@@ -2,143 +2,150 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # hsu zangmen <chzang55@gmail.com>, 2025.
+# Weblate Translation Memory <noreply-mt-weblate-translation-memory@weblate.org>, 2025.
+# Cheng-Chia Tseng <pswo10680@gmail.com>, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-04-16 03:27+0000\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Automatically generated\n"
-"Language-Team: none\n"
+"POT-Creation-Date: 2025-06-19 03:39+0000\n"
+"PO-Revision-Date: 2025-05-10 15:59+0000\n"
+"Last-Translator: Cheng-Chia Tseng <pswo10680@gmail.com>\n"
+"Language-Team: Chinese (Traditional) <https://translate.fedoraproject.org/"
+"projects/dnf5/libdnf5-plugin-actions/zh_TW/>\n"
 "Language: zh_TW\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Weblate 5.11.3\n"
 
 #: actions.cpp:237
 msgid "File \"{}\" on line {}: {}"
-msgstr ""
+msgstr "檔案 「{}」 在 {} 行： {}"
 
 #: actions.cpp:636 actions.cpp:642 actions.cpp:648 actions.cpp:654
 msgid "\"HOOK:PKG_FILTER:DIRECTION:OPTIONS:CMD\" format expected"
-msgstr ""
+msgstr "\"HOOK:PKG_FILTER:DIRECTION:OPTIONS:CMD\" 預期格式"
 
 #: actions.cpp:676
 msgid "Unknown \"enabled\" option value \"{}\""
-msgstr ""
+msgstr "未知 \"enabled\" 選項值 「{}」"
 
 #: actions.cpp:683
 msgid "Unknown option \"{}\""
-msgstr ""
+msgstr "未知選項 「{}」"
 
 #: actions.cpp:711
 msgid "Unknown hook \"{}\""
-msgstr ""
+msgstr "未知掛鉤「{}」"
 
 #: actions.cpp:720
 msgid ""
 "Package filter can only be used in GOAL_RESOLVED, PRE_TRANS and POST_TRANS "
 "hooks"
-msgstr ""
+msgstr "套件過濾器只能用在 GOAL_RESOLVED、PRE_TRANS 和 POST_TRANS 掛鉤上"
 
 #: actions.cpp:726
 msgid "Cannot use direction without package filter"
-msgstr ""
+msgstr "無法在沒有封裝過濾器的情況下使用方向"
 
 #: actions.cpp:740
 msgid "Unknown package direction \"{}\""
-msgstr ""
+msgstr "未知套件方向 「{}」"
 
 #: actions.cpp:747
 msgid "Unknown mode \"{}\""
-msgstr ""
+msgstr "未知模式 「{}」"
 
 #: actions.cpp:755
 msgid "Unsupported value of the \"raise_error\" option: {}"
-msgstr ""
+msgstr "己不支援 \"raise_error\" 選項的值： {}"
 
 #: actions.cpp:760
 msgid "Missing command"
-msgstr ""
+msgstr "無效指令"
 
 #: actions.cpp:953
 msgid "Synax error: Missing equal sign (=) in action output line: {}"
-msgstr ""
+msgstr "語句錯誤： 動作輸出行中缺少等號 (=)： {}"
 
 #: actions.cpp:964
 msgid "Cannot set option: Action output line: {}"
-msgstr ""
+msgstr "無法設定選項： 動作輸出： {}"
 
 #: actions.cpp:982
 msgid "Action sent the wrong log level: {}"
-msgstr ""
+msgstr "傳送動作中錯誤的記錄層級：{}"
 
 #: actions.cpp:987 actions.cpp:1794
 msgid "Action calls for stop: {}"
-msgstr ""
+msgstr "要求停止動作：{}"
 
 #: actions.cpp:990 actions.cpp:1801
 msgid "Action sent error message: {}"
-msgstr ""
+msgstr "動作時發送錯誤訊息：{}"
 
 #: actions.cpp:995
 msgid ""
 "Syntax error: Action output line must start with \"tmp.\" or \"conf.\" or "
 "\"var.\" or \"stop=\" or \"error=\": {}"
 msgstr ""
+"語法錯誤： 動作輸出行必須以 \"tmp.\" 或 \"conf.\" 或 \"var.\" 或 \"stop=\" "
+"或 \"error=\" 開始： {}"
 
 #: actions.cpp:1020
 msgid "Error reading from action (from pipe)"
-msgstr ""
+msgstr "讀取動作（來自管道）出錯"
 
 #: actions.cpp:1038
 msgid "Syntax error in json request from action: Missing starting '{{' char"
-msgstr ""
+msgstr "動作中 json 請求的語法錯誤： 缺少起始的 '{{' 字符"
 
 #: actions.cpp:1062
 msgid "Error during processing of a request from action."
-msgstr ""
+msgstr "處理動作請求時發生錯誤。"
 
 #: actions.cpp:1071
 msgid "Syntax error in json request from action: {}"
-msgstr ""
+msgstr "動作中 json 請求有語法錯誤： {}"
 
 #: actions.cpp:1079
 msgid "Syntax error in json request from action: Incomplete input"
-msgstr ""
+msgstr "動作中 json 請求有語法錯誤： 輸入不完整"
 
 #: actions.cpp:1154
 msgid "Cannot write response"
-msgstr ""
+msgstr "無法寫入回應"
 
 #: actions.cpp:1821
 msgid "Actions plugin: Cannot create pipe"
-msgstr ""
+msgstr "動作外掛元件： 無法建立管道"
 
 #: actions.cpp:1913
 msgid "Actions plugin: Cannot fork"
-msgstr ""
+msgstr "動作外掛元件：無法分叉"
 
 #: actions.cpp:1968
 msgid "Actions plugin: Cannot bind command stdin"
-msgstr ""
+msgstr "動作外掛元件： 無法綁定標準輸入指令"
 
 #: actions.cpp:1970
 msgid "Actions plugin: Cannot bind command stdout"
-msgstr ""
+msgstr "動作外掛元件： 無法綁定標準輸出指令"
 
 #: actions.cpp:1988
 msgid "Cannot execute action, command \"{}\" arguments \"{}\""
-msgstr ""
+msgstr "無法執行動作，命令 「{}」 參數 「{}」"
 
 #: actions.cpp:1996
 msgid "Error during preparation child process"
-msgstr ""
+msgstr "準備子處理過程中出錯"
 
 #: actions.cpp:2015
 msgid "Exit code: {}"
-msgstr ""
+msgstr "退出代碼： {}"
 
 #: actions.cpp:2019
 msgid "Terminated by signal: {}"
-msgstr ""
+msgstr "由訊號終止：{}"

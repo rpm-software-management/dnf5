@@ -2,15 +2,17 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # Petr Ptacek <petr106@atlas.cz>, 2024.
-# Weblate Translation Memory <noreply-mt-weblate-translation-memory@weblate.org>, 2024.
+# Weblate Translation Memory <noreply-mt-weblate-translation-memory@weblate.org>, 2024, 2025.
+# Petr Pisar <ppisar@redhat.com>, 2025.
+# Jonáš Loskot <alius@users.noreply.translate.fedoraproject.org>, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-04-16 03:27+0000\n"
-"PO-Revision-Date: 2024-02-02 12:15+0000\n"
-"Last-Translator: Weblate Translation Memory <noreply-mt-weblate-translation-"
-"memory@weblate.org>\n"
+"POT-Creation-Date: 2025-06-19 03:39+0000\n"
+"PO-Revision-Date: 2025-06-01 23:36+0000\n"
+"Last-Translator: Jonáš Loskot <alius@users.noreply.translate.fedoraproject."
+"org>\n"
 "Language-Team: Czech <https://translate.fedoraproject.org/projects/dnf5/"
 "dnf5daemon-client/cs/>\n"
 "Language: cs\n"
@@ -18,13 +20,11 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Weblate 5.3.1\n"
+"X-Generator: Weblate 5.11.4\n"
 
 #: commands/advisory/advisory.cpp:35
-#, fuzzy
-#| msgid "List advisories"
 msgid "Manage advisories"
-msgstr "Seznam doporučení"
+msgstr "Správa doporučení"
 
 #: commands/advisory/advisory_info.hpp:34
 msgid "Print details about advisories"
@@ -39,12 +39,12 @@ msgid "Show advisories containing any version of installed packages."
 msgstr "Zobrazí doporučení obsahující jakoukoli verzi nainstalovaných balíčků."
 
 #: commands/advisory/arguments.hpp:43
-#, fuzzy
-#| msgid "Show advisories containing newer versions of installed packages."
 msgid ""
 "Show advisories containing newer versions of installed packages. This is the "
 "default behavior."
-msgstr "Zobrazí doporučení obsahující novější verze nainstalovaných balíčků."
+msgstr ""
+"Zobrazí doporučení obsahující novější verze nainstalovaných balíčků. Toto je "
+"běžné chování."
 
 #: commands/advisory/arguments.hpp:55
 msgid ""
@@ -65,12 +65,12 @@ msgid ""
 "Show only advisories containing packages with specified names. List option, "
 "supports globs."
 msgstr ""
-"Zobrazit pouze doporučení obsahující balíčky se zadanými názvy. Seznam "
+"Zobrazí pouze doporučení obsahující balíčky se zadanými názvy. Seznam "
 "možností, podporuje globs."
 
 #: commands/advisory/arguments.hpp:81
 msgid "PACKAGE_NAME,..."
-msgstr "PACKAGE_NAME,..."
+msgstr "NÁZEV_BALÍČKU,…"
 
 #: commands/advisory/arguments.hpp:88
 msgid "List of patterns matched against advisory names."
@@ -85,116 +85,116 @@ msgid "Show only advisories referencing a CVE."
 msgstr "Zobrazí pouze doporučení odkazující na CVE."
 
 #: commands/advisory/arguments.hpp:113
-msgid "Limit to packages in advisories with specified name. List option."
-msgstr "Omezí se na balíčky v doporučeních se zadaným názvem. Seznam možností."
+msgid ""
+"Include content contained in advisories with specified name. List option."
+msgstr ""
+"Zahrne obsah obsažený v doporučeních se zadaným názvem. Seznam možností."
 
 #: commands/advisory/arguments.hpp:114
 msgid "ADVISORY_NAME,..."
-msgstr "ADVISORY_NAME,..."
+msgstr "NÁZEV_DOPORUČENÍ,…"
 
 #: commands/advisory/arguments.hpp:121
-msgid "Limit to packages in security advisories."
-msgstr "Omezí se na balíčky v bezpečnostních doporučeních."
+msgid "Include content contained in security advisories."
+msgstr "Zahrne obsah obsažený v bezpečnostních doporučeních."
 
 #: commands/advisory/arguments.hpp:128
-msgid "Limit to packages in bugfix advisories."
-msgstr "Omezí se na balíčky v doporučeních na opravu chyb."
+msgid "Include content contained in bugfix advisories."
+msgstr "Zahrne obsah obsažený v doporučeních na opravu chyb."
 
 #: commands/advisory/arguments.hpp:135
-msgid "Limit to packages in enhancement advisories."
-msgstr "Omezí se na balíčky v doporučeních pro vylepšení."
+msgid "Include content contained in enhancement advisories."
+msgstr "Zahrne obsah obsažený v doporučeních pro vylepšení."
 
 #: commands/advisory/arguments.hpp:142
-msgid "Limit to packages in newpackage advisories."
-msgstr "Omezí se na balíčky v doporučeních na nové balíčky."
+msgid "Include content contained in newpackage advisories."
+msgstr "Zahrne obsah obsažený v doporučeních na nové balíčky."
 
 #. Note for translators: "critical" etc. quoted words are
 #. literals that should not be translated.
 #: commands/advisory/arguments.hpp:155
 msgid ""
-"Limit to packages in advisories with specified severity. List option. Can be "
-"\"critical\", \"important\", \"moderate\", \"low\", \"none\"."
+"Include content contained in advisories with specified severity. List "
+"option. Can be \"critical\", \"important\", \"moderate\", \"low\", \"none\"."
 msgstr ""
-"Omezí se na balíčky v doporučeních se specifikovanou závažností. Seznamu "
-"možností. Může být \"critical\", \"important\", \"moderate\", \"low\", "
-"\"none\"."
+"Zahrne obsah obsažený v doporučeních se zadanou závažností. Seznamu "
+"možností. Může být „critical“ (kritická), „important“ (důležitá), "
+"„moderate“ (střední), „low“ (nízká), „none“ (žádná)."
 
 #: commands/advisory/arguments.hpp:157
 msgid "ADVISORY_SEVERITY,..."
-msgstr "ADVISORY_SEVERITY,..."
+msgstr "ZÁVAŽNOST_DOPORUČENÍ,…"
 
 #: commands/advisory/arguments.hpp:169
 msgid ""
-"Limit to packages in advisories that fix a Bugzilla ID, Eg. 123123. List "
-"option."
+"Include content contained in advisories that fix a Bugzilla ID, Eg. 123123. "
+"List option."
 msgstr ""
-"Omezí se na balíčky v doporučeních, které opravují Bugzilla ID, např. "
+"Zahrne obsah obsažený v doporučeních, které opravují Bugzilla ID, např. "
 "123123. Seznamu možností."
 
 #: commands/advisory/arguments.hpp:170
 msgid "BUGZILLA_ID,..."
-msgstr "BUGZILLA_ID,..."
+msgstr "BUGZILLA_ID,…"
 
 #: commands/advisory/arguments.hpp:180
 msgid ""
-"Limit to packages in advisories that fix a CVE (Common Vulnerabilities and "
-"Exposures) ID, Eg. CVE-2201-0123. List option."
+"Include content contained in advisories that fix a CVE (Common "
+"Vulnerabilities and Exposures) ID, Eg. CVE-2201-0123. List option."
 msgstr ""
-"Omezí se na balíčky v doporučeních, které opravují ID CVE (Common "
+"Zahrne obsah obsažený v doporučeních, které opravují ID CVE (Common "
 "Vulnerabilities and Exposures), např. CVE-2201-0123. Seznam možností."
 
 #: commands/advisory/arguments.hpp:182
 msgid "CVE_ID,..."
-msgstr "CVE_ID,..."
+msgstr "CVE_ID,…"
 
 #: commands/clean/clean.cpp:88
 msgid "Error cleaning the cache: {}"
-msgstr ""
+msgstr "Chyba při čištění mezipaměti: {}"
 
 #: commands/distro-sync/distro-sync.cpp:48
 msgid ""
 "Upgrade or downgrade installed software to the latest available versions"
 msgstr ""
+"Upgradovat nebo downgradovat nainstalovaný software na nejnovější dostupné "
+"verze"
 
 #: commands/group/group.cpp:41
 msgid "Manage comps groups"
-msgstr ""
+msgstr "Spravovat skupiny srovnatelných jednotek"
 
 #: commands/group/group_list.hpp:37
 msgid "Show only available groups."
-msgstr ""
+msgstr "Zobrazit pouze dostupné skupiny."
 
 #: commands/group/group_list.hpp:43
 msgid "Show only installed groups."
-msgstr ""
+msgstr "Zobrazit pouze nainstalované skupiny."
 
 #: commands/group/group_list.hpp:49
 msgid "Show also hidden groups."
-msgstr ""
+msgstr "Zobrazit také skryté skupiny."
 
 #: commands/group/group_list.hpp:59
-#, fuzzy
-#| msgid ""
-#| "Show only advisories containing packages with specified names. List "
-#| "option, supports globs."
 msgid ""
 "Show only groups containing packages with specified names. List option, "
 "supports globs."
 msgstr ""
-"Zobrazit pouze doporučení obsahující balíčky se zadanými názvy. Seznam "
+"Zobrazit pouze skupiny obsahující balíčky se zadanými názvy. Seznam "
 "možností, podporuje globs."
 
 #: commands/repo/repo.cpp:37
 msgid "Manage repositories"
-msgstr ""
+msgstr "Spravovat repozitáře"
 
 #: commands/repoquery/repoquery.cpp:95
 msgid "search for packages matching various criteria"
-msgstr ""
+msgstr "hledat balíčky odpovídající různým kritériům"
 
 #: commands/repoquery/repoquery.cpp:159
 msgid "Error parsing JSON object \"{}\": {}"
-msgstr ""
+msgstr "Chyba při zpracování objektu JSON „{}“: {}"
 
 #: exception.cpp:28
 msgid ""

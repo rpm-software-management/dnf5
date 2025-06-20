@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-04-16 03:27+0000\n"
-"PO-Revision-Date: 2025-03-29 13:53+0000\n"
+"POT-Creation-Date: 2025-06-19 03:39+0000\n"
+"PO-Revision-Date: 2025-06-01 08:46+0000\n"
 "Last-Translator: Remus-Gabriel Chelu <remusgabriel.chelu@disroot.org>\n"
 "Language-Team: Romanian <https://translate.fedoraproject.org/projects/dnf5/"
 "libdnf5/ro/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : (n==0 || (n%100 > 0 && n%100 < "
 "20)) ? 1 : 2;\n"
-"X-Generator: Weblate 5.10.4\n"
+"X-Generator: Weblate 5.11.4\n"
 
 #: advisory/advisory.cpp:81
 msgid ""
@@ -32,7 +32,7 @@ msgid "Unsupported argument for REMOVE action: {}"
 msgstr "Argument neacceptat pentru acțiunea REMOVE: {} „{}”"
 
 #. TODO(lukash) throw a proper exception
-#: base/goal.cpp:1593
+#: base/goal.cpp:1641
 msgid "Incorrect configuration value for multilib_policy: {}"
 msgstr "Valoare de configurare incorectă pentru multilib_policy: {}"
 
@@ -181,20 +181,28 @@ msgid "No match for argument: {}"
 msgstr "Nu există nicio potrivire pentru argumentul: {}"
 
 #: base/log_event.cpp:163
+msgid "No match for argument '{0}' in selected advisories"
+msgstr "Nici o potrivire pentru argumentul „{0}” în avizele selectate"
+
+#: base/log_event.cpp:165
+msgid "No match in selected advisories"
+msgstr "Nici o potrivire în avizele selectate"
+
+#: base/log_event.cpp:169
 msgid "No match for argument '{0}' in repositories '{1}'"
 msgstr "Nu există nicio potrivire pentru argumentul „{0}” în depozitele „{1}”"
 
-#: base/log_event.cpp:169
+#: base/log_event.cpp:175
 msgid "Cannot perform {0} for {1} '{2}' because it is not installed."
 msgstr ""
 "Nu se poate efectua {0} pentru {1} „{2}” deoarece acesta nu este instalat."
 
-#: base/log_event.cpp:174
+#: base/log_event.cpp:180
 msgid "Packages for argument '{}' available, but not installed."
 msgstr ""
 "Pachetele pentru argumentul „{}” sunt disponibile, dar nu sunt instalate."
 
-#: base/log_event.cpp:178
+#: base/log_event.cpp:184
 msgid ""
 "Packages for argument '{}' available, but installed for a different "
 "architecture."
@@ -202,25 +210,25 @@ msgstr ""
 "Pachetele pentru argumentul „{}” sunt disponibile, dar instalate pentru o "
 "arhitectură diferită."
 
-#: base/log_event.cpp:182
+#: base/log_event.cpp:188
 msgid "Cannot perform {0} because '{1}' matches only source packages."
 msgstr ""
 "Nu se poate efectua {0} deoarece „{1}” corespunde numai pachetelor sursă."
 
-#: base/log_event.cpp:186
+#: base/log_event.cpp:192
 msgid "Argument '{}' matches only source packages."
 msgstr "Argumentul „{}” se potrivește numai pachetelor sursă."
 
-#: base/log_event.cpp:190
+#: base/log_event.cpp:196
 msgid "Cannot perform {0} because '{1}' matches only excluded packages."
 msgstr ""
 "Nu se poate efectua {0} deoarece „{1}” corespunde numai pachetelor excluse."
 
-#: base/log_event.cpp:194
+#: base/log_event.cpp:200
 msgid "Argument '{}' matches only excluded packages."
 msgstr "Argumentul „{}” se potrivește numai pachetelor excluse."
 
-#: base/log_event.cpp:198
+#: base/log_event.cpp:204
 msgid ""
 "Cannot perform {0} because '{1}' matches only packages excluded by "
 "versionlock."
@@ -228,19 +236,19 @@ msgstr ""
 "Nu se poate efectua {0} deoarece „{1}” se potrivește numai pachetelor "
 "excluse de versionlock."
 
-#: base/log_event.cpp:202
+#: base/log_event.cpp:208
 msgid "Argument '{}' matches only packages excluded by versionlock."
 msgstr "Argumentul „{}” se potrivește numai pachetelor excluse de versionlock."
 
-#: base/log_event.cpp:207
+#: base/log_event.cpp:213
 msgid "  * Maybe you meant: {}"
 msgstr "  * Poate că ați vrut să spuneți: {}"
 
-#: base/log_event.cpp:210
+#: base/log_event.cpp:216
 msgid "There are following alternatives for '{0}': {1}"
 msgstr "Există următoarele alternative pentru „{0}”: {1}"
 
-#: base/log_event.cpp:217
+#: base/log_event.cpp:223
 msgid ""
 "The lowest available version of the \"{}\" package is already installed, "
 "cannot downgrade it."
@@ -248,7 +256,7 @@ msgstr ""
 "Cea mai mică versiune disponibilă a pachetului „{}” este deja instalată, nu "
 "se poate face retrogradarea acestuia."
 
-#: base/log_event.cpp:223
+#: base/log_event.cpp:229
 msgid ""
 "Installed packages for argument '{0}' are not available in repositories in "
 "the same version, available versions: {1}, cannot reinstall."
@@ -256,14 +264,14 @@ msgstr ""
 "Pachetele instalate pentru argumentul „{0}” nu sunt disponibile în depozite "
 "în aceeași versiune, versiuni disponibile: {1}, nu se pot reinstala."
 
-#: base/log_event.cpp:229
+#: base/log_event.cpp:235
 msgid ""
 "Cannot perform {0} because '{1}' is installed in a different version: '{2}'."
 msgstr ""
 "Nu se poate efectua {0} deoarece „{1}” este instalat într-o versiune "
 "diferită: „{2}”."
 
-#: base/log_event.cpp:235
+#: base/log_event.cpp:241
 msgid ""
 "Packages for argument '{}' installed and available, but in a different "
 "version."
@@ -271,24 +279,24 @@ msgstr ""
 "Pachetele pentru argumentul „{}” sunt instalate și disponibile, dar într-o "
 "versiune diferită."
 
-#: base/log_event.cpp:237
+#: base/log_event.cpp:243
 msgid "Packages for argument '{}' installed, but not available."
 msgstr ""
 "Pachetele pentru argumentul „{}” sunt instalate, dar nu sunt disponibile."
 
-#: base/log_event.cpp:246
+#: base/log_event.cpp:252
 msgid "Package \"{}\" is already installed with reason \"{}\"."
 msgstr "Pachetul „{}” este deja instalat cu motivul „{}”."
 
-#: base/log_event.cpp:248
+#: base/log_event.cpp:254
 msgid "Package \"{}\" is already installed."
 msgstr "Pachetul „{}” este deja instalat."
 
-#: base/log_event.cpp:257
+#: base/log_event.cpp:263
 msgid "Debug data written to \"{}\""
 msgstr "Date de depanare scrise în „{}”"
 
-#: base/log_event.cpp:261
+#: base/log_event.cpp:267
 msgid ""
 "{0} upgrade cannot be reverted, however associated package actions will be. "
 "({1} id: '{2}') ."
@@ -296,16 +304,16 @@ msgstr ""
 "Actualizarea {0} nu poate fi anulată, însă acțiunile asociate pachetului vor "
 "fi anulate. ({1} id: „{2}”) ."
 
-#: base/log_event.cpp:267
+#: base/log_event.cpp:273
 msgid "{} action for argument \"{}\" is not supported."
 msgstr "Acțiunea {} pentru argumentul „{}” nu este acceptată."
 
 #. Format a leading line of the error message.
-#: base/log_event.cpp:276
+#: base/log_event.cpp:282
 msgid "Unable to resolve argument '{}':"
 msgstr "Nu se poate rezolva argumentul „{}”:"
 
-#: base/log_event.cpp:280
+#: base/log_event.cpp:286
 msgid ""
 "\n"
 "  - Argument '{}' matches {} stream ('{}') of module '{}', but the stream is "
@@ -327,23 +335,23 @@ msgstr[2] ""
 "  - Argumentul „{}” se potrivește cu {} de fluxuri („{}”) din modulul „{}”, "
 "dar niciunul dintre fluxuri nu este activat sau implicit."
 
-#: base/log_event.cpp:287
+#: base/log_event.cpp:293
 msgid "', '"
 msgstr "„, ”"
 
-#: base/log_event.cpp:296
+#: base/log_event.cpp:302
 msgid "Modular dependency problems:\n"
 msgstr "Probleme de dependențe modulare:\n"
 
-#: base/log_event.cpp:303
+#: base/log_event.cpp:309
 msgid "Modular dependency problems with the latest modules:\n"
 msgstr "Probleme de dependență modulară cu cele mai recente module:\n"
 
-#: base/log_event.cpp:310
+#: base/log_event.cpp:316
 msgid "Modular dependency problems with the defaults:\n"
 msgstr "Probleme de dependență modulară cu valorile implicite:\n"
 
-#: base/log_event.cpp:325
+#: base/log_event.cpp:331
 msgid ""
 "The operation would result in switching of module '{0}' stream '{1}' to "
 "stream '{2}'\n"
@@ -351,7 +359,7 @@ msgstr ""
 "Operația ar avea ca rezultat trecerea modulului „{0}” de la fluxul „{1}” la "
 "fluxul „{2}”\n"
 
-#: base/log_event.cpp:330
+#: base/log_event.cpp:336
 msgid ""
 "Error: It is not possible to switch enabled streams of a module unless "
 "explicitly enabled via configuration option module_stream_switch."
@@ -360,7 +368,7 @@ msgstr ""
 "dacă este activată explicit prin opțiunea de configurare "
 "„module_stream_switch”."
 
-#: base/log_event.cpp:335
+#: base/log_event.cpp:341
 msgid ""
 "Extra package '{0}' (with action '{1}') which is not present in the stored "
 "transaction was pulled into the transaction.\n"
@@ -368,11 +376,11 @@ msgstr ""
 "Pachetul suplimentar „{0}” (cu acțiunea „{1}”) care nu este prezent în "
 "tranzacția stocată a fost adăugat în tranzacție.\n"
 
-#: base/log_event.cpp:341
+#: base/log_event.cpp:347
 msgid "Cannot parse file: '{0}': {1}.\n"
 msgstr "Nu se poate analiza fișierul: „{0}”: {1}.\n"
 
-#: base/log_event.cpp:348
+#: base/log_event.cpp:354
 msgid ""
 "Could not find debuginfo package for the following packages resolved from "
 "the argument '{0}': {1}"
@@ -380,12 +388,12 @@ msgstr ""
 "Nu s-a putut găsi pachetul debuginfo pentru următoarele pachete rezolvate "
 "din argumentul „{0}”: {1}"
 
-#: base/log_event.cpp:351 base/log_event.cpp:362
+#: base/log_event.cpp:357 base/log_event.cpp:368
 msgctxt "String for joining NEVRAs - e.g. `foo-4-4.noarch, bar-5-5.noarch`"
 msgid ", "
 msgstr ", "
 
-#: base/log_event.cpp:358
+#: base/log_event.cpp:364
 msgid ""
 "Could not find debugsource package for the following packages resolved from "
 "the argument '{0}': {1}"
@@ -393,7 +401,7 @@ msgstr ""
 "Nu s-a putut găsi pachetul debugsource pentru următoarele pachete rezolvate "
 "din argumentul „{0}”: {1}"
 
-#: base/log_event.cpp:365
+#: base/log_event.cpp:371
 msgid "Transaction merge error: '{0}'"
 msgstr "Eroare la fuzionarea tranzacțiilor: „{0}”"
 
@@ -936,7 +944,7 @@ msgstr ""
 msgid "Cannot load libdnf plugin enabled from: {}"
 msgstr "Nu se poate încărca modulul libdnf activat de la: {}"
 
-#: repo/config_repo.cpp:569
+#: repo/config_repo.cpp:581
 msgid "get_unique_id(): Computation of SHA256 failed"
 msgstr "get_unique_id(): Calculul SHA256 a eșuat"
 
@@ -973,28 +981,32 @@ msgstr "Deja descărcat(e)"
 msgid "Failed to download packages"
 msgstr "Descărcarea pachetelor a eșuat"
 
-#: repo/repo.cpp:59
+#: repo/repo.cpp:61
 msgid "Failed to load RPM \"{}\": doesn't have the \".rpm\" extension"
 msgstr "Încărcarea RPM „{}” a eșuat: nu are extensia „.rpm”"
 
-#: repo/repo.cpp:63
+#: repo/repo.cpp:65
 msgid "Failed to access RPM \"{}\": {}"
 msgstr "Accesul la RPM „{}” a eșuat: {}"
 
-#: repo/repo.cpp:105
+#: repo/repo.cpp:107
 msgid "Invalid repository id \"{}\": unexpected character '{}'"
 msgstr "Id de depozit nevalid „{}”: caracter neașteptat „{}”"
 
-#: repo/repo.cpp:148
+#: repo/repo.cpp:150
 msgid "Repository \"{}\" has no source (baseurl, mirrorlist or metalink) set."
 msgstr ""
 "Depozitul „{}” nu are configurată sursa (baseurl, mirrorlist sau metalink)."
 
-#: repo/repo.cpp:159
+#: repo/repo.cpp:161
 msgid "Repository \"{}\" has unsupported type \"{}\", skipping."
 msgstr "Depozitul „{}” are tipul neacceptat „{}”, se omite."
 
-#: repo/repo.cpp:410
+#: repo/repo.cpp:221 repo/repo.cpp:241 repo/repo_sack.cpp:372
+msgid "Failed to download metadata ({}: \"{}\") for repository \"{}\": {}"
+msgstr "Descărcarea metadatelor ({}: „{}”) pentru depozitul „{}” a eșuat: {}"
+
+#: repo/repo.cpp:439
 msgid ""
 "Failed to load repository: \"primary\" data not present or in unsupported "
 "format"
@@ -1002,19 +1014,19 @@ msgstr ""
 "Încărcarea depozitului a eșuat: Datele „primary” nu sunt prezente sau sunt "
 "într-un format neacceptat"
 
-#: repo/repo.cpp:476
+#: repo/repo.cpp:505
 msgid "Failed to load comps \"{}\": doesn't have the \".xml\" extension"
 msgstr "Încărcarea comps „{}” a eșuat: nu are extensia „.xml”"
 
-#: repo/repo.cpp:483
+#: repo/repo.cpp:512
 msgid "Failed to load xml Comps \"{}\": {}"
 msgstr "Încărcarea comps xml a eșuat „{}”: {}"
 
-#: repo/repo.cpp:501
+#: repo/repo.cpp:530
 msgid "Failed to load RPM \"{}\": {}"
 msgstr "Încărcarea RPM „{}” a eșuat: {}"
 
-#: repo/repo_cache.cpp:252
+#: repo/repo_cache.cpp:255
 msgid "Unable to determine id of the repository in the cache."
 msgstr "Nu s-a putut determina id-ul depozitului din cache."
 
@@ -1022,31 +1034,35 @@ msgstr "Nu s-a putut determina id-ul depozitului din cache."
 msgid "Empty path to the repository cache directory."
 msgstr "Rută goală către directorul cache al depozitului."
 
-#: repo/repo_downloader.cpp:138
+#: repo/repo_downloader.cpp:214
 msgid "Librepo error: {}"
 msgstr "Eroare librepo: {}"
 
-#: repo/repo_downloader.cpp:170
-msgid "Failed to download metadata ({}: \"{}\") for repository \"{}\""
-msgstr "Descărcarea metadatelor ({}: „{}”) pentru depozitul „{}” a eșuat"
+#: repo/repo_downloader.cpp:258
+msgid "Failed to set up metadata download"
+msgstr "Configurarea descărcării metadatelor a eșuat"
 
-#: repo/repo_downloader.cpp:241
+#: repo/repo_downloader.cpp:312 repo/repo_downloader.cpp:362
+msgid "Failed to download metadata"
+msgstr "Descărcarea metadatelor a eșuat"
+
+#: repo/repo_downloader.cpp:426
 msgid "Error checking if metalink \"{}\" is in sync for repository \"{}\""
 msgstr ""
 "Eroare la verificarea dacă metalink „{}” este sincronizat pentru depozitul "
 "„{}”"
 
-#: repo/repo_downloader.cpp:271
+#: repo/repo_downloader.cpp:446
 msgid "Error checking if repomd ({}: \"{}\") is in sync for repository \"{}\""
 msgstr ""
 "Eroare la verificarea dacă repomd ({}: „{}”) este sincronizat pentru "
 "depozitul „{}”"
 
-#: repo/repo_downloader.cpp:336
+#: repo/repo_downloader.cpp:515
 msgid "Error loading local metadata for repository \"{}\""
 msgstr "Eroare la încărcarea metadatelor locale pentru depozitul „{}”"
 
-#: repo/repo_downloader.cpp:475
+#: repo/repo_downloader.cpp:597
 msgid ""
 "No valid source (baseurl, mirrorlist or metalink) found for repository \"{}\""
 msgstr ""
@@ -1065,7 +1081,7 @@ msgstr "Eșec la listarea cheilor OpenPGP: {}"
 msgid "Failed to import OpenPGP keys: {}"
 msgstr "Importare eșuată a cheilor OpenPGP: {}"
 
-#: repo/repo_sack.cpp:148
+#: repo/repo_sack.cpp:159
 msgid ""
 "Failed to create repo \"{}\": Id is present more than once in the "
 "configuration"
@@ -1073,52 +1089,52 @@ msgstr ""
 "Nu s-a reușit crearea depozitului „{}”: Id-ul este prezent de mai multe ori "
 "în configurație"
 
-#: repo/repo_sack.cpp:575
+#: repo/repo_sack.cpp:635
 msgid "Cache-only enabled but no cache for repository \"{}\""
 msgstr ""
 "Opțiunea cache-only este activată, dar nu există cache pentru depozitul „{}”"
 
-#: repo/solv_repo.cpp:266
+#: repo/solv_repo.cpp:267
 msgid "Failed to load repomd for repo \"{}\" from \"{}\": {}."
 msgstr "Încărcarea repomd pentru repo „{}” de la „{}” a eșuat: {}."
 
-#: repo/solv_repo.cpp:274
+#: repo/solv_repo.cpp:275
 msgid "Failed to load primary for repo \"{}\" from \"{}\": {}."
 msgstr "Încărcarea „primary” pentru repo „{}” de la „{}” a eșuat: {}."
 
-#: repo/solv_repo.cpp:322
+#: repo/solv_repo.cpp:323
 msgid "Unsupported extended repodata type for the system repo: \"{}\"."
 msgstr "Tip repodata extins neacceptat pentru depozitul sistemului: „{}”."
 
-#: repo/solv_repo.cpp:394
+#: repo/solv_repo.cpp:395
 msgid "Failed to load {} extension for repo \"{}\" from \"{}\": {}"
 msgstr ""
 "Nu s-a reușit încărcarea extensiei {} pentru depozitul „{}” de la „{}”: {}"
 
-#: repo/solv_repo.cpp:430
+#: repo/solv_repo.cpp:431
 msgid "Failed to load system repo from root \"{}\": {}"
 msgstr "Încărcarea depozitului de sistem de la rădăcina „{}” a eșuat: {}"
 
-#: repo/solv_repo.cpp:531
+#: repo/solv_repo.cpp:532
 msgid "Failed to load {} cache for repo \"{}\" from \"{}\": {}"
 msgstr ""
 "Nu s-a putut încărca cache-ul {} pentru depozitul repo „{}” din „{}”: {}"
 
-#: repo/solv_repo.cpp:585
+#: repo/solv_repo.cpp:586
 msgid "Failed to write primary cache for repo \"{}\" to \"{}\": {}"
 msgstr ""
 "Scrierea cache-ului „primary” pentru depozitul „{}” în „{}” a eșuat: {}"
 
-#: repo/solv_repo.cpp:607
+#: repo/solv_repo.cpp:608
 msgid "Failed to re-load primary cache for repo \"{}\" from \"{}\": {}"
 msgstr ""
 "A eșuat reîncărcarea cache-ului „primary” pentru depozitul „{}” din „{}”: {}"
 
-#: repo/solv_repo.cpp:672
+#: repo/solv_repo.cpp:673
 msgid "Failed to write {} cache for repo \"{}\" to \"{}\": {}"
 msgstr "Scrierea cache-ului primar pentru depozitul „{}” din „{}” a eșuat: {}"
 
-#: repo/solv_repo.cpp:693
+#: repo/solv_repo.cpp:694
 msgid "Failed to re-load {} cache for repo \"{}\" from \"{}\": {}"
 msgstr ""
 "A eșuat reîncărcarea cache-ului {} pentru depozitul repo „{}” din „{}”: {}"
@@ -1179,77 +1195,77 @@ msgid "Failed to import public key \"{}\" to rpmdb: {}"
 msgstr "Importarea cheii publice \"{}\" în rpmdb a eșuat: {}"
 
 #. TODO(jrohel): Why? Librpm does not provide this information.
-#: rpm/transaction.cpp:112
+#: rpm/transaction.cpp:114
 msgid "Cannot set root directory \"{}\""
 msgstr "Nu se poate defini directorul rădăcină „{}”"
 
-#: rpm/transaction.cpp:123
+#: rpm/transaction.cpp:125
 #, c-format
 msgid "Error %i opening rpm database"
 msgstr "Eroare %i la deschiderea bazei de date rpm"
 
-#: rpm/transaction.cpp:132
+#: rpm/transaction.cpp:134
 msgid "The rpmdbCookie() function did not return cookie of rpm database."
 msgstr "Funcția rpmdbCookie() nu a returnat cookie-ul bazei de date rpm."
 
-#: rpm/transaction.cpp:197
+#: rpm/transaction.cpp:199
 msgid "Failed to order the rpm transaction."
 msgstr "Nu s-a putut ordona tranzacția rpm."
 
-#: rpm/transaction.cpp:233
+#: rpm/transaction.cpp:235
 msgid ""
 "Failed to set scriptlet output file, cannot duplicate file descriptor: {}"
 msgstr ""
 "Nu s-a reușit definirea fișierului de ieșire scriptlet, nu se poate duplica "
 "descriptorul de fișier: {}"
 
-#: rpm/transaction.cpp:252
+#: rpm/transaction.cpp:254
 msgid "Failed to set scriptlet output file, cannot open file \"{}\": {}"
 msgstr ""
 "Nu s-a reușit definirea fișierului de ieșire scriptlet, nu se poate deschide "
 "fișierul „{}”: {}"
 
-#: rpm/transaction.cpp:273
+#: rpm/transaction.cpp:275
 msgid "Failed to read package header, cannot open file \"{}\": {}"
 msgstr ""
 "Nu s-a reușit citirea antetului pachetului, nu se poate deschide fișierul "
 "„{}”: {}"
 
-#: rpm/transaction.cpp:290
+#: rpm/transaction.cpp:292
 msgid "Failed to read package header from file \"{}\""
 msgstr "Nu s-a reușit citirea antetului pachetului din fișierul „{}”"
 
-#: rpm/transaction.cpp:303
+#: rpm/transaction.cpp:305
 msgid "Cannot init rpm database iterator"
 msgstr "Nu se poate iniția iteratorul bazei de date rpm"
 
-#: rpm/transaction.cpp:307
+#: rpm/transaction.cpp:309
 msgid "Package was not found in rpm database"
 msgstr "Pachetul nu a fost găsit în baza de date rpm"
 
 #. TODO(jrohel): Why? Librpm does not provide this information.
-#: rpm/transaction.cpp:323
+#: rpm/transaction.cpp:325
 msgid "Cannot reinstall package \"{}\""
 msgstr "Nu se poate reinstala pachetul „{}”"
 
 #. TODO(jrohel): Why? Librpm does not provide this information.
-#: rpm/transaction.cpp:341
+#: rpm/transaction.cpp:343
 msgid "Cannot remove package \"{}\""
 msgstr "Nu se poate elimina pachetul „{}”"
 
-#: rpm/transaction.cpp:360
+#: rpm/transaction.cpp:362
 msgid "Cannot upgrade package \"{}\""
 msgstr "Nu se poate actualiza pachetul „{}”"
 
-#: rpm/transaction.cpp:364
+#: rpm/transaction.cpp:366
 msgid "Cannot downgrade package \"{}\""
 msgstr "Nu se poate retrograda pachetul „{}”"
 
-#: rpm/transaction.cpp:368
+#: rpm/transaction.cpp:370
 msgid "Cannot install package \"{}\""
 msgstr "Nu se poate instala pachetul „{}”"
 
-#: rpm/versionlock_config.cpp:284 system/state.cpp:573
+#: rpm/versionlock_config.cpp:284 system/state.cpp:605
 msgid "{}"
 msgstr "{}"
 
@@ -1262,21 +1278,21 @@ msgstr "A eșuat conversia epocii „{}” în număr"
 msgid "Writing debugsolver data into \"{}\" failed: {}"
 msgstr "Scrierea datelor debugsolver în „{}” a eșuat: {}"
 
-#: system/state.cpp:280 system/state.cpp:289
+#: system/state.cpp:282 system/state.cpp:291
 msgid "Invalid TOML version \"{}\", \"MAJOR.MINOR\" expected"
 msgstr "Versiune TOML nevalidă „{}”, se aștepta „V_MAJORĂ.V_MINORĂ”"
 
-#: system/state.cpp:297
+#: system/state.cpp:299
 msgid "{} state for \"{}\" not found."
 msgstr "Starea {} pentru „{}” nu a fost găsită."
 
-#: system/state.cpp:301
+#: system/state.cpp:303
 msgid "Loading system state TOML file {} failed (see dnf5-system-state(7)): {}"
 msgstr ""
 "Încărcarea fișierului TOML de stare a sistemului {} a eșuat (consultați dnf5-"
 "system-state(7)): {}"
 
-#: system/state.cpp:602
+#: system/state.cpp:640
 msgid "Unsupported TOML version \"{}\", maximum supported version is \"{}\""
 msgstr "Versiune TOML neacceptată „{}”, versiunea maximă acceptată este „{}”"
 

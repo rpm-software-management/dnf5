@@ -1,7 +1,7 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# Rafael Fontenelle <rafaelff@gnome.org>, 2024.
+# Rafael Fontenelle <rafaelff@gnome.org>, 2024, 2025.
 # Fábio Rodrigues Ribeiro <farribeiro@gmail.com>, 2024.
 # "Geraldo S. Simião Kutz" <geraldo.simiao.kutz@gmail.com>, 2024, 2025.
 # Ciro Mota <ciro.mota@gmail.com>, 2024.
@@ -9,9 +9,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-04-16 03:27+0000\n"
-"PO-Revision-Date: 2025-03-01 03:12+0000\n"
-"Last-Translator: \"Geraldo S. Simião Kutz\" <geraldo.simiao.kutz@gmail.com>\n"
+"POT-Creation-Date: 2025-06-19 03:39+0000\n"
+"PO-Revision-Date: 2025-05-06 05:08+0000\n"
+"Last-Translator: Rafael Fontenelle <rafaelff@gnome.org>\n"
 "Language-Team: Portuguese (Brazil) <https://translate.fedoraproject.org/"
 "projects/dnf5/dnf5daemon-client/pt_BR/>\n"
 "Language: pt_BR\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.10.2\n"
+"X-Generator: Weblate 5.11.3\n"
 
 #: commands/advisory/advisory.cpp:35
 msgid "Manage advisories"
@@ -85,38 +85,40 @@ msgid "Show only advisories referencing a CVE."
 msgstr "Mostra apenas os avisos que fazem referência a um CVE."
 
 #: commands/advisory/arguments.hpp:113
-msgid "Limit to packages in advisories with specified name. List option."
-msgstr "Limite para pacotes em avisos com o nome especificado. Opção de lista."
+msgid ""
+"Include content contained in advisories with specified name. List option."
+msgstr ""
+"Inclui conteúdo contido em avisos com o nome especificado. Opção de lista."
 
 #: commands/advisory/arguments.hpp:114
 msgid "ADVISORY_NAME,..."
 msgstr "NOME_AVISO,..."
 
 #: commands/advisory/arguments.hpp:121
-msgid "Limit to packages in security advisories."
-msgstr "Limite para pacotes em avisos de segurança."
+msgid "Include content contained in security advisories."
+msgstr "Inclui conteúdo contido em avisos de segurança."
 
 #: commands/advisory/arguments.hpp:128
-msgid "Limit to packages in bugfix advisories."
-msgstr "Limite para pacotes em avisos de correção de bugs."
+msgid "Include content contained in bugfix advisories."
+msgstr "Inclui conteúdo contido em avisos de correção de bugs."
 
 #: commands/advisory/arguments.hpp:135
-msgid "Limit to packages in enhancement advisories."
-msgstr "Limite para pacotes em avisos de melhorias."
+msgid "Include content contained in enhancement advisories."
+msgstr "Inclui conteúdo contido em avisos de melhorias."
 
 #: commands/advisory/arguments.hpp:142
-msgid "Limit to packages in newpackage advisories."
-msgstr "Limite para pacotes em avisos de novos pacotes."
+msgid "Include content contained in newpackage advisories."
+msgstr "Inclui conteúdo contido em avisos de novos pacotes."
 
 #. Note for translators: "critical" etc. quoted words are
 #. literals that should not be translated.
 #: commands/advisory/arguments.hpp:155
 msgid ""
-"Limit to packages in advisories with specified severity. List option. Can be "
-"\"critical\", \"important\", \"moderate\", \"low\", \"none\"."
+"Include content contained in advisories with specified severity. List "
+"option. Can be \"critical\", \"important\", \"moderate\", \"low\", \"none\"."
 msgstr ""
-"Limite para pacotes em avisos com a gravidade especificada. Opção de lista. "
-"Pode ser \"critical\", \"important\", \"moderate\", \"low\", \"none\"."
+"Inclui conteúdo contido em avisos com a gravidade especificada. Opção de "
+"lista. Pode ser \"critical\", \"important\", \"moderate\", \"low\", \"none\"."
 
 #: commands/advisory/arguments.hpp:157
 msgid "ADVISORY_SEVERITY,..."
@@ -124,11 +126,11 @@ msgstr "GRAVIDADE_AVISO,..."
 
 #: commands/advisory/arguments.hpp:169
 msgid ""
-"Limit to packages in advisories that fix a Bugzilla ID, Eg. 123123. List "
-"option."
+"Include content contained in advisories that fix a Bugzilla ID, Eg. 123123. "
+"List option."
 msgstr ""
-"Limite para pacotes em avisos que corrigem um Bugzilla ID, ex. 123123. Opção "
-"de lista."
+"Inclui conteúdo contido em avisos que corrigem um Bugzilla ID, ex. 123123. "
+"Opção de lista."
 
 #: commands/advisory/arguments.hpp:170
 msgid "BUGZILLA_ID,..."
@@ -136,10 +138,10 @@ msgstr "BUGZILLA_ID,..."
 
 #: commands/advisory/arguments.hpp:180
 msgid ""
-"Limit to packages in advisories that fix a CVE (Common Vulnerabilities and "
-"Exposures) ID, Eg. CVE-2201-0123. List option."
+"Include content contained in advisories that fix a CVE (Common "
+"Vulnerabilities and Exposures) ID, Eg. CVE-2201-0123. List option."
 msgstr ""
-"Limite para pacotes em avisos que corrigem um ID de CVE (Common "
+"Inclui conteúdo contido em avisos que corrigem um ID de CVE (Common "
 "Vulnerabilities and Exposures), ex. CVE-2201-0123. Opção de lista."
 
 #: commands/advisory/arguments.hpp:182

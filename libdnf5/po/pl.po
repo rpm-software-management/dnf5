@@ -7,10 +7,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-04-16 03:27+0000\n"
-"PO-Revision-Date: 2025-03-29 13:53+0000\n"
-"Last-Translator: Weblate Translation Memory <noreply-mt-weblate-translation-"
-"memory@weblate.org>\n"
+"POT-Creation-Date: 2025-06-19 03:39+0000\n"
+"PO-Revision-Date: 2025-06-01 07:13+0000\n"
+"Last-Translator: Paweł Marciniak <sunwire+fas@gmail.com>\n"
 "Language-Team: Polish <https://translate.fedoraproject.org/projects/dnf5/"
 "libdnf5/pl/>\n"
 "Language: pl\n"
@@ -19,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 5.10.4\n"
+"X-Generator: Weblate 5.11.4\n"
 
 #: advisory/advisory.cpp:81
 msgid ""
@@ -34,7 +33,7 @@ msgid "Unsupported argument for REMOVE action: {}"
 msgstr "Nieobsługiwany argument dla akcji USUŃ: {}"
 
 #. TODO(lukash) throw a proper exception
-#: base/goal.cpp:1593
+#: base/goal.cpp:1641
 msgid "Incorrect configuration value for multilib_policy: {}"
 msgstr "Nieprawidłowa wartość konfiguracji dla multilib_policy: {}"
 
@@ -183,18 +182,26 @@ msgid "No match for argument: {}"
 msgstr "Brak dopasowania dla argumentu: {}"
 
 #: base/log_event.cpp:163
+msgid "No match for argument '{0}' in selected advisories"
+msgstr "Brak dopasowania dla argumentu „{0}” w wybranych ostrzeżeniach"
+
+#: base/log_event.cpp:165
+msgid "No match in selected advisories"
+msgstr "Brak dopasowania w wybranych ostrzeżeniach"
+
+#: base/log_event.cpp:169
 msgid "No match for argument '{0}' in repositories '{1}'"
 msgstr "Brak dopasowania dla argumentu '{0}' w repozytoriach '{1}'"
 
-#: base/log_event.cpp:169
+#: base/log_event.cpp:175
 msgid "Cannot perform {0} for {1} '{2}' because it is not installed."
 msgstr "Nie można wykonać {0} dla {1} '{2}', ponieważ nie jest zainstalowany."
 
-#: base/log_event.cpp:174
+#: base/log_event.cpp:180
 msgid "Packages for argument '{}' available, but not installed."
 msgstr "Pakiety dla argumentu '{}' są dostępne, ale nie zainstalowane."
 
-#: base/log_event.cpp:178
+#: base/log_event.cpp:184
 msgid ""
 "Packages for argument '{}' available, but installed for a different "
 "architecture."
@@ -202,25 +209,25 @@ msgstr ""
 "Pakiety dla argumentu '{}' są dostępne, ale zainstalowane dla innej "
 "architektury."
 
-#: base/log_event.cpp:182
+#: base/log_event.cpp:188
 msgid "Cannot perform {0} because '{1}' matches only source packages."
 msgstr ""
 "Nie można wykonać {0}, ponieważ '{1}' pasuje tylko do pakietów źródłowych."
 
-#: base/log_event.cpp:186
+#: base/log_event.cpp:192
 msgid "Argument '{}' matches only source packages."
 msgstr "Argument '{}' pasuje tylko do pakietów źródłowych."
 
-#: base/log_event.cpp:190
+#: base/log_event.cpp:196
 msgid "Cannot perform {0} because '{1}' matches only excluded packages."
 msgstr ""
 "Nie można wykonać {0}, ponieważ '{1}' pasuje tylko do wykluczonych pakietów."
 
-#: base/log_event.cpp:194
+#: base/log_event.cpp:200
 msgid "Argument '{}' matches only excluded packages."
 msgstr "Argument '{}' pasuje tylko do wykluczonych pakietów."
 
-#: base/log_event.cpp:198
+#: base/log_event.cpp:204
 msgid ""
 "Cannot perform {0} because '{1}' matches only packages excluded by "
 "versionlock."
@@ -228,19 +235,19 @@ msgstr ""
 "Nie można wykonać {0}, ponieważ '{1}' pasuje tylko do pakietów wykluczonych "
 "przez versionlock."
 
-#: base/log_event.cpp:202
+#: base/log_event.cpp:208
 msgid "Argument '{}' matches only packages excluded by versionlock."
 msgstr "Argument '{}' pasuje tylko do pakietów wykluczonych przez versionlock."
 
-#: base/log_event.cpp:207
+#: base/log_event.cpp:213
 msgid "  * Maybe you meant: {}"
 msgstr "  • Czy chodziło o: {}"
 
-#: base/log_event.cpp:210
+#: base/log_event.cpp:216
 msgid "There are following alternatives for '{0}': {1}"
 msgstr "Istnieją następujące alternatywy dla '{0}': {1}"
 
-#: base/log_event.cpp:217
+#: base/log_event.cpp:223
 msgid ""
 "The lowest available version of the \"{}\" package is already installed, "
 "cannot downgrade it."
@@ -248,7 +255,7 @@ msgstr ""
 "Najniższa dostępna wersja pakietu „{}” jest już zainstalowana. Nie można jej "
 "obniżyć."
 
-#: base/log_event.cpp:223
+#: base/log_event.cpp:229
 msgid ""
 "Installed packages for argument '{0}' are not available in repositories in "
 "the same version, available versions: {1}, cannot reinstall."
@@ -256,37 +263,37 @@ msgstr ""
 "Zainstalowane pakiety dla argumentu „{0}” nie są dostępne w repozytoriach w "
 "tej samej wersji, dostępne wersje: {1}, nie można zainstalować ponownie."
 
-#: base/log_event.cpp:229
+#: base/log_event.cpp:235
 msgid ""
 "Cannot perform {0} because '{1}' is installed in a different version: '{2}'."
 msgstr ""
 "Nie można wykonać {0}, ponieważ '{1}' jest zainstalowany w innej wersji: "
 "'{2}'."
 
-#: base/log_event.cpp:235
+#: base/log_event.cpp:241
 msgid ""
 "Packages for argument '{}' installed and available, but in a different "
 "version."
 msgstr ""
 "Pakiety dla argumentu '{}' są zainstalowane i dostępne, ale w innej wersji."
 
-#: base/log_event.cpp:237
+#: base/log_event.cpp:243
 msgid "Packages for argument '{}' installed, but not available."
 msgstr "Pakiety dla argumentu '{}' zostały zainstalowane, ale są niedostępne."
 
-#: base/log_event.cpp:246
+#: base/log_event.cpp:252
 msgid "Package \"{}\" is already installed with reason \"{}\"."
 msgstr "Pakiet „{}” został już zainstalowany z powodu „{}”."
 
-#: base/log_event.cpp:248
+#: base/log_event.cpp:254
 msgid "Package \"{}\" is already installed."
 msgstr "Pakiet „{}” jest już zainstalowany."
 
-#: base/log_event.cpp:257
+#: base/log_event.cpp:263
 msgid "Debug data written to \"{}\""
 msgstr "Dane debugowania zapisane w „{}”"
 
-#: base/log_event.cpp:261
+#: base/log_event.cpp:267
 msgid ""
 "{0} upgrade cannot be reverted, however associated package actions will be. "
 "({1} id: '{2}') ."
@@ -294,16 +301,16 @@ msgstr ""
 "{0} uaktualnienia nie można cofnąć, ale powiązane z nim działania pakietu "
 "będą cofnięte. ({1} id: '{2}') ."
 
-#: base/log_event.cpp:267
+#: base/log_event.cpp:273
 msgid "{} action for argument \"{}\" is not supported."
 msgstr "{} akcja dla argumentu \"{}\" nie jest obsługiwana."
 
 #. Format a leading line of the error message.
-#: base/log_event.cpp:276
+#: base/log_event.cpp:282
 msgid "Unable to resolve argument '{}':"
 msgstr "Nie można rozwiązać argumentu '{}':"
 
-#: base/log_event.cpp:280
+#: base/log_event.cpp:286
 msgid ""
 "\n"
 "  - Argument '{}' matches {} stream ('{}') of module '{}', but the stream is "
@@ -325,23 +332,23 @@ msgstr[2] ""
 "  - Argument '{}' pasuje do {} strumieni ('{}') modułu '{}', ale żaden ze "
 "strumieni nie jest włączony ani domyślny."
 
-#: base/log_event.cpp:287
+#: base/log_event.cpp:293
 msgid "', '"
 msgstr "', '"
 
-#: base/log_event.cpp:296
+#: base/log_event.cpp:302
 msgid "Modular dependency problems:\n"
 msgstr "Problemy zależności modułowych:\n"
 
-#: base/log_event.cpp:303
+#: base/log_event.cpp:309
 msgid "Modular dependency problems with the latest modules:\n"
 msgstr "Problemy zależności modułowych w najnowszych modułach:\n"
 
-#: base/log_event.cpp:310
+#: base/log_event.cpp:316
 msgid "Modular dependency problems with the defaults:\n"
 msgstr "Problemy z zależnościami modułowymi przy ustawieniach domyślnych:\n"
 
-#: base/log_event.cpp:325
+#: base/log_event.cpp:331
 msgid ""
 "The operation would result in switching of module '{0}' stream '{1}' to "
 "stream '{2}'\n"
@@ -349,7 +356,7 @@ msgstr ""
 "Operacja spowoduje przełączenie strumienia modułu '{0}' '{1}' na strumień "
 "'{2}'\n"
 
-#: base/log_event.cpp:330
+#: base/log_event.cpp:336
 msgid ""
 "Error: It is not possible to switch enabled streams of a module unless "
 "explicitly enabled via configuration option module_stream_switch."
@@ -357,7 +364,7 @@ msgstr ""
 "Błąd: Nie można przełączać włączonych strumieni modułu, chyba że zostanie to "
 "wyraźnie włączone za pomocą opcji konfiguracji module_stream_switch."
 
-#: base/log_event.cpp:335
+#: base/log_event.cpp:341
 msgid ""
 "Extra package '{0}' (with action '{1}') which is not present in the stored "
 "transaction was pulled into the transaction.\n"
@@ -365,11 +372,11 @@ msgstr ""
 "Dodatkowy pakiet '{0}' (z akcją '{1}'), którego nie ma w zapisanej "
 "transakcji, został wciągnięty do transakcji.\n"
 
-#: base/log_event.cpp:341
+#: base/log_event.cpp:347
 msgid "Cannot parse file: '{0}': {1}.\n"
 msgstr "Nie można przeanalizować pliku: '{0}': {1}.\n"
 
-#: base/log_event.cpp:348
+#: base/log_event.cpp:354
 msgid ""
 "Could not find debuginfo package for the following packages resolved from "
 "the argument '{0}': {1}"
@@ -377,12 +384,12 @@ msgstr ""
 "Nie można znaleźć pakietu debuginfo dla następujących pakietów rozwiązanych "
 "na podstawie argumentu '{0}': {1}"
 
-#: base/log_event.cpp:351 base/log_event.cpp:362
+#: base/log_event.cpp:357 base/log_event.cpp:368
 msgctxt "String for joining NEVRAs - e.g. `foo-4-4.noarch, bar-5-5.noarch`"
 msgid ", "
 msgstr ", "
 
-#: base/log_event.cpp:358
+#: base/log_event.cpp:364
 msgid ""
 "Could not find debugsource package for the following packages resolved from "
 "the argument '{0}': {1}"
@@ -390,7 +397,7 @@ msgstr ""
 "Nie można znaleźć pakietu debugsource dla następujących pakietów "
 "rozwiązanych na podstawie argumentu '{0}': {1}"
 
-#: base/log_event.cpp:365
+#: base/log_event.cpp:371
 msgid "Transaction merge error: '{0}'"
 msgstr "Błąd scalania transakcji: '{0}'"
 
@@ -930,7 +937,7 @@ msgstr "Plugins::load_plugins(): config_dir_path nie może być pusty"
 msgid "Cannot load libdnf plugin enabled from: {}"
 msgstr "Nie można załadować wtyczki libdnf włączonej z: {}"
 
-#: repo/config_repo.cpp:569
+#: repo/config_repo.cpp:581
 msgid "get_unique_id(): Computation of SHA256 failed"
 msgstr "get_unique_id(): Obliczenie SHA256 nie powiodło się"
 
@@ -966,29 +973,34 @@ msgstr "Już pobrano"
 msgid "Failed to download packages"
 msgstr "Nie udało się pobrać pakietów"
 
-#: repo/repo.cpp:59
+#: repo/repo.cpp:61
 msgid "Failed to load RPM \"{}\": doesn't have the \".rpm\" extension"
 msgstr "Nie udało się załadować RPM „{}”: nie ma rozszerzenia „.rpm”"
 
-#: repo/repo.cpp:63
+#: repo/repo.cpp:65
 msgid "Failed to access RPM \"{}\": {}"
 msgstr "Nie udało się uzyskać dostępu do RPM „{}”: {}"
 
-#: repo/repo.cpp:105
+#: repo/repo.cpp:107
 msgid "Invalid repository id \"{}\": unexpected character '{}'"
 msgstr "Nieprawidłowy identyfikator repozytorium „{}”: nieoczekiwany znak „{}”"
 
-#: repo/repo.cpp:148
+#: repo/repo.cpp:150
 msgid "Repository \"{}\" has no source (baseurl, mirrorlist or metalink) set."
 msgstr ""
 "Repozytorium „{}” nie ma ustawionego źródła (baseurl, mirrorlist lub "
 "metalink)."
 
-#: repo/repo.cpp:159
+#: repo/repo.cpp:161
 msgid "Repository \"{}\" has unsupported type \"{}\", skipping."
 msgstr "Repozytorium „{}” ma nieobsługiwany typ „{}”, pomijanie."
 
-#: repo/repo.cpp:410
+#: repo/repo.cpp:221 repo/repo.cpp:241 repo/repo_sack.cpp:372
+msgid "Failed to download metadata ({}: \"{}\") for repository \"{}\": {}"
+msgstr ""
+"Nie udało się pobrać metadanych ({}: \"{}\") dla repozytorium \"{}\": {}"
+
+#: repo/repo.cpp:439
 msgid ""
 "Failed to load repository: \"primary\" data not present or in unsupported "
 "format"
@@ -996,19 +1008,19 @@ msgstr ""
 "Nie udało się załadować repozytorium: dane „podstawowe” nie są obecne lub są "
 "w nieobsługiwanym formacie"
 
-#: repo/repo.cpp:476
+#: repo/repo.cpp:505
 msgid "Failed to load comps \"{}\": doesn't have the \".xml\" extension"
 msgstr "Nie udało się załadować kompozycji „{}”: nie ma rozszerzenia „.xml”"
 
-#: repo/repo.cpp:483
+#: repo/repo.cpp:512
 msgid "Failed to load xml Comps \"{}\": {}"
 msgstr "Nie udało się załadować kompozycji xml \"{}\": {}"
 
-#: repo/repo.cpp:501
+#: repo/repo.cpp:530
 msgid "Failed to load RPM \"{}\": {}"
 msgstr "Nie udało się załadować RPM „{}”: {}"
 
-#: repo/repo_cache.cpp:252
+#: repo/repo_cache.cpp:255
 msgid "Unable to determine id of the repository in the cache."
 msgstr "Nie można ustalić identyfikatora repozytorium w pamięci podręcznej."
 
@@ -1016,31 +1028,35 @@ msgstr "Nie można ustalić identyfikatora repozytorium w pamięci podręcznej."
 msgid "Empty path to the repository cache directory."
 msgstr "Pusta ścieżka do katalogu pamięci podręcznej repozytorium."
 
-#: repo/repo_downloader.cpp:138
+#: repo/repo_downloader.cpp:214
 msgid "Librepo error: {}"
 msgstr "Błąd librepo: {}"
 
-#: repo/repo_downloader.cpp:170
-msgid "Failed to download metadata ({}: \"{}\") for repository \"{}\""
-msgstr "Nie udało się pobrać metadanych ({}: \"{}\") dla repozytorium \"{}\""
+#: repo/repo_downloader.cpp:258
+msgid "Failed to set up metadata download"
+msgstr "Nie udało się skonfigurować pobierania metadanych"
 
-#: repo/repo_downloader.cpp:241
+#: repo/repo_downloader.cpp:312 repo/repo_downloader.cpp:362
+msgid "Failed to download metadata"
+msgstr "Nie udało się pobrać metadanych"
+
+#: repo/repo_downloader.cpp:426
 msgid "Error checking if metalink \"{}\" is in sync for repository \"{}\""
 msgstr ""
 "Wystąpił błąd podczas sprawdzania, czy metalink „{}” jest zsynchronizowany z "
 "repozytorium „{}”"
 
-#: repo/repo_downloader.cpp:271
+#: repo/repo_downloader.cpp:446
 msgid "Error checking if repomd ({}: \"{}\") is in sync for repository \"{}\""
 msgstr ""
 "Wystąpił błąd podczas sprawdzania, czy repomd ({}: \"{}\") jest "
 "zsynchronizowany z repozytorium \"{}\""
 
-#: repo/repo_downloader.cpp:336
+#: repo/repo_downloader.cpp:515
 msgid "Error loading local metadata for repository \"{}\""
 msgstr "Błąd podczas ładowania lokalnych metadanych dla repozytorium „{}”"
 
-#: repo/repo_downloader.cpp:475
+#: repo/repo_downloader.cpp:597
 msgid ""
 "No valid source (baseurl, mirrorlist or metalink) found for repository \"{}\""
 msgstr ""
@@ -1060,7 +1076,7 @@ msgstr "Nie udało się wyświetlić kluczy OpenPGP: {}"
 msgid "Failed to import OpenPGP keys: {}"
 msgstr "Nie udało się zaimportować kluczy OpenPGP: {}"
 
-#: repo/repo_sack.cpp:148
+#: repo/repo_sack.cpp:159
 msgid ""
 "Failed to create repo \"{}\": Id is present more than once in the "
 "configuration"
@@ -1068,60 +1084,60 @@ msgstr ""
 "Nie udało się utworzyć repozytorium „{}”: Identyfikator występuje więcej niż "
 "raz w konfiguracji"
 
-#: repo/repo_sack.cpp:575
+#: repo/repo_sack.cpp:635
 msgid "Cache-only enabled but no cache for repository \"{}\""
 msgstr ""
 "Włączono tylko pamięć podręczną, ale brak pamięci podręcznej dla "
 "repozytorium „{}”"
 
-#: repo/solv_repo.cpp:266
+#: repo/solv_repo.cpp:267
 msgid "Failed to load repomd for repo \"{}\" from \"{}\": {}."
 msgstr "Nie udało się załadować repomd dla repozytorium „{}” z „{}”: {}."
 
-#: repo/solv_repo.cpp:274
+#: repo/solv_repo.cpp:275
 msgid "Failed to load primary for repo \"{}\" from \"{}\": {}."
 msgstr ""
 "Nie udało się załadować „podstawowych” danych repozytorium „{}” z „{}”: {}."
 
-#: repo/solv_repo.cpp:322
+#: repo/solv_repo.cpp:323
 msgid "Unsupported extended repodata type for the system repo: \"{}\"."
 msgstr ""
 "Nieobsługiwany rozszerzony typ repozytorium danych dla repozytorium "
 "systemowego: „{}”."
 
-#: repo/solv_repo.cpp:394
+#: repo/solv_repo.cpp:395
 msgid "Failed to load {} extension for repo \"{}\" from \"{}\": {}"
 msgstr ""
 "Nie udało się załadować rozszerzenia {} dla repozytorium „{}” z „{}”: {}"
 
-#: repo/solv_repo.cpp:430
+#: repo/solv_repo.cpp:431
 msgid "Failed to load system repo from root \"{}\": {}"
 msgstr ""
 
-#: repo/solv_repo.cpp:531
+#: repo/solv_repo.cpp:532
 msgid "Failed to load {} cache for repo \"{}\" from \"{}\": {}"
 msgstr ""
 "Nie udało się załadować pamięci podręcznej {} dla repozytorium „{}” z „{}”: "
 "{}"
 
-#: repo/solv_repo.cpp:585
+#: repo/solv_repo.cpp:586
 msgid "Failed to write primary cache for repo \"{}\" to \"{}\": {}"
 msgstr ""
 "Nie udało się zapisać podstawowej pamięci podręcznej głównej dla "
 "repozytorium „{}” do „{}”: {}"
 
-#: repo/solv_repo.cpp:607
+#: repo/solv_repo.cpp:608
 msgid "Failed to re-load primary cache for repo \"{}\" from \"{}\": {}"
 msgstr ""
 "Nie udało się ponownie załadować podstawowej pamięci podręcznej dla "
 "repozytorium „{}” z „{}”: {}"
 
-#: repo/solv_repo.cpp:672
+#: repo/solv_repo.cpp:673
 msgid "Failed to write {} cache for repo \"{}\" to \"{}\": {}"
 msgstr ""
 "Nie udało się zapisać pamięci podręcznej {} dla repozytorium „{}” do „{}”: {}"
 
-#: repo/solv_repo.cpp:693
+#: repo/solv_repo.cpp:694
 msgid "Failed to re-load {} cache for repo \"{}\" from \"{}\": {}"
 msgstr ""
 "Nie udało się ponownie załadować pamięci podręcznej {} dla repozytorium „{}” "
@@ -1183,76 +1199,76 @@ msgid "Failed to import public key \"{}\" to rpmdb: {}"
 msgstr "Nie udało się zaimportować klucza publicznego „{}” do rpmdb: {}"
 
 #. TODO(jrohel): Why? Librpm does not provide this information.
-#: rpm/transaction.cpp:112
+#: rpm/transaction.cpp:114
 msgid "Cannot set root directory \"{}\""
 msgstr "Nie można ustawić katalogu głównego „{}”"
 
-#: rpm/transaction.cpp:123
+#: rpm/transaction.cpp:125
 #, c-format
 msgid "Error %i opening rpm database"
 msgstr "Błąd %i podczas otwierania bazy danych rpm"
 
-#: rpm/transaction.cpp:132
+#: rpm/transaction.cpp:134
 msgid "The rpmdbCookie() function did not return cookie of rpm database."
 msgstr "Funkcja rpmdbCookie() nie zwróciła pliku cookie bazy danych rpm."
 
-#: rpm/transaction.cpp:197
+#: rpm/transaction.cpp:199
 msgid "Failed to order the rpm transaction."
 msgstr "Nie udało się uporządkować transakcji rpm."
 
-#: rpm/transaction.cpp:233
+#: rpm/transaction.cpp:235
 msgid ""
 "Failed to set scriptlet output file, cannot duplicate file descriptor: {}"
 msgstr ""
 "Nie udało się ustawić pliku wyjściowego scriptletu, nie można zduplikować "
 "deskryptora pliku: {}"
 
-#: rpm/transaction.cpp:252
+#: rpm/transaction.cpp:254
 msgid "Failed to set scriptlet output file, cannot open file \"{}\": {}"
 msgstr ""
 "Nie udało się ustawić pliku wyjściowego scriptletu, nie można otworzyć pliku "
 "\"{}\": {}"
 
-#: rpm/transaction.cpp:273
+#: rpm/transaction.cpp:275
 msgid "Failed to read package header, cannot open file \"{}\": {}"
 msgstr ""
 "Nie udało się odczytać nagłówka pakietu, nie można otworzyć pliku \"{}\": {}"
 
-#: rpm/transaction.cpp:290
+#: rpm/transaction.cpp:292
 msgid "Failed to read package header from file \"{}\""
 msgstr "Nie udało się odczytać nagłówka pakietu z pliku „{}”"
 
-#: rpm/transaction.cpp:303
+#: rpm/transaction.cpp:305
 msgid "Cannot init rpm database iterator"
 msgstr "Nie można zainicjować iteratora bazy danych rpm"
 
-#: rpm/transaction.cpp:307
+#: rpm/transaction.cpp:309
 msgid "Package was not found in rpm database"
 msgstr "Pakiet nie został znaleziony w bazie danych rpm"
 
 #. TODO(jrohel): Why? Librpm does not provide this information.
-#: rpm/transaction.cpp:323
+#: rpm/transaction.cpp:325
 msgid "Cannot reinstall package \"{}\""
 msgstr "Nie można ponownie zainstalować pakietu „{}”"
 
 #. TODO(jrohel): Why? Librpm does not provide this information.
-#: rpm/transaction.cpp:341
+#: rpm/transaction.cpp:343
 msgid "Cannot remove package \"{}\""
 msgstr "Nie można usunąć pakietu „{}”"
 
-#: rpm/transaction.cpp:360
+#: rpm/transaction.cpp:362
 msgid "Cannot upgrade package \"{}\""
 msgstr "Nie można uaktualnić pakietu „{}”"
 
-#: rpm/transaction.cpp:364
+#: rpm/transaction.cpp:366
 msgid "Cannot downgrade package \"{}\""
 msgstr "Nie można obniżyć wersji pakietu „{}”"
 
-#: rpm/transaction.cpp:368
+#: rpm/transaction.cpp:370
 msgid "Cannot install package \"{}\""
 msgstr "Nie można zainstalować pakietu „{}”"
 
-#: rpm/versionlock_config.cpp:284 system/state.cpp:573
+#: rpm/versionlock_config.cpp:284 system/state.cpp:605
 msgid "{}"
 msgstr "{}"
 
@@ -1265,21 +1281,21 @@ msgstr "Nie udało się przekonwertować epoki „{}” na liczbę"
 msgid "Writing debugsolver data into \"{}\" failed: {}"
 msgstr "Nie udało się zapisać danych debugera do „{}”: {}"
 
-#: system/state.cpp:280 system/state.cpp:289
+#: system/state.cpp:282 system/state.cpp:291
 msgid "Invalid TOML version \"{}\", \"MAJOR.MINOR\" expected"
 msgstr "Nieprawidłowa wersja TOML „{}”, oczekiwano „MAJOR.MINOR”"
 
-#: system/state.cpp:297
+#: system/state.cpp:299
 msgid "{} state for \"{}\" not found."
 msgstr "{} stan dla \"{}\" nie został znaleziony."
 
-#: system/state.cpp:301
+#: system/state.cpp:303
 msgid "Loading system state TOML file {} failed (see dnf5-system-state(7)): {}"
 msgstr ""
 "Ładowanie pliku TOML stanu systemu {} nie powiodło się (patrz dnf5-system-"
 "state(7)): {}"
 
-#: system/state.cpp:602
+#: system/state.cpp:640
 msgid "Unsupported TOML version \"{}\", maximum supported version is \"{}\""
 msgstr "Nieobsługiwana wersja TOML „{}”, maksymalna obsługiwana wersja to „{}”"
 

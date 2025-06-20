@@ -4,13 +4,14 @@
 # Dennis Koerner <dennis@bumblebeeman.dev>, 2024.
 # Weblate Translation Memory <noreply-mt-weblate-translation-memory@weblate.org>, 2024.
 # Fabio D <fabio1977@arcor.de>, 2024.
+# Mario Blättermann <mario.blaettermann@gmail.com>, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-04-16 03:27+0000\n"
-"PO-Revision-Date: 2024-11-05 14:23+0000\n"
-"Last-Translator: Fabio D <fabio1977@arcor.de>\n"
+"POT-Creation-Date: 2025-06-19 03:39+0000\n"
+"PO-Revision-Date: 2025-05-01 13:57+0000\n"
+"Last-Translator: Mario Blättermann <mario.blaettermann@gmail.com>\n"
 "Language-Team: German <https://translate.fedoraproject.org/projects/dnf5/"
 "dnf5-plugin-config-manager/de/>\n"
 "Language: de\n"
@@ -18,7 +19,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.8.2\n"
+"X-Generator: Weblate 5.11.1\n"
 
 #: addrepo.cpp:136
 msgid "from-repofile: \"{}\" file does not exist"
@@ -111,8 +112,8 @@ msgstr "Konfiguration verwalten"
 msgid ""
 "{}: Badly formatted argument value: Last key character cannot be '.': {}"
 msgstr ""
-"{}: Schlecht formatierter Argumentwert: Letzter Schlüsselwert kann nicht '.' "
-"sein: {}"
+"{}: Fehlerhaft formatierter Argumentwert: Letzter Schlüsselwert kann nicht "
+"».« sein: {}"
 
 #: setopt.cpp:100 unsetopt.cpp:81
 msgid "{}: Empty repository id is not allowed: {}"

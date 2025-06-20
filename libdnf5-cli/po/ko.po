@@ -4,13 +4,13 @@
 # Byoungchan Lee <byoungchan.lee@gmx.com>, 2024.
 # Weblate Translation Memory <noreply-mt-weblate-translation-memory@weblate.org>, 2024.
 # Joungmin Lee <leejm516@gmail.com>, 2024.
-# 김인수 <simmon@nplob.com>, 2024.
+# 김인수 <simmon@nplob.com>, 2024, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-04-16 03:27+0000\n"
-"PO-Revision-Date: 2024-12-13 06:02+0000\n"
+"POT-Creation-Date: 2025-06-19 03:39+0000\n"
+"PO-Revision-Date: 2025-06-14 07:33+0000\n"
 "Last-Translator: 김인수 <simmon@nplob.com>\n"
 "Language-Team: Korean <https://translate.fedoraproject.org/projects/dnf5/"
 "libdnf5-cli/ko/>\n"
@@ -19,98 +19,110 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.8.4\n"
+"X-Generator: Weblate 5.11.4\n"
 
-#: argument_parser.cpp:62
+#: argument_parser.cpp:68
+msgid "Misconfigured alias \"{}\": cannot convert \"{}\" to a number"
+msgstr "잘못 구성된 별칭 \"{}\": \"{}\"를 숫자로 변환 할 수 없습니다"
+
+#: argument_parser.cpp:76
+msgid "Misconfigured alias \"{}\": index \"{}\" out of range"
+msgstr "잘못 구성된 별칭 \"{}\": 색인 \"{}\"가 범위를 벗어남"
+
+#: argument_parser.cpp:98
 msgid "\"{}\" not allowed together with named argument \"{}\""
 msgstr "\"{}\"는 명명된 인수 \"{}\"와 함께 허용 되지 않습니다"
 
-#: argument_parser.cpp:64
+#: argument_parser.cpp:100
 msgid "\"{}\" not allowed in command \"{}\""
 msgstr "\"{}\"는 명령 \"{}\"에서 허용되지 않습니다"
 
-#: argument_parser.cpp:66
+#: argument_parser.cpp:102
 msgid "\"{}\" not allowed together with positional argument \"{}\""
 msgstr "\"{}\"는 위치 인수 \"{}\"와 함께 허용되지 않습니다"
 
-#: argument_parser.cpp:111
+#: argument_parser.cpp:147
 msgid "Argument id \"{}\" already registered in group \"{}\""
 msgstr "인수 id \"{}는 이미 그룹 \"{}\"에서 등록되어 있습니다"
 
-#: argument_parser.cpp:238
+#: argument_parser.cpp:274
 msgid "Invalid character '.' in argument id \"{}\""
 msgstr "잘못된 문자 '.' (인수 id \"{}\"에서)"
 
-#: argument_parser.cpp:346 argument_parser.cpp:351
+#: argument_parser.cpp:382 argument_parser.cpp:387
 msgid "Too few values for positional argument \"{}\""
 msgstr "위치 인수 \"{}\"를 위한 값이 너무 적습니다"
 
-#: argument_parser.cpp:512
+#: argument_parser.cpp:548
 msgid "Missing value for named argument \"--{}\""
 msgstr "명명된 인수 \"--{}\"를 위해 누락된 값"
 
-#: argument_parser.cpp:520
+#: argument_parser.cpp:556
 msgid "Unexpected value for named argument \"--{}\""
 msgstr "명명된 인수 \"--{}\"에 대해 예상치 못한 값"
 
-#: argument_parser.cpp:562
+#: argument_parser.cpp:598
 msgid "Missing value for named argument \"-{}\""
 msgstr "명명된 인수 \"-{}\"에 대해 누락된 값"
 
 #. print usage
-#: argument_parser.cpp:658
+#: argument_parser.cpp:694
 msgid "Usage:"
 msgstr "사용법:"
 
-#: argument_parser.cpp:666
+#: argument_parser.cpp:702
 msgid "Description:"
 msgstr "설명:"
 
-#: argument_parser.cpp:943
+#: argument_parser.cpp:979
 msgid "Command id \"{}\" already registered for command \"{}\""
 msgstr "명령 id \"{}\"는 이미 명령 \"{}\"를 위해 등록되어 있습니다"
 
-#: argument_parser.cpp:954
+#: argument_parser.cpp:990
 msgid "Named argument id \"{}\" already registered for command \"{}\""
 msgstr "명명된 인수 id \"{}\"는 이미 명령 \"{}\"를 위해 등록되어 있습니다"
 
-#: argument_parser.cpp:964
+#: argument_parser.cpp:1000
 msgid "Positional argument id \"{}\" already registered for command \"{}\""
 msgstr "위치 인수 id \"{}\"는 이미 명령 \"{}\"를 위해 등록되어 있습니다"
 
-#: argument_parser.cpp:974
+#: argument_parser.cpp:1010
 msgid "Group id \"{}\" already registered for command \"{}\""
 msgstr "그룹 id \"{}\"는 이미 명령 \"{}\"를 위해 등록되어 있습니다"
 
-#: argument_parser.cpp:1001
+#: argument_parser.cpp:1037
 msgid "Command id \"{}\" does not contain subcommand with id \"{}\""
 msgstr "명령 id \"{}\"는 id \"{}\"를 갖는 하위 명령을 포함하지 않습니다"
 
-#: argument_parser.cpp:1009
+#: argument_parser.cpp:1045
 msgid "Command id \"{}\" does not contain named argument with id \"{}\""
 msgstr "명령 id \"{}\"는 id \"{}\"를 갖는 명명된 인수를 포함하지 않습니다"
 
-#: argument_parser.cpp:1017
+#: argument_parser.cpp:1053
 msgid "Command id \"{}\" does not contain positional argument with id \"{}\""
 msgstr "명령 id \"{}\"는 id \"{}\"를 갖는 위치 인수를 포함하지 않습니다"
 
-#: argument_parser.cpp:1024
+#: argument_parser.cpp:1060
 msgid "Command id \"{}\" does not contain group with id \"{}\""
 msgstr "명령 id \"{}\"는 id \"{}\"를 갖는 그룹을 포함하지 않습니다"
 
-#: argument_parser.cpp:1141 argument_parser.cpp:1345
+#: argument_parser.cpp:1177 argument_parser.cpp:1388
 msgid "Unknown argument \"{}\" for command \"{}\""
 msgstr "알 수 없는 인수 \"{}\" (명령 \"{}\"용)"
 
-#: argument_parser.cpp:1156 argument_parser.cpp:1360
+#: argument_parser.cpp:1192 argument_parser.cpp:1403
 msgid "Missing positional argument \"{}\" for command \"{}\""
 msgstr "누락된 위치 인수 \"{}\" (명령 \"{}\"용)"
 
-#: argument_parser.cpp:1563
+#: argument_parser.cpp:1274
+msgid "Missing value for command alias \"{}\""
+msgstr "명령 별칭 \"{}\"에 누락된 값"
+
+#: argument_parser.cpp:1610
 msgid "Named argument with path id \"{}\" not found"
 msgstr "경로 id \"{}\"를 갖는 명명된 인수를 찾지 못했습니다"
 
-#: argument_parser.cpp:1573
+#: argument_parser.cpp:1620
 msgid "Positional argument with path id \"{}\" not found"
 msgstr "경로 d \"{}\"를 갖는 위치 인수를 찾지 못했습니다"
 
@@ -221,7 +233,7 @@ msgstr "연결 요약:\n"
 #: output/transaction_table.cpp:132
 msgid " Installing:      {:4} package\n"
 msgid_plural " Installing:      {:4} packages\n"
-msgstr[0] " 설치 중:      {:4} 꾸러미\n"
+msgstr[0] " 설치 중:       {:4} 꾸러미\n"
 
 #. Keep the replaceble number aligned across all messages.
 #: output/transaction_table.cpp:141
@@ -245,7 +257,7 @@ msgstr[0] " 교체 중:       {:4} 꾸러미\n"
 #: output/transaction_table.cpp:168
 msgid " Removing:        {:4} package\n"
 msgid_plural " Removing:        {:4} packages\n"
-msgstr[0] " 제거 중:        {:4} 꾸러미\n"
+msgstr[0] " 제거 중:       {:4} 꾸러미\n"
 
 #. Keep the replaceble number aligned across all messages.
 #: output/transaction_table.cpp:177

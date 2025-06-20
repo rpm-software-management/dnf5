@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-04-16 03:27+0000\n"
+"POT-Creation-Date: 2025-06-19 03:39+0000\n"
 "PO-Revision-Date: 2025-04-05 08:01+0000\n"
 "Last-Translator: Inci sakura <incisakura@icloud.com>\n"
 "Language-Team: Japanese <https://translate.fedoraproject.org/projects/dnf5/"
@@ -20,6 +20,150 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Generator: Weblate 5.10.4\n"
+
+#: cmdline_aliases.cpp:84 context.cpp:301 main.cpp:1357
+msgid ", "
+msgstr ", "
+
+#: cmdline_aliases.cpp:145
+msgid ""
+"Attached named argument \"{}\" not found: {}: Requested in file \"{}\" on "
+"line {}: {}"
+msgstr ""
+
+#: cmdline_aliases.cpp:159
+msgid ""
+"Unknown attribute \"{}\" of attached named argument for alias \"{}\" in file "
+"\"{}\" on line {}: {}"
+msgstr ""
+
+#: cmdline_aliases.cpp:171
+msgid "Missing attribute \"id_path\" for alias \"{}\" in file \"{}\""
+msgstr ""
+
+#: cmdline_aliases.cpp:208
+msgid "Unsupported version \"{}\" in file \"{}\". Supported versions: {}"
+msgstr ""
+
+#: cmdline_aliases.cpp:218
+msgid "Bad value type of attribute \"version\" in file \"{}\" on line {}: {}"
+msgstr ""
+
+#: cmdline_aliases.cpp:224
+msgid "Missing attribute \"version\" in file \"{}\""
+msgstr ""
+
+#: cmdline_aliases.cpp:236
+msgid "Unknown key \"{}\" in file \"{}\" on line {}: {}"
+msgstr ""
+
+#: cmdline_aliases.cpp:253
+msgid "Empty or bad element id path in file \"{}\" on line {}: {}"
+msgstr ""
+
+#: cmdline_aliases.cpp:272
+msgid ""
+"Parent command \"{}\" not found: {}: Requested in file \"{}\" on line {}: {}"
+msgstr ""
+
+#: cmdline_aliases.cpp:301
+msgid "Unknown type \"{}\" of element \"{}\" in file \"{}\" on line {}: {}"
+msgstr ""
+
+#: cmdline_aliases.cpp:312
+msgid "Missing attribute \"type\" for element \"{}\" in file \"{}\""
+msgstr ""
+
+#: cmdline_aliases.cpp:331
+msgid ""
+"Named argument \"{}\" already registered. Requested in file \"{}\" on line "
+"{}: {}"
+msgstr ""
+
+#: cmdline_aliases.cpp:347
+msgid ""
+"Command \"{}\" already registered. Requested in file \"{}\" on line {}: {}"
+msgstr ""
+
+#: cmdline_aliases.cpp:375
+msgid "Unknown attribute \"{}\" of group \"{}\" in file \"{}\" on line {}: {}"
+msgstr ""
+
+#: cmdline_aliases.cpp:387
+msgid "Missing attribute \"header\" for element \"{}\" in file \"{}\""
+msgstr ""
+
+#: cmdline_aliases.cpp:428 cmdline_aliases.cpp:538
+msgid ""
+"The \"short_name\" attribute of named argument \"{}\" must be one character "
+"long in file \"{}\" on line {}: {}"
+msgstr ""
+
+#: cmdline_aliases.cpp:446
+msgid "Source \"{}\" not found: {}: Requested in file \"{}\" on line {}: {}"
+msgstr ""
+
+#: cmdline_aliases.cpp:462 cmdline_aliases.cpp:563 cmdline_aliases.cpp:676
+msgid "Group \"{}\" not found: {}: Requested in file \"{}\" on line {}: {}"
+msgstr ""
+
+#: cmdline_aliases.cpp:476 cmdline_aliases.cpp:579
+msgid ""
+"Unknown attribute \"{}\" of named argument \"{}\" in file \"{}\" on line {}: "
+"{}"
+msgstr ""
+
+#: cmdline_aliases.cpp:489
+msgid "Missing attribute \"source\" for named argument \"{}\" in file \"{}\""
+msgstr ""
+
+#: cmdline_aliases.cpp:498 cmdline_aliases.cpp:592
+msgid ""
+"At least one of the attributes \"long_name\" and \"short_name\" must be set "
+"for named argument \"{}\" in file \"{}\""
+msgstr ""
+
+#: cmdline_aliases.cpp:657
+msgid ""
+"Attached command \"{}\" not found: {}: Requested in file \"{}\" on line {}: "
+"{}"
+msgstr ""
+
+#: cmdline_aliases.cpp:691
+msgid ""
+"Used config file version \"1.0\" for attribute \"{}\" of command \"{}\" in "
+"file \"{}\" on line {}: {}"
+msgstr ""
+
+#: cmdline_aliases.cpp:713
+msgid ""
+"Unknown attribute \"{}\" of required value for alias \"{}\" in file \"{}\" "
+"on line {}: {}"
+msgstr ""
+
+#: cmdline_aliases.cpp:726
+msgid ""
+"Missing attribute \"value_help\" of required value for alias \"{}\" in file "
+"\"{}\""
+msgstr ""
+
+#: cmdline_aliases.cpp:740
+msgid ""
+"Unknown attribute \"{}\" of command \"{}\" in file \"{}\" on line {}: {}"
+msgstr ""
+
+#: cmdline_aliases.cpp:756
+msgid ""
+"Missing attribute \"attached_command\" for command \"{}\" in file \"{}\""
+msgstr ""
+
+#: cmdline_aliases.cpp:791
+msgid "Bad value type in file \"{}\" on line {}: {}"
+msgstr ""
+
+#: cmdline_aliases.cpp:804
+msgid "Syntax error in file \"{}\" on line {}:"
+msgstr ""
 
 #: commands/advisory/advisory.cpp:36
 msgid "Manage advisories"
@@ -100,63 +244,102 @@ msgstr "bugzilla に関連する勧告のみを表示。"
 msgid "Show only advisories referencing a CVE."
 msgstr "CVE に関連する勧告のみを表示。"
 
-#: commands/advisory_shared.hpp:113
-msgid "Limit to packages in advisories with specified name. List option."
+#: commands/advisory_shared.hpp:76
+msgid "No advisory found matching the requested name: \"{}\""
+msgstr ""
+
+#: commands/advisory_shared.hpp:109
+msgid "No advisory found fixing the Bugzilla ID: \"{}\""
+msgstr ""
+
+#: commands/advisory_shared.hpp:128
+msgid "No advisory found fixing the CVE ID: \"{}\""
+msgstr ""
+
+#: commands/advisory_shared.hpp:143
+msgid "No advisory found matching the specified filters."
+msgstr ""
+
+#: commands/advisory_shared.hpp:158
+#, fuzzy
+#| msgid "Limit to packages in advisories with specified name. List option."
+msgid ""
+"Include content contained in advisories with specified name. List option."
 msgstr "指定名前のパッケージの勧告のみ。リスト。"
 
-#: commands/advisory_shared.hpp:114
+#: commands/advisory_shared.hpp:159
 msgid "ADVISORY_NAME,..."
 msgstr "勧告名,..."
 
-#: commands/advisory_shared.hpp:121
-msgid "Limit to packages in security advisories."
+#: commands/advisory_shared.hpp:166
+#, fuzzy
+#| msgid "Limit to packages in security advisories."
+msgid "Include content contained in security advisories."
 msgstr "security 勧告のあるパッケージのみ。"
 
-#: commands/advisory_shared.hpp:128
-msgid "Limit to packages in bugfix advisories."
+#: commands/advisory_shared.hpp:173
+#, fuzzy
+#| msgid "Limit to packages in bugfix advisories."
+msgid "Include content contained in bugfix advisories."
 msgstr "bugfix 勧告のあるパッケージのみ。"
 
-#: commands/advisory_shared.hpp:135
-msgid "Limit to packages in enhancement advisories."
+#: commands/advisory_shared.hpp:180
+#, fuzzy
+#| msgid "Limit to packages in enhancement advisories."
+msgid "Include content contained in enhancement advisories."
 msgstr "enhancement 勧告のあるパッケージのみ。"
 
-#: commands/advisory_shared.hpp:142
-msgid "Limit to packages in newpackage advisories."
+#: commands/advisory_shared.hpp:187
+#, fuzzy
+#| msgid "Limit to packages in newpackage advisories."
+msgid "Include content contained in newpackage advisories."
 msgstr "newpackage 勧告ありパッケージのみ。"
 
-#: commands/advisory_shared.hpp:153
+#: commands/advisory_shared.hpp:198
+#, fuzzy
+#| msgid ""
+#| "Limit to packages in advisories with specified severity. List option. Can "
+#| "be \"critical\", \"important\", \"moderate\", \"low\", \"none\"."
 msgid ""
-"Limit to packages in advisories with specified severity. List option. Can be "
-"\"critical\", \"important\", \"moderate\", \"low\", \"none\"."
+"Include content contained in advisories with specified severity. List "
+"option. Can be \"critical\", \"important\", \"moderate\", \"low\", \"none\"."
 msgstr ""
 "指定重大度の勧告のあるパッケージのみ。リスト。\"critical\"(深刻), "
 "\"important\"(重要), \"moderate\"(一般), \"low\"(低い), \"none\"(なし)は指定"
 "可能。"
 
-#: commands/advisory_shared.hpp:155
+#: commands/advisory_shared.hpp:200
 msgid "ADVISORY_SEVERITY,..."
 msgstr "ADVISORY_SEVERITY,..."
 
-#: commands/advisory_shared.hpp:167
+#: commands/advisory_shared.hpp:212
+#, fuzzy
+#| msgid ""
+#| "Limit to packages in advisories that fix a Bugzilla ID, Eg. 123123. List "
+#| "option."
 msgid ""
-"Limit to packages in advisories that fix a Bugzilla ID, Eg. 123123. List "
-"option."
+"Include content contained in advisories that fix a Bugzilla ID, Eg. 123123. "
+"List option."
 msgstr ""
 "指定 Bugzilla ID (例: 123123) を修正する勧告のあるパッケージのみ。リスト。"
 
-#: commands/advisory_shared.hpp:168
+#: commands/advisory_shared.hpp:213
 msgid "BUGZILLA_ID,..."
 msgstr "BUGZILLA_ID,..."
 
-#: commands/advisory_shared.hpp:178
+#: commands/advisory_shared.hpp:223
+#, fuzzy
+#| msgid ""
+#| "Limit to packages in advisories that fix a CVE (Common Vulnerabilities "
+#| "and Exposures) ID, Eg. CVE-2201-0123. List option."
 msgid ""
-"Limit to packages in advisories that fix a CVE (Common Vulnerabilities and "
-"Exposures) ID, Eg. CVE-2201-0123. List option."
+"Include content contained in advisories that fix a CVE (Common "
+"Vulnerabilities and Exposures) ID, Eg. CVE-2201-0123. List option."
 msgstr ""
 "指定 CVE (共通脆弱性識別子) ID (例: CVE-2201-0123) を修正する勧告のみ。リス"
 "ト。"
 
-#: commands/advisory_shared.hpp:180
+#: commands/advisory_shared.hpp:225
 msgid "CVE_ID,..."
 msgstr "CVE_ID,..."
 
@@ -221,31 +404,83 @@ msgstr ""
 "インストール済みソフトウェアを最新の利用可能なバージョンにアップグレードまた"
 "はダウングレード"
 
-#: commands/downgrade/downgrade.cpp:40
+#: commands/do/do.cpp:44
+#, fuzzy
+#| msgid "Running transaction"
+msgid "Do transaction"
+msgstr "トランザクションを実行中"
+
+#: commands/do/do.cpp:49
+msgid "Action to be done on the following items."
+msgstr ""
+
+#: commands/do/do.cpp:63
+msgid "Unsupported action \"{}\""
+msgstr ""
+
+#: commands/do/do.cpp:73
+msgid "Type of the following items."
+msgstr ""
+
+#: commands/do/do.cpp:86
+msgid "Unsupported item type \"{}\""
+msgstr ""
+
+#: commands/do/do.cpp:98
+msgid "List of items to take action on"
+msgstr ""
+
+#: commands/do/do.cpp:129 commands/do/do.cpp:133
+msgid "Only package downgrade is supported."
+msgstr ""
+
+#: commands/do/do.cpp:140 commands/do/do.cpp:144
+msgid "Only package reinstall is supported."
+msgstr ""
+
+#: commands/do/do.cpp:150
+msgid "Action was not defined"
+msgstr ""
+
+#: commands/do/do.cpp:228
+#, fuzzy
+#| msgid "Invalid urlprotocol option: {}"
+msgid "Invalid Environmet/Group specification: {}"
+msgstr "無効な urlprotocol オプション: {}"
+
+#: commands/do/do.cpp:312
+msgid "Downgrading environments and groups is not supported."
+msgstr ""
+
+#: commands/do/do.cpp:328
+msgid "Reinstaling environments and groups is not supported."
+msgstr ""
+
+#: commands/downgrade/downgrade.cpp:42
 msgid "Downgrade software"
 msgstr "ソフトウェアをダウングレード"
 
-#: commands/download/download.cpp:105
+#: commands/download/download.cpp:106
 msgid "When running with --url, prints URLs from all available mirrors"
 msgstr ""
 "--url オプションを使用して実行すると、利用可能なすべてのミラーからの URL を表"
 "示します"
 
-#: commands/download/download.cpp:121
+#: commands/download/download.cpp:122
 msgid "Invalid urlprotocol option: {}"
 msgstr "無効な urlprotocol オプション: {}"
 
-#: commands/download/download.cpp:148 main.cpp:624
+#: commands/download/download.cpp:149 main.cpp:627
 msgid "Unsupported architecture \"{0}\". Please choose one from {1}"
 msgstr "サポートされてないアーキテクチャ \"{0}\"。 {1} から一つ選んでください"
 
 #. TODO(jrohel): Add support for requiring an argument by another argument in ArgumentParser?
-#: commands/download/download.cpp:184
+#: commands/download/download.cpp:186
 msgid "Option \"--alldeps\" should be used with \"--resolve\""
 msgstr ""
 "オプション \"--alldeps\" は \"--resolve\" と一緒に使用する必要があります"
 
-#: commands/download/download.cpp:220
+#: commands/download/download.cpp:226
 msgid ""
 "No package \"{}\" available; You might want to use --skip-unavailable option."
 msgstr ""
@@ -267,6 +502,22 @@ msgstr "環境 ID に一致するパターン。"
 #: commands/environment/environment.cpp:35
 msgid "Manage comps environments"
 msgstr "comps 環境管理"
+
+#: commands/from_repo.cpp:35
+msgid ""
+"The following items can be selected only from the specified repositories. "
+"All enabled repositories will still be used to satisfy dependencies."
+msgstr ""
+
+#: commands/from_repo.cpp:38
+#, fuzzy
+#| msgid "CVE_ID,..."
+msgid "REPO_ID,..."
+msgstr "CVE_ID,..."
+
+#: commands/from_repo.cpp:47
+msgid "\"--from_repo\" already defined with diferent value"
+msgstr ""
 
 #: commands/group/arguments.hpp:34
 msgid "Show only available groups."
@@ -370,7 +621,7 @@ msgstr ""
 "無効なトランザクション ID 範囲 \"{}\"。\"ID\" または \"ID..ID\" が必要で"
 "す。\"ID\" は \"NUMBER\"、\"last\"、または \"last-NUMBER\" です。"
 
-#: commands/install/install.cpp:41
+#: commands/install/install.cpp:43
 msgid "Install software"
 msgstr "ソフトウェアをインストール"
 
@@ -485,11 +736,11 @@ msgstr "モジュールを管理"
 msgid "No matches found for \"{}\"."
 msgstr "\"{}\" に一致する結果を見つかりませんでした。"
 
-#: commands/offline/offline.cpp:213
+#: commands/offline/offline.cpp:214
 msgid "Manage offline transactions"
 msgstr "オフライン トランザクションを管理"
 
-#: commands/offline/offline.cpp:245
+#: commands/offline/offline.cpp:246
 msgid ""
 "Error reading state: {}. Rerun the command you used to initiate the offline "
 "transaction, e.g. `dnf5 system-upgrade download [OPTIONS]`."
@@ -498,11 +749,11 @@ msgstr ""
 "使用されたコマンドを再実行してください。例: `dnf5 system-upgrade download "
 "[OPTIONS]`。"
 
-#: commands/offline/offline.cpp:268
+#: commands/offline/offline.cpp:269
 msgid "Couldn't connect to D-Bus: {}"
 msgstr "D-Bus に接続できませんでした: {}"
 
-#: commands/offline/offline.cpp:299
+#: commands/offline/offline.cpp:300
 msgid ""
 "Prepare the system to perform the offline transaction and reboot to start "
 "the transaction."
@@ -510,31 +761,33 @@ msgstr ""
 "オフライン トランザクションを実行するためにシステムを準備し、再起動してトラン"
 "ザクションを実行します。"
 
-#: commands/offline/offline.cpp:306
+#: commands/offline/offline.cpp:307
 msgid "Power off the system after the operation is complete"
 msgstr "操作完了後にシステムの電源をオフにます"
 
-#: commands/offline/offline.cpp:317
+#: commands/offline/offline.cpp:318
 msgid "No offline transaction is stored."
 msgstr "保存されたオフライン トランザクションがありません。"
 
-#: commands/offline/offline.cpp:325
+#: commands/offline/offline.cpp:326
 msgid "System is not ready for offline transaction."
 msgstr "システムはまだオフライン トランザクションの準備をできていません。"
 
-#: commands/offline/offline.cpp:328
+#: commands/offline/offline.cpp:329
 msgid "Data directory {} does not exist."
 msgstr "データ ディレクトリ {} が存在しません。"
 
-#: commands/offline/offline.cpp:353
+#: commands/offline/offline.cpp:354
 msgid "{} is not wanted by system-update.target."
 msgstr "{} は system-update.target に要求されていません。"
 
-#: commands/offline/offline.cpp:362
-msgid "The system will now reboot to upgrade to release version "
+#: commands/offline/offline.cpp:364
+#, fuzzy
+#| msgid "The system will now reboot to upgrade to release version "
+msgid "The system will now reboot to upgrade to release version {}."
 msgstr "システムはリリース バージョンのアップグレードのため再起動します "
 
-#: commands/offline/offline.cpp:366
+#: commands/offline/offline.cpp:368
 msgid ""
 "The system will now reboot to perform the offline transaction initiated by "
 "the following command:"
@@ -542,7 +795,7 @@ msgstr ""
 "システムは、以下のコマンドによって開始されたオフライン トランザクションを実行"
 "するために再起動します:"
 
-#: commands/offline/offline.cpp:397
+#: commands/offline/offline.cpp:399
 msgid ""
 "Internal use only, not intended to be run by the user. Execute the "
 "transaction in the offline environment."
@@ -550,66 +803,66 @@ msgstr ""
 "内部用、ユーザーが実行することを考慮していません。オフライン環境でトランザク"
 "ションを実行します。"
 
-#: commands/offline/offline.cpp:431
+#: commands/offline/offline.cpp:433
 msgid "Trigger file does not exist. Exiting."
 msgstr "トリガー ファイルが存在しません。終了します。"
 
-#: commands/offline/offline.cpp:435
+#: commands/offline/offline.cpp:437
 msgid "Another offline transaction tool is running. Exiting."
 msgstr "別のオフライン トランザクション ツールが実行中です。終了します。"
 
-#: commands/offline/offline.cpp:462
+#: commands/offline/offline.cpp:464
 msgid "Starting offline transaction. This will take a while."
 msgstr "オフライントランザクションを開始します。しばらくお待ちください。"
 
-#: commands/offline/offline.cpp:466
+#: commands/offline/offline.cpp:468
 msgid "Starting system upgrade. This will take a while."
 msgstr "システム更新中、しばらくお待ちください。"
 
-#: commands/offline/offline.cpp:478
+#: commands/offline/offline.cpp:480
 msgid "Use `dnf5 offline reboot` to begin the transaction."
 msgstr "`dnf5 offline reboot` でトランザクションを開始します。"
 
-#: commands/offline/offline.cpp:529
+#: commands/offline/offline.cpp:531
 msgid "Transaction failed: "
 msgstr "トランザクション失敗: "
 
-#: commands/offline/offline.cpp:599
+#: commands/offline/offline.cpp:601
 msgid "Error reading journal: {}"
 msgstr "ジャーナル読み取り中にエラーが発生しました: {}"
 
-#: commands/offline/offline.cpp:605
+#: commands/offline/offline.cpp:607
 msgid "Add journal match failed: {}"
 msgstr "ジャーナルの一致追加に失敗しました: {}"
 
-#: commands/offline/offline.cpp:633
+#: commands/offline/offline.cpp:635
 msgid "No logs were found."
 msgstr "ログを見つかりませんでした。"
 
-#: commands/offline/offline.cpp:637
+#: commands/offline/offline.cpp:639
 msgid "The following boots appear to contain offline transaction logs:"
 msgstr "下記の起動にオフライン トランザクション ログが含まれているようです:"
 
-#: commands/offline/offline.cpp:654
+#: commands/offline/offline.cpp:656
 msgid "Cannot find logs with this index."
 msgstr "このインデックスのログを見つかりませんでした。"
 
-#: commands/offline/offline.cpp:661
+#: commands/offline/offline.cpp:663
 msgid "Unable to match systemd journal entry."
 msgstr "systemd ジャーナル エントリに一致しません。"
 
-#: commands/offline/offline.cpp:673
+#: commands/offline/offline.cpp:675
 msgid "Show logs from past offline transactions"
 msgstr "過去のオフライン トランザクションのログを表示します"
 
-#: commands/offline/offline.cpp:681
+#: commands/offline/offline.cpp:683
 msgid ""
 "Which log to show. Run without any arguments to get a list of available logs."
 msgstr ""
 "表示させたいログ。引数なしで実行すると、利用可能なすべてのログが表示されま"
 "す。"
 
-#: commands/offline/offline.cpp:696
+#: commands/offline/offline.cpp:698
 msgid ""
 "systemd is not supported in this build of DNF 5; the `log` subcommand is "
 "unavailable."
@@ -617,22 +870,22 @@ msgstr ""
 "この dnf5 のビルドは systemd をサポートされていません。`log` サブコマンドは利"
 "用できません。"
 
-#: commands/offline/offline.cpp:701
+#: commands/offline/offline.cpp:703
 msgid "Show status of the current offline transaction"
 msgstr "現在のオフライン トランザクションの状態を表示します"
 
-#: commands/offline/offline.cpp:717
+#: commands/offline/offline.cpp:719
 msgid "An offline transaction was initiated by the following command:"
 msgstr "オフライン トランザクションは以下のコマンドによって開始されました:"
 
-#: commands/offline/offline.cpp:719
+#: commands/offline/offline.cpp:721
 msgid ""
 "Run `dnf5 offline reboot` to reboot and perform the offline transaction."
 msgstr ""
 "`dnf5 offline reboot` を実行してオフライン トランザクションを実行してくださ"
 "い。"
 
-#: commands/offline/offline.cpp:721
+#: commands/offline/offline.cpp:723
 msgid ""
 "An offline transaction was started, but it did not finish. Run `dnf5 offline "
 "log` for more information. The command that initiated the transaction was:"
@@ -641,7 +894,7 @@ msgstr ""
 "offline log` を実行して更なる情報を確認できます。トランザクションはこちらのコ"
 "マンドによって初期化されました:"
 
-#: commands/offline/offline.cpp:726
+#: commands/offline/offline.cpp:728
 msgid "Unknown offline transaction status: "
 msgstr "不明なオフライン トランザクション状態: "
 
@@ -649,7 +902,7 @@ msgstr "不明なオフライン トランザクション状態: "
 msgid "Find what package provides the given value"
 msgstr "指定した値が属するパッケージを検索します"
 
-#: commands/reinstall/reinstall.cpp:40
+#: commands/reinstall/reinstall.cpp:42
 msgid "Reinstall software"
 msgstr "ソフトウェアを再インストール"
 
@@ -713,7 +966,7 @@ msgstr "パターン"
 msgid "Search for software matching all specified strings"
 msgstr "所定な文字列に一致するソフトウェアを検索します"
 
-#: commands/swap/swap.cpp:42
+#: commands/swap/swap.cpp:44
 msgid "Remove software and install another in one transaction"
 msgstr "一度のトランザクションでソフトウェアの削除とインストールを行います"
 
@@ -746,11 +999,11 @@ msgstr "オフラインで実行するための distro-sync トランザクシ�
 msgid "Store an upgrade transaction to be performed offline"
 msgstr "オフラインで実行するためのアップグレード トランザクションを保存します"
 
-#: commands/upgrade/upgrade.cpp:41
+#: commands/upgrade/upgrade.cpp:43
 msgid "Upgrade software"
 msgstr "ソフトウェアを更新"
 
-#: commands/upgrade/upgrade.cpp:48
+#: commands/upgrade/upgrade.cpp:50
 msgid ""
 "Upgrade packages only to the lowest versions that fix advisories of type "
 "bugfix, enhancement, security, or newpackage. In case that any option "
@@ -881,10 +1134,6 @@ msgstr "キー 0x{} が正常に削除されました。"
 #: context.cpp:295
 msgid "setopt: \"{}.{}\": {}"
 msgstr "setopt: \"{}.{}\": {}"
-
-#: context.cpp:301 main.cpp:1351
-msgid ", "
-msgstr ", "
 
 #: context.cpp:305
 msgid ""
@@ -1032,31 +1281,31 @@ msgstr "共有ライブラリ \"{}\" を読み込めませんでした: {}"
 msgid "Cannot obtain address of symbol \"{}\": {}"
 msgstr "シンボル \"{}\" のアドレスを取得できませんでした: {}"
 
-#: main.cpp:131
+#: main.cpp:133
 msgid "Utility for packages maintaining"
 msgstr "パッケージ管理のためのユーティリティ"
 
-#: main.cpp:132
+#: main.cpp:134
 msgid "DNF5 is a program for maintaining packages."
 msgstr "DNF5 はパッケージ管理用のプログラムです。"
 
-#: main.cpp:133
+#: main.cpp:135
 msgid "Unclassified options:"
 msgstr "未分類オプション:"
 
-#: main.cpp:136
+#: main.cpp:138
 msgid "Global options:"
 msgstr "グローバル オプション:"
 
-#: main.cpp:141
+#: main.cpp:143
 msgid "Print help"
 msgstr "ヘルプを表示します"
 
-#: main.cpp:148
+#: main.cpp:150
 msgid "Configuration file location"
 msgstr "設定ファイルの場所"
 
-#: main.cpp:156
+#: main.cpp:158
 msgid ""
 "In combination with a non-interactive command, shows just the relevant "
 "content. Suppresses messages notifying about the current state or actions of "
@@ -1065,7 +1314,7 @@ msgstr ""
 "関連内容のみが表示されるので、非対話型コマンドとの組み合わせ使用に適していま"
 "す。dnf5 の現在の状態やアクションに関するメッセージは抑制されます。"
 
-#: main.cpp:171
+#: main.cpp:173
 msgid ""
 "Run entirely from system cache, don't update the cache and use it even in "
 "case it is expired."
@@ -1073,31 +1322,31 @@ msgstr ""
 "期限切れであってもキャッシュを更新せず、完全にシステム キャッシュで実行しま"
 "す。"
 
-#: main.cpp:180
+#: main.cpp:182
 msgid "Control whether color is used."
 msgstr "色の利用を制御。"
 
-#: main.cpp:186
+#: main.cpp:188
 msgid "Force refreshing metadata before running the command."
 msgstr "コマンド実行する前にメタデータを強制的に更新します。"
 
-#: main.cpp:202
+#: main.cpp:204
 msgid "Failed to expire repository cache in path \"{0}\": {1}"
 msgstr "パス \"{0}\" のリポジトリ キャッシュの期限切れに失敗しました: {1}"
 
-#: main.cpp:216
+#: main.cpp:218
 msgid "create additional repository using id and path"
 msgstr "指定 ID とパスで追加リポジトリを作成します"
 
-#: main.cpp:224
+#: main.cpp:226
 msgid "repofrompath: Incorrect repoid and path specification \"{}\""
 msgstr "repofrompath: 不正な ID とパス指定 \"{}\""
 
-#: main.cpp:236
+#: main.cpp:238
 msgid "set arbitrary config and repo options"
 msgstr "任意の設定およびリポジトリ オプションを設定します"
 
-#: main.cpp:238
+#: main.cpp:240
 msgid ""
 "Override a configuration option from the configuration file. To override "
 "configuration options for repositories, use repoid.option for  the\n"
@@ -1114,45 +1363,45 @@ msgstr ""
 "              上書きされることはありません。ただし、空の値（例: --"
 "setopt=tsflags=）を指定すると、そのオプションはクリアされます。"
 
-#: main.cpp:247 main.cpp:286
+#: main.cpp:249 main.cpp:288
 msgid "{}: Badly formatted argument value \"{}\""
 msgstr "{}: 不正形式の引数 \"{}\""
 
-#: main.cpp:254
+#: main.cpp:256
 msgid ""
 "{}: Badly formatted argument value: Last key character cannot be '.': {}"
 msgstr "{}: 不正形式の引数: キー最後の文字を '.' にすることはできません: {}"
 
-#: main.cpp:267
+#: main.cpp:269
 msgid "setopt: \"{0}\": {1}"
 msgstr "setopt: \"{0}\": {1}"
 
-#: main.cpp:279
+#: main.cpp:281
 msgid "set arbitrary variable"
 msgstr "任意の変数を設定します"
 
-#: main.cpp:293
+#: main.cpp:295
 msgid "setvar: {}"
 msgstr "setvar: {}"
 
-#: main.cpp:302
+#: main.cpp:304
 msgid "automatically answer yes for all questions"
 msgstr "すべての質問に「はい」 と自動的に答えます"
 
-#: main.cpp:309
+#: main.cpp:311
 msgid "automatically answer no for all questions"
 msgstr "すべての質問に「いいえ」と自動的に答えます"
 
-#: main.cpp:316
+#: main.cpp:318
 msgid "try the best available package versions in transactions"
 msgstr ""
 "トランザクションにおいて利用可能な最適なパッケージ バージョンを試します"
 
-#: main.cpp:323
+#: main.cpp:325
 msgid "do not limit the transaction to the best candidate"
 msgstr "トランザクションを最適候補に限定しません"
 
-#: main.cpp:334
+#: main.cpp:336
 msgid ""
 "Don't install files that are marked as documentation (which includes man "
 "pages and texinfo documents)"
@@ -1160,53 +1409,53 @@ msgstr ""
 "ドキュメントとしてマークされたファイルをインストールしません (man ページや "
 "Texinfo ドキュメントを含む)"
 
-#: main.cpp:350
+#: main.cpp:352
 msgid "exclude packages by name or glob"
 msgstr "名前または glob でパッケージを除外します"
 
-#: main.cpp:369
+#: main.cpp:371
 msgid ""
 "Enable additional repositories. List option. Supports globs, can be "
 "specified multiple times."
 msgstr "追加リポジトリを有効にします。リスト、glob は複数回指定可能。"
 
-#: main.cpp:387
+#: main.cpp:389
 msgid ""
 "Disable repositories. List option. Supports globs, can be specified multiple "
 "times."
 msgstr "追加リポジトリを無効にします。リスト、glob は複数回指定可能。"
 
-#: main.cpp:405
+#: main.cpp:407
 msgid ""
 "Enable just specific repositories. List option. Supports globs, can be "
 "specified multiple times."
 msgstr "指定リポジトリを有効にします。リスト、glob は複数回指定可能。"
 
-#: main.cpp:427
+#: main.cpp:429
 msgid "disable OpenPGP signature checking (if RPM policy allows)"
 msgstr "OpenPGP 署名の確認を無効にします (RPM ポリシーが許容する限り)"
 
-#: main.cpp:443
+#: main.cpp:446
 msgid "Disable all libdnf5 plugins"
 msgstr "libdnf5 プラグインをすべて無効にします"
 
-#: main.cpp:453
+#: main.cpp:456
 msgid ""
 "Enable libdnf5 plugins by name. List option. Supports globs, can be "
 "specified multiple times."
 msgstr "libdnf5 プラグインを有効にします。リスト、glob は複数回指定可能。"
 
-#: main.cpp:468
+#: main.cpp:471
 msgid ""
 "Disable libdnf5 plugins by name. List option. Supports globs, can be "
 "specified multiple times."
 msgstr "libdnf5 プラグインを無効にします。リスト、glob は複数回指定可能。"
 
-#: main.cpp:485
+#: main.cpp:488
 msgid "add a comment to transaction"
 msgstr "トランザクションにコメントを追加します"
 
-#: main.cpp:487
+#: main.cpp:490
 msgid ""
 "Adds a comment to the action. If a transaction takes place, the comment is "
 "stored in it."
@@ -1214,11 +1463,11 @@ msgstr ""
 "アクションにコメントを追加します。トランザクションが実行される場合、コメント"
 "はそれに保存されます。"
 
-#: main.cpp:500
+#: main.cpp:503
 msgid "set install root"
 msgstr "インストール root を設定します"
 
-#: main.cpp:507
+#: main.cpp:510
 msgid ""
 "use configuration, reposdir, and vars from the host system rather than the "
 "installroot"
@@ -1226,11 +1475,11 @@ msgstr ""
 "installroot ではなく、ホスト システムからの設定、リポジトリ ディレクトリ、変"
 "数を利用します"
 
-#: main.cpp:516
+#: main.cpp:519
 msgid "override the value of $releasever in config and repo files"
 msgstr "設定ファイルと repo ファイルの $releasever の値をオーバーライドします"
 
-#: main.cpp:529
+#: main.cpp:532
 msgid ""
 "Show newly installed leaf packages and packages that became leaves after a "
 "transaction."
@@ -1238,60 +1487,60 @@ msgstr ""
 "新しくインストールされたリーフ パッケージおよびトランザクション後にリーフに"
 "なったパッケージを表示します。"
 
-#: main.cpp:543
+#: main.cpp:546
 msgid "Dump detailed solving results into files"
 msgstr "詳細な解決結果をファイルにダンプします"
 
-#: main.cpp:552
+#: main.cpp:555
 msgid "Print main configuration values to stdout"
 msgstr "メイン設定の値を stdout に出力します"
 
-#: main.cpp:569
+#: main.cpp:572
 msgid ""
 "Print repository configuration values to stdout. List option. Supports globs"
 msgstr "リポジトリ設定を stdout に出力します。リスト、glob 利用可能"
 
-#: main.cpp:584
+#: main.cpp:587
 msgid "Print variable values to stdout"
 msgstr "変数値を stdout に出力します"
 
-#: main.cpp:598
+#: main.cpp:601
 msgid "Show DNF5 version and exit"
 msgstr "DNF5 のバージョンを表示して終了します"
 
-#: main.cpp:605
+#: main.cpp:608
 msgid "Force the use of a different architecture."
 msgstr "強制的に別のアーキテクチャを利用します。"
 
-#: main.cpp:643
+#: main.cpp:646
 msgid "Software Management Commands:"
 msgstr "ソフトウェア管理コマンド:"
 
-#: main.cpp:650
+#: main.cpp:653
 msgid "Query Commands:"
 msgstr "クエリ コマンド:"
 
-#: main.cpp:657
+#: main.cpp:660
 msgid "Subcommands:"
 msgstr "サブコマンド:"
 
-#: main.cpp:754
+#: main.cpp:759
 msgid "{} version {}.{}.{}.{}"
 msgstr "{} バージョン {}.{}.{}.{}"
 
-#: main.cpp:757
+#: main.cpp:762
 msgid "{} plugin API version {}.{}"
 msgstr "{} プラグイン API バージョン {}.{}"
 
-#: main.cpp:762
+#: main.cpp:767
 msgid "libdnf5 version {}.{}.{}.{}"
 msgstr "libdnf5 バージョン {}.{}.{}.{}"
 
-#: main.cpp:765
+#: main.cpp:770
 msgid "libdnf5 plugin API version {}.{}"
 msgstr "libdnf5 プラグイン API バージョン {}.{}"
 
-#: main.cpp:772
+#: main.cpp:777
 msgid ""
 "\n"
 "Loaded {} plugins:"
@@ -1299,24 +1548,24 @@ msgstr ""
 "\n"
 "読み込まれた {} プラグイン:"
 
-#: main.cpp:777
+#: main.cpp:782
 msgid "  name: {}"
 msgstr "  名前: {}"
 
-#: main.cpp:780
+#: main.cpp:785
 msgid "  version: {}.{}.{}"
 msgstr "  バージョン: {}.{}.{}"
 
-#: main.cpp:782
+#: main.cpp:787
 msgid "  API version: {}.{}"
 msgstr "  API バージョン: {}.{}"
 
-#: main.cpp:820
+#: main.cpp:825
 msgid ""
 "Total size of inbound packages is {:.0f} {:s}. Need to download {:.0f} {:s}."
 msgstr "パッケージサイズ {:.0f} {:s} 、ダウンロードサイズ {:.0f} {:s} 。"
 
-#: main.cpp:837
+#: main.cpp:842
 msgid ""
 "After this operation, {:.0f} {:s} extra will be used (install {:.0f} {:s}, "
 "remove {:.0f} {:s})."
@@ -1324,7 +1573,7 @@ msgstr ""
 "完了後、{:.0f} {:s} のサイズが利用されます（インストール {:.0f} {:s}、削除 "
 "{:.0f} {:s}）。"
 
-#: main.cpp:848
+#: main.cpp:853
 msgid ""
 "After this operation, {:.0f} {:s} will be freed (install {:.0f} {:s}, remove "
 "{:.0f} {:s})."
@@ -1332,39 +1581,39 @@ msgstr ""
 "完了後、 {:.0f} {:s} のサイズが解放されます（インストール {:.0f} {:s}、削除 "
 "{:.0f} {:s}）。"
 
-#: main.cpp:860
+#: main.cpp:865
 msgid "======== Main configuration: ========"
 msgstr "======== メイン設定: ========"
 
-#: main.cpp:897
+#: main.cpp:902
 msgid "No matching repo to dump configuration: \"{}\""
 msgstr "設定をダンプするために一致するリポジトリがありません: \"{}\""
 
-#: main.cpp:902
+#: main.cpp:907
 msgid "======== \"{}\" repository configuration: ========"
 msgstr "======== \"{}\" リポジトリ設定: ========"
 
-#: main.cpp:922
+#: main.cpp:927
 msgid "======== Variables: ========"
 msgstr "======== 変数: ========"
 
-#: main.cpp:962
+#: main.cpp:967
 msgid "New leaves:"
 msgstr "新規リーフ:"
 
-#: main.cpp:964
+#: main.cpp:969
 msgid " {}"
 msgstr " {}"
 
-#: main.cpp:1008
+#: main.cpp:1013
 msgid "{} to skip unavailable packages"
 msgstr "{} で利用できないパッケージをスキップします"
 
-#: main.cpp:1016
+#: main.cpp:1021
 msgid "{} to allow extra packages in the transaction"
 msgstr "{} でトランザクション内での追加パッケージを許可します"
 
-#: main.cpp:1029
+#: main.cpp:1034
 msgid ""
 "{} to allow mismatches between installed and stored transaction packages. "
 "This can result in an empty transaction because among other things the "
@@ -1374,27 +1623,27 @@ msgstr ""
 "許可します。これにより、失敗した削除アクションを無視することがあるため、空の"
 "トランザクションになる可能性があります。"
 
-#: main.cpp:1076
+#: main.cpp:1081
 msgid "{} to not limit the transaction to the best candidates"
 msgstr "{} でトランザクションを最適候補に制限しないようにします"
 
-#: main.cpp:1083
+#: main.cpp:1088
 msgid "{} to allow removing of installed packages to resolve problems"
 msgstr "{} で問題解決のためにインストール済みパッケージの削除を許可します"
 
-#: main.cpp:1092
+#: main.cpp:1097
 msgid "{} to load additional filelists metadata"
 msgstr "{} で追加ファイル リスト メタデータを読み込みます"
 
-#: main.cpp:1099
+#: main.cpp:1104
 msgid "{} to skip uninstallable packages"
 msgstr "{} でアンインストールできないパッケージをスキップします"
 
-#: main.cpp:1105
+#: main.cpp:1110
 msgid "You can try to add to command line:"
 msgstr "コマンド ラインに追加してみてください:"
 
-#: main.cpp:1123
+#: main.cpp:1128
 msgid ""
 "No matches were found for the following plugin name patterns while enabling "
 "libdnf plugins: {}"
@@ -1402,7 +1651,7 @@ msgstr ""
 "libdnf プラグインを有効にする際、次のプラグイン名パターンに一致するものを見つ"
 "かりませんでした: {}"
 
-#: main.cpp:1124
+#: main.cpp:1129
 msgid ""
 "No matches were found for the following plugin name patterns while disabling "
 "libdnf plugins: {}"
@@ -1410,23 +1659,23 @@ msgstr ""
 "libdnf プラグインを無効にする際、次のプラグイン名パターンに一致するものを見つ"
 "かりませんでした: {}"
 
-#: main.cpp:1220
+#: main.cpp:1226
 msgid "--- DNF5 launched with arguments: \"{}\" ---"
 msgstr "--- DNF5 起動引数: \"{}\" ---"
 
-#: main.cpp:1256
+#: main.cpp:1262
 msgid "Invalid \"index\" in \"--complete=<index>[,...]\": {}"
 msgstr "無効なインデックス \"--complete=<index>[,...]\": {}"
 
-#: main.cpp:1295
+#: main.cpp:1301
 msgid "{}."
 msgstr "{}。"
 
-#: main.cpp:1298 main.cpp:1550
+#: main.cpp:1304 main.cpp:1556
 msgid "{}. Add \"--help\" for more information about the arguments."
 msgstr "{}。 引数に関する詳細を表示するには \"--help\" を追加してください。"
 
-#: main.cpp:1307
+#: main.cpp:1313
 msgid ""
 "It could be a command provided by a plugin, try: dnf5 install 'dnf5-"
 "command({})'"
@@ -1434,18 +1683,18 @@ msgstr ""
 "これはプラグインによって提供されるコマンドの可能性があります。次を試してくだ"
 "さい: dnf5 install 'dnf5-command({})'"
 
-#: main.cpp:1349
+#: main.cpp:1355
 msgid ""
 "The argument is available for commands: {}. (It has to be placed after the "
 "command.)"
 msgstr ""
 "引数は以下のコマンドで利用可能: {}. (コマンドの後で指定する必要があります)"
 
-#: main.cpp:1393
+#: main.cpp:1399
 msgid "No read/execute access in current directory, moving to /"
 msgstr "現在のディレクトリに読み取り/実行権限がないため、/ に移動します"
 
-#: main.cpp:1465
+#: main.cpp:1471
 msgid ""
 "The requested operation requires superuser privileges. Please log in as a "
 "user with elevated rights, or use the \"--assumeno\" or \"--downloadonly\" "
@@ -1455,17 +1704,17 @@ msgstr ""
 "ンするか、システム状態を変更せずにコマンドを実行するには \"--assumeno\" また"
 "は \"--downloadonly\" オプションを使用してください。"
 
-#: main.cpp:1506
+#: main.cpp:1512
 msgid "The operation will only store the transaction in {}"
 msgstr "この操作では、トランザクションを {} への保存のみがされます"
 
-#: main.cpp:1508
+#: main.cpp:1514
 msgid "The operation will only download packages for the transaction."
 msgstr ""
 "この操作では、トランザクションのためのパッケージのダウンロードのみがされま"
 "す。"
 
-#: main.cpp:1513
+#: main.cpp:1519
 msgid ""
 "Test mode enabled: Only package downloads, OpenPGP key installations and "
 "transaction checks will be performed."
@@ -1473,7 +1722,7 @@ msgstr ""
 "テスト モードが有効です: パッケージのダウンロード、OpenPGP キーのインストー"
 "ル、およびトランザクションのチェックのみが行われます。"
 
-#: main.cpp:1521
+#: main.cpp:1527
 msgid ""
 "Error: this bootc system is configured to be read-only. For more "
 "information, run `bootc --help`."
@@ -1481,7 +1730,7 @@ msgstr ""
 "エラー: bootc システムが読み込み専用です。詳しくは、`bootc --help` を実行して"
 "ください。"
 
-#: main.cpp:1538
+#: main.cpp:1544
 msgid ""
 "No repositories were loaded from the installroot. To use the configuration "
 "and repositories of the host system, pass --use-host-config."
@@ -1489,15 +1738,15 @@ msgstr ""
 "installroot からリポジトリを読み込みませんでした。ホスト システムの設定とリポ"
 "ジトリを利用するには、--use-host-config を渡してください。"
 
-#: main.cpp:1560
+#: main.cpp:1566
 msgid "Command returned error: {}"
 msgstr "コマンドがエラーを返しました: {}"
 
-#: main.cpp:1568
+#: main.cpp:1574
 msgid "DNF5 finished"
 msgstr "DNF5 が終了しました"
 
-#: main.cpp:1572
+#: main.cpp:1578
 msgid "Complete!"
 msgstr "完了しました！"
 
