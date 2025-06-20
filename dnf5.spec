@@ -1022,6 +1022,9 @@ mkdir -p %{buildroot}%{_libdir}/libdnf5/plugins
 %ldconfig_scriptlets
 
 %changelog
+* Fri Jun 20 2025 Packit Team <hello@packit.dev> - 5.2.14.0-1
+- New upstream release 5.2.14.0
+
 * Wed Apr 23 2025 Packit Team <hello@packit.dev> - 5.2.13.1-1
 - New upstream release 5.2.13.1
 
