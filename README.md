@@ -85,11 +85,17 @@ For details about how to contribute to the DNF5 project, see [CONTRIBUTING.md](h
 Reporting issues
 ================
 
-To report an issue, use either of the following methods:
+To report an issue (except of issues in the translations), use either of the following methods:
 
 * Create a [GitHub issue](https://github.com/rpm-software-management/dnf5/issues/new) [[backlog](https://github.com/rpm-software-management/dnf5/issues)].
 * File a bug by using the [Red Hat Bugzilla](https://bugzilla.redhat.com/enter_bug.cgi?product=Fedora&component=dnf5) tool.
   [[backlog](https://bugzilla.redhat.com/buglist.cgi?bug_status=__open__&product=Fedora&component=dnf5)]
+
+To report an issue in the translated messages:
+
+* Correct the message yourself at [Fedora Weblate](https://translate.fedoraproject.org/projects/dnf5/).
+* Mark the message as _Needs editting_ at the same place.
+* Contact a translator of the affected translation catalog directly.
 
 
 Developing DNF5 by building and testing the code
@@ -99,7 +105,16 @@ For details about building and testing DNF5, see the [Development environment se
 
 Translating
 -----------
-TBD
+
+Translating DNF5 from English to other langauges happens at
+[Fedora Weblate](https://translate.fedoraproject.org/projects/dnf5/)
+translation web site.
+
+The web site extracts new English messages from this repository. Users of the web
+site translate them there and the web site exports the finshed translations to
+[dnf5-l10n](https://github.com/rpm-software-management/dnf5-l10n) repository.
+The translation catalogs from the repository are copied into a DNF5 release
+tar ball on every DNF5 release.
 
 
 License
