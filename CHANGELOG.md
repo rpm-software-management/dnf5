@@ -1,3 +1,81 @@
+# 5.2.14.0
+
+- Update translations from weblate
+- Unify system state module saving
+- Make system state files writing more robust
+- Add `Base` to `system::State`
+- automatic: Expand emit_via in command_email emitter to individual arguments
+- ci: Remove "Package Build" GitHub Action
+- [dnf5] cmdline_aliases: Fix TOML syntax err msg in build TOML11_COMPAT
+- doc: aliases: switch code-block language from 'none' to 'TOML'
+- cmdline_aliases: Support values consumed by command aliases
+- dnf5: Add support for localization of aliases
+- dnf5 cmdline_aliases: Print warnings to stderr
+- dnf5 cmdline_aliases: Localize printed error messages
+- dnf5 cmdline_aliases: Unify use of BasicValue type
+- dnf5 cmdline_aliases: Refactor to use shared location functions
+- Mark dnf5daemon-server-polkit as noarch
+- doc: Correct a typo in dnf-nightly repository URL
+- automatic: email emitter: Do not use fractional seconds in e-mail Date headers
+- Unify `D-Bus` name formatting
+- Expose dnf_daemon dbus Python example in docs
+- dnf5: download: Argument "--from-repo"
+- dnf5: install/upgrade/reinstall/downgrade/swap: Argument "--from-repo"
+- reposync: Spell "GPG" as "OpenPGP" in the usage text
+- Update `max_parallel_downloads` doc, it now affects also repo downloads
+- Remove no longer needed `RepoDownloader::perform`
+- Use new RepoDownloader API to download repo descriptions
+- Add new `RepoDownloader` API to donwload only repomd/metalink
+- Rename `end_cb` to `end_cb_full_download`, there will be more end cbs
+- Move `lr_target`s to `callback_data` and move setup to `add`
+- Name `load_repo` function type and add `reusing` option
+- Extract `librepo` handle dlist configuration
+- Extract error handling of `RepoDownloader::download()` report
+- Turn `handle_repo_exception` to `static` `RepoSack::Impl` method
+- dnf5: Reset cursor and formatting after SIGINT
+- dnf5daemon: Fix a missing reset method if built with sdbus-s++ version 2
+- pre-commit: Exclude .tito/tito.props from check-xml
+- Add missing interfaces and re-order interfaces in a more logical order
+- changes_from_dnf4: makecache doesn't always refresh
+- Honor per-repo pgp_gpgcheck=0 even in rpm's enforcing signature mode
+- doc: --use-host-config instead of --releasever=/
+- dnf5: Command "do": New argument "--from-repo"
+- dnf5: Command "do"
+- dnfdaemon: Add Polkit rule to allow wheel users to run transactions
+- dnfdaemon: Split-off polkit policy for trusted transactions
+- doc: Document '\n' sequence in repoquery --queryformat string
+- Include dnf-nightly in testing farm testing jobs
+- Require new librepo which has fix API for parallel downloads
+- Use new API for parallel downloading
+- Replace `download_metadata` API with `Add` and `Download`
+- Update users of `RepoDownloader` to match new API
+- Rework is_repomd_in_sync and is_metalink_in_sync to use new perform
+- Make `RepoDownloader::perform` static and rework callbacks
+- Convert several of `RepoDownloader` methods that to static ones
+- Extract callback data from `RepoDownloader`
+- Remove unused `RepoDownloader` defines
+- Split `DownloadData` out of `RepoDownloader`
+- Include dnf-nightly in packit copr builds
+- Fix clang build by disabling ruby deprecation warning
+- Fix package build workflow: use code from the tested PR
+- doc: Advisory filters can cause transaction commands to fail
+- dnf5: Strict handling of --bzs and --cves options
+- Add NOT_FOUND_IN_ADVISORIES to resolve log for UPGRADE_ALL
+- goal: Report specs filtered out by advisories
+- dnf5: Strict handling of --advisories=... option
+- dnf5: --no-gpgchecks overrides localpkg_gpgcheck
+- I18N: Do not glue sentences in offline command messages
+- Remove unused `WITH_ZCHUNK` option
+- dnfdaemon: Adjust wording of advisory options descriptions
+- dnf5: Adjust wording of advisory options descriptions
+- doc: Clarify advisories filters documentation
+- expired-pgp-keys: Do not use a deprecated way of removing keys with RPM v6
+- doc: "dnf4 config-manager" dropped --dump and --dump-variables options
+- Change scriptlet names to match spec designators
+- README: Mention #dnf IRC channel in first section
+- expired-pgp-keys: Use a temporary GnuPG home directory
+- download: Do not print "Downloading Packages:" header in quiet mode
+
 # 5.2.13.1
 
 - RepoCacheRemoveStatistics::get_bytes_removed return uintmax_t
