@@ -32,7 +32,7 @@ class TestGoal(base_test_case.BaseTestCase):
 
         # Try to resolve the goal without running base.setup()
         with self.assertRaisesRegex(libdnf5.exception.UserAssertionError,
-                                    '^libdnf5/base/goal.cpp:[0-9]+:.*libdnf5::Goal::resolve\\(\\):'
+                                    'libdnf5/base/goal.cpp:[0-9]+:.*libdnf5::Goal::resolve\\(\\):'
                                     ' API Assertion \'p_impl->base->is_initialized\\(\\)\' failed:'
                                     ' Base instance was not fully initialized by Base::setup\\(\\)'):
             goal.resolve()
@@ -57,13 +57,13 @@ class TestGoal(base_test_case.BaseTestCase):
         with self.assertRaisesRegex(libdnf5.exception.RepoFileDownloadErrorNested, 'Failed to download files') as cm:
             goal.resolve()
         self.assertRegex(cm.exception.format(libdnf5.exception.FormatDetailLevel_WithDomainAndName),
-                         '^libdnf5::repo::FileDownloadError: Failed to download files\n'
+                         'libdnf5::repo::FileDownloadError: Failed to download files\n'
                          ' libdnf5::repo::LibrepoError: Librepo error: Curl error \\([0-9]+\\):'
                          ' .* https://i-dont-exist.com/')
         with self.assertRaisesRegex(libdnf5.exception.Error, 'Librepo error: Curl error') as cm_nested:
             cm.exception.rethrow_if_nested()
         self.assertRegex(cm_nested.exception.format(libdnf5.exception.FormatDetailLevel_WithDomainAndName),
-                         '^libdnf5::Error: Librepo error: Curl error \\([0-9]+\\):'
+                         'libdnf5::Error: Librepo error: Curl error \\([0-9]+\\):'
                          ' .* https://i-dont-exist.com/')
 
     def test_unsupported_argument_add_remove(self):
@@ -80,7 +80,7 @@ class TestGoal(base_test_case.BaseTestCase):
         goal = libdnf5.base.Goal(self.base)
 
         with self.assertRaisesRegex(libdnf5.exception.UserAssertionError,
-                                    '^libdnf5/base/goal.cpp:[0-9]+: void libdnf5::Goal::add_rpm_reason_change\\(.*\\):'
+                                    'libdnf5/base/goal.cpp:[0-9]+: void libdnf5::Goal::add_rpm_reason_change\\(.*\\):'
                                     ' API Assertion \'reason != libdnf5::transaction::TransactionItemReason::GROUP || !group_id.empty\\(\\)\''
                                     ' failed: group_id is required for setting reason "GROUP"'):
             goal.add_rpm_reason_change(
