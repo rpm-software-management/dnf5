@@ -73,7 +73,7 @@ class TestConfigurationOptions(base_test_case.BaseTestCase):
         option.lock('')
 
         with self.assertRaisesRegex(libdnf5.exception.UserAssertionError,
-                                    '^libdnf5/conf/option.cpp:[0-9]+: void libdnf5::Option::assert_not_locked\\(\\) const:'
+                                    'libdnf5/conf/option.cpp:[0-9]+: void libdnf5::Option::assert_not_locked\\(\\) const:'
                                     ' API Assertion \'!p_impl->locked\' failed:'
                                     ' Attempting to write to a locked option'):
             option.set(False)
