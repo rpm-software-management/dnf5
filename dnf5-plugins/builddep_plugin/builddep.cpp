@@ -122,6 +122,30 @@ void BuildDepCommand::set_argument_parser() {
     allow_erasing = std::make_unique<AllowErasingOption>(*this);
     auto skip_unavailable = std::make_unique<SkipUnavailableOption>(*this);
     create_allow_downgrade_options(*this);
+
+    {
+        auto from_repo_opt = parser.add_new_named_arg("from-repo");
+        from_repo_opt->set_long_name("from-repo");
+        from_repo_opt->set_description(
+            _("The following items can be selected only from the specified repositories. All enabled repositories will "
+              "still be used to satisfy dependencies."));
+        from_repo_opt->set_has_value(true);
+        from_repo_opt->set_arg_value_help(_("REPO_ID,..."));
+        from_repo_opt->set_parse_hook_func(
+            [this](libdnf5::cli::ArgumentParser::NamedArg *, [[maybe_unused]] const char * option, const char * value) {
+                if (from_repos.empty()) {
+                    from_repos = libdnf5::OptionStringList(value).get_value();
+                } else {
+                    if (from_repos != libdnf5::OptionStringList(value).get_value()) {
+                        throw libdnf5::cli::ArgumentParserConflictingArgumentsError(
+                            M_("\"--from_repo\" already defined with diferent value"));
+                    }
+                }
+                return true;
+            });
+        cmd.register_named_arg(from_repo_opt);
+    }
+
     create_store_option(*this);
 
     auto spec_arg = parser.add_new_named_arg("spec");
@@ -272,6 +296,9 @@ bool BuildDepCommand::add_from_pkg(
     auto & ctx = get_context();
 
     libdnf5::rpm::PackageQuery pkg_query(ctx.get_base());
+    if (!from_repos.empty()) {
+        pkg_query.filter_repo_id(from_repos, libdnf5::sack::QueryCmp::GLOB);
+    }
     libdnf5::ResolveSpecSettings settings;
     settings.set_with_provides(false);
     settings.set_with_filenames(false);
@@ -285,6 +312,9 @@ bool BuildDepCommand::add_from_pkg(
     }
 
     libdnf5::rpm::PackageQuery source_pkgs(ctx.get_base());
+    if (!from_repos.empty()) {
+        source_pkgs.filter_repo_id(from_repos, libdnf5::sack::QueryCmp::GLOB);
+    }
     source_pkgs.filter_arch(std::vector<std::string>{"src", "nosrc"});
     source_pkgs.filter_name(source_names);
     if (source_pkgs.empty()) {
