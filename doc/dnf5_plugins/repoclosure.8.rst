@@ -45,8 +45,9 @@ Options
 ``--best``
     | Check only the newest packages per arch.
 
-``--check <repoid>``
+``--check=REPO_ID,...``
     | Specify repositories to check, can be specified multiple times (default is all enabled repositories).
+    | Accepted values are repository ids, or a glob of ids.
 
 ``--newest``
     | Check only the newest packages in the repos.

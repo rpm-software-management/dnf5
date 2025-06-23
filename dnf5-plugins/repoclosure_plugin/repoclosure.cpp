@@ -61,7 +61,7 @@ void RepoclosureCommand::set_argument_parser() {
     check_repos_arg->set_long_name("check");
     check_repos_arg->set_description("Specify repo ids to check");
     check_repos_arg->set_has_value(true);
-    check_repos_arg->set_arg_value_help("<REPO ID>,...");
+    check_repos_arg->set_arg_value_help("<REPO_ID>,...");
     check_repos_arg->set_parse_hook_func([this](
                                              [[maybe_unused]] libdnf5::cli::ArgumentParser::NamedArg * arg,
                                              [[maybe_unused]] const char * option,
@@ -127,7 +127,7 @@ void RepoclosureCommand::run() {
     }
 
     if (!check_repos.empty()) {
-        to_check_query.filter_repo_id(check_repos);
+        to_check_query.filter_repo_id(check_repos, libdnf5::sack::QueryCmp::GLOB);
     }
 
     if (!arches.empty()) {
