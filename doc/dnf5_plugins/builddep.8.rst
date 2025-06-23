@@ -59,6 +59,8 @@ Options
 ``--no-allow-downgrade``
     | Disable downgrade of dependencies when resolving the requested operation.
 
+.. include:: ../_shared/options/from-repo.rst
+
 ``--spec``
     | Treat command line arguments following this option as spec files.
 
