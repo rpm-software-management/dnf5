@@ -121,7 +121,7 @@ void Goal::dbus_register() {
                 sdbus::Signature{""},
                 {},
                 sdbus::Signature{""},
-                {"success", "error_msg"},
+                {},
                 [this](sdbus::MethodCall call) -> void {
                     session.get_threads_manager().handle_method(*this, &Goal::reset, call, session.session_locale);
                 },
