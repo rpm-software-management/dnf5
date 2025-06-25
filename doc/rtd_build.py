@@ -24,7 +24,7 @@ def generate_bindings_from_dir(in_dir, out_dir):
     swig_options = ["-python", "-DSWIGWORDSIZE64", "-doxygen",
                     "-relativeimport", "-outdir", out_dir, "-c++"]
     swig_includes = ["-I" + os.path.join(SOURCE_DIR, "include"), "-I" + os.path.join(
-        SOURCE_DIR, "common"), "-I/usr/include/python3.11"]
+        SOURCE_DIR, "common"), "-I/usr/include/python3.11", "-I" + SOURCE_DIR]
 
     for in_file in os.listdir(in_dir):
         # exclude shared.i which is not a standalone interface file
