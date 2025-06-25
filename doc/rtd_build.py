@@ -3,6 +3,8 @@ import sys
 import subprocess
 
 DIR = os.path.abspath(os.path.dirname(__file__))
+# get parent directory path
+SOURCE_DIR = os.path.dirname(DIR)
 
 
 def configure(src_path, dst_path, substitutions):
@@ -21,8 +23,8 @@ def configure(src_path, dst_path, substitutions):
 def generate_bindings_from_dir(in_dir, out_dir):
     swig_options = ["-python", "-DSWIGWORDSIZE64", "-doxygen",
                     "-relativeimport", "-outdir", out_dir, "-c++"]
-    swig_includes = ["-I" + os.path.join(DIR, "../include"), "-I" + os.path.join(
-        DIR, "../common"), "-I/usr/include/python3.11"]
+    swig_includes = ["-I" + os.path.join(SOURCE_DIR, "include"), "-I" + os.path.join(
+        SOURCE_DIR, "common"), "-I/usr/include/python3.11"]
 
     for in_file in os.listdir(in_dir):
         # exclude shared.i which is not a standalone interface file
@@ -36,7 +38,7 @@ def generate_bindings_from_dir(in_dir, out_dir):
 def main():
     # configure the .in files
     configure("Doxyfile.in", "Doxyfile", {
-              "@CMAKE_SOURCE_DIR@": os.path.join(DIR, "..")})
+              "@CMAKE_SOURCE_DIR@": SOURCE_DIR})
     configure("conf.py.in", "conf.py", {
               "@CMAKE_CURRENT_BINARY_DIR@": DIR, "@AUTOAPI_EXTENSION@": "\'autoapi.extension\',"})
 
@@ -60,11 +62,11 @@ def main():
     # libdnf5
     # Generate bindings outside of doc dir, into their python bindings dir. This has to match with path provided to autoapi_dirs in conf.py.in
     generate_bindings_from_dir(os.path.join(
-        DIR, "../bindings/libdnf5"), os.path.join(DIR, "../bindings/python3/libdnf5"))
+        SOURCE_DIR, "bindings/libdnf5"), os.path.join(SOURCE_DIR, "bindings/python3/libdnf5"))
 
     # libdnf5-cli
-    generate_bindings_from_dir(os.path.join(DIR, "../bindings/libdnf5_cli"),
-                               os.path.join(DIR, "../bindings/python3/libdnf5_cli"))
+    generate_bindings_from_dir(os.path.join(SOURCE_DIR, "bindings/libdnf5_cli"),
+                               os.path.join(SOURCE_DIR, "bindings/python3/libdnf5_cli"))
 
 
 if __name__ == "__main__":
