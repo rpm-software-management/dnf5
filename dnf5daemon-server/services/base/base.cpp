@@ -172,7 +172,7 @@ sdbus::MethodReply Base::clean(sdbus::MethodCall & call) {
     call >> cache_type;
 
     if (cache_type != "expire-cache" &&
-        !session.check_authorization(dnfdaemon::POLKIT_EXECUTE_RPM_TRANSACTION, call.getSender())) {
+        !session.check_authorization(dnfdaemon::POLKIT_EXECUTE_RPM_TRUSTED_TRANSACTION, call.getSender())) {
         throw std::runtime_error("Not authorized");
     }
 
