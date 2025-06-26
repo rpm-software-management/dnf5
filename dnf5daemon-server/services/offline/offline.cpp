@@ -168,7 +168,7 @@ sdbus::MethodReply Offline::get_status(sdbus::MethodCall & call) {
 }
 
 sdbus::MethodReply Offline::cancel(sdbus::MethodCall & call) {
-    if (!session.check_authorization(dnfdaemon::POLKIT_EXECUTE_RPM_TRANSACTION, call.getSender())) {
+    if (!session.check_authorization(dnfdaemon::POLKIT_EXECUTE_RPM_TRUSTED_TRANSACTION, call.getSender())) {
         throw std::runtime_error("Not authorized");
     }
     bool success = true;
@@ -195,7 +195,7 @@ sdbus::MethodReply Offline::cancel(sdbus::MethodCall & call) {
 }
 
 sdbus::MethodReply Offline::clean(sdbus::MethodCall & call) {
-    if (!session.check_authorization(dnfdaemon::POLKIT_EXECUTE_RPM_TRANSACTION, call.getSender())) {
+    if (!session.check_authorization(dnfdaemon::POLKIT_EXECUTE_RPM_TRUSTED_TRANSACTION, call.getSender())) {
         throw std::runtime_error("Not authorized");
     }
     std::vector<std::string> error_msgs;
@@ -224,7 +224,7 @@ sdbus::MethodReply Offline::clean(sdbus::MethodCall & call) {
 }
 
 sdbus::MethodReply Offline::set_finish_action(sdbus::MethodCall & call) {
-    if (!session.check_authorization(dnfdaemon::POLKIT_EXECUTE_RPM_TRANSACTION, call.getSender())) {
+    if (!session.check_authorization(dnfdaemon::POLKIT_EXECUTE_RPM_TRUSTED_TRANSACTION, call.getSender())) {
         throw std::runtime_error("Not authorized");
     }
     bool success{false};
