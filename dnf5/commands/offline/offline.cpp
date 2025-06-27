@@ -52,6 +52,9 @@ using namespace libdnf5::cli;
 const std::string & ID_TO_IDENTIFY_BOOTS = libdnf5::offline::OFFLINE_STARTED_ID;
 
 #ifdef WITH_SYSTEMD
+const SDBUS_SERVICE_NAME_TYPE LOGIND_DESTINATION_NAME{"org.freedesktop.login1"};
+const SDBUS_INTERFACE_NAME_TYPE LOGIND_MANAGER_INTERFACE{"org.freedesktop.login1.Manager"};
+const sdbus::ObjectPath LOGIND_OBJECT_PATH{"/org/freedesktop/login1"};
 const SDBUS_SERVICE_NAME_TYPE SYSTEMD_DESTINATION_NAME{"org.freedesktop.systemd1"};
 const sdbus::ObjectPath SYSTEMD_OBJECT_PATH{"/org/freedesktop/systemd1"};
 const SDBUS_INTERFACE_NAME_TYPE SYSTEMD_MANAGER_INTERFACE{"org.freedesktop.systemd1.Manager"};
@@ -269,11 +272,11 @@ void reboot(bool poweroff = false) {
         throw libdnf5::cli::CommandExitError(1, M_("Couldn't connect to D-Bus: {}"), error_message);
     }
     if (connection != nullptr) {
-        auto proxy = sdbus::createProxy(*connection, SYSTEMD_DESTINATION_NAME, SYSTEMD_OBJECT_PATH);
+        auto proxy = sdbus::createProxy(*connection, LOGIND_DESTINATION_NAME, LOGIND_OBJECT_PATH);
         if (poweroff) {
-            proxy->callMethod("PowerOff").onInterface(SYSTEMD_MANAGER_INTERFACE);
+            proxy->callMethod("PowerOff").onInterface(LOGIND_MANAGER_INTERFACE).withArguments(true);
         } else {
-            proxy->callMethod("Reboot").onInterface(SYSTEMD_MANAGER_INTERFACE);
+            proxy->callMethod("Reboot").onInterface(LOGIND_MANAGER_INTERFACE).withArguments(true);
         }
     }
 #else
