@@ -19,6 +19,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "list.hpp"
 
+#include "../from_repo.hpp"
+
 #include <dnf5/shared_options.hpp>
 #include <libdnf5-cli/output/package_list_sections.hpp>
 #include <libdnf5/rpm/package_query.hpp>
@@ -58,6 +60,8 @@ void ListCommand::set_argument_parser() {
 
     show_duplicates = std::make_unique<libdnf5::cli::session::BoolOption>(
         *this, "showduplicates", '\0', _("Show all versions of the packages, not only the latest ones."), false);
+
+    create_installed_from_repo_option(*this, installed_from_repos, true);
 
     auto conflicts =
         parser.add_conflict_args_group(std::make_unique<std::vector<libdnf5::cli::ArgumentParser::Argument *>>());
@@ -168,7 +172,11 @@ void ListCommand::run() {
     auto sections = create_output();
 
     libdnf5::rpm::PackageQuery installed(base_query);
-    installed.filter_installed();
+    if (installed_from_repos.empty()) {
+        installed.filter_installed();
+    } else {
+        installed.filter_from_repo_id(installed_from_repos, libdnf5::sack::QueryCmp::GLOB);
+    }
 
     // TODO(mblaha) currently only the installed version and upgrades
     // are highlighted to make the output a bit saner
