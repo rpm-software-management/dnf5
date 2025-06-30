@@ -4,7 +4,7 @@ ConditionPathExists=/system-update
 Documentation=https://www.freedesktop.org/wiki/Software/systemd/SystemUpdates
 
 DefaultDependencies=no
-Requires=sysinit.target
+Requires=sysinit.target dbus.socket
 After=sysinit.target systemd-journald.socket system-update-pre.target
 Before=poweroff.target reboot.target shutdown.target system-update.target
 OnFailure=dnf5-offline-transaction-cleanup.service
