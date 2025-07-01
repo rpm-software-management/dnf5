@@ -43,13 +43,12 @@ void TransactionCommand::run_transaction(bool offline) {
 
     // resolve the transaction
     options["allow_erasing"] = sdbus::Variant(ctx.allow_erasing.get_value());
-    std::vector<dnfdaemon::DbusTransactionItem> transaction;
-    unsigned int result_int;
-    ctx.session_proxy->callMethod("resolve")
-        .onInterface(dnfdaemon::INTERFACE_GOAL)
-        .withTimeout(static_cast<uint64_t>(-1))
-        .withArguments(options)
-        .storeResultsTo(transaction, result_int);
+    auto resolve_result = ctx.session_proxy->callMethodAsync("resolve")
+                              .onInterface(dnfdaemon::INTERFACE_GOAL)
+                              .withTimeout(static_cast<uint64_t>(-1))
+                              .withArguments(options)
+                              .getResultAsFuture<std::vector<dnfdaemon::DbusTransactionItem>, unsigned int>();
+    auto [transaction, result_int] = resolve_result.get();
     dnfdaemon::ResolveResult result = static_cast<dnfdaemon::ResolveResult>(result_int);
     DbusGoalWrapper dbus_goal_wrapper(transaction);
 
@@ -81,10 +80,12 @@ void TransactionCommand::run_transaction(bool offline) {
     // do the transaction
     options.clear();
     options["offline"] = sdbus::Variant(offline);
-    ctx.session_proxy->callMethod("do_transaction")
-        .onInterface(dnfdaemon::INTERFACE_GOAL)
-        .withTimeout(static_cast<uint64_t>(-1))
-        .withArguments(options);
+    auto do_result = ctx.session_proxy->callMethodAsync("do_transaction")
+                         .onInterface(dnfdaemon::INTERFACE_GOAL)
+                         .withTimeout(static_cast<uint64_t>(-1))
+                         .withArguments(options)
+                         .getResultAsFuture<>();
+    do_result.get();
 }
 
 }  // namespace dnfdaemon::client
