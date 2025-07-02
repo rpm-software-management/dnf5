@@ -49,11 +49,33 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
     </method>
 
     <!--
+        confirm_key_with_options:
+        @key_id: id of the key in question
+        @confirmed: whether the key import is confirmed by user
+        @options: an array of key/value pairs to modify the call behavior
+
+        Confirm repository OpenPGP key import.
+
+        Following @options are supported:
+            - interactive: boolean, default true
+                Set to "true", when the operation is done by a user, thus user interaction like password prompts can be done.
+
+        Unknown options are ignored.
+    -->
+    <method name="confirm_key_with_options">
+        <arg name="key_id" type="s" direction="in"/>
+        <arg name="confirmed" type="b" direction="in"/>
+        <arg name="options" type="a{sv}" direction="in" />
+    </method>
+
+    <!--
         confirm_key:
         @key_id: id of the key in question
         @confirmed: whether the key import is confirmed by user
 
         Confirm repository OpenPGP key import.
+
+        This is equivalent to call "confirm_key_with_options()" with empty options.
     -->
     <method name="confirm_key">
         <arg name="key_id" type="s" direction="in"/>
@@ -61,13 +83,51 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
     </method>
 
     <!--
+        enable_with_options:
+        @repo_ids: array of strings containing all repo ids to be enabled
+        @options: an array of key/value pairs to modify the call behavior
+
+        Enable repositories based on the list of given ids.
+
+        Following @options are supported:
+            - interactive: boolean, default true
+                Set to "true", when the operation is done by a user, thus user interaction like password prompts can be done.
+
+        Unknown options are ignored.
+    -->
+    <method name="enable_with_options">
+        <arg name="repo_ids" type="as" direction="in"/>
+        <arg name="options" type="a{sv}" direction="in"/>
+    </method>
+
+    <!--
         enable:
         @repo_ids: array of strings containing all repo ids to be enabled
 
         Enable repositories based on the list of given ids.
+
+        This is equivalent to call "enable_with_options()" with empty options.
     -->
     <method name="enable">
         <arg name="repo_ids" type="as" direction="in"/>
+    </method>
+
+    <!--
+        disable_with_options:
+        @repo_ids: array of strings containing all repo ids to be disabled
+        @options: an array of key/value pairs to modify the call behavior
+
+        Disable repositories based on the list of given ids.
+
+        Following @options are supported:
+            - interactive: boolean, default true
+                Set to "true", when the operation is done by a user, thus user interaction like password prompts can be done.
+
+        Unknown options are ignored.
+    -->
+    <method name="disable_with_options">
+        <arg name="repo_ids" type="as" direction="in"/>
+        <arg name="options" type="a{sv}" direction="in"/>
     </method>
 
     <!--
@@ -75,6 +135,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
         @repo_ids: array of strings containing all repo ids to be disabled
 
         Disable repositories based on the list of given ids.
+
+        This is equivalent to call "disable_with_options()" with empty options.
     -->
     <method name="disable">
         <arg name="repo_ids" type="as" direction="in"/>

@@ -277,6 +277,16 @@ void Repo::dbus_register() {
                 },
                 {}},
             sdbus::MethodVTableItem{
+                sdbus::MethodName{"confirm_key_with_options"},
+                sdbus::Signature{"sb"},
+                {"key_id", "confirmed"},
+                sdbus::Signature{""},
+                {},
+                [this](sdbus::MethodCall call) -> void {
+                    session.get_threads_manager().handle_method(*this, &Repo::confirm_key_with_options, call);
+                },
+                {}},
+            sdbus::MethodVTableItem{
                 sdbus::MethodName{"confirm_key"},
                 sdbus::Signature{"sb"},
                 {"key_id", "confirmed"},
@@ -287,6 +297,17 @@ void Repo::dbus_register() {
                 },
                 {}},
             sdbus::MethodVTableItem{
+                sdbus::MethodName{"enable_with_options"},
+                sdbus::Signature{"asa{sv}"},
+                {"repo_ids", "options"},
+                sdbus::Signature{""},
+                {},
+                [this](sdbus::MethodCall call) -> void {
+                    session.get_threads_manager().handle_method(
+                        *this, &Repo::enable_with_options, call, session.session_locale);
+                },
+                {}},
+            sdbus::MethodVTableItem{
                 sdbus::MethodName{"enable"},
                 sdbus::Signature{"as"},
                 {"repo_ids"},
@@ -294,6 +315,17 @@ void Repo::dbus_register() {
                 {},
                 [this](sdbus::MethodCall call) -> void {
                     session.get_threads_manager().handle_method(*this, &Repo::enable, call, session.session_locale);
+                },
+                {}},
+            sdbus::MethodVTableItem{
+                sdbus::MethodName{"disable_with_options"},
+                sdbus::Signature{"asa{sv}"},
+                {"repo_ids", "options"},
+                sdbus::Signature{""},
+                {},
+                [this](sdbus::MethodCall call) -> void {
+                    session.get_threads_manager().handle_method(
+                        *this, &Repo::disable_with_options, call, session.session_locale);
                 },
                 {}},
             sdbus::MethodVTableItem{
@@ -320,6 +352,16 @@ void Repo::dbus_register() {
         });
     dbus_object->registerMethod(
         dnfdaemon::INTERFACE_REPO,
+        "confirm_key_with_options",
+        "sba{sv}",
+        {"key_id", "confirmed", "options"},
+        "",
+        {},
+        [this](sdbus::MethodCall call) -> void {
+            session.get_threads_manager().handle_method(*this, &Repo::confirm_key_with_options, call);
+        });
+    dbus_object->registerMethod(
+        dnfdaemon::INTERFACE_REPO,
         "confirm_key",
         "sb",
         {"key_id", "confirmed"},
@@ -329,8 +371,30 @@ void Repo::dbus_register() {
             session.get_threads_manager().handle_method(*this, &Repo::confirm_key, call);
         });
     dbus_object->registerMethod(
+        dnfdaemon::INTERFACE_REPO,
+        "enable_with_options",
+        "asa{sv}",
+        {"repo_ids", "options"},
+        "",
+        {},
+        [this](sdbus::MethodCall call) -> void {
+            session.get_threads_manager().handle_method(
+                *this, &Repo::enable_with_options, call, session.session_locale);
+        });
+    dbus_object->registerMethod(
         dnfdaemon::INTERFACE_REPO, "enable", "as", {"repo_ids"}, "", {}, [this](sdbus::MethodCall call) -> void {
             session.get_threads_manager().handle_method(*this, &Repo::enable, call, session.session_locale);
+        });
+    dbus_object->registerMethod(
+        dnfdaemon::INTERFACE_REPO,
+        "disable_with_options",
+        "asa{sv}",
+        {"repo_ids", "options"},
+        "",
+        {},
+        [this](sdbus::MethodCall call) -> void {
+            session.get_threads_manager().handle_method(
+                *this, &Repo::disable_with_options, call, session.session_locale);
         });
     dbus_object->registerMethod(
         dnfdaemon::INTERFACE_REPO, "disable", "as", {"repo_ids"}, "", {}, [this](sdbus::MethodCall call) -> void {
@@ -339,18 +403,35 @@ void Repo::dbus_register() {
 #endif
 }
 
-sdbus::MethodReply Repo::confirm_key(sdbus::MethodCall & call) {
-    std::string key_id;
-    bool confirmed;
-    call >> key_id >> confirmed;
+sdbus::MethodReply Repo::impl_confirm_key(
+    sdbus::MethodCall & call, const std::string & key_id, bool confirmed, const dnfdaemon::KeyValueMap & options) {
+    bool interactive = dnfdaemon::key_value_map_get<bool>(options, "interactive", true);
     if (confirmed) {
-        if (!session.check_authorization(dnfdaemon::POLKIT_CONFIRM_KEY_IMPORT, call.getSender())) {
+        if (!session.check_authorization(dnfdaemon::POLKIT_CONFIRM_KEY_IMPORT, call.getSender(), interactive)) {
             session.confirm_key(key_id, false);
             throw std::runtime_error("Not authorized");
         }
     }
     session.confirm_key(key_id, confirmed);
     return call.createReply();
+}
+
+sdbus::MethodReply Repo::confirm_key_with_options(sdbus::MethodCall & call) {
+    std::string key_id;
+    bool confirmed;
+    dnfdaemon::KeyValueMap options{};
+    call >> key_id >> confirmed >> options;
+
+    return impl_confirm_key(call, key_id, confirmed, options);
+}
+
+sdbus::MethodReply Repo::confirm_key(sdbus::MethodCall & call) {
+    std::string key_id;
+    bool confirmed;
+    dnfdaemon::KeyValueMap options{};
+    call >> key_id >> confirmed;
+
+    return impl_confirm_key(call, key_id, confirmed, options);
 }
 
 sdbus::MethodReply Repo::list(sdbus::MethodCall & call) {
@@ -449,11 +530,14 @@ void Repo::enable_disable_repos(const std::vector<std::string> & ids, const bool
     }
 }
 
-sdbus::MethodReply Repo::enable_disable(sdbus::MethodCall && call, const bool & enable) {
+sdbus::MethodReply Repo::impl_enable_disable(
+    sdbus::MethodCall & call,
+    bool enable,
+    const std::vector<std::string> & ids,
+    const dnfdaemon::KeyValueMap & options) {
     auto sender = call.getSender();
-    std::vector<std::string> ids;
-    call >> ids;
-    auto is_authorized = session.check_authorization(dnfdaemon::POLKIT_REPOCONF_WRITE, sender);
+    bool interactive = dnfdaemon::key_value_map_get<bool>(options, "interactive", true);
+    auto is_authorized = session.check_authorization(dnfdaemon::POLKIT_REPOCONF_WRITE, sender, interactive);
     if (!is_authorized) {
         throw sdbus::Error(dnfdaemon::ERROR_REPOCONF, "Not authorized.");
     }
@@ -462,4 +546,36 @@ sdbus::MethodReply Repo::enable_disable(sdbus::MethodCall && call, const bool & 
 
     auto reply = call.createReply();
     return reply;
+}
+
+sdbus::MethodReply Repo::enable_with_options(sdbus::MethodCall & call) {
+    std::vector<std::string> ids;
+    dnfdaemon::KeyValueMap options;
+    call >> ids >> options;
+
+    return impl_enable_disable(call, true, ids, options);
+}
+
+sdbus::MethodReply Repo::enable(sdbus::MethodCall & call) {
+    std::vector<std::string> ids;
+    dnfdaemon::KeyValueMap options{};
+    call >> ids;
+
+    return impl_enable_disable(call, true, ids, options);
+}
+
+sdbus::MethodReply Repo::disable_with_options(sdbus::MethodCall & call) {
+    std::vector<std::string> ids;
+    dnfdaemon::KeyValueMap options;
+    call >> ids >> options;
+
+    return impl_enable_disable(call, false, ids, options);
+}
+
+sdbus::MethodReply Repo::disable(sdbus::MethodCall & call) {
+    std::vector<std::string> ids;
+    dnfdaemon::KeyValueMap options{};
+    call >> ids;
+
+    return impl_enable_disable(call, false, ids, options);
 }
