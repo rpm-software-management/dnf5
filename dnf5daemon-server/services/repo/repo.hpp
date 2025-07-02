@@ -36,10 +36,19 @@ public:
 
 private:
     sdbus::MethodReply list(sdbus::MethodCall & call);
+    sdbus::MethodReply impl_confirm_key(
+        sdbus::MethodCall & call, const std::string & key_id, bool confirmed, const dnfdaemon::KeyValueMap & options);
+    sdbus::MethodReply confirm_key_with_options(sdbus::MethodCall & call);
     sdbus::MethodReply confirm_key(sdbus::MethodCall & call);
-    sdbus::MethodReply enable_disable(sdbus::MethodCall && call, const bool & enable);
-    sdbus::MethodReply enable(sdbus::MethodCall & call) { return enable_disable(std::move(call), true); };
-    sdbus::MethodReply disable(sdbus::MethodCall & call) { return enable_disable(std::move(call), false); };
+    sdbus::MethodReply impl_enable_disable(
+        sdbus::MethodCall & call,
+        bool enable,
+        const std::vector<std::string> & ids,
+        const dnfdaemon::KeyValueMap & options);
+    sdbus::MethodReply enable_with_options(sdbus::MethodCall & call);
+    sdbus::MethodReply enable(sdbus::MethodCall & call);
+    sdbus::MethodReply disable_with_options(sdbus::MethodCall & call);
+    sdbus::MethodReply disable(sdbus::MethodCall & call);
 
     void enable_disable_repos(const std::vector<std::string> & ids, const bool enable);
 };
