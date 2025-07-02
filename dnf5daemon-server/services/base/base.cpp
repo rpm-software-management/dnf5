@@ -60,6 +60,17 @@ void Base::dbus_register() {
                 },
                 {}},
             sdbus::MethodVTableItem{
+                sdbus::MethodName{"clean_with_options"},
+                sdbus::Signature{"sa{sv}"},
+                {"cache_type", "options"},
+                sdbus::Signature{"bs"},
+                {"success", "error_msg"},
+                [this](sdbus::MethodCall call) -> void {
+                    session.get_threads_manager().handle_method(
+                        *this, &Base::clean_with_options, call, session.session_locale);
+                },
+                {}},
+            sdbus::MethodVTableItem{
                 sdbus::MethodName{"clean"},
                 sdbus::Signature{"s"},
                 {"cache_type"},
@@ -109,6 +120,16 @@ void Base::dbus_register() {
     dbus_object->registerMethod(
         dnfdaemon::INTERFACE_BASE, "read_all_repos", "", {}, "b", {"success"}, [this](sdbus::MethodCall call) -> void {
             session.get_threads_manager().handle_method(*this, &Base::read_all_repos, call, session.session_locale);
+        });
+    dbus_object->registerMethod(
+        dnfdaemon::INTERFACE_BASE,
+        "clean_with_options",
+        "sa{sv}",
+        {"cache_type", "options"},
+        "bs",
+        {"success", "error_msg"},
+        [this](sdbus::MethodCall call) -> void {
+            session.get_threads_manager().handle_method(*this, &Base::clean_with_options, call, session.session_locale);
         });
     dbus_object->registerMethod(
         dnfdaemon::INTERFACE_BASE,
@@ -166,13 +187,14 @@ sdbus::MethodReply Base::read_all_repos(sdbus::MethodCall & call) {
     return reply;
 }
 
-sdbus::MethodReply Base::clean(sdbus::MethodCall & call) {
-    // let the "expire-cache" do anyone, just as read_all_repos()
-    std::string cache_type{};
-    call >> cache_type;
+sdbus::MethodReply Base::impl_clean(
+    sdbus::MethodCall & call, const std::string & cache_type, const dnfdaemon::KeyValueMap & options) {
+    bool interactive = dnfdaemon::key_value_map_get<bool>(options, "interactive", true);
 
+    // let the "expire-cache" do anyone, just as read_all_repos()
     if (cache_type != "expire-cache" &&
-        !session.check_authorization(dnfdaemon::POLKIT_EXECUTE_RPM_TRUSTED_TRANSACTION, call.getSender())) {
+        !session.check_authorization(
+            dnfdaemon::POLKIT_EXECUTE_RPM_TRUSTED_TRANSACTION, call.getSender(), interactive)) {
         throw std::runtime_error("Not authorized");
     }
 
@@ -221,6 +243,22 @@ sdbus::MethodReply Base::clean(sdbus::MethodCall & call) {
     reply << success;
     reply << error_msg;
     return reply;
+}
+
+sdbus::MethodReply Base::clean_with_options(sdbus::MethodCall & call) {
+    std::string cache_type{};
+    dnfdaemon::KeyValueMap options;
+    call >> cache_type >> options;
+
+    return impl_clean(call, cache_type, options);
+}
+
+sdbus::MethodReply Base::clean(sdbus::MethodCall & call) {
+    std::string cache_type{};
+    dnfdaemon::KeyValueMap options{};
+    call >> cache_type;
+
+    return impl_clean(call, cache_type, options);
 }
 
 sdbus::MethodReply Base::reset(sdbus::MethodCall & call) {

@@ -36,13 +36,36 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
     </method>
 
     <!--
+        clean_with_options:
+        @cache_type: cache type to clean up. Supported types are "all", "packages", "metadata", "dbcache", and "expire-cache".
+        @options: an array of key/value pairs to modify the call behavior
+        @success: `true` if the cache was successfully cleaned, `false` otherwise.
+        @error_msg: string, contains errors encountered while cleaning the cache.
+
+        Remove or expire cached data.
+
+        Following @options are supported:
+            - interactive: boolean, default true
+                Set to "true", when the operation is done by a user, thus user interaction like password prompts can be done.
+
+        Unknown options are ignored.
+    -->
+    <method name="clean_with_options">
+        <arg name="cache_type" type="s" direction="in"/>
+        <arg name="options" type="a{sv}" direction="in" />
+        <arg name="success" type="b" direction="out"/>
+        <arg name="error_msg" type="s" direction="out"/>
+    </method>
+
+    <!--
         clean:
         @cache_type: cache type to clean up. Supported types are "all", "packages", "metadata", "dbcache", and "expire-cache".
         @success: `true` if the cache was successfully cleaned, `false` otherwise.
         @error_msg: string, contains errors encountered while cleaning the cache.
 
-
         Remove or expire cached data.
+
+        This is equivalent to call "clean_with_options()" with empty options.
     -->
     <method name="clean">
         <arg name="cache_type" type="s" direction="in"/>

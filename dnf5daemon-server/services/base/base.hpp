@@ -35,6 +35,9 @@ public:
     void dbus_deregister();
 
 private:
+    sdbus::MethodReply impl_clean(
+        sdbus::MethodCall & call, const std::string & cache_type, const dnfdaemon::KeyValueMap & options);
+    sdbus::MethodReply clean_with_options(sdbus::MethodCall & call);
     sdbus::MethodReply clean(sdbus::MethodCall & call);
     sdbus::MethodReply reset(sdbus::MethodCall & call);
     sdbus::MethodReply read_all_repos(sdbus::MethodCall & call);
