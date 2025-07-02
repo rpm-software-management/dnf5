@@ -37,6 +37,25 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
         <arg name="transaction_status" type="a{sv}" direction="out" />
     </method>
 
+    <!--
+        cancel_with_options:
+        @options: an array of key/value pairs to modify the call behavior
+        @success: boolean, returns `false` if there was an error during the transaction cancellation, or if the offline transaction was initiated by another tool than dnf5. Returns `true` if the offline transaction was successfully cancelled or if no offline transaction was configured.
+        @error_msg: string, contains error encountered while cancelling the transaction
+
+        Cancel the dnf5 offline transaction configured for the next reboot. Offline updates scheduled by another tool are not cancelled.
+
+        Following @options are supported:
+            - interactive: boolean, default true
+                Set to "true", when the operation is done by a user, thus user interaction like password prompts can be done.
+
+        Unknown options are ignored.
+    -->
+    <method name="cancel_with_options">
+        <arg name="options" type="a{sv}" direction="in" />
+        <arg name="success" type="b" direction="out" />
+        <arg name="error_msg" type="s" direction="out" />
+    </method>
 
     <!--
         cancel:
@@ -44,8 +63,29 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
         @error_msg: string, contains error encountered while cancelling the transaction
 
         Cancel the dnf5 offline transaction configured for the next reboot. Offline updates scheduled by another tool are not cancelled.
+
+        This is equivalent to call "cancel_with_options()" with empty options.
     -->
     <method name="cancel">
+        <arg name="success" type="b" direction="out" />
+        <arg name="error_msg" type="s" direction="out" />
+    </method>
+
+    <!--
+        clean_with_options:
+        @options: an array of key/value pairs to modify the call behavior
+        @success: boolean, returns `false` if there was an error during the transaction cleanup. Returns `true` if the offline transaction was successfully cleaned or if no offline transaction was configured.
+        @error_msg: string, contains error encountered while cleaning the transaction
+
+        Cancel the dnf5 offline transaction configured for the next reboot and remove all stored offline transaction data, including downloaded packages. Offline updates scheduled by another tool are not affected.
+
+        Following @options are supported:
+            - interactive: boolean, default true
+                Set to "true", when the operation is done by a user, thus user interaction like password prompts can be done.
+
+        Unknown options are ignored.
+    -->
+    <method name="clean_with_options">
         <arg name="success" type="b" direction="out" />
         <arg name="error_msg" type="s" direction="out" />
     </method>
@@ -56,8 +96,34 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
         @error_msg: string, contains error encountered while cleaning the transaction
 
         Cancel the dnf5 offline transaction configured for the next reboot and remove all stored offline transaction data, including downloaded packages. Offline updates scheduled by another tool are not affected.
+
+        This is equivalent to call "clean_with_options()" with empty options.
     -->
     <method name="clean">
+        <arg name="options" type="a{sv}" direction="in" />
+        <arg name="success" type="b" direction="out" />
+        <arg name="error_msg" type="s" direction="out" />
+    </method>
+
+    <!--
+        set_finish_action_with_options:
+        @action: string, one of "poweroff", or "reboot". If set to "poweroff", the system will be powered off after applying the offline transaction. Otherwise the system will reboot.
+        @options: an array of key/value pairs to modify the call behavior
+        @success: boolean, true if the action was successfully set
+        @error_msg: string, contains error encountered while setting the action
+
+        Set the action that should be performed after the offline transaction is applied. If the `action` is "poweroff", the system will be powered off, otherwise it will be rebooted (which is default).
+        The call might fail in case there is no scheduled offline transaction, or the transaction was not scheduled using libdnf5.
+
+        Following @options are supported:
+            - interactive: boolean, default true
+                Set to "true", when the operation is done by a user, thus user interaction like password prompts can be done.
+
+        Unknown options are ignored.
+    -->
+    <method name="set_finish_action_with_options">
+        <arg name="action" type="s" direction="in" />
+        <arg name="options" type="a{sv}" direction="in" />
         <arg name="success" type="b" direction="out" />
         <arg name="error_msg" type="s" direction="out" />
     </method>
@@ -70,6 +136,9 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
         Set the action that should be performed after the offline transaction is applied. If the `action` is "poweroff", the system will be powered off, otherwise it will be rebooted (which is default).
         The call might fail in case there is no scheduled offline transaction, or the transaction was not scheduled using libdnf5.
+
+
+        This is equivalent to call "set_finish_action_with_options()" with empty options.
     -->
     <method name="set_finish_action">
         <arg name="action" type="s" direction="in" />

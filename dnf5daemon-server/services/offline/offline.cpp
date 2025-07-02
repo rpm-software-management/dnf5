@@ -56,6 +56,17 @@ void Offline::dbus_register() {
     dbus_object
         ->addVTable(
             sdbus::MethodVTableItem{
+                sdbus::MethodName{"cancel_with_options"},
+                sdbus::Signature{"a{sv}"},
+                {"options"},
+                sdbus::Signature{"bs"},
+                {"success", "error_msg"},
+                [this](sdbus::MethodCall call) -> void {
+                    session.get_threads_manager().handle_method(
+                        *this, &Offline::cancel_with_options, call, session.session_locale);
+                },
+                {}},
+            sdbus::MethodVTableItem{
                 sdbus::MethodName{"cancel"},
                 {},
                 {},
@@ -77,6 +88,17 @@ void Offline::dbus_register() {
                 },
                 {}},
             sdbus::MethodVTableItem{
+                sdbus::MethodName{"clean_with_options"},
+                sdbus::Signature{"a{sv}"},
+                {"options"},
+                sdbus::Signature{"bs"},
+                {"success", "error_msg"},
+                [this](sdbus::MethodCall call) -> void {
+                    session.get_threads_manager().handle_method(
+                        *this, &Offline::clean_with_options, call, session.session_locale);
+                },
+                {}},
+            sdbus::MethodVTableItem{
                 sdbus::MethodName{"clean"},
                 {},
                 {},
@@ -84,6 +106,17 @@ void Offline::dbus_register() {
                 {"success", "error_msg"},
                 [this](sdbus::MethodCall call) -> void {
                     session.get_threads_manager().handle_method(*this, &Offline::clean, call, session.session_locale);
+                },
+                {}},
+            sdbus::MethodVTableItem{
+                sdbus::MethodName{"set_finish_action_with_options"},
+                sdbus::Signature{"sa{sv}"},
+                {"action", "options"},
+                sdbus::Signature{"bs"},
+                {"success", "error_msg"},
+                [this](sdbus::MethodCall call) -> void {
+                    session.get_threads_manager().handle_method(
+                        *this, &Offline::set_finish_action_with_options, call, session.session_locale);
                 },
                 {}},
             sdbus::MethodVTableItem{
@@ -99,6 +132,17 @@ void Offline::dbus_register() {
                 {}})
         .forInterface(dnfdaemon::INTERFACE_OFFLINE);
 #else
+    dbus_object->registerMethod(
+        dnfdaemon::INTERFACE_OFFLINE,
+        "cancel_with_options",
+        {"a{sv}"},
+        {"options"},
+        "bs",
+        {"success", "error_msg"},
+        [this](sdbus::MethodCall call) -> void {
+            session.get_threads_manager().handle_method(
+                *this, &Offline::cancel_with_options, call, session.session_locale);
+        });
     dbus_object->registerMethod(
         dnfdaemon::INTERFACE_OFFLINE,
         "cancel",
@@ -121,6 +165,17 @@ void Offline::dbus_register() {
         });
     dbus_object->registerMethod(
         dnfdaemon::INTERFACE_OFFLINE,
+        "clean_with_options",
+        {"a{sv}"},
+        {"options"},
+        "bs",
+        {"success", "error_msg"},
+        [this](sdbus::MethodCall call) -> void {
+            session.get_threads_manager().handle_method(
+                *this, &Offline::clean_with_options, call, session.session_locale);
+        });
+    dbus_object->registerMethod(
+        dnfdaemon::INTERFACE_OFFLINE,
         "clean",
         {},
         {},
@@ -128,6 +183,17 @@ void Offline::dbus_register() {
         {"success", "error_msg"},
         [this](sdbus::MethodCall call) -> void {
             session.get_threads_manager().handle_method(*this, &Offline::clean, call, session.session_locale);
+        });
+    dbus_object->registerMethod(
+        dnfdaemon::INTERFACE_OFFLINE,
+        "set_finish_action_with_options",
+        "sa{sv}",
+        {"action", "options"},
+        "bs",
+        {"success", "error_msg"},
+        [this](sdbus::MethodCall call) -> void {
+            session.get_threads_manager().handle_method(
+                *this, &Offline::set_finish_action_with_options, call, session.session_locale);
         });
     dbus_object->registerMethod(
         dnfdaemon::INTERFACE_OFFLINE,
@@ -167,8 +233,10 @@ sdbus::MethodReply Offline::get_status(sdbus::MethodCall & call) {
     return reply;
 }
 
-sdbus::MethodReply Offline::cancel(sdbus::MethodCall & call) {
-    if (!session.check_authorization(dnfdaemon::POLKIT_EXECUTE_RPM_TRUSTED_TRANSACTION, call.getSender())) {
+sdbus::MethodReply Offline::impl_cancel(sdbus::MethodCall & call, const dnfdaemon::KeyValueMap & options) {
+    bool interactive = dnfdaemon::key_value_map_get<bool>(options, "interactive", true);
+    if (!session.check_authorization(
+            dnfdaemon::POLKIT_EXECUTE_RPM_TRUSTED_TRANSACTION, call.getSender(), interactive)) {
         throw std::runtime_error("Not authorized");
     }
     bool success = true;
@@ -194,8 +262,21 @@ sdbus::MethodReply Offline::cancel(sdbus::MethodCall & call) {
     return reply;
 }
 
-sdbus::MethodReply Offline::clean(sdbus::MethodCall & call) {
-    if (!session.check_authorization(dnfdaemon::POLKIT_EXECUTE_RPM_TRUSTED_TRANSACTION, call.getSender())) {
+sdbus::MethodReply Offline::cancel_with_options(sdbus::MethodCall & call) {
+    dnfdaemon::KeyValueMap options;
+    call >> options;
+    return impl_cancel(call, options);
+}
+
+sdbus::MethodReply Offline::cancel(sdbus::MethodCall & call) {
+    dnfdaemon::KeyValueMap options{};
+    return impl_cancel(call, options);
+}
+
+sdbus::MethodReply Offline::impl_clean(sdbus::MethodCall & call, const dnfdaemon::KeyValueMap & options) {
+    bool interactive = dnfdaemon::key_value_map_get<bool>(options, "interactive", true);
+    if (!session.check_authorization(
+            dnfdaemon::POLKIT_EXECUTE_RPM_TRUSTED_TRANSACTION, call.getSender(), interactive)) {
         throw std::runtime_error("Not authorized");
     }
     std::vector<std::string> error_msgs;
@@ -223,19 +304,31 @@ sdbus::MethodReply Offline::clean(sdbus::MethodCall & call) {
     return reply;
 }
 
-sdbus::MethodReply Offline::set_finish_action(sdbus::MethodCall & call) {
-    if (!session.check_authorization(dnfdaemon::POLKIT_EXECUTE_RPM_TRUSTED_TRANSACTION, call.getSender())) {
+sdbus::MethodReply Offline::clean_with_options(sdbus::MethodCall & call) {
+    dnfdaemon::KeyValueMap options;
+    call >> options;
+    return impl_clean(call, options);
+}
+
+sdbus::MethodReply Offline::clean(sdbus::MethodCall & call) {
+    dnfdaemon::KeyValueMap options{};
+    return impl_clean(call, options);
+}
+
+sdbus::MethodReply Offline::impl_set_finish_action(
+    sdbus::MethodCall & call, const std::string & action, const dnfdaemon::KeyValueMap & options) {
+    bool interactive = dnfdaemon::key_value_map_get<bool>(options, "interactive", true);
+    if (!session.check_authorization(
+            dnfdaemon::POLKIT_EXECUTE_RPM_TRUSTED_TRANSACTION, call.getSender(), interactive)) {
         throw std::runtime_error("Not authorized");
     }
     bool success{false};
     std::string error_msg{};
 
-    std::string finish_action;
-    call >> finish_action;
     // check finish_action validity
-    if (finish_action != "poweroff" && finish_action != "reboot") {
-        error_msg = fmt::format(
-            "Unsupported finish action \"{}\". Valid options are \"reboot\", or \"poweroff\".", finish_action);
+    if (action != "poweroff" && action != "reboot") {
+        error_msg =
+            fmt::format("Unsupported finish action \"{}\". Valid options are \"reboot\", or \"poweroff\".", action);
     } else {
         const std::filesystem::path state_path{get_datadir() / libdnf5::offline::TRANSACTION_STATE_FILENAME};
         std::error_code ec;
@@ -248,7 +341,7 @@ sdbus::MethodReply Offline::set_finish_action(sdbus::MethodCall & call) {
             const auto & read_exception = state.get_read_exception();
             if (read_exception == nullptr) {
                 // set the poweroff_after item accordingly
-                state.get_data().set_poweroff_after(finish_action == "poweroff");
+                state.get_data().set_poweroff_after(action == "poweroff");
                 // write the new state
                 state.write();
                 success = true;
@@ -265,4 +358,18 @@ sdbus::MethodReply Offline::set_finish_action(sdbus::MethodCall & call) {
     reply << success;
     reply << error_msg;
     return reply;
+}
+
+sdbus::MethodReply Offline::set_finish_action_with_options(sdbus::MethodCall & call) {
+    std::string action;
+    dnfdaemon::KeyValueMap options;
+    call >> action >> options;
+    return impl_set_finish_action(call, action, options);
+}
+
+sdbus::MethodReply Offline::set_finish_action(sdbus::MethodCall & call) {
+    std::string action;
+    dnfdaemon::KeyValueMap options{};
+    call >> action;
+    return impl_set_finish_action(call, action, options);
 }
