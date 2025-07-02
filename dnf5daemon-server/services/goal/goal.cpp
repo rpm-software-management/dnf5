@@ -374,10 +374,15 @@ bool is_transaction_trusted(libdnf5::base::Transaction * transaction) {
 sdbus::MethodReply Goal::do_transaction(sdbus::MethodCall & call) {
     transaction_resolved_assert();
     auto * transaction = session.get_transaction();
+    // read options from dbus call
+    dnfdaemon::KeyValueMap options;
+    call >> options;
+    bool interactive = dnfdaemon::key_value_map_get<bool>(options, "interactive", true);
     if (!session.check_authorization(
             is_transaction_trusted(transaction) ? dnfdaemon::POLKIT_EXECUTE_RPM_TRUSTED_TRANSACTION
                                                 : dnfdaemon::POLKIT_EXECUTE_RPM_TRANSACTION,
-            call.getSender())) {
+            call.getSender(),
+            interactive)) {
         throw std::runtime_error("Not authorized");
     }
 
@@ -389,10 +394,6 @@ sdbus::MethodReply Goal::do_transaction(sdbus::MethodCall & call) {
     std::lock_guard<std::mutex> transaction_lock(transaction_mutex, std::adopt_lock);
 
     session.set_cancel_download(Session::CancelDownload::NOT_REQUESTED);
-
-    // read options from dbus call
-    dnfdaemon::KeyValueMap options;
-    call >> options;
 
     bool offline = dnfdaemon::key_value_map_get<bool>(options, "offline", false);
 
