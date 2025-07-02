@@ -785,6 +785,7 @@ Package management service with a DBus interface.
 Summary:        Polkit rule to allow wheel group members install trusted packages
 License:        GPL-2.0-or-later
 Requires:       polkit
+Requires:       dnf5daemon-server = %{version}-%{release}
 BuildArch:      noarch
 
 %description -n dnf5daemon-server-polkit
