@@ -106,15 +106,19 @@ For details about building and testing DNF5, see the [Development environment se
 Translating
 -----------
 
-Translating DNF5 from English to other langauges happens at
+Translating DNF5 from English to other languages happens at
 [Fedora Weblate](https://translate.fedoraproject.org/projects/dnf5/)
 translation web site.
 
-The web site extracts new English messages from this repository. Users of the web
-site translate them there and the web site exports the finshed translations to
+A [GitHub workflow](.github/workflows/weblate-sync-pot.yml) extracts new English
+messages from this repository every day and commits them to
 [dnf5-l10n](https://github.com/rpm-software-management/dnf5-l10n) repository.
-The translation catalogs from the repository are copied into a DNF5 release
-tar ball on every DNF5 release.
+The translation web site then presents them to its users who translate
+them there and the web site saves the finished translations back to the
+dnf5-l10n repository.
+Finally, the translation catalogs from that repository are
+[copied](.github/actions/weblate-pull-translations/action.yml) into this repository
+just before [every DNF5 release](.github/workflows/prepare-release.yml).
 
 
 License
