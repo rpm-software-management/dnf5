@@ -223,6 +223,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
             - mode: string (one of "distrosync", "upgrade", default is "distrosync")
                 By default the system_upgrade behaves like `dnf distro-sync`, always installing packages from the new release, even if they are older than the currently installed version. If set to "upgrade", packages from the new release are not installed if they are older than what is currently installed (behave like `dnf upgrade`).
+            - interactive: boolean, default true
+                Set to "true", when the operation is done by a user, thus user interaction like password prompts can be done.
 
         Unknown options are ignored.
     -->
