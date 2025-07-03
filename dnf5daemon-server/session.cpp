@@ -325,20 +325,24 @@ bool Session::check_authorization(
 }
 
 void Session::download_transaction_packages() {
-    libdnf5::repo::PackageDownloader downloader(base->get_weak_ptr());
-
-    // container is owner of package callbacks user_data
+    // container is owner of package callbacks user_data;
     std::vector<std::unique_ptr<dnf5daemon::DownloadUserData>> user_data;
-    for (auto & tspkg : transaction->get_transaction_packages()) {
-        if (transaction_item_action_is_inbound(tspkg.get_action()) &&
-            tspkg.get_package().get_repo()->get_type() != libdnf5::repo::Repo::Type::COMMANDLINE) {
-            auto & data = user_data.emplace_back(std::make_unique<dnf5daemon::DownloadUserData>());
-            data->download_id = "package:" + std::to_string(tspkg.get_package().get_id().id);
-            downloader.add(tspkg.get_package(), data.get());
-        }
-    }
+    // make sure the user_data is freed after the downloader, because the
+    // downloader can call download_end signal during its destructor
+    {
+        libdnf5::repo::PackageDownloader downloader(base->get_weak_ptr());
 
-    downloader.download();
+        for (auto & tspkg : transaction->get_transaction_packages()) {
+            if (transaction_item_action_is_inbound(tspkg.get_action()) &&
+                tspkg.get_package().get_repo()->get_type() != libdnf5::repo::Repo::Type::COMMANDLINE) {
+                auto & data = user_data.emplace_back(std::make_unique<dnf5daemon::DownloadUserData>());
+                data->download_id = "package:" + std::to_string(tspkg.get_package().get_id().id);
+                downloader.add(tspkg.get_package(), data.get());
+            }
+        }
+
+        downloader.download();
+    }
 }
 
 void Session::store_transaction_offline() {
