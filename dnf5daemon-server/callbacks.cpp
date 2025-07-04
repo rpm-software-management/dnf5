@@ -51,6 +51,9 @@ sdbus::Signal DownloadCB::create_signal_download(const SDBUS_SIGNAL_NAME_TYPE & 
     if (user_data) {
         auto * data = reinterpret_cast<DownloadUserData *>(user_data);
         signal << data->download_id;
+    } else {
+        // it can happen for example when downloading OpenPGP keys
+        signal << "";
     }
     return signal;
 }
