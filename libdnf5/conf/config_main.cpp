@@ -116,6 +116,7 @@ class ConfigMain::Impl {
     OptionNumber<std::int32_t> debuglevel{2, 0, 10};
     OptionNumber<std::int32_t> errorlevel{3, 0, 10};
     OptionPath installroot{"/", false, true};
+    OptionBool with_mounts{false};
     OptionBool use_host_config{false};
     OptionPath config_file_path{CONF_FILENAME};
     OptionBool plugins{true};
@@ -305,6 +306,7 @@ ConfigMain::Impl::Impl(Config & owner) : owner(owner) {
     owner.opt_binds().add("debuglevel", debuglevel);
     owner.opt_binds().add("errorlevel", errorlevel);
     owner.opt_binds().add("installroot", installroot);
+    owner.opt_binds().add("with_mounts", with_mounts);
     owner.opt_binds().add("use_host_config", use_host_config);
     owner.opt_binds().add("config_file_path", config_file_path);
     owner.opt_binds().add("plugins", plugins);
@@ -493,6 +495,13 @@ OptionPath & ConfigMain::get_installroot_option() {
 }
 const OptionPath & ConfigMain::get_installroot_option() const {
     return p_impl->installroot;
+}
+
+OptionBool & ConfigMain::get_with_mounts_option() {
+    return p_impl->with_mounts;
+}
+const OptionBool & ConfigMain::get_with_mounts_option() const {
+    return p_impl->with_mounts;
 }
 
 OptionBool & ConfigMain::get_use_host_config_option() {
