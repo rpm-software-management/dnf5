@@ -333,13 +333,9 @@ bool RepoSack::Impl::handle_repo_exception(const Repo * repo, std::exception_ptr
     } catch (const RepoDownloadError & rd_err) {
         exception = rd_err;
         if (report_key_err) {
-            try {
-                std::rethrow_if_nested(rd_err);
-            } catch (const LibrepoError & lr_err) {
-                if (lr_err.get_code() == LRE_BADGPG) {
-                    return true;
-                }
-            } catch (...) {
+            std::string msg = rd_err.what();
+            if (msg.ends_with("Signing key not found")) {
+                return true;
             }
         }
     } catch (const std::exception & e) {
