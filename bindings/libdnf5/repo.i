@@ -1,5 +1,6 @@
 #if defined(SWIGPYTHON)
-%module(package="libdnf5", directors="1") repo
+%module("threads"=1, package="libdnf5", directors="1") repo
+%nothread;
 #elif defined(SWIGPERL)
 %module "libdnf5::repo"
 #elif defined(SWIGRUBY)
@@ -153,6 +154,10 @@ wrap_unique_ptr(RepoCallbacksUniquePtr, libdnf5::repo::RepoCallbacks);
 
 %include "libdnf5/repo/repo_query.hpp"
 %template(SackRepoRepoQuery) libdnf5::sack::Sack<libdnf5::repo::Repo>;
+
+#if defined(SWIGPYTHON)
+%thread;
+#endif
 %include "libdnf5/repo/repo_sack.hpp"
 %template(RepoSackWeakPtr) libdnf5::WeakPtr<libdnf5::repo::RepoSack, false>;
 
