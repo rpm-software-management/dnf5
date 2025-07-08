@@ -45,3 +45,22 @@ class TestGroup(base_test_case.BaseTestCase):
         query = libdnf5.comps.GroupQuery(self.base)
         core_group = next(iter(query))
         self.assertEqual(5, len(core_group.get_packages()))
+
+    def test_group_when_query_out_of_scope(self):
+        self.add_repo_repomd("repomd-comps-core")
+
+        def get_group(base):
+            query = libdnf5.comps.GroupQuery(base)
+            return next(iter(query))
+
+        self.assertEqual(5, len(get_group(self.base).get_packages()))
+
+    def test_iterating_over_inline_query(self):
+        self.add_repo_repomd("repomd-comps-core", False)
+        self.add_repo_repomd("repomd-comps-standard")
+
+        ids = []
+        for grp in sorted(libdnf5.comps.GroupQuery(self.base), key=lambda x: int(x.get_order_int())):
+            ids.append(grp.get_groupid())
+
+        self.assertEqual(['core', 'standard'], ids)
