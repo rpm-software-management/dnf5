@@ -65,17 +65,17 @@ void CompsGroupTest::test_load() {
     q_core.filter_installed(false);
     q_core.filter_groupid("core");
     auto core = q_core.get();
-    CPPUNIT_ASSERT_EQUAL(std::string("core"), core.get_groupid());
-    CPPUNIT_ASSERT_EQUAL(std::string("Core"), core.get_name());
-    CPPUNIT_ASSERT_EQUAL(std::string("Kern"), core.get_translated_name("de"));
-    CPPUNIT_ASSERT_EQUAL(std::string("Smallest possible installation"), core.get_description());
-    CPPUNIT_ASSERT_EQUAL(std::string("Kleinstmögliche Installation"), core.get_translated_description("de"));
-    CPPUNIT_ASSERT_EQUAL(std::string("1"), core.get_order());
-    CPPUNIT_ASSERT_EQUAL(1, core.get_order_int());
-    CPPUNIT_ASSERT_EQUAL(std::string("it"), core.get_langonly());
-    CPPUNIT_ASSERT_EQUAL(false, core.get_uservisible());
-    CPPUNIT_ASSERT_EQUAL(false, core.get_default());
-    CPPUNIT_ASSERT_EQUAL(false, core.get_installed());
+    CPPUNIT_ASSERT_EQUAL(std::string("core"), core->get_groupid());
+    CPPUNIT_ASSERT_EQUAL(std::string("Core"), core->get_name());
+    CPPUNIT_ASSERT_EQUAL(std::string("Kern"), core->get_translated_name("de"));
+    CPPUNIT_ASSERT_EQUAL(std::string("Smallest possible installation"), core->get_description());
+    CPPUNIT_ASSERT_EQUAL(std::string("Kleinstmögliche Installation"), core->get_translated_description("de"));
+    CPPUNIT_ASSERT_EQUAL(std::string("1"), core->get_order());
+    CPPUNIT_ASSERT_EQUAL(1, core->get_order_int());
+    CPPUNIT_ASSERT_EQUAL(std::string("it"), core->get_langonly());
+    CPPUNIT_ASSERT_EQUAL(false, core->get_uservisible());
+    CPPUNIT_ASSERT_EQUAL(false, core->get_default());
+    CPPUNIT_ASSERT_EQUAL(false, core->get_installed());
 
     std::vector<Package> exp_pkgs_core = {
         Package("bash", PackageType::MANDATORY, ""),
@@ -83,32 +83,32 @@ void CompsGroupTest::test_load() {
         Package("dnf", PackageType::DEFAULT, ""),
         Package("conditional", PackageType::CONDITIONAL, "nonexistent"),
         Package("dnf-plugins-core", PackageType::OPTIONAL, "")};
-    CPPUNIT_ASSERT_EQUAL(exp_pkgs_core, core.get_packages());
+    CPPUNIT_ASSERT_EQUAL(exp_pkgs_core, core->get_packages());
 
     GroupQuery q_standard(base);
     q_standard.filter_installed(false);
     q_standard.filter_groupid("standard");
     auto standard = q_standard.get();
-    CPPUNIT_ASSERT_EQUAL(std::string("standard"), standard.get_groupid());
-    CPPUNIT_ASSERT_EQUAL(std::string("Standard"), standard.get_name());
-    CPPUNIT_ASSERT_EQUAL(std::string("標準"), standard.get_translated_name("ja"));
+    CPPUNIT_ASSERT_EQUAL(std::string("standard"), standard->get_groupid());
+    CPPUNIT_ASSERT_EQUAL(std::string("Standard"), standard->get_name());
+    CPPUNIT_ASSERT_EQUAL(std::string("標準"), standard->get_translated_name("ja"));
     CPPUNIT_ASSERT_EQUAL(
-        std::string("Common set of utilities that extend the minimal installation."), standard.get_description());
+        std::string("Common set of utilities that extend the minimal installation."), standard->get_description());
     CPPUNIT_ASSERT_EQUAL(
         std::string("最小限のインストールを拡張するユーティリティの共通セット"),
-        standard.get_translated_description("ja"));
-    CPPUNIT_ASSERT_EQUAL(std::string("1"), standard.get_order());
-    CPPUNIT_ASSERT_EQUAL(1, standard.get_order_int());
-    CPPUNIT_ASSERT_EQUAL(std::string(""), standard.get_langonly());
-    CPPUNIT_ASSERT_EQUAL(false, standard.get_uservisible());
-    CPPUNIT_ASSERT_EQUAL(false, standard.get_default());
-    CPPUNIT_ASSERT_EQUAL(false, standard.get_installed());
+        standard->get_translated_description("ja"));
+    CPPUNIT_ASSERT_EQUAL(std::string("1"), standard->get_order());
+    CPPUNIT_ASSERT_EQUAL(1, standard->get_order_int());
+    CPPUNIT_ASSERT_EQUAL(std::string(""), standard->get_langonly());
+    CPPUNIT_ASSERT_EQUAL(false, standard->get_uservisible());
+    CPPUNIT_ASSERT_EQUAL(false, standard->get_default());
+    CPPUNIT_ASSERT_EQUAL(false, standard->get_installed());
 
     std::vector<Package> exp_pkgs_standard = {
         Package("cryptsetup", PackageType::MANDATORY, ""),
         Package("chrony", PackageType::CONDITIONAL, "gnome-control-center"),
         Package("conditional", PackageType::CONDITIONAL, "nonexistent")};
-    CPPUNIT_ASSERT_EQUAL(exp_pkgs_standard, standard.get_packages());
+    CPPUNIT_ASSERT_EQUAL(exp_pkgs_standard, standard->get_packages());
 }
 
 
@@ -118,18 +118,18 @@ void CompsGroupTest::test_load_defaults() {
     GroupQuery q_core_empty(base);
     q_core_empty.filter_groupid("core");
     auto core_empty = q_core_empty.get();
-    CPPUNIT_ASSERT_EQUAL(std::string("core"), core_empty.get_groupid());
-    CPPUNIT_ASSERT_EQUAL(std::string(""), core_empty.get_name());
-    CPPUNIT_ASSERT_EQUAL(std::string(""), core_empty.get_translated_name("ja"));
-    CPPUNIT_ASSERT_EQUAL(std::string(""), core_empty.get_description());
-    CPPUNIT_ASSERT_EQUAL(std::string(""), core_empty.get_translated_description("ja"));
-    CPPUNIT_ASSERT_EQUAL(std::string(""), core_empty.get_order());
-    CPPUNIT_ASSERT_EQUAL(INT_MAX, core_empty.get_order_int());
-    CPPUNIT_ASSERT_EQUAL(std::string(""), core_empty.get_langonly());
-    CPPUNIT_ASSERT_EQUAL(true, core_empty.get_uservisible());
-    CPPUNIT_ASSERT_EQUAL(false, core_empty.get_default());
-    CPPUNIT_ASSERT_EQUAL(false, core_empty.get_installed());
-    CPPUNIT_ASSERT_EQUAL((size_t)0, core_empty.get_packages().size());
+    CPPUNIT_ASSERT_EQUAL(std::string("core"), core_empty->get_groupid());
+    CPPUNIT_ASSERT_EQUAL(std::string(""), core_empty->get_name());
+    CPPUNIT_ASSERT_EQUAL(std::string(""), core_empty->get_translated_name("ja"));
+    CPPUNIT_ASSERT_EQUAL(std::string(""), core_empty->get_description());
+    CPPUNIT_ASSERT_EQUAL(std::string(""), core_empty->get_translated_description("ja"));
+    CPPUNIT_ASSERT_EQUAL(std::string(""), core_empty->get_order());
+    CPPUNIT_ASSERT_EQUAL(INT_MAX, core_empty->get_order_int());
+    CPPUNIT_ASSERT_EQUAL(std::string(""), core_empty->get_langonly());
+    CPPUNIT_ASSERT_EQUAL(true, core_empty->get_uservisible());
+    CPPUNIT_ASSERT_EQUAL(false, core_empty->get_default());
+    CPPUNIT_ASSERT_EQUAL(false, core_empty->get_installed());
+    CPPUNIT_ASSERT_EQUAL((size_t)0, core_empty->get_packages().size());
 }
 
 
@@ -143,19 +143,19 @@ void CompsGroupTest::test_merge() {
     GroupQuery q_core2(base);
     q_core2.filter_groupid("core");
     auto core2 = q_core2.get();
-    CPPUNIT_ASSERT_EQUAL(std::string("core"), core2.get_groupid());
-    CPPUNIT_ASSERT_EQUAL(std::string("Core v2"), core2.get_name());
+    CPPUNIT_ASSERT_EQUAL(std::string("core"), core2->get_groupid());
+    CPPUNIT_ASSERT_EQUAL(std::string("Core v2"), core2->get_name());
     // When attributes are missing in core-v2.xml, original values are kept
-    CPPUNIT_ASSERT_EQUAL(std::string("Kern v2"), core2.get_translated_name("de"));
-    CPPUNIT_ASSERT_EQUAL(std::string("Smallest possible installation v2"), core2.get_description());
-    CPPUNIT_ASSERT_EQUAL(std::string("Kleinstmögliche Installation v2"), core2.get_translated_description("de"));
-    CPPUNIT_ASSERT_EQUAL(std::string("2"), core2.get_order());
-    CPPUNIT_ASSERT_EQUAL(2, core2.get_order_int());
-    CPPUNIT_ASSERT_EQUAL(std::string("de"), core2.get_langonly());
+    CPPUNIT_ASSERT_EQUAL(std::string("Kern v2"), core2->get_translated_name("de"));
+    CPPUNIT_ASSERT_EQUAL(std::string("Smallest possible installation v2"), core2->get_description());
+    CPPUNIT_ASSERT_EQUAL(std::string("Kleinstmögliche Installation v2"), core2->get_translated_description("de"));
+    CPPUNIT_ASSERT_EQUAL(std::string("2"), core2->get_order());
+    CPPUNIT_ASSERT_EQUAL(2, core2->get_order_int());
+    CPPUNIT_ASSERT_EQUAL(std::string("de"), core2->get_langonly());
     // When boolean attributes are missing in core-v2.xml, default values are taken
-    CPPUNIT_ASSERT_EQUAL(true, core2.get_uservisible());
-    CPPUNIT_ASSERT_EQUAL(true, core2.get_default());
-    CPPUNIT_ASSERT_EQUAL(false, core2.get_installed());
+    CPPUNIT_ASSERT_EQUAL(true, core2->get_uservisible());
+    CPPUNIT_ASSERT_EQUAL(true, core2->get_default());
+    CPPUNIT_ASSERT_EQUAL(false, core2->get_installed());
 
     std::vector<Package> exp_pkgs_core2 = {
         Package("bash", PackageType::MANDATORY, ""),
@@ -163,7 +163,7 @@ void CompsGroupTest::test_merge() {
         Package("dnf", PackageType::DEFAULT, ""),
         Package("dnf-plugins-core", PackageType::OPTIONAL, ""),
         Package("conditional", PackageType::CONDITIONAL, "nonexistent")};
-    CPPUNIT_ASSERT_EQUAL(exp_pkgs_core2, core2.get_packages());
+    CPPUNIT_ASSERT_EQUAL(exp_pkgs_core2, core2->get_packages());
 }
 
 
@@ -178,19 +178,19 @@ void CompsGroupTest::test_merge_when_different_load_order() {
     GroupQuery q_core2(base);
     q_core2.filter_groupid("core");
     auto core2 = q_core2.get();
-    CPPUNIT_ASSERT_EQUAL(std::string("core"), core2.get_groupid());
-    CPPUNIT_ASSERT_EQUAL(std::string("Core v2"), core2.get_name());
+    CPPUNIT_ASSERT_EQUAL(std::string("core"), core2->get_groupid());
+    CPPUNIT_ASSERT_EQUAL(std::string("Core v2"), core2->get_name());
     // When attributes are missing in core-v2.xml, original values are kept
-    CPPUNIT_ASSERT_EQUAL(std::string("Kern v2"), core2.get_translated_name("de"));
-    CPPUNIT_ASSERT_EQUAL(std::string("Smallest possible installation v2"), core2.get_description());
-    CPPUNIT_ASSERT_EQUAL(std::string("Kleinstmögliche Installation v2"), core2.get_translated_description("de"));
-    CPPUNIT_ASSERT_EQUAL(std::string("2"), core2.get_order());
-    CPPUNIT_ASSERT_EQUAL(2, core2.get_order_int());
-    CPPUNIT_ASSERT_EQUAL(std::string("de"), core2.get_langonly());
+    CPPUNIT_ASSERT_EQUAL(std::string("Kern v2"), core2->get_translated_name("de"));
+    CPPUNIT_ASSERT_EQUAL(std::string("Smallest possible installation v2"), core2->get_description());
+    CPPUNIT_ASSERT_EQUAL(std::string("Kleinstmögliche Installation v2"), core2->get_translated_description("de"));
+    CPPUNIT_ASSERT_EQUAL(std::string("2"), core2->get_order());
+    CPPUNIT_ASSERT_EQUAL(2, core2->get_order_int());
+    CPPUNIT_ASSERT_EQUAL(std::string("de"), core2->get_langonly());
     // When boolean attributes are missing in core-v2.xml, default values are taken
-    CPPUNIT_ASSERT_EQUAL(true, core2.get_uservisible());
-    CPPUNIT_ASSERT_EQUAL(true, core2.get_default());
-    CPPUNIT_ASSERT_EQUAL(false, core2.get_installed());
+    CPPUNIT_ASSERT_EQUAL(true, core2->get_uservisible());
+    CPPUNIT_ASSERT_EQUAL(true, core2->get_default());
+    CPPUNIT_ASSERT_EQUAL(false, core2->get_installed());
 
     std::vector<Package> exp_pkgs_core2 = {
         Package("bash", PackageType::MANDATORY, ""),
@@ -198,7 +198,7 @@ void CompsGroupTest::test_merge_when_different_load_order() {
         Package("dnf", PackageType::DEFAULT, ""),
         Package("dnf-plugins-core", PackageType::OPTIONAL, ""),
         Package("conditional", PackageType::CONDITIONAL, "nonexistent")};
-    CPPUNIT_ASSERT_EQUAL(exp_pkgs_core2, core2.get_packages());
+    CPPUNIT_ASSERT_EQUAL(exp_pkgs_core2, core2->get_packages());
 }
 
 
@@ -213,19 +213,19 @@ void CompsGroupTest::test_merge_with_empty() {
     GroupQuery q_core_empty(base);
     q_core_empty.filter_groupid("core");
     auto core_empty = q_core_empty.get();
-    CPPUNIT_ASSERT_EQUAL(std::string("core"), core_empty.get_groupid());
-    CPPUNIT_ASSERT_EQUAL(std::string("Core"), core_empty.get_name());
+    CPPUNIT_ASSERT_EQUAL(std::string("core"), core_empty->get_groupid());
+    CPPUNIT_ASSERT_EQUAL(std::string("Core"), core_empty->get_name());
     // attributes are missing in core-empty.xml -> original values are kept
-    CPPUNIT_ASSERT_EQUAL(std::string("Kern"), core_empty.get_translated_name("de"));
-    CPPUNIT_ASSERT_EQUAL(std::string("Smallest possible installation"), core_empty.get_description());
-    CPPUNIT_ASSERT_EQUAL(std::string("Kleinstmögliche Installation"), core_empty.get_translated_description("de"));
-    CPPUNIT_ASSERT_EQUAL(std::string("1"), core_empty.get_order());
-    CPPUNIT_ASSERT_EQUAL(1, core_empty.get_order_int());
-    CPPUNIT_ASSERT_EQUAL(std::string("it"), core_empty.get_langonly());
+    CPPUNIT_ASSERT_EQUAL(std::string("Kern"), core_empty->get_translated_name("de"));
+    CPPUNIT_ASSERT_EQUAL(std::string("Smallest possible installation"), core_empty->get_description());
+    CPPUNIT_ASSERT_EQUAL(std::string("Kleinstmögliche Installation"), core_empty->get_translated_description("de"));
+    CPPUNIT_ASSERT_EQUAL(std::string("1"), core_empty->get_order());
+    CPPUNIT_ASSERT_EQUAL(1, core_empty->get_order_int());
+    CPPUNIT_ASSERT_EQUAL(std::string("it"), core_empty->get_langonly());
     // boolean attributes are missing in core-empty.xml -> default values are taken
-    CPPUNIT_ASSERT_EQUAL(true, core_empty.get_uservisible());
-    CPPUNIT_ASSERT_EQUAL(false, core_empty.get_default());
-    CPPUNIT_ASSERT_EQUAL(false, core_empty.get_installed());
+    CPPUNIT_ASSERT_EQUAL(true, core_empty->get_uservisible());
+    CPPUNIT_ASSERT_EQUAL(false, core_empty->get_default());
+    CPPUNIT_ASSERT_EQUAL(false, core_empty->get_installed());
 
     std::vector<Package> exp_pkgs_core = {
         Package("bash", PackageType::MANDATORY, ""),
@@ -233,7 +233,7 @@ void CompsGroupTest::test_merge_with_empty() {
         Package("dnf", PackageType::DEFAULT, ""),
         Package("conditional", PackageType::CONDITIONAL, "nonexistent"),
         Package("dnf-plugins-core", PackageType::OPTIONAL, "")};
-    CPPUNIT_ASSERT_EQUAL(exp_pkgs_core, core_empty.get_packages());
+    CPPUNIT_ASSERT_EQUAL(exp_pkgs_core, core_empty->get_packages());
 }
 
 
@@ -247,24 +247,24 @@ void CompsGroupTest::test_merge_empty_with_nonempty() {
     GroupQuery q_core(base);
     q_core.filter_groupid("core");
     auto core = q_core.get();
-    CPPUNIT_ASSERT_EQUAL(std::string("core"), core.get_groupid());
-    CPPUNIT_ASSERT_EQUAL(std::string("Core v2"), core.get_name());
-    CPPUNIT_ASSERT_EQUAL(std::string("Kern v2"), core.get_translated_name("de"));
-    CPPUNIT_ASSERT_EQUAL(std::string("Smallest possible installation v2"), core.get_description());
-    CPPUNIT_ASSERT_EQUAL(std::string("Kleinstmögliche Installation v2"), core.get_translated_description("de"));
-    CPPUNIT_ASSERT_EQUAL(std::string("2"), core.get_order());
-    CPPUNIT_ASSERT_EQUAL(2, core.get_order_int());
-    CPPUNIT_ASSERT_EQUAL(std::string("de"), core.get_langonly());
-    CPPUNIT_ASSERT_EQUAL(true, core.get_uservisible());
-    CPPUNIT_ASSERT_EQUAL(true, core.get_default());
-    CPPUNIT_ASSERT_EQUAL(false, core.get_installed());
+    CPPUNIT_ASSERT_EQUAL(std::string("core"), core->get_groupid());
+    CPPUNIT_ASSERT_EQUAL(std::string("Core v2"), core->get_name());
+    CPPUNIT_ASSERT_EQUAL(std::string("Kern v2"), core->get_translated_name("de"));
+    CPPUNIT_ASSERT_EQUAL(std::string("Smallest possible installation v2"), core->get_description());
+    CPPUNIT_ASSERT_EQUAL(std::string("Kleinstmögliche Installation v2"), core->get_translated_description("de"));
+    CPPUNIT_ASSERT_EQUAL(std::string("2"), core->get_order());
+    CPPUNIT_ASSERT_EQUAL(2, core->get_order_int());
+    CPPUNIT_ASSERT_EQUAL(std::string("de"), core->get_langonly());
+    CPPUNIT_ASSERT_EQUAL(true, core->get_uservisible());
+    CPPUNIT_ASSERT_EQUAL(true, core->get_default());
+    CPPUNIT_ASSERT_EQUAL(false, core->get_installed());
 
     std::vector<Package> exp_pkgs_core = {
         Package("bash", PackageType::MANDATORY, ""),
         Package("glibc", PackageType::MANDATORY, ""),
         Package("dnf", PackageType::DEFAULT, ""),
         Package("dnf-plugins-core", PackageType::OPTIONAL, "")};
-    CPPUNIT_ASSERT_EQUAL(exp_pkgs_core, core.get_packages());
+    CPPUNIT_ASSERT_EQUAL(exp_pkgs_core, core->get_packages());
 }
 
 
@@ -276,15 +276,15 @@ void CompsGroupTest::test_merge_different_translations() {
     GroupQuery q_core(base);
     q_core.filter_groupid("core");
     auto core = q_core.get();
-    CPPUNIT_ASSERT_EQUAL(std::string("core"), core.get_groupid());
-    CPPUNIT_ASSERT_EQUAL(std::string("Core"), core.get_name());
-    CPPUNIT_ASSERT_EQUAL(std::string("Smallest possible installation"), core.get_description());
+    CPPUNIT_ASSERT_EQUAL(std::string("core"), core->get_groupid());
+    CPPUNIT_ASSERT_EQUAL(std::string("Core"), core->get_name());
+    CPPUNIT_ASSERT_EQUAL(std::string("Smallest possible installation"), core->get_description());
     // translations that are missing in repomd-comps-core-different-translations are taken from repomd-comps-core
-    CPPUNIT_ASSERT_EQUAL(std::string("Kern"), core.get_translated_name("de"));
-    CPPUNIT_ASSERT_EQUAL(std::string("Kleinstmögliche Installation"), core.get_translated_description("de"));
+    CPPUNIT_ASSERT_EQUAL(std::string("Kern"), core->get_translated_name("de"));
+    CPPUNIT_ASSERT_EQUAL(std::string("Kleinstmögliche Installation"), core->get_translated_description("de"));
     // translations that are missing in repomd-comps-core are taken from repomd-comps-core-different-translations
-    CPPUNIT_ASSERT_EQUAL(std::string("Tuum"), core.get_translated_name("et"));
-    CPPUNIT_ASSERT_EQUAL(std::string("Väikseim võimalik paigaldus"), core.get_translated_description("et"));
+    CPPUNIT_ASSERT_EQUAL(std::string("Tuum"), core->get_translated_name("et"));
+    CPPUNIT_ASSERT_EQUAL(std::string("Väikseim võimalik paigaldus"), core->get_translated_description("et"));
 }
 
 
@@ -296,7 +296,7 @@ void CompsGroupTest::test_serialize() {
     auto standard = q_standard.get();
 
     auto serialize_path = temp_dir->get_path() / "serialized-standard.xml";
-    standard.serialize(serialize_path);
+    standard->serialize(serialize_path);
 
     std::string actual = libdnf5::utils::fs::File(serialize_path, "r").read();
 
@@ -322,5 +322,5 @@ void CompsGroupTest::test_solvables() {
     // There is an environment with id core that has a translation for lang "ee", but it shouldn't be used for the group with id core.
     q_groups.filter_groupid("core");
     auto core = q_groups.get();
-    CPPUNIT_ASSERT_EQUAL(std::string("Smallest possible installation"), core.get_translated_description("ee"));
+    CPPUNIT_ASSERT_EQUAL(std::string("Smallest possible installation"), core->get_translated_description("ee"));
 }

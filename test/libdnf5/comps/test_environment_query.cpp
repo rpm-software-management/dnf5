@@ -43,7 +43,7 @@ void CompsEnvironmentQueryTest::setUp() {
 
 void CompsEnvironmentQueryTest::test_query_all() {
     EnvironmentQuery q_environments(base);
-    std::vector<Environment> expected = {
+    std::vector<EnvironmentWeakPtr> expected = {
         get_environment("core"), get_environment("custom-environment"), get_environment("minimal-environment")};
     CPPUNIT_ASSERT_EQUAL(expected, to_vector(q_environments));
 }
@@ -53,7 +53,7 @@ void CompsEnvironmentQueryTest::test_query_filter_environmentid() {
     // Filter envitonments with id equal to "core"
     EnvironmentQuery q_environments(base);
     q_environments.filter_environmentid("core");
-    std::vector<Environment> expected = {get_environment("core")};
+    std::vector<EnvironmentWeakPtr> expected = {get_environment("core")};
     CPPUNIT_ASSERT_EQUAL(expected, to_vector(q_environments));
 
     // Filter envitonments with id containing "environment"
@@ -80,7 +80,7 @@ void CompsEnvironmentQueryTest::test_query_filter_name() {
     // Filter envitonments with name equal to "Core Environment"
     EnvironmentQuery q_environments(base);
     q_environments.filter_name("Core Environment");
-    std::vector<Environment> expected = {get_environment("core")};
+    std::vector<EnvironmentWeakPtr> expected = {get_environment("core")};
     CPPUNIT_ASSERT_EQUAL(expected, to_vector(q_environments));
 
     // Filter envitonments with name containing "Environment"
@@ -111,7 +111,7 @@ void CompsEnvironmentQueryTest::test_query_excludes() {
     q_excludes1.filter_environmentid("custom-environment");
     sack->set_user_environment_excludes(q_excludes1);
     EnvironmentQuery q_groups(base);
-    std::vector<Environment> expected = {get_environment("core"), get_environment("minimal-environment")};
+    std::vector<EnvironmentWeakPtr> expected = {get_environment("core"), get_environment("minimal-environment")};
     CPPUNIT_ASSERT_EQUAL(expected, to_vector(q_groups));
 
     // Add environment "core" to user excludes -> user excludes are groups: "standard", "core"

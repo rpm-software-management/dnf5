@@ -42,14 +42,14 @@ void CompsEnvironmentTest::test_load() {
     q_minimal_env.filter_installed(false);
     q_minimal_env.filter_environmentid("minimal-environment");
     auto minimal_env = q_minimal_env.get();
-    CPPUNIT_ASSERT_EQUAL(std::string("minimal-environment"), minimal_env.get_environmentid());
-    CPPUNIT_ASSERT_EQUAL(std::string("Minimal Install"), minimal_env.get_name());
-    CPPUNIT_ASSERT_EQUAL(std::string("Minimale Installation"), minimal_env.get_translated_name("de"));
-    CPPUNIT_ASSERT_EQUAL(std::string("Basic functionality."), minimal_env.get_description());
-    CPPUNIT_ASSERT_EQUAL(std::string("Grundlegende Funktionalität."), minimal_env.get_translated_description("de"));
-    CPPUNIT_ASSERT_EQUAL(std::string("3"), minimal_env.get_order());
-    CPPUNIT_ASSERT_EQUAL(3, minimal_env.get_order_int());
-    CPPUNIT_ASSERT_EQUAL(false, minimal_env.get_installed());
+    CPPUNIT_ASSERT_EQUAL(std::string("minimal-environment"), minimal_env->get_environmentid());
+    CPPUNIT_ASSERT_EQUAL(std::string("Minimal Install"), minimal_env->get_name());
+    CPPUNIT_ASSERT_EQUAL(std::string("Minimale Installation"), minimal_env->get_translated_name("de"));
+    CPPUNIT_ASSERT_EQUAL(std::string("Basic functionality."), minimal_env->get_description());
+    CPPUNIT_ASSERT_EQUAL(std::string("Grundlegende Funktionalität."), minimal_env->get_translated_description("de"));
+    CPPUNIT_ASSERT_EQUAL(std::string("3"), minimal_env->get_order());
+    CPPUNIT_ASSERT_EQUAL(3, minimal_env->get_order_int());
+    CPPUNIT_ASSERT_EQUAL(false, minimal_env->get_installed());
 }
 
 
@@ -59,14 +59,14 @@ void CompsEnvironmentTest::test_load_defaults() {
     EnvironmentQuery q_minimal_empty(base);
     q_minimal_empty.filter_environmentid("minimal-environment");
     auto minimal_empty = q_minimal_empty.get();
-    CPPUNIT_ASSERT_EQUAL(std::string("minimal-environment"), minimal_empty.get_environmentid());
-    CPPUNIT_ASSERT_EQUAL(std::string(""), minimal_empty.get_name());
-    CPPUNIT_ASSERT_EQUAL(std::string(""), minimal_empty.get_translated_name("ja"));
-    CPPUNIT_ASSERT_EQUAL(std::string(""), minimal_empty.get_description());
-    CPPUNIT_ASSERT_EQUAL(std::string(""), minimal_empty.get_translated_description("ja"));
-    CPPUNIT_ASSERT_EQUAL(std::string(""), minimal_empty.get_order());
-    CPPUNIT_ASSERT_EQUAL(INT_MAX, minimal_empty.get_order_int());
-    CPPUNIT_ASSERT_EQUAL(false, minimal_empty.get_installed());
+    CPPUNIT_ASSERT_EQUAL(std::string("minimal-environment"), minimal_empty->get_environmentid());
+    CPPUNIT_ASSERT_EQUAL(std::string(""), minimal_empty->get_name());
+    CPPUNIT_ASSERT_EQUAL(std::string(""), minimal_empty->get_translated_name("ja"));
+    CPPUNIT_ASSERT_EQUAL(std::string(""), minimal_empty->get_description());
+    CPPUNIT_ASSERT_EQUAL(std::string(""), minimal_empty->get_translated_description("ja"));
+    CPPUNIT_ASSERT_EQUAL(std::string(""), minimal_empty->get_order());
+    CPPUNIT_ASSERT_EQUAL(INT_MAX, minimal_empty->get_order_int());
+    CPPUNIT_ASSERT_EQUAL(false, minimal_empty->get_installed());
 }
 
 void CompsEnvironmentTest::test_merge() {
@@ -79,20 +79,20 @@ void CompsEnvironmentTest::test_merge() {
     EnvironmentQuery q_minimal_env(base);
     q_minimal_env.filter_environmentid("minimal-environment");
     auto minimal_env = q_minimal_env.get();
-    CPPUNIT_ASSERT_EQUAL(std::string("minimal-environment"), minimal_env.get_environmentid());
-    CPPUNIT_ASSERT_EQUAL(std::string("Minimal Install v2"), minimal_env.get_name());
-    CPPUNIT_ASSERT_EQUAL(std::string("Minimale Installation v2"), minimal_env.get_translated_name("de"));
-    CPPUNIT_ASSERT_EQUAL(std::string("Basic functionality v2."), minimal_env.get_description());
-    CPPUNIT_ASSERT_EQUAL(std::string("Grundlegende Funktionalität v2."), minimal_env.get_translated_description("de"));
-    CPPUNIT_ASSERT_EQUAL(std::string("4"), minimal_env.get_order());
-    CPPUNIT_ASSERT_EQUAL(4, minimal_env.get_order_int());
-    CPPUNIT_ASSERT_EQUAL(false, minimal_env.get_installed());
+    CPPUNIT_ASSERT_EQUAL(std::string("minimal-environment"), minimal_env->get_environmentid());
+    CPPUNIT_ASSERT_EQUAL(std::string("Minimal Install v2"), minimal_env->get_name());
+    CPPUNIT_ASSERT_EQUAL(std::string("Minimale Installation v2"), minimal_env->get_translated_name("de"));
+    CPPUNIT_ASSERT_EQUAL(std::string("Basic functionality v2."), minimal_env->get_description());
+    CPPUNIT_ASSERT_EQUAL(std::string("Grundlegende Funktionalität v2."), minimal_env->get_translated_description("de"));
+    CPPUNIT_ASSERT_EQUAL(std::string("4"), minimal_env->get_order());
+    CPPUNIT_ASSERT_EQUAL(4, minimal_env->get_order_int());
+    CPPUNIT_ASSERT_EQUAL(false, minimal_env->get_installed());
 
     std::set<std::string> expected = {"core", "core-2"};
-    const auto groups = minimal_env.get_groups();
+    const auto groups = minimal_env->get_groups();
     CPPUNIT_ASSERT_EQUAL(expected, std::set<std::string>(groups.begin(), groups.end()));
     std::set<std::string> expected_optional = {"guest-agents", "guest-agents-2", "standard"};
-    const auto optional_groups = minimal_env.get_optional_groups();
+    const auto optional_groups = minimal_env->get_optional_groups();
     CPPUNIT_ASSERT_EQUAL(expected_optional, std::set<std::string>(optional_groups.begin(), optional_groups.end()));
 }
 
@@ -107,20 +107,20 @@ void CompsEnvironmentTest::test_merge_when_different_load_order() {
     EnvironmentQuery q_minimal_env(base);
     q_minimal_env.filter_environmentid("minimal-environment");
     auto minimal_env = q_minimal_env.get();
-    CPPUNIT_ASSERT_EQUAL(std::string("minimal-environment"), minimal_env.get_environmentid());
-    CPPUNIT_ASSERT_EQUAL(std::string("Minimal Install v2"), minimal_env.get_name());
-    CPPUNIT_ASSERT_EQUAL(std::string("Minimale Installation v2"), minimal_env.get_translated_name("de"));
-    CPPUNIT_ASSERT_EQUAL(std::string("Basic functionality v2."), minimal_env.get_description());
-    CPPUNIT_ASSERT_EQUAL(std::string("Grundlegende Funktionalität v2."), minimal_env.get_translated_description("de"));
-    CPPUNIT_ASSERT_EQUAL(std::string("4"), minimal_env.get_order());
-    CPPUNIT_ASSERT_EQUAL(4, minimal_env.get_order_int());
-    CPPUNIT_ASSERT_EQUAL(false, minimal_env.get_installed());
+    CPPUNIT_ASSERT_EQUAL(std::string("minimal-environment"), minimal_env->get_environmentid());
+    CPPUNIT_ASSERT_EQUAL(std::string("Minimal Install v2"), minimal_env->get_name());
+    CPPUNIT_ASSERT_EQUAL(std::string("Minimale Installation v2"), minimal_env->get_translated_name("de"));
+    CPPUNIT_ASSERT_EQUAL(std::string("Basic functionality v2."), minimal_env->get_description());
+    CPPUNIT_ASSERT_EQUAL(std::string("Grundlegende Funktionalität v2."), minimal_env->get_translated_description("de"));
+    CPPUNIT_ASSERT_EQUAL(std::string("4"), minimal_env->get_order());
+    CPPUNIT_ASSERT_EQUAL(4, minimal_env->get_order_int());
+    CPPUNIT_ASSERT_EQUAL(false, minimal_env->get_installed());
 
     std::set<std::string> expected = {"core", "core-2"};
-    const auto groups = minimal_env.get_groups();
+    const auto groups = minimal_env->get_groups();
     CPPUNIT_ASSERT_EQUAL(expected, std::set<std::string>(groups.begin(), groups.end()));
     std::set<std::string> expected_optional = {"guest-agents", "guest-agents-2", "standard"};
-    const auto optional_groups = minimal_env.get_optional_groups();
+    const auto optional_groups = minimal_env->get_optional_groups();
     CPPUNIT_ASSERT_EQUAL(expected_optional, std::set<std::string>(optional_groups.begin(), optional_groups.end()));
 }
 
@@ -135,20 +135,20 @@ void CompsEnvironmentTest::test_merge_with_empty() {
     EnvironmentQuery q_minimal_empty(base);
     q_minimal_empty.filter_environmentid("minimal-environment");
     auto minimal_empty = q_minimal_empty.get();
-    CPPUNIT_ASSERT_EQUAL(std::string("minimal-environment"), minimal_empty.get_environmentid());
+    CPPUNIT_ASSERT_EQUAL(std::string("minimal-environment"), minimal_empty->get_environmentid());
     // attributes are missing in minimal-environment-empty.xml -> original values are kept
-    CPPUNIT_ASSERT_EQUAL(std::string("Minimal Install"), minimal_empty.get_name());
-    CPPUNIT_ASSERT_EQUAL(std::string("Minimale Installation"), minimal_empty.get_translated_name("de"));
-    CPPUNIT_ASSERT_EQUAL(std::string("Basic functionality."), minimal_empty.get_description());
-    CPPUNIT_ASSERT_EQUAL(std::string("Grundlegende Funktionalität."), minimal_empty.get_translated_description("de"));
-    CPPUNIT_ASSERT_EQUAL(std::string("3"), minimal_empty.get_order());
-    CPPUNIT_ASSERT_EQUAL(3, minimal_empty.get_order_int());
-    CPPUNIT_ASSERT_EQUAL(false, minimal_empty.get_installed());
+    CPPUNIT_ASSERT_EQUAL(std::string("Minimal Install"), minimal_empty->get_name());
+    CPPUNIT_ASSERT_EQUAL(std::string("Minimale Installation"), minimal_empty->get_translated_name("de"));
+    CPPUNIT_ASSERT_EQUAL(std::string("Basic functionality."), minimal_empty->get_description());
+    CPPUNIT_ASSERT_EQUAL(std::string("Grundlegende Funktionalität."), minimal_empty->get_translated_description("de"));
+    CPPUNIT_ASSERT_EQUAL(std::string("3"), minimal_empty->get_order());
+    CPPUNIT_ASSERT_EQUAL(3, minimal_empty->get_order_int());
+    CPPUNIT_ASSERT_EQUAL(false, minimal_empty->get_installed());
 
     std::vector<std::string> expected = {"core"};
-    CPPUNIT_ASSERT_EQUAL(expected, minimal_empty.get_groups());
+    CPPUNIT_ASSERT_EQUAL(expected, minimal_empty->get_groups());
     std::set<std::string> expected_optional = {"guest-agents", "standard"};
-    const auto optional_groups = minimal_empty.get_optional_groups();
+    const auto optional_groups = minimal_empty->get_optional_groups();
     CPPUNIT_ASSERT_EQUAL(expected_optional, std::set<std::string>(optional_groups.begin(), optional_groups.end()));
 }
 
@@ -164,19 +164,19 @@ void CompsEnvironmentTest::test_merge_empty_with_nonempty() {
     q_minimal_env.filter_installed(false);
     q_minimal_env.filter_environmentid("minimal-environment");
     auto minimal_env = q_minimal_env.get();
-    CPPUNIT_ASSERT_EQUAL(std::string("minimal-environment"), minimal_env.get_environmentid());
-    CPPUNIT_ASSERT_EQUAL(std::string("Minimal Install"), minimal_env.get_name());
-    CPPUNIT_ASSERT_EQUAL(std::string("Minimale Installation"), minimal_env.get_translated_name("de"));
-    CPPUNIT_ASSERT_EQUAL(std::string("Basic functionality."), minimal_env.get_description());
-    CPPUNIT_ASSERT_EQUAL(std::string("Grundlegende Funktionalität."), minimal_env.get_translated_description("de"));
-    CPPUNIT_ASSERT_EQUAL(std::string("3"), minimal_env.get_order());
-    CPPUNIT_ASSERT_EQUAL(3, minimal_env.get_order_int());
-    CPPUNIT_ASSERT_EQUAL(false, minimal_env.get_installed());
+    CPPUNIT_ASSERT_EQUAL(std::string("minimal-environment"), minimal_env->get_environmentid());
+    CPPUNIT_ASSERT_EQUAL(std::string("Minimal Install"), minimal_env->get_name());
+    CPPUNIT_ASSERT_EQUAL(std::string("Minimale Installation"), minimal_env->get_translated_name("de"));
+    CPPUNIT_ASSERT_EQUAL(std::string("Basic functionality."), minimal_env->get_description());
+    CPPUNIT_ASSERT_EQUAL(std::string("Grundlegende Funktionalität."), minimal_env->get_translated_description("de"));
+    CPPUNIT_ASSERT_EQUAL(std::string("3"), minimal_env->get_order());
+    CPPUNIT_ASSERT_EQUAL(3, minimal_env->get_order_int());
+    CPPUNIT_ASSERT_EQUAL(false, minimal_env->get_installed());
 
     std::vector<std::string> expected = {"core"};
-    CPPUNIT_ASSERT_EQUAL(expected, minimal_env.get_groups());
+    CPPUNIT_ASSERT_EQUAL(expected, minimal_env->get_groups());
     std::set<std::string> expected_optional = {"guest-agents", "standard"};
-    const auto optional_groups = minimal_env.get_optional_groups();
+    const auto optional_groups = minimal_env->get_optional_groups();
     CPPUNIT_ASSERT_EQUAL(expected_optional, std::set<std::string>(optional_groups.begin(), optional_groups.end()));
 }
 
@@ -189,20 +189,20 @@ void CompsEnvironmentTest::test_merge_different_translations() {
     EnvironmentQuery q_minimal_env(base);
     q_minimal_env.filter_environmentid("minimal-environment");
     auto minimal_env = q_minimal_env.get();
-    CPPUNIT_ASSERT_EQUAL(std::string("minimal-environment"), minimal_env.get_environmentid());
-    CPPUNIT_ASSERT_EQUAL(std::string("Minimal Install"), minimal_env.get_name());
-    CPPUNIT_ASSERT_EQUAL(std::string("Basic functionality."), minimal_env.get_description());
+    CPPUNIT_ASSERT_EQUAL(std::string("minimal-environment"), minimal_env->get_environmentid());
+    CPPUNIT_ASSERT_EQUAL(std::string("Minimal Install"), minimal_env->get_name());
+    CPPUNIT_ASSERT_EQUAL(std::string("Basic functionality."), minimal_env->get_description());
     // translations that are missing in minimal-environment-different-translations are taken from minimal-environment
-    CPPUNIT_ASSERT_EQUAL(std::string("Minimale Installation"), minimal_env.get_translated_name("de"));
-    CPPUNIT_ASSERT_EQUAL(std::string("Grundlegende Funktionalität."), minimal_env.get_translated_description("de"));
+    CPPUNIT_ASSERT_EQUAL(std::string("Minimale Installation"), minimal_env->get_translated_name("de"));
+    CPPUNIT_ASSERT_EQUAL(std::string("Grundlegende Funktionalität."), minimal_env->get_translated_description("de"));
     // translations that are missing in minimal-environment are taken from minimal-environment-different-translations
-    CPPUNIT_ASSERT_EQUAL(std::string("Vähimmäisasennus"), minimal_env.get_translated_name("fi"));
-    CPPUNIT_ASSERT_EQUAL(std::string("Perustoiminnot."), minimal_env.get_translated_description("fi"));
+    CPPUNIT_ASSERT_EQUAL(std::string("Vähimmäisasennus"), minimal_env->get_translated_name("fi"));
+    CPPUNIT_ASSERT_EQUAL(std::string("Perustoiminnot."), minimal_env->get_translated_description("fi"));
 
     std::vector<std::string> expected = {"core"};
-    CPPUNIT_ASSERT_EQUAL(expected, minimal_env.get_groups());
+    CPPUNIT_ASSERT_EQUAL(expected, minimal_env->get_groups());
     std::set<std::string> expected_optional = {"guest-agents", "standard"};
-    const auto optional_groups = minimal_env.get_optional_groups();
+    const auto optional_groups = minimal_env->get_optional_groups();
     CPPUNIT_ASSERT_EQUAL(expected_optional, std::set<std::string>(optional_groups.begin(), optional_groups.end()));
 }
 
@@ -215,7 +215,7 @@ void CompsEnvironmentTest::test_serialize() {
     auto minimal_env = q_minimal_env.get();
 
     auto serialize_path = std::filesystem::temp_directory_path() / "serialized-standard.xml";
-    minimal_env.serialize(serialize_path);
+    minimal_env->serialize(serialize_path);
 
     std::ifstream serialized_stream(serialize_path);
     std::string actual;
@@ -246,5 +246,5 @@ void CompsEnvironmentTest::test_solvables() {
     q_environments.filter_environmentid("core");
     auto core = q_environments.get();
     CPPUNIT_ASSERT_EQUAL(
-        std::string("Environment with the same id as an existing group."), core.get_translated_description("de"));
+        std::string("Environment with the same id as an existing group."), core->get_translated_description("de"));
 }

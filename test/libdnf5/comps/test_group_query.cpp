@@ -43,7 +43,8 @@ void CompsGroupQueryTest::setUp() {
 
 void CompsGroupQueryTest::test_query_all() {
     GroupQuery q_groups(base);
-    std::vector<Group> expected = {get_group("core"), get_group("critical-path-standard"), get_group("standard")};
+    std::vector<GroupWeakPtr> expected = {
+        get_group("core"), get_group("critical-path-standard"), get_group("standard")};
     CPPUNIT_ASSERT_EQUAL(expected, to_vector(q_groups));
 }
 
@@ -52,7 +53,7 @@ void CompsGroupQueryTest::test_query_filter_groupid() {
     // Filter groups with id equal to "standard"
     GroupQuery q_groups(base);
     q_groups.filter_groupid("standard");
-    std::vector<Group> expected = {get_group("standard")};
+    std::vector<GroupWeakPtr> expected = {get_group("standard")};
     CPPUNIT_ASSERT_EQUAL(expected, to_vector(q_groups));
 
     // Filter groups with id containing "standard"
@@ -85,7 +86,7 @@ void CompsGroupQueryTest::test_query_filter_name() {
     // Filter groups with name equal to "Standard"
     GroupQuery q_groups(base);
     q_groups.filter_name("Standard");
-    std::vector<Group> expected = {get_group("standard")};
+    std::vector<GroupWeakPtr> expected = {get_group("standard")};
     CPPUNIT_ASSERT_EQUAL(expected, to_vector(q_groups));
 
     // Filter groups with name containing "Standard"
@@ -112,7 +113,7 @@ void CompsGroupQueryTest::test_query_filter_uservisible() {
     // Filter groups with uservisible=true
     GroupQuery q_groups(base);
     q_groups.filter_uservisible(true);
-    std::vector<Group> expected = {get_group("core"), get_group("critical-path-standard")};
+    std::vector<GroupWeakPtr> expected = {get_group("core"), get_group("critical-path-standard")};
     CPPUNIT_ASSERT_EQUAL(expected, to_vector(q_groups));
 
     // Filter groups with uservisible=false
@@ -127,7 +128,7 @@ void CompsGroupQueryTest::test_query_filter_default() {
     // Filter groups with default=true
     GroupQuery q_groups(base);
     q_groups.filter_default(true);
-    std::vector<Group> expected = {get_group("critical-path-standard")};
+    std::vector<GroupWeakPtr> expected = {get_group("critical-path-standard")};
     CPPUNIT_ASSERT_EQUAL(expected, to_vector(q_groups));
 
     // Filter groups with default=false
@@ -142,7 +143,7 @@ void CompsGroupQueryTest::test_query_filter_package_name() {
     // Filter groups which contain given packages
     GroupQuery q_groups(base);
     q_groups.filter_package_name(std::vector<std::string>({"chrony"}));
-    std::vector<Group> expected = {get_group("standard")};
+    std::vector<GroupWeakPtr> expected = {get_group("standard")};
     CPPUNIT_ASSERT_EQUAL(expected, to_vector(q_groups));
 
     q_groups = GroupQuery(base);
@@ -160,7 +161,7 @@ void CompsGroupQueryTest::test_query_excludes() {
     q_excludes1.filter_groupid("standard");
     sack->set_user_group_excludes(q_excludes1);
     GroupQuery q_groups(base);
-    std::vector<Group> expected = {get_group("core"), get_group("critical-path-standard")};
+    std::vector<GroupWeakPtr> expected = {get_group("core"), get_group("critical-path-standard")};
     CPPUNIT_ASSERT_EQUAL(expected, to_vector(q_groups));
 
     // Add group "core" to user excludes -> user excludes are groups: "standard", "core"

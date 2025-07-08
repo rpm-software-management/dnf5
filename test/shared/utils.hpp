@@ -102,31 +102,32 @@ struct assertion_traits<libdnf5::advisory::AdvisorySet> {
 };
 
 template <>
-struct assertion_traits<libdnf5::comps::Environment> {
-    inline static bool equal(const libdnf5::comps::Environment & left, const libdnf5::comps::Environment & right) {
+struct assertion_traits<libdnf5::comps::EnvironmentWeakPtr> {
+    inline static bool equal(
+        const libdnf5::comps::EnvironmentWeakPtr & left, const libdnf5::comps::EnvironmentWeakPtr & right) {
         return left == right;
     }
 
-    inline static std::string toString(const libdnf5::comps::Environment & environment) {
+    inline static std::string toString(const libdnf5::comps::EnvironmentWeakPtr & environment) {
         std::string repos;
-        for (const auto & repo : environment.get_repos()) {
+        for (const auto & repo : environment->get_repos()) {
             if (!repos.empty()) {
                 repos += ", ";
             }
             repos += repo;
         }
 
-        return fmt::format("{} (repos: {})", environment.get_environmentid(), repos);
+        return fmt::format("{} (repos: {})", environment->get_environmentid(), repos);
     }
 };
 
 template <>
-struct assertion_traits<libdnf5::Set<libdnf5::comps::Environment>> {
-    inline static std::string toString(const libdnf5::Set<libdnf5::comps::Environment> & environments) {
+struct assertion_traits<libdnf5::Set<libdnf5::comps::EnvironmentWeakPtr>> {
+    inline static std::string toString(const libdnf5::Set<libdnf5::comps::EnvironmentWeakPtr> & environments) {
         std::string result;
 
         for (const auto & environment : environments) {
-            result += "\n    " + assertion_traits<libdnf5::comps::Environment>::toString(environment);
+            result += "\n    " + assertion_traits<libdnf5::comps::EnvironmentWeakPtr>::toString(environment);
         }
 
         return result;
@@ -134,31 +135,31 @@ struct assertion_traits<libdnf5::Set<libdnf5::comps::Environment>> {
 };
 
 template <>
-struct assertion_traits<libdnf5::comps::Group> {
-    inline static bool equal(const libdnf5::comps::Group & left, const libdnf5::comps::Group & right) {
-        return left == right;
+struct assertion_traits<libdnf5::comps::GroupWeakPtr> {
+    inline static bool equal(const libdnf5::comps::GroupWeakPtr & left, const libdnf5::comps::GroupWeakPtr & right) {
+        return *left == *right;
     }
 
-    inline static std::string toString(const libdnf5::comps::Group & group) {
+    inline static std::string toString(const libdnf5::comps::GroupWeakPtr & group) {
         std::string repos;
-        for (const auto & repo : group.get_repos()) {
+        for (const auto & repo : group->get_repos()) {
             if (!repos.empty()) {
                 repos += ", ";
             }
             repos += repo;
         }
 
-        return fmt::format("{} (repos: {})", group.get_groupid(), repos);
+        return fmt::format("{} (repos: {})", group->get_groupid(), repos);
     }
 };
 
 template <>
-struct assertion_traits<libdnf5::Set<libdnf5::comps::Group>> {
-    inline static std::string toString(const libdnf5::Set<libdnf5::comps::Group> & groups) {
+struct assertion_traits<libdnf5::Set<libdnf5::comps::GroupWeakPtr>> {
+    inline static std::string toString(const libdnf5::Set<libdnf5::comps::GroupWeakPtr> & groups) {
         std::string result;
 
         for (const auto & group : groups) {
-            result += "\n    " + assertion_traits<libdnf5::comps::Group>::toString(group);
+            result += "\n    " + assertion_traits<libdnf5::comps::GroupWeakPtr>::toString(group);
         }
 
         return result;
@@ -343,8 +344,9 @@ struct assertion_traits<libdnf5::transaction::EnvironmentReplay> {
 
 
 std::vector<libdnf5::advisory::Advisory> to_vector(const libdnf5::advisory::AdvisorySet & advisory_set);
-std::vector<libdnf5::comps::Environment> to_vector(const libdnf5::Set<libdnf5::comps::Environment> & environment_set);
-std::vector<libdnf5::comps::Group> to_vector(const libdnf5::Set<libdnf5::comps::Group> & group_set);
+std::vector<libdnf5::comps::EnvironmentWeakPtr> to_vector(
+    const libdnf5::Set<libdnf5::comps::EnvironmentWeakPtr> & environment_set);
+std::vector<libdnf5::comps::GroupWeakPtr> to_vector(const libdnf5::Set<libdnf5::comps::GroupWeakPtr> & group_set);
 std::vector<libdnf5::rpm::Reldep> to_vector(const libdnf5::rpm::ReldepList & reldep_list);
 std::vector<libdnf5::rpm::Package> to_vector(const libdnf5::rpm::PackageSet & package_set);
 
