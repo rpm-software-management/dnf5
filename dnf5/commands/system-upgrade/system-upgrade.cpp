@@ -123,13 +123,13 @@ void SystemUpgradeDownloadCommand::run() {
     libdnf5::comps::GroupQuery q_groups(ctx.get_base());
     q_groups.filter_installed(true);
     for (const auto & grp : q_groups) {
-        goal->add_group_upgrade(grp.get_groupid());
+        goal->add_group_upgrade(grp->get_groupid());
     }
 
     libdnf5::comps::EnvironmentQuery q_environments(ctx.get_base());
     q_environments.filter_installed(true);
     for (const auto & env : q_environments) {
-        goal->add_group_upgrade(env.get_environmentid());
+        goal->add_group_upgrade(env->get_environmentid());
     }
 
     ctx.set_should_store_offline(true);

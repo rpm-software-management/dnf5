@@ -1037,7 +1037,7 @@ Transaction::TransactionRunResult Transaction::Impl::_run(
         installed_query.filter_installed(true);
         std::set<std::string> installed_group_ids{};
         for (const auto & grp : installed_query) {
-            installed_group_ids.emplace(grp.get_groupid());
+            installed_group_ids.emplace(grp->get_groupid());
         }
         for (const auto & tsgrp : groups) {
             if (transaction_item_action_is_inbound(tsgrp.get_action())) {

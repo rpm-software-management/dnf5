@@ -943,17 +943,14 @@ void RepoSack::Impl::fix_group_missing_xml() {
                     libdnf5::comps::GroupQuery group_query(available_groups);
                     group_query.filter_groupid(group_id);
                     if (group_query.size() == 1) {
-                        // GroupQuery is basically a set thus iterators and `.get()` method
-                        // return `const Group` objects.
-                        // To call non-const serialize method we need to make a copy here.
-                        libdnf5::comps::Group group = group_query.get();
+                        auto & group = group_query.get();
                         auto xml_file_name = comps_xml_dir / (group_id + ".xml");
                         logger.debug(
                             "Re-creating installed group \"{}\" definition to file \"{}\".",
                             group_id,
                             xml_file_name.string());
                         try {
-                            group.serialize(xml_file_name);
+                            group->serialize(xml_file_name);
                             xml_saved = true;
                         } catch (utils::xml::XMLSaveError & ex) {
                             logger.debug(ex.what());
@@ -979,14 +976,14 @@ void RepoSack::Impl::fix_group_missing_xml() {
                     libdnf5::comps::EnvironmentQuery environment_query(available_environments);
                     environment_query.filter_environmentid(environment_id);
                     if (environment_query.size() == 1) {
-                        libdnf5::comps::Environment environment = environment_query.get();
+                        auto & environment = environment_query.get();
                         auto xml_file_name = comps_xml_dir / (environment_id + ".xml");
                         logger.debug(
                             "Re-creating installed environmental group \"{}\" definition to file \"{}\".",
                             environment_id,
                             xml_file_name.string());
                         try {
-                            environment.serialize(xml_file_name);
+                            environment->serialize(xml_file_name);
                             xml_saved = true;
                         } catch (utils::xml::XMLSaveError & ex) {
                             logger.debug(ex.what());

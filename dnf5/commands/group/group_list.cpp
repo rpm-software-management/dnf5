@@ -76,7 +76,7 @@ void GroupListCommand::run() {
         query_installed.filter_installed(true);
         std::vector<std::string> installed_ids;
         for (const auto & grp : query_installed) {
-            installed_ids.emplace_back(grp.get_groupid());
+            installed_ids.emplace_back(grp->get_groupid());
         }
         libdnf5::comps::GroupQuery query_available(query);
         query_available.filter_installed(false);
@@ -91,13 +91,14 @@ void GroupListCommand::run() {
 }
 
 void GroupListCommand::print(const libdnf5::comps::GroupQuery & query) {
-    std::vector<libdnf5::comps::Group> groups(query.list().begin(), query.list().end());
-    std::sort(groups.begin(), groups.end(), libdnf5::cli::output::comps_display_order_cmp<libdnf5::comps::Group>);
+    std::vector<libdnf5::comps::GroupWeakPtr> groups(query.list().begin(), query.list().end());
+    std::sort(
+        groups.begin(), groups.end(), libdnf5::cli::output::comps_display_order_cmp<libdnf5::comps::GroupWeakPtr>);
 
     std::vector<std::unique_ptr<libdnf5::cli::output::IGroup>> items;
     items.reserve(groups.size());
     for (auto & obj : groups) {
-        items.emplace_back(new libdnf5::cli::output::GroupAdapter(obj));
+        items.emplace_back(new libdnf5::cli::output::GroupAdapter(*obj));
     }
     libdnf5::cli::output::print_grouplist_table(items);
 }

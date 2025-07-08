@@ -107,7 +107,7 @@ sdbus::MethodReply Group::list(sdbus::MethodCall & call) {
         query_installed.filter_installed(true);
         std::vector<std::string> installed_ids;
         for (const auto & grp : query_installed) {
-            installed_ids.emplace_back(grp.get_groupid());
+            installed_ids.emplace_back(grp->get_groupid());
         }
         libdnf5::comps::GroupQuery query_available(query);
         query_available.filter_installed(false);
@@ -127,7 +127,7 @@ sdbus::MethodReply Group::list(sdbus::MethodCall & call) {
     std::vector<std::string> attributes =
         dnfdaemon::key_value_map_get<std::vector<std::string>>(options, "attributes", std::vector<std::string>{});
     for (auto grp : query.list()) {
-        out_groups.push_back(group_to_map(grp, attributes));
+        out_groups.push_back(group_to_map(*grp, attributes));
     }
 
     auto reply = call.createReply();

@@ -45,6 +45,8 @@ public:
     int id{0};
 };
 
+class Group;
+using GroupWeakPtr = WeakPtr<Group, false>;
 
 // @replaces dnf:dnf/comps.py:class:Group
 class LIBDNF_API Group {
@@ -164,6 +166,7 @@ protected:
 
 private:
     friend class GroupQuery;
+    friend class CompsSack;
 
     LIBDNF_LOCAL void add_group_id(const GroupId & group_id);
 
