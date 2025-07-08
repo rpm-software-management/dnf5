@@ -70,3 +70,13 @@ class TestRepoQuery(base_test_case.BaseTestCase):
             result.add(repo.get_id())
         self.assertEqual(
             result, {"repo1", "repo2", "repo1_updates", "repo2_updates"})
+
+        # Tests repo objects after query goes out of scope
+        repos_list = []
+        for repo in libdnf5.repo.RepoQuery(self.base):
+            repos_list.append(repo)
+        result = set()
+        for repo in repos_list:
+            result.add(repo.get_id())
+        self.assertEqual(
+            result, {"repo1", "repo2", "repo1_updates", "repo2_updates"})
