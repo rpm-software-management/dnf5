@@ -65,6 +65,7 @@ private:
     std::vector<std::unique_ptr<libdnf5::utils::fs::TempFile>> downloaded_remotes{};
 
     std::unique_ptr<AllowErasingOption> allow_erasing;
+    std::vector<std::string> from_repos;
 };
 
 
