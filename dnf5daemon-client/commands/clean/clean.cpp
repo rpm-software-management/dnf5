@@ -66,19 +66,22 @@ void CleanCommand::run() {
     }
 
     const std::string cache_type = dynamic_cast<libdnf5::OptionString *>((*cache_types)[0].get())->get_value();
+    dnfdaemon::KeyValueMap options = {};
+    options.clear();
     bool success;
     std::string error_msg;
     ctx.session_proxy->callMethod("clean")
         .onInterface(dnfdaemon::INTERFACE_BASE)
         .withTimeout(static_cast<uint64_t>(-1))
-        .withArguments(cache_type)
+        .withArguments(cache_type, options)
         .storeResultsTo(success, error_msg);
     // make it compatible with `dnf5 clean metadata` which also cleans solv files
     if (success && (cache_type == "metadata")) {
+        options.clear();
         ctx.session_proxy->callMethod("clean")
             .onInterface(dnfdaemon::INTERFACE_BASE)
             .withTimeout(static_cast<uint64_t>(-1))
-            .withArguments("dbcache")
+            .withArguments("dbcache", options)
             .storeResultsTo(success, error_msg);
     }
 

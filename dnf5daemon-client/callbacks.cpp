@@ -240,10 +240,11 @@ void DownloadCB::key_import(sdbus::Signal & signal) {
 
         // signal the confirmation back to the server
         try {
+            dnfdaemon::KeyValueMap options{};
             session_proxy->callMethod("confirm_key")
                 .onInterface(dnfdaemon::INTERFACE_REPO)
                 .withTimeout(static_cast<uint64_t>(-1))
-                .withArguments(key_id, confirmed);
+                .withArguments(key_id, confirmed, options);
         } catch (const sdbus::Error & ex) {
             std::cerr << ex.what() << std::endl;
         }

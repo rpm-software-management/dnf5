@@ -61,8 +61,8 @@ void Base::dbus_register() {
                 {}},
             sdbus::MethodVTableItem{
                 sdbus::MethodName{"clean"},
-                sdbus::Signature{"s"},
-                {"cache_type"},
+                sdbus::Signature{"sa{sv}"},
+                {"cache_type", "options"},
                 sdbus::Signature{"bs"},
                 {"success", "error_msg"},
                 [this](sdbus::MethodCall call) -> void {
@@ -113,8 +113,8 @@ void Base::dbus_register() {
     dbus_object->registerMethod(
         dnfdaemon::INTERFACE_BASE,
         "clean",
-        "s",
-        {"cache_type"},
+        "sa{sv}",
+        {"cache_type", "options"},
         "bs",
         {"success", "error_msg"},
         [this](sdbus::MethodCall call) -> void {
@@ -169,10 +169,12 @@ sdbus::MethodReply Base::read_all_repos(sdbus::MethodCall & call) {
 sdbus::MethodReply Base::clean(sdbus::MethodCall & call) {
     // let the "expire-cache" do anyone, just as read_all_repos()
     std::string cache_type{};
-    call >> cache_type;
+    dnfdaemon::KeyValueMap options;
+    call >> cache_type >> options;
+    bool interactive = dnfdaemon::key_value_map_get<bool>(options, "interactive", true);
 
     if (cache_type != "expire-cache" &&
-        !session.check_authorization(dnfdaemon::POLKIT_EXECUTE_RPM_TRUSTED_TRANSACTION, call.getSender())) {
+        !session.check_authorization(dnfdaemon::POLKIT_EXECUTE_RPM_TRUSTED_TRANSACTION, call.getSender(), interactive)) {
         throw std::runtime_error("Not authorized");
     }
 

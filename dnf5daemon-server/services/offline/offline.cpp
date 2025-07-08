@@ -57,8 +57,8 @@ void Offline::dbus_register() {
         ->addVTable(
             sdbus::MethodVTableItem{
                 sdbus::MethodName{"cancel"},
-                {},
-                {},
+                sdbus::Signature{"a{sv}"},
+                {"options"},
                 sdbus::Signature{"bs"},
                 {"success", "error_msg"},
                 [this](sdbus::MethodCall call) -> void {
@@ -78,8 +78,8 @@ void Offline::dbus_register() {
                 {}},
             sdbus::MethodVTableItem{
                 sdbus::MethodName{"clean"},
-                {},
-                {},
+                sdbus::Signature{"a{sv}"},
+                {"options"},
                 sdbus::Signature{"bs"},
                 {"success", "error_msg"},
                 [this](sdbus::MethodCall call) -> void {
@@ -88,8 +88,8 @@ void Offline::dbus_register() {
                 {}},
             sdbus::MethodVTableItem{
                 sdbus::MethodName{"set_finish_action"},
-                sdbus::Signature{"s"},
-                {"action"},
+                sdbus::Signature{"sa{sv}"},
+                {"action", "options"},
                 sdbus::Signature{"bs"},
                 {"success", "error_msg"},
                 [this](sdbus::MethodCall call) -> void {
@@ -102,8 +102,8 @@ void Offline::dbus_register() {
     dbus_object->registerMethod(
         dnfdaemon::INTERFACE_OFFLINE,
         "cancel",
-        {},
-        {},
+        {"a{sv}"},
+        {"options"},
         "bs",
         {"success", "error_msg"},
         [this](sdbus::MethodCall call) -> void {
@@ -122,8 +122,8 @@ void Offline::dbus_register() {
     dbus_object->registerMethod(
         dnfdaemon::INTERFACE_OFFLINE,
         "clean",
-        {},
-        {},
+        {"a{sv}"},
+        {"options"},
         "bs",
         {"success", "error_msg"},
         [this](sdbus::MethodCall call) -> void {
@@ -132,8 +132,8 @@ void Offline::dbus_register() {
     dbus_object->registerMethod(
         dnfdaemon::INTERFACE_OFFLINE,
         "set_finish_action",
-        "s",
-        {"action"},
+        "sa{sv}",
+        {"action", "options"},
         "bs",
         {"success", "error_msg"},
         [this](sdbus::MethodCall call) -> void {
@@ -168,7 +168,10 @@ sdbus::MethodReply Offline::get_status(sdbus::MethodCall & call) {
 }
 
 sdbus::MethodReply Offline::cancel(sdbus::MethodCall & call) {
-    if (!session.check_authorization(dnfdaemon::POLKIT_EXECUTE_RPM_TRUSTED_TRANSACTION, call.getSender())) {
+    dnfdaemon::KeyValueMap options;
+    call >> options;
+    bool interactive = dnfdaemon::key_value_map_get<bool>(options, "interactive", true);
+    if (!session.check_authorization(dnfdaemon::POLKIT_EXECUTE_RPM_TRUSTED_TRANSACTION, call.getSender(), interactive)) {
         throw std::runtime_error("Not authorized");
     }
     bool success = true;
@@ -195,7 +198,10 @@ sdbus::MethodReply Offline::cancel(sdbus::MethodCall & call) {
 }
 
 sdbus::MethodReply Offline::clean(sdbus::MethodCall & call) {
-    if (!session.check_authorization(dnfdaemon::POLKIT_EXECUTE_RPM_TRUSTED_TRANSACTION, call.getSender())) {
+    dnfdaemon::KeyValueMap options;
+    call >> options;
+    bool interactive = dnfdaemon::key_value_map_get<bool>(options, "interactive", true);
+    if (!session.check_authorization(dnfdaemon::POLKIT_EXECUTE_RPM_TRUSTED_TRANSACTION, call.getSender(), interactive)) {
         throw std::runtime_error("Not authorized");
     }
     std::vector<std::string> error_msgs;
@@ -224,18 +230,20 @@ sdbus::MethodReply Offline::clean(sdbus::MethodCall & call) {
 }
 
 sdbus::MethodReply Offline::set_finish_action(sdbus::MethodCall & call) {
-    if (!session.check_authorization(dnfdaemon::POLKIT_EXECUTE_RPM_TRUSTED_TRANSACTION, call.getSender())) {
+    std::string action;
+    dnfdaemon::KeyValueMap options;
+    call >> action >> options;
+    bool interactive = dnfdaemon::key_value_map_get<bool>(options, "interactive", true);
+    if (!session.check_authorization(dnfdaemon::POLKIT_EXECUTE_RPM_TRUSTED_TRANSACTION, call.getSender(), interactive)) {
         throw std::runtime_error("Not authorized");
     }
     bool success{false};
     std::string error_msg{};
 
-    std::string finish_action;
-    call >> finish_action;
     // check finish_action validity
-    if (finish_action != "poweroff" && finish_action != "reboot") {
+    if (action != "poweroff" && action != "reboot") {
         error_msg = fmt::format(
-            "Unsupported finish action \"{}\". Valid options are \"reboot\", or \"poweroff\".", finish_action);
+            "Unsupported finish action \"{}\". Valid options are \"reboot\", or \"poweroff\".", action);
     } else {
         const std::filesystem::path state_path{get_datadir() / libdnf5::offline::TRANSACTION_STATE_FILENAME};
         std::error_code ec;
@@ -248,7 +256,7 @@ sdbus::MethodReply Offline::set_finish_action(sdbus::MethodCall & call) {
             const auto & read_exception = state.get_read_exception();
             if (read_exception == nullptr) {
                 // set the poweroff_after item accordingly
-                state.get_data().set_poweroff_after(finish_action == "poweroff");
+                state.get_data().set_poweroff_after(action == "poweroff");
                 // write the new state
                 state.write();
                 success = true;

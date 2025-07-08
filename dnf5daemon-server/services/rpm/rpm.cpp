@@ -817,14 +817,15 @@ sdbus::MethodReply Rpm::remove(sdbus::MethodCall & call) {
 }
 
 sdbus::MethodReply Rpm::system_upgrade(sdbus::MethodCall & call) {
-    if (!session.check_authorization(dnfdaemon::POLKIT_EXECUTE_RPM_TRANSACTION, call.getSender())) {
-        throw std::runtime_error("Not authorized");
-    }
-    auto base = session.get_base();
-
     // read options from dbus call
     dnfdaemon::KeyValueMap options;
     call >> options;
+    bool interactive = dnfdaemon::key_value_map_get<bool>(options, "interactive", true);
+
+    if (!session.check_authorization(dnfdaemon::POLKIT_EXECUTE_RPM_TRANSACTION, call.getSender(), interactive)) {
+        throw std::runtime_error("Not authorized");
+    }
+    auto base = session.get_base();
 
     // check that releasever is different than the detected one
     auto target_releasever = base->get_vars()->get_value("releasever");
