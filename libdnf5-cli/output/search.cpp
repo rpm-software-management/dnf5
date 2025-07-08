@@ -24,6 +24,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <libdnf5/utils/bgettext/bgettext-lib.h>
 #include <libdnf5/utils/patterns.hpp>
+#include <libsmartcols/libsmartcols.h>
 
 #include <algorithm>
 #include <iostream>
@@ -97,19 +98,67 @@ void print_search_results(const SearchResults & results) {
         return std::regex_replace(text, patterns_regex, highlight_regex_format);
     };
 
-    for (auto const & result : results.group_results) {
-        std::cout << bold << _("Matched fields: ") << reset << construct_keys_string(result.matched_keys) << std::endl;
+    std::unique_ptr<libscols_table, decltype(&scols_unref_table)> table(scols_new_table(), &scols_unref_table);
 
+    if (!libdnf5::cli::tty::is_interactive()) {
+        // Do not hard-code 80 as non-interactive screen width. Let libdnf5::cli::tty to decide
+        auto screen_width = size_t(libdnf5::cli::tty::get_width());
+        scols_table_set_termwidth(table.get(), screen_width);
+        // The below is necessary to make the libsmartcols' truncation work with non-interactive terminal
+        scols_table_set_termforce(table.get(), SCOLS_TERMFORCE_ALWAYS);
+    }
+
+    const std::vector<std::tuple<const char *, double, int>> columns = {
+        {_("Package"), 0.15, 0}, {_("Description"), 0.7, SCOLS_FL_TRUNC}, {_("Matched fields"), 0.15, 0}};
+
+    for (auto [name, whint, flags] : columns) {
+        scols_table_new_column(table.get(), name, whint, flags);
+    }
+
+    for (auto const & result : results.group_results) {
+        auto matched_fields = construct_keys_string(result.matched_keys);
         for (auto const & package : result.matched_packages.packages) {
-            std::cout << " ";
+            struct libscols_line * ln = scols_table_new_line(table.get(), NULL);
+            std::string name;
             if (results.options.show_duplicates) {
-                std::cout << highlight(package.get_full_nevra());
+                name = package.get_full_nevra();
             } else {
-                std::cout << highlight(package.get_name()) << "." << package.get_arch();
+                name = package.get_name() + "." + package.get_arch();
             }
-            std::cout << ": " << highlight(package.get_summary()) << std::endl;
+            scols_line_set_data(ln, 0, name.c_str());
+            // Regretfully we can not use the highlight for the below because of truncation
+            scols_line_set_data(ln, 1, package.get_summary().c_str());
+            scols_line_set_data(ln, 2, matched_fields.c_str());
         }
     }
+
+    char * output_buffer = NULL;
+    size_t output_size = 0;
+    FILE * output_stream;
+    output_stream = open_memstream(&output_buffer, &output_size);
+    scols_table_set_stream(table.get(), output_stream);
+    scols_print_table(table.get());
+    char * line = NULL;
+    size_t size = 0;
+    // Printing table header in bold text
+    if (getline(&line, &size, output_stream) == -1) {
+        std::cout << _("Unable to retrieve search results.") << std::endl;
+        free(line);
+        return;
+    }
+    std::cout << bold << std::string(line) << reset;
+    // Printing the rest of table with highlighting (only for first 2 columns)
+    auto pkg_n_desc_width = scols_column_get_width(scols_table_get_column(table.get(), 0));
+    pkg_n_desc_width += scols_column_get_width(scols_table_get_column(table.get(), 1));
+    pkg_n_desc_width += 2;  // extra space between columns
+    while (getline(&line, &size, output_stream) != -1) {
+        auto pkg_n_desc = std::string(line).substr(0, pkg_n_desc_width);
+        auto rest = std::string(line).substr(pkg_n_desc_width, std::string::npos);
+        // nitpick: The highlight does not work if the matching word is truncated
+        std::cout << highlight(pkg_n_desc) << rest;
+    }
+    free(line);
+    fclose(output_stream);
 }
 
 }  // namespace libdnf5::cli::output
