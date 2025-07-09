@@ -1889,6 +1889,17 @@ GoalProblem Goal::Impl::add_reinstall_to_goal(
 
     // keep only available packages
     query -= query_installed;
+
+    // filtering from_repo_ids
+    if (!settings.get_from_repo_ids().empty()) {
+        query_installed.filter_from_repo_id(settings.get_from_repo_ids(), sack::QueryCmp::GLOB);
+        // Report when package is not installed from repositories
+        if (query.empty()) {
+            // TODO(jmracek) no solution for the spec => mark result - not from repository
+            return GoalProblem::NOT_FOUND_IN_REPOSITORIES;
+        }
+    }
+
     if (query.empty()) {
         transaction.p_impl->add_resolve_log(
             GoalAction::REINSTALL,
@@ -1943,8 +1954,6 @@ GoalProblem Goal::Impl::add_reinstall_to_goal(
             }
         }
     }
-
-    // TODO(jmracek) Implement filtering from_repo_ids
 
     if (!settings.get_to_repo_ids().empty()) {
         relevant_available.filter_repo_id(settings.get_to_repo_ids(), sack::QueryCmp::GLOB);
@@ -2224,8 +2233,10 @@ GoalProblem Goal::Impl::add_remove_to_goal(
         return skip_unavailable ? GoalProblem::NO_PROBLEM : problem;
     }
 
+    // filtering from_repo_ids
     if (!settings.get_from_repo_ids().empty()) {
-        // TODO(jmracek) keep only packages installed from repo_id -requires swdb
+        query.filter_from_repo_id(settings.get_from_repo_ids(), sack::QueryCmp::GLOB);
+        // Report when package is not installed from repositories
         if (query.empty()) {
             // TODO(jmracek) no solution for the spec => mark result - not from repository
             return GoalProblem::NOT_FOUND_IN_REPOSITORIES;

@@ -1177,6 +1177,57 @@ void PackageQuery::filter_repo_id(const std::vector<std::string> & patterns, lib
     }
 }
 
+void PackageQuery::filter_from_repo_id(const std::vector<std::string> & patterns, libdnf5::sack::QueryCmp cmp_type) {
+    auto & pool = get_rpm_pool(p_impl->base);
+    const auto * const installed_repo = pool->installed;
+    if (installed_repo == nullptr) {
+        (*p_impl).clear();
+        return;
+    }
+
+    const bool cmp_not = (cmp_type & libdnf5::sack::QueryCmp::NOT) == libdnf5::sack::QueryCmp::NOT;
+    if (cmp_not) {
+        // Removal of NOT CmpType makes following comparisons easier and effective
+        cmp_type = cmp_type - libdnf5::sack::QueryCmp::NOT;
+    }
+
+    const bool cmp_glob = (cmp_type & libdnf5::sack::QueryCmp::GLOB) == libdnf5::sack::QueryCmp::GLOB;
+
+    std::vector<bool> cmp_globs(patterns.size());
+    for (size_t i = 0; i < patterns.size(); ++i) {
+        if (cmp_glob && libdnf5::utils::is_glob_pattern(patterns[i].c_str())) {
+            cmp_globs[i] = true;
+        }
+    }
+
+    libdnf5::solv::SolvMap filter_result(pool.get_nsolvables());
+    auto endp = end();
+    for (auto itp = begin(); itp != endp; ++itp) {
+        const auto pkg = *itp;
+        if (pkg.is_installed()) {
+            const auto from_repo = pkg.get_from_repo_id();
+            for (size_t i = 0; i < patterns.size(); ++i) {
+                switch (cmp_globs[i]) {
+                    case false:
+                        if ((strcmp(patterns[i].c_str(), from_repo.c_str()) != 0) == cmp_not) {
+                            filter_result.add_unsafe(pkg.get_id().id);
+                        };
+                        break;
+                    case true:
+                        if ((fnmatch(patterns[i].c_str(), from_repo.c_str(), 0) != 0) == cmp_not) {
+                            filter_result.add_unsafe(pkg.get_id().id);
+                        };
+                        break;
+                }
+            }
+        }
+    }
+
+    // TODO(jrohel): The optimization replaces the original query_result buffer. Is it OK?
+    // Or we need to use a slower version "*p_impl &= filter_result;"
+    p_impl->swap(filter_result);
+}
+
 void PackageQuery::filter_sourcerpm(const std::vector<std::string> & patterns, libdnf5::sack::QueryCmp cmp_type) {
     bool cmp_not = (cmp_type & libdnf5::sack::QueryCmp::NOT) == libdnf5::sack::QueryCmp::NOT;
     if (cmp_not) {
