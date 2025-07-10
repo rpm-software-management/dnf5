@@ -33,6 +33,8 @@
 
 #include "libdnf5-cli/defs.h"
 
+#include "libdnf5/common/impl_ptr.hpp"
+
 
 namespace libdnf5::cli::progressbar {
 
@@ -40,6 +42,11 @@ namespace libdnf5::cli::progressbar {
 class LIBDNF_CLI_API DownloadProgressBar : public ProgressBar {
 public:
     explicit DownloadProgressBar(int64_t download_size, const std::string & description);
+    ~DownloadProgressBar();
+    DownloadProgressBar(const DownloadProgressBar & src);
+    DownloadProgressBar & operator=(const DownloadProgressBar & src);
+    DownloadProgressBar(DownloadProgressBar && src) noexcept;
+    DownloadProgressBar & operator=(DownloadProgressBar && src) noexcept;
 
     using ProgressBar::get_messages;
     using ProgressBar::set_state;
@@ -48,8 +55,8 @@ public:
 
     // TODO(dmach): add print() method
 
-    bool get_number_widget_visible() const noexcept { return number_widget.get_visible(); }
-    void set_number_widget_visible(bool value) noexcept { number_widget.set_visible(value); }
+    bool get_number_widget_visible() const noexcept;
+    void set_number_widget_visible(bool value) noexcept;
 
 protected:
     void to_stream(std::ostream & stream) override;
@@ -58,14 +65,8 @@ private:
     // TODO(dmach): fix inconsistency - MultiProgresBar::operator<< erases previously printed lines, DownloadProgressBar::operator<< does not
     LIBDNF_CLI_API friend std::ostream & operator<<(std::ostream & stream, DownloadProgressBar & bar);
 
-    // widgets
-    libdnf5::cli::progressbar::NumberWidget number_widget;
-    libdnf5::cli::progressbar::DescriptionWidget description_widget;
-    libdnf5::cli::progressbar::PercentWidget percent_widget;
-    libdnf5::cli::progressbar::ProgressWidget progress_widget;
-    libdnf5::cli::progressbar::SpeedWidget speed_widget;
-    libdnf5::cli::progressbar::SizeWidget size_widget;
-    libdnf5::cli::progressbar::TimeWidget time_widget;
+    class LIBDNF_CLI_LOCAL Impl;
+    ImplPtr<Impl> p_impl;
 };
 
 
