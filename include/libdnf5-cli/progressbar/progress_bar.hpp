@@ -23,6 +23,8 @@
 
 #include "libdnf5-cli/defs.h"
 
+#include "libdnf5/common/impl_ptr.hpp"
+
 #include <chrono>
 #include <string>
 #include <vector>
@@ -54,64 +56,61 @@ public:
 
     explicit ProgressBar(int64_t total_ticks);
     explicit ProgressBar(int64_t total_ticks, const std::string & description);
-    virtual ~ProgressBar() = default;
+    virtual ~ProgressBar();
+    ProgressBar(const ProgressBar & src);
+    ProgressBar & operator=(const ProgressBar & src);
+    ProgressBar(ProgressBar && src) noexcept;
+    ProgressBar & operator=(ProgressBar && src) noexcept;
 
     void reset();
 
     // ticks
-    int64_t get_ticks() const noexcept { return ticks; }
+    int64_t get_ticks() const noexcept;
     void set_ticks(int64_t value);
     void add_ticks(int64_t value);
 
     // total ticks
-    int64_t get_total_ticks() const noexcept { return total_ticks; }
+    int64_t get_total_ticks() const noexcept;
     void set_total_ticks(int64_t value);
 
     // number
-    int32_t get_number() const noexcept { return number; }
-    void set_number(int32_t value) { number = value; }
+    int32_t get_number() const noexcept;
+    void set_number(int32_t value);
 
     // total
-    int32_t get_total() const noexcept { return total; }
-    void set_total(int32_t value) { total = value; }
+    int32_t get_total() const noexcept;
+    void set_total(int32_t value);
 
     // workflow
     void start();
-    ProgressBarState get_state() const noexcept { return state; }
-    void set_state(ProgressBarState value) {
-        update();
-        state = value;
-    }
-    bool is_finished() const noexcept {
-        return get_state() != ProgressBarState::READY && get_state() != ProgressBarState::STARTED;
-    }
-    bool is_failed() const noexcept {
-        return get_state() == ProgressBarState::ERROR || get_state() == ProgressBarState::WARNING;
-    }
+    ProgressBarState get_state() const noexcept;
+    void set_state(ProgressBarState value);
+    bool is_finished() const noexcept;
+    bool is_failed() const noexcept;
 
     // description
-    std::string get_description() const noexcept { return description; }
-    void set_description(const std::string & value) { description = value; }
+    std::string get_description() const noexcept;
+    void set_description(const std::string & value);
 
     // messages
-    void add_message(MessageType type, const std::string & message) { messages.emplace_back(type, message); }
+    void add_message(MessageType type, const std::string & message);
     /// remove the last message
     void pop_message();
-    const std::vector<Message> & get_messages() const noexcept { return messages; }
+    const std::vector<Message> & get_messages() const noexcept;
 
     // auto-finish feature; turn off if you want to handle state manually
-    bool get_auto_finish() const noexcept { return auto_finish; }
-    void set_auto_finish(bool value) { auto_finish = value; }
+    bool get_auto_finish() const noexcept;
+    void set_auto_finish(bool value);
 
     // stats
     void update();
-    int32_t get_percent_done() const noexcept { return percent_done; }
-    int64_t get_current_speed() const noexcept { return current_speed; }
-    int64_t get_average_speed() const noexcept { return average_speed; }
-    int64_t get_elapsed_seconds() const noexcept { return elapsed_seconds; }
-    int64_t get_remaining_seconds() const noexcept { return remaining_seconds; }
+    int32_t get_percent_done() const noexcept;
+    int64_t get_current_speed() const noexcept;
+    int64_t get_average_speed() const noexcept;
+    int64_t get_elapsed_seconds() const noexcept;
+    int64_t get_remaining_seconds() const noexcept;
 
-    std::chrono::time_point<std::chrono::system_clock> get_begin() { return begin; }
+    std::chrono::time_point<std::chrono::system_clock> get_begin();
 
     LIBDNF_CLI_API friend std::ostream & operator<<(std::ostream & os, ProgressBar & bar);
 
@@ -119,36 +118,8 @@ protected:
     virtual void to_stream(std::ostream & stream) = 0;
 
 private:
-    // ticks
-    int64_t ticks = -1;
-    int64_t total_ticks = -1;
-
-    // numbers
-    int32_t number = 0;
-    int32_t total = 0;
-
-    // description
-    std::string description;
-
-    // messages
-    std::vector<Message> messages;
-
-    ProgressBarState state = ProgressBarState::READY;
-
-    int32_t percent_done = -1;
-    int64_t elapsed_seconds = 0;
-    int64_t remaining_seconds = 0;
-    int64_t average_speed = 0;
-
-    bool auto_finish = true;
-
-    std::chrono::time_point<std::chrono::system_clock> begin = std::chrono::system_clock::from_time_t(0);
-    std::chrono::time_point<std::chrono::system_clock> end = std::chrono::system_clock::from_time_t(0);
-
-    // current (average) speed over the last second
-    std::chrono::time_point<std::chrono::system_clock> current_speed_window_start = std::chrono::system_clock::now();
-    int64_t current_speed = 0;
-    int64_t current_speed_window_ticks = 0;
+    class LIBDNF_CLI_LOCAL Impl;
+    ImplPtr<Impl> p_impl;
 };
 
 
