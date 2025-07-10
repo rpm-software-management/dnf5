@@ -48,19 +48,25 @@ std::vector<libdnf5::advisory::Advisory> to_vector(const libdnf5::advisory::Advi
 }
 
 
-std::vector<libdnf5::comps::Environment> to_vector(const libdnf5::Set<libdnf5::comps::Environment> & environment_set) {
-    std::vector<libdnf5::comps::Environment> res;
+std::vector<libdnf5::comps::EnvironmentWeakPtr> to_vector(
+    const libdnf5::Set<libdnf5::comps::EnvironmentWeakPtr> & environment_set) {
+    std::vector<libdnf5::comps::EnvironmentWeakPtr> res;
     for (const auto & environment : environment_set) {
         res.push_back(environment);
     }
+    std::sort(res.begin(), res.end(), [](libdnf5::comps::EnvironmentWeakPtr a, libdnf5::comps::EnvironmentWeakPtr b) {
+        return *a < *b;
+    });
     return res;
 }
 
 
-std::vector<libdnf5::comps::Group> to_vector(const libdnf5::Set<libdnf5::comps::Group> & group_set) {
-    std::vector<libdnf5::comps::Group> res;
+std::vector<libdnf5::comps::GroupWeakPtr> to_vector(const libdnf5::Set<libdnf5::comps::GroupWeakPtr> & group_set) {
+    std::vector<libdnf5::comps::GroupWeakPtr> res;
     for (const auto & group : group_set) {
         res.push_back(group);
     }
+    std::sort(
+        res.begin(), res.end(), [](libdnf5::comps::GroupWeakPtr a, libdnf5::comps::GroupWeakPtr b) { return *a < *b; });
     return res;
 }

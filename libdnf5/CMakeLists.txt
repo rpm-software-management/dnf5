@@ -42,7 +42,7 @@ target_link_libraries(libdnf5_iface INTERFACE libdnf5_obj $<TARGET_OBJECTS:libdn
 
 # build libdnf5.so
 add_library(libdnf5 SHARED $<TARGET_OBJECTS:libdnf5_obj>)
-set(DNF_SO_VERSION 2)
+set(DNF_SO_VERSION 3)
 set_target_properties(libdnf5 PROPERTIES OUTPUT_NAME "dnf5")
 set_target_properties(libdnf5 PROPERTIES SOVERSION ${DNF_SO_VERSION})
 # required to have dlopen symbol

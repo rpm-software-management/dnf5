@@ -67,15 +67,15 @@ void EnvironmentListCommand::run() {
         query.filter_installed(false);
     }
 
-    std::vector<libdnf5::comps::Environment> environments(query.list().begin(), query.list().end());
+    std::vector<libdnf5::comps::EnvironmentWeakPtr> environments(query.list().begin(), query.list().end());
     std::sort(
         environments.begin(),
         environments.end(),
-        libdnf5::cli::output::comps_display_order_cmp<libdnf5::comps::Environment>);
+        libdnf5::cli::output::comps_display_order_cmp<libdnf5::comps::EnvironmentWeakPtr>);
 
     std::vector<std::unique_ptr<libdnf5::cli::output::IEnvironment>> cli_envs;
     for (auto & env : environments) {
-        cli_envs.emplace_back(new libdnf5::cli::output::EnvironmentAdapter(env));
+        cli_envs.emplace_back(new libdnf5::cli::output::EnvironmentAdapter(*env));
     }
     libdnf5::cli::output::print_environmentlist_table(cli_envs);
 }

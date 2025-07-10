@@ -1,6 +1,6 @@
 %global project_version_prime 5
-%global project_version_major 2
-%global project_version_minor 14
+%global project_version_major 3
+%global project_version_minor 0
 %global project_version_micro 0
 
 %bcond dnf5_obsoletes_dnf %[0%{?fedora} > 40 || 0%{?rhel} > 10]
@@ -404,7 +404,7 @@ Package management library.
 %dir %{_datadir}/dnf5/repos.d
 %dir %{_datadir}/dnf5/vars.d
 %dir %{_libdir}/libdnf5
-%{_libdir}/libdnf5.so.2*
+%{_libdir}/libdnf5.so.3*
 %dir %{_prefix}/lib/sysimage/libdnf5
 %attr(0755, root, root) %ghost %dir %{_prefix}/lib/sysimage/libdnf5/comps_groups
 %verify(not md5 size mtime) %attr(0644, root, root) %ghost %{_prefix}/lib/sysimage/libdnf5/environments.toml
@@ -434,7 +434,7 @@ Requires:       libdnf5%{?_isa} = %{version}-%{release}
 Library for working with a terminal in a command-line package manager.
 
 %files -n libdnf5-cli -f libdnf5-cli.lang
-%{_libdir}/libdnf5-cli.so.2*
+%{_libdir}/libdnf5-cli.so.3*
 %license COPYING.md
 %license lgpl-2.1.txt
 %endif

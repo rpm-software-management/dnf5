@@ -45,6 +45,9 @@ public:
 };
 
 
+class Environment;
+using EnvironmentWeakPtr = WeakPtr<Environment, false>;
+
 // @replaces dnf:dnf/comps.py:class:Environment
 class LIBDNF_API Environment {
 public:
@@ -147,6 +150,7 @@ protected:
 
 private:
     friend class EnvironmentQuery;
+    friend class CompsSack;
 
     LIBDNF_LOCAL void add_environment_id(const EnvironmentId & environment_id);
 

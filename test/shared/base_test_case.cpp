@@ -90,13 +90,13 @@ libdnf5::advisory::Advisory BaseTestCase::get_advisory(const std::string & name)
 }
 
 
-libdnf5::comps::Environment BaseTestCase::get_environment(const std::string & environmentid, bool installed) {
+libdnf5::comps::EnvironmentWeakPtr BaseTestCase::get_environment(const std::string & environmentid, bool installed) {
     // This is used for testing queries as well, hence we don't use the EnvironmentQuery facility for filtering
-    libdnf5::Set<libdnf5::comps::Environment> environments = libdnf5::comps::EnvironmentQuery(base);
+    libdnf5::Set<libdnf5::comps::EnvironmentWeakPtr> environments = libdnf5::comps::EnvironmentQuery(base);
 
-    std::set<libdnf5::comps::Environment> found;
+    std::set<libdnf5::comps::EnvironmentWeakPtr> found;
     for (auto environment : environments) {
-        if (environment.get_environmentid() == environmentid && environment.get_installed() == installed) {
+        if (environment->get_environmentid() == environmentid && environment->get_installed() == installed) {
             found.insert(environment);
         }
     }
@@ -113,13 +113,13 @@ libdnf5::comps::Environment BaseTestCase::get_environment(const std::string & en
 }
 
 
-libdnf5::comps::Group BaseTestCase::get_group(const std::string & groupid, bool installed) {
+libdnf5::comps::GroupWeakPtr BaseTestCase::get_group(const std::string & groupid, bool installed) {
     // This is used for testing queries as well, hence we don't use the GroupQuery facility for filtering
-    libdnf5::Set<libdnf5::comps::Group> groups = libdnf5::comps::GroupQuery(base);
+    libdnf5::Set<libdnf5::comps::GroupWeakPtr> groups = libdnf5::comps::GroupQuery(base);
 
-    std::set<libdnf5::comps::Group> found;
+    std::set<libdnf5::comps::GroupWeakPtr> found;
     for (auto group : groups) {
-        if (group.get_groupid() == groupid && group.get_installed() == installed) {
+        if (group->get_groupid() == groupid && group->get_installed() == installed) {
             found.insert(group);
         }
     }

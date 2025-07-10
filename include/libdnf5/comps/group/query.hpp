@@ -33,7 +33,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 namespace libdnf5::comps {
 
 
-class LIBDNF_API GroupQuery : public libdnf5::sack::Query<Group> {
+class LIBDNF_API GroupQuery : public libdnf5::sack::Query<GroupWeakPtr> {
 public:
     using ExcludeFlags = libdnf5::sack::ExcludeFlags;
 

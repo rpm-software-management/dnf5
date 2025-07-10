@@ -59,9 +59,9 @@ public:
 
     libdnf5::advisory::Advisory get_advisory(const std::string & name);
 
-    libdnf5::comps::Environment get_environment(const std::string & environmentid, bool installed = false);
+    libdnf5::comps::EnvironmentWeakPtr get_environment(const std::string & environmentid, bool installed = false);
 
-    libdnf5::comps::Group get_group(const std::string & groupid, bool installed = false);
+    libdnf5::comps::GroupWeakPtr get_group(const std::string & groupid, bool installed = false);
 
     libdnf5::rpm::Package get_pkg(const std::string & nevra, bool installed = false);
     libdnf5::rpm::Package get_pkg(const std::string & nevra, const char * repo);

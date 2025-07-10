@@ -124,7 +124,7 @@ private:
 
 template <class T>
 bool comps_display_order_cmp(T & a, T & b) {
-    return a.get_order_int() < b.get_order_int();
+    return a->get_order_int() < b->get_order_int();
 }
 
 }  // namespace libdnf5::cli::output

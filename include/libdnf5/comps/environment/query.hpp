@@ -33,7 +33,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 namespace libdnf5::comps {
 
 
-class LIBDNF_API EnvironmentQuery : public libdnf5::sack::Query<Environment> {
+class LIBDNF_API EnvironmentQuery : public libdnf5::sack::Query<EnvironmentWeakPtr> {
 public:
     using ExcludeFlags = libdnf5::sack::ExcludeFlags;
 
