@@ -32,15 +32,31 @@
 
 namespace libdnf5::cli::progressbar {
 
+class MultiProgressBar::Impl {
+public:
+    Impl();
 
-MultiProgressBar::MultiProgressBar() : total(0, _("Total")) {
+    std::size_t total_bar_visible_limit{0};
+    std::vector<std::unique_ptr<ProgressBar>> bars_all;
+    std::vector<ProgressBar *> bars_todo;
+    std::vector<ProgressBar *> bars_done;
+    DownloadProgressBar total;
+    // Whether the last line was printed without a new line ending (such as an in progress bar)
+    bool line_printed{false};
+    std::size_t num_of_lines_to_clear{0};
+};
+
+MultiProgressBar::Impl::Impl() : total(0, _("Total")) {
     total.set_auto_finish(false);
     total.start();
+}
+
+
+MultiProgressBar::MultiProgressBar() : p_impl(new Impl()) {
     if (tty::is_interactive()) {
         std::cerr << tty::cursor_hide;
     }
 }
-
 
 MultiProgressBar::~MultiProgressBar() {
     if (tty::is_interactive()) {
@@ -48,52 +64,68 @@ MultiProgressBar::~MultiProgressBar() {
     }
 }
 
+void MultiProgressBar::print() {
+    std::cerr << *this;
+    std::cerr << std::flush;
+}
+
+void MultiProgressBar::set_total_bar_visible_limit(std::size_t value) noexcept {
+    p_impl->total_bar_visible_limit = value;
+}
+
+DownloadProgressBar & MultiProgressBar::get_total_bar() noexcept {
+    return p_impl->total;
+}
+
+void MultiProgressBar::set_total_bar_number_widget_visible(bool value) noexcept {
+    p_impl->total.set_number_widget_visible(value);
+}
 
 void MultiProgressBar::add_bar(std::unique_ptr<ProgressBar> && bar) {
-    bars_todo.push_back(bar.get());
+    p_impl->bars_todo.push_back(bar.get());
 
     // if the number is not set, automatically find and set the next available
     if (bar->get_number() == 0) {
         int number = 0;
-        for (auto i : bars_todo) {
+        for (auto i : p_impl->bars_todo) {
             number = std::max(number, i->get_number());
         }
         bar->set_number(number + 1);
     }
 
-    bars_all.push_back(std::move(bar));
+    p_impl->bars_all.push_back(std::move(bar));
 
     // update total (in [num/total]) in total progress bar
-    auto registered_bars_count = static_cast<int32_t>(bars_all.size());
-    if (total.get_total() < registered_bars_count) {
-        total.set_total(registered_bars_count);
+    auto registered_bars_count = static_cast<int32_t>(p_impl->bars_all.size());
+    if (p_impl->total.get_total() < registered_bars_count) {
+        p_impl->total.set_total(registered_bars_count);
     }
 
     // update total (in [num/total]) in all bars to do
-    for (auto & i : bars_todo) {
-        i->set_total(total.get_total());
+    for (auto & i : p_impl->bars_todo) {
+        i->set_total(p_impl->total.get_total());
     }
 }
 
 
 void MultiProgressBar::set_total_num_of_bars(std::size_t value) noexcept {
-    if (value < bars_all.size()) {
-        value = bars_all.size();
+    if (value < p_impl->bars_all.size()) {
+        value = p_impl->bars_all.size();
     }
     auto num_of_bars = static_cast<int>(value);
-    if (num_of_bars != total.get_total()) {
-        total.set_total(num_of_bars);
+    if (num_of_bars != p_impl->total.get_total()) {
+        p_impl->total.set_total(num_of_bars);
 
         // update total (in [num/total]) in all bars to do
-        for (auto & i : bars_todo) {
-            i->set_total(total.get_total());
+        for (auto & i : p_impl->bars_todo) {
+            i->set_total(p_impl->total.get_total());
         }
     }
 }
 
 
 std::size_t MultiProgressBar::get_total_num_of_bars() const noexcept {
-    return static_cast<std::size_t>(total.get_total());
+    return static_cast<std::size_t>(p_impl->total.get_total());
 }
 
 
@@ -106,30 +138,30 @@ std::ostream & operator<<(std::ostream & stream, MultiProgressBar & mbar) {
     text_buffer.str("");
     text_buffer.clear();
 
-    std::size_t last_num_of_lines_to_clear = mbar.num_of_lines_to_clear;
+    std::size_t last_num_of_lines_to_clear = mbar.p_impl->num_of_lines_to_clear;
     std::size_t num_of_lines_permanent = 0;
 
-    if (is_interactive && mbar.num_of_lines_to_clear > 0) {
-        if (mbar.num_of_lines_to_clear > 1) {
+    if (is_interactive && mbar.p_impl->num_of_lines_to_clear > 0) {
+        if (mbar.p_impl->num_of_lines_to_clear > 1) {
             // Move the cursor up by the number of lines we want to write over
-            text_buffer << "\033[" << (mbar.num_of_lines_to_clear - 1) << "A";
+            text_buffer << "\033[" << (mbar.p_impl->num_of_lines_to_clear - 1) << "A";
         }
         text_buffer << "\r";
     }
 
     // Number of lines that need to be cleared, including the last line even if it is empty
-    mbar.num_of_lines_to_clear = 0;
-    mbar.line_printed = false;
+    mbar.p_impl->num_of_lines_to_clear = 0;
+    mbar.p_impl->line_printed = false;
 
     // store numbers of bars in progress
     std::vector<int32_t> numbers;
-    for (auto * bar : mbar.bars_todo) {
+    for (auto * bar : mbar.p_impl->bars_todo) {
         numbers.insert(numbers.begin(), bar->get_number());
     }
 
     // print completed bars first and remove them from the list
-    for (std::size_t i = 0; i < mbar.bars_todo.size(); i++) {
-        auto * bar = mbar.bars_todo[i];
+    for (std::size_t i = 0; i < mbar.p_impl->bars_todo.size(); i++) {
+        auto * bar = mbar.p_impl->bars_todo[i];
         if (!bar->is_finished()) {
             continue;
         }
@@ -139,14 +171,14 @@ std::ostream & operator<<(std::ostream & stream, MultiProgressBar & mbar) {
         text_buffer << std::endl;
         num_of_lines_permanent++;
         num_of_lines_permanent += bar->get_messages().size();
-        mbar.bars_done.push_back(bar);
+        mbar.p_impl->bars_done.push_back(bar);
         // TODO(dmach): use iterator
-        mbar.bars_todo.erase(mbar.bars_todo.begin() + static_cast<int>(i));
+        mbar.p_impl->bars_todo.erase(mbar.p_impl->bars_todo.begin() + static_cast<int>(i));
         i--;
     }
 
     // then print incomplete
-    for (auto & bar : mbar.bars_todo) {
+    for (auto & bar : mbar.p_impl->bars_todo) {
         bar->set_number(numbers.back());
         numbers.pop_back();
 
@@ -160,13 +192,13 @@ std::ostream & operator<<(std::ostream & stream, MultiProgressBar & mbar) {
             bar->update();
             continue;
         }
-        if (mbar.line_printed) {
+        if (mbar.p_impl->line_printed) {
             text_buffer << std::endl;
         }
         text_buffer << *bar;
-        mbar.line_printed = true;
-        mbar.num_of_lines_to_clear++;
-        mbar.num_of_lines_to_clear += bar->get_messages().size();
+        mbar.p_impl->line_printed = true;
+        mbar.p_impl->num_of_lines_to_clear++;
+        mbar.p_impl->num_of_lines_to_clear += bar->get_messages().size();
     }
 
     // then print the "total" progress bar
@@ -174,7 +206,7 @@ std::ostream & operator<<(std::ostream & stream, MultiProgressBar & mbar) {
     int64_t ticks = 0;
     int64_t total_ticks = 0;
 
-    for (auto & bar : mbar.bars_done) {
+    for (auto & bar : mbar.p_impl->bars_done) {
         total_numbers = std::max(total_numbers, bar->get_total());
         // completed bars can be unfinished
         // add only processed ticks to both values
@@ -182,15 +214,16 @@ std::ostream & operator<<(std::ostream & stream, MultiProgressBar & mbar) {
         ticks += bar->get_ticks();
     }
 
-    for (auto & bar : mbar.bars_todo) {
+    for (auto & bar : mbar.p_impl->bars_todo) {
         total_numbers = std::max(total_numbers, bar->get_total());
         total_ticks += bar->get_total_ticks();
         ticks += bar->get_ticks();
     }
 
 
-    if ((mbar.bars_all.size() >= mbar.total_bar_visible_limit) && (is_interactive || mbar.bars_todo.empty())) {
-        if (mbar.line_printed) {
+    if ((mbar.p_impl->bars_all.size() >= mbar.p_impl->total_bar_visible_limit) &&
+        (is_interactive || mbar.p_impl->bars_todo.empty())) {
+        if (mbar.p_impl->line_printed) {
             text_buffer << std::endl;
         }
         // print divider
@@ -199,23 +232,24 @@ std::ostream & operator<<(std::ostream & stream, MultiProgressBar & mbar) {
         text_buffer << std::endl;
 
         // print Total progress bar
-        mbar.total.set_number(static_cast<int>(mbar.bars_done.size()));
+        auto & mbar_total = mbar.get_total_bar();
+        mbar_total.set_number(static_cast<int>(mbar.p_impl->bars_done.size()));
 
-        mbar.total.set_total_ticks(total_ticks);
-        mbar.total.set_ticks(ticks);
+        mbar_total.set_total_ticks(total_ticks);
+        mbar_total.set_ticks(ticks);
 
-        if (mbar.bars_todo.empty()) {
+        if (mbar.p_impl->bars_todo.empty()) {
             // all bars have finished, set the "Total" bar as finished too according to their states
-            mbar.total.set_state(ProgressBarState::SUCCESS);
+            mbar_total.set_state(ProgressBarState::SUCCESS);
         }
 
-        text_buffer << mbar.total;
+        text_buffer << mbar_total;
         // +1 for the divider line, +1 for the total bar line
-        mbar.num_of_lines_to_clear += 2;
-        if (mbar.total.is_finished()) {
+        mbar.p_impl->num_of_lines_to_clear += 2;
+        if (mbar_total.is_finished()) {
             text_buffer << std::endl;
         } else {
-            mbar.line_printed = true;
+            mbar.p_impl->line_printed = true;
         }
     }
 
@@ -226,10 +260,10 @@ std::ostream & operator<<(std::ostream & stream, MultiProgressBar & mbar) {
     // TODO(amatej): It would be sufficient to do this only once after all progressbars have
     // finished but unfortunaly MultiProgressBar doesn't have a pImpl so we cannot
     // store the highest line count it had. We could fix this when breaking ABI.
-    size_t all_written = num_of_lines_permanent + mbar.num_of_lines_to_clear;
+    size_t all_written = num_of_lines_permanent + mbar.p_impl->num_of_lines_to_clear;
     if (last_num_of_lines_to_clear > all_written) {
         auto delta = last_num_of_lines_to_clear - all_written;
-        if (!mbar.line_printed) {
+        if (!mbar.p_impl->line_printed) {
             text_buffer << tty::clear_line;
         }
         for (std::size_t i = 0; i < delta; i++) {
