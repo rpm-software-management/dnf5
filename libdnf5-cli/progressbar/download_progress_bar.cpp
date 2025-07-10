@@ -41,16 +41,43 @@ namespace libdnf5::cli::progressbar {
 // [  1/999] Total                           10% [===                 ] 543.2 kB/s | 543.2 MB | -12m34s
 
 
-DownloadProgressBar::DownloadProgressBar(int64_t download_size, const std::string & description)
-    : ProgressBar(download_size, description) {
-    number_widget.set_bar(this);
-    description_widget.set_bar(this);
-    percent_widget.set_bar(this);
-    progress_widget.set_bar(this);
-    speed_widget.set_bar(this);
-    size_widget.set_bar(this);
-    time_widget.set_bar(this);
+class DownloadProgressBar::Impl {
+public:
+    Impl(DownloadProgressBar & download_progress_bar);
+
+    // widgets
+    libdnf5::cli::progressbar::NumberWidget number_widget;
+    libdnf5::cli::progressbar::DescriptionWidget description_widget;
+    libdnf5::cli::progressbar::PercentWidget percent_widget;
+    libdnf5::cli::progressbar::ProgressWidget progress_widget;
+    libdnf5::cli::progressbar::SpeedWidget speed_widget;
+    libdnf5::cli::progressbar::SizeWidget size_widget;
+    libdnf5::cli::progressbar::TimeWidget time_widget;
+
+private:
+    DownloadProgressBar * download_progress_bar;
+};
+
+DownloadProgressBar::Impl::Impl(DownloadProgressBar & download_progress_bar)
+    : download_progress_bar(&download_progress_bar) {
+    number_widget.set_bar(this->download_progress_bar);
+    description_widget.set_bar(this->download_progress_bar);
+    percent_widget.set_bar(this->download_progress_bar);
+    progress_widget.set_bar(this->download_progress_bar);
+    speed_widget.set_bar(this->download_progress_bar);
+    size_widget.set_bar(this->download_progress_bar);
+    time_widget.set_bar(this->download_progress_bar);
 }
+
+DownloadProgressBar::~DownloadProgressBar() = default;
+DownloadProgressBar::DownloadProgressBar(const DownloadProgressBar & src) = default;
+DownloadProgressBar & DownloadProgressBar::operator=(const DownloadProgressBar & src) = default;
+DownloadProgressBar::DownloadProgressBar(DownloadProgressBar && src) noexcept = default;
+DownloadProgressBar & DownloadProgressBar::operator=(DownloadProgressBar && src) noexcept = default;
+
+DownloadProgressBar::DownloadProgressBar(int64_t download_size, const std::string & description)
+    : ProgressBar(download_size, description),
+      p_impl(new Impl(*this)) {}
 
 
 static std::size_t get_bar_width(const std::vector<Widget *> & widgets) {
@@ -68,6 +95,14 @@ std::ostream & operator<<(std::ostream & stream, DownloadProgressBar & bar) {
 }
 
 
+bool DownloadProgressBar::get_number_widget_visible() const noexcept {
+    return p_impl->number_widget.get_visible();
+}
+
+void DownloadProgressBar::set_number_widget_visible(bool value) noexcept {
+    p_impl->number_widget.set_visible(value);
+}
+
 void DownloadProgressBar::to_stream(std::ostream & stream) {
     update();
 
@@ -78,27 +113,27 @@ void DownloadProgressBar::to_stream(std::ostream & stream) {
     }
 
     // set the default delimiters
-    number_widget.set_delimiter_before("");
-    description_widget.set_delimiter_before(" ");
-    percent_widget.set_delimiter_before(" ");
-    progress_widget.set_delimiter_before(" ");
-    speed_widget.set_delimiter_before(" | ");
-    size_widget.set_delimiter_before(" | ");
-    time_widget.set_delimiter_before(" | ");
+    p_impl->number_widget.set_delimiter_before("");
+    p_impl->description_widget.set_delimiter_before(" ");
+    p_impl->percent_widget.set_delimiter_before(" ");
+    p_impl->progress_widget.set_delimiter_before(" ");
+    p_impl->speed_widget.set_delimiter_before(" | ");
+    p_impl->size_widget.set_delimiter_before(" | ");
+    p_impl->time_widget.set_delimiter_before(" | ");
 
     // set the default description widget width
     // we'll increase the size if terminal width allows
-    description_widget.set_width(21);
+    p_impl->description_widget.set_width(21);
 
     // create vector of all widgets
     std::vector<Widget *> widgets = {
-        &number_widget,
-        &description_widget,
-        &percent_widget,
-        &progress_widget,
-        &speed_widget,
-        &size_widget,
-        &time_widget,
+        &p_impl->number_widget,
+        &p_impl->description_widget,
+        &p_impl->percent_widget,
+        &p_impl->progress_widget,
+        &p_impl->speed_widget,
+        &p_impl->size_widget,
+        &p_impl->time_widget,
     };
 
     // remove widgets that are not visible
@@ -115,37 +150,39 @@ void DownloadProgressBar::to_stream(std::ostream & stream) {
     // if bar doesn't fit terminal width, hide progress widget
     std::size_t bar_width = get_bar_width(widgets);
     if (bar_width > terminal_width) {
-        widgets.erase(std::remove(widgets.begin(), widgets.end(), &progress_widget), widgets.end());
+        widgets.erase(std::remove(widgets.begin(), widgets.end(), &p_impl->progress_widget), widgets.end());
         bar_width = get_bar_width(widgets);
     }
 
     // if bar doesn't fit terminal width, hide speed widget
     if (bar_width > terminal_width) {
-        widgets.erase(std::remove(widgets.begin(), widgets.end(), &speed_widget), widgets.end());
-        speed_widget.set_delimiter_before(" ");
+        widgets.erase(std::remove(widgets.begin(), widgets.end(), &p_impl->speed_widget), widgets.end());
+        p_impl->speed_widget.set_delimiter_before(" ");
         bar_width = get_bar_width(widgets);
     }
 
     // if bar doesn't fit terminal width, hide time widget
     if (bar_width > terminal_width) {
-        widgets.erase(std::remove(widgets.begin(), widgets.end(), &time_widget), widgets.end());
+        widgets.erase(std::remove(widgets.begin(), widgets.end(), &p_impl->time_widget), widgets.end());
         bar_width = get_bar_width(widgets);
     }
 
     // if bar is finished, hide the progress widget
     if (get_state() != ProgressBarState::STARTED) {
-        widgets.erase(std::remove(widgets.begin(), widgets.end(), &progress_widget), widgets.end());
+        widgets.erase(std::remove(widgets.begin(), widgets.end(), &p_impl->progress_widget), widgets.end());
         bar_width = get_bar_width(widgets);
     }
 
     // if bar doesn't fit terminal width, reduce description width
     if (bar_width > terminal_width) {
-        description_widget.set_total_width(description_widget.get_total_width() + terminal_width - bar_width);
+        p_impl->description_widget.set_total_width(
+            p_impl->description_widget.get_total_width() + terminal_width - bar_width);
         bar_width = get_bar_width(widgets);
     }
 
     if (bar_width < terminal_width) {
-        description_widget.set_total_width(description_widget.get_total_width() + terminal_width - bar_width);
+        p_impl->description_widget.set_total_width(
+            p_impl->description_widget.get_total_width() + terminal_width - bar_width);
         bar_width = get_bar_width(widgets);
     }
 
