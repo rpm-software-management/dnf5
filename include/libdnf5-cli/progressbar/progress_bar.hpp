@@ -97,6 +97,11 @@ public:
     /// remove the last message
     void pop_message();
     const std::vector<Message> & get_messages() const noexcept;
+    const std::string & get_message_prefix() const noexcept;
+
+    /// Calculate number of lines occupied by messages when printed on terminal of the given width.
+    /// Takes new lines and wide utf characters into account.
+    std::size_t calculate_messages_terminal_lines(std::size_t terminal_width);
 
     // auto-finish feature; turn off if you want to handle state manually
     bool get_auto_finish() const noexcept;
@@ -116,6 +121,7 @@ public:
 
 protected:
     virtual void to_stream(std::ostream & stream) = 0;
+    std::size_t get_message_padding(std::size_t terminal_width, std::string_view message, std::size_t message_index);
 
 private:
     class LIBDNF_CLI_LOCAL Impl;

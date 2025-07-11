@@ -20,13 +20,24 @@
 
 #include "libdnf5-cli/progressbar/progress_bar.hpp"
 
+#include <optional>
+
 
 namespace libdnf5::cli::progressbar {
 
 class ProgressBar::Impl {
 public:
+    struct MessageMetrics {
+        std::size_t terminal_width;
+        std::size_t lines;
+        std::size_t padding;
+    };
+
     explicit Impl(int64_t total_ticks) : total_ticks{total_ticks} {}
     Impl(int64_t total_ticks, const std::string & description) : total_ticks{total_ticks}, description{description} {}
+
+    const MessageMetrics & get_message_metrics(
+        std::size_t terminal_width, std::string_view message, std::size_t message_index) noexcept;
 
     // ticks
     int64_t ticks = -1;
@@ -41,6 +52,10 @@ public:
 
     // messages
     std::vector<ProgressBar::Message> messages;
+    std::string message_prefix{">>> "};
+    // cache for number of terminal lines occupied by the message and padding
+    // needed to fill the last line completely.
+    std::vector<std::optional<MessageMetrics>> messages_metrics_cache;
 
     ProgressBarState state = ProgressBarState::READY;
 
@@ -59,6 +74,49 @@ public:
     int64_t current_speed = 0;
     int64_t current_speed_window_ticks = 0;
 };
+
+const ProgressBar::Impl::MessageMetrics & ProgressBar::Impl::get_message_metrics(
+    std::size_t terminal_width, std::string_view message, std::size_t message_index) noexcept {
+    auto & cached_mm = messages_metrics_cache.at(message_index);
+    if (cached_mm && (*cached_mm).terminal_width == terminal_width) {
+        // the value is cached and valid for current terminal_with
+        return *cached_mm;
+    }
+
+    std::size_t msg_lines = 1;
+    std::size_t current_column = 0;
+    std::mbstate_t mbstate = std::mbstate_t();
+
+    while (!message.empty()) {
+        if (message.front() == '\n') {
+            ++msg_lines;
+            current_column = 0;
+            message.remove_prefix(1);
+            continue;
+        }
+
+        // calculate the display width of the character
+        wchar_t wc;
+        auto bytes_consumed = std::mbrtowc(&wc, message.data(), message.size(), &mbstate);
+        if (bytes_consumed <= 0) {
+            break;
+        }
+        auto char_width = static_cast<std::size_t>(wcwidth(wc));
+
+        // If the character doesn't fit, wrap to the next line
+        if (current_column + char_width > terminal_width) {
+            ++msg_lines;
+            current_column = char_width;
+        } else {
+            current_column += char_width;
+        }
+
+        message.remove_prefix(static_cast<std::size_t>(bytes_consumed));
+    }
+    messages_metrics_cache[message_index].emplace(
+        MessageMetrics{terminal_width, msg_lines, terminal_width - current_column});
+    return messages_metrics_cache.at(message_index).value();
+}
 
 
 ProgressBar::~ProgressBar() = default;
@@ -125,10 +183,31 @@ void ProgressBar::set_description(const std::string & value) {
 
 void ProgressBar::add_message(MessageType type, const std::string & message) {
     p_impl->messages.emplace_back(type, message);
+    p_impl->messages_metrics_cache.emplace_back(std::nullopt);
 }
 
 const std::vector<ProgressBar::Message> & ProgressBar::get_messages() const noexcept {
     return p_impl->messages;
+}
+
+const std::string & ProgressBar::get_message_prefix() const noexcept {
+    return p_impl->message_prefix;
+}
+
+std::size_t ProgressBar::get_message_padding(
+    std::size_t terminal_width, std::string_view message, std::size_t message_index) {
+    return p_impl->get_message_metrics(terminal_width, message, message_index).padding;
+}
+
+std::size_t ProgressBar::calculate_messages_terminal_lines(std::size_t terminal_width) {
+    std::size_t num_lines = 0;
+    std::size_t message_index = 0;
+    for (const auto & [msg_type, msg] : get_messages()) {
+        std::string full_msg = p_impl->message_prefix + msg;
+        num_lines += p_impl->get_message_metrics(terminal_width, full_msg, message_index).lines;
+        ++message_index;
+    }
+    return num_lines;
 }
 
 bool ProgressBar::get_auto_finish() const noexcept {
@@ -294,6 +373,7 @@ void ProgressBar::set_total_ticks(int64_t value) {
 void ProgressBar::pop_message() {
     if (!p_impl->messages.empty()) {
         p_impl->messages.pop_back();
+        p_impl->messages_metrics_cache.pop_back();
     }
 }
 
