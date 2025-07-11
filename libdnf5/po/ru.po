@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-19 03:39+0000\n"
+"POT-Creation-Date: 2025-07-11 03:49+0000\n"
 "PO-Revision-Date: 2024-09-19 09:54+0000\n"
 "Last-Translator: Aleksey Fedorov <aleksejfedorov963@gmail.com>\n"
 "Language-Team: Russian <https://translate.fedoraproject.org/projects/dnf5/"
@@ -647,30 +647,30 @@ msgstr "Сбой импорта публичного ключа."
 msgid "Invalid tsflag: {}"
 msgstr "Недопустимый tsflag: {}"
 
-#: base/transaction.cpp:1318
+#: base/transaction.cpp:1314
 msgid "Public key \"{}\" is already present, not importing."
 msgstr "Публичный ключ \"{}\" уже присутствует, не импортируется."
 
-#: base/transaction.cpp:1339
+#: base/transaction.cpp:1335
 msgid "An error occurred importing key \"{}\": {}"
 msgstr "Произошла ошибка при импорте ключа \"{}\": {}"
 
-#: base/transaction.cpp:1373
+#: base/transaction.cpp:1369
 #, fuzzy
 #| msgid "PGP check for package \"{}\" ({}) from repo \"{}\" has failed: "
 msgid "OpenPGP check for package \"{}\" ({}) from repo \"{}\" has failed: "
 msgstr "Сбой проверки PGP для пакета \"{}\" ({}) из репозитория \"{}\": "
 
-#: base/transaction.cpp:1401
+#: base/transaction.cpp:1397
 msgid "Import of the key didn't help, wrong key?"
 msgstr "Импорт ключа не помог, неправильный ключ?"
 
-#: base/transaction.cpp:1420
+#: base/transaction.cpp:1416
 msgctxt "It is a joining character for repositories IDs"
 msgid ", "
 msgstr ", "
 
-#: base/transaction.cpp:1423
+#: base/transaction.cpp:1419
 #, fuzzy
 #| msgid "Warning: skipped PGP checks for {0} packages from repository: {1}"
 #| msgid_plural ""
@@ -685,7 +685,7 @@ msgstr[1] ""
 msgstr[2] ""
 "Предупреждение: пропущены проверки PGP для {0} пакетов из репозиториев: {1}"
 
-#: base/transaction.cpp:1426
+#: base/transaction.cpp:1422
 #, fuzzy
 #| msgid "Warning: skipped PGP checks for {0} packages from repository: {1}"
 #| msgid_plural ""
@@ -1007,7 +1007,7 @@ msgstr ""
 msgid "Repository \"{}\" has unsupported type \"{}\", skipping."
 msgstr "Репозиторий \"{}\" имеет неподдерживаемый тип \"{}\", пропуск."
 
-#: repo/repo.cpp:221 repo/repo.cpp:241 repo/repo_sack.cpp:372
+#: repo/repo.cpp:221 repo/repo.cpp:241 repo/repo_sack.cpp:368
 #, fuzzy
 #| msgid "Failed to download metadata ({}: \"{}\") for repository \"{}\""
 msgid "Failed to download metadata ({}: \"{}\") for repository \"{}\": {}"
@@ -1104,7 +1104,7 @@ msgstr ""
 "Не удалось создать репозиторий \"{}\": Идентификатор присутствует в "
 "конфигурации более одного раза"
 
-#: repo/repo_sack.cpp:635
+#: repo/repo_sack.cpp:631
 msgid "Cache-only enabled but no cache for repository \"{}\""
 msgstr "Включено только кэширование, но нет кэша для репозитория \"{}\""
 

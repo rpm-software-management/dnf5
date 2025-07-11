@@ -1,0 +1,1731 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# Sijmen Schoon <fedora@vijf.life>, 2025.
+# Weblate Translation Memory <noreply-mt-weblate-translation-memory@weblate.org>, 2025.
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-07-11 03:49+0000\n"
+"PO-Revision-Date: 2025-06-24 22:34+0000\n"
+"Last-Translator: Sijmen Schoon <fedora@vijf.life>\n"
+"Language-Team: Dutch <https://translate.fedoraproject.org/projects/dnf5/"
+"libdnf5/nl/>\n"
+"Language: nl\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.12.2\n"
+
+#: advisory/advisory.cpp:81
+msgid ""
+"Bad libsolv id for advisory \"{}\", solvable name \"{}\" doesn't have "
+"advisory prefix \"{}\""
+msgstr ""
+"Ongeldige libsolv-id voor advies \"{}\", oplosbare naam \"{}\" bevat geen "
+"adviesvoorvoegsel \"{}\""
+
+#: base/goal.cpp:472
+msgid "Unsupported argument for REMOVE action: {}"
+msgstr "Niet-ondersteund argument voor REMOVE-actie: {}"
+
+#. TODO(lukash) throw a proper exception
+#: base/goal.cpp:1641
+msgid "Incorrect configuration value for multilib_policy: {}"
+msgstr "Incorrecte configuratiewaarde voor multilib_policy: {}"
+
+#: base/goal_elements.cpp:352
+msgid "Install"
+msgstr "Installeren"
+
+#: base/goal_elements.cpp:354
+msgid "Install via provide"
+msgstr "Installeren via voorziening"
+
+#: base/goal_elements.cpp:356
+msgid "Install by group"
+msgstr "Installeren op basis van groep"
+
+#: base/goal_elements.cpp:358
+msgid "Upgrade"
+msgstr "Upgraden"
+
+#: base/goal_elements.cpp:360
+msgid "Upgrade all"
+msgstr "Alles upgraden"
+
+#: base/goal_elements.cpp:362
+msgid "Upgrade minimal"
+msgstr "Minimaal upgraden"
+
+#: base/goal_elements.cpp:364
+msgid "Upgrade all minimal"
+msgstr "Alles minimaal upgraden"
+
+#: base/goal_elements.cpp:366
+msgid "Downgrade"
+msgstr "Downgraden"
+
+#: base/goal_elements.cpp:368
+msgid "Reinstall"
+msgstr "Herinstalleren"
+
+#: base/goal_elements.cpp:370
+msgid "Install or reinstall"
+msgstr "(Her)installeren"
+
+#: base/goal_elements.cpp:372
+msgid "Remove"
+msgstr "Verwijderen"
+
+#: base/goal_elements.cpp:374
+msgid "Distrosync"
+msgstr "Distrosync"
+
+#: base/goal_elements.cpp:376
+msgid "Distrosync all"
+msgstr "Alles distrosyncen"
+
+#: base/goal_elements.cpp:378
+msgid "Reason Change"
+msgstr "Redenwijziging"
+
+#: base/goal_elements.cpp:380
+msgid "Resolve"
+msgstr "Oplossen"
+
+#: base/goal_elements.cpp:382
+msgid "Enable"
+msgstr "Inschakelen"
+
+#: base/goal_elements.cpp:384
+msgid "Disable"
+msgstr "Uitschakelen"
+
+#: base/goal_elements.cpp:386
+msgid "Reset"
+msgstr "Resetten"
+
+#: base/goal_elements.cpp:388
+msgid "Parse serialized transaction"
+msgstr "Geserialiseerde transactie parsen"
+
+#: base/goal_elements.cpp:390
+msgid "Install action"
+msgstr "Installeeractie"
+
+#: base/goal_elements.cpp:392
+msgid "Remove action"
+msgstr "Verwijderactie"
+
+#: base/goal_elements.cpp:394
+msgid "Upgrade action"
+msgstr "Upgrade-actie"
+
+#: base/goal_elements.cpp:396
+msgid "Reinstall action"
+msgstr "Herinstalleeractie"
+
+#: base/goal_elements.cpp:398
+msgid "Reason change action"
+msgstr "Redenwijzigingsactie"
+
+#: base/goal_elements.cpp:400
+msgid "Reason override"
+msgstr "Redenoverschrijving"
+
+#: base/goal_elements.cpp:402
+msgid "Revert comps upgrade"
+msgstr "Comps-upgrade terugzetten"
+
+#: base/goal_elements.cpp:404
+msgid "Install debug RPMs"
+msgstr "Debug-RPM's installeren"
+
+#: base/goal_elements.cpp:406
+msgid "Transaction merge"
+msgstr "Transactiesamenvoeging"
+
+#: base/log_event.cpp:141
+msgid "No packages to remove for argument: {}"
+msgstr "Geen pakketten om te verwijderen voor argument: {}"
+
+#: base/log_event.cpp:143
+msgid "No groups to remove for argument: {}"
+msgstr "Geen groepen om te verwijderen voor argument: {}"
+
+#: base/log_event.cpp:146
+msgid "No environmental groups to remove for argument: {}"
+msgstr "Geen omgevingsgroepen om te verwijderen voor argument: {}"
+
+#: base/log_event.cpp:148
+msgid "No modules to remove for argument: {}"
+msgstr "Geen modules om te verwijderen voor argument: {}"
+
+#: base/log_event.cpp:152
+msgid "No match for group from environment: {}"
+msgstr "Geen overeenkomst voor groep in omgeving: {}"
+
+#: base/log_event.cpp:154
+msgid "No match for group package: {}"
+msgstr "Geen overeenkomst voor groepspakket: {}"
+
+#: base/log_event.cpp:158
+msgid "Cannot perform {0}, no match for: {1}."
+msgstr "Kan {0} niet uitvoeren, geen overeenkomst voor: {1}."
+
+#: base/log_event.cpp:160
+msgid "No match for argument: {}"
+msgstr "Geen overeenkomst voor argument: {}"
+
+#: base/log_event.cpp:163
+msgid "No match for argument '{0}' in selected advisories"
+msgstr "Geen overeenkomst voor argument '{0}' in de geselecteerde adviezen"
+
+#: base/log_event.cpp:165
+msgid "No match in selected advisories"
+msgstr "Geen overeenkomst in de geselecteerde adviezen"
+
+#: base/log_event.cpp:169
+msgid "No match for argument '{0}' in repositories '{1}'"
+msgstr "Geen overeenkomst voor argument '{0}' in repositories '{1}'"
+
+#: base/log_event.cpp:175
+msgid "Cannot perform {0} for {1} '{2}' because it is not installed."
+msgstr ""
+"Kan {0} niet uitvoeren voor {1} '{2}', omdat deze niet geinstalleerd is."
+
+#: base/log_event.cpp:180
+msgid "Packages for argument '{}' available, but not installed."
+msgstr "Pakketten beschikbaar voor argument '{}', maar niet geïnstalleerd."
+
+#: base/log_event.cpp:184
+msgid ""
+"Packages for argument '{}' available, but installed for a different "
+"architecture."
+msgstr ""
+"Pakketten beschikbaar voor argument '{}', maar geïnstalleerd voor een andere "
+"architectuur."
+
+#: base/log_event.cpp:188
+msgid "Cannot perform {0} because '{1}' matches only source packages."
+msgstr ""
+"Kan {0} niet uitvoeren omdat '{1}' alleen overeenkomst met bronpakketten."
+
+#: base/log_event.cpp:192
+msgid "Argument '{}' matches only source packages."
+msgstr "Argument '{}' komt alleen overeen met bronpakketten."
+
+#: base/log_event.cpp:196
+msgid "Cannot perform {0} because '{1}' matches only excluded packages."
+msgstr ""
+"Kan {0} niet uitvoeren omdat '{1}' alleen overeenkomt met uitgesloten "
+"pakketten."
+
+#: base/log_event.cpp:200
+msgid "Argument '{}' matches only excluded packages."
+msgstr "Argument '{}' komt alleen overeen met uitgesloten pakketten."
+
+#: base/log_event.cpp:204
+msgid ""
+"Cannot perform {0} because '{1}' matches only packages excluded by "
+"versionlock."
+msgstr ""
+"Kan {0} niet uitvoeren omdat '{1}' alleen overeenkomt met door versionlock "
+"uitgesloten pakketten."
+
+#: base/log_event.cpp:208
+msgid "Argument '{}' matches only packages excluded by versionlock."
+msgstr ""
+"Argument '{}' komt alleen overeen met door versionlock uitgesloten pakketten."
+
+#: base/log_event.cpp:213
+msgid "  * Maybe you meant: {}"
+msgstr "  * Misschien bedoelde je: {}"
+
+#: base/log_event.cpp:216
+msgid "There are following alternatives for '{0}': {1}"
+msgstr "Er zijn de volgende alternatieven voor '{0}': {1}"
+
+#: base/log_event.cpp:223
+msgid ""
+"The lowest available version of the \"{}\" package is already installed, "
+"cannot downgrade it."
+msgstr ""
+"De laagst beschikbare versie van het pakket \"{}\"s al geïnstalleerd; "
+"downgraden is niet mogelijk."
+
+#: base/log_event.cpp:229
+msgid ""
+"Installed packages for argument '{0}' are not available in repositories in "
+"the same version, available versions: {1}, cannot reinstall."
+msgstr ""
+"Geïnstalleerde pakketten voor argument '{0}' zijn niet beschikbaar in "
+"dezelfde versie in repositories. Beschikbare versies: {1}. Herinstallatie is "
+"niet mogelijk."
+
+#: base/log_event.cpp:235
+msgid ""
+"Cannot perform {0} because '{1}' is installed in a different version: '{2}'."
+msgstr ""
+"Kan {0} niet uitvoeren omdat '{1}' geïnstalleerd is in een andere versie: "
+"'{2}'."
+
+#: base/log_event.cpp:241
+msgid ""
+"Packages for argument '{}' installed and available, but in a different "
+"version."
+msgstr ""
+"Pakketten voor argument '{}' zijn geïnstalleerd en beschikbaar, maar in een "
+"andere versie."
+
+#: base/log_event.cpp:243
+msgid "Packages for argument '{}' installed, but not available."
+msgstr ""
+"Pakketten voor argument '{}' zijn geïnstalleerd, maar niet beschikbaar."
+
+#: base/log_event.cpp:252
+msgid "Package \"{}\" is already installed with reason \"{}\"."
+msgstr "Pakket \"{}\" is al geïnstalleerd met reden \"{}\"."
+
+#: base/log_event.cpp:254
+msgid "Package \"{}\" is already installed."
+msgstr "Pakket \"{}\" is al geïnstalleerd."
+
+#: base/log_event.cpp:263
+msgid "Debug data written to \"{}\""
+msgstr "Debuggegevens geschreven naar \"{}\""
+
+#: base/log_event.cpp:267
+msgid ""
+"{0} upgrade cannot be reverted, however associated package actions will be. "
+"({1} id: '{2}') ."
+msgstr ""
+"{0}-upgrade kan niet worden teruggedraaid, maar bijbehorende pakketacties "
+"wel. ({1} id: '{2}')."
+
+#: base/log_event.cpp:273
+msgid "{} action for argument \"{}\" is not supported."
+msgstr "{}-actie voor argument \"{}\" is niet ondersteund."
+
+#. Format a leading line of the error message.
+#: base/log_event.cpp:282
+msgid "Unable to resolve argument '{}':"
+msgstr "Kan argument '{}' niet oplossen:"
+
+#: base/log_event.cpp:286
+msgid ""
+"\n"
+"  - Argument '{}' matches {} stream ('{}') of module '{}', but the stream is "
+"not enabled or default."
+msgid_plural ""
+"\n"
+"  - Argument '{}' matches {} streams ('{}') of module '{}', but none of the "
+"streams are enabled or default."
+msgstr[0] ""
+"\n"
+"  - Argument '{}' komt overeen met {} stream ('{}') van module '{}', maar de "
+"stream is niet ingeschakeld of standaard."
+msgstr[1] ""
+"\n"
+"  - Argument '{}' komt overeen met {} streams ('{}') van module '{}', maar "
+"de stream is niet ingeschakeld of standaard."
+
+#: base/log_event.cpp:293
+msgid "', '"
+msgstr "', '"
+
+#: base/log_event.cpp:302
+msgid "Modular dependency problems:\n"
+msgstr "Problemen met modulaire afhankelijkheden:\n"
+
+#: base/log_event.cpp:309
+msgid "Modular dependency problems with the latest modules:\n"
+msgstr "Problemen met modulaire afhankelijkheden met de laatste modules:\n"
+
+#: base/log_event.cpp:316
+msgid "Modular dependency problems with the defaults:\n"
+msgstr "Problemen met modulaire afhankelijkheden met de standaardwaarden:\n"
+
+#: base/log_event.cpp:331
+msgid ""
+"The operation would result in switching of module '{0}' stream '{1}' to "
+"stream '{2}'\n"
+msgstr ""
+"De bewerking zou resulteren in het overschakelen van module '{0}' van stream "
+"'{1}' naar stream '{2}'\n"
+
+#: base/log_event.cpp:336
+msgid ""
+"Error: It is not possible to switch enabled streams of a module unless "
+"explicitly enabled via configuration option module_stream_switch."
+msgstr ""
+"Fout: Het is niet mogelijk om ingeschakelde streams van een module te "
+"wisselen, tenzij dit expliciet is toegestaan via de configuratie-optie "
+"module_stream_switch."
+
+#: base/log_event.cpp:341
+msgid ""
+"Extra package '{0}' (with action '{1}') which is not present in the stored "
+"transaction was pulled into the transaction.\n"
+msgstr ""
+"Extra pakket '{0}' (met actie '{1}') dat niet aanwezig is in de opgeslagen "
+"transactie, is aan de transactie toegevoegd.\n"
+
+#: base/log_event.cpp:347
+msgid "Cannot parse file: '{0}': {1}.\n"
+msgstr "Kan bestand niet parsen: '{0}': {1}.\n"
+
+#: base/log_event.cpp:354
+msgid ""
+"Could not find debuginfo package for the following packages resolved from "
+"the argument '{0}': {1}"
+msgstr ""
+"Kon geen debuginfo-pakket vinden voor de volgende pakketten die zijn "
+"gevonden via het argument '{0}': {1}"
+
+#: base/log_event.cpp:357 base/log_event.cpp:368
+msgctxt "String for joining NEVRAs - e.g. `foo-4-4.noarch, bar-5-5.noarch`"
+msgid ", "
+msgstr ", "
+
+#: base/log_event.cpp:364
+msgid ""
+"Could not find debugsource package for the following packages resolved from "
+"the argument '{0}': {1}"
+msgstr ""
+"Kon geen debugsource-pakket vinden voor de volgende pakketten die zijn "
+"gevonden via het argument '{0}': {1}"
+
+#: base/log_event.cpp:371
+msgid "Transaction merge error: '{0}'"
+msgstr "Fout bij samenvoegen van transacties: '{0}'"
+
+#: base/solver_problems.cpp:41
+msgid "{} does not belong to a distupgrade repository"
+msgstr "{} behoort niet tot een distupgrade-repository"
+
+#: base/solver_problems.cpp:42
+msgid "{0} from {1} has inferior architecture"
+msgstr "{0} van {1} heeft een inferieure architectuur"
+
+#: base/solver_problems.cpp:43
+msgid "problem with installed package"
+msgstr "probleem met geïnstalleerd pakket"
+
+#: base/solver_problems.cpp:44 base/solver_problems.cpp:80
+msgid "conflicting requests"
+msgstr "tegenstrijdige verzoeken"
+
+#: base/solver_problems.cpp:45 base/solver_problems.cpp:81
+msgid "unsupported request"
+msgstr "niet-ondersteund verzoek"
+
+#: base/solver_problems.cpp:46 base/solver_problems.cpp:82
+msgid "nothing provides requested {}"
+msgstr "niets biedt het aangevraagde {} aan"
+
+#: base/solver_problems.cpp:47
+msgid "package {} does not exist"
+msgstr "pakket {} bestaat niet"
+
+#: base/solver_problems.cpp:48 base/solver_problems.cpp:84
+msgid "{} is provided by the system"
+msgstr "{} wordt door het systeem aangeboden"
+
+#: base/solver_problems.cpp:49 base/solver_problems.cpp:85
+msgid "some dependency problem"
+msgstr "een of ander afhankelijkheidsprobleem"
+
+#: base/solver_problems.cpp:50
+msgid "cannot install the best update candidate for package {}"
+msgstr "kan de beste update-kandidaat voor pakket {} niet installeren"
+
+#: base/solver_problems.cpp:51 base/solver_problems.cpp:87
+msgid "cannot install the best candidate for the job"
+msgstr "kan de beste kandidaat voor de taak niet installeren"
+
+#: base/solver_problems.cpp:52
+msgid "package {0} from {1} is filtered out by modular filtering"
+msgstr "pakket {0} van {1} is uitgesloten door modulaire filtering"
+
+#: base/solver_problems.cpp:53
+msgid "package {0} from {1} does not have a compatible architecture"
+msgstr "pakket {0} van {1} heeft geen compatibele architectuur"
+
+#: base/solver_problems.cpp:54
+msgid "package {0} from {1} is not installable"
+msgstr "pakket {0} van {1} is niet installeerbaar"
+
+#: base/solver_problems.cpp:55
+msgid "package {0} from {1} is filtered out by exclude filtering"
+msgstr "pakket {0} van {1} is uitgesloten door uitsluitfiltering"
+
+#: base/solver_problems.cpp:56
+msgid "nothing provides {0} needed by {1} from {2}"
+msgstr "niets biedt {0} aan dat nodig is voor {1} van {2}"
+
+#: base/solver_problems.cpp:57
+msgid "cannot install both {0} from {1} and {2} from {3}"
+msgstr "kan niet tegelijkertijd {0} van {1} én {2} van {3} installeren"
+
+#: base/solver_problems.cpp:58
+msgid "package {0} from {1} conflicts with {2} provided by {3} from {4}"
+msgstr ""
+"pakket {0} van {1} conflicteert met {2}, dat door {3} van {4} aangeboden "
+"wordt"
+
+#: base/solver_problems.cpp:60
+msgid "installed package {0} conflicts with {1} provided by {2} from {3}"
+msgstr ""
+"geïnstalleerd pakket {0} conflicteert met {1}, dat door {2} van {3} "
+"aangeboden wordt"
+
+#: base/solver_problems.cpp:61
+msgid "package {0} from {1} obsoletes {2} provided by {3} from {4}"
+msgstr "pakket {0} van {1} vervangt {2}, dat door {3} van {4} aangeboden wordt"
+
+#: base/solver_problems.cpp:62
+msgid "installed package {0} obsoletes {1} provided by {2} from {3}"
+msgstr ""
+"geïnstalleerd pakket {0} vervangt {1}, dat door {2} van {3} aangeboden wordt"
+
+#: base/solver_problems.cpp:64
+msgid "package {0} from {1} implicitly obsoletes {2} provided by {3} from {4}"
+msgstr ""
+"pakket {0} van {1} vervangt impliciet {2}, dat door {3} van {4} aangeboden "
+"wordt"
+
+#: base/solver_problems.cpp:66
+msgid ""
+"package {1} from {2} requires {0}, but none of the providers can be installed"
+msgstr ""
+"pakket {1} van {2} vereist {0}, maar geen van de aanbieders kan worden "
+"geïnstalleerd"
+
+#: base/solver_problems.cpp:68
+msgid ""
+"installed package {1} requires {0}, but none of the providers can be "
+"installed"
+msgstr ""
+"geïnstalleerd pakket {1} vereist {0}, maar geen van de aanbieders kan worden "
+"geïnstalleerd"
+
+#: base/solver_problems.cpp:69
+msgid "package {0} from {1} conflicts with {2} provided by itself"
+msgstr ""
+"pakket {0} van {1} conflicteert met {2}, dat door zichzelf aangeboden wordt"
+
+#: base/solver_problems.cpp:70
+msgid "both package {0} from {1} and {3} from {4} obsolete {2}"
+msgstr "zowel pakket {0} van {1} als {3} van {4} vervangen {2}"
+
+#: base/solver_problems.cpp:72
+msgid ""
+"The operation would result in removing the following protected packages: {}"
+msgstr ""
+"De operatie zou ertoe leiden dat de volgende beschermde pakketten verwijderd "
+"worden: {}"
+
+#: base/solver_problems.cpp:75
+msgid "The operation would result in removing of running kernel: {}"
+msgstr ""
+"De operatie zou er toe leiden dat de draaiende kernel wordt vervangen: {}"
+
+#: base/solver_problems.cpp:77
+msgid "module {} does not belong to a distupgrade repository"
+msgstr "module {} hoort niet bij een distupgrade-repository"
+
+#: base/solver_problems.cpp:78
+msgid "module {} has inferior architecture"
+msgstr "module {} heeft een inferieure architectuur"
+
+#: base/solver_problems.cpp:79
+msgid "problem with installed module {}"
+msgstr "probleem met geïnstalleerde module {}"
+
+#: base/solver_problems.cpp:83
+msgid "module {} does not exist"
+msgstr "module {} bestaat niet"
+
+#: base/solver_problems.cpp:86
+msgid "cannot install the best update candidate for module {}"
+msgstr "kan de beste update-kandidaat voor module {} niet installeren"
+
+#: base/solver_problems.cpp:88 base/solver_problems.cpp:91
+msgid "module {} is disabled"
+msgstr "module {} is uitgeschakeld"
+
+#: base/solver_problems.cpp:89
+msgid "module {} does not have a compatible architecture"
+msgstr "module {} heeft geen compatibele architectuur"
+
+#: base/solver_problems.cpp:90
+msgid "module {} is not installable"
+msgstr "module {} is niet installeerbaar"
+
+#: base/solver_problems.cpp:92
+msgid "nothing provides {0} needed by module {1}"
+msgstr "niets biedt {0} aan, dat nodig is voor module {1}"
+
+#: base/solver_problems.cpp:93
+msgid "cannot install both modules {0} and {1}"
+msgstr "kan modules {0} en {1} niet tegelijk installeren"
+
+#: base/solver_problems.cpp:94
+msgid "module {0} conflicts with {1} provided by {2}"
+msgstr "module {0} conflicteert met {1}, dat door {2} aangeboden wordt"
+
+#: base/solver_problems.cpp:95
+msgid "module {0} obsoletes {1} provided by {2}"
+msgstr "module {0} vervangt {1}, dat door {2} aangeboden wordt"
+
+#: base/solver_problems.cpp:96
+msgid "installed module {0} obsoletes {1} provided by {2}"
+msgstr "geïnstalleerde module {0} vervangt {1}, dat door {2} aangeboden wordt"
+
+#: base/solver_problems.cpp:97
+msgid "module {0} implicitly obsoletes {1} provided by {2}"
+msgstr "module {0} vervangt impliciet {1}, dat door {2} aangeboden wordt"
+
+#: base/solver_problems.cpp:98
+msgid "module {1} requires {0}, but none of the providers can be installed"
+msgstr ""
+"module {1} vereist {0}, maar geen van de aanbieders kan worden geïnstalleerd"
+
+#: base/solver_problems.cpp:99
+msgid "module {1} conflicts with {0} provided by itself"
+msgstr "module {1} conflicteert met {0}, dat door zichzelf aangeboden wordt"
+
+#: base/solver_problems.cpp:100
+msgid "both module {0} and {2} obsolete {1}"
+msgstr "modules {0} en {2} vervangen beiden {1}"
+
+#: base/solver_problems.cpp:290
+msgid "Problem: "
+msgstr "Probleem: "
+
+#: base/solver_problems.cpp:294
+msgid "Problem {}: "
+msgstr "Probleem {}: "
+
+#: base/transaction.cpp:80
+msgid "This transaction has been already run before."
+msgstr "Deze transactie is al een keer uitgevoerd."
+
+#: base/transaction.cpp:81
+msgid "Cannot run transaction with resolving problems."
+msgstr "Kan transactie niet uitvoeren vanwege oplossingsproblemen."
+
+#: base/transaction.cpp:82
+msgid "Rpm transaction check failed."
+msgstr "Rpm-transactiecontrole is mislukt."
+
+#: base/transaction.cpp:84
+msgid ""
+"Failed to obtain rpm transaction lock. Another transaction is in progress."
+msgstr ""
+"Kon rpm-transactieslot niet verkrijgen. Er draait al een andere transactie."
+
+#: base/transaction.cpp:85
+msgid "Rpm transaction failed."
+msgstr "Rpm-transactie mislukt."
+
+#: base/transaction.cpp:86
+msgid "Signature verification failed."
+msgstr "Handtekeningsverificatie is mislukt."
+
+#: base/transaction.cpp:90
+msgid "The repository does not have any OpenPGP keys configured."
+msgstr "De repository heeft geen geconfigureerde OpenPGP-sleutels."
+
+#: base/transaction.cpp:91
+msgid "Public key is not installed."
+msgstr "Publieke sleutel is niet geïnstalleerd."
+
+#: base/transaction.cpp:92
+msgid "Canceled by the user."
+msgstr "Geannuleerd door de gebruiker."
+
+#: base/transaction.cpp:93
+msgid "Public key import failed."
+msgstr "Importeren van publieke sleutel is mislukt."
+
+#: base/transaction.cpp:980
+msgid "Invalid tsflag: {}"
+msgstr "Ongeldige tsflag: {}"
+
+#: base/transaction.cpp:1314
+msgid "Public key \"{}\" is already present, not importing."
+msgstr "Publieke sleutel \"{}\" is al aanwezig; import wordt overgeslagen."
+
+#: base/transaction.cpp:1335
+msgid "An error occurred importing key \"{}\": {}"
+msgstr "Er is een fout opgetreden bij het importeren van sleutel \"{}\": {}"
+
+#: base/transaction.cpp:1369
+msgid "OpenPGP check for package \"{}\" ({}) from repo \"{}\" has failed: "
+msgstr ""
+"OpenPGP-controle voor pakket \"{}\" ({})\" van repository \"{}\" is mislukt: "
+
+#: base/transaction.cpp:1397
+msgid "Import of the key didn't help, wrong key?"
+msgstr "Het importeren van de sleutel hielp niet — verkeerde sleutel?"
+
+#: base/transaction.cpp:1416
+msgctxt "It is a joining character for repositories IDs"
+msgid ", "
+msgstr ", "
+
+#: base/transaction.cpp:1419
+msgid "Warning: skipped OpenPGP checks for {0} package from repository: {1}"
+msgid_plural ""
+"Warning: skipped OpenPGP checks for {0} packages from repository: {1}"
+msgstr[0] ""
+"Waarschuwing: OpenPGP-controles overgeslagen voor {0} pakket uit repository: "
+"{1}"
+msgstr[1] ""
+"Waarschuwing: OpenPGP-controles overgeslagen voor {0} pakketten uit "
+"repository: {1}"
+
+#: base/transaction.cpp:1422
+msgid "Warning: skipped OpenPGP checks for {0} package from repositories: {1}"
+msgid_plural ""
+"Warning: skipped OpenPGP checks for {0} packages from repositories: {1}"
+msgstr[0] ""
+"Waarschuwing: OpenPGP-controles overgeslagen voor {0} pakket uit "
+"repository's: {1}"
+msgstr[1] ""
+"Waarschuwing: OpenPGP-controles overgeslagen voor {0} pakketten uit "
+"repository's: {1}"
+
+#: common/exception.cpp:78
+msgid "System error"
+msgstr "Systeemfout"
+
+#: common/exception.cpp:199
+msgid "General RuntimeError exception"
+msgstr "Algemene RuntimeError-fout"
+
+#: common/sack/query.cpp:27
+msgid "Query must contain exactly one object."
+msgstr "Query moet exact één object bevatten."
+
+#: common/xdg.cpp:43
+msgid "get_user_home_dir(): Cannot determine the user's home directory"
+msgstr "get_user_home_dir(): Kan home-map van de gebruiker niet bepalen"
+
+#: common/xdg.cpp:98
+msgid "get_user_runtime_dir(): Cannot determine the user's runtime directory"
+msgstr ""
+"get_user_runtime_dir(): Kan de runtime-map van de gebruiker niet bepalen"
+
+#: comps/environment/environment.cpp:325
+msgid "failed to save xml document for comps"
+msgstr "kon het xml-document voor comps niet opslaan"
+
+#: comps/group/group.cpp:373
+msgid "Failed to save xml document for group \"{}\" to file \"{}\": {}"
+msgstr ""
+"Kon het xml-document voor groep \"{}\" niet opslaan naar bestand \"{}\": {}"
+
+#: comps/group/package.cpp:118 comps/group/package.cpp:121
+msgid "Invalid package type: {}"
+msgstr "Ongeldig pakkettype: {}"
+
+#: conf/config_main.cpp:57
+msgid "Input is empty. Must contain a value."
+msgstr "Invoer is leeg. Er moet een waarde worden opgegeven."
+
+#: conf/config_main.cpp:63
+msgid "Input value '{}' must not be negative"
+msgstr "Invoerwaarde '{}' mag niet negatief zijn"
+
+#: conf/config_main.cpp:68
+msgid "Could not convert '{}' to bytes"
+msgstr "Kon '{}' niet converteren naar bytes"
+
+#: conf/config_main.cpp:84
+msgid "Unknown unit '{}'"
+msgstr "Onbekende eenheid '{}'"
+
+#: conf/config_main.cpp:281
+msgid "The throttle value {} is outside the allowed range {} ... {}"
+msgstr "De throttle-waarde {} ligt buiten het toegestane bereik {} ... {}"
+
+#: conf/config_parser.cpp:54
+msgid "Section \"{}\" not found"
+msgstr "Sectie \"{}\" niet gevonden"
+
+#: conf/config_parser.cpp:59
+msgid "Section \"{}\" does not contain option \"{}\""
+msgstr "Sectie \"{}\" bevat geen optie \"{}\""
+
+#: conf/config_parser.cpp:96
+msgid "Configuration file \"{}\" not found"
+msgstr "Configuratiebestand \"{}\" niet gevonden"
+
+#: conf/config_parser.cpp:99
+msgid "Unable to access configuration file \"{}\""
+msgstr "Kon configuratiebestand \"{}\" niet openen"
+
+#: conf/config_parser.cpp:102
+msgid "Error in configuration file \"{}\""
+msgstr "Fout in configuratiebestand \"{}\""
+
+#: conf/option_binds.cpp:29
+msgid "Option \"{}\" not found"
+msgstr "Optie \"{}\" niet gevonden"
+
+#: conf/option_binds.cpp:32
+msgid "Option \"{}\" already exists"
+msgstr "Optie \"{}\" bestaat al"
+
+#: conf/option_bool.cpp:82
+msgid "Invalid boolean value \"{}\""
+msgstr "Ongeldige booleaanse waarde \"{}\""
+
+#: conf/option_enum.cpp:68
+msgid "Enum option value \"{}\" not allowed"
+msgstr "Enum-optiewaarde \"{}\" niet toegestaan"
+
+#: conf/option_number.cpp:99
+msgid "Input value {} is outside the allowed range {} ... {}"
+msgstr "Invoerwaarde {} is buiten het toegestane bereik {} ... {}"
+
+#: conf/option_number.cpp:112
+msgid "Invalid number option value \"{}\""
+msgstr "Ongeldige nummeroptiewaarde \"{}\""
+
+#: conf/option_path.cpp:93
+msgid "Only absolute paths allowed, relative path \"{}\" detected"
+msgstr ""
+"Alleen absolute paden zijn toegestaan, maar een relatief pad \"{}\" is "
+"gedetecteerd"
+
+#: conf/option_path.cpp:98
+msgid "Path \"{}\" does not exist"
+msgstr "Pad \"{}\" bestaat niet"
+
+#: conf/option_seconds.cpp:38
+msgid "Empty time option value"
+msgstr "Lege tijdoptiewaarde"
+
+#: conf/option_seconds.cpp:50
+msgid "Invalid time option value \"{}\", number or \"never\" expected"
+msgstr "Ongeldige tijdoptiewaarde \"{}\", nummer of \"never\" verwacht"
+
+#: conf/option_seconds.cpp:54
+msgid ""
+"Invalid time option value \"{}\", negative values except \"-1\" not allowed"
+msgstr ""
+"Ongeldige tijdoptiewaarde \"{}\", behalve \"-1\" zijn negatieve waarden niet "
+"toegestaan"
+
+#: conf/option_seconds.cpp:59
+msgid "Unknown time format \"{}\""
+msgstr "Onbekend tijdformaat \"{}\""
+
+#: conf/option_seconds.cpp:78
+msgid "Unknown time unit '{}'"
+msgstr "Ongebekende tijdseenheid '{}'"
+
+#: conf/option_string.cpp:89
+msgid ""
+"Input value \"{}\" not allowed, allowed values for this option are defined "
+"by regular expression \"{}\""
+msgstr ""
+"Invoerwaarde \"{}\" is niet toegestaan; toegestane waarden voor deze optie "
+"zijn gedefinieerd door de reguliere expressie \"{}\""
+
+#. TODO(jrohel): We don't know the option name at this time. Add a text name to the options
+#. or extend exception (add name) in upper layer.
+#: conf/option_string.cpp:114
+msgid "Option value is not set"
+msgstr "Optiewaarde is niet ingesteld"
+
+#: conf/option_string_list.cpp:175
+msgid ""
+"Input item value \"{}\" not allowed, allowed values for this option are "
+"defined by regular expression \"{}\""
+msgstr ""
+"Invoeritemwaarde \"{}\" is niet toegestaan; toegestane waarden voor deze "
+"optie zijn gedefinieerd door de reguliere expressie \"{}\""
+
+#: conf/vars.cpp:313 conf/vars.cpp:353
+msgid "Variable \"{}\" is read-only"
+msgstr "Variabele \"{}\" is alleen-lezen"
+
+#: logger/rotating_file_logger.cpp:65
+msgid "Cannot open log file"
+msgstr "Kan logbestand niet openen"
+
+#: module/module_db.cpp:76 module/module_db.cpp:85 module/module_sack.cpp:767
+msgid "No such module: {}"
+msgstr "Geen dergelijke module: {}"
+
+#: module/module_db.cpp:268
+msgid "Cannot enable multiple streams for module '{}'"
+msgstr "Kan meerdere streams voor module '{}' niet inschakelen"
+
+#. TODO(pkratoch) replace with a proper and descriptive exception
+#. TODO(jmracek) else if (removalOfProtected && removalOfProtected->size()) {
+#. throw Goal::Error(_("no solution, cannot remove protected package"),
+#. DNF_ERROR_REMOVAL_OF_PROTECTED_PKG);
+#. }
+#. TODO(lukash) replace with a proper and descriptive exception
+#: module/module_goal_private.cpp:83 rpm/solv/goal_private.cpp:342
+#: rpm/solv/goal_private.cpp:764
+msgid "no solution possible"
+msgstr "geen oplossing mogelijk"
+
+#: module/module_metadata.cpp:102
+msgid "Failed to update from string: {}"
+msgstr "Update van string mislukt: {}"
+
+#: module/module_metadata.cpp:129
+msgid "Failed to resolve module metadata: {}"
+msgstr "Oplossen module-metadata is mislukt: {}"
+
+#: module/module_metadata.cpp:140
+msgid "Failed to upgrade defaults: {}"
+msgstr "Upgrade van standaardwaarden mislukt: {}"
+
+#: module/module_metadata.cpp:144
+msgid "Failed to upgrade streams: {}"
+msgstr "Upgrade van streams mislukt: {}"
+
+#: module/module_sack.cpp:93
+msgid "Failed to load module metadata for repository \"{}\": {}"
+msgstr "Laden van module-metadata voor repository \"{}\" mislukt: {}"
+
+#: module/module_sack.cpp:594
+msgid "Missing '='"
+msgstr "Ontbrekende '='"
+
+#: module/module_sack.cpp:598 module/module_sack.cpp:606
+msgid "Missing '\"' in the value"
+msgstr "Ontbrekende '\"' in de waarde"
+
+#: module/module_sack.cpp:602
+msgid "Missing ':' in the value"
+msgstr "Ontbrekende ':' in de waarde"
+
+#: module/module_sack.cpp:911
+msgid "Invalid module status: {}"
+msgstr "Ongeldige modulestatus: {}"
+
+#: plugin/plugins.cpp:67
+msgid ""
+"Unsupported plugin API combination. API version provided by plugin "
+"\"{}\" (\"{}\") is \"{}.{}\". API version in libdnf is \"{}.{}\"."
+msgstr ""
+"Niet-ondersteunde plugin-API-combinatie. De API-versie die door plugin "
+"\"{}\" (\"{}\") aangeboden wordt is \"{}.{}\". API-versie in libdnf is \"{}."
+"{}\"."
+
+#: plugin/plugins.cpp:92
+msgid "Failed to create a libdnf plugin instance"
+msgstr "Aanmaken van libdnf-plugin-instantie mislukt"
+
+#: plugin/plugins.cpp:146
+msgid "Cannot find plugin library \"{}\""
+msgstr "Kan pluginbibliotheek \"{}\" niet vinden"
+
+#: plugin/plugins.cpp:213
+msgid "Invalid option value: enabled={}"
+msgstr "Ongeldige optiewaarde: enabled={}"
+
+#: plugin/plugins.cpp:237
+msgid "Plugins::load_plugins(): config_dir_path cannot be empty"
+msgstr "Plugins::load_plugins(): config_dir_path kan niet leeg zijn"
+
+#: plugin/plugins.cpp:253
+msgid "Cannot load libdnf plugin enabled from: {}"
+msgstr "Kan libdnf-plugin niet laden die is ingeschakeld vanuit: {}"
+
+#: repo/config_repo.cpp:581
+msgid "get_unique_id(): Computation of SHA256 failed"
+msgstr "get_unique_id(): Berekenen van SHA256 mislukt"
+
+#: repo/file_downloader.cpp:154
+msgid "Cannot download files, cacheonly option is activated."
+msgstr "Kan bestanden niet downloaden, cacheonly-optie is ingeschakeld."
+
+#: repo/file_downloader.cpp:216
+msgid "Failed to download files"
+msgstr "Downloaden van bestanden is mislukt"
+
+#: repo/librepo.cpp:118
+msgid ""
+"Maximum download speed is lower than minimum, please change configuration of "
+"minrate or throttle"
+msgstr ""
+"Maximale downloadsnelheid is lager dan het minimum; verander de configuratie "
+"van minrate of throttle"
+
+#: repo/librepo.cpp:181
+msgid "'proxy_username' is set but not 'proxy_password'"
+msgstr "'proxy_username' is ingesteld, maar 'proxy_password' niet"
+
+#: repo/package_downloader.cpp:154
+msgid "Cannot download the \"{0}\" package, cacheonly option is activated."
+msgstr ""
+"Kan het pakket \"{0}\" niet downloaden, cacheonly-optie is ingeschakeld."
+
+#: repo/package_downloader.cpp:219
+msgid "Already downloaded"
+msgstr "Al gedownload"
+
+#: repo/package_downloader.cpp:267
+msgid "Failed to download packages"
+msgstr "Kon pakketten niet downloaden"
+
+#: repo/repo.cpp:61
+msgid "Failed to load RPM \"{}\": doesn't have the \".rpm\" extension"
+msgstr "Kon RPM \"{}\" niet laden: bestand heeft geen \".rpm\"-extensie"
+
+#: repo/repo.cpp:65
+msgid "Failed to access RPM \"{}\": {}"
+msgstr "Kon RPM \"{}\" niet openen: {}"
+
+#: repo/repo.cpp:107
+msgid "Invalid repository id \"{}\": unexpected character '{}'"
+msgstr "Ongeldige repository-id \"{}\": onverwacht karakter '{}'"
+
+#: repo/repo.cpp:150
+msgid "Repository \"{}\" has no source (baseurl, mirrorlist or metalink) set."
+msgstr ""
+"Er is geen bron (baseurl, mirrorlist of metalink) ingesteld voor repository "
+"\"{}\"."
+
+#: repo/repo.cpp:161
+msgid "Repository \"{}\" has unsupported type \"{}\", skipping."
+msgstr ""
+"Repository \"{}\" heeft een niet-ondersteund type \"{}\" en wordt "
+"overgeslagen."
+
+#: repo/repo.cpp:221 repo/repo.cpp:241 repo/repo_sack.cpp:368
+msgid "Failed to download metadata ({}: \"{}\") for repository \"{}\": {}"
+msgstr ""
+"Downloaden van metadata ({}: \"{}\") voor repository \"{}\": {} mislukt"
+
+#: repo/repo.cpp:439
+msgid ""
+"Failed to load repository: \"primary\" data not present or in unsupported "
+"format"
+msgstr ""
+"Laden van repository mislukt: \"primaire\" data niet aanwezig of is in een "
+"niet-ondersteunde indeling"
+
+#: repo/repo.cpp:505
+msgid "Failed to load comps \"{}\": doesn't have the \".xml\" extension"
+msgstr "Laden van comps \"{}\" mislukt: bestand heeft geen \".xml\"-extensie"
+
+#: repo/repo.cpp:512
+msgid "Failed to load xml Comps \"{}\": {}"
+msgstr "Laden van xml comps \"{}\" mislukt: {}"
+
+#: repo/repo.cpp:530
+msgid "Failed to load RPM \"{}\": {}"
+msgstr "Laden van RPM \"{}\" mislukt: {}"
+
+#: repo/repo_cache.cpp:255
+msgid "Unable to determine id of the repository in the cache."
+msgstr "Bepalen van de ID van de repository in de cache mislukt."
+
+#: repo/repo_cache_private.hpp:59
+msgid "Empty path to the repository cache directory."
+msgstr "Leeg pad naar de repository-cachemap."
+
+#: repo/repo_downloader.cpp:214
+msgid "Librepo error: {}"
+msgstr "Librepo-fout: {}"
+
+#: repo/repo_downloader.cpp:258
+msgid "Failed to set up metadata download"
+msgstr "Het opzetten van de metadata-download is mislukt"
+
+#: repo/repo_downloader.cpp:312 repo/repo_downloader.cpp:362
+msgid "Failed to download metadata"
+msgstr "Downloaden metadata mislukt"
+
+#: repo/repo_downloader.cpp:426
+msgid "Error checking if metalink \"{}\" is in sync for repository \"{}\""
+msgstr ""
+"Controleren of metalink \"{}\" in sync is met repository \"{}\" is mislukt"
+
+#: repo/repo_downloader.cpp:446
+msgid "Error checking if repomd ({}: \"{}\") is in sync for repository \"{}\""
+msgstr ""
+"Controleren of repomd ({}: \"{}\") in sync is met repository \"{}\" is "
+"mislukt"
+
+#: repo/repo_downloader.cpp:515
+msgid "Error loading local metadata for repository \"{}\""
+msgstr "Laden van locale metadata voor repository \"{}\" is mislukt"
+
+#: repo/repo_downloader.cpp:597
+msgid ""
+"No valid source (baseurl, mirrorlist or metalink) found for repository \"{}\""
+msgstr ""
+"Geen geldige bron (baseurl, mirrorlist of metalink) gevonden voor repository "
+"\"{}\""
+
+#: repo/repo_pgp.cpp:60
+msgid "Failed to import OpenPGP keys into temporary keyring: {}"
+msgstr ""
+"Importeren van OpenPGP-sleutels naar de tijdelijke sleutelbos is mislukt: {}"
+
+#: repo/repo_pgp.cpp:66 repo/repo_pgp.cpp:93
+msgid "Failed to list OpenPGP keys: {}"
+msgstr "Het weergeven van OpenPGP-sleutels is mislukt: {}"
+
+#: repo/repo_pgp.cpp:141
+msgid "Failed to import OpenPGP keys: {}"
+msgstr "Het importeren van OpenPGP-sleutels is mislukt: {}"
+
+#: repo/repo_sack.cpp:159
+msgid ""
+"Failed to create repo \"{}\": Id is present more than once in the "
+"configuration"
+msgstr ""
+"Het aanmaken van repository \"{}\" is mislukt: ID is meer dan één keer "
+"aanwezig in de configuratie"
+
+#: repo/repo_sack.cpp:631
+msgid "Cache-only enabled but no cache for repository \"{}\""
+msgstr "Cache-only is ingeschakeld, maar er is geen cache voor repository {}"
+
+#: repo/solv_repo.cpp:267
+msgid "Failed to load repomd for repo \"{}\" from \"{}\": {}."
+msgstr "Laden van repomd voor repo \"{}\" van \"{}\" mislukt: {}."
+
+#: repo/solv_repo.cpp:275
+msgid "Failed to load primary for repo \"{}\" from \"{}\": {}."
+msgstr ""
+"Het laden van primary voor repository \"{}\" van \"{}\" is mislukt: {}."
+
+#: repo/solv_repo.cpp:323
+msgid "Unsupported extended repodata type for the system repo: \"{}\"."
+msgstr ""
+"Niet-ondersteund uitgebreid repodata-type voor de systeemrepository: \"{}\"."
+
+#: repo/solv_repo.cpp:395
+msgid "Failed to load {} extension for repo \"{}\" from \"{}\": {}"
+msgstr "Laden van extensie {} voor repository \"{}\" van \"{}\" is mislukt: {}"
+
+#: repo/solv_repo.cpp:431
+msgid "Failed to load system repo from root \"{}\": {}"
+msgstr "Laden van systeemrepository van root \"{}\" is mislukt: {}"
+
+#: repo/solv_repo.cpp:532
+msgid "Failed to load {} cache for repo \"{}\" from \"{}\": {}"
+msgstr "Laden van {}-cache voor repository \"{}\" van \"{}\" is mislukt: {}"
+
+#: repo/solv_repo.cpp:586
+msgid "Failed to write primary cache for repo \"{}\" to \"{}\": {}"
+msgstr ""
+"Schrijven van primary-cache voor repository \"{}\" naar \"{}\" is mislukt: {}"
+
+#: repo/solv_repo.cpp:608
+msgid "Failed to re-load primary cache for repo \"{}\" from \"{}\": {}"
+msgstr ""
+"Herladen van primary-cache voor repository \"{}\" van \"{}\" mislukt: {}"
+
+#: repo/solv_repo.cpp:673
+msgid "Failed to write {} cache for repo \"{}\" to \"{}\": {}"
+msgstr ""
+"Schrijven van {}-cache voor repository \"{}\" naar \"{}\" is mislukt: {}"
+
+#: repo/solv_repo.cpp:694
+msgid "Failed to re-load {} cache for repo \"{}\" from \"{}\": {}"
+msgstr "Herladen van {}-cache van repository \"{}\" van \"{}\" is mislukt: {}"
+
+#: repo/temp_files_memory.cpp:52
+msgid ""
+"An error occurred when parsing the temporary files memory file at '{}': {}"
+msgstr ""
+"Er is een fout opgetreden bij het verwerken van het geheugenbestand van "
+"tijdelijke bestanden op '{}': {}"
+
+#: rpm/nevra.cpp:82
+msgid "NEVRA string \"{}\" contains ':' multiple times"
+msgstr "NEVRA-string \"{}\" bevat meermaals ':'"
+
+#: rpm/nevra.cpp:86
+msgid "Invalid character '{}' in NEVRA string \"{}\""
+msgstr "Ongeldig teken '{}' in NEVRA-string \"{}\""
+
+#: rpm/package.cpp:81
+msgid "Package with rpmdbid was not found"
+msgstr "Pakket met rpmdbid niet gevonden"
+
+#: rpm/package.cpp:478
+msgid "<unknown>"
+msgstr "<onbekend>"
+
+#: rpm/reldep.cpp:116 rpm/reldep.cpp:123
+msgid "Cannot parse a dependency string"
+msgstr "Kan afhankelijkheidsstring niet parsen"
+
+#: rpm/rpm_signature.cpp:45
+msgid "No corresponding key was found."
+msgstr "Geen bijbehorende sleutel gevonden."
+
+#: rpm/rpm_signature.cpp:46
+msgid "The signature is valid, but the key is not trusted."
+msgstr "De handtekening is geldig, maar de sleutel wordt niet vertrouwd."
+
+#: rpm/rpm_signature.cpp:47
+msgid "The package is not signed."
+msgstr "Het pakket is niet ondertekend."
+
+#: rpm/rpm_signature.cpp:48
+msgid "Problem occurred when opening the package."
+msgstr "Probleem opgetreden bij het openen van het pakket."
+
+#: rpm/rpm_signature.cpp:64
+msgid "Failed to set rpm transaction rootDir \"{}\"."
+msgstr "Instellen van rootDir rpm-transactie \"{}\" is mislukt."
+
+#: rpm/rpm_signature.cpp:290
+msgid "\"{}\": key is not an armored public key."
+msgstr "\"{}\": sleutel is geen 'armored' publieke sleutel."
+
+#: rpm/rpm_signature.cpp:295
+msgid "Failed to import public key \"{}\" to rpmdb: {}"
+msgstr "Importeren van publieke sleutel \"{}\" naar rpmdb mislukt: {}"
+
+#. TODO(jrohel): Why? Librpm does not provide this information.
+#: rpm/transaction.cpp:114
+msgid "Cannot set root directory \"{}\""
+msgstr "Instellen van root-map \"{}\" mislukt"
+
+#: rpm/transaction.cpp:125
+#, c-format
+msgid "Error %i opening rpm database"
+msgstr "Fout %i bij openen van rpm-database"
+
+#: rpm/transaction.cpp:134
+msgid "The rpmdbCookie() function did not return cookie of rpm database."
+msgstr ""
+"De rpmdbCookie()-functie heeft geen cookie van de rpm-database teruggegeven."
+
+#: rpm/transaction.cpp:199
+msgid "Failed to order the rpm transaction."
+msgstr "Het ordenen van de rpm-transactie is mislukt."
+
+#: rpm/transaction.cpp:235
+msgid ""
+"Failed to set scriptlet output file, cannot duplicate file descriptor: {}"
+msgstr ""
+"Instellen van uitvoerbestand voor scriptlet mislukt, bestanddescriptor kan "
+"niet worden gedupliceerd: {}"
+
+#: rpm/transaction.cpp:254
+msgid "Failed to set scriptlet output file, cannot open file \"{}\": {}"
+msgstr ""
+"Instellen van uitvoerbestand voor scriptlet mislukt, kan bestand \"{}\" niet "
+"openen: {}"
+
+#: rpm/transaction.cpp:275
+msgid "Failed to read package header, cannot open file \"{}\": {}"
+msgstr "Lezen van pakket-header mislukt; kan bestand \"{}\" niet openen: {}"
+
+#: rpm/transaction.cpp:292
+msgid "Failed to read package header from file \"{}\""
+msgstr "Lezen van pakket-header van bestand \"{}\" mislukt"
+
+#: rpm/transaction.cpp:305
+msgid "Cannot init rpm database iterator"
+msgstr "Initialiseren van rpm-database-iterator mislukt"
+
+#: rpm/transaction.cpp:309
+msgid "Package was not found in rpm database"
+msgstr "Pakket niet gevonden in rpm-database"
+
+#. TODO(jrohel): Why? Librpm does not provide this information.
+#: rpm/transaction.cpp:325
+msgid "Cannot reinstall package \"{}\""
+msgstr "Herinstalleren van pakket \"{}\" mislukt"
+
+#. TODO(jrohel): Why? Librpm does not provide this information.
+#: rpm/transaction.cpp:343
+msgid "Cannot remove package \"{}\""
+msgstr "Verwijderen van pakket \"{}\" is mislukt"
+
+#: rpm/transaction.cpp:362
+msgid "Cannot upgrade package \"{}\""
+msgstr "Upgraden van pakket \"{}\" is mislukt"
+
+#: rpm/transaction.cpp:366
+msgid "Cannot downgrade package \"{}\""
+msgstr "Downgraden van pakket \"{}\" is mislukt"
+
+#: rpm/transaction.cpp:370
+msgid "Cannot install package \"{}\""
+msgstr "Installeren van pakket \"{}\" is mislukt"
+
+#: rpm/versionlock_config.cpp:284 system/state.cpp:605
+msgid "{}"
+msgstr "{}"
+
+#. TODO(lukash) throw proper exception class
+#: solv/pool.cpp:174
+msgid "Failed to convert epoch \"{}\" to number"
+msgstr "Omzetten van epoch \"{}\" naar een nummer is mislukt"
+
+#: solv/solver.cpp:79
+msgid "Writing debugsolver data into \"{}\" failed: {}"
+msgstr "Schrijven van debugsolver-data naar \"{}\" is mislukt: {}"
+
+#: system/state.cpp:282 system/state.cpp:291
+msgid "Invalid TOML version \"{}\", \"MAJOR.MINOR\" expected"
+msgstr "Ongeldige TOML-versie \"{}\", \"MAJOR.MINOR\" verwacht"
+
+#: system/state.cpp:299
+msgid "{} state for \"{}\" not found."
+msgstr "{}-staat voor \"{}\" niet gevonden."
+
+#: system/state.cpp:303
+msgid "Loading system state TOML file {} failed (see dnf5-system-state(7)): {}"
+msgstr ""
+"Laden van TOML-bestand voor systeemstaat {} is mislukt (zie dnf5-system-"
+"state(7)): {}"
+
+#: system/state.cpp:640
+msgid "Unsupported TOML version \"{}\", maximum supported version is \"{}\""
+msgstr ""
+"Niet-ondersteunde TOML-versie \"{}\"; maximale ondersteunde versie is \"{}\""
+
+#: transaction/Swdb.cpp:91
+msgid "In progress"
+msgstr "Bezig"
+
+#: transaction/Swdb.cpp:99 transaction/Swdb.cpp:126 transaction/Swdb.cpp:136
+#: transaction/Swdb.cpp:150 transaction/Swdb.cpp:273 transaction/Swdb.cpp:281
+msgid "Not in progress"
+msgstr "Niet bezig"
+
+#: transaction/Swdb.cpp:158
+msgid "No transaction in progress"
+msgstr "Geen transactie bezig"
+
+#: transaction/Transformer.cpp:647
+msgid "Transformer: can't open history persist dir"
+msgstr "Transformer: kan de geschiedenisopslagmap niet openen"
+
+#: transaction/Transformer.cpp:660
+msgid "Couldn't find a history database"
+msgstr "Kan geen geschiedenisdatabase vinden"
+
+#. TODO(dmach): replace with a better exception class
+#: transaction/db/comps_environment_group.cpp:100
+msgid ""
+"Failed to insert record into table 'comps_environment_group' in history "
+"database"
+msgstr ""
+"Invoegen van record in de tabel 'comps_environment_group' van de "
+"geschiedenisdatabase is mislukt"
+
+#: transaction/db/db.cpp:71
+msgid "Unable to get 'version' from table 'config'"
+msgstr "Kan 'version' niet ophalen uit de 'config'-tabel"
+
+#. TODO(dmach): replace with a better exception class
+#: transaction/db/item.cpp:43
+msgid "Failed to insert record into table 'item' in history database"
+msgstr ""
+"Invoegen van record in de tabel 'item' van de geschiedenisdatabase is mislukt"
+
+#: transaction/offline.cpp:195
+msgid "error reading offline state file"
+msgstr "fout bij lezen van het offlinestaat-bestand"
+
+#: transaction/offline.cpp:200
+msgid "incompatible version of state data"
+msgstr "incompatibele versie van staatdata"
+
+#: transaction/transaction.cpp:96
+msgid "Invalid transaction state: {}"
+msgstr "Ongeldige transactiestaat: {}"
+
+#: transaction/transaction.cpp:279
+msgid "Transaction has already started!"
+msgstr "Transactie is al gestart!"
+
+#: transaction/transaction_item_action.cpp:28
+msgid "Invalid transaction item action: {}"
+msgstr "Ongeldige transactieitemactie: {}"
+
+#: transaction/transaction_item_reason.cpp:28
+msgid "Invalid transaction item reason: {}"
+msgstr "Ongeldige transactieitemreden: {}"
+
+#: transaction/transaction_item_state.cpp:28
+msgid "Invalid transaction item state: {}"
+msgstr "Ongeldige transactieitemstaat: {}"
+
+#: transaction/transaction_item_type.cpp:28
+msgid "Invalid transaction item type: {}"
+msgstr "Ongeldig transactieitemtype: {}"
+
+#: transaction/transaction_merge.cpp:102
+msgid ""
+"Action '{0}' '{1}' cannot be merged after it was '{2}' in preceding "
+"transactions -> setting '{0}'."
+msgstr ""
+"Actie '{0}' '{1}' kan niet worden samengevoegd nadat deze '{2}' was in "
+"voorgaande transacties -> ingesteld op '{0}'."
+
+#: transaction/transaction_merge.cpp:116
+msgid ""
+"Action 'Upgrade' '{0}' cannot be merged because it is not present at that "
+"point -> setting 'Install'."
+msgstr ""
+"Actie 'Upgrade' '{0}' kan niet worden samengevoegd omdat deze op dat punt "
+"niet aanwezig is -> ingesteld op 'Install'."
+
+#: transaction/transaction_merge.cpp:174 transaction/transaction_merge.cpp:231
+msgid ""
+"Action 'Reinstall' '{0}' cannot be merged because it is not present at that "
+"point -> setting 'Install'."
+msgstr ""
+"Actie 'Reinstall' '{0}' kan niet worden samengevoegd omdat deze op dat punt "
+"niet aanwezig is -> ingesteld op 'Install'."
+
+#: transaction/transaction_merge.cpp:194
+msgid ""
+"Action '{0}' '{1}' cannot be merged after it was '{2}' in preceding "
+"transaction -> setting '{0}'."
+msgstr ""
+"Actie '{0}' '{1}' kan niet worden samengevoegd nadat deze '{2}' was in "
+"voorgaande transactie -> ingesteld op '{0}'."
+
+#: transaction/transaction_merge.cpp:215
+msgid "Unexpected action encountered: '{0}' during transaction merge."
+msgstr ""
+"Onverwachte actie tegengekomen: '{0}' tijdens samenvoegen van transactie."
+
+#: transaction/transaction_merge.cpp:224
+msgid ""
+"Action '{0}' '{1}' cannot be merged because it is not present at that point -"
+"> skipping it."
+msgstr ""
+"Actie '{0}' '{1}' kan niet worden samengevoegd omdat deze op dat punt niet "
+"aanwezig is -> overgeslagen."
+
+#: transaction/transaction_merge.cpp:245
+msgid ""
+"Action '{0}' '{1}' cannot be merged because it is not present at that point -"
+"> setting 'INSTALL'."
+msgstr ""
+"Actie '{0}' '{1}' kan niet worden samengevoegd omdat deze op dat punt niet "
+"aanwezig is -> ingesteld op 'INSTALL'."
+
+#: transaction/transaction_merge.cpp:266
+msgid ""
+"Action '{0}' '{1}' cannot be merged because it is not present at that point "
+"(present versions are: {2}) -> skipping it."
+msgstr ""
+"Actie '{0}' '{1}' kan niet worden samengevoegd omdat deze op dat punt niet "
+"aanwezig is (aanwezige versies zijn: {2}) -> wordt overgeslagen."
+
+#: transaction/transaction_merge.cpp:277
+msgid ""
+"Action '{0}' '{1}' cannot be merged because it is already present at that "
+"point -> skipping it."
+msgstr ""
+"Actie '{0}' '{1}' kan niet worden samengevoegd omdat deze op dat punt al "
+"aanwezig is -> wordt overgeslagen."
+
+#: transaction/transaction_merge.cpp:294
+msgid ""
+"Action '{0}' '{1}' cannot be merged because it is already installed in "
+"version '{2}' -> keeping the action from older transaction with '{1}'."
+msgstr ""
+"Actie '{0}' '{1}' kan niet worden samengevoegd omdat deze al geïnstalleerd "
+"is in versie '{2}' -> actie van oudere transactie met '{1}' wordt behouden."
+
+#: transaction/transaction_merge.cpp:304
+msgid "Invalid action encountered: '{0}' during transaction merge."
+msgstr ""
+"Ongeldige actie tegengekomen: '{0}' tijdens samenvoegen van transacties."
+
+#: transaction/transaction_sr.cpp:49
+msgid "Transaction replay JSON serialized transaction input is empty"
+msgstr ""
+"De geserialiseerde JSON-transactieinvoer voor het herhalen van de transactie "
+"is leeg"
+
+#: transaction/transaction_sr.cpp:58
+msgid "Error during transaction replay JSON parsing : {}"
+msgstr ""
+"Fout bij het parsen van de JSON voor het herhalen van de transactie: {}"
+
+#: transaction/transaction_sr.cpp:68
+msgid "Unexpected version format: \"{}\", supported version is \"{}\""
+msgstr "Onverwacht versieformaat: \"{}\"; ondersteunde versie is \"{}\""
+
+#: transaction/transaction_sr.cpp:74
+msgid "Incompatible major version: \"{}\", supported major version is \"{}\""
+msgstr "Incompatibele hoofdversie: \"{}\"; ondersteunde hoofdversie is \"{}\""
+
+#: transaction/transaction_sr.cpp:81
+msgid "Invalid minor version: \"{}\", number expected"
+msgstr "Ongeldige subversie: \"{}\"; nummer verwacht"
+
+#: transaction/transaction_sr.cpp:84
+msgid "Missing key \"version\""
+msgstr "Ontbrekende sleutel \"versie\""
+
+#: transaction/transaction_sr.cpp:92
+msgid "Unexpected type of \"environments\", array expected"
+msgstr "Onverwacht type van \"environments\", array verwacht"
+
+#: transaction/transaction_sr.cpp:105
+msgid "Missing object key \"id\" in an environment"
+msgstr "Ontbrekende objectsleutel \"id\" in een omgeving"
+
+#: transaction/transaction_sr.cpp:110
+msgid "Missing object key \"action\" in an environment"
+msgstr "Ontbrekende objectsleutel \"action\" in een omgeving"
+
+#: transaction/transaction_sr.cpp:129
+msgid "Unexpected type of \"groups\", array expected"
+msgstr "Onverwacht type van \"groups\", array verwacht"
+
+#: transaction/transaction_sr.cpp:145
+msgid "Missing object key \"id\" in a group"
+msgstr "Ontbrekende objectsleutel \"id\" in een groep"
+
+#: transaction/transaction_sr.cpp:150
+msgid "Missing object key \"action\" in a group"
+msgstr "Ontbrekende objectsleutel \"action\" in een groep"
+
+#: transaction/transaction_sr.cpp:155
+msgid "Missing object key \"reason\" in a group"
+msgstr "Ontbrekende objectsleutel \"reason\" in een groep"
+
+#: transaction/transaction_sr.cpp:186
+msgid "Unexpected type of \"rpms\", array expected"
+msgstr "Onverwacht type van \"rpms\", array verwacht"
+
+#: transaction/transaction_sr.cpp:202
+msgid "Cannot parse NEVRA for rpm \"{}\""
+msgstr "Kan NEVRA niet parsen voor rpm \"{}\""
+
+#: transaction/transaction_sr.cpp:210
+msgid "Either \"nevra\" or \"package_path\" object key is required in an rpm"
+msgstr ""
+"Óf de objectsleutel \"nevra\" óf de objectsleutel \"package_path\" is "
+"vereist in een rpm"
+
+#: transaction/transaction_sr.cpp:215
+msgid "Missing object key \"action\" in an rpm"
+msgstr "Ontbrekende objectsleutel \"action\" in een rpm"
+
+#: transaction/transaction_sr.cpp:220
+msgid "Missing object key \"reason\" in an rpm"
+msgstr "Ontbrekende objectsleutel \"reason\" in een rpm"
+
+#: transaction/transaction_sr.cpp:227
+msgid ""
+"Missing mandatory object key \"group_id\" in an rpm with reason \"Group\" "
+"and action \"Reason Change\""
+msgstr ""
+"Ontbrekende verplichte objectsleutel \"group_id\" in een rpm met reden "
+"\"Group\" en actie \"Reason Change\""
+
+#: utils/fs/file.cpp:86
+msgid "cannot open file"
+msgstr "kan bestand niet openen"
+
+#: utils/fs/file.cpp:99
+msgid "cannot open file from fd"
+msgstr "kan bestand niet openen met fd"
+
+#: utils/fs/file.cpp:109
+msgid "cannot close file"
+msgstr "kan bestand niet sluiten"
+
+#: utils/fs/file.cpp:139 utils/fs/file.cpp:168
+msgid "error reading file"
+msgstr "fout bij lezen van bestand"
+
+#: utils/fs/file.cpp:154 utils/fs/file.cpp:180
+msgid "error writing file"
+msgstr "out bij schrijven van bestand"
+
+#: utils/fs/file.cpp:189
+msgid "error flushing file"
+msgstr "fout bij flushen van bestand"
+
+#: utils/fs/file.cpp:198
+msgid "error seeking in file"
+msgstr "fout bij zoeken in bestand"
+
+#: utils/fs/file.cpp:209
+msgid "error retrieving file position"
+msgstr "fout bij ophalen bestandspositie"
+
+#: utils/fs/file.cpp:297
+msgid "error reading a line from file"
+msgstr "fout bij het lezen van een regel van bestand"
+
+#: utils/fs/file.cpp:335
+msgid "error retrieving file descriptor"
+msgstr "fout bij het ophalen van bestandsdescriptor"
+
+#: utils/fs/temp.cpp:42
+msgid "cannot create temporary directory"
+msgstr "kan tijdelijke map niet aanmaken"
+
+#: utils/fs/temp.cpp:89
+msgid "cannot create temporary file"
+msgstr "kan tijdelijk bestand niet aanmaken"
+
+#: utils/fs/temp.cpp:142
+msgid "cannot close temporary file"
+msgstr "kan tijdelijk bestand niet sluiten"
+
+#: utils/iniparser.cpp:126
+msgid "Missing ']' on line {}"
+msgstr "Ontbrekende ']' op regel {}"
+
+#: utils/iniparser.cpp:129
+msgid "Empty section name on line {}"
+msgstr "Lege sectienaam op regel {}"
+
+#: utils/iniparser.cpp:137
+msgid "Text after section on line {}"
+msgstr "Tekst na sectie op regel {}"
+
+#: utils/iniparser.cpp:147
+msgid "Missing section header on line {}"
+msgstr "Ontbrekende sectieheader op regel {}"
+
+#: utils/iniparser.cpp:152
+msgid "Illegal continuation line on line {}"
+msgstr "Ongeldige voortzettingsregel op regel {}"
+
+#: utils/iniparser.cpp:159
+msgid "Missing option name on line {}"
+msgstr "Ontbrekende optienaam op regel {}"
+
+#: utils/iniparser.cpp:163
+msgid "Missing '=' on line {}"
+msgstr "Ontbrekende '=' op regel {}"
+
+#. returns localized message, problem with later translation
+#: utils/library.cpp:34
+msgid "Cannot load shared library \"{}\": {}"
+msgstr "Kan gedeelde library \"{}\" niet vinden: {}"
+
+#: utils/library.cpp:48
+msgid "Cannot obtain address of symbol \"{}\": {}"
+msgstr "Kan adres van symbool \"{}\" niet verkrijgen: {}"
+
+#: utils/locale.cpp:57
+msgid "Cannot set the locale \"{}\": {}"
+msgstr "Kan de locale \"{}\" niet instellen: {}"
+
+#: utils/locker.cpp:45
+msgid "Failed to open lock file \"{}\""
+msgstr "Openen van vergrendelingsbestand \"{}\" mislukt"
+
+#: utils/locker.cpp:60
+msgid "Failed to obtain lock \"{}\""
+msgstr "Verkrijgen van vergrendeling \"{}\" mislukt"
+
+#: utils/locker.cpp:70
+msgid "Failed to close lock file \"{}\""
+msgstr "Sluiten van vergrendelingsbestand \"{}\" mislukt"
+
+#: utils/locker.cpp:73
+msgid "Failed to delete lock file \"{}\""
+msgstr "Verwijderen van vergrendelingsbestand \"{}\" mislukt"
+
+#: utils/sqlite3/sqlite3.cpp:29
+msgid "SQL statement compilation failed: \"{}\""
+msgstr "Compileren van SQL-instructie mislukt: \"{}\""
+
+#: utils/sqlite3/sqlite3.cpp:31
+msgid "Binding integer value to SQL statement failed: \"{}\""
+msgstr "Het binden van integerwaarde aan SQL-instructie is mislukt: \"{}\""
+
+#: utils/sqlite3/sqlite3.cpp:33
+msgid "Binding integer64 value to SQL statement failed: \"{}\""
+msgstr ""
+"Het binden van de integer64-waarde aan SQL-instructie is mislukt: \"{}\""
+
+#: utils/sqlite3/sqlite3.cpp:35
+msgid "Binding unsigned integer32 value to SQL statement failed: \"{}\""
+msgstr ""
+"Het binden van de integer32-waarde aan de SQL-instructie is mislukt: \"{}\""
+
+#: utils/sqlite3/sqlite3.cpp:37
+msgid "Binding double value to SQL statement failed: \"{}\""
+msgstr ""
+"Het binden van de double-waarde aan de SQL-instructie is mislukt: \"{}\""
+
+#: utils/sqlite3/sqlite3.cpp:39
+msgid "Binding bool value to SQL statement failed: \"{}\""
+msgstr "Het binden van de bool-waarde aan de SQL-instructie is mislukt: \"{}\""
+
+#: utils/sqlite3/sqlite3.cpp:40
+msgid "Binding text to SQL statement failed: \"{}\""
+msgstr "Het binden van text aan de SQL-instructie is mislukt: \"{}\""
+
+#: utils/sqlite3/sqlite3.cpp:41
+msgid "Binding blob to SQL statement failed: \"{}\""
+msgstr "Het binden van de blob aan de SQL-instructie is mislukt: \"{}\""
+
+#: utils/sqlite3/sqlite3.cpp:42
+msgid "SQL statement evaluation failed: \"{}\""
+msgstr "Evaluatie van SQL-instructie mislukt: \"{}\""
+
+#: utils/sqlite3/sqlite3.cpp:44
+msgid "Insufficient memory or result exceed maximum SQLite3 string length"
+msgstr ""
+"Onvoldoende geheugen, of resultaat overschrijdt maximale SQLite3-"
+"tekenreekslengte"
+
+#: utils/sqlite3/sqlite3.cpp:46
+msgid "Column \"{}\" not found"
+msgstr "Kolom \"{}\" niet gevonden"
+
+#: utils/sqlite3/sqlite3.cpp:48
+msgid "SQL statement execution failed: \"{}\""
+msgstr "Uitvoeren van SQL-instructie mislukt: \"{}\""
+
+#: utils/sqlite3/sqlite3.cpp:68
+msgid "Failed to open database \"{}\""
+msgstr "Openen van database \"{}\" mislukt"
+
+#: utils/sqlite3/sqlite3.cpp:105
+msgid "Failed to close database \"{}\""
+msgstr "Sluiten van database \"{}\" mislukt"
+
+#: utils/sqlite3/sqlite3.cpp:117 utils/sqlite3/sqlite3.cpp:143
+msgid "Failed to open backup database \"{}\""
+msgstr "Openen van backup-database \"{}\" mislukt"
+
+#: utils/sqlite3/sqlite3.cpp:132
+msgid "Failed to backup database \"{}\" into \"{}\""
+msgstr "Backuppen van database \"{}\" naar \"{}\" mislukt"
+
+#: utils/sqlite3/sqlite3.cpp:158
+msgid "Failed to restore database \"{}\""
+msgstr "Herstellen van database \"{}\" is mislukt"
+
+#: utils/system.cpp:34
+msgid "failed to read rpm config files"
+msgstr "lezen rpm-configuratiebestanden mislukt"
+
+#: utils/system.cpp:52
+msgid "Failed to execute uname()"
+msgstr "Uitvoeren uname() mislukt"

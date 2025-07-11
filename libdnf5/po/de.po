@@ -7,13 +7,14 @@
 # Fabio D <fabio1977@arcor.de>, 2024.
 # Ettore Atalan <atalanttore@googlemail.com>, 2024, 2025.
 # J C <valsu@vivaldi.net>, 2025.
+# Sijmen Schoon <fedora@vijf.life>, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-19 03:39+0000\n"
-"PO-Revision-Date: 2025-02-23 02:57+0000\n"
-"Last-Translator: J C <valsu@vivaldi.net>\n"
+"POT-Creation-Date: 2025-07-11 03:49+0000\n"
+"PO-Revision-Date: 2025-06-24 20:30+0000\n"
+"Last-Translator: Sijmen Schoon <fedora@vijf.life>\n"
 "Language-Team: German <https://translate.fedoraproject.org/projects/dnf5/"
 "libdnf5/de/>\n"
 "Language: de\n"
@@ -21,7 +22,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.10\n"
+"X-Generator: Weblate 5.12.2\n"
 
 #: advisory/advisory.cpp:81
 msgid ""
@@ -185,10 +186,8 @@ msgid "No match for argument: {}"
 msgstr "Keine Übereinstimmung für Argument: {}"
 
 #: base/log_event.cpp:163
-#, fuzzy
-#| msgid "No match for argument '{0}' in repositories '{1}'"
 msgid "No match for argument '{0}' in selected advisories"
-msgstr "Keine Übereinstimmung für Argument '{0}' in Repositories '{1}'"
+msgstr "Keine Übereinstimmung für Argument '{0}' in den ausgewählten Hinweisen"
 
 #: base/log_event.cpp:165
 msgid "No match in selected advisories"
@@ -583,7 +582,7 @@ msgstr "nichts stellt {0} bereit, welches von Modul {1} benötigt wird"
 
 #: base/solver_problems.cpp:93
 msgid "cannot install both modules {0} and {1}"
-msgstr "Module {0} und {1} können nicht installiert werden"
+msgstr "Module {0} und {1} können nicht gleichzeitig installiert werden"
 
 #: base/solver_problems.cpp:94
 msgid "module {0} conflicts with {1} provided by {2}"
@@ -670,31 +669,31 @@ msgstr "Importieren des öffentlichen Schlüssels fehlgeschlagen."
 msgid "Invalid tsflag: {}"
 msgstr "Ungültiges tsflag: {}"
 
-#: base/transaction.cpp:1318
+#: base/transaction.cpp:1314
 msgid "Public key \"{}\" is already present, not importing."
 msgstr ""
 "Öffentlicher Schlüssel \"{}\" ist bereits vorhanden. Er wird nicht "
 "importiert."
 
-#: base/transaction.cpp:1339
+#: base/transaction.cpp:1335
 msgid "An error occurred importing key \"{}\": {}"
 msgstr "Beim Importieren des Schlüssels \"{}\" ist ein Fehler aufgetreten: {}"
 
-#: base/transaction.cpp:1373
+#: base/transaction.cpp:1369
 msgid "OpenPGP check for package \"{}\" ({}) from repo \"{}\" has failed: "
 msgstr ""
 "OpenPGP-Prüfung für Paket „{}“ ({}) aus Repository „{}“ ist fehlgeschlagen: "
 
-#: base/transaction.cpp:1401
+#: base/transaction.cpp:1397
 msgid "Import of the key didn't help, wrong key?"
 msgstr "Das Importieren des Schlüssels hat nicht geholfen? Falscher Schlüssel?"
 
-#: base/transaction.cpp:1420
+#: base/transaction.cpp:1416
 msgctxt "It is a joining character for repositories IDs"
 msgid ", "
 msgstr ", "
 
-#: base/transaction.cpp:1423
+#: base/transaction.cpp:1419
 msgid "Warning: skipped OpenPGP checks for {0} package from repository: {1}"
 msgid_plural ""
 "Warning: skipped OpenPGP checks for {0} packages from repository: {1}"
@@ -705,7 +704,7 @@ msgstr[1] ""
 "Warnung: Übersprungene OpenPGP-Prüfungen für {0} Pakete aus dem Repository: "
 "{1}"
 
-#: base/transaction.cpp:1426
+#: base/transaction.cpp:1422
 msgid "Warning: skipped OpenPGP checks for {0} package from repositories: {1}"
 msgid_plural ""
 "Warning: skipped OpenPGP checks for {0} packages from repositories: {1}"
@@ -1024,7 +1023,7 @@ msgstr ""
 "Repository \"{}\" hat einen nicht unterstützten Typ \"{}\". Es wird "
 "übersprungen."
 
-#: repo/repo.cpp:221 repo/repo.cpp:241 repo/repo_sack.cpp:372
+#: repo/repo.cpp:221 repo/repo.cpp:241 repo/repo_sack.cpp:368
 #, fuzzy
 #| msgid "Failed to download metadata ({}: \"{}\") for repository \"{}\""
 msgid "Failed to download metadata ({}: \"{}\") for repository \"{}\": {}"
@@ -1121,7 +1120,7 @@ msgstr ""
 "Erstellen von Repo \"{}\" fehlgeschlagen: ID ist mehr als einmal in der "
 "Konfiguration enthalten"
 
-#: repo/repo_sack.cpp:635
+#: repo/repo_sack.cpp:631
 msgid "Cache-only enabled but no cache for repository \"{}\""
 msgstr "Cache-only ist aktiviert, aber kein Cache für Repository \"{}\""
 

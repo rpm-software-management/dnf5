@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-19 03:39+0000\n"
+"POT-Creation-Date: 2025-07-11 03:49+0000\n"
 "PO-Revision-Date: 2023-11-28 02:51+0000\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <https://translate.fedoraproject.org/projects/dnf5/"
@@ -18,19 +18,19 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Generator: Weblate 5.2.1\n"
 
-#: repoclosure.cpp:45
+#: repoclosure.cpp:46
 msgid "Print list of unresolved dependencies for repositories"
 msgstr "რეპოზიტორიების ამოუხსნელი დამოკიდებულებების სიის გამოტანა"
 
-#: repoclosure.cpp:154
+#: repoclosure.cpp:155
 msgid "No match for argument \"{}\"."
 msgstr "არგუმენტს \"{}\" არაფერი ემთხვევა."
 
-#: repoclosure.cpp:160
+#: repoclosure.cpp:161
 msgid "Failed to resolve package specifications."
 msgstr "პაკეტის სპეციფიკაციების ამოხსნა ჩავარდა."
 
-#: repoclosure.cpp:215
+#: repoclosure.cpp:220
 msgid ""
 "Error: Repoclosure ended with unresolved dependencies ({}) across {} "
 "packages."

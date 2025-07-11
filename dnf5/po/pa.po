@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-19 03:39+0000\n"
+"POT-Creation-Date: 2025-07-11 03:49+0000\n"
 "PO-Revision-Date: 2025-01-03 15:05+0000\n"
 "Last-Translator: A S Alam <aalam@users.noreply.translate.fedoraproject.org>\n"
 "Language-Team: Punjabi <https://translate.fedoraproject.org/projects/dnf5/"
@@ -356,7 +356,7 @@ msgstr ""
 msgid "Install debuginfo packages."
 msgstr "debuginfo ਪੈਕੇਜ ਇੰਸਟਾਲ ਕਰੋ।"
 
-#: commands/distro-sync/distro-sync.cpp:42
+#: commands/distro-sync/distro-sync.cpp:44
 msgid ""
 "Upgrade or downgrade installed software to the latest available versions"
 msgstr "ਇੰਸਟਾਲ ਹੋਏ ਸਾਫਟਵੇਅਰਾਂ ਨੂੰ ਉਹਨਾਂ ਦੇ ਨਵੇਂ ਮੌਜੂਦ ਵਰਜ਼ਨਾਂ ਲਈ ਅੱਪਗਰੇਡ ਜਾਂ ਡਾਊਨਗਰੇਡ ਕਰੋ"
@@ -573,75 +573,75 @@ msgstr ""
 msgid "Lists packages depending on the packages' relation to the system"
 msgstr ""
 
-#: commands/list/list.cpp:47
-msgid "List of keys to match case insensitively"
+#: commands/list/list.cpp:48
+msgid "List of package-spec-NI to match (case insensitively)"
 msgstr ""
 
-#: commands/list/list.cpp:59
+#: commands/list/list.cpp:60
 msgid "Show all versions of the packages, not only the latest ones."
 msgstr "ਪੈਕੇਜ ਦੇ ਸਿਰਫ਼ ਨਵੇਂ ਵਰਜ਼ਨਾਂ ਦੀ ਬਜਾਏ ਸਭ ਵਰਜ਼ਨਾਂ ਨੂੰ ਵੇਖਾਓ।"
 
-#: commands/list/list.cpp:65
+#: commands/list/list.cpp:66
 msgid "List installed packages."
 msgstr "ਇੰਸਟਾਲ ਹੋਏ ਪੈਕੇਜਾਂ ਦੀ ਸੂਚੀ ਹੈ।"
 
-#: commands/list/list.cpp:69
+#: commands/list/list.cpp:70
 msgid "List available packages."
 msgstr "ਮੌਜੂਦ ਪੈਕੇਜਾਂ ਦੀ ਸੂਚੀ ਹੈ।"
 
-#: commands/list/list.cpp:76
+#: commands/list/list.cpp:77
 msgid ""
 "List extras, that is packages installed on the system that are not available "
 "in any known repository."
 msgstr ""
 
-#: commands/list/list.cpp:84
+#: commands/list/list.cpp:85
 msgid ""
 "List packages installed on the system that are obsoleted by packages in any "
 "known repository."
 msgstr ""
 
-#: commands/list/list.cpp:89
+#: commands/list/list.cpp:90
 msgid "List packages recently added into the repositories."
 msgstr ""
 
-#: commands/list/list.cpp:93
+#: commands/list/list.cpp:94
 msgid "List upgrades available for the installed packages."
 msgstr "ਇੰਸਟਾਲ ਹੋਏ ਪੈਕੇਜਾਂ ਲਈ ਅੱਪਗਰੇਡਾਂ ਨੂੰ ਵੇਖਾਓ।"
 
-#: commands/list/list.cpp:97
+#: commands/list/list.cpp:98
 msgid "List packages which will be removed by the 'dnf autoremove' command."
 msgstr ""
 
-#: commands/list/list.cpp:194 commands/list/list.cpp:199
+#: commands/list/list.cpp:195 commands/list/list.cpp:200
 msgid "Installed packages"
 msgstr "ਇੰਸਟਾਲ ਹੋਏ ਪੈਕੇਜ"
 
-#: commands/list/list.cpp:195 commands/list/list.cpp:208
+#: commands/list/list.cpp:196 commands/list/list.cpp:209
 msgid "Available packages"
 msgstr "ਮੌਜੂਦ ਪੈਕੇਜ"
 
-#: commands/list/list.cpp:216
+#: commands/list/list.cpp:217
 msgid "Available upgrades"
 msgstr "ਮੌਜੂਦ ਅੱਪਗਰੇਡ"
 
-#: commands/list/list.cpp:232
+#: commands/list/list.cpp:233
 msgid "Obsoleting packages"
 msgstr "ਬਰਤਰਫ਼ ਕੀਤੇ ਪੈਕੇਜ"
 
-#: commands/list/list.cpp:237
+#: commands/list/list.cpp:238
 msgid "Autoremove packages"
 msgstr "ਆਟੋ-ਹਟਾਉਣ ਲਈ ਪੈਕੇਜ"
 
-#: commands/list/list.cpp:241
+#: commands/list/list.cpp:242
 msgid "Extra packages"
 msgstr "ਵਾਧੂ ਪੈਕੇਜ"
 
-#: commands/list/list.cpp:252
+#: commands/list/list.cpp:253
 msgid "Recently added packages"
 msgstr "ਸੱਜਰੇ ਜੋੜੇ ਗਏ ਪੈਕੇਜ"
 
-#: commands/list/list.cpp:257
+#: commands/list/list.cpp:258
 msgid "No matching packages to list"
 msgstr ""
 
@@ -669,149 +669,149 @@ msgstr "ਮੋਡੀਊਲਾਂ ਦਾ ਇੰਤਜ਼ਾਮ"
 msgid "No matches found for \"{}\"."
 msgstr "\"{}\" ਲਈ ਕੋਈ ਮੇਲ ਨਹੀਂ ਲੱਭਿਆ।"
 
-#: commands/offline/offline.cpp:214
+#: commands/offline/offline.cpp:217
 msgid "Manage offline transactions"
 msgstr "ਆਫ਼ਲਾਈਨ ਟਰਾਂਜ਼ੈਕਸ਼ਨ ਦਾ ਇੰਤਜ਼ਾਮ"
 
-#: commands/offline/offline.cpp:246
+#: commands/offline/offline.cpp:249
 msgid ""
 "Error reading state: {}. Rerun the command you used to initiate the offline "
 "transaction, e.g. `dnf5 system-upgrade download [OPTIONS]`."
 msgstr ""
 
-#: commands/offline/offline.cpp:269
+#: commands/offline/offline.cpp:272
 msgid "Couldn't connect to D-Bus: {}"
 msgstr "D-Bus ਨਾਲ ਕਨੈਕਟ ਨਹੀਂ ਕੀਤਾ ਜਾ ਸਕਿਆ: {}"
 
-#: commands/offline/offline.cpp:300
+#: commands/offline/offline.cpp:303
 msgid ""
 "Prepare the system to perform the offline transaction and reboot to start "
 "the transaction."
 msgstr "ਸਿਸਟਮ ਨੂੰ ਆਫ਼ਲਾਈਨ ਟਰਾਂਜ਼ੈਕਸ਼ਨ ਲਈ ਤਿਆਰ ਕਰੋ ਅਤੇ ਟਰਾਂਜ਼ੈਕਸ਼ਨ ਸ਼ੁਰੂ ਕਰਨ ਲਈ ਮੁੜ-ਚਾਲੂ ਕਰੋ।"
 
-#: commands/offline/offline.cpp:307
+#: commands/offline/offline.cpp:310
 msgid "Power off the system after the operation is complete"
 msgstr "ਕਾਰਵਾਈ ਪੂਰੀ ਹੋਣ ਦੇ ਬਾਅਦ ਸਿਸਟਮ ਨੂੰ ਬੰਦ ਕਰੋ"
 
-#: commands/offline/offline.cpp:318
+#: commands/offline/offline.cpp:321
 msgid "No offline transaction is stored."
 msgstr "ਕੋਈ ਆਫ਼ਲਾਈਨ ਟਰਾਂਜ਼ੈਕਸ਼ਨ ਸੰਭਾਲੀ ਨਹੀਂ ਹੈ।"
 
-#: commands/offline/offline.cpp:326
+#: commands/offline/offline.cpp:329
 msgid "System is not ready for offline transaction."
 msgstr "ਸਿਸਟਮ ਆਫ਼ਲਾਈਨ ਟਰਾਂਜ਼ੈਕਸ਼ਨ ਲਈ ਤਿਆਰ ਨਹੀਂ ਹੈ।"
 
-#: commands/offline/offline.cpp:329
+#: commands/offline/offline.cpp:332
 msgid "Data directory {} does not exist."
 msgstr "ਡਾਟਾ ਡਾਇਰੈਕਟਰੀ {} ਮੌਜੂਦ ਨਹੀਂ ਹੈ।"
 
-#: commands/offline/offline.cpp:354
+#: commands/offline/offline.cpp:357
 msgid "{} is not wanted by system-update.target."
 msgstr ""
 
-#: commands/offline/offline.cpp:364
+#: commands/offline/offline.cpp:367
 #, fuzzy
 #| msgid "The system will now reboot to upgrade to release version "
 msgid "The system will now reboot to upgrade to release version {}."
 msgstr "ਰੀਲਿਜ਼ ਵਰਜ਼ਨ ਲਈ ਅੱਪਗਰੇਡ ਕਰਨ ਲਈ ਹੁਣ ਸਿਸਟਮ ਹੁਣ ਮੁੜ-ਚਾਲੂ ਹੋਵੇਗਾ। "
 
-#: commands/offline/offline.cpp:368
+#: commands/offline/offline.cpp:371
 msgid ""
 "The system will now reboot to perform the offline transaction initiated by "
 "the following command:"
 msgstr "ਸਿਸਟਮ ਹੁਣ ਅੱਗੇ ਦਿੱਤੀ ਕਮਾਂਡ ਵਲੋਂ ਸ਼ੁਰੂ ਕੀਤੀ ਆਫ਼ਲਾਈਨ ਟਰਾਂਜ਼ੈਕਸ਼ਨ ਕਰਨ ਲਈ ਮੁੜ-ਚਾਲੂ ਹੋਵੇਗਾ:"
 
-#: commands/offline/offline.cpp:399
+#: commands/offline/offline.cpp:402
 msgid ""
 "Internal use only, not intended to be run by the user. Execute the "
 "transaction in the offline environment."
 msgstr ""
 
-#: commands/offline/offline.cpp:433
+#: commands/offline/offline.cpp:436
 msgid "Trigger file does not exist. Exiting."
 msgstr ""
 
-#: commands/offline/offline.cpp:437
+#: commands/offline/offline.cpp:440
 msgid "Another offline transaction tool is running. Exiting."
 msgstr "ਹੋਰ ਆਫ਼ਲਾਈਨ ਟਰਾਂਜ਼ੈਕਸ਼ਨ ਟੂਲ ਚੱਲ ਰਿਹਾ ਹੈ। ਬੰਦ ਕੀਤਾ ਜਾ ਰਿਹਾ ਹੈ।"
 
-#: commands/offline/offline.cpp:464
+#: commands/offline/offline.cpp:467
 #, fuzzy
 #| msgid "No offline transaction is stored."
 msgid "Starting offline transaction. This will take a while."
 msgstr "ਕੋਈ ਆਫ਼ਲਾਈਨ ਟਰਾਂਜ਼ੈਕਸ਼ਨ ਸੰਭਾਲੀ ਨਹੀਂ ਹੈ।"
 
-#: commands/offline/offline.cpp:468
+#: commands/offline/offline.cpp:471
 msgid "Starting system upgrade. This will take a while."
 msgstr ""
 
-#: commands/offline/offline.cpp:480
+#: commands/offline/offline.cpp:483
 msgid "Use `dnf5 offline reboot` to begin the transaction."
 msgstr "ਟਰਾਂਜ਼ੈਕਸ਼ਨ ਸ਼ੁਰੂ ਕਰਨ ਲਈ `dnf5 offline reboot` ਨੂੰ ਵਰਤੋਂ।"
 
-#: commands/offline/offline.cpp:531
+#: commands/offline/offline.cpp:534
 msgid "Transaction failed: "
 msgstr "ਟਰਾਂਜ਼ੈਕਸ਼ਨ ਅਸਫ਼ਲ ਹੈ: "
 
-#: commands/offline/offline.cpp:601
+#: commands/offline/offline.cpp:604
 msgid "Error reading journal: {}"
 msgstr "ਜਰਨਲ ਪੜ੍ਹਨ ਦੌਰਾਨ ਗਲਤੀ: {}"
 
-#: commands/offline/offline.cpp:607
+#: commands/offline/offline.cpp:610
 msgid "Add journal match failed: {}"
 msgstr ""
 
-#: commands/offline/offline.cpp:635
+#: commands/offline/offline.cpp:638
 msgid "No logs were found."
 msgstr "ਕੋਈ ਲਾਗ ਨਹੀਂ ਲੱਭਿਆ।"
 
-#: commands/offline/offline.cpp:639
+#: commands/offline/offline.cpp:642
 msgid "The following boots appear to contain offline transaction logs:"
 msgstr ""
 
-#: commands/offline/offline.cpp:656
+#: commands/offline/offline.cpp:659
 msgid "Cannot find logs with this index."
 msgstr "ਇਸ ਇੰਡੈਕਸ ਨਾਲ ਲਾਗ ਨਹੀਂ ਲੱਭੇ ਜਾ ਸਕਦੇ ਹਨ।"
 
-#: commands/offline/offline.cpp:663
+#: commands/offline/offline.cpp:666
 msgid "Unable to match systemd journal entry."
 msgstr ""
 
-#: commands/offline/offline.cpp:675
+#: commands/offline/offline.cpp:678
 msgid "Show logs from past offline transactions"
 msgstr "ਪਿਛਲੀਆਂ ਆਫ਼ਲਾਈਨ ਟਰਾਂਜ਼ੈਕਸ਼ਨਾਂ ਤੋਂ ਲਾਗ ਨੂੰ ਵੇਖਾਓ"
 
-#: commands/offline/offline.cpp:683
+#: commands/offline/offline.cpp:686
 msgid ""
 "Which log to show. Run without any arguments to get a list of available logs."
 msgstr ""
 
-#: commands/offline/offline.cpp:698
+#: commands/offline/offline.cpp:701
 msgid ""
 "systemd is not supported in this build of DNF 5; the `log` subcommand is "
 "unavailable."
 msgstr ""
 
-#: commands/offline/offline.cpp:703
+#: commands/offline/offline.cpp:706
 msgid "Show status of the current offline transaction"
 msgstr "ਮੌਜੂਦਾ ਆਫ਼ਲਾਈਨ ਟਰਾਂਜ਼ੈਕਸ਼ਨ ਦੀ ਸਥਿਤੀ ਨੂੰ ਵੇਖਾਓ"
 
-#: commands/offline/offline.cpp:719
+#: commands/offline/offline.cpp:722
 msgid "An offline transaction was initiated by the following command:"
 msgstr "ਇੱਕ ਆਫ਼ਲਾਈਨ ਟਰਾਂਜ਼ੈਕਸ਼ਨ ਨੂੰ ਅੱਗੇ ਦਿੱਤੀ ਕਮਾਂਡ ਵਲੋਂ ਸ਼ੁਰੂ ਕੀਤਾ ਗਿਆ ਹੈ:"
 
-#: commands/offline/offline.cpp:721
+#: commands/offline/offline.cpp:724
 msgid ""
 "Run `dnf5 offline reboot` to reboot and perform the offline transaction."
 msgstr "ਮੁੜ ਚਾਲੂ ਕਰਨ ਅਤੇ ਆਫ਼ਲਾਈਨ ਟਰਾਂਜ਼ੈਕਸ਼ਨ ਕਰਨ ਲਈ `dnf5 offline reboot` ਨੂੰ ਚਲਾਓ।"
 
-#: commands/offline/offline.cpp:723
+#: commands/offline/offline.cpp:726
 msgid ""
 "An offline transaction was started, but it did not finish. Run `dnf5 offline "
 "log` for more information. The command that initiated the transaction was:"
 msgstr ""
 
-#: commands/offline/offline.cpp:728
+#: commands/offline/offline.cpp:731
 msgid "Unknown offline transaction status: "
 msgstr "ਅਣਪਛਾਤੀ ਆਫ਼ਲਾਈਨ ਟਰਾਂਜ਼ੈਕਸ਼ਨ ਸਥਿਤੀ: "
 
@@ -934,20 +934,20 @@ msgstr ""
 msgid "Add new entry to versionlock configuration"
 msgstr ""
 
-#: commands/versionlock/versionlock_add.cpp:43
-msgid "List of package specs to add versionlock for"
+#: commands/versionlock/versionlock_add.cpp:44
+msgid "List of package package-spec-N to add versionlock for"
 msgstr ""
 
-#: commands/versionlock/versionlock_add.cpp:106
-#: commands/versionlock/versionlock_exclude.cpp:125
+#: commands/versionlock/versionlock_add.cpp:107
+#: commands/versionlock/versionlock_exclude.cpp:126
 msgid "No package found for \"{}\"."
 msgstr "\"{}\" ਲਈ ਕੋਈ ਪੈਕੇਜ ਨਹੀਂ ਲੱਭਿਆ।"
 
-#: commands/versionlock/versionlock_add.cpp:133
+#: commands/versionlock/versionlock_add.cpp:134
 msgid "Adding versionlock on \"{0} = {1}\"."
 msgstr ""
 
-#: commands/versionlock/versionlock_add.cpp:136
+#: commands/versionlock/versionlock_add.cpp:137
 msgid "Package \"{}\" is already locked."
 msgstr "\"{}\" ਪੈਕੇਜ ਪਹਿਲਾਂ ਹੀ ਲਾਕ ਹੈ।"
 
@@ -971,16 +971,16 @@ msgstr ""
 msgid "Add new exclude entry to versionlock configuration"
 msgstr ""
 
-#: commands/versionlock/versionlock_exclude.cpp:43
-msgid "List of package specs to add versionlock exclude for"
+#: commands/versionlock/versionlock_exclude.cpp:44
+msgid "List of package-spec-N to add versionlock exclude for"
 msgstr ""
 
-#: commands/versionlock/versionlock_exclude.cpp:88
-#: commands/versionlock/versionlock_exclude.cpp:100
+#: commands/versionlock/versionlock_exclude.cpp:89
+#: commands/versionlock/versionlock_exclude.cpp:101
 msgid "Adding versionlock exclude on \"{0} = {1}\"."
 msgstr ""
 
-#: commands/versionlock/versionlock_exclude.cpp:139
+#: commands/versionlock/versionlock_exclude.cpp:140
 msgid "Package \"{}\" is already excluded."
 msgstr "\"{}\" ਪੈਕੇਜ ਪਹਿਲਾਂ ਹੀ ਅਲਹਿਦਾ ਕੀਤਾ ਹੈ।"
 

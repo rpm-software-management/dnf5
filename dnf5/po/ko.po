@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-19 03:39+0000\n"
-"PO-Revision-Date: 2025-06-14 10:57+0000\n"
+"POT-Creation-Date: 2025-07-11 03:49+0000\n"
+"PO-Revision-Date: 2025-07-10 07:51+0000\n"
 "Last-Translator: 김인수 <simmon@nplob.com>\n"
 "Language-Team: Korean <https://translate.fedoraproject.org/projects/dnf5/"
 "dnf5/ko/>\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.11.4\n"
+"X-Generator: Weblate 5.12.2\n"
 
 #: cmdline_aliases.cpp:84 context.cpp:301 main.cpp:1357
 msgid ", "
@@ -389,7 +389,7 @@ msgstr "캐쉬 디렉토리를 반복 할 수 없습니다 \"{}\": {}"
 msgid "Install debuginfo packages."
 msgstr "디버그 정보 꾸러미를 설치합니다."
 
-#: commands/distro-sync/distro-sync.cpp:42
+#: commands/distro-sync/distro-sync.cpp:44
 msgid ""
 "Upgrade or downgrade installed software to the latest available versions"
 msgstr "설치된 소프트웨어를 최신의 사용 가능한 버전으로 향상 또는 하향"
@@ -619,23 +619,23 @@ msgstr ""
 msgid "Lists packages depending on the packages' relation to the system"
 msgstr "꾸러미와 시스템의 연관에 따라 의존하는 꾸러미를 나열합니다"
 
-#: commands/list/list.cpp:47
-msgid "List of keys to match case insensitively"
-msgstr "대소문자를 구분하지 않도록 일치하는 키의 목록"
+#: commands/list/list.cpp:48
+msgid "List of package-spec-NI to match (case insensitively)"
+msgstr "일치 시킬 때에 package-spec-NI의 목록 (대소문자 구분 없음)"
 
-#: commands/list/list.cpp:59
+#: commands/list/list.cpp:60
 msgid "Show all versions of the packages, not only the latest ones."
 msgstr "최종 부분만이 아닌 꾸러미의 모든 버전을 표시합니다."
 
-#: commands/list/list.cpp:65
+#: commands/list/list.cpp:66
 msgid "List installed packages."
 msgstr "설치된 꾸러미 목록."
 
-#: commands/list/list.cpp:69
+#: commands/list/list.cpp:70
 msgid "List available packages."
 msgstr "사용 할 수 있는 꾸러미 목록."
 
-#: commands/list/list.cpp:76
+#: commands/list/list.cpp:77
 msgid ""
 "List extras, that is packages installed on the system that are not available "
 "in any known repository."
@@ -643,7 +643,7 @@ msgstr ""
 "알려진 저장소에서 사용 할 수 없는 시스템에 설치된 꾸러미로 추가된 부분을 나열"
 "합니다."
 
-#: commands/list/list.cpp:84
+#: commands/list/list.cpp:85
 msgid ""
 "List packages installed on the system that are obsoleted by packages in any "
 "known repository."
@@ -651,47 +651,47 @@ msgstr ""
 "알려진 저장소에서 꾸러미에 의해 더 이상 사용하지 않는 시스템에서 설치된 꾸러"
 "미를 나열합니다."
 
-#: commands/list/list.cpp:89
+#: commands/list/list.cpp:90
 msgid "List packages recently added into the repositories."
 msgstr "최근에 저장소로 추가된 꾸러미를 나열합니다."
 
-#: commands/list/list.cpp:93
+#: commands/list/list.cpp:94
 msgid "List upgrades available for the installed packages."
 msgstr "설치된 꾸러미를 위해 사용 가능한 향상을 나열합니다."
 
-#: commands/list/list.cpp:97
+#: commands/list/list.cpp:98
 msgid "List packages which will be removed by the 'dnf autoremove' command."
 msgstr "'dnf autoremove' 명령에 의해 제거 될 꾸러미를 나열합니다."
 
-#: commands/list/list.cpp:194 commands/list/list.cpp:199
+#: commands/list/list.cpp:195 commands/list/list.cpp:200
 msgid "Installed packages"
 msgstr "설치된 꾸러미"
 
-#: commands/list/list.cpp:195 commands/list/list.cpp:208
+#: commands/list/list.cpp:196 commands/list/list.cpp:209
 msgid "Available packages"
 msgstr "사용 할 수 있는 꾸러미"
 
-#: commands/list/list.cpp:216
+#: commands/list/list.cpp:217
 msgid "Available upgrades"
 msgstr "사용 가능한 향상"
 
-#: commands/list/list.cpp:232
+#: commands/list/list.cpp:233
 msgid "Obsoleting packages"
 msgstr "더 이상 사용되지 않는 꾸러미"
 
-#: commands/list/list.cpp:237
+#: commands/list/list.cpp:238
 msgid "Autoremove packages"
 msgstr "꾸러미 자동제거"
 
-#: commands/list/list.cpp:241
+#: commands/list/list.cpp:242
 msgid "Extra packages"
 msgstr "추가 꾸러미"
 
-#: commands/list/list.cpp:252
+#: commands/list/list.cpp:253
 msgid "Recently added packages"
 msgstr "최근에 추가된 꾸러미"
 
-#: commands/list/list.cpp:257
+#: commands/list/list.cpp:258
 msgid "No matching packages to list"
 msgstr "목록과 일치하는 꾸러미가 없습니다"
 
@@ -719,11 +719,11 @@ msgstr "모듈 관리"
 msgid "No matches found for \"{}\"."
 msgstr "\"{}\"를 위해 일치되는 것을 찾을 수 없습니다."
 
-#: commands/offline/offline.cpp:214
+#: commands/offline/offline.cpp:217
 msgid "Manage offline transactions"
 msgstr "오프라인 연결을 관리합니다"
 
-#: commands/offline/offline.cpp:246
+#: commands/offline/offline.cpp:249
 msgid ""
 "Error reading state: {}. Rerun the command you used to initiate the offline "
 "transaction, e.g. `dnf5 system-upgrade download [OPTIONS]`."
@@ -731,42 +731,42 @@ msgstr ""
 "읽는 중에 상태 오류: {}. 오프라인 연결(예: `dnf5 system-upgrade download "
 "[OPTIONS]`)을 시작하는 데 사용되는 명령을 재실행합니다."
 
-#: commands/offline/offline.cpp:269
+#: commands/offline/offline.cpp:272
 msgid "Couldn't connect to D-Bus: {}"
 msgstr "D-Bus로 연결 할 수 없음: {}"
 
-#: commands/offline/offline.cpp:300
+#: commands/offline/offline.cpp:303
 msgid ""
 "Prepare the system to perform the offline transaction and reboot to start "
 "the transaction."
 msgstr ""
 "시스템을 오프라인 연결을 수행하도록 준비하고 연결을 시작하도록 재부팅합니다."
 
-#: commands/offline/offline.cpp:307
+#: commands/offline/offline.cpp:310
 msgid "Power off the system after the operation is complete"
 msgstr "동작이 완료된 후에 시스템을 종료합니다"
 
-#: commands/offline/offline.cpp:318
+#: commands/offline/offline.cpp:321
 msgid "No offline transaction is stored."
 msgstr "오프라인 연결은 저장되지 않습니다."
 
-#: commands/offline/offline.cpp:326
+#: commands/offline/offline.cpp:329
 msgid "System is not ready for offline transaction."
 msgstr "시스템은 오프라인 연결을 위해 준비되어 있지 않습니다."
 
-#: commands/offline/offline.cpp:329
+#: commands/offline/offline.cpp:332
 msgid "Data directory {} does not exist."
 msgstr "자료 디렉토리 {}가 존재하지 않습니다."
 
-#: commands/offline/offline.cpp:354
+#: commands/offline/offline.cpp:357
 msgid "{} is not wanted by system-update.target."
 msgstr "{}는 system-update.target에 의해 원하지 않습니다."
 
-#: commands/offline/offline.cpp:364
+#: commands/offline/offline.cpp:367
 msgid "The system will now reboot to upgrade to release version {}."
 msgstr "시스템은 현재 출시 버전으로 향상 하도록 재부팅 합니다 {}."
 
-#: commands/offline/offline.cpp:368
+#: commands/offline/offline.cpp:371
 msgid ""
 "The system will now reboot to perform the offline transaction initiated by "
 "the following command:"
@@ -774,7 +774,7 @@ msgstr ""
 "시스템은 현재 다음과 같은 명령에 의해 시작되도록 오프라인 연결을 수행하도록 "
 "재시작 합니다:"
 
-#: commands/offline/offline.cpp:399
+#: commands/offline/offline.cpp:402
 msgid ""
 "Internal use only, not intended to be run by the user. Execute the "
 "transaction in the offline environment."
@@ -782,65 +782,65 @@ msgstr ""
 "내부용으로만 사용되며, 사용자에 의해 동작하도록 하지 않습니다. 오프라인 환경"
 "에서 연결을 실행합니다."
 
-#: commands/offline/offline.cpp:433
+#: commands/offline/offline.cpp:436
 msgid "Trigger file does not exist. Exiting."
 msgstr "트리거 파일이 존재하지 않습니다. 나가는 중."
 
-#: commands/offline/offline.cpp:437
+#: commands/offline/offline.cpp:440
 msgid "Another offline transaction tool is running. Exiting."
 msgstr "다른 오프라인 연결 도구가 동작 중입니다. 나가는 중."
 
-#: commands/offline/offline.cpp:464
+#: commands/offline/offline.cpp:467
 msgid "Starting offline transaction. This will take a while."
 msgstr "오프라인 연결 시작. 시간이 좀 걸립니다."
 
-#: commands/offline/offline.cpp:468
+#: commands/offline/offline.cpp:471
 msgid "Starting system upgrade. This will take a while."
 msgstr "시스템 향상 시작. 시간이 좀 걸립니다."
 
-#: commands/offline/offline.cpp:480
+#: commands/offline/offline.cpp:483
 msgid "Use `dnf5 offline reboot` to begin the transaction."
 msgstr "`dnf5 offline reboot`을 사용하여 연결을 시작합니다."
 
-#: commands/offline/offline.cpp:531
+#: commands/offline/offline.cpp:534
 msgid "Transaction failed: "
 msgstr "연결 실패함: "
 
-#: commands/offline/offline.cpp:601
+#: commands/offline/offline.cpp:604
 msgid "Error reading journal: {}"
 msgstr "journal을 읽기 중 오류: {}"
 
-#: commands/offline/offline.cpp:607
+#: commands/offline/offline.cpp:610
 msgid "Add journal match failed: {}"
 msgstr "Journal 일치 추가에 실패함: {}"
 
-#: commands/offline/offline.cpp:635
+#: commands/offline/offline.cpp:638
 msgid "No logs were found."
 msgstr "기록을 찾을 수 없습니다."
 
-#: commands/offline/offline.cpp:639
+#: commands/offline/offline.cpp:642
 msgid "The following boots appear to contain offline transaction logs:"
 msgstr "다음 부트는 오프라인 연결 기록을 포함하도록 표시됩니다:"
 
-#: commands/offline/offline.cpp:656
+#: commands/offline/offline.cpp:659
 msgid "Cannot find logs with this index."
 msgstr "이와 같은 색인을 갖는 기록을 찾을 수 없습니다."
 
-#: commands/offline/offline.cpp:663
+#: commands/offline/offline.cpp:666
 msgid "Unable to match systemd journal entry."
 msgstr "systemd journal 항목과 일치 할 수 없음."
 
-#: commands/offline/offline.cpp:675
+#: commands/offline/offline.cpp:678
 msgid "Show logs from past offline transactions"
 msgstr "지난 오프라인 연결에서 기록을 표시합니다"
 
-#: commands/offline/offline.cpp:683
+#: commands/offline/offline.cpp:686
 msgid ""
 "Which log to show. Run without any arguments to get a list of available logs."
 msgstr ""
 "표시 하려는 기록. 사용 가능한 기록의 목록을 가져오도록 인수 없이 실행합니다."
 
-#: commands/offline/offline.cpp:698
+#: commands/offline/offline.cpp:701
 msgid ""
 "systemd is not supported in this build of DNF 5; the `log` subcommand is "
 "unavailable."
@@ -848,21 +848,21 @@ msgstr ""
 "systemd는 DNF 5의 이 제작에서 지원되지 않습니다; `log` 하위명령은 사용 할 수 "
 "없습니다."
 
-#: commands/offline/offline.cpp:703
+#: commands/offline/offline.cpp:706
 msgid "Show status of the current offline transaction"
 msgstr "현재 오프라인 연결 상태를 표시합니다"
 
-#: commands/offline/offline.cpp:719
+#: commands/offline/offline.cpp:722
 msgid "An offline transaction was initiated by the following command:"
 msgstr "다음 명령에 의해 오프라인 연결이 시작되었습니다:"
 
-#: commands/offline/offline.cpp:721
+#: commands/offline/offline.cpp:724
 msgid ""
 "Run `dnf5 offline reboot` to reboot and perform the offline transaction."
 msgstr ""
 "`dnf5 offline reboot`를 동작하여 재시작 하고 오프라인 연결을 수행합니다."
 
-#: commands/offline/offline.cpp:723
+#: commands/offline/offline.cpp:726
 msgid ""
 "An offline transaction was started, but it did not finish. Run `dnf5 offline "
 "log` for more information. The command that initiated the transaction was:"
@@ -870,7 +870,7 @@ msgstr ""
 "오프라인 연결이 시작되었지만, 종료되지 못했습니다. 더 많은 정보를 위해 `dnf5 "
 "offline log`를 수행해요. 연결이 시작된 명령은 다음과 같습니다:"
 
-#: commands/offline/offline.cpp:728
+#: commands/offline/offline.cpp:731
 msgid "Unknown offline transaction status: "
 msgstr "알지 못하는 오프라인 연결 상태: "
 
@@ -1001,20 +1001,20 @@ msgstr "versionlock 구성 관리"
 msgid "Add new entry to versionlock configuration"
 msgstr "신규 항목을 versionlock 구성에 추가합니다"
 
-#: commands/versionlock/versionlock_add.cpp:43
-msgid "List of package specs to add versionlock for"
-msgstr "versionlock을 추가하려는 꾸러미 상세 목록"
+#: commands/versionlock/versionlock_add.cpp:44
+msgid "List of package package-spec-N to add versionlock for"
+msgstr "versionlock을 추가하려는 꾸러미 package-spec-N의 목록"
 
-#: commands/versionlock/versionlock_add.cpp:106
-#: commands/versionlock/versionlock_exclude.cpp:125
+#: commands/versionlock/versionlock_add.cpp:107
+#: commands/versionlock/versionlock_exclude.cpp:126
 msgid "No package found for \"{}\"."
 msgstr "\"{}\"를 위해 어떤 꾸러미도 찾을 수 없습니다."
 
-#: commands/versionlock/versionlock_add.cpp:133
+#: commands/versionlock/versionlock_add.cpp:134
 msgid "Adding versionlock on \"{0} = {1}\"."
 msgstr "\"{0} = {1}\"에서 versionlock 추가하기."
 
-#: commands/versionlock/versionlock_add.cpp:136
+#: commands/versionlock/versionlock_add.cpp:137
 msgid "Package \"{}\" is already locked."
 msgstr "꾸러미 {} 는 이미 잠겨졌습니다."
 
@@ -1038,16 +1038,16 @@ msgstr "versionlock 항목을 삭제 중:"
 msgid "Add new exclude entry to versionlock configuration"
 msgstr "신규 예외 항목을 versionlock 구성에 추가합니다"
 
-#: commands/versionlock/versionlock_exclude.cpp:43
-msgid "List of package specs to add versionlock exclude for"
-msgstr "versionlock 제외를 추가하려는 꾸러미 사양의 목록"
+#: commands/versionlock/versionlock_exclude.cpp:44
+msgid "List of package-spec-N to add versionlock exclude for"
+msgstr "versionlock 제외를 추가하려는 package-spec-N의 목록"
 
-#: commands/versionlock/versionlock_exclude.cpp:88
-#: commands/versionlock/versionlock_exclude.cpp:100
+#: commands/versionlock/versionlock_exclude.cpp:89
+#: commands/versionlock/versionlock_exclude.cpp:101
 msgid "Adding versionlock exclude on \"{0} = {1}\"."
 msgstr "\"{0} = {1}\"에서 versionlock 예외 추가 중."
 
-#: commands/versionlock/versionlock_exclude.cpp:139
+#: commands/versionlock/versionlock_exclude.cpp:140
 msgid "Package \"{}\" is already excluded."
 msgstr "꾸러미 {} 는 이미 제외되었습니다."
 

@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-19 03:39+0000\n"
-"PO-Revision-Date: 2025-05-10 15:59+0000\n"
+"POT-Creation-Date: 2025-07-11 03:49+0000\n"
+"PO-Revision-Date: 2025-07-02 18:28+0000\n"
 "Last-Translator: Cheng-Chia Tseng <pswo10680@gmail.com>\n"
 "Language-Team: Chinese (Traditional) <https://translate.fedoraproject.org/"
 "projects/dnf5/libdnf5-cli/zh_TW/>\n"
@@ -18,56 +18,56 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.11.3\n"
+"X-Generator: Weblate 5.12.2\n"
 
 #: argument_parser.cpp:68
 msgid "Misconfigured alias \"{}\": cannot convert \"{}\" to a number"
-msgstr ""
+msgstr "組態設定錯誤的別名「{}」：無法將「{}」轉換為數字"
 
 #: argument_parser.cpp:76
 msgid "Misconfigured alias \"{}\": index \"{}\" out of range"
-msgstr ""
+msgstr "組態設定錯誤的別名「{}」：索引「{}」超出範圍"
 
 #: argument_parser.cpp:98
 msgid "\"{}\" not allowed together with named argument \"{}\""
-msgstr "「{}」 不可與已命名的參數 「{}」 一起使用"
+msgstr "「{}」不可與已命名的引數「{}」一起使用"
 
 #: argument_parser.cpp:100
 msgid "\"{}\" not allowed in command \"{}\""
-msgstr "指令 「{}」 中不允許使用 「{}」"
+msgstr "命令「{}」中不允許使用「{}」"
 
 #: argument_parser.cpp:102
 msgid "\"{}\" not allowed together with positional argument \"{}\""
-msgstr "「{}」 不可與位置參數 「{}」 一起使用"
+msgstr "「{}」不可與位置引數「{}」一起使用"
 
 #: argument_parser.cpp:147
 msgid "Argument id \"{}\" already registered in group \"{}\""
-msgstr "參數 ID 「{}」 已在群組 「{}」 中註冊"
+msgstr "引數 ID「{}」已在群組「{}」中註冊"
 
 #: argument_parser.cpp:274
 msgid "Invalid character '.' in argument id \"{}\""
-msgstr "參數 id 「{}」 中的無效字符 '.'"
+msgstr "引數 ID「{}」中的無效字符 '.'"
 
 #: argument_parser.cpp:382 argument_parser.cpp:387
 msgid "Too few values for positional argument \"{}\""
-msgstr "位置參數 「{}」 的值太少"
+msgstr "位置引數「{}」的值太少"
 
 #: argument_parser.cpp:548
 msgid "Missing value for named argument \"--{}\""
-msgstr "己命名參數 \"--{}\" 的值有缺少"
+msgstr "己命名引數 \"--{}\" 的值有缺少"
 
 #: argument_parser.cpp:556
 msgid "Unexpected value for named argument \"--{}\""
-msgstr "已命名參數 \"--{}\" 的非預期值"
+msgstr "已命名引數 \"--{}\" 的非預期值"
 
 #: argument_parser.cpp:598
 msgid "Missing value for named argument \"-{}\""
-msgstr "命名參數 \"-{}\" 的值有缺少"
+msgstr "命名引數 \"-{}\" 的值有缺少"
 
 #. print usage
 #: argument_parser.cpp:694
 msgid "Usage:"
-msgstr "用法:"
+msgstr "用法："
 
 #: argument_parser.cpp:702
 msgid "Description:"
@@ -75,57 +75,55 @@ msgstr "描述："
 
 #: argument_parser.cpp:979
 msgid "Command id \"{}\" already registered for command \"{}\""
-msgstr "指令 ID 「{}」 已註冊為指令 「{}」"
+msgstr "命令 ID「{}」已註冊為命令「{}」"
 
 #: argument_parser.cpp:990
 msgid "Named argument id \"{}\" already registered for command \"{}\""
-msgstr "已為指令 「{}」 註冊命名的參數 ID 「{}」"
+msgstr "已為命令「{}」註冊命名的引數 ID「{}」"
 
 #: argument_parser.cpp:1000
 msgid "Positional argument id \"{}\" already registered for command \"{}\""
-msgstr "位置參數 id 「{}」 已為指令 「{}」 進行註冊"
+msgstr "位置引數 id「{}」已為命令「{}」進行註冊"
 
 #: argument_parser.cpp:1010
 msgid "Group id \"{}\" already registered for command \"{}\""
-msgstr "群組 ID「{}」 已為指令 「{}」 進行註冊"
+msgstr "群組 ID「{}」已為命令「{}」進行註冊"
 
 #: argument_parser.cpp:1037
 msgid "Command id \"{}\" does not contain subcommand with id \"{}\""
-msgstr "指令 ID 「{}」 不包含 ID 為 「{}」 的子指令"
+msgstr "命令 ID「{}」不包含 ID 為「{}」的子命令"
 
 #: argument_parser.cpp:1045
 msgid "Command id \"{}\" does not contain named argument with id \"{}\""
-msgstr "指令 id 「{}」 不包含 id 為 「{}」 的命名參數"
+msgstr "命令 id「{}」不包含 id 為「{}」的命名引數"
 
 #: argument_parser.cpp:1053
 msgid "Command id \"{}\" does not contain positional argument with id \"{}\""
-msgstr "指令 id 「{}」 不包含位置參數 id 「{}」"
+msgstr "命令 id「{}」不包含位置引數 id「{}」"
 
 #: argument_parser.cpp:1060
 msgid "Command id \"{}\" does not contain group with id \"{}\""
-msgstr "指令 ID 「{}」 不包含 ID 為 「{}」 的群組"
+msgstr "命令 ID「{}」不包含 ID 為「{}」的群組"
 
 #: argument_parser.cpp:1177 argument_parser.cpp:1388
 msgid "Unknown argument \"{}\" for command \"{}\""
-msgstr "指令 「{}」 的未知參數 「{}」"
+msgstr "命令「{}」的未知引數「{}」"
 
 #: argument_parser.cpp:1192 argument_parser.cpp:1403
 msgid "Missing positional argument \"{}\" for command \"{}\""
-msgstr "命令 「{}」 缺少位置參數 「{}」"
+msgstr "命令「{}」缺少位置引數「{}」"
 
 #: argument_parser.cpp:1274
-#, fuzzy
-#| msgid "Missing value for named argument \"-{}\""
 msgid "Missing value for command alias \"{}\""
-msgstr "命名參數 \"-{}\" 的值有缺少"
+msgstr "命令別名「{}」的值有缺少"
 
 #: argument_parser.cpp:1610
 msgid "Named argument with path id \"{}\" not found"
-msgstr "未找到路徑 ID 為 「{}」 的已命名參數"
+msgstr "未找到路徑 ID 為「{}」的已命名引數"
 
 #: argument_parser.cpp:1620
 msgid "Positional argument with path id \"{}\" not found"
-msgstr "未找到路徑 ID 為 「{}」 的位置參數"
+msgstr "未找到路徑 ID 為「{}」的位置引數"
 
 #: exception.cpp:30
 msgid "Operation aborted by the user."
@@ -141,7 +139,7 @@ msgstr "提示：[d] 預設、[e] 已啟用, [x] 已停用, [i] 已安裝, [a] �
 
 #: output/modulelist.cpp:39
 msgid "Hint: [d]efault, [e]nabled, [x]disabled, [i]nstalled"
-msgstr "提示：預設[d]、已啟用[e]、已停用[x]、已安裝[i]"
+msgstr "提示：[d] 預設、[e] 已啟用、[x] 已停用、[i] 已安裝"
 
 #. Note for translators: This is a right-aligned column separator in
 #. a package properties table as in "Name    : bash".
@@ -156,7 +154,7 @@ msgstr "名稱"
 
 #: output/packageinfo.cpp:68
 msgid "Epoch"
-msgstr "時代"
+msgstr "Epoch"
 
 #: output/packageinfo.cpp:69 output/transaction_table.cpp:289
 msgid "Version"
@@ -172,7 +170,7 @@ msgstr "架構"
 
 #: output/packageinfo.cpp:75
 msgid "Obsoletes"
-msgstr "過時的"
+msgstr "棄用"
 
 #: output/packageinfo.cpp:85
 msgid "Download size"
@@ -224,7 +222,7 @@ msgstr "找不到符合項目。"
 
 #: output/search.cpp:101
 msgid "Matched fields: "
-msgstr "符合欄位： "
+msgstr "符合的欄位： "
 
 #: output/transaction_table.cpp:127
 msgid "Transaction Summary:\n"
@@ -240,31 +238,31 @@ msgstr[0] " 正在安裝：      {:4} 軟體包\n"
 #: output/transaction_table.cpp:141
 msgid " Reinstalling:    {:4} package\n"
 msgid_plural " Reinstalling:    {:4} packages\n"
-msgstr[0] " 正在重新安裝：    {:4} 軟體包\n"
+msgstr[0] " 正在重新安裝：{:4} 軟體包\n"
 
 #. Keep the replaceble number aligned across all messages.
 #: output/transaction_table.cpp:150
 msgid " Upgrading:       {:4} package\n"
 msgid_plural " Upgrading:       {:4} packages\n"
-msgstr[0] " 正在升級：       {:4} 軟體包\n"
+msgstr[0] " 正在升級：      {:4} 軟體包\n"
 
 #. Keep the replaceble number aligned across all messages.
 #: output/transaction_table.cpp:159
 msgid " Replacing:       {:4} package\n"
 msgid_plural " Replacing:       {:4} packages\n"
-msgstr[0] " 正在取代：       {:4} 軟體包\n"
+msgstr[0] " 正在取代：      {:4} 軟體包\n"
 
 #. Keep the replaceble number aligned across all messages.
 #: output/transaction_table.cpp:168
 msgid " Removing:        {:4} package\n"
 msgid_plural " Removing:        {:4} packages\n"
-msgstr[0] " 正在移除：        {:4} 軟體包\n"
+msgstr[0] " 正在移除：      {:4} 軟體包\n"
 
 #. Keep the replaceble number aligned across all messages.
 #: output/transaction_table.cpp:177
 msgid " Downgrading:     {:4} package\n"
 msgid_plural " Downgrading:     {:4} packages\n"
-msgstr[0] " 正在降級：     {:4} 軟體包\n"
+msgstr[0] " 正在降級：      {:4} 軟體包\n"
 
 #. Keep the replaceble number aligned across all messages.
 #: output/transaction_table.cpp:186
@@ -276,7 +274,7 @@ msgstr[0] " 正在變更原因：{:4} 軟體包\n"
 #: output/transaction_table.cpp:195
 msgid " Skipping:        {:4} package\n"
 msgid_plural " Skipping:        {:4} packages\n"
-msgstr[0] " 正在略過：        {:4} 軟體包\n"
+msgstr[0] " 正在略過：      {:4} 軟體包\n"
 
 #: output/transaction_table.cpp:277
 msgid "Package"
@@ -308,11 +306,11 @@ msgstr "替換 "
 
 #: output/transaction_table.cpp:470
 msgid "Skipping packages with conflicts:"
-msgstr "略過有衝突的軟體包："
+msgstr "將略過有衝突的軟體包："
 
 #: output/transaction_table.cpp:472
 msgid "Skipping packages with broken dependencies:"
-msgstr "略過依賴關係損壞的軟體包："
+msgstr "將略過依賴關係損壞的軟體包："
 
 #: output/transaction_table.cpp:533
 msgid "Installing dependencies:"
@@ -344,11 +342,11 @@ msgstr "正在重新安裝："
 
 #: output/transaction_table.cpp:553
 msgid "Removing dependent packages:"
-msgstr "正在移除相關的軟體包："
+msgstr "正在移除依賴的軟體包："
 
 #: output/transaction_table.cpp:555
 msgid "Removing unused dependencies:"
-msgstr "正在移除無用的依賴軟體包："
+msgstr "正在移除無用的依賴項目："
 
 #: output/transaction_table.cpp:557
 msgid "Removing:"
@@ -356,11 +354,11 @@ msgstr "正在移除："
 
 #: output/transaction_table.cpp:561
 msgid "Changing reason:"
-msgstr "變更原因："
+msgstr "正在變更原因："
 
 #: output/transaction_table.cpp:593
 msgid "Installing groups dependencies:"
-msgstr "安裝群組相依性："
+msgstr "正在安裝群組依賴項目："
 
 #: output/transaction_table.cpp:595
 msgid "Installing groups:"
@@ -412,4 +410,4 @@ msgstr "總計"
 
 #: session.cpp:149
 msgid "Missing command"
-msgstr "無效指令"
+msgstr "缺少命令"
