@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-19 03:39+0000\n"
+"POT-Creation-Date: 2025-07-11 03:49+0000\n"
 "PO-Revision-Date: 2025-06-01 05:33+0000\n"
 "Last-Translator: 김인수 <simmon@nplob.com>\n"
 "Language-Team: Korean <https://translate.fedoraproject.org/projects/dnf5/"
@@ -630,34 +630,34 @@ msgstr "공개 키 가져오기에 실패함."
 msgid "Invalid tsflag: {}"
 msgstr "잘못된 tsflag: {}"
 
-#: base/transaction.cpp:1318
+#: base/transaction.cpp:1314
 msgid "Public key \"{}\" is already present, not importing."
 msgstr "공개 키 \"{}\"가 이미 존재하고, 가져오지 않습니다."
 
-#: base/transaction.cpp:1339
+#: base/transaction.cpp:1335
 msgid "An error occurred importing key \"{}\": {}"
 msgstr "키를 가져오는 중에 발생하였습니다 \"{}\": {}"
 
-#: base/transaction.cpp:1373
+#: base/transaction.cpp:1369
 msgid "OpenPGP check for package \"{}\" ({}) from repo \"{}\" has failed: "
 msgstr "Openrepo \"{}에서 꾸러미 \"{}\" ({})를 위한 PGP 점검이 실패했습니다: "
 
-#: base/transaction.cpp:1401
+#: base/transaction.cpp:1397
 msgid "Import of the key didn't help, wrong key?"
 msgstr "키 가져오기가 도움이 되지 않습니다, 잘못된 키입니까?"
 
-#: base/transaction.cpp:1420
+#: base/transaction.cpp:1416
 msgctxt "It is a joining character for repositories IDs"
 msgid ", "
 msgstr ", "
 
-#: base/transaction.cpp:1423
+#: base/transaction.cpp:1419
 msgid "Warning: skipped OpenPGP checks for {0} package from repository: {1}"
 msgid_plural ""
 "Warning: skipped OpenPGP checks for {0} packages from repository: {1}"
 msgstr[0] "경고: 저장소에서 {0} 꾸러미를 위해 OpenPGP 점검을 건너뜀: {1}"
 
-#: base/transaction.cpp:1426
+#: base/transaction.cpp:1422
 msgid "Warning: skipped OpenPGP checks for {0} package from repositories: {1}"
 msgid_plural ""
 "Warning: skipped OpenPGP checks for {0} packages from repositories: {1}"
@@ -961,7 +961,7 @@ msgstr ""
 msgid "Repository \"{}\" has unsupported type \"{}\", skipping."
 msgstr "저장소 \"{}는 미지원 유형 \"{}\"을 가지며, 건너뜁니다."
 
-#: repo/repo.cpp:221 repo/repo.cpp:241 repo/repo_sack.cpp:372
+#: repo/repo.cpp:221 repo/repo.cpp:241 repo/repo_sack.cpp:368
 msgid "Failed to download metadata ({}: \"{}\") for repository \"{}\": {}"
 msgstr "저장소를 위한 메타자료 ({}: \"{}\") 를 내려받는 데 실패함 \"{}\": {}"
 
@@ -1044,7 +1044,7 @@ msgid ""
 "configuration"
 msgstr "repo \"{}\"를 생성하는 데 실패함: Id는 구성에서 두 번 이상 존재합니다"
 
-#: repo/repo_sack.cpp:635
+#: repo/repo_sack.cpp:631
 msgid "Cache-only enabled but no cache for repository \"{}\""
 msgstr "캐쉬-전용이 활성화되었으나 저장소를 위한 캐쉬가 없습니다 \"{}\""
 

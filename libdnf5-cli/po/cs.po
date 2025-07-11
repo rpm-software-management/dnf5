@@ -2,416 +2,438 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # Jonáš Loskot <fedoraproject.org@alius.cz>, 2025.
+# Jonáš Loskot <alius@users.noreply.translate.fedoraproject.org>, 2025.
+# Petr Pisar <ppisar@redhat.com>, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-19 03:39+0000\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Automatically generated\n"
-"Language-Team: none\n"
+"POT-Creation-Date: 2025-07-11 03:49+0000\n"
+"PO-Revision-Date: 2025-07-07 15:51+0000\n"
+"Last-Translator: Petr Pisar <ppisar@redhat.com>\n"
+"Language-Team: Czech <https://translate.fedoraproject.org/projects/dnf5/"
+"libdnf5-cli/cs/>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
+"X-Generator: Weblate 5.12.2\n"
 
 #: argument_parser.cpp:68
 msgid "Misconfigured alias \"{}\": cannot convert \"{}\" to a number"
-msgstr ""
+msgstr "Chybně nastavený alias „{}“: „{}“ nelze převést na číslo"
 
 #: argument_parser.cpp:76
 msgid "Misconfigured alias \"{}\": index \"{}\" out of range"
-msgstr ""
+msgstr "Chybně nastavený alias „{}“: pořadové číslo „{}“ je mimo rozsah"
 
 #: argument_parser.cpp:98
 msgid "\"{}\" not allowed together with named argument \"{}\""
-msgstr ""
+msgstr "„{}“ nelze použít spolu s pojmenovaným argumentem „{}“"
 
 #: argument_parser.cpp:100
 msgid "\"{}\" not allowed in command \"{}\""
-msgstr ""
+msgstr "„{}“ není v příkazu „{}“ dovoleno"
 
 #: argument_parser.cpp:102
 msgid "\"{}\" not allowed together with positional argument \"{}\""
-msgstr ""
+msgstr "„{}“ nelze použít spolu s pozičním argumentem „{}“"
 
 #: argument_parser.cpp:147
 msgid "Argument id \"{}\" already registered in group \"{}\""
-msgstr ""
+msgstr "Identifikátor argumentu „{}“ je již registrován ve skupině „{}“"
 
 #: argument_parser.cpp:274
 msgid "Invalid character '.' in argument id \"{}\""
-msgstr ""
+msgstr "Neplatný znak „.“ identifikátoru argumentu „{}“"
 
 #: argument_parser.cpp:382 argument_parser.cpp:387
 msgid "Too few values for positional argument \"{}\""
-msgstr ""
+msgstr "Příliš mnoho hodnot pro poziční argument „{}“"
 
 #: argument_parser.cpp:548
 msgid "Missing value for named argument \"--{}\""
-msgstr ""
+msgstr "Pojmenovanému argumentu „--{}“ chybí hodnota"
 
 #: argument_parser.cpp:556
 msgid "Unexpected value for named argument \"--{}\""
-msgstr ""
+msgstr "Nečekaná hodnota u pojmenovaného argumentu „--{}“"
 
 #: argument_parser.cpp:598
 msgid "Missing value for named argument \"-{}\""
-msgstr ""
+msgstr "Pojmenovanému argumentu „-{}“ chybí hodnota"
 
 #. print usage
 #: argument_parser.cpp:694
 msgid "Usage:"
-msgstr ""
+msgstr "Použití:"
 
 #: argument_parser.cpp:702
 msgid "Description:"
-msgstr ""
+msgstr "Popis:"
 
 #: argument_parser.cpp:979
 msgid "Command id \"{}\" already registered for command \"{}\""
-msgstr ""
+msgstr "Identifikátor příkazu „{}“ je již registrován ve skupině „{}“"
 
 #: argument_parser.cpp:990
 msgid "Named argument id \"{}\" already registered for command \"{}\""
 msgstr ""
+"Identifikátor pojmenovaného argumentu „{}“ je již registrován pro příkaz „{}“"
 
 #: argument_parser.cpp:1000
 msgid "Positional argument id \"{}\" already registered for command \"{}\""
 msgstr ""
+"Identifikátor pozičního argumentu „{}“ je již registrován pro příkaz „{}“"
 
 #: argument_parser.cpp:1010
 msgid "Group id \"{}\" already registered for command \"{}\""
-msgstr ""
+msgstr "Identifikátor skupiny „{}“ je již registrován pro příkaz „{}“"
 
 #: argument_parser.cpp:1037
 msgid "Command id \"{}\" does not contain subcommand with id \"{}\""
 msgstr ""
+"Příkaz s identifikátorem „{}“ neobsahuje podpříkaz s identifikátorem „{}“"
 
 #: argument_parser.cpp:1045
 msgid "Command id \"{}\" does not contain named argument with id \"{}\""
 msgstr ""
+"Příkaz s identifikátorem „{}“ neobsahuje pojmenovaný argument "
+"s identifikátorem „{}“"
 
 #: argument_parser.cpp:1053
 msgid "Command id \"{}\" does not contain positional argument with id \"{}\""
 msgstr ""
+"Příkaz s identifikátorem „{}“ neobsahuje poziční argument s identifikátorem "
+"„{}“"
 
 #: argument_parser.cpp:1060
 msgid "Command id \"{}\" does not contain group with id \"{}\""
 msgstr ""
+"Příkaz s identifikátorem „{}“ neobsahuje skupinu s identifikátorem „{}“"
 
 #: argument_parser.cpp:1177 argument_parser.cpp:1388
 msgid "Unknown argument \"{}\" for command \"{}\""
-msgstr ""
+msgstr "Neznámý argument „{}“ pro příkaz „{}“"
 
 #: argument_parser.cpp:1192 argument_parser.cpp:1403
 msgid "Missing positional argument \"{}\" for command \"{}\""
-msgstr ""
+msgstr "Příkazu „{1}“ chybí poziční argument „{0}“"
 
 #: argument_parser.cpp:1274
 msgid "Missing value for command alias \"{}\""
-msgstr ""
+msgstr "Příkazovému aliasu „{}“ chybí hodnota"
 
 #: argument_parser.cpp:1610
 msgid "Named argument with path id \"{}\" not found"
-msgstr ""
+msgstr "Pojmenovaný argument s cestovým identifikátorem „{}“ nebyl nalezen"
 
 #: argument_parser.cpp:1620
 msgid "Positional argument with path id \"{}\" not found"
-msgstr ""
+msgstr "Poziční argument s cestovým identifikátorem „{}“ nebyl nalezen"
 
 #: exception.cpp:30
 msgid "Operation aborted by the user."
-msgstr ""
+msgstr "Úkon byl přerušen uživatelem."
 
 #: exception.cpp:33
 msgid "Failed to resolve the transaction"
-msgstr ""
+msgstr "Transakci nebylo možné vyřešit"
 
 #: output/moduleinfo.cpp:36
 msgid "Hint: [d]efault, [e]nabled, [x]disabled, [i]nstalled, [a]ctive"
 msgstr ""
+"Legenda: [d] výchozí, [e] zapnutý, [x] vypnutý, [i] nainstalovaný, [a] "
+"aktivní"
 
 #: output/modulelist.cpp:39
 msgid "Hint: [d]efault, [e]nabled, [x]disabled, [i]nstalled"
-msgstr ""
+msgstr "Legenda: [d] výchozí, [e] zapnutý, [x] vypnutý, [i] nainstalovaný"
 
 #. Note for translators: This is a right-aligned column separator in
 #. a package properties table as in "Name    : bash".
 #: output/packageinfo.cpp:57
 msgid " : "
-msgstr ""
+msgstr " : "
 
 #. Add package
 #: output/packageinfo.cpp:63
 msgid "Name"
-msgstr ""
+msgstr "Název"
 
 #: output/packageinfo.cpp:68
 msgid "Epoch"
-msgstr ""
+msgstr "Epocha"
 
 #: output/packageinfo.cpp:69 output/transaction_table.cpp:289
 msgid "Version"
-msgstr ""
+msgstr "Verze"
 
 #: output/packageinfo.cpp:70
 msgid "Release"
-msgstr ""
+msgstr "Vydání"
 
 #: output/packageinfo.cpp:71
 msgid "Architecture"
-msgstr ""
+msgstr "Architektura"
 
 #: output/packageinfo.cpp:75
 msgid "Obsoletes"
-msgstr ""
+msgstr "Nahrazuje"
 
 #: output/packageinfo.cpp:85
 msgid "Download size"
-msgstr ""
+msgstr "Stahovaná velikost"
 
 #: output/packageinfo.cpp:89
 msgid "Installed size"
-msgstr ""
+msgstr "Instalovaná velikost"
 
 #: output/packageinfo.cpp:91
 msgid "Source"
-msgstr ""
+msgstr "Zdrojový balíček"
 
 #: output/packageinfo.cpp:94
 msgid "From repository"
-msgstr ""
+msgstr "Z repozitáře"
 
 #: output/packageinfo.cpp:96 output/transaction_table.cpp:295
 msgid "Repository"
-msgstr ""
+msgstr "Repozitář"
 
 #: output/packageinfo.cpp:98
 msgid "Summary"
-msgstr ""
+msgstr "Shrnutí"
 
 #: output/packageinfo.cpp:99
 msgid "URL"
-msgstr ""
+msgstr "URL"
 
 #: output/packageinfo.cpp:100
 msgid "License"
-msgstr ""
+msgstr "Licence"
 
 #: output/packageinfo.cpp:104
 msgid "Description"
-msgstr ""
+msgstr "Popis"
 
 #: output/packageinfo.cpp:109
 msgid "Vendor"
-msgstr ""
+msgstr "Dodavatel"
 
 #: output/search.cpp:45
 msgid " (exact)"
-msgstr ""
+msgstr " (přesný)"
 
 #: output/search.cpp:90
 msgid "No matches found."
-msgstr ""
+msgstr "Žádná shoda nenalezena."
 
 #: output/search.cpp:101
 msgid "Matched fields: "
-msgstr ""
+msgstr "Odpovídající položky: "
 
 #: output/transaction_table.cpp:127
 msgid "Transaction Summary:\n"
-msgstr ""
+msgstr "Shrnutí transakce:\n"
 
 #. Keep the replaceble number aligned across all messages.
 #: output/transaction_table.cpp:132
 msgid " Installing:      {:4} package\n"
 msgid_plural " Installing:      {:4} packages\n"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] " Nainstalovat:    {:4} balíček\n"
+msgstr[1] " Nainstalovat:    {:4} balíčky\n"
+msgstr[2] " Nainstalovat:    {:4} balíčků\n"
 
 #. Keep the replaceble number aligned across all messages.
 #: output/transaction_table.cpp:141
 msgid " Reinstalling:    {:4} package\n"
 msgid_plural " Reinstalling:    {:4} packages\n"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] " Přeinstalovat:   {:4} balíček\n"
+msgstr[1] " Přeinstalovat:   {:4} balíčky\n"
+msgstr[2] " Přeinstalovat:   {:4} balíčků\n"
 
 #. Keep the replaceble number aligned across all messages.
 #: output/transaction_table.cpp:150
 msgid " Upgrading:       {:4} package\n"
 msgid_plural " Upgrading:       {:4} packages\n"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] " Aktualizovat:    {:4} balíček\n"
+msgstr[1] " Aktualizovat:    {:4} balíčky\n"
+msgstr[2] " Aktualizovat:    {:4} balíčků\n"
 
 #. Keep the replaceble number aligned across all messages.
 #: output/transaction_table.cpp:159
 msgid " Replacing:       {:4} package\n"
 msgid_plural " Replacing:       {:4} packages\n"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] " Nahradit:        {:4} balíček\n"
+msgstr[1] " Nahradit:        {:4} balíčky\n"
+msgstr[2] " Nahradit:        {:4} balíčků\n"
 
 #. Keep the replaceble number aligned across all messages.
 #: output/transaction_table.cpp:168
 msgid " Removing:        {:4} package\n"
 msgid_plural " Removing:        {:4} packages\n"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] " Odstranit:       {:4} balíček\n"
+msgstr[1] " Odstranit:       {:4} balíčky\n"
+msgstr[2] " Odstranit:       {:4} balíčků\n"
 
 #. Keep the replaceble number aligned across all messages.
 #: output/transaction_table.cpp:177
 msgid " Downgrading:     {:4} package\n"
 msgid_plural " Downgrading:     {:4} packages\n"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] " Ponížit:         {:4} balíček\n"
+msgstr[1] " Ponížit:         {:4} balíčky\n"
+msgstr[2] " Ponížit:         {:4} balíčků\n"
 
 #. Keep the replaceble number aligned across all messages.
 #: output/transaction_table.cpp:186
 msgid " Changing reason: {:4} package\n"
 msgid_plural " Changing reason: {:4} packages\n"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] " Změnit důvod:    {:4} balíček\n"
+msgstr[1] " Změnit důvod:    {:4} balíčky\n"
+msgstr[2] " Změnit důvod:    {:4} balíčků\n"
 
 #. Keep the replaceble number aligned across all messages.
 #: output/transaction_table.cpp:195
 msgid " Skipping:        {:4} package\n"
 msgid_plural " Skipping:        {:4} packages\n"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] " Vynechat:        {:4} balíček\n"
+msgstr[1] " Vynechat:        {:4} balíčky\n"
+msgstr[2] " Vynechat:        {:4} balíčků\n"
 
 #: output/transaction_table.cpp:277
 msgid "Package"
-msgstr ""
+msgstr "Balíček"
 
 #: output/transaction_table.cpp:283
 msgid "Arch"
-msgstr ""
+msgstr "Arch."
 
 #: output/transaction_table.cpp:301
 msgid "Size"
-msgstr ""
+msgstr "Velikost"
 
 #: output/transaction_table.cpp:357 output/transaction_table.cpp:451
 msgid "{} -> {}"
-msgstr ""
+msgstr "{} → {}"
 
 #: output/transaction_table.cpp:373
 msgid "replacing {}"
-msgstr ""
+msgstr "nahrazuje {}"
 
 #: output/transaction_table.cpp:409 output/transaction_table.cpp:426
 msgid " <name-unset>"
-msgstr ""
+msgstr " <název_nenastaven>"
 
 #: output/transaction_table.cpp:457
 msgid "replacing "
-msgstr ""
+msgstr "nahrazuje "
 
 #: output/transaction_table.cpp:470
 msgid "Skipping packages with conflicts:"
-msgstr ""
+msgstr "Balíčky vynechané kvůli konfliktům:"
 
 #: output/transaction_table.cpp:472
 msgid "Skipping packages with broken dependencies:"
-msgstr ""
+msgstr "Balíčky vynechané kvůli rozbitým závislostem:"
 
 #: output/transaction_table.cpp:533
 msgid "Installing dependencies:"
-msgstr ""
+msgstr "Instalované závislosti:"
 
 #: output/transaction_table.cpp:535
 msgid "Installing weak dependencies:"
-msgstr ""
+msgstr "Instalované slabé závislosti:"
 
 #: output/transaction_table.cpp:537
 msgid "Installing group/module packages:"
-msgstr ""
+msgstr "Instalované balíčky skupin/modulů:"
 
 #: output/transaction_table.cpp:539
 msgid "Installing:"
-msgstr ""
+msgstr "Nainstalovat:"
 
 #: output/transaction_table.cpp:543
 msgid "Upgrading:"
-msgstr ""
+msgstr "Aktualizovat:"
 
 #: output/transaction_table.cpp:546
 msgid "Downgrading:"
-msgstr ""
+msgstr "Ponížit:"
 
 #: output/transaction_table.cpp:549
 msgid "Reinstalling:"
-msgstr ""
+msgstr "Přeinstalovat:"
 
 #: output/transaction_table.cpp:553
 msgid "Removing dependent packages:"
-msgstr ""
+msgstr "Odstranit závislé balíčky:"
 
 #: output/transaction_table.cpp:555
 msgid "Removing unused dependencies:"
-msgstr ""
+msgstr "Odstranit nepotřebné závislosti:"
 
 #: output/transaction_table.cpp:557
 msgid "Removing:"
-msgstr ""
+msgstr "Odstranit:"
 
 #: output/transaction_table.cpp:561
 msgid "Changing reason:"
-msgstr ""
+msgstr "Změnit důvod:"
 
 #: output/transaction_table.cpp:593
 msgid "Installing groups dependencies:"
-msgstr ""
+msgstr "Nainstalovat skupinové závislosti:"
 
 #: output/transaction_table.cpp:595
 msgid "Installing groups:"
-msgstr ""
+msgstr "Nainstalovat skupiny:"
 
 #: output/transaction_table.cpp:599
 msgid "Removing groups:"
-msgstr ""
+msgstr "Odstranit skupiny:"
 
 #: output/transaction_table.cpp:602
 msgid "Upgrading groups:"
-msgstr ""
+msgstr "Aktualizovat skupiny:"
 
 #: output/transaction_table.cpp:629
 msgid "Installing environmental groups:"
-msgstr ""
+msgstr "Nainstalovat skupiny prostředí:"
 
 #: output/transaction_table.cpp:632
 msgid "Removing environmental groups:"
-msgstr ""
+msgstr "Odstranit skupiny prostředí:"
 
 #: output/transaction_table.cpp:635
 msgid "Upgrading environmental groups:"
-msgstr ""
+msgstr "Aktualizaovat skupiny prostředí:"
 
 #: output/transaction_table.cpp:662
 msgid "Enabling module streams:"
-msgstr ""
+msgstr "Zapnout proudy modulů:"
 
 #: output/transaction_table.cpp:665
 msgid "Disabling modules:"
-msgstr ""
+msgstr "Vypnout moduly:"
 
 #: output/transaction_table.cpp:668
 msgid "Resetting modules:"
-msgstr ""
+msgstr "Resetovat moduly:"
 
 #: output/transaction_table.cpp:671
 msgid "Switching module streams:"
-msgstr ""
+msgstr "Změnit proudy modulů:"
 
 #: output/transaction_table.cpp:745
 msgid "Nothing to do."
-msgstr ""
+msgstr "Není co dělat."
 
 #: progressbar/multi_progress_bar.cpp:36
 msgid "Total"
-msgstr ""
+msgstr "Celkem"
 
 #: session.cpp:149
 msgid "Missing command"
-msgstr ""
+msgstr "Chybí příkaz"

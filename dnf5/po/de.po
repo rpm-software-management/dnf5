@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-19 03:39+0000\n"
+"POT-Creation-Date: 2025-07-11 03:49+0000\n"
 "PO-Revision-Date: 2025-05-01 13:57+0000\n"
 "Last-Translator: Mario Blättermann <mario.blaettermann@gmail.com>\n"
 "Language-Team: German <https://translate.fedoraproject.org/projects/dnf5/"
@@ -380,7 +380,7 @@ msgstr "Kann das Cache Verzeichnis \"{}\": {} nicht wieder laden"
 msgid "Install debuginfo packages."
 msgstr "Debuginfo-Pakete installieren."
 
-#: commands/distro-sync/distro-sync.cpp:42
+#: commands/distro-sync/distro-sync.cpp:44
 msgid ""
 "Upgrade or downgrade installed software to the latest available versions"
 msgstr ""
@@ -613,23 +613,25 @@ msgstr ""
 msgid "Lists packages depending on the packages' relation to the system"
 msgstr "Listet Pakete abhängig von ihrer Beziehung zum System auf"
 
-#: commands/list/list.cpp:47
-msgid "List of keys to match case insensitively"
+#: commands/list/list.cpp:48
+#, fuzzy
+#| msgid "List of keys to match case insensitively"
+msgid "List of package-spec-NI to match (case insensitively)"
 msgstr "Schlüssel zum fallunabhängigen Vergleich auflisten"
 
-#: commands/list/list.cpp:59
+#: commands/list/list.cpp:60
 msgid "Show all versions of the packages, not only the latest ones."
 msgstr "Alle Versionen der Pakete anzeigen, nicht nur die Aktuellsten."
 
-#: commands/list/list.cpp:65
+#: commands/list/list.cpp:66
 msgid "List installed packages."
 msgstr "Installierte Pakete auflisten."
 
-#: commands/list/list.cpp:69
+#: commands/list/list.cpp:70
 msgid "List available packages."
 msgstr "Verfügbare Pakete auflisten."
 
-#: commands/list/list.cpp:76
+#: commands/list/list.cpp:77
 msgid ""
 "List extras, that is packages installed on the system that are not available "
 "in any known repository."
@@ -637,7 +639,7 @@ msgstr ""
 "Extras, also Pakete, die auf dem System installiert sind, aber in keinem "
 "bekannten Repository verfügbar sind, auflisten."
 
-#: commands/list/list.cpp:84
+#: commands/list/list.cpp:85
 msgid ""
 "List packages installed on the system that are obsoleted by packages in any "
 "known repository."
@@ -645,48 +647,48 @@ msgstr ""
 "Pakete auflisten, die auf dem System installiert sind, aber von Paketen in "
 "einem bekannten Repository ersetzt werden (obsolete Pakete)."
 
-#: commands/list/list.cpp:89
+#: commands/list/list.cpp:90
 msgid "List packages recently added into the repositories."
 msgstr "Pakete, die kürzlich den Repositories hinzugefügt wurden, auflisten."
 
-#: commands/list/list.cpp:93
+#: commands/list/list.cpp:94
 msgid "List upgrades available for the installed packages."
 msgstr "Verfügbare Aktualisierungen für die installierten Pakete auflisten."
 
-#: commands/list/list.cpp:97
+#: commands/list/list.cpp:98
 msgid "List packages which will be removed by the 'dnf autoremove' command."
 msgstr ""
 "Pakete, die durch das Kommando 'dnf autoremove' entfernt werden, auflisten."
 
-#: commands/list/list.cpp:194 commands/list/list.cpp:199
+#: commands/list/list.cpp:195 commands/list/list.cpp:200
 msgid "Installed packages"
 msgstr "Installierte Pakete"
 
-#: commands/list/list.cpp:195 commands/list/list.cpp:208
+#: commands/list/list.cpp:196 commands/list/list.cpp:209
 msgid "Available packages"
 msgstr "Verfügbare Pakete"
 
-#: commands/list/list.cpp:216
+#: commands/list/list.cpp:217
 msgid "Available upgrades"
 msgstr "Verfügbare Aktualisierungen"
 
-#: commands/list/list.cpp:232
+#: commands/list/list.cpp:233
 msgid "Obsoleting packages"
 msgstr "Nicht mehr benötigte Pakete"
 
-#: commands/list/list.cpp:237
+#: commands/list/list.cpp:238
 msgid "Autoremove packages"
 msgstr "Pakete automatisch entfernen"
 
-#: commands/list/list.cpp:241
+#: commands/list/list.cpp:242
 msgid "Extra packages"
 msgstr "Extra-Pakete"
 
-#: commands/list/list.cpp:252
+#: commands/list/list.cpp:253
 msgid "Recently added packages"
 msgstr "Kürzlich hinzugefügte Pakete"
 
-#: commands/list/list.cpp:257
+#: commands/list/list.cpp:258
 msgid "No matching packages to list"
 msgstr "Keine übereinstimmenden Pakete zum Auflisten"
 
@@ -714,11 +716,11 @@ msgstr "Module verwalten"
 msgid "No matches found for \"{}\"."
 msgstr "Keine Übereinstimmungen für \"{}\" gefunden."
 
-#: commands/offline/offline.cpp:214
+#: commands/offline/offline.cpp:217
 msgid "Manage offline transactions"
 msgstr "Offline-Transaktionen verwalten"
 
-#: commands/offline/offline.cpp:246
+#: commands/offline/offline.cpp:249
 msgid ""
 "Error reading state: {}. Rerun the command you used to initiate the offline "
 "transaction, e.g. `dnf5 system-upgrade download [OPTIONS]`."
@@ -727,11 +729,11 @@ msgstr ""
 "Initiieren der Offline-Transaktion verwendet haben, erneut aus. Z.B. `dnf5 "
 "system-upgrade download [OPTIONS]`."
 
-#: commands/offline/offline.cpp:269
+#: commands/offline/offline.cpp:272
 msgid "Couldn't connect to D-Bus: {}"
 msgstr "Konnte keine Verbindung zum D-Bus herstellen: {}"
 
-#: commands/offline/offline.cpp:300
+#: commands/offline/offline.cpp:303
 msgid ""
 "Prepare the system to perform the offline transaction and reboot to start "
 "the transaction."
@@ -739,27 +741,27 @@ msgstr ""
 "Bereiten Sie das System für die Durchführung der Offline-Transaktion vor und "
 "starten Sie es neu, um die Transaktion zu starten."
 
-#: commands/offline/offline.cpp:307
+#: commands/offline/offline.cpp:310
 msgid "Power off the system after the operation is complete"
 msgstr "Das System nach Abschluss des Vorgangs ausschalten"
 
-#: commands/offline/offline.cpp:318
+#: commands/offline/offline.cpp:321
 msgid "No offline transaction is stored."
 msgstr "Keine Offline-Transaktion ist gespeichert."
 
-#: commands/offline/offline.cpp:326
+#: commands/offline/offline.cpp:329
 msgid "System is not ready for offline transaction."
 msgstr "Das System ist nicht für Offline-Transaktionen bereit."
 
-#: commands/offline/offline.cpp:329
+#: commands/offline/offline.cpp:332
 msgid "Data directory {} does not exist."
 msgstr "Datenverzeichnis {} existiert nicht."
 
-#: commands/offline/offline.cpp:354
+#: commands/offline/offline.cpp:357
 msgid "{} is not wanted by system-update.target."
 msgstr "{} wird nicht von system-update.target benötigt."
 
-#: commands/offline/offline.cpp:364
+#: commands/offline/offline.cpp:367
 #, fuzzy
 #| msgid "The system will now reboot to upgrade to release version "
 msgid "The system will now reboot to upgrade to release version {}."
@@ -767,7 +769,7 @@ msgstr ""
 "Das System wird nun neustarten, um ein Upgrade auf die Release-Version "
 "durchzuführen "
 
-#: commands/offline/offline.cpp:368
+#: commands/offline/offline.cpp:371
 msgid ""
 "The system will now reboot to perform the offline transaction initiated by "
 "the following command:"
@@ -775,7 +777,7 @@ msgstr ""
 "Das System wird nun neustarten, um die durch den folgenden Befehl initiierte "
 "Offline-Transaktion durchzuführen:"
 
-#: commands/offline/offline.cpp:399
+#: commands/offline/offline.cpp:402
 msgid ""
 "Internal use only, not intended to be run by the user. Execute the "
 "transaction in the offline environment."
@@ -783,69 +785,69 @@ msgstr ""
 "Nur für interne Zwecke, nicht zur Ausführung durch den Benutzer gedacht. "
 "Führen Sie die Transaktion in der Offline-Umgebung aus."
 
-#: commands/offline/offline.cpp:433
+#: commands/offline/offline.cpp:436
 msgid "Trigger file does not exist. Exiting."
 msgstr "Trigger-Datei existiert nicht. Wird beendet."
 
-#: commands/offline/offline.cpp:437
+#: commands/offline/offline.cpp:440
 msgid "Another offline transaction tool is running. Exiting."
 msgstr "Ein weiteres Offline-Transaktionstool wird ausgeführt. Wird beendet."
 
-#: commands/offline/offline.cpp:464
+#: commands/offline/offline.cpp:467
 #, fuzzy
 #| msgid "No offline transaction is stored."
 msgid "Starting offline transaction. This will take a while."
 msgstr "Keine Offline-Transaktion ist gespeichert."
 
-#: commands/offline/offline.cpp:468
+#: commands/offline/offline.cpp:471
 msgid "Starting system upgrade. This will take a while."
 msgstr ""
 
-#: commands/offline/offline.cpp:480
+#: commands/offline/offline.cpp:483
 msgid "Use `dnf5 offline reboot` to begin the transaction."
 msgstr "Nutzen Sie `dnf5 offline reboot`, um mit der Transaktion zu beginnen."
 
-#: commands/offline/offline.cpp:531
+#: commands/offline/offline.cpp:534
 msgid "Transaction failed: "
 msgstr "Transaktion fehlgeschlagen: "
 
-#: commands/offline/offline.cpp:601
+#: commands/offline/offline.cpp:604
 msgid "Error reading journal: {}"
 msgstr "Fehler beim Lesen des Journals: {}"
 
-#: commands/offline/offline.cpp:607
+#: commands/offline/offline.cpp:610
 msgid "Add journal match failed: {}"
 msgstr "Hinzufügen der Journal-Übereinstimmung fehlgeschlagen: {}"
 
-#: commands/offline/offline.cpp:635
+#: commands/offline/offline.cpp:638
 msgid "No logs were found."
 msgstr "Es wurden keine Logs gefunden."
 
-#: commands/offline/offline.cpp:639
+#: commands/offline/offline.cpp:642
 msgid "The following boots appear to contain offline transaction logs:"
 msgstr ""
 "Folgende Bootvorgänge scheinen Offline-Transaktionsprotokolle zu enthalten:"
 
-#: commands/offline/offline.cpp:656
+#: commands/offline/offline.cpp:659
 msgid "Cannot find logs with this index."
 msgstr "Es können keine Logs mit diesem Index gefunden werden."
 
-#: commands/offline/offline.cpp:663
+#: commands/offline/offline.cpp:666
 msgid "Unable to match systemd journal entry."
 msgstr "Kein treffender Eintrag im systemd-Journal gefunden."
 
-#: commands/offline/offline.cpp:675
+#: commands/offline/offline.cpp:678
 msgid "Show logs from past offline transactions"
 msgstr "Logs vergangener Offline-Transaktionen anzeigen"
 
-#: commands/offline/offline.cpp:683
+#: commands/offline/offline.cpp:686
 msgid ""
 "Which log to show. Run without any arguments to get a list of available logs."
 msgstr ""
 "Welches Protokoll anzuzeigen. Ohne Argumente ausführen, um eine Liste der "
 "verfügbaren Protokolle zu erhalten."
 
-#: commands/offline/offline.cpp:698
+#: commands/offline/offline.cpp:701
 msgid ""
 "systemd is not supported in this build of DNF 5; the `log` subcommand is "
 "unavailable."
@@ -853,22 +855,22 @@ msgstr ""
 "systemd wird in diesem Build von DNF 5 nicht unterstützt; der Unterbefehl "
 "`log` ist nicht verfügbar."
 
-#: commands/offline/offline.cpp:703
+#: commands/offline/offline.cpp:706
 msgid "Show status of the current offline transaction"
 msgstr "Status der aktuellen Offline-Transaktion anzeigen"
 
-#: commands/offline/offline.cpp:719
+#: commands/offline/offline.cpp:722
 msgid "An offline transaction was initiated by the following command:"
 msgstr "Eine Offline-Transaktion wurde durch den folgenden Befehl initiiert:"
 
-#: commands/offline/offline.cpp:721
+#: commands/offline/offline.cpp:724
 msgid ""
 "Run `dnf5 offline reboot` to reboot and perform the offline transaction."
 msgstr ""
 "Führen Sie `dnf5 offline reboot` aus, um neu zu starten und die Offline-"
 "Transaktion auszuführen."
 
-#: commands/offline/offline.cpp:723
+#: commands/offline/offline.cpp:726
 msgid ""
 "An offline transaction was started, but it did not finish. Run `dnf5 offline "
 "log` for more information. The command that initiated the transaction was:"
@@ -877,7 +879,7 @@ msgstr ""
 "Sie `dnf5 offline log` aus, um weitere Informationen zu erhalten. Der "
 "Befehl, der die Transaktion initiierte, war:"
 
-#: commands/offline/offline.cpp:728
+#: commands/offline/offline.cpp:731
 msgid "Unknown offline transaction status: "
 msgstr "Unbekannter Zustand der Offline-Transaktion: "
 
@@ -1013,20 +1015,22 @@ msgstr "Versionlock-Konfiguration verwalten"
 msgid "Add new entry to versionlock configuration"
 msgstr "Neuen Eintrag zur Versionlock-Konfiguration hinzufügen"
 
-#: commands/versionlock/versionlock_add.cpp:43
-msgid "List of package specs to add versionlock for"
+#: commands/versionlock/versionlock_add.cpp:44
+#, fuzzy
+#| msgid "List of package specs to add versionlock for"
+msgid "List of package package-spec-N to add versionlock for"
 msgstr "Liste der Paketspezifikationen, denen Versionlock hinzugefügt wird"
 
-#: commands/versionlock/versionlock_add.cpp:106
-#: commands/versionlock/versionlock_exclude.cpp:125
+#: commands/versionlock/versionlock_add.cpp:107
+#: commands/versionlock/versionlock_exclude.cpp:126
 msgid "No package found for \"{}\"."
 msgstr "Kein Paket für \"{}\" gefunden."
 
-#: commands/versionlock/versionlock_add.cpp:133
+#: commands/versionlock/versionlock_add.cpp:134
 msgid "Adding versionlock on \"{0} = {1}\"."
 msgstr "Hinzufügen von Versionssperre an \"{0} = {1}\"."
 
-#: commands/versionlock/versionlock_add.cpp:136
+#: commands/versionlock/versionlock_add.cpp:137
 msgid "Package \"{}\" is already locked."
 msgstr "Paket {} ist bereits gesperrt."
 
@@ -1051,18 +1055,20 @@ msgstr "Versionlock-Eintrag löschen:"
 msgid "Add new exclude entry to versionlock configuration"
 msgstr "Hinzufügen einer neuen Ausnahme zur Versionlock-Konfiguration"
 
-#: commands/versionlock/versionlock_exclude.cpp:43
-msgid "List of package specs to add versionlock exclude for"
+#: commands/versionlock/versionlock_exclude.cpp:44
+#, fuzzy
+#| msgid "List of package specs to add versionlock exclude for"
+msgid "List of package-spec-N to add versionlock exclude for"
 msgstr ""
 "Liste der Paket-Spezifikationen, für die Versionlock-Ausnahmen hinzugefügt "
 "werden sollen"
 
-#: commands/versionlock/versionlock_exclude.cpp:88
-#: commands/versionlock/versionlock_exclude.cpp:100
+#: commands/versionlock/versionlock_exclude.cpp:89
+#: commands/versionlock/versionlock_exclude.cpp:101
 msgid "Adding versionlock exclude on \"{0} = {1}\"."
 msgstr "Hinzufügen einer Versionlock-Ausnahme zu \"{0} = {1}\"."
 
-#: commands/versionlock/versionlock_exclude.cpp:139
+#: commands/versionlock/versionlock_exclude.cpp:140
 msgid "Package \"{}\" is already excluded."
 msgstr "Paket \"{}\" ist bereits ausgenommen."
 

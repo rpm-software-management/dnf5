@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-19 03:39+0000\n"
-"PO-Revision-Date: 2025-05-18 10:16+0000\n"
+"POT-Creation-Date: 2025-07-11 03:49+0000\n"
+"PO-Revision-Date: 2025-07-02 18:28+0000\n"
 "Last-Translator: Cheng-Chia Tseng <pswo10680@gmail.com>\n"
 "Language-Team: Chinese (Traditional) <https://translate.fedoraproject.org/"
 "projects/dnf5/libdnf5/zh_TW/>\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.11.3\n"
+"X-Generator: Weblate 5.12.2\n"
 
 #: advisory/advisory.cpp:81
 msgid ""
@@ -29,12 +29,12 @@ msgstr ""
 
 #: base/goal.cpp:472
 msgid "Unsupported argument for REMOVE action: {}"
-msgstr "REMOVE 動作己不支援的參數： {}"
+msgstr "REMOVE 動作己不支援的參數：{}"
 
 #. TODO(lukash) throw a proper exception
 #: base/goal.cpp:1641
 msgid "Incorrect configuration value for multilib_policy: {}"
-msgstr "multilib_policy 的組態設定值不正確： {}"
+msgstr "multilib_policy 的組態設定值不正確：{}"
 
 #: base/goal_elements.cpp:352
 msgid "Install"
@@ -346,7 +346,7 @@ msgstr ""
 
 #: base/log_event.cpp:347
 msgid "Cannot parse file: '{0}': {1}.\n"
-msgstr "無法解析檔案： '{0}': {1}.\n"
+msgstr "無法解析檔案：'{0}': {1}.\n"
 
 #: base/log_event.cpp:354
 msgid ""
@@ -606,35 +606,35 @@ msgstr ""
 msgid "Invalid tsflag: {}"
 msgstr ""
 
-#: base/transaction.cpp:1318
+#: base/transaction.cpp:1314
 msgid "Public key \"{}\" is already present, not importing."
 msgstr ""
 
-#: base/transaction.cpp:1339
+#: base/transaction.cpp:1335
 msgid "An error occurred importing key \"{}\": {}"
 msgstr ""
 
-#: base/transaction.cpp:1373
+#: base/transaction.cpp:1369
 msgid "OpenPGP check for package \"{}\" ({}) from repo \"{}\" has failed: "
 msgstr ""
 
-#: base/transaction.cpp:1401
+#: base/transaction.cpp:1397
 msgid "Import of the key didn't help, wrong key?"
 msgstr ""
 
-#: base/transaction.cpp:1420
+#: base/transaction.cpp:1416
 msgctxt "It is a joining character for repositories IDs"
 msgid ", "
 msgstr ""
 
-#: base/transaction.cpp:1423
+#: base/transaction.cpp:1419
 msgid "Warning: skipped OpenPGP checks for {0} package from repository: {1}"
 msgid_plural ""
 "Warning: skipped OpenPGP checks for {0} packages from repository: {1}"
 msgstr[0] ""
 msgstr[1] ""
 
-#: base/transaction.cpp:1426
+#: base/transaction.cpp:1422
 msgid "Warning: skipped OpenPGP checks for {0} package from repositories: {1}"
 msgid_plural ""
 "Warning: skipped OpenPGP checks for {0} packages from repositories: {1}"
@@ -743,7 +743,7 @@ msgstr ""
 
 #: conf/option_path.cpp:98
 msgid "Path \"{}\" does not exist"
-msgstr "路徑 「{}」 不存在"
+msgstr "路徑「{}」不存在"
 
 #: conf/option_seconds.cpp:38
 msgid "Empty time option value"
@@ -927,7 +927,7 @@ msgstr ""
 msgid "Repository \"{}\" has unsupported type \"{}\", skipping."
 msgstr "儲存庫「{}」有不支援的「{}」類型，跳過。"
 
-#: repo/repo.cpp:221 repo/repo.cpp:241 repo/repo_sack.cpp:372
+#: repo/repo.cpp:221 repo/repo.cpp:241 repo/repo_sack.cpp:368
 msgid "Failed to download metadata ({}: \"{}\") for repository \"{}\": {}"
 msgstr ""
 
@@ -1008,7 +1008,7 @@ msgid ""
 "configuration"
 msgstr ""
 
-#: repo/repo_sack.cpp:635
+#: repo/repo_sack.cpp:631
 msgid "Cache-only enabled but no cache for repository \"{}\""
 msgstr ""
 
@@ -1126,11 +1126,11 @@ msgstr ""
 #: rpm/transaction.cpp:235
 msgid ""
 "Failed to set scriptlet output file, cannot duplicate file descriptor: {}"
-msgstr ""
+msgstr "無法設定命令小稿輸出檔，無法再製檔案描述元：{}"
 
 #: rpm/transaction.cpp:254
 msgid "Failed to set scriptlet output file, cannot open file \"{}\": {}"
-msgstr ""
+msgstr "無法設定命令小稿輸出檔，無法開啟檔案「{}」：{}"
 
 #: rpm/transaction.cpp:275
 msgid "Failed to read package header, cannot open file \"{}\": {}"
@@ -1344,11 +1344,11 @@ msgstr ""
 
 #: transaction/transaction_sr.cpp:74
 msgid "Incompatible major version: \"{}\", supported major version is \"{}\""
-msgstr "不相容的主要版本： 「{}」，支援的主要版本為 「{}」"
+msgstr "不相容的主要版本：「{}」，支援的主要版本為「{}」"
 
 #: transaction/transaction_sr.cpp:81
 msgid "Invalid minor version: \"{}\", number expected"
-msgstr "無效的次版號： 「{}」，預期值是數字"
+msgstr "無效的次版號：「{}」，預期值是數字"
 
 #: transaction/transaction_sr.cpp:84
 msgid "Missing key \"version\""

@@ -9,10 +9,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-19 03:39+0000\n"
-"PO-Revision-Date: 2025-06-01 23:36+0000\n"
-"Last-Translator: Jonáš Loskot <alius@users.noreply.translate.fedoraproject."
-"org>\n"
+"POT-Creation-Date: 2025-07-11 03:49+0000\n"
+"PO-Revision-Date: 2025-07-09 15:06+0000\n"
+"Last-Translator: Petr Pisar <ppisar@redhat.com>\n"
 "Language-Team: Czech <https://translate.fedoraproject.org/projects/dnf5/"
 "dnf5daemon-client/cs/>\n"
 "Language: cs\n"
@@ -20,7 +19,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Weblate 5.11.4\n"
+"X-Generator: Weblate 5.12.2\n"
 
 #: commands/advisory/advisory.cpp:35
 msgid "Manage advisories"
@@ -78,7 +77,7 @@ msgstr "Seznam vzorů porovnaných s doporučenými názvy."
 
 #: commands/advisory/arguments.hpp:95
 msgid "Show only advisories referencing a bugzilla."
-msgstr "Zobrazí pouze doporučení odkazující na bugzillu."
+msgstr "Zobrazí pouze doporučení odkazující na Bugzillu."
 
 #: commands/advisory/arguments.hpp:102
 msgid "Show only advisories referencing a CVE."
@@ -157,8 +156,7 @@ msgstr "Chyba při čištění mezipaměti: {}"
 msgid ""
 "Upgrade or downgrade installed software to the latest available versions"
 msgstr ""
-"Upgradovat nebo downgradovat nainstalovaný software na nejnovější dostupné "
-"verze"
+"Aktualizovat nebo ponížit nainstalovaný software na nejnovější dostupné verze"
 
 #: commands/group/group.cpp:41
 msgid "Manage comps groups"

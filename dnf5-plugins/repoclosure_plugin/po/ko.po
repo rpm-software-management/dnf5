@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-19 03:39+0000\n"
+"POT-Creation-Date: 2025-07-11 03:49+0000\n"
 "PO-Revision-Date: 2024-06-04 09:28+0000\n"
 "Last-Translator: 김인수 <simmon@nplob.com>\n"
 "Language-Team: Korean <https://translate.fedoraproject.org/projects/dnf5/"
@@ -18,19 +18,19 @@ msgstr ""
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Generator: Weblate 5.5.5\n"
 
-#: repoclosure.cpp:45
+#: repoclosure.cpp:46
 msgid "Print list of unresolved dependencies for repositories"
 msgstr "저장소를 위해 해결되지 못한 의존성의 목록 출력"
 
-#: repoclosure.cpp:154
+#: repoclosure.cpp:155
 msgid "No match for argument \"{}\"."
 msgstr "인수 \"{}\"와 일치하지 않습니다."
 
-#: repoclosure.cpp:160
+#: repoclosure.cpp:161
 msgid "Failed to resolve package specifications."
 msgstr "꾸러미 사양을 확인하는 데 실패함."
 
-#: repoclosure.cpp:215
+#: repoclosure.cpp:220
 msgid ""
 "Error: Repoclosure ended with unresolved dependencies ({}) across {} "
 "packages."

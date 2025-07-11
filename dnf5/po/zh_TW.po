@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-19 03:39+0000\n"
-"PO-Revision-Date: 2025-05-18 10:16+0000\n"
+"POT-Creation-Date: 2025-07-11 03:49+0000\n"
+"PO-Revision-Date: 2025-07-02 18:28+0000\n"
 "Last-Translator: Cheng-Chia Tseng <pswo10680@gmail.com>\n"
 "Language-Team: Chinese (Traditional) <https://translate.fedoraproject.org/"
 "projects/dnf5/dnf5/zh_TW/>\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.11.3\n"
+"X-Generator: Weblate 5.12.2\n"
 
 #: cmdline_aliases.cpp:84 context.cpp:301 main.cpp:1357
 msgid ", "
@@ -366,7 +366,7 @@ msgstr "無法迭代快取目錄「{}」：{}"
 msgid "Install debuginfo packages."
 msgstr "安裝 debuginfo 軟體包。"
 
-#: commands/distro-sync/distro-sync.cpp:42
+#: commands/distro-sync/distro-sync.cpp:44
 msgid ""
 "Upgrade or downgrade installed software to the latest available versions"
 msgstr "升級或降級已安裝的軟體至最新可用版本"
@@ -591,75 +591,77 @@ msgstr "列出其他已安裝軟體包不需要的已安裝軟體包群組"
 msgid "Lists packages depending on the packages' relation to the system"
 msgstr "依據軟體包與系統間的關係列出軟體包"
 
-#: commands/list/list.cpp:47
-msgid "List of keys to match case insensitively"
+#: commands/list/list.cpp:48
+#, fuzzy
+#| msgid "List of keys to match case insensitively"
+msgid "List of package-spec-NI to match (case insensitively)"
 msgstr "不考慮大小寫的鍵比對清單"
 
-#: commands/list/list.cpp:59
+#: commands/list/list.cpp:60
 msgid "Show all versions of the packages, not only the latest ones."
 msgstr "顯示軟體包的所有版本，而不只是最新版本。"
 
-#: commands/list/list.cpp:65
+#: commands/list/list.cpp:66
 msgid "List installed packages."
 msgstr "列出已安裝的軟體包。"
 
-#: commands/list/list.cpp:69
+#: commands/list/list.cpp:70
 msgid "List available packages."
 msgstr "列出可用的軟體包。"
 
-#: commands/list/list.cpp:76
+#: commands/list/list.cpp:77
 msgid ""
 "List extras, that is packages installed on the system that are not available "
 "in any known repository."
 msgstr "列出額外軟體包，也就是系統上已安裝，卻不在任何已知軟體庫中的軟體包。"
 
-#: commands/list/list.cpp:84
+#: commands/list/list.cpp:85
 msgid ""
 "List packages installed on the system that are obsoleted by packages in any "
 "known repository."
 msgstr "列出安裝在系統上，但已被任何已知軟體庫中的軟體包淘汰的軟體包。"
 
-#: commands/list/list.cpp:89
+#: commands/list/list.cpp:90
 msgid "List packages recently added into the repositories."
 msgstr "列出軟體庫最近加入的軟體包。"
 
-#: commands/list/list.cpp:93
+#: commands/list/list.cpp:94
 msgid "List upgrades available for the installed packages."
 msgstr "列出已安裝軟體包的可用升級。"
 
-#: commands/list/list.cpp:97
+#: commands/list/list.cpp:98
 msgid "List packages which will be removed by the 'dnf autoremove' command."
 msgstr "列出會被 'dnf autoremove' 命令移除的軟體包。"
 
-#: commands/list/list.cpp:194 commands/list/list.cpp:199
+#: commands/list/list.cpp:195 commands/list/list.cpp:200
 msgid "Installed packages"
 msgstr "已安裝軟體包"
 
-#: commands/list/list.cpp:195 commands/list/list.cpp:208
+#: commands/list/list.cpp:196 commands/list/list.cpp:209
 msgid "Available packages"
 msgstr "可用的軟體包"
 
-#: commands/list/list.cpp:216
+#: commands/list/list.cpp:217
 msgid "Available upgrades"
 msgstr "可用的升級"
 
-#: commands/list/list.cpp:232
+#: commands/list/list.cpp:233
 msgid "Obsoleting packages"
 msgstr "棄用的軟體包"
 
-#: commands/list/list.cpp:237
+#: commands/list/list.cpp:238
 msgid "Autoremove packages"
 msgstr "自動移除軟體包"
 
-#: commands/list/list.cpp:241
+#: commands/list/list.cpp:242
 msgid "Extra packages"
 msgstr "額外的軟體包"
 
-#: commands/list/list.cpp:252
+#: commands/list/list.cpp:253
 msgid "Recently added packages"
 msgstr "最近加入的軟體包"
 
-#: commands/list/list.cpp:257
+#: commands/list/list.cpp:258
 msgid "No matching packages to list"
 msgstr "沒有可列出的符合軟體包"
 
@@ -687,11 +689,11 @@ msgstr "管理模組"
 msgid "No matches found for \"{}\"."
 msgstr "找不到符合的「{}」。"
 
-#: commands/offline/offline.cpp:214
+#: commands/offline/offline.cpp:217
 msgid "Manage offline transactions"
 msgstr "管理離線處理事項"
 
-#: commands/offline/offline.cpp:246
+#: commands/offline/offline.cpp:249
 msgid ""
 "Error reading state: {}. Rerun the command you used to initiate the offline "
 "transaction, e.g. `dnf5 system-upgrade download [OPTIONS]`."
@@ -699,129 +701,129 @@ msgstr ""
 "讀取狀態出錯：{}。重新執行您用來啟動離線處理事項的命令，例如 `dnf5 system-"
 "upgrade download [OPTIONS]`。"
 
-#: commands/offline/offline.cpp:269
+#: commands/offline/offline.cpp:272
 msgid "Couldn't connect to D-Bus: {}"
-msgstr "無法連線至 D-Bus：{}"
+msgstr "無法與 D-Bus 連線：{}"
 
-#: commands/offline/offline.cpp:300
+#: commands/offline/offline.cpp:303
 msgid ""
 "Prepare the system to perform the offline transaction and reboot to start "
 "the transaction."
 msgstr "準備系統以執行離線處理事項，並重新開機啟動處理事項。"
 
-#: commands/offline/offline.cpp:307
+#: commands/offline/offline.cpp:310
 msgid "Power off the system after the operation is complete"
 msgstr "操作完成後關閉系統電源"
 
-#: commands/offline/offline.cpp:318
+#: commands/offline/offline.cpp:321
 msgid "No offline transaction is stored."
 msgstr "不會儲存離線處理事項。"
 
-#: commands/offline/offline.cpp:326
+#: commands/offline/offline.cpp:329
 msgid "System is not ready for offline transaction."
 msgstr "系統尚未準備好進行離線處理事項。"
 
-#: commands/offline/offline.cpp:329
+#: commands/offline/offline.cpp:332
 msgid "Data directory {} does not exist."
 msgstr "資料目錄 {} 不存在。"
 
-#: commands/offline/offline.cpp:354
+#: commands/offline/offline.cpp:357
 msgid "{} is not wanted by system-update.target."
 msgstr "{} 不是 system-update.target 想要的。"
 
-#: commands/offline/offline.cpp:364
+#: commands/offline/offline.cpp:367
 msgid "The system will now reboot to upgrade to release version {}."
 msgstr "系統現在重新開機，將升級至發行版本 {}。"
 
-#: commands/offline/offline.cpp:368
+#: commands/offline/offline.cpp:371
 msgid ""
 "The system will now reboot to perform the offline transaction initiated by "
 "the following command:"
 msgstr "系統現在會重新啟動，以執行由下列命令啟動的離線處理事項："
 
-#: commands/offline/offline.cpp:399
+#: commands/offline/offline.cpp:402
 msgid ""
 "Internal use only, not intended to be run by the user. Execute the "
 "transaction in the offline environment."
 msgstr "僅供內部使用，使用者不得執行。在離線環境中執行處理事項。"
 
-#: commands/offline/offline.cpp:433
+#: commands/offline/offline.cpp:436
 msgid "Trigger file does not exist. Exiting."
 msgstr "觸發檔案不存在。退出。"
 
-#: commands/offline/offline.cpp:437
+#: commands/offline/offline.cpp:440
 msgid "Another offline transaction tool is running. Exiting."
 msgstr "另一個離線處理事項工具正在執行。退出。"
 
-#: commands/offline/offline.cpp:464
+#: commands/offline/offline.cpp:467
 msgid "Starting offline transaction. This will take a while."
 msgstr "開始離線處理事項。這將需要一段時間。"
 
-#: commands/offline/offline.cpp:468
+#: commands/offline/offline.cpp:471
 msgid "Starting system upgrade. This will take a while."
 msgstr "開始系統升級。這需要一段時間。"
 
-#: commands/offline/offline.cpp:480
+#: commands/offline/offline.cpp:483
 msgid "Use `dnf5 offline reboot` to begin the transaction."
 msgstr "使用 `dnf5 offline reboot` 開始處理事項。"
 
-#: commands/offline/offline.cpp:531
+#: commands/offline/offline.cpp:534
 msgid "Transaction failed: "
 msgstr "處理事項失敗 "
 
-#: commands/offline/offline.cpp:601
+#: commands/offline/offline.cpp:604
 msgid "Error reading journal: {}"
 msgstr "讀取日誌時出錯：{}"
 
-#: commands/offline/offline.cpp:607
+#: commands/offline/offline.cpp:610
 msgid "Add journal match failed: {}"
 msgstr "新增日誌對失敗：{}"
 
-#: commands/offline/offline.cpp:635
+#: commands/offline/offline.cpp:638
 msgid "No logs were found."
 msgstr "未找到日誌。"
 
-#: commands/offline/offline.cpp:639
+#: commands/offline/offline.cpp:642
 msgid "The following boots appear to contain offline transaction logs:"
 msgstr "下列開機似乎包含離線處理事項記錄："
 
-#: commands/offline/offline.cpp:656
+#: commands/offline/offline.cpp:659
 msgid "Cannot find logs with this index."
 msgstr "無法透過這個索引找到記錄檔。"
 
-#: commands/offline/offline.cpp:663
+#: commands/offline/offline.cpp:666
 msgid "Unable to match systemd journal entry."
 msgstr "無法符合 systemd 的記錄檔項目。"
 
-#: commands/offline/offline.cpp:675
+#: commands/offline/offline.cpp:678
 msgid "Show logs from past offline transactions"
 msgstr "顯示過去離線處理事項的日誌"
 
-#: commands/offline/offline.cpp:683
+#: commands/offline/offline.cpp:686
 msgid ""
 "Which log to show. Run without any arguments to get a list of available logs."
 msgstr "要顯示的日誌。在沒有任何引數的情況下執行，以取得可用日誌清單。"
 
-#: commands/offline/offline.cpp:698
+#: commands/offline/offline.cpp:701
 msgid ""
 "systemd is not supported in this build of DNF 5; the `log` subcommand is "
 "unavailable."
 msgstr "DNF 5 的此版本不支援 systemd；`log` 子命令不可用。"
 
-#: commands/offline/offline.cpp:703
+#: commands/offline/offline.cpp:706
 msgid "Show status of the current offline transaction"
 msgstr "顯示目前離線處理事項的狀態"
 
-#: commands/offline/offline.cpp:719
+#: commands/offline/offline.cpp:722
 msgid "An offline transaction was initiated by the following command:"
 msgstr "離線處理事項由下列命令啟動："
 
-#: commands/offline/offline.cpp:721
+#: commands/offline/offline.cpp:724
 msgid ""
 "Run `dnf5 offline reboot` to reboot and perform the offline transaction."
 msgstr "執行 `dnf5 offline reboot` 以重新啟動並執行離線處理事項。"
 
-#: commands/offline/offline.cpp:723
+#: commands/offline/offline.cpp:726
 msgid ""
 "An offline transaction was started, but it did not finish. Run `dnf5 offline "
 "log` for more information. The command that initiated the transaction was:"
@@ -829,7 +831,7 @@ msgstr ""
 "已啟動離線處理事項，但未完成。執行 `dnf5 offline log` 取得更多資訊。啟動處理"
 "事項的命令是："
 
-#: commands/offline/offline.cpp:728
+#: commands/offline/offline.cpp:731
 msgid "Unknown offline transaction status: "
 msgstr "未知離線處理事項狀態： "
 
@@ -958,20 +960,22 @@ msgstr "管理版本鎖組態"
 msgid "Add new entry to versionlock configuration"
 msgstr "在版本鎖組態中加入新項目"
 
-#: commands/versionlock/versionlock_add.cpp:43
-msgid "List of package specs to add versionlock for"
+#: commands/versionlock/versionlock_add.cpp:44
+#, fuzzy
+#| msgid "List of package specs to add versionlock for"
+msgid "List of package package-spec-N to add versionlock for"
 msgstr "要新增版本鎖的軟體包規格清單"
 
-#: commands/versionlock/versionlock_add.cpp:106
-#: commands/versionlock/versionlock_exclude.cpp:125
+#: commands/versionlock/versionlock_add.cpp:107
+#: commands/versionlock/versionlock_exclude.cpp:126
 msgid "No package found for \"{}\"."
 msgstr "找不到「{}」的軟體包。"
 
-#: commands/versionlock/versionlock_add.cpp:133
+#: commands/versionlock/versionlock_add.cpp:134
 msgid "Adding versionlock on \"{0} = {1}\"."
 msgstr "以「{0} = {1}」加入版本鎖定。"
 
-#: commands/versionlock/versionlock_add.cpp:136
+#: commands/versionlock/versionlock_add.cpp:137
 msgid "Package \"{}\" is already locked."
 msgstr "已鎖定「{}」軟體包。"
 
@@ -995,16 +999,18 @@ msgstr "刪除版本鎖記錄："
 msgid "Add new exclude entry to versionlock configuration"
 msgstr "在版本鎖的組態設定中新增排除項目"
 
-#: commands/versionlock/versionlock_exclude.cpp:43
-msgid "List of package specs to add versionlock exclude for"
+#: commands/versionlock/versionlock_exclude.cpp:44
+#, fuzzy
+#| msgid "List of package specs to add versionlock exclude for"
+msgid "List of package-spec-N to add versionlock exclude for"
 msgstr "要新增版本鎖排除的軟體包規格清單"
 
-#: commands/versionlock/versionlock_exclude.cpp:88
-#: commands/versionlock/versionlock_exclude.cpp:100
+#: commands/versionlock/versionlock_exclude.cpp:89
+#: commands/versionlock/versionlock_exclude.cpp:101
 msgid "Adding versionlock exclude on \"{0} = {1}\"."
 msgstr "加入「{0} = {1}」的版本排除鎖定。"
 
-#: commands/versionlock/versionlock_exclude.cpp:139
+#: commands/versionlock/versionlock_exclude.cpp:140
 msgid "Package \"{}\" is already excluded."
 msgstr "軟體包「 {}」已排除。"
 

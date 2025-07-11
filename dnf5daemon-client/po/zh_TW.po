@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-19 03:39+0000\n"
-"PO-Revision-Date: 2025-05-18 10:16+0000\n"
+"POT-Creation-Date: 2025-07-11 03:49+0000\n"
+"PO-Revision-Date: 2025-07-02 18:28+0000\n"
 "Last-Translator: Cheng-Chia Tseng <pswo10680@gmail.com>\n"
 "Language-Team: Chinese (Traditional) <https://translate.fedoraproject.org/"
 "projects/dnf5/dnf5daemon-client/zh_TW/>\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.11.3\n"
+"X-Generator: Weblate 5.12.2\n"
 
 #: commands/advisory/advisory.cpp:35
 msgid "Manage advisories"
@@ -138,7 +138,7 @@ msgstr "CVE_ID,..."
 
 #: commands/clean/clean.cpp:88
 msgid "Error cleaning the cache: {}"
-msgstr "清除快取出錯： {}"
+msgstr "清除快取出錯：{}"
 
 #: commands/distro-sync/distro-sync.cpp:48
 msgid ""
@@ -173,11 +173,11 @@ msgstr "管理軟體庫"
 
 #: commands/repoquery/repoquery.cpp:95
 msgid "search for packages matching various criteria"
-msgstr "搜尋符合各種條件的套件"
+msgstr "搜尋符合各種條件的軟體包"
 
 #: commands/repoquery/repoquery.cpp:159
 msgid "Error parsing JSON object \"{}\": {}"
-msgstr "解析 JSON 物件 「{}」 時出錯： {}"
+msgstr "解析 JSON 物件「{}」時出錯：{}"
 
 #: exception.cpp:28
 msgid ""
@@ -192,4 +192,4 @@ msgstr "{}：格式錯誤的引數值：最後一個鍵的字元不能是「.」
 
 #: main.cpp:258 main.cpp:308
 msgid ". Add \"--help\" for more information about the arguments."
-msgstr ". 加入\"--help\" 以取得更多關於參數的資訊。"
+msgstr "。加入\"--help\" 以取得更多關於引數的資訊。"

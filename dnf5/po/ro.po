@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-19 03:39+0000\n"
-"PO-Revision-Date: 2025-06-11 07:31+0000\n"
+"POT-Creation-Date: 2025-07-11 03:49+0000\n"
+"PO-Revision-Date: 2025-07-08 16:06+0000\n"
 "Last-Translator: Remus-Gabriel Chelu <remusgabriel.chelu@disroot.org>\n"
 "Language-Team: Romanian <https://translate.fedoraproject.org/projects/dnf5/"
 "dnf5/ro/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : (n==0 || (n%100 > 0 && n%100 < "
 "20)) ? 1 : 2;\n"
-"X-Generator: Weblate 5.11.4\n"
+"X-Generator: Weblate 5.12.2\n"
 
 #: cmdline_aliases.cpp:84 context.cpp:301 main.cpp:1357
 msgid ", "
@@ -413,7 +413,7 @@ msgstr "Nu se poate itera directorul de cache „{}”: {}"
 msgid "Install debuginfo packages."
 msgstr "Instalează pachetele debuginfo."
 
-#: commands/distro-sync/distro-sync.cpp:42
+#: commands/distro-sync/distro-sync.cpp:44
 msgid ""
 "Upgrade or downgrade installed software to the latest available versions"
 msgstr ""
@@ -653,24 +653,25 @@ msgstr ""
 msgid "Lists packages depending on the packages' relation to the system"
 msgstr "Listează pachetele în funcție de relația pachetelor cu sistemul"
 
-#: commands/list/list.cpp:47
-msgid "List of keys to match case insensitively"
+#: commands/list/list.cpp:48
+msgid "List of package-spec-NI to match (case insensitively)"
 msgstr ""
-"Listă de chei pentru potrivirea fără distincție între majuscule și minuscule"
+"Lista de N specificații de pachete „package-spec-NI” pentru potrivire (fără "
+"distincție între majuscule și minuscule)"
 
-#: commands/list/list.cpp:59
+#: commands/list/list.cpp:60
 msgid "Show all versions of the packages, not only the latest ones."
 msgstr "Afișează toate versiunile pachetelor, nu doar pe cele mai recente."
 
-#: commands/list/list.cpp:65
+#: commands/list/list.cpp:66
 msgid "List installed packages."
 msgstr "Listează pachetele instalate."
 
-#: commands/list/list.cpp:69
+#: commands/list/list.cpp:70
 msgid "List available packages."
 msgstr "Listează pachetele disponibile."
 
-#: commands/list/list.cpp:76
+#: commands/list/list.cpp:77
 msgid ""
 "List extras, that is packages installed on the system that are not available "
 "in any known repository."
@@ -678,7 +679,7 @@ msgstr ""
 "Listează pachetele suplimentare, adică pachetele instalate în sistem care nu "
 "sunt disponibile în niciun depozit cunoscut."
 
-#: commands/list/list.cpp:84
+#: commands/list/list.cpp:85
 msgid ""
 "List packages installed on the system that are obsoleted by packages in any "
 "known repository."
@@ -686,47 +687,47 @@ msgstr ""
 "Listează pachetele instalate în sistem care au devenit obsolete din cauza "
 "pachetelor din oricare dintre depozitele cunoscute."
 
-#: commands/list/list.cpp:89
+#: commands/list/list.cpp:90
 msgid "List packages recently added into the repositories."
 msgstr "Listează pachetele adăugate recent în depozite."
 
-#: commands/list/list.cpp:93
+#: commands/list/list.cpp:94
 msgid "List upgrades available for the installed packages."
 msgstr "Listează actualizările disponibile pentru pachetele instalate."
 
-#: commands/list/list.cpp:97
+#: commands/list/list.cpp:98
 msgid "List packages which will be removed by the 'dnf autoremove' command."
 msgstr "Listează pachetele care vor fi eliminate de comanda «dnf autoremove»."
 
-#: commands/list/list.cpp:194 commands/list/list.cpp:199
+#: commands/list/list.cpp:195 commands/list/list.cpp:200
 msgid "Installed packages"
 msgstr "Pachete instalate"
 
-#: commands/list/list.cpp:195 commands/list/list.cpp:208
+#: commands/list/list.cpp:196 commands/list/list.cpp:209
 msgid "Available packages"
 msgstr "Pachete disponibile"
 
-#: commands/list/list.cpp:216
+#: commands/list/list.cpp:217
 msgid "Available upgrades"
 msgstr "Actualizări disponibile"
 
-#: commands/list/list.cpp:232
+#: commands/list/list.cpp:233
 msgid "Obsoleting packages"
 msgstr "Pachete devenite obsolete"
 
-#: commands/list/list.cpp:237
+#: commands/list/list.cpp:238
 msgid "Autoremove packages"
 msgstr "Pachete care pot fi eliminate automat"
 
-#: commands/list/list.cpp:241
+#: commands/list/list.cpp:242
 msgid "Extra packages"
 msgstr "Pachete suplimentare"
 
-#: commands/list/list.cpp:252
+#: commands/list/list.cpp:253
 msgid "Recently added packages"
 msgstr "Pachete adăugate recent"
 
-#: commands/list/list.cpp:257
+#: commands/list/list.cpp:258
 msgid "No matching packages to list"
 msgstr "Nu există pachete care să se potrivească de listat"
 
@@ -754,11 +755,11 @@ msgstr "Gestionează modulele"
 msgid "No matches found for \"{}\"."
 msgstr "Nu s-au găsit potriviri pentru „{}”."
 
-#: commands/offline/offline.cpp:214
+#: commands/offline/offline.cpp:217
 msgid "Manage offline transactions"
 msgstr "Gestionează tranzacțiile fără conexiune la rețea"
 
-#: commands/offline/offline.cpp:246
+#: commands/offline/offline.cpp:249
 msgid ""
 "Error reading state: {}. Rerun the command you used to initiate the offline "
 "transaction, e.g. `dnf5 system-upgrade download [OPTIONS]`."
@@ -767,11 +768,11 @@ msgstr ""
 "pentru a iniția tranzacția fără conexiune, de exemplu «dnf5 system-upgrade "
 "download [OPȚIUNI]»."
 
-#: commands/offline/offline.cpp:269
+#: commands/offline/offline.cpp:272
 msgid "Couldn't connect to D-Bus: {}"
 msgstr "Nu s-a putut realiza conectarea la D-Bus: {}"
 
-#: commands/offline/offline.cpp:300
+#: commands/offline/offline.cpp:303
 msgid ""
 "Prepare the system to perform the offline transaction and reboot to start "
 "the transaction."
@@ -779,34 +780,34 @@ msgstr ""
 "Pregătește sistemul pentru a efectua tranzacția fără conexiune și îl "
 "repornește pentru a începe tranzacția."
 
-#: commands/offline/offline.cpp:307
+#: commands/offline/offline.cpp:310
 msgid "Power off the system after the operation is complete"
 msgstr "Oprește sistemul după finalizarea operațiunii"
 
-#: commands/offline/offline.cpp:318
+#: commands/offline/offline.cpp:321
 msgid "No offline transaction is stored."
 msgstr "Nu este stocată nicio tranzacție fără conexiune."
 
-#: commands/offline/offline.cpp:326
+#: commands/offline/offline.cpp:329
 msgid "System is not ready for offline transaction."
 msgstr "Sistemul nu este pregătit pentru tranzacția fără conexiune."
 
-#: commands/offline/offline.cpp:329
+#: commands/offline/offline.cpp:332
 msgid "Data directory {} does not exist."
 msgstr "Directorul de date {} nu există."
 
-#: commands/offline/offline.cpp:354
+#: commands/offline/offline.cpp:357
 msgid "{} is not wanted by system-update.target."
 msgstr ""
 "{} nu este una dintre dependențele (Wants/WantedBy) ale system-update.target."
 
-#: commands/offline/offline.cpp:364
+#: commands/offline/offline.cpp:367
 msgid "The system will now reboot to upgrade to release version {}."
 msgstr ""
 "Sistemul va reporni acum pentru a face actualizarea la noua versiune lansată "
 "{}."
 
-#: commands/offline/offline.cpp:368
+#: commands/offline/offline.cpp:371
 msgid ""
 "The system will now reboot to perform the offline transaction initiated by "
 "the following command:"
@@ -814,7 +815,7 @@ msgstr ""
 "Sistemul va reporni acum pentru a efectua tranzacția fără conexiune inițiată "
 "de următoarea comandă:"
 
-#: commands/offline/offline.cpp:399
+#: commands/offline/offline.cpp:402
 msgid ""
 "Internal use only, not intended to be run by the user. Execute the "
 "transaction in the offline environment."
@@ -822,67 +823,67 @@ msgstr ""
 "Numai pentru uz intern, nu este destinată a fi executată de către "
 "utilizator. Execută tranzacția în mediul fără conexiune."
 
-#: commands/offline/offline.cpp:433
+#: commands/offline/offline.cpp:436
 msgid "Trigger file does not exist. Exiting."
 msgstr "Fișierul de declanșare nu există. Se iese."
 
-#: commands/offline/offline.cpp:437
+#: commands/offline/offline.cpp:440
 msgid "Another offline transaction tool is running. Exiting."
 msgstr "Un alt instrument de tranzacționare fără conexiune rulează. Se iese."
 
-#: commands/offline/offline.cpp:464
+#: commands/offline/offline.cpp:467
 msgid "Starting offline transaction. This will take a while."
 msgstr "Se inițiază tranzacția fără conexiune. Aceasta va dura ceva timp."
 
-#: commands/offline/offline.cpp:468
+#: commands/offline/offline.cpp:471
 msgid "Starting system upgrade. This will take a while."
 msgstr "Se inițiază actualizarea sistemului. Aceasta va dura ceva timp."
 
-#: commands/offline/offline.cpp:480
+#: commands/offline/offline.cpp:483
 msgid "Use `dnf5 offline reboot` to begin the transaction."
 msgstr "Utilizați comanda «dnf5 offline reboot» pentru a începe tranzacția."
 
-#: commands/offline/offline.cpp:531
+#: commands/offline/offline.cpp:534
 msgid "Transaction failed: "
 msgstr "Tranzacția a eșuat: "
 
-#: commands/offline/offline.cpp:601
+#: commands/offline/offline.cpp:604
 msgid "Error reading journal: {}"
 msgstr "Eroare la citirea fișierului de jurnal: {}"
 
-#: commands/offline/offline.cpp:607
+#: commands/offline/offline.cpp:610
 msgid "Add journal match failed: {}"
 msgstr "Adăugarea potrivirii în jurnal a eșuat: {}"
 
-#: commands/offline/offline.cpp:635
+#: commands/offline/offline.cpp:638
 msgid "No logs were found."
 msgstr "Nu a fost găsit niciun jurnal."
 
-#: commands/offline/offline.cpp:639
+#: commands/offline/offline.cpp:642
 msgid "The following boots appear to contain offline transaction logs:"
 msgstr ""
 "Următoarele porniri par să conțină jurnale de tranzacții fără conexiune:"
 
-#: commands/offline/offline.cpp:656
+#: commands/offline/offline.cpp:659
 msgid "Cannot find logs with this index."
 msgstr "Nu se poate găsi niciun jurnal cu acest index."
 
-#: commands/offline/offline.cpp:663
+#: commands/offline/offline.cpp:666
 msgid "Unable to match systemd journal entry."
 msgstr "Nu s-a găsit nicio intrare care să corespundă în jurnalul systemd."
 
-#: commands/offline/offline.cpp:675
+#: commands/offline/offline.cpp:678
 msgid "Show logs from past offline transactions"
 msgstr "Afișează jurnalele din tranzacțiile efectuate fără conexiune în trecut"
 
-#: commands/offline/offline.cpp:683
+#: commands/offline/offline.cpp:686
 msgid ""
 "Which log to show. Run without any arguments to get a list of available logs."
 msgstr ""
 "Ce jurnal să fie afișat. Executați-o fără niciun argument pentru a obține o "
 "listă a jurnalelor disponibile."
 
-#: commands/offline/offline.cpp:698
+#: commands/offline/offline.cpp:701
 msgid ""
 "systemd is not supported in this build of DNF 5; the `log` subcommand is "
 "unavailable."
@@ -890,23 +891,23 @@ msgstr ""
 "systemd nu este acceptat în această versiune a DNF 5; subcomanda „log” nu "
 "este disponibilă."
 
-#: commands/offline/offline.cpp:703
+#: commands/offline/offline.cpp:706
 msgid "Show status of the current offline transaction"
 msgstr "Afișează starea tranzacției efectuate fără conexiune, curente"
 
-#: commands/offline/offline.cpp:719
+#: commands/offline/offline.cpp:722
 msgid "An offline transaction was initiated by the following command:"
 msgstr ""
 "O tranzacție fără conexiune la rețea a fost inițiată prin următoarea comandă:"
 
-#: commands/offline/offline.cpp:721
+#: commands/offline/offline.cpp:724
 msgid ""
 "Run `dnf5 offline reboot` to reboot and perform the offline transaction."
 msgstr ""
 "Rulați «dnf5 offline reboot» pentru a reporni și a efectua tranzacția fără "
 "conexiune la rețea."
 
-#: commands/offline/offline.cpp:723
+#: commands/offline/offline.cpp:726
 msgid ""
 "An offline transaction was started, but it did not finish. Run `dnf5 offline "
 "log` for more information. The command that initiated the transaction was:"
@@ -915,7 +916,7 @@ msgstr ""
 "finalizată. Rulați «dnf5 offline log» pentru mai multe informații. Comanda "
 "care a inițiat tranzacția a fost:"
 
-#: commands/offline/offline.cpp:728
+#: commands/offline/offline.cpp:731
 msgid "Unknown offline transaction status: "
 msgstr "Stare necunoscută a tranzacției fără conexiune la rețea: "
 
@@ -1055,20 +1056,22 @@ msgstr "Gestionează configurația versionlock"
 msgid "Add new entry to versionlock configuration"
 msgstr "Adaugă o nouă intrare la configurația versionlock"
 
-#: commands/versionlock/versionlock_add.cpp:43
-msgid "List of package specs to add versionlock for"
-msgstr "Lista specificațiilor pachetelor pentru adăugarea la versionlock"
+#: commands/versionlock/versionlock_add.cpp:44
+msgid "List of package package-spec-N to add versionlock for"
+msgstr ""
+"Lista de N specificații de pachete „package-spec-N” pentru adăugarea la "
+"versionlock"
 
-#: commands/versionlock/versionlock_add.cpp:106
-#: commands/versionlock/versionlock_exclude.cpp:125
+#: commands/versionlock/versionlock_add.cpp:107
+#: commands/versionlock/versionlock_exclude.cpp:126
 msgid "No package found for \"{}\"."
 msgstr "Nu s-a găsit niciun pachet pentru „{}”."
 
-#: commands/versionlock/versionlock_add.cpp:133
+#: commands/versionlock/versionlock_add.cpp:134
 msgid "Adding versionlock on \"{0} = {1}\"."
 msgstr "Se adaugă blocarea versiunii „versionlock” la „{0} = {1}”."
 
-#: commands/versionlock/versionlock_add.cpp:136
+#: commands/versionlock/versionlock_add.cpp:137
 msgid "Package \"{}\" is already locked."
 msgstr "Pachetul „{}” este deja blocat."
 
@@ -1094,19 +1097,19 @@ msgstr "Se șterge intrarea versionlock:"
 msgid "Add new exclude entry to versionlock configuration"
 msgstr "Adaugă o nouă intrare de excludere la configurația versionlock"
 
-#: commands/versionlock/versionlock_exclude.cpp:43
-msgid "List of package specs to add versionlock exclude for"
+#: commands/versionlock/versionlock_exclude.cpp:44
+msgid "List of package-spec-N to add versionlock exclude for"
 msgstr ""
-"Lista specificațiilor de pachete pentru care se adaugă excluderea de la "
-"blocareai versiunii „versionlock”"
+"Lista de N specificații de pachete „package-spec-N” pentru care se adaugă "
+"excluderea de la blocarea versiunii „versionlock”"
 
-#: commands/versionlock/versionlock_exclude.cpp:88
-#: commands/versionlock/versionlock_exclude.cpp:100
+#: commands/versionlock/versionlock_exclude.cpp:89
+#: commands/versionlock/versionlock_exclude.cpp:101
 msgid "Adding versionlock exclude on \"{0} = {1}\"."
 msgstr ""
 "Se adaugă excluderea de la blocarea versiunii „versionlock” la „{0} = {1}”."
 
-#: commands/versionlock/versionlock_exclude.cpp:139
+#: commands/versionlock/versionlock_exclude.cpp:140
 msgid "Package \"{}\" is already excluded."
 msgstr "Pachetul „{}” este deja exclus."
 
