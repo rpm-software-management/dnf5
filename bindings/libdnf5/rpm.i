@@ -62,6 +62,8 @@
 %template(VectorNevraForm) std::vector<libdnf5::rpm::Nevra::Form>;
 %template(PairBoolNevra) std::pair<bool, libdnf5::rpm::Nevra>;
 %template(cmp_nevra) libdnf5::rpm::cmp_nevra<libdnf5::rpm::Nevra>;
+%template(to_full_nevra_string) libdnf5::rpm::to_full_nevra_string<libdnf5::rpm::Nevra>;
+%template(to_nevra_string) libdnf5::rpm::to_nevra_string<libdnf5::rpm::Nevra>;
 
 %include "libdnf5/rpm/versionlock_config.hpp"
 

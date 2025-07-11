@@ -74,6 +74,10 @@ void NevraTest::test_nevra() {
         CPPUNIT_ASSERT(nevra.get_version() == "3.6.9");
         CPPUNIT_ASSERT(nevra.get_release() == "11.fc100");
         CPPUNIT_ASSERT(nevra.get_arch() == "x86_64");
+
+        // test that to_nevra_string() and to_full_nevra_string() template functions work without epoch
+        CPPUNIT_ASSERT_EQUAL(std::string("four-of-fish-3.6.9-11.fc100.x86_64"), to_nevra_string(nevra));
+        CPPUNIT_ASSERT_EQUAL(std::string("four-of-fish-0:3.6.9-11.fc100.x86_64"), to_full_nevra_string(nevra));
     }
 
     {
