@@ -217,56 +217,43 @@ void DownloadProgressBar::to_stream(std::ostream & stream) {
         stream << tty::reset;
     }
 
-    for (auto & msg : get_messages()) {
-        auto message_type = msg.first;
-        auto message = msg.second;
+    std::size_t message_index = 0;
+    for (const auto & [message_type, message] : get_messages()) {
+        const auto & prefix = get_message_prefix();
 
-        const auto & prefix = ">>> ";
-        const auto prefix_width = libdnf5::cli::utils::utf8::width(prefix);
+        stream << std::endl << prefix;
 
-        stream << std::endl;
-        // print only part of the prefix that fits the terminal width
-        stream << libdnf5::cli::utils::utf8::substr_width(prefix, 0, terminal_width);
-
-        if (prefix_width < terminal_width) {
-            // only proceed if there is at least some space for the message
-            color_used = false;
-            if (tty::is_coloring_enabled()) {
-                // color the message in interactive terminal
-                switch (message_type) {
-                    case MessageType::INFO:
-                        break;
-                    case MessageType::SUCCESS:
-                        stream << tty::green;
-                        color_used = true;
-                        break;
-                    case MessageType::WARNING:
-                        stream << tty::yellow;
-                        color_used = true;
-                        break;
-                    case MessageType::ERROR:
-                        stream << tty::red;
-                        color_used = true;
-                        break;
-                }
-            }
-
-            // Add padding to fully fill the terminal_width, this is because MultiProgressBar
-            // overrides its own messages, it doesn't clear the lines.
-            // If the message is short some leftover characters could be still present after it.
-            const auto message_width = libdnf5::cli::utils::utf8::width(message);
-            const auto space_available = terminal_width - prefix_width;
-            if (message_width < space_available) {
-                message.append(space_available - message_width, ' ');
-            }
-
-            // print only part of the message that fits the terminal width
-            stream << libdnf5::cli::utils::utf8::substr_width(message, 0, space_available);
-
-            if (color_used) {
-                stream << tty::reset;
+        color_used = false;
+        if (tty::is_coloring_enabled()) {
+            // color the message in interactive terminal
+            switch (message_type) {
+                case MessageType::INFO:
+                    break;
+                case MessageType::SUCCESS:
+                    stream << tty::green;
+                    color_used = true;
+                    break;
+                case MessageType::WARNING:
+                    stream << tty::yellow;
+                    color_used = true;
+                    break;
+                case MessageType::ERROR:
+                    stream << tty::red;
+                    color_used = true;
+                    break;
             }
         }
+
+        stream << message;
+        // Add padding to fully fill the terminal_width, this is because MultiProgressBar
+        // overrides its own messages, it doesn't clear the lines.
+        // If the message is short some leftover characters could be still present after it.
+        stream << std::string(get_message_padding(terminal_width, prefix + message, message_index), ' ');
+
+        if (color_used) {
+            stream << tty::reset;
+        }
+        ++message_index;
     }
 }
 
