@@ -131,6 +131,7 @@ std::size_t MultiProgressBar::get_total_num_of_bars() const noexcept {
 
 std::ostream & operator<<(std::ostream & stream, MultiProgressBar & mbar) {
     const bool is_interactive{tty::is_interactive()};
+    auto terminal_width = static_cast<std::size_t>(tty::get_width());
 
     // We'll buffer the output text to a single string and print it all at once.
     // This is to avoid multiple writes to the terminal, which can cause flickering.
@@ -170,7 +171,7 @@ std::ostream & operator<<(std::ostream & stream, MultiProgressBar & mbar) {
         text_buffer << *bar;
         text_buffer << std::endl;
         num_of_lines_permanent++;
-        num_of_lines_permanent += bar->get_messages().size();
+        num_of_lines_permanent += bar->calculate_messages_terminal_lines(terminal_width);
         mbar.p_impl->bars_done.push_back(bar);
         // TODO(dmach): use iterator
         mbar.p_impl->bars_todo.erase(mbar.p_impl->bars_todo.begin() + static_cast<int>(i));
@@ -198,7 +199,7 @@ std::ostream & operator<<(std::ostream & stream, MultiProgressBar & mbar) {
         text_buffer << *bar;
         mbar.p_impl->line_printed = true;
         mbar.p_impl->num_of_lines_to_clear++;
-        mbar.p_impl->num_of_lines_to_clear += bar->get_messages().size();
+        mbar.p_impl->num_of_lines_to_clear += bar->calculate_messages_terminal_lines(terminal_width);
     }
 
     // then print the "total" progress bar
@@ -227,8 +228,7 @@ std::ostream & operator<<(std::ostream & stream, MultiProgressBar & mbar) {
             text_buffer << std::endl;
         }
         // print divider
-        int terminal_width = tty::get_width();
-        text_buffer << std::string(static_cast<std::size_t>(terminal_width), '-');
+        text_buffer << std::string(terminal_width, '-');
         text_buffer << std::endl;
 
         // print Total progress bar
