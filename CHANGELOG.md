@@ -1,3 +1,34 @@
+# 5.2.15.0
+
+- Update translations from weblate
+- Adapt missing gpg key check for parallel downloading
+- repoclosure: skip rich dependencies
+- search: Do not separate a package from a summary with a colon
+- Fix: add_up_down_distrosync_to_goal: to_repo_ids filtering
+- dnf5: distro-sync: Argument "--from-repo"
+- swig: Add %thread directive for repo_sack.hpp for Python
+- dnfdaemon: Fix a crash under dnf5daemon::DownloadCB::create_signal_download()
+- Add dnf5daemon-server requirement for polkit subpkg
+- doc: Correct handling the translations
+- dnfdaemon-client: Call server methods asynchronously
+- offline: Require D-Bus socket service from dnf5-offline-transaction.service
+- offline: Perform gracefull powerof/reboot instead of immediate one
+- readthedocs: add swig include to fix doc builds
+- readthedocs: extract `SOURCE_DIR` variable
+- readthedocs: fix path joining
+- dnfdaemon: Make permission check more consistent
+- dnfdaemon: Removed incorrect output parameter names
+- dnfdaemon: support all_advisories option for recent_changes()
+- advisory: Add support for filtering advisories by Nevra
+- dnfdaemon: support installonly pkgs in recent_changes()
+- dnfdaemon: Add new History interface
+- dnf5: repoclosure: Support globs in "--check=" option
+- doc: Handling translations
+- Docs: enhance install command behavior description
+- Unify commands help with package specs
+- Introduce new format denoting package spec formats
+- test: ease path assertions in tests
+
 # 5.2.14.0
 
 - Update translations from weblate
