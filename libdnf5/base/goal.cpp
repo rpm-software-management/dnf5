@@ -592,6 +592,10 @@ GoalProblem Goal::Impl::add_specs_to_goal(base::Transaction & transaction) {
             case GoalAction::UPGRADE_ALL_MINIMAL: {
                 rpm::PackageQuery query(base);
 
+                if (!settings.get_to_repo_ids().empty()) {
+                    query.filter_repo_id(settings.get_to_repo_ids(), sack::QueryCmp::GLOB);
+                }
+
                 // Apply advisory filters
                 if (settings.get_advisory_filter() != nullptr) {
                     filter_candidates_for_advisory_upgrade(
@@ -622,10 +626,17 @@ GoalProblem Goal::Impl::add_specs_to_goal(base::Transaction & transaction) {
             } break;
             case GoalAction::DISTRO_SYNC_ALL: {
                 rpm::PackageQuery query(base);
-                // Since distro-sync uses SOLVER_TARGETED mode we cannot pass in installed packages because if we did
-                // updating only a subset of packages would be a valid solution. However in a distro-sync we want to
-                // ensure ALL packages are synchronized with the target repository.
-                query.filter_available();
+
+                if (settings.get_to_repo_ids().empty()) {
+                    // Since distro-sync uses SOLVER_TARGETED mode we cannot pass in installed packages because
+                    // if we did updating only a subset of packages would be a valid solution. However in a distro-sync
+                    // we want to ensure ALL packages are synchronized with the target repository.
+                    query.filter_available();
+                } else {
+                    // Keep only the packages available in the specified repositories.
+                    query.filter_repo_id(settings.get_to_repo_ids(), sack::QueryCmp::GLOB);
+                }
+
                 libdnf5::solv::IdQueue upgrade_ids;
                 for (auto package_id : *query.p_impl) {
                     upgrade_ids.push_back(package_id);
