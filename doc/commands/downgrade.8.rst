@@ -54,6 +54,8 @@ Options
 ``--no-allow-downgrade``
     | Disable downgrade of dependencies when resolving the requested operation.
 
+.. include:: ../_shared/options/installed-from-repo.rst
+
 .. include:: ../_shared/options/from-repo.rst
 
 ``--downloadonly``

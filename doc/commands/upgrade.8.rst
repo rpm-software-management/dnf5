@@ -64,6 +64,8 @@ Options
     | Set directory used for downloading packages to. Default location is to the current working directory.
     | Automatically sets the ``downloadonly`` option.
 
+.. include:: ../_shared/options/installed-from-repo.rst
+
 .. include:: ../_shared/options/from-repo.rst
 
 ``--downloadonly``
