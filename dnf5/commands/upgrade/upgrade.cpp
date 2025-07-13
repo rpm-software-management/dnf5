@@ -69,6 +69,7 @@ void UpgradeCommand::set_argument_parser() {
     allow_erasing = std::make_unique<AllowErasingOption>(*this);
     auto skip_unavailable = std::make_unique<SkipUnavailableOption>(*this);
     create_allow_downgrade_options(*this);
+    create_installed_from_repo_option(*this, installed_from_repos, true);
     create_from_repo_option(*this, from_repos, true);
     create_destdir_option(*this);
     create_downloadonly_option(*this);
@@ -126,6 +127,7 @@ void UpgradeCommand::run() {
         }
     }
 
+    settings.set_from_repo_ids(installed_from_repos);
 
     auto advisories = advisory_query_from_cli_input(
         ctx.get_base(),

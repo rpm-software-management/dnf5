@@ -50,6 +50,8 @@ Options
 ``--skip-unavailable``
     | Allow skipping packages that are not possible to synchronize. All remaining packages will be synchronized.
 
+.. include:: ../_shared/options/installed-from-repo.rst
+
 .. include:: ../_shared/options/from-repo.rst
 
 ``--downloadonly``
