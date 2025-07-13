@@ -612,6 +612,10 @@ GoalProblem Goal::Impl::add_specs_to_goal(base::Transaction & transaction) {
                     }
                 }
 
+                if (query.empty()) {
+                    return GoalProblem::NO_PROBLEM;
+                }
+
                 // Make the smallest possible upgrade
                 if (action == GoalAction::UPGRADE_ALL_MINIMAL) {
                     query.filter_earliest_evr();
@@ -635,6 +639,10 @@ GoalProblem Goal::Impl::add_specs_to_goal(base::Transaction & transaction) {
                 } else {
                     // Keep only the packages available in the specified repositories.
                     query.filter_repo_id(settings.get_to_repo_ids(), sack::QueryCmp::GLOB);
+                }
+
+                if (query.empty()) {
+                    return GoalProblem::NO_PROBLEM;
                 }
 
                 libdnf5::solv::IdQueue upgrade_ids;
