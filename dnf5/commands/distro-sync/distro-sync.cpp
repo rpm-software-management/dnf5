@@ -55,6 +55,7 @@ void DistroSyncCommand::set_argument_parser() {
     allow_erasing = std::make_unique<AllowErasingOption>(*this);
     auto skip_broken = std::make_unique<SkipBrokenOption>(*this);
     auto skip_unavailable = std::make_unique<SkipUnavailableOption>(*this);
+    create_installed_from_repo_option(*this, installed_from_repos, true);
     create_from_repo_option(*this, from_repos, true);
     create_downloadonly_option(*this);
     create_offline_option(*this);
@@ -71,6 +72,7 @@ void DistroSyncCommand::run() {
     auto goal = get_context().get_goal();
     goal->set_allow_erasing(allow_erasing->get_value());
     auto settings = libdnf5::GoalJobSettings();
+    settings.set_from_repo_ids(installed_from_repos);
     if (patterns_to_distro_sync_options->empty()) {
         goal->add_rpm_distro_sync(settings);
     } else {
