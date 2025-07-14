@@ -71,10 +71,13 @@ void DistroSyncCommand::run() {
     auto goal = get_context().get_goal();
     goal->set_allow_erasing(allow_erasing->get_value());
     auto settings = libdnf5::GoalJobSettings();
-    settings.set_to_repo_ids(from_repos);
     if (patterns_to_distro_sync_options->empty()) {
         goal->add_rpm_distro_sync(settings);
     } else {
+        // The "--from-repo" option only applies to packages explicitly listed on the command line.
+        // Other packages can be used from any enabled repository.
+        settings.set_to_repo_ids(from_repos);
+
         for (auto & pattern : *patterns_to_distro_sync_options) {
             auto option = dynamic_cast<libdnf5::OptionString *>(pattern.get());
             goal->add_rpm_distro_sync(option->get_value(), settings);
