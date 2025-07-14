@@ -385,10 +385,14 @@ void Goal::add_rpm_upgrade(const std::string & spec, const GoalJobSettings & set
 }
 
 void Goal::add_rpm_upgrade(const GoalJobSettings & settings, bool minimal) {
-    if (minimal) {
-        p_impl->rpm_specs.push_back(std::make_tuple(GoalAction::UPGRADE_ALL_MINIMAL, std::string(), settings));
+    if (settings.get_from_repo_ids().empty()) {
+        const auto action = minimal ? GoalAction::UPGRADE_ALL_MINIMAL : GoalAction::UPGRADE_ALL;
+        p_impl->rpm_specs.push_back(std::make_tuple(action, std::string(), settings));
     } else {
-        p_impl->rpm_specs.push_back(std::make_tuple(GoalAction::UPGRADE_ALL, std::string(), settings));
+        // We want to perform upgrade only for packages installed from the from_repo_ids.
+        // Using UPGRADE_ALL and UPGRADE_ALL_MINIMAL is not possible.
+        const auto action = minimal ? GoalAction::UPGRADE_MINIMAL : GoalAction::UPGRADE;
+        p_impl->rpm_specs.push_back(std::make_tuple(action, "*", settings));
     }
 }
 
@@ -421,7 +425,13 @@ void Goal::add_rpm_distro_sync(const std::string & spec, const GoalJobSettings &
 }
 
 void Goal::add_rpm_distro_sync(const GoalJobSettings & settings) {
-    p_impl->rpm_specs.push_back(std::make_tuple(GoalAction::DISTRO_SYNC_ALL, std::string(), settings));
+    if (settings.get_from_repo_ids().empty()) {
+        p_impl->rpm_specs.push_back(std::make_tuple(GoalAction::DISTRO_SYNC_ALL, std::string(), settings));
+    } else {
+        // We want to perform distro-sync only for packages installed from the from_repo_ids.
+        // Using DISTROSYNC_ALL is not possible.
+        p_impl->rpm_specs.push_back(std::make_tuple(GoalAction::DISTRO_SYNC, "*", settings));
+    }
 }
 
 void Goal::add_rpm_distro_sync(const rpm::Package & rpm_package, const GoalJobSettings & settings) {
