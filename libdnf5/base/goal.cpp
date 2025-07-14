@@ -2270,10 +2270,10 @@ GoalProblem Goal::Impl::add_up_down_distrosync_to_goal(
     GoalJobSettings & settings,
     bool minimal) {
     // Get values before the first report to set in GoalJobSettings used values
-    bool best = settings.resolve_best(base->get_config());
-    bool skip_broken = action == GoalAction::UPGRADE ? true : settings.resolve_skip_broken(base->get_config());
-    bool clean_requirements_on_remove = settings.resolve_clean_requirements_on_remove();
-    bool skip_unavailable = settings.resolve_skip_unavailable(base->get_config());
+    const bool best = settings.resolve_best(base->get_config());
+    const bool skip_broken = action == GoalAction::UPGRADE ? true : settings.resolve_skip_broken(base->get_config());
+    const bool clean_requirements_on_remove = settings.resolve_clean_requirements_on_remove();
+    const bool skip_unavailable = settings.resolve_skip_unavailable(base->get_config());
 
     auto sack = base->get_rpm_package_sack();
     rpm::PackageQuery base_query(base);
@@ -2285,24 +2285,57 @@ GoalProblem Goal::Impl::add_up_down_distrosync_to_goal(
         auto problem = transaction.p_impl->report_not_found(action, spec, settings, libdnf5::Logger::Level::WARNING);
         return skip_unavailable ? GoalProblem::NO_PROBLEM : problem;
     }
-    // Report when package is not installed
+
     rpm::PackageQuery all_installed(base, rpm::PackageQuery::ExcludeFlags::IGNORE_EXCLUDES);
     all_installed.filter_installed();
-    // Report only not installed if not obsoleters - https://bugzilla.redhat.com/show_bug.cgi?id=1818118
+
+    rpm::PackageQuery installed(all_installed);
+    if (!settings.get_from_repo_ids().empty()) {
+        installed.filter_from_repo_id(settings.get_from_repo_ids(), libdnf5::sack::QueryCmp::GLOB);
+    }
+
     bool obsoleters = false;
+    rpm::PackageQuery obsoleters_query(query);
     if (obsoletes && action != GoalAction::DOWNGRADE) {
-        rpm::PackageQuery obsoleters_query(query);
-        obsoleters_query.filter_obsoletes(all_installed);
+        obsoleters_query.filter_obsoletes(installed);  // Keep only packages that obsolete some installed packages
         if (!obsoleters_query.empty()) {
             obsoleters = true;
         }
     }
-    rpm::PackageQuery relevant_installed_na(all_installed);
+
+    rpm::PackageQuery relevant_installed_n(installed);
+    relevant_installed_n.filter_name(query);
+    rpm::PackageQuery relevant_installed_na(installed);
+    relevant_installed_na.filter_name_arch(query);
+
+    // If from_repo_ids is defined, keep only the relevant packages in the query
+    if (!settings.get_from_repo_ids().empty()) {
+        rpm::PackageQuery relevant_all_installed_na(all_installed);
+        relevant_all_installed_na.filter_name_arch(query);
+        rpm::PackageQuery query_relevant_installed_name(query);
+
+        // Keep in the query only those packages that have installed counterparts with the same name and architecture,
+        // installed from repositories specified in from_repo_ids.
+        query.filter_name_arch(relevant_installed_na);
+
+        // Restore to the query those packages for which installed counterparts exist with the same name but
+        // a different architecture, originating from repositories specified in from_repo_ids, and for which
+        // no installed version with the desired architecture exists from a different repository
+        query_relevant_installed_name.filter_name(relevant_installed_n);
+        query_relevant_installed_name -= query;
+        query_relevant_installed_name.filter_name_arch(relevant_all_installed_na, sack::QueryCmp::NEQ);
+        query |= query_relevant_installed_name;
+
+        // Restore to the query packages that obsolete those installed from repositories specified in from_repo_ids.
+        if (obsoleters) {
+            query |= obsoleters_query;
+        }
+    }
+
+    // Report when package is not installed
+    // Report only not installed if not obsoleters - https://bugzilla.redhat.com/show_bug.cgi?id=1818118
     if (!obsoleters) {
-        relevant_installed_na.filter_name_arch(query);
         if (relevant_installed_na.empty()) {
-            rpm::PackageQuery relevant_installed_n(all_installed);
-            relevant_installed_n.filter_name(query);
             if (relevant_installed_n.empty()) {
                 transaction.p_impl->add_resolve_log(
                     action,
@@ -2327,8 +2360,13 @@ GoalProblem Goal::Impl::add_up_down_distrosync_to_goal(
     }
 
     bool add_obsoletes = obsoletes && nevra_pair.second.has_just_name() && action != GoalAction::DOWNGRADE;
-    rpm::PackageQuery installed(query);
-    installed.filter_installed();
+    rpm::PackageQuery query_installed(query);
+    if (settings.get_from_repo_ids().empty()) {
+        query_installed.filter_installed();
+    } else {
+        query_installed.filter_from_repo_id(settings.get_from_repo_ids(), libdnf5::sack::QueryCmp::GLOB);
+    }
+
     // TODO(jmracek) Apply latest filters on installed (or later)
     if (add_obsoletes) {
         // Obsoletes are not added to downgrade set
@@ -2338,7 +2376,7 @@ GoalProblem Goal::Impl::add_up_down_distrosync_to_goal(
             obsoletes_query.filter_available();
             rpm::PackageQuery to_obsolete_query(query);
             to_obsolete_query.filter_upgrades();
-            to_obsolete_query |= installed;
+            to_obsolete_query |= query_installed;
             obsoletes_query.filter_obsoletes(to_obsolete_query);
             query |= obsoletes_query;
         } else if (action == GoalAction::DISTRO_SYNC) {
@@ -2398,13 +2436,13 @@ GoalProblem Goal::Impl::add_up_down_distrosync_to_goal(
             //     (especially with --no-best) and since libsolv prefers the smallest possible upgrade it could result
             //     in no upgrade even if there is one available. This is a problem in general but its critical with
             //     --security transactions (https://bugzilla.redhat.com/show_bug.cgi?id=2097757)
-            all_installed.filter_name(query);
+            installed.filter_name(query);
             //   - We want to add only the latest versions of installed packages, this is specifically for installonly
             //     packages. Otherwise if for example kernel-1 and kernel-3 were installed and present in the
             //     transaction libsolv could decide to install kernel-2 because it is an upgrade for kernel-1 even
             //     though we don't want it because there already is a newer version present.
-            all_installed.filter_latest_evr();
-            query |= all_installed;
+            installed.filter_latest_evr();
+            query |= installed;
             solv_map_to_id_queue(tmp_queue, *query.p_impl);
             rpm_goal.add_upgrade(tmp_queue, best, clean_requirements_on_remove);
             break;
