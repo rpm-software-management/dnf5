@@ -144,6 +144,7 @@ wrap_unique_ptr(DownloadCallbacksUniquePtr, libdnf5::repo::DownloadCallbacks);
 
 %include "libdnf5/repo/repo_weak.hpp"
 %template(RepoWeakPtr) libdnf5::WeakPtr<libdnf5::repo::Repo, false>;
+%typemap(out) libdnf5::WeakPtr<libdnf5::repo::Repo, false> & libdnf5::SetConstIterator<libdnf5::repo::RepoWeakPtr>::operator* = copy_return_value;
 %template(SetConstIteratorRepoWeakPtr) libdnf5::SetConstIterator<libdnf5::repo::RepoWeakPtr>;
 %template(SetRepoWeakPtr) libdnf5::Set<libdnf5::repo::RepoWeakPtr>;
 %template(SackQueryRepoWeakPtr) libdnf5::sack::Query<libdnf5::repo::RepoWeakPtr>;
