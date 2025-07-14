@@ -126,7 +126,6 @@ void UpgradeCommand::run() {
         }
     }
 
-    settings.set_to_repo_ids(from_repos);
 
     auto advisories = advisory_query_from_cli_input(
         ctx.get_base(),
@@ -146,6 +145,7 @@ void UpgradeCommand::run() {
     if (pkg_specs.empty()) {
         goal->add_rpm_upgrade(settings, minimal->get_value());
     } else {
+        settings.set_to_repo_ids(from_repos);  // Apply from_repos only if packages are specified
         for (const auto & spec : pkg_specs) {
             goal->add_upgrade(spec, settings, minimal->get_value());
         }
