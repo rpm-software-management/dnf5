@@ -71,6 +71,7 @@ void SwapCommand::set_argument_parser() {
 
     allow_erasing = std::make_unique<AllowErasingOption>(*this);
 
+    create_installed_from_repo_option(*this, installed_from_repos, true);
     create_from_repo_option(*this, from_repos, true);
 
     create_offline_option(*this);
@@ -87,9 +88,10 @@ void SwapCommand::run() {
     auto goal = get_context().get_goal();
     goal->set_allow_erasing(allow_erasing->get_value());
     auto settings = libdnf5::GoalJobSettings();
+    settings.set_from_repo_ids(installed_from_repos);
     settings.set_to_repo_ids(from_repos);
     goal->add_install(install_pkg_spec, settings);
-    goal->add_rpm_remove(remove_pkg_spec);
+    goal->add_rpm_remove(remove_pkg_spec, settings);
 }
 
 }  // namespace dnf5
