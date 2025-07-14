@@ -41,6 +41,7 @@
 %include "libdnf5/comps/group/package.hpp"
 %include "libdnf5/comps/group/group.hpp"
 %template(VectorPackage) std::vector<libdnf5::comps::Package>;
+%typemap(out) libdnf5::comps::Group & libdnf5::SetConstIterator<libdnf5::comps::Group>::operator* = copy_return_value;
 %template(SetConstIteratorGroup) libdnf5::SetConstIterator<libdnf5::comps::Group>;
 %template(SetGroup) libdnf5::Set<libdnf5::comps::Group>;
 %template(SackQueryGroup) libdnf5::sack::Query<libdnf5::comps::Group>;
@@ -48,6 +49,7 @@
 add_iterator(SetGroup)
 
 %include "libdnf5/comps/environment/environment.hpp"
+%typemap(out) libdnf5::comps::Environment & libdnf5::SetConstIterator<libdnf5::comps::Environment>::operator* = copy_return_value;
 %template(SetConstIteratorEnvironment) libdnf5::SetConstIterator<libdnf5::comps::Environment>;
 %template(SetEnvironment) libdnf5::Set<libdnf5::comps::Environment>;
 %template(SackQueryEnvironment) libdnf5::sack::Query<libdnf5::comps::Environment>;
