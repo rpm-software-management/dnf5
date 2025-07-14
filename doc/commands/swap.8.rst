@@ -42,6 +42,8 @@ Options
 ``--allowerasing``
     | Allow removing of installed packages to resolve any potential dependency problems.
 
+.. include:: ../_shared/options/installed-from-repo.rst
+
 .. include:: ../_shared/options/from-repo.rst
 
 ``--offline``
