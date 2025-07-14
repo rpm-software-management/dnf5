@@ -225,6 +225,12 @@ fix_swigtype_trait(ClassName)
 %ignore libdnf5::SetConstIterator::operator++(int);
 %ignore libdnf5::SetConstIterator::operator--(int);
 %ignore libdnf5::SetConstIterator::operator->() const;
+
+%typemap(out, noblock=1) copy_return_value {
+    // create a copy that is owned by the caller
+    $result = SWIG_NewPointerObj((new $*1_ltype(*$1)), $1_descriptor, 1);
+}
+
 %include "libdnf5/common/set.hpp"
 #if defined(SWIGPYTHON)
 %extend libdnf5::Set {
