@@ -84,6 +84,14 @@ std::string perform_control_sequences(std::string target) {
                 output[current_row].clear();
             }
             state = EMPTY;
+        } else if (state == CONTROL_SEQUENCE_AMOUNT && amount == 0 && current_value == 'J') {
+            // erase the entire output starting with current line
+            if (current_row < output.size()) {
+                for (std::size_t i = current_row; i < output.size(); ++i) {
+                    output[i].clear();
+                }
+            }
+            state = EMPTY;
         } else if (state == CONTROL_SEQUENCE_AMOUNT && current_value == 'm') {
             // This is a color control sequence, just skip it
             state = EMPTY;
@@ -188,9 +196,9 @@ void ProgressbarInteractiveTest::test_download_progress_bar_with_messages() {
     oss << *download_progress_bar;
     Pattern expected =
         "\\[0/0\\] test                     40% | ????? ??B\\/s |   4.0   B | ???????\n"
-        ">>> test message1                                                     \n"
-        ">>> test message2                                                     \n"
-        ">>> test もで 諤奯ゞ                                                  ";
+        ">>> test message1\n"
+        ">>> test message2\n"
+        ">>> test もで 諤奯ゞ";
     ASSERT_MATCHES(expected, oss.str());
 
     download_progress_bar->pop_message();
@@ -248,7 +256,7 @@ void ProgressbarInteractiveTest::test_multi_progress_bar_with_messages_with_tota
     oss << multi_progress_bar;
     Pattern expected =
         "\\[1/1\\] test                     40% | ????? ??B\\/s |   4.0   B | ???????\n"
-        ">>> test message1                                                     \n"
+        ">>> test message1\n"
         "----------------------------------------------------------------------\n"
         "\\[0/1\\] Total                    40% | ????? ??B\\/s |   4.0   B | ???????";
 
@@ -329,9 +337,9 @@ void ProgressbarInteractiveTest::test_multi_progress_bars_with_messages_with_tot
     Pattern expected =
         "\\[1/2\\] test1                   100% | ????? ??B\\/s |  10.0   B | ???????\n"
         "\\[2/2\\] test2                    40% | ????? ??B\\/s |   4.0   B | ???????\n"
-        ">>> test message1                                                     \n"
-        ">>> test message2                                                     \n"
-        ">>> test もで 諤奯ゞ                                                  \n"
+        ">>> test message1\n"
+        ">>> test message2\n"
+        ">>> test もで 諤奯ゞ\n"
         "----------------------------------------------------------------------\n"
         "\\[1/2\\] Total                    70% | ????? ??B\\/s |  14.0   B | ???????";
 
@@ -377,7 +385,7 @@ void ProgressbarInteractiveTest::test_multi_progress_bar_with_messages() {
     oss << multi_progress_bar;
     Pattern expected =
         "\\[1/1\\] test                     40% | ????? ??B\\/s |   4.0   B | ???????\n"
-        ">>> test message1                                                     ";
+        ">>> test message1";
 
     ASSERT_MATCHES(expected, perform_control_sequences(oss.str()));
 
@@ -432,9 +440,9 @@ void ProgressbarInteractiveTest::test_multi_progress_bars_with_messages() {
     Pattern expected =
         "\\[1/2\\] test1                   100% | ????? ??B\\/s |  10.0   B | ???????\n"
         "\\[2/2\\] test2                    40% | ????? ??B\\/s |   4.0   B | ???????\n"
-        ">>> test message1                                                     \n"
-        ">>> test message2                                                     \n"
-        ">>> test こんにちは世界！                                             ";
+        ">>> test message1\n"
+        ">>> test message2\n"
+        ">>> test こんにちは世界！";
 
     ASSERT_MATCHES(expected, perform_control_sequences(oss.str()));
 
@@ -508,7 +516,7 @@ void ProgressbarInteractiveTest::test_multi_progress_bar_with_short_messages() {
     oss << multi_progress_bar;
     Pattern expected =
         "\\[1/1\\] test                     40% | ????? ??B\\/s |   4.0   B | ???????\n"
-        ">>> test loooooooooooooooooooooooooooooooooooooooooong message        ";
+        ">>> test loooooooooooooooooooooooooooooooooooooooooong message";
 
     ASSERT_MATCHES(expected, perform_control_sequences(oss.str()));
 
@@ -518,7 +526,7 @@ void ProgressbarInteractiveTest::test_multi_progress_bar_with_short_messages() {
     oss << multi_progress_bar;
     expected =
         "\\[1/1\\] test                     40% | ????? ??B\\/s |   4.0   B | ???????\n"
-        ">>> test short message                                                ";
+        ">>> test short message";
 
     ASSERT_MATCHES(expected, perform_control_sequences(oss.str()));
 }
@@ -547,7 +555,7 @@ void ProgressbarInteractiveTest::test_multi_progress_bars_with_already_downloade
     oss << multi_progress_bar;
     Pattern expected =
         "\\[1/3\\] test                    100% | ????? ??B\\/s |   0.0   B | ???????\n"
-        ">>> Already Downloaded                                                \n"
+        ">>> Already Downloaded\n"
         "----------------------------------------------------------------------\n"
         "\\[1/3\\] Total                   ???% | ????? ??B\\/s |  -2.0   B | ???????";
 
@@ -563,9 +571,9 @@ void ProgressbarInteractiveTest::test_multi_progress_bars_with_already_downloade
     oss << multi_progress_bar;
     expected =
         "\\[1/3\\] test                    100% | ????? ??B\\/s |   0.0   B | ???????\n"
-        ">>> Already Downloaded                                                \n"
+        ">>> Already Downloaded\n"
         "\\[2/3\\] test                    100% | ????? ??B\\/s |   0.0   B | ???????\n"
-        ">>> Already Downloaded                                                \n"
+        ">>> Already Downloaded\n"
         "----------------------------------------------------------------------\n"
         "\\[2/3\\] Total                   ???% | ????? ??B\\/s |  -1.0   B | ???????";
     ASSERT_MATCHES(expected, perform_control_sequences(oss.str()));
@@ -577,9 +585,9 @@ void ProgressbarInteractiveTest::test_multi_progress_bars_with_already_downloade
     oss << multi_progress_bar;
     expected =
         "\\[1/3\\] test                    100% | ????? ??B\\/s |   0.0   B | ???????\n"
-        ">>> Already Downloaded                                                \n"
+        ">>> Already Downloaded\n"
         "\\[2/3\\] test                    100% | ????? ??B\\/s |   0.0   B | ???????\n"
-        ">>> Already Downloaded                                                \n"
+        ">>> Already Downloaded\n"
         "\\[3/3\\] test                     40% | ????? ??B\\/s |   4.0   B | ???????\n"
         "----------------------------------------------------------------------\n"
         "\\[2/3\\] Total                    40% | ????? ??B\\/s |   4.0   B | ???????";
