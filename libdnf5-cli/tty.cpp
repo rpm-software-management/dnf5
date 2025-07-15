@@ -126,6 +126,9 @@ TTY_COMMAND(white, "\033[37m")
 // tty::clear_line
 TTY_COMMAND(clear_line, "\033[2K")
 
+// tty::clear_to_end
+TTY_COMMAND(clear_to_end, "\033[0J")
+
 // tty::cursor_up
 TTY_COMMAND(cursor_up, "\x1b[A")
 
