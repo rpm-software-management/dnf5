@@ -194,11 +194,6 @@ const std::string & ProgressBar::get_message_prefix() const noexcept {
     return p_impl->message_prefix;
 }
 
-std::size_t ProgressBar::get_message_padding(
-    std::size_t terminal_width, std::string_view message, std::size_t message_index) {
-    return p_impl->get_message_metrics(terminal_width, message, message_index).padding;
-}
-
 std::size_t ProgressBar::calculate_messages_terminal_lines(std::size_t terminal_width) {
     std::size_t num_lines = 0;
     std::size_t message_index = 0;

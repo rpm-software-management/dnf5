@@ -245,10 +245,6 @@ void DownloadProgressBar::to_stream(std::ostream & stream) {
         }
 
         stream << message;
-        // Add padding to fully fill the terminal_width, this is because MultiProgressBar
-        // overrides its own messages, it doesn't clear the lines.
-        // If the message is short some leftover characters could be still present after it.
-        stream << std::string(get_message_padding(terminal_width, prefix + message, message_index), ' ');
 
         if (color_used) {
             stream << tty::reset;
