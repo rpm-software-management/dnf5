@@ -121,7 +121,6 @@ public:
 
 protected:
     virtual void to_stream(std::ostream & stream) = 0;
-    std::size_t get_message_padding(std::size_t terminal_width, std::string_view message, std::size_t message_index);
 
 private:
     class LIBDNF_CLI_LOCAL Impl;
