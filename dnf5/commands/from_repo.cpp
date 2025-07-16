@@ -37,10 +37,16 @@ void create_from_repo_option(Command & command, std::vector<std::string> & from_
     from_repo_opt->set_has_value(true);
     from_repo_opt->set_arg_value_help(_("REPO_ID,..."));
     from_repo_opt->set_parse_hook_func(
-        [&from_repos, detect_conflict](
+        [&command, &from_repos, detect_conflict](
             libdnf5::cli::ArgumentParser::NamedArg *, [[maybe_unused]] const char * option, const char * value) {
             if (!detect_conflict || from_repos.empty()) {
                 from_repos = libdnf5::OptionStringList(value).get_value();
+
+                // We need to ensure repositories for requested packages are enabled. We'll explicitly enable them
+                // using setopts as a safeguard. setopts will be applied later during repository configuration loading.
+                for (const auto & repoid_pattern : from_repos) {
+                    command.get_context().get_setopts().emplace_back(repoid_pattern + ".enabled", "1");
+                }
             } else {
                 if (from_repos != libdnf5::OptionStringList(value).get_value()) {
                     throw libdnf5::cli::ArgumentParserConflictingArgumentsError(
