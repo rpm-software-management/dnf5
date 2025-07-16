@@ -27,12 +27,14 @@
 #include <libdnf5-cli/progressbar/download_progress_bar.hpp>
 #include <libdnf5-cli/progressbar/multi_progress_bar.hpp>
 
+#include <regex>
+
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ProgressbarInteractiveTest);
 
 namespace {
 
-// We look for control sequnces (such as move cursor up N times and carriage return)
+// We look for control sequences (such as move cursor up N times and carriage return)
 // and perform them. It basically simulates a terminal emulator.
 //
 // It can look like: "\x1b[9A\r" = move cursor 9 times up followed by carriage return
@@ -71,7 +73,7 @@ std::string perform_control_sequences(std::string target) {
             state = CONTROL_SEQUENCE_AMOUNT;
         } else if ((state == CONTROL_SEQUENCE_INTRO || state == CONTROL_SEQUENCE_AMOUNT) && current_value == 'A') {
             if (amount > current_row) {
-                CPPUNIT_FAIL(fmt::format("Cursor up control sequnce outside of output"));
+                CPPUNIT_FAIL(fmt::format("Cursor up control sequence outside of output"));
             }
             current_row -= amount;
             state = EMPTY;
@@ -115,6 +117,31 @@ std::string perform_control_sequences(std::string target) {
     }
 
     return libdnf5::utils::string::join(output, "\n");
+}
+
+int count_cursor_up_lines(const std::string & text) {
+    int lines_up = 0;
+
+    // Regular expression to find "\x1b[A" or "\x1b[NA"
+    std::regex cursor_up_regex("\\x1b\\[(\\d*)A");
+
+    auto end_of_sequence = std::sregex_iterator();
+    for (std::sregex_iterator cursor_up = std::sregex_iterator(text.begin(), text.end(), cursor_up_regex);
+         cursor_up != end_of_sequence;
+         ++cursor_up) {
+        std::smatch match = *cursor_up;
+        std::string number = match[1].str();  // The captured number string
+
+        if (number.empty()) {
+            // Case: "\x1b[A" (equivalent to N=1)
+            ++lines_up;
+        } else {
+            // Case: "\x1b[NA"
+            lines_up += std::stoi(number);
+        }
+    }
+
+    return lines_up;
 }
 
 }  //namespace
@@ -209,6 +236,87 @@ void ProgressbarInteractiveTest::test_download_progress_bar_with_messages() {
     oss << *download_progress_bar;
     expected = "\\[0/0\\] test                     40% | ????? ??B\\/s |   4.0   B | ???????";
     ASSERT_MATCHES(expected, oss.str());
+}
+
+void ProgressbarInteractiveTest::test_download_progress_bar_with_long_messages() {
+    // The messages that do not fit within the terminal line are not trimmed.
+    // After the message is removed, the correct number of "cursor up" control
+    // sequences is issued.
+
+    auto download_progress_bar = std::make_unique<libdnf5::cli::progressbar::DownloadProgressBar>(10, "test");
+
+    libdnf5::cli::progressbar::MultiProgressBar multi_progress_bar;
+    multi_progress_bar.set_total_bar_visible_limit(libdnf5::cli::progressbar::MultiProgressBar::NEVER_VISIBLE_LIMIT);
+    auto download_progress_bar_raw = download_progress_bar.get();
+    multi_progress_bar.add_bar(std::move(download_progress_bar));
+
+    download_progress_bar_raw->set_ticks(4);
+    download_progress_bar_raw->set_state(libdnf5::cli::progressbar::ProgressBarState::STARTED);
+
+    {
+        // A string exactly 70 characters long (there will be a ">>> " prefix
+        // prepended) fits on one terminal line
+        download_progress_bar_raw->add_message(
+            libdnf5::cli::progressbar::MessageType::INFO,
+            ".....1.........2.........3.........4.........5.........6.........7");
+
+        std::ostringstream oss;
+        oss << multi_progress_bar;
+        Pattern expected =
+            "\\[1/1\\] test                     40% | ????? ??B\\/s |   4.0   B | ???????\n"
+            ">>> .....1.........2.........3.........4.........5.........6.........7";
+
+        ASSERT_MATCHES(expected, perform_control_sequences(oss.str()));
+
+        download_progress_bar_raw->pop_message();
+        oss << multi_progress_bar;
+        expected = "\\[1/1\\] test                     40% | ????? ??B\\/s |   4.0   B | ???????\n";
+        CPPUNIT_ASSERT_EQUAL(1, count_cursor_up_lines(oss.str()));
+    }
+
+    {
+        // A message longer than 70 characters will be split to multiple lines
+        download_progress_bar_raw->add_message(
+            libdnf5::cli::progressbar::MessageType::INFO,
+            ".....1.........2.........3.........4.........5.........6.........71");
+
+        std::ostringstream oss;
+        oss << multi_progress_bar;
+        // whole message is printed
+        Pattern expected =
+            "\\[1/1\\] test                     40% | ????? ??B\\/s |   4.0   B | ???????\n"
+            ">>> .....1.........2.........3.........4.........5.........6.........71";
+
+        ASSERT_MATCHES(expected, perform_control_sequences(oss.str()));
+
+        download_progress_bar_raw->pop_message();
+        oss << multi_progress_bar;
+        expected = "\\[1/1\\] test                     40% | ????? ??B\\/s |   4.0   B | ???????\n";
+        // two "cursor up" lines expected
+        CPPUNIT_ASSERT_EQUAL(2, count_cursor_up_lines(oss.str()));
+    }
+
+    {
+        // two cols wide characters are correctly counted
+        download_progress_bar_raw->add_message(
+            libdnf5::cli::progressbar::MessageType::INFO,
+            ".....1.........2..もで...3.........4.........5.........6.........71");
+
+        std::ostringstream oss;
+        oss << multi_progress_bar;
+        // whole message is printed
+        Pattern expected =
+            "\\[1/1\\] test                     40% | ????? ??B\\/s |   4.0   B | ???????\n"
+            ">>> .....1.........2..もで...3.........4.........5.........6.........71";
+
+        ASSERT_MATCHES(expected, perform_control_sequences(oss.str()));
+
+        download_progress_bar_raw->pop_message();
+        oss << multi_progress_bar;
+        expected = "\\[1/1\\] test                     40% | ????? ??B\\/s |   4.0   B | ???????\n";
+        // two "cursor up" lines expected
+        CPPUNIT_ASSERT_EQUAL(2, count_cursor_up_lines(oss.str()));
+    }
 }
 
 void ProgressbarInteractiveTest::test_multi_progress_bar_with_total_finished() {
