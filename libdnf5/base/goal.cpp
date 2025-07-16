@@ -1410,11 +1410,40 @@ std::pair<GoalProblem, libdnf5::solv::IdQueue> Goal::Impl::add_install_to_goal(
         return {GoalProblem::NO_PROBLEM, result_queue};
     }
 
+    rpm::PackageQuery installed(query);
+    installed.filter_installed();
+
+    if (!settings.get_to_repo_ids().empty()) {
+        query.filter_repo_id(settings.get_to_repo_ids(), sack::QueryCmp::GLOB);
+        if (query.empty()) {
+            transaction.p_impl->add_resolve_log(
+                action,
+                GoalProblem::NOT_FOUND_IN_REPOSITORIES,
+                settings,
+                libdnf5::transaction::TransactionItemType::PACKAGE,
+                spec,
+                {},
+                log_level);
+            return {skip_unavailable ? GoalProblem::NO_PROBLEM : GoalProblem::NOT_FOUND_IN_REPOSITORIES, result_queue};
+        }
+
+        // We require packages only from the to_repo_ids repositories. We'll select only the corresponding installed
+        // packages (matching name and architecture, or the same NEVRA for install-only packages)
+        installed.filter_name_arch(query);
+        rpm::PackageQuery installed_install_only(installed);
+        installed_install_only.filter_installonly();
+        installed -= installed_install_only;
+        installed_install_only.filter_nevra(query);
+        installed |= installed_install_only;
+
+        // Return the corresponding installed packages to the query
+        // TODO(jrohel): Is it needed?
+        query |= installed;
+    }
+
     bool has_just_name = nevra_pair.second.has_just_name();
     bool add_obsoletes = cfg_main.get_obsoletes_option().get_value() && has_just_name;
 
-    rpm::PackageQuery installed(query);
-    installed.filter_installed();
     for (auto package_id : *installed.p_impl) {
         transaction.p_impl->add_resolve_log(
             action,
@@ -1429,22 +1458,6 @@ std::pair<GoalProblem, libdnf5::solv::IdQueue> Goal::Impl::add_install_to_goal(
     bool skip_broken = settings.resolve_skip_broken(cfg_main);
 
     if (multilib_policy == "all" || utils::is_glob_pattern(nevra_pair.second.get_arch().c_str())) {
-        if (!settings.get_to_repo_ids().empty()) {
-            query.filter_repo_id(settings.get_to_repo_ids(), sack::QueryCmp::GLOB);
-            if (query.empty()) {
-                transaction.p_impl->add_resolve_log(
-                    action,
-                    GoalProblem::NOT_FOUND_IN_REPOSITORIES,
-                    settings,
-                    libdnf5::transaction::TransactionItemType::PACKAGE,
-                    spec,
-                    {},
-                    log_level);
-                return {GoalProblem::NOT_FOUND_IN_REPOSITORIES, result_queue};
-            }
-            query |= installed;
-        }
-
         // Apply advisory filters
         if (settings.get_advisory_filter() != nullptr) {
             query.filter_advisories(*settings.get_advisory_filter(), libdnf5::sack::QueryCmp::EQ);
@@ -1530,22 +1543,6 @@ std::pair<GoalProblem, libdnf5::solv::IdQueue> Goal::Impl::add_install_to_goal(
             (nevra_pair.second.get_name().empty() &&
              (!nevra_pair.second.get_epoch().empty() || !nevra_pair.second.get_version().empty() ||
               !nevra_pair.second.get_release().empty() || !nevra_pair.second.get_arch().empty()))) {
-            if (!settings.get_to_repo_ids().empty()) {
-                query.filter_repo_id(settings.get_to_repo_ids(), sack::QueryCmp::GLOB);
-                if (query.empty()) {
-                    transaction.p_impl->add_resolve_log(
-                        action,
-                        GoalProblem::NOT_FOUND_IN_REPOSITORIES,
-                        settings,
-                        libdnf5::transaction::TransactionItemType::PACKAGE,
-                        spec,
-                        {},
-                        log_level);
-                    return {GoalProblem::NOT_FOUND_IN_REPOSITORIES, result_queue};
-                }
-                query |= installed;
-            }
-
             // Apply advisory filters
             if (settings.get_advisory_filter() != nullptr) {
                 query.filter_advisories(*settings.get_advisory_filter(), libdnf5::sack::QueryCmp::EQ);
@@ -1618,21 +1615,6 @@ std::pair<GoalProblem, libdnf5::solv::IdQueue> Goal::Impl::add_install_to_goal(
         } else {
             if (add_obsoletes) {
                 add_obsoletes_to_data(base_query, query);
-            }
-            if (!settings.get_to_repo_ids().empty()) {
-                query.filter_repo_id(settings.get_to_repo_ids(), sack::QueryCmp::GLOB);
-                if (query.empty()) {
-                    transaction.p_impl->add_resolve_log(
-                        action,
-                        GoalProblem::NOT_FOUND_IN_REPOSITORIES,
-                        settings,
-                        libdnf5::transaction::TransactionItemType::PACKAGE,
-                        spec,
-                        {},
-                        log_level);
-                    return {GoalProblem::NOT_FOUND_IN_REPOSITORIES, result_queue};
-                }
-                query |= installed;
             }
 
             // Apply advisory filters
