@@ -30,6 +30,7 @@ class ProgressbarInteractiveTest : public CppUnit::TestCase {
     CPPUNIT_TEST(test_perform_control_sequences);
     CPPUNIT_TEST(test_download_progress_bar);
     CPPUNIT_TEST(test_download_progress_bar_with_messages);
+    CPPUNIT_TEST(test_download_progress_bar_with_long_messages);
     CPPUNIT_TEST(test_multi_progress_bar_with_total_finished);
     CPPUNIT_TEST(test_multi_progress_bar_with_messages_with_total);
     CPPUNIT_TEST(test_multi_progress_bars_with_messages_with_total);
@@ -47,6 +48,7 @@ public:
     void test_perform_control_sequences();
     void test_download_progress_bar();
     void test_download_progress_bar_with_messages();
+    void test_download_progress_bar_with_long_messages();
     void test_multi_progress_bar_with_total_finished();
     void test_multi_progress_bar_with_messages_with_total();
     void test_multi_progress_bars_with_messages_with_total();
