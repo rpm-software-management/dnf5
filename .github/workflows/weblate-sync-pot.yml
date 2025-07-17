@@ -16,6 +16,15 @@ jobs:
       options: --user root
     timeout-minutes: 10
     steps:
+      - uses: actions/create-github-app-token@v1
+        id: app-token
+        with:
+          app-id: ${{ vars.RSM_CI_APP_ID }}
+          private-key: ${{ secrets.RSM_CI_APP_PRIVATE_KEY }}
+          permissions:
+            contents: "write"
+          repositories: "rpm-software-management/dnf5-l10n"
+
       - name: Clone source repository
         uses: actions/checkout@v4
         with:
@@ -33,7 +42,7 @@ jobs:
         with:
           path: l10n
           repository: ${{ github.repository }}-l10n
-          ssh-key: ${{ secrets.L10N_SSH_KEY }}
+          token: ${{ steps.app-token.outputs.token }}
 
       - name: Commit .pot to weblate repo
         run: |
