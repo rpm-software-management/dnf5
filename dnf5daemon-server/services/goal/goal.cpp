@@ -378,11 +378,12 @@ sdbus::MethodReply Goal::do_transaction(sdbus::MethodCall & call) {
     dnfdaemon::KeyValueMap options;
     call >> options;
     bool interactive = dnfdaemon::key_value_map_get<bool>(options, "interactive", true);
-    if (!session.check_authorization(
-            is_transaction_trusted(transaction) ? dnfdaemon::POLKIT_EXECUTE_RPM_TRUSTED_TRANSACTION
-                                                : dnfdaemon::POLKIT_EXECUTE_RPM_TRANSACTION,
-            call.getSender(),
-            interactive)) {
+    bool downloadonly = dnfdaemon::key_value_map_get<bool>(options, "downloadonly", false);
+    if (!downloadonly && !session.check_authorization(
+                             is_transaction_trusted(transaction) ? dnfdaemon::POLKIT_EXECUTE_RPM_TRUSTED_TRANSACTION
+                                                                 : dnfdaemon::POLKIT_EXECUTE_RPM_TRANSACTION,
+                             call.getSender(),
+                             interactive)) {
         throw std::runtime_error("Not authorized");
     }
 
@@ -398,30 +399,32 @@ sdbus::MethodReply Goal::do_transaction(sdbus::MethodCall & call) {
     bool offline = dnfdaemon::key_value_map_get<bool>(options, "offline", false);
 
     if (offline) {
-        session.store_transaction_offline();
+        session.store_transaction_offline(downloadonly);
         // TODO(mblaha): signalize reboot?
     } else {
         session.download_transaction_packages();
         session.set_cancel_download(Session::CancelDownload::NOT_ALLOWED);
+        if (!downloadonly) {
+            std::string comment;
+            if (options.find("comment") != options.end()) {
+                comment = dnfdaemon::key_value_map_get<std::string>(options, "comment");
+            }
 
-        std::string comment;
-        if (options.find("comment") != options.end()) {
-            comment = dnfdaemon::key_value_map_get<std::string>(options, "comment");
+            transaction->set_callbacks(std::make_unique<dnf5daemon::DbusTransactionCB>(session));
+            transaction->set_description("dnf5daemon-server");
+            transaction->set_comment(comment);
+
+            auto rpm_result = transaction->run();
+            if (rpm_result != libdnf5::base::Transaction::TransactionRunResult::SUCCESS) {
+                throw sdbus::Error(
+                    dnfdaemon::ERROR_TRANSACTION,
+                    fmt::format(
+                        "rpm transaction failed with code {}.",
+                        static_cast<std::underlying_type_t<libdnf5::base::Transaction::TransactionRunResult>>(
+                            rpm_result)));
+            }
+            // TODO(mblaha): clean up downloaded packages after successful transaction
         }
-
-        transaction->set_callbacks(std::make_unique<dnf5daemon::DbusTransactionCB>(session));
-        transaction->set_description("dnf5daemon-server");
-        transaction->set_comment(comment);
-
-        auto rpm_result = transaction->run();
-        if (rpm_result != libdnf5::base::Transaction::TransactionRunResult::SUCCESS) {
-            throw sdbus::Error(
-                dnfdaemon::ERROR_TRANSACTION,
-                fmt::format(
-                    "rpm transaction failed with code {}.",
-                    static_cast<std::underlying_type_t<libdnf5::base::Transaction::TransactionRunResult>>(rpm_result)));
-        }
-        // TODO(mblaha): clean up downloaded packages after successful transaction
     }
 
     auto reply = call.createReply();

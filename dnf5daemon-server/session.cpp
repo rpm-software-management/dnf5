@@ -345,9 +345,17 @@ void Session::download_transaction_packages() {
     }
 }
 
-void Session::store_transaction_offline() {
-    // Download transaction packages
+void Session::store_transaction_offline(bool downloadonly) {
     const auto & installroot = base->get_config().get_installroot_option().get_value();
+    const auto & offline_datadir = installroot / libdnf5::offline::DEFAULT_DATADIR.relative_path();
+    std::filesystem::create_directories(offline_datadir);
+    const std::filesystem::path state_path{offline_datadir / libdnf5::offline::TRANSACTION_STATE_FILENAME};
+    libdnf5::offline::OfflineTransactionState state{state_path};
+    auto & state_data = state.get_data();
+    state_data.set_status(libdnf5::offline::STATUS_DOWNLOAD_INCOMPLETE);
+    state.write();
+
+    // Download transaction packages
     const auto & dest_dir = installroot / libdnf5::offline::DEFAULT_DATADIR.relative_path() / "packages";
     std::filesystem::create_directories(dest_dir);
     base->get_config().get_destdir_option().set(dest_dir);
@@ -368,20 +376,9 @@ void Session::store_transaction_offline() {
     }
 
     // Serialize the transaction
-    const auto & offline_datadir = installroot / libdnf5::offline::DEFAULT_DATADIR.relative_path();
-    std::filesystem::create_directories(offline_datadir);
-
     constexpr const char * packages_in_trans_dir{"./packages"};
     constexpr const char * comps_in_trans_dir{"./comps"};
     const auto & comps_location = offline_datadir / comps_in_trans_dir;
-
-    const std::filesystem::path state_path{offline_datadir / libdnf5::offline::TRANSACTION_STATE_FILENAME};
-    libdnf5::offline::OfflineTransactionState state{state_path};
-
-    auto & state_data = state.get_data();
-
-    state_data.set_status(libdnf5::offline::STATUS_DOWNLOAD_INCOMPLETE);
-    state.write();
 
     transaction->store_comps(comps_location);
 
@@ -408,11 +405,14 @@ void Session::store_transaction_offline() {
     }
 
     // create the magic symlink /system-update -> datadir
-    if (!std::filesystem::is_symlink(libdnf5::offline::MAGIC_SYMLINK)) {
-        std::filesystem::create_symlink(offline_datadir, libdnf5::offline::MAGIC_SYMLINK);
+    if (downloadonly) {
+        state_data.set_status(libdnf5::offline::STATUS_DOWNLOAD_COMPLETE);
+    } else {
+        if (!std::filesystem::is_symlink(libdnf5::offline::MAGIC_SYMLINK)) {
+            std::filesystem::create_symlink(offline_datadir, libdnf5::offline::MAGIC_SYMLINK);
+        }
+        state_data.set_status(libdnf5::offline::STATUS_READY);
     }
-    state_data.set_status(libdnf5::offline::STATUS_READY);
-
     state.write();
 }
 

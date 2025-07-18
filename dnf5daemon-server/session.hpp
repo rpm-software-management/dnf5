@@ -91,7 +91,7 @@ public:
     /// download packages for the current transaction
     void download_transaction_packages();
     /// prepare the current transaction to run during the next reboot
-    void store_transaction_offline();
+    void store_transaction_offline(bool downloadonly);
 
     /// Getter for download cancel request flag.
     CancelDownload get_cancel_download() { return cancel_download.load(); }
