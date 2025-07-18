@@ -385,10 +385,14 @@ void Goal::add_rpm_upgrade(const std::string & spec, const GoalJobSettings & set
 }
 
 void Goal::add_rpm_upgrade(const GoalJobSettings & settings, bool minimal) {
-    if (minimal) {
-        p_impl->rpm_specs.push_back(std::make_tuple(GoalAction::UPGRADE_ALL_MINIMAL, std::string(), settings));
+    if (settings.get_from_repo_ids().empty()) {
+        const auto action = minimal ? GoalAction::UPGRADE_ALL_MINIMAL : GoalAction::UPGRADE_ALL;
+        p_impl->rpm_specs.push_back(std::make_tuple(action, std::string(), settings));
     } else {
-        p_impl->rpm_specs.push_back(std::make_tuple(GoalAction::UPGRADE_ALL, std::string(), settings));
+        // We want to perform upgrade only for packages installed from the from_repo_ids.
+        // Using UPGRADE_ALL and UPGRADE_ALL_MINIMAL is not possible.
+        const auto action = minimal ? GoalAction::UPGRADE_MINIMAL : GoalAction::UPGRADE;
+        p_impl->rpm_specs.push_back(std::make_tuple(action, "*", settings));
     }
 }
 
@@ -421,7 +425,13 @@ void Goal::add_rpm_distro_sync(const std::string & spec, const GoalJobSettings &
 }
 
 void Goal::add_rpm_distro_sync(const GoalJobSettings & settings) {
-    p_impl->rpm_specs.push_back(std::make_tuple(GoalAction::DISTRO_SYNC_ALL, std::string(), settings));
+    if (settings.get_from_repo_ids().empty()) {
+        p_impl->rpm_specs.push_back(std::make_tuple(GoalAction::DISTRO_SYNC_ALL, std::string(), settings));
+    } else {
+        // We want to perform distro-sync only for packages installed from the from_repo_ids.
+        // Using DISTROSYNC_ALL is not possible.
+        p_impl->rpm_specs.push_back(std::make_tuple(GoalAction::DISTRO_SYNC, "*", settings));
+    }
 }
 
 void Goal::add_rpm_distro_sync(const rpm::Package & rpm_package, const GoalJobSettings & settings) {
@@ -592,6 +602,10 @@ GoalProblem Goal::Impl::add_specs_to_goal(base::Transaction & transaction) {
             case GoalAction::UPGRADE_ALL_MINIMAL: {
                 rpm::PackageQuery query(base);
 
+                if (!settings.get_to_repo_ids().empty()) {
+                    query.filter_repo_id(settings.get_to_repo_ids(), sack::QueryCmp::GLOB);
+                }
+
                 // Apply advisory filters
                 if (settings.get_advisory_filter() != nullptr) {
                     filter_candidates_for_advisory_upgrade(
@@ -608,6 +622,10 @@ GoalProblem Goal::Impl::add_specs_to_goal(base::Transaction & transaction) {
                     }
                 }
 
+                if (query.empty()) {
+                    return GoalProblem::NO_PROBLEM;
+                }
+
                 // Make the smallest possible upgrade
                 if (action == GoalAction::UPGRADE_ALL_MINIMAL) {
                     query.filter_earliest_evr();
@@ -622,10 +640,21 @@ GoalProblem Goal::Impl::add_specs_to_goal(base::Transaction & transaction) {
             } break;
             case GoalAction::DISTRO_SYNC_ALL: {
                 rpm::PackageQuery query(base);
-                // Since distro-sync uses SOLVER_TARGETED mode we cannot pass in installed packages because if we did
-                // updating only a subset of packages would be a valid solution. However in a distro-sync we want to
-                // ensure ALL packages are synchronized with the target repository.
-                query.filter_available();
+
+                if (settings.get_to_repo_ids().empty()) {
+                    // Since distro-sync uses SOLVER_TARGETED mode we cannot pass in installed packages because
+                    // if we did updating only a subset of packages would be a valid solution. However in a distro-sync
+                    // we want to ensure ALL packages are synchronized with the target repository.
+                    query.filter_available();
+                } else {
+                    // Keep only the packages available in the specified repositories.
+                    query.filter_repo_id(settings.get_to_repo_ids(), sack::QueryCmp::GLOB);
+                }
+
+                if (query.empty()) {
+                    return GoalProblem::NO_PROBLEM;
+                }
+
                 libdnf5::solv::IdQueue upgrade_ids;
                 for (auto package_id : *query.p_impl) {
                     upgrade_ids.push_back(package_id);
@@ -1391,11 +1420,40 @@ std::pair<GoalProblem, libdnf5::solv::IdQueue> Goal::Impl::add_install_to_goal(
         return {GoalProblem::NO_PROBLEM, result_queue};
     }
 
+    rpm::PackageQuery installed(query);
+    installed.filter_installed();
+
+    if (!settings.get_to_repo_ids().empty()) {
+        query.filter_repo_id(settings.get_to_repo_ids(), sack::QueryCmp::GLOB);
+        if (query.empty()) {
+            transaction.p_impl->add_resolve_log(
+                action,
+                GoalProblem::NOT_FOUND_IN_REPOSITORIES,
+                settings,
+                libdnf5::transaction::TransactionItemType::PACKAGE,
+                spec,
+                {},
+                log_level);
+            return {skip_unavailable ? GoalProblem::NO_PROBLEM : GoalProblem::NOT_FOUND_IN_REPOSITORIES, result_queue};
+        }
+
+        // We require packages only from the to_repo_ids repositories. We'll select only the corresponding installed
+        // packages (matching name and architecture, or the same NEVRA for install-only packages)
+        installed.filter_name_arch(query);
+        rpm::PackageQuery installed_install_only(installed);
+        installed_install_only.filter_installonly();
+        installed -= installed_install_only;
+        installed_install_only.filter_nevra(query);
+        installed |= installed_install_only;
+
+        // Return the corresponding installed packages to the query
+        // TODO(jrohel): Is it needed?
+        query |= installed;
+    }
+
     bool has_just_name = nevra_pair.second.has_just_name();
     bool add_obsoletes = cfg_main.get_obsoletes_option().get_value() && has_just_name;
 
-    rpm::PackageQuery installed(query);
-    installed.filter_installed();
     for (auto package_id : *installed.p_impl) {
         transaction.p_impl->add_resolve_log(
             action,
@@ -1410,22 +1468,6 @@ std::pair<GoalProblem, libdnf5::solv::IdQueue> Goal::Impl::add_install_to_goal(
     bool skip_broken = settings.resolve_skip_broken(cfg_main);
 
     if (multilib_policy == "all" || utils::is_glob_pattern(nevra_pair.second.get_arch().c_str())) {
-        if (!settings.get_to_repo_ids().empty()) {
-            query.filter_repo_id(settings.get_to_repo_ids(), sack::QueryCmp::GLOB);
-            if (query.empty()) {
-                transaction.p_impl->add_resolve_log(
-                    action,
-                    GoalProblem::NOT_FOUND_IN_REPOSITORIES,
-                    settings,
-                    libdnf5::transaction::TransactionItemType::PACKAGE,
-                    spec,
-                    {},
-                    log_level);
-                return {GoalProblem::NOT_FOUND_IN_REPOSITORIES, result_queue};
-            }
-            query |= installed;
-        }
-
         // Apply advisory filters
         if (settings.get_advisory_filter() != nullptr) {
             query.filter_advisories(*settings.get_advisory_filter(), libdnf5::sack::QueryCmp::EQ);
@@ -1511,22 +1553,6 @@ std::pair<GoalProblem, libdnf5::solv::IdQueue> Goal::Impl::add_install_to_goal(
             (nevra_pair.second.get_name().empty() &&
              (!nevra_pair.second.get_epoch().empty() || !nevra_pair.second.get_version().empty() ||
               !nevra_pair.second.get_release().empty() || !nevra_pair.second.get_arch().empty()))) {
-            if (!settings.get_to_repo_ids().empty()) {
-                query.filter_repo_id(settings.get_to_repo_ids(), sack::QueryCmp::GLOB);
-                if (query.empty()) {
-                    transaction.p_impl->add_resolve_log(
-                        action,
-                        GoalProblem::NOT_FOUND_IN_REPOSITORIES,
-                        settings,
-                        libdnf5::transaction::TransactionItemType::PACKAGE,
-                        spec,
-                        {},
-                        log_level);
-                    return {GoalProblem::NOT_FOUND_IN_REPOSITORIES, result_queue};
-                }
-                query |= installed;
-            }
-
             // Apply advisory filters
             if (settings.get_advisory_filter() != nullptr) {
                 query.filter_advisories(*settings.get_advisory_filter(), libdnf5::sack::QueryCmp::EQ);
@@ -1599,21 +1625,6 @@ std::pair<GoalProblem, libdnf5::solv::IdQueue> Goal::Impl::add_install_to_goal(
         } else {
             if (add_obsoletes) {
                 add_obsoletes_to_data(base_query, query);
-            }
-            if (!settings.get_to_repo_ids().empty()) {
-                query.filter_repo_id(settings.get_to_repo_ids(), sack::QueryCmp::GLOB);
-                if (query.empty()) {
-                    transaction.p_impl->add_resolve_log(
-                        action,
-                        GoalProblem::NOT_FOUND_IN_REPOSITORIES,
-                        settings,
-                        libdnf5::transaction::TransactionItemType::PACKAGE,
-                        spec,
-                        {},
-                        log_level);
-                    return {GoalProblem::NOT_FOUND_IN_REPOSITORIES, result_queue};
-                }
-                query |= installed;
             }
 
             // Apply advisory filters
@@ -1889,6 +1900,25 @@ GoalProblem Goal::Impl::add_reinstall_to_goal(
 
     // keep only available packages
     query -= query_installed;
+
+    // filtering from_repo_ids
+    if (!settings.get_from_repo_ids().empty()) {
+        query_installed.filter_from_repo_id(settings.get_from_repo_ids(), sack::QueryCmp::GLOB);
+        // Report when package is not installed from repositories
+        if (query_installed.empty()) {
+            // TODO(jrohel) no solution for the spec => mark result - not from repository
+            transaction.p_impl->add_resolve_log(
+                GoalAction::REINSTALL,
+                GoalProblem::NOT_INSTALLED,
+                settings,
+                libdnf5::transaction::TransactionItemType::PACKAGE,
+                spec,
+                {},
+                log_level);
+            return skip_unavailable ? GoalProblem::NO_PROBLEM : GoalProblem::NOT_INSTALLED;
+        }
+    }
+
     if (query.empty()) {
         transaction.p_impl->add_resolve_log(
             GoalAction::REINSTALL,
@@ -1943,8 +1973,6 @@ GoalProblem Goal::Impl::add_reinstall_to_goal(
             }
         }
     }
-
-    // TODO(jmracek) Implement filtering from_repo_ids
 
     if (!settings.get_to_repo_ids().empty()) {
         relevant_available.filter_repo_id(settings.get_to_repo_ids(), sack::QueryCmp::GLOB);
@@ -2208,14 +2236,14 @@ void Goal::Impl::add_rpms_to_goal(base::Transaction & transaction) {
 GoalProblem Goal::Impl::add_remove_to_goal(
     base::Transaction & transaction, const std::string & spec, GoalJobSettings & settings) {
     bool clean_requirements_on_remove = settings.resolve_clean_requirements_on_remove(base->get_config());
+    auto & cfg_main = base->get_config();
+    const bool skip_unavailable =
+        settings.get_skip_unavailable() == GoalSetting::AUTO ? true : settings.resolve_skip_unavailable(cfg_main);
     rpm::PackageQuery query(base);
     query.filter_installed();
 
     auto nevra_pair = query.resolve_pkg_spec(spec, settings, false);
     if (!nevra_pair.first) {
-        auto & cfg_main = base->get_config();
-        bool skip_unavailable =
-            settings.get_skip_unavailable() == GoalSetting::AUTO ? true : settings.resolve_skip_unavailable(cfg_main);
         auto problem = transaction.p_impl->report_not_found(
             GoalAction::REMOVE,
             spec,
@@ -2224,11 +2252,21 @@ GoalProblem Goal::Impl::add_remove_to_goal(
         return skip_unavailable ? GoalProblem::NO_PROBLEM : problem;
     }
 
+    // filtering from_repo_ids
     if (!settings.get_from_repo_ids().empty()) {
-        // TODO(jmracek) keep only packages installed from repo_id -requires swdb
+        query.filter_from_repo_id(settings.get_from_repo_ids(), sack::QueryCmp::GLOB);
+        // Report when package is not installed from repositories
         if (query.empty()) {
-            // TODO(jmracek) no solution for the spec => mark result - not from repository
-            return GoalProblem::NOT_FOUND_IN_REPOSITORIES;
+            // TODO(jrohel) no solution for the spec => mark result - not from repository
+            transaction.p_impl->add_resolve_log(
+                GoalAction::REMOVE,
+                GoalProblem::NOT_INSTALLED,
+                settings,
+                libdnf5::transaction::TransactionItemType::PACKAGE,
+                spec,
+                {},
+                skip_unavailable ? libdnf5::Logger::Level::WARNING : libdnf5::Logger::Level::ERROR);
+            return skip_unavailable ? GoalProblem::NO_PROBLEM : GoalProblem::NOT_INSTALLED;
         }
     }
     rpm_goal.add_remove(*query.p_impl, clean_requirements_on_remove);
@@ -2242,10 +2280,10 @@ GoalProblem Goal::Impl::add_up_down_distrosync_to_goal(
     GoalJobSettings & settings,
     bool minimal) {
     // Get values before the first report to set in GoalJobSettings used values
-    bool best = settings.resolve_best(base->get_config());
-    bool skip_broken = action == GoalAction::UPGRADE ? true : settings.resolve_skip_broken(base->get_config());
-    bool clean_requirements_on_remove = settings.resolve_clean_requirements_on_remove();
-    bool skip_unavailable = settings.resolve_skip_unavailable(base->get_config());
+    const bool best = settings.resolve_best(base->get_config());
+    const bool skip_broken = action == GoalAction::UPGRADE ? true : settings.resolve_skip_broken(base->get_config());
+    const bool clean_requirements_on_remove = settings.resolve_clean_requirements_on_remove();
+    const bool skip_unavailable = settings.resolve_skip_unavailable(base->get_config());
 
     auto sack = base->get_rpm_package_sack();
     rpm::PackageQuery base_query(base);
@@ -2257,24 +2295,57 @@ GoalProblem Goal::Impl::add_up_down_distrosync_to_goal(
         auto problem = transaction.p_impl->report_not_found(action, spec, settings, libdnf5::Logger::Level::WARNING);
         return skip_unavailable ? GoalProblem::NO_PROBLEM : problem;
     }
-    // Report when package is not installed
+
     rpm::PackageQuery all_installed(base, rpm::PackageQuery::ExcludeFlags::IGNORE_EXCLUDES);
     all_installed.filter_installed();
-    // Report only not installed if not obsoleters - https://bugzilla.redhat.com/show_bug.cgi?id=1818118
+
+    rpm::PackageQuery installed(all_installed);
+    if (!settings.get_from_repo_ids().empty()) {
+        installed.filter_from_repo_id(settings.get_from_repo_ids(), libdnf5::sack::QueryCmp::GLOB);
+    }
+
     bool obsoleters = false;
+    rpm::PackageQuery obsoleters_query(query);
     if (obsoletes && action != GoalAction::DOWNGRADE) {
-        rpm::PackageQuery obsoleters_query(query);
-        obsoleters_query.filter_obsoletes(all_installed);
+        obsoleters_query.filter_obsoletes(installed);  // Keep only packages that obsolete some installed packages
         if (!obsoleters_query.empty()) {
             obsoleters = true;
         }
     }
-    rpm::PackageQuery relevant_installed_na(all_installed);
+
+    rpm::PackageQuery relevant_installed_n(installed);
+    relevant_installed_n.filter_name(query);
+    rpm::PackageQuery relevant_installed_na(installed);
+    relevant_installed_na.filter_name_arch(query);
+
+    // If from_repo_ids is defined, keep only the relevant packages in the query
+    if (!settings.get_from_repo_ids().empty()) {
+        rpm::PackageQuery relevant_all_installed_na(all_installed);
+        relevant_all_installed_na.filter_name_arch(query);
+        rpm::PackageQuery query_relevant_installed_name(query);
+
+        // Keep in the query only those packages that have installed counterparts with the same name and architecture,
+        // installed from repositories specified in from_repo_ids.
+        query.filter_name_arch(relevant_installed_na);
+
+        // Restore to the query those packages for which installed counterparts exist with the same name but
+        // a different architecture, originating from repositories specified in from_repo_ids, and for which
+        // no installed version with the desired architecture exists from a different repository
+        query_relevant_installed_name.filter_name(relevant_installed_n);
+        query_relevant_installed_name -= query;
+        query_relevant_installed_name.filter_name_arch(relevant_all_installed_na, sack::QueryCmp::NEQ);
+        query |= query_relevant_installed_name;
+
+        // Restore to the query packages that obsolete those installed from repositories specified in from_repo_ids.
+        if (obsoleters) {
+            query |= obsoleters_query;
+        }
+    }
+
+    // Report when package is not installed
+    // Report only not installed if not obsoleters - https://bugzilla.redhat.com/show_bug.cgi?id=1818118
     if (!obsoleters) {
-        relevant_installed_na.filter_name_arch(query);
         if (relevant_installed_na.empty()) {
-            rpm::PackageQuery relevant_installed_n(all_installed);
-            relevant_installed_n.filter_name(query);
             if (relevant_installed_n.empty()) {
                 transaction.p_impl->add_resolve_log(
                     action,
@@ -2299,8 +2370,13 @@ GoalProblem Goal::Impl::add_up_down_distrosync_to_goal(
     }
 
     bool add_obsoletes = obsoletes && nevra_pair.second.has_just_name() && action != GoalAction::DOWNGRADE;
-    rpm::PackageQuery installed(query);
-    installed.filter_installed();
+    rpm::PackageQuery query_installed(query);
+    if (settings.get_from_repo_ids().empty()) {
+        query_installed.filter_installed();
+    } else {
+        query_installed.filter_from_repo_id(settings.get_from_repo_ids(), libdnf5::sack::QueryCmp::GLOB);
+    }
+
     // TODO(jmracek) Apply latest filters on installed (or later)
     if (add_obsoletes) {
         // Obsoletes are not added to downgrade set
@@ -2310,7 +2386,7 @@ GoalProblem Goal::Impl::add_up_down_distrosync_to_goal(
             obsoletes_query.filter_available();
             rpm::PackageQuery to_obsolete_query(query);
             to_obsolete_query.filter_upgrades();
-            to_obsolete_query |= installed;
+            to_obsolete_query |= query_installed;
             obsoletes_query.filter_obsoletes(to_obsolete_query);
             query |= obsoletes_query;
         } else if (action == GoalAction::DISTRO_SYNC) {
@@ -2370,13 +2446,13 @@ GoalProblem Goal::Impl::add_up_down_distrosync_to_goal(
             //     (especially with --no-best) and since libsolv prefers the smallest possible upgrade it could result
             //     in no upgrade even if there is one available. This is a problem in general but its critical with
             //     --security transactions (https://bugzilla.redhat.com/show_bug.cgi?id=2097757)
-            all_installed.filter_name(query);
+            installed.filter_name(query);
             //   - We want to add only the latest versions of installed packages, this is specifically for installonly
             //     packages. Otherwise if for example kernel-1 and kernel-3 were installed and present in the
             //     transaction libsolv could decide to install kernel-2 because it is an upgrade for kernel-1 even
             //     though we don't want it because there already is a newer version present.
-            all_installed.filter_latest_evr();
-            query |= all_installed;
+            installed.filter_latest_evr();
+            query |= installed;
             solv_map_to_id_queue(tmp_queue, *query.p_impl);
             rpm_goal.add_upgrade(tmp_queue, best, clean_requirements_on_remove);
             break;

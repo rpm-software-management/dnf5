@@ -43,6 +43,7 @@ public:
     std::vector<std::unique_ptr<libdnf5::Option>> * patterns_to_distro_sync_options{nullptr};
 
     std::unique_ptr<AllowErasingOption> allow_erasing;
+    std::vector<std::string> installed_from_repos;
     std::vector<std::string> from_repos;
 };
 
