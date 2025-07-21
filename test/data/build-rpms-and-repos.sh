@@ -1,7 +1,7 @@
 #!/bin/sh
 
 
-function usage() {
+usage() {
     echo "usage: $(basename $0) <binary-test-data-directory>"
 }
 
@@ -12,7 +12,7 @@ if [ $# -ne 1 ]; then
 fi
 
 
-SCRIPT_DIRECTORY=$(dirname $(readlink -f $0))
+SCRIPT_DIRECTORY=$(dirname "$(readlink -f "$0")")
 TARGET_DIRECTORY="$1"
 
 
@@ -24,7 +24,7 @@ case "${TARGET_DIRECTORY}" in
 esac
 
 
-function build_rpms() {
+build_rpms() {
     SPEC="$1"
     TARGET_DIR="$2"
     # use a temporary topdir to avoid writing to user's rpmbuild directory
@@ -60,5 +60,5 @@ for REPO_DIR in "${SCRIPT_DIRECTORY}"/repos-rpm/*; do
     for SPEC in "${REPO_DIR}"/*.spec; do
         build_rpms "${SPEC}" "${TARGET_DIR}"
     done
-    createrepo_c ${TARGET_DIR}
+    createrepo_c "${TARGET_DIR}"
 done
