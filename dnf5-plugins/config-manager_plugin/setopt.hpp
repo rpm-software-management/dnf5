@@ -43,7 +43,7 @@ private:
     std::map<std::string, std::string> main_setopts;
     std::map<std::string, std::map<std::string, std::string>> in_repos_setopts;
     std::map<std::string, std::map<std::string, std::string>> matching_repos_setopts;
-    bool create_missing_dirs{false};  // Allows to create missing directories.
+    bool create_missing_dirs{false};  // Allows one to create missing directories.
 };
 
 }  // namespace dnf5

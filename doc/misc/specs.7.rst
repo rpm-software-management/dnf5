@@ -68,8 +68,8 @@ matched against:
 
 sequentially until a match is found.
 
-For example ``<package-spec-NP>`` is first matched againts NEVRAs and if no
-matching NEVRA is found it is matched againts Provides.
+For example ``<package-spec-NP>`` is first matched against NEVRAs and if no
+matching NEVRA is found it is matched against Provides.
 
 When ``<package-spec>`` is a package name or a provide, the user can provide
 additional restriction rules for matching the arguments. Basic version comparisons

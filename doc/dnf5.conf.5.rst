@@ -538,7 +538,7 @@ repository configuration file should aside from repo ID consists of baseurl, met
 
     For superuser overwrites the :ref:`cachedir <cachedir_options-label>` option value.
 
-    Allows to differentiate user and superuser cachedir.
+    Allows one to differentiate user and superuser cachedir.
 
     Default: ``/var/cache/libdnf5``.
 

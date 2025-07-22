@@ -52,7 +52,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
     <!--
         reset:
-        @success: `true` if the session was successfully resetted, `false` otherwise.
+        @success: `true` if the session was successfully reset, `false` otherwise.
         @error_msg: string, contains errors encountered while resetting the session
 
         Completely reset the session.

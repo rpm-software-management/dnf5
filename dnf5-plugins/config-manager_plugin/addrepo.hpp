@@ -81,7 +81,7 @@ private:
 
     SourceRepofile source_repofile;   // Location of source repository configuration file.
     std::string repo_id;              // The user-defined ID of the newly created repository.
-    bool create_missing_dirs{false};  // Allows to create missing directories.
+    bool create_missing_dirs{false};  // Allows one to create missing directories.
     FilePolicy file_policy{FilePolicy::ERROR};
     std::string save_filename;                     // User-defined name of newly saved configuration file.
     std::map<std::string, std::string> repo_opts;  // Options for the new repository.
