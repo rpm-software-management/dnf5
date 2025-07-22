@@ -35,8 +35,10 @@ class TestNevra(base_test_case.BaseTestCase):
         self.assertEqual(nevra.get_arch(), "x86_64")
 
         # test that to_nevra_string() and to_full_nevra_string() template functions work
-        self.assertEqual(libdnf5.rpm.to_nevra_string(nevra), "four-of-fish-8:3.6.9-11.fc100.x86_64")
-        self.assertEqual(libdnf5.rpm.to_full_nevra_string(nevra), "four-of-fish-8:3.6.9-11.fc100.x86_64")
+        self.assertEqual(
+            libdnf5.rpm.to_nevra_string(nevra), "four-of-fish-8:3.6.9-11.fc100.x86_64")
+        self.assertEqual(
+            libdnf5.rpm.to_full_nevra_string(nevra), "four-of-fish-8:3.6.9-11.fc100.x86_64")
 
     def test_nevra_without_epoch(self):
         nevras = libdnf5.rpm.Nevra.parse(
@@ -50,8 +52,10 @@ class TestNevra(base_test_case.BaseTestCase):
         self.assertEqual(nevra.get_arch(), "x86_64")
 
         # test that to_nevra_string() and to_full_nevra_string() template functions work without epoch
-        self.assertEqual(libdnf5.rpm.to_nevra_string(nevra), "four-of-fish-3.6.9-11.fc100.x86_64")
-        self.assertEqual(libdnf5.rpm.to_full_nevra_string(nevra), "four-of-fish-0:3.6.9-11.fc100.x86_64")
+        self.assertEqual(
+            libdnf5.rpm.to_nevra_string(nevra), "four-of-fish-3.6.9-11.fc100.x86_64")
+        self.assertEqual(
+            libdnf5.rpm.to_full_nevra_string(nevra), "four-of-fish-0:3.6.9-11.fc100.x86_64")
 
     def test_nevra_with_colon_in_name(self):
         nevras = libdnf5.rpm.Nevra.parse(
@@ -74,7 +78,8 @@ class TestNevra(base_test_case.BaseTestCase):
         self.assertEqual(nevra.get_release(), "")
         self.assertEqual(nevra.get_arch(), "")
 
-        nevras = libdnf5.rpm.Nevra.parse("fish-8:3.6.9", libdnf5.rpm.VectorNevraForm(1, libdnf5.rpm.Nevra.Form_NEV))
+        nevras = libdnf5.rpm.Nevra.parse(
+            "fish-8:3.6.9", libdnf5.rpm.VectorNevraForm(1, libdnf5.rpm.Nevra.Form_NEV))
         self.assertEqual(len(nevras), 1)
         nevra = nevras.pop()
         self.assertEqual(nevra.get_name(), "fish")
@@ -83,7 +88,8 @@ class TestNevra(base_test_case.BaseTestCase):
         self.assertEqual(nevra.get_release(), "")
         self.assertEqual(nevra.get_arch(), "")
 
-        nevras = libdnf5.rpm.Nevra.parse("fish-3.6.9", libdnf5.rpm.VectorNevraForm(1, libdnf5.rpm.Nevra.Form_NEV))
+        nevras = libdnf5.rpm.Nevra.parse(
+            "fish-3.6.9", libdnf5.rpm.VectorNevraForm(1, libdnf5.rpm.Nevra.Form_NEV))
         self.assertEqual(len(nevras), 1)
         nevra = nevras.pop()
         self.assertEqual(nevra.get_name(), "fish")
@@ -114,16 +120,20 @@ class TestNevra(base_test_case.BaseTestCase):
         self.assertEqual(nevra.get_arch(), "i686")
 
     def test_nevra_incorrect_form_NA(self):
-        nevras = libdnf5.rpm.Nevra.parse("name.ar-ch", libdnf5.rpm.VectorNevraForm(1, libdnf5.rpm.Nevra.Form_NA))
+        nevras = libdnf5.rpm.Nevra.parse(
+            "name.ar-ch", libdnf5.rpm.VectorNevraForm(1, libdnf5.rpm.Nevra.Form_NA))
         self.assertEqual(len(nevras), 0)
 
-        nevras = libdnf5.rpm.Nevra.parse("name.-arch", libdnf5.rpm.VectorNevraForm(1, libdnf5.rpm.Nevra.Form_NA))
+        nevras = libdnf5.rpm.Nevra.parse(
+            "name.-arch", libdnf5.rpm.VectorNevraForm(1, libdnf5.rpm.Nevra.Form_NA))
         self.assertEqual(len(nevras), 0)
 
-        nevras = libdnf5.rpm.Nevra.parse("name.", libdnf5.rpm.VectorNevraForm(1, libdnf5.rpm.Nevra.Form_NA))
+        nevras = libdnf5.rpm.Nevra.parse(
+            "name.", libdnf5.rpm.VectorNevraForm(1, libdnf5.rpm.Nevra.Form_NA))
         self.assertEqual(len(nevras), 0)
 
-        nevras = libdnf5.rpm.Nevra.parse("name", libdnf5.rpm.VectorNevraForm(1, libdnf5.rpm.Nevra.Form_NA))
+        nevras = libdnf5.rpm.Nevra.parse(
+            "name", libdnf5.rpm.VectorNevraForm(1, libdnf5.rpm.Nevra.Form_NA))
         self.assertEqual(len(nevras), 0)
 
     def test_nevra_invalid_characters(self):
