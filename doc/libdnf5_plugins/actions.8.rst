@@ -178,7 +178,7 @@ Output line format
 
 * ``stop=<message>`` - throws a stop exception with <message> (added in version 1.4.0)
 
-* ``error=<message>`` - the error <message> is logged or throws error exception whith <message> if ``raise_error=1``
+* ``error=<message>`` - the error <message> is logged or throws error exception with <message> if ``raise_error=1``
   (added in version 1.4.0)
 
 * ``log.<level>=<message>`` - writes <message> to the logger with priority <level> (added in version 1.4.0)

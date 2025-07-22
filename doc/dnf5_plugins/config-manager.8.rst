@@ -93,7 +93,7 @@ Subcommands
     However, the options may be still defined in configuration files in drop-in directories (for example,
     the default distribution configuration).
 
-    The ``unsetopt`` command removes repository configuration overides from the file named ``99-config_manager.repo``
+    The ``unsetopt`` command removes repository configuration overrides from the file named ``99-config_manager.repo``
     located in the system repository override directory. However, the overrides may be still defined in other repository
     override files (for example, the default distribution overrides). Empty sections are removed from the configuration
     override file. Repository ID may contain globs. In this case, the ``repoid`` pattern is resolved and the override
@@ -118,7 +118,7 @@ Subcommands
     So, the variable may still exist in another directory in the list (for example, the default distribution value).
 
     Note:
-    The variables ``releasever_major`` and ``releasever_minor`` are generated automatically and connot be removed.
+    The variables ``releasever_major`` and ``releasever_minor`` are generated automatically and cannot be removed.
 
 
 .. note::

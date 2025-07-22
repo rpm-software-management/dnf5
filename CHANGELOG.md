@@ -831,7 +831,7 @@
 - dnfdaemon: Missing signal registration
 - doc: config manager plugin: wrap too long lines
 - doc: document config-manager plugin
-- Packit: get version from specfile for copr_builds againts main
+- Packit: get version from specfile for copr_builds against main
 - Update tests to use new `load_repos()` API
 - Use new load_repos instead of deprecated update_and_load_enabled_repos
 - Make `libdnf5::repo::Repo::load()` private
