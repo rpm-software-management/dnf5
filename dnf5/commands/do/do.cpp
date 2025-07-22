@@ -90,6 +90,7 @@ void DoCommand::set_argument_parser() {
         cmd.register_named_arg(item_type_opt);
     }
 
+    create_installed_from_repo_option(*this, installed_from_repos, false);
     create_from_repo_option(*this, from_repos, false);
 
     {
@@ -101,6 +102,7 @@ void DoCommand::set_argument_parser() {
                                        int argc,
                                        const char * const argv[]) {
             libdnf5::GoalJobSettings settings;
+            settings.set_from_repo_ids(installed_from_repos);
             settings.set_to_repo_ids(from_repos);
             switch (action) {
                 case Action::INSTALL:
