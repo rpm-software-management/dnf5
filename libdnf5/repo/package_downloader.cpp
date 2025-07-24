@@ -174,8 +174,20 @@ void PackageDownloader::download() try {
             continue;
         }
 
+        // Disable fastest_mirror callbacks for package downloading for now
+        // TODO(amatej): There is a problem in the API, libdnf5::repo::DownloadCallbacks::fastest_mirror interface
+        //               expects user_cb_data created by libdnf5::repo::DownloadCallbacks::add_new_download, these
+        //               are specific for each package download.
+        //               However librepo API allows setting fastest mirror callback data only per librepo handle and
+        //               we reuse one handle for all packages from given repository.
+        //               To resolve this we either have to create separate handle for each package (could be expensive)
+        //               or enhance LrPackageTarget with fastestmirror callback data (breaks librepo ABI).
+        auto & cached_handle = RepoDownloader::get_cached_handle(*pkg_target.package.get_repo());
+        cached_handle.set_opt(LRO_FASTESTMIRRORCB, NULL);
+        cached_handle.set_opt(LRO_FASTESTMIRRORDATA, NULL);
+
         auto * lr_target = lr_packagetarget_new_v3(
-            RepoDownloader::get_cached_handle(*pkg_target.package.get_repo()).get(),
+            cached_handle.get(),
             pkg_target.package.get_location().c_str(),
             pkg_target.destination.c_str(),
             static_cast<LrChecksumType>(pkg_target.package.get_checksum().get_type()),
