@@ -19,8 +19,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "do.hpp"
 
-#include "../from_repo.hpp"
-
 #include <dnf5/shared_options.hpp>
 #include <libdnf5/conf/const.hpp>
 #include <libdnf5/utils/bgettext/bgettext-mark-domain.h>

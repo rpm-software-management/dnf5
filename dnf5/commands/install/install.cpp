@@ -19,8 +19,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "install.hpp"
 
-#include "../from_repo.hpp"
-
 #include <dnf5/shared_options.hpp>
 #include <libdnf5/conf/const.hpp>
 

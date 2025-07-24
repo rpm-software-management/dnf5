@@ -71,6 +71,23 @@ DNF_API void create_offline_option(dnf5::Command & command);
 /// Create the `--json` option for a command provided as an argument.
 DNF_API void create_json_option(dnf5::Command & command);
 
+
+/// Creates a new named argument "--from-repo=REPO_ID,...".
+/// When the argument is used, the list of REPO_IDs is split and the IDs are stored in the `repo_ids` vector.
+/// If `detect_conflict` is true, a `libdnf5::cli::ArgumentParserConflictingArgumentsError` exception is thrown
+/// if "--from-repo" was already used with a different value.
+/// Newly created argument is registered to the `command` and returned.
+DNF_API libdnf5::cli::ArgumentParser::NamedArg * create_from_repo_option(
+    Command & command, std::vector<std::string> & repo_ids, bool detect_conflict);
+
+/// Creates a new named argument "--installed-from-repo=REPO_ID,...".
+/// When the argument is used, the list of REPO_IDs is split and the IDs are stored in the `repo_ids` vector.
+/// If `detect_conflict` is true, a `libdnf5::cli::ArgumentParserConflictingArgumentsError` exception is thrown
+/// if "--installed-from-repo" was already used with a different value.
+/// Newly created argument is registered to the `command` and returned.
+DNF_API libdnf5::cli::ArgumentParser::NamedArg * create_installed_from_repo_option(
+    Command & command, std::vector<std::string> & repo_ids, bool detect_conflict);
+
 }  // namespace dnf5
 
 #endif  // DNF5_COMMANDS_SHARED_OPTIONS_HPP
