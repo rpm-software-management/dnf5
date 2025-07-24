@@ -19,8 +19,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "remove.hpp"
 
-#include "../from_repo.hpp"
-
 #include <dnf5/shared_options.hpp>
 
 namespace dnf5 {
