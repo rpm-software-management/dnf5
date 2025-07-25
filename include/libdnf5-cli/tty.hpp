@@ -45,6 +45,7 @@ LIBDNF_CLI_API std::ostream & cyan(std::ostream & stream);
 LIBDNF_CLI_API std::ostream & white(std::ostream & stream);
 
 LIBDNF_CLI_API std::ostream & clear_line(std::ostream & stream);
+LIBDNF_CLI_API std::ostream & clear_to_end(std::ostream & stream);
 LIBDNF_CLI_API std::ostream & cursor_up(std::ostream & stream);
 LIBDNF_CLI_API std::ostream & cursor_down(std::ostream & stream);
 
