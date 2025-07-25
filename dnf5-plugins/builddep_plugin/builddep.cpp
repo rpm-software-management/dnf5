@@ -122,6 +122,9 @@ void BuildDepCommand::set_argument_parser() {
     allow_erasing = std::make_unique<AllowErasingOption>(*this);
     auto skip_unavailable = std::make_unique<SkipUnavailableOption>(*this);
     create_allow_downgrade_options(*this);
+
+    create_from_repo_option(*this, from_repos, true);
+
     create_store_option(*this);
 
     auto spec_arg = parser.add_new_named_arg("spec");
@@ -272,6 +275,9 @@ bool BuildDepCommand::add_from_pkg(
     auto & ctx = get_context();
 
     libdnf5::rpm::PackageQuery pkg_query(ctx.get_base());
+    if (!from_repos.empty()) {
+        pkg_query.filter_repo_id(from_repos, libdnf5::sack::QueryCmp::GLOB);
+    }
     libdnf5::ResolveSpecSettings settings;
     settings.set_with_provides(false);
     settings.set_with_filenames(false);
@@ -285,6 +291,9 @@ bool BuildDepCommand::add_from_pkg(
     }
 
     libdnf5::rpm::PackageQuery source_pkgs(ctx.get_base());
+    if (!from_repos.empty()) {
+        source_pkgs.filter_repo_id(from_repos, libdnf5::sack::QueryCmp::GLOB);
+    }
     source_pkgs.filter_arch(std::vector<std::string>{"src", "nosrc"});
     source_pkgs.filter_name(source_names);
     if (source_pkgs.empty()) {
