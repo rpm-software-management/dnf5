@@ -205,6 +205,7 @@ BuildRequires:  pkgconfig(smartcols)
 
 %if %{with dnf5_plugins}
 BuildRequires:  libcurl-devel >= 7.62.0
+BuildRequires:  pkgconfig(libpkgmanifest)
 %endif
 
 %if %{with dnf5daemon_server}
@@ -835,20 +836,22 @@ Provides:       dnf5-command(builddep)
 Provides:       dnf5-command(changelog)
 Provides:       dnf5-command(config-manager)
 Provides:       dnf5-command(copr)
+Provides:       dnf5-command(manifest)
 Provides:       dnf5-command(needs-restarting)
 Provides:       dnf5-command(repoclosure)
 Provides:       dnf5-command(reposync)
 Provides:       dnf5-command(repomanage)
 
 %description -n dnf5-plugins
-Core DNF5 plugins that enhance dnf5 with builddep, changelog,
-config-manager, copr, repoclosure, repomanage and reposync commands.
+Core DNF5 plugins that enhance dnf5 with builddep, changelog, config-manager,
+copr, manifest, needs-restarting, repoclosure, repomanage, and reposync commands.
 
 %files -n dnf5-plugins -f dnf5-plugin-builddep.lang -f dnf5-plugin-changelog.lang -f dnf5-plugin-config-manager.lang -f dnf5-plugin-copr.lang -f dnf5-plugin-needs-restarting.lang -f dnf5-plugin-repoclosure.lang -f dnf5-plugin-reposync.lang
 %{_libdir}/dnf5/plugins/builddep_cmd_plugin.so
 %{_libdir}/dnf5/plugins/changelog_cmd_plugin.so
 %{_libdir}/dnf5/plugins/config-manager_cmd_plugin.so
 %{_libdir}/dnf5/plugins/copr_cmd_plugin.so
+%{_libdir}/dnf5/plugins/manifest_cmd_plugin.so
 %{_libdir}/dnf5/plugins/needs_restarting_cmd_plugin.so
 %{_libdir}/dnf5/plugins/repoclosure_cmd_plugin.so
 %{_libdir}/dnf5/plugins/reposync_cmd_plugin.so
