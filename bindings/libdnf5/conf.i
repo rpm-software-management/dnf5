@@ -151,5 +151,29 @@ create_config_option_attributes(ConfigMain)
 %}
 #endif
 
+// The following adds a config options iterator in Python.
+//
+%define add_config_iterator(ClassName)
+#if defined(SWIGPYTHON)
+%pythoncode %{
+import re
+
+def ClassName##__iter__(self):
+    options = {}
+    for attr in dir(ClassName):
+        option_getter_match = re.search(r'get_(\w+)_option', attr)
+        if option_getter_match:
+            option_name = option_getter_match.group(1)
+            options[option_name] = self.__getattribute__('get_{}_option'.format(option_name))()
+    return iter(options.items())
+ClassName.__iter__ = ClassName##__iter__
+del ClassName##__iter__
+
+%}
+#endif
+%enddef
+
+add_config_iterator(ConfigMain)
+
 // Deletes any previously defined catches
 %catches();
