@@ -21,6 +21,7 @@ Welcome to DNF5's documentation!
     best_practices/index
     templates/index
     changes_from_dnf4.7
+    migrating_to_dnf5.7
 
 
 Indices and tables
