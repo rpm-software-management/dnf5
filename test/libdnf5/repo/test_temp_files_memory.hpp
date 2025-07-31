@@ -32,6 +32,7 @@ class TempFilesMemoryTest : public BaseTestCase {
     CPPUNIT_TEST(test_directory_is_created_when_not_exists);
     CPPUNIT_TEST(test_get_files_when_empty_storage);
     CPPUNIT_TEST(test_get_files_throws_exception_when_invalid_format);
+    CPPUNIT_TEST(test_get_files_returns_empty_vector_when_missing_key);
     CPPUNIT_TEST(test_get_files_returns_stored_values);
     CPPUNIT_TEST(test_add_files_when_empty_storage);
     CPPUNIT_TEST(test_add_no_files_when_empty_storage);
@@ -47,6 +48,7 @@ public:
     void test_directory_is_created_when_not_exists();
     void test_get_files_when_empty_storage();
     void test_get_files_throws_exception_when_invalid_format();
+    void test_get_files_returns_empty_vector_when_missing_key();
     void test_get_files_returns_stored_values();
     void test_add_files_when_empty_storage();
     void test_add_no_files_when_empty_storage();
