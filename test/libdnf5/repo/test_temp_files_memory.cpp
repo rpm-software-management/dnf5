@@ -49,11 +49,17 @@ void TempFilesMemoryTest::test_get_files_when_empty_storage() {
     CPPUNIT_ASSERT(memory.get_files().empty());
 }
 
-void TempFilesMemoryTest::test_get_files_throws_exception_when_invalid_format() {
+void TempFilesMemoryTest::test_get_files_returns_empty_vector_when_missing_key() {
     libdnf5::utils::fs::File(full_path, "w").write("");
     TempFilesMemory memory_empty(base.get_weak_ptr(), parent_dir_path);
-    CPPUNIT_ASSERT_THROW(memory_empty.get_files(), libdnf5::Error);
+    CPPUNIT_ASSERT(memory_empty.get_files().empty());
 
+    libdnf5::utils::fs::File(full_path, "w").write("UNKNOWN_KEY = [\"path1\", \"path2\", \"path3\"]");
+    TempFilesMemory memory_unknown_key(base.get_weak_ptr(), parent_dir_path);
+    CPPUNIT_ASSERT(memory_unknown_key.get_files().empty());
+}
+
+void TempFilesMemoryTest::test_get_files_throws_exception_when_invalid_format() {
     libdnf5::utils::fs::File(full_path, "w").write("[\"path1\", \"path2\", \"path3\"]");
     TempFilesMemory memory_invalid(base.get_weak_ptr(), parent_dir_path);
     CPPUNIT_ASSERT_THROW(memory_invalid.get_files(), libdnf5::Error);

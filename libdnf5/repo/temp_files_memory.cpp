@@ -46,7 +46,7 @@ std::vector<std::string> TempFilesMemory::get_files() const {
 
     try {
         auto toml_data = toml::parse(full_memory_path);
-        return toml::get<std::vector<std::string>>(toml_data[FILE_PATHS_TOML_KEY]);
+        return toml::find_or(toml_data, FILE_PATHS_TOML_KEY, std::vector<std::string>{});
     } catch (const toml::exception & e) {
         throw libdnf5::Error(
             M_("An error occurred when parsing the temporary files memory file at '{}': {}"),
