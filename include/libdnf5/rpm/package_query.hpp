@@ -988,6 +988,10 @@ public:
     std::pair<bool, libdnf5::rpm::Nevra> resolve_pkg_spec(
         const std::string & pkg_spec, const libdnf5::ResolveSpecSettings & settings, bool with_src);
 
+    /// Returns `true` if the dependency `reldep` is satisfied by the packages in query, otherwise `false` is returned.
+    /// @since 5.3.0.1
+    bool is_dep_satisfied(const Reldep & reldep);
+
     void swap(PackageQuery & other) noexcept;
 
     /// Filter packages to keep only duplicates of installed packages. Packages are duplicate if they have the same `name` and `arch` but different `evr`.

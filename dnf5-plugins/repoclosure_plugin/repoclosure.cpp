@@ -170,17 +170,11 @@ void RepoclosureCommand::run() {
     for (const auto & pkg : to_check_query) {
         std::vector<std::string> unsatisfied;
         for (const auto & reldep : pkg.get_requires()) {
-            if (libdnf5::rpm::Reldep::is_rich_dependency(reldep.to_string())) {
-                // Rich dependencies are skipped because they are too complicated to provide correct result
-                continue;
-            };
             int reldep_id = reldep.get_id().id;
             auto resolved_it = resolved.find(reldep_id);
             bool satisfied;
             if (resolved_it == resolved.end()) {
-                libdnf5::rpm::PackageQuery reldep_q(available_query);
-                reldep_q.filter_provides(reldep);
-                satisfied = !reldep_q.empty();
+                satisfied = available_query.is_dep_satisfied(reldep);
                 resolved.emplace(reldep_id, satisfied);
             } else {
                 satisfied = resolved_it->second;
