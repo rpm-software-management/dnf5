@@ -58,6 +58,10 @@ OptionBinds::Item::Item(Option & option) : p_impl(new Impl(option)) {}
 
 OptionBinds::Item::~Item() = default;
 
+OptionBinds::Item::Item() = default;
+OptionBinds::Item::Item(const Item & src) = default;
+OptionBinds::Item & OptionBinds::Item::operator=(const Item & src) = default;
+
 Option::Priority OptionBinds::Item::get_priority() const {
     return p_impl->option->get_priority();
 }

@@ -42,6 +42,10 @@ public:
         using NewStringFunc = std::function<void(Option::Priority, const std::string &)>;
         using GetValueStringFunc = std::function<const std::string &()>;
 
+        Item();
+        Item(const Item & src);
+        Item & operator=(const Item & src);
+
         ~Item();
         Option::Priority get_priority() const;
         void new_string(Option::Priority priority, const std::string & value);
