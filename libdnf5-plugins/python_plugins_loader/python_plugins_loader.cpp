@@ -33,7 +33,7 @@ namespace fs = std::filesystem;
 
 namespace {
 
-constexpr const char * PLUGIN_NAME = "python_plugin_loader";
+constexpr const char * PLUGIN_NAME = "python_plugins_loader";
 constexpr plugin::Version PLUGIN_VERSION{0, 1, 0};
 constexpr PluginAPIVersion REQUIRED_PLUGIN_API_VERSION{.major = 2, .minor = 0};
 
