@@ -134,6 +134,11 @@ public:
 
     libdnf5::BaseWeakPtr get_weak_ptr();
 
+    /// @brief Load libdnf5 plugin config, extract name of the plugin and check if it is enabled
+    /// @param config_file_path Path to a plugin config
+    /// @return a tuple with plugin name, parsed config and a bool whether the plugin is enabled
+    std::tuple<std::string, libdnf5::ConfigParser, bool> load_plugin_config(const std::string & config_file_path);
+
 private:
     friend class libdnf5::InternalBaseUser;
     friend class libdnf5::base::Transaction;
