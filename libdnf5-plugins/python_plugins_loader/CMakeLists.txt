@@ -35,3 +35,5 @@ target_link_libraries(python_plugins_loader PRIVATE libdnf5)
 install(TARGETS python_plugins_loader LIBRARY DESTINATION ${CMAKE_INSTALL_FULL_LIBDIR}/libdnf5/plugins/)
 install(FILES "README" DESTINATION ${Python3_SITELIB}/libdnf_plugins/)
 install(FILES "python_plugins_loader.conf" DESTINATION "${CMAKE_INSTALL_FULL_SYSCONFDIR}/dnf/libdnf5-plugins")
+# directory for Python plugin's configs
+install(DIRECTORY DESTINATION "${CMAKE_INSTALL_FULL_SYSCONFDIR}/dnf/libdnf5-plugins/python_plugins_loader.d")
