@@ -144,6 +144,59 @@ void Base::Impl::with_config_file_path(std::function<void(const std::string &)> 
     }
 }
 
+std::tuple<std::string, libdnf5::ConfigParser, bool> Base::load_plugin_config(const std::string & config_file_path) {
+    auto & logger = *get_logger();
+
+    libdnf5::ConfigParser parser;
+    parser.read(config_file_path);
+
+    std::string plugin_name;
+    try {
+        plugin_name = parser.get_value("main", "name");
+    } catch (const ConfigParserError &) {
+        plugin_name = std::filesystem::path(config_file_path).stem();
+        logger.warning(
+            "Missing plugin name in configuration file \"{}\". \"{}\" will be used.", config_file_path, plugin_name);
+    }
+
+    bool is_enabled;
+    bool is_enabled_set{false};
+    for (auto it = p_impl->plugins_enablement.rbegin(); it != p_impl->plugins_enablement.rend(); ++it) {
+        if (sack::match_string(plugin_name, sack::QueryCmp::GLOB, it->first)) {
+            is_enabled = it->second;
+            is_enabled_set = true;
+            break;
+        }
+    }
+    if (!is_enabled_set) {
+        enum class Enabled { NO, YES, HOST_ONLY, INSTALLROOT_ONLY } enabled;
+        const auto & enabled_str = parser.get_value("main", "enabled");
+        if (enabled_str == "host-only") {
+            enabled = Enabled::HOST_ONLY;
+        } else if (enabled_str == "installroot-only") {
+            enabled = Enabled::INSTALLROOT_ONLY;
+        } else {
+            try {
+                enabled = OptionBool(false).from_string(enabled_str) ? Enabled::YES : Enabled::NO;
+            } catch (OptionInvalidValueError & ex) {
+                throw OptionInvalidValueError(M_("Invalid option value: enabled={}"), enabled_str);
+            }
+        }
+        const auto & installroot = get_config().get_installroot_option().get_value();
+        is_enabled = enabled == Enabled::YES || (enabled == Enabled::HOST_ONLY && installroot == "/") ||
+                     (enabled == Enabled::INSTALLROOT_ONLY && installroot != "/");
+    }
+
+    if (!is_enabled) {
+        logger.debug("Skip disabled plugin \"{}\"", config_file_path);
+        // Creates a PluginInfo for the unloaded plugin.
+        auto & plugins_info = InternalBaseUser::get_plugins_info(this);
+        plugins_info.emplace_back(libdnf5::plugin::PluginInfo::Impl::create_plugin_info(plugin_name, nullptr));
+    }
+
+    return {plugin_name, parser, is_enabled};
+}
+
 void Base::load_plugins() {
     // load plugins according to configuration
     if (!p_impl->config.get_plugins_option().get_value()) {
@@ -153,10 +206,9 @@ void Base::load_plugins() {
     const char * plugins_config_dir = std::getenv("LIBDNF_PLUGINS_CONFIG_DIR");
     if (plugins_config_dir &&
         p_impl->config.get_pluginconfpath_option().get_priority() < Option::Priority::COMMANDLINE) {
-        p_impl->plugins.load_plugins(plugins_config_dir, p_impl->plugins_enablement);
+        p_impl->plugins.load_plugins(plugins_config_dir);
     } else {
-        p_impl->plugins.load_plugins(
-            p_impl->config.get_pluginconfpath_option().get_value(), p_impl->plugins_enablement);
+        p_impl->plugins.load_plugins(p_impl->config.get_pluginconfpath_option().get_value());
     }
 }
 
