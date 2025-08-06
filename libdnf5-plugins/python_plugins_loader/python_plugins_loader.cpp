@@ -179,7 +179,7 @@ static void fetch_python_error_to_exception(const char * msg) {
 void PythonPluginLoader::load_plugin_file(const fs::path & file_path) {
     // Very High Level Embedding
     // std::string python_code = "import " + file_path.stem().string() +";";
-    // python_code += "import libdnf;";
+    // python_code += "import libdnf5;";
     // python_code += "plug = " + file_path.stem().string() +".Plugin();";
     // python_code += "locked_base = libdnf5.base.Base.get_locked_base();";
     // python_code += "locked_base.add_plugin(plug)";
@@ -207,17 +207,17 @@ void PythonPluginLoader::load_plugin_file(const fs::path & file_path) {
     if (!plugin_instance) {
         fetch_python_error_to_exception("PyObject_CallObject(plugin_class_constructor, nullptr): ");
     }
-    PyObject * libdnf = PyDict_GetItemString(plugin_module_dict, "libdnf");
-    if (!libdnf) {
-        fetch_python_error_to_exception("PyDict_GetItemString(plugin_module_dict, \"libdnf\"): ");
+    PyObject * libdnf5 = PyDict_GetItemString(plugin_module_dict, "libdnf5");
+    if (!libdnf5) {
+        fetch_python_error_to_exception("PyDict_GetItemString(plugin_module_dict, \"libdnf5\"): ");
     }
-    PyObject * libdnf_dict = PyModule_GetDict(libdnf);
-    if (!libdnf_dict) {
-        fetch_python_error_to_exception("PyModule_GetDict(libdnf): ");
+    PyObject * libdnf5_dict = PyModule_GetDict(libdnf5);
+    if (!libdnf5_dict) {
+        fetch_python_error_to_exception("PyModule_GetDict(libdnf5): ");
     }
-    PyObject * base_module = PyDict_GetItemString(libdnf_dict, "base");
+    PyObject * base_module = PyDict_GetItemString(libdnf5_dict, "base");
     if (!base_module) {
-        fetch_python_error_to_exception("PyDict_GetItemString(plugin_module_dict, \"libdnf\"): ");
+        fetch_python_error_to_exception("PyDict_GetItemString(plugin_module_dict, \"libdnf5\"): ");
     }
     PyObject * base_module_dict = PyModule_GetDict(base_module);
     if (!base_module_dict) {
