@@ -41,7 +41,7 @@ public:
 
 class Plugin {
 public:
-    explicit Plugin(IPlugin & iplugin_instance);
+    Plugin(IPlugin & iplugin_instance, ConfigParser && parser);
     virtual ~Plugin();
 
     Plugin(const Plugin &) = delete;
@@ -131,7 +131,9 @@ private:
 };
 
 
-inline Plugin::Plugin(IPlugin & iplugin_instance) : iplugin_instance{&iplugin_instance} {}
+inline Plugin::Plugin(IPlugin & iplugin_instance, ConfigParser && parser)
+    : iplugin_instance{&iplugin_instance},
+      cfg_parser(std::move(parser)) {}
 
 inline Plugin::~Plugin() {
     finish();
