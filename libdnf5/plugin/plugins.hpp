@@ -88,6 +88,11 @@ public:
     void load_plugin(
         const std::string & config_file_path, const PreserveOrderMap<std::string, bool> & plugin_enablement);
 
+    /// Loads the plugin config file and checks if it is enabled
+    /// Returns plugin name, plugin config and whether the plugin is enabled.
+    std::tuple<std::string, libdnf5::ConfigParser, bool> load_config_and_check_enabled(
+        const std::string & config_file_path, const PreserveOrderMap<std::string, bool> & plugin_enablement);
+
     /// Loads plugins defined by configuration files in the directory.
     void load_plugins(
         const std::string & config_dir_path, const PreserveOrderMap<std::string, bool> & plugin_enablement);
