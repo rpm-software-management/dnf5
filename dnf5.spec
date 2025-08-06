@@ -711,6 +711,7 @@ Libdnf5 plugin that allows loading Python plugins.
 %files -n python3-libdnf5-python-plugins-loader
 %{_libdir}/libdnf5/plugins/python_plugins_loader.*
 %config %{_sysconfdir}/dnf/libdnf5-plugins/python_plugins_loader.conf
+%dir %{_sysconfdir}/dnf/libdnf5-plugins/python_plugins_loader.d
 %dir %{python3_sitelib}/libdnf_plugins/
 %doc %{python3_sitelib}/libdnf_plugins/README
 %endif
