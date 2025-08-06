@@ -207,7 +207,7 @@ void PythonPluginLoader::load_plugin_file(const fs::path & file_path) {
     if (!plugin_instance) {
         fetch_python_error_to_exception("PyObject_CallObject(plugin_class_constructor, nullptr): ");
     }
-    PyObject * libdnf = PyDict_GetItemString(plugin_module_dict, "libdnf");
+    PyObject * libdnf = PyDict_GetItemString(plugin_module_dict, "libdnf5");
     if (!libdnf) {
         fetch_python_error_to_exception("PyDict_GetItemString(plugin_module_dict, \"libdnf\"): ");
     }
