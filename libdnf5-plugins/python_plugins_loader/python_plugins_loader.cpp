@@ -42,7 +42,7 @@ constexpr const char * attrs_value[]{"Jaroslav Rohel", "jrohel@redhat.com", "Plu
 
 class PythonPluginLoader : public plugin::IPlugin {
 public:
-    PythonPluginLoader(libdnf5::plugin::IPluginData & data, libdnf5::ConfigParser &) : IPlugin(data) {}
+    PythonPluginLoader(libdnf5::plugin::IPluginData & data, libdnf5::ConfigParser &) : IPlugin(data), data(data) {}
     virtual ~PythonPluginLoader();
 
     PluginAPIVersion get_api_version() const noexcept override { return REQUIRED_PLUGIN_API_VERSION; }
@@ -70,6 +70,8 @@ private:
 
     static int python_ref_counter;
     bool active{false};
+    // Store the plugin data so we can pass them to each python plugin
+    libdnf5::plugin::IPluginData & data;
 };
 
 int PythonPluginLoader::python_ref_counter{0};
