@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-11 03:49+0000\n"
-"PO-Revision-Date: 2025-07-08 16:06+0000\n"
+"POT-Creation-Date: 2025-07-26 03:48+0000\n"
+"PO-Revision-Date: 2025-07-24 13:01+0000\n"
 "Last-Translator: Remus-Gabriel Chelu <remusgabriel.chelu@disroot.org>\n"
 "Language-Team: Romanian <https://translate.fedoraproject.org/projects/dnf5/"
 "dnf5/ro/>\n"
@@ -440,31 +440,31 @@ msgstr "Tipul următoarelor elemente."
 msgid "Unsupported item type \"{}\""
 msgstr "Tip de element neadmis „{}”"
 
-#: commands/do/do.cpp:98
+#: commands/do/do.cpp:99
 msgid "List of items to take action on"
 msgstr "Lista elementelor asupra cărora trebuie luate măsuri"
 
-#: commands/do/do.cpp:129 commands/do/do.cpp:133
+#: commands/do/do.cpp:131 commands/do/do.cpp:135
 msgid "Only package downgrade is supported."
 msgstr "Este acceptată doar retrogradarea pachetelor."
 
-#: commands/do/do.cpp:140 commands/do/do.cpp:144
+#: commands/do/do.cpp:142 commands/do/do.cpp:146
 msgid "Only package reinstall is supported."
 msgstr "Este acceptată doar reinstalarea pachetelor."
 
-#: commands/do/do.cpp:150
+#: commands/do/do.cpp:152
 msgid "Action was not defined"
 msgstr "Acțiunea nu a fost definită"
 
-#: commands/do/do.cpp:228
+#: commands/do/do.cpp:230
 msgid "Invalid Environmet/Group specification: {}"
 msgstr "Specificație de mediu/grup nevalidă: {}"
 
-#: commands/do/do.cpp:312
+#: commands/do/do.cpp:314
 msgid "Downgrading environments and groups is not supported."
 msgstr "Retrogradarea mediilor și grupurilor nu este acceptată."
 
-#: commands/do/do.cpp:328
+#: commands/do/do.cpp:330
 msgid "Reinstaling environments and groups is not supported."
 msgstr "Reinstalarea mediilor și grupurilor nu este acceptată."
 
@@ -523,13 +523,25 @@ msgstr ""
 "Toate depozitele activate vor fi utilizate în continuare pentru a satisface "
 "dependențele."
 
-#: commands/from_repo.cpp:38
+#: commands/from_repo.cpp:38 commands/from_repo.cpp:70
 msgid "REPO_ID,..."
 msgstr "ID_DEPOZIT,..."
 
-#: commands/from_repo.cpp:47
+#: commands/from_repo.cpp:53
 msgid "\"--from_repo\" already defined with diferent value"
-msgstr "„--from_repo” deja definit cu o valoare diferită"
+msgstr "„--from_repo” deja definită cu o valoare diferită"
+
+#: commands/from_repo.cpp:68
+msgid ""
+"Filters installed packages by the ID of the repository they were installed "
+"from."
+msgstr ""
+"Filtrează pachetele instalate după ID-ul depozitului din care au fost "
+"instalate."
+
+#: commands/from_repo.cpp:79
+msgid "\"--installed-from_repo\" already defined with diferent value"
+msgstr "„--installed-from_repo” deja definită cu o valoare diferită"
 
 #: commands/group/arguments.hpp:34
 msgid "Show only available groups."
@@ -649,29 +661,29 @@ msgstr ""
 "Listează grupurile de pachete instalate care nu sunt solicitate de alte "
 "pachete instalate"
 
-#: commands/list/list.cpp:44
+#: commands/list/list.cpp:46
 msgid "Lists packages depending on the packages' relation to the system"
 msgstr "Listează pachetele în funcție de relația pachetelor cu sistemul"
 
-#: commands/list/list.cpp:48
+#: commands/list/list.cpp:50
 msgid "List of package-spec-NI to match (case insensitively)"
 msgstr ""
 "Lista de N specificații de pachete „package-spec-NI” pentru potrivire (fără "
 "distincție între majuscule și minuscule)"
 
-#: commands/list/list.cpp:60
+#: commands/list/list.cpp:62
 msgid "Show all versions of the packages, not only the latest ones."
 msgstr "Afișează toate versiunile pachetelor, nu doar pe cele mai recente."
 
-#: commands/list/list.cpp:66
+#: commands/list/list.cpp:70
 msgid "List installed packages."
 msgstr "Listează pachetele instalate."
 
-#: commands/list/list.cpp:70
+#: commands/list/list.cpp:74
 msgid "List available packages."
 msgstr "Listează pachetele disponibile."
 
-#: commands/list/list.cpp:77
+#: commands/list/list.cpp:81
 msgid ""
 "List extras, that is packages installed on the system that are not available "
 "in any known repository."
@@ -679,7 +691,7 @@ msgstr ""
 "Listează pachetele suplimentare, adică pachetele instalate în sistem care nu "
 "sunt disponibile în niciun depozit cunoscut."
 
-#: commands/list/list.cpp:85
+#: commands/list/list.cpp:89
 msgid ""
 "List packages installed on the system that are obsoleted by packages in any "
 "known repository."
@@ -687,47 +699,47 @@ msgstr ""
 "Listează pachetele instalate în sistem care au devenit obsolete din cauza "
 "pachetelor din oricare dintre depozitele cunoscute."
 
-#: commands/list/list.cpp:90
+#: commands/list/list.cpp:94
 msgid "List packages recently added into the repositories."
 msgstr "Listează pachetele adăugate recent în depozite."
 
-#: commands/list/list.cpp:94
+#: commands/list/list.cpp:98
 msgid "List upgrades available for the installed packages."
 msgstr "Listează actualizările disponibile pentru pachetele instalate."
 
-#: commands/list/list.cpp:98
+#: commands/list/list.cpp:102
 msgid "List packages which will be removed by the 'dnf autoremove' command."
 msgstr "Listează pachetele care vor fi eliminate de comanda «dnf autoremove»."
 
-#: commands/list/list.cpp:195 commands/list/list.cpp:200
+#: commands/list/list.cpp:203 commands/list/list.cpp:208
 msgid "Installed packages"
 msgstr "Pachete instalate"
 
-#: commands/list/list.cpp:196 commands/list/list.cpp:209
+#: commands/list/list.cpp:204 commands/list/list.cpp:217
 msgid "Available packages"
 msgstr "Pachete disponibile"
 
-#: commands/list/list.cpp:217
+#: commands/list/list.cpp:225
 msgid "Available upgrades"
 msgstr "Actualizări disponibile"
 
-#: commands/list/list.cpp:233
+#: commands/list/list.cpp:241
 msgid "Obsoleting packages"
 msgstr "Pachete devenite obsolete"
 
-#: commands/list/list.cpp:238
+#: commands/list/list.cpp:246
 msgid "Autoremove packages"
 msgstr "Pachete care pot fi eliminate automat"
 
-#: commands/list/list.cpp:242
+#: commands/list/list.cpp:250
 msgid "Extra packages"
 msgstr "Pachete suplimentare"
 
-#: commands/list/list.cpp:253
+#: commands/list/list.cpp:261
 msgid "Recently added packages"
 msgstr "Pachete adăugate recent"
 
-#: commands/list/list.cpp:258
+#: commands/list/list.cpp:266
 msgid "No matching packages to list"
 msgstr "Nu există pachete care să se potrivească de listat"
 
@@ -928,7 +940,7 @@ msgstr "Găsește pachetul care furnizează valoarea dată"
 msgid "Reinstall software"
 msgstr "Reinstalează software-ul"
 
-#: commands/remove/remove.cpp:40
+#: commands/remove/remove.cpp:42
 msgid "Remove (uninstall) software"
 msgstr "Elimină (dezinstalează) software-ul"
 
@@ -956,11 +968,11 @@ msgstr "Model de căutat în ID-uri de depozite."
 msgid "Manage repositories"
 msgstr "Gestionează depozitele"
 
-#: commands/repoquery/repoquery.cpp:80
+#: commands/repoquery/repoquery.cpp:82
 msgid "Search for packages matching various criteria"
 msgstr "Caută pachete care corespund diferitelor criterii"
 
-#: commands/repoquery/repoquery.cpp:517
+#: commands/repoquery/repoquery.cpp:525
 msgid ""
 "Option \"--exactdeps\" has to be used either with \"--whatrequires\" or \"--"
 "whatdepends\""
@@ -968,7 +980,7 @@ msgstr ""
 "Opțiunea „--exactdeps” trebuie să fie utilizată fie cu „--whatrequires”, fie "
 "cu „--whatdepends”"
 
-#: commands/repoquery/repoquery.cpp:522
+#: commands/repoquery/repoquery.cpp:530
 msgid ""
 "Option \"--recursive\" has to be used either with \"--whatrequires\" or \"--"
 "providers-of=requires\""

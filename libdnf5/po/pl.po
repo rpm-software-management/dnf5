@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-11 03:49+0000\n"
+"POT-Creation-Date: 2025-07-26 03:48+0000\n"
 "PO-Revision-Date: 2025-06-01 07:13+0000\n"
 "Last-Translator: Paweł Marciniak <sunwire+fas@gmail.com>\n"
 "Language-Team: Polish <https://translate.fedoraproject.org/projects/dnf5/"
@@ -28,12 +28,12 @@ msgstr ""
 "Zły identyfikator libsolv dla ostrzeżenia „{}”, rozpoznawalna nazwa „{}” nie "
 "zaczyna się od przedrostka ostrzeżenia „{}”"
 
-#: base/goal.cpp:472
+#: base/goal.cpp:482
 msgid "Unsupported argument for REMOVE action: {}"
 msgstr "Nieobsługiwany argument dla akcji USUŃ: {}"
 
 #. TODO(lukash) throw a proper exception
-#: base/goal.cpp:1641
+#: base/goal.cpp:1652
 msgid "Incorrect configuration value for multilib_policy: {}"
 msgstr "Nieprawidłowa wartość konfiguracji dla multilib_policy: {}"
 
@@ -965,11 +965,11 @@ msgstr "„proxy_username” jest ustawione, ale „proxy_password” nie jest"
 msgid "Cannot download the \"{0}\" package, cacheonly option is activated."
 msgstr "Nie można pobrać pakietu „{0}”, opcja cacheonly jest aktywna."
 
-#: repo/package_downloader.cpp:219
+#: repo/package_downloader.cpp:231
 msgid "Already downloaded"
 msgstr "Już pobrano"
 
-#: repo/package_downloader.cpp:267
+#: repo/package_downloader.cpp:279
 msgid "Failed to download packages"
 msgstr "Nie udało się pobrać pakietów"
 

@@ -1,24 +1,26 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# A S Alam <aalam@users.noreply.translate.fedoraproject.org>, 2024, 2025.
+# Ega Natha <ega8642@gmail.com>, 2025.
+# Weblate Translation Memory <noreply-mt-weblate-translation-memory@weblate.org>, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-07-26 03:48+0000\n"
-"PO-Revision-Date: 2025-01-03 15:05+0000\n"
-"Last-Translator: A S Alam <aalam@users.noreply.translate.fedoraproject.org>\n"
-"Language-Team: Punjabi <https://translate.fedoraproject.org/projects/dnf5/"
-"dnf5/pa/>\n"
-"Language: pa\n"
+"PO-Revision-Date: 2025-07-25 03:22+0000\n"
+"Last-Translator: Ega Natha <ega8642@gmail.com>\n"
+"Language-Team: Indonesian <https://translate.fedoraproject.org/projects/dnf5/"
+"dnf5/id/>\n"
+"Language: id\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.9.1\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Weblate 5.12.2\n"
 
 #: cmdline_aliases.cpp:84 context.cpp:301 main.cpp:1357
+#, fuzzy
 msgid ", "
 msgstr ", "
 
@@ -41,6 +43,7 @@ msgstr ""
 #: cmdline_aliases.cpp:208
 msgid "Unsupported version \"{}\" in file \"{}\". Supported versions: {}"
 msgstr ""
+"Versi \"{}\" tak didukung dalam berkas \"{}\". Versi yang didukung: \"{}\""
 
 #: cmdline_aliases.cpp:218
 msgid "Bad value type of attribute \"version\" in file \"{}\" on line {}: {}"
@@ -88,7 +91,7 @@ msgstr ""
 
 #: cmdline_aliases.cpp:387
 msgid "Missing attribute \"header\" for element \"{}\" in file \"{}\""
-msgstr ""
+msgstr "Atribut \"header\" hilang untuk elemen \"{}\" dalam berkas \"{}\""
 
 #: cmdline_aliases.cpp:428 cmdline_aliases.cpp:538
 msgid ""
@@ -164,39 +167,40 @@ msgstr ""
 
 #: commands/advisory/advisory.cpp:36
 msgid "Manage advisories"
-msgstr "ਸਲਾਹਾਂ ਦਾ ਇੰਤਜ਼ਾਮ"
+msgstr "Mengelola Penasihat"
 
 #: commands/advisory/advisory_info.hpp:35
 msgid "Print details about advisories"
-msgstr "ਸਲਾਹਾਂ ਬਾਰੇ ਵੇਰਵੇ ਦਿਓ"
+msgstr "Berikan rincian tentang penasihat"
 
 #: commands/advisory/advisory_list.hpp:35
+#, fuzzy
 msgid "List advisories"
-msgstr "ਸਲਾਹਾਂ ਵੇਖਾਓ"
+msgstr "Daftar penasihat"
 
 #: commands/advisory/advisory_summary.cpp:44
 msgid "All"
-msgstr "ਸਭ"
+msgstr "Semua"
 
 #: commands/advisory/advisory_summary.cpp:48
 msgid "Installed"
-msgstr "ਇੰਸਟਾਲ ਹੋਏ"
+msgstr "Terpasang"
 
 #: commands/advisory/advisory_summary.cpp:52
 msgid "Updates"
-msgstr "ਅੱਪਡੇਟ"
+msgstr "Pembaruan"
 
 #: commands/advisory/advisory_summary.cpp:65
 msgid "Available"
-msgstr "ਮੌਜੂਦ"
+msgstr "Tersedia"
 
 #: commands/advisory/advisory_summary.hpp:33
 msgid "Print summary of advisories"
-msgstr "ਸਲਾਹਾਂ ਦੇ ਸਾਰ ਬਾਰੇ ਜਾਣਕਾਰੀ ਦਿਓ"
+msgstr ""
 
 #: commands/advisory/arguments.hpp:34
 msgid "Show advisories containing any version of installed packages."
-msgstr "ਇੰਸਟਾਲ ਹੋਏ ਪੈਕੇਜਾਂ ਦੇ ਕਿਸੇ ਵੀ ਵਰਜ਼ਨ ਬਾਰੇ ਸਲਾਹਾਂ ਵੇਖਾਓ।"
+msgstr ""
 
 #: commands/advisory/arguments.hpp:45
 msgid ""
@@ -223,7 +227,7 @@ msgstr ""
 
 #: commands/advisory/arguments.hpp:83 commands/history/arguments.hpp:81
 msgid "PACKAGE_NAME,..."
-msgstr "ਪੈਕੇਜ_ਨਾਂ,..."
+msgstr "NAMA_PAKET,..."
 
 #: commands/advisory/arguments.hpp:90
 msgid "List of patterns matched against advisory names."
@@ -231,15 +235,15 @@ msgstr ""
 
 #: commands/advisory/arguments.hpp:100
 msgid "Show only advisories referencing a bugzilla."
-msgstr ""
+msgstr "Hanya tampilkan penasihat yang mereferensikan bugzilla."
 
 #: commands/advisory/arguments.hpp:107
 msgid "Show only advisories referencing a CVE."
-msgstr ""
+msgstr "Hanya tampilkan penasihat yang mereferensikan CVE."
 
 #: commands/advisory_shared.hpp:76
 msgid "No advisory found matching the requested name: \"{}\""
-msgstr ""
+msgstr "Penasihat tidak ditemukan untuk nama yang diminta: \"{}\""
 
 #: commands/advisory_shared.hpp:109
 msgid "No advisory found fixing the Bugzilla ID: \"{}\""
@@ -260,7 +264,7 @@ msgstr ""
 
 #: commands/advisory_shared.hpp:159
 msgid "ADVISORY_NAME,..."
-msgstr ""
+msgstr "NAMA_PENASIHAT,..."
 
 #: commands/advisory_shared.hpp:166
 msgid "Include content contained in security advisories."
@@ -286,7 +290,7 @@ msgstr ""
 
 #: commands/advisory_shared.hpp:200
 msgid "ADVISORY_SEVERITY,..."
-msgstr ""
+msgstr "KEPARAHAN_PENASIHAT,..."
 
 #: commands/advisory_shared.hpp:212
 msgid ""
@@ -296,7 +300,7 @@ msgstr ""
 
 #: commands/advisory_shared.hpp:213
 msgid "BUGZILLA_ID,..."
-msgstr "BUGZILLA_ID,..."
+msgstr "ID_BUGZILLA,..."
 
 #: commands/advisory_shared.hpp:223
 msgid ""
@@ -306,7 +310,7 @@ msgstr ""
 
 #: commands/advisory_shared.hpp:225
 msgid "CVE_ID,..."
-msgstr "CVE_ID,..."
+msgstr "ID_CVE,..."
 
 #: commands/autoremove/autoremove.cpp:38
 msgid "Remove all unneeded packages originally installed as dependencies."
@@ -314,7 +318,7 @@ msgstr ""
 
 #: commands/check-upgrade/check-upgrade.cpp:47
 msgid "Check for available package upgrades"
-msgstr "ਪੈਕੇਜ ਅੱਪਗਰੇਡਾਂ ਦੀ ਮੌਜੂਦਗੀ ਦੀ ਜਾਂਚ ਕਰੋ"
+msgstr "Periksa pembaruan paket yang tersedia"
 
 #: commands/check-upgrade/check-upgrade.cpp:54
 msgid ""
@@ -326,7 +330,7 @@ msgstr ""
 
 #: commands/check/check.cpp:247
 msgid "Check for problems in the packagedb"
-msgstr "packagedb ਵਿੱਚ ਸਮੱਸਿਆਵਾਂ ਦੀ ਜਾਂਚ ਕਰੋ"
+msgstr "Periksa masalah dalam packagedb"
 
 #: commands/check/check.cpp:335
 msgid "Check discovered {} problem(s) in {} package(s)"
@@ -354,34 +358,34 @@ msgstr ""
 
 #: commands/debuginfo-install/debuginfo-install.cpp:45
 msgid "Install debuginfo packages."
-msgstr "debuginfo ਪੈਕੇਜ ਇੰਸਟਾਲ ਕਰੋ।"
+msgstr "Pasang paket debuginfo."
 
 #: commands/distro-sync/distro-sync.cpp:44
 msgid ""
 "Upgrade or downgrade installed software to the latest available versions"
-msgstr "ਇੰਸਟਾਲ ਹੋਏ ਸਾਫਟਵੇਅਰਾਂ ਨੂੰ ਉਹਨਾਂ ਦੇ ਨਵੇਂ ਮੌਜੂਦ ਵਰਜ਼ਨਾਂ ਲਈ ਅੱਪਗਰੇਡ ਜਾਂ ਡਾਊਨਗਰੇਡ ਕਰੋ"
+msgstr ""
+"Tingkatkan atau turunkan perangkat lunak terpasang ke versi terakhir yang "
+"tersedia"
 
 #: commands/do/do.cpp:44
-#, fuzzy
-#| msgid "Running transaction"
 msgid "Do transaction"
-msgstr "ਟਰਾਂਜ਼ੈਕਸ਼ਨ ਚੱਲ ਰਹੀ ਹੈ"
+msgstr "Lakukan transaksi"
 
 #: commands/do/do.cpp:49
 msgid "Action to be done on the following items."
-msgstr ""
+msgstr "Aksi yang akan dilakukan dalam butir berikut."
 
 #: commands/do/do.cpp:63
 msgid "Unsupported action \"{}\""
-msgstr ""
+msgstr "Aksi \"{}\" tidak didukung"
 
 #: commands/do/do.cpp:73
 msgid "Type of the following items."
-msgstr ""
+msgstr "Ketik butir berikut."
 
 #: commands/do/do.cpp:86
 msgid "Unsupported item type \"{}\""
-msgstr ""
+msgstr "Tipe butir \"{}\" tidak didukung"
 
 #: commands/do/do.cpp:99
 msgid "List of items to take action on"
@@ -389,11 +393,11 @@ msgstr ""
 
 #: commands/do/do.cpp:131 commands/do/do.cpp:135
 msgid "Only package downgrade is supported."
-msgstr ""
+msgstr "Hanya penurunan paket yang didukung."
 
 #: commands/do/do.cpp:142 commands/do/do.cpp:146
 msgid "Only package reinstall is supported."
-msgstr ""
+msgstr "Hanya pemasangan ulang paket yang didukung."
 
 #: commands/do/do.cpp:152
 msgid "Action was not defined"
@@ -413,7 +417,7 @@ msgstr ""
 
 #: commands/downgrade/downgrade.cpp:42
 msgid "Downgrade software"
-msgstr "ਸਾਫਟਵੇਅਰ ਡਾਊਨਗਰੇਡ"
+msgstr ""
 
 #: commands/download/download.cpp:106
 msgid "When running with --url, prints URLs from all available mirrors"
@@ -425,7 +429,7 @@ msgstr ""
 
 #: commands/download/download.cpp:149 main.cpp:627
 msgid "Unsupported architecture \"{0}\". Please choose one from {1}"
-msgstr "ਗ਼ੈਰ-ਸਹਾਇਕ \"{0}\" ਢਾਂਚਾ। {1} ਤੋਂ ਇੱਕ ਨੂੰ ਚੁਣੋ।"
+msgstr ""
 
 #. TODO(jrohel): Add support for requiring an argument by another argument in ArgumentParser?
 #: commands/download/download.cpp:186
@@ -439,11 +443,11 @@ msgstr ""
 
 #: commands/environment/arguments.hpp:33
 msgid "Show only available environments."
-msgstr "ਸਿਰਫ਼ ਮੌਜੂਦਾ ਇਨਵਾਇਰਨਮੈਂਟ ਹੀ ਵੇਖਾਓ।"
+msgstr ""
 
 #: commands/environment/arguments.hpp:40
 msgid "Show only installed environments."
-msgstr "ਸਿਰਫ਼ ਇੰਸਟਾਲ ਹੋਏ ਇਨਵਾਇਰਮੈੰਟ ਹੀ ਵੇਖਾਓ।"
+msgstr ""
 
 #: commands/environment/arguments.hpp:47
 msgid "Pattern matching environment IDs."
@@ -460,10 +464,8 @@ msgid ""
 msgstr ""
 
 #: commands/from_repo.cpp:38 commands/from_repo.cpp:70
-#, fuzzy
-#| msgid "CVE_ID,..."
 msgid "REPO_ID,..."
-msgstr "CVE_ID,..."
+msgstr ""
 
 #: commands/from_repo.cpp:53
 msgid "\"--from_repo\" already defined with diferent value"
@@ -481,15 +483,15 @@ msgstr ""
 
 #: commands/group/arguments.hpp:34
 msgid "Show only available groups."
-msgstr "ਸਿਰਫ਼ ਮੌਜੂਦ ਗਰੁੱਪ ਹੀ ਵੇਖਾਓ।"
+msgstr "hanya tampilkan grup yang tersedia."
 
 #: commands/group/arguments.hpp:41
 msgid "Show also hidden groups."
-msgstr "ਲੁਕਵੇਂ ਗਰੁੱਪ ਵੀ ਵੇਖਾਓ।"
+msgstr "tampilkan juga grup tersembunyi."
 
 #: commands/group/arguments.hpp:48
 msgid "Show only installed groups."
-msgstr "ਸਿਰਫ਼ ਇੰਸਟਾਲ ਹੋਏ ਪੈਕੇਜ ਹੀ ਵੇਖਾਓ।"
+msgstr ""
 
 #: commands/group/arguments.hpp:59
 msgid ""
@@ -503,15 +505,15 @@ msgstr ""
 
 #: commands/group/arguments.hpp:76
 msgid "Include optional packages from group."
-msgstr "ਗਰੁੱਪ ਵਿੱਚੋਂ ਚੋਣਵੇਂ ਪੈਕੇਜ ਸਮੇਤ।"
+msgstr ""
 
 #: commands/group/arguments.hpp:83
 msgid "Operate on groups only, no packages are changed."
-msgstr "ਗਰੁੱਪਾਂ ਉੱਤੇ ਹੀ ਚਲਾਓ, ਕੋਈ ਪੈਕੇਜ ਨਹੀਂ ਬਦਲਿਆ ਗਿਆ ਹੈ।"
+msgstr ""
 
 #: commands/history/arguments.hpp:37
 msgid "Transaction ID"
-msgstr "ਟਰਾਂਜ਼ੈਕਸ਼ਨ ID"
+msgstr ""
 
 #: commands/history/arguments.hpp:44
 msgid "Reverse the order of transactions."
@@ -536,7 +538,7 @@ msgstr ""
 
 #: commands/history/history.cpp:41
 msgid "Manage transaction history"
-msgstr "ਟਰਾਂਜ਼ੈਕਸ਼ਨ ਅਤੀਤ ਦਾ ਇੰਤਜ਼ਾਮ"
+msgstr ""
 
 #: commands/history/history_info.cpp:70
 msgid ""
@@ -548,21 +550,21 @@ msgstr ""
 #: commands/history/history_rollback.cpp:58
 #: commands/history/history_store.cpp:65 commands/history/history_undo.cpp:57
 msgid "No matching transaction ID found, exactly one required."
-msgstr "ਕੋਈ ਵੀ ਮਿਲਦਾ ਟਰਾਂਜ਼ੈਕਸ਼ਨ ID ਨਹੀਂ ਲੱਭਿਆ, ਇੱਕ ਹੀ ਚਾਹੀਦਾ ਹੈ।"
+msgstr ""
 
 #: commands/history/history_redo.cpp:58
 #: commands/history/history_rollback.cpp:62
 #: commands/history/history_undo.cpp:61
 msgid "Matched more than one transaction ID, exactly one required."
-msgstr "ਇੱਕ ਤੋਂ ਵੱਧ ਮਿਲਦੇ ਟਰਾਂਜ਼ੈਕਸ਼ਨ ID ਨਹੀਂ ਲੱਭੇ ਹਨ, ਇੱਕ ਹੀ ਚਾਹੀਦਾ ਹੈ।"
+msgstr ""
 
 #: commands/history/history_store.cpp:68
 msgid "Multiple transactions selected for storing, only one allowed."
-msgstr "ਸੰਭਾਲਣ ਲਈ ਕਈ ਟਰਾਂਜ਼ੈਕਸ਼ਨ ਨੂੰ ਚੁਣਿਆ ਗਿਆ ਹੈ, ਪਰ ਇੱਕ ਹੀ ਮਨਜ਼ੂਰੀ ਹੈ।"
+msgstr ""
 
 #: commands/history/history_store.cpp:80
 msgid "File \"{}\" already exists, it will be overwritten.\n"
-msgstr "ਫਾਈਲ \"{}\" ਪਹਿਲਾਂ ਹੀ ਮੌਜੂਦ ਹੈ, ਇਸ ਦੇ ਉੱਤੇ ਲਿਖਿਆ ਜਾਵੇਗਾ।\n"
+msgstr ""
 
 #: commands/history/transaction_id.cpp:32
 msgid ""
@@ -572,7 +574,7 @@ msgstr ""
 
 #: commands/install/install.cpp:43
 msgid "Install software"
-msgstr "ਇੰਸਟਾਲ ਹੋਏ ਸਾਫਟਵੇਅਰ"
+msgstr ""
 
 #: commands/leaves/leaves.cpp:42
 msgid ""
@@ -589,15 +591,15 @@ msgstr ""
 
 #: commands/list/list.cpp:62
 msgid "Show all versions of the packages, not only the latest ones."
-msgstr "ਪੈਕੇਜ ਦੇ ਸਿਰਫ਼ ਨਵੇਂ ਵਰਜ਼ਨਾਂ ਦੀ ਬਜਾਏ ਸਭ ਵਰਜ਼ਨਾਂ ਨੂੰ ਵੇਖਾਓ।"
+msgstr ""
 
 #: commands/list/list.cpp:70
 msgid "List installed packages."
-msgstr "ਇੰਸਟਾਲ ਹੋਏ ਪੈਕੇਜਾਂ ਦੀ ਸੂਚੀ ਹੈ।"
+msgstr ""
 
 #: commands/list/list.cpp:74
 msgid "List available packages."
-msgstr "ਮੌਜੂਦ ਪੈਕੇਜਾਂ ਦੀ ਸੂਚੀ ਹੈ।"
+msgstr ""
 
 #: commands/list/list.cpp:81
 msgid ""
@@ -617,7 +619,7 @@ msgstr ""
 
 #: commands/list/list.cpp:98
 msgid "List upgrades available for the installed packages."
-msgstr "ਇੰਸਟਾਲ ਹੋਏ ਪੈਕੇਜਾਂ ਲਈ ਅੱਪਗਰੇਡਾਂ ਨੂੰ ਵੇਖਾਓ।"
+msgstr ""
 
 #: commands/list/list.cpp:102
 msgid "List packages which will be removed by the 'dnf autoremove' command."
@@ -625,31 +627,31 @@ msgstr ""
 
 #: commands/list/list.cpp:203 commands/list/list.cpp:208
 msgid "Installed packages"
-msgstr "ਇੰਸਟਾਲ ਹੋਏ ਪੈਕੇਜ"
+msgstr ""
 
 #: commands/list/list.cpp:204 commands/list/list.cpp:217
 msgid "Available packages"
-msgstr "ਮੌਜੂਦ ਪੈਕੇਜ"
+msgstr ""
 
 #: commands/list/list.cpp:225
 msgid "Available upgrades"
-msgstr "ਮੌਜੂਦ ਅੱਪਗਰੇਡ"
+msgstr ""
 
 #: commands/list/list.cpp:241
 msgid "Obsoleting packages"
-msgstr "ਬਰਤਰਫ਼ ਕੀਤੇ ਪੈਕੇਜ"
+msgstr ""
 
 #: commands/list/list.cpp:246
 msgid "Autoremove packages"
-msgstr "ਆਟੋ-ਹਟਾਉਣ ਲਈ ਪੈਕੇਜ"
+msgstr ""
 
 #: commands/list/list.cpp:250
 msgid "Extra packages"
-msgstr "ਵਾਧੂ ਪੈਕੇਜ"
+msgstr ""
 
 #: commands/list/list.cpp:261
 msgid "Recently added packages"
-msgstr "ਸੱਜਰੇ ਜੋੜੇ ਗਏ ਪੈਕੇਜ"
+msgstr ""
 
 #: commands/list/list.cpp:266
 msgid "No matching packages to list"
@@ -661,11 +663,11 @@ msgstr ""
 
 #: commands/module/arguments.hpp:36
 msgid "Show enabled modules."
-msgstr "ਸਮਰੱਥ ਕੀਤੇ ਮੋਡੀਊਲ ਵੇਖਾਓ।"
+msgstr ""
 
 #: commands/module/arguments.hpp:43
 msgid "Show disabled modules."
-msgstr "ਅਸਮਰੱਥ ਕੀਤੇ ਮੋਡੀਊਲ ਵੇਖਾਓ।"
+msgstr ""
 
 #: commands/module/arguments.hpp:50
 msgid "Pattern matching module NSVCAs."
@@ -673,15 +675,15 @@ msgstr ""
 
 #: commands/module/module.cpp:43
 msgid "Manage modules"
-msgstr "ਮੋਡੀਊਲਾਂ ਦਾ ਇੰਤਜ਼ਾਮ"
+msgstr ""
 
 #: commands/module/module_list.cpp:85
 msgid "No matches found for \"{}\"."
-msgstr "\"{}\" ਲਈ ਕੋਈ ਮੇਲ ਨਹੀਂ ਲੱਭਿਆ।"
+msgstr ""
 
 #: commands/offline/offline.cpp:217
 msgid "Manage offline transactions"
-msgstr "ਆਫ਼ਲਾਈਨ ਟਰਾਂਜ਼ੈਕਸ਼ਨ ਦਾ ਇੰਤਜ਼ਾਮ"
+msgstr ""
 
 #: commands/offline/offline.cpp:249
 msgid ""
@@ -691,45 +693,43 @@ msgstr ""
 
 #: commands/offline/offline.cpp:272
 msgid "Couldn't connect to D-Bus: {}"
-msgstr "D-Bus ਨਾਲ ਕਨੈਕਟ ਨਹੀਂ ਕੀਤਾ ਜਾ ਸਕਿਆ: {}"
+msgstr ""
 
 #: commands/offline/offline.cpp:303
 msgid ""
 "Prepare the system to perform the offline transaction and reboot to start "
 "the transaction."
-msgstr "ਸਿਸਟਮ ਨੂੰ ਆਫ਼ਲਾਈਨ ਟਰਾਂਜ਼ੈਕਸ਼ਨ ਲਈ ਤਿਆਰ ਕਰੋ ਅਤੇ ਟਰਾਂਜ਼ੈਕਸ਼ਨ ਸ਼ੁਰੂ ਕਰਨ ਲਈ ਮੁੜ-ਚਾਲੂ ਕਰੋ।"
+msgstr ""
 
 #: commands/offline/offline.cpp:310
 msgid "Power off the system after the operation is complete"
-msgstr "ਕਾਰਵਾਈ ਪੂਰੀ ਹੋਣ ਦੇ ਬਾਅਦ ਸਿਸਟਮ ਨੂੰ ਬੰਦ ਕਰੋ"
+msgstr ""
 
 #: commands/offline/offline.cpp:321
 msgid "No offline transaction is stored."
-msgstr "ਕੋਈ ਆਫ਼ਲਾਈਨ ਟਰਾਂਜ਼ੈਕਸ਼ਨ ਸੰਭਾਲੀ ਨਹੀਂ ਹੈ।"
+msgstr ""
 
 #: commands/offline/offline.cpp:329
 msgid "System is not ready for offline transaction."
-msgstr "ਸਿਸਟਮ ਆਫ਼ਲਾਈਨ ਟਰਾਂਜ਼ੈਕਸ਼ਨ ਲਈ ਤਿਆਰ ਨਹੀਂ ਹੈ।"
+msgstr ""
 
 #: commands/offline/offline.cpp:332
 msgid "Data directory {} does not exist."
-msgstr "ਡਾਟਾ ਡਾਇਰੈਕਟਰੀ {} ਮੌਜੂਦ ਨਹੀਂ ਹੈ।"
+msgstr ""
 
 #: commands/offline/offline.cpp:357
 msgid "{} is not wanted by system-update.target."
 msgstr ""
 
 #: commands/offline/offline.cpp:367
-#, fuzzy
-#| msgid "The system will now reboot to upgrade to release version "
 msgid "The system will now reboot to upgrade to release version {}."
-msgstr "ਰੀਲਿਜ਼ ਵਰਜ਼ਨ ਲਈ ਅੱਪਗਰੇਡ ਕਰਨ ਲਈ ਹੁਣ ਸਿਸਟਮ ਹੁਣ ਮੁੜ-ਚਾਲੂ ਹੋਵੇਗਾ। "
+msgstr ""
 
 #: commands/offline/offline.cpp:371
 msgid ""
 "The system will now reboot to perform the offline transaction initiated by "
 "the following command:"
-msgstr "ਸਿਸਟਮ ਹੁਣ ਅੱਗੇ ਦਿੱਤੀ ਕਮਾਂਡ ਵਲੋਂ ਸ਼ੁਰੂ ਕੀਤੀ ਆਫ਼ਲਾਈਨ ਟਰਾਂਜ਼ੈਕਸ਼ਨ ਕਰਨ ਲਈ ਮੁੜ-ਚਾਲੂ ਹੋਵੇਗਾ:"
+msgstr ""
 
 #: commands/offline/offline.cpp:402
 msgid ""
@@ -743,13 +743,11 @@ msgstr ""
 
 #: commands/offline/offline.cpp:440
 msgid "Another offline transaction tool is running. Exiting."
-msgstr "ਹੋਰ ਆਫ਼ਲਾਈਨ ਟਰਾਂਜ਼ੈਕਸ਼ਨ ਟੂਲ ਚੱਲ ਰਿਹਾ ਹੈ। ਬੰਦ ਕੀਤਾ ਜਾ ਰਿਹਾ ਹੈ।"
+msgstr ""
 
 #: commands/offline/offline.cpp:467
-#, fuzzy
-#| msgid "No offline transaction is stored."
 msgid "Starting offline transaction. This will take a while."
-msgstr "ਕੋਈ ਆਫ਼ਲਾਈਨ ਟਰਾਂਜ਼ੈਕਸ਼ਨ ਸੰਭਾਲੀ ਨਹੀਂ ਹੈ।"
+msgstr ""
 
 #: commands/offline/offline.cpp:471
 msgid "Starting system upgrade. This will take a while."
@@ -757,15 +755,15 @@ msgstr ""
 
 #: commands/offline/offline.cpp:483
 msgid "Use `dnf5 offline reboot` to begin the transaction."
-msgstr "ਟਰਾਂਜ਼ੈਕਸ਼ਨ ਸ਼ੁਰੂ ਕਰਨ ਲਈ `dnf5 offline reboot` ਨੂੰ ਵਰਤੋਂ।"
+msgstr ""
 
 #: commands/offline/offline.cpp:534
 msgid "Transaction failed: "
-msgstr "ਟਰਾਂਜ਼ੈਕਸ਼ਨ ਅਸਫ਼ਲ ਹੈ: "
+msgstr ""
 
 #: commands/offline/offline.cpp:604
 msgid "Error reading journal: {}"
-msgstr "ਜਰਨਲ ਪੜ੍ਹਨ ਦੌਰਾਨ ਗਲਤੀ: {}"
+msgstr ""
 
 #: commands/offline/offline.cpp:610
 msgid "Add journal match failed: {}"
@@ -773,7 +771,7 @@ msgstr ""
 
 #: commands/offline/offline.cpp:638
 msgid "No logs were found."
-msgstr "ਕੋਈ ਲਾਗ ਨਹੀਂ ਲੱਭਿਆ।"
+msgstr ""
 
 #: commands/offline/offline.cpp:642
 msgid "The following boots appear to contain offline transaction logs:"
@@ -781,7 +779,7 @@ msgstr ""
 
 #: commands/offline/offline.cpp:659
 msgid "Cannot find logs with this index."
-msgstr "ਇਸ ਇੰਡੈਕਸ ਨਾਲ ਲਾਗ ਨਹੀਂ ਲੱਭੇ ਜਾ ਸਕਦੇ ਹਨ।"
+msgstr ""
 
 #: commands/offline/offline.cpp:666
 msgid "Unable to match systemd journal entry."
@@ -789,7 +787,7 @@ msgstr ""
 
 #: commands/offline/offline.cpp:678
 msgid "Show logs from past offline transactions"
-msgstr "ਪਿਛਲੀਆਂ ਆਫ਼ਲਾਈਨ ਟਰਾਂਜ਼ੈਕਸ਼ਨਾਂ ਤੋਂ ਲਾਗ ਨੂੰ ਵੇਖਾਓ"
+msgstr ""
 
 #: commands/offline/offline.cpp:686
 msgid ""
@@ -804,16 +802,16 @@ msgstr ""
 
 #: commands/offline/offline.cpp:706
 msgid "Show status of the current offline transaction"
-msgstr "ਮੌਜੂਦਾ ਆਫ਼ਲਾਈਨ ਟਰਾਂਜ਼ੈਕਸ਼ਨ ਦੀ ਸਥਿਤੀ ਨੂੰ ਵੇਖਾਓ"
+msgstr ""
 
 #: commands/offline/offline.cpp:722
 msgid "An offline transaction was initiated by the following command:"
-msgstr "ਇੱਕ ਆਫ਼ਲਾਈਨ ਟਰਾਂਜ਼ੈਕਸ਼ਨ ਨੂੰ ਅੱਗੇ ਦਿੱਤੀ ਕਮਾਂਡ ਵਲੋਂ ਸ਼ੁਰੂ ਕੀਤਾ ਗਿਆ ਹੈ:"
+msgstr ""
 
 #: commands/offline/offline.cpp:724
 msgid ""
 "Run `dnf5 offline reboot` to reboot and perform the offline transaction."
-msgstr "ਮੁੜ ਚਾਲੂ ਕਰਨ ਅਤੇ ਆਫ਼ਲਾਈਨ ਟਰਾਂਜ਼ੈਕਸ਼ਨ ਕਰਨ ਲਈ `dnf5 offline reboot` ਨੂੰ ਚਲਾਓ।"
+msgstr ""
 
 #: commands/offline/offline.cpp:726
 msgid ""
@@ -823,7 +821,7 @@ msgstr ""
 
 #: commands/offline/offline.cpp:731
 msgid "Unknown offline transaction status: "
-msgstr "ਅਣਪਛਾਤੀ ਆਫ਼ਲਾਈਨ ਟਰਾਂਜ਼ੈਕਸ਼ਨ ਸਥਿਤੀ: "
+msgstr ""
 
 #: commands/provides/provides.cpp:48
 msgid "Find what package provides the given value"
@@ -831,11 +829,11 @@ msgstr ""
 
 #: commands/reinstall/reinstall.cpp:42
 msgid "Reinstall software"
-msgstr "ਸਾਫਟਵੇਅਰ ਨੂੰ ਮੁੜ-ਇੰਸਟਾਲ ਕਰੋ"
+msgstr ""
 
 #: commands/remove/remove.cpp:42
 msgid "Remove (uninstall) software"
-msgstr "ਸਾਫਟਵੇਅਰ ਨੂੰ ਹਟਾਓ (ਅਣ-ਇੰਸਟਾਲ)"
+msgstr ""
 
 #: commands/replay/replay.cpp:38
 msgid "Replay a transaction that was previously stored to a directory"
@@ -843,15 +841,15 @@ msgstr ""
 
 #: commands/repo/arguments.hpp:35
 msgid "Show all repositories."
-msgstr "ਸਭ ਰਿਪੋਜ਼ਟਰੀਆਂ ਨੂੰ ਵੇਖਾਓ।"
+msgstr ""
 
 #: commands/repo/arguments.hpp:42
 msgid "Show enabled repositories (default)."
-msgstr "ਸਮਰੱਥ ਕੀਤੀਆਂ ਰਿਪੋਜ਼ਟਰੀਆਂ ਨੂੰ ਵੇਖਾਓ (ਮੂਲ)।"
+msgstr ""
 
 #: commands/repo/arguments.hpp:49
 msgid "Show disabled repositories."
-msgstr "ਅਸਮਰੱਥ ਕੀਤੀਆਂ ਰਿਪੋਜ਼ਟਰੀਆਂ ਵੇਖਾਓ।"
+msgstr ""
 
 #: commands/repo/arguments.hpp:56
 msgid "Pattern matching repo IDs."
@@ -859,7 +857,7 @@ msgstr ""
 
 #: commands/repo/repo.cpp:38
 msgid "Manage repositories"
-msgstr "ਰਿਪੋਜ਼ਟਰੀਆਂ ਦੀ ਇੰਤਜ਼ਾਮ ਕਰੋ"
+msgstr ""
 
 #: commands/repoquery/repoquery.cpp:82
 msgid "Search for packages matching various criteria"
@@ -883,23 +881,23 @@ msgstr ""
 
 #: commands/search/arguments.hpp:45
 msgid "Patterns"
-msgstr "ਪੈਟਰਨ"
+msgstr ""
 
 #: commands/search/search.cpp:44
 msgid "Search for software matching all specified strings"
-msgstr "ਦਿੱਤੀਆਂ ਗਈਆਂ ਸਤਰਾਂ ਨਾਲ ਮਿਲਦੇ ਸਾਫਟਵੇਅਰਾਂ ਲਈ ਖੋਜੋ"
+msgstr ""
 
 #: commands/swap/swap.cpp:44
 msgid "Remove software and install another in one transaction"
-msgstr "ਸਾਫਟਵੇਅਰ ਨੂੰ ਹਟਾਓ ਅਤੇ ਹੋਰ ਨੂੰ ਇੱਕ ਟਰਾਂਜ਼ੈਕਸ਼ਨ ਵਿੱਚ ਇੰਟਸਟਾਲ ਕਰੋ"
+msgstr ""
 
 #: commands/system-upgrade/system-upgrade.cpp:56
 msgid "Prepare system for upgrade to a new release"
-msgstr "ਸਿਸਟਮ ਨੂੰ ਨਵੇਂ ਰੀਲਿਜ਼ ਵਾਸਤੇ ਅੱਪਗਰੇਡ ਕਰਨ ਲਈ ਤਿਆਰ ਕਰੋ"
+msgstr ""
 
 #: commands/system-upgrade/system-upgrade.cpp:72
 msgid "Download everything needed to upgrade to a new release"
-msgstr "ਨਵੇਂ ਰੀਲਿਜ਼ ਵਾਸਤੇ ਅੱਪਗਰੇਡ ਕਰਨ ਵਾਸਤੇ ਚਾਹੀਦੀ ਹਰ ਚੀਜ਼ ਨੂੰ ਡਾਊਨਲੋਡ ਕਰੋ"
+msgstr ""
 
 #: commands/system-upgrade/system-upgrade.cpp:80
 msgid ""
@@ -913,15 +911,15 @@ msgstr ""
 
 #: commands/system-upgrade/system-upgrade.cpp:150
 msgid "Store a distro-sync transaction to be performed offline"
-msgstr "ਇੱਕ ਡਿਸਟਰੋ-ਸਿੰਕ ਟਰਾਂਜ਼ੈਕਸ਼ਨ ਨੂੰ ਆਫ਼ਲਾਈਨ ਕਰਨ ਲਈ ਸੰਭਾਲੋ"
+msgstr ""
 
 #: commands/system-upgrade/system-upgrade.cpp:172
 msgid "Store an upgrade transaction to be performed offline"
-msgstr "ਇੱਕ ਅੱਪਗਰੇਡ ਟਰਾਂਜ਼ੈਕਸ਼ਨ ਨੂੰ ਆਫ਼ਲਾਈਨ ਕਰਨ ਲਈ ਸੰਭਾਲੋ"
+msgstr ""
 
 #: commands/upgrade/upgrade.cpp:43
 msgid "Upgrade software"
-msgstr "ਸਾਫਟਵੇਅਰ ਅੱਪਗਰੇਡ"
+msgstr ""
 
 #: commands/upgrade/upgrade.cpp:50
 msgid ""
@@ -951,7 +949,7 @@ msgstr ""
 #: commands/versionlock/versionlock_add.cpp:107
 #: commands/versionlock/versionlock_exclude.cpp:126
 msgid "No package found for \"{}\"."
-msgstr "\"{}\" ਲਈ ਕੋਈ ਪੈਕੇਜ ਨਹੀਂ ਲੱਭਿਆ।"
+msgstr ""
 
 #: commands/versionlock/versionlock_add.cpp:134
 msgid "Adding versionlock on \"{0} = {1}\"."
@@ -959,7 +957,7 @@ msgstr ""
 
 #: commands/versionlock/versionlock_add.cpp:137
 msgid "Package \"{}\" is already locked."
-msgstr "\"{}\" ਪੈਕੇਜ ਪਹਿਲਾਂ ਹੀ ਲਾਕ ਹੈ।"
+msgstr ""
 
 #: commands/versionlock/versionlock_clear.cpp:32
 msgid "Remove all entries from versionlock configuration"
@@ -992,47 +990,37 @@ msgstr ""
 
 #: commands/versionlock/versionlock_exclude.cpp:140
 msgid "Package \"{}\" is already excluded."
-msgstr "\"{}\" ਪੈਕੇਜ ਪਹਿਲਾਂ ਹੀ ਅਲਹਿਦਾ ਕੀਤਾ ਹੈ।"
+msgstr ""
 
 #: context.cpp:73
 msgid "Importing OpenPGP key 0x{}:\n"
-msgstr "OpenPGP ਕੁੰਜੀ 0x{} ਨੂੰ ਇੰਪੋਰਟ ਕੀਤਾ ਜਾ ਰਿਹਾ ਹੈ:\n"
+msgstr ""
 
 #: context.cpp:75 context.cpp:100
 msgid " UserID     : \"{}\"\n"
-msgstr " ਵਰਤੋਂਕਾਰ-ਆਈਡੀ     : \"{}\"\n"
+msgstr ""
 
 #: context.cpp:78
 msgid ""
 " Fingerprint: {}\n"
 " From       : {}\n"
 msgstr ""
-" ਫਿੰਗਰਪਰਿੰਟ: {}\n"
-" ਵਲੋਂ       : {}\n"
 
 #: context.cpp:87
 msgid "The key was successfully imported."
-msgstr "ਕੁੰਜੀ ਨੂੰ ਕਾਮਯਾਬੀ ਨਾਲ ਇੰਪੋਰਟ ਕੀਤਾ ਗਿਆ।"
+msgstr ""
 
 #: context.cpp:96
 msgid "The following OpenPGP key (0x{}) is about to be removed:"
 msgstr ""
 
 #: context.cpp:98
-#, fuzzy
-#| msgid " UserID     : \"{}\"\n"
 msgid " Reason     : {}\n"
-msgstr " ਵਰਤੋਂਕਾਰ-ਆਈਡੀ     : \"{}\"\n"
+msgstr ""
 
 #: context.cpp:102
-#, fuzzy
-#| msgid ""
-#| " Fingerprint: {}\n"
-#| " From       : {}\n"
 msgid " Fingerprint: {}\n"
 msgstr ""
-" ਫਿੰਗਰਪਰਿੰਟ: {}\n"
-" ਵਲੋਂ       : {}\n"
 
 #: context.cpp:104
 msgid "As a result, installing packages signed with this key will fail."
@@ -1052,10 +1040,8 @@ msgid "The system will now proceed with removing the key."
 msgstr ""
 
 #: context.cpp:115
-#, fuzzy
-#| msgid "The key was successfully imported."
 msgid "Key 0x{} was successfully removed."
-msgstr "ਕੁੰਜੀ ਨੂੰ ਕਾਮਯਾਬੀ ਨਾਲ ਇੰਪੋਰਟ ਕੀਤਾ ਗਿਆ।"
+msgstr ""
 
 #: context.cpp:295
 msgid "setopt: \"{}.{}\": {}"
@@ -1069,46 +1055,45 @@ msgstr ""
 
 #: context.cpp:309
 msgid "No matching repositories for {}"
-msgstr "{} ਲਈ ਕੋਈ ਵੀ ਮਿਲਦੀਆਂ ਰਿਪੋਜ਼ਟਰੀਆਂ ਨਹੀਂ ਹਨ"
+msgstr ""
 
 #: context.cpp:355
 msgid "Updating and loading repositories:"
-msgstr "ਰਿਪੋਜ਼ਟਰੀਆਂ ਨੂੰ ਅੱਪਡੇਟ ਤੇ ਲੋਡ ਕੀਤਾ ਜਾ ਰਿਹਾ ਹੈ:"
+msgstr "Memperbarui dan memuat repositori:"
 
 #: context.cpp:365
 msgid "Repositories loaded."
-msgstr "ਰਿਪੋਜ਼ਟਰੀਆਂ ਨੂੰ ਲੋਡ ਕੀਤਾ।"
+msgstr "Repositori termuat."
 
 #: context.cpp:371
 msgid "Testing offline transaction"
-msgstr "ਆਫ਼ਲਾਈਨ ਟਰਾਂਜ਼ੈਕਸ਼ਨ ਨੂੰ ਟੈਸਟ ਕੀਤਾ ਜਾ ਰਿਹਾ ਹੈ"
+msgstr ""
 
 #: context.cpp:375 context.cpp:523
 msgid "Transaction failed: {}"
-msgstr "ਟਰਾਂਜ਼ੈਕਸ਼ਨ ਫੇਲ੍ਹ ਹੈ: {}"
+msgstr ""
 
 #: context.cpp:380 context.cpp:528
 msgid "  - {}"
-msgstr "  - {}"
+msgstr ""
 
 #: context.cpp:447
 msgid ""
 "Location \"{}\" already contains a stored transaction, it will be "
 "overwritten."
-msgstr "\"{}\" ਟਿਕਾਣੇ ਵਿੱਚ ਪਹਿਲਾਂ ਹੀ ਸੰਭਾਲੀ ਹੋਈ ਟਰਾਂਜ਼ੈਕਸ਼ਨ ਹੈ, ਜਿਸ ਉੱਤੇ ਲਿਖਿਆ ਜਾਵੇਗਾ।"
+msgstr ""
 
 #: context.cpp:476
 msgid ""
 "There is already an offline transaction queued, initiated by the following "
 "command:"
-msgstr "ਅੱਗੇ ਦਿੱਤੀ ਕਮਾਂਡ ਵਲੋਂ ਸ਼ੁਰੂ ਕੀਤੀ ਗਈ ਆਫ਼ਲਾਈਨ ਟਰਾਂਜ਼ੈਕਸ਼ਨ ਪਹਿਲਾਂ ਹੀ ਲਾਈਨ ਵਿੱਚ ਹੈ:"
+msgstr ""
 
 #: context.cpp:478
 msgid ""
 "Continuing will cancel the old offline transaction and replace it with this "
 "one."
 msgstr ""
-"ਜਾਰੀ ਰੱਖਣ ਨਾਲ ਪੁਰਾਣੀ ਆਫ਼ਲਾਈਨ ਟਰਾਂਜ਼ੈਕਸ਼ਨ ਨੂੰ ਰੱਦ ਕੀਤਾ ਜਾਵੇਗਾ ਅਤੇ ਇਸ ਨਾਲ ਬਦਲਿਆ ਜਾਵੇਗਾ।"
 
 #: context.cpp:496
 msgid ""
@@ -1116,71 +1101,66 @@ msgid ""
 "reboot and run the transaction. To cancel the transaction and delete the "
 "downloaded files, use `dnf5 offline clean`."
 msgstr ""
-"ਟਰਾਂਜ਼ੈਕਸ਼ਨ ਨੂੰ ਆਫ਼ਲਾਈਨ ਕਰਨ ਲਈ ਸੰਭਾਲਿਆ ਗਿਆ ਸੀ। ਮੁੜ-ਚਾਲੂ ਕਰਕੇ ਟਰਾਂਜ਼ੈਕਸ਼ਨ ਕਰਨ ਲਈ `dnf5 "
-"offline reboot` ਨੂੰ ਚਲਾਓ। ਟਰਾਂਜ਼ੈਕਸ਼ਨ ਨੂੰ ਰੱਦ ਕਰਨ ਅਤੇ ਡਾਊਨਲੋਡ ਕੀਤੀਆਂ ਫ਼ਾਈਲਾਂ ਨੂੰ ਹਟਾਉਣ ਵਾਸਤੇ "
-"`dnf5 offline clean` ਨੂੰ ਵਰਤੋਂ।"
 
 #: context.cpp:502
 msgid "Running transaction"
-msgstr "ਟਰਾਂਜ਼ੈਕਸ਼ਨ ਚੱਲ ਰਹੀ ਹੈ"
+msgstr "Transkasi berjalan"
 
 #: context.cpp:820
 msgid "Upgrading {}"
-msgstr "{} ਨੂੰ ਅੱਪਗਰੇਡ ਕੀਤਾ ਜਾ ਰਿਹਾ ਹੈ"
+msgstr "Memperbarui {}"
 
 #: context.cpp:823
 msgid "Downgrading {}"
-msgstr "{} ਨੂੰ ਡਾਊਨਗਰੇਡ ਕੀਤਾ ਜਾ ਰਿਹਾ ਹੈ"
+msgstr "Menurunkan {}"
 
 #: context.cpp:826
 msgid "Reinstalling {}"
-msgstr "{} ਨੂੰ ਮੁੜ-ਇੰਸਟਾਲ ਕੀਤਾ ਜਾ ਰਿਹਾ ਹੈ"
+msgstr "Memasang ulang {}"
 
 #: context.cpp:839
 msgid "Unexpected action in TransactionPackage: {}"
-msgstr ""
+msgstr "Aksi tak terduga dalam TransactionPackage: {}"
 
 #: context.cpp:845
 msgid "Installing {}"
-msgstr "{} ਨੂੰ ਇੰਸਟਾਲ ਕੀਤਾ ਜਾ ਰਿਹਾ ਹੈ"
+msgstr "Memasang {}"
 
 #: context.cpp:866
 msgid "Prepare transaction"
-msgstr "ਟਰਾਂਜ਼ੈਕਸ਼ਨ ਨੂੰ ਤਿਆਰ ਕੀਤਾ ਜਾ ਰਿਹਾ ਹੈ"
+msgstr "Mempersiapkan transaksi"
 
 #: context.cpp:886
 msgid "Removing {}"
-msgstr "{} ਨੂੰ ਹਟਾਇਆ ਜਾ ਰਿਹਾ ਹੈ"
+msgstr "Menghapus {}"
 
 #: context.cpp:889
 msgid "Cleanup {}"
-msgstr "{} ਦੀ ਸਫ਼ਾਈ"
+msgstr "Membersihkan {}"
 
 #: context.cpp:907
 msgid "Unpack error: {}"
-msgstr "ਅਣ-ਪੈਕ ਗਲਤੀ: {}"
+msgstr ""
 
 #: context.cpp:915
 msgid "Cpio error: {}"
-msgstr "Cpio ਗ਼ਲਤੀ: {}"
+msgstr ""
 
 #: context.cpp:925
 msgid "Scriptlet output:"
-msgstr "ਸਕ੍ਰਿਪਟਲਿਟ ਆਉਟਪੁੱਟ:"
+msgstr ""
 
 #: context.cpp:948
-#, fuzzy
-#| msgid "Running {} scriptlet: {}"
 msgid "Running scriptlets"
-msgstr "ਸਕ੍ਰਿਪਟਲਿਟ {} ਚੱਲ ਰਿਹਾ ਹੈ: {}"
+msgstr ""
 
 #: context.cpp:953
 msgid "Running {} scriptlet: {}"
-msgstr "ਸਕ੍ਰਿਪਟਲਿਟ {} ਚੱਲ ਰਿਹਾ ਹੈ: {}"
+msgstr ""
 
 #: context.cpp:968
 msgid "Finished {} scriptlet: {}"
-msgstr "ਸਕ੍ਰਿਪਟਲਿਟ {} ਮੁਕੰਮਲ ਹੋਇਆ: {}"
+msgstr ""
 
 #: context.cpp:974
 msgid "Non-critical error in {} scriptlet: {}"
@@ -1192,11 +1172,11 @@ msgstr ""
 
 #: context.cpp:1018
 msgid "Verify package files"
-msgstr "ਪੈਕੇਜ ਫਾਇਲਾਂ ਦੀ ਜਾਂਚ"
+msgstr "Verifikasi berkas paket"
 
 #: library.cpp:33
 msgid "Cannot load shared library \"{}\": {}"
-msgstr "\"{}\" ਸ਼ੇਅਰਡ ਲਾਇਬਰੇਰੀ ਨੂੰ ਲੋਡ ਨਹੀਂ ਕੀਤਾ ਜਾ ਸਕਦਾ: {}"
+msgstr ""
 
 #: library.cpp:47
 msgid "Cannot obtain address of symbol \"{}\": {}"
@@ -1204,11 +1184,11 @@ msgstr ""
 
 #: main.cpp:133
 msgid "Utility for packages maintaining"
-msgstr "ਪੈਕੇਜ ਦੇ ਇੰਤਜ਼ਾਮ ਲਈ ਸਹੂਲਤ"
+msgstr ""
 
 #: main.cpp:134
 msgid "DNF5 is a program for maintaining packages."
-msgstr "DNF5 ਪੈਕੇਜਾਂ ਦਾ ਇੰਤਜ਼ਾਮ ਕਰਨ ਵਾਲਾ ਪ੍ਰੋਗਰਾਮ ਹੈ।"
+msgstr ""
 
 #: main.cpp:135
 msgid "Unclassified options:"
@@ -1216,15 +1196,15 @@ msgstr ""
 
 #: main.cpp:138
 msgid "Global options:"
-msgstr "ਗਲੋਬਲ ਚੋਣਾਂ:"
+msgstr "Opsi global:"
 
 #: main.cpp:143
 msgid "Print help"
-msgstr "ਮਦਦ ਵੇਖਾਓ"
+msgstr "Tampilkan bantuan"
 
 #: main.cpp:150
 msgid "Configuration file location"
-msgstr "ਫਾਇਲ ਟਿਕਾਣੇ ਦੀ ਸੰਰਚਨਾ"
+msgstr ""
 
 #: main.cpp:158
 msgid ""
@@ -1238,8 +1218,6 @@ msgid ""
 "Run entirely from system cache, don't update the cache and use it even in "
 "case it is expired."
 msgstr ""
-"ਪੂਰੀ ਤਰ੍ਹਾਂ ਸਿਸਟਮ ਕੈਸ਼ ਤੋਂ ਹੀ ਚਲਾਓ, ਕੈਸ਼ ਨੂੰ ਅੱਪਡੇਟ ਨਾ ਕਰੋ ਅਤੇ ਭਾਵੇਂ ਇਸ ਦੀ ਮਿਆਦ ਪੁੱਗ ਹੀ ਗਈ ਹੋਵੇ "
-"ਤਾਂ ਵੀ ਇਸ ਨੂੰ ਹੀ ਵਰਤੋਂ।"
 
 #: main.cpp:182
 msgid "Control whether color is used."
@@ -1247,7 +1225,7 @@ msgstr ""
 
 #: main.cpp:188
 msgid "Force refreshing metadata before running the command."
-msgstr "ਕਮਾਂਡ ਚਲਾਉਣ ਤੋਂ ਪਹਿਲਾਂ ਮੇਟਾ-ਡਾਟਾ ਨੂੰ ਤਾਜ਼ਾ ਕਰਨ ਲਈ ਮਜ਼ਬੂਰ ਕਰੋ।"
+msgstr ""
 
 #: main.cpp:204
 msgid "Failed to expire repository cache in path \"{0}\": {1}"
@@ -1299,15 +1277,15 @@ msgstr ""
 
 #: main.cpp:304
 msgid "automatically answer yes for all questions"
-msgstr "ਸਾਰੇ ਸਵਾਲਾਂ ਲਈ ਆਪਣੇ-ਆਪ ਜਵਾਬ ਹਾਂ (yes) ਵਿੱਚ ਦਿਓ"
+msgstr ""
 
 #: main.cpp:311
 msgid "automatically answer no for all questions"
-msgstr "ਸਾਰੇ ਸਵਾਲਾਂ ਲਈ ਆਪਣੇ-ਆਪ ਜਵਾਬ ਨਹੀਂ (no) ਵਿੱਚ ਦਿਓ"
+msgstr ""
 
 #: main.cpp:318
 msgid "try the best available package versions in transactions"
-msgstr "ਟਰਾਂਜ਼ੈਕਸ਼ਨਾਂ ਵਿੱਚ ਸਭ ਤੋਂ ਵਧੀਆ ਮੌਜੂਦ ਪੈਕੇਜ ਵਰਜ਼ਨ ਨਾਲ ਕੋਸ਼ਿਸ਼ ਕਰੋ"
+msgstr ""
 
 #: main.cpp:325
 msgid "do not limit the transaction to the best candidate"
@@ -1347,7 +1325,7 @@ msgstr ""
 
 #: main.cpp:446
 msgid "Disable all libdnf5 plugins"
-msgstr "ਸਭ libdnf5 ਪਲੱਗਇਨਾਂ ਨੂੰ ਅਸਮਰੱਥ ਕਰੋ"
+msgstr ""
 
 #: main.cpp:456
 msgid ""
@@ -1363,19 +1341,17 @@ msgstr ""
 
 #: main.cpp:488
 msgid "add a comment to transaction"
-msgstr "ਟਰਾਂਜ਼ੈਕਸ਼ਨ ਵਿੱਚ ਟਿੱਪਣੀ ਜੋੜੋ"
+msgstr ""
 
 #: main.cpp:490
 msgid ""
 "Adds a comment to the action. If a transaction takes place, the comment is "
 "stored in it."
 msgstr ""
-"ਕਾਰਵਾਈ ਵਿੱਚ ਟਿੱਪਣੀ ਨੂੰ ਜੋੜਦਾ ਹੈ। ਜੇ ਟਰਾਂਜ਼ੈਕਸ਼ਨ ਕੀਤੀ ਜਾਂਦੀ ਹੈ ਤਾਂ ਟਿੱਪਣੀ ਨੂੰ ਇਸ ਵਿੱਚ ਸੰਭਾਲਿਆ "
-"ਜਾਂਦਾ ਹੈ।"
 
 #: main.cpp:503
 msgid "set install root"
-msgstr "ਇੰਸਟਾਲ root ਸੈਟ ਕਰੋ"
+msgstr ""
 
 #: main.cpp:510
 msgid ""
@@ -1412,39 +1388,39 @@ msgstr ""
 
 #: main.cpp:601
 msgid "Show DNF5 version and exit"
-msgstr "DNF5 ਵਰਜ਼ਨ ਦੇਖਾਓ ਅਤੇ ਬੰਦ ਕਰੋ"
+msgstr ""
 
 #: main.cpp:608
 msgid "Force the use of a different architecture."
-msgstr "ਵੱਖਰਾ ਢਾਂਚਾ ਵਰਤਣ ਲਈ ਮਜ਼ਬੂਰ ਕਰੋ।"
+msgstr ""
 
 #: main.cpp:646
 msgid "Software Management Commands:"
-msgstr "ਸਾਫਟਵੇਅਰ ਇੰਤਜ਼ਾਮ ਕਮਾਡਾਂ:"
+msgstr "Perintah Manajemen Perangkat lunak:"
 
 #: main.cpp:653
 msgid "Query Commands:"
-msgstr "ਕਿਊਰੀ ਕਮਾਂਡ:"
+msgstr "Perintah Kueri:"
 
 #: main.cpp:660
 msgid "Subcommands:"
-msgstr "ਸਬ-ਕਮਾਂਡ:"
+msgstr "Subperintah:"
 
 #: main.cpp:759
 msgid "{} version {}.{}.{}.{}"
-msgstr "{} ਵਰਜ਼ਨ {}.{}.{}.{}"
+msgstr "{} versi {}.{}.{}.{}"
 
 #: main.cpp:762
 msgid "{} plugin API version {}.{}"
-msgstr "{} ਪਲੱਗਇਨ API ਵਰਜ਼ਨ {}.{}"
+msgstr "Versi API pengaya {} {}.{}"
 
 #: main.cpp:767
 msgid "libdnf5 version {}.{}.{}.{}"
-msgstr "libdnf5 ਵਰਜ਼ਨ {}.{}.{}.{}"
+msgstr "Versi libdnf5 {}.{}.{}.{}"
 
 #: main.cpp:770
 msgid "libdnf5 plugin API version {}.{}"
-msgstr "libdnf5 ਪਲੱਗਇਨ API ਵਰਜ਼ਨ {}.{}"
+msgstr "Versi API pengaya libdnf5 {}.{}"
 
 #: main.cpp:777
 msgid ""
@@ -1452,45 +1428,46 @@ msgid ""
 "Loaded {} plugins:"
 msgstr ""
 "\n"
-"ਲੋਡ ਕੀਤੀਆਂ {} ਪਲੱਗਇਨ:"
+"Pengaya {} termuat:"
 
 #: main.cpp:782
 msgid "  name: {}"
-msgstr "  ਨਾਂ: {}"
+msgstr "  nama: {}"
 
 #: main.cpp:785
 msgid "  version: {}.{}.{}"
-msgstr "  ਵਰਜ਼ਨ: {}.{}.{}"
+msgstr "  versi: {}.{}.{}"
 
 #: main.cpp:787
 msgid "  API version: {}.{}"
-msgstr "  API ਵਰਜ਼ਨ: {}.{}"
+msgstr "  versi API: {}.{}"
 
 #: main.cpp:825
 msgid ""
 "Total size of inbound packages is {:.0f} {:s}. Need to download {:.0f} {:s}."
 msgstr ""
-"ਲਿਆਂਦੇ ਜਾਣ ਵਾਲੇ ਪੈਕੇਜਾਂ ਦਾ ਕੁੱਲ ਆਕਾਰ {:.0f} {:s} ਹੈ। {:.0f} {:s} ਨੂੰ ਡਾਊਨਲੋਡ ਕਰਨ ਦੀ ਲੋੜ ਹੈ।"
+"Total ukuran paket yang diterima adalah {:.0f} {:s}. Perlu mengunduh {:.0f} "
+"{:s}."
 
 #: main.cpp:842
 msgid ""
 "After this operation, {:.0f} {:s} extra will be used (install {:.0f} {:s}, "
 "remove {:.0f} {:s})."
 msgstr ""
-"ਇਸ ਕਾਰਵਾਈ ਦੇ ਬਾਅਦ, {:.0f} {:s} ਹੋਰ ਥਾਂ ਨੂੰ ਵਰਤਿਆ ਜਾਵੇਗਾ (ਇੰਸਟਾਲ ਕਰਨਾ {:.0f} {:s}, "
-"ਹਟਾਉਣਾ {:.0f} {:s})।"
+"Setelah operasi ini, akan ada penambahan sebanyak {:.0f} {:s} (pasang {:.0f} "
+"{:s}, hapus {:.0f} {:s})."
 
 #: main.cpp:853
 msgid ""
 "After this operation, {:.0f} {:s} will be freed (install {:.0f} {:s}, remove "
 "{:.0f} {:s})."
 msgstr ""
-"ਕਾਰਵਾਈ ਦੇ ਬਾਅਦ, {:.0f} {:s} ਥਾਂ ਖਾਲੀ ਕੀਤੀ ਜਾਵੇਗੀ (ਇੰਸਟਾਲ ਕਰਨਾ {:.0f} {:s}, "
-"ਹਟਾਉਣਾ {:.0f} {:s})।"
+"Setelah operasi ini, akan ada pengurangan sebanyak {:.0f} {:s} (pasang "
+"{:.0f} {:s}, hapus {:.0f} {:s})."
 
 #: main.cpp:865
 msgid "======== Main configuration: ========"
-msgstr "======== ਮੁੱਖ ਸੰਰਚਨਾ: ========"
+msgstr ""
 
 #: main.cpp:902
 msgid "No matching repo to dump configuration: \"{}\""
@@ -1498,11 +1475,11 @@ msgstr ""
 
 #: main.cpp:907
 msgid "======== \"{}\" repository configuration: ========"
-msgstr "======== \"{}\" ਰਿਪੋਰਜ਼ਟਰੀ ਦੀ ਸੰਰਚਨਾ: ========"
+msgstr ""
 
 #: main.cpp:927
 msgid "======== Variables: ========"
-msgstr "======== ਵੇਰੀਬਲ: ========"
+msgstr ""
 
 #: main.cpp:967
 msgid "New leaves:"
@@ -1510,15 +1487,15 @@ msgstr ""
 
 #: main.cpp:969
 msgid " {}"
-msgstr " {}"
+msgstr ""
 
 #: main.cpp:1013
 msgid "{} to skip unavailable packages"
-msgstr "{} ਨੂੰ ਗ਼ੈਰ-ਮੌਜੂਦ ਪੈਕੇਜਾਂ ਨੂੰ ਛੱਡਣ ਦਿਓ"
+msgstr "{} untuk melewati paket yang tidak tersedia"
 
 #: main.cpp:1021
 msgid "{} to allow extra packages in the transaction"
-msgstr "{} ਨੂੰ ਟਰਾਂਜ਼ੈਕਸ਼ਨ ਵਿੱਚ ਹੋਰ ਵਾਧੂ ਪੈਕੇਜਾਂ ਲਈ ਮਨਜ਼ੂਰੀ ਦਿਓ"
+msgstr "{} untuk mengizinkan menambahkan paket tambahan dalam transaksi"
 
 #: main.cpp:1034
 msgid ""
@@ -1526,26 +1503,31 @@ msgid ""
 "This can result in an empty transaction because among other things the "
 "option can ignore failing Remove actions."
 msgstr ""
+"{} untuk mengizinkan ketaksepadanan dalam transaksi paket terpasang dan "
+"tersimpan. Ini dapat mengakibatkan transaksi kosong karena antara hal lain "
+"opsi ini dapat mengabaikan aksi Hapus yang gagal."
 
 #: main.cpp:1081
 msgid "{} to not limit the transaction to the best candidates"
-msgstr ""
+msgstr "{} untuk tidak membatasi transaksi ke kandidat terbaik"
 
 #: main.cpp:1088
 msgid "{} to allow removing of installed packages to resolve problems"
-msgstr "ਸਮੱਸਿਆਵਾਂ ਨੂੰ ਹੱਲ਼ ਕਰਨ ਵਾਸਤੇ {} ਨੂੰ ਇੰਸਟਾਲ ਹੋਏ ਪੈਕੇਜਾਂ ਨੂੰ ਹਟਾਉਣ ਦੀ ਮਨਜ਼ੂਰੀ ਦਿਓ"
+msgstr ""
+"{} untuk mengizinkan menghapus paket yang terpasang untuk mengatasi masalah"
 
 #: main.cpp:1097
+#, fuzzy
 msgid "{} to load additional filelists metadata"
-msgstr ""
+msgstr "{} untuk memuat metadata filelists"
 
 #: main.cpp:1104
 msgid "{} to skip uninstallable packages"
-msgstr ""
+msgstr "{} untuk melewati paket yang dapat di pasang"
 
 #: main.cpp:1110
 msgid "You can try to add to command line:"
-msgstr "ਤੁਸੀਂ ਕਮਾਂਡ ਲਾਈਨ ਉੱਤੇ ਜੋੜਨ ਦੀ ਕੋਸ਼ਿਸ਼ ਕਰ ਸਕਦੇ ਹੋ:"
+msgstr ""
 
 #: main.cpp:1128
 msgid ""
@@ -1569,7 +1551,7 @@ msgstr ""
 
 #: main.cpp:1301
 msgid "{}."
-msgstr "{}."
+msgstr ""
 
 #: main.cpp:1304 main.cpp:1556
 msgid "{}. Add \"--help\" for more information about the arguments."
@@ -1597,14 +1579,17 @@ msgid ""
 "user with elevated rights, or use the \"--assumeno\" or \"--downloadonly\" "
 "options to run the command without modifying the system state."
 msgstr ""
+"Operasi yang diminta memerlukan izin superuser. Mohon log masuk sebagai "
+"pengguna dengan hak tinggi, atau gunakan opsi \"--assumeno\" atau \"--"
+"downloadonly\" untuk menjalankan perintah tanpa mengubah keadaan sistem."
 
 #: main.cpp:1512
 msgid "The operation will only store the transaction in {}"
-msgstr "ਕਾਰਵਾਈ {} ਵਿੱਚ ਸਿਰਫ਼ ਟਰਾਂਜ਼ੈਕਸ਼ਨ ਨੂੰ ਸੰਭਾਲੇਗੀ"
+msgstr "Operasi ini hanya akan menyimpan transaksi dalam {}"
 
 #: main.cpp:1514
 msgid "The operation will only download packages for the transaction."
-msgstr "ਕਾਰਵਾਈ ਟਰਾਂਜ਼ੈਕਸ਼ਨ ਲਈ ਸਿਰਫ਼ ਪੈਕੇਜਾਂ ਨੂੰ ਡਾਊਨਲੋਡ ਹੀ ਕਰੇਗੀ।"
+msgstr "Operasi ini hanya akan mengunduh paket untuk transaksi."
 
 #: main.cpp:1519
 msgid ""
@@ -1626,33 +1611,24 @@ msgstr ""
 
 #: main.cpp:1566
 msgid "Command returned error: {}"
-msgstr "ਕਮਾਂਡ ਨੇ ਗ਼ਲਤੀ ਵਾਪਸ ਕੀਤੀ: {}"
+msgstr "Perintah mengembalikan galat: {}"
 
 #: main.cpp:1574
 msgid "DNF5 finished"
-msgstr "DNF5 ਮੁਕੰਮਲ"
+msgstr "DNF5 selesai"
 
 #: main.cpp:1578
 msgid "Complete!"
-msgstr "ਮੁਕੰਮਲ!"
+msgstr "Selesai!"
 
 #: shared_options.cpp:32
 msgid "Allow removing of installed packages to resolve problems"
-msgstr "ਸਮੱਸਿਆਵਾਂ ਨੂੰ ਹੱਲ਼ ਕਰਨ ਵਾਸਤੇ ਇੰਸਟਾਲ ਹੋਏ ਪੈਕੇਜਾਂ ਨੂੰ ਹਟਾਉਣ ਦੀ ਮਨਜ਼ੂਰੀ ਦਿਓ"
+msgstr "Mengizinkan menghapus paket yang terpasang untuk mengatasi masalah"
 
 #: shared_options.cpp:42
 msgid "Allow resolving of depsolve problems by skipping packages"
-msgstr "ਨਿਰਭਰਤਾ ਸਮੱਸਿਆਵਾਂ ਨੂੰ ਹੱਲ ਕਰਨ ਲਈ ਪੈਕੇਜ ਛੱਡਣ ਦੀ ਮਨਜ਼ੂਰੀ ਦਿਓ"
+msgstr "Mengizinkan mengatasi masalah depsolve dengan melewati paket"
 
 #: shared_options.cpp:54
 msgid "Allow skipping unavailable packages"
-msgstr "ਨਾ-ਮੌਜੂਦ ਪੈਕੇਜਾਂ ਨੂੰ ਛੱਡਣ ਦੀ ਮਨਜ਼ੂਰੀ ਦਿਓ"
-
-#, fuzzy
-#~| msgid ""
-#~| " Fingerprint: {}\n"
-#~| " From       : {}\n"
-#~ msgid " From       : {}\n"
-#~ msgstr ""
-#~ " ਫਿੰਗਰਪਰਿੰਟ: {}\n"
-#~ " ਵਲੋਂ       : {}\n"
+msgstr "Mengizinkan melewati paket yang tidak tersedia"

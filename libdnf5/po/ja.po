@@ -4,13 +4,14 @@
 # Gnuey56 <gnuey56@proton.me>, 2024.
 # Weblate Translation Memory <noreply-mt-weblate-translation-memory@weblate.org>, 2024.
 # Inci sakura <incisakura@icloud.com>, 2024, 2025.
+# Takuya Wakazono <pastalian46@gmail.com>, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-11 03:49+0000\n"
-"PO-Revision-Date: 2025-01-25 03:44+0000\n"
-"Last-Translator: Inci sakura <incisakura@icloud.com>\n"
+"POT-Creation-Date: 2025-07-26 03:48+0000\n"
+"PO-Revision-Date: 2025-07-25 17:09+0000\n"
+"Last-Translator: Takuya Wakazono <pastalian46@gmail.com>\n"
 "Language-Team: Japanese <https://translate.fedoraproject.org/projects/dnf5/"
 "libdnf5/ja/>\n"
 "Language: ja\n"
@@ -18,7 +19,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.9.2\n"
+"X-Generator: Weblate 5.12.2\n"
 
 #: advisory/advisory.cpp:81
 msgid ""
@@ -28,12 +29,12 @@ msgstr ""
 "勧告 \"{}\" の libsolv ID が不正です。解決名 \"{}\" は勧告のプレフィックス "
 "\"{}\" を持っていません"
 
-#: base/goal.cpp:472
+#: base/goal.cpp:482
 msgid "Unsupported argument for REMOVE action: {}"
 msgstr "REMOVE アクションで対応していない引数: {}"
 
 #. TODO(lukash) throw a proper exception
-#: base/goal.cpp:1641
+#: base/goal.cpp:1652
 msgid "Incorrect configuration value for multilib_policy: {}"
 msgstr "multilib_policy の設定値が正しくありません: {}"
 
@@ -179,7 +180,7 @@ msgstr ""
 
 #: base/log_event.cpp:160
 msgid "No match for argument: {}"
-msgstr ""
+msgstr "引数に一致するものはありません: {}"
 
 #: base/log_event.cpp:163
 msgid "No match for argument '{0}' in selected advisories"
@@ -274,7 +275,7 @@ msgstr ""
 
 #: base/log_event.cpp:254
 msgid "Package \"{}\" is already installed."
-msgstr ""
+msgstr "パッケージ \"{}\" は既にインストールされています。"
 
 #: base/log_event.cpp:263
 msgid "Debug data written to \"{}\""
@@ -894,11 +895,11 @@ msgstr ""
 msgid "Cannot download the \"{0}\" package, cacheonly option is activated."
 msgstr ""
 
-#: repo/package_downloader.cpp:219
+#: repo/package_downloader.cpp:231
 msgid "Already downloaded"
 msgstr ""
 
-#: repo/package_downloader.cpp:267
+#: repo/package_downloader.cpp:279
 msgid "Failed to download packages"
 msgstr ""
 

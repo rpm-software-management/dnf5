@@ -1,0 +1,1881 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# kanitha chim <kchim@redhat.com>, 2025.
+# Weblate Translation Memory <noreply-mt-weblate-translation-memory@weblate.org>, 2025.
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-07-26 03:48+0000\n"
+"PO-Revision-Date: 2025-08-02 13:53+0000\n"
+"Last-Translator: kanitha chim <kchim@redhat.com>\n"
+"Language-Team: Khmer (Central) <https://translate.fedoraproject.org/projects/"
+"dnf5/dnf5/km/>\n"
+"Language: km\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Weblate 5.12.2\n"
+
+#: cmdline_aliases.cpp:84 context.cpp:301 main.cpp:1357
+msgid ", "
+msgstr ", "
+
+#: cmdline_aliases.cpp:145
+#, c++-format
+msgid ""
+"Attached named argument \"{}\" not found: {}: Requested in file \"{}\" on "
+"line {}: {}"
+msgstr ""
+"រកមិនឃើញឈ្មោះ argument ដែលបានភ្ជាប់ \"{}\": {}: បានស្នើរនៅក្នុងឯកសារ \"{}\" នៅជួរ {}:"
+" {}"
+
+#: cmdline_aliases.cpp:159
+#, c++-format
+msgid ""
+"Unknown attribute \"{}\" of attached named argument for alias \"{}\" in file "
+"\"{}\" on line {}: {}"
+msgstr ""
+"មិនស្គាល់ attribute \"{}\" នៃឈ្មោះ argument ដែលបានភ្ជាប់សម្រាប់ alias \"{}\" នៅក្នុង "
+"file \"{}\" នៅជួរ {}:{}"
+
+#: cmdline_aliases.cpp:171
+#, c++-format
+msgid "Missing attribute \"id_path\" for alias \"{}\" in file \"{}\""
+msgstr "គ្មាន attribute \"id_path\" សម្រាប់ alias \"{}\" នៅក្នុង file \"{}\""
+
+#: cmdline_aliases.cpp:208
+#, c++-format
+msgid "Unsupported version \"{}\" in file \"{}\". Supported versions: {}"
+msgstr "មិនគាំទ្រកំណែ \"{}\" នៅក្នុង file \"{}\"។ គាំទ្រកំណែ: {}"
+
+#: cmdline_aliases.cpp:218
+#, c++-format
+msgid "Bad value type of attribute \"version\" in file \"{}\" on line {}: {}"
+msgstr ""
+"ប្រភេទតម្លៃមិនត្រឹមត្រូវនៃ attribute \"version\" នៅក្នុង file \"{}\" នៅលើជួរ {}: {}"
+
+#: cmdline_aliases.cpp:224
+#, c++-format
+msgid "Missing attribute \"version\" in file \"{}\""
+msgstr "គ្មាន attribute \"version\" នៅក្នុង file \"{}\""
+
+#: cmdline_aliases.cpp:236
+#, c++-format
+msgid "Unknown key \"{}\" in file \"{}\" on line {}: {}"
+msgstr "មិនស្គាល់ key \"{}\" នៅក្នុង file \"{}\" នៅលើជួរ {}:{}"
+
+#: cmdline_aliases.cpp:253
+#, c++-format
+msgid "Empty or bad element id path in file \"{}\" on line {}: {}"
+msgstr "id path ទទេរ​ឬធាតុមិនត្រឹមត្រូវនៅក្នុង file \"{}\" នៅលើជួរ​ {}:{}"
+
+#: cmdline_aliases.cpp:272
+#, c++-format
+msgid ""
+"Parent command \"{}\" not found: {}: Requested in file \"{}\" on line {}: {}"
+msgstr ""
+"Parent command​ \"{}\" រកមិនឃើញ: {}: បានដាក់ស្នើរនៅក្នុង file \"{}\" នោលើជួរ {}: {}"
+
+#: cmdline_aliases.cpp:301
+#, c++-format
+msgid "Unknown type \"{}\" of element \"{}\" in file \"{}\" on line {}: {}"
+msgstr "មិនស្គាល់ប្រភេទ \"{}\" នៃធាតុ \"{}\" នៅក្នុង file \"{}\" នៅលើជួរ {}: {}"
+
+#: cmdline_aliases.cpp:312
+#, c++-format
+msgid "Missing attribute \"type\" for element \"{}\" in file \"{}\""
+msgstr "គ្មាន attribute \"type\" សម្រាប់ធាតុ \"{}\" នៅក្នុង file \"{}\""
+
+#: cmdline_aliases.cpp:331
+#, c++-format
+msgid ""
+"Named argument \"{}\" already registered. Requested in file \"{}\" on line "
+"{}: {}"
+msgstr ""
+"ឈ្មោះ argument \"{}\" បានចុះឈ្មោះរួចហើយ។ ដាក់ស្នើរនៅក្នុង file \"{}\" នៅលើជួរ {}: {}"
+
+#: cmdline_aliases.cpp:347
+#, c++-format
+msgid ""
+"Command \"{}\" already registered. Requested in file \"{}\" on line {}: {}"
+msgstr ""
+"Command \"{}\" បានចុះឈ្មោះរួចហើយ។ ដាក់ស្នើរនៅក្នុង file \"{}\" នៅលើជួរ {}: {}"
+
+#: cmdline_aliases.cpp:375
+#, c++-format
+msgid "Unknown attribute \"{}\" of group \"{}\" in file \"{}\" on line {}: {}"
+msgstr ""
+"មិនស្គាល់ attribute \"{}\" នៃក្រុម \"{}\" នៅក្នុង file \"{}\" នៅលើជួរ {}: {}"
+
+#: cmdline_aliases.cpp:387
+#, c++-format
+msgid "Missing attribute \"header\" for element \"{}\" in file \"{}\""
+msgstr "គ្មាន attribute \"header\" សម្រាប់ធាតុ \"{}\" នៅក្នុង file \"{}\""
+
+#: cmdline_aliases.cpp:428 cmdline_aliases.cpp:538
+#, c++-format
+msgid ""
+"The \"short_name\" attribute of named argument \"{}\" must be one character "
+"long in file \"{}\" on line {}: {}"
+msgstr ""
+"\"short_name\" attribute នៃឈ្មោះ argument \"{}\" ត្រូវតែមានប្រវែងមួយតួអក្សរនៅក្នុង "
+"file \"{}\" នៅលើជួរ {}: {}"
+
+#: cmdline_aliases.cpp:446
+#, c++-format
+msgid "Source \"{}\" not found: {}: Requested in file \"{}\" on line {}: {}"
+msgstr ""
+"ប្រភព \"{}\" រកមិនឃើញ: {}: បានដាក់ស្នើរនៅក្នុង file \"{}\" នៅលើជួរ {}: {}"
+
+#: cmdline_aliases.cpp:462 cmdline_aliases.cpp:563 cmdline_aliases.cpp:676
+#, c++-format
+msgid "Group \"{}\" not found: {}: Requested in file \"{}\" on line {}: {}"
+msgstr ""
+"ក្រុម \"{}\"​ រកមិនឃើញ: {}: បានដាក់ស្នើរនៅក្នុង file \"{}\" នៅលើជួរ {}: {}"
+
+#: cmdline_aliases.cpp:476 cmdline_aliases.cpp:579
+#, c++-format
+msgid ""
+"Unknown attribute \"{}\" of named argument \"{}\" in file \"{}\" on line {}: "
+"{}"
+msgstr ""
+"មិនស្គាល់​ attribute \"{}\"​ នៃឈ្មោះ argument \"{}\" នៅក្នុង file \"{}\" នៅលើជួរ {}: "
+"{}"
+
+#: cmdline_aliases.cpp:489
+#, c++-format
+msgid "Missing attribute \"source\" for named argument \"{}\" in file \"{}\""
+msgstr ""
+"គ្មាន attribute \"source\" សម្រាប់ឈ្មោះ argument​ ​\"{}\" នៅក្នុង file \"{}\""
+
+#: cmdline_aliases.cpp:498 cmdline_aliases.cpp:592
+#, c++-format
+msgid ""
+"At least one of the attributes \"long_name\" and \"short_name\" must be set "
+"for named argument \"{}\" in file \"{}\""
+msgstr ""
+"យ៉ាងហោចណាស់មួយនៃ attributes \"long_name\" និង \"short_name\" ត្រូវដាក់សម្រាប់ឈ្មោះ "
+"argument \"{}\" នៅក្នុង file \"{}\""
+
+#: cmdline_aliases.cpp:657
+#, c++-format
+msgid ""
+"Attached command \"{}\" not found: {}: Requested in file \"{}\" on line {}: "
+"{}"
+msgstr ""
+"រកមិនឃើញ command \"{}\" ដែលបានភ្ជាប់: {}: បានដាក់ស្នើរនៅក្នុង file \"{}\" នៅលើជួរ "
+"{}:{}"
+
+#: cmdline_aliases.cpp:691
+#, c++-format
+msgid ""
+"Used config file version \"1.0\" for attribute \"{}\" of command \"{}\" in "
+"file \"{}\" on line {}: {}"
+msgstr ""
+"config file កំណែ \"1.0\" ត្រូវបានប្រើប្រាស់សម្រាប់ attribute \"{}\" នៃ command \"{}\""
+" នៅក្នុង file \"{}\" នៅលើជួរ {}: {}"
+
+#: cmdline_aliases.cpp:713
+#, c++-format
+msgid ""
+"Unknown attribute \"{}\" of required value for alias \"{}\" in file \"{}\" "
+"on line {}: {}"
+msgstr ""
+"មិនស្គាល់ attribute \"{}\" នៃតម្លៃទាមទារសម្រាប់ alias \"{}\" នៅក្នុង file \"{}\" "
+"នៅលើជួរ {}: {}"
+
+#: cmdline_aliases.cpp:726
+#, c++-format
+msgid ""
+"Missing attribute \"value_help\" of required value for alias \"{}\" in file "
+"\"{}\""
+msgstr ""
+"គ្មាន attribute \"value_help\" នៃតម្លៃទាមទាររបស់ alias \"{}\" នៅក្នុង file \"{}\""
+
+#: cmdline_aliases.cpp:740
+#, c++-format
+msgid ""
+"Unknown attribute \"{}\" of command \"{}\" in file \"{}\" on line {}: {}"
+msgstr ""
+"មិនស្គាល់ attribute \"{}\" នៃ command \"{}\" នៅក្នុង file \"{}\" នៅលើជួរ {}: {}"
+
+#: cmdline_aliases.cpp:756
+#, c++-format
+msgid ""
+"Missing attribute \"attached_command\" for command \"{}\" in file \"{}\""
+msgstr ""
+"គ្មាន attribute \"attached_command\" សម្រាប់ command \"{}\" នៅក្នុង file \"{}\""
+
+#: cmdline_aliases.cpp:791
+#, c++-format
+msgid "Bad value type in file \"{}\" on line {}: {}"
+msgstr "ប្រភេទតម្លៃមិនត្រឹមត្រូវនៅក្នុង file \"{}\" នៅលើជួរ {}: {}"
+
+#: cmdline_aliases.cpp:804
+#, c++-format
+msgid "Syntax error in file \"{}\" on line {}:"
+msgstr "កំហុស syntax នៅក្នុង file \"{}\" នៅលើជួរ​​ {}:"
+
+#: commands/advisory/advisory.cpp:36
+msgid "Manage advisories"
+msgstr "គ្រប់គ្រង advisories"
+
+#: commands/advisory/advisory_info.hpp:35
+msgid "Print details about advisories"
+msgstr "បង្ហាញលំអិតអំពីរ advisories"
+
+#: commands/advisory/advisory_list.hpp:35
+msgid "List advisories"
+msgstr "បង្ហាញ advisories"
+
+#: commands/advisory/advisory_summary.cpp:44
+msgid "All"
+msgstr "ទាំងអស់"
+
+#: commands/advisory/advisory_summary.cpp:48
+msgid "Installed"
+msgstr "បានដំឡើង"
+
+#: commands/advisory/advisory_summary.cpp:52
+msgid "Updates"
+msgstr "ធ្វើកំណែទម្រង់"
+
+#: commands/advisory/advisory_summary.cpp:65
+msgid "Available"
+msgstr "ទំនេរ"
+
+#: commands/advisory/advisory_summary.hpp:33
+msgid "Print summary of advisories"
+msgstr "បង្ហាញសង្ខេបនៃ advisories"
+
+#: commands/advisory/arguments.hpp:34
+msgid "Show advisories containing any version of installed packages."
+msgstr "បង្ហាញ advisories ដែលមានផ្ទុករាល់កំណែនៃ packages ដែលបានដំឡើង។"
+
+#: commands/advisory/arguments.hpp:45
+msgid ""
+"Show advisories containing newer versions of installed packages. This is the "
+"default behavior."
+msgstr ""
+"បង្ហាញ advisories ដែលមានផ្ទុកកំណែថ្មីជាងមុននៃ packages ដែលបានដំឡើង។ នេះគឺជាឥរិយាបថដើម។"
+
+#: commands/advisory/arguments.hpp:57
+msgid ""
+"Show advisories containing equal and older versions of installed packages."
+msgstr ""
+"បង្ហាញ advisories ដែលមានផ្ទុកកំណែ​ស្មើរគ្នា និង​ចាស់ជាងនៃ packages ដែលបានដំឡើង។"
+
+#: commands/advisory/arguments.hpp:69
+msgid ""
+"Show advisories containing newer versions of installed packages for which a "
+"newer version is available."
+msgstr ""
+"បង្ហាញ advisories ដែលមានផ្ទុកកំណែថ្មីជាងនៃ packages "
+"ដែលបានដំឡើងសម្រាប់កំណែថ្មីជាងណាដែលទំនេររួចរាល់។"
+
+#: commands/advisory/arguments.hpp:82
+msgid ""
+"Show only advisories containing packages with specified names. List option, "
+"supports globs."
+msgstr ""
+"បង្ហាញតែ advisories ណាមួយដែលមានផ្ទុក packages ជាមួយនឹងឈ្មោះដែលបានបញ្ជាក់។ បង្ហាញជម្រើស, "
+"គាំទ្រ globs។"
+
+#: commands/advisory/arguments.hpp:83 commands/history/arguments.hpp:81
+msgid "PACKAGE_NAME,..."
+msgstr "PACKAGE_NAME,..."
+
+#: commands/advisory/arguments.hpp:90
+msgid "List of patterns matched against advisory names."
+msgstr "តារាងនៃលំនាំដែលត្រូវគ្នានឹងឈ្មោះ advisory។"
+
+#: commands/advisory/arguments.hpp:100
+msgid "Show only advisories referencing a bugzilla."
+msgstr "បង្ហាញតែ advisories ណាដែលយោងទៅកាន់ bugzilla។"
+
+#: commands/advisory/arguments.hpp:107
+msgid "Show only advisories referencing a CVE."
+msgstr "បង្ហាញតែ advisories ណាដែលយោងទៅ CVE។"
+
+#: commands/advisory_shared.hpp:76
+#, c++-format
+msgid "No advisory found matching the requested name: \"{}\""
+msgstr "រកមិនឃើញ advisory ដែលត្រូវគ្នានឹងឈ្មោះដែលបានដាក់ស្នើរ: \"{}\""
+
+#: commands/advisory_shared.hpp:109
+#, c++-format
+msgid "No advisory found fixing the Bugzilla ID: \"{}\""
+msgstr "រកមិនឃើញ advisory ដែលកែតម្រូវ Bugzilla ID: \"{}\""
+
+#: commands/advisory_shared.hpp:128
+#, c++-format
+msgid "No advisory found fixing the CVE ID: \"{}\""
+msgstr "រកមិនឃើញ advisory ដែលកែតម្រូវ CVE ID: \"{}\""
+
+#: commands/advisory_shared.hpp:143
+msgid "No advisory found matching the specified filters."
+msgstr "រកមិនឃើញ advisory ដែលត្រូវនឹង filters ដែលបានបញ្ជាក់។"
+
+#: commands/advisory_shared.hpp:158
+msgid ""
+"Include content contained in advisories with specified name. List option."
+msgstr ""
+"បញ្ជូលមាតិកាដែលមានផ្ទុកនៅក្នុង advisories ជាមួយនឹងឈ្មោះដែលបានបញ្ជាក់។ បង្ហាញជម្រើស។"
+
+#: commands/advisory_shared.hpp:159
+msgid "ADVISORY_NAME,..."
+msgstr "ADVISORY_NAME,..."
+
+#: commands/advisory_shared.hpp:166
+msgid "Include content contained in security advisories."
+msgstr "បញ្ជូលមាតិកាដែលមានផ្ទុកនៅក្នុង security advisories។"
+
+#: commands/advisory_shared.hpp:173
+msgid "Include content contained in bugfix advisories."
+msgstr "បញ្ជូលមាតិកាដែលមានផ្ទុកនៅក្នុង bugfix advisories។"
+
+#: commands/advisory_shared.hpp:180
+msgid "Include content contained in enhancement advisories."
+msgstr "បញ្ជូលមាតិកាដែលមានផ្ទុកនៅក្នុង enhancement advisories។"
+
+#: commands/advisory_shared.hpp:187
+msgid "Include content contained in newpackage advisories."
+msgstr "បញ្ជូលមាតិកាដែលមានផ្ទុកនៅក្នុង newpackage advisories។"
+
+#: commands/advisory_shared.hpp:198
+msgid ""
+"Include content contained in advisories with specified severity. List "
+"option. Can be \"critical\", \"important\", \"moderate\", \"low\", \"none\"."
+msgstr ""
+"បញ្ជូលមាតិកាដែលមានផ្ទុកនៅក្នុង advisories ជាមួយនឹង severity ដែលបានបញ្ជាក់។ បង្ហាញជម្រើស។ "
+"អាចជា \"critical\", \"important\", \"moderate\", \"low\", \"none\"។"
+
+#: commands/advisory_shared.hpp:200
+msgid "ADVISORY_SEVERITY,..."
+msgstr "ADVISORY_SEVERITY,..."
+
+#: commands/advisory_shared.hpp:212
+msgid ""
+"Include content contained in advisories that fix a Bugzilla ID, Eg. 123123. "
+"List option."
+msgstr ""
+"បញ្ចូលមាតិកាដែលមានផ្ទុកនៅក្នុង advisories ដែលកែតម្រូវ Bugzilla ID, ឧទាហរណ៍ 123123។ "
+"បង្ហាញជម្រើស។"
+
+#: commands/advisory_shared.hpp:213
+msgid "BUGZILLA_ID,..."
+msgstr "BUGZILLA_ID,..."
+
+#: commands/advisory_shared.hpp:223
+msgid ""
+"Include content contained in advisories that fix a CVE (Common "
+"Vulnerabilities and Exposures) ID, Eg. CVE-2201-0123. List option."
+msgstr ""
+"បញ្ចូលមាតិកាដែលមានផ្ទុកនៅក្នុង advisories ដែលកែរតម្រូវ CVE (Common Vulnerabilities "
+"and Exposures) ID, ឧទាហរណ៍​ CVE-2201-0123។​ បង្ហាញជម្រើស។"
+
+#: commands/advisory_shared.hpp:225
+msgid "CVE_ID,..."
+msgstr "CVE_ID,..."
+
+#: commands/autoremove/autoremove.cpp:38
+msgid "Remove all unneeded packages originally installed as dependencies."
+msgstr ""
+"ដកចេញរាល់ packages ដែលមិនត្រូវការទាំងអស់ដែលត្រូវបានដំឡើងមុនដំបូងជា dependencies។"
+
+#: commands/check-upgrade/check-upgrade.cpp:47
+msgid "Check for available package upgrades"
+msgstr "ពិនិត្យថាតើមាន packages ណាដែលអាចធ្វើកំណែទម្រង់បាន"
+
+#: commands/check-upgrade/check-upgrade.cpp:54
+msgid ""
+"Reports the lowest versions of packages that fix advisories of type bugfix, "
+"enhancement, security, or newpackage. In case that any option limiting "
+"advisories is used it reports the lowest versions of packages that fix "
+"advisories matching selected advisory properties"
+msgstr ""
+"រាយការណ៍កំណែទាបបំផុងរបស់ packages ដែលកែរតម្រូវប្រភេទ advisories ដូចជា bugfix, "
+"enhancement, security, ឬ newpackage។ ក្នុងករណីដែលជម្រើសណាមួយបានកំណត់ advisories "
+"ត្រូវបានប្រើប្រាស់របាយការណ៍នៃកំណែទាបបំផុតនៃ packages ដែលកែតម្រូវ advisories "
+"ត្រូវនឹងលក្ខណ:សម្បត្តិនៃ advisory ដែលបានជ្រើសរើស"
+
+#: commands/check/check.cpp:247
+msgid "Check for problems in the packagedb"
+msgstr "ពិនិត្យរកមើលបញ្ហានៅក្នុង packagedb"
+
+#: commands/check/check.cpp:335
+#, c++-format
+msgid "Check discovered {} problem(s) in {} package(s)"
+msgstr "ពិនិត្យបញ្ហាដែលបានរកឃើញ {} នៅក្នុង {} package(s)"
+
+#: commands/clean/clean.cpp:91
+#, c++-format
+msgid "List of cache types to clean up. Supported types: {0}"
+msgstr "បង្ហាញតារាងប្រភេទ cache ដើម្បីសម្អាត។ ប្រភេទដែលគាំទ្រ: {0}"
+
+#: commands/clean/clean.cpp:109
+#, c++-format
+msgid "Unknown cache type \"{0}\". Supported types: {1}"
+msgstr "មិនស្គាល់ប្រភេទ cache \"{0}\"។ គាំទ្រប្រភេទ: {1}"
+
+#: commands/clean/clean.cpp:166
+#, c++-format
+msgid "Failed to cleanup repository cache in path \"{0}\": {1}"
+msgstr "បរាជ័យក្នុងការសម្អាត repository cache នៅក្នុង path \"{0}\": {1}"
+
+#: commands/clean/clean.cpp:176
+#, c++-format
+msgid "Cache directory \"{}\" does not exist. Nothing to clean."
+msgstr "Cache directory \"{}\" មិនមាន។ គ្មានអ្វីត្រូវសម្អាត។"
+
+#: commands/clean/clean.cpp:181
+#, c++-format
+msgid "Cannot iterate cache directory \"{}\": {}"
+msgstr "មិនអាច iterate cache directory \"{}\": {}"
+
+#: commands/debuginfo-install/debuginfo-install.cpp:45
+msgid "Install debuginfo packages."
+msgstr "ដំឡើង​ debuginfo packages។"
+
+#: commands/distro-sync/distro-sync.cpp:44
+msgid ""
+"Upgrade or downgrade installed software to the latest available versions"
+msgstr "ធ្វើកំណែ​ឡើង ឬ បញ្ចុះកំណែកម្មវិធីដែលបានដំឡើងទៅកំណែចុងក្រោយដែលមានរួចរាល់"
+
+#: commands/do/do.cpp:44
+msgid "Do transaction"
+msgstr "ធ្វើប្រតិបត្តិការ"
+
+#: commands/do/do.cpp:49
+msgid "Action to be done on the following items."
+msgstr "សកម្មភាពដើម្បីសម្រេចនៅធាតុដូចខាងក្រោម។"
+
+#: commands/do/do.cpp:63
+#, c++-format
+msgid "Unsupported action \"{}\""
+msgstr "សកម្មភាពមិនគាំទ្រ \"{}\""
+
+#: commands/do/do.cpp:73
+msgid "Type of the following items."
+msgstr "ប្រភេទនៃធាតុដូចខាងក្រោម។"
+
+#: commands/do/do.cpp:86
+#, c++-format
+msgid "Unsupported item type \"{}\""
+msgstr "ប្រភេទធាតុដែលមិនគាំទ្រ \"{}\""
+
+#: commands/do/do.cpp:99
+msgid "List of items to take action on"
+msgstr "តារាងធាតុដើម្បីធ្វើសកម្មភាព"
+
+#: commands/do/do.cpp:131 commands/do/do.cpp:135
+msgid "Only package downgrade is supported."
+msgstr "សម្រាប់គាំទ្រតែការបញ្ជុះកំណែ package។"
+
+#: commands/do/do.cpp:142 commands/do/do.cpp:146
+msgid "Only package reinstall is supported."
+msgstr "សម្រាប់គាំទ្រតែការដំឡើង package ម្ដងទៀត។"
+
+#: commands/do/do.cpp:152
+msgid "Action was not defined"
+msgstr "សកម្មភាពមិនត្រូវបានកំណត់"
+
+#: commands/do/do.cpp:230
+#, c++-format
+msgid "Invalid Environmet/Group specification: {}"
+msgstr "Environment/Group ដែលបានបញ្ជាក់មិនត្រឹមត្រូវ: {}"
+
+#: commands/do/do.cpp:314
+msgid "Downgrading environments and groups is not supported."
+msgstr "ការបញ្ជុះកំណែ environments និង group​ គឺមិនគាំទ្រ។"
+
+#: commands/do/do.cpp:330
+msgid "Reinstaling environments and groups is not supported."
+msgstr "ការដំឡើង environments និង groups ម្ដងទៀតគឺមិនគាំទ្រ។"
+
+#: commands/downgrade/downgrade.cpp:42
+msgid "Downgrade software"
+msgstr "ធ្វើការបញ្ជុះកំណែកម្មវិធី"
+
+#: commands/download/download.cpp:106
+msgid "When running with --url, prints URLs from all available mirrors"
+msgstr "នៅពេល running ជាមួយ --url,​ បង្ហាញ URLs ពី mirrors ទាំងអស់ដែលមាន"
+
+#: commands/download/download.cpp:122
+#, c++-format
+msgid "Invalid urlprotocol option: {}"
+msgstr "ជម្រើស urlprotocol មិនត្រឹមត្រូវ: {}"
+
+#: commands/download/download.cpp:149 main.cpp:627
+#, c++-format
+msgid "Unsupported architecture \"{0}\". Please choose one from {1}"
+msgstr "ស្ថាបត្យកម្មមិនត្រូវបានគាំទ្រ \"{0}\"។ សូមជ្រើសរើសមួយក្នុងចំណោម {1}"
+
+#. TODO(jrohel): Add support for requiring an argument by another argument in ArgumentParser?
+#: commands/download/download.cpp:186
+msgid "Option \"--alldeps\" should be used with \"--resolve\""
+msgstr "ជម្រើស \"--alldeps\" គួរតែត្រូវបានប្រើប្រាស់ជាមួយ \"--resolve\""
+
+#: commands/download/download.cpp:226
+#, c++-format
+msgid ""
+"No package \"{}\" available; You might want to use --skip-unavailable option."
+msgstr "គ្មាន package \"{}\";​​​ អ្នកអាចប្រើជម្រើស --skip-unavailable។"
+
+#: commands/environment/arguments.hpp:33
+msgid "Show only available environments."
+msgstr "បង្ហាញតែ environments ដែលមាន។"
+
+#: commands/environment/arguments.hpp:40
+msgid "Show only installed environments."
+msgstr "បង្ហាញតែ environments ដែលបានដំឡើង។"
+
+#: commands/environment/arguments.hpp:47
+msgid "Pattern matching environment IDs."
+msgstr "លំនាំត្រូវនឹង environment IDs។"
+
+#: commands/environment/environment.cpp:35
+msgid "Manage comps environments"
+msgstr "គ្រប់គ្រង comps environments"
+
+#: commands/from_repo.cpp:35
+msgid ""
+"The following items can be selected only from the specified repositories. "
+"All enabled repositories will still be used to satisfy dependencies."
+msgstr ""
+"ធាតុខាងក្រោមនេះអាចជ្រើសរើសបានតែពី repositories ដែលបានបញ្ជាក់ប៉ុណ្ណោះ។ រាល់ "
+"repositories ដែលបានដាក់អោយប្រើនឹងនៅតែអាចប្រើបានដើម្បីបំពេញតាម dependencies។"
+
+#: commands/from_repo.cpp:38 commands/from_repo.cpp:70
+msgid "REPO_ID,..."
+msgstr "REPO_ID,..."
+
+#: commands/from_repo.cpp:53
+msgid "\"--from_repo\" already defined with diferent value"
+msgstr "\"--from_repo\" ត្រូវបានកំណត់រួចហើយជាមួយនឹងតម្លៃផ្សេង"
+
+#: commands/from_repo.cpp:68
+msgid ""
+"Filters installed packages by the ID of the repository they were installed "
+"from."
+msgstr ""
+"ជ្រើសតម្រង packages​ ដែលបានដំឡើងដោយ ID​ នៃ repository ពីកន្លែងដែលពួកវាត្រូវបានដំឡើង។"
+
+#: commands/from_repo.cpp:79
+msgid "\"--installed-from_repo\" already defined with diferent value"
+msgstr "\"--installed-from_repo\" ត្រូវបានកំណត់រួចហើយជាមួយនឹងតម្លៃផ្សេង"
+
+#: commands/group/arguments.hpp:34
+msgid "Show only available groups."
+msgstr "បង្ហាញតែ groups ដែលមានប៉ុណ្ណោះ។"
+
+#: commands/group/arguments.hpp:41
+msgid "Show also hidden groups."
+msgstr "បង្ហាញ groups ដែលបានលាក់ផងដែរ។"
+
+#: commands/group/arguments.hpp:48
+msgid "Show only installed groups."
+msgstr "បង្ហាញតែ groups ដែលបានដំឡើងប៉ុណ្ណោះ។"
+
+#: commands/group/arguments.hpp:59
+msgid ""
+"Show only groups containing packages with specified names. List option, "
+"supports globs."
+msgstr ""
+"បង្ហាញតែ groups ដែលមាន​ packages ជាមួយនឹងឈ្មោះដែលបានបញ្ជាក់។ បង្ហាញជម្រើស, គាំទ្រ globs។"
+
+#: commands/group/arguments.hpp:67
+msgid "Pattern matching group IDS."
+msgstr "លំនាំត្រូវនឹង group IDs។"
+
+#: commands/group/arguments.hpp:76
+msgid "Include optional packages from group."
+msgstr "បញ្ចូល packages ដែលមិនទាមទារពី group។"
+
+#: commands/group/arguments.hpp:83
+msgid "Operate on groups only, no packages are changed."
+msgstr ""
+"ធ្វើដំណើរការនៅលើ groups តែប៉ុណ្ណោះ, គ្មាន packages ណាដែលត្រូវបានផ្លាស់ប្ដូរឡើយ។"
+
+#: commands/history/arguments.hpp:37
+msgid "Transaction ID"
+msgstr "ប្រតិបត្តិការ ID"
+
+#: commands/history/arguments.hpp:44
+msgid "Reverse the order of transactions."
+msgstr "បញ្ច្រាស់លំដាប់នៃប្រតិបត្តិការ។"
+
+#: commands/history/arguments.hpp:54
+msgid ""
+"Don't consider mismatches between installed and stored transaction packages "
+"as errors. This can result in an empty transaction because among other "
+"things the option can ignore failing Remove actions."
+msgstr ""
+"កុំពិចារណាភាពមិនត្រូវគ្នារវាងប្រតិបត្តិការ packages ដែលបានដំឡើង​ និង បានរក្សាទុកថាជាកំហុស។ "
+"នេះអាចក្លាចទៅជាប្រតិបត្តិការទទេរ ពីព្រោះក្នុងចំណោមវត្ថុផ្សេងជម្រើសអាចមិនអើពើការបរាជ័យសកម្មភាព "
+"Remove។"
+
+#: commands/history/arguments.hpp:67
+msgid "Don't consider extra packages pulled into the transaction as errors."
+msgstr ""
+"កុំពិចារណា packages បន្ថែមដែលត្រូវបានទាញចូលទៅក្នុងប្រតិបត្តិការថាជាកំហុស។"
+
+#: commands/history/arguments.hpp:80
+msgid ""
+"Show only transactions containing packages with specified names. List "
+"option, supports globs."
+msgstr ""
+"បង្ហាញតែប្រតិបត្តិការដែលមានផ្ទុក packages ជាមួយនឹងឈ្មោះដែលបានបញ្ជាក់។ បង្ហាញជម្រើស, គាំទ្រ "
+"globs។"
+
+#: commands/history/history.cpp:41
+msgid "Manage transaction history"
+msgstr "គ្រប់គ្រងប្រវត្តិប្រតិបត្តិការ"
+
+#: commands/history/history_info.cpp:70
+msgid ""
+"No match found, history info defaults to considering only the last "
+"transaction, specify \"1..last\" range to search all transactions."
+msgstr ""
+"រកមិនឃើញភាពផ្គូរផ្គង, ប្រវត្តិពណ៌មានត្រូវបានលំនាំទៅការផ្ទុកតែប្រតិបត្តិការចុងក្រោយ, បញ្ជាក់ "
+"\"1..last\" ជួរដើម្បីស្វែងរកប្រតិបត្តិការទាំងអស់។"
+
+#: commands/history/history_redo.cpp:54
+#: commands/history/history_rollback.cpp:58
+#: commands/history/history_store.cpp:65 commands/history/history_undo.cpp:57
+msgid "No matching transaction ID found, exactly one required."
+msgstr "រកមិនឃើញប្រតិបត្តិការ ID ដែលផ្គូរផ្គង, ត្រូវបានទាមទារតែមួយគត់។"
+
+#: commands/history/history_redo.cpp:58
+#: commands/history/history_rollback.cpp:62
+#: commands/history/history_undo.cpp:61
+msgid "Matched more than one transaction ID, exactly one required."
+msgstr "ផ្គូរផ្គងច្រើនជាងមួយប្រតិបត្តិការ ID, ត្រូវបានទាមទារតែមួយគត់។"
+
+#: commands/history/history_store.cpp:68
+msgid "Multiple transactions selected for storing, only one allowed."
+msgstr ""
+"ប្រតិបត្តិការមួយចំនួនត្រូវបានជ្រើសរើសសម្រាប់រក្សាទុក, ត្រូវបានអនុញ្ញាតតែមួយគត់។"
+
+#: commands/history/history_store.cpp:80
+#, c++-format
+msgid "File \"{}\" already exists, it will be overwritten.\n"
+msgstr "ឯកសារ \"{}\" មានរួចហើយ, វានឹងត្រូវបានសរសេរជាន់លើ។\n"
+
+#: commands/history/transaction_id.cpp:32
+#, c++-format
+msgid ""
+"Invalid transaction ID range \"{}\", \"ID\" or \"ID..ID\" expected, where ID "
+"is \"NUMBER\", \"last\" or \"last-NUMBER\"."
+msgstr ""
+"ជួរប្រតិបត្តិការ ID មិនត្រឹមត្រូវ \"{}\", \"ID\", ឬ \"ID..ID\" រំពឹងទុក, ដែល ID ជា "
+"\"NUMBER\", \"last\", ឬ \"last-NUMBER\"។"
+
+#: commands/install/install.cpp:43
+msgid "Install software"
+msgstr "ដំឡើងកម្មវិធី"
+
+#: commands/leaves/leaves.cpp:42
+msgid ""
+"List groups of installed packages not required by other installed packages"
+msgstr ""
+"តារាងក្រុមនៃ packages ដែលបានដំឡើងតែមិនទាមទារដោយ packages ផ្សេងៗដែលបានដំឡើង"
+
+#: commands/list/list.cpp:46
+msgid "Lists packages depending on the packages' relation to the system"
+msgstr ""
+"បង្ហាញ packages ដែលពឹងពាក់លើ packages ផ្សេងៗដែលមានទំនាក់ទំនងទៅនឹងប្រព័ន្ធ"
+
+#: commands/list/list.cpp:50
+msgid "List of package-spec-NI to match (case insensitively)"
+msgstr "បង្ហាញ package-spec-NI ដើម្បីផ្គូរផ្គង (case insensitively)"
+
+#: commands/list/list.cpp:62
+msgid "Show all versions of the packages, not only the latest ones."
+msgstr "បង្ហាញគ្រប់កំណែនៃ packages, មិនមែនតែកំែណចុងក្រោយបង្អស់ទេ។"
+
+#: commands/list/list.cpp:70
+msgid "List installed packages."
+msgstr "បង្ហាញ packages ដែលបានដំឡើង។"
+
+#: commands/list/list.cpp:74
+msgid "List available packages."
+msgstr "បង្ហាញ packages ដែលមាន។"
+
+#: commands/list/list.cpp:81
+msgid ""
+"List extras, that is packages installed on the system that are not available "
+"in any known repository."
+msgstr ""
+"បង្ហាញ extras, ដែលជា packages ដែលបានដំឡើងនៅលើប្រព័ន្ធដែលមិនមាននៅក្នុង repository "
+"ដែលបានស្គាល់។"
+
+#: commands/list/list.cpp:89
+msgid ""
+"List packages installed on the system that are obsoleted by packages in any "
+"known repository."
+msgstr ""
+"បង្ហាញ packages ដែលបានដំឡើងនៅលើប្រព័ន្ធដែលមិនបានប្រើដោយ packages នៅក្នុង repository "
+"ដែលបានស្គាល់។"
+
+#: commands/list/list.cpp:94
+msgid "List packages recently added into the repositories."
+msgstr "បង្ហាញ packages ថ្មីៗដែលបានដាក់ចូលទៅក្នុង repositories។"
+
+#: commands/list/list.cpp:98
+msgid "List upgrades available for the installed packages."
+msgstr "បង្ហាញកំណែឡើងដែលមានសម្រាប់ packages ដែលបានដំឡើង។"
+
+#: commands/list/list.cpp:102
+msgid "List packages which will be removed by the 'dnf autoremove' command."
+msgstr "បង្ហាញ packages ដែលនឹងត្រូវបានដកចេញដោយ command 'dnf autoremove' ។"
+
+#: commands/list/list.cpp:203 commands/list/list.cpp:208
+msgid "Installed packages"
+msgstr "បានដំឡើង packages"
+
+#: commands/list/list.cpp:204 commands/list/list.cpp:217
+msgid "Available packages"
+msgstr "packages ដែលមាន"
+
+#: commands/list/list.cpp:225
+msgid "Available upgrades"
+msgstr "កំណែឡើងដែលមាន"
+
+#: commands/list/list.cpp:241
+msgid "Obsoleting packages"
+msgstr "លែងប្រើ packages"
+
+#: commands/list/list.cpp:246
+msgid "Autoremove packages"
+msgstr "ដក packages ចេញដោយស្វ័យប្រវត្តិ"
+
+#: commands/list/list.cpp:250
+msgid "Extra packages"
+msgstr "packages បន្ថែម"
+
+#: commands/list/list.cpp:261
+msgid "Recently added packages"
+msgstr "packages ដែលបានដាក់ចូលថ្មីៗ"
+
+#: commands/list/list.cpp:266
+msgid "No matching packages to list"
+msgstr "គ្មាន packages ដែលផ្គូរផ្គងដើម្បីបង្ហាញ"
+
+#: commands/mark/mark.cpp:38
+msgid "Change the reason of an installed package"
+msgstr "ផ្លាស់ប្ដូរហេតុផលនៃ package ដែលបានដំឡើង"
+
+#: commands/module/arguments.hpp:36
+msgid "Show enabled modules."
+msgstr "បង្ហាញ modules ដែលបានដាក់ឲ្យដំណើរការ។"
+
+#: commands/module/arguments.hpp:43
+msgid "Show disabled modules."
+msgstr "បង្ហាញ modules ដែលបានបិទ។"
+
+#: commands/module/arguments.hpp:50
+msgid "Pattern matching module NSVCAs."
+msgstr "លំនាំត្រូវនឹង module NSVCAs។"
+
+#: commands/module/module.cpp:43
+msgid "Manage modules"
+msgstr "គ្រប់គ្រង modules"
+
+#: commands/module/module_list.cpp:85
+#, c++-format
+msgid "No matches found for \"{}\"."
+msgstr "រកមិនឃើញការផ្គូរផ្គងសម្រាប់ \"{}\"។"
+
+#: commands/offline/offline.cpp:217
+msgid "Manage offline transactions"
+msgstr "គ្រប់គ្រងប្រតិបត្តិការក្រៅបណ្ដាញ"
+
+#: commands/offline/offline.cpp:249
+#, c++-format
+msgid ""
+"Error reading state: {}. Rerun the command you used to initiate the offline "
+"transaction, e.g. `dnf5 system-upgrade download [OPTIONS]`."
+msgstr ""
+"កំហុសអានស្ថានភាព: {}។ Rerun command ដែលអ្នកបានប្រើដើម្បីចាប់ផ្ដើមប្រតិបត្តិការក្រៅបណ្ដាញ, "
+"ឧទាហរណ៍ `dnf5 system-upgrade download [OPTIONS]`។"
+
+#: commands/offline/offline.cpp:272
+#, c++-format
+msgid "Couldn't connect to D-Bus: {}"
+msgstr "មិនអាច់ភ្ជាប់ទៅកាន់ D-Bus: {}"
+
+#: commands/offline/offline.cpp:303
+msgid ""
+"Prepare the system to perform the offline transaction and reboot to start "
+"the transaction."
+msgstr ""
+"រៀបចំប្រព័ន្ធដើម្បីអនុវត្តប្រតិបត្តិការក្រៅបណ្ដាញនិង reboot ដើម្បីចាប់ផ្ដើមប្រតិបត្តិការ។"
+
+#: commands/offline/offline.cpp:310
+msgid "Power off the system after the operation is complete"
+msgstr "បិទប្រព័ន្ធបន្ទាប់ពីប្រតិបត្តិការបញ្ចប់"
+
+#: commands/offline/offline.cpp:321
+msgid "No offline transaction is stored."
+msgstr "គ្មានប្រតិបត្តិការក្រៅបណ្ដាញត្រូវបានរក្សាទុក។"
+
+#: commands/offline/offline.cpp:329
+msgid "System is not ready for offline transaction."
+msgstr "ប្រព័ន្ធគឺមិនទាន់រួចរាល់សម្រាប់ប្រតិបត្តិការក្រៅបណ្ដាញ។"
+
+#: commands/offline/offline.cpp:332
+#, c++-format
+msgid "Data directory {} does not exist."
+msgstr "ថតទិន្នន័យ {} គឺមិនមាន។"
+
+#: commands/offline/offline.cpp:357
+#, c++-format
+msgid "{} is not wanted by system-update.target."
+msgstr "{} គឺមិនត្រូវការដោយ system-update.target។"
+
+#: commands/offline/offline.cpp:367
+#, c++-format
+msgid "The system will now reboot to upgrade to release version {}."
+msgstr "ប្រព័ន្ធនឹង reboot ឥឡូវនេះដើម្បីធ្វើកំណែឡើងទៅ release version {}។"
+
+#: commands/offline/offline.cpp:371
+msgid ""
+"The system will now reboot to perform the offline transaction initiated by "
+"the following command:"
+msgstr ""
+"ប្រព័ន្ធនឹងធ្វើការ reboot​ ឥឡូវនេះដើម្បីអនុវត្តប្រតិបត្តិការក្រៅបណ្ដាញដែលផ្ដួចផ្ដើមដោយ command​ "
+"ដូចខាងក្រោម:"
+
+#: commands/offline/offline.cpp:402
+msgid ""
+"Internal use only, not intended to be run by the user. Execute the "
+"transaction in the offline environment."
+msgstr ""
+"អ្នកប្រើប្រាស់ផ្ទៃក្នុងតែមួយគត់, មិនមែនសម្រាប់ run ដោយអ្នកប្រើប្រាស់ទូរទៅ។​ ធ្វើប្រតិបត្តិការនៅក្នុង​ "
+"environment ក្រៅបណ្ដាញ។"
+
+#: commands/offline/offline.cpp:436
+msgid "Trigger file does not exist. Exiting."
+msgstr "ឯកសារដែលបាន​ trigger​ មិនមាន។​ ចាកចេញ។"
+
+#: commands/offline/offline.cpp:440
+msgid "Another offline transaction tool is running. Exiting."
+msgstr "ឧបករណ៍ប្រតិបត្តិការក្រៅបណ្ដាញផ្សេងទៀតគឺកំពុងធ្វើដំណើរការ។​ ចាកចេញ។"
+
+#: commands/offline/offline.cpp:467
+msgid "Starting offline transaction. This will take a while."
+msgstr "ចាប់ផ្ដើមប្រតិបត្តិការក្រៅបណ្ដាញ។ វានឹងត្រូវការពេលបន្តិច។"
+
+#: commands/offline/offline.cpp:471
+msgid "Starting system upgrade. This will take a while."
+msgstr "ចាប់ផ្ដើមធ្វើកំណែឡើងសម្រាប់ប្រព័ន្ធ។ វានឹងត្រូវការពេលបន្តិច។"
+
+#: commands/offline/offline.cpp:483
+msgid "Use `dnf5 offline reboot` to begin the transaction."
+msgstr "ប្រើ `dnf5 offline reboot` ដើម្បីចាប់ផ្ដើមប្រតិបត្តិការ។"
+
+#: commands/offline/offline.cpp:534
+msgid "Transaction failed: "
+msgstr "ប្រតិបត្តិការមិនបានជោគជ័យ: "
+
+#: commands/offline/offline.cpp:604
+#, c++-format
+msgid "Error reading journal: {}"
+msgstr "កំហុសអាន journal: {}"
+
+#: commands/offline/offline.cpp:610
+#, c++-format
+msgid "Add journal match failed: {}"
+msgstr "ដាក់ journal​ ផ្គូរផ្គងមិនបានសម្រេច: {}"
+
+#: commands/offline/offline.cpp:638
+msgid "No logs were found."
+msgstr "រកមិនឃើញ​ logs។"
+
+#: commands/offline/offline.cpp:642
+msgid "The following boots appear to contain offline transaction logs:"
+msgstr "boots​ ខាងក្រោមនេះហាក់ដូចជាមានផ្ទុក logs​ នៃប្រតិបត្តិការក្រៅបណ្ដាញ:"
+
+#: commands/offline/offline.cpp:659
+msgid "Cannot find logs with this index."
+msgstr "មិនអាចស្វែងរក logs ជាមួយនឹង index នេះទេ។"
+
+#: commands/offline/offline.cpp:666
+msgid "Unable to match systemd journal entry."
+msgstr "មិនអាចធ្វើការផ្គូរផ្គង systemd journal entry។"
+
+#: commands/offline/offline.cpp:678
+msgid "Show logs from past offline transactions"
+msgstr "បង្ហាញ logs ពីប្រតិបត្តិការក្រៅបណ្ដាញអតីតកាល"
+
+#: commands/offline/offline.cpp:686
+msgid ""
+"Which log to show. Run without any arguments to get a list of available logs."
+msgstr ""
+"Which log ដើម្បីបង្ហាញ។ Run​ ដោយគ្មានអមជាមួយ arguments ណាមួយដើម្បីបានតារាងនៃ logs "
+"ទាំងអស់។"
+
+#: commands/offline/offline.cpp:701
+msgid ""
+"systemd is not supported in this build of DNF 5; the `log` subcommand is "
+"unavailable."
+msgstr ""
+"systemd គឺមិនត្រូវបានគាំទ្រនៅក្នុង build នៃ DNF 5; `log` subcommand មិនមានទេ។"
+
+#: commands/offline/offline.cpp:706
+msgid "Show status of the current offline transaction"
+msgstr "បង្ហាញស្ថានភាពនៃប្រតិបត្តិការក្រៅបណ្ដាញបច្ចុប្បន្ន"
+
+#: commands/offline/offline.cpp:722
+msgid "An offline transaction was initiated by the following command:"
+msgstr "ប្រតិបត្តិការក្រៅបណ្ដាញត្រូវបានផ្ដួចផ្ដើមដោយ command ដូចខាងក្រោម:"
+
+#: commands/offline/offline.cpp:724
+msgid ""
+"Run `dnf5 offline reboot` to reboot and perform the offline transaction."
+msgstr ""
+"Run `dnf5 offline reboot` ដើម្បី reboot និងអនុវត្តប្រតិបត្តិការក្រៅបណ្ដាញ។"
+
+#: commands/offline/offline.cpp:726
+msgid ""
+"An offline transaction was started, but it did not finish. Run `dnf5 offline "
+"log` for more information. The command that initiated the transaction was:"
+msgstr ""
+"ប្រតិបត្តិការក្រៅបណ្ដាញត្រូវបានចាប់ផ្ដើម, ប៉ុន្តែវាមិនបានបញ្ចប់ទេ។​ Run `dnf5 offline log` "
+"សម្រាប់មើលព័ត៏មានបន្ថែម។​ command ដែលបានផ្ដួចផ្ដើមប្រតិបត្តិការគឺ:"
+
+#: commands/offline/offline.cpp:731
+msgid "Unknown offline transaction status: "
+msgstr "មិនស្គាល់ស្ថានភាពរបស់ប្រតិបត្តិការក្រៅបណ្ដាញ: "
+
+#: commands/provides/provides.cpp:48
+msgid "Find what package provides the given value"
+msgstr "ស្វែងរកថាតើ package​ ណាដែលផ្ដល់តម្លៃនេះ"
+
+#: commands/reinstall/reinstall.cpp:42
+msgid "Reinstall software"
+msgstr "ធ្វើការដំឡើងកម្មវិធីម្ដងទៀត"
+
+#: commands/remove/remove.cpp:42
+msgid "Remove (uninstall) software"
+msgstr "លុប(ដក)​ កម្មវិធី​​"
+
+#: commands/replay/replay.cpp:38
+msgid "Replay a transaction that was previously stored to a directory"
+msgstr "ចាក់ឡើងវិញនូវប្រតិបត្តិការដែលពីមុនត្រូវបានទុកនៅក្នុងថត"
+
+#: commands/repo/arguments.hpp:35
+msgid "Show all repositories."
+msgstr "បង្ហាញ repositories ទាំងអស់។"
+
+#: commands/repo/arguments.hpp:42
+msgid "Show enabled repositories (default)."
+msgstr "បង្ហាញ repositories ដែលបានដាក់ឲ្យប្រើ (លំនាំដើម)។"
+
+#: commands/repo/arguments.hpp:49
+msgid "Show disabled repositories."
+msgstr "បង្ហាញ repositories ដែលត្រូវបានបិទ។"
+
+#: commands/repo/arguments.hpp:56
+msgid "Pattern matching repo IDs."
+msgstr "លំនាំត្រូវនឹង repo IDs។"
+
+#: commands/repo/repo.cpp:38
+msgid "Manage repositories"
+msgstr "គ្រប់គ្រង repositories"
+
+#: commands/repoquery/repoquery.cpp:82
+msgid "Search for packages matching various criteria"
+msgstr "ស្វែងរក package ដែលត្រូវនឹងលក្ខណ:វិនិច្ឆ័យផ្សេងៗ"
+
+#: commands/repoquery/repoquery.cpp:525
+msgid ""
+"Option \"--exactdeps\" has to be used either with \"--whatrequires\" or \"--"
+"whatdepends\""
+msgstr ""
+"ជម្រើស \"--exactdeps\" ត្រូវបានប្រើប្រាស់ជាមួយ \"--whatrequires\" ឬក៍ "
+"\"--whatdepends\""
+
+#: commands/repoquery/repoquery.cpp:530
+msgid ""
+"Option \"--recursive\" has to be used either with \"--whatrequires\" or \"--"
+"providers-of=requires\""
+msgstr ""
+"ជម្រើស \"--recursive\" ត្រូវបានប្រើប្រាស់ជាមួយនឹង \"--whatrequires\" ឬក៍ "
+"\"--providers-of=requires\""
+
+#: commands/search/arguments.hpp:37
+msgid "Search also package description and URL."
+msgstr "ស្វែងរកការពិពណ៏នានៃ​ package និង URL។"
+
+#: commands/search/arguments.hpp:45
+msgid "Patterns"
+msgstr "លំនាំ"
+
+#: commands/search/search.cpp:44
+msgid "Search for software matching all specified strings"
+msgstr "ស្វែងរកសម្រាប់កម្មវិធីត្រូវនឹងអក្សរដែលបានបញ្ជាក់"
+
+#: commands/swap/swap.cpp:44
+msgid "Remove software and install another in one transaction"
+msgstr "លុបចេញកម្មវិធី និង ដំឡើងកម្មវិធីផ្សេងនៅក្នុងប្រតិបត្តិការមួយ"
+
+#: commands/system-upgrade/system-upgrade.cpp:56
+msgid "Prepare system for upgrade to a new release"
+msgstr "ប្រៀបធៀបប្រព័ន្ធសម្រាប់កំណែឡើងទៅការបញ្ចេញថ្មី"
+
+#: commands/system-upgrade/system-upgrade.cpp:72
+msgid "Download everything needed to upgrade to a new release"
+msgstr "ទាញយកគ្រប់យ៉ាងដែលចាំបាច់សម្រាប់ធ្វើកំណែឡើងទៅកាន់ការបញ្ចេញថ្មី"
+
+#: commands/system-upgrade/system-upgrade.cpp:80
+msgid ""
+"Do not install packages from the new release if they are older than what is "
+"currently installed"
+msgstr ""
+"កុំដំឡើង packages មកពីការបញ្ចេញថ្មីប្រសិនបើពួកវាចាស់ជាងអ្វីដែលបានដំឡើងរួចរាល់នាបុច្ចប្បន្ន"
+
+#: commands/system-upgrade/system-upgrade.cpp:101
+msgid "Need a --releasever greater than the current system version."
+msgstr "ត្រូវការ --releasever ដែលធំជាងកំណែនៅក្នុងប្រព័ន្ធបុច្ចប្បន្ន។"
+
+#: commands/system-upgrade/system-upgrade.cpp:150
+msgid "Store a distro-sync transaction to be performed offline"
+msgstr "រក្សាទុកប្រតិបត្តិការ distro-sync ដើម្បីអនុវត្តក្រៅបណ្ដាញ"
+
+#: commands/system-upgrade/system-upgrade.cpp:172
+msgid "Store an upgrade transaction to be performed offline"
+msgstr "រក្សាទុកកំណែប្រតិបត្តិការដើម្បីអនុវត្តក្រៅបណ្ដាញ"
+
+#: commands/upgrade/upgrade.cpp:43
+msgid "Upgrade software"
+msgstr "ធ្វើកំណែឡើងកម្មវិធី"
+
+#: commands/upgrade/upgrade.cpp:50
+msgid ""
+"Upgrade packages only to the lowest versions that fix advisories of type "
+"bugfix, enhancement, security, or newpackage. In case that any option "
+"limiting advisories is used it upgrades packages only to the lowest versions "
+"that fix advisories that matching selected advisory property"
+msgstr ""
+"ដំឡើងកំណែកញ្ចប់ទៅកំណែទាបបំផុតដែលជួសជុលការណែនាំអំពីប្រភេទ bugfix, enhancement, security ឬ​ "
+"newpackage។ ក្នុង​ករណី​ដែល​ការ​ណែនាំ​កំណត់​ជម្រើស​ណា​មួយ​ត្រូវ​បាន​ប្រើ "
+"វា​ធ្វើ​ឱ្យ​ប្រសើរ​កញ្ចប់​តែ​ទៅ​កំណែ​ទាប​បំផុត​ដែល​ជួសជុល​ការ​ប្រឹក្សា​ដែល​ត្រូវ​គ្នា​នឹង​លក្ខណៈ​សម្បត្តិ​ទីប្រឹក្សា​ដែល​បាន​"
+"ជ្រើសរើស"
+
+#. TODO(mblaha): add full command line
+#: commands/versionlock/utils.cpp:35
+#, c++-format
+msgid "Added by 'versionlock {}' command on {}"
+msgstr "ដាក់បញ្ចូលដោយ 'versionlock {}' command នៅ {}"
+
+#: commands/versionlock/versionlock.cpp:40
+msgid "Manage versionlock configuration"
+msgstr "គ្រប់គ្រង versionlock configuration"
+
+#: commands/versionlock/versionlock_add.cpp:37
+msgid "Add new entry to versionlock configuration"
+msgstr "ដាក់ entry ថ្មីទៅ versionlock configuration"
+
+#: commands/versionlock/versionlock_add.cpp:44
+msgid "List of package package-spec-N to add versionlock for"
+msgstr "បង្ហាញតារាងនៃ package-spec-N ដើម្បីបន្ថែម versionlock សម្រាប់"
+
+#: commands/versionlock/versionlock_add.cpp:107
+#: commands/versionlock/versionlock_exclude.cpp:126
+#, c++-format
+msgid "No package found for \"{}\"."
+msgstr "រកមិនឃើញ package សម្រាប់ \"{}\"។"
+
+#: commands/versionlock/versionlock_add.cpp:134
+#, c++-format
+msgid "Adding versionlock on \"{0} = {1}\"."
+msgstr "កំពុងដាក់បន្ថែម versionlock នៅលើ \"{0} = {1}\"។"
+
+#: commands/versionlock/versionlock_add.cpp:137
+#, c++-format
+msgid "Package \"{}\" is already locked."
+msgstr "Package \"{}\" បានបិទរួចរាល់។"
+
+#: commands/versionlock/versionlock_clear.cpp:32
+msgid "Remove all entries from versionlock configuration"
+msgstr "ដកចេញរាល់ entries ទាំងអស់ដែលមកពី versionlock configuration"
+
+#: commands/versionlock/versionlock_delete.cpp:35
+msgid "Remove any matching versionlock configuration entries"
+msgstr "ដក់ចេញការផ្គូរផ្គងណាមួយនៃ versionlock configuration entries"
+
+#: commands/versionlock/versionlock_delete.cpp:41
+msgid "List of package specs to remove versionlock for"
+msgstr "បង្ហាញតារាងនៃ package specs ដើម្បីលុបចេញ versionlock សម្រាប់"
+
+#: commands/versionlock/versionlock_delete.cpp:55
+msgid "Deleting versionlock entry:"
+msgstr "កំពុងលុប versionlock entry:"
+
+#: commands/versionlock/versionlock_exclude.cpp:37
+msgid "Add new exclude entry to versionlock configuration"
+msgstr "ដាក់បន្ថែម exclude entry ថ្មីទៅកាន់ versionlock configuration"
+
+#: commands/versionlock/versionlock_exclude.cpp:44
+msgid "List of package-spec-N to add versionlock exclude for"
+msgstr "បង្ហាញតារាងនៃ package-spec-N ដើម្បីដាក់ versionlock exclude សម្រាប់"
+
+#: commands/versionlock/versionlock_exclude.cpp:89
+#: commands/versionlock/versionlock_exclude.cpp:101
+#, c++-format
+msgid "Adding versionlock exclude on \"{0} = {1}\"."
+msgstr "កំពុងដាក់បន្ថែម versionlock exclude នៅលើ \"{0} = {1}\"។"
+
+#: commands/versionlock/versionlock_exclude.cpp:140
+#, c++-format
+msgid "Package \"{}\" is already excluded."
+msgstr "Package \"{}\" ត្រូវបានដកចេញរួចរាល់។"
+
+#: context.cpp:73
+#, c++-format
+msgid "Importing OpenPGP key 0x{}:\n"
+msgstr "កំពុងទាញចូល OpenPGP key 0x{}:\n"
+
+#: context.cpp:75 context.cpp:100
+#, c++-format
+msgid " UserID     : \"{}\"\n"
+msgstr " .UserID.....:\"{}\"\n"
+
+#: context.cpp:78
+#, c++-format
+msgid ""
+" Fingerprint: {}\n"
+" From       : {}\n"
+msgstr ""
+" ស្នាមម្រាមដៃ: {}\n"
+" មកពី       : {}\n"
+
+#: context.cpp:87
+msgid "The key was successfully imported."
+msgstr "Key ត្រូវបានទាញចូលជោគជ័យ។"
+
+#: context.cpp:96
+#, c++-format
+msgid "The following OpenPGP key (0x{}) is about to be removed:"
+msgstr "OpenPGP key (0x{}) ខាងក្រោមនេះគឺនឹងត្រូវបានលុបចោល:"
+
+#: context.cpp:98
+#, c++-format
+msgid " Reason     : {}\n"
+msgstr " ហេតុផល     : {}\n"
+
+#: context.cpp:102
+#, c++-format
+msgid " Fingerprint: {}\n"
+msgstr " ស្នាមម្រាមដៃ: {}\n"
+
+#: context.cpp:104
+msgid "As a result, installing packages signed with this key will fail."
+msgstr "ជាលទ្ធផល, ការដំឡើង packages ដែលបានចុះហត្ថលេខាជាមួយ key នេះនឹងបរាជ័យ។"
+
+#: context.cpp:105
+msgid "It is recommended to remove the expired key to allow importing"
+msgstr "គេបានណែនាំអោយលុប key ដែលផុតកំណត់ដើម្បីអនុញ្ញាតការនាំចូល"
+
+#: context.cpp:106
+msgid ""
+"an updated key. This might leave already installed packages unverifiable."
+msgstr ""
+"key ដែលបានធ្វើបច្ចុប្បន្នកាល។ នេះអាចធ្វើអោយ package "
+"ដែលបានដំឡើងរួចហើយក្លាយទៅជាមិនអាចផ្ទៀងផ្ទាត់បាន។"
+
+#: context.cpp:109
+msgid "The system will now proceed with removing the key."
+msgstr "ប្រព័ន្ធនឹងចាប់ផ្ដើមលុប key ចោលឥឡូវនេះ។"
+
+#: context.cpp:115
+#, c++-format
+msgid "Key 0x{} was successfully removed."
+msgstr "Key 0x{} ត្រូវបានដកចេញជោគជ័យ។"
+
+#: context.cpp:295
+#, c++-format
+msgid "setopt: \"{}.{}\": {}"
+msgstr "setopt: \"{}.{}\": {}"
+
+#: context.cpp:305
+#, c++-format
+msgid ""
+"No matching repositories for {}. To use repositories from a host system, "
+"pass --use-host-config option"
+msgstr ""
+"គ្មាន​ repositories ដែលត្រូវនឹងគ្នាសម្រាប់ {}។ ដើម្បីប្រើ repositories ពីប្រព័ន្ធដើម, "
+"វាយបញ្ចូលជម្រើស --use-host-config"
+
+#: context.cpp:309
+#, c++-format
+msgid "No matching repositories for {}"
+msgstr "គ្មាន repositories ផ្គូរផ្គងសម្រាប់ {}"
+
+#: context.cpp:355
+msgid "Updating and loading repositories:"
+msgstr "កំពុងធ្វើបច្ចុប្បន្នភាព និង ទាញផ្ទុក repositories:"
+
+#: context.cpp:365
+msgid "Repositories loaded."
+msgstr "Repositories ត្រូវបានទាញផ្ទុក។"
+
+#: context.cpp:371
+msgid "Testing offline transaction"
+msgstr "កំពុងសាកល្បងប្រតិបត្តិការក្រៅបណ្ដាញ"
+
+#: context.cpp:375 context.cpp:523
+#, c++-format
+msgid "Transaction failed: {}"
+msgstr "ប្រតិបត្តិការមិនបានជោគជ័យ: {}"
+
+#: context.cpp:380 context.cpp:528
+#, c++-format
+msgid "  - {}"
+msgstr "  - {}"
+
+#: context.cpp:447
+#, c++-format
+msgid ""
+"Location \"{}\" already contains a stored transaction, it will be "
+"overwritten."
+msgstr "ទីតាំង \"{}\" មានផ្ទុកប្រតិបត្តិការស្រាប់ហើយ, វានឹងត្រូវបានសរសេរជាន់លើ។"
+
+#: context.cpp:476
+msgid ""
+"There is already an offline transaction queued, initiated by the following "
+"command:"
+msgstr ""
+"មានប្រតិបត្តិការក្រៅបណ្ដាញរួចរាល់ហើយនៅក្នុងជួរ, ត្រូវបានផ្ដួចផ្ដើមដោយ command​ ដូចខាងក្រោម:"
+
+#: context.cpp:478
+msgid ""
+"Continuing will cancel the old offline transaction and replace it with this "
+"one."
+msgstr ""
+"ធ្វើការបន្តនឹងបោះបង់ចោលប្រតិបត្តិការក្រៅបណ្ដាញចាស់ និងជំនួសវាជាមួយនឹងប្រតិបត្តិការមួយនេះ។"
+
+#: context.cpp:496
+msgid ""
+"Transaction stored to be performed offline. Run `dnf5 offline reboot` to "
+"reboot and run the transaction. To cancel the transaction and delete the "
+"downloaded files, use `dnf5 offline clean`."
+msgstr ""
+"ប្រតិបត្តិការដែលបានរក្សាទុកដើម្បីអនុវត្តក្រៅបណ្ដាញ។ Run `dnf5 offline reboot`ដើម្បី reboot "
+"និង run​ ប្រតិបត្តិការ។ ដើម្បីបោះបង់ចោលប្រតិបត្តិការនិងលុបចោលឯកសារដែលបានទាញយក, ប្រើ `dnf5 "
+"offline clean`។"
+
+#: context.cpp:502
+msgid "Running transaction"
+msgstr "កំពុងដំណើរការប្រតិបត្តិការ"
+
+#: context.cpp:820
+#, c++-format
+msgid "Upgrading {}"
+msgstr "កំពុងធ្វើកំណែឡើង {}"
+
+#: context.cpp:823
+#, c++-format
+msgid "Downgrading {}"
+msgstr "កំពុងធ្វើកំណែចុះ {}"
+
+#: context.cpp:826
+#, c++-format
+msgid "Reinstalling {}"
+msgstr "កំពុងដំឡើងម្ដងទៀត {}"
+
+#: context.cpp:839
+#, c++-format
+msgid "Unexpected action in TransactionPackage: {}"
+msgstr "សកម្មភាពមិនបានរំពឹងទុកនៅក្នុង TransactionPackage: {}"
+
+#: context.cpp:845
+#, c++-format
+msgid "Installing {}"
+msgstr "កំពុងតម្លើង​ {}"
+
+#: context.cpp:866
+msgid "Prepare transaction"
+msgstr "រៀបចំប្រតិបត្តិការ"
+
+#: context.cpp:886
+#, c++-format
+msgid "Removing {}"
+msgstr "ធ្វើការដកចេញ {}"
+
+#: context.cpp:889
+#, c++-format
+msgid "Cleanup {}"
+msgstr "សម្អាត {}"
+
+#: context.cpp:907
+#, c++-format
+msgid "Unpack error: {}"
+msgstr "ស្រាយកញ្ចប់កំហុស: {}"
+
+#: context.cpp:915
+#, c++-format
+msgid "Cpio error: {}"
+msgstr "កំហុស​ cpio: {}"
+
+#: context.cpp:925
+msgid "Scriptlet output:"
+msgstr "សង្ខេបទិន្នផល:"
+
+#: context.cpp:948
+msgid "Running scriptlets"
+msgstr "កំពុង run scriptlets"
+
+#: context.cpp:953
+#, c++-format
+msgid "Running {} scriptlet: {}"
+msgstr "កំពុង run {} scriptlet: {}"
+
+#: context.cpp:968
+#, c++-format
+msgid "Finished {} scriptlet: {}"
+msgstr "បានបញ្ចប់ {} scriptlet: {}"
+
+#: context.cpp:974
+#, c++-format
+msgid "Non-critical error in {} scriptlet: {}"
+msgstr "កំហុសមិនធ្ងន់ធ្ងរនៅក្នុង {} scriptlet: {}"
+
+#: context.cpp:983
+#, c++-format
+msgid "Error in {} scriptlet: {}"
+msgstr "កំហុសនៅក្នុង {} scriptlet: {}"
+
+#: context.cpp:1018
+msgid "Verify package files"
+msgstr "បញ្ជាក់ឯកសារ package"
+
+#: library.cpp:33
+#, c++-format
+msgid "Cannot load shared library \"{}\": {}"
+msgstr "មិនអាចទាញផ្ទុកបណ្ណាល័យរួម \"{}\": {}"
+
+#: library.cpp:47
+#, c++-format
+msgid "Cannot obtain address of symbol \"{}\": {}"
+msgstr "មិនអាចទទួលអាស័យដ្ឋាននៃនិមិត្តសញ្ញា \"{}\": {}​"
+
+#: main.cpp:133
+msgid "Utility for packages maintaining"
+msgstr "ឧបករណ៍ប្រើប្រាស់សម្រាប់ថែរក្សា packages"
+
+#: main.cpp:134
+msgid "DNF5 is a program for maintaining packages."
+msgstr "DNF5 គឺជាកម្មវិធីសម្រាប់ថែរក្សា packages។"
+
+#: main.cpp:135
+msgid "Unclassified options:"
+msgstr "ជម្រើសដែលមិនបានចាត់ថ្នាក់:"
+
+#: main.cpp:138
+msgid "Global options:"
+msgstr "ជម្រើសសកល:"
+
+#: main.cpp:143
+msgid "Print help"
+msgstr "បង្ហាញជំនួយ"
+
+#: main.cpp:150
+msgid "Configuration file location"
+msgstr "ទីតាំងរបស់ឯកសារ configuration"
+
+#: main.cpp:158
+msgid ""
+"In combination with a non-interactive command, shows just the relevant "
+"content. Suppresses messages notifying about the current state or actions of "
+"dnf5."
+msgstr ""
+"ផ្សំជាមួយនឹង non-interactive command, បង្ហាញតែមាតិការដែលពាក់ព័ន្ធ។ "
+"រារាំងសារដែលផ្ដល់ដំណឹងអំពីស្ថានភាពបច្ចុប្បន្ន​ឬសកម្មភាពនៃ dnf5។"
+
+#: main.cpp:173
+msgid ""
+"Run entirely from system cache, don't update the cache and use it even in "
+"case it is expired."
+msgstr ""
+"Run ទាំងស្រុងពី cache របស់ប្រព័ន្ធ, កុំធ្វើបុច្ចប្បន្នកាល cache និងប្រើវាទោះបីជាក្នុងករណីវាផុតកំណត់។"
+
+#: main.cpp:182
+msgid "Control whether color is used."
+msgstr "គ្រប់គ្រងថាតើពណ៏ត្រូវបានប្រើ។"
+
+#: main.cpp:188
+msgid "Force refreshing metadata before running the command."
+msgstr "ជម្រុញការ refreshing metadata មុនពេល run command។"
+
+#: main.cpp:204
+#, c++-format
+msgid "Failed to expire repository cache in path \"{0}\": {1}"
+msgstr ""
+"បរាជ័យក្នុងការធ្វើឲ្យ repository cache ផុតកំណត់នៅក្នុង path \"{0}\": {1}"
+
+#: main.cpp:218
+msgid "create additional repository using id and path"
+msgstr "បង្កើត repository បន្ថែមដោយប្រើ id និង path"
+
+#: main.cpp:226
+#, c++-format
+msgid "repofrompath: Incorrect repoid and path specification \"{}\""
+msgstr "repofrompath: ការបញ្ជាក់​ repoid និង path មិនត្រឹមត្រូវ \"{}\""
+
+#: main.cpp:238
+msgid "set arbitrary config and repo options"
+msgstr "ដាក់ arbitrary config និងជម្រើស repo"
+
+#: main.cpp:240
+msgid ""
+"Override a configuration option from the configuration file. To override "
+"configuration options for repositories, use repoid.option for  the\n"
+"              <option>.  Values  for configuration options like excludepkgs, "
+"includepkgs, installonlypkgs and tsflags are appended to the original "
+"value,\n"
+"              they do not override it. However, specifying an empty value "
+"(e.g. --setopt=tsflags=) will clear the option."
+msgstr ""
+"Override ជម្រើស configuration ពីឯកសារ configuration។ ដើម្បី​ override ជម្រើស "
+"configuration ពី repositories, សូមប្រើ repoid.option សម្រាប់\n"
+"              <ជម្រើស>។  តម្លៃសម្រាប់ជម្រើស configuration ដូចជា excludepkgs, "
+"includepkgs, installonlypkgs និង tsflags ត្រូវបានបន្ថែមទៅតម្លៃដើម។\n"
+"              ពួកគេមិន override វាទេ។ ទោះយ៉ាងណាក៏ដោយ ការបញ្ជាក់តម្លៃទទេ (ឧ. "
+"--setopt=tsflags=) នឹងជម្រះជម្រើស។"
+
+#: main.cpp:249 main.cpp:288
+#, c++-format
+msgid "{}: Badly formatted argument value \"{}\""
+msgstr "{}: តម្លៃ argument ត្រូវបានបង្កើតឡើងដោយមិនបានល្អ \"{}\""
+
+#: main.cpp:256
+#, c++-format
+msgid ""
+"{}: Badly formatted argument value: Last key character cannot be '.': {}"
+msgstr ""
+"{}: តម្លៃ argument ត្រូវបានបង្កើតឡើងមិនល្អ។ ព្យញ្ជានចុងក្រោយមិនអាចជា '.':{}"
+
+#: main.cpp:269
+#, c++-format
+msgid "setopt: \"{0}\": {1}"
+msgstr "setopt: \"{0}\": {1}"
+
+#: main.cpp:281
+msgid "set arbitrary variable"
+msgstr "កំណត់វ៉ារ្យង់ arbitrary"
+
+#: main.cpp:295
+#, c++-format
+msgid "setvar: {}"
+msgstr "setvar: {}"
+
+#: main.cpp:304
+msgid "automatically answer yes for all questions"
+msgstr "ឆ្លើយយល់ព្រមចំពោះសំណួរទាំងអស់ដោយស្វ័យប្រវត្តិ"
+
+#: main.cpp:311
+msgid "automatically answer no for all questions"
+msgstr "ឆ្លើយមិនយល់ព្រមចំពោះសំណួរទាំងអស់ដោយស្វ័យប្រវត្តិ"
+
+#: main.cpp:318
+msgid "try the best available package versions in transactions"
+msgstr "ព្យាយាមលើកំណែ package ដែលល្អជាងគេនៅក្នុងប្រតិបត្តិការ"
+
+#: main.cpp:325
+msgid "do not limit the transaction to the best candidate"
+msgstr "កុំដាក់កំណត់ប្រតិបត្តិការទៅលើតែបេក្ខភាពដែលល្អជាងគេ"
+
+#: main.cpp:336
+msgid ""
+"Don't install files that are marked as documentation (which includes man "
+"pages and texinfo documents)"
+msgstr ""
+"កំុដំឡើង files ដែលត្រូវបានសម្គាល់ថាជាឯកសារ (ដែលរួមបញ្ចូល man pages​ និង ឯកសារ​ textinfo)"
+
+#: main.cpp:352
+msgid "exclude packages by name or glob"
+msgstr "មិនរួមបញ្ចូល packages តាមរយ:ឈ្មោះឬ​ glob"
+
+#: main.cpp:371
+msgid ""
+"Enable additional repositories. List option. Supports globs, can be "
+"specified multiple times."
+msgstr ""
+"បើកឲ្យដំណើរការ repositories បន្ថែម។ បង្ហាញជម្រើស។​ គាំទ្រ globs, អាចបញ្ជាក់បានច្រើនដង។"
+
+#: main.cpp:389
+msgid ""
+"Disable repositories. List option. Supports globs, can be specified multiple "
+"times."
+msgstr "បិទ repositories។​ បង្ហាញជម្រើស។ គាំទ្រ globs, អាចបញ្ជាក់បានច្រើនដង។"
+
+#: main.cpp:407
+msgid ""
+"Enable just specific repositories. List option. Supports globs, can be "
+"specified multiple times."
+msgstr ""
+"បើកអោយដំណើរការតែ repositories ជាក់លាក់ណាមួយ។ បង្ហាញជម្រើស។ គាំទ្រ globs, "
+"អាចបញ្ជាក់បានច្រើនដង។"
+
+#: main.cpp:429
+msgid "disable OpenPGP signature checking (if RPM policy allows)"
+msgstr "បិទការពិនិត្យហត្ថលេខា OpenPGP​ (ប្រសិនបើគោលនយោបាយ​ RPM អនុញ្ញាត)"
+
+#: main.cpp:446
+msgid "Disable all libdnf5 plugins"
+msgstr "បិទមិនអោយដំណើរការរាល់ libdnf5 plugins"
+
+#: main.cpp:456
+msgid ""
+"Enable libdnf5 plugins by name. List option. Supports globs, can be "
+"specified multiple times."
+msgstr ""
+"បើកអោយដំណើរការ libdnf5 plugins ដោយប្រើឈ្មោះ។ បង្ហាញជម្រើស។ គាំទ្រ​ globs, "
+"អាចបញ្ជាក់បានច្រើនដង។"
+
+#: main.cpp:471
+msgid ""
+"Disable libdnf5 plugins by name. List option. Supports globs, can be "
+"specified multiple times."
+msgstr ""
+"បិទមិនអោយដំណើរកា libdnf5 plugins ដោយឈ្មោះ។ បង្ហាញជម្រើស។ គាំទ្រ globs, "
+"អាចបញ្ជាក់បានច្រើនដង។"
+
+#: main.cpp:488
+msgid "add a comment to transaction"
+msgstr "ដាក់មតិយោបល់ទៅប្រតិបត្តិការ"
+
+#: main.cpp:490
+msgid ""
+"Adds a comment to the action. If a transaction takes place, the comment is "
+"stored in it."
+msgstr ""
+"ដាក់មតិយោបល់ទៅសកម្មភាព។ ប្រសិនបើប្រតិបត្តិការចាប់ផ្ដើម មតិយោបល់ត្រូវរក្សារទុកក្នុងប្រតិបត្តិការ។"
+
+#: main.cpp:503
+msgid "set install root"
+msgstr "ដាក់ការដំឡើង root"
+
+#: main.cpp:510
+msgid ""
+"use configuration, reposdir, and vars from the host system rather than the "
+"installroot"
+msgstr ""
+"ប្រើ configuration, reposdir, និង vars ពីម្ចាស់ប្រព័ន្ធជាជាង installroot"
+
+#: main.cpp:519
+msgid "override the value of $releasever in config and repo files"
+msgstr "override តម្លៃនៃ $releasever នៅក្នុង config និង repo files"
+
+#: main.cpp:532
+msgid ""
+"Show newly installed leaf packages and packages that became leaves after a "
+"transaction."
+msgstr ""
+"បង្ហាញ leaf packages ដែលទើបនឹងបានដំឡើងថ្មីៗ និង package ដែលក្លាយទៅជា leaves "
+"បន្ទាប់ពីប្រតិបត្តិការ។"
+
+#: main.cpp:546
+msgid "Dump detailed solving results into files"
+msgstr "បោះបញ្ចូលសេចក្តីលំអិតនៃលទ្ធផលដែលបានដោះស្រាយទៅក្នុងឯកសារ"
+
+#: main.cpp:555
+msgid "Print main configuration values to stdout"
+msgstr "បង្ហាញតម្លៃគោលនៃ configuration ទៅ stdout"
+
+#: main.cpp:572
+msgid ""
+"Print repository configuration values to stdout. List option. Supports globs"
+msgstr ""
+"បង្ហាញតម្លៃ repository configuration ទៅ stdout. បង្ហាញជម្រើស។ គាំទ្រ​ globs"
+
+#: main.cpp:587
+msgid "Print variable values to stdout"
+msgstr "បង្ហាញតម្លៃអថេរទៅ stdout"
+
+#: main.cpp:601
+msgid "Show DNF5 version and exit"
+msgstr "បង្ហាញកំណែ DNF5 ហើយ​ចាកចេញ"
+
+#: main.cpp:608
+msgid "Force the use of a different architecture."
+msgstr "បង្ខំការប្រើប្រាស់ស្ថាបត្យកម្មផ្សេង។"
+
+#: main.cpp:646
+msgid "Software Management Commands:"
+msgstr "Commands សម្រាប់ការគ្រប់គ្រងកម្មវិធី:"
+
+#: main.cpp:653
+msgid "Query Commands:"
+msgstr "ស្វែងរក commands:"
+
+#: main.cpp:660
+msgid "Subcommands:"
+msgstr "Subcommands:"
+
+#: main.cpp:759
+#, c++-format
+msgid "{} version {}.{}.{}.{}"
+msgstr "{} កំណែ {}.{}.{}.{}"
+
+#: main.cpp:762
+#, c++-format
+msgid "{} plugin API version {}.{}"
+msgstr "{} កំណែ​ plugin API {}.{}"
+
+#: main.cpp:767
+#, c++-format
+msgid "libdnf5 version {}.{}.{}.{}"
+msgstr "កំណែ libdnf5 {}.{}.{}.{}"
+
+#: main.cpp:770
+#, c++-format
+msgid "libdnf5 plugin API version {}.{}"
+msgstr "កំណែ libdnf5 plugin API {}.{}"
+
+#: main.cpp:777
+#, c++-format
+msgid ""
+"\n"
+"Loaded {} plugins:"
+msgstr ""
+"\n"
+"បានទាញផ្ទុក {} plugins:"
+
+#: main.cpp:782
+#, c++-format
+msgid "  name: {}"
+msgstr "  ឈ្មោះ: {}"
+
+#: main.cpp:785
+#, c++-format
+msgid "  version: {}.{}.{}"
+msgstr "  កំណែ: {}.{}.{}"
+
+#: main.cpp:787
+#, c++-format
+msgid "  API version: {}.{}"
+msgstr "  កំណែ API: {}.{}"
+
+#: main.cpp:825
+#, c++-format
+msgid ""
+"Total size of inbound packages is {:.0f} {:s}. Need to download {:.0f} {:s}."
+msgstr "ទំហំសរុបនៃ inbound packages គឺ {:.0f} {:s}។ ត្រូវការទាញយក {:.0f} {:s}។"
+
+#: main.cpp:842
+#, c++-format
+msgid ""
+"After this operation, {:.0f} {:s} extra will be used (install {:.0f} {:s}, "
+"remove {:.0f} {:s})."
+msgstr ""
+"បន្ទាប់ពីប្រតិបត្តិការនេះ, {:.0f} {:s} បន្ថែមនឹងត្រូវបានប្រើ (ដំឡើង {:.0f} {:s}, ដកចេញ "
+"{:.0f} {:s})។"
+
+#: main.cpp:853
+#, c++-format
+msgid ""
+"After this operation, {:.0f} {:s} will be freed (install {:.0f} {:s}, remove "
+"{:.0f} {:s})."
+msgstr ""
+"បន្ទាប់ពីប្រតិបត្តិការនេះ, {:.0f} {:s} នឹងត្រូវបានដោះលែង (ដំឡើង {:.0f} {:s}, ដកចេញ "
+"{:.0f} {:s})។"
+
+#: main.cpp:865
+msgid "======== Main configuration: ========"
+msgstr "======== គោលចំបងនៃ configuration: ========"
+
+#: main.cpp:902
+#, c++-format
+msgid "No matching repo to dump configuration: \"{}\""
+msgstr "គ្មាន repo ដែលផ្គូរផ្គងដើម្បីបោះចូលទៅ configuration: \"{}\""
+
+#: main.cpp:907
+#, c++-format
+msgid "======== \"{}\" repository configuration: ========"
+msgstr "======== \"{}\" repository configuration: ========"
+
+#: main.cpp:927
+msgid "======== Variables: ========"
+msgstr "======== អថេរ: ========"
+
+#: main.cpp:967
+msgid "New leaves:"
+msgstr "Leaves ថ្មី:"
+
+#: main.cpp:969
+#, c++-format
+msgid " {}"
+msgstr " {}"
+
+#: main.cpp:1013
+#, c++-format
+msgid "{} to skip unavailable packages"
+msgstr "{} ដើម្បីរំលង packages ដែលមិនមាន"
+
+#: main.cpp:1021
+#, c++-format
+msgid "{} to allow extra packages in the transaction"
+msgstr "{} ដើម្បីអនុញ្ញាត packages បន្ថែមនៅក្នុងប្រតិបត្តិការ"
+
+#: main.cpp:1034
+#, c++-format
+msgid ""
+"{} to allow mismatches between installed and stored transaction packages. "
+"This can result in an empty transaction because among other things the "
+"option can ignore failing Remove actions."
+msgstr ""
+"{}​ ដើម្បីអនុញ្ញាតការមិនផ្គូរផ្គងរវាង transaction packages ដែលបានដំឡើង និងដែលបានរក្សារទុ"
+"ក. វាអាចចេញលទ្ធផលជាប្រតិបត្តិការទទេរពីព្រោះក្នុងចំណោមអ្វីផ្សេងទៀត ជម្រើសអាចមើលរំលងសកម្មភាព "
+"Remove ដែលបរាជ័យ។"
+
+#: main.cpp:1081
+#, c++-format
+msgid "{} to not limit the transaction to the best candidates"
+msgstr "{} ដើម្បីមិនដាក់កំណត់ប្រតិបត្តិការទៅលើបេក្ខភាពដែលល្អជាងគេ"
+
+#: main.cpp:1088
+#, c++-format
+msgid "{} to allow removing of installed packages to resolve problems"
+msgstr "{} ដើម្បីអនុញ្ញាតការដកចេញនៃ packages ដែលបានដំឡើងក្នុងការដោះស្រាយបញ្ហា"
+
+#: main.cpp:1097
+#, c++-format
+msgid "{} to load additional filelists metadata"
+msgstr "{} ដើម្បីទាញផ្ទុក filelists metadata បន្ថែម"
+
+#: main.cpp:1104
+#, c++-format
+msgid "{} to skip uninstallable packages"
+msgstr "{} ដើម្បីរំលង packages ដែលមិនអាចដំឡើងបាន"
+
+#: main.cpp:1110
+msgid "You can try to add to command line:"
+msgstr "អ្នកអាចព្យាយាមដាក់វាទៅលើ command line:"
+
+#: main.cpp:1128
+#, c++-format
+msgid ""
+"No matches were found for the following plugin name patterns while enabling "
+"libdnf plugins: {}"
+msgstr "រកមិនឃើញលទ្ធផលដូចនឹងលំនាំនៃ plugin នៅពេលកំពុងបើក libdnf plugins: {}"
+
+#: main.cpp:1129
+#, c++-format
+msgid ""
+"No matches were found for the following plugin name patterns while disabling "
+"libdnf plugins: {}"
+msgstr "រកមិនឃើញលទ្ធផលដូចនឹងលំនាំនៃ plugin នៅពេលកំពុងបិទ libdnf plugins: {}"
+
+#: main.cpp:1226
+#, c++-format
+msgid "--- DNF5 launched with arguments: \"{}\" ---"
+msgstr "--- DNF5 បានបើកដំណើរការជាមួយ arguments: \"{}\" ---"
+
+#: main.cpp:1262
+#, c++-format
+msgid "Invalid \"index\" in \"--complete=<index>[,...]\": {}"
+msgstr "មិនត្រឹមត្រូវ \"index\" in \"--complete=<index>[,...]\": {}"
+
+#: main.cpp:1301
+#, c++-format
+msgid "{}."
+msgstr "{}."
+
+#: main.cpp:1304 main.cpp:1556
+#, c++-format
+msgid "{}. Add \"--help\" for more information about the arguments."
+msgstr "{}. ដាក់ \"--help\" សម្រាប់ព័ត៌មានបន្ថែមអំពី arguments។"
+
+#: main.cpp:1313
+#, c++-format
+msgid ""
+"It could be a command provided by a plugin, try: dnf5 install 'dnf5-"
+"command({})'"
+msgstr ""
+"វាអាចជា command ដែលបានផ្ដល់ដោយ plugin, ព្យាយាម: dnf5 install 'dnf5-command({})'"
+
+#: main.cpp:1355
+#, c++-format
+msgid ""
+"The argument is available for commands: {}. (It has to be placed after the "
+"command.)"
+msgstr "Argument គឺមានសម្រាប់ commands: {}។ (វាត្រូវតែដាក់បន្ទាប់ពី command។)"
+
+#: main.cpp:1399
+msgid "No read/execute access in current directory, moving to /"
+msgstr "គ្មានសិទ្ធិចូល read/execute នៅក្នុងថតបច្ចុប្បន្ន, ផ្លាស់ប្ដូរទៅ /"
+
+#: main.cpp:1471
+msgid ""
+"The requested operation requires superuser privileges. Please log in as a "
+"user with elevated rights, or use the \"--assumeno\" or \"--downloadonly\" "
+"options to run the command without modifying the system state."
+msgstr ""
+"ប្រតិបត្តិការដែលបានដាក់ស្នើរតម្រូវអោយមានសិទ្ធិជា superuser។ សូមចូលជាអ្នកប្រើប្រាស់ដើម្បីមានសិទ្ធិ, "
+"ឬក៍ប្រើជម្រើស \"--assumeno\" ឬ \"--downloadonly\" ដើម្បី​ run command "
+"ដោយគ្មានផ្លាស់ប្ដូរស្ថានភាពរបស់ប្រព័ន្ធ។"
+
+#: main.cpp:1512
+#, c++-format
+msgid "The operation will only store the transaction in {}"
+msgstr "ប្រតិបត្តិការនឹងរក្សារទុកតែប្រតិបត្តិការនៅក្នុង {}"
+
+#: main.cpp:1514
+msgid "The operation will only download packages for the transaction."
+msgstr "ប្រតិបត្តិការនឹងទាញចូលតែ packages សម្រាប់ប្រតិបត្តិការប៉ុណ្ណោះ។"
+
+#: main.cpp:1519
+msgid ""
+"Test mode enabled: Only package downloads, OpenPGP key installations and "
+"transaction checks will be performed."
+msgstr ""
+"ការកំណត់សាកល្បងត្រូវបានបើក: សម្រាប់តែទាញចូល package, ការដំឡើង OpenPGP key "
+"ហើយការពិនិត្យប្រតិបត្តិការនឹងត្រូវបានអនុវត្ត។"
+
+#: main.cpp:1527
+msgid ""
+"Error: this bootc system is configured to be read-only. For more "
+"information, run `bootc --help`."
+msgstr ""
+"កំហុង: bootc system គឺត្រូវបាន configured អោយ read-only. សម្រាប់ព័ត៌មានបន្ថែម, run `"
+"bootc --help`។"
+
+#: main.cpp:1544
+msgid ""
+"No repositories were loaded from the installroot. To use the configuration "
+"and repositories of the host system, pass --use-host-config."
+msgstr ""
+"គ្មាន repositories ដែលត្រូវបានទាញផ្ទុកពី installroot។ ដើម្បីប្រើ configuration និង "
+"repositories នៃម្ចាស់ប្រព័ន្ធ, វាយបញ្ចូល --use-host-config។"
+
+#: main.cpp:1566
+#, c++-format
+msgid "Command returned error: {}"
+msgstr "Command ឆ្លើយត្រឡប់មកវិញនូវកំហុស: {}"
+
+#: main.cpp:1574
+msgid "DNF5 finished"
+msgstr "DNF5 បានបញ្ចប់"
+
+#: main.cpp:1578
+msgid "Complete!"
+msgstr "បញ្ចប់!"
+
+#: shared_options.cpp:32
+msgid "Allow removing of installed packages to resolve problems"
+msgstr "អនុញ្ញាតឲ្យដកចេញនូវ packages ដែលបានដំឡើងដើម្បីដោះស្រាយបញ្ហា"
+
+#: shared_options.cpp:42
+msgid "Allow resolving of depsolve problems by skipping packages"
+msgstr "អនុញ្ញាតអោយដោះស្រាយ​បញ្ហា depsolve ដោយរំលង packages"
+
+#: shared_options.cpp:54
+msgid "Allow skipping unavailable packages"
+msgstr "អនុញ្ញាតអោយរំលង packages ដែលមិនមាន"

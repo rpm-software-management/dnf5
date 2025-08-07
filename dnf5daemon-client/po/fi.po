@@ -3,14 +3,14 @@
 # This file is distributed under the same license as the PACKAGE package.
 # Jiri Grönroos <jiri.gronroos@iki.fi>, 2024.
 # Ville-Pekka Vainio <vpvainio@iki.fi>, 2024.
-# Ricky Tigg <ricky.tigg@gmail.com>, 2024.
+# Ricky Tigg <ricky.tigg@gmail.com>, 2024, 2025.
 # Weblate Translation Memory <noreply-mt-weblate-translation-memory@weblate.org>, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-11 03:49+0000\n"
-"PO-Revision-Date: 2024-11-21 12:27+0000\n"
+"POT-Creation-Date: 2025-07-26 03:48+0000\n"
+"PO-Revision-Date: 2025-07-19 11:40+0000\n"
 "Last-Translator: Ricky Tigg <ricky.tigg@gmail.com>\n"
 "Language-Team: Finnish <https://translate.fedoraproject.org/projects/dnf5/"
 "dnf5daemon-client/fi/>\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.8.2\n"
+"X-Generator: Weblate 5.12.2\n"
 
 #: commands/advisory/advisory.cpp:35
 msgid "Manage advisories"
@@ -87,53 +87,40 @@ msgid "Show only advisories referencing a CVE."
 msgstr "Näytä vain CVE:hen viittaavat neuvot."
 
 #: commands/advisory/arguments.hpp:113
-#, fuzzy
-#| msgid "Limit to packages in advisories with specified name. List option."
 msgid ""
 "Include content contained in advisories with specified name. List option."
 msgstr ""
-"Rajoita neuvoissa tietyllä nimellä oleviin paketteihin. Luettelovaihtoehto."
+"Sisällytä määritetyllä nimellä varustettujen tiedotteiden sisältö. "
+"Luettelovaihtoehto."
 
 #: commands/advisory/arguments.hpp:114
 msgid "ADVISORY_NAME,..."
 msgstr "NEUVON_NIMI,..."
 
 #: commands/advisory/arguments.hpp:121
-#, fuzzy
-#| msgid "Limit to packages in security advisories."
 msgid "Include content contained in security advisories."
-msgstr "Rajoita turvallisuusneuvoissa oleviin paketteihin."
+msgstr "Sisällytä tietoturvatiedotteissa oleva sisältö."
 
 #: commands/advisory/arguments.hpp:128
-#, fuzzy
-#| msgid "Limit to packages in bugfix advisories."
 msgid "Include content contained in bugfix advisories."
-msgstr "Rajoita virheenkorjausneuvoissa oleviin paketteihin."
+msgstr "Sisällytä viankorjaustiedotteissa oleva sisältö."
 
 #: commands/advisory/arguments.hpp:135
-#, fuzzy
-#| msgid "Limit to packages in enhancement advisories."
 msgid "Include content contained in enhancement advisories."
-msgstr "Rajoita parannusneuvoissa oleviin paketteihin."
+msgstr "Sisällytä parannustiedotteissa oleva sisältö."
 
 #: commands/advisory/arguments.hpp:142
-#, fuzzy
-#| msgid "Limit to packages in newpackage advisories."
 msgid "Include content contained in newpackage advisories."
-msgstr "Rajoita uusi_paketti-neuvoissa oleviin paketteihin."
+msgstr "Sisällytä newpackage-tiedotteissa oleva sisältö."
 
 #. Note for translators: "critical" etc. quoted words are
 #. literals that should not be translated.
 #: commands/advisory/arguments.hpp:155
-#, fuzzy
-#| msgid ""
-#| "Limit to packages in advisories with specified severity. List option. Can "
-#| "be \"critical\", \"important\", \"moderate\", \"low\", \"none\"."
 msgid ""
 "Include content contained in advisories with specified severity. List "
 "option. Can be \"critical\", \"important\", \"moderate\", \"low\", \"none\"."
 msgstr ""
-"Rajoita neuvoissa määrätyllä vakavuudella oleviin paketteihin. "
+"Sisällytä tiedotteissa oleva sisältö, jolla on määritelty vakavuusaste. "
 "Luettelovaihtoehto. Voi olla 'critical', 'important', 'moderate', 'low', "
 "'none'."
 
@@ -142,31 +129,23 @@ msgid "ADVISORY_SEVERITY,..."
 msgstr "NEUVON_VAKAVUUS..."
 
 #: commands/advisory/arguments.hpp:169
-#, fuzzy
-#| msgid ""
-#| "Limit to packages in advisories that fix a Bugzilla ID, Eg. 123123. List "
-#| "option."
 msgid ""
 "Include content contained in advisories that fix a Bugzilla ID, Eg. 123123. "
 "List option."
 msgstr ""
-"Rajoita neuvoissa oleviin paketteihin, jotka korjaavat Bugzilla ID:n, esim. "
-"123123. Luettelovaihtoehto."
+"Sisällytä tiedotteissa oleva sisältö, jotka korjaavat jokin Bugzilla-"
+"tunnuksen, esim. 123123. Luettelovaihtoehto."
 
 #: commands/advisory/arguments.hpp:170
 msgid "BUGZILLA_ID,..."
 msgstr "BUGZILLAN_TUNNUS,..."
 
 #: commands/advisory/arguments.hpp:180
-#, fuzzy
-#| msgid ""
-#| "Limit to packages in advisories that fix a CVE (Common Vulnerabilities "
-#| "and Exposures) ID, Eg. CVE-2201-0123. List option."
 msgid ""
 "Include content contained in advisories that fix a CVE (Common "
 "Vulnerabilities and Exposures) ID, Eg. CVE-2201-0123. List option."
 msgstr ""
-"Rajoita neuvoissa oleviin paketteihin, jotka korjaavat CVE (Common "
+"Sisällytä tiedotteissa oleva sisältö, jotka korjaavat jokin CVE (Common "
 "Vulnerabilities and Exposures)-tunnuksen, esim. CVE-2201-0123. "
 "Luettelovaihtoehto."
 
