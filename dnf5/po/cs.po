@@ -6,13 +6,14 @@
 # Petr Stourac <stouracp@gmail.com>, 2025.
 # Petr Pisar <ppisar@redhat.com>, 2025.
 # Jonáš Loskot <alius@users.noreply.translate.fedoraproject.org>, 2025.
+# Vít Smolík <me@smoliicek.cz>, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-11 03:49+0000\n"
-"PO-Revision-Date: 2025-07-09 15:06+0000\n"
-"Last-Translator: Petr Pisar <ppisar@redhat.com>\n"
+"POT-Creation-Date: 2025-07-26 03:48+0000\n"
+"PO-Revision-Date: 2025-07-22 10:18+0000\n"
+"Last-Translator: Vít Smolík <me@smoliicek.cz>\n"
 "Language-Team: Czech <https://translate.fedoraproject.org/projects/dnf5/dnf5/"
 "cs/>\n"
 "Language: cs\n"
@@ -31,140 +32,164 @@ msgid ""
 "Attached named argument \"{}\" not found: {}: Requested in file \"{}\" on "
 "line {}: {}"
 msgstr ""
+"Připojený pojmenovaný argument „{}“ nenalezen: {}: Požadován v souboru „{}“ "
+"na řádku {}: {}"
 
 #: cmdline_aliases.cpp:159
 msgid ""
 "Unknown attribute \"{}\" of attached named argument for alias \"{}\" in file "
 "\"{}\" on line {}: {}"
 msgstr ""
+"Neznámý atribut „{}“ připojeného pojmenovaného argumentu aliasu „{}“ "
+"v souboru „{}“ na řádku {}: {}"
 
 #: cmdline_aliases.cpp:171
 msgid "Missing attribute \"id_path\" for alias \"{}\" in file \"{}\""
-msgstr ""
+msgstr "Aliasu „{}“ v souboru „{}“ chybí atribut „id_path“"
 
 #: cmdline_aliases.cpp:208
 msgid "Unsupported version \"{}\" in file \"{}\". Supported versions: {}"
-msgstr ""
+msgstr "Nepodporované verze „{} v souboru „{}“. Podporované verze jsou: {}"
 
 #: cmdline_aliases.cpp:218
 msgid "Bad value type of attribute \"version\" in file \"{}\" on line {}: {}"
-msgstr ""
+msgstr "Chybný typ hodnoty atributu „version“ v souboru „{}“ na řádku {}: {}"
 
 #: cmdline_aliases.cpp:224
 msgid "Missing attribute \"version\" in file \"{}\""
-msgstr ""
+msgstr "V souboru „{}“ chybí atribut „version“"
 
 #: cmdline_aliases.cpp:236
 msgid "Unknown key \"{}\" in file \"{}\" on line {}: {}"
-msgstr ""
+msgstr "Neznámý klíč „{}“ v souboru „{}“ na řádku {}: {}"
 
 #: cmdline_aliases.cpp:253
 msgid "Empty or bad element id path in file \"{}\" on line {}: {}"
 msgstr ""
+"Prázdný nebo chybný prvek v identifikátoru cesty v souboru „{}“ na řádku {}: "
+"{}"
 
 #: cmdline_aliases.cpp:272
 msgid ""
 "Parent command \"{}\" not found: {}: Requested in file \"{}\" on line {}: {}"
 msgstr ""
+"Rodičovský příkaz „{}“ nenalezen: {}: Požadován v souboru „{}“ na řádku {}: "
+"{}"
 
 #: cmdline_aliases.cpp:301
 msgid "Unknown type \"{}\" of element \"{}\" in file \"{}\" on line {}: {}"
-msgstr ""
+msgstr "Neznámý typ „{}“ prvku „{}“ v souboru „{}“ na řádku {}: {}"
 
 #: cmdline_aliases.cpp:312
 msgid "Missing attribute \"type\" for element \"{}\" in file \"{}\""
-msgstr ""
+msgstr "Prvku „{}“ v souboru „{}“ chybí atribut „type“"
 
 #: cmdline_aliases.cpp:331
 msgid ""
 "Named argument \"{}\" already registered. Requested in file \"{}\" on line "
 "{}: {}"
 msgstr ""
+"Pojmenovaný argument „{}“ je již zaregistrován. Požadován v souboru „{}“ na "
+"řádku {}: {}"
 
 #: cmdline_aliases.cpp:347
 msgid ""
 "Command \"{}\" already registered. Requested in file \"{}\" on line {}: {}"
 msgstr ""
+"Příkaz „{}“ je již zaregistrován. Požadován v souboru „{}“ na řádku {}: {}"
 
 #: cmdline_aliases.cpp:375
 msgid "Unknown attribute \"{}\" of group \"{}\" in file \"{}\" on line {}: {}"
-msgstr ""
+msgstr "Neznámý atribut „{}“ skupiny „{}“ v souboru „{}“ na řádku {}: {}"
 
 #: cmdline_aliases.cpp:387
 msgid "Missing attribute \"header\" for element \"{}\" in file \"{}\""
-msgstr ""
+msgstr "Prvku „{}“ v souboru „{}“ chybí atribut „header“"
 
 #: cmdline_aliases.cpp:428 cmdline_aliases.cpp:538
 msgid ""
 "The \"short_name\" attribute of named argument \"{}\" must be one character "
 "long in file \"{}\" on line {}: {}"
 msgstr ""
+"Atribut „short_name“ pojmenovaného argumentu „{}“ v souboru „{}“ na řádku {} "
+"musí mít délku jednoho znaku: {}"
 
 #: cmdline_aliases.cpp:446
 msgid "Source \"{}\" not found: {}: Requested in file \"{}\" on line {}: {}"
-msgstr ""
+msgstr "Zdroj „{}“ nenalezen: {}: Požadován v souboru „{}“ na řádku {}: {}"
 
 #: cmdline_aliases.cpp:462 cmdline_aliases.cpp:563 cmdline_aliases.cpp:676
 msgid "Group \"{}\" not found: {}: Requested in file \"{}\" on line {}: {}"
-msgstr ""
+msgstr "Skupina „{}“ nenalezena: {}: Požadována v souboru „{}“ na řádku {}: {}"
 
 #: cmdline_aliases.cpp:476 cmdline_aliases.cpp:579
 msgid ""
 "Unknown attribute \"{}\" of named argument \"{}\" in file \"{}\" on line {}: "
 "{}"
 msgstr ""
+"Neznámý atribut „{}“ pojmenovaného argumentu „{}“ v souboru „{}“ na řádku "
+"{}: {}"
 
 #: cmdline_aliases.cpp:489
 msgid "Missing attribute \"source\" for named argument \"{}\" in file \"{}\""
-msgstr ""
+msgstr "Pojmenovanému argumentu „{}“ v souboru „{}“ chybí atribut „source“"
 
 #: cmdline_aliases.cpp:498 cmdline_aliases.cpp:592
 msgid ""
 "At least one of the attributes \"long_name\" and \"short_name\" must be set "
 "for named argument \"{}\" in file \"{}\""
 msgstr ""
+"Pojmenovaný argument „{}“ v souboru „{}“ musí mít nastaven alespoň atribut "
+"„long_name“ nebo „short_name“"
 
 #: cmdline_aliases.cpp:657
 msgid ""
 "Attached command \"{}\" not found: {}: Requested in file \"{}\" on line {}: "
 "{}"
 msgstr ""
+"Připojený příkaz „{}“ nenalezen: {}: Požadovaný v souboru „{}“ na řádku {}: "
+"{}"
 
 #: cmdline_aliases.cpp:691
 msgid ""
 "Used config file version \"1.0\" for attribute \"{}\" of command \"{}\" in "
 "file \"{}\" on line {}: {}"
 msgstr ""
+"Atribut „{}“ příkazu „{}“ v souboru „{}“ na řádku {} používá konfigurační "
+"soubor verze „1.0“: {}"
 
 #: cmdline_aliases.cpp:713
 msgid ""
 "Unknown attribute \"{}\" of required value for alias \"{}\" in file \"{}\" "
 "on line {}: {}"
 msgstr ""
+"Neznámý atribut „{}“ požadované hodnoty aliasu „{}“ v souboru „{}“ na řádku "
+"{}: {}"
 
 #: cmdline_aliases.cpp:726
 msgid ""
 "Missing attribute \"value_help\" of required value for alias \"{}\" in file "
 "\"{}\""
 msgstr ""
+"Požadované hodnotě aliasu „{}“ v souboru „{}“ chybí atribut „value_help“"
 
 #: cmdline_aliases.cpp:740
 msgid ""
 "Unknown attribute \"{}\" of command \"{}\" in file \"{}\" on line {}: {}"
-msgstr ""
+msgstr "Neznámý atribut „{}“ příkazu „{}“ v souboru „{}“ na řádku {}: {}"
 
 #: cmdline_aliases.cpp:756
 msgid ""
 "Missing attribute \"attached_command\" for command \"{}\" in file \"{}\""
-msgstr ""
+msgstr "Příkazu „{}“ v souboru „{}“ chybí atribut „attached_command“"
 
 #: cmdline_aliases.cpp:791
 msgid "Bad value type in file \"{}\" on line {}: {}"
-msgstr ""
+msgstr "Chybný hodnotový typ v souboru „{}“ na řádku {}: {}"
 
 #: cmdline_aliases.cpp:804
 msgid "Syntax error in file \"{}\" on line {}:"
-msgstr ""
+msgstr "Syntaktická chyba v souboru „{}“ na řádku {}:"
 
 #: commands/advisory/advisory.cpp:36
 msgid "Manage advisories"
@@ -262,7 +287,7 @@ msgstr ""
 
 #: commands/advisory_shared.hpp:143
 msgid "No advisory found matching the specified filters."
-msgstr ""
+msgstr "Nebyla nalezena žádná doporučení odpovídající zadaným filtrům."
 
 #: commands/advisory_shared.hpp:158
 msgid ""
@@ -387,57 +412,55 @@ msgstr "Vykonat transakci"
 
 #: commands/do/do.cpp:49
 msgid "Action to be done on the following items."
-msgstr ""
+msgstr "Provede daný úkon s následujícími položkami."
 
 #: commands/do/do.cpp:63
 msgid "Unsupported action \"{}\""
-msgstr ""
+msgstr "Nepodporovaný úkon „{}“"
 
 #: commands/do/do.cpp:73
 msgid "Type of the following items."
-msgstr ""
+msgstr "Druh následujících položek."
 
 #: commands/do/do.cpp:86
 msgid "Unsupported item type \"{}\""
-msgstr ""
+msgstr "Nepodporovaný druh položky „{}“"
 
-#: commands/do/do.cpp:98
+#: commands/do/do.cpp:99
 msgid "List of items to take action on"
-msgstr ""
+msgstr "Seznam položek s kterými provést úkon"
 
-#: commands/do/do.cpp:129 commands/do/do.cpp:133
+#: commands/do/do.cpp:131 commands/do/do.cpp:135
 msgid "Only package downgrade is supported."
-msgstr ""
+msgstr "Podporováno je pouze ponížení balíčku."
 
-#: commands/do/do.cpp:140 commands/do/do.cpp:144
+#: commands/do/do.cpp:142 commands/do/do.cpp:146
 msgid "Only package reinstall is supported."
-msgstr ""
+msgstr "Podporována je pouze reinstalace balíčku."
 
-#: commands/do/do.cpp:150
+#: commands/do/do.cpp:152
 msgid "Action was not defined"
-msgstr ""
+msgstr "Úkon nebyl určen."
 
-#: commands/do/do.cpp:228
-#, fuzzy
-#| msgid "Invalid urlprotocol option: {}"
+#: commands/do/do.cpp:230
 msgid "Invalid Environmet/Group specification: {}"
-msgstr "Neplatná volba protokolu adresy URL: {}"
+msgstr "Neplatné určení prostředí nebo skupiny: {}"
 
-#: commands/do/do.cpp:312
+#: commands/do/do.cpp:314
 msgid "Downgrading environments and groups is not supported."
-msgstr ""
+msgstr "Ponížení prostředí nebo skupin není podporováno."
 
-#: commands/do/do.cpp:328
+#: commands/do/do.cpp:330
 msgid "Reinstaling environments and groups is not supported."
-msgstr ""
+msgstr "Reinstalace prostředí nebo skupin není podporováno."
 
 #: commands/downgrade/downgrade.cpp:42
 msgid "Downgrade software"
-msgstr ""
+msgstr "Poníží programové vybavení"
 
 #: commands/download/download.cpp:106
 msgid "When running with --url, prints URLs from all available mirrors"
-msgstr ""
+msgstr "S přepínačem --url vypisuje adresy ze všech dostupných zrcadel"
 
 #: commands/download/download.cpp:122
 msgid "Invalid urlprotocol option: {}"
@@ -445,17 +468,19 @@ msgstr "Neplatná volba protokolu adresy URL: {}"
 
 #: commands/download/download.cpp:149 main.cpp:627
 msgid "Unsupported architecture \"{0}\". Please choose one from {1}"
-msgstr "Nepodporovaná architektura \"{0}\". Vyberte prosím jednu z {1}"
+msgstr "Nepodporovaná architektura „{0}“. Vyberte prosím jednu z {1}"
 
 #. TODO(jrohel): Add support for requiring an argument by another argument in ArgumentParser?
 #: commands/download/download.cpp:186
 msgid "Option \"--alldeps\" should be used with \"--resolve\""
-msgstr "Volba \"--alldeps\" by měla být použita s \"--resolve\""
+msgstr "Volba „--alldeps“ by měla být použita s „--resolve“"
 
 #: commands/download/download.cpp:226
 msgid ""
 "No package \"{}\" available; You might want to use --skip-unavailable option."
 msgstr ""
+"Žádný balíček „{}“ není dostupný. Možná byste chtěli použít přepínač --skip-"
+"unavailable."
 
 #: commands/environment/arguments.hpp:33
 msgid "Show only available environments."
@@ -479,15 +504,30 @@ msgid ""
 "All enabled repositories will still be used to satisfy dependencies."
 msgstr ""
 
-#: commands/from_repo.cpp:38
-#, fuzzy
-#| msgid "CVE_ID,..."
+#: commands/from_repo.cpp:38 commands/from_repo.cpp:70
 msgid "REPO_ID,..."
-msgstr "CVE_ID,…"
+msgstr "ID_REPOZITÁŘE,…"
 
-#: commands/from_repo.cpp:47
+#: commands/from_repo.cpp:53
 msgid "\"--from_repo\" already defined with diferent value"
+msgstr "„--from_repo“ je již použito s jinou hodnotou"
+
+#: commands/from_repo.cpp:68
+#, fuzzy
+#| msgid ""
+#| "List groups of installed packages not required by other installed packages"
+msgid ""
+"Filters installed packages by the ID of the repository they were installed "
+"from."
 msgstr ""
+"Vypíše skupiny nainstalovaných balíčků, které nejsou vyžadovány jinými "
+"nainstalovanými balíčky"
+
+#: commands/from_repo.cpp:79
+#, fuzzy
+#| msgid "\"--from_repo\" already defined with diferent value"
+msgid "\"--installed-from_repo\" already defined with diferent value"
+msgstr "„--from_repo“ je již použito s jinou hodnotou"
 
 #: commands/group/arguments.hpp:34
 msgid "Show only available groups."
@@ -535,6 +575,9 @@ msgid ""
 "as errors. This can result in an empty transaction because among other "
 "things the option can ignore failing Remove actions."
 msgstr ""
+"Nepovažuje neshody mezi nainstalovanými balíčky a balíčky z uložené "
+"transakce za chyby. Tento přístup může vést k prázdné transakci, protože "
+"tento přepínač mimo jiné ignoruje selhávající úkony odinstalace."
 
 #: commands/history/arguments.hpp:67
 msgid "Don't consider extra packages pulled into the transaction as errors."
@@ -603,29 +646,29 @@ msgstr ""
 "Vypíše skupiny nainstalovaných balíčků, které nejsou vyžadovány jinými "
 "nainstalovanými balíčky"
 
-#: commands/list/list.cpp:44
+#: commands/list/list.cpp:46
 msgid "Lists packages depending on the packages' relation to the system"
 msgstr "Vypíše balíčky podle jejich vztahu k systému"
 
-#: commands/list/list.cpp:48
+#: commands/list/list.cpp:50
 #, fuzzy
 #| msgid "List of keys to match case insensitively"
 msgid "List of package-spec-NI to match (case insensitively)"
 msgstr "Seznam klíčů, které se mají shodovat bez ohledu na velikost písmen"
 
-#: commands/list/list.cpp:60
+#: commands/list/list.cpp:62
 msgid "Show all versions of the packages, not only the latest ones."
 msgstr "Zobrazí všechny verze balíčků, nejen poslední z nich."
 
-#: commands/list/list.cpp:66
+#: commands/list/list.cpp:70
 msgid "List installed packages."
 msgstr "Vypíše nainstalované balíčky."
 
-#: commands/list/list.cpp:70
+#: commands/list/list.cpp:74
 msgid "List available packages."
 msgstr "Vypíše dostupné balíčky."
 
-#: commands/list/list.cpp:77
+#: commands/list/list.cpp:81
 msgid ""
 "List extras, that is packages installed on the system that are not available "
 "in any known repository."
@@ -633,7 +676,7 @@ msgstr ""
 "Vypíše cizí balíčky, tj. takové které jsou nainstalované v systému, ale "
 "které nejsou dostupné v žádném známém repozitáři."
 
-#: commands/list/list.cpp:85
+#: commands/list/list.cpp:89
 msgid ""
 "List packages installed on the system that are obsoleted by packages in any "
 "known repository."
@@ -641,47 +684,47 @@ msgstr ""
 "Vypíše balíčky, které jsou nainstalované v systému, ale které by měly být "
 "nahrazeny balíčky ze známých repozitářů."
 
-#: commands/list/list.cpp:90
+#: commands/list/list.cpp:94
 msgid "List packages recently added into the repositories."
 msgstr "Vypíše balíčky, které byly nedávno přidány do repozitářů."
 
-#: commands/list/list.cpp:94
+#: commands/list/list.cpp:98
 msgid "List upgrades available for the installed packages."
 msgstr "Vypíše aktualizace dostupné pro nainstalované balíčky."
 
-#: commands/list/list.cpp:98
+#: commands/list/list.cpp:102
 msgid "List packages which will be removed by the 'dnf autoremove' command."
 msgstr "Vypíše balíčky, které by byly odstraněny příkazem „dnf autoremove“."
 
-#: commands/list/list.cpp:195 commands/list/list.cpp:200
+#: commands/list/list.cpp:203 commands/list/list.cpp:208
 msgid "Installed packages"
 msgstr "Nainstalované balíčky"
 
-#: commands/list/list.cpp:196 commands/list/list.cpp:209
+#: commands/list/list.cpp:204 commands/list/list.cpp:217
 msgid "Available packages"
 msgstr "Dostupné balíčky"
 
-#: commands/list/list.cpp:217
+#: commands/list/list.cpp:225
 msgid "Available upgrades"
 msgstr "Dostupné aktualizace"
 
-#: commands/list/list.cpp:233
+#: commands/list/list.cpp:241
 msgid "Obsoleting packages"
 msgstr "Nahrazující balíčky"
 
-#: commands/list/list.cpp:238
+#: commands/list/list.cpp:246
 msgid "Autoremove packages"
 msgstr "Automaticky odstranitelné balíčky"
 
-#: commands/list/list.cpp:242
+#: commands/list/list.cpp:250
 msgid "Extra packages"
 msgstr "Cizí balíčky"
 
-#: commands/list/list.cpp:253
+#: commands/list/list.cpp:261
 msgid "Recently added packages"
 msgstr "Nedávno přidané balíčky"
 
-#: commands/list/list.cpp:258
+#: commands/list/list.cpp:266
 msgid "No matching packages to list"
 msgstr "Žádné odpovídající balíčky k seznamu"
 
@@ -879,7 +922,7 @@ msgstr ""
 msgid "Reinstall software"
 msgstr ""
 
-#: commands/remove/remove.cpp:40
+#: commands/remove/remove.cpp:42
 msgid "Remove (uninstall) software"
 msgstr ""
 
@@ -907,11 +950,11 @@ msgstr "ID repozitáře odpovídající vzoru."
 msgid "Manage repositories"
 msgstr "Spravovat repozitáře"
 
-#: commands/repoquery/repoquery.cpp:80
+#: commands/repoquery/repoquery.cpp:82
 msgid "Search for packages matching various criteria"
 msgstr ""
 
-#: commands/repoquery/repoquery.cpp:517
+#: commands/repoquery/repoquery.cpp:525
 msgid ""
 "Option \"--exactdeps\" has to be used either with \"--whatrequires\" or \"--"
 "whatdepends\""
@@ -919,7 +962,7 @@ msgstr ""
 "Volba \"--exactdeps\" musí být použita buď s \"--whatrequires\" nebo \"--"
 "whatdepends\""
 
-#: commands/repoquery/repoquery.cpp:522
+#: commands/repoquery/repoquery.cpp:530
 msgid ""
 "Option \"--recursive\" has to be used either with \"--whatrequires\" or \"--"
 "providers-of=requires\""
@@ -1676,7 +1719,7 @@ msgstr "Příkaz vrátil chybu: {}"
 
 #: main.cpp:1574
 msgid "DNF5 finished"
-msgstr "DFN5 skončil"
+msgstr "DNF5 skončil"
 
 #: main.cpp:1578
 msgid "Complete!"

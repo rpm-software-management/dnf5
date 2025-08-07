@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-11 03:49+0000\n"
+"POT-Creation-Date: 2025-07-26 03:48+0000\n"
 "PO-Revision-Date: 2025-06-03 16:14+0000\n"
 "Last-Translator: Weblate Translation Memory <noreply-mt-weblate-translation-"
 "memory@weblate.org>\n"
@@ -28,12 +28,12 @@ msgstr ""
 "Id de libsolv para advertencia \"{}\", nombre \"{}\" resoluble no tiene "
 "prefijo de advertencia \"{}\""
 
-#: base/goal.cpp:472
+#: base/goal.cpp:482
 msgid "Unsupported argument for REMOVE action: {}"
 msgstr "Argumento no soportado para acción REMOVE: {}"
 
 #. TODO(lukash) throw a proper exception
-#: base/goal.cpp:1641
+#: base/goal.cpp:1652
 msgid "Incorrect configuration value for multilib_policy: {}"
 msgstr "Valor de configuración incorrecto para multilib_policy: {}"
 
@@ -967,11 +967,11 @@ msgid "Cannot download the \"{0}\" package, cacheonly option is activated."
 msgstr ""
 "No se puede descargar el paquete «{0}», la opción cacheonly está activada."
 
-#: repo/package_downloader.cpp:219
+#: repo/package_downloader.cpp:231
 msgid "Already downloaded"
 msgstr "Ya descargado"
 
-#: repo/package_downloader.cpp:267
+#: repo/package_downloader.cpp:279
 msgid "Failed to download packages"
 msgstr "Incorrecto al descargar paquetes"
 

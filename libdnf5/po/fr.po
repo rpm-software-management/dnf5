@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-11 03:49+0000\n"
+"POT-Creation-Date: 2025-07-26 03:48+0000\n"
 "PO-Revision-Date: 2025-06-02 10:02+0000\n"
 "Last-Translator: Léane GRASSER <leane.grasser@proton.me>\n"
 "Language-Team: French <https://translate.fedoraproject.org/projects/dnf5/"
@@ -29,12 +29,12 @@ msgstr ""
 "Mauvais ID libsolv pour l'avertissement \"{}\", le nom résoluble \"{}\" ne "
 "commence pas par le préfixe d'avertissement \"{}\""
 
-#: base/goal.cpp:472
+#: base/goal.cpp:482
 msgid "Unsupported argument for REMOVE action: {}"
 msgstr "Argument non pris en charge pour l'action REMOVE : {}"
 
 #. TODO(lukash) throw a proper exception
-#: base/goal.cpp:1641
+#: base/goal.cpp:1652
 msgid "Incorrect configuration value for multilib_policy: {}"
 msgstr "Valeur de configuration pour multilib_policy incorrecte : {}"
 
@@ -985,11 +985,11 @@ msgid "Cannot download the \"{0}\" package, cacheonly option is activated."
 msgstr ""
 "Impossible de télécharger le paquet \"{0}\", l'option cacheonly est activée."
 
-#: repo/package_downloader.cpp:219
+#: repo/package_downloader.cpp:231
 msgid "Already downloaded"
 msgstr "Déjà téléchargé"
 
-#: repo/package_downloader.cpp:267
+#: repo/package_downloader.cpp:279
 msgid "Failed to download packages"
 msgstr "Échec du téléchargement des paquets"
 

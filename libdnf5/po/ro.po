@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-11 03:49+0000\n"
+"POT-Creation-Date: 2025-07-26 03:48+0000\n"
 "PO-Revision-Date: 2025-06-01 08:46+0000\n"
 "Last-Translator: Remus-Gabriel Chelu <remusgabriel.chelu@disroot.org>\n"
 "Language-Team: Romanian <https://translate.fedoraproject.org/projects/dnf5/"
@@ -27,12 +27,12 @@ msgstr ""
 "Id libsolv greșit pentru avizul „{}”, numele rezolvabil „{}” nu are prefixul "
 "avizului „{}”"
 
-#: base/goal.cpp:472
+#: base/goal.cpp:482
 msgid "Unsupported argument for REMOVE action: {}"
 msgstr "Argument neacceptat pentru acțiunea REMOVE: {} „{}”"
 
 #. TODO(lukash) throw a proper exception
-#: base/goal.cpp:1641
+#: base/goal.cpp:1652
 msgid "Incorrect configuration value for multilib_policy: {}"
 msgstr "Valoare de configurare incorectă pentru multilib_policy: {}"
 
@@ -973,11 +973,11 @@ msgid "Cannot download the \"{0}\" package, cacheonly option is activated."
 msgstr ""
 "Nu se poate descărca pachetul „{0}”, opțiunea „cacheonly” este activată."
 
-#: repo/package_downloader.cpp:219
+#: repo/package_downloader.cpp:231
 msgid "Already downloaded"
 msgstr "Deja descărcat(e)"
 
-#: repo/package_downloader.cpp:267
+#: repo/package_downloader.cpp:279
 msgid "Failed to download packages"
 msgstr "Descărcarea pachetelor a eșuat"
 

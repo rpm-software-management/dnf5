@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-11 03:49+0000\n"
+"POT-Creation-Date: 2025-07-26 03:48+0000\n"
 "PO-Revision-Date: 2025-03-30 20:53+0000\n"
 "Last-Translator: Tom FRANZO <tom@franzo.fr>\n"
 "Language-Team: Basque <https://translate.fedoraproject.org/projects/dnf5/"
@@ -422,33 +422,33 @@ msgstr ""
 msgid "Unsupported item type \"{}\""
 msgstr ""
 
-#: commands/do/do.cpp:98
+#: commands/do/do.cpp:99
 msgid "List of items to take action on"
 msgstr ""
 
-#: commands/do/do.cpp:129 commands/do/do.cpp:133
+#: commands/do/do.cpp:131 commands/do/do.cpp:135
 msgid "Only package downgrade is supported."
 msgstr ""
 
-#: commands/do/do.cpp:140 commands/do/do.cpp:144
+#: commands/do/do.cpp:142 commands/do/do.cpp:146
 msgid "Only package reinstall is supported."
 msgstr ""
 
-#: commands/do/do.cpp:150
+#: commands/do/do.cpp:152
 msgid "Action was not defined"
 msgstr ""
 
-#: commands/do/do.cpp:228
+#: commands/do/do.cpp:230
 #, fuzzy
 #| msgid "Invalid urlprotocol option: {}"
 msgid "Invalid Environmet/Group specification: {}"
 msgstr "urlprotocol aukera baliogabea: {}"
 
-#: commands/do/do.cpp:312
+#: commands/do/do.cpp:314
 msgid "Downgrading environments and groups is not supported."
 msgstr ""
 
-#: commands/do/do.cpp:328
+#: commands/do/do.cpp:330
 msgid "Reinstaling environments and groups is not supported."
 msgstr ""
 
@@ -502,14 +502,29 @@ msgid ""
 "All enabled repositories will still be used to satisfy dependencies."
 msgstr ""
 
-#: commands/from_repo.cpp:38
+#: commands/from_repo.cpp:38 commands/from_repo.cpp:70
 #, fuzzy
 #| msgid "CVE_ID,..."
 msgid "REPO_ID,..."
 msgstr "CVE_ID,..."
 
-#: commands/from_repo.cpp:47
+#: commands/from_repo.cpp:53
 msgid "\"--from_repo\" already defined with diferent value"
+msgstr ""
+
+#: commands/from_repo.cpp:68
+#, fuzzy
+#| msgid ""
+#| "List groups of installed packages not required by other installed packages"
+msgid ""
+"Filters installed packages by the ID of the repository they were installed "
+"from."
+msgstr ""
+"Zerrendatu instalatutako beste pakete batzuek behar ez dituzten pakete "
+"instalatuen taldeak"
+
+#: commands/from_repo.cpp:79
+msgid "\"--installed-from_repo\" already defined with diferent value"
 msgstr ""
 
 #: commands/group/arguments.hpp:34
@@ -614,79 +629,79 @@ msgstr ""
 "Zerrendatu instalatutako beste pakete batzuek behar ez dituzten pakete "
 "instalatuen taldeak"
 
-#: commands/list/list.cpp:44
+#: commands/list/list.cpp:46
 msgid "Lists packages depending on the packages' relation to the system"
 msgstr "Paketeak sistemarekin duen erlazioaren arabera zerrendatzen ditu"
 
-#: commands/list/list.cpp:48
+#: commands/list/list.cpp:50
 msgid "List of package-spec-NI to match (case insensitively)"
 msgstr ""
 
-#: commands/list/list.cpp:60
+#: commands/list/list.cpp:62
 msgid "Show all versions of the packages, not only the latest ones."
 msgstr ""
 
-#: commands/list/list.cpp:66
+#: commands/list/list.cpp:70
 msgid "List installed packages."
 msgstr ""
 
-#: commands/list/list.cpp:70
+#: commands/list/list.cpp:74
 msgid "List available packages."
 msgstr ""
 
-#: commands/list/list.cpp:77
+#: commands/list/list.cpp:81
 msgid ""
 "List extras, that is packages installed on the system that are not available "
 "in any known repository."
 msgstr ""
 
-#: commands/list/list.cpp:85
+#: commands/list/list.cpp:89
 msgid ""
 "List packages installed on the system that are obsoleted by packages in any "
 "known repository."
 msgstr ""
 
-#: commands/list/list.cpp:90
+#: commands/list/list.cpp:94
 msgid "List packages recently added into the repositories."
 msgstr ""
 
-#: commands/list/list.cpp:94
+#: commands/list/list.cpp:98
 msgid "List upgrades available for the installed packages."
 msgstr ""
 
-#: commands/list/list.cpp:98
+#: commands/list/list.cpp:102
 msgid "List packages which will be removed by the 'dnf autoremove' command."
 msgstr ""
 
-#: commands/list/list.cpp:195 commands/list/list.cpp:200
+#: commands/list/list.cpp:203 commands/list/list.cpp:208
 msgid "Installed packages"
 msgstr "Instalatutako paketeak"
 
-#: commands/list/list.cpp:196 commands/list/list.cpp:209
+#: commands/list/list.cpp:204 commands/list/list.cpp:217
 msgid "Available packages"
 msgstr "Eskuragarri dauden paketeak"
 
-#: commands/list/list.cpp:217
+#: commands/list/list.cpp:225
 msgid "Available upgrades"
 msgstr "Eskuragarri dauden bertsio-berritzeak"
 
-#: commands/list/list.cpp:233
+#: commands/list/list.cpp:241
 msgid "Obsoleting packages"
 msgstr "Zaharkituta dauden paketeak"
 
-#: commands/list/list.cpp:238
+#: commands/list/list.cpp:246
 msgid "Autoremove packages"
 msgstr "Kendu paketeak automatikoki"
 
-#: commands/list/list.cpp:242
+#: commands/list/list.cpp:250
 msgid "Extra packages"
 msgstr "Pakete gehigarriak"
 
-#: commands/list/list.cpp:253
+#: commands/list/list.cpp:261
 msgid "Recently added packages"
 msgstr "Berriki gehitutako paketeak"
 
-#: commands/list/list.cpp:258
+#: commands/list/list.cpp:266
 msgid "No matching packages to list"
 msgstr ""
 
@@ -864,7 +879,7 @@ msgstr ""
 msgid "Reinstall software"
 msgstr "Berrinstalatu softwarea"
 
-#: commands/remove/remove.cpp:40
+#: commands/remove/remove.cpp:42
 msgid "Remove (uninstall) software"
 msgstr "Kendu (desinstalatu) softwarea"
 
@@ -892,17 +907,17 @@ msgstr ""
 msgid "Manage repositories"
 msgstr ""
 
-#: commands/repoquery/repoquery.cpp:80
+#: commands/repoquery/repoquery.cpp:82
 msgid "Search for packages matching various criteria"
 msgstr ""
 
-#: commands/repoquery/repoquery.cpp:517
+#: commands/repoquery/repoquery.cpp:525
 msgid ""
 "Option \"--exactdeps\" has to be used either with \"--whatrequires\" or \"--"
 "whatdepends\""
 msgstr ""
 
-#: commands/repoquery/repoquery.cpp:522
+#: commands/repoquery/repoquery.cpp:530
 msgid ""
 "Option \"--recursive\" has to be used either with \"--whatrequires\" or \"--"
 "providers-of=requires\""

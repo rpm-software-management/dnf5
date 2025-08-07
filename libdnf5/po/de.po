@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-11 03:49+0000\n"
+"POT-Creation-Date: 2025-07-26 03:48+0000\n"
 "PO-Revision-Date: 2025-06-24 20:30+0000\n"
 "Last-Translator: Sijmen Schoon <fedora@vijf.life>\n"
 "Language-Team: German <https://translate.fedoraproject.org/projects/dnf5/"
@@ -32,12 +32,12 @@ msgstr ""
 "Ungültige libsolv-ID für Hinweis \"{}\", der auflösbare Name \"{}\" enthält "
 "keinen Hinweispräfix \"{}\""
 
-#: base/goal.cpp:472
+#: base/goal.cpp:482
 msgid "Unsupported argument for REMOVE action: {}"
 msgstr "Nicht unterstütztes Argument für die REMOVE Aktion: {}"
 
 #. TODO(lukash) throw a proper exception
-#: base/goal.cpp:1641
+#: base/goal.cpp:1652
 msgid "Incorrect configuration value for multilib_policy: {}"
 msgstr "Fehlerhafter Konfigurationswert für multilib_policy: {}"
 
@@ -991,11 +991,11 @@ msgstr ""
 "Kann das Paket \"{0}\" nicht herunterladen, die Option cacheonly ist "
 "aktiviert."
 
-#: repo/package_downloader.cpp:219
+#: repo/package_downloader.cpp:231
 msgid "Already downloaded"
 msgstr "Bereits heruntergeladen"
 
-#: repo/package_downloader.cpp:267
+#: repo/package_downloader.cpp:279
 msgid "Failed to download packages"
 msgstr "Herunterladen der Pakete fehlgeschlagen"
 

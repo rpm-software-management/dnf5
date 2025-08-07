@@ -6,13 +6,14 @@
 # Weblate Translation Memory <noreply-mt-weblate-translation-memory@weblate.org>, 2024.
 # Ruben Roland Fonti <ruben.roland.fonti@ikmail.com>, 2024.
 # Salvatore Cocuzza <info@salvatorecocuzza.it>, 2025.
+# Nathan <nathan95@live.it>, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-11 03:49+0000\n"
-"PO-Revision-Date: 2025-06-15 11:11+0000\n"
-"Last-Translator: Salvatore Cocuzza <info@salvatorecocuzza.it>\n"
+"POT-Creation-Date: 2025-07-26 03:48+0000\n"
+"PO-Revision-Date: 2025-08-06 09:53+0000\n"
+"Last-Translator: Nathan <nathan95@live.it>\n"
 "Language-Team: Italian <https://translate.fedoraproject.org/projects/dnf5/"
 "dnf5/it/>\n"
 "Language: it\n"
@@ -20,7 +21,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.11.4\n"
+"X-Generator: Weblate 5.12.2\n"
 
 #: cmdline_aliases.cpp:84 context.cpp:301 main.cpp:1357
 msgid ", "
@@ -449,31 +450,31 @@ msgstr "Tipologia dei seguenti articoli."
 msgid "Unsupported item type \"{}\""
 msgstr "Tipo di elemento non supportato \"{}\""
 
-#: commands/do/do.cpp:98
+#: commands/do/do.cpp:99
 msgid "List of items to take action on"
 msgstr "Elenco degli elementi su cui intervenire"
 
-#: commands/do/do.cpp:129 commands/do/do.cpp:133
+#: commands/do/do.cpp:131 commands/do/do.cpp:135
 msgid "Only package downgrade is supported."
 msgstr "È supportato solo il downgrade del pacchetto."
 
-#: commands/do/do.cpp:140 commands/do/do.cpp:144
+#: commands/do/do.cpp:142 commands/do/do.cpp:146
 msgid "Only package reinstall is supported."
 msgstr "È supportata solo la reinstallazione del pacchetto."
 
-#: commands/do/do.cpp:150
+#: commands/do/do.cpp:152
 msgid "Action was not defined"
 msgstr "L'azione non è stata definita"
 
-#: commands/do/do.cpp:228
+#: commands/do/do.cpp:230
 msgid "Invalid Environmet/Group specification: {}"
 msgstr "Specifica ambiente/gruppo non valida: {}"
 
-#: commands/do/do.cpp:312
+#: commands/do/do.cpp:314
 msgid "Downgrading environments and groups is not supported."
 msgstr "Il downgrade di ambienti e gruppi non è supportato."
 
-#: commands/do/do.cpp:328
+#: commands/do/do.cpp:330
 msgid "Reinstaling environments and groups is not supported."
 msgstr "La reinstallazione di ambienti e gruppi non è supportata."
 
@@ -532,13 +533,25 @@ msgstr ""
 "specificati. Tutti i repository abilitati verranno comunque utilizzati per "
 "soddisfare le dipendenze."
 
-#: commands/from_repo.cpp:38
+#: commands/from_repo.cpp:38 commands/from_repo.cpp:70
 msgid "REPO_ID,..."
 msgstr "REPO_ID,..."
 
-#: commands/from_repo.cpp:47
+#: commands/from_repo.cpp:53
 msgid "\"--from_repo\" already defined with diferent value"
 msgstr "\"--from_repo\" già definito con un valore diverso"
+
+#: commands/from_repo.cpp:68
+msgid ""
+"Filters installed packages by the ID of the repository they were installed "
+"from."
+msgstr ""
+"Filtra i pacchetti installati in base all'ID del repository da cui sono "
+"stati installati."
+
+#: commands/from_repo.cpp:79
+msgid "\"--installed-from_repo\" already defined with diferent value"
+msgstr "\"--installed-from_repo\" è già definito con un valore diverso"
 
 #: commands/group/arguments.hpp:34
 msgid "Show only available groups."
@@ -658,31 +671,29 @@ msgstr ""
 "Elenca i gruppi di pacchetti installati non richiesti da altri pacchetti "
 "installati"
 
-#: commands/list/list.cpp:44
+#: commands/list/list.cpp:46
 msgid "Lists packages depending on the packages' relation to the system"
 msgstr "Elenca i pacchetti in base alla relazione dei pacchetti con il sistema"
 
-#: commands/list/list.cpp:48
-#, fuzzy
-#| msgid "List of keys to match case insensitively"
+#: commands/list/list.cpp:50
 msgid "List of package-spec-NI to match (case insensitively)"
 msgstr ""
-"Elenco di chiavi per la corrispondenza senza distinzione tra maiuscole e "
-"minuscole"
+"Elenco di package-spec-NI da abbinare (senza distinzione tra maiuscole e "
+"minuscole)"
 
-#: commands/list/list.cpp:60
+#: commands/list/list.cpp:62
 msgid "Show all versions of the packages, not only the latest ones."
 msgstr "Mostra tutte le versioni dei pacchetti, non solo le ultime."
 
-#: commands/list/list.cpp:66
+#: commands/list/list.cpp:70
 msgid "List installed packages."
 msgstr "Elenco dei pacchetti installati."
 
-#: commands/list/list.cpp:70
+#: commands/list/list.cpp:74
 msgid "List available packages."
 msgstr "Elenco dei pacchetti disponibili."
 
-#: commands/list/list.cpp:77
+#: commands/list/list.cpp:81
 msgid ""
 "List extras, that is packages installed on the system that are not available "
 "in any known repository."
@@ -690,7 +701,7 @@ msgstr ""
 "Elenco degli extra, ovvero i pacchetti installati sul sistema che non sono "
 "disponibili in nessun repository conosciuto."
 
-#: commands/list/list.cpp:85
+#: commands/list/list.cpp:89
 msgid ""
 "List packages installed on the system that are obsoleted by packages in any "
 "known repository."
@@ -698,48 +709,48 @@ msgstr ""
 "Elenco dei pacchetti installati nel sistema che sono obsoleti dai pacchetti "
 "in qualsiasi repository conosciuto."
 
-#: commands/list/list.cpp:90
+#: commands/list/list.cpp:94
 msgid "List packages recently added into the repositories."
 msgstr "Elenco dei pacchetti recentemente aggiunti nei repository."
 
-#: commands/list/list.cpp:94
+#: commands/list/list.cpp:98
 msgid "List upgrades available for the installed packages."
 msgstr "Elenco degli aggiornamenti disponibili per i pacchetti installati."
 
-#: commands/list/list.cpp:98
+#: commands/list/list.cpp:102
 msgid "List packages which will be removed by the 'dnf autoremove' command."
 msgstr ""
 "Elenco dei pacchetti che verranno rimossi dal comando 'dnf autoremove'."
 
-#: commands/list/list.cpp:195 commands/list/list.cpp:200
+#: commands/list/list.cpp:203 commands/list/list.cpp:208
 msgid "Installed packages"
 msgstr "Pacchetti installati"
 
-#: commands/list/list.cpp:196 commands/list/list.cpp:209
+#: commands/list/list.cpp:204 commands/list/list.cpp:217
 msgid "Available packages"
 msgstr "Pacchetti disponibili"
 
-#: commands/list/list.cpp:217
+#: commands/list/list.cpp:225
 msgid "Available upgrades"
 msgstr "Aggiornamenti disponibili"
 
-#: commands/list/list.cpp:233
+#: commands/list/list.cpp:241
 msgid "Obsoleting packages"
 msgstr "Pacchetti obsoleti"
 
-#: commands/list/list.cpp:238
+#: commands/list/list.cpp:246
 msgid "Autoremove packages"
 msgstr "Pacchetti in rimozione automatica"
 
-#: commands/list/list.cpp:242
+#: commands/list/list.cpp:250
 msgid "Extra packages"
 msgstr "Pacchetti extra"
 
-#: commands/list/list.cpp:253
+#: commands/list/list.cpp:261
 msgid "Recently added packages"
 msgstr "Pacchetti aggiunti di recente"
 
-#: commands/list/list.cpp:258
+#: commands/list/list.cpp:266
 msgid "No matching packages to list"
 msgstr "Nessun pacchetto corrispondente"
 
@@ -938,7 +949,7 @@ msgstr "Determina quale pacchetto fornisce il valore dato"
 msgid "Reinstall software"
 msgstr "Reinstalla il software"
 
-#: commands/remove/remove.cpp:40
+#: commands/remove/remove.cpp:42
 msgid "Remove (uninstall) software"
 msgstr "Rimuove (disinstalla) il software"
 
@@ -968,11 +979,11 @@ msgstr "ID repository corrispondenti al modello."
 msgid "Manage repositories"
 msgstr "Gestisce i repository"
 
-#: commands/repoquery/repoquery.cpp:80
+#: commands/repoquery/repoquery.cpp:82
 msgid "Search for packages matching various criteria"
 msgstr "Cerca pacchetti che corrispondono a vari criteri"
 
-#: commands/repoquery/repoquery.cpp:517
+#: commands/repoquery/repoquery.cpp:525
 msgid ""
 "Option \"--exactdeps\" has to be used either with \"--whatrequires\" or \"--"
 "whatdepends\""
@@ -980,7 +991,7 @@ msgstr ""
 "L'opzione \"--exactdeps\" deve essere usata con \"--whatrequires\" o \"--"
 "whatdepends\""
 
-#: commands/repoquery/repoquery.cpp:522
+#: commands/repoquery/repoquery.cpp:530
 msgid ""
 "Option \"--recursive\" has to be used either with \"--whatrequires\" or \"--"
 "providers-of=requires\""
@@ -1064,11 +1075,8 @@ msgid "Add new entry to versionlock configuration"
 msgstr "Aggunge una nuova entry alla configurazione di versionlock"
 
 #: commands/versionlock/versionlock_add.cpp:44
-#, fuzzy
-#| msgid "List of package specs to add versionlock for"
 msgid "List of package package-spec-N to add versionlock for"
-msgstr ""
-"Elenco delle specifiche del pacchetto per cui aggiungere il blocco versione"
+msgstr "Elenco dei pacchetti package-spec-N per cui aggiungere versionlock"
 
 #: commands/versionlock/versionlock_add.cpp:107
 #: commands/versionlock/versionlock_exclude.cpp:126
@@ -1105,12 +1113,8 @@ msgstr ""
 "Aggiungi una nuova voce di esclusione alla configurazione del blocco versione"
 
 #: commands/versionlock/versionlock_exclude.cpp:44
-#, fuzzy
-#| msgid "List of package specs to add versionlock exclude for"
 msgid "List of package-spec-N to add versionlock exclude for"
-msgstr ""
-"Elenco delle specifiche del pacchetto per cui aggiungere l'esclusione del "
-"blocco versione"
+msgstr "Elenco di package-spec-N per cui aggiungere l'esclusione versionlock"
 
 #: commands/versionlock/versionlock_exclude.cpp:89
 #: commands/versionlock/versionlock_exclude.cpp:101
@@ -1372,7 +1376,7 @@ msgstr ""
 
 #: main.cpp:182
 msgid "Control whether color is used."
-msgstr "Imposta l'uso del colore"
+msgstr "Imposta l'uso del colore."
 
 #: main.cpp:188
 msgid "Force refreshing metadata before running the command."
