@@ -20,6 +20,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "url.hpp"
 
+#include <cctype>
 
 namespace libdnf5::utils::url {
 
@@ -32,6 +33,38 @@ bool is_url(std::string path) {
     }
     return path.starts_with("file://") || path.starts_with("http://") || path.starts_with("ftp://") ||
            path.starts_with("https://");
+}
+
+std::string url_encode(const std::string & src) {
+    auto no_encode = [](char ch) { return std::isalnum(ch) != 0 || ch == '-' || ch == '.' || ch == '_' || ch == '~'; };
+
+    // compute length of encoded string
+    auto len = src.length();
+    for (auto ch : src) {
+        if (!no_encode(ch)) {
+            len += 2;
+        }
+    }
+
+    // encode the input string
+    std::string encoded;
+    encoded.reserve(len);
+    for (auto ch : src) {
+        if (no_encode(ch)) {
+            encoded.push_back(ch);
+        } else {
+            encoded.push_back('%');
+            int hex;
+            hex = static_cast<unsigned char>(ch) >> 4;
+            hex += hex <= 9 ? '0' : 'a' - 10;
+            encoded.push_back(static_cast<char>(hex));
+            hex = static_cast<unsigned char>(ch) & 0x0F;
+            hex += hex <= 9 ? '0' : 'a' - 10;
+            encoded.push_back(static_cast<char>(hex));
+        }
+    }
+
+    return encoded;
 }
 
 }  // namespace libdnf5::utils::url

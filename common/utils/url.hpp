@@ -27,6 +27,13 @@ namespace libdnf5::utils::url {
 
 bool is_url(std::string path);
 
+/// Converts the given input string to a URL encoded string
+/// All input characters that are not a-z, A-Z, 0-9, '-', '.', '_' or '~' are converted
+/// to their "URL escaped" version (%NN where NN is a two-digit hexadecimal number).
+/// @param src String to encode
+/// @return URL encoded string
+std::string url_encode(const std::string & src);
+
 }  // namespace libdnf5::utils::url
 
 #endif  // LIBDNF5_UTILS_URL_HPP

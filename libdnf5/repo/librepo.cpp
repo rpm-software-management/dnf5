@@ -19,6 +19,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "librepo.hpp"
 
+#include "utils/url.hpp"
+
 #include "libdnf5/repo/repo_errors.hpp"
 #include "libdnf5/utils/bgettext/bgettext-mark-domain.h"
 
@@ -38,42 +40,6 @@ static constexpr struct {
     {"ntlm_wb", LR_AUTH_NTLM_WB},
     {"any", LR_AUTH_ANY}};
 
-/// Converts the given input string to a URL encoded string
-/// All input characters that are not a-z, A-Z, 0-9, '-', '.', '_' or '~' are converted
-/// to their "URL escaped" version (%NN where NN is a two-digit hexadecimal number).
-/// @param src String to encode
-/// @return URL encoded string
-static std::string url_encode(const std::string & src) {
-    auto no_encode = [](char ch) { return isalnum(ch) != 0 || ch == '-' || ch == '.' || ch == '_' || ch == '~'; };
-
-    // compute length of encoded string
-    auto len = src.length();
-    for (auto ch : src) {
-        if (!no_encode(ch)) {
-            len += 2;
-        }
-    }
-
-    // encode the input string
-    std::string encoded;
-    encoded.reserve(len);
-    for (auto ch : src) {
-        if (no_encode(ch)) {
-            encoded.push_back(ch);
-        } else {
-            encoded.push_back('%');
-            int hex;
-            hex = static_cast<unsigned char>(ch) >> 4;
-            hex += hex <= 9 ? '0' : 'a' - 10;
-            encoded.push_back(static_cast<char>(hex));
-            hex = static_cast<unsigned char>(ch) & 0x0F;
-            hex += hex <= 9 ? '0' : 'a' - 10;
-            encoded.push_back(static_cast<char>(hex));
-        }
-    }
-
-    return encoded;
-}
 
 /// Format user password string
 /// Returns user and password in user:password form.
@@ -82,7 +48,7 @@ static std::string url_encode(const std::string & src) {
 /// @param passwd Password
 /// @return User and password in user:password form
 static std::string format_user_pass_string(const std::string & user, const std::string & passwd) {
-    return url_encode(user) + ":" + url_encode(passwd);
+    return libdnf5::utils::url::url_encode(user) + ":" + libdnf5::utils::url::url_encode(passwd);
 }
 
 LibrepoResult & LibrepoResult::operator=(LibrepoResult && other) noexcept {
