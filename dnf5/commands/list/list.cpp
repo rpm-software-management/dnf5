@@ -19,8 +19,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "list.hpp"
 
-#include "../from_repo.hpp"
-
 #include <dnf5/shared_options.hpp>
 #include <libdnf5-cli/output/package_list_sections.hpp>
 #include <libdnf5/rpm/package_query.hpp>

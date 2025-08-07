@@ -19,8 +19,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "repoquery.hpp"
 
-#include "../from_repo.hpp"
-
 #include "libdnf5-cli/output/adapters/package_tmpl.hpp"
 
 #include <dnf5/shared_options.hpp>
