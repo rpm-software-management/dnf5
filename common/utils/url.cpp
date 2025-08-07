@@ -67,4 +67,32 @@ std::string url_encode(const std::string & src) {
     return encoded;
 }
 
+std::string url_decode(const std::string & src) {
+    std::string decoded;
+    decoded.reserve(src.length());
+    auto hex_to_int = [](char ch) -> int {
+        if (ch >= '0' && ch <= '9') {
+            // digit
+            return ch - '0';
+        } else if (ch >= 'a' && ch <= 'f') {
+            // lowercase hex digit
+            return ch - 'a' + 10;
+        } else {
+            // uppercase hex digit (rely on std::isxdigit was performed before)
+            return ch - 'A' + 10;
+        }
+    };
+    for (std::size_t i = 0; i < src.length(); ++i) {
+        char ch = src[i];
+        if (ch == '%' && i + 2 < src.length() && std::isxdigit(src[i + 1]) && std::isxdigit(src[i + 2])) {
+            int byte_value = hex_to_int(src[i + 1]) * 16 + hex_to_int(src[i + 2]);
+            decoded.push_back(static_cast<char>(byte_value));
+            i += 2;
+        } else {
+            decoded.push_back(ch);
+        }
+    }
+    return decoded;
+}
+
 }  // namespace libdnf5::utils::url

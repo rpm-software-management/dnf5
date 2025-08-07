@@ -34,6 +34,11 @@ bool is_url(std::string path);
 /// @return URL encoded string
 std::string url_encode(const std::string & src);
 
+/// Convert the given URL encoded string to a decoded string.
+/// @param src String to decode
+/// @return URL decoded string
+std::string url_decode(const std::string & src);
+
 }  // namespace libdnf5::utils::url
 
 #endif  // LIBDNF5_UTILS_URL_HPP
