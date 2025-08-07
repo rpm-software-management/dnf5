@@ -20,7 +20,10 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "url.hpp"
 
+#include "string.hpp"
+
 #include <cctype>
+#include <vector>
 
 namespace libdnf5::utils::url {
 
@@ -93,6 +96,17 @@ std::string url_decode(const std::string & src) {
         }
     }
     return decoded;
+}
+
+std::string url_path_encode(const std::string & url, bool preserve_already_encoded) {
+    // split by path separator and encode each part separately
+    std::vector<std::string> encoded_parts;
+    for (const auto & part : libdnf5::utils::string::split(url, "/")) {
+        // If preserve_already_encoded is true, decode first to prevent double-encoding (normalize)
+        encoded_parts.push_back(url_encode(preserve_already_encoded ? url_decode(part) : part));
+    }
+
+    return libdnf5::utils::string::join(encoded_parts, "/");
 }
 
 }  // namespace libdnf5::utils::url

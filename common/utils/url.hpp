@@ -39,6 +39,12 @@ std::string url_encode(const std::string & src);
 /// @return URL decoded string
 std::string url_decode(const std::string & src);
 
+/// Encode the given string to be safe for use in a URL path. It preserves path separators.
+/// @param url The URL to encode.
+/// @param preserve_already_encoded If true, do not re-encode already encoded characters (e.g. the path was already encoded by createrepo_c)
+/// @return The encoded URL.
+std::string url_path_encode(const std::string & url, bool preserve_already_encoded);
+
 }  // namespace libdnf5::utils::url
 
 #endif  // LIBDNF5_UTILS_URL_HPP
