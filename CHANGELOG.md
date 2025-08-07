@@ -1,3 +1,39 @@
+# 5.2.16.0
+
+- Update translations from weblate
+- Bump minor version to 5.2.16
+- dnfdaemon: Enable download-only transaction execution
+- dnfdaemon: Make it possible to set 'interactive' option for Rpm::system_upgrade()
+- dnfdaemon: Make it possible to set 'interactive' option for Offline::cancel(), Offline::clean(), Offline::set_finish_action()
+- dnfdaemon: Make it possible to set 'interactive' option for Repo::confirm_key(), Repo::enable(), Repo::disable()
+- dnfdaemon: Make it possible to set 'interactive' option for Goal::do_transaction()
+- dnfdaemon: Make it possible to set 'interactive' option for Base::clean()
+- test: Add test for temp files toml with missing key
+- repo: Do not fail on empty temporary files toml
+- actions: Replace L10N_SSH_KEY secret with RSM CI GitHub token
+- dnf5: Support --installed-from-repo= for "do"
+- Disable fastest_mirror callback for package downloading
+- Copy return value from `SetConstIterator::operator*`
+- tests: verify `SetConstIterator` works in Python bindings
+- test_nevra.py: change formatting to satisfy autopep8
+- Fix various typos found by Lintian
+- tests: fix compat with dash and other shellcheck warnings
+- dnf5: Support --installed-from-repo= for swap
+- dnf5: Support --installed-from-repo= for upgrade/downgrade/distro-sync
+- Goal: add_rpm_(upgrade/distro_sync) Improve support from_repo_ids
+- Goal: Honor set_from_repo_ids in add_up_down_distrosync_to_goal
+- dnf5: Support --installed-from-repo= for reinstall/remove
+- Goal: Honor set_from_repo_ids in add_(remove,reinstall)_to_goal
+- dnf5: Support --installed-from-repo= for repoquery/list/info
+- rpm::PackageQuery: New filter "filter_from_repo_id"
+- dnf5: "--from-repo=" option enables and validates source repositories
+- Goal::Impl::add_install_to_goal: Fix to_repo_ids handling
+- dnf5: upgrade/distro-sync: Apply --from-repo only if pkgs are specified
+- Goal::Impl::add_specs_to_goal: Skip processing of empty query in *ALL*
+- Goal::Impl::add_specs_to_goal: Apply to_repo_ids settings in *ALL*
+- Add unit tests for nevra parsing
+- swig: Add bindings for templated functions that convert nevra to string
+
 # 5.2.15.0
 
 - Update translations from weblate
