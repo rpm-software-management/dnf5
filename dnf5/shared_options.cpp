@@ -87,7 +87,8 @@ void create_destdir_option(dnf5::Command & command) {
     auto destdir = parser.add_new_named_arg("destdir");
     destdir->set_long_name("destdir");
     destdir->set_description(
-        "Set directory used for downloading packages to. Default location is to the current working directory.");
+        "Set directory used for downloading packages to. Default location is to the repository cache directory. "
+        "Automatically sets the --downloadonly option.");
     destdir->set_has_value(true);
     destdir->set_arg_value_help("DESTDIR");
     destdir->link_value(&command.get_context().get_base().get_config().get_destdir_option());

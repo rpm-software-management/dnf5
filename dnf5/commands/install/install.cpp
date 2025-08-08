@@ -59,6 +59,7 @@ void InstallCommand::set_argument_parser() {
     auto skip_unavailable = std::make_unique<SkipUnavailableOption>(*this);
     create_allow_downgrade_options(*this);
     create_from_repo_option(*this, from_repos, true);
+    create_destdir_option(*this);
     create_downloadonly_option(*this);
     create_offline_option(*this);
 
@@ -88,6 +89,10 @@ void InstallCommand::configure() {
         advisory_cve->get_value());
 
     context.set_load_available_repos(Context::LoadAvailableRepos::ENABLED);
+
+    if (!context.get_base().get_config().get_destdir_option().empty()) {
+        context.get_base().get_config().get_downloadonly_option().set(true);
+    }
 }
 
 void InstallCommand::run() {

@@ -160,6 +160,9 @@ void DownloadCommand::set_argument_parser() {
     cmd.register_named_arg(alldeps);
     create_from_repo_option(*this, from_repos, true);
     create_destdir_option(*this);
+    auto & destdir = parser.get_named_arg("download.destdir", false);
+    destdir.set_description(
+        "Set directory used for downloading packages to. Default location is to the current working directory.");
     auto skip_unavailable = std::make_unique<SkipUnavailableOption>(*this);
     cmd.register_named_arg(srpm);
     cmd.register_named_arg(url);
