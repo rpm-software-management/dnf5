@@ -20,6 +20,10 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "url.hpp"
 
+#include "string.hpp"
+
+#include <cctype>
+#include <vector>
 
 namespace libdnf5::utils::url {
 
@@ -32,6 +36,77 @@ bool is_url(std::string path) {
     }
     return path.starts_with("file://") || path.starts_with("http://") || path.starts_with("ftp://") ||
            path.starts_with("https://");
+}
+
+std::string url_encode(const std::string & src) {
+    auto no_encode = [](char ch) { return std::isalnum(ch) != 0 || ch == '-' || ch == '.' || ch == '_' || ch == '~'; };
+
+    // compute length of encoded string
+    auto len = src.length();
+    for (auto ch : src) {
+        if (!no_encode(ch)) {
+            len += 2;
+        }
+    }
+
+    // encode the input string
+    std::string encoded;
+    encoded.reserve(len);
+    for (auto ch : src) {
+        if (no_encode(ch)) {
+            encoded.push_back(ch);
+        } else {
+            encoded.push_back('%');
+            int hex;
+            hex = static_cast<unsigned char>(ch) >> 4;
+            hex += hex <= 9 ? '0' : 'a' - 10;
+            encoded.push_back(static_cast<char>(hex));
+            hex = static_cast<unsigned char>(ch) & 0x0F;
+            hex += hex <= 9 ? '0' : 'a' - 10;
+            encoded.push_back(static_cast<char>(hex));
+        }
+    }
+
+    return encoded;
+}
+
+std::string url_decode(const std::string & src) {
+    std::string decoded;
+    decoded.reserve(src.length());
+    auto hex_to_int = [](char ch) -> int {
+        if (ch >= '0' && ch <= '9') {
+            // digit
+            return ch - '0';
+        } else if (ch >= 'a' && ch <= 'f') {
+            // lowercase hex digit
+            return ch - 'a' + 10;
+        } else {
+            // uppercase hex digit (rely on std::isxdigit was performed before)
+            return ch - 'A' + 10;
+        }
+    };
+    for (std::size_t i = 0; i < src.length(); ++i) {
+        char ch = src[i];
+        if (ch == '%' && i + 2 < src.length() && std::isxdigit(src[i + 1]) && std::isxdigit(src[i + 2])) {
+            int byte_value = hex_to_int(src[i + 1]) * 16 + hex_to_int(src[i + 2]);
+            decoded.push_back(static_cast<char>(byte_value));
+            i += 2;
+        } else {
+            decoded.push_back(ch);
+        }
+    }
+    return decoded;
+}
+
+std::string url_path_encode(const std::string & url, bool preserve_already_encoded) {
+    // split by path separator and encode each part separately
+    std::vector<std::string> encoded_parts;
+    for (const auto & part : libdnf5::utils::string::split(url, "/")) {
+        // If preserve_already_encoded is true, decode first to prevent double-encoding (normalize)
+        encoded_parts.push_back(url_encode(preserve_already_encoded ? url_decode(part) : part));
+    }
+
+    return libdnf5::utils::string::join(encoded_parts, "/");
 }
 
 }  // namespace libdnf5::utils::url
