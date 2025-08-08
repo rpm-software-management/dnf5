@@ -437,6 +437,7 @@ void Context::Impl::store_offline(libdnf5::base::Transaction & transaction) {
 
 void Context::Impl::download_and_run(libdnf5::base::Transaction & transaction) {
     if (!transaction_store_path.empty()) {
+        auto & config = base.get_config();
         auto transaction_location = transaction_store_path / TRANSACTION_JSON;
         constexpr const char * packages_in_trans_dir{"./packages"};
         auto packages_location = transaction_store_path / packages_in_trans_dir;
@@ -446,16 +447,20 @@ void Context::Impl::download_and_run(libdnf5::base::Transaction & transaction) {
             print_error(libdnf5::utils::sformat(
                 _("Location \"{}\" already contains a stored transaction, it will be overwritten."),
                 transaction_store_path.string()));
-            if (libdnf5::cli::utils::userconfirm::userconfirm(base.get_config())) {
+            if (libdnf5::cli::utils::userconfirm::userconfirm(config)) {
                 std::filesystem::remove_all(packages_location);
                 std::filesystem::remove_all(comps_location);
             } else {
                 throw libdnf5::cli::AbortedByUserError();
             }
         }
-        auto & destdir_opt = base.get_config().get_destdir_option();
+        auto & destdir_opt = config.get_destdir_option();
         destdir_opt.set(packages_location);
         std::filesystem::create_directories(transaction_store_path);
+        // Override keepcache option because stored transaction packages should be always kept.
+        // Following transactions should never remove them.
+        auto & keepcache_opt = config.get_keepcache_option();
+        keepcache_opt.set(true);
         transaction.download();
         transaction.store_comps(comps_location);
         libdnf5::utils::fs::File transfile(transaction_location, "w");
