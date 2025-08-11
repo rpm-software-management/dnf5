@@ -39,7 +39,10 @@ bool is_url(std::string path) {
 }
 
 std::string url_encode(const std::string & src) {
-    auto no_encode = [](char ch) { return std::isalnum(ch) != 0 || ch == '-' || ch == '.' || ch == '_' || ch == '~'; };
+    auto no_encode = [](char ch) {
+        return (ch >= '0' && ch <= '9') || (ch >= 'A' && ch <= 'Z') || (ch >= 'a' && ch <= 'z') || ch == '-' ||
+               ch == '.' || ch == '_' || ch == '~';
+    };
 
     // compute length of encoded string
     auto len = src.length();

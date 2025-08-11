@@ -177,7 +177,7 @@ std::pair<std::string, size_t> Vars::substitute_expression(std::string_view text
 
             // Find the end of the variable name
             auto it = std::find_if_not(res.begin() + static_cast<long>(pos_variable), res.end(), [](char c) {
-                return std::isalnum(c) != 0 || c == '_';
+                return (c >= '0' && c <= '9') || (c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z') || c == '_';
             });
             auto pos_after_variable = static_cast<size_t>(std::distance(res.begin(), it));
 
