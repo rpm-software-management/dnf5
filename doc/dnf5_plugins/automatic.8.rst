@@ -226,4 +226,4 @@ The email emitter configuration.
 ``[base]`` section
 ------------------
 
-Can be used to override settings from DNF's main configuration file. See :manpage:`dnf5-conf(5)`.
+Can be used to override settings from DNF's main configuration file. See :manpage:`dnf5.conf(5)`.
