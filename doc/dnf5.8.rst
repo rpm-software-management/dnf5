@@ -476,7 +476,7 @@ Library Plugins:
     | :manpage:`libdnf5-expired-pgp-keys(8)`, :ref:`Expired PGP keys plugin <expired-pgp-keys_plugin_ref-label>`
 
 Configuration:
-    | :manpage:`dnf5-conf(5)`, :ref:`DNF5 Configuration Reference <dnf5_conf-label>`
+    | :manpage:`dnf5.conf(5)`, :ref:`DNF5 Configuration Reference <dnf5_conf-label>`
 
 Miscellaneous:
     | :manpage:`dnf5-aliases(7)`, :ref:`Aliases for command line arguments <aliases_misc_ref-label>`

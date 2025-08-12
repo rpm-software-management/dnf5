@@ -189,4 +189,4 @@ See Also
 ========
 
 Configuration:
-    | :manpage:`dnf5-conf(5)`, :ref:`DNF5 Configuration Reference <dnf5_conf-label>`
+    | :manpage:`dnf5.conf(5)`, :ref:`DNF5 Configuration Reference <dnf5_conf-label>`

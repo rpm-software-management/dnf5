@@ -25,7 +25,7 @@
 Description
 ===========
 
-The DNF5 system state consists of several TOML files with their location determined by the `system_state_dir` configuration option (:manpage:`dnf5-conf(5)`, :ref:`system_state_dir <system_state_dir_options-label>`). DNF5 uses the system state to:
+The DNF5 system state consists of several TOML files with their location determined by the `system_state_dir` configuration option (:manpage:`dnf5.conf(5)`, :ref:`system_state_dir <system_state_dir_options-label>`). DNF5 uses the system state to:
 
     1. Store the reasons why each installed package was added to the system. The reasons can be "user" for packages that the user explicitly asked DNF5 to install, "dependency" and "weak dependency" for packages pulled in as dependencies of another package, "group" for packages installed by a group, or "external" for packages installed by another tool (e.g. rpm).
 
