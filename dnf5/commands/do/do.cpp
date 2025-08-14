@@ -173,6 +173,7 @@ void DoCommand::set_argument_parser() {
     advisory_enhancement = std::make_unique<EnhancementOption>(*this);
     advisory_newpackage = std::make_unique<NewpackageOption>(*this);
 
+    create_destdir_option(*this);
     create_downloadonly_option(*this);
     create_offline_option(*this);
     create_store_option(*this);
@@ -207,6 +208,10 @@ void DoCommand::configure() {
 
     context.set_load_available_repos(
         in_pkgs_count > 0 ? Context::LoadAvailableRepos::ENABLED : Context::LoadAvailableRepos::NONE);
+
+    if (!context.get_base().get_config().get_destdir_option().empty()) {
+        context.get_base().get_config().get_downloadonly_option().set(true);
+    }
 }
 
 

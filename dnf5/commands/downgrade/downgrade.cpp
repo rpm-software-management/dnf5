@@ -60,6 +60,7 @@ void DowngradeCommand::set_argument_parser() {
     create_allow_downgrade_options(*this);
     create_installed_from_repo_option(*this, installed_from_repos, true);
     create_from_repo_option(*this, from_repos, true);
+    create_destdir_option(*this);
     create_downloadonly_option(*this);
     create_offline_option(*this);
     create_store_option(*this);
@@ -69,6 +70,10 @@ void DowngradeCommand::configure() {
     auto & context = get_context();
     context.set_load_system_repo(true);
     context.set_load_available_repos(Context::LoadAvailableRepos::ENABLED);
+
+    if (!context.get_base().get_config().get_destdir_option().empty()) {
+        context.get_base().get_config().get_downloadonly_option().set(true);
+    }
 }
 
 void DowngradeCommand::run() {
