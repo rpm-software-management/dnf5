@@ -19,8 +19,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "distro-sync.hpp"
 
-#include "../from_repo.hpp"
-
 #include <dnf5/shared_options.hpp>
 #include <libdnf5/conf/option_string.hpp>
 #include <libdnf5/utils/bgettext/bgettext-lib.h>
