@@ -21,6 +21,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "rpm/transaction.hpp"
 
 #include "base_impl.hpp"
+
+#include "libdnf5/base/transaction_info.hpp"
 #ifdef WITH_MODULEMD
 #include "module/module_db.hpp"
 #include "module/module_sack_impl.hpp"
@@ -50,6 +52,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <fcntl.h>
 #include <fmt/format.h>
+#include <toml.hpp>
 #include <unistd.h>
 
 #include <filesystem>
@@ -156,6 +159,43 @@ static std::vector<std::pair<ProblemRules, std::vector<std::string>>> get_remova
         }
     }
     return problem_output;
+}
+
+class TransactionLocker : public libdnf5::utils::Locker {
+public:
+    TransactionLocker(const std::filesystem::path & lock_path, const TransactionInfo & info);
+
+    // Additional functionality - separate method
+    void write_transaction_metadata();
+
+private:
+    TransactionInfo transaction_info;
+    std::string format_transaction_info_toml() const;
+};
+
+TransactionLocker::TransactionLocker(const std::filesystem::path & path, const TransactionInfo & info)
+    : Locker(path.string()),
+      transaction_info(info) {}
+
+void TransactionLocker::write_transaction_metadata() {
+    std::string toml_content = format_transaction_info_toml();
+    try {
+        write_content(toml_content);  // Use base class write method
+    } catch (const SystemError & e) {
+        //TODO(mblaha): log the error (would require base object)
+    }
+}
+
+std::string TransactionLocker::format_transaction_info_toml() const {
+    toml::table table;
+    table["transaction"] = toml::table{
+        {"description", transaction_info.get_description()},
+        {"comment", transaction_info.get_comment()},
+        {"user_id", transaction_info.get_user_id()},
+        {"start_time", transaction_info.get_start_time()},
+    };
+
+    return toml::format(toml::value(table));
 }
 
 }  // namespace
