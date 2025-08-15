@@ -21,6 +21,8 @@
 #include "rpm/transaction.hpp"
 
 #include "base_impl.hpp"
+
+#include "libdnf5/base/active_transaction_info.hpp"
 #ifdef WITH_MODULEMD
 #include "module/module_db.hpp"
 #include "module/module_sack_impl.hpp"
@@ -51,6 +53,7 @@
 
 #include <fcntl.h>
 #include <fmt/format.h>
+#include <toml.hpp>
 #include <unistd.h>
 
 #include <filesystem>
@@ -158,6 +161,28 @@ static std::vector<std::pair<ProblemRules, std::vector<std::string>>> get_remova
         }
     }
     return problem_output;
+}
+
+class TransactionLocker : public libdnf5::utils::Locker {
+public:
+    TransactionLocker(const std::filesystem::path & lock_path, const ActiveTransactionInfo & info);
+
+    void write_transaction_metadata();
+
+private:
+    ActiveTransactionInfo transaction_info;
+};
+
+TransactionLocker::TransactionLocker(const std::filesystem::path & path, const ActiveTransactionInfo & info)
+    : Locker(path.string()),
+      transaction_info(info) {}
+
+void TransactionLocker::write_transaction_metadata() {
+    try {
+        write_content(transaction_info.to_toml());
+    } catch (const SystemError & e) {
+        //TODO(mblaha): log the error (would require base object)
+    }
 }
 
 }  // namespace
