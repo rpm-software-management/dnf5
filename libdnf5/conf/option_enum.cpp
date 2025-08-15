@@ -60,6 +60,8 @@ OptionEnum::OptionEnum(
     test(p_impl->value);
 }
 
+OptionEnum::OptionEnum(const OptionEnum & other) = default;
+
 OptionEnum::~OptionEnum() = default;
 
 void OptionEnum::test(const std::string & value) const {

@@ -272,6 +272,9 @@ bool Base::are_repos_configured() const noexcept {
 ConfigMain & Base::get_config() {
     return p_impl->config;
 }
+void Base::set_config(ConfigMain config) {
+    this->p_impl->config = std::move(config);
+}
 LogRouterWeakPtr Base::get_logger() {
     return {&p_impl->log_router, &p_impl->log_router_guard};
 }
