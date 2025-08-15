@@ -67,6 +67,8 @@ public:
     OptionBinds(const OptionBinds & src);
     ~OptionBinds();
 
+    OptionBinds & operator=(const OptionBinds & other);
+
     Item & add(
         std::string id,
         Option & option,
