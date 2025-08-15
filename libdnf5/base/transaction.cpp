@@ -21,6 +21,7 @@
 #include "rpm/transaction.hpp"
 
 #include "base_impl.hpp"
+
 #ifdef WITH_MODULEMD
 #include "module/module_db.hpp"
 #include "module/module_sack_impl.hpp"
@@ -158,6 +159,24 @@ static std::vector<std::pair<ProblemRules, std::vector<std::string>>> get_remova
         }
     }
     return problem_output;
+}
+
+class TransactionLocker : public libdnf5::utils::Locker {
+public:
+    TransactionLocker(const std::filesystem::path & path, const ActiveTransactionInfo & info);
+
+    void write_metadata();
+
+private:
+    ActiveTransactionInfo transaction_info;
+};
+
+TransactionLocker::TransactionLocker(const std::filesystem::path & path, const ActiveTransactionInfo & info)
+    : Locker(path.string()),
+      transaction_info(info) {}
+
+void TransactionLocker::write_metadata() {
+    write_content(transaction_info.to_toml());
 }
 
 }  // namespace
