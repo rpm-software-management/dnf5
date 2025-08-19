@@ -56,6 +56,8 @@ void DebuginfoInstallCommand::set_argument_parser() {
         patterns_to_debuginfo_install_options);
     patterns_arg->set_description("List of package-spec-NPFB to install the associated debuginfo packages for");
     cmd.register_positional_arg(patterns_arg);
+    create_offline_option(*this);
+    create_store_option(*this);
 }
 
 void DebuginfoInstallCommand::configure() {

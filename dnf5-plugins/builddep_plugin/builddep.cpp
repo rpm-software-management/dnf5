@@ -123,6 +123,7 @@ void BuildDepCommand::set_argument_parser() {
     auto skip_unavailable = std::make_unique<SkipUnavailableOption>(*this);
     create_allow_downgrade_options(*this);
     create_store_option(*this);
+    create_offline_option(*this);
 
     auto spec_arg = parser.add_new_named_arg("spec");
     spec_arg->set_long_name("spec");
