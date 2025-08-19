@@ -1159,7 +1159,7 @@ static bool cmd_requires_privileges(dnf5::Context & context) {
 
     // first a hard-coded list of commands that always need to be run with elevated privileges
     auto main_arg_cmd = cmd->get_parent_command() != context.get_root_command() ? arg_cmd->get_parent() : arg_cmd;
-    std::vector<std::string> privileged_cmds = {"automatic", "offline", "system-upgrade"};
+    std::vector<std::string> privileged_cmds = {"automatic", "offline", "system-upgrade", "replay"};
     if (std::find(privileged_cmds.begin(), privileged_cmds.end(), main_arg_cmd->get_id()) != privileged_cmds.end()) {
         return true;
     }
