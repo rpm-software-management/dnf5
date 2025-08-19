@@ -12,6 +12,7 @@ DNF5 Commands
     check-upgrade.8
     clean.8
     distro-sync.8
+    do.8
     downgrade.8
     download.8
     environment.8
