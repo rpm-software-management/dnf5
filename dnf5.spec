@@ -322,6 +322,7 @@ It supports RPM packages, modulemd modules, and comps groups & environments.
 %{_mandir}/man8/dnf*-check-upgrade.8.*
 %{_mandir}/man8/dnf*-clean.8.*
 %{_mandir}/man8/dnf*-distro-sync.8.*
+%{_mandir}/man8/dnf*-do.8.*
 %{_mandir}/man8/dnf*-downgrade.8.*
 %{_mandir}/man8/dnf*-download.8.*
 %{_mandir}/man8/dnf*-environment.8.*

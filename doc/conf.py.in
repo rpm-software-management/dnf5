@@ -118,6 +118,7 @@ man_pages = [
     ('commands/check-upgrade.8', 'dnf5-check-upgrade', 'Check-Upgrade Command', AUTHORS, 8),
     ('commands/clean.8', 'dnf5-clean', 'Clean Command', AUTHORS, 8),
     ('commands/distro-sync.8', 'dnf5-distro-sync', 'Distro-Sync Command', AUTHORS, 8),
+    ('commands/do.8', 'dnf5-do', 'Do Command', AUTHORS, 8),
     ('commands/downgrade.8', 'dnf5-downgrade', 'Downgrade Command', AUTHORS, 8),
     ('commands/download.8', 'dnf5-download', 'Download Command', AUTHORS, 8),
     ('commands/environment.8', 'dnf5-environment', 'Environment Command', AUTHORS, 8),
