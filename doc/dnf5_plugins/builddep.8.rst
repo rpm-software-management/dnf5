@@ -67,6 +67,8 @@ Options
 ``--srpm``
     | Treat command line arguments following this option as source rpms.
 
+.. include:: ../_shared/options/transaction.rst
+
 
 Arguments
 =========
