@@ -126,6 +126,7 @@ void BuildDepCommand::set_argument_parser() {
     create_from_repo_option(*this, from_repos, true);
 
     create_store_option(*this);
+    create_offline_option(*this);
 
     auto spec_arg = parser.add_new_named_arg("spec");
     spec_arg->set_long_name("spec");
