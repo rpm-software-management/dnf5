@@ -74,6 +74,8 @@ Options
 ``--skip-unavailable``
     | Allow skipping packages that are not installed on the system. All remaining installed packages will be marked.
 
+.. include:: ../_shared/options/transaction.rst
+
 
 Examples
 ========

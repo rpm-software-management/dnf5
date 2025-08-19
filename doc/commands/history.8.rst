@@ -88,6 +88,8 @@ Options for ``undo``, ``rollback`` and ``redo``
 ``--skip-unavailable``
     | Allow skipping packages actions that are not possible perform.
 
+.. include:: ../_shared/options/transaction.rst
+
 
 Options for ``undo`` and ``rollback``
 =====================================

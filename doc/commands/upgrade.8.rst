@@ -71,8 +71,7 @@ Options
 ``--downloadonly``
     | Only download packages for transaction.
 
-``--offline``
-    | Store the transaction to be performed offline. See :manpage:`dnf5-offline(8)`, :ref:`Offline command <offline_command_ref-label>`.
+.. include:: ../_shared/options/transaction.rst
 
 .. include:: ../_shared/options/advisories.rst
 

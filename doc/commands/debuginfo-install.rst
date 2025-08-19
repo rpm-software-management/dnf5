@@ -52,6 +52,7 @@ Options
 ``--skip-unavailable``
     | Allow skipping packages that are not available in repositories. All available packages will be installed.
 
+.. include:: ../_shared/options/transaction.rst
 
 Examples
 ========
