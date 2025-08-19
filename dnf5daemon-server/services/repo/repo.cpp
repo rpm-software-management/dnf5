@@ -278,8 +278,8 @@ void Repo::dbus_register() {
                 {}},
             sdbus::MethodVTableItem{
                 sdbus::MethodName{"confirm_key_with_options"},
-                sdbus::Signature{"sb"},
-                {"key_id", "confirmed"},
+                sdbus::Signature{"sba{sv}"},
+                {"key_id", "confirmed", "options"},
                 sdbus::Signature{""},
                 {},
                 [this](sdbus::MethodCall call) -> void {
