@@ -88,8 +88,10 @@ class TestTutorial(base_test_case.BaseTestCase):
         with open("tutorial/transaction/transaction.py", "r") as f:
             file += f.read()
 
+        tmp_path = os.getcwd()
         exec(file, {'installroot': self.installroot,
                     'cachedir': self.cachedir, 'baseurl': self.baseurl})
+        os.chdir(tmp_path)
 
     def test_force_arch(self):
         file = ""
