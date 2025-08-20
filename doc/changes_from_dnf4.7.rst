@@ -345,6 +345,13 @@ Changes to individual commands
 Changes on the API
 ==================
 
+The differences between DNF4 and DNF5 API are not only in minor tweeks, but there are major architectural changes, therefore, it is not feasible to cover all the changes. The :ref:`tutorial_api_changes_ref-label` section describes the most common use cases and points out the main differences.
+
+.. _other_api_changes_ref-label:
+
+Other notable changes on the API
+--------------------------------
+
 ``PackageSet::operator[]``
   * It was removed due to insufficient O(n^2) performance. Use PackageSet iterator to access the data instead.
 
