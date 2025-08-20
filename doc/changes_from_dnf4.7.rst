@@ -345,46 +345,28 @@ Changes to individual commands
 Changes on the API
 ==================
 
-PackageSet::operator[]
-----------------------
-It was removed due to insufficient O(n^2) performance.
-Use PackageSet iterator to access the data instead.
+``PackageSet::operator[]``
+  * It was removed due to insufficient O(n^2) performance. Use PackageSet iterator to access the data instead.
+
+``Package::get_epoch()``
+  * The return type was changed from ``unsigned long`` to ``std::string``.
 
 
-Package::get_epoch()
---------------------
-The return type was changed from ``unsigned long`` to ``std::string``.
+DNF: ``Package.size``, libdnf: ``dnf_package_get_size()``
+  * The return value was ambiguous, returning either package or install size. Use Package::get_download_size() and Package::get_install_size() instead.
+
+``dnf_sack_set_installonly``, ``dnf_sack_get_installonly``, ``dnf_sack_set_installonly_limit``, ``dnf_sack_get_installonly_limit``
+  * The functions were dropped as unneeded. The installonly packages are taken directly from main Conf in Base.
+
+``Query::filter()`` - ``HY_PKG_UPGRADES_BY_PRIORITY``, ``HY_PKG_OBSOLETES_BY_PRIORITY``, ``HY_PKG_LATEST_PER_ARCH_BY_PRIORITY``
+  * The priority filter was separated into a standalone method. Combine ``query.filter_priority()`` with ``query.filter_latest_evr()`` or another filter to achieve the original functionality.
+
+``Query::filter()`` - ``HY_PKG_LATEST``
+  * The filter was replaced with ``filter_latest_evr()`` which has the same behavior as ``HY_PKG_LATEST_PER_ARCH``
 
 
-DNF: Package.size, libdnf: dnf_package_get_size()
--------------------------------------------------
-The return value was ambiguous, returning either package or install size.
-Use Package::get_download_size() and Package::get_install_size() instead.
-
-
-dnf_sack_set_installonly, dnf_sack_get_installonly, dnf_sack_set_installonly_limit, dnf_sack_get_installonly_limit
-------------------------------------------------------------------------------------------------------------------
-The functions were dropped as unneeded. The installonly packages are taken directly from main Conf in Base.
-
-
-Query::filter() - HY_PKG_UPGRADES_BY_PRIORITY, HY_PKG_OBSOLETES_BY_PRIORITY, HY_PKG_LATEST_PER_ARCH_BY_PRIORITY
----------------------------------------------------------------------------------------------------------------
-The priority filter was separated into a standalone method.
-Combine ``query.filter_priority()`` with ``query.filter_latest_evr()`` or another filter to achieve the original
-functionality.
-
-
-Query::filter() - HY_PKG_LATEST
--------------------------------
-The filter was replaced with ``filter_latest_evr()`` which has the same behavior as ``HY_PKG_LATEST_PER_ARCH``
-
-
-ConfigMain::proxy_auth_method() and ConfigRepo::proxy_auth_method()
--------------------------------------------------------------------
-The return types were changed. ``OptionEnum<std::string>`` was replaced by ``OptionStringSet``.
-A combination of several authentication methods (for example "basic" and "digest") can now be used.
-This allows using a list of authentication methods in configuration files and the DNF5 command line
-"--setopt=proxy_auth_method=".
+``ConfigMain::proxy_auth_method()`` and ``ConfigRepo::proxy_auth_method()``
+  * The return types were changed. ``OptionEnum<std::string>`` was replaced by ``OptionStringSet``. A combination of several authentication methods (for example "basic" and "digest") can now be used. This allows using a list of authentication methods in configuration files and the DNF5 command line "--setopt=proxy_auth_method=".
 
 
 .. _conf_changes_ref-label:
