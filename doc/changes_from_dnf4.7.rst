@@ -303,6 +303,13 @@ Changes to individual commands
 
   * See the :ref:`Repoquery command <repoquery_command_ref-label>` for more information.
 
+``shell``
+  * The ``shell`` command has been superseded by the new ``do`` command.
+
+    * The main advantage of the old command was its ability to perform multiple actions within a single transaction. The new ``do`` command retains this core functionality, but with a different usage model.
+
+        * Usage: The ``shell`` command allowed actions to be entered via an interactive shell or a redirected file. The new ``do`` command, however, requires actions to be provided as command-line arguments. Direct support for reading a command file is not available at this time. However, the file's contents can be passed as arguments on the command line (e.g., ``dnf do $(cat file)``).
+
 ``system-upgrade``
   * Moved from a plugin to a built-in command.
 
