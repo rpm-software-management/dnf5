@@ -54,7 +54,11 @@ public:
 
     explicit Option(Priority priority = Priority::EMPTY);
     Option(const Option & src);
+    Option(Option && other) noexcept;
+
     virtual ~Option();
+
+    Option & operator=(const Option & other);
 
     /// Makes copy (clone) of this object.
     // @replaces libdnf:conf/Option.hpp:method:Option.clone()

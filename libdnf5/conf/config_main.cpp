@@ -110,6 +110,7 @@ class ConfigMain::Impl {
     friend class ConfigMain;
 
     explicit Impl(Config & owner);
+    explicit Impl(Config & owner, Config & other);
 
     Config & owner;
 
@@ -470,7 +471,20 @@ ConfigMain::Impl::Impl(Config & owner) : owner(owner) {
 ConfigMain::ConfigMain() {
     p_impl = std::unique_ptr<Impl>(new Impl(*this));
 }
+
+ConfigMain::ConfigMain(const ConfigMain & other) : Config(other) {
+    p_impl = std::make_unique<Impl>(*other.p_impl);
+}
+
 ConfigMain::~ConfigMain() = default;
+
+ConfigMain & ConfigMain::operator=(const ConfigMain & other) {
+    if (this != &other) {
+        Config::operator=(other);
+        p_impl = std::make_unique<Impl>(*other.p_impl);
+    }
+    return *this;
+}
 
 OptionNumber<std::int32_t> & ConfigMain::get_debuglevel_option() {
     return p_impl->debuglevel;

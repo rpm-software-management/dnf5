@@ -23,6 +23,15 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 namespace libdnf5 {
 
 class Config::Impl {
+public:
+    Impl() = default;
+    Impl(const Impl & other) : binds(other.binds) {}
+
+    Impl & operator=(const Impl & other) {
+        binds = other.binds;
+        return *this;
+    }
+
 private:
     friend Config;
 
@@ -33,8 +42,18 @@ OptionBinds & Config::opt_binds() noexcept {
     return p_impl->binds;
 }
 
-Config::~Config() = default;
 Config::Config() : p_impl(new Impl()) {}
+
+Config::Config(const Config & other) : p_impl(other.p_impl) {}
+
+Config::~Config() = default;
+
+Config & Config::operator=(const Config & other) {
+    if (this != &other) {
+        p_impl = other.p_impl;
+    }
+    return *this;
+}
 
 void Config::load_from_parser(
     const ConfigParser & parser,

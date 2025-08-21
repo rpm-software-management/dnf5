@@ -37,7 +37,11 @@ public:
     OptionBinds & opt_binds() noexcept;
 
     Config();
+    Config(const Config & other);
+
     virtual ~Config();
+
+    Config & operator=(const Config & other);
 
     virtual void load_from_parser(
         const ConfigParser & parser,
