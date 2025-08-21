@@ -30,6 +30,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf5/defs.h"
 #include "libdnf5/logger/log_router.hpp"
 #include "libdnf5/module/module_sack_weak.hpp"
+#include "libdnf5/plugin/iplugin.hpp"
 #include "libdnf5/plugin/plugin_info.hpp"
 #include "libdnf5/repo/download_callbacks.hpp"
 #include "libdnf5/repo/repo_sack.hpp"
@@ -133,6 +134,12 @@ public:
     VarsWeakPtr get_vars();
 
     libdnf5::BaseWeakPtr get_weak_ptr();
+
+    /// @brief Add libdnf5 plugin instance that introduces additional logic into the library using hooks.
+    /// @param config_file_path Path to the configuration file of the new libdnf5 plugin
+    /// @param iplugin_instance New libdnf5 plugin instance
+    /// @return true if the plugin is successfully added, false otherwise.
+    bool add_plugin(const std::string & config_file_path, libdnf5::plugin::IPlugin & iplugin_instance);
 
 private:
     friend class libdnf5::InternalBaseUser;

@@ -174,7 +174,7 @@ void Plugins::load_plugin_library(
     logger.debug("End of loading plugins using the \"{}\" plugin.", name);
 }
 
-void Plugins::load_plugin(
+std::tuple<std::string, libdnf5::ConfigParser, bool> Plugins::load_config_and_check_enabled(
     const std::string & config_file_path, const PreserveOrderMap<std::string, bool> & plugin_enablement) {
     auto & logger = *base->get_logger();
 
@@ -223,11 +223,19 @@ void Plugins::load_plugin(
         // Creates a PluginInfo for the unloaded plugin.
         auto & plugins_info = InternalBaseUser::get_plugins_info(base);
         plugins_info.emplace_back(PluginInfo::Impl::create_plugin_info(plugin_name, nullptr));
-        return;
     }
 
-    auto library_path = find_plugin_library(plugin_name);
-    load_plugin_library(std::move(parser), library_path, plugin_name);
+    return {plugin_name, parser, is_enabled};
+}
+
+void Plugins::load_plugin(
+    const std::string & config_file_path, const PreserveOrderMap<std::string, bool> & plugin_enablement) {
+    auto [plugin_name, parser, is_enabled] = load_config_and_check_enabled(config_file_path, plugin_enablement);
+
+    if (is_enabled) {
+        auto library_path = find_plugin_library(plugin_name);
+        load_plugin_library(std::move(parser), library_path, plugin_name);
+    }
 }
 
 void Plugins::load_plugins(
