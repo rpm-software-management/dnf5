@@ -133,6 +133,10 @@ Options for ``install``, ``remove`` and ``upgrade``
     | Disable downgrade of dependencies when resolving the requested operation.
     | Used with ``install`` and ``upgrade`` commands.
 
+``--destdir=<path>``
+    | Set directory used for downloading packages to. Default location is to the repository cache directory. Automatically sets the --downloadonly option.
+    | Used with ``install`` and ``upgrade`` commands.
+
 ``--downloadonly``
     | Download the resolved package set without executing an RPM transaction.
     | Used with ``install`` and ``upgrade`` commands.

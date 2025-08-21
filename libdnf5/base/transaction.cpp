@@ -418,6 +418,11 @@ void Transaction::download() {
             downloader.add(tspkg.get_package());
         }
     }
+    // We don't want to remove downloaded transaction packages in case the
+    // destdir was changed (e.g. using --destdir, --store, --offline)
+    if (!p_impl->base->get_config().get_destdir_option().empty()) {
+        downloader.force_keep_packages(true);
+    }
     downloader.download();
 }
 

@@ -39,6 +39,7 @@ void GroupUpgradeCommand::set_argument_parser() {
     allow_erasing = std::make_unique<AllowErasingOption>(*this);
     auto skip_unavailable = std::make_unique<SkipUnavailableOption>(*this);
     create_allow_downgrade_options(*this);
+    create_destdir_option(*this);
     create_downloadonly_option(*this);
     create_offline_option(*this);
     create_store_option(*this);
@@ -50,6 +51,10 @@ void GroupUpgradeCommand::configure() {
     context.set_load_available_repos(Context::LoadAvailableRepos::ENABLED);
     context.get_base().get_config().get_optional_metadata_types_option().add_item(
         libdnf5::Option::Priority::RUNTIME, libdnf5::METADATA_TYPE_COMPS);
+
+    if (!context.get_base().get_config().get_destdir_option().empty()) {
+        context.get_base().get_config().get_downloadonly_option().set(true);
+    }
 }
 
 void GroupUpgradeCommand::run() {
