@@ -150,6 +150,7 @@ man_pages = [
     ('dnf5_plugins/copr.8', 'dnf5-copr', 'Copr Command', AUTHORS, 8),
     ('dnf5_plugins/needs_restarting.8', 'dnf5-needs-restarting', 'Needs-restarting Command', AUTHORS, 8),
     ('dnf5_plugins/repoclosure.8', 'dnf5-repoclosure', 'Repoclosure Command', AUTHORS, 8),
+    ('dnf5_plugins/repomanage.8', 'dnf5-repomanage', 'Repomanage Command', AUTHORS, 8),
     ('dnf5_plugins/reposync.8', 'dnf5-reposync', 'Reposync Command', AUTHORS, 8),
     ('libdnf5_plugins/actions.8', 'libdnf5-actions', 'Actions Plugin', AUTHORS, 8),
     ('libdnf5_plugins/expired-pgp-keys.8', 'libdnf5-expired-pgp-keys', 'Expired PGP Keys Plugin', AUTHORS, 8),
