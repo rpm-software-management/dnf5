@@ -599,6 +599,13 @@ void RootCommand::set_argument_parser() {
         auto version = parser.add_new_named_arg("version");
         version->set_long_name("version");
         version->set_description(_("Show DNF5 version and exit"));
+        version->set_parse_hook_func([&ctx](
+                                         [[maybe_unused]] ArgumentParser::NamedArg * arg,
+                                         [[maybe_unused]] const char * option,
+                                         [[maybe_unused]] const char * value) {
+            ctx.set_show_version(true);
+            return true;
+        });
         global_options_group->register_argument(version);
     }
 
@@ -668,7 +675,8 @@ void RootCommand::pre_configure() {
     // With these options it is possible to run dnf5 without a command.
     if (arg_parser.get_named_arg("dump-variables", false).get_parse_count() > 0 ||
         arg_parser.get_named_arg("dump-main-config", false).get_parse_count() > 0 ||
-        arg_parser.get_named_arg("dump-repo-config", false).get_parse_count() > 0) {
+        arg_parser.get_named_arg("dump-repo-config", false).get_parse_count() > 0 ||
+        arg_parser.get_named_arg("version", false).get_parse_count() > 0) {
         return;
     }
 
@@ -784,6 +792,22 @@ static void print_versions(Context & context) {
         context.print_output(
             libdnf5::utils::sformat(_("  version: {}.{}.{}"), version.major, version.minor, version.micro));
         const auto & api_version = iplugin->get_api_version();
+        context.print_output(libdnf5::utils::sformat(_("  API version: {}.{}"), api_version.major, api_version.minor));
+    }
+
+    first = true;
+    for (const auto & plugin_info : context.get_base().get_plugins_info()) {
+        if (first) {
+            first = false;
+            context.print_output(_("\nLoaded libdnf5 plugins:"));
+        } else {
+            context.print_output("");
+        }
+        context.print_output(libdnf5::utils::sformat(_("  name: {}"), plugin_info.get_name()));
+        const auto & version = plugin_info.get_version();
+        context.print_output(
+            libdnf5::utils::sformat(_("  version: {}.{}.{}"), version.major, version.minor, version.micro));
+        const auto & api_version = plugin_info.get_api_version();
         context.print_output(libdnf5::utils::sformat(_("  API version: {}.{}"), api_version.major, api_version.minor));
     }
 }
@@ -1031,7 +1055,8 @@ static void print_resolve_hints(dnf5::Context & context) {
                 const std::string_view arg{"--ignore-installed"};
                 if (has_named_arg(command, arg.substr(2))) {
                     hints.emplace_back(libdnf5::utils::sformat(
-                        _("{} to allow mismatches between installed and stored transaction packages. This can result "
+                        _("{} to allow mismatches between installed and stored transaction packages. This can "
+                          "result "
                           "in an empty transaction because among other things the option can ignore failing Remove "
                           "actions."),
                         arg));
@@ -1366,11 +1391,6 @@ int main(int argc, char * argv[]) try {
                 arg_parser.get_selected_command()->help();
                 return static_cast<int>(libdnf5::cli::ExitCode::SUCCESS);
             }
-            // print version of program if --version was used
-            if (arg_parser.get_named_arg("version", false).get_parse_count() > 0) {
-                dnf5::print_versions(context);
-                return static_cast<int>(libdnf5::cli::ExitCode::SUCCESS);
-            }
         }
 
         auto download_callbacks_uptr = std::make_unique<dnf5::DownloadCallbacks>();
@@ -1428,6 +1448,11 @@ int main(int argc, char * argv[]) try {
             log_router.swap_logger(destination_logger, 0);
             // Write messages from memory buffer logger to destination logger
             dynamic_cast<libdnf5::MemoryBufferLogger &>(*destination_logger).write_to_logger(log_router);
+
+            if (context.get_show_version()) {
+                dnf5::print_versions(context);
+                return static_cast<int>(libdnf5::cli::ExitCode::SUCCESS);
+            }
 
             if (context.get_dump_variables()) {
                 dump_variables(context);

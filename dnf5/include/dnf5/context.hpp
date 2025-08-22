@@ -176,6 +176,10 @@ public:
     std::vector<std::pair<std::vector<std::string>, bool>> & get_libdnf_plugins_enablement();
     const std::vector<std::pair<std::vector<std::string>, bool>> & get_libdnf_plugins_enablement() const;
 
+    /// Set to true to print version information
+    void set_show_version(bool enable);
+    bool get_show_version() const;
+
 private:
     class DNF_LOCAL Impl;
     std::unique_ptr<Impl> p_impl;
