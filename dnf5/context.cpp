@@ -234,6 +234,9 @@ public:
         return libdnf_plugins_enablement;
     }
 
+    void set_show_version(bool enable) { this->show_version = enable; }
+    bool get_show_version() const { return this->show_version; }
+
 private:
     Context & owner;
 
@@ -271,6 +274,7 @@ private:
 
     bool load_system_repo{false};
     LoadAvailableRepos load_available_repos{LoadAvailableRepos::NONE};
+    bool show_version{false};
 };
 
 // TODO(jrohel): Move logic into libdnf?
@@ -738,6 +742,14 @@ void Context::set_create_repos(bool create_repos) {
 
 bool Context::get_create_repos() const {
     return p_impl->get_create_repos();
+}
+
+void Context::set_show_version(bool show_version) {
+    p_impl->set_show_version(show_version);
+}
+
+bool Context::get_show_version() const {
+    return p_impl->get_show_version();
 }
 
 libdnf5::Base & Context::get_base() {
