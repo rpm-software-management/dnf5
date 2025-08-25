@@ -25,7 +25,7 @@ PROJECT_BINARY_DIR = os.environ["PROJECT_BINARY_DIR"]
 PROJECT_SOURCE_DIR = os.environ["PROJECT_SOURCE_DIR"]
 
 
-class TestTutorial(base_test_case.BaseTestCase):
+class TestAPIChangesFromDNF4(base_test_case.BaseTestCase):
     def setUp(self):
         super().setUp()
         self.installroot = self.base.get_config().installroot
@@ -35,43 +35,56 @@ class TestTutorial(base_test_case.BaseTestCase):
 
     def test_create_base(self):
         file = ""
-        with open("tutorial/session/create_base.py", "r") as f:
+        with open("tutorial/api_changes_from_dnf4/create_base.py", "r") as f:
             file += f.read()
 
         exec(file, {'installroot': self.installroot, 'cachedir': self.cachedir})
 
-    def test_load_repo(self):
+    def test_configure_base(self):
         file = ""
-        with open("tutorial/session/create_base.py", "r") as f:
+        with open("tutorial/api_changes_from_dnf4/create_base.py", "r") as f:
             file += f.read()
 
-        with open("tutorial/repo/load_repo.py", "r") as f:
+        with open("tutorial/api_changes_from_dnf4/configure_base.py", "r") as f:
             file += f.read()
 
         exec(file, {'installroot': self.installroot,
                     'cachedir': self.cachedir, 'baseurl': self.baseurl})
 
-    def test_load_system_repo(self):
-        # TODO(nsella) This example does not 'compile' yet
-        # file = ""
-        # with open("tutorial/session/create_base.py", "r") as f:
-        #     file += f.read()
-
-        # with open("tutorial/repo/load_system_repos.py", "r") as f:
-        #     file += f.read()
-
-        # exec(file, { 'installroot': self.installroot, 'baseurl': self.baseurl })
-        pass
-
-    def test_query(self):
+    def test_load_repo(self):
         file = ""
-        with open("tutorial/session/create_base.py", "r") as f:
+        with open("tutorial/api_changes_from_dnf4/create_base.py", "r") as f:
             file += f.read()
 
-        with open("tutorial/repo/load_repo.py", "r") as f:
+        with open("tutorial/api_changes_from_dnf4/load_repos.py", "r") as f:
             file += f.read()
 
-        with open("tutorial/query/query.py", "r") as f:
+        exec(file, {'installroot': self.installroot,
+                    'cachedir': self.cachedir, 'baseurl': self.baseurl})
+
+    def test_package_query(self):
+        file = ""
+        with open("tutorial/api_changes_from_dnf4/create_base.py", "r") as f:
+            file += f.read()
+
+        with open("tutorial/api_changes_from_dnf4/load_repos.py", "r") as f:
+            file += f.read()
+
+        with open("tutorial/api_changes_from_dnf4/package_query.py", "r") as f:
+            file += f.read()
+
+        exec(file, {'installroot': self.installroot,
+                    'cachedir': self.cachedir, 'baseurl': self.baseurl})
+
+    def test_group_query(self):
+        file = ""
+        with open("tutorial/api_changes_from_dnf4/create_base.py", "r") as f:
+            file += f.read()
+
+        with open("tutorial/api_changes_from_dnf4/load_repos.py", "r") as f:
+            file += f.read()
+
+        with open("tutorial/api_changes_from_dnf4/group_query.py", "r") as f:
             file += f.read()
 
         exec(file, {'installroot': self.installroot,
@@ -79,23 +92,16 @@ class TestTutorial(base_test_case.BaseTestCase):
 
     def test_transaction(self):
         file = ""
-        with open("tutorial/session/create_base.py", "r") as f:
+        with open("tutorial/api_changes_from_dnf4/create_base.py", "r") as f:
             file += f.read()
 
-        with open("tutorial/repo/load_repo.py", "r") as f:
+        with open("tutorial/api_changes_from_dnf4/load_repos.py", "r") as f:
             file += f.read()
 
-        with open("tutorial/transaction/transaction.py", "r") as f:
+        with open("tutorial/api_changes_from_dnf4/transaction.py", "r") as f:
             file += f.read()
 
         tmp_path = os.getcwd()
         exec(file, {'installroot': self.installroot,
                     'cachedir': self.cachedir, 'baseurl': self.baseurl})
         os.chdir(tmp_path)
-
-    def test_force_arch(self):
-        file = ""
-        with open("tutorial/session/force_arch.py", "r") as f:
-            file += f.read()
-
-        exec(file, {'installroot': self.installroot, 'cachedir': self.cachedir})
