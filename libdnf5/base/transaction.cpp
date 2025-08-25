@@ -356,9 +356,8 @@ void Transaction::Impl::add_resolve_log(
     const std::set<std::string> & additional_data,
     libdnf5::Logger::Level log_level) {
     resolve_logs.emplace_back(LogEvent(action, problem, additional_data, settings, spec_type, spec));
-    // TODO(jmracek) Use a logger properly
     auto & logger = *base->get_logger();
-    logger.log(log_level, resolve_logs.back().to_string());
+    logger.log_line(log_level, resolve_logs.back().to_string());
 }
 
 void Transaction::Impl::add_resolve_log(
@@ -369,9 +368,8 @@ void Transaction::Impl::add_resolve_log(
 
 void Transaction::Impl::add_resolve_log(GoalProblem problem, const SolverProblems & problems) {
     resolve_logs.emplace_back(LogEvent(problem, problems));
-    // TODO(jmracek) Use a logger properly
     auto & logger = *base->get_logger();
-    logger.error(resolve_logs.back().to_string());
+    logger.log_line(libdnf5::Logger::Level::ERROR, resolve_logs.back().to_string());
 }
 
 const std::vector<LogEvent> & Transaction::get_resolve_logs() const {
