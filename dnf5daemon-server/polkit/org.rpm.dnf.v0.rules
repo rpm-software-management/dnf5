@@ -1,5 +1,6 @@
 polkit.addRule(function(action, subject) {
-    if (action.id == "org.rpm.dnf.v0.rpm.execute_trusted_transaction" &&
+    if ((action.id == "org.rpm.dnf.v0.rpm.execute_trusted_transaction" ||
+         action.id == "org.rpm.dnf.v0.rpm.Repo.confirm_key") &&
         subject.active == true && subject.local == true &&
         subject.isInGroup("wheel")) {
             return polkit.Result.YES;
