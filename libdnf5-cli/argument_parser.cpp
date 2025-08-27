@@ -618,8 +618,9 @@ int ArgumentParser::NamedArg::parse_short(const char * option, int argc, const c
         auto & target_arg = owner.get_named_arg(target_named_arg.id_path, false);
         const char * args[2];
         int args_count = 1;
+        std::string target_arg_val;
         if (target_arg.get_has_value()) {
-            std::string target_arg_val = target_named_arg.value;
+            target_arg_val = target_named_arg.value;
             replace_all(target_arg_val, "${}", arg_value);
             args[args_count++] = target_arg_val.c_str();
         }
