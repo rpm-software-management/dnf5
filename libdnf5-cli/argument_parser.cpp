@@ -1279,8 +1279,9 @@ void ArgumentParser::CommandAlias::parse(const char * option, int argc, const ch
         auto & target_arg = owner.get_named_arg(target_named_arg.id_path, false);
         const char * args[2];
         int args_count = 1;
+        std::string value;
         if (target_arg.get_has_value()) {
-            auto value = format_string(target_named_arg.value, number_of_required_values + 1, argv);
+            value = format_string(target_named_arg.value, number_of_required_values + 1, argv);
             args[args_count++] = value.c_str();
         }
         args[0] = option;
