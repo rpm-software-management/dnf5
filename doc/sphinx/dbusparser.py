@@ -1,3 +1,4 @@
+# Copyright Contributors to the DNF5 project.
 # Copyright (C) 2008-2011 Red Hat, Inc.
 # Author: David Zeuthen <davidz@redhat.com>
 # SPDX-License-Identifier: LGPL-2.1-or-later
