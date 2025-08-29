@@ -1,3 +1,4 @@
+# Copyright Contributors to the DNF5 project.
 # D-Bus sphinx domain extension
 #
 # Copyright (C) 2021, Red Hat Inc.

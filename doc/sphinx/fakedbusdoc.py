@@ -1,3 +1,4 @@
+# Copyright Contributors to the DNF5 project.
 # D-Bus XML documentation extension, compatibility gunk for <sphinx4
 #
 # Copyright (C) 2021, Red Hat Inc.
