@@ -40,6 +40,8 @@ public:
     OptionEnum(std::string default_value, std::vector<std::string> enum_vals);
     OptionEnum(std::string default_value, std::vector<std::string> enum_vals, FromStringFunc && from_string_func);
 
+    OptionEnum(const OptionEnum & other);
+
     ~OptionEnum() override;
 
     /// Makes copy (clone) of this object.

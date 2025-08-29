@@ -93,6 +93,12 @@ private:
 OptionBinds::OptionBinds() : p_impl(new Impl()) {}
 OptionBinds::OptionBinds(const OptionBinds & src) = default;
 OptionBinds::~OptionBinds() = default;
+OptionBinds & OptionBinds::operator=(const OptionBinds & other) {
+    if (this != &other) {
+        p_impl = other.p_impl;
+    }
+    return *this;
+}
 
 OptionBinds::Item & OptionBinds::at(const std::string & id) {
     auto item = p_impl->items.find(id);

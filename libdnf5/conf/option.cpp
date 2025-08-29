@@ -35,9 +35,11 @@ private:
 
 Option::Option(Priority priority) : p_impl(new Impl(priority)) {}
 
+Option::Option(const Option & src) = default;
+
 Option::~Option() = default;
 
-Option::Option(const Option & src) = default;
+Option & Option::operator=(const Option & other) = default;
 
 Option::Priority Option::get_priority() const {
     return p_impl->priority;
@@ -69,5 +71,6 @@ void Option::assert_not_locked() const {
 const std::string & Option::get_lock_comment() const noexcept {
     return p_impl->lock_comment;
 }
+
 
 }  // namespace libdnf5
