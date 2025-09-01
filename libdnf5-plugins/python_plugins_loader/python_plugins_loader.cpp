@@ -21,6 +21,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <fmt/format.h>
 #include <libdnf5/base/base.hpp>
 #include <libdnf5/plugin/iplugin.hpp>
+#include <swigpyrun.h>
 
 #include <cstdlib>
 #include <cstring>
@@ -182,7 +183,7 @@ void PythonPluginLoader::load_plugin_file(const fs::path & file_path) {
     // Very High Level Embedding
     // std::string python_code = "import " + file_path.stem().string() +";";
     // python_code += "import libdnf5;";
-    // python_code += "plug = " + file_path.stem().string() +".Plugin();";
+    // python_code += "plug = " + file_path.stem().string() +".Plugin(data);";
     // python_code += "locked_base = libdnf5.base.Base.get_locked_base();";
     // python_code += "locked_base.add_plugin(plug)";
     // PyRun_SimpleString(python_code.c_str());
@@ -205,9 +206,17 @@ void PythonPluginLoader::load_plugin_file(const fs::path & file_path) {
     if (!plugin_class_constructor) {
         fetch_python_error_to_exception("PyInstanceMethod_New(plugin_class): ");
     }
-    PyObject * plugin_instance = PyObject_CallObject(plugin_class_constructor, nullptr);
+    PyObject * args_tuple = PyTuple_New(1);
+    if (!args_tuple) {
+        fetch_python_error_to_exception("PyTuple_New(1)");
+    }
+    swig_type_info * type = SWIG_TypeQuery("libdnf5::plugin::IPluginData *");
+    if (!PyTuple_SetItem(args_tuple, 0, SWIG_NewPointerObj(&data, type, 0))) {
+        fetch_python_error_to_exception("PyTuple_SetItem(args_tuple, 0, PyLong_FromVoidPtr(&data))");
+    }
+    PyObject * plugin_instance = PyObject_CallObject(plugin_class_constructor, args_tuple);
     if (!plugin_instance) {
-        fetch_python_error_to_exception("PyObject_CallObject(plugin_class_constructor, nullptr): ");
+        fetch_python_error_to_exception("PyObject_CallObject(plugin_class_constructor, args_tuple): ");
     }
     PyObject * libdnf5 = PyDict_GetItemString(plugin_module_dict, "libdnf5");
     if (!libdnf5) {
