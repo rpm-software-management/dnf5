@@ -1,3 +1,4 @@
+# Copyright Contributors to the DNF5 project.
 # Copyright (C) 2021 Red Hat, Inc.
 # SPDX-License-Identifier: LGPL-2.0-or-later
 #
