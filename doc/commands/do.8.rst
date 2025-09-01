@@ -1,5 +1,6 @@
 ..
     Copyright Contributors to the DNF5 project.
+    SPDX-License-Identifier: GPL-2.0-or-later
 
     This file is part of DNF5: https://github.com/rpm-software-management/dnf5/
 
