@@ -116,6 +116,22 @@ To setup a development environment, complete the following steps:
      rpmbuild -ba --define "_sourcedir $(pwd)" dnf5.spec #[--with=<option>|--without=<option> ...]
      ```
 
+## License Header
+
+New C++ and C source files should start with the following header:
+```
+// Copyright Contributors to the DNF5 project
+// SPDX-License-Identifier: THE-LICENSE-IDENTIFIER
+```
+
+The same rule applies to other source files, with the header adjusted according to the rules of the specific language. For example, Perl, Python, and Ruby source files should start with the header:
+```
+# Copyright Contributors to the DNF5 project
+# SPDX-License-Identifier: THE-LICENSE-IDENTIFIER
+```
+
+Replace `THE-LICENSE-IDENTIFIER` with either `GPL-2.0-or-later` or `LGPL-2.1-or-later`, according to COPYING.md.
+
 ## Pull request checklist
 
 When you submit your pull request or push new commits to it, our automated
