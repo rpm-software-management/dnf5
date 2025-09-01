@@ -7,9 +7,23 @@ if(NOT WITH_PYTHON_PLUGINS_LOADER)
 endif()
 
 find_package(Python3 REQUIRED COMPONENTS Interpreter Development)
+find_package(SWIG REQUIRED)
 include_directories(${Python3_INCLUDE_DIRS})
 
+add_custom_target(swigpyrun-header
+    ${SWIG_EXECUTABLE} -python -external-runtime
+    COMMENT "Generating SWIG Python runtime header"
+)
+
 add_library(python_plugins_loader MODULE python_plugins_loader.cpp)
+
+# python_plugins_loader requires swigpyrun.h so lets generate it
+add_dependencies(python_plugins_loader swigpyrun-header)
+# Include directory with the gereated swigpyrun.h header
+target_include_directories(python_plugins_loader PRIVATE ${CMAKE_CURRENT_BINARY_DIR})
+# This is need because the generated swigpyrun.h contains warnings
+# (which get treated as errors)
+target_compile_options(python_plugins_loader PRIVATE -Wno-sign-conversion -Wno-missing-field-initializers)
 
 # disable the 'lib' prefix in order to create python_plugins_loader.so
 set_target_properties(python_plugins_loader PROPERTIES PREFIX "")
