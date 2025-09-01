@@ -1,4 +1,5 @@
 # Copyright Contributors to the libdnf project.
+# SPDX-License-Identifier: LGPL-2.1-or-later
 #
 # This file is part of libdnf: https://github.com/rpm-software-management/libdnf/
 #
