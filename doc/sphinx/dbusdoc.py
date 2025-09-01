@@ -1,3 +1,4 @@
+# Copyright Contributors to the DNF5 project.
 # D-Bus XML documentation extension
 #
 # Copyright (C) 2021, Red Hat Inc.
