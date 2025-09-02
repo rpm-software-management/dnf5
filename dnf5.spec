@@ -84,6 +84,7 @@ Provides:       dnf5-command(versionlock)
 %bcond_without plugin_expired_pgp_keys
 %bcond_without plugin_rhsm
 %bcond_without python_plugins_loader
+%bcond_without plugin_local
 
 %bcond_without comps
 %bcond_without modulemd
@@ -695,6 +696,26 @@ Libdnf5 plugin that allows loading Python plugins.
 %{_libdir}/libdnf5/plugins/python_plugins_loader.*
 %dir %{python3_sitelib}/libdnf_plugins/
 %doc %{python3_sitelib}/libdnf_plugins/README
+%endif
+
+# ========== libdnf5-plugin-local ==========
+
+%if %{with plugin_local}
+%package -n libdnf5-plugin-local
+Summary:        Libdnf5 plugin that automatically copies all downloaded packages to a local repository
+License:        LGPL-2.1-or-later
+Requires:       libdnf5%{?_isa} = %{version}-%{release}
+Requires:       createrepo_c
+
+%description -n libdnf5-plugin-local
+Libdnf5 plugin that automatically copies all downloaded packages to a repository on the local filesystem and generates repo metadata.
+
+%files -n libdnf5-plugin-local
+%{_libdir}/libdnf5/plugins/local.*
+%config %{_sysconfdir}/dnf/libdnf5-plugins/local.conf
+%if %{with man}
+%{_mandir}/man8/libdnf5-local.8.*
+%endif
 %endif
 
 
