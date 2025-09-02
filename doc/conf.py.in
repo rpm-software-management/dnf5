@@ -154,6 +154,7 @@ man_pages = [
     ('dnf5_plugins/reposync.8', 'dnf5-reposync', 'Reposync Command', AUTHORS, 8),
     ('libdnf5_plugins/actions.8', 'libdnf5-actions', 'Actions Plugin', AUTHORS, 8),
     ('libdnf5_plugins/expired-pgp-keys.8', 'libdnf5-expired-pgp-keys', 'Expired PGP Keys Plugin', AUTHORS, 8),
+    ('libdnf5_plugins/local.8', 'libdnf5-local', 'Local Plugin', AUTHORS, 8),
     ('misc/aliases.7', 'dnf5-aliases', 'Aliases for command line arguments', AUTHORS, 7),
     ('misc/caching.7', 'dnf5-caching', 'Caching', AUTHORS, 7),
     ('misc/comps.7', 'dnf5-comps', 'Comps Groups And Environments', AUTHORS, 7),
