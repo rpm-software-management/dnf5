@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-07-26 03:48+0000\n"
-"PO-Revision-Date: 2025-07-24 13:01+0000\n"
+"PO-Revision-Date: 2025-08-20 07:53+0000\n"
 "Last-Translator: Remus-Gabriel Chelu <remusgabriel.chelu@disroot.org>\n"
 "Language-Team: Romanian <https://translate.fedoraproject.org/projects/dnf5/"
 "dnf5/ro/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : (n==0 || (n%100 > 0 && n%100 < "
 "20)) ? 1 : 2;\n"
-"X-Generator: Weblate 5.12.2\n"
+"X-Generator: Weblate 5.13\n"
 
 #: cmdline_aliases.cpp:84 context.cpp:301 main.cpp:1357
 msgid ", "
@@ -668,7 +668,7 @@ msgstr "Listează pachetele în funcție de relația pachetelor cu sistemul"
 #: commands/list/list.cpp:50
 msgid "List of package-spec-NI to match (case insensitively)"
 msgstr ""
-"Lista de N specificații de pachete „package-spec-NI” pentru potrivire (fără "
+"Lista de specificații NI de pachete „package-spec-NI” pentru potrivire (fără "
 "distincție între majuscule și minuscule)"
 
 #: commands/list/list.cpp:62
@@ -1071,8 +1071,8 @@ msgstr "Adaugă o nouă intrare la configurația versionlock"
 #: commands/versionlock/versionlock_add.cpp:44
 msgid "List of package package-spec-N to add versionlock for"
 msgstr ""
-"Lista de N specificații de pachete „package-spec-N” pentru adăugarea la "
-"versionlock"
+"Lista de specificații N de pachete „package-spec-N” (cu distincție între "
+"majuscule și minuscule) pentru adăugarea la versionlock"
 
 #: commands/versionlock/versionlock_add.cpp:107
 #: commands/versionlock/versionlock_exclude.cpp:126
@@ -1112,8 +1112,9 @@ msgstr "Adaugă o nouă intrare de excludere la configurația versionlock"
 #: commands/versionlock/versionlock_exclude.cpp:44
 msgid "List of package-spec-N to add versionlock exclude for"
 msgstr ""
-"Lista de N specificații de pachete „package-spec-N” pentru care se adaugă "
-"excluderea de la blocarea versiunii „versionlock”"
+"Lista de specificații N de pachete „package-spec-N” (cu distincție între "
+"majuscule și minuscule) pentru care se adaugă excluderea de la blocarea "
+"versiunii „versionlock”"
 
 #: commands/versionlock/versionlock_exclude.cpp:89
 #: commands/versionlock/versionlock_exclude.cpp:101
