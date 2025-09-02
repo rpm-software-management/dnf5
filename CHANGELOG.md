@@ -1,3 +1,35 @@
+# 5.2.17.0
+
+- Update translations from weblate
+- Add `repomanage` plugin
+- dnf5daemon-server: Allow RPM key import without password prompt for wheel users
+- doc: Add Tutorial: API changes between DNF and DNF5
+- test: Add tests for code examples for API changes tutorial
+- doc: Format API changes as paragraphs instead of sections
+- test: Keep the same working directory when running python tutorial tests
+- Introduces `libdnf5` list plugins on `--version` parameter
+- cli: Fix use-after-free in NamedArg::parse_short
+- cli: Fix use-after-free issue in CommandAlias
+- libdnf5: Don't double format a transaction error
+- Unify docs for shared transactions options: --offline and --store
+- Add `replay` to the hardcoded set of commands that require privileges
+- All commands that compose a transaction should support offline and store
+- doc: Add a chapter about migrating to dnf5
+- doc: changes_from_dnf4: Info about `shell` cmd superseded by `do` cmd
+- DNF5: Documentation for "do" command
+- dnf5: Move create(_installed)_from_repo_option to public API
+- dnf5: builddep: Argument "--from-repo"
+- dnf5daemon-server: Correct repo::confirm_key_with_options D-Bus signature
+- `--store` option: override keepcache option not to remove packages
+- doc: fix references to dnf5.conf(5)
+- Replace locale-dependent std::isalnum checks
+- repo: Correctly URL-encode packages locations
+- test: Add unit tests for common/utils/url
+- utils: New url_path_encode() function
+- utils: Add url_decode() function
+- Move url_encode() to libdnf5::utils::url
+- dnfdaemon: Obey downloader D-Bus signal signature
+
 # 5.2.16.0
 
 - Update translations from weblate
