@@ -321,7 +321,7 @@ bool Repo::is_expired() const {
         return true;
     if (p_impl->config.get_metadata_expire_option().get_value() == -1)
         return false;
-    return get_age() > p_impl->config.get_metadata_expire_option().get_value();
+    return get_age() >= p_impl->config.get_metadata_expire_option().get_value();
 }
 
 int Repo::get_expires_in() const {
@@ -644,7 +644,7 @@ void Repo::recompute_expired() {
             mtime(p_impl->downloader->get_metadata_path(RepoDownloader::MD_FILENAME_PRIMARY).c_str())) {
         p_impl->expired = true;
     } else {
-        p_impl->expired = get_age() > p_impl->config.get_metadata_expire_option().get_value();
+        p_impl->expired = get_age() >= p_impl->config.get_metadata_expire_option().get_value();
     }
 }
 
