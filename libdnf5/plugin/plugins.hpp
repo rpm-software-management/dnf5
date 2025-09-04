@@ -41,7 +41,7 @@ public:
 
 class Plugin {
 public:
-    explicit Plugin(IPlugin & iplugin_instance);
+    Plugin(IPlugin & iplugin_instance, ConfigParser && parser);
     virtual ~Plugin();
 
     Plugin(const Plugin &) = delete;
@@ -84,13 +84,8 @@ public:
     /// Registers the plugin passed by the argument.
     void register_plugin(std::unique_ptr<Plugin> && plugin);
 
-    /// Loads the plugin from the library defined by the configuration file config_file_path.
-    void load_plugin(
-        const std::string & config_file_path, const PreserveOrderMap<std::string, bool> & plugin_enablement);
-
     /// Loads plugins defined by configuration files in the directory.
-    void load_plugins(
-        const std::string & config_dir_path, const PreserveOrderMap<std::string, bool> & plugin_enablement);
+    void load_plugins(const std::string & config_dir_path);
 
     /// Returns the number of registered plugins.
     size_t count() const noexcept;
@@ -131,7 +126,9 @@ private:
 };
 
 
-inline Plugin::Plugin(IPlugin & iplugin_instance) : iplugin_instance{&iplugin_instance} {}
+inline Plugin::Plugin(IPlugin & iplugin_instance, ConfigParser && parser)
+    : iplugin_instance{&iplugin_instance},
+      cfg_parser(std::move(parser)) {}
 
 inline Plugin::~Plugin() {
     finish();
