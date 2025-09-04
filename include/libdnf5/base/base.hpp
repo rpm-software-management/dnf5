@@ -30,6 +30,7 @@
 #include "libdnf5/defs.h"
 #include "libdnf5/logger/log_router.hpp"
 #include "libdnf5/module/module_sack_weak.hpp"
+#include "libdnf5/plugin/iplugin.hpp"
 #include "libdnf5/plugin/plugin_info.hpp"
 #include "libdnf5/repo/download_callbacks.hpp"
 #include "libdnf5/repo/repo_sack.hpp"
@@ -138,6 +139,15 @@ public:
     /// @param config_file_path Path to a plugin config
     /// @return a tuple with plugin name, parsed config and a bool whether the plugin is enabled
     std::tuple<std::string, libdnf5::ConfigParser, bool> load_plugin_config(const std::string & config_file_path);
+
+    /// @brief Add libdnf5 plugin instance that introduces additional logic into the library using hooks.
+    /// @param plugin_name Name of the new plugin
+    /// @param plugin_config Parsed config of the new plugin
+    /// @param iplugin_instance New libdnf5 plugin instance
+    void add_plugin(
+        const std::string & plugin_name,
+        libdnf5::ConfigParser && plugin_config,
+        libdnf5::plugin::IPlugin & iplugin_instance);
 
 private:
     friend class libdnf5::InternalBaseUser;
