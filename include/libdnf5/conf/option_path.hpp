@@ -49,6 +49,8 @@ public:
 
     OptionPath(const OptionPath & src);
 
+    OptionPath & operator=(const OptionPath & other);
+
     /// Constructor sets default value and conditions.
     // @replaces libdnf:conf/OptionPath.hpp:ctor:OptionPath.OptionPath(const char * defaultValue, const std::string & regex, bool icase, bool exists = false, bool absPath = false)
     OptionPath(const char * default_value, std::string regex, bool icase, bool exists = false, bool abs_path = false);
