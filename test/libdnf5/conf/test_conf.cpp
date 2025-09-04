@@ -71,3 +71,61 @@ void ConfTest::test_config_pkg_gpgcheck() {
     CPPUNIT_ASSERT_EQUAL(&config_repo.get_pkg_gpgcheck_option(), &config_repo.get_gpgcheck_option());
 #pragma GCC diagnostic pop
 }
+
+namespace {
+
+libdnf5::ConfigMain copy_construct_config_main(const libdnf5::ConfigMain & config) {
+    return libdnf5::ConfigMain{config};
+}
+
+libdnf5::ConfigMain assign_config_main(const libdnf5::ConfigMain & config) {
+    libdnf5::ConfigMain config_copy;
+    config_copy = config;
+    return config_copy;
+}
+
+}  // namespace
+
+void test_copy_config_main(std::function<libdnf5::ConfigMain(const libdnf5::ConfigMain &)> copy_function) {
+    libdnf5::ConfigMain config;
+
+    config.get_assumeyes_option().set(libdnf5::Option::Priority::MAINCONFIG, false);
+    config.get_debuglevel_option().set(libdnf5::Option::Priority::RUNTIME, 7);
+    config.get_allow_downgrade_option().set(libdnf5::Option::Priority::RUNTIME, false);
+    config.get_destdir_option().set(libdnf5::Option::Priority::RUNTIME, "foobar");
+
+    auto config_copy = copy_function(config);
+
+    CPPUNIT_ASSERT_EQUAL(false, config_copy.get_allow_downgrade_option().get_value());
+    CPPUNIT_ASSERT_EQUAL(std::string{"foobar"}, config_copy.get_destdir_option().get_value());
+
+    CPPUNIT_ASSERT_EQUAL(libdnf5::Option::Priority::MAINCONFIG, config.get_assumeyes_option().get_priority());
+    CPPUNIT_ASSERT_EQUAL(false, config.get_assumeyes_option().get_value());
+
+    CPPUNIT_ASSERT_EQUAL(libdnf5::Option::Priority::MAINCONFIG, config_copy.get_assumeyes_option().get_priority());
+    CPPUNIT_ASSERT_EQUAL(false, config_copy.get_assumeyes_option().get_value());
+
+    config_copy.get_assumeyes_option().set(libdnf5::Option::Priority::RUNTIME, true);
+
+    CPPUNIT_ASSERT_EQUAL(libdnf5::Option::Priority::MAINCONFIG, config.get_assumeyes_option().get_priority());
+    CPPUNIT_ASSERT_EQUAL(false, config.get_assumeyes_option().get_value());
+
+    CPPUNIT_ASSERT_EQUAL(libdnf5::Option::Priority::RUNTIME, config_copy.get_assumeyes_option().get_priority());
+    CPPUNIT_ASSERT_EQUAL(true, config_copy.get_assumeyes_option().get_value());
+
+    CPPUNIT_ASSERT_EQUAL(0ul, config_copy.get_excludepkgs_option().get_value().size());
+    CPPUNIT_ASSERT_EQUAL(0ul, config.get_excludepkgs_option().get_value().size());
+
+    config_copy.get_excludepkgs_option().add_item(libdnf5::Option::Priority::RUNTIME, "abc");
+
+    CPPUNIT_ASSERT_EQUAL(1ul, config_copy.get_excludepkgs_option().get_value().size());
+    CPPUNIT_ASSERT_EQUAL(0ul, config.get_excludepkgs_option().get_value().size());
+}
+
+void ConfTest::test_config_assign_config_main() {
+    test_copy_config_main(assign_config_main);
+}
+
+void ConfTest::test_config_copy_construct_config_main() {
+    test_copy_config_main(copy_construct_config_main);
+}

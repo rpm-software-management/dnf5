@@ -33,6 +33,8 @@ class ConfTest : public TestCaseFixture {
     CPPUNIT_TEST(test_config_main);
     CPPUNIT_TEST(test_config_repo);
     CPPUNIT_TEST(test_config_pkg_gpgcheck);
+    CPPUNIT_TEST(test_config_assign_config_main);
+    CPPUNIT_TEST(test_config_copy_construct_config_main);
     CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -41,6 +43,8 @@ public:
     void test_config_main();
     void test_config_repo();
     void test_config_pkg_gpgcheck();
+    void test_config_assign_config_main();
+    void test_config_copy_construct_config_main();
 
     std::unique_ptr<libdnf5::Base> base;
     libdnf5::LogRouter logger;
