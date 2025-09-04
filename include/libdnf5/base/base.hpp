@@ -60,6 +60,9 @@ public:
     /// Constructs a new Base instance and sets the destination loggers.
     Base(std::vector<std::unique_ptr<Logger>> && loggers = {});
 
+    /// Constructs a new Base instance and sets the config and destination loggers.
+    Base(ConfigMain config, std::vector<std::unique_ptr<Logger>> && loggers = {});
+
     ~Base();
 
     void set_download_callbacks(std::unique_ptr<repo::DownloadCallbacks> && download_callbacks);

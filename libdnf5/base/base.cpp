@@ -53,14 +53,19 @@ namespace libdnf5 {
 static std::atomic<Base *> locked_base{nullptr};
 static std::mutex locked_base_mutex;
 
-Base::Base(std::vector<std::unique_ptr<Logger>> && loggers) : p_impl(new Impl(get_weak_ptr(), std::move(loggers))) {}
+Base::Base(std::vector<std::unique_ptr<Logger>> && loggers)
+    : p_impl(new Impl(get_weak_ptr(), std::move(loggers), {})) {}
+
+Base::Base(ConfigMain config, std::vector<std::unique_ptr<Logger>> && loggers)
+    : p_impl(new Impl(get_weak_ptr(), std::move(loggers), std::move(config))) {}
 
 Base::~Base() = default;
 
-Base::Impl::Impl(const libdnf5::BaseWeakPtr & base, std::vector<std::unique_ptr<Logger>> && loggers)
+Base::Impl::Impl(const libdnf5::BaseWeakPtr & base, std::vector<std::unique_ptr<Logger>> && loggers, ConfigMain config)
     : rpm_advisory_sack(base),
       plugins(*base),
       log_router(std::move(loggers)),
+      config(std::move(config)),
       comps_sack(base),
       repo_sack(base),
       rpm_package_sack(base),
