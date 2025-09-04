@@ -48,6 +48,8 @@ public:
 
     ~OptionBool() override;
 
+    OptionBool & operator=(const OptionBool & other);
+
     /// Makes copy (clone) of this object.
     // @replaces libdnf:conf/OptionBool.hpp:method:OptionBool.clone()
     OptionBool * clone() const override;

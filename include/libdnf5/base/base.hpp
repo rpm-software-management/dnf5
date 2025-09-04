@@ -58,7 +58,7 @@ class InternalBaseUser;
 class LIBDNF_API Base {
 public:
     /// Constructs a new Base instance and sets the destination loggers.
-    Base(std::vector<std::unique_ptr<Logger>> && loggers = {});
+    Base(std::vector<std::unique_ptr<Logger>> && loggers = {}, ConfigMain config = {});
 
     ~Base();
 

@@ -40,7 +40,11 @@ public:
     OptionEnum(std::string default_value, std::vector<std::string> enum_vals);
     OptionEnum(std::string default_value, std::vector<std::string> enum_vals, FromStringFunc && from_string_func);
 
+    OptionEnum(const OptionEnum & src);
+
     ~OptionEnum() override;
+
+    OptionEnum & operator=(const OptionEnum & other);
 
     /// Makes copy (clone) of this object.
     // @replaces libdnf:conf/OptionEnum.hpp:method:OptionEnum<std::string>.clone()

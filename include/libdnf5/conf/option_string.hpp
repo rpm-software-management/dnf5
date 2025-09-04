@@ -41,6 +41,8 @@ public:
 
     OptionString(const OptionString & src);
 
+    OptionString & operator=(const OptionString & other);
+
     /// Makes copy (clone) of this object.
     // @replaces libdnf:conf/OptionString.hpp:method:OptionString.clone()
     OptionString * clone() const override;

@@ -110,6 +110,9 @@ class ConfigMain::Impl {
     friend class ConfigMain;
 
     explicit Impl(Config & owner);
+    explicit Impl(Config & owner, const ConfigMain::Impl & other);
+
+    Impl & operator=(const Impl & other);
 
     Config & owner;
 
@@ -467,10 +470,151 @@ ConfigMain::Impl::Impl(Config & owner) : owner(owner) {
     owner.opt_binds().add("optional_metadata_types", optional_metadata_types);
 }
 
+ConfigMain::Impl::Impl(Config & owner, const ConfigMain::Impl & other) : Impl(owner) {
+    *this = other;
+}
+
+ConfigMain::Impl & ConfigMain::Impl::operator=(const ConfigMain::Impl & other) {
+    if (this != &other) {
+        debuglevel = other.debuglevel;
+        errorlevel = other.errorlevel;
+        installroot = other.installroot;
+        use_host_config = other.use_host_config;
+        config_file_path = other.config_file_path;
+        plugins = other.plugins;
+        pluginpath = other.pluginpath;
+        pluginconfpath = other.pluginconfpath;
+        persistdir = other.persistdir;
+        system_state_dir = other.system_state_dir;
+        transaction_history_dir = other.transaction_history_dir;
+        transformdb = other.transformdb;
+        recent = other.recent;
+        reset_nice = other.reset_nice;
+        system_cachedir = other.system_cachedir;
+        cacheonly = other.cacheonly;
+        keepcache = other.keepcache;
+        logdir = other.logdir;
+        log_size = other.log_size;
+        log_rotate = other.log_rotate;
+        debugdir = other.debugdir;
+        varsdir = other.varsdir;
+        reposdir = other.reposdir;
+        debug_solver = other.debug_solver;
+        installonlypkgs = other.installonlypkgs;
+        group_package_types = other.group_package_types;
+        optional_metadata_types = other.optional_metadata_types;
+        installonly_limit = other.installonly_limit;
+        tsflags = other.tsflags;
+        assumeyes = other.assumeyes;
+        assumeno = other.assumeno;
+        check_config_file_age = other.check_config_file_age;
+        defaultyes = other.defaultyes;
+        diskspacecheck = other.diskspacecheck;
+        localpkg_gpgcheck = other.localpkg_gpgcheck;
+        gpgkey_dns_verification = other.gpgkey_dns_verification;
+        obsoletes = other.obsoletes;
+        exit_on_lock = other.exit_on_lock;
+        allow_vendor_change = other.allow_vendor_change;
+        metadata_timer_sync = other.metadata_timer_sync;
+        disable_excludes = other.disable_excludes;
+        multilib_policy = other.multilib_policy;
+        best = other.best;
+        install_weak_deps = other.install_weak_deps;
+        allow_downgrade = other.allow_downgrade;
+        bugtracker_url = other.bugtracker_url;
+        zchunk = other.zchunk;
+        color = other.color;
+        color_list_installed_older = other.color_list_installed_older;
+        color_list_installed_newer = other.color_list_installed_newer;
+        color_list_installed_reinstall = other.color_list_installed_reinstall;
+        color_list_installed_extra = other.color_list_installed_extra;
+        color_list_available_upgrade = other.color_list_available_upgrade;
+        color_list_available_downgrade = other.color_list_available_downgrade;
+        color_list_available_reinstall = other.color_list_available_reinstall;
+        color_list_available_install = other.color_list_available_install;
+        color_update_installed = other.color_update_installed;
+        color_update_local = other.color_update_local;
+        color_update_remote = other.color_update_remote;
+        color_search_match = other.color_search_match;
+        history_record = other.history_record;
+        history_record_packages = other.history_record_packages;
+        rpmverbosity = other.rpmverbosity;
+        strict = other.strict;
+        skip_broken = other.skip_broken;
+        skip_unavailable = other.skip_unavailable;
+        autocheck_running_kernel = other.autocheck_running_kernel;
+        clean_requirements_on_remove = other.clean_requirements_on_remove;
+        history_list_view = other.history_list_view;
+        upgrade_group_objects_upgrade = other.upgrade_group_objects_upgrade;
+        destdir = other.destdir;
+        comment = other.comment;
+        downloadonly = other.downloadonly;
+        ignorearch = other.ignorearch;
+        module_platform_id = other.module_platform_id;
+        module_stream_switch = other.module_stream_switch;
+        module_obsoletes = other.module_obsoletes;
+        user_agent = other.user_agent;
+        countme = other.countme;
+        protect_running_kernel = other.protect_running_kernel;
+        build_cache = other.build_cache;
+        retries = other.retries;
+        cachedir = other.cachedir;
+        fastestmirror = other.fastestmirror;
+        excludeenvs = other.excludeenvs;
+        excludegroups = other.excludegroups;
+        excludepkgs = other.excludepkgs;
+        includepkgs = other.includepkgs;
+        exclude_from_weak = other.exclude_from_weak;
+        exclude_from_weak_autodetect = other.exclude_from_weak_autodetect;
+        proxy = other.proxy;
+        proxy_username = other.proxy_username;
+        proxy_password = other.proxy_password;
+        proxy_auth_method = other.proxy_auth_method;
+        protected_packages = other.protected_packages;
+        username = other.username;
+        password = other.password;
+        pkg_gpgcheck = other.pkg_gpgcheck;
+        repo_gpgcheck = other.repo_gpgcheck;
+        enabled = other.enabled;
+        enablegroups = other.enablegroups;
+        bandwidth = other.bandwidth;
+        minrate = other.minrate;
+        ip_resolve = other.ip_resolve;
+        throttle = other.throttle;
+        timeout = other.timeout;
+        max_parallel_downloads = other.max_parallel_downloads;
+        metadata_expire = other.metadata_expire;
+        sslcacert = other.sslcacert;
+        sslverify = other.sslverify;
+        sslclientcert = other.sslclientcert;
+        sslclientkey = other.sslclientkey;
+        proxy_sslcacert = other.proxy_sslcacert;
+        proxy_sslverify = other.proxy_sslverify;
+        proxy_sslclientcert = other.proxy_sslclientcert;
+        proxy_sslclientkey = other.proxy_sslclientkey;
+        deltarpm = other.deltarpm;
+        deltarpm_percentage = other.deltarpm_percentage;
+        skip_if_unavailable = other.skip_if_unavailable;
+    }
+    return *this;
+}
+
 ConfigMain::ConfigMain() {
     p_impl = std::unique_ptr<Impl>(new Impl(*this));
 }
+
+ConfigMain::ConfigMain(const ConfigMain & other) : Config() {
+    p_impl = std::unique_ptr<Impl>(new Impl(*this, *other.p_impl));
+}
+
 ConfigMain::~ConfigMain() = default;
+
+ConfigMain & ConfigMain::operator=(const ConfigMain & other) {
+    if (this != &other) {
+        *p_impl = *other.p_impl;
+    }
+    return *this;
+}
 
 OptionNumber<std::int32_t> & ConfigMain::get_debuglevel_option() {
     return p_impl->debuglevel;

@@ -93,6 +93,9 @@ OptionNumber<T>::OptionNumber(const OptionNumber & src) : Option(src),
                                                           p_impl(new Impl(*src.p_impl)) {}
 
 template <typename T>
+OptionNumber<T> & OptionNumber<T>::operator=(const OptionNumber & other) = default;
+
+template <typename T>
 void OptionNumber<T>::test(ValueType value) const {
     if (value < p_impl->min || value > p_impl->max) {
         throw OptionValueNotAllowedError(
