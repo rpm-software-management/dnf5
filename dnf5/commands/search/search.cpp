@@ -22,11 +22,15 @@
 
 #include "search_processor.hpp"
 
+#include "libdnf5/utils/bgettext/bgettext-mark-domain.h"
+
 #include <dnf5/shared_options.hpp>
+#include <libdnf5-cli/exception.hpp>
 #include <libdnf5-cli/output/search.hpp>
 #include <libdnf5/conf/option_string.hpp>
 #include <libdnf5/rpm/package_query.hpp>
 #include <libdnf5/rpm/package_set.hpp>
+#include <libdnf5/utils/bgettext/bgettext-lib.h>
 
 namespace dnf5 {
 
@@ -48,9 +52,27 @@ void SearchCommand::set_argument_parser() {
 
     show_duplicates = std::make_unique<libdnf5::cli::session::BoolOption>(
         *this, "showduplicates", '\0', "Show all versions of the packages, not only the latest ones.", false);
+
+    search_name = std::make_unique<libdnf5::cli::session::BoolOption>(
+        *this, "name", '\0', "Limit the search to the Name field.", false);
+
+    search_summary = std::make_unique<libdnf5::cli::session::BoolOption>(
+        *this, "summary", '\0', "Limit the search to the Summary field.", false);
 }
 
 void SearchCommand::configure() {
+    const auto name_only = search_name->get_value();
+    const auto summary_only = search_summary->get_value();
+    const auto search_all = all->get_value();
+
+    if (name_only && summary_only) {
+        throw libdnf5::cli::CommandExitError(1, M_("Options --name and --summary cannot be used together."));
+    }
+
+    if (search_all && (name_only || summary_only)) {
+        throw libdnf5::cli::CommandExitError(1, M_("Option --all cannot be used with --name or --summary."));
+    }
+
     auto & context = get_context();
     context.set_load_system_repo(true);
     context.set_load_available_repos(Context::LoadAvailableRepos::ENABLED);
@@ -58,7 +80,13 @@ void SearchCommand::configure() {
 
 void SearchCommand::run() {
     auto & base = get_context().get_base();
-    SearchProcessor processor(base, patterns->get_value(), all->get_value(), show_duplicates->get_value());
+    SearchProcessor processor(
+        base,
+        patterns->get_value(),
+        all->get_value(),
+        show_duplicates->get_value(),
+        search_name->get_value(),
+        search_summary->get_value());
     libdnf5::cli::output::print_search_results(processor.get_results());
 }
 
