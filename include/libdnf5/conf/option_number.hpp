@@ -64,6 +64,8 @@ public:
 
     ~OptionNumber() override;
 
+    OptionNumber & operator=(const OptionNumber & other);
+
     /// Makes copy (clone) of this object.
     // @replaces libdnf:conf/OptionNumber.hpp:method:OptionBoo<T>.clone()
     OptionNumber * clone() const override;
