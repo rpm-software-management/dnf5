@@ -156,6 +156,10 @@ template <typename T, bool IsAppend>
 OptionStringContainer<T, IsAppend>::~OptionStringContainer() = default;
 
 template <typename T, bool IsAppend>
+OptionStringContainer<T, IsAppend> & OptionStringContainer<T, IsAppend>::operator=(
+    const OptionStringContainer & other) = default;
+
+template <typename T, bool IsAppend>
 void OptionStringContainer<T, IsAppend>::init_regex_matcher() {
     if (p_impl->regex.empty()) {
         return;

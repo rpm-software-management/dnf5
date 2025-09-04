@@ -35,9 +35,11 @@ private:
 
 Option::Option(Priority priority) : p_impl(new Impl(priority)) {}
 
+Option::Option(const Option & src) = default;
+
 Option::~Option() = default;
 
-Option::Option(const Option & src) = default;
+Option & Option::operator=(const Option & other) = default;
 
 Option::Priority Option::get_priority() const {
     return p_impl->priority;

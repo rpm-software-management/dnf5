@@ -88,6 +88,8 @@ OptionPath::~OptionPath() = default;
 
 OptionPath::OptionPath(const OptionPath & src) = default;
 
+OptionPath & OptionPath::operator=(const OptionPath & other) = default;
+
 void OptionPath::test(const std::string & value) const {
     if (p_impl->abs_path && value[0] != '/') {
         throw OptionValueNotAllowedError(M_("Only absolute paths allowed, relative path \"{}\" detected"), value);

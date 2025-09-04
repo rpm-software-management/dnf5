@@ -60,7 +60,11 @@ OptionEnum::OptionEnum(
     test(p_impl->value);
 }
 
+OptionEnum::OptionEnum(const OptionEnum & other) = default;
+
 OptionEnum::~OptionEnum() = default;
+
+OptionEnum & OptionEnum::operator=(const OptionEnum & other) = default;
 
 void OptionEnum::test(const std::string & value) const {
     auto it = std::find(p_impl->enum_vals.begin(), p_impl->enum_vals.end(), value);

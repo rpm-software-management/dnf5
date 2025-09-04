@@ -110,8 +110,9 @@ class ConfigMain::Impl {
     friend class ConfigMain;
 
     explicit Impl(Config & owner);
+    explicit Impl(Config & owner, const ConfigMain::Impl & other);
 
-    Config & owner;
+    Impl & operator=(const Impl & other);
 
     OptionNumber<std::int32_t> debuglevel{2, 0, 10};
     OptionNumber<std::int32_t> errorlevel{3, 0, 10};
@@ -301,7 +302,7 @@ class ConfigMain::Impl {
     OptionBool skip_if_unavailable{false};
 };
 
-ConfigMain::Impl::Impl(Config & owner) : owner(owner) {
+ConfigMain::Impl::Impl(Config & owner) {
     owner.opt_binds().add("debuglevel", debuglevel);
     owner.opt_binds().add("errorlevel", errorlevel);
     owner.opt_binds().add("installroot", installroot);
@@ -467,10 +468,28 @@ ConfigMain::Impl::Impl(Config & owner) : owner(owner) {
     owner.opt_binds().add("optional_metadata_types", optional_metadata_types);
 }
 
+ConfigMain::Impl::Impl(Config & owner, const Impl & other) : Impl(owner) {
+    *this = other;
+}
+
+ConfigMain::Impl & ConfigMain::Impl::operator=(const Impl & other) = default;
+
 ConfigMain::ConfigMain() {
     p_impl = std::unique_ptr<Impl>(new Impl(*this));
 }
+
+ConfigMain::ConfigMain(const ConfigMain & other) : Config() {
+    p_impl = std::unique_ptr<Impl>(new Impl(*this, *other.p_impl));
+}
+
 ConfigMain::~ConfigMain() = default;
+
+ConfigMain & ConfigMain::operator=(const ConfigMain & other) {
+    if (this != &other) {
+        *p_impl = *other.p_impl;
+    }
+    return *this;
+}
 
 OptionNumber<std::int32_t> & ConfigMain::get_debuglevel_option() {
     return p_impl->debuglevel;

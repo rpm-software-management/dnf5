@@ -49,6 +49,8 @@ public:
     OptionStringContainer(const OptionStringContainer & src);
     ~OptionStringContainer() override;
 
+    OptionStringContainer<T, IsAppend> & operator=(const OptionStringContainer & other);
+
     /// Makes copy (clone) of this object.
     // @replaces libdnf:conf/OptionStringList.hpp:method:OptionStringList.clone()
     OptionStringContainer * clone() const override;

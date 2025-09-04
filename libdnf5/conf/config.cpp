@@ -33,8 +33,9 @@ OptionBinds & Config::opt_binds() noexcept {
     return p_impl->binds;
 }
 
-Config::~Config() = default;
 Config::Config() : p_impl(new Impl()) {}
+
+Config::~Config() = default;
 
 void Config::load_from_parser(
     const ConfigParser & parser,
