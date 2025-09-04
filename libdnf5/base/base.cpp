@@ -20,6 +20,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf5/base/base.hpp"
 
 #include "../conf/config_utils.hpp"
+#include "../plugin/plugin_info_impl.hpp"
 #include "base_impl.hpp"
 #include "conf/config.h"
 
@@ -210,6 +211,17 @@ void Base::load_plugins() {
     } else {
         p_impl->plugins.load_plugins(p_impl->config.get_pluginconfpath_option().get_value());
     }
+}
+
+void Base::add_plugin(
+    const std::string & plugin_name,
+    libdnf5::ConfigParser && plugin_config,
+    libdnf5::plugin::IPlugin & iplugin_instance) {
+    auto plugin = std::make_unique<libdnf5::plugin::Plugin>(iplugin_instance, std::move(plugin_config));
+    p_impl->plugins.register_plugin(std::move(plugin));
+
+    auto & plugins_info = InternalBaseUser::get_plugins_info(this);
+    plugins_info.emplace_back(plugin::PluginInfo::Impl::create_plugin_info(plugin_name, &iplugin_instance));
 }
 
 void Base::enable_disable_plugins(const std::vector<std::string> & plugin_names, bool enable) {
