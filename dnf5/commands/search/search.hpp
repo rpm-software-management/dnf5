@@ -44,6 +44,8 @@ private:
     std::unique_ptr<SearchAllOption> all{nullptr};
     std::unique_ptr<SearchPatternsArguments> patterns{nullptr};
     std::unique_ptr<libdnf5::cli::session::BoolOption> show_duplicates{nullptr};
+    std::unique_ptr<libdnf5::cli::session::BoolOption> search_name{nullptr};
+    std::unique_ptr<libdnf5::cli::session::BoolOption> search_summary{nullptr};
 };
 
 }  // namespace dnf5

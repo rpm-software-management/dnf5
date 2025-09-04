@@ -45,6 +45,8 @@ using matched_key_pair = std::pair<std::string, SearchKeyMatch>;
 struct SearchOptions {
     bool search_all;       ///< If we search also in description and URL fields in addition to name, summary.
     bool show_duplicates;  ///< If multiple versions of the same package are allowed in the output.
+    bool search_name;      ///< If we search only to the name field
+    bool search_summary;   ///< If we search only to the summary field
 };
 
 /// Auxiliary structure for holding the set of result packages together with their comparator.

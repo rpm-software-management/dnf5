@@ -36,7 +36,12 @@ class SearchProcessor {
 public:
     /// Prepare the processor based on the parameters given by the user.
     explicit SearchProcessor(
-        libdnf5::Base & base, std::vector<std::string> patterns, bool search_all, bool show_duplicates);
+        libdnf5::Base & base,
+        std::vector<std::string> patterns,
+        bool search_all,
+        bool show_duplicates,
+        bool search_name,
+        bool search_summary);
 
     /// Results computation method.
     libdnf5::cli::output::SearchResults get_results();
@@ -103,6 +108,8 @@ private:
     libdnf5::rpm::PackageQuery full_package_query;
     std::unordered_map<std::string, int> packages_priorities;
     bool showdupes;
+    bool search_name;
+    bool search_summary;
 };
 
 }  // namespace dnf5

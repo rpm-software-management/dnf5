@@ -35,8 +35,9 @@ The ``search`` command in ``DNF5`` is used for searching packages by matching
 given keywords from the user against various metadata.
 
 By default the command searches for all requested keys (AND operation) in
-`Name` or `Summary` fields from the RPM package metadata. Matching is
-case-insensitive and globs are supported.
+`Name` or `Summary` fields from the RPM package metadata. Users can limit
+the search to specific fields using ``--name`` or ``--summary``
+options. Matching is case-insensitive and globs are supported.
 
 
 Options
@@ -45,6 +46,15 @@ Options
 ``--all``
     | Search patterns also inside `Description` and `URL` fields.
     | By applying this option the search lists packages that match at least one of the keys (OR operation).
+    | Cannot be used with ``--name`` or ``--summary``.
+
+``--name``
+    | Limit the search to the `Name` field only.
+    | Cannot be used with ``--all`` or ``--summary``.
+
+``--summary``
+    | Limit the search to the `Summary` field only.
+    | Cannot be used with ``--all`` or ``--name``.
 
 ``--showduplicates``
     | Show all versions of packages, not only the latest ones.
@@ -61,6 +71,12 @@ Examples
 
 ``dnf5 search --all fedora gnome kde``
     | Search packages having any of given keywords in `Name`, `Summary`, `Description` or `URL` fields.
+
+``dnf5 search --name firefox``
+    | Search ``firefox`` keyword only in the `Name` field of packages.
+
+``dnf5 search --summary browser``
+    | Search ``browser`` keyword only in the `Summary` field of packages.
 
 
 See Also
