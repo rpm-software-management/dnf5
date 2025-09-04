@@ -189,8 +189,8 @@ void PythonPluginLoader::load_plugin_file(const fs::path & file_path) {
     // PyRun_SimpleString(python_code.c_str());
 
     // Similar but Pure Embedding
-    auto * module_name = file_path.stem().c_str();
-    PyObject * plugin_module = PyImport_ImportModule(module_name);
+    fs::path module_name = file_path.stem();
+    PyObject * plugin_module = PyImport_ImportModule(module_name.c_str());
     if (!plugin_module) {
         fetch_python_error_to_exception("PyImport_ImportModule(): ");
     }
