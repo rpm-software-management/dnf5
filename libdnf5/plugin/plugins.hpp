@@ -84,9 +84,6 @@ public:
     /// Registers the plugin passed by the argument.
     void register_plugin(std::unique_ptr<Plugin> && plugin);
 
-    /// Loads the plugin from the library defined by the configuration file config_file_path.
-    void load_plugin(const std::string & config_file_path);
-
     /// Loads plugins defined by configuration files in the directory.
     void load_plugins(const std::string & config_dir_path);
 

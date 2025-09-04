@@ -174,15 +174,6 @@ void Plugins::load_plugin_library(
     logger.debug("End of loading plugins using the \"{}\" plugin.", name);
 }
 
-void Plugins::load_plugin(const std::string & config_file_path) {
-    auto [plugin_name, parser, is_enabled] = base->load_plugin_config(config_file_path);
-
-    if (is_enabled) {
-        auto library_path = find_plugin_library(plugin_name);
-        load_plugin_library(std::move(parser), library_path, plugin_name);
-    }
-}
-
 void Plugins::load_plugins(const std::string & config_dir_path) {
     auto & logger = *base->get_logger();
     if (config_dir_path.empty())
@@ -199,7 +190,11 @@ void Plugins::load_plugins(const std::string & config_dir_path) {
 
     for (const auto & path : config_paths) {
         try {
-            load_plugin(path);
+            auto [plugin_name, parser, is_enabled] = base->load_plugin_config(path);
+            if (is_enabled) {
+                auto library_path = find_plugin_library(plugin_name);
+                load_plugin_library(std::move(parser), library_path, plugin_name);
+            }
         } catch (const std::exception & ex) {
             logger.error("Cannot load libdnf plugin enabled from \"{}\": {}", path.string(), ex.what());
             libdnf5::throw_with_nested(PluginError(M_("Cannot load libdnf plugin enabled from: {}"), path.string()));
