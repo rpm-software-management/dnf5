@@ -25,6 +25,8 @@
 #include <libdnf5/comps/group/query.hpp>
 #include <libdnf5/rpm/package_query.hpp>
 
+#include <forward_list>
+
 
 CPPUNIT_TEST_SUITE_REGISTRATION(APIChangesTest);
 
@@ -86,4 +88,29 @@ void APIChangesTest::test_transaction() {
 #include "api_changes_from_dnf4/load_repos.cpp"
 #include "api_changes_from_dnf4/transaction.cpp"
     // clang-format on
+}
+
+
+void APIChangesTest::test_download_callbacks() {
+#include "api_changes_from_dnf4/create_base.cpp"
+#include "api_changes_from_dnf4/load_repos.cpp"
+
+    libdnf5::Goal goal(base);
+    goal.add_rpm_install("one");
+    auto transaction = goal.resolve();
+
+#include "api_changes_from_dnf4/download_callbacks.cpp"
+}
+
+
+void APIChangesTest::test_transaction_callbacks() {
+#include "api_changes_from_dnf4/create_base.cpp"
+#include "api_changes_from_dnf4/load_repos.cpp"
+
+    libdnf5::Goal goal(base);
+    goal.add_rpm_install("one");
+    auto transaction = goal.resolve();
+    transaction.download();
+
+#include "api_changes_from_dnf4/transaction_callbacks.cpp"
 }
