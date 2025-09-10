@@ -10,5 +10,6 @@ LIBDNF5 Plugins
 
     actions.8
     expired-pgp-keys.8
+    local.8
 
 ..

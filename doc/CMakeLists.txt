@@ -54,6 +54,10 @@ if(WITH_MAN)
         install(FILES ${CMAKE_CURRENT_BINARY_DIR}/man/dnf5daemon-dbus-api.8 DESTINATION share/man/man8)
     endif()
 
+    if(WITH_PLUGIN_LOCAL)
+        install(FILES ${CMAKE_CURRENT_BINARY_DIR}/man/libdnf5-local.8 DESTINATION share/man/man8)
+    endif()
+
     if(WITH_DNF5)
         install(FILES ${CMAKE_CURRENT_BINARY_DIR}/man/dnf5.8 DESTINATION share/man/man8)
         install(FILES ${CMAKE_CURRENT_BINARY_DIR}/man/dnf5.conf.5 DESTINATION share/man/man5)
