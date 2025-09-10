@@ -38,6 +38,7 @@
 #include "libdnf5/conf/config_parser.hpp"
 #include "libdnf5/conf/const.hpp"
 #include "libdnf5/utils/bgettext/bgettext-mark-domain.h"
+#include "libdnf5/utils/locker.hpp"
 
 #include <atomic>
 #include <cstdlib>
@@ -298,6 +299,29 @@ libdnf5::module::ModuleSackWeakPtr Base::get_module_sack() {
 
 VarsWeakPtr Base::get_vars() {
     return {&p_impl->vars, &p_impl->vars_guard};
+}
+
+std::unique_ptr<base::ActiveTransactionInfo> Base::get_active_transaction_info() {
+    std::filesystem::path lock_file_path = get_config().get_installroot_option().get_value();
+    lock_file_path /= std::filesystem::path(libdnf5::TRANSACTION_LOCK_FILEPATH).relative_path();
+
+    libdnf5::utils::Locker locker(lock_file_path.string());
+
+    // Try to acquire read lock - if successful, no write lock exists (no active transaction)
+    if (locker.read_lock()) {
+        return nullptr;
+    }
+
+    // Read lock failed - write lock exists, read content from the opened file descriptor
+    std::string content = locker.read_content();
+
+    if (content.empty()) {
+        // Empty lock file means no valid transaction info
+        return nullptr;
+    }
+
+    // Parse TOML content
+    return std::make_unique<base::ActiveTransactionInfo>(base::ActiveTransactionInfo::from_toml(content));
 }
 
 libdnf5::BaseWeakPtr Base::get_weak_ptr() {

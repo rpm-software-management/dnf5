@@ -20,6 +20,7 @@
 #ifndef LIBDNF5_BASE_BASE_HPP
 #define LIBDNF5_BASE_BASE_HPP
 
+#include "libdnf5/base/active_transaction_info.hpp"
 #include "libdnf5/base/base_weak.hpp"
 #include "libdnf5/common/exception.hpp"
 #include "libdnf5/common/impl_ptr.hpp"
@@ -131,6 +132,10 @@ public:
 
     /// Gets base variables. They can be used in configuration files. Syntax in the config - ${var_name} or $var_name.
     VarsWeakPtr get_vars();
+
+    /// Returns information about the currently active transaction, if any.
+    /// @return unique_ptr to ActiveTransactionInfo if a transaction is running, nullptr otherwise
+    std::unique_ptr<base::ActiveTransactionInfo> get_active_transaction_info();
 
     libdnf5::BaseWeakPtr get_weak_ptr();
 

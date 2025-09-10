@@ -21,6 +21,8 @@
 #include "rpm/transaction.hpp"
 
 #include "base_impl.hpp"
+
+#include "libdnf5/base/active_transaction_info.hpp"
 #ifdef WITH_MODULEMD
 #include "module/module_db.hpp"
 #include "module/module_sack_impl.hpp"
@@ -50,6 +52,7 @@
 
 #include <fcntl.h>
 #include <fmt/format.h>
+#include <toml.hpp>
 #include <unistd.h>
 
 #include <filesystem>
@@ -156,6 +159,28 @@ static std::vector<std::pair<ProblemRules, std::vector<std::string>>> get_remova
         }
     }
     return problem_output;
+}
+
+class TransactionLocker : public libdnf5::utils::Locker {
+public:
+    TransactionLocker(const std::filesystem::path & lock_path, const ActiveTransactionInfo & info);
+
+    void write_transaction_metadata();
+
+private:
+    ActiveTransactionInfo transaction_info;
+};
+
+TransactionLocker::TransactionLocker(const std::filesystem::path & path, const ActiveTransactionInfo & info)
+    : Locker(path.string()),
+      transaction_info(info) {}
+
+void TransactionLocker::write_transaction_metadata() {
+    try {
+        write_content(transaction_info.to_toml());
+    } catch (const SystemError & e) {
+        //TODO(mblaha): log the error (would require base object)
+    }
 }
 
 }  // namespace
@@ -944,15 +969,25 @@ Transaction::TransactionRunResult Transaction::Impl::_run(
 
     auto & config = base->get_config();
 
+    // prepare transaction info
+    ActiveTransactionInfo info;
+    info.set_description(description);
+    info.set_comment(comment);
+    info.set_pid(getpid());
+    info.set_start_time(
+        std::chrono::duration_cast<std::chrono::seconds>(std::chrono::system_clock::now().time_since_epoch()).count());
+
     // acquire the lock
     std::filesystem::path lock_file_path = config.get_installroot_option().get_value();
     lock_file_path /= std::filesystem::path(libdnf5::TRANSACTION_LOCK_FILEPATH).relative_path();
     std::filesystem::create_directories(lock_file_path.parent_path());
 
-    libdnf5::utils::Locker locker(lock_file_path);
-    if (!locker.write_lock()) {
+    TransactionLocker transaction_locker(lock_file_path, info);
+    if (!transaction_locker.write_lock()) {
+        auto transaction_info = transaction_locker.read_content();
         return TransactionRunResult::ERROR_LOCK;
     }
+    transaction_locker.write_transaction_metadata();
 
     // fill and check the rpm transaction
     libdnf5::rpm::Transaction rpm_transaction(base);
@@ -1017,12 +1052,12 @@ Transaction::TransactionRunResult Transaction::Impl::_run(
 
     db_transaction.set_comment(comment);
     db_transaction.set_description(description);
-
     if (user_id) {
         db_transaction.set_user_id(*user_id);
     } else {
         db_transaction.set_user_id(get_login_uid());
     }
+
     //
     // TODO(jrohel): nevra of running dnf5?
     //db_transaction.add_runtime_package("dnf5");
