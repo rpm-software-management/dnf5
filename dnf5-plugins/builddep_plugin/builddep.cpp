@@ -32,6 +32,7 @@
 #include <rpm/rpmds.h>
 #include <rpm/rpmio.h>
 #include <rpm/rpmlib.h>
+#include <rpm/rpmlog.h>
 #include <rpm/rpmmacro.h>
 #include <rpm/rpmts.h>
 
@@ -210,7 +211,10 @@ void BuildDepCommand::parse_builddep_specs(int specs_count, const char * const s
 
 bool BuildDepCommand::add_from_spec_file(
     std::set<std::string> & install_specs, std::set<std::string> & conflicts_specs, const char * spec_file_name) {
+    auto old_log_mask = rpmlogSetMask(RPMLOG_UPTO(RPMLOG_PRI(RPMLOG_DEBUG)));
     auto spec = rpmSpecParse(spec_file_name, RPMSPEC_ANYARCH | RPMSPEC_FORCE, nullptr);
+    rpmlogSetMask(old_log_mask);
+
     if (spec == nullptr) {
         std::cerr << "Failed to parse spec file \"" << spec_file_name << "\"." << std::endl;
         return false;
@@ -241,6 +245,8 @@ bool BuildDepCommand::add_from_srpm_file(
         return false;
     }
 
+    auto old_log_mask = rpmlogSetMask(RPMLOG_UPTO(RPMLOG_PRI(RPMLOG_DEBUG)));
+
     Header header;
     auto ts = rpmtsCreate();
     rpmtsSetVSFlags(ts, _RPMVSF_NOSIGNATURES | _RPMVSF_NODIGESTS);
@@ -248,6 +254,8 @@ bool BuildDepCommand::add_from_srpm_file(
     rpmtsFree(ts);
     Fclose(fd);
     fd = nullptr;
+
+    rpmlogSetMask(old_log_mask);
 
     if (rc == RPMRC_OK) {
         auto dependency_set = rpmdsInit(rpmdsNewPool(nullptr, header, RPMTAG_REQUIRENAME, 0));
