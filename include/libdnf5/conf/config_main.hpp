@@ -321,6 +321,12 @@ public:
         libdnf5::Logger & logger,
         Option::Priority priority = Option::Priority::MAINCONFIG) override;
 
+
+    /// For each option, set the option value to the value from `other`. An option
+    /// will only be set if its priority in `other` is greater or equal to the
+    /// current priority and the option in `other` is not empty.
+    void load_from_config(const libdnf5::ConfigMain & other);
+
 private:
     class LIBDNF_LOCAL Impl;
     std::unique_ptr<Impl> p_impl;

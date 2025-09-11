@@ -113,6 +113,8 @@ class ConfigMain::Impl {
 
     Config & owner;
 
+    void load_from_config(const Impl & other);
+
     OptionNumber<std::int32_t> debuglevel{2, 0, 10};
     OptionNumber<std::int32_t> errorlevel{3, 0, 10};
     OptionPath installroot{"/", false, true};
@@ -1344,6 +1346,141 @@ void ConfigMain::load_from_parser(
     if (geteuid() == 0) {
         p_impl->cachedir.set(Option::Priority::MAINCONFIG, p_impl->system_cachedir.get_value());
     }
+}
+
+namespace {
+template <class T>
+void load_option(T & dest, const T & src) {
+    if (!src.empty()) {
+        dest.set(src.get_priority(), src.get_value());
+    }
+}
+}  // namespace
+
+void ConfigMain::Impl::load_from_config(const ConfigMain::Impl & other) {
+    load_option(debuglevel, other.debuglevel);
+    load_option(errorlevel, other.errorlevel);
+    load_option(installroot, other.installroot);
+    load_option(use_host_config, other.use_host_config);
+    load_option(config_file_path, other.config_file_path);
+    load_option(plugins, other.plugins);
+    load_option(pluginpath, other.pluginpath);
+    load_option(pluginconfpath, other.pluginconfpath);
+    load_option(persistdir, other.persistdir);
+    load_option(system_state_dir, other.system_state_dir);
+    load_option(transaction_history_dir, other.transaction_history_dir);
+    load_option(transformdb, other.transformdb);
+    load_option(recent, other.recent);
+    load_option(reset_nice, other.reset_nice);
+    load_option(system_cachedir, other.system_cachedir);
+    load_option(cacheonly, other.cacheonly);
+    load_option(keepcache, other.keepcache);
+    load_option(logdir, other.logdir);
+    load_option(log_size, other.log_size);
+    load_option(log_rotate, other.log_rotate);
+    load_option(debugdir, other.debugdir);
+    load_option(varsdir, other.varsdir);
+    load_option(reposdir, other.reposdir);
+    load_option(debug_solver, other.debug_solver);
+    load_option(installonlypkgs, other.installonlypkgs);
+    load_option(group_package_types, other.group_package_types);
+    load_option(optional_metadata_types, other.optional_metadata_types);
+    load_option(installonly_limit, other.installonly_limit);
+    load_option(tsflags, other.tsflags);
+    load_option(assumeyes, other.assumeyes);
+    load_option(assumeno, other.assumeno);
+    load_option(check_config_file_age, other.check_config_file_age);
+    load_option(defaultyes, other.defaultyes);
+    load_option(diskspacecheck, other.diskspacecheck);
+    load_option(localpkg_gpgcheck, other.localpkg_gpgcheck);
+    load_option(gpgkey_dns_verification, other.gpgkey_dns_verification);
+    load_option(obsoletes, other.obsoletes);
+    load_option(exit_on_lock, other.exit_on_lock);
+    load_option(allow_vendor_change, other.allow_vendor_change);
+    load_option(metadata_timer_sync, other.metadata_timer_sync);
+    load_option(disable_excludes, other.disable_excludes);
+    load_option(multilib_policy, other.multilib_policy);
+    load_option(best, other.best);
+    load_option(install_weak_deps, other.install_weak_deps);
+    load_option(allow_downgrade, other.allow_downgrade);
+    load_option(bugtracker_url, other.bugtracker_url);
+    load_option(zchunk, other.zchunk);
+    load_option(color, other.color);
+    load_option(color_list_installed_older, other.color_list_installed_older);
+    load_option(color_list_installed_newer, other.color_list_installed_newer);
+    load_option(color_list_installed_reinstall, other.color_list_installed_reinstall);
+    load_option(color_list_installed_extra, other.color_list_installed_extra);
+    load_option(color_list_available_upgrade, other.color_list_available_upgrade);
+    load_option(color_list_available_downgrade, other.color_list_available_downgrade);
+    load_option(color_list_available_reinstall, other.color_list_available_reinstall);
+    load_option(color_list_available_install, other.color_list_available_install);
+    load_option(color_update_installed, other.color_update_installed);
+    load_option(color_update_local, other.color_update_local);
+    load_option(color_update_remote, other.color_update_remote);
+    load_option(color_search_match, other.color_search_match);
+    load_option(history_record, other.history_record);
+    load_option(history_record_packages, other.history_record_packages);
+    load_option(rpmverbosity, other.rpmverbosity);
+    load_option(strict, other.strict);
+    load_option(skip_broken, other.skip_broken);
+    load_option(skip_unavailable, other.skip_unavailable);
+    load_option(autocheck_running_kernel, other.autocheck_running_kernel);
+    load_option(clean_requirements_on_remove, other.clean_requirements_on_remove);
+    load_option(history_list_view, other.history_list_view);
+    load_option(upgrade_group_objects_upgrade, other.upgrade_group_objects_upgrade);
+    load_option(destdir, other.destdir);
+    load_option(comment, other.comment);
+    load_option(downloadonly, other.downloadonly);
+    load_option(ignorearch, other.ignorearch);
+    load_option(module_platform_id, other.module_platform_id);
+    load_option(module_stream_switch, other.module_stream_switch);
+    load_option(module_obsoletes, other.module_obsoletes);
+    load_option(user_agent, other.user_agent);
+    load_option(countme, other.countme);
+    load_option(protect_running_kernel, other.protect_running_kernel);
+    load_option(build_cache, other.build_cache);
+    load_option(retries, other.retries);
+    load_option(cachedir, other.cachedir);
+    load_option(fastestmirror, other.fastestmirror);
+    load_option(excludeenvs, other.excludeenvs);
+    load_option(excludegroups, other.excludegroups);
+    load_option(excludepkgs, other.excludepkgs);
+    load_option(includepkgs, other.includepkgs);
+    load_option(exclude_from_weak, other.exclude_from_weak);
+    load_option(exclude_from_weak_autodetect, other.exclude_from_weak_autodetect);
+    load_option(proxy, other.proxy);
+    load_option(proxy_username, other.proxy_username);
+    load_option(proxy_password, other.proxy_password);
+    load_option(proxy_auth_method, other.proxy_auth_method);
+    load_option(protected_packages, other.protected_packages);
+    load_option(username, other.username);
+    load_option(password, other.password);
+    load_option(pkg_gpgcheck, other.pkg_gpgcheck);
+    load_option(repo_gpgcheck, other.repo_gpgcheck);
+    load_option(enabled, other.enabled);
+    load_option(enablegroups, other.enablegroups);
+    load_option(bandwidth, other.bandwidth);
+    load_option(minrate, other.minrate);
+    load_option(ip_resolve, other.ip_resolve);
+    load_option(throttle, other.throttle);
+    load_option(timeout, other.timeout);
+    load_option(max_parallel_downloads, other.max_parallel_downloads);
+    load_option(metadata_expire, other.metadata_expire);
+    load_option(sslcacert, other.sslcacert);
+    load_option(sslverify, other.sslverify);
+    load_option(sslclientcert, other.sslclientcert);
+    load_option(sslclientkey, other.sslclientkey);
+    load_option(proxy_sslcacert, other.proxy_sslcacert);
+    load_option(proxy_sslverify, other.proxy_sslverify);
+    load_option(proxy_sslclientcert, other.proxy_sslclientcert);
+    load_option(proxy_sslclientkey, other.proxy_sslclientkey);
+    load_option(deltarpm, other.deltarpm);
+    load_option(deltarpm_percentage, other.deltarpm_percentage);
+    load_option(skip_if_unavailable, other.skip_if_unavailable);
+}
+
+void ConfigMain::load_from_config(const ConfigMain & other) {
+    p_impl->load_from_config(*other.p_impl);
 }
 
 }  // namespace libdnf5
