@@ -356,6 +356,7 @@ void Session::download_transaction_packages() {
 void Session::store_transaction_offline(bool downloadonly) {
     const auto & installroot = base->get_config().get_installroot_option().get_value();
     const auto & offline_datadir = installroot / libdnf5::offline::DEFAULT_DATADIR.relative_path();
+    const auto & offline_destdir = installroot / libdnf5::offline::DEFAULT_DESTDIR.relative_path();
     std::filesystem::create_directories(offline_datadir);
     const std::filesystem::path state_path{offline_datadir / libdnf5::offline::TRANSACTION_STATE_FILENAME};
     libdnf5::offline::OfflineTransactionState state{state_path};
@@ -364,7 +365,7 @@ void Session::store_transaction_offline(bool downloadonly) {
     state.write();
 
     // Download transaction packages
-    const auto & dest_dir = installroot / libdnf5::offline::DEFAULT_DATADIR.relative_path() / "packages";
+    const auto & dest_dir = offline_destdir / "packages";
     std::filesystem::create_directories(dest_dir);
     base->get_config().get_destdir_option().set(dest_dir);
     download_transaction_packages();
@@ -384,15 +385,13 @@ void Session::store_transaction_offline(bool downloadonly) {
     }
 
     // Serialize the transaction
-    constexpr const char * packages_in_trans_dir{"./packages"};
-    constexpr const char * comps_in_trans_dir{"./comps"};
-    const auto & comps_location = offline_datadir / comps_in_trans_dir;
+    const auto & comps_location = offline_destdir / "comps";
 
     transaction->store_comps(comps_location);
 
     const auto transaction_json_path = offline_datadir / "transaction.json";
     libdnf5::utils::fs::File transaction_json_file{transaction_json_path, "w"};
-    transaction_json_file.write(transaction->serialize(packages_in_trans_dir, comps_in_trans_dir));
+    transaction_json_file.write(transaction->serialize(dest_dir, comps_location));
     transaction_json_file.close();
 
     // Download and transaction test complete. Fill out entries in offline

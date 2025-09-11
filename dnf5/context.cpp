@@ -395,10 +395,11 @@ void Context::Impl::store_offline(libdnf5::base::Transaction & transaction) {
     // Serialize the transaction
     const auto & installroot = base.get_config().get_installroot_option().get_value();
     const auto & offline_datadir = installroot / libdnf5::offline::DEFAULT_DATADIR.relative_path();
+    const auto & offline_destdir = installroot / libdnf5::offline::DEFAULT_DESTDIR.relative_path();
     std::filesystem::create_directories(offline_datadir);
-    constexpr const char * packages_in_trans_dir{"./packages"};
-    constexpr const char * comps_in_trans_dir{"./comps"};
-    const auto & comps_location = offline_datadir / comps_in_trans_dir;
+    std::filesystem::create_directories(offline_destdir);
+    const auto & packages_location = offline_destdir / "packages";
+    const auto & comps_location = offline_destdir / "comps";
 
     const std::filesystem::path state_path{offline_datadir / libdnf5::offline::TRANSACTION_STATE_FILENAME};
     libdnf5::offline::OfflineTransactionState state{state_path};
@@ -411,7 +412,7 @@ void Context::Impl::store_offline(libdnf5::base::Transaction & transaction) {
 
     const auto transaction_json_path = offline_datadir / TRANSACTION_JSON;
     libdnf5::utils::fs::File transaction_json_file{transaction_json_path, "w"};
-    transaction_json_file.write(transaction.serialize(packages_in_trans_dir, comps_in_trans_dir));
+    transaction_json_file.write(transaction.serialize(packages_location, comps_location));
     transaction_json_file.close();
 
     // Download and transaction test complete. Fill out entries in offline
@@ -477,7 +478,9 @@ void Context::Impl::download_and_run(libdnf5::base::Transaction & transaction) {
     if (should_store_offline) {
         const auto & installroot = base.get_config().get_installroot_option().get_value();
         const auto & offline_datadir = installroot / libdnf5::offline::DEFAULT_DATADIR.relative_path();
+        const auto & offline_destdir = installroot / libdnf5::offline::DEFAULT_DESTDIR.relative_path();
         std::filesystem::create_directories(offline_datadir);
+        std::filesystem::create_directories(offline_destdir);
         const std::filesystem::path state_path{offline_datadir / libdnf5::offline::TRANSACTION_STATE_FILENAME};
         libdnf5::offline::OfflineTransactionState state{state_path};
 
@@ -491,8 +494,7 @@ void Context::Impl::download_and_run(libdnf5::base::Transaction & transaction) {
                 throw libdnf5::cli::AbortedByUserError();
             }
         }
-
-        base.get_config().get_destdir_option().set(offline_datadir / "packages");
+        base.get_config().get_destdir_option().set(offline_destdir / "packages");
         transaction.set_download_local_pkgs(true);
     }
 

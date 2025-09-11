@@ -49,6 +49,7 @@ private:
     enum class Scheduled { NOT_SCHEDULED, ANOTHER_TOOL, SCHEDULED };
     Scheduled offline_transaction_scheduled();
     std::filesystem::path get_datadir();
+    std::filesystem::path get_destdir();
 };
 
 #endif
