@@ -111,8 +111,10 @@ class ConfigMain::Impl {
 
     explicit Impl(Config & owner);
     explicit Impl(Config & owner, const ConfigMain::Impl & other);
+    explicit Impl(Config & owner, ConfigMain::Impl && other) noexcept;
 
     Impl & operator=(const Impl & other);
+    Impl & operator=(Impl && other) noexcept;
 
     OptionNumber<std::int32_t> debuglevel{2, 0, 10};
     OptionNumber<std::int32_t> errorlevel{3, 0, 10};
@@ -472,21 +474,32 @@ ConfigMain::Impl::Impl(Config & owner, const Impl & other) : Impl(owner) {
     *this = other;
 }
 
+ConfigMain::Impl::Impl(Config & owner, Impl && other) noexcept : Impl(owner) {
+    *this = std::move(other);
+}
+
 ConfigMain::Impl & ConfigMain::Impl::operator=(const Impl & other) = default;
 
-ConfigMain::ConfigMain() {
-    p_impl = std::unique_ptr<Impl>(new Impl(*this));
-}
+ConfigMain::Impl & ConfigMain::Impl::operator=(Impl && other) noexcept = default;
 
-ConfigMain::ConfigMain(const ConfigMain & other) : Config() {
-    p_impl = std::unique_ptr<Impl>(new Impl(*this, *other.p_impl));
-}
+ConfigMain::ConfigMain() : p_impl{new Impl(*this)} {}
+
+ConfigMain::ConfigMain(const ConfigMain & other) : Config{}, p_impl{new Impl(*this, *other.p_impl)} {}
+
+ConfigMain::ConfigMain(ConfigMain && other) noexcept : Config{}, p_impl{new Impl(*this, std::move(*other.p_impl))} {}
 
 ConfigMain::~ConfigMain() = default;
 
 ConfigMain & ConfigMain::operator=(const ConfigMain & other) {
     if (this != &other) {
         *p_impl = *other.p_impl;
+    }
+    return *this;
+}
+
+ConfigMain & ConfigMain::operator=(ConfigMain && other) noexcept {
+    if (this != &other) {
+        p_impl = std::move(other.p_impl);
     }
     return *this;
 }

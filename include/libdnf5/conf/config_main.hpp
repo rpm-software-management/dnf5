@@ -41,10 +41,12 @@ class LIBDNF_API ConfigMain : public Config {
 public:
     ConfigMain();
     ConfigMain(const ConfigMain & other);
+    ConfigMain(ConfigMain && other) noexcept;
 
     ~ConfigMain();
 
     ConfigMain & operator=(const ConfigMain & other);
+    ConfigMain & operator=(ConfigMain && other) noexcept;
 
     OptionNumber<std::int32_t> & get_debuglevel_option();
     const OptionNumber<std::int32_t> & get_debuglevel_option() const;
