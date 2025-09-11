@@ -123,6 +123,15 @@ void ManifestNewCommand::set_argument_parser() {
     archs_arg->link_value(archs_option);
     cmd.register_named_arg(archs_arg);
 
+    source_option =
+        dynamic_cast<libdnf5::OptionBool *>(parser.add_init_value(std::make_unique<libdnf5::OptionBool>(false)));
+    auto * source_arg = parser.add_new_named_arg("source");
+    source_arg->set_long_name("source");
+    source_arg->set_description(_("Include source packages in consideration"));
+    source_arg->set_const_value("true");
+    source_arg->link_value(source_option);
+    cmd.register_named_arg(source_arg);
+
     auto keys = parser.add_new_positional_arg("specs", ArgumentParser::PositionalArg::UNLIMITED, nullptr, nullptr);
     keys->set_description("List of [<package-spec-NPFB>|@<group-spec>|@<environment-spec>]");
     keys->set_parse_hook_func(
@@ -204,6 +213,9 @@ void ManifestNewCommand::populate_manifest(
             id_path_pair.second = vars->substitute(id_path_pair.second);
         }
         repo_sack->create_repos_from_paths(repos_from_path, libdnf5::Option::Priority::COMMANDLINE);
+    }
+    if (source_option->get_value()) {
+        repo_sack->enable_source_repos();
     }
     set_repo_callbacks(*base);
 
@@ -317,6 +329,8 @@ void ManifestNewCommand::run() {
 }
 
 std::vector<libdnf5::rpm::Package> ManifestNewCommand::resolve_pkgs(libdnf5::Base & base) {
+    auto & ctx = get_context();
+
     if (generate_system_snapshot) {
         libdnf5::rpm::PackageQuery installed_query{base};
         installed_query.filter_installed();
@@ -324,7 +338,7 @@ std::vector<libdnf5::rpm::Package> ManifestNewCommand::resolve_pkgs(libdnf5::Bas
         return sort_pkgs(std::move(installed));
     }
 
-    std::vector<libdnf5::rpm::Package> resolved_pkgs;
+    std::set<libdnf5::rpm::Package> resolved_pkgs;
     libdnf5::Goal goal(base);
     if (input.has_value()) {
         goal.set_allow_erasing(input->get_options().get_allow_erasing());
@@ -349,11 +363,38 @@ std::vector<libdnf5::rpm::Package> ManifestNewCommand::resolve_pkgs(libdnf5::Bas
 
     for (const auto & tspkg : transaction.get_transaction_packages()) {
         if (libdnf5::transaction::transaction_item_action_is_inbound(tspkg.get_action())) {
-            resolved_pkgs.push_back(tspkg.get_package());
+            resolved_pkgs.insert(tspkg.get_package());
         }
     }
 
-    return sort_pkgs(std::move(resolved_pkgs));
+    if (source_option->get_value()) {
+        libdnf5::rpm::PackageQuery source_pkg_query{base};
+        source_pkg_query.filter_arch("src");
+        source_pkg_query.filter_available();
+
+        std::set<libdnf5::rpm::Package> source_pkgs;
+        for (const auto & pkg : resolved_pkgs) {
+            auto sourcerpm = pkg.get_sourcerpm();
+            if (!sourcerpm.empty()) {
+                libdnf5::rpm::PackageQuery pkg_query{source_pkg_query};
+                pkg_query.filter_epoch({pkg.get_epoch()});
+
+                // Remove ".rpm" to get sourcerpm nevra
+                sourcerpm.erase(sourcerpm.length() - 4);
+                pkg_query.resolve_pkg_spec(sourcerpm, {}, true);
+
+                for (const auto & spkg : pkg_query) {
+                    source_pkgs.insert(spkg);
+                }
+            } else if (pkg.get_arch() != "src") {
+                ctx.print_info(libdnf5::utils::sformat(_("No source rpm defined for package: \"{}\""), pkg.get_name()));
+            }
+        }
+        resolved_pkgs.insert(source_pkgs.begin(), source_pkgs.end());
+    }
+
+    std::vector<libdnf5::rpm::Package> resolved_pkgs_vector{resolved_pkgs.begin(), resolved_pkgs.end()};
+    return sort_pkgs(std::move(resolved_pkgs_vector));
 }
 
 }  // namespace dnf5

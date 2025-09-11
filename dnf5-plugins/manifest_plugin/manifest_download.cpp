@@ -39,6 +39,15 @@ void ManifestDownloadCommand::set_argument_parser() {
     archs_arg->link_value(archs_option);
     cmd.register_named_arg(archs_arg);
 
+    source_option =
+        dynamic_cast<libdnf5::OptionBool *>(parser.add_init_value(std::make_unique<libdnf5::OptionBool>(false)));
+    auto * source_arg = parser.add_new_named_arg("source");
+    source_arg->set_long_name("source");
+    source_arg->set_description(_("Download source packages"));
+    source_arg->set_const_value("true");
+    source_arg->link_value(source_option);
+    cmd.register_named_arg(source_arg);
+
     create_destdir_option(*this);
 }
 
@@ -78,6 +87,9 @@ void ManifestDownloadCommand::download_packages(
     // Load repositories
     auto repo_sack = base->get_repo_sack();
     create_manifest_repos(*base, manifest.get_repositories());
+    if (source_option->get_value()) {
+        repo_sack->enable_source_repos();
+    }
     set_repo_callbacks(*base);
     ctx.print_info(libdnf5::utils::sformat(_("Updating and loading repositories for arch {}:"), arch));
     repo_sack->load_repos(libdnf5::repo::Repo::Type::AVAILABLE);
@@ -87,7 +99,7 @@ void ManifestDownloadCommand::download_packages(
     libdnf5::repo::PackageDownloader downloader{*base};
     downloader.force_keep_packages(true);
 
-    for (auto & manifest_pkg : manifest.get_packages().get(arch)) {
+    for (auto & manifest_pkg : manifest.get_packages().get(arch, source_option->get_value())) {
         libdnf5::rpm::PackageQuery query{*base};
         query.filter_repo_id(manifest_pkg.get_repo_id());
         const auto & nevra = nevra_manifest_to_dnf(manifest_pkg.get_nevra());
