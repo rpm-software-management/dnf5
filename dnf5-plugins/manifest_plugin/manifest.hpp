@@ -68,6 +68,7 @@ private:
     libdnf5::OptionBool * use_system_option{nullptr};
     libdnf5::OptionBool * per_arch_option{nullptr};
     libdnf5::OptionStringList * archs_option{nullptr};
+    libdnf5::OptionBool * source_option{nullptr};
 
     std::vector<std::string> pkg_specs;
     std::optional<libpkgmanifest::input::Input> input;
@@ -91,6 +92,7 @@ private:
         const std::filesystem::path & default_destdir);
 
     libdnf5::OptionStringList * archs_option{nullptr};
+    libdnf5::OptionBool * source_option{nullptr};
 
     std::vector<std::string> archs;
     std::map<std::string, std::filesystem::path> manifest_paths;
