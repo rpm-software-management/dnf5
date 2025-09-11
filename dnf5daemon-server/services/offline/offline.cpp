@@ -36,6 +36,12 @@ std::filesystem::path Offline::get_datadir() {
     return installroot / libdnf5::offline::DEFAULT_DATADIR.relative_path();
 }
 
+std::filesystem::path Offline::get_destdir() {
+    auto base = session.get_base();
+    const auto & installroot = base->get_config().get_installroot_option().get_value();
+    return installroot / libdnf5::offline::DEFAULT_DESTDIR.relative_path();
+}
+
 Offline::Scheduled Offline::offline_transaction_scheduled() {
     std::error_code ec;
     // magic symlink exists
@@ -291,6 +297,15 @@ sdbus::MethodReply Offline::impl_clean(sdbus::MethodCall & call, const dnfdaemon
     }
     // clean dnf5 offline transaction files
     for (const auto & entry : std::filesystem::directory_iterator(get_datadir())) {
+        std::error_code ec;
+        std::filesystem::remove_all(entry.path(), ec);
+        if (ec) {
+            success = false;
+            error_msgs.push_back(ec.message());
+        }
+    }
+    // clean dnf5 offline packages destdir
+    for (const auto & entry : std::filesystem::directory_iterator(get_destdir())) {
         std::error_code ec;
         std::filesystem::remove_all(entry.path(), ec);
         if (ec) {

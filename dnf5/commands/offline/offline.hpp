@@ -47,10 +47,12 @@ public:
 
 protected:
     std::filesystem::path get_datadir() const { return datadir; };
+    std::filesystem::path get_destdir() const { return destdir; };
     std::optional<libdnf5::offline::OfflineTransactionState> state;
 
 private:
     std::filesystem::path datadir;
+    std::filesystem::path destdir;
 };
 
 class OfflineRebootCommand : public OfflineSubcommand {
