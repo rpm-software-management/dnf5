@@ -71,3 +71,40 @@ void ConfTest::test_config_pkg_gpgcheck() {
     CPPUNIT_ASSERT_EQUAL(&config_repo.get_pkg_gpgcheck_option(), &config_repo.get_gpgcheck_option());
 #pragma GCC diagnostic pop
 }
+
+void ConfTest::test_config_load_from_config() {
+    libdnf5::ConfigMain config;
+
+    config.get_assumeyes_option().set(libdnf5::Option::Priority::MAINCONFIG, false);
+    config.get_debuglevel_option().set(libdnf5::Option::Priority::RUNTIME, 7);
+    config.get_allow_downgrade_option().set(libdnf5::Option::Priority::RUNTIME, false);
+    config.get_destdir_option().set(libdnf5::Option::Priority::RUNTIME, "foobar");
+
+    libdnf5::ConfigMain config_copy;
+    config_copy.load_from_config(config);
+
+    CPPUNIT_ASSERT_EQUAL(false, config_copy.get_allow_downgrade_option().get_value());
+    CPPUNIT_ASSERT_EQUAL(std::string{"foobar"}, config_copy.get_destdir_option().get_value());
+
+    CPPUNIT_ASSERT_EQUAL(libdnf5::Option::Priority::MAINCONFIG, config.get_assumeyes_option().get_priority());
+    CPPUNIT_ASSERT_EQUAL(false, config.get_assumeyes_option().get_value());
+
+    CPPUNIT_ASSERT_EQUAL(libdnf5::Option::Priority::MAINCONFIG, config_copy.get_assumeyes_option().get_priority());
+    CPPUNIT_ASSERT_EQUAL(false, config_copy.get_assumeyes_option().get_value());
+
+    config_copy.get_assumeyes_option().set(libdnf5::Option::Priority::RUNTIME, true);
+
+    CPPUNIT_ASSERT_EQUAL(libdnf5::Option::Priority::MAINCONFIG, config.get_assumeyes_option().get_priority());
+    CPPUNIT_ASSERT_EQUAL(false, config.get_assumeyes_option().get_value());
+
+    CPPUNIT_ASSERT_EQUAL(libdnf5::Option::Priority::RUNTIME, config_copy.get_assumeyes_option().get_priority());
+    CPPUNIT_ASSERT_EQUAL(true, config_copy.get_assumeyes_option().get_value());
+
+    CPPUNIT_ASSERT_EQUAL(0ul, config_copy.get_excludepkgs_option().get_value().size());
+    CPPUNIT_ASSERT_EQUAL(0ul, config.get_excludepkgs_option().get_value().size());
+
+    config_copy.get_excludepkgs_option().add_item(libdnf5::Option::Priority::RUNTIME, "abc");
+
+    CPPUNIT_ASSERT_EQUAL(1ul, config_copy.get_excludepkgs_option().get_value().size());
+    CPPUNIT_ASSERT_EQUAL(0ul, config.get_excludepkgs_option().get_value().size());
+}

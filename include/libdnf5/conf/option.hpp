@@ -99,6 +99,10 @@ public:
     void assert_not_locked() const;
 
 protected:
+    Option(Option && src) noexcept;
+    Option & operator=(const Option & other);
+    Option & operator=(Option && other) noexcept;
+
     void set_priority(Priority priority);
     const std::string & get_lock_comment() const noexcept;
 

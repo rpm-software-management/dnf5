@@ -75,6 +75,12 @@ OptionString::~OptionString() = default;
 
 OptionString::OptionString(const OptionString & src) = default;
 
+OptionString::OptionString(OptionString && src) noexcept = default;
+
+OptionString & OptionString::operator=(OptionString && other) noexcept = default;
+
+OptionString & OptionString::operator=(const OptionString & other) = default;
+
 void OptionString::test(const std::string & value) const {
     if (p_impl->regex.empty()) {
         return;

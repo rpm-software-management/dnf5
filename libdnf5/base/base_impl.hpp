@@ -67,7 +67,7 @@ public:
 
 private:
     friend class Base;
-    Impl(const libdnf5::BaseWeakPtr & base, std::vector<std::unique_ptr<Logger>> && loggers);
+    Impl(const libdnf5::BaseWeakPtr & base, std::vector<std::unique_ptr<Logger>> && loggers, ConfigMain config);
 
     bool repos_configured{false};
 

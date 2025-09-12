@@ -40,6 +40,10 @@ public:
     ~OptionString();
 
     OptionString(const OptionString & src);
+    OptionString(OptionString && src) noexcept;
+
+    OptionString & operator=(const OptionString & other);
+    OptionString & operator=(OptionString && other) noexcept;
 
     /// Makes copy (clone) of this object.
     // @replaces libdnf:conf/OptionString.hpp:method:OptionString.clone()

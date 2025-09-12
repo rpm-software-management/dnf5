@@ -49,6 +49,12 @@ public:
 
     OptionPath(const OptionPath & src);
 
+    OptionPath(OptionPath && src) noexcept;
+
+    OptionPath & operator=(const OptionPath & other);
+
+    OptionPath & operator=(OptionPath && other) noexcept;
+
     /// Constructor sets default value and conditions.
     // @replaces libdnf:conf/OptionPath.hpp:ctor:OptionPath.OptionPath(const char * defaultValue, const std::string & regex, bool icase, bool exists = false, bool absPath = false)
     OptionPath(const char * default_value, std::string regex, bool icase, bool exists = false, bool abs_path = false);

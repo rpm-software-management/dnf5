@@ -33,6 +33,7 @@ class BaseTest : public TestCaseFixture {
     CPPUNIT_TEST(test_missing_setup);
     CPPUNIT_TEST(test_repeated_setup);
     CPPUNIT_TEST(test_unlock_not_locked);
+    CPPUNIT_TEST(test_construct_with_config);
     CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -40,6 +41,7 @@ public:
     void test_missing_setup();
     void test_repeated_setup();
     void test_unlock_not_locked();
+    void test_construct_with_config();
 };
 
 

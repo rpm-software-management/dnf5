@@ -89,8 +89,23 @@ template <typename T>
 OptionNumber<T>::~OptionNumber() = default;
 
 template <typename T>
+OptionNumber<T> & OptionNumber<T>::operator=(const OptionNumber & other) {
+    if (this != &other) {
+        Option::operator=(other);
+        p_impl = other.p_impl;
+    }
+    return *this;
+}
+
+template <typename T>
+OptionNumber<T> & OptionNumber<T>::operator=(OptionNumber && other) noexcept = default;
+
+template <typename T>
 OptionNumber<T>::OptionNumber(const OptionNumber & src) : Option(src),
                                                           p_impl(new Impl(*src.p_impl)) {}
+
+template <typename T>
+OptionNumber<T>::OptionNumber(OptionNumber<T> && src) noexcept = default;
 
 template <typename T>
 void OptionNumber<T>::test(ValueType value) const {

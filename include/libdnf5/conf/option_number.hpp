@@ -62,7 +62,13 @@ public:
 
     OptionNumber(const OptionNumber & src);
 
+    OptionNumber(OptionNumber && src) noexcept;
+
     ~OptionNumber() override;
+
+    OptionNumber & operator=(const OptionNumber & other);
+
+    OptionNumber & operator=(OptionNumber && other) noexcept;
 
     /// Makes copy (clone) of this object.
     // @replaces libdnf:conf/OptionNumber.hpp:method:OptionBoo<T>.clone()
