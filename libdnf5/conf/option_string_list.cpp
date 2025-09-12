@@ -153,7 +153,18 @@ template <typename T, bool IsAppend>
 OptionStringContainer<T, IsAppend>::OptionStringContainer(const OptionStringContainer & src) = default;
 
 template <typename T, bool IsAppend>
+OptionStringContainer<T, IsAppend>::OptionStringContainer(OptionStringContainer && src) noexcept = default;
+
+template <typename T, bool IsAppend>
 OptionStringContainer<T, IsAppend>::~OptionStringContainer() = default;
+
+template <typename T, bool IsAppend>
+OptionStringContainer<T, IsAppend> & OptionStringContainer<T, IsAppend>::operator=(const OptionStringContainer & src) =
+    default;
+
+template <typename T, bool IsAppend>
+OptionStringContainer<T, IsAppend> & OptionStringContainer<T, IsAppend>::operator=(
+    OptionStringContainer && src) noexcept = default;
 
 template <typename T, bool IsAppend>
 void OptionStringContainer<T, IsAppend>::init_regex_matcher() {

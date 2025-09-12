@@ -40,7 +40,11 @@ namespace libdnf5 {
 class LIBDNF_API ConfigMain : public Config {
 public:
     ConfigMain();
+    ConfigMain(ConfigMain && other) noexcept;
+
     ~ConfigMain();
+
+    ConfigMain & operator=(ConfigMain && other) noexcept;
 
     OptionNumber<std::int32_t> & get_debuglevel_option();
     const OptionNumber<std::int32_t> & get_debuglevel_option() const;

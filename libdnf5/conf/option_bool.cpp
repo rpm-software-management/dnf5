@@ -44,6 +44,18 @@ public:
         }
     }
 
+    Impl & operator=(const OptionBool::Impl & other) {
+        default_value = other.default_value;
+        value = other.value;
+        if (other.true_values) {
+            true_values = std::make_unique<std::vector<std::string>>(*other.true_values);
+        }
+        if (other.false_values) {
+            false_values = std::make_unique<std::vector<std::string>>(*other.false_values);
+        }
+        return *this;
+    }
+
 private:
     friend OptionBool;
 
@@ -55,6 +67,8 @@ private:
 
 OptionBool::OptionBool(const OptionBool & src) = default;
 
+OptionBool::OptionBool(OptionBool && src) noexcept = default;
+
 OptionBool::OptionBool(bool default_value, std::vector<std::string> true_vals, std::vector<std::string> false_vals)
     : Option(Priority::DEFAULT),
       p_impl(new Impl(default_value, std::move(true_vals), std::move(false_vals))) {}
@@ -62,6 +76,10 @@ OptionBool::OptionBool(bool default_value, std::vector<std::string> true_vals, s
 OptionBool::OptionBool(bool default_value) : Option(Priority::DEFAULT), p_impl(new Impl(default_value)) {}
 
 OptionBool::~OptionBool() = default;
+
+OptionBool & OptionBool::operator=(const OptionBool & other) = default;
+
+OptionBool & OptionBool::operator=(OptionBool && other) noexcept = default;
 
 bool OptionBool::from_string(const std::string & value) const {
     auto tmp_value = value;

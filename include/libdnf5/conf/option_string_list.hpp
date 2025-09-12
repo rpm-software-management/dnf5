@@ -47,7 +47,11 @@ public:
     OptionStringContainer(ValueType default_value, std::string regex, bool icase, std::string delimiters);
 
     OptionStringContainer(const OptionStringContainer & src);
+    OptionStringContainer(OptionStringContainer && src) noexcept;
     ~OptionStringContainer() override;
+
+    OptionStringContainer & operator=(const OptionStringContainer & other);
+    OptionStringContainer & operator=(OptionStringContainer && other) noexcept;
 
     /// Makes copy (clone) of this object.
     // @replaces libdnf:conf/OptionStringList.hpp:method:OptionStringList.clone()

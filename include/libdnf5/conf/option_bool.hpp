@@ -46,7 +46,13 @@ public:
 
     OptionBool(const OptionBool & src);
 
+    OptionBool(OptionBool && src) noexcept;
+
     ~OptionBool() override;
+
+    OptionBool & operator=(const OptionBool & other);
+
+    OptionBool & operator=(OptionBool && other) noexcept;
 
     /// Makes copy (clone) of this object.
     // @replaces libdnf:conf/OptionBool.hpp:method:OptionBool.clone()

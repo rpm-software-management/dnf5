@@ -39,6 +39,12 @@ Option::~Option() = default;
 
 Option::Option(const Option & src) = default;
 
+Option::Option(Option && src) noexcept = default;
+
+Option & Option::operator=(const Option & other) = default;
+
+Option & Option::operator=(Option && other) noexcept = default;
+
 Option::Priority Option::get_priority() const {
     return p_impl->priority;
 }

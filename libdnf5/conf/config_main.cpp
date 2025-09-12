@@ -110,8 +110,9 @@ class ConfigMain::Impl {
     friend class ConfigMain;
 
     explicit Impl(Config & owner);
+    explicit Impl(Config & owner, ConfigMain::Impl && other) noexcept;
 
-    Config & owner;
+    Impl & operator=(Impl && other) noexcept;
 
     void load_from_config(const Impl & other);
 
@@ -303,7 +304,7 @@ class ConfigMain::Impl {
     OptionBool skip_if_unavailable{false};
 };
 
-ConfigMain::Impl::Impl(Config & owner) : owner(owner) {
+ConfigMain::Impl::Impl(Config & owner) {
     owner.opt_binds().add("debuglevel", debuglevel);
     owner.opt_binds().add("errorlevel", errorlevel);
     owner.opt_binds().add("installroot", installroot);
@@ -469,10 +470,25 @@ ConfigMain::Impl::Impl(Config & owner) : owner(owner) {
     owner.opt_binds().add("optional_metadata_types", optional_metadata_types);
 }
 
-ConfigMain::ConfigMain() {
-    p_impl = std::unique_ptr<Impl>(new Impl(*this));
-}
+ConfigMain::ConfigMain() : p_impl{new Impl(*this)} {}
+
+ConfigMain::ConfigMain(ConfigMain && other) noexcept : Config{}, p_impl{new Impl(*this, std::move(*other.p_impl))} {}
+
 ConfigMain::~ConfigMain() = default;
+
+ConfigMain & ConfigMain::operator=(ConfigMain && other) noexcept {
+    if (this != &other) {
+        Config::operator=(Config{});
+        p_impl = std::unique_ptr<Impl>(new Impl(*this, std::move(*other.p_impl)));
+    }
+    return *this;
+}
+
+ConfigMain::Impl::Impl(Config & owner, Impl && other) noexcept : Impl(owner) {
+    *this = std::move(other);
+}
+
+ConfigMain::Impl & ConfigMain::Impl::operator=(Impl && other) noexcept = default;
 
 OptionNumber<std::int32_t> & ConfigMain::get_debuglevel_option() {
     return p_impl->debuglevel;

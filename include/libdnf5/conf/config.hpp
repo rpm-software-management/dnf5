@@ -39,6 +39,8 @@ public:
     Config();
     virtual ~Config();
 
+    Config & operator=(Config && other) noexcept;
+
     virtual void load_from_parser(
         const ConfigParser & parser,
         const std::string & section,
