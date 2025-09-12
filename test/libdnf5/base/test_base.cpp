@@ -85,3 +85,18 @@ void BaseTest::test_unlock_not_locked() {
     // Unlocking should work now
     base->unlock();
 }
+
+void BaseTest::test_construct_with_config() {
+    // Creates a new Base object
+    auto base = get_preconfigured_base();
+
+    // Create a copy of the base's config
+    libdnf5::ConfigMain config_copy;
+    config_copy.load_from_config(base->get_config());
+
+    // Create a new base using the config_copy
+    libdnf5::Base new_base{std::move(config_copy)};
+
+    // Setup should proceed without error
+    new_base.setup();
+}
