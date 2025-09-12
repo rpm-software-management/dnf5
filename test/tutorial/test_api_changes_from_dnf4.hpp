@@ -36,6 +36,8 @@ class APIChangesTest : public CppUnit::TestCase {
     CPPUNIT_TEST(test_package_query);
     CPPUNIT_TEST(test_group_query);
     CPPUNIT_TEST(test_transaction);
+    CPPUNIT_TEST(test_download_callbacks);
+    CPPUNIT_TEST(test_transaction_callbacks);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -49,6 +51,8 @@ public:
     void test_package_query();
     void test_group_query();
     void test_transaction();
+    void test_download_callbacks();
+    void test_transaction_callbacks();
 
 private:
     std::string baseurl = PROJECT_BINARY_DIR "/test/data/repos-rpm/rpm-repo1/";
