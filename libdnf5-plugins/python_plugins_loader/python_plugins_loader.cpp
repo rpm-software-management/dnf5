@@ -21,6 +21,7 @@
 #include <fmt/format.h>
 #include <libdnf5/base/base.hpp>
 #include <libdnf5/plugin/iplugin.hpp>
+#include <swigpyrun.h>
 
 #include <cstdlib>
 #include <cstring>
@@ -33,7 +34,7 @@ namespace fs = std::filesystem;
 
 namespace {
 
-constexpr const char * PLUGIN_NAME = "python_plugin_loader";
+constexpr const char * PLUGIN_NAME = "python_plugins_loader";
 constexpr plugin::Version PLUGIN_VERSION{0, 1, 0};
 constexpr PluginAPIVersion REQUIRED_PLUGIN_API_VERSION{.major = 2, .minor = 0};
 
@@ -42,7 +43,7 @@ constexpr const char * attrs_value[]{"Jaroslav Rohel", "jrohel@redhat.com", "Plu
 
 class PythonPluginLoader : public plugin::IPlugin {
 public:
-    PythonPluginLoader(libdnf5::plugin::IPluginData & data, libdnf5::ConfigParser &) : IPlugin(data) {}
+    PythonPluginLoader(libdnf5::plugin::IPluginData & data, libdnf5::ConfigParser &) : IPlugin(data), data(data) {}
     virtual ~PythonPluginLoader();
 
     PluginAPIVersion get_api_version() const noexcept override { return REQUIRED_PLUGIN_API_VERSION; }
@@ -65,11 +66,14 @@ public:
     void load_plugins() override;
 
 private:
-    void load_plugin_file(const fs::path & file);
-    void load_plugins_from_dir(const fs::path & dir_path);
+    void load_plugin_file(
+        const std::string & plugin_name, libdnf5::ConfigParser * plugin_config, const fs::path & plugin_path);
+    void load_plugins_from_dir(const fs::path & config_dir_path, const fs::path & plugins_dir);
 
     static int python_ref_counter;
     bool active{false};
+    // Store the plugin data so we can pass them to each python plugin
+    libdnf5::plugin::IPluginData & data;
 };
 
 int PythonPluginLoader::python_ref_counter{0};
@@ -176,18 +180,19 @@ static void fetch_python_error_to_exception(const char * msg) {
 }
 
 /// Load Python plugin from path
-void PythonPluginLoader::load_plugin_file(const fs::path & file_path) {
+void PythonPluginLoader::load_plugin_file(
+    const std::string & plugin_name, libdnf5::ConfigParser * plugin_config, const fs::path & plugin_path) {
     // Very High Level Embedding
     // std::string python_code = "import " + file_path.stem().string() +";";
-    // python_code += "import libdnf;";
-    // python_code += "plug = " + file_path.stem().string() +".Plugin();";
+    // python_code += "import libdnf5;";
+    // python_code += "plug = " + file_path.stem().string() +".Plugin(data);";
     // python_code += "locked_base = libdnf5.base.Base.get_locked_base();";
     // python_code += "locked_base.add_plugin(plug)";
     // PyRun_SimpleString(python_code.c_str());
 
     // Similar but Pure Embedding
-    auto * module_name = file_path.stem().c_str();
-    PyObject * plugin_module = PyImport_ImportModule(module_name);
+    fs::path module_name = plugin_path.stem();
+    PyObject * plugin_module = PyImport_ImportModule(module_name.c_str());
     if (!plugin_module) {
         fetch_python_error_to_exception("PyImport_ImportModule(): ");
     }
@@ -203,21 +208,29 @@ void PythonPluginLoader::load_plugin_file(const fs::path & file_path) {
     if (!plugin_class_constructor) {
         fetch_python_error_to_exception("PyInstanceMethod_New(plugin_class): ");
     }
-    PyObject * plugin_instance = PyObject_CallObject(plugin_class_constructor, nullptr);
+    PyObject * args_tuple = PyTuple_New(1);
+    if (!args_tuple) {
+        fetch_python_error_to_exception("PyTuple_New(1)");
+    }
+    swig_type_info * type = SWIG_TypeQuery("libdnf5::plugin::IPluginData *");
+    if (!PyTuple_SetItem(args_tuple, 0, SWIG_NewPointerObj(&data, type, 0))) {
+        fetch_python_error_to_exception("PyTuple_SetItem(args_tuple, 0, PyLong_FromVoidPtr(&data))");
+    }
+    PyObject * plugin_instance = PyObject_CallObject(plugin_class_constructor, args_tuple);
     if (!plugin_instance) {
-        fetch_python_error_to_exception("PyObject_CallObject(plugin_class_constructor, nullptr): ");
+        fetch_python_error_to_exception("PyObject_CallObject(plugin_class_constructor, args_tuple): ");
     }
-    PyObject * libdnf = PyDict_GetItemString(plugin_module_dict, "libdnf");
-    if (!libdnf) {
-        fetch_python_error_to_exception("PyDict_GetItemString(plugin_module_dict, \"libdnf\"): ");
+    PyObject * libdnf5 = PyDict_GetItemString(plugin_module_dict, "libdnf5");
+    if (!libdnf5) {
+        fetch_python_error_to_exception("PyDict_GetItemString(plugin_module_dict, \"libdnf5\"): ");
     }
-    PyObject * libdnf_dict = PyModule_GetDict(libdnf);
-    if (!libdnf_dict) {
-        fetch_python_error_to_exception("PyModule_GetDict(libdnf): ");
+    PyObject * libdnf5_dict = PyModule_GetDict(libdnf5);
+    if (!libdnf5_dict) {
+        fetch_python_error_to_exception("PyModule_GetDict(libdnf5): ");
     }
-    PyObject * base_module = PyDict_GetItemString(libdnf_dict, "base");
+    PyObject * base_module = PyDict_GetItemString(libdnf5_dict, "base");
     if (!base_module) {
-        fetch_python_error_to_exception("PyDict_GetItemString(plugin_module_dict, \"libdnf\"): ");
+        fetch_python_error_to_exception("PyDict_GetItemString(plugin_module_dict, \"libdnf5\"): ");
     }
     PyObject * base_module_dict = PyModule_GetDict(base_module);
     if (!base_module_dict) {
@@ -232,37 +245,51 @@ void PythonPluginLoader::load_plugin_file(const fs::path & file_path) {
         fetch_python_error_to_exception("PyDict_CallMethod(base_class, \"get_locked_base\", NULL): ");
     }
     UniquePtrPyObject add_plugin_string(PyUnicode_FromString("add_plugin"));
-    PyObject_CallMethodObjArgs(locked_base.get(), add_plugin_string.get(), plugin_instance, NULL);
+    UniquePtrPyObject plugin_name_string(PyUnicode_FromString(plugin_name.c_str()));
+    type = SWIG_TypeQuery("libdnf5::ConfigParser *");
+    PyObject * py_config_parser = SWIG_NewPointerObj(plugin_config, type, 0);
+    if (!py_config_parser) {
+        fetch_python_error_to_exception("SWIG_NewPointerObj(plugin_config, type, 0)");
+    }
+    PyObject_CallMethodObjArgs(
+        locked_base.get(), add_plugin_string.get(), plugin_name_string.get(), py_config_parser, plugin_instance, NULL);
 }
 
 
-void PythonPluginLoader::load_plugins_from_dir(const fs::path & dir_path) {
-    auto & logger = *get_base().get_logger();
+void PythonPluginLoader::load_plugins_from_dir(const fs::path & config_dir_path, const fs::path & plugins_dir) {
+    auto & base = get_base();
+    auto & logger = *base.get_logger();
 
-    if (dir_path.empty())
-        throw std::runtime_error("PythonPluginLoader::load_from_dir() dir_path cannot be empty");
+    if (config_dir_path.empty()) {
+        throw std::runtime_error("PythonPluginLoader::load_plugins_from_dir() config_dir_path cannot be empty");
+    }
 
-    std::vector<fs::path> lib_names;
-    std::error_code ec;
-    for (auto & p : std::filesystem::directory_iterator(dir_path, ec)) {
-        if ((p.is_regular_file() || p.is_symlink()) && p.path().extension() == ".py") {
-            lib_names.emplace_back(p.path());
+    std::vector<fs::path> config_paths;
+    std::error_code ec;  // Do not report errors if config_dir_path refers to a non-existing file or not a directory
+    for (const auto & p : fs::directory_iterator(config_dir_path, ec)) {
+        if ((p.is_regular_file() || p.is_symlink()) && p.path().extension() == ".conf") {
+            config_paths.emplace_back(p.path());
         }
     }
-    if (ec) {
-        logger.warning("PythonPluginLoader: Cannot read plugins directory \"{}\": {}", dir_path.string(), ec.message());
-        return;
-    }
-    std::sort(lib_names.begin(), lib_names.end());
+    std::sort(config_paths.begin(), config_paths.end());
 
     std::string error_msgs;
-    for (auto & p : lib_names) {
-        try {
-            load_plugin_file(p);
-        } catch (const std::exception & ex) {
-            std::string msg = fmt::format("Cannot load plugin \"{}\": {}", p.string(), ex.what());
-            logger.error(msg);
-            error_msgs += msg + '\n';
+    for (const auto & config_file_path : config_paths) {
+        auto [plugin_name, plugin_config, is_enabled] = base.load_plugin_config(config_file_path);
+        fs::path plugin_path = plugins_dir / (plugin_name + ".py");
+        if (is_enabled && (fs::is_regular_file(plugin_path, ec) || fs::is_symlink(plugin_path, ec))) {
+            try {
+                load_plugin_file(plugin_name, &plugin_config, plugin_path);
+            } catch (const std::exception & ex) {
+                std::string msg = fmt::format("Cannot load plugin \"{}\": {}", plugin_path.string(), ex.what());
+                logger.error(msg);
+                error_msgs += msg + '\n';
+            }
+        }
+        if (ec) {
+            logger.warning(
+                "PythonPluginLoader: Cannot read plugins directory \"{}\": {}", plugins_dir.string(), ec.message());
+            continue;
         }
     }
 
@@ -310,7 +337,16 @@ void PythonPluginLoader::load_plugins() {
             ("PyDict_CallMethod(path_object, \"append\", \"(s)\", " + path.string() + "): ").c_str());
     }
 
-    load_plugins_from_dir(path);
+    auto & conf = get_base().get_config();
+    fs::path python_plugins_conf_dir;
+    const char * plugins_config_dir = std::getenv("LIBDNF_PLUGINS_CONFIG_DIR");
+    if (plugins_config_dir && conf.get_pluginconfpath_option().get_priority() < Option::Priority::COMMANDLINE) {
+        python_plugins_conf_dir = plugins_config_dir;
+    } else {
+        python_plugins_conf_dir = conf.get_pluginconfpath_option().get_value();
+    }
+
+    load_plugins_from_dir(python_plugins_conf_dir / "python_plugins_loader.d", path);
 }
 
 
