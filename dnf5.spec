@@ -88,6 +88,7 @@ Provides:       dnf5-command(versionlock)
 %bcond_without comps
 %bcond_without modulemd
 %bcond_without systemd
+%bcond_without libpkgmanifest
 
 %bcond_with    html
 %if 0%{?rhel} == 8
@@ -204,7 +205,9 @@ BuildRequires:  pkgconfig(smartcols)
 
 %if %{with dnf5_plugins}
 BuildRequires:  libcurl-devel >= 7.62.0
+%if %{with libpkgmanifest}
 BuildRequires:  pkgconfig(libpkgmanifest)
+%endif
 %endif
 
 %if %{with dnf5daemon_server}
@@ -813,7 +816,9 @@ Provides:       dnf5-command(builddep)
 Provides:       dnf5-command(changelog)
 Provides:       dnf5-command(config-manager)
 Provides:       dnf5-command(copr)
+%if %{with libpkgmanifest}
 Provides:       dnf5-command(manifest)
+%endif
 Provides:       dnf5-command(needs-restarting)
 Provides:       dnf5-command(repoclosure)
 Provides:       dnf5-command(reposync)
@@ -821,14 +826,16 @@ Provides:       dnf5-command(repomanage)
 
 %description -n dnf5-plugins
 Core DNF5 plugins that enhance dnf5 with builddep, changelog, config-manager,
-copr, manifest, needs-restarting, repoclosure, repomanage, and reposync commands.
+copr, %{?with_libpkgmanifest:manifest, }needs-restarting, repoclosure, repomanage, and reposync commands.
 
 %files -n dnf5-plugins -f dnf5-plugin-builddep.lang -f dnf5-plugin-changelog.lang -f dnf5-plugin-config-manager.lang -f dnf5-plugin-copr.lang -f dnf5-plugin-needs-restarting.lang -f dnf5-plugin-repoclosure.lang -f dnf5-plugin-reposync.lang
 %{_libdir}/dnf5/plugins/builddep_cmd_plugin.so
 %{_libdir}/dnf5/plugins/changelog_cmd_plugin.so
 %{_libdir}/dnf5/plugins/config-manager_cmd_plugin.so
 %{_libdir}/dnf5/plugins/copr_cmd_plugin.so
+%if %{with libpkgmanifest}
 %{_libdir}/dnf5/plugins/manifest_cmd_plugin.so
+%endif
 %{_libdir}/dnf5/plugins/needs_restarting_cmd_plugin.so
 %{_libdir}/dnf5/plugins/repoclosure_cmd_plugin.so
 %{_libdir}/dnf5/plugins/reposync_cmd_plugin.so
@@ -838,7 +845,9 @@ copr, manifest, needs-restarting, repoclosure, repomanage, and reposync commands
 %{_mandir}/man8/dnf*-changelog.8.*
 %{_mandir}/man8/dnf*-config-manager.8.*
 %{_mandir}/man8/dnf*-copr.8.*
+%if %{with libpkgmanifest}
 %{_mandir}/man8/dnf*-manifest.8.*
+%endif
 %{_mandir}/man8/dnf*-needs-restarting.8.*
 %{_mandir}/man8/dnf*-repoclosure.8.*
 %{_mandir}/man8/dnf*-reposync.8.*
@@ -919,6 +928,7 @@ automatically and regularly from systemd timers, cron jobs or similar.
     -DWITH_COMPS=%{?with_comps:ON}%{!?with_comps:OFF} \
     -DWITH_MODULEMD=%{?with_modulemd:ON}%{!?with_modulemd:OFF} \
     -DWITH_SYSTEMD=%{?with_systemd:ON}%{!?with_systemd:OFF} \
+    -DWITH_LIBPKGMANIFEST=%{?with_libpkgmanifest:ON}%{!?with_libpkgmanifest:OFF} \
     \
     -DWITH_HTML=%{?with_html:ON}%{!?with_html:OFF} \
     -DWITH_MAN=%{?with_man:ON}%{!?with_man:OFF} \
