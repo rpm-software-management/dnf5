@@ -861,6 +861,7 @@ copr, manifest, needs-restarting, repoclosure, repomanage, and reposync commands
 %{_mandir}/man8/dnf*-changelog.8.*
 %{_mandir}/man8/dnf*-config-manager.8.*
 %{_mandir}/man8/dnf*-copr.8.*
+%{_mandir}/man8/dnf*-manifest.8.*
 %{_mandir}/man8/dnf*-needs-restarting.8.*
 %{_mandir}/man8/dnf*-repoclosure.8.*
 %{_mandir}/man8/dnf*-reposync.8.*
