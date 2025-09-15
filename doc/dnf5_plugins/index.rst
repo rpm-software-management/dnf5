@@ -13,6 +13,7 @@ DNF5 Plugins
     changelog.8
     config-manager.8
     copr.8
+    manifest.8
     needs_restarting.8
     repoclosure.8
     repomanage.8
