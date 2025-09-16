@@ -38,6 +38,7 @@
 #include "transaction_package_impl.hpp"
 #include "utils/string.hpp"
 
+#include "libdnf5/base/active_transaction_info.hpp"
 #include "libdnf5/base/base.hpp"
 #include "libdnf5/common/exception.hpp"
 #include "libdnf5/common/sack/exclude_flags.hpp"
@@ -946,6 +947,8 @@ Transaction::TransactionRunResult Transaction::Impl::_run(
     const std::optional<uint32_t> user_id,
     const std::string & comment,
     const bool test_only) {
+    concurrent_transaction.reset();
+
     // do not allow running a transaction multiple times
     if (history_db_id > 0) {
         return TransactionRunResult::ERROR_RERUN;
@@ -977,6 +980,8 @@ Transaction::TransactionRunResult Transaction::Impl::_run(
 
     TransactionLocker transaction_locker(lock_file_path, info);
     if (!transaction_locker.write_lock()) {
+        auto content = transaction_locker.read_content();
+        concurrent_transaction = std::make_unique<ActiveTransactionInfo>(ActiveTransactionInfo::from_toml(content));
         return TransactionRunResult::ERROR_LOCK;
     }
     transaction_locker.write_transaction_metadata();
@@ -1675,6 +1680,10 @@ std::vector<std::string> Transaction::get_rpm_messages() {
 
 void Transaction::set_rpm_messages(std::vector<std::string> && rpm_messages) {
     p_impl->set_rpm_messages(std::move(rpm_messages));
+}
+
+const ActiveTransactionInfo * Transaction::get_concurrent_transaction() const noexcept {
+    return p_impl->concurrent_transaction.get();
 }
 
 }  // namespace libdnf5::base
