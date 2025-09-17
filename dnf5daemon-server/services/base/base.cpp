@@ -181,7 +181,11 @@ void Base::dbus_register() {
 }
 
 sdbus::MethodReply Base::read_all_repos(sdbus::MethodCall & call) {
-    bool retval = session.read_all_repos();
+    bool retval;
+    {
+        LOCK_LIBDNF5();
+        retval = session.read_all_repos();
+    }
     auto reply = call.createReply();
     reply << retval;
     return reply;
@@ -271,7 +275,10 @@ sdbus::MethodReply Base::reset(sdbus::MethodCall & call) {
         error_msg = "Cannot reset, an rpm transaction is running.";
     } else {
         std::lock_guard<std::mutex> transaction_lock(transaction_mutex, std::adopt_lock);
-        session.reset_base();
+        {
+            LOCK_LIBDNF5();
+            session.reset_base();
+        }
     }
     auto reply = call.createReply();
     reply << success;

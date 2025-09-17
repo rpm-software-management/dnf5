@@ -164,27 +164,28 @@ sdbus::MethodReply Advisory::list(sdbus::MethodCall & call) {
     KeyValueMap options;
     call >> options;
 
-    session.fill_sack();
-
-    auto base = session.get_base();
-    auto advisory_query = advisory_query_from_options(*base, options);
-    auto opt_attrs = key_value_map_get<std::vector<std::string>>(options, "advisory_attrs", {});
-
-    // to decide whether particular advisory package is installed / available / unrelated
-    // to the system we need the latest versions of each installed n.a
-    libdnf5::rpm::PackageQuery installed_pkgs(*base);
-    installed_pkgs.filter_installed();
-    installed_pkgs.filter_latest_evr();
-    // map installed na -> package
-    std::unordered_map<std::string, libdnf5::rpm::Package> installed_versions;
-    for (const auto & pkg : installed_pkgs) {
-        installed_versions.emplace(pkg.get_na(), std::move(pkg));
-    }
-
     KeyValueMapList advisories;
+    {
+        LOCK_LIBDNF5();
+        session.fill_sack();
+        auto base = session.get_base();
+        auto advisory_query = advisory_query_from_options(*base, options);
+        auto opt_attrs = key_value_map_get<std::vector<std::string>>(options, "advisory_attrs", {});
 
-    for (const auto & advisory : advisory_query) {
-        advisories.emplace_back(advisory_to_map(advisory, opt_attrs, installed_versions));
+        // to decide whether particular advisory package is installed / available / unrelated
+        // to the system we need the latest versions of each installed n.a
+        libdnf5::rpm::PackageQuery installed_pkgs(*base);
+        installed_pkgs.filter_installed();
+        installed_pkgs.filter_latest_evr();
+        // map installed na -> package
+        std::unordered_map<std::string, libdnf5::rpm::Package> installed_versions;
+        for (const auto & pkg : installed_pkgs) {
+            installed_versions.emplace(pkg.get_na(), std::move(pkg));
+        }
+
+        for (const auto & advisory : advisory_query) {
+            advisories.emplace_back(advisory_to_map(advisory, opt_attrs, installed_versions));
+        }
     }
 
     auto reply = call.createReply();

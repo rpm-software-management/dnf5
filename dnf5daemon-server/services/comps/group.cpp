@@ -64,70 +64,73 @@ sdbus::MethodReply Group::list(sdbus::MethodCall & call) {
     dnfdaemon::KeyValueMap options;
     call >> options;
 
-    session.fill_sack();
-    auto base = session.get_base();
-
-    libdnf5::comps::GroupQuery query(base->get_weak_ptr());
-
-    // patterns to search
-    const auto patterns =
-        dnfdaemon::key_value_map_get<std::vector<std::string>>(options, "patterns", std::vector<std::string>());
-    if (patterns.size() > 0) {
-        libdnf5::comps::GroupQuery patterns_query(base->get_weak_ptr(), true);
-        const auto match_group_id = dnfdaemon::key_value_map_get<bool>(options, "match_group_id", true);
-        if (match_group_id) {
-            libdnf5::comps::GroupQuery query_id(query);
-            query_id.filter_groupid(patterns, libdnf5::sack::QueryCmp::IGLOB);
-            patterns_query |= query_id;
-        }
-        const auto match_group_name = dnfdaemon::key_value_map_get<bool>(options, "match_group_name", false);
-        if (match_group_name) {
-            libdnf5::comps::GroupQuery query_name(query);
-            query_name.filter_name(patterns, libdnf5::sack::QueryCmp::IGLOB);
-            patterns_query |= query_name;
-        }
-        query = patterns_query;
-    }
-
-    // filter hidden groups
-    const auto with_hidden = dnfdaemon::key_value_map_get<bool>(options, "with_hidden", false);
-    if (!with_hidden) {
-        query.filter_uservisible(true);
-    }
-
-    const auto scope = dnfdaemon::key_value_map_get<std::string>(options, "scope", "all");
-    if (scope == "installed") {
-        query.filter_installed(true);
-    } else if (scope == "available") {
-        query.filter_installed(false);
-    } else if (scope == "all") {
-        // to remove duplicities in the output remove from query all available
-        // groups with the same groupid as any of the installed groups.
-        libdnf5::comps::GroupQuery query_installed(query);
-        query_installed.filter_installed(true);
-        std::vector<std::string> installed_ids;
-        for (const auto & grp : query_installed) {
-            installed_ids.emplace_back(grp.get_groupid());
-        }
-        libdnf5::comps::GroupQuery query_available(query);
-        query_available.filter_installed(false);
-        query_available.filter_groupid(installed_ids);
-        query -= query_available;
-    } else {
-        throw sdbus::Error(dnfdaemon::ERROR, fmt::format("Unsupported scope for group filtering \"{}\".", scope));
-    }
-
-    const auto contains_pkgs = dnfdaemon::key_value_map_get<std::vector<std::string>>(options, "contains_pkgs", {});
-    if (!contains_pkgs.empty()) {
-        query.filter_package_name(contains_pkgs, libdnf5::sack::QueryCmp::IGLOB);
-    }
-
-    // create reply from the query
     dnfdaemon::KeyValueMapList out_groups;
-    std::vector<std::string> attributes =
-        dnfdaemon::key_value_map_get<std::vector<std::string>>(options, "attributes", std::vector<std::string>{});
-    for (auto grp : query.list()) {
-        out_groups.push_back(group_to_map(grp, attributes));
+    {
+        LOCK_LIBDNF5();
+        session.fill_sack();
+        auto base = session.get_base();
+
+        libdnf5::comps::GroupQuery query(base->get_weak_ptr());
+
+        // patterns to search
+        const auto patterns =
+            dnfdaemon::key_value_map_get<std::vector<std::string>>(options, "patterns", std::vector<std::string>());
+        if (patterns.size() > 0) {
+            libdnf5::comps::GroupQuery patterns_query(base->get_weak_ptr(), true);
+            const auto match_group_id = dnfdaemon::key_value_map_get<bool>(options, "match_group_id", true);
+            if (match_group_id) {
+                libdnf5::comps::GroupQuery query_id(query);
+                query_id.filter_groupid(patterns, libdnf5::sack::QueryCmp::IGLOB);
+                patterns_query |= query_id;
+            }
+            const auto match_group_name = dnfdaemon::key_value_map_get<bool>(options, "match_group_name", false);
+            if (match_group_name) {
+                libdnf5::comps::GroupQuery query_name(query);
+                query_name.filter_name(patterns, libdnf5::sack::QueryCmp::IGLOB);
+                patterns_query |= query_name;
+            }
+            query = patterns_query;
+        }
+
+        // filter hidden groups
+        const auto with_hidden = dnfdaemon::key_value_map_get<bool>(options, "with_hidden", false);
+        if (!with_hidden) {
+            query.filter_uservisible(true);
+        }
+
+        const auto scope = dnfdaemon::key_value_map_get<std::string>(options, "scope", "all");
+        if (scope == "installed") {
+            query.filter_installed(true);
+        } else if (scope == "available") {
+            query.filter_installed(false);
+        } else if (scope == "all") {
+            // to remove duplicities in the output remove from query all available
+            // groups with the same groupid as any of the installed groups.
+            libdnf5::comps::GroupQuery query_installed(query);
+            query_installed.filter_installed(true);
+            std::vector<std::string> installed_ids;
+            for (const auto & grp : query_installed) {
+                installed_ids.emplace_back(grp.get_groupid());
+            }
+            libdnf5::comps::GroupQuery query_available(query);
+            query_available.filter_installed(false);
+            query_available.filter_groupid(installed_ids);
+            query -= query_available;
+        } else {
+            throw sdbus::Error(dnfdaemon::ERROR, fmt::format("Unsupported scope for group filtering \"{}\".", scope));
+        }
+
+        const auto contains_pkgs = dnfdaemon::key_value_map_get<std::vector<std::string>>(options, "contains_pkgs", {});
+        if (!contains_pkgs.empty()) {
+            query.filter_package_name(contains_pkgs, libdnf5::sack::QueryCmp::IGLOB);
+        }
+
+        // create reply from the query
+        std::vector<std::string> attributes =
+            dnfdaemon::key_value_map_get<std::vector<std::string>>(options, "attributes", std::vector<std::string>{});
+        for (auto grp : query.list()) {
+            out_groups.push_back(group_to_map(grp, attributes));
+        }
     }
 
     auto reply = call.createReply();

@@ -200,95 +200,98 @@ sdbus::MethodReply Goal::resolve(sdbus::MethodCall & call) {
     call >> options;
     bool allow_erasing = dnfdaemon::key_value_map_get<bool>(options, "allow_erasing", false);
 
-    session.fill_sack();
-
-    auto & goal = session.get_goal();
-    goal.set_allow_erasing(allow_erasing);
-    auto transaction = goal.resolve();
-    session.set_transaction(transaction);
-
     std::vector<dnfdaemon::DbusTransactionItem> dbus_transaction;
     auto overall_result = dnfdaemon::ResolveResult::ERROR;
-    if (transaction.get_problems() == libdnf5::GoalProblem::NO_PROBLEM) {
-        // return the transaction only if there were no problems
-        std::vector<std::string> pkg_attrs{
-            "name",
-            "epoch",
-            "version",
-            "release",
-            "arch",
-            "repo_id",
-            "from_repo_id",
-            "download_size",
-            "install_size",
-            "evr",
-            "reason",
-            "full_nevra"};
-        for (auto & tspkg : transaction.get_transaction_packages()) {
-            dnfdaemon::KeyValueMap trans_item_attrs{};
-            if (tspkg.get_reason_change_group_id()) {
-                trans_item_attrs.emplace("reason_change_group_id", *tspkg.get_reason_change_group_id());
-            }
-            auto replaces = tspkg.get_replaces();
-            if (replaces.size() > 0) {
-                std::vector<int> replaces_ids{};
-                for (auto & r : replaces) {
-                    replaces_ids.emplace_back(r.get_id().id);
+    {
+        LOCK_LIBDNF5();
+        session.fill_sack();
+
+        auto & goal = session.get_goal();
+        goal.set_allow_erasing(allow_erasing);
+        auto transaction = goal.resolve();
+        session.set_transaction(transaction);
+
+        if (transaction.get_problems() == libdnf5::GoalProblem::NO_PROBLEM) {
+            // return the transaction only if there were no problems
+            std::vector<std::string> pkg_attrs{
+                "name",
+                "epoch",
+                "version",
+                "release",
+                "arch",
+                "repo_id",
+                "from_repo_id",
+                "download_size",
+                "install_size",
+                "evr",
+                "reason",
+                "full_nevra"};
+            for (auto & tspkg : transaction.get_transaction_packages()) {
+                dnfdaemon::KeyValueMap trans_item_attrs{};
+                if (tspkg.get_reason_change_group_id()) {
+                    trans_item_attrs.emplace("reason_change_group_id", *tspkg.get_reason_change_group_id());
                 }
-                trans_item_attrs.emplace("replaces", replaces_ids);
+                auto replaces = tspkg.get_replaces();
+                if (replaces.size() > 0) {
+                    std::vector<int> replaces_ids{};
+                    for (auto & r : replaces) {
+                        replaces_ids.emplace_back(r.get_id().id);
+                    }
+                    trans_item_attrs.emplace("replaces", replaces_ids);
+                }
+                dbus_transaction.push_back(dnfdaemon::DbusTransactionItem(
+                    dbus_transaction_item_type_to_string(dnfdaemon::DbusTransactionItemType::PACKAGE),
+                    transaction_item_action_to_string(tspkg.get_action()),
+                    transaction_item_reason_to_string(tspkg.get_reason()),
+                    trans_item_attrs,
+                    package_to_map(tspkg.get_package(), pkg_attrs)));
             }
-            dbus_transaction.push_back(dnfdaemon::DbusTransactionItem(
-                dbus_transaction_item_type_to_string(dnfdaemon::DbusTransactionItemType::PACKAGE),
-                transaction_item_action_to_string(tspkg.get_action()),
-                transaction_item_reason_to_string(tspkg.get_reason()),
-                trans_item_attrs,
-                package_to_map(tspkg.get_package(), pkg_attrs)));
-        }
-        std::vector<std::string> grp_attrs{"name"};
-        dnfdaemon::KeyValueMap trans_item_attrs{};
-        for (auto & tsgrp : transaction.get_transaction_groups()) {
-            auto group = tsgrp.get_group();
-            dbus_transaction.push_back(dnfdaemon::DbusTransactionItem(
-                dbus_transaction_item_type_to_string(dnfdaemon::DbusTransactionItemType::GROUP),
-                transaction_item_action_to_string(tsgrp.get_action()),
-                transaction_item_reason_to_string(tsgrp.get_reason()),
-                trans_item_attrs,
-                group_to_map(group, grp_attrs)));
-        }
-        for (auto & tsenv : transaction.get_transaction_environments()) {
-            dbus_transaction.push_back(dnfdaemon::DbusTransactionItem(
-                dbus_transaction_item_type_to_string(dnfdaemon::DbusTransactionItemType::ENVIRONMENT),
-                transaction_item_action_to_string(tsenv.get_action()),
-                transaction_item_reason_to_string(tsenv.get_reason()),
-                trans_item_attrs,
-                environment_to_map(tsenv.get_environment(), grp_attrs)));
-        }
-        // there are transactions resolved without problems but still resolve_logs
-        // may contain some warnings / information
-        if (transaction.get_resolve_logs().size() > 0) {
-            overall_result = dnfdaemon::ResolveResult::WARNING;
-        } else {
-            overall_result = dnfdaemon::ResolveResult::NO_PROBLEM;
-        }
-        for (const auto & pkg : transaction.get_conflicting_packages()) {
+            std::vector<std::string> grp_attrs{"name"};
             dnfdaemon::KeyValueMap trans_item_attrs{};
-            trans_item_attrs.emplace("reason_skipped", "conflict");
-            dbus_transaction.emplace_back(
-                dbus_transaction_item_type_to_string(dnfdaemon::DbusTransactionItemType::SKIPPED),
-                "",
-                "",
-                trans_item_attrs,
-                package_to_map(pkg, pkg_attrs));
-        }
-        for (const auto & pkg : transaction.get_broken_dependency_packages()) {
-            dnfdaemon::KeyValueMap trans_item_attrs{};
-            trans_item_attrs.emplace("reason_skipped", "broken_dependency");
-            dbus_transaction.emplace_back(
-                dbus_transaction_item_type_to_string(dnfdaemon::DbusTransactionItemType::SKIPPED),
-                "",
-                "",
-                trans_item_attrs,
-                package_to_map(pkg, pkg_attrs));
+            for (auto & tsgrp : transaction.get_transaction_groups()) {
+                auto group = tsgrp.get_group();
+                dbus_transaction.push_back(dnfdaemon::DbusTransactionItem(
+                    dbus_transaction_item_type_to_string(dnfdaemon::DbusTransactionItemType::GROUP),
+                    transaction_item_action_to_string(tsgrp.get_action()),
+                    transaction_item_reason_to_string(tsgrp.get_reason()),
+                    trans_item_attrs,
+                    group_to_map(group, grp_attrs)));
+            }
+            for (auto & tsenv : transaction.get_transaction_environments()) {
+                dbus_transaction.push_back(dnfdaemon::DbusTransactionItem(
+                    dbus_transaction_item_type_to_string(dnfdaemon::DbusTransactionItemType::ENVIRONMENT),
+                    transaction_item_action_to_string(tsenv.get_action()),
+                    transaction_item_reason_to_string(tsenv.get_reason()),
+                    trans_item_attrs,
+                    environment_to_map(tsenv.get_environment(), grp_attrs)));
+            }
+            // there are transactions resolved without problems but still resolve_logs
+            // may contain some warnings / information
+            if (transaction.get_resolve_logs().size() > 0) {
+                overall_result = dnfdaemon::ResolveResult::WARNING;
+            } else {
+                overall_result = dnfdaemon::ResolveResult::NO_PROBLEM;
+            }
+            for (const auto & pkg : transaction.get_conflicting_packages()) {
+                dnfdaemon::KeyValueMap trans_item_attrs{};
+                trans_item_attrs.emplace("reason_skipped", "conflict");
+                dbus_transaction.emplace_back(
+                    dbus_transaction_item_type_to_string(dnfdaemon::DbusTransactionItemType::SKIPPED),
+                    "",
+                    "",
+                    trans_item_attrs,
+                    package_to_map(pkg, pkg_attrs));
+            }
+            for (const auto & pkg : transaction.get_broken_dependency_packages()) {
+                dnfdaemon::KeyValueMap trans_item_attrs{};
+                trans_item_attrs.emplace("reason_skipped", "broken_dependency");
+                dbus_transaction.emplace_back(
+                    dbus_transaction_item_type_to_string(dnfdaemon::DbusTransactionItemType::SKIPPED),
+                    "",
+                    "",
+                    trans_item_attrs,
+                    package_to_map(pkg, pkg_attrs));
+            }
         }
     }
 
@@ -460,7 +463,10 @@ sdbus::MethodReply Goal::cancel(sdbus::MethodCall & call) {
 }
 
 sdbus::MethodReply Goal::reset(sdbus::MethodCall & call) {
-    session.reset_goal();
+    {
+        LOCK_LIBDNF5();
+        session.reset_goal();
+    }
     auto reply = call.createReply();
     return reply;
 }
