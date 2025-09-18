@@ -200,12 +200,15 @@ sdbus::MethodReply Goal::resolve(sdbus::MethodCall & call) {
     call >> options;
     bool allow_erasing = dnfdaemon::key_value_map_get<bool>(options, "allow_erasing", false);
 
-    session.fill_sack();
+    {
+        LOCK_LIBDNF5();
+        session.fill_sack();
 
-    auto & goal = session.get_goal();
-    goal.set_allow_erasing(allow_erasing);
-    auto transaction = goal.resolve();
-    session.set_transaction(transaction);
+        auto & goal = session.get_goal();
+        goal.set_allow_erasing(allow_erasing);
+        auto transaction = goal.resolve();
+        session.set_transaction(transaction);
+    }
 
     std::vector<dnfdaemon::DbusTransactionItem> dbus_transaction;
     auto overall_result = dnfdaemon::ResolveResult::ERROR;

@@ -36,6 +36,10 @@
 #include <thread>
 #include <vector>
 
+// Macro to simplify libdnf5 access serialization
+#define LOCK_LIBDNF5() std::lock_guard<std::mutex> libdnf5_lock(get_session().get_libdnf5_mutex())
+
+
 class Session;
 
 class IDbusSessionService {
@@ -99,6 +103,7 @@ public:
     void set_cancel_download(CancelDownload value) { cancel_download.store(value); }
 
     std::mutex & get_transaction_mutex() { return transaction_mutex; }
+    std::mutex & get_libdnf5_mutex() { return libdnf5_mutex; }
 
     void reset_goal();
     void reset_base();
@@ -121,6 +126,7 @@ private:
     enum class KeyConfirmationStatus { PENDING, CONFIRMED, REJECTED };
     std::mutex key_import_mutex;
     std::mutex transaction_mutex;
+    std::mutex libdnf5_mutex;
     std::condition_variable key_import_condition;
     std::map<std::string, KeyConfirmationStatus> key_import_status{};  // map key_id: confirmation status
     std::atomic<CancelDownload> cancel_download{CancelDownload::NOT_RUNNING};

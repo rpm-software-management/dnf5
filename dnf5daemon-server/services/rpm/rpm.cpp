@@ -398,6 +398,8 @@ libdnf5::rpm::PackageQuery resolve_nevras(libdnf5::rpm::PackageQuery base_query,
 }
 
 libdnf5::rpm::PackageQuery Rpm::filter_packages(const dnfdaemon::KeyValueMap & options) {
+    LOCK_LIBDNF5();
+    session.fill_sack();
     auto base = session.get_base();
 
     // add potential command-line packages
@@ -591,8 +593,6 @@ sdbus::MethodReply Rpm::list(sdbus::MethodCall & call) {
     dnfdaemon::KeyValueMap options;
     call >> options;
 
-    session.fill_sack();
-
     auto query = filter_packages(options);
 
     // create reply from the query
@@ -618,8 +618,6 @@ void Rpm::list_fd(sdbus::MethodCall & call, const std::string & transfer_id) {
     call >> dbus_unix_fd;
 
     int out_fd = dbus_unix_fd.get();
-
-    session.fill_sack();
 
     auto query = filter_packages(options);
 
@@ -668,14 +666,17 @@ sdbus::MethodReply Rpm::distro_sync(sdbus::MethodCall & call) {
     dnfdaemon::KeyValueMap options;
     call >> options;
 
-    // fill the goal
-    auto & goal = session.get_goal();
-    libdnf5::GoalJobSettings setting;
-    if (specs.empty()) {
-        goal.add_rpm_distro_sync(setting);
-    } else {
-        for (const auto & spec : specs) {
-            goal.add_rpm_distro_sync(spec, setting);
+    {
+        LOCK_LIBDNF5();
+        // fill the goal
+        auto & goal = session.get_goal();
+        libdnf5::GoalJobSettings setting;
+        if (specs.empty()) {
+            goal.add_rpm_distro_sync(setting);
+        } else {
+            for (const auto & spec : specs) {
+                goal.add_rpm_distro_sync(spec, setting);
+            }
         }
     }
 
@@ -692,12 +693,15 @@ sdbus::MethodReply Rpm::downgrade(sdbus::MethodCall & call) {
     call >> options;
     std::vector<std::string> repo_ids = dnfdaemon::key_value_map_get<std::vector<std::string>>(options, "repo_ids", {});
 
-    // fill the goal
-    auto & goal = session.get_goal();
-    libdnf5::GoalJobSettings setting;
-    setting.set_to_repo_ids(repo_ids);
-    for (const auto & spec : specs) {
-        goal.add_downgrade(spec, setting);
+    {
+        LOCK_LIBDNF5();
+        // fill the goal
+        auto & goal = session.get_goal();
+        libdnf5::GoalJobSettings setting;
+        setting.set_to_repo_ids(repo_ids);
+        for (const auto & spec : specs) {
+            goal.add_downgrade(spec, setting);
+        }
     }
 
     auto reply = call.createReply();
@@ -729,15 +733,18 @@ sdbus::MethodReply Rpm::install(sdbus::MethodCall & call) {
     }
     std::vector<std::string> repo_ids = dnfdaemon::key_value_map_get<std::vector<std::string>>(options, "repo_ids", {});
 
-    // fill the goal
-    auto & goal = session.get_goal();
-    libdnf5::GoalJobSettings setting;
-    setting.set_skip_broken(skip_broken);
-    setting.set_skip_unavailable(skip_unavailable);
-    setting.set_to_repo_ids(repo_ids);
+    {
+        LOCK_LIBDNF5();
+        // fill the goal
+        auto & goal = session.get_goal();
+        libdnf5::GoalJobSettings setting;
+        setting.set_skip_broken(skip_broken);
+        setting.set_skip_unavailable(skip_unavailable);
+        setting.set_to_repo_ids(repo_ids);
 
-    for (const auto & spec : specs) {
-        goal.add_install(spec, setting);
+        for (const auto & spec : specs) {
+            goal.add_install(spec, setting);
+        }
     }
 
     auto reply = call.createReply();
@@ -753,15 +760,18 @@ sdbus::MethodReply Rpm::upgrade(sdbus::MethodCall & call) {
     call >> options;
     std::vector<std::string> repo_ids = dnfdaemon::key_value_map_get<std::vector<std::string>>(options, "repo_ids", {});
 
-    // fill the goal
-    auto & goal = session.get_goal();
-    libdnf5::GoalJobSettings setting;
-    setting.set_to_repo_ids(repo_ids);
-    if (specs.empty()) {
-        goal.add_rpm_upgrade(setting);
-    } else {
-        for (const auto & spec : specs) {
-            goal.add_upgrade(spec, setting);
+    {
+        LOCK_LIBDNF5();
+        // fill the goal
+        auto & goal = session.get_goal();
+        libdnf5::GoalJobSettings setting;
+        setting.set_to_repo_ids(repo_ids);
+        if (specs.empty()) {
+            goal.add_rpm_upgrade(setting);
+        } else {
+            for (const auto & spec : specs) {
+                goal.add_upgrade(spec, setting);
+            }
         }
     }
 
@@ -778,12 +788,15 @@ sdbus::MethodReply Rpm::reinstall(sdbus::MethodCall & call) {
     call >> options;
     std::vector<std::string> repo_ids = dnfdaemon::key_value_map_get<std::vector<std::string>>(options, "repo_ids", {});
 
-    // fill the goal
-    auto & goal = session.get_goal();
-    libdnf5::GoalJobSettings setting;
-    setting.set_to_repo_ids(repo_ids);
-    for (const auto & spec : specs) {
-        goal.add_reinstall(spec, setting);
+    {
+        LOCK_LIBDNF5();
+        // fill the goal
+        auto & goal = session.get_goal();
+        libdnf5::GoalJobSettings setting;
+        setting.set_to_repo_ids(repo_ids);
+        for (const auto & spec : specs) {
+            goal.add_reinstall(spec, setting);
+        }
     }
 
     auto reply = call.createReply();
@@ -798,18 +811,21 @@ sdbus::MethodReply Rpm::remove(sdbus::MethodCall & call) {
     dnfdaemon::KeyValueMap options;
     call >> options;
 
-    // fill the goal
-    auto & goal = session.get_goal();
+    {
+        LOCK_LIBDNF5();
+        // fill the goal
+        auto & goal = session.get_goal();
 
-    // Limit remove spec capabity to prevent multiple matches. Remove command should not match anything after performing
-    // a remove action with the same spec. NEVRA and filenames are the only types that have no overlaps.
-    libdnf5::GoalJobSettings setting;
-    setting.set_with_nevra(true);
-    setting.set_with_provides(false);
-    setting.set_with_filenames(true);
-    setting.set_with_binaries(false);
-    for (const auto & spec : specs) {
-        goal.add_remove(spec, setting);
+        // Limit remove spec capabity to prevent multiple matches. Remove command should not match anything after performing
+        // a remove action with the same spec. NEVRA and filenames are the only types that have no overlaps.
+        libdnf5::GoalJobSettings setting;
+        setting.set_with_nevra(true);
+        setting.set_with_provides(false);
+        setting.set_with_filenames(true);
+        setting.set_with_binaries(false);
+        for (const auto & spec : specs) {
+            goal.add_remove(spec, setting);
+        }
     }
 
     auto reply = call.createReply();
@@ -841,31 +857,34 @@ sdbus::MethodReply Rpm::system_upgrade(sdbus::MethodCall & call) {
     // get the upgrade mode
     std::string upgrade_mode = dnfdaemon::key_value_map_get<std::string>(options, "mode", "distrosync");
 
-    // fill the goal
-    auto & goal = session.get_goal();
-    libdnf5::GoalJobSettings settings;
-    if (upgrade_mode == "upgrade") {
-        goal.add_rpm_upgrade(settings);
-    } else if (upgrade_mode == "distrosync") {
-        goal.add_rpm_distro_sync(settings);
-    } else {
-        throw sdbus::Error(
-            dnfdaemon::ERROR,
-            fmt::format(
-                "Unsupported system-upgrade mode \"{}\". Only \"distrosync\" and \"upgrade\" modes are supported.",
-                upgrade_mode));
-    }
+    {
+        LOCK_LIBDNF5();
+        // fill the goal
+        auto & goal = session.get_goal();
+        libdnf5::GoalJobSettings settings;
+        if (upgrade_mode == "upgrade") {
+            goal.add_rpm_upgrade(settings);
+        } else if (upgrade_mode == "distrosync") {
+            goal.add_rpm_distro_sync(settings);
+        } else {
+            throw sdbus::Error(
+                dnfdaemon::ERROR,
+                fmt::format(
+                    "Unsupported system-upgrade mode \"{}\". Only \"distrosync\" and \"upgrade\" modes are supported.",
+                    upgrade_mode));
+        }
 
-    libdnf5::comps::GroupQuery q_groups(*base);
-    q_groups.filter_installed(true);
-    for (const auto & grp : q_groups) {
-        goal.add_group_upgrade(grp.get_groupid());
-    }
+        libdnf5::comps::GroupQuery q_groups(*base);
+        q_groups.filter_installed(true);
+        for (const auto & grp : q_groups) {
+            goal.add_group_upgrade(grp.get_groupid());
+        }
 
-    libdnf5::comps::EnvironmentQuery q_environments(*base);
-    q_environments.filter_installed(true);
-    for (const auto & env : q_environments) {
-        goal.add_group_upgrade(env.get_environmentid());
+        libdnf5::comps::EnvironmentQuery q_environments(*base);
+        q_environments.filter_installed(true);
+        for (const auto & env : q_environments) {
+            goal.add_group_upgrade(env.get_environmentid());
+        }
     }
 
     auto reply = call.createReply();
