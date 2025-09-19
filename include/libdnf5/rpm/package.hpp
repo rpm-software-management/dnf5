@@ -146,6 +146,7 @@ public:
     std::string get_arch() const;
 
     /// @return RPM package EVR (Epoch:Version-Release). If the Epoch is 0, it is omitted from the output.
+    /// @deprecated Use separate components or full NEVRA for consistent epoch display
     /// @since 5.0
     //
     // @replaces dnf:dnf/package.py:attribute:Package.evr
@@ -153,6 +154,7 @@ public:
     std::string get_evr() const;
 
     /// @return RPM package NEVRA (Name-Epoch:Version-Release.Arch). If the Epoch is 0, it is omitted from the output.
+    /// @deprecated Use get_full_nevra() for consistent epoch display
     /// @since 5.0
     //
     // @replaces libdnf:libdnf/hy-package.h:function:dnf_package_get_nevra(DnfPackage * pkg)
@@ -532,7 +534,7 @@ public:
     /// @since 5.0.5
     libdnf5::BaseWeakPtr get_base() const;
 
-    /// Return NEVRA -> 0 epoch is not shown in string
+    /// Return NEVRA -> always includes epoch (including 0 if epoch is empty)
     std::string to_string() const;
 
     /// Provide descriptive information about instance including NEVRA and ID
