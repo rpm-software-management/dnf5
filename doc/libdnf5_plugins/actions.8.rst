@@ -234,8 +234,11 @@ An example actions file:
    # ==============================================================================================
    # The next two actions emulate the DNF4 snapper plugin. It uses the "snapper" command-line proram.
 
-   # Creates pre snapshot before the transaction and stores the snapshot number in the "tmp.snapper_pre_number" variable.
-   pre_transaction::::/usr/bin/sh -c echo\ "tmp.snapper_pre_number=$(snapper\ create\ -t\ pre\ -p)"
+   # Creates a snapshot description and saves it to the "tmp.snapper_descr" variable.
+   pre_transaction::::/usr/bin/sh -c echo\ "tmp.snapper_descr=$(ps\ -o\ command\ --no-headers\ -p\ '${pid}')"
 
-   # If the variable "tmp.snapper_pre_number" exists, it creates post snapshot after the transaction and removes the variable "tmp.snapper_pre_number".
-   post_transaction::::/usr/bin/sh -c [\ -n\ "${tmp.snapper_pre_number}"\ ]\ &&\ snapper\ create\ -t\ post\ --pre-number\ "${tmp.snapper_pre_number}"\ ;\ echo\ tmp.snapper_pre_number
+   # Creates pre snapshot before the transaction and stores the snapshot number in the "tmp.snapper_pre_number" variable.
+   pre_transaction::::/usr/bin/sh -c echo\ "tmp.snapper_pre_number=$(snapper\ create\ -t\ pre\ -p\ -d\ '${tmp.snapper_descr}')"
+
+   # If the variable "tmp.snapper_pre_number" exists, it creates post snapshot after the transaction and removes the used variables.
+   post_transaction::::/usr/bin/sh -c [\ -n\ "${tmp.snapper_pre_number}"\ ]\ &&\ snapper\ create\ -t\ post\ --pre-number\ "${tmp.snapper_pre_number}"\ -d\ "${tmp.snapper_descr}"\ ;\ echo\ tmp.snapper_pre_number\ ;\ echo\ tmp.snapper_descr
