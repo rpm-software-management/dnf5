@@ -41,7 +41,7 @@ void VersionlockAddCommand::set_argument_parser() {
 
     auto * keys =
         parser.add_new_positional_arg("package-spec-N", ArgumentParser::PositionalArg::AT_LEAST_ONE, nullptr, nullptr);
-    keys->set_description(_("List of package package-spec-N to add versionlock for"));
+    keys->set_description(_("List of packages to lock to their current versions"));
     keys->set_parse_hook_func(
         [this]([[maybe_unused]] ArgumentParser::PositionalArg * arg, int argc, const char * const argv[]) {
             for (int i = 0; i < argc; ++i) {
