@@ -49,7 +49,7 @@ using namespace libdnf5;
 namespace {
 
 constexpr const char * PLUGIN_NAME = "actions";
-constexpr plugin::Version PLUGIN_VERSION{1, 4, 0};
+constexpr plugin::Version PLUGIN_VERSION{1, 4, 1};
 constexpr PluginAPIVersion REQUIRED_PLUGIN_API_VERSION{.major = 2, .minor = 1};
 
 constexpr const char * attrs[]{"author.name", "author.email", "description", nullptr};
@@ -879,7 +879,8 @@ std::vector<std::pair<std::string, std::string>> Actions::set_conf(const std::st
             } catch (libdnf5::OptionError & ex) {
                 throw ConfigError(fmt::format("Cannot set repo config option \"{}={}\": {}", key, value, ex.what()));
             }
-            list_set_key_vals.emplace_back(repo->get_id() + '.' + it->first, value);
+            auto actual_value = it->second.get_value_string();
+            list_set_key_vals.emplace_back(repo->get_id() + '.' + it->first, actual_value);
         }
     } else {
         auto config_opts = base.get_config().opt_binds();
@@ -892,7 +893,8 @@ std::vector<std::pair<std::string, std::string>> Actions::set_conf(const std::st
         } catch (libdnf5::OptionError & ex) {
             throw ConfigError(fmt::format("Cannot set config option \"{}={}\": {}", key, value, ex.what()));
         }
-        list_set_key_vals.emplace_back(key, value);
+        auto actual_value = it->second.get_value_string();
+        list_set_key_vals.emplace_back(key, actual_value);
     }
     return list_set_key_vals;
 }
@@ -1738,7 +1740,8 @@ void Actions::process_json_command(const CommandToRun & command, struct json_obj
                                 throw ConfigError(
                                     fmt::format("Cannot set repo config option \"{}={}\": {}", key, value, ex.what()));
                             }
-                            auto * jset_key_val = new_key_val_obj("key", key.c_str(), "value", value.c_str());
+                            auto actual_value = it->second.get_value_string();
+                            auto * jset_key_val = new_key_val_obj("key", key.c_str(), "value", actual_value.c_str());
                             json_object_array_add(jret_keys_val, jset_key_val);
                         }
                     }
