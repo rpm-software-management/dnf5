@@ -21,17 +21,17 @@ import libdnf5
 
 
 class Plugin(libdnf5.plugin.IPlugin):
-    def __init__(self):
-        super(Plugin, self).__init__()
-        self.base = None
+    def __init__(self, data):
+        super(Plugin, self).__init__(data)
+        self.base = self.get_base()
 
     @staticmethod
     def get_api_version():
-        return libdnf5.plugin.Version(0, 1, 0)
+        return libdnf5.PluginAPIVersion(2, 1)
 
     @staticmethod
     def get_name():
-        return 'python_test_plugin'
+        return 'plugin'
 
     @staticmethod
     def get_version():
@@ -44,15 +44,13 @@ class Plugin(libdnf5.plugin.IPlugin):
                                      'and writes the current value of the "skip_if_unavailable" option to the log.'}
         return attributes.get(name, None)
 
-    def init(self, base):
-        self.base = base
-
-    def hook(self, plugin_hook_id):
-        if plugin_hook_id == libdnf5.plugin.HookId_LOAD_CONFIG_FROM_FILE:
-            logger = self.base.get_logger()
-            config = self.base.get_config()
-            logger.info(self.get_name() + ' - skip_if_unavailable = ' +
-                        str(config.skip_if_unavailable))
+    def repos_configured(self):
+        logger = self.base.get_logger()
+        config = self.base.get_config()
+        logger.info(self.get_name() + ' - skip_if_unavailable = ' +
+                    str(config.skip_if_unavailable))
+        print(self.get_name() + ' - skip_if_unavailable = ' +
+              str(config.skip_if_unavailable))
         return True
 
     def finish(self):
