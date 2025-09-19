@@ -110,7 +110,7 @@ Subcommands
     directories. In other words, the last directory has the highest priority.
 
     Note:
-    The variables ``releasever_major`` and ``releasever_minor`` are read-only. Their values are generated from the ``releasever`` variable.
+    The variables ``releasever_major`` and ``releasever_minor`` are automatically derived from the ``releasever`` variable whenever it is set.
 
 ``unsetvar <variable>+``
     Removes variables.
@@ -118,9 +118,6 @@ Subcommands
     Variables are loaded from multiple directories. The list of directory paths is taken from the ``varsdir`` option.
     The ``unsetvar`` command removes variables from the last directory in the list (by default ``/etc/dnf/vars``).
     So, the variable may still exist in another directory in the list (for example, the default distribution value).
-
-    Note:
-    The variables ``releasever_major`` and ``releasever_minor`` are generated automatically and cannot be removed.
 
 
 .. note::

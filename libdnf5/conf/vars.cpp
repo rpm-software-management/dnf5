@@ -52,7 +52,7 @@ extern char ** environ;
 
 namespace libdnf5 {
 
-static const std::unordered_set<std::string> READ_ONLY_VARIABLES = {"releasever_major", "releasever_minor"};
+static const std::unordered_set<std::string> READ_ONLY_VARIABLES = {};
 
 static constexpr const char * DISTROVERPKGS[] = {
     "system-release(releasever)",
