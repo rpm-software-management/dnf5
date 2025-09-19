@@ -336,7 +336,13 @@ TransactionTable::Impl::Impl(ITransaction & transaction) {
         // column. Thus adding a indentation manualy.
         scols_line_set_data(ln, COL_NAME, (" " + pkg->get_name()).c_str());
         scols_line_set_data(ln, COL_ARCH, pkg->get_arch().c_str());
-        scols_line_set_data(ln, COL_EVR, pkg->get_evr().c_str());
+        // Always show epoch in EVR (epoch:version-release)
+        std::string evr_with_epoch = pkg->get_epoch();
+        if (evr_with_epoch.empty()) {
+            evr_with_epoch = "0";
+        }
+        evr_with_epoch += ":" + pkg->get_version() + "-" + pkg->get_release();
+        scols_line_set_data(ln, COL_EVR, evr_with_epoch.c_str());
         if (tspkg->get_action() == libdnf5::transaction::TransactionItemAction::REMOVE) {
             scols_line_set_data(ln, COL_REPO, pkg->get_from_repo_id().c_str());
         } else {
