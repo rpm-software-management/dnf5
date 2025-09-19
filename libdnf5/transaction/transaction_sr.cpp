@@ -346,8 +346,8 @@ TransactionReplay to_replay(libdnf5::transaction::Transaction & trans) {
     for (const auto & pkg : trans.get_packages()) {
         PackageReplay package_replay;
 
-        // Use to_nevra_string in order to have nevra wihtout epoch if it is 0
-        package_replay.nevra = rpm::to_nevra_string(pkg);
+        // Use to_full_nevra_string to always include epoch (including 0 if epoch is empty)
+        package_replay.nevra = rpm::to_full_nevra_string(pkg);
         package_replay.action = pkg.get_action();
         package_replay.reason = pkg.get_reason();
         package_replay.repo_id = pkg.get_repoid();
