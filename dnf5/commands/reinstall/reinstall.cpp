@@ -41,7 +41,7 @@ void ReinstallCommand::set_argument_parser() {
 
     auto keys = parser.add_new_positional_arg(
         "package-spec-NPFB", ArgumentParser::PositionalArg::AT_LEAST_ONE, nullptr, nullptr);
-    keys->set_description("List of package package-spec-NPFB to reinstall");
+    keys->set_description("List of packages to reinstall");
     keys->set_parse_hook_func(
         [this]([[maybe_unused]] ArgumentParser::PositionalArg * arg, int argc, const char * const argv[]) {
             for (int i = 0; i < argc; ++i) {
