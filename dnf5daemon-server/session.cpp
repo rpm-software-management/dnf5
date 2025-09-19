@@ -131,6 +131,14 @@ void Session::setup_base() {
         auto releasever = session_configuration_value<std::string>("releasever");
         base->get_vars()->set("releasever", releasever);
     }
+    if (session_configuration.find("releasever_major") != session_configuration.end()) {
+        auto releasever_major = session_configuration_value<std::string>("releasever_major");
+        base->get_vars()->set("releasever_major", releasever_major);
+    }
+    if (session_configuration.find("releasever_minor") != session_configuration.end()) {
+        auto releasever_minor = session_configuration_value<std::string>("releasever_minor");
+        base->get_vars()->set("releasever_minor", releasever_minor);
+    }
 
     base->setup();
 

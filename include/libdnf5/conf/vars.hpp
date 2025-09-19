@@ -108,6 +108,9 @@ public:
 
     static std::unique_ptr<std::string> detect_release(const BaseWeakPtr & base, const std::string & install_root_path);
 
+    static std::tuple<std::unique_ptr<std::string>, std::unique_ptr<std::string>, std::unique_ptr<std::string>>
+    detect_releasevers(const BaseWeakPtr & base, const std::string & install_root_path);
+
 private:
     friend class Base;
 
