@@ -21,7 +21,7 @@ jobs:
         with:
           app-id: ${{ vars.RSM_CI_APP_ID }}
           private-key: ${{ secrets.RSM_CI_APP_PRIVATE_KEY }}
-          permissions:
+          permissions: |
             contents: "write"
           repositories: "rpm-software-management/dnf5-l10n"
 
