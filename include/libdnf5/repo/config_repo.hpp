@@ -43,8 +43,8 @@ public:
 
     OptionString & get_name_option();
     const OptionString & get_name_option() const;
-    OptionChild<OptionBool> & get_enabled_option();
-    const OptionChild<OptionBool> & get_enabled_option() const;
+    OptionBool & get_enabled_option();
+    const OptionBool & get_enabled_option() const;
     OptionChild<OptionString> & get_basecachedir_option();
     const OptionChild<OptionString> & get_basecachedir_option() const;
     OptionStringList & get_baseurl_option();
