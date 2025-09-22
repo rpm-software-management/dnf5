@@ -41,7 +41,7 @@ class ConfigRepo::Impl {
     std::string id;
 
     OptionString name{""};
-    OptionChild<OptionBool> enabled{main_config.get_enabled_option()};
+    OptionBool enabled{true};
     OptionChild<OptionString> basecachedir{main_config.get_cachedir_option()};
     OptionStringList baseurl{std::vector<std::string>{}};
     OptionString mirrorlist{nullptr};
@@ -204,10 +204,10 @@ OptionString & ConfigRepo::get_name_option() {
 const OptionString & ConfigRepo::get_name_option() const {
     return p_impl->name;
 }
-OptionChild<OptionBool> & ConfigRepo::get_enabled_option() {
+OptionBool & ConfigRepo::get_enabled_option() {
     return p_impl->enabled;
 }
-const OptionChild<OptionBool> & ConfigRepo::get_enabled_option() const {
+const OptionBool & ConfigRepo::get_enabled_option() const {
     return p_impl->enabled;
 }
 

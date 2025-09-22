@@ -268,7 +268,11 @@ public:
     const OptionBool & get_pkg_gpgcheck_option() const;
     OptionBool & get_repo_gpgcheck_option();
     const OptionBool & get_repo_gpgcheck_option() const;
+    /// @deprecated Use ConfigRepo::get_enabled_option()
+    [[deprecated("Use ConfigRepo::get_enabled_option()")]]
     OptionBool & get_enabled_option();
+    /// @deprecated Use ConfigRepo::get_enabled_option() const
+    [[deprecated("Use ConfigRepo::get_enabled_option() const")]]
     const OptionBool & get_enabled_option() const;
     OptionBool & get_enablegroups_option();
     const OptionBool & get_enablegroups_option() const;

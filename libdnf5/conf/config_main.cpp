@@ -1192,9 +1192,11 @@ const OptionBool & ConfigMain::get_repo_gpgcheck_option() const {
 }
 
 OptionBool & ConfigMain::get_enabled_option() {
+    LIBDNF5_DEPRECATED("Use ConfigRepo::get_enabled_option()");
     return p_impl->enabled;
 }
 const OptionBool & ConfigMain::get_enabled_option() const {
+    LIBDNF5_DEPRECATED("Use ConfigRepo::get_enabled_option() const");
     return p_impl->enabled;
 }
 
