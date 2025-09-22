@@ -45,7 +45,7 @@ public:
     void join_threads(const bool only_finished);
     void finish();
 
-    template <class S>
+    template <class S, bool UseLibdnf5Mutex = true>
     void handle_method(
         S & service,
         sdbus::MethodReply (S::*method)(sdbus::MethodCall &),
@@ -65,6 +65,13 @@ public:
 
                 sdbus::MethodReply reply;
                 try {
+                    // Use template parameter to control libdnf5 mutex usage per method
+                    // UseLibdnf5Mutex=true (default): Serialize D-Bus method calls that use libdnf5
+                    // UseLibdnf5Mutex=false: Skip mutex for methods that don't need synchronization
+                    std::optional<std::lock_guard<std::mutex>> libdnf5_lock;
+                    if constexpr (UseLibdnf5Mutex) {
+                        libdnf5_lock.emplace(service.get_session().get_libdnf5_mutex());
+                    }
                     reply = (service.*method)(call);
                 } catch (const sdbus::Error & ex) {
                     reply = call.createErrorReply(ex);
@@ -105,7 +112,7 @@ public:
         register_thread(std::move(worker));
     }
 
-    template <class S>
+    template <class S, bool UseLibdnf5Mutex = true>
     void handle_method_fd(
         S & service,
         void (S::*method)(sdbus::MethodCall &, const std::string &),
@@ -140,6 +147,13 @@ public:
 
                 if (error_msg.empty()) {
                     try {
+                        // Use template parameter to control libdnf5 mutex usage per method
+                        // UseLibdnf5Mutex=true (default): Serialize D-Bus method calls that use libdnf5
+                        // UseLibdnf5Mutex=false: Skip mutex for methods that don't need synchronization
+                        std::optional<std::lock_guard<std::mutex>> libdnf5_lock;
+                        if constexpr (UseLibdnf5Mutex) {
+                            libdnf5_lock.emplace(service.get_session().get_libdnf5_mutex());
+                        }
                         (service.*method)(call, transfer_id);
                     } catch (...) {
                         // TODO(mblaha): log the error

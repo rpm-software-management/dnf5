@@ -57,7 +57,8 @@ void SessionManager::dbus_register() {
                 sdbus::Signature{"o"},
                 {"session_object_path"},
                 [this](sdbus::MethodCall call) -> void {
-                    threads_manager.handle_method(*this, &SessionManager::open_session, call);
+                    // open_session method manages sessions and does not call any libdnf5 API. Do not use the mutex.
+                    threads_manager.handle_method<SessionManager, false>(*this, &SessionManager::open_session, call);
                 },
                 {}},
             sdbus::MethodVTableItem{
@@ -67,7 +68,8 @@ void SessionManager::dbus_register() {
                 sdbus::Signature{"b"},
                 {"success"},
                 [this](sdbus::MethodCall call) -> void {
-                    threads_manager.handle_method(*this, &SessionManager::close_session, call);
+                    // close_session method manages sessions and does not call any libdnf5 API. Do not use the mutex.
+                    threads_manager.handle_method<SessionManager, false>(*this, &SessionManager::close_session, call);
                 },
                 {}})
         .forInterface(dnfdaemon::INTERFACE_SESSION_MANAGER);
@@ -80,7 +82,8 @@ void SessionManager::dbus_register() {
         "o",
         {"session_object_path"},
         [this](sdbus::MethodCall call) -> void {
-            threads_manager.handle_method(*this, &SessionManager::open_session, call);
+            // open_session method manages sessions and does not call any libdnf5 API. Do not use the mutex.
+            threads_manager.handle_method<SessionManager, false>(*this, &SessionManager::open_session, call);
         });
     dbus_object->registerMethod(
         dnfdaemon::INTERFACE_SESSION_MANAGER,
@@ -90,7 +93,8 @@ void SessionManager::dbus_register() {
         "b",
         {"success"},
         [this](sdbus::MethodCall call) -> void {
-            threads_manager.handle_method(*this, &SessionManager::close_session, call);
+            // close_session method manages sessions and does not call any libdnf5 API. Do not use the mutex.
+            threads_manager.handle_method<SessionManager, false>(*this, &SessionManager::close_session, call);
         });
     dbus_object->finishRegistration();
 
