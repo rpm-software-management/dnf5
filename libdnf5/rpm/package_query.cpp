@@ -2635,6 +2635,12 @@ void PackageQuery::filter_priority() {
     }
 }
 
+bool PackageQuery::is_dep_satisfied(const Reldep & reldep) {
+    p_impl->base->get_rpm_package_sack()->p_impl->make_provides_ready();
+    auto & pool = get_rpm_pool(p_impl->base);
+    return pool.is_dep_satisfied_in_map(reldep.get_id().id, *p_impl);
+}
+
 std::pair<bool, libdnf5::rpm::Nevra> PackageQuery::resolve_pkg_spec(
     const std::string & pkg_spec, const ResolveSpecSettings & settings, bool with_src) {
     auto & pool = get_rpm_pool(p_impl->base);
