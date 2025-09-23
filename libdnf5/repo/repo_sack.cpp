@@ -912,7 +912,7 @@ void RepoSack::internalize_repos() {
 }
 
 void RepoSack::Impl::fix_group_missing_xml() {
-    if (system_repo != nullptr) {
+    if (system_repo != nullptr && system_repo->is_loaded()) {
         auto & solv_repo = system_repo->get_solv_repo();
         auto & group_missing_xml = solv_repo.get_groups_missing_xml();
         auto & environments_missing_xml = solv_repo.get_environments_missing_xml();
