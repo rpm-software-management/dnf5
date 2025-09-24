@@ -3,6 +3,8 @@
 
 #include "libdnf5/base/active_transaction_info.hpp"
 
+#include "libdnf5/utils/bgettext/bgettext-mark-domain.h"
+
 #include <toml.hpp>
 
 #include <ctime>
@@ -87,10 +89,10 @@ ActiveTransactionInfo ActiveTransactionInfo::from_toml(const std::string & toml_
         info.set_comment(toml::find_or<std::string>(data, "comment", ""));
         info.set_pid(toml::find_or<pid_t>(data, "pid", -1));
         info.set_start_time(toml::find_or<time_t>(data, "start_time", 0));
-    } catch (const toml::syntax_error &) {
-        // Return default/empty ActiveTransactionInfo on TOML syntax errors
-    } catch (const toml::type_error &) {
-        // Return default/empty ActiveTransactionInfo on TOML type errors
+    } catch (const toml::syntax_error & ex) {
+        throw ActiveTransactionInfoParseError(M_("Error parsing transaction info: {}"), std::string(ex.what()));
+    } catch (const toml::type_error & ex) {
+        throw ActiveTransactionInfoParseError(M_("Error parsing transaction info: {}"), std::string(ex.what()));
     }
 
     return info;

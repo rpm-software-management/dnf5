@@ -978,10 +978,15 @@ Transaction::TransactionRunResult Transaction::Impl::_run(
     lock_file_path /= std::filesystem::path(libdnf5::TRANSACTION_LOCK_FILEPATH).relative_path();
     std::filesystem::create_directories(lock_file_path.parent_path());
 
+    auto logger = base->get_logger().get();
     TransactionLocker transaction_locker(lock_file_path, info);
     if (!transaction_locker.write_lock()) {
         auto content = transaction_locker.read_content();
-        concurrent_transaction = std::make_unique<ActiveTransactionInfo>(ActiveTransactionInfo::from_toml(content));
+        try {
+            concurrent_transaction = std::make_unique<ActiveTransactionInfo>(ActiveTransactionInfo::from_toml(content));
+        } catch (const ActiveTransactionInfoParseError & ex) {
+            logger->warning(ex.what());
+        }
         return TransactionRunResult::ERROR_LOCK;
     }
     transaction_locker.write_transaction_metadata();
@@ -1114,9 +1119,6 @@ Transaction::TransactionRunResult Transaction::Impl::_run(
     }
     db_transaction.set_dt_start(dt_start);
     db_transaction.start();
-
-
-    auto logger = base->get_logger().get();
 
     int pipe_out_from_scriptlets[2];
     if (pipe2(pipe_out_from_scriptlets, O_CLOEXEC) == -1) {
