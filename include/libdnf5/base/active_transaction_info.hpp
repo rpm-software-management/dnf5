@@ -4,6 +4,7 @@
 #ifndef LIBDNF5_BASE_ACTIVE_TRANSACTION_INFO_HPP
 #define LIBDNF5_BASE_ACTIVE_TRANSACTION_INFO_HPP
 
+#include "libdnf5/common/exception.hpp"
 #include "libdnf5/defs.h"
 
 #include <unistd.h>
@@ -13,6 +14,13 @@
 #include <string>
 
 namespace libdnf5::base {
+
+class LIBDNF_API ActiveTransactionInfoParseError : public libdnf5::Error {
+public:
+    using libdnf5::Error::Error;
+    const char * get_domain_name() const noexcept override { return "libdnf5::base"; }
+    const char * get_name() const noexcept override { return "ActiveTransactionInfoParseError"; }
+};
 
 class LIBDNF_API ActiveTransactionInfo {
 public:
@@ -54,7 +62,8 @@ public:
 
     /// @brief Create ActiveTransactionInfo from TOML string
     /// @param toml_string The TOML string to parse
-    /// @return ActiveTransactionInfo object parsed from TOML, or empty object if parsing fails
+    /// @return ActiveTransactionInfo object parsed from TOML
+    /// @throws ActiveTransactionInfoParseError if TOML parsing fails
     static ActiveTransactionInfo from_toml(const std::string & toml_string);
 
 private:
