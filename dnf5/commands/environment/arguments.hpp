@@ -44,7 +44,7 @@ public:
 class EnvironmentSpecArguments : public libdnf5::cli::session::StringArgumentList {
 public:
     explicit EnvironmentSpecArguments(libdnf5::cli::session::Command & command)
-        : StringArgumentList(command, "environment-spec", _("Pattern matching environment IDs.")) {}
+        : StringArgumentList(command, "environment-spec", _("Pattern matching environment identifiers.")) {}
 };
 
 

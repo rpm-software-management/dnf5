@@ -29,7 +29,7 @@ Synopsis
 
 ``dnf5 group {list|info} [options] [<group-spec>...]``
 
-``dnf5 group {install|remove|upgrade} [options] <group-spec>...``
+``dnf5 group {install|remove|upgrade} [options] <group-spec|environment-spec>...``
 
 
 Description
@@ -40,7 +40,8 @@ related to them and it is also used for groups installation.
 To query environments use separate ``environment`` command.
 Note: ``dnf-4`` listed both environments and groups with the ``group`` command.
 
-Optional ``group-spec`` arguments could be passed to filter only groups with given names.
+Optional ``group-spec`` arguments can be passed to filter groups with given IDs or names. The install, remove and
+upgrade commands take both ``group-spec`` and ``environment-spec``.
 
 
 Subcommands
@@ -57,36 +58,40 @@ Subcommands
     The command accepts the same options as the ``list`` subcommand.
 
 ``install``
-    Mark the specified groups installed and install packages it contains.
-    Also include optional packages of the group if the ``--with-optional`` option is
-    specified. By default all `Mandatory` and `Default` packages will be installed whenever
-    possible. `Conditional` packages are installed if they meet their requirement. This can
-    be configured by :manpage:`dnf5.conf(5)`, :ref:`group_package_types <group_package_types_options-label>`.
+    Mark the specified environments or groups installed and install groups and packages they
+    contain.
 
-    If the group is already (partially) installed, the command  installs the missing
-    packages from the group.
+    If an environments or group is already (partially) installed, the command  installs the
+    missing groups and packages it contains.
 
-    If the ``--no-packages`` option is used, no new packages will be installed by
-    this command. Only currently installed group packages are considered to be installed
-    with the group.
+    In case both groups and environments match, only groups are affected.
+
+    If the ``--with-optional`` option is used, also include ``Optional`` packages of groups. By default,
+    all ``Mandatory`` and ``Default`` packages will be installed whenever possible. ``Conditional``
+    packages are installed if they meet their requirement. This can be configured by
+    :manpage:`dnf5.conf(5)`, :ref:`group_package_types <group_package_types_options-label>`.
+
+    If the ``--no-packages`` option is used, no packages will be installed by this command.
+    Only currently installed group packages are considered to be installed with the groups.
 
 ``remove``
-    Mark the group removed and remove those packages in the group  from  the
-    system  which  do not belong to another installed group and were not installed
-    explicitly by the user.
+    Mark the specified environments or groups removed and remove groups and packages they contain
+    unless they belong to another installed environment or group, were installed explicitly by the
+    user or (in case of packages) were installed as a dependency.
 
-    If the ``--no-packages`` option is used, no packages will be removed by this
-    command.
+    In case both groups and environments match, only groups are affected.
+
+    If the ``--no-packages`` option is used, no packages will be removed by this command.
 
 ``upgrade``
-    Upgrade a definition of the specified group and the packages belonging to
-    the group. If new packages have been added to the current definition of
-    the group since the group was installed, the new packages will be
-    installed. Likewise, if some packages have been removed from the group
-    definition, the packages will be uninstalled unless they were installed for
-    a different reason (e.g.  explicitly installed by a user or implicitly
-    installed as a dependency).
+    Upgrade a definition of the specified environments and groups and the groups and packages they
+    contain. If new groups or packages have been added to the current definitions since the
+    environments or groups were installed, the new groups and packages will be installed. Likewise,
+    if some groups or packages have been removed from the definition, they will be removed
+    unless they were installed for a different reason (belong to another installed environment or
+    group, were installed explicitly by the user or were installed as a dependency).
 
+    In case both groups and environments match, only groups are affected.
 
 Options for ``list`` and ``info``
 =================================
@@ -112,7 +117,7 @@ Options for ``install``, ``remove`` and ``upgrade``
     | Used with ``install`` command.
 
 ``--no-packages``
-    | Operate exclusively on the groups without manipulating any packages.
+    | Operate exclusively on the environments and groups without manipulating any packages.
     | Used with ``install`` and ``remove`` commands.
 
 ``--allowerasing``

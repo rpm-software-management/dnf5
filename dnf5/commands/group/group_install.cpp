@@ -32,11 +32,11 @@ using namespace libdnf5::cli;
 
 void GroupInstallCommand::set_argument_parser() {
     auto & cmd = *get_argument_parser_command();
-    cmd.set_description("Install comp groups, including their packages");
+    cmd.set_description("Install comp environments or groups, including their packages");
 
     with_optional = std::make_unique<GroupWithOptionalOption>(*this);
     no_packages = std::make_unique<GroupNoPackagesOption>(*this);
-    group_specs = std::make_unique<GroupSpecArguments>(*this, ArgumentParser::PositionalArg::AT_LEAST_ONE);
+    group_specs = std::make_unique<CompsSpecArguments>(*this, ArgumentParser::PositionalArg::AT_LEAST_ONE);
 
     allow_erasing = std::make_unique<AllowErasingOption>(*this);
     auto skip_broken = std::make_unique<SkipBrokenOption>(*this);
