@@ -31,7 +31,6 @@
     #include "libdnf5/base/base.hpp"
     #include "libdnf5/base/solver_problems.hpp"
     #include "libdnf5/base/log_event.hpp"
-    #include "libdnf5/base/active_transaction_info.hpp"
     #include "libdnf5/base/transaction.hpp"
     #include "libdnf5/base/transaction_package.hpp"
     #include "libdnf5/base/goal.hpp"
