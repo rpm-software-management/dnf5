@@ -520,10 +520,36 @@ void RootCommand::set_argument_parser() {
     releasever->set_parse_hook_func(
         [&ctx](
             [[maybe_unused]] ArgumentParser::NamedArg * arg, [[maybe_unused]] const char * option, const char * value) {
-            ctx.get_base().get_vars()->set("releasever", value);
+            ctx.get_base().get_vars()->set("releasever", value, libdnf5::Vars::Priority::COMMANDLINE);
             return true;
         });
     global_options_group->register_argument(releasever);
+
+    auto releasever_major = parser.add_new_named_arg("releasever-major");
+    releasever_major->set_long_name("releasever-major");
+    releasever_major->set_has_value(true);
+    releasever_major->set_arg_value_help("RELEASEVER_MAJOR");
+    releasever_major->set_description(_("override the value of $releasever_major in config and repo files"));
+    releasever_major->set_parse_hook_func(
+        [&ctx](
+            [[maybe_unused]] ArgumentParser::NamedArg * arg, [[maybe_unused]] const char * option, const char * value) {
+            ctx.get_base().get_vars()->set("releasever_major", value, libdnf5::Vars::Priority::COMMANDLINE);
+            return true;
+        });
+    global_options_group->register_argument(releasever_major);
+
+    auto releasever_minor = parser.add_new_named_arg("releasever-minor");
+    releasever_minor->set_long_name("releasever-minor");
+    releasever_minor->set_has_value(true);
+    releasever_minor->set_arg_value_help("RELEASEVER_MINOR");
+    releasever_minor->set_description(_("override the value of $releasever_minor in config and repo files"));
+    releasever_minor->set_parse_hook_func(
+        [&ctx](
+            [[maybe_unused]] ArgumentParser::NamedArg * arg, [[maybe_unused]] const char * option, const char * value) {
+            ctx.get_base().get_vars()->set("releasever_minor", value, libdnf5::Vars::Priority::COMMANDLINE);
+            return true;
+        });
+    global_options_group->register_argument(releasever_minor);
 
     {
         auto show_new_leaves = parser.add_new_named_arg("show-new-leaves");

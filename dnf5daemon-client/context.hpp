@@ -66,6 +66,8 @@ public:
     libdnf5::OptionBool allow_erasing{false};
     libdnf5::OptionString installroot{"/"};
     libdnf5::OptionString releasever{""};
+    libdnf5::OptionString releasever_major{""};
+    libdnf5::OptionString releasever_minor{""};
 
     void reset_download_cb();
     void set_download_cb(DownloadCB * download_cb) { this->download_cb = download_cb; }
