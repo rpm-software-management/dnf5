@@ -64,23 +64,38 @@ public:
 class GroupSpecArguments : public libdnf5::cli::session::StringArgumentList {
 public:
     GroupSpecArguments(libdnf5::cli::session::Command & command, int nargs)
-        : StringArgumentList(command, "group-spec", _("Pattern matching group IDS."), nargs) {}
+        : StringArgumentList(command, "group-spec", _("Pattern matching group identifiers."), nargs) {}
     explicit GroupSpecArguments(libdnf5::cli::session::Command & command)
         : GroupSpecArguments(command, libdnf5::cli::ArgumentParser::PositionalArg::UNLIMITED) {}
+};
+
+
+class CompsSpecArguments : public libdnf5::cli::session::StringArgumentList {
+public:
+    CompsSpecArguments(libdnf5::cli::session::Command & command, int nargs)
+        : StringArgumentList(
+              command, "group-spec|environment-spec", _("Pattern matching group or environment identifiers."), nargs) {}
+    explicit CompsSpecArguments(libdnf5::cli::session::Command & command)
+        : CompsSpecArguments(command, libdnf5::cli::ArgumentParser::PositionalArg::UNLIMITED) {}
 };
 
 
 class GroupWithOptionalOption : public libdnf5::cli::session::BoolOption {
 public:
     explicit GroupWithOptionalOption(libdnf5::cli::session::Command & command)
-        : BoolOption(command, "with-optional", '\0', _("Include optional packages from group."), false) {}
+        : BoolOption(command, "with-optional", '\0', _("Include optional packages from groups."), false) {}
 };
 
 
 class GroupNoPackagesOption : public libdnf5::cli::session::BoolOption {
 public:
     explicit GroupNoPackagesOption(libdnf5::cli::session::Command & command)
-        : BoolOption(command, "no-packages", '\0', _("Operate on groups only, no packages are changed."), false) {}
+        : BoolOption(
+              command,
+              "no-packages",
+              '\0',
+              _("Operate on environments and groups only, no packages are changed."),
+              false) {}
 };
 
 }  // namespace dnf5

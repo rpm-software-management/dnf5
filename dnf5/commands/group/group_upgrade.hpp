@@ -41,7 +41,7 @@ public:
 
     std::unique_ptr<AllowErasingOption> allow_erasing;
 
-    std::unique_ptr<GroupSpecArguments> group_specs{nullptr};
+    std::unique_ptr<CompsSpecArguments> group_specs{nullptr};
 };
 
 
