@@ -298,8 +298,19 @@ Following options are applicable in the general context for any ``dnf5`` command
     If you want only packages from this repository to be available, combine this option with ``--repo=REPO_ID`` switch.
 
 ``--releasever=RELEASEVER``
-    | Override the value of the distribution release in configuration files.
-    | This can affect cache paths, values in configuration files and mirrorlist URLs.
+    Override the value of the distribution release (the ``releasever`` variable) in configuration files.
+    This can affect cache paths, values in configuration files and mirrorlist URLs.
+    Whenever ``releasever`` is set, ``releasever_major`` and ``releasever_minor`` will also be set by splitting ``releasever`` on the first ``.``.
+
+``--releasever-major=RELEASEVER_MAJOR``
+    Override the ``releasever_major`` variable, which is usually automatically detected or taken from the part of ``$releasever`` before the first ``.``.
+    Does not affect the setting of the ``releasever`` variable.
+    Must be specified after ``--releasever`` on the command line, otherwise the major part of the ``--releasever`` will take precedent.
+
+``--releasever-minor=RELEASEVER_MINOR``
+    Override the ``releasever_minor`` variable, which is usually automatically detected or taken from the part of ``$releasever`` after the first ``.``.
+    Does not affect the setting of the ``releasever`` variable.
+    Must be specified after ``--releasever`` on the command line, otherwise the minor part of the ``--releasever`` will take precedent.
 
 ``--setopt=[REPO_ID.]OPTION=VALUE``
     | Override a configuration option from the configuration file.
