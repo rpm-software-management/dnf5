@@ -106,8 +106,22 @@ public:
     /// @param name Name of the variable
     const Variable & get(const std::string & name) const;
 
+    /// @brief Detects the releasever of the system
+    ///
+    /// Returns the release name of the distribution of the tree rooted at `installroot`.
+    /// This function uses information from RPMDB found under the tree.
+    /// It's preferred to use ``detect_releasevers`` over ``detect_release``; if you use the latter, you will not be aware of distribution overrides for the major and minor release versions.
+    ///
+    /// @return the detected releasever, or nullptr if the releasever could not be determined (perhaps because the tree has no RPMDB).
     static std::unique_ptr<std::string> detect_release(const BaseWeakPtr & base, const std::string & install_root_path);
 
+    /// @brief Detect the releasever, overridden major release, and overridden minor release for the system
+    ///
+    /// Returns a tuple of the release name, overridden major release, and overridden minor release of the distribution of the tree rooted at `installroot`.
+    /// This function uses information from RPMDB found under the tree.
+    /// The major and minor release versions are usually derived from the release version by splitting it on the first ``.``, but distributions can override the derived major and minor versions.
+    ///
+    /// @return a tuple of the releasever, overridden releasever_major, and overridden releasever_minor. Each member of the tuple can be nullptr if not provided by the system.
     static std::tuple<std::unique_ptr<std::string>, std::unique_ptr<std::string>, std::unique_ptr<std::string>>
     detect_releasevers(const BaseWeakPtr & base, const std::string & install_root_path);
 
