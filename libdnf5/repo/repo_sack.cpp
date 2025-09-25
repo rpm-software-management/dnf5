@@ -184,17 +184,38 @@ RepoWeakPtr RepoSack::get_cmdline_repo() {
 
 
 RepoWeakPtr RepoSack::get_stored_transaction_repo(const std::string & repo_id) {
-    std::string real_repo_id = repo_id.empty() ? STORED_TRANSACTION_NAME : repo_id;
+    std::string stored_transaction_repo_id = STORED_TRANSACTION_NAME;
+    if (!repo_id.empty()) {
+        stored_transaction_repo_id += " (" + repo_id + ")";
+    }
+
     RepoWeakPtr stored_repo;
+    // There are two options:
+    // - Original repo_id is picked when it isn't already taken by a repo with type AVAILABLE.
+    //   This happens for offline and system upgrade commands, they don't load available repositories.
+    // - Otherwise stored_transaction_repo_id is picked.
+    //   Used for replay command.
+    std::string selected_repo_id = repo_id;
     for (const auto & existing_repo : get_data()) {
-        if (existing_repo->get_id() == real_repo_id) {
+        if (existing_repo->get_id() == repo_id) {
+            if (existing_repo->get_type() == Repo::Type::COMMANDLINE) {
+                stored_repo = existing_repo->get_weak_ptr();
+                break;
+            } else {
+                selected_repo_id = stored_transaction_repo_id;
+            }
+        } else if (existing_repo->get_id() == stored_transaction_repo_id) {
+            libdnf_assert(
+                existing_repo->get_type() == Repo::Type::COMMANDLINE,
+                "Stored transaction repo has to be of type commandline");
             stored_repo = existing_repo->get_weak_ptr();
             break;
         }
     }
+
     if (!stored_repo.is_valid()) {
         // Repo type is COMMANDLINE because we don't want to download download any packages. We want it to behave like commandline repo.
-        std::unique_ptr<Repo> repo(new Repo(p_impl->base, real_repo_id, Repo::Type::COMMANDLINE));
+        std::unique_ptr<Repo> repo(new Repo(p_impl->base, selected_repo_id, Repo::Type::COMMANDLINE));
         repo->get_config().get_build_cache_option().set(libdnf5::Option::Priority::RUNTIME, false);
         stored_repo = add_item_with_return(std::move(repo));
     }
