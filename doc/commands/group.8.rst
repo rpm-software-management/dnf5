@@ -29,7 +29,7 @@ Synopsis
 
 ``dnf5 group {list|info} [options] [<group-spec>...]``
 
-``dnf5 group {install|remove|upgrade} [options] <group-spec>...``
+``dnf5 group {install|remove|upgrade} [options] <group-spec|environment-spec>...``
 
 
 Description
@@ -40,7 +40,8 @@ related to them and it is also used for groups installation.
 To query environments use separate ``environment`` command.
 Note: ``dnf-4`` listed both environments and groups with the ``group`` command.
 
-Optional ``group-spec`` arguments could be passed to filter only groups with given names.
+Optional ``group-spec`` arguments can be passed to filter groups with given IDs or names. The install, remove and
+upgrade commands take both ``group-spec`` and ``environment-spec``.
 
 
 Subcommands

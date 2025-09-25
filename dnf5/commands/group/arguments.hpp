@@ -70,6 +70,16 @@ public:
 };
 
 
+class CompsSpecArguments : public libdnf5::cli::session::StringArgumentList {
+public:
+    CompsSpecArguments(libdnf5::cli::session::Command & command, int nargs)
+        : StringArgumentList(
+              command, "group-spec|environment-spec", _("Pattern matching group or environment IDS."), nargs) {}
+    explicit CompsSpecArguments(libdnf5::cli::session::Command & command)
+        : CompsSpecArguments(command, libdnf5::cli::ArgumentParser::PositionalArg::UNLIMITED) {}
+};
+
+
 class GroupWithOptionalOption : public libdnf5::cli::session::BoolOption {
 public:
     explicit GroupWithOptionalOption(libdnf5::cli::session::Command & command)
