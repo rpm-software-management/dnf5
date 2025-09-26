@@ -79,10 +79,10 @@ Delivering to the User
 Each plugin requires a mandatory configuration file where we need to define the plugin's name
 and specify when to enable it during runtime. Options include:
 
-* ``NO``: Plugin is disabled.
-* ``YES``: Plugin is enabled.
-* ``HOST_ONLY``: Plugin is enabled only in configurations without installroot.
-* ``INSTALLROOT_ONLY``: Plugin is enabled only in configurations with installroot.
+* ``no``: Plugin is disabled.
+* ``yes``: Plugin is enabled.
+* ``host-only``: Plugin is enabled only in configurations without installroot.
+* ``installroot-only``: Plugin is enabled only in configurations with installroot.
 
 Additional optional configuration options and sections can be defined and then accessed from
 the plugin implementation. Here's an example configuration file:
