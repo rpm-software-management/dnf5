@@ -54,6 +54,12 @@ void Context::init_session(sdbus::IConnection & connection) {
     if (!releasever.get_value().empty()) {
         cfg["releasever"] = sdbus::Variant(releasever.get_value());
     }
+    if (!releasever_major.get_value().empty()) {
+        cfg["releasever_major"] = sdbus::Variant(releasever_major.get_value());
+    }
+    if (!releasever_minor.get_value().empty()) {
+        cfg["releasever_minor"] = sdbus::Variant(releasever_minor.get_value());
+    }
     cfg["locale"] = sdbus::Variant(setlocale(LC_MESSAGES, nullptr));
 
     session_manager_proxy->callMethod("open_session")

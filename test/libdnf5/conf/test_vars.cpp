@@ -230,22 +230,12 @@ void VarsTest::test_vars_api_releasever() {
         CPPUNIT_ASSERT_EQUAL_MESSAGE("priority returned by vars->get()", libdnf5::Vars::Priority::PLUGIN, prioriry);
     }
 
-    // the "releasever" variable is read-write
+    // the "releasever", "releasever_major", and "releasever_minor" variables are read-write
     CPPUNIT_ASSERT(!vars->is_read_only("releasever"));
+    CPPUNIT_ASSERT(!vars->is_read_only("releasever_major"));
+    CPPUNIT_ASSERT(!vars->is_read_only("releasever_minor"));
 
-    // auto-created variables "releasever_major" and "releasever_minor" are read-only
-    CPPUNIT_ASSERT(vars->is_read_only("releasever_major"));
-    CPPUNIT_ASSERT(vars->is_read_only("releasever_minor"));
-
-    // setting the value of a read-only variable throws exception
-    CPPUNIT_ASSERT_THROW(
-        vars->set("releasever_major", "40", libdnf5::Vars::Priority::PLUGIN), libdnf5::ReadOnlyVariableError);
-
-    // removing read-only variable throws exception
-    CPPUNIT_ASSERT_THROW(
-        vars->unset("releasever_major", libdnf5::Vars::Priority::PLUGIN), libdnf5::ReadOnlyVariableError);
-
-    // because the variable "releaver" is read-write, it can be removed
+    // because the variable "releasever" is read-write, it can be removed
     CPPUNIT_ASSERT(vars->unset("releasever", libdnf5::Vars::Priority::PLUGIN));
     CPPUNIT_ASSERT_MESSAGE("after vars->unset(\"test_var3\")", !vars->contains("releasever"));
 }

@@ -131,6 +131,20 @@ void RootCommand::set_argument_parser() {
     releasever->link_value(&ctx.releasever);
     cmd.register_named_arg(releasever);
 
+    auto releasever_major = ctx.get_argument_parser().add_new_named_arg("releasever-major");
+    releasever_major->set_long_name("releasever-major");
+    releasever_major->set_has_value(true);
+    releasever_major->set_description("override the $releasever_major variable value");
+    releasever_major->link_value(&ctx.releasever_major);
+    cmd.register_named_arg(releasever_major);
+
+    auto releasever_minor = ctx.get_argument_parser().add_new_named_arg("releasever-minor");
+    releasever_minor->set_long_name("releasever-minor");
+    releasever_minor->set_has_value(true);
+    releasever_minor->set_description("override the $releasever_minor variable value");
+    releasever_minor->link_value(&ctx.releasever_minor);
+    cmd.register_named_arg(releasever_minor);
+
     auto setopt = ctx.get_argument_parser().add_new_named_arg("setopt");
     setopt->set_long_name("setopt");
     setopt->set_has_value(true);
