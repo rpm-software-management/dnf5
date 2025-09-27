@@ -108,6 +108,8 @@ public:
     const OptionChild<OptionSeconds> & get_timeout_option() const;
     OptionChild<OptionNumber<std::uint32_t>> & get_max_parallel_downloads_option();
     const OptionChild<OptionNumber<std::uint32_t>> & get_max_parallel_downloads_option() const;
+    OptionChild<OptionNumber<std::uint32_t>> & get_max_downloads_per_mirror_option();
+    const OptionChild<OptionNumber<std::uint32_t>> & get_max_downloads_per_mirror_option() const;
     OptionChild<OptionSeconds> & get_metadata_expire_option();
     const OptionChild<OptionSeconds> & get_metadata_expire_option() const;
     OptionNumber<std::int32_t> & get_cost_option();
