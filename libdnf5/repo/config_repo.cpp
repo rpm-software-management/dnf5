@@ -72,6 +72,7 @@ class ConfigRepo::Impl {
     OptionChild<OptionNumber<float>> throttle{main_config.get_throttle_option()};
     OptionChild<OptionSeconds> timeout{main_config.get_timeout_option()};
     OptionChild<OptionNumber<std::uint32_t>> max_parallel_downloads{main_config.get_max_parallel_downloads_option()};
+    OptionChild<OptionNumber<std::uint32_t>> max_downloads_per_mirror{main_config.get_max_downloads_per_mirror_option()};
     OptionChild<OptionSeconds> metadata_expire{main_config.get_metadata_expire_option()};
     OptionNumber<std::int32_t> cost{1000};
     OptionNumber<std::int32_t> priority{99};
@@ -162,6 +163,7 @@ ConfigRepo::Impl::Impl(Config & owner, ConfigMain & main_config, const std::stri
     owner.opt_binds().add("throttle", throttle);
     owner.opt_binds().add("timeout", timeout);
     owner.opt_binds().add("max_parallel_downloads", max_parallel_downloads);
+    owner.opt_binds().add("max_downloads_per_mirror", max_downloads_per_mirror);
     owner.opt_binds().add("metadata_expire", metadata_expire);
     owner.opt_binds().add("cost", cost);
     owner.opt_binds().add("priority", priority);
@@ -409,6 +411,13 @@ OptionChild<OptionNumber<std::uint32_t>> & ConfigRepo::get_max_parallel_download
 }
 const OptionChild<OptionNumber<std::uint32_t>> & ConfigRepo::get_max_parallel_downloads_option() const {
     return p_impl->max_parallel_downloads;
+}
+
+OptionChild<OptionNumber<std::uint32_t>> & ConfigRepo::get_max_downloads_per_mirror_option() {
+    return p_impl->max_downloads_per_mirror;
+}
+const OptionChild<OptionNumber<std::uint32_t>> & ConfigRepo::get_max_downloads_per_mirror_option() const {
+    return p_impl->max_downloads_per_mirror;
 }
 
 OptionChild<OptionSeconds> & ConfigRepo::get_metadata_expire_option() {

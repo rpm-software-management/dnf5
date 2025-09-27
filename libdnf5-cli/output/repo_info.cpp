@@ -186,6 +186,7 @@ general connection settings?
        bandwidth
        ip_resolve
        max_parallel_downloads
+       max_downloads_per_mirror
        minrate
        retries
        throttle

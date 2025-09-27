@@ -1037,6 +1037,15 @@ configuration.
 
     Default: ``3``.
 
+.. _max_downloads_per_mirror_options-label:
+
+``max_downloads_per_mirror``
+    :ref:`integer <integer-label>`
+
+    Maximum number of simultaneous downloads per mirror. Max is ``20``.
+
+    Default: ``3``.
+
 .. _metadata_expire_options-label:
 
 ``metadata_expire``

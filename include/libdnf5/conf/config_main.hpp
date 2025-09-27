@@ -288,6 +288,8 @@ public:
     const OptionSeconds & get_timeout_option() const;
     OptionNumber<std::uint32_t> & get_max_parallel_downloads_option();
     const OptionNumber<std::uint32_t> & get_max_parallel_downloads_option() const;
+    OptionNumber<std::uint32_t> & get_max_downloads_per_mirror_option();
+    const OptionNumber<std::uint32_t> & get_max_downloads_per_mirror_option() const;
     OptionSeconds & get_metadata_expire_option();
     const OptionSeconds & get_metadata_expire_option() const;
     OptionString & get_sslcacert_option();

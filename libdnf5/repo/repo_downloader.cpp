@@ -668,6 +668,7 @@ void RepoDownloader::common_handle_setup(LibrepoHandle & h, const DownloadData &
     h.set_opt(LRO_GPGCHECK, download_data.config.get_repo_gpgcheck_option().get_value());
     h.set_opt(LRO_MAXMIRRORTRIES, static_cast<long>(download_data.max_mirror_tries));
     h.set_opt(LRO_MAXPARALLELDOWNLOADS, download_data.config.get_max_parallel_downloads_option().get_value());
+    h.set_opt(LRO_MAXDOWNLOADSPERMIRROR, download_data.config.get_max_downloads_per_mirror_option().get_value());
 
     LrUrlVars * repomd_substs = nullptr;
     repomd_substs = lr_urlvars_set(repomd_substs, MD_FILENAME_GROUP_GZ, MD_FILENAME_GROUP);
