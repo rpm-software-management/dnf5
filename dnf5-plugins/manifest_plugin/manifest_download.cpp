@@ -29,24 +29,24 @@ void ManifestDownloadCommand::set_argument_parser() {
 
     cmd.set_description(_("Download all packages specified in the manifest file to disk."));
 
-    archs_option = dynamic_cast<libdnf5::OptionStringList *>(
+    arch_option = dynamic_cast<libdnf5::OptionStringList *>(
         parser.add_init_value(std::make_unique<libdnf5::OptionStringList>(std::vector<std::string>())));
-    auto * archs_arg = parser.add_new_named_arg("archs");
-    archs_arg->set_long_name("archs");
-    archs_arg->set_description("Explicitly specify basearchs to use");
-    archs_arg->set_has_value(true);
-    archs_arg->set_arg_value_help("<ARCH>,...");
-    archs_arg->link_value(archs_option);
-    cmd.register_named_arg(archs_arg);
+    auto * arch_arg = parser.add_new_named_arg("arch");
+    arch_arg->set_long_name("arch");
+    arch_arg->set_description("Explicitly specify basearches to use");
+    arch_arg->set_has_value(true);
+    arch_arg->set_arg_value_help("<ARCH>,...");
+    arch_arg->link_value(arch_option);
+    cmd.register_named_arg(arch_arg);
 
-    source_option =
+    srpm_option =
         dynamic_cast<libdnf5::OptionBool *>(parser.add_init_value(std::make_unique<libdnf5::OptionBool>(false)));
-    auto * source_arg = parser.add_new_named_arg("source");
-    source_arg->set_long_name("source");
-    source_arg->set_description(_("Download source packages"));
-    source_arg->set_const_value("true");
-    source_arg->link_value(source_option);
-    cmd.register_named_arg(source_arg);
+    auto * srpm_arg = parser.add_new_named_arg("source");
+    srpm_arg->set_long_name("source");
+    srpm_arg->set_description(_("Download source packages"));
+    srpm_arg->set_const_value("true");
+    srpm_arg->link_value(srpm_option);
+    cmd.register_named_arg(srpm_arg);
 
     create_destdir_option(*this);
 }
@@ -63,13 +63,13 @@ void ManifestDownloadCommand::pre_configure() {
 void ManifestDownloadCommand::configure() {
     auto & ctx = get_context();
 
-    if (archs_option->get_priority() > libdnf5::Option::Priority::DEFAULT) {
-        archs = std::vector<std::string>(archs_option->get_value().begin(), archs_option->get_value().end());
+    if (arch_option->get_priority() > libdnf5::Option::Priority::DEFAULT) {
+        arches = std::vector<std::string>(arch_option->get_value().begin(), arch_option->get_value().end());
     } else {
-        archs = {ctx.get_base().get_vars()->get_value("arch")};
+        arches = {ctx.get_base().get_vars()->get_value("arch")};
     }
 
-    for (const auto & arch : archs) {
+    for (const auto & arch : arches) {
         manifest_paths[arch] = get_manifest_path(*manifest_path_option, arch);
     }
 }
@@ -81,13 +81,13 @@ void ManifestDownloadCommand::download_packages(
     auto & ctx = get_context();
 
     auto base = create_base_for_arch(arch);
-    const std::filesystem::path manifest_path_base{std::get<0>(splitext(manifest_path_option->get_value()))};
+    const auto & manifest_path_base = std::filesystem::path{manifest_path_option->get_value()}.stem();
     base->get_config().get_destdir_option().set(libdnf5::Option::Priority::PLUGINDEFAULT, default_destdir);
 
     // Load repositories
     auto repo_sack = base->get_repo_sack();
-    create_manifest_repos(*base, manifest.get_repositories());
-    if (source_option->get_value()) {
+    create_repos(*base, manifest.get_repositories());
+    if (srpm_option->get_value()) {
         repo_sack->enable_source_repos();
     }
     set_repo_callbacks(*base);
@@ -99,7 +99,7 @@ void ManifestDownloadCommand::download_packages(
     libdnf5::repo::PackageDownloader downloader{*base};
     downloader.force_keep_packages(true);
 
-    for (auto & manifest_pkg : manifest.get_packages().get(arch, source_option->get_value())) {
+    for (auto & manifest_pkg : manifest.get_packages().get(arch, srpm_option->get_value())) {
         libdnf5::rpm::PackageQuery query{*base};
         query.filter_repo_id(manifest_pkg.get_repo_id());
         const auto & nevra = nevra_manifest_to_dnf(manifest_pkg.get_nevra());
@@ -116,13 +116,13 @@ void ManifestDownloadCommand::download_packages(
 void ManifestDownloadCommand::run() {
     std::optional<std::filesystem::path> last_manifest_path;
     std::optional<libpkgmanifest::manifest::Manifest> manifest;
-    for (const auto & arch : archs) {
+    for (const auto & arch : arches) {
         const auto & manifest_path = manifest_paths[arch];
         if (!manifest.has_value() || last_manifest_path != manifest_path) {
             manifest = libpkgmanifest::manifest::Parser().parse(manifest_path);
         }
         last_manifest_path = manifest_path;
-        const std::filesystem::path manifest_path_base{std::get<0>(splitext(manifest_path))};
+        const auto & manifest_path_base = manifest_path.stem();
         const auto & default_destdir = std::filesystem::absolute(manifest_path_base);
         download_packages(*manifest, arch, default_destdir);
     }

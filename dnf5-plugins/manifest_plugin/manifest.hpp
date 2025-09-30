@@ -20,8 +20,6 @@ const std::string BOOTSTRAP_REPO_ID{"bootstrap"};
 
 libdnf5::rpm::Nevra nevra_manifest_to_dnf(const libpkgmanifest::manifest::Nevra & manifest_nevra);
 
-std::pair<std::filesystem::path, std::string> splitext(const std::filesystem::path & path);
-
 std::filesystem::path get_manifest_path(libdnf5::OptionPath & option, const std::string & arch);
 
 void set_repo_callbacks(libdnf5::Base & base);
@@ -45,9 +43,8 @@ public:
     void pre_configure() override;
 
 protected:
-    void create_manifest_repos(libdnf5::Base & base, libpkgmanifest::common::Repositories manifest_repos) const;
+    void create_repos(libdnf5::Base & base, libpkgmanifest::common::Repositories manifest_repos) const;
     std::unique_ptr<libdnf5::Base> create_base_for_arch(const std::string & arch) const;
-    libpkgmanifest::manifest::Manifest parse_manifest(const std::string & arch) const;
 
     libdnf5::OptionPath * manifest_path_option{nullptr};
     std::unique_ptr<libdnf5::ConfigMain> config_before_setup;
@@ -67,12 +64,12 @@ private:
     libdnf5::OptionPath * input_path_option{nullptr};
     libdnf5::OptionBool * use_system_option{nullptr};
     libdnf5::OptionBool * per_arch_option{nullptr};
-    libdnf5::OptionStringList * archs_option{nullptr};
-    libdnf5::OptionBool * source_option{nullptr};
+    libdnf5::OptionStringList * arch_option{nullptr};
+    libdnf5::OptionBool * srpm_option{nullptr};
 
     std::vector<std::string> pkg_specs;
     std::optional<libpkgmanifest::input::Input> input;
-    std::vector<std::string> archs;
+    std::vector<std::string> arches;
     bool use_system_repository{false};
     bool generate_system_snapshot{false};
 };
@@ -91,10 +88,10 @@ private:
         const std::string & arch,
         const std::filesystem::path & default_destdir);
 
-    libdnf5::OptionStringList * archs_option{nullptr};
-    libdnf5::OptionBool * source_option{nullptr};
+    libdnf5::OptionStringList * arch_option{nullptr};
+    libdnf5::OptionBool * srpm_option{nullptr};
 
-    std::vector<std::string> archs;
+    std::vector<std::string> arches;
     std::map<std::string, std::filesystem::path> manifest_paths;
 };
 

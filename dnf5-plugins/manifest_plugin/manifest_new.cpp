@@ -113,24 +113,24 @@ void ManifestNewCommand::set_argument_parser() {
     per_arch_arg->link_value(per_arch_option);
     cmd.register_named_arg(per_arch_arg);
 
-    archs_option = dynamic_cast<libdnf5::OptionStringList *>(
+    arch_option = dynamic_cast<libdnf5::OptionStringList *>(
         parser.add_init_value(std::make_unique<libdnf5::OptionStringList>(std::vector<std::string>())));
-    auto * archs_arg = parser.add_new_named_arg("archs");
-    archs_arg->set_long_name("archs");
-    archs_arg->set_description("Explicitly specify basearchs to use");
-    archs_arg->set_has_value(true);
-    archs_arg->set_arg_value_help("<ARCH>,...");
-    archs_arg->link_value(archs_option);
-    cmd.register_named_arg(archs_arg);
+    auto * arch_arg = parser.add_new_named_arg("arch");
+    arch_arg->set_long_name("arch");
+    arch_arg->set_description("Explicitly specify basearches to use");
+    arch_arg->set_has_value(true);
+    arch_arg->set_arg_value_help("<ARCH>,...");
+    arch_arg->link_value(arch_option);
+    cmd.register_named_arg(arch_arg);
 
-    source_option =
+    srpm_option =
         dynamic_cast<libdnf5::OptionBool *>(parser.add_init_value(std::make_unique<libdnf5::OptionBool>(false)));
-    auto * source_arg = parser.add_new_named_arg("source");
-    source_arg->set_long_name("source");
-    source_arg->set_description(_("Include source packages in consideration"));
-    source_arg->set_const_value("true");
-    source_arg->link_value(source_option);
-    cmd.register_named_arg(source_arg);
+    auto * srpm_arg = parser.add_new_named_arg("srpm");
+    srpm_arg->set_long_name("srpm");
+    srpm_arg->set_description(_("Include source packages in consideration"));
+    srpm_arg->set_const_value("true");
+    srpm_arg->link_value(srpm_option);
+    cmd.register_named_arg(srpm_arg);
 
     auto keys = parser.add_new_positional_arg("specs", ArgumentParser::PositionalArg::UNLIMITED, nullptr, nullptr);
     keys->set_description("List of [<package-spec-NPFB>|@<group-spec>|@<environment-spec>]");
@@ -164,11 +164,11 @@ void ManifestNewCommand::configure() {
     }
 
     if (input.has_value()) {
-        archs = input->get_archs();
-    } else if (archs_option->get_priority() > libdnf5::Option::Priority::DEFAULT) {
-        archs = std::vector<std::string>(archs_option->get_value().begin(), archs_option->get_value().end());
+        arches = input->get_archs();
+    } else if (arch_option->get_priority() > libdnf5::Option::Priority::DEFAULT) {
+        arches = std::vector<std::string>(arch_option->get_value().begin(), arch_option->get_value().end());
     } else {
-        archs = {ctx.get_base().get_vars()->get_value("arch")};
+        arches = {ctx.get_base().get_vars()->get_value("arch")};
     }
 
     ctx.set_load_available_repos(Context::LoadAvailableRepos::NONE);
@@ -183,30 +183,11 @@ void ManifestNewCommand::populate_manifest(
     // Load repositories
     auto repo_sack = base->get_repo_sack();
     if (input.has_value()) {
-        for (const auto & input_repo : input->get_repositories()) {
-            auto repo = repo_sack->create_repo(input_repo.get_id());
-            auto & repo_config = repo->get_config();
-            const auto & vars = base->get_vars();
-            if (!input_repo.get_metalink().empty()) {
-                const auto & metalink = vars->substitute(input_repo.get_metalink());
-                repo_config.get_metalink_option().set(metalink);
-            } else if (!input_repo.get_mirrorlist().empty()) {
-                const auto & mirrorlist = vars->substitute(input_repo.get_mirrorlist());
-                repo_config.get_mirrorlist_option().set(mirrorlist);
-            } else if (!input_repo.get_baseurl().empty()) {
-                const auto & baseurl = vars->substitute(input_repo.get_baseurl());
-                repo_config.get_baseurl_option().set(baseurl);
-            } else {
-                throw libdnf5::RuntimeError(M_("Input repository \"{}\" has no baseurl"), input_repo.get_id());
-            }
-        }
+        create_repos(*base, input->get_repositories());
     } else {
         repo_sack->create_repos_from_system_configuration();
 
-        repo_sack->create_repos_from_paths(ctx.get_repos_from_path(), libdnf5::Option::Priority::COMMANDLINE);
-
         std::vector<std::pair<std::string, std::string>> repos_from_path{ctx.get_repos_from_path()};
-
         auto vars = base->get_vars();
         for (auto & id_path_pair : repos_from_path) {
             id_path_pair.first = vars->substitute(id_path_pair.first);
@@ -214,7 +195,7 @@ void ManifestNewCommand::populate_manifest(
         }
         repo_sack->create_repos_from_paths(repos_from_path, libdnf5::Option::Priority::COMMANDLINE);
     }
-    if (source_option->get_value()) {
+    if (srpm_option->get_value()) {
         repo_sack->enable_source_repos();
     }
     set_repo_callbacks(*base);
@@ -311,7 +292,7 @@ void ManifestNewCommand::populate_manifest(
 void ManifestNewCommand::run() {
     libpkgmanifest::manifest::Serializer serializer;
     if (per_arch_option->get_value()) {
-        for (const auto & arch : archs) {
+        for (const auto & arch : arches) {
             libpkgmanifest::manifest::Manifest manifest;
             populate_manifest(manifest, arch, false);
 
@@ -321,8 +302,8 @@ void ManifestNewCommand::run() {
         }
     } else {
         libpkgmanifest::manifest::Manifest manifest;
-        for (const auto & arch : archs) {
-            populate_manifest(manifest, arch, archs.size() > 1);
+        for (const auto & arch : arches) {
+            populate_manifest(manifest, arch, arches.size() > 1);
         }
         serializer.serialize(manifest, manifest_path_option->get_value());
     }
@@ -340,14 +321,12 @@ std::vector<libdnf5::rpm::Package> ManifestNewCommand::resolve_pkgs(libdnf5::Bas
 
     std::set<libdnf5::rpm::Package> resolved_pkgs;
     libdnf5::Goal goal(base);
-    if (input.has_value()) {
-        goal.set_allow_erasing(input->get_options().get_allow_erasing());
-    }
     if (!pkg_specs.empty()) {
         for (const auto & spec : pkg_specs) {
             goal.add_rpm_install(spec);
         }
     } else if (input.has_value()) {
+        goal.set_allow_erasing(input->get_options().get_allow_erasing());
         for (const auto & spec : (*input).get_packages().get_installs()) {
             goal.add_rpm_install(spec);
         }
@@ -367,7 +346,7 @@ std::vector<libdnf5::rpm::Package> ManifestNewCommand::resolve_pkgs(libdnf5::Bas
         }
     }
 
-    if (source_option->get_value()) {
+    if (srpm_option->get_value()) {
         libdnf5::rpm::PackageQuery source_pkg_query{base};
         source_pkg_query.filter_arch("src");
         source_pkg_query.filter_available();

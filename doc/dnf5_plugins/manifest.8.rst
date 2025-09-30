@@ -53,7 +53,7 @@ For working with RPM package manifest files using the `libpkgmanifest <https://g
     The manifest file may contain packages for multiple base architectures.
     By default, only packages corresponding to the current system architecture
     are downloaded. To download packages for specific architectures, use the
-    ``--archs`` option.
+    ``--arch`` option.
 
 ``install``
     Install all packages specified in the manifest file.
@@ -79,7 +79,7 @@ Options
     Specify a custom path for the manifest file.
     By default, ``packages.manifest.yaml`` is used.
 
-``--source``
+``--srpm``
     Include source packages in consideration.
     Not supported for the ``install`` command.
 
@@ -87,7 +87,7 @@ Options
     Consider currently installed system packages for dependency resolution
     and exclude them from the resulting manifest file.
 
-``--archs``
+``--arch``
     Specify a comma-separated list of architectures to work with.
     By default, only packages corresponding to the current system architecture are processed.
 
@@ -113,7 +113,7 @@ Examples
 ``dnf manifest new wget --use-system``
     Create a new manifest file including the ``wget`` package and all its uninstalled dependencies.
 
-``dnf manifest download --manifest /home/user/Downloads/manifest.yaml --source``
+``dnf manifest download --manifest /home/user/Downloads/manifest.yaml --srpm``
     Download all packages, including source packages, specified in the given manifest file.
 
 ``dnf manifest install -y``
