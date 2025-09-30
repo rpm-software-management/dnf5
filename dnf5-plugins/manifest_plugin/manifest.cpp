@@ -27,13 +27,6 @@ libdnf5::rpm::Nevra nevra_manifest_to_dnf(const libpkgmanifest::manifest::Nevra 
     return dnf_nevra;
 }
 
-std::pair<std::filesystem::path, std::string> splitext(const std::filesystem::path & path) {
-    const std::string extension = path.extension().string();
-    std::string root = path.string();
-    root.erase(root.length() - extension.length());
-    return {root, extension};
-}
-
 std::filesystem::path get_manifest_path(libdnf5::OptionPath & option, const std::string & arch) {
     std::string path{option.get_value()};
 
@@ -195,10 +188,9 @@ std::unique_ptr<libdnf5::Base> ManifestSubcommand::create_base_for_arch(const st
     return base;
 }
 
-void ManifestSubcommand::create_manifest_repos(
-    libdnf5::Base & base, libpkgmanifest::common::Repositories manifest_repos) const {
+void ManifestSubcommand::create_repos(libdnf5::Base & base, libpkgmanifest::common::Repositories repos) const {
     auto repo_sack = base.get_repo_sack();
-    for (const auto & manifest_repo : manifest_repos) {
+    for (const auto & manifest_repo : repos) {
         auto repo = repo_sack->create_repo(manifest_repo.get_id());
 
         repo->set_callbacks(std::make_unique<KeyImportRepoCB>(base.get_config()));
@@ -217,7 +209,7 @@ void ManifestSubcommand::create_manifest_repos(
             const auto & baseurl = vars->substitute(manifest_repo.get_baseurl());
             repo_config.get_baseurl_option().set(baseurl);
         } else {
-            throw libdnf5::RuntimeError(M_("Manifest repository \"{}\" has no baseurl"), manifest_repo.get_id());
+            throw libdnf5::RuntimeError(M_("Repository \"{}\" has no baseurl"), manifest_repo.get_id());
         }
     }
 }

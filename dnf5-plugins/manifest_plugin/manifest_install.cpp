@@ -40,14 +40,14 @@ void ManifestInstallCommand::configure() {
 
     const auto & manifest_path = get_manifest_path(*manifest_path_option, arch);
 
-    std::filesystem::path destdir{std::get<0>(splitext(manifest_path))};
+    std::filesystem::path destdir{manifest_path.stem()};
     base.get_config().get_destdir_option().set(libdnf5::Option::Priority::PLUGINDEFAULT, destdir);
 
     base.get_config().get_skip_broken_option().set(false);
     base.get_config().get_skip_unavailable_option().set(false);
 
     manifest = libpkgmanifest::manifest::Parser().parse(manifest_path);
-    create_manifest_repos(base, manifest.get_repositories());
+    create_repos(base, manifest.get_repositories());
 }
 
 void ManifestInstallCommand::run() {
