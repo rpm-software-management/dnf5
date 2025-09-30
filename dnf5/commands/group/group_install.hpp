@@ -43,7 +43,7 @@ public:
 
     std::unique_ptr<GroupWithOptionalOption> with_optional{nullptr};
     std::unique_ptr<GroupNoPackagesOption> no_packages{nullptr};
-    std::unique_ptr<GroupSpecArguments> group_specs{nullptr};
+    std::unique_ptr<CompsSpecArguments> group_specs{nullptr};
 
 protected:
     // to be used by an alias command only

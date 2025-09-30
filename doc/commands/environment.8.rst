@@ -40,7 +40,7 @@ The ``environment`` command in ``DNF5`` offers several queries for getting infor
 about environments and groups related to them. You can install environments
 with the ``install`` command as ``install @environment-id``.
 
-Optional ``environment-spec`` arguments could be passed to filter only environments with given names.
+Optional ``environment-spec`` arguments can be passed to filter environments with given IDs or names.
 
 
 Subcommands
