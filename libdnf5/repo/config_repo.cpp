@@ -72,7 +72,8 @@ class ConfigRepo::Impl {
     OptionChild<OptionNumber<float>> throttle{main_config.get_throttle_option()};
     OptionChild<OptionSeconds> timeout{main_config.get_timeout_option()};
     OptionChild<OptionNumber<std::uint32_t>> max_parallel_downloads{main_config.get_max_parallel_downloads_option()};
-    OptionChild<OptionNumber<std::uint32_t>> max_downloads_per_mirror{main_config.get_max_downloads_per_mirror_option()};
+    OptionChild<OptionNumber<std::uint32_t>> max_downloads_per_mirror{
+        main_config.get_max_downloads_per_mirror_option()};
     OptionChild<OptionSeconds> metadata_expire{main_config.get_metadata_expire_option()};
     OptionNumber<std::int32_t> cost{1000};
     OptionNumber<std::int32_t> priority{99};
