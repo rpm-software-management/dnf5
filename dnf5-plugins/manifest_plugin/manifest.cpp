@@ -362,40 +362,41 @@ void ManifestSubcommand::add_pkgs_to_manifest(
         manifest_pkg.set_nevra(nevra);
         manifest_pkg.set_size(dnf_pkg.get_download_size());
 
-        std::optional<libdnf5::repo::RepoWeakPtr> dnf_repo;
         libdnf5::repo::RepoQuery rq{base};
+        std::string repo_id;
         if (is_from_system_repo) {
-            rq.filter_id(dnf_pkg.get_from_repo_id(), libdnf5::sack::QueryCmp::EQ);
+            repo_id = dnf_pkg.get_from_repo_id();
         } else {
-            rq.filter_id(dnf_pkg.get_repo_id(), libdnf5::sack::QueryCmp::EQ);
+            repo_id = dnf_pkg.get_repo_id();
         }
-        if (rq.size() > 0) {
-            dnf_repo = *rq.begin();
-            manifest_pkg.set_repo_id((*dnf_repo)->get_id());
-        } else {
-            manifest_pkg.set_repo_id(BOOTSTRAP_REPO_ID);
+        rq.filter_id(repo_id, libdnf5::sack::QueryCmp::EQ);
+        if (rq.empty()) {
+            throw libdnf5::RuntimeError(
+                M_("Package \"{}\" wanted from repository \"{}\", but no such repository was found."),
+                dnf_pkg.get_nevra(),
+                repo_id);
         }
+        libdnf5::repo::RepoWeakPtr dnf_repo = *rq.begin();
+        manifest_pkg.set_repo_id(dnf_repo->get_id());
 
         // Add the package's repository if it has not already been added
         if (!added_repository_ids.contains(manifest_pkg.get_repo_id())) {
             libpkgmanifest::common::Repository manifest_repo;
             manifest_repo.set_id(manifest_pkg.get_repo_id());
-            if (dnf_repo.has_value()) {
-                const auto & repo_config = (*dnf_repo)->get_config();
-                if (!repo_config.get_metalink_option().empty()) {
-                    const auto & url = get_arch_generic_url(repo_config.get_metalink_option().get_value(), arch);
-                    manifest_repo.set_metalink(url);
-                } else if (!repo_config.get_mirrorlist_option().empty()) {
-                    const auto & url = get_arch_generic_url(repo_config.get_mirrorlist_option().get_value(), arch);
-                    manifest_repo.set_mirrorlist(url);
-                } else {
-                    const auto & baseurls = repo_config.get_baseurl_option().get_value();
-                    if (baseurls.empty()) {
-                        throw libdnf5::RuntimeError(M_("Repository \"{}\" has no baseurl"), (*dnf_repo)->get_id());
-                    }
-                    const auto & url = get_arch_generic_url(baseurls.front(), arch);
-                    manifest_repo.set_baseurl(url);
+            const auto & repo_config = dnf_repo->get_config();
+            if (!repo_config.get_metalink_option().empty()) {
+                const auto & url = get_arch_generic_url(repo_config.get_metalink_option().get_value(), arch);
+                manifest_repo.set_metalink(url);
+            } else if (!repo_config.get_mirrorlist_option().empty()) {
+                const auto & url = get_arch_generic_url(repo_config.get_mirrorlist_option().get_value(), arch);
+                manifest_repo.set_mirrorlist(url);
+            } else {
+                const auto & baseurls = repo_config.get_baseurl_option().get_value();
+                if (baseurls.empty()) {
+                    throw libdnf5::RuntimeError(M_("Repository \"{}\" has no baseurl"), dnf_repo->get_id());
                 }
+                const auto & url = get_arch_generic_url(baseurls.front(), arch);
+                manifest_repo.set_baseurl(url);
             }
             manifest.get_repositories().add(manifest_repo);
             added_repository_ids.insert(manifest_repo.get_id());
