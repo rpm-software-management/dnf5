@@ -362,6 +362,14 @@ std::vector<libdnf5::rpm::Package> ManifestNewCommand::resolve_pkgs(libdnf5::Bas
                 sourcerpm.erase(sourcerpm.length() - 4);
                 pkg_query.resolve_pkg_spec(sourcerpm, {}, true);
 
+                if (pkg_query.empty()) {
+                    throw libdnf5::RuntimeError(
+                        M_("Couldn't find source package {} in available repositories"), sourcerpm);
+                } else {
+                    pkg_query.filter_latest_evr_any_arch();
+                    source_pkgs.insert(*pkg_query.begin());
+                }
+
                 for (const auto & spkg : pkg_query) {
                     source_pkgs.insert(spkg);
                 }
