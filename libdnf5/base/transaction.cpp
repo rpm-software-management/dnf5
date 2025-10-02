@@ -1451,7 +1451,9 @@ void Transaction::Impl::set_rpm_messages(std::vector<std::string> && rpm_message
 }
 
 std::string Transaction::serialize(
-    const std::filesystem::path & packages_path, const std::filesystem::path & comps_path) const {
+    const std::filesystem::path & packages_path,
+    const std::filesystem::path & comps_path,
+    const std::string repo_prefix) const {
     transaction::TransactionReplay transaction_replay;
 
     for (const auto & pkg : get_transaction_packages()) {
@@ -1461,7 +1463,11 @@ std::string Transaction::serialize(
         package_replay.nevra = rpm_pkg.get_nevra();
         package_replay.action = pkg.get_action();
         package_replay.reason = pkg.get_reason();
-        package_replay.repo_id = rpm_pkg.get_repo_id();
+        if (repo_prefix.empty()) {
+            package_replay.repo_id = rpm_pkg.get_repo_id();
+        } else {
+            package_replay.repo_id = repo_prefix + "(" + rpm_pkg.get_repo_id() + ")";
+        }
         if (pkg.get_reason_change_group_id()) {
             package_replay.group_id = *pkg.get_reason_change_group_id();
         }
@@ -1481,7 +1487,11 @@ std::string Transaction::serialize(
         group_replay.action = group.get_action();
         group_replay.reason = group.get_reason();
         // TODO(amatej): does each group has to have at least one repo?
-        group_replay.repo_id = *(group.get_group().get_repos().begin());
+        if (repo_prefix.empty()) {
+            group_replay.repo_id = *(group.get_group().get_repos().begin());
+        } else {
+            group_replay.repo_id = repo_prefix + "(" + *(group.get_group().get_repos().begin()) + ")";
+        }
         group_replay.package_types = group.get_package_types();
 
         if (!comps_path.empty()) {
@@ -1498,7 +1508,11 @@ std::string Transaction::serialize(
         environment_replay.environment_id = xml_environment.get_environmentid();
         environment_replay.action = environment.get_action();
         // TODO(amatej): does each environment has to have at least one repo?
-        environment_replay.repo_id = *(environment.get_environment().get_repos().begin());
+        if (repo_prefix.empty()) {
+            environment_replay.repo_id = *(environment.get_environment().get_repos().begin());
+        } else {
+            environment_replay.repo_id = repo_prefix + "(" + *(environment.get_environment().get_repos().begin()) + ")";
+        }
 
         if (!comps_path.empty()) {
             environment_replay.environment_path = build_comps_xml_path(comps_path, xml_environment.get_environmentid());
