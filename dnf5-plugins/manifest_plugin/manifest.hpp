@@ -16,7 +16,6 @@ const std::string DEFAULT_INPUT_FILENAME{"rpms.in.yaml"};
 const std::string DEFAULT_MANIFEST_FILENAME{"packages.manifest.yaml"};
 const std::string MODULE_FILENAME{"modules_dump.modulemd.yaml"};
 const std::string MODULAR_DATA_SEPARATOR{"..."};
-const std::string BOOTSTRAP_REPO_ID{"bootstrap"};
 
 std::vector<libdnf5::rpm::Package> sort_pkgs(std::vector<libdnf5::rpm::Package> input);
 
