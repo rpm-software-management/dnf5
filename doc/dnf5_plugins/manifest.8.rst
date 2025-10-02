@@ -28,20 +28,20 @@ For working with RPM package manifest files using the `libpkgmanifest <https://g
 
 
 ``new``
-    Generate a manifest file based on the provided input.
+    Create a manifest file based on a list of packages or the installed
+    packages on the system.
 
-    Supported input forms include:
-    - Package specifications
-    - Prototype input file
-    - None (defaults to using installed packages)
+    If given a list of packages, all packages and their dependencies will be
+    resolved and pinned in the manifest file.
 
-    The input is resolved, and all relevant packages and dependencies
-    are saved in the manifest file.
+    If a list of packages is not given, all installed packages on the system
+    will be pinned in the manifest file.
 
-    See options and examples for more details.
+``resolve``
+    Create a manifest file from a provided input file.
 
-    Without specific input, the manifest is generated solely from
-    installed packages.
+    Resolves the list of packages specified in the input file and pins all
+    packages and their dependencies in the manifest file.
 
 ``download``
     Download all packages specified in the manifest file to disk.
@@ -99,12 +99,15 @@ Options
 Examples
 --------
 
-``dnf manifest new``
-    If the ``rpms.in.yaml`` prototype input file is in the current directory, it will be used
-    for package dependency resolution. If not, the manifest will be generated from the
-    system's installed packages.
+``dnf manifest resolve``
+    Resolve the ``rpms.in.yaml`` prototype input file in the current directory
+    and create the resulting manifest file at the default location:
+    ``packages.manifest.yaml``.
 
-    The new manifest file is created at the default location: ``packages.manifest.yaml``.
+``dnf manifest new``
+    Create a new manifest file from the system's installed packages. The new
+    manifest file will be created at the default location:
+    ``packages.manifest.yaml``.
 
 ``dnf manifest new alsa-lib alsa-tools``
     Create a new manifest file containing the ``alsa-lib`` and ``alsa-tools`` packages along
