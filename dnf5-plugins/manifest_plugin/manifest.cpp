@@ -7,6 +7,7 @@
 
 #include <libdnf5-cli/utils/userconfirm.hpp>
 #include <libdnf5/logger/logger.hpp>
+#include <libdnf5/repo/repo_errors.hpp>
 #include <libdnf5/repo/repo_sack.hpp>
 #include <libdnf5/rpm/package_query.hpp>
 #include <libdnf5/rpm/rpm_signature.hpp>
@@ -251,7 +252,15 @@ std::unique_ptr<libdnf5::Base> ManifestSubcommand::create_base_for_arch(const st
 void ManifestSubcommand::create_repos(libdnf5::Base & base, libpkgmanifest::common::Repositories repos) const {
     auto repo_sack = base.get_repo_sack();
     for (const auto & manifest_repo : repos) {
-        auto repo = repo_sack->create_repo(manifest_repo.get_id());
+        libdnf5::repo::RepoWeakPtr repo;
+        try {
+            repo = repo_sack->create_repo(manifest_repo.get_id());
+        } catch (const libdnf5::repo::RepoIdAlreadyExistsError & e) {
+            throw libdnf5::RuntimeError(
+                M_("The stored manifest repository \"{}\" conflicts with an existing repository of the same ID (likely "
+                   "added by a libdnf5 plugin)."),
+                manifest_repo.get_id());
+        }
 
         repo->set_callbacks(std::make_unique<KeyImportRepoCB>(base.get_config()));
 
