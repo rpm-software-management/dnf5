@@ -18,6 +18,8 @@ const std::string MODULE_FILENAME{"modules_dump.modulemd.yaml"};
 const std::string MODULAR_DATA_SEPARATOR{"..."};
 const std::string BOOTSTRAP_REPO_ID{"bootstrap"};
 
+std::vector<libdnf5::rpm::Package> sort_pkgs(std::vector<libdnf5::rpm::Package> input);
+
 libdnf5::rpm::Nevra nevra_manifest_to_dnf(const libpkgmanifest::manifest::Nevra & manifest_nevra);
 
 std::filesystem::path get_manifest_path(libdnf5::OptionPath & option, const std::string & arch);
@@ -45,6 +47,14 @@ public:
 protected:
     void create_repos(libdnf5::Base & base, libpkgmanifest::common::Repositories manifest_repos) const;
     std::unique_ptr<libdnf5::Base> create_base_for_arch(const std::string & arch) const;
+    std::vector<libdnf5::rpm::Package> resolve_goal(
+        libdnf5::Goal & goal, libdnf5::Base & base, const bool include_srpms);
+    void add_pkgs_to_manifest(
+        libpkgmanifest::manifest::Manifest & manifest,
+        libdnf5::Base & base,
+        const std::vector<libdnf5::rpm::Package> & pkgs,
+        const std::string & arch,
+        const bool multiarch);
 
     libdnf5::OptionPath * manifest_path_option{nullptr};
     std::unique_ptr<libdnf5::ConfigMain> config_before_setup;
@@ -61,17 +71,35 @@ private:
     void populate_manifest(libpkgmanifest::manifest::Manifest &, const std::string & arch, const bool multiarch);
     std::vector<libdnf5::rpm::Package> resolve_pkgs(libdnf5::Base & base);
 
-    libdnf5::OptionPath * input_path_option{nullptr};
     libdnf5::OptionBool * use_system_option{nullptr};
     libdnf5::OptionBool * per_arch_option{nullptr};
     libdnf5::OptionStringList * arch_option{nullptr};
     libdnf5::OptionBool * srpm_option{nullptr};
 
     std::vector<std::string> pkg_specs;
-    std::optional<libpkgmanifest::input::Input> input;
     std::vector<std::string> arches;
     bool use_system_repository{false};
     bool generate_system_snapshot{false};
+};
+
+class ManifestResolveCommand : public ManifestSubcommand {
+public:
+    explicit ManifestResolveCommand(Context & context) : ManifestSubcommand(context, "resolve") {}
+    void set_argument_parser() override;
+    void configure() override;
+    void run() override;
+
+private:
+    void populate_manifest(libpkgmanifest::manifest::Manifest &, const std::string & arch, const bool multiarch);
+    std::vector<libdnf5::rpm::Package> resolve_pkgs(libdnf5::Base & base);
+
+    libdnf5::OptionBool * use_system_option{nullptr};
+    libdnf5::OptionPath * input_path_option{nullptr};
+    libdnf5::OptionBool * per_arch_option{nullptr};
+    libdnf5::OptionBool * srpm_option{nullptr};
+
+    std::optional<libpkgmanifest::input::Input> input;
+    std::vector<std::string> arches;
 };
 
 class ManifestDownloadCommand : public ManifestSubcommand {
