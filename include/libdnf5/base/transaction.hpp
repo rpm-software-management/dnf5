@@ -168,11 +168,17 @@ public:
     /// @warning This method is experimental/unstable and should not be relied on. It may be removed without warning
     /// Serialize the transaction into a json data format which can be later loaded
     /// into a `libdnf5::Goal` and replayed.
-    /// If packages_path is provided it is assumed all packages in this transaction are present there and
-    /// the serialized transaction contains paths those packages.
-    /// The same applies for comps paths (they can be stored using the `store_comps` method).
+    /// @param packages_path If provided it is assumed all packages in this transaction are present there and
+    ///                      the resulting serialized transaction will contain paths to those packages.
+    /// @param comps_path If provided it is assumed all comps in this transaction are present there and
+    ///                   the resulting serialized transaction will contain paths to those xml comps files
+    ///                   (they can be stored using the `store_comps` method).
+    /// @param repo_prefix If provided each repository id used in this transaction will be wrapped in
+    ///                    brackets and prefix by repo_prefix.
     std::string serialize(
-        const std::filesystem::path & packages_path = "", const std::filesystem::path & comps_path = "") const;
+        const std::filesystem::path & packages_path = "",
+        const std::filesystem::path & comps_path = "",
+        const std::string repo_prefix = "") const;
 
     /// @warning This method is experimental/unstable and should not be relied on. It may be removed without warning
     /// Store each group and environment in this transaction as a separate xml file in the

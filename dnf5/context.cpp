@@ -58,6 +58,8 @@ namespace dnf5 {
 
 namespace {
 
+constexpr const char * STORED_REPO_PREFIX = "@stored_transaction";
+
 // The `KeyImportRepoCB` class implements callback only for importing repository key.
 class KeyImportRepoCB : public libdnf5::repo::RepoCallbacks2_1 {
 public:
@@ -468,7 +470,7 @@ void Context::Impl::download_and_run(libdnf5::base::Transaction & transaction) {
         transaction.download();
         transaction.store_comps(comps_location);
         libdnf5::utils::fs::File transfile(transaction_location, "w");
-        transfile.write(transaction.serialize(packages_in_trans_dir, comps_in_trans_dir));
+        transfile.write(transaction.serialize(packages_in_trans_dir, comps_in_trans_dir, STORED_REPO_PREFIX));
         return;
     }
 
