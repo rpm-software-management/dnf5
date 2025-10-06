@@ -20,14 +20,14 @@
 
 .. _needs_restarting_plugin_ref-label:
 
-#########################
- Needs-Restarting Command
-#########################
+########################
+needs-restarting Command
+########################
 
 Synopsis
 ========
 
-``dnf5 needs-restarting [--services | -s]``
+``dnf5 needs-restarting [-p | --processes [-e | --exclude-services]] [-s | --services] [-r | --reboothint]``
 
 
 Description
@@ -41,5 +41,14 @@ The ``needs-restarting`` command will exit with code 1 if a reboot is recommende
 Options
 =======
 
+``-p, --processes``
+    | List processes that need restarting. If the package that provides the executable running, or any of its dependencies, have been updated since the process started, then restarting the process will be recommended.
+
+``-e, --exclude-services``
+    | Used with the ``-p, --processes`` option and will filter out any processes that are handled by systemd services.
+
 ``-s, --services``
     | List systemd services that need restarting. If the package that provides the service, or any of its dependencies, have been updated since the service started, then restarting the service will be recommended. Note that this approach is quite aggressive to recommend a restart when one may not be strictly necessary.
+
+``-r, --reboothint``
+    | Has no effect, kept for compatibility with DNF 4. "dnf4 needs-restarting -r" provides the same functionality as "dnf5 needs-restarting".
