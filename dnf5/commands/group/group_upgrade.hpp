@@ -42,6 +42,12 @@ public:
     std::unique_ptr<AllowErasingOption> allow_erasing;
 
     std::unique_ptr<CompsSpecArguments> group_specs{nullptr};
+
+protected:
+    virtual const libdnf5::CompsTypePreferred & get_comps_type_preferred() const { return comps_type_preferred; }
+
+private:
+    libdnf5::CompsTypePreferred comps_type_preferred = libdnf5::CompsTypePreferred::GROUP;
 };
 
 

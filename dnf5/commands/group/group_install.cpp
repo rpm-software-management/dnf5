@@ -69,6 +69,7 @@ void GroupInstallCommand::run() {
             ctx.get_base().get_config().get_group_package_types_option().get_value());
         settings.set_group_package_types(group_package_types | libdnf5::comps::PackageType::OPTIONAL);
     }
+    settings.set_comps_type_preferred(get_comps_type_preferred());
     for (const auto & spec : group_specs->get_value()) {
         goal->add_group_install(spec, libdnf5::transaction::TransactionItemReason::USER, settings);
     }

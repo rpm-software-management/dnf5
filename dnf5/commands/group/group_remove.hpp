@@ -41,6 +41,11 @@ public:
 protected:
     // to be used by an alias command only
     explicit GroupRemoveCommand(Context & context, const std::string & name) : Command(context, name) {}
+
+    virtual const libdnf5::CompsTypePreferred & get_comps_type_preferred() const { return comps_type_preferred; }
+
+private:
+    libdnf5::CompsTypePreferred comps_type_preferred = libdnf5::CompsTypePreferred::GROUP;
 };
 
 

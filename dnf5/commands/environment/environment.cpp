@@ -20,7 +20,10 @@
 #include "environment.hpp"
 
 #include "environment_info.hpp"
+#include "environment_install.hpp"
 #include "environment_list.hpp"
+#include "environment_remove.hpp"
+#include "environment_upgrade.hpp"
 
 namespace dnf5 {
 
@@ -36,11 +39,20 @@ void EnvironmentCommand::set_argument_parser() {
 }
 
 void EnvironmentCommand::register_subcommands() {
+    // query commands
     auto * query_commands_environment = get_context().get_argument_parser().add_new_group("environment_query_commands");
     query_commands_environment->set_header("Query Commands:");
     get_argument_parser_command()->register_group(query_commands_environment);
     register_subcommand(std::make_unique<EnvironmentListCommand>(get_context()), query_commands_environment);
     register_subcommand(std::make_unique<EnvironmentInfoCommand>(get_context()), query_commands_environment);
+    // software management commands
+    auto * swm_commands_environment =
+        get_context().get_argument_parser().add_new_group("environment_software_management_commands");
+    swm_commands_environment->set_header("Software Management Commands:");
+    get_argument_parser_command()->register_group(swm_commands_environment);
+    register_subcommand(std::make_unique<EnvironmentInstallCommand>(get_context()), swm_commands_environment);
+    register_subcommand(std::make_unique<EnvironmentRemoveCommand>(get_context()), swm_commands_environment);
+    register_subcommand(std::make_unique<EnvironmentUpgradeCommand>(get_context()), swm_commands_environment);
 }
 
 void EnvironmentCommand::pre_configure() {
