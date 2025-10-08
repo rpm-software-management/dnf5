@@ -41,7 +41,8 @@ To query environments use separate ``environment`` command.
 Note: ``dnf-4`` listed both environments and groups with the ``group`` command.
 
 Optional ``group-spec`` arguments can be passed to filter groups with given IDs or names. The install, remove and
-upgrade commands take both ``group-spec`` and ``environment-spec``.
+upgrade commands take both ``group-spec`` and ``environment-spec``, but in case both groups and
+environments match, only groups are affected.
 
 
 Subcommands

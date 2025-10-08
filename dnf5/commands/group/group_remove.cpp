@@ -54,6 +54,7 @@ void GroupRemoveCommand::run() {
     if (no_packages->get_value()) {
         settings.set_group_no_packages(true);
     }
+    settings.set_comps_type_preferred(get_comps_type_preferred());
     for (const auto & spec : group_specs->get_value()) {
         goal->add_group_remove(spec, libdnf5::transaction::TransactionItemReason::USER, settings);
     }

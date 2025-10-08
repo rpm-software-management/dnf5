@@ -171,6 +171,10 @@ current ``LC_MESSAGES`` locale (if possible).
 Comps ``specs`` are prefixed by ``@`` for commands that also accept package ``specs``.
 For example see :manpage:`dnf5-install(8)`, :ref:`Install Command <install_command_ref-label>`.
 
+The group and environment commands accept both ``<group-spec>`` and ``<environment-spec>``, but
+prefer only their corresponding type in case both groups and environments match the given argument.
+Other commands that accept both types affect both groups and environments.
+
 Modules
 =======
 
