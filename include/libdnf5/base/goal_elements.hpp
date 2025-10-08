@@ -173,6 +173,9 @@ enum class GoalSetting { AUTO, SET_TRUE, SET_FALSE };
 /// Unresolved or resolved values based on GoalSetting
 enum class GoalUsedSetting { UNUSED, USED_TRUE, USED_FALSE };
 
+/// Settings for which comps types should be preffered in case both match.
+enum class CompsTypePreferred { BOTH, GROUP, ENVIRONMENT };
+
 /// Configure SPEC resolving.
 /// Important for queries that resolve SPEC.
 struct LIBDNF_API ResolveSpecSettings {
@@ -306,6 +309,13 @@ public:
     /// Default: false
     void set_environment_no_groups(bool environment_no_groups);
     bool get_environment_no_groups() const;
+
+    /// Set which comps type (GROUP or ENVIRONMENT) is preffered in case both match.
+    /// If only one type matches, it is selected regardless.
+    ///
+    /// By default, both groups and environments will be selected if both match.
+    void set_comps_type_preferred(CompsTypePreferred comps_type_preferred);
+    CompsTypePreferred get_comps_type_preferred() const;
 
     /// Set whether to report packages providing alternatives (``alternative-for(..)`` provide) and packages
     /// with different letter capitalization when no matches are found.
