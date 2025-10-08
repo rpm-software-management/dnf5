@@ -1245,8 +1245,10 @@ GoalProblem Goal::Impl::resolve_group_specs(std::vector<GroupSpec> & specs, base
         }
         sack::QueryCmp cmp = settings.get_ignore_case() ? sack::QueryCmp::IGLOB : sack::QueryCmp::GLOB;
         bool spec_resolved{false};
+
+        // Get query of groups which match the spec for the given action.
+        comps::GroupQuery group_query(base, true);
         if (settings.get_group_search_groups()) {
-            comps::GroupQuery group_query(base, true);
             comps::GroupQuery spec_groups_query(base_groups_query);
             // for REMOVE / UPGRADE actions take only installed groups into account
             // for INSTALL only available groups
@@ -1262,7 +1264,35 @@ GoalProblem Goal::Impl::resolve_group_specs(std::vector<GroupSpec> & specs, base
                 group_query_name.filter_name(spec, cmp);
                 group_query |= group_query_name;
             }
+        }
+        // Get query of environments which match the spec for the given action.
+        comps::EnvironmentQuery environment_query(base, true);
+        if (settings.get_group_search_environments()) {
+            comps::EnvironmentQuery spec_environments_query(base_environments_query);
+            spec_environments_query.filter_installed(action != GoalAction::INSTALL);
+            if (settings.get_group_with_id()) {
+                comps::EnvironmentQuery environment_query_id(spec_environments_query);
+                environment_query_id.filter_environmentid(spec, cmp);
+                environment_query |= environment_query_id;
+            }
+            // TODO(mblaha): reconsider usefulness of searching groups by names
+            if (settings.get_group_with_name()) {
+                comps::EnvironmentQuery environment_query_name(spec_environments_query);
+                environment_query_name.filter_name(spec, cmp);
+                environment_query |= environment_query_name;
+            }
+        }
 
+        // Use the environment query only if environments are preffered or if the spec didn't match any groups.
+        if (!environment_query.empty() &&
+            (settings.get_comps_type_preferred() != CompsTypePreferred::GROUP || group_query.empty())) {
+            resolved_environment_specs[action].push_back({spec, std::move(environment_query), settings});
+            spec_resolved = true;
+        }
+
+        // Use the group query only if groups are preffered or if the spec didn't match any environments.
+        if (!group_query.empty() &&
+            (settings.get_comps_type_preferred() != CompsTypePreferred::ENVIRONMENT || !spec_resolved)) {
             comps::GroupQuery already_handled_groups(base, true);
             // Check if there are other actions for selected groups,
             // we don't want to have multiple actions per one group id.
@@ -1313,26 +1343,7 @@ GoalProblem Goal::Impl::resolve_group_specs(std::vector<GroupSpec> & specs, base
                 spec_resolved = true;
             }
         }
-        if (settings.get_group_search_environments()) {
-            comps::EnvironmentQuery environment_query(base, true);
-            comps::EnvironmentQuery spec_environments_query(base_environments_query);
-            spec_environments_query.filter_installed(action != GoalAction::INSTALL);
-            if (settings.get_group_with_id()) {
-                comps::EnvironmentQuery environment_query_id(spec_environments_query);
-                environment_query_id.filter_environmentid(spec, cmp);
-                environment_query |= environment_query_id;
-            }
-            // TODO(mblaha): reconsider usefulness of searching groups by names
-            if (settings.get_group_with_name()) {
-                comps::EnvironmentQuery environment_query_name(spec_environments_query);
-                environment_query_name.filter_name(spec, cmp);
-                environment_query |= environment_query_name;
-            }
-            if (!environment_query.empty()) {
-                resolved_environment_specs[action].push_back({spec, std::move(environment_query), settings});
-                spec_resolved = true;
-            }
-        }
+
         if (!spec_resolved) {
             transaction.p_impl->add_resolve_log(
                 action,
