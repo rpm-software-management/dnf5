@@ -146,6 +146,10 @@ class GoalJobSettings::Impl {
     /// with the environment itself, but will not add any groups to the transaction.
     bool environment_no_groups{false};
 
+    /// Set which comps type (GROUP or ENVIRONMENT) is preffered in case both match.
+    /// If only one type matches, it is selected regardless.
+    CompsTypePreferred comps_type_preferred{CompsTypePreferred::BOTH};
+
     /// Set whether hints should be reported
     bool report_hint{true};
 
@@ -479,6 +483,13 @@ void GoalJobSettings::set_environment_no_groups(bool environment_no_groups) {
 }
 bool GoalJobSettings::get_environment_no_groups() const {
     return p_impl->environment_no_groups;
+}
+
+void GoalJobSettings::set_comps_type_preferred(CompsTypePreferred comps_type_preferred) {
+    p_impl->comps_type_preferred = comps_type_preferred;
+}
+CompsTypePreferred GoalJobSettings::get_comps_type_preferred() const {
+    return p_impl->comps_type_preferred;
 }
 
 void GoalJobSettings::set_advisory_filter(const libdnf5::advisory::AdvisoryQuery & filter) {
