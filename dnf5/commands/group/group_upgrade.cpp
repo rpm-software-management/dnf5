@@ -58,6 +58,7 @@ void GroupUpgradeCommand::run() {
     goal->set_allow_erasing(allow_erasing->get_value());
 
     libdnf5::GoalJobSettings settings;
+    settings.set_comps_type_preferred(get_comps_type_preferred());
     for (const auto & spec : group_specs->get_value()) {
         goal->add_group_upgrade(spec, settings);
     }
