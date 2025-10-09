@@ -29,6 +29,7 @@
 #endif
 #include "conf/config.h"
 #include "repo_cache_private.hpp"
+#include "repo_sack_private.hpp"
 #include "solv/pool.hpp"
 #include "solv/solver.hpp"
 #include "solv_repo.hpp"
@@ -70,7 +71,6 @@ namespace fs = std::filesystem;
 namespace {
 
 // Names of special repositories
-constexpr const char * SYSTEM_REPO_NAME = "@System";
 constexpr const char * CMDLINE_REPO_NAME = "@commandline";
 constexpr const char * STORED_TRANSACTION_NAME = "@stored_transaction";
 // TODO lukash: unused, remove?
@@ -315,7 +315,7 @@ std::map<std::string, libdnf5::rpm::Package> RepoSack::add_cmdline_packages(
 
 RepoWeakPtr RepoSack::get_system_repo() {
     if (!p_impl->system_repo) {
-        std::unique_ptr<Repo> repo(new Repo(p_impl->base, SYSTEM_REPO_NAME, Repo::Type::SYSTEM));
+        std::unique_ptr<Repo> repo(new Repo(p_impl->base, libdnf5::repo::SYSTEM_REPO_NAME, Repo::Type::SYSTEM));
         // TODO(mblaha): re-enable caching once we can reliably detect whether system repo is up-to-date
         repo->get_config().get_build_cache_option().set(libdnf5::Option::Priority::RUNTIME, false);
         p_impl->system_repo = repo.get();
