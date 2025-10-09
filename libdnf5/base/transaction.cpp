@@ -25,6 +25,7 @@
 #include "module/module_db.hpp"
 #include "module/module_sack_impl.hpp"
 #endif
+#include "../repo/repo_sack_private.hpp"
 #include "repo/temp_files_memory.hpp"
 #include "rpm/package_set_impl.hpp"
 #include "solv/pool.hpp"
@@ -1463,7 +1464,7 @@ std::string Transaction::serialize(
         package_replay.nevra = rpm_pkg.get_nevra();
         package_replay.action = pkg.get_action();
         package_replay.reason = pkg.get_reason();
-        if (repo_prefix.empty()) {
+        if (repo_prefix.empty() || rpm_pkg.get_repo_id() == std::string(libdnf5::repo::SYSTEM_REPO_NAME)) {
             package_replay.repo_id = rpm_pkg.get_repo_id();
         } else {
             package_replay.repo_id = repo_prefix + "(" + rpm_pkg.get_repo_id() + ")";
@@ -1487,10 +1488,11 @@ std::string Transaction::serialize(
         group_replay.action = group.get_action();
         group_replay.reason = group.get_reason();
         // TODO(amatej): does each group has to have at least one repo?
-        if (repo_prefix.empty()) {
-            group_replay.repo_id = *(group.get_group().get_repos().begin());
+        std::string first_repo_id = *(group.get_group().get_repos().begin());
+        if (repo_prefix.empty() || first_repo_id == std::string(libdnf5::repo::SYSTEM_REPO_NAME)) {
+            group_replay.repo_id = first_repo_id;
         } else {
-            group_replay.repo_id = repo_prefix + "(" + *(group.get_group().get_repos().begin()) + ")";
+            group_replay.repo_id = repo_prefix + "(" + first_repo_id + ")";
         }
         group_replay.package_types = group.get_package_types();
 
@@ -1508,10 +1510,11 @@ std::string Transaction::serialize(
         environment_replay.environment_id = xml_environment.get_environmentid();
         environment_replay.action = environment.get_action();
         // TODO(amatej): does each environment has to have at least one repo?
-        if (repo_prefix.empty()) {
-            environment_replay.repo_id = *(environment.get_environment().get_repos().begin());
+        std::string first_repo_id = *(environment.get_environment().get_repos().begin());
+        if (repo_prefix.empty() || first_repo_id == std::string(libdnf5::repo::SYSTEM_REPO_NAME)) {
+            environment_replay.repo_id = first_repo_id;
         } else {
-            environment_replay.repo_id = repo_prefix + "(" + *(environment.get_environment().get_repos().begin()) + ")";
+            environment_replay.repo_id = repo_prefix + "(" + first_repo_id + ")";
         }
 
         if (!comps_path.empty()) {

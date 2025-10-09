@@ -173,8 +173,8 @@ public:
     /// @param comps_path If provided it is assumed all comps in this transaction are present there and
     ///                   the resulting serialized transaction will contain paths to those xml comps files
     ///                   (they can be stored using the `store_comps` method).
-    /// @param repo_prefix If provided each repository id used in this transaction will be wrapped in
-    ///                    brackets and prefix by repo_prefix.
+    /// @param repo_prefix If provided each repository id (except for @System repo) used in this transaction
+    ///                    will be wrapped in brackets and prefix by repo_prefix.
     std::string serialize(
         const std::filesystem::path & packages_path = "",
         const std::filesystem::path & comps_path = "",
