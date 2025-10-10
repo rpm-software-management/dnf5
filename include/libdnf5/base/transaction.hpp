@@ -23,6 +23,7 @@
 
 #include "transaction_errors.hpp"
 
+#include "libdnf5/base/active_transaction_info.hpp"
 #include "libdnf5/base/base_weak.hpp"
 #include "libdnf5/base/goal_elements.hpp"
 #include "libdnf5/base/log_event.hpp"
@@ -196,6 +197,9 @@ public:
 
     /// Retrieve captured RPM log messages
     std::vector<std::string> get_rpm_messages();
+
+    /// Retrieve metadat of concurrently running transaction
+    const ActiveTransactionInfo * get_concurrent_transaction() const noexcept;
 
 private:
     friend class TransactionEnvironment;
