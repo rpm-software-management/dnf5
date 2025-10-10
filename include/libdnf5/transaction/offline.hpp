@@ -47,6 +47,7 @@ const std::string STATUS_TRANSACTION_INCOMPLETE{"transaction-incomplete"};
 const std::filesystem::path MAGIC_SYMLINK{"/system-update"};
 
 const std::filesystem::path DEFAULT_DATADIR{std::filesystem::path(libdnf5::SYSTEM_STATE_DIR) / "offline"};
+const std::filesystem::path DEFAULT_DESTDIR{std::filesystem::path(libdnf5::PERSISTDIR) / "offline"};
 const std::filesystem::path TRANSACTION_STATE_FILENAME{"offline-transaction-state.toml"};
 
 class OfflineTransactionState;

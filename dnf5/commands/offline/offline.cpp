@@ -232,7 +232,9 @@ void OfflineSubcommand::configure() {
 
     const std::filesystem::path installroot = ctx.get_base().get_config().get_installroot_option().get_value();
     datadir = installroot / libdnf5::offline::DEFAULT_DATADIR.relative_path();
+    destdir = installroot / libdnf5::offline::DEFAULT_DESTDIR.relative_path();
     std::filesystem::create_directories(datadir);
+    std::filesystem::create_directories(destdir);
     state = std::make_optional<libdnf5::offline::OfflineTransactionState>(
         datadir / libdnf5::offline::TRANSACTION_STATE_FILENAME);
 }
@@ -284,10 +286,14 @@ void reboot(bool poweroff = false) {
 #endif  // #ifdef WITH_SYSTEMD
 }
 
-void clean_datadir(Context & ctx, const std::filesystem::path & datadir) {
+void clean_datadir_and_destdir(
+    Context & ctx, const std::filesystem::path & datadir, const std::filesystem::path & destdir) {
     ctx.get_base().get_logger()->info("Cleaning up downloaded data...");
 
     for (const auto & entry : std::filesystem::directory_iterator(datadir)) {
+        std::filesystem::remove_all(entry.path());
+    }
+    for (const auto & entry : std::filesystem::directory_iterator(destdir)) {
         std::filesystem::remove_all(entry.path());
     }
 }
@@ -488,7 +494,9 @@ void OfflineExecuteCommand::run() {
 
     const auto & installroot = ctx.get_base().get_config().get_installroot_option().get_value();
     const auto & datadir = installroot / libdnf5::offline::DEFAULT_DATADIR.relative_path();
+    const auto & destdir = installroot / libdnf5::offline::DEFAULT_DESTDIR.relative_path();
     std::filesystem::create_directories(datadir);
+    std::filesystem::create_directories(destdir);
     const auto & transaction_json_path = datadir / TRANSACTION_JSON;
 
     const auto & goal = std::make_unique<libdnf5::Goal>(ctx.get_base());
@@ -500,8 +508,8 @@ void OfflineExecuteCommand::run() {
     auto transaction = *context.get_transaction();
     if (transaction.get_problems() != libdnf5::GoalProblem::NO_PROBLEM) {
         std::cerr << "Failed to resolve transaction. This indicates some bigger problem, since the offline transaction "
-                     "was already successfully resolved before. Was the cache at "
-                  << datadir << " modified?" << std::endl;
+                     "was already successfully resolved before. Was the saved transaction at "
+                  << datadir << " or the cache at " << destdir << " modified?" << std::endl;
         throw libdnf5::cli::GoalResolveError(transaction);
     }
 
@@ -559,7 +567,7 @@ void OfflineExecuteCommand::run() {
         ctx, transaction_complete_message, libdnf5::offline::OFFLINE_FINISHED_ID, system_releasever, target_releasever);
 
     // If the transaction succeeded, remove downloaded data
-    clean_datadir(ctx, get_datadir());
+    clean_datadir_and_destdir(ctx, get_datadir(), get_destdir());
 
     reboot(offline_data.get_poweroff_after());
 }
@@ -573,7 +581,7 @@ void OfflineCleanCommand::set_argument_parser() {
 void OfflineCleanCommand::run() {
     auto & ctx = get_context();
     std::filesystem::remove(libdnf5::offline::MAGIC_SYMLINK);
-    clean_datadir(ctx, get_datadir());
+    clean_datadir_and_destdir(ctx, get_datadir(), get_destdir());
 }
 
 struct BootEntry {
