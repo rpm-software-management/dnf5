@@ -22,6 +22,7 @@
 
 #include "base/base_impl.hpp"
 #include "id_queue.hpp"
+#include "vendor_change_manager.hpp"
 
 #include "libdnf5/repo/repo.hpp"
 
@@ -260,6 +261,22 @@ protected:
 
 class RpmPool : public Pool {
     // TODO(mblaha): Move rpm specific methods from parent Pool class here
+public:
+    RpmPool() : vendor_change_manager(*this) {
+        pool_set_custom_vendorcheck(pool, callback_policy_illegal_vendorchange);
+    }
+    ~RpmPool() { pool_set_custom_vendorcheck(pool, nullptr); }
+
+    void load_vendor_change_policy(const std::filesystem::path & policy_file) {
+        vendor_change_manager.load_vendor_change_policy(policy_file);
+    }
+
+private:
+    friend class VendorChangeManager;
+
+    static int callback_policy_illegal_vendorchange(::Pool * libsolv_pool, Solvable * installed, Solvable * new_solv);
+
+    VendorChangeManager vendor_change_manager;
 };
 
 

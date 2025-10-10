@@ -21,6 +21,8 @@
 
 #include "libdnf5/utils/bgettext/bgettext-mark-domain.h"
 
+#include <fnmatch.h>
+
 extern "C" {
 #include <solv/pool.h>
 #include <solv/queue.h>
@@ -29,6 +31,33 @@ extern "C" {
 
 
 namespace libdnf5::solv {
+
+// Check if an illegal vendor change occurs when an installed solvable is replaced by a new solvable.
+// Returns 1 if the vendor change is illegal, otherwise returns 0.
+int RpmPool::callback_policy_illegal_vendorchange(::Pool * libsolv_pool, Solvable * installed, Solvable * new_solv) {
+    // Treat a missing vendor as an empty string (ID_EMPTY)
+    auto outgoing_vendor = installed->vendor ? installed->vendor : ID_EMPTY;
+    auto incoming_vendor = new_solv->vendor ? new_solv->vendor : ID_EMPTY;
+    if (incoming_vendor == outgoing_vendor) {
+        return 0;  // OK, no vendor change occured
+    }
+
+    auto * pool = reinterpret_cast<RpmPool *>(libsolv_pool->appdata);
+
+    auto outgoing_vendor_mask = pool->vendor_change_manager.get_vendor_change_masks(outgoing_vendor).outgoing_mask;
+    if (outgoing_vendor_mask.none()) {
+        // The outgoing vendor is not involved in any valid policy change.
+        // Therefore, any change is illegal.
+        return 1;
+    }
+
+    auto incomin_vendor_mask = pool->vendor_change_manager.get_vendor_change_masks(incoming_vendor).incoming_mask;
+    if ((outgoing_vendor_mask & incomin_vendor_mask).any()) {
+        return 0;  // OK, a policy match was foun
+    }
+
+    return 1;  // Illegal vendor change
+}
 
 TempEvr::TempEvr(const Pool & pool, const char * evr) {
     split_evr = pool_alloctmpspace(*pool, static_cast<int>(strlen(evr)) + 1);
