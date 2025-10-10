@@ -80,6 +80,7 @@ public:
     /// Create libsolv pool and set the appropriate pool flags
     Pool() : considered(0) {
         pool = pool_create();
+        pool->appdata = this;
         // Ensure excluded packages are not taken as candidates for solver
         pool_set_flag(pool, POOL_FLAG_WHATPROVIDESWITHDISABLED, 1);
         // Allow packages of the same name with different architectures to be installed in parallel
