@@ -922,44 +922,67 @@ void RepoSack::Impl::fix_group_missing_xml() {
         auto & logger = *base->get_logger();
         auto & system_state = base->p_impl->get_system_state();
         auto comps_xml_dir = system_state.get_group_xml_dir();
+        auto comps_xml_dir_groups = comps_xml_dir / "groups";
+        auto comps_xml_dir_environments = comps_xml_dir / "environments";
         bool directory_exists = true;
         std::error_code ec;
-        std::filesystem::create_directories(comps_xml_dir, ec);
+        std::filesystem::create_directories(comps_xml_dir_groups, ec);
         if (ec) {
-            logger.debug("Failed to create directory \"{}\": {}", comps_xml_dir.string(), ec.message());
+            logger.debug("Failed to create directory \"{}\": {}", comps_xml_dir_groups.string(), ec.message());
+            directory_exists = false;
+        }
+        std::filesystem::create_directories(comps_xml_dir_environments, ec);
+        if (ec) {
+            logger.debug("Failed to create directory \"{}\": {}", comps_xml_dir_environments.string(), ec.message());
             directory_exists = false;
         }
         if (!group_missing_xml.empty()) {
             libdnf5::comps::GroupQuery available_groups(base);
             available_groups.filter_installed(false);
             for (const auto & group_id : group_missing_xml) {
-                bool xml_saved = false;
+                bool group_loaded = false;
                 if (directory_exists) {
-                    // try to find the group id in availables
-                    libdnf5::comps::GroupQuery group_query(available_groups);
-                    group_query.filter_groupid(group_id);
-                    if (group_query.size() == 1) {
-                        // GroupQuery is basically a set thus iterators and `.get()` method
-                        // return `const Group` objects.
-                        // To call non-const serialize method we need to make a copy here.
-                        libdnf5::comps::Group group = group_query.get();
-                        auto xml_file_name = comps_xml_dir / (group_id + ".xml");
-                        logger.debug(
-                            "Re-creating installed group \"{}\" definition to file \"{}\".",
-                            group_id,
-                            xml_file_name.string());
-                        try {
-                            group.serialize(xml_file_name);
-                            xml_saved = true;
-                        } catch (utils::xml::XMLSaveError & ex) {
-                            logger.debug(ex.what());
+                    auto xml_file_name = comps_xml_dir_groups / (group_id + ".xml");
+                    auto xml_file_name_in_comps_dir = comps_xml_dir / (group_id + ".xml");
+                    // Try to copy the xml file from the comps directory where it used to be stored.
+                    if (solv_repo.read_group_solvable_from_xml(xml_file_name_in_comps_dir)) {
+                        group_loaded = true;
+                        std::filesystem::rename(xml_file_name_in_comps_dir, xml_file_name, ec);
+                        if (ec) {
+                            logger.debug(
+                                "Failed to move \"{}\" into directory \"{}\": {}",
+                                xml_file_name_in_comps_dir.string(),
+                                comps_xml_dir_groups.string(),
+                                ec.message());
                         }
-                        if (xml_saved) {
-                            solv_repo.read_group_solvable_from_xml(xml_file_name);
+                    } else {
+                        // try to find the group id in availables
+                        libdnf5::comps::GroupQuery group_query(available_groups);
+                        group_query.filter_groupid(group_id);
+                        if (group_query.size() == 1) {
+                            // GroupQuery is basically a set thus iterators and `.get()` method
+                            // return `const Group` objects.
+                            // To call non-const serialize method we need to make a copy here.
+                            libdnf5::comps::Group group = group_query.get();
+                            logger.debug(
+                                "Re-creating installed group \"{}\" definition to file \"{}\".",
+                                group_id,
+                                xml_file_name.string());
+                            bool xml_saved = false;
+                            try {
+                                group.serialize(xml_file_name);
+                                xml_saved = true;
+                            } catch (utils::xml::XMLSaveError & ex) {
+                                logger.debug(ex.what());
+                            }
+                            if (xml_saved) {
+                                solv_repo.read_group_solvable_from_xml(xml_file_name);
+                                group_loaded = true;
+                            }
                         }
                     }
                 }
-                if (!xml_saved) {
+                if (!group_loaded) {
                     // fall-back to creating solvables only from system state
                     solv_repo.create_group_solvable(group_id, system_state.get_group_state(group_id));
                 }
@@ -969,30 +992,47 @@ void RepoSack::Impl::fix_group_missing_xml() {
             libdnf5::comps::EnvironmentQuery available_environments(base);
             available_environments.filter_installed(false);
             for (const auto & environment_id : environments_missing_xml) {
-                bool xml_saved = false;
+                bool environment_loaded = false;
                 if (directory_exists) {
-                    // try to find the environment id in availables
-                    libdnf5::comps::EnvironmentQuery environment_query(available_environments);
-                    environment_query.filter_environmentid(environment_id);
-                    if (environment_query.size() == 1) {
-                        libdnf5::comps::Environment environment = environment_query.get();
-                        auto xml_file_name = comps_xml_dir / (environment_id + ".xml");
-                        logger.debug(
-                            "Re-creating installed environmental group \"{}\" definition to file \"{}\".",
-                            environment_id,
-                            xml_file_name.string());
-                        try {
-                            environment.serialize(xml_file_name);
-                            xml_saved = true;
-                        } catch (utils::xml::XMLSaveError & ex) {
-                            logger.debug(ex.what());
+                    auto xml_file_name = comps_xml_dir_groups / (environment_id + ".xml");
+                    auto xml_file_name_in_comps_dir = comps_xml_dir / (environment_id + ".xml");
+                    // Try to copy the xml file from the comps directory where it used to be stored.
+                    if (solv_repo.read_group_solvable_from_xml(xml_file_name_in_comps_dir)) {
+                        environment_loaded = true;
+                        std::filesystem::rename(xml_file_name_in_comps_dir, xml_file_name, ec);
+                        if (ec) {
+                            logger.debug(
+                                "Failed to move \"{}\" into directory \"{}\": {}",
+                                xml_file_name_in_comps_dir.string(),
+                                comps_xml_dir_groups.string(),
+                                ec.message());
                         }
-                        if (xml_saved) {
-                            solv_repo.read_group_solvable_from_xml(xml_file_name);
+                    } else {
+                        // try to find the environment id in availables
+                        libdnf5::comps::EnvironmentQuery environment_query(available_environments);
+                        environment_query.filter_environmentid(environment_id);
+                        if (environment_query.size() == 1) {
+                            libdnf5::comps::Environment environment = environment_query.get();
+                            auto xml_file_name = comps_xml_dir_environments / (environment_id + ".xml");
+                            logger.debug(
+                                "Re-creating installed environmental group \"{}\" definition to file \"{}\".",
+                                environment_id,
+                                xml_file_name.string());
+                            bool xml_saved = false;
+                            try {
+                                environment.serialize(xml_file_name);
+                                xml_saved = true;
+                            } catch (utils::xml::XMLSaveError & ex) {
+                                logger.debug(ex.what());
+                            }
+                            if (xml_saved) {
+                                solv_repo.read_group_solvable_from_xml(xml_file_name);
+                                environment_loaded = true;
+                            }
                         }
                     }
                 }
-                if (!xml_saved) {
+                if (!environment_loaded) {
                     // fall-back to creating solvables only from system state
                     solv_repo.create_environment_solvable(
                         environment_id, system_state.get_environment_state(environment_id));
