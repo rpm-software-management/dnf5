@@ -1170,10 +1170,13 @@ Transaction::TransactionRunResult Transaction::Impl::_run(
 
         // Set correct system state for groups in the transaction
         auto comps_xml_dir = system_state.get_group_xml_dir();
-        std::filesystem::create_directories(comps_xml_dir);
+        auto comps_xml_dir_groups = comps_xml_dir / "groups";
+        auto comps_xml_dir_environments = comps_xml_dir / "environments";
+        std::filesystem::create_directories(comps_xml_dir_groups);
+        std::filesystem::create_directories(comps_xml_dir_environments);
         for (const auto & tsgroup : groups) {
             auto group = tsgroup.get_group();
-            auto group_xml_path = comps_xml_dir / (group.get_groupid() + ".xml");
+            auto group_xml_path = comps_xml_dir_groups / (group.get_groupid() + ".xml");
             if (transaction_item_action_is_inbound(tsgroup.get_action())) {
                 libdnf5::system::GroupState state;
                 state.userinstalled = tsgroup.get_reason() == transaction::TransactionItemReason::USER;
@@ -1214,7 +1217,7 @@ Transaction::TransactionRunResult Transaction::Impl::_run(
         // Set correct system state for environmental groups in the transaction
         for (const auto & tsenvironment : environments) {
             auto environment = tsenvironment.get_environment();
-            auto environment_xml_path = comps_xml_dir / (environment.get_environmentid() + ".xml");
+            auto environment_xml_path = comps_xml_dir_environments / (environment.get_environmentid() + ".xml");
             if (transaction_item_action_is_inbound(tsenvironment.get_action())) {
                 libdnf5::system::EnvironmentState state;
                 // Remember groups installed by this environmental group
@@ -1497,7 +1500,7 @@ std::string Transaction::serialize(
         group_replay.package_types = group.get_package_types();
 
         if (!comps_path.empty()) {
-            group_replay.group_path = build_comps_xml_path(comps_path, xml_group.get_groupid());
+            group_replay.group_path = build_comps_xml_path(comps_path / "groups", xml_group.get_groupid());
         }
 
         transaction_replay.groups.push_back(group_replay);
@@ -1518,7 +1521,8 @@ std::string Transaction::serialize(
         }
 
         if (!comps_path.empty()) {
-            environment_replay.environment_path = build_comps_xml_path(comps_path, xml_environment.get_environmentid());
+            environment_replay.environment_path =
+                build_comps_xml_path(comps_path / "environments", xml_environment.get_environmentid());
         }
 
         transaction_replay.environments.push_back(environment_replay);
@@ -1532,18 +1536,22 @@ std::string Transaction::serialize(
 void Transaction::store_comps(const std::filesystem::path & comps_path) const {
     auto groups = get_transaction_groups();
     auto envs = get_transaction_environments();
-    if (!groups.empty() || !envs.empty()) {
-        std::filesystem::create_directories(comps_path);
+    if (!groups.empty()) {
+        auto comps_xml_dir_groups = comps_path / "groups";
+        std::filesystem::create_directories(comps_xml_dir_groups);
+        for (const auto & group : groups) {
+            auto xml_group = group.get_group();
+            xml_group.serialize(build_comps_xml_path(comps_xml_dir_groups, xml_group.get_groupid()));
+        }
     }
-
-    for (const auto & group : groups) {
-        auto xml_group = group.get_group();
-        xml_group.serialize(build_comps_xml_path(comps_path, xml_group.get_groupid()));
-    }
-
-    for (const auto & environment : envs) {
-        auto xml_environment = environment.get_environment();
-        xml_environment.serialize(build_comps_xml_path(comps_path, xml_environment.get_environmentid()));
+    if (!envs.empty()) {
+        auto comps_xml_dir_environments = comps_path / "environments";
+        std::filesystem::create_directories(comps_xml_dir_environments);
+        for (const auto & environment : envs) {
+            auto xml_environment = environment.get_environment();
+            xml_environment.serialize(
+                build_comps_xml_path(comps_xml_dir_environments, xml_environment.get_environmentid()));
+        }
     }
 }
 
