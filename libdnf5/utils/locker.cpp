@@ -64,6 +64,58 @@ bool Locker::lock(short int type) {
     return true;
 }
 
+void Locker::write_content(const std::string & content) {
+    if (lock_fd == -1) {
+        throw RuntimeError(M_("The lock file \"{}\" is not opened"), path);
+    }
+
+    // Truncate the file first
+    if (ftruncate(lock_fd, 0) == -1) {
+        throw SystemError(errno, M_("Failed to truncate lock file \"{}\""), path);
+    }
+    if (lseek(lock_fd, 0, SEEK_SET) == -1) {
+        throw SystemError(errno, M_("Failed to seek lock file \"{}\""), path);
+    }
+
+    // Write the content
+    ssize_t written = ::write(lock_fd, content.c_str(), content.size());
+    if (written == -1) {
+        throw SystemError(errno, M_("Failed to write to lock file \"{}\""), path);
+    }
+
+    // Ensure data is written to disk
+    if (fsync(lock_fd) == -1) {
+        throw SystemError(errno, M_("Failed to sync lock file \"{}\""), path);
+    }
+}
+
+std::string Locker::read_content() {
+    if (lock_fd == -1) {
+        throw RuntimeError(M_("Cannot read content: no lock held on file \"{}\""), path);
+    }
+
+    std::string content;
+    content.reserve(1024);
+    char buffer[1024];
+
+    if (lseek(lock_fd, 0, SEEK_SET) == -1) {
+        throw SystemError(errno, M_("Failed to seek lock file \"{}\""), path);
+    }
+
+    while (true) {
+        auto read_bytes = ::read(lock_fd, buffer, sizeof(buffer));
+        if (read_bytes == -1) {
+            throw SystemError(errno, M_("Failed to read from lock file \"{}\""), path);
+        }
+        if (read_bytes == 0) {
+            break;
+        }
+        content.append(buffer, static_cast<size_t>(read_bytes));
+    }
+
+    return content;
+}
+
 void Locker::unlock() {
     if (lock_fd != -1) {
         if (close(lock_fd) == -1) {
