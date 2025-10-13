@@ -25,6 +25,8 @@ std::filesystem::path get_manifest_path(libdnf5::OptionPath & option, const std:
 
 void set_repo_callbacks(libdnf5::Base & base);
 
+void load_host_repos(dnf5::Context & ctx, libdnf5::Base & base);
+
 namespace dnf5 {
 
 class ManifestCommand : public Command {
@@ -93,6 +95,7 @@ private:
     std::vector<libdnf5::rpm::Package> resolve_pkgs(libdnf5::Base & base);
 
     libdnf5::OptionBool * use_system_option{nullptr};
+    libdnf5::OptionBool * use_host_repos_option{nullptr};
     libdnf5::OptionPath * input_path_option{nullptr};
     libdnf5::OptionBool * per_arch_option{nullptr};
     libdnf5::OptionBool * srpm_option{nullptr};

@@ -105,15 +105,7 @@ void ManifestNewCommand::populate_manifest(
 
     // Load repositories
     auto repo_sack = base->get_repo_sack();
-    repo_sack->create_repos_from_system_configuration();
-
-    std::vector<std::pair<std::string, std::string>> repos_from_path{ctx.get_repos_from_path()};
-    auto vars = base->get_vars();
-    for (auto & id_path_pair : repos_from_path) {
-        id_path_pair.first = vars->substitute(id_path_pair.first);
-        id_path_pair.second = vars->substitute(id_path_pair.second);
-    }
-    repo_sack->create_repos_from_paths(repos_from_path, libdnf5::Option::Priority::COMMANDLINE);
+    load_host_repos(ctx, *base);
 
     if (srpm_option->get_value()) {
         repo_sack->enable_source_repos();
