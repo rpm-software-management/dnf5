@@ -49,19 +49,6 @@ DNF5 is available since Fedora 38. To install the DNF5 package manager, use eith
 
 Note: `dnf-nightly` provides nightly builds for the entire DNF stack. Once you enable this repository you will start receiving updates for DNF, libdnf, and for the other packages of the stack.
 
-### Testing DNF5 obsoletes DNF
-
-Optionally you can install DNF5 from these COPR repositories[^dnf5-testing][^dnf5-testing-nightly]. The packages are build using the copr option `--rpmbuilds-with dnf5_obsoletes_dnf`. By installing these packages DNF5 will be the default package manager in your system. You will still be able to use DNF running `dnf4`.
-
-Packages from `dnf5-testing` are versioned following Fedora release pace and are updated every two weeks. Packages from `dnf5-testing-nightly` are built nightly.
-
-| Command | DNF5 Version |
-| --- | --- |
-| sudo dnf copr enable rpmsoftwaremanagement/dnf5-testing[^dnf5-testing] | Fedora rawhide version |
-| sudo dnf copr enable rpmsoftwaremanagement/dnf5-testing-nightly[^dnf5-testing-nightly] | Nightly Builds |
-[^dnf5-testing]: https://copr.fedorainfracloud.org/coprs/rpmsoftwaremanagement/dnf5-testing/
-[^dnf5-testing-nightly]: https://copr.fedorainfracloud.org/coprs/rpmsoftwaremanagement/dnf5-testing-nightly/
-
 
 Documentation
 =============

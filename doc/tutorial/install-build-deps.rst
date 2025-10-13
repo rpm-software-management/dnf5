@@ -7,7 +7,7 @@ On Fedora, we run one of the following commands according to our needs.
 
 Enable COPR repo with the DNF 5 nightly builds::
 
-    $ dnf copr enable rpmsoftwaremanagement/dnf5-testing-nightly
+    $ dnf copr enable rpmsoftwaremanagement/dnf-nightly
 
 C++::
 
