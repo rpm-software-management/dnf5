@@ -44,6 +44,15 @@ void ManifestResolveCommand::set_argument_parser() {
     use_system_arg->link_value(use_system_option);
     cmd.register_named_arg(use_system_arg);
 
+    use_host_repos_option =
+        dynamic_cast<libdnf5::OptionBool *>(parser.add_init_value(std::make_unique<libdnf5::OptionBool>(false)));
+    auto * use_host_repos_arg = parser.add_new_named_arg("use-host-repos");
+    use_host_repos_arg->set_long_name("use-host-repos");
+    use_host_repos_arg->set_description(_("Use host repositories for resolving dependencies"));
+    use_host_repos_arg->set_const_value("true");
+    use_host_repos_arg->link_value(use_host_repos_option);
+    cmd.register_named_arg(use_host_repos_arg);
+
     per_arch_option =
         dynamic_cast<libdnf5::OptionBool *>(parser.add_init_value(std::make_unique<libdnf5::OptionBool>(false)));
     auto * per_arch_arg = parser.add_new_named_arg("per-arch");
@@ -74,12 +83,16 @@ void ManifestResolveCommand::configure() {
 
 void ManifestResolveCommand::populate_manifest(
     libpkgmanifest::manifest::Manifest & manifest, const std::string & arch, const bool multiarch) {
+    auto & ctx = get_context();
     auto private_base = create_base_for_arch(arch);
     auto base = private_base->get_weak_ptr();
 
     // Load repositories
     auto repo_sack = base->get_repo_sack();
     create_repos(*base, input->get_repositories());
+    if (use_host_repos_option->get_value()) {
+        load_host_repos(ctx, *base);
+    }
     if (srpm_option->get_value()) {
         repo_sack->enable_source_repos();
     }
