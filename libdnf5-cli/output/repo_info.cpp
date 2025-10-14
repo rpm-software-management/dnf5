@@ -208,6 +208,7 @@ void RepoInfo::print() {
     p_impl->print();
 }
 
+// [NOTE] When editing, do not forget to update the docs at docs/commands/repo.8.rst
 void print_repoinfo_json([[maybe_unused]] const std::vector<std::unique_ptr<IRepoInfo>> & repos) {
     json_object * json_repos = json_object_new_array();
     for (const auto & repo : repos) {

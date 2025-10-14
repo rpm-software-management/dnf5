@@ -710,6 +710,7 @@ repository configuration file should aside from repo ID consists of baseurl, met
 
     Default: ``bold,magenta``.
 
+.. _repo_options-label:
 
 Repo Options
 ============

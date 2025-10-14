@@ -73,3 +73,65 @@ Examples
 ``dnf5 config-manager setopt repo_id.enabled=0``
     | Persistently disable repository using the config-manager plugin command.
     | See :manpage:`dnf5-config-manager(8)` for more details.
+
+JSON Output
+===========
+
+* ``dnf5 repo list --json``
+
+  The command returns a JSON array of objects, each describing one repository.
+  Each object contains the following fields:
+
+  - ``id`` (string) - Repository ID.
+  - ``name`` (string) - Repository name.
+  - ``is_enabled`` (boolean) - Repository status, either ``true`` (enabled),
+    or ``false`` (disabled).
+
+* ``dnf5 repo info --json``
+
+  The command returns a JSON array of objects, each describing one repository.
+  Each object contains the following fields:
+
+  - ``id`` (string) - Repository ID.
+  - ``name`` (string) - Repository name.
+  - ``is_enabled`` (boolean) - Repository status, either ``true`` (enabled),
+    or ``false`` (disabled).
+  - ``priority`` (integer) - Repository priority.
+  - ``cost`` (integer) - Repository cost.
+  - ``type`` (string) - Repository type.
+  - ``exclude_pkgs`` (array of strings) - List of excluded packages.
+  - ``include_pkgs`` (array of strings) - List of included packages.
+  - ``timestamp`` (integer) - Timestamp of the last metadata update,
+    UNIX time.
+  - ``metadata_expire`` (integer) - Metadata expiration time. If not set, value
+    is taken from global config.
+  - ``skip_if_unavailable`` (boolean) - Whether to skip the repository
+    if it is unavailable.
+  - ``repo_file_path`` (string) - Path to the repository file.
+  - ``base_url`` (array of strings) - List of base URLs. They are “effective”
+    base URLs, i.e., after expanding any variables included.
+  - ``metalink`` (string) - Metalink URL.
+  - ``mirrorlist`` (string) - Mirrorlist URL.
+  - ``gpg_key`` (array of strings) - List of OpenPGP keys.
+  - ``repo_gpgcheck`` (boolean) - Whether to perform GPG check
+    of the repository metadata.
+  - ``pkg_gpgcheck`` (boolean) - Whether to perform GPG check
+    of the packages.
+  - ``available_pkgs`` (integer) - Number of available packages
+    in the repository.
+  - ``pkgs`` (integer) - Number of packages
+    in the repository.
+  - ``size`` (integer) - Total size of packages
+    in the repository, in bytes.
+  - ``content_tags`` (array of strings) - List of content tags.
+  - ``distro_tags`` (array of strings) - List of distro tags.
+  - ``revision`` (string) - Repository revision.
+  - ``max_timestamp`` (integer) - Maximum timestamp from repomd records;
+    UNIX time.
+
+For more details about the fields, see the ``REPO OPTIONS`` section in dnf5.conf(5).
+
+See Also
+========
+
+      :manpage:`dnf5.conf(5)`, :ref:`Repo options <_repo_options-label>`
