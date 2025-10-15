@@ -17,6 +17,7 @@ Welcome to DNF5's documentation!
     dnf5_plugins/index
     dnf5.8
     dnf5.conf.5
+    dnf5.conf-vendorpolicy.5
     dnf_daemon/index
     misc/index
     best_practices/index

@@ -57,7 +57,8 @@ repository configuration file should aside from repo ID consists of baseurl, met
 ``allow_vendor_change``
     :ref:`boolean <boolean-label>`
 
-    If disabled DNF5 will stick to vendor when upgrading or downgrading rpms.
+    If disabled, DNF5 will stick to the original vendor during RPM upgrades or downgrades.
+    This preference, however, can be fine-tuned using :ref:`Vendor change policies <dnf5_vendor_change_policy-label>`.
 
     Default: ``True``.
 
@@ -1590,5 +1591,6 @@ See Also
 ========
 
 * :manpage:`dnf5(8)`, :ref:`DNF5 Command Reference <command_ref-label>`
+* :manpage:`dnf5.conf-vendorpolicy(5)`, :ref:`DNF5 Vendor Change Policy File Reference <dnf5_vendor_change_policy-label>`
 * :manpage:`dnf5.conf-todo(5)`, :ref:`Options that are documented/implemented in DNF but not in DNF5 <dnf5_conf_todo-label>`
 * :manpage:`dnf5.conf-deprecated(5)`, :ref:`Config Options that are deprecated in DNF5 <dnf5_conf_deprecated-label>`
