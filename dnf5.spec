@@ -409,6 +409,8 @@ Package management library.
 %dir %{_sysconfdir}/dnf/libdnf5-plugins
 %dir %{_datadir}/dnf5/repos.d
 %dir %{_datadir}/dnf5/vars.d
+%dir %{_datadir}/dnf5/vendors.d
+%dir %{_sysconfdir}/dnf/vendors.d
 %dir %{_libdir}/libdnf5
 %{_libdir}/libdnf5.so.2*
 %dir %{_prefix}/lib/sysimage/libdnf5
