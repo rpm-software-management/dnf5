@@ -227,6 +227,12 @@ public:
         return *this;
     }
 
+    /// Returns true if result of intersection is empty
+    [[nodiscard]] bool is_intersection_empty(const Map & other) const noexcept;
+
+    /// Returns true if result of intersection is empty
+    [[nodiscard]] bool is_intersection_empty(const SolvMap & other) const noexcept;
+
     /// Swaps the underlying libsolv Map pointers.
     void swap(SolvMap & other) noexcept { std::swap(map, other.map); }
 
@@ -371,6 +377,24 @@ inline std::size_t SolvMap::size() const noexcept {
         result += BIT_COUNT_LOOKUP[*byte++];
     }
     return result;
+}
+
+
+inline bool SolvMap::is_intersection_empty(const Map & other_map) const noexcept {
+    const unsigned char * it = map.map;
+    const unsigned char * other_it = other_map.map;
+    const unsigned char * const end = it + (map.size < other_map.size ? map.size : other_map.size);
+    while (it < end) {
+        if ((*it++ & *other_it++) != 0) {
+            return false;
+        }
+    }
+    return true;
+}
+
+
+inline bool SolvMap::is_intersection_empty(const SolvMap & other) const noexcept {
+    return this->is_intersection_empty(other.get_map());
 }
 
 }  // namespace libdnf5::solv

@@ -47,6 +47,8 @@ constexpr const char * TRANSACTION_LOCK_FILEPATH = "/run/dnf/rpmtransaction.lock
 // More important varsdirs must be on the end of vector
 const std::vector<std::string> VARS_DIRS{"/usr/share/dnf5/vars.d", "/etc/dnf/vars"};
 
+constexpr char VENDOR_CONF_DIR[] = "/etc/dnf/vendors.d";
+
 const std::vector<std::string> GROUP_PACKAGE_TYPES{"mandatory", "default", "conditional"};
 const std::vector<std::string> INSTALLONLYPKGS{
     "kernel",

@@ -299,6 +299,21 @@ void Base::setup() {
 
     vars->load(vars_installroot, config.get_varsdir_option().get_value());
 
+    // Load vendor change policies
+    fs::path vendor_conf_dir_path{VENDOR_CONF_DIR};
+    fs::path distribution_vendor_conf_dir_path{LIBDNF5_DISTRIBUTION_VENDOR_CONF_DIR};
+    const bool use_installroot_config{!p_impl->config.get_use_host_config_option().get_value()};
+    if (use_installroot_config) {
+        fs::path installroot_path{p_impl->config.get_installroot_option().get_value()};
+        vendor_conf_dir_path = installroot_path / vendor_conf_dir_path.relative_path();
+        distribution_vendor_conf_dir_path = installroot_path / distribution_vendor_conf_dir_path.relative_path();
+    }
+    const auto paths =
+        utils::fs::create_sorted_file_list({vendor_conf_dir_path, distribution_vendor_conf_dir_path}, ".conf");
+    for (const auto & path : paths) {
+        pool->load_vendor_change_policy(path);
+    }
+
     config.get_varsdir_option().lock("Locked by Base::setup()");
     pool_setdisttype(**pool, DISTTYPE_RPM);
     // TODO(jmracek) - architecture variable is changeable therefore architecture in vars must be synchronized with RpmPool
