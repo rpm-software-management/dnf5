@@ -33,7 +33,7 @@ DNF5 C++:
     :linenos:
     :lines: 2,4-
 
-The groups and environments are in DNF4 stored in the ``dnf.comps.Comps`` class, whih is different from a query object, though it also provides some filtering. In DNF5, the groups and environments are queried using the ``libdnf5::comps::GroupQuery`` and ``libdnf5::comps::EnvironmentQuery`` classes respectively, similarly to the ``libdnf5::rpm::PackageQuery`` class. The example shows querying groups, but the environments are analogous.
+The groups and environments are in DNF4 stored in the ``dnf.comps.Comps`` class, which is different from a query object, though it also provides some filtering. In DNF5, the groups and environments are queried using the ``libdnf5::comps::GroupQuery`` and ``libdnf5::comps::EnvironmentQuery`` classes respectively, similarly to the ``libdnf5::rpm::PackageQuery`` class. The example shows querying groups, but the environments are analogous.
 
 DNF4 Python:
 
