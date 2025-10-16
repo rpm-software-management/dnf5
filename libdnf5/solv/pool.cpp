@@ -44,20 +44,23 @@ int RpmPool::callback_policy_illegal_vendorchange(::Pool * libsolv_pool, Solvabl
 
     auto * pool = reinterpret_cast<RpmPool *>(libsolv_pool->appdata);
 
-    auto outgoing_vendor_mask = pool->vendor_change_manager.get_vendor_change_masks(outgoing_vendor).outgoing_mask;
-    if (outgoing_vendor_mask.none()) {
+    const auto & outgoing_vendor_mask =
+        pool->vendor_change_manager.get_vendor_change_masks(outgoing_vendor).outgoing_mask;
+    if (outgoing_vendor_mask.empty()) {
         // The outgoing vendor is not involved in any valid policy change.
         // Therefore, any change is illegal.
         return 1;
     }
 
-    auto incomin_vendor_mask = pool->vendor_change_manager.get_vendor_change_masks(incoming_vendor).incoming_mask;
-    if ((outgoing_vendor_mask & incomin_vendor_mask).any()) {
-        return 0;  // OK, a policy match was foun
+    const auto & incomin_vendor_mask =
+        pool->vendor_change_manager.get_vendor_change_masks(incoming_vendor).incoming_mask;
+    if (!outgoing_vendor_mask.is_intersection_empty(incomin_vendor_mask)) {
+        return 0;  // OK, a policy match was found
     }
 
-    return 1;  // Illegal vendor change
+    return 1;  // Illegal vendor change.
 }
+
 
 TempEvr::TempEvr(const Pool & pool, const char * evr) {
     split_evr = pool_alloctmpspace(*pool, static_cast<int>(strlen(evr)) + 1);
