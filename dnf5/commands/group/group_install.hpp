@@ -43,11 +43,16 @@ public:
 
     std::unique_ptr<GroupWithOptionalOption> with_optional{nullptr};
     std::unique_ptr<GroupNoPackagesOption> no_packages{nullptr};
-    std::unique_ptr<GroupSpecArguments> group_specs{nullptr};
+    std::unique_ptr<CompsSpecArguments> group_specs{nullptr};
 
 protected:
     // to be used by an alias command only
     explicit GroupInstallCommand(Context & context, const std::string & name) : Command(context, name) {}
+
+    virtual const libdnf5::CompsTypePreferred & get_comps_type_preferred() const { return comps_type_preferred; }
+
+private:
+    libdnf5::CompsTypePreferred comps_type_preferred = libdnf5::CompsTypePreferred::GROUP;
 };
 
 

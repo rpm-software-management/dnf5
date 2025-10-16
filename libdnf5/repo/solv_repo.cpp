@@ -298,7 +298,7 @@ void SolvRepo::load_system_repo_ext(RepodataType type) {
             auto & system_state = base->p_impl->get_system_state();
             auto comps_dir = system_state.get_group_xml_dir();
             for (auto & group_id : system_state.get_installed_groups()) {
-                auto ext_fn = comps_dir / (group_id + ".xml");
+                auto ext_fn = comps_dir / "groups" / (group_id + ".xml");
                 if (!read_group_solvable_from_xml(ext_fn)) {
                     // The group xml file either not exists or is not parseable by
                     // libsolv.
@@ -306,7 +306,7 @@ void SolvRepo::load_system_repo_ext(RepodataType type) {
                 }
             }
             for (auto & environment_id : system_state.get_installed_environments()) {
-                auto ext_fn = comps_dir / (environment_id + ".xml");
+                auto ext_fn = comps_dir / "environments" / (environment_id + ".xml");
                 if (!read_group_solvable_from_xml(ext_fn)) {
                     // The environment xml file either not exists or is not parseable by
                     // libsolv.
