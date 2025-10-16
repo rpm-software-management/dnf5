@@ -4,9 +4,10 @@
 #ifndef LIBDNF5_SOLV_VENDOR_CHANGE_MANAGER_HPP
 #define LIBDNF5_SOLV_VENDOR_CHANGE_MANAGER_HPP
 
+#include "solv_map.hpp"
+
 #include "libdnf5/common/sack/query_cmp.hpp"
 
-#include <bitset>
 #include <filesystem>
 #include <string>
 #include <vector>
@@ -22,8 +23,6 @@ class Pool;
 
 class VendorChangeManager {
 public:
-    static constexpr unsigned int MAX_VENDOR_POLICIES = 64;
-
     struct VendorChangePolicy {
         struct VendorDef {
             std::string vendor;
@@ -36,8 +35,8 @@ public:
 
     struct VendorChangeMasks {
         Id vendor;
-        std::bitset<MAX_VENDOR_POLICIES> outgoing_mask;
-        std::bitset<MAX_VENDOR_POLICIES> incoming_mask;
+        SolvMap outgoing_mask{0};
+        SolvMap incoming_mask{0};
     };
 
     VendorChangeManager(const Pool & pool);
