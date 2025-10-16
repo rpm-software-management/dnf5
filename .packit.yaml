@@ -14,6 +14,9 @@ packages:
     upstream_package_name: dnf5
     # downstream (Fedora) RPM package name
     downstream_package_name: dnf5
+    actions:
+      get-current-version:
+        - bash -c 'rpmspec -q --queryformat "%{VERSION}\n" dnf5.spec | head -n1'
 
   # Test build with disabled modules.
   # Use separate package configuration because Packit
@@ -40,23 +43,23 @@ jobs:
       - fedora-rawhide
     copy_upstream_release_description: false
     packages: [dnf5]
+    actions: {}
   - job: koji_build
     trigger: commit
     dist_git_branches:
       - fedora-all
     packages: [dnf5]
+    actions: {}
   - job: bodhi_update
     trigger: commit
     dist_git_branches:
       - fedora-all
     packages: [dnf5]
+    actions: {}
   - job: copr_build
     trigger: pull_request
     targets:
       - fedora-all
-    actions:
-      get-current-version:
-        - bash -c 'rpmspec -q --queryformat "%{VERSION}\n" dnf5.spec | head -n1'
     packages: [dnf5]
     additional_repos:
       - "copr://rpmsoftwaremanagement/dnf-nightly"
