@@ -101,29 +101,37 @@ JSON Output
   - ``type`` (string) - Repository type.
   - ``exclude_pkgs`` (array of strings) - List of excluded packages.
   - ``include_pkgs`` (array of strings) - List of included packages.
-  - ``timestamp`` (integer; 64-bit) - Timestamp of the last metadata update,
+  - ``timestamp`` (integer) - Timestamp of the last metadata update,
     UNIX time.
   - ``metadata_expire`` (integer) - Metadata expiration time. If not set, value
     is taken from global config.
   - ``skip_if_unavailable`` (boolean) - Whether to skip the repository
     if it is unavailable.
   - ``repo_file_path`` (string) - Path to the repository file.
-  - ``base_url`` (array of strings) - List of base URLs.
+  - ``base_url`` (array of strings) - List of base URLs. They are “effective”
+    base URLs, i.e., after expanding any variables included.
   - ``metalink`` (string) - Metalink URL.
   - ``mirrorlist`` (string) - Mirrorlist URL.
-  - ``gpg_key`` (array of strings) - List of GPG keys.
+  - ``gpg_key`` (array of strings) - List of OpenPGP keys.
   - ``repo_gpgcheck`` (boolean) - Whether to perform GPG check
     of the repository metadata.
   - ``pkg_gpgcheck`` (boolean) - Whether to perform GPG check
     of the packages.
-  - ``available_pkgs`` (integer; 64-bit unsigned) - Number of available packages
+  - ``available_pkgs`` (integer) - Number of available packages
     in the repository.
-  - ``pkgs`` (integer; 64-bit unsigned) - Number of packages
+  - ``pkgs`` (integer) - Number of packages
     in the repository.
-  - ``size`` (integer; 64-bit unsigned) - Total size of packages
+  - ``size`` (integer) - Total size of packages
     in the repository, in bytes.
   - ``content_tags`` (array of strings) - List of content tags.
   - ``distro_tags`` (array of strings) - List of distro tags.
   - ``revision`` (string) - Repository revision.
-  - ``max_timestamp`` (integer; 64-bit) - Maximum timestamp from repomd records;
+  - ``max_timestamp`` (integer) - Maximum timestamp from repomd records;
     UNIX time.
+
+For more details about the fields, see the ``REPO OPTIONS`` section in dnf5.conf(5).
+
+See Also
+========
+
+      :manpage:`dnf5.conf(5)`, :ref:`Repo options <_repo_options-label>`
