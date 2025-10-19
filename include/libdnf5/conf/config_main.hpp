@@ -244,6 +244,10 @@ public:
     const OptionStringAppendList & get_exclude_from_weak_option() const;
     OptionBool & get_exclude_from_weak_autodetect_option();
     const OptionBool & get_exclude_from_weak_autodetect_option() const;
+    OptionStringAppendList & get_metalink_exclude_domain_option();
+    const OptionStringAppendList & get_metalink_exclude_domain_option() const;
+    OptionStringAppendList & get_metalink_exclude_location_option();
+    const OptionStringAppendList & get_metalink_exclude_location_option() const;
     OptionString & get_proxy_option();
     const OptionString & get_proxy_option() const;
     OptionString & get_proxy_username_option();
