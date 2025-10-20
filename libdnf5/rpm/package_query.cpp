@@ -743,6 +743,89 @@ void PackageQuery::filter_arch(const std::vector<std::string> & patterns, libdnf
     }
 }
 
+void PackageQuery::filter_vendor(const std::vector<std::string> & patterns, libdnf5::sack::QueryCmp cmp_type) {
+    auto & pool = get_rpm_pool(p_impl->base);
+    libdnf5::solv::SolvMap filter_result(pool.get_nsolvables());
+    const bool cmp_not = (cmp_type & libdnf5::sack::QueryCmp::NOT) == libdnf5::sack::QueryCmp::NOT;
+    if (cmp_not) {
+        // Removal of NOT CmpType makes following comparisons easier and more effective
+        cmp_type = cmp_type - libdnf5::sack::QueryCmp::NOT;
+    }
+
+    const bool cmp_glob = (cmp_type & libdnf5::sack::QueryCmp::GLOB) == libdnf5::sack::QueryCmp::GLOB;
+
+    for (const auto & pattern : patterns) {
+        libdnf5::sack::QueryCmp tmp_cmp_type = cmp_type;
+        const char * const c_pattern = pattern.c_str();
+        // Remove GLOB when the pattern is not a glob
+        if (cmp_glob && !libdnf5::utils::is_glob_pattern(c_pattern)) {
+            tmp_cmp_type = (tmp_cmp_type - libdnf5::sack::QueryCmp::GLOB) | libdnf5::sack::QueryCmp::EQ;
+        }
+
+        switch (tmp_cmp_type) {
+            case libdnf5::sack::QueryCmp::EQ: {
+                Id match_vendor_id = pool.str2id(pattern.c_str(), 0);
+                if (match_vendor_id == 0) {
+                    continue;
+                }
+                for (Id candidate_id : *p_impl) {
+                    const Solvable * const solvable = pool.id2solvable(candidate_id);
+                    if (solvable->vendor == match_vendor_id) {
+                        filter_result.add_unsafe(candidate_id);
+                    }
+                }
+            } break;
+            case libdnf5::sack::QueryCmp::IEXACT: {
+                Id icase_vendor = pool.id_to_lowercase_id(pattern.c_str(), 0);
+                if (icase_vendor == 0) {
+                    continue;
+                }
+                for (Id candidate_id : *p_impl) {
+                    const char * const vendor = pool.get_vendor(candidate_id);
+                    if (vendor != nullptr) {
+                        Id candidate_vendor_icase = pool.id_to_lowercase_id(vendor, 0);
+                        if (candidate_vendor_icase == icase_vendor) {
+                            filter_result.add_unsafe(candidate_id);
+                        }
+                    }
+                }
+            } break;
+            case libdnf5::sack::QueryCmp::ICONTAINS: {
+                for (Id candidate_id : *p_impl) {
+                    const char * const vendor = pool.get_vendor(candidate_id);
+                    if (vendor != nullptr && strcasestr(vendor, c_pattern) != nullptr) {
+                        filter_result.add_unsafe(candidate_id);
+                    }
+                }
+            } break;
+            case libdnf5::sack::QueryCmp::IGLOB:
+                filter_glob_internal<&libdnf5::solv::RpmPool::get_vendor>(
+                    pool, c_pattern, *p_impl, filter_result, FNM_CASEFOLD);
+                break;
+            case libdnf5::sack::QueryCmp::CONTAINS: {
+                for (Id candidate_id : *p_impl) {
+                    const char * const vendor = pool.get_vendor(candidate_id);
+                    if (vendor != nullptr && strstr(vendor, c_pattern) != nullptr) {
+                        filter_result.add_unsafe(candidate_id);
+                    }
+                }
+            } break;
+            case libdnf5::sack::QueryCmp::GLOB:
+                filter_glob_internal<&libdnf5::solv::RpmPool::get_vendor>(pool, c_pattern, *p_impl, filter_result, 0);
+                break;
+            default:
+                libdnf_throw_assert_unsupported_query_cmp_type(cmp_type);
+        }
+    }
+
+    // Apply filter results to query
+    if (cmp_not) {
+        *p_impl -= filter_result;
+    } else {
+        *p_impl &= filter_result;
+    }
+}
+
 namespace {
 
 struct NevraID {
