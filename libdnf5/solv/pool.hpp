@@ -273,6 +273,10 @@ public:
         vendor_change_manager.load_vendor_change_policy(policy_file);
     }
 
+    [[nodiscard]] SolvMap & get_incoming_vendor_bypassed_solvables() noexcept {
+        return vendor_change_manager.get_incoming_vendor_bypassed_solvables();
+    }
+
 private:
     friend class VendorChangeManager;
 
