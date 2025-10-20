@@ -70,6 +70,8 @@ Options
 
 .. include:: ../_shared/options/from-repo.rst
 
+.. include:: ../_shared/options/from-vendor.rst
+
 ``--downloadonly``
     | Only download packages for transaction.
 
