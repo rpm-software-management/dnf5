@@ -135,6 +135,32 @@ void SolvMapTest::test_difference() {
 }
 
 
+void SolvMapTest::test_is_and_empty() {
+    libdnf5::solv::SolvMap map1(16);
+    libdnf5::solv::SolvMap map2(24);
+
+    CPPUNIT_ASSERT(map1.is_intersection_empty(map1));
+
+    map1.add(4);
+    map1.add(6);
+    map1.add(14);
+    map2.add(5);
+    map2.add(8);
+    map2.add(12);
+    map2.add(22);
+
+    CPPUNIT_ASSERT(!map1.is_intersection_empty(map1));
+
+    CPPUNIT_ASSERT(map1.is_intersection_empty(map2));
+    CPPUNIT_ASSERT(map2.is_intersection_empty(map1));
+
+    map1.add(12);
+
+    CPPUNIT_ASSERT(!map1.is_intersection_empty(map2));
+    CPPUNIT_ASSERT(!map2.is_intersection_empty(map1));
+}
+
+
 void SolvMapTest::test_iterator_empty() {
     std::vector<Id> expected = {};
     std::vector<Id> result;

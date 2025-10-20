@@ -363,6 +363,7 @@ It supports RPM packages, modulemd modules, and comps groups & environments.
 %{_mandir}/man7/dnf*-system-state.7.*
 %{_mandir}/man7/dnf*-changes-from-dnf4.7.*
 %{_mandir}/man5/dnf*.conf.5.*
+%{_mandir}/man5/dnf*.conf-vendorpolicy.5.*
 %{_mandir}/man5/dnf*.conf-todo.5.*
 %{_mandir}/man5/dnf*.conf-deprecated.5.*
 %endif
@@ -409,6 +410,8 @@ Package management library.
 %dir %{_sysconfdir}/dnf/libdnf5-plugins
 %dir %{_datadir}/dnf5/repos.d
 %dir %{_datadir}/dnf5/vars.d
+%dir %{_datadir}/dnf5/vendors.d
+%dir %{_sysconfdir}/dnf/vendors.d
 %dir %{_libdir}/libdnf5
 %{_libdir}/libdnf5.so.2*
 %dir %{_prefix}/lib/sysimage/libdnf5

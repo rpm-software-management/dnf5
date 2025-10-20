@@ -153,4 +153,10 @@ install(DIRECTORY DESTINATION "${CMAKE_INSTALL_FULL_SYSCONFDIR}/dnf/repos.overri
 # Makes an empty directory for libdnf5-plugins configuration files
 install(DIRECTORY DESTINATION "${CMAKE_INSTALL_FULL_SYSCONFDIR}/dnf/libdnf5-plugins")
 
+# Creates an empty directory for distribution-supplied vendor change policies configuration files
+install(DIRECTORY DESTINATION "${CMAKE_INSTALL_PREFIX}/share/dnf5/vendors.d")
+
+# Creates an empty directory for user-defined vendor change policies configuration files
+install(DIRECTORY DESTINATION "${CMAKE_INSTALL_FULL_SYSCONFDIR}/dnf/vendors.d")
+
 add_subdirectory(po)

@@ -170,6 +170,7 @@ man_pages = [
     ('dnf_daemon/dnf5daemon_server.8', 'dnf5daemon-server', 'Package management service with a DBus interface', AUTHORS, 8),
     ('dnf_daemon/dnf5daemon_dbus_api.8', 'dnf5daemon-dbus-api', 'DBus API Reference for Dnf5daemon', AUTHORS, 8),
     ('dnf5.conf.5', 'dnf5.conf', 'DNF5 Configuration Reference', AUTHORS, 5),
+    ('dnf5.conf-vendorpolicy.5', 'dnf5.conf-vendorpolicy', 'DNF5 Vendor Change Policy File Reference', AUTHORS, 5),
     ('dnf5.conf-todo.5', 'dnf5.conf-todo', 'Options that are documented/implemented in DNF but not in DNF5', AUTHORS, 5),
     ('dnf5.conf-deprecated.5', 'dnf5.conf-deprecated', 'Config Options that are deprecated in DNF5', AUTHORS, 5),
 ]

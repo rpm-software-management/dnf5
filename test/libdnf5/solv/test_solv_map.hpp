@@ -39,6 +39,7 @@ class SolvMapTest : public CppUnit::TestCase {
     CPPUNIT_TEST(test_union);
     CPPUNIT_TEST(test_intersection);
     CPPUNIT_TEST(test_difference);
+    CPPUNIT_TEST(test_is_and_empty);
     CPPUNIT_TEST(test_iterator_empty);
     CPPUNIT_TEST(test_iterator_full);
     CPPUNIT_TEST(test_iterator_sparse);
@@ -65,6 +66,8 @@ public:
     void test_union();
     void test_intersection();
     void test_difference();
+
+    void test_is_and_empty();
 
     void test_iterator_empty();
     void test_iterator_full();
