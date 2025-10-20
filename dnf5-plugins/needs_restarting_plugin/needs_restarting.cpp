@@ -456,7 +456,7 @@ void NeedsRestartingCommand::processes_need_restarting(Context & ctx, bool exclu
 
     // Map of executable paths to their process start times and packages
     struct ProcessInfo {
-        const char * pid;
+        std::string pid;
         std::string cmdline;
         time_t start_time;
         libdnf5::rpm::Package package;
@@ -471,9 +471,8 @@ void NeedsRestartingCommand::processes_need_restarting(Context & ctx, bool exclu
             continue;
         }
 
-        const char * pid = entry->d_name;
         bool is_pid = true;
-        for (const char * c = pid; *c != '\0'; ++c) {
+        for (const char * c = entry->d_name; *c != '\0'; ++c) {
             if (!std::isdigit(*c)) {
                 is_pid = false;
                 break;
@@ -483,6 +482,8 @@ void NeedsRestartingCommand::processes_need_restarting(Context & ctx, bool exclu
         if (!is_pid) {
             continue;
         }
+
+        std::string pid{entry->d_name};
 
         // Skip processes managed by systemd services if exclude_services is set
         if (exclude_services && service_pids.find(pid) != service_pids.end()) {
