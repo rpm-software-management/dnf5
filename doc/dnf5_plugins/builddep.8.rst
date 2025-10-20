@@ -63,6 +63,8 @@ Options
 
 .. include:: ../_shared/options/from-repo.rst
 
+.. include:: ../_shared/options/from-vendor.rst
+
 ``--spec``
     | Treat command line arguments following this option as spec files.
 
