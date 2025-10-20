@@ -52,9 +52,10 @@ Changes to individual options
 ``-4/-6``
   * Dropped. Now only the ``ip_resolve`` configuration option is available.
 
-.. TODO(jkolarik): Not implemented yet
-   ``-d, --debuglevel``
-     * Dropped. Now only the ``debuglevel`` configuration option is available.
+..
+    TODO(jkolarik): Not implemented yet
+    ``-d, --debuglevel``
+      * Dropped. Now only the ``debuglevel`` configuration option is available.
 
 ``--disableexcludes`` and ``--disableexcludepkgs``
   * Dropped. Now only the ``disable_excludes`` configuration option is available.
