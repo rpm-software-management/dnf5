@@ -158,6 +158,7 @@ void DownloadCommand::set_argument_parser() {
     cmd.register_named_arg(resolve);
     cmd.register_named_arg(alldeps);
     create_from_repo_option(*this, from_repos, true);
+    create_from_vendor_option(*this, from_vendors, true);
     create_destdir_option(*this);
     auto skip_unavailable = std::make_unique<SkipUnavailableOption>(*this);
     cmd.register_named_arg(srpm);
@@ -211,6 +212,9 @@ void DownloadCommand::run() {
             pkg_query.filter_available();
         } else {
             pkg_query.filter_repo_id(from_repos, libdnf5::sack::QueryCmp::GLOB);
+        }
+        if (!from_vendors.empty()) {
+            pkg_query.filter_vendor(from_vendors, libdnf5::sack::QueryCmp::GLOB);
         }
         pkg_query.filter_priority();
         pkg_query.filter_latest_evr();

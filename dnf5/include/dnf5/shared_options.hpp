@@ -88,6 +88,14 @@ DNF_API libdnf5::cli::ArgumentParser::NamedArg * create_from_repo_option(
 DNF_API libdnf5::cli::ArgumentParser::NamedArg * create_installed_from_repo_option(
     Command & command, std::vector<std::string> & repo_ids, bool detect_conflict);
 
+/// Creates a new named argument "--from-vendor=VENDOR,...".
+/// When the argument is used, the list of VENDORs is split and the IDs are stored in the `vendors` vector.
+/// If `detect_conflict` is true, a `libdnf5::cli::ArgumentParserConflictingArgumentsError` exception is thrown
+/// if "--from-vendor" was already used with a different value.
+/// Newly created argument is registered to the `command` and returned.
+DNF_API libdnf5::cli::ArgumentParser::NamedArg * create_from_vendor_option(
+    Command & command, std::vector<std::string> & vendors, bool detect_conflict);
+
 }  // namespace dnf5
 
 #endif  // DNF5_COMMANDS_SHARED_OPTIONS_HPP
