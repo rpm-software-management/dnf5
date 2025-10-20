@@ -42,6 +42,7 @@ const std::string SYSTEMD_DESTINATION_NAME{"org.freedesktop.systemd1"};
 const sdbus::ObjectPath SYSTEMD_OBJECT_PATH{"/org/freedesktop/systemd1"};
 const SDBUS_INTERFACE_NAME_TYPE SYSTEMD_MANAGER_INTERFACE{"org.freedesktop.systemd1.Manager"};
 const SDBUS_INTERFACE_NAME_TYPE SYSTEMD_UNIT_INTERFACE{"org.freedesktop.systemd1.Unit"};
+const SDBUS_INTERFACE_NAME_TYPE SYSTEMD_SERVICE_INTERFACE{"org.freedesktop.systemd1.Service"};
 
 namespace dnf5 {
 
@@ -410,7 +411,7 @@ void NeedsRestartingCommand::processes_need_restarting(Context & ctx, bool exclu
                 // Get the main PID of the service
                 try {
                     const auto main_pid =
-                        uint32_t{unit_proxy->getProperty("MainPID").onInterface(SYSTEMD_UNIT_INTERFACE)};
+                        uint32_t{unit_proxy->getProperty("MainPID").onInterface(SYSTEMD_SERVICE_INTERFACE)};
                     if (main_pid > 0) {
                         service_pids.insert(std::to_string(main_pid));
                     }
@@ -421,8 +422,9 @@ void NeedsRestartingCommand::processes_need_restarting(Context & ctx, bool exclu
 
                 // Also get control group PIDs
                 try {
-                    std::string control_group =
-                        unit_proxy->getProperty("ControlGroup").onInterface(SYSTEMD_UNIT_INTERFACE).get<std::string>();
+                    std::string control_group = unit_proxy->getProperty("ControlGroup")
+                                                    .onInterface(SYSTEMD_SERVICE_INTERFACE)
+                                                    .get<std::string>();
                     if (!control_group.empty()) {
                         // Read PIDs from the cgroup
                         std::string cgroup_procs_path = "/sys/fs/cgroup" + control_group + "/cgroup.procs";
