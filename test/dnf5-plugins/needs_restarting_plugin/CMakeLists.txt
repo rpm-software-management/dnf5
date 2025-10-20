@@ -16,8 +16,7 @@ include_directories(${PROJECT_SOURCE_DIR}/libdnf5)
 include_directories(${PROJECT_SOURCE_DIR}/dnf5)
 include_directories(${PROJECT_SOURCE_DIR}/dnf5/include)
 
-pkg_check_modules(SDBUS_CPP REQUIRED sdbus-c++)
-include_directories(${SDBUS_CPP_INCLUDE_DIRS})
+include(sdbus_cpp)
 
 pkg_check_modules(RPM REQUIRED rpm>=4.17.0)
 
