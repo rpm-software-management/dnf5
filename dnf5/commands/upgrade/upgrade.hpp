@@ -47,6 +47,7 @@ protected:
 
     std::vector<std::string> installed_from_repos;
     std::vector<std::string> from_repos;
+    std::vector<std::string> from_vendors;
 
     std::unique_ptr<AdvisoryOption> advisory_name;
     std::unique_ptr<SecurityOption> advisory_security;

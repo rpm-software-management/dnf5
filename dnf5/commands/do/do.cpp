@@ -90,6 +90,7 @@ void DoCommand::set_argument_parser() {
 
     create_installed_from_repo_option(*this, installed_from_repos, false);
     create_from_repo_option(*this, from_repos, false);
+    create_from_vendor_option(*this, from_vendors, false);
 
     {
         auto items =
@@ -102,6 +103,7 @@ void DoCommand::set_argument_parser() {
             libdnf5::GoalJobSettings settings;
             settings.set_from_repo_ids(installed_from_repos);
             settings.set_to_repo_ids(from_repos);
+            settings.set_to_vendors(from_vendors);
             switch (action) {
                 case Action::INSTALL:
                     for (int i = 0; i < argc; ++i) {
