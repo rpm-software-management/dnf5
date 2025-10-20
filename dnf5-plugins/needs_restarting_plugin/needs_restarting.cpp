@@ -153,7 +153,6 @@ time_t NeedsRestartingCommand::get_kernel_boot_time(Context & ctx) {
         logger->debug("Error reading /proc/stat, using {} as the system boot time.", btime);
     }
 
-    logger->debug("Using {} as the system boot time.", btime);
     return btime;
 }
 
@@ -457,6 +456,8 @@ void NeedsRestartingCommand::processes_need_restarting(Context & ctx, bool exclu
 
     // Map of executable paths to their process start times and packages
     struct ProcessInfo {
+        const char * pid;
+        std::string cmdline;
         time_t start_time;
         libdnf5::rpm::Package package;
     };
@@ -470,9 +471,9 @@ void NeedsRestartingCommand::processes_need_restarting(Context & ctx, bool exclu
             continue;
         }
 
-        const char * name = entry->d_name;
+        const char * pid = entry->d_name;
         bool is_pid = true;
-        for (const char * c = name; *c != '\0'; ++c) {
+        for (const char * c = pid; *c != '\0'; ++c) {
             if (!std::isdigit(*c)) {
                 is_pid = false;
                 break;
@@ -484,12 +485,12 @@ void NeedsRestartingCommand::processes_need_restarting(Context & ctx, bool exclu
         }
 
         // Skip processes managed by systemd services if exclude_services is set
-        if (exclude_services && service_pids.find(name) != service_pids.end()) {
+        if (exclude_services && service_pids.find(pid) != service_pids.end()) {
             continue;
         }
 
         // Get the process start time from /proc/[pid]/stat
-        std::string stat_path = std::string("/proc/") + name + "/stat";
+        std::string stat_path = std::string("/proc/") + pid + "/stat";
         std::ifstream stat_file(stat_path);
         time_t process_start_time = 0;
 
@@ -519,8 +520,24 @@ void NeedsRestartingCommand::processes_need_restarting(Context & ctx, bool exclu
             }
         }
 
+        // Read the full cmdline
+        std::string cmdline_path = std::string("/proc/") + pid + "/cmdline";
+        std::ifstream cmdline_file(cmdline_path);
+        std::string cmdline;
+
+        if (cmdline_file.is_open()) {
+            std::getline(cmdline_file, cmdline, '\0');
+
+            // null bytes used as field separators; replace with spaces
+            for (char & c : cmdline) {
+                if (c == '\0') {
+                    c = ' ';
+                }
+            }
+        }
+
         // Read the exe symlink to get the executable path
-        std::string exe_link = std::string("/proc/") + name + "/exe";
+        std::string exe_link = std::string("/proc/") + pid + "/exe";
         char exe_path[PATH_MAX];
         ssize_t len = readlink(exe_link.c_str(), exe_path, sizeof(exe_path) - 1);
 
@@ -538,7 +555,7 @@ void NeedsRestartingCommand::processes_need_restarting(Context & ctx, bool exclu
             auto it = file_to_package.find(exe_path_str);
             if (it != file_to_package.end()) {
                 const auto & package = it->second;
-                running_processes.insert({exe_path_str, ProcessInfo{process_start_time, package}});
+                running_processes.insert({exe_path_str, ProcessInfo{pid, cmdline, process_start_time, package}});
             }
         }
     }
@@ -558,7 +575,7 @@ void NeedsRestartingCommand::processes_need_restarting(Context & ctx, bool exclu
             // updated since the process started, the process needs restart
             const auto install_time = static_cast<time_t>(dep.get_install_time());
             if (install_time > process_info.start_time) {
-                processes_needing_restart.insert(exe_path);
+                processes_needing_restart.insert(std::string(process_info.pid) + '\t' + process_info.cmdline);
                 // Track this package as updated so we can check reverse dependencies
                 updated_packages.add(dep);
                 break;
