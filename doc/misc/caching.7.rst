@@ -1,5 +1,5 @@
-.. Copyright Contributors to the DNF5 project.
 ..
+    Copyright Contributors to the DNF5 project.
     Copyright Contributors to the libdnf project.
     SPDX-License-Identifier: GPL-2.0-or-later
 
@@ -18,8 +18,9 @@
     You should have received a copy of the GNU General Public License
     along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
-.. TODO(jkolarik): Add link to modularity in "What are the metadata types" when the page exists
-.. TODO(jkolarik): Add link to dnf5.conf options when the page exists
+..
+    TODO(jkolarik): Add link to modularity in "What are the metadata types" when the page exists
+    TODO(jkolarik): Add link to dnf5.conf options when the page exists
 
 
 .. _caching_misc_ref-label:
