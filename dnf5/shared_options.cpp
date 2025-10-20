@@ -216,4 +216,32 @@ libdnf5::cli::ArgumentParser::NamedArg * create_installed_from_repo_option(
     return installed_from_repo_opt;
 }
 
+
+libdnf5::cli::ArgumentParser::NamedArg * create_from_vendor_option(
+    Command & command, std::vector<std::string> & vendors, bool detect_conflict) {
+    auto & parser = command.get_context().get_argument_parser();
+    auto * const from_vendor_opt = parser.add_new_named_arg("from-vendor");
+    from_vendor_opt->set_long_name("from-vendor");
+    from_vendor_opt->set_description(
+        _("The following items can be selected only from the specified vendors. The vendor is ignored or vendor "
+          "change policies (if allow_vendor_change=0) will still be used for items that satisfy dependencies."));
+    from_vendor_opt->set_has_value(true);
+    from_vendor_opt->set_arg_value_help(_("VENDOR,..."));
+    from_vendor_opt->set_parse_hook_func(
+        [&vendors, detect_conflict](
+            libdnf5::cli::ArgumentParser::NamedArg *, [[maybe_unused]] const char * option, const char * value) {
+            if (!detect_conflict || vendors.empty()) {
+                vendors = libdnf5::OptionStringList(value).get_value();
+            } else {
+                if (vendors != libdnf5::OptionStringList(value).get_value()) {
+                    throw libdnf5::cli::ArgumentParserConflictingArgumentsError(
+                        M_("\"--from_vendor\" already defined with diferent value"));
+                }
+            }
+            return true;
+        });
+    command.get_argument_parser_command()->register_named_arg(from_vendor_opt);
+    return from_vendor_opt;
+}
+
 }  // namespace dnf5
