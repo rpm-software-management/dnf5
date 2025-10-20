@@ -178,6 +178,8 @@ public:
 
     const char * get_arch(Id id) const noexcept { return id2str(id2solvable(id)->arch); }
 
+    const char * get_vendor(Id id) const noexcept { return id2str(id2solvable(id)->vendor); }
+
     /// Construct package string ID without epoch when epoch is 0
     /// Returns a temporary object allocated by pool_alloctmpspace
     const char * get_nevra(Id id) const noexcept { return solvable2str(id2solvable(id)); }
