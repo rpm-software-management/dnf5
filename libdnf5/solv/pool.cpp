@@ -44,6 +44,12 @@ int RpmPool::callback_policy_illegal_vendorchange(::Pool * libsolv_pool, Solvabl
 
     auto * pool = reinterpret_cast<RpmPool *>(libsolv_pool->appdata);
 
+    // Check if the incoming solvable bypasses vendor check.
+    // If so, always accept the vendor change without further checks.
+    if (pool->vendor_change_manager.is_incoming_vendor_bypassed_solvable(pool_solvable2id(libsolv_pool, new_solv))) {
+        return 0;  // OK, incoming solvable bypasses vendor check
+    }
+
     const auto & outgoing_vendor_mask =
         pool->vendor_change_manager.get_vendor_change_masks(outgoing_vendor).outgoing_mask;
     if (outgoing_vendor_mask.empty()) {
