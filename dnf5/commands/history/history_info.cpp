@@ -21,6 +21,7 @@
 
 #include "transaction_id.hpp"
 
+#include <dnf5/shared_options.hpp>
 #include <libdnf5-cli/output/transactioninfo.hpp>
 
 #include <iostream>
@@ -31,12 +32,16 @@ using namespace libdnf5::cli;
 
 void HistoryInfoCommand::set_argument_parser() {
     get_argument_parser_command()->set_description("Print details about transactions");
+    get_argument_parser_command()->set_long_description(
+        "Display detailed information about past transactions including packages, groups, and environments. Use --json for machine-readable output.");
 
     transaction_specs = std::make_unique<TransactionSpecArguments>(*this);
     auto & ctx = get_context();
     transaction_specs->get_arg()->set_complete_hook_func(create_history_id_autocomplete(ctx));
     reverse = std::make_unique<ReverseOption>(*this);
     contains_pkgs = std::make_unique<HistoryContainsPkgsOption>(*this);
+    
+    create_json_option(*this);
 }
 
 void HistoryInfoCommand::run() {
@@ -60,16 +65,26 @@ void HistoryInfoCommand::run() {
         std::sort(transactions.begin(), transactions.end());
     }
 
+    auto & ctx = get_context();
     if (!transactions.empty()) {
-        for (auto ts : transactions) {
-            libdnf5::cli::output::print_transaction_info(ts);
-            std::cout << std::endl;
+        if (ctx.get_json_output_requested()) {
+            libdnf5::cli::output::print_transaction_info_json(transactions);
+        } else {
+            for (auto ts : transactions) {
+                libdnf5::cli::output::print_transaction_info(ts);
+                std::cout << std::endl;
+            }
         }
     } else {
-        if (ts_specs.empty()) {
-            std::cout << _("No match found, history info defaults to considering only the last transaction, specify "
-                           "\"1..last\" range to search all transactions.")
-                      << std::endl;
+        if (ctx.get_json_output_requested()) {
+            // Output empty JSON result
+            libdnf5::cli::output::print_transaction_info_json(transactions);
+        } else {
+            if (ts_specs.empty()) {
+                std::cout << _("No match found, history info defaults to considering only the last transaction, specify "
+                               "\"1..last\" range to search all transactions.")
+                          << std::endl;
+            }
         }
     }
 }
