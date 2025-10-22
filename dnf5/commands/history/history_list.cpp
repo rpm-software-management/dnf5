@@ -21,6 +21,7 @@
 
 #include "transaction_id.hpp"
 
+#include <dnf5/shared_options.hpp>
 #include <libdnf5-cli/output/transactionlist.hpp>
 
 
@@ -30,10 +31,14 @@ using namespace libdnf5::cli;
 
 void HistoryListCommand::set_argument_parser() {
     get_argument_parser_command()->set_description("List transactions");
+    get_argument_parser_command()->set_long_description(
+        "Display a list of past transactions. Use --json for machine-readable output.");
 
     transaction_specs = std::make_unique<TransactionSpecArguments>(*this);
     reverse = std::make_unique<ReverseOption>(*this);
     contains_pkgs = std::make_unique<HistoryContainsPkgsOption>(*this);
+    
+    create_json_option(*this);
 }
 
 void HistoryListCommand::run() {
@@ -57,7 +62,12 @@ void HistoryListCommand::run() {
         std::sort(transactions.begin(), transactions.end());
     }
 
-    libdnf5::cli::output::print_transaction_list(transactions);
+    auto & ctx = get_context();
+    if (ctx.get_json_output_requested()) {
+        libdnf5::cli::output::print_transaction_list_json(transactions);
+    } else {
+        libdnf5::cli::output::print_transaction_list(transactions);
+    }
 }
 
 }  // namespace dnf5

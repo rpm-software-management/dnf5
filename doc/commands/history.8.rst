@@ -47,10 +47,12 @@ Subcommands
 ``list``
     | List info about recorded transactions in the system.
     | If no ``<transaction-spec>`` is specified it uses all transactions.
+    | Supports ``--json`` for machine-readable output.
 
 ``info``
     | Print details about specific transactions.
     | If no ``<transaction-spec>`` is specified it uses the last transaction.
+    | Supports ``--json`` for machine-readable output with detailed package, group, and environment information.
 
 ``undo``
     | Revert all actions from the specified transaction.
@@ -81,6 +83,10 @@ Options for ``list`` and ``info``
 ``--contains-pkgs=PACKAGE_NAME,...``
     | Show only transactions containing packages with specified names.
     | This is a list option. Globs are supported.
+
+``--json``
+    | Request JSON output format for machine-readable results.
+    | Available for ``list`` and ``info`` subcommands only.
 
 
 Options for ``undo``, ``rollback`` and ``redo``
@@ -131,6 +137,12 @@ Examples
 
 ``dnf5 history undo 4 --ignore-extras``
     | Undo the fourth transaction ignoring extra packages pulled into the reverting transaction.
+
+``dnf5 history list --json``
+    | List all transactions in JSON format for programmatic processing.
+
+``dnf5 history info last --json``
+    | Show detailed info about the last transaction in JSON format with complete package details.
 
 
 See Also
