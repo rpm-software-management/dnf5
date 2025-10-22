@@ -28,6 +28,7 @@
 namespace libdnf5::cli::output {
 
 LIBDNF_CLI_API void print_transaction_info(libdnf5::transaction::Transaction & transaction);
+LIBDNF_CLI_API void print_transaction_info_json(std::vector<libdnf5::transaction::Transaction> & transactions);
 
 }  // namespace libdnf5::cli::output
 
