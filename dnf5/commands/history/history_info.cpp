@@ -21,6 +21,7 @@
 
 #include "transaction_id.hpp"
 
+#include <dnf5/shared_options.hpp>
 #include <libdnf5-cli/output/transactioninfo.hpp>
 
 #include <iostream>
@@ -37,6 +38,8 @@ void HistoryInfoCommand::set_argument_parser() {
     transaction_specs->get_arg()->set_complete_hook_func(create_history_id_autocomplete(ctx));
     reverse = std::make_unique<ReverseOption>(*this);
     contains_pkgs = std::make_unique<HistoryContainsPkgsOption>(*this);
+
+    create_json_option(*this);
 }
 
 void HistoryInfoCommand::run() {
@@ -60,6 +63,11 @@ void HistoryInfoCommand::run() {
         std::sort(transactions.begin(), transactions.end());
     }
 
+    auto & ctx = get_context();
+    if (ctx.get_json_output_requested()) {
+        libdnf5::cli::output::print_transaction_info_json(transactions);
+        return;
+    }
     if (!transactions.empty()) {
         for (auto ts : transactions) {
             libdnf5::cli::output::print_transaction_info(ts);

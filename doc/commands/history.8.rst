@@ -82,6 +82,10 @@ Options for ``list`` and ``info``
     | Show only transactions containing packages with specified names.
     | This is a list option. Globs are supported.
 
+``--json``
+    | Request JSON output format for machine-readable results.
+    | Available for ``list`` and ``info`` subcommands only.
+
 
 Options for ``undo``, ``rollback`` and ``redo``
 ===============================================
@@ -131,6 +135,58 @@ Examples
 
 ``dnf5 history undo 4 --ignore-extras``
     | Undo the fourth transaction ignoring extra packages pulled into the reverting transaction.
+
+``dnf5 history list --json``
+    | List all transactions in JSON format for programmatic processing.
+
+``dnf5 history info last --json``
+    | Show detailed info about the last transaction in JSON format with complete package details.
+
+
+JSON Output
+===========
+
+* ``dnf5 history list --json``
+
+The command returns a JSON array, each element describing one transaction.
+Each transaction object contains the following fields:
+
+- ``id`` (integer) - Transaction ID.
+- ``command_line`` (string) - Command line that initiated the transaction.
+- ``start_time`` (integer) - Transaction start time, UNIX time.
+- ``end_time`` (integer) - Transaction end time, UNIX time.
+- ``user_id`` (integer) - User ID who initiated the transaction.
+- ``status`` (string) - Transaction status, typically "Ok".
+- ``releasever`` (string) - System release version when transaction occurred.
+- ``altered_count`` (integer) - Number of packages altered in the transaction.
+
+* ``dnf5 history info --json``
+
+The command returns a JSON array, each element describing one transaction.
+Each transaction object contains the following fields:
+
+- ``id`` (integer) - Transaction ID.
+- ``start_time`` (integer) - Transaction start time, UNIX time.
+- ``end_time`` (integer) - Transaction end time, UNIX time.
+- ``rpmdb_version_begin`` (string) - RPM database version before the transaction.
+- ``rpmdb_version_end`` (string) - RPM database version after the transaction.
+- ``user_id`` (integer) - User ID who initiated the transaction.
+- ``user_name`` (string) - User name and details who initiated the transaction.
+- ``status`` (string) - Transaction status, typically "Ok".
+- ``releasever`` (string) - System release version when transaction occurred.
+- ``description`` (string) - Command line that initiated the transaction.
+- ``comment`` (string) - User comment for the transaction (usually empty).
+- ``packages`` (array) - List of packages altered in the transaction. Each package object contains:
+
+  - ``nevra`` (string) - Package name-epoch:version-release.architecture.
+  - ``action`` (string) - Action performed (Install, Remove, Upgrade, etc.).
+  - ``reason`` (string) - Reason for the action (User, Dependency, etc.).
+  - ``repository`` (string) - Repository from which the package came.
+
+- ``groups`` (array) - List of package groups altered (only present if groups were modified).
+- ``environments`` (array) - List of package environments altered (only present if environments were modified).
+
+For empty results, both commands return ``[]``.
 
 
 See Also

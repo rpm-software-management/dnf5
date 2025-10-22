@@ -26,6 +26,7 @@
 
 #include "libdnf5/transaction/transaction_history.hpp"
 
+#include <json-c/json.h>
 #include <libsmartcols/libsmartcols.h>
 
 
@@ -69,6 +70,39 @@ void print_transaction_list(std::vector<libdnf5::transaction::Transaction> & ts_
     }
 
     scols_print_table(table.get());
+}
+
+// [NOTE] When editing JSON output format, do not forget to update the docs at doc/commands/history.8.rst
+void print_transaction_list_json(std::vector<libdnf5::transaction::Transaction> & ts_list) {
+    std::unordered_map<int64_t, int64_t> id_to_item_count;
+    if (!ts_list.empty()) {
+        libdnf5::transaction::TransactionHistory history(ts_list[0].get_base());
+        id_to_item_count = history.get_transaction_item_counts(ts_list);
+    }
+
+    json_object * json_transactions = json_object_new_array();
+
+    for (auto & ts : ts_list) {
+        json_object * json_transaction = json_object_new_object();
+
+        json_object_object_add(json_transaction, "id", json_object_new_int64(ts.get_id()));
+        json_object_object_add(json_transaction, "command_line", json_object_new_string(ts.get_description().c_str()));
+        json_object_object_add(json_transaction, "start_time", json_object_new_int64(ts.get_dt_start()));
+        json_object_object_add(json_transaction, "end_time", json_object_new_int64(ts.get_dt_end()));
+        json_object_object_add(json_transaction, "user_id", json_object_new_int64(ts.get_user_id()));
+        json_object_object_add(
+            json_transaction,
+            "status",
+            json_object_new_string(libdnf5::transaction::transaction_state_to_string(ts.get_state()).c_str()));
+        json_object_object_add(json_transaction, "releasever", json_object_new_string(ts.get_releasever().c_str()));
+        json_object_object_add(
+            json_transaction, "altered_count", json_object_new_int64(id_to_item_count.at(ts.get_id())));
+
+        json_object_array_add(json_transactions, json_transaction);
+    }
+
+    std::cout << json_object_to_json_string_ext(json_transactions, JSON_C_TO_STRING_PRETTY) << std::endl;
+    json_object_put(json_transactions);
 }
 
 }  // namespace libdnf5::cli::output
