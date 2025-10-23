@@ -32,6 +32,7 @@ class LIBDNF_API Locker {
 public:
     /// Create a Locker object at a given path
     explicit Locker(const std::string & path);
+    Locker(const std::string & path, const bool keep_file);
     ~Locker();
 
     /// @brief Try to acquire read lock on a given file path
@@ -62,6 +63,7 @@ private:
 
     std::string path;
     int lock_fd{-1};
+    bool keep_file;
 };
 
 }  // namespace libdnf5::utils
