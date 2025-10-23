@@ -59,24 +59,39 @@ void TempFilesMemory::add_files(const std::vector<std::string> & paths) {
     auto files = get_files();
     files.insert(files.end(), paths.begin(), paths.end());
 
-    // sort and deduplicate resulting vector
+    // sort and deduplicate the vector
     std::sort(files.begin(), files.end());
     files.erase(std::unique(files.begin(), files.end()), files.end());
 
+    write(files);
+}
+
+void TempFilesMemory::write(const std::vector<std::string> & paths) {
     // write new contents to a temporary file and then move the new file atomically
     auto temporary_path = full_memory_path.string() + ".temp";
-    auto new_data = toml::format(toml::value(toml::table{{FILE_PATHS_TOML_KEY, files}}));
+    auto new_data = toml::format(toml::value(toml::table{{FILE_PATHS_TOML_KEY, paths}}));
     // Although it's not clear for the documentation if it is possible,
     // it occurred, that the file was empty, which results in parsing error,
     // see https://github.com/rpm-software-management/dnf5/issues/1001
     if (new_data.empty()) {
         auto & logger = *base->get_logger();
         logger.error(
-            "Serializing temporary file paths failed for the input vector: \"{}\"", utils::string::join(files, ", "));
+            "Serializing temporary file paths failed for the input vector: \"{}\"", utils::string::join(paths, ", "));
         return;
     }
     utils::fs::File(temporary_path, "w").write(new_data);
     std::filesystem::rename(temporary_path, full_memory_path);
+}
+
+void TempFilesMemory::remove_files(const std::vector<std::string> & paths) {
+    auto files = get_files();
+
+    std::set<std::string> to_remove{paths.begin(), paths.end()};
+    files.erase(
+        std::remove_if(files.begin(), files.end(), [&](const std::string & file) { return to_remove.contains(file); }),
+        files.end());
+
+    write(files);
 }
 
 void TempFilesMemory::clear() {
