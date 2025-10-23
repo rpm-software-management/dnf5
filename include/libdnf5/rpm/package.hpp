@@ -532,7 +532,7 @@ public:
     /// @since 5.0.5
     libdnf5::BaseWeakPtr get_base() const;
 
-    /// Return NEVRA -> 0 epoch is not shown in string
+    /// Return NEVRA -> always includes epoch (including 0 if epoch is empty)
     std::string to_string() const;
 
     /// Provide descriptive information about instance including NEVRA and ID
