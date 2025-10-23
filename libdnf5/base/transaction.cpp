@@ -902,15 +902,6 @@ void Transaction::Impl::process_scriptlets_output(int fd) {
     close(fd);
 }
 
-static bool contains_any_inbound_package(std::vector<TransactionPackage> & packages) {
-    for (const auto & package : packages) {
-        if (transaction_item_action_is_inbound(package.get_action())) {
-            return true;
-        }
-    }
-    return false;
-}
-
 Transaction::TransactionRunResult Transaction::Impl::test() {
     return this->_run(std::make_unique<libdnf5::rpm::TransactionCallbacks>(), "", std::nullopt, "", true);
 }
@@ -1258,14 +1249,27 @@ Transaction::TransactionRunResult Transaction::Impl::_run(
     plugins.post_transaction(*transaction);
 
     if (ret == 0) {
-        // removes any temporarily stored packages from the system
-        // only if any inbound action takes place
+        // Remove any temporarily stored packages that are no longer needed
         auto keepcache = config.get_keepcache_option().get_value();
-        auto any_inbound_action_present = contains_any_inbound_package(packages);
-        if (!keepcache && any_inbound_action_present) {
-            libdnf5::repo::TempFilesMemory temp_files_memory(base, config.get_cachedir_option().get_value());
-            auto temp_files = temp_files_memory.get_files();
-            for (auto & file : temp_files) {
+
+        std::set<std::string> package_files_to_remove;
+        if (!keepcache) {
+            // All package files for inbound packages should be marked for removal
+            for (const auto & tspkg : packages) {
+                if (transaction_item_action_is_inbound(tspkg.get_action())) {
+                    package_files_to_remove.insert(tspkg.get_package().get_package_path());
+                }
+            }
+        }
+
+        // Get all temp files
+        libdnf5::repo::TempFilesMemory temp_files_memory(base, config.get_cachedir_option().get_value());
+        const auto & temp_files = temp_files_memory.get_files();
+
+        std::vector<std::string> removed;
+        for (const auto & file : temp_files) {
+            // If a file was marked for removal, remove it from the filesystem
+            if (package_files_to_remove.contains(file)) {
                 try {
                     if (!std::filesystem::remove(file)) {
                         logger->debug("Temporary file \"{}\" doesn't exist.", file);
@@ -1275,6 +1279,20 @@ Transaction::TransactionRunResult Transaction::Impl::_run(
                         "An error occurred when trying to remove a temporary file \"{}\": {}", file, ex.what());
                 }
             }
+            try {
+                // All temp files that no longer exist should be removed from the temp_files_memory,
+                // whether they were removed just now or by someone else.
+                if (!std::filesystem::exists(file)) {
+                    removed.push_back(file);
+                }
+            } catch (const std::filesystem::filesystem_error &) {
+                // Silently continue if we can't determine whether a file still exists.
+            }
+        }
+        // Remove all nonexistent files from the temp_files_memory
+        temp_files_memory.remove_files(removed);
+        // Remove the temp_files_memory file if it's empty
+        if (temp_files_memory.get_files().empty()) {
             temp_files_memory.clear();
         }
 
