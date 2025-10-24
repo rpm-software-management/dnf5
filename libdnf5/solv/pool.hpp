@@ -253,6 +253,10 @@ public:
 
     int set_flag(int flag, int value) { return pool_set_flag(pool, flag, value); }
 
+    /// Returns `1` if the dependency `dep` is satisfied by the packages specified
+    /// in `map`, otherwise `0` is returned.
+    int is_dep_satisfied_in_map(Id dep, SolvMap & map) { return pool_satisfieddep_map(pool, &map.get_map(), dep); }
+
 protected:
     SolvMap considered;  // owner of the considered map, `pool->considered` is only a raw pointer
     ::Pool * pool;
