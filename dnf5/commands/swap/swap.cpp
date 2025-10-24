@@ -71,6 +71,7 @@ void SwapCommand::set_argument_parser() {
 
     create_installed_from_repo_option(*this, installed_from_repos, true);
     create_from_repo_option(*this, from_repos, true);
+    create_from_vendor_option(*this, from_vendors, true);
 
     create_offline_option(*this);
     create_store_option(*this);
@@ -88,6 +89,7 @@ void SwapCommand::run() {
     auto settings = libdnf5::GoalJobSettings();
     settings.set_from_repo_ids(installed_from_repos);
     settings.set_to_repo_ids(from_repos);
+    settings.set_to_vendors(from_vendors);
     goal->add_install(install_pkg_spec, settings);
     goal->add_rpm_remove(remove_pkg_spec, settings);
 }

@@ -44,10 +44,31 @@ public:
 
     void load_vendor_change_policy(const std::filesystem::path & path);
 
+    /// Check if a solvable is in the list of incoming solvables that bypass vendor check.
+    /// @param solvable_id The solvable ID to check
+    /// @return true if the solvable bypasses vendor check, false otherwise
+    [[nodiscard]] bool is_incoming_vendor_bypassed_solvable(Id solvable_id) const noexcept {
+        return incoming_vendor_bypassed_solvables.contains(solvable_id);
+    }
+
+    /// Get a reference to the map of incoming solvables that bypass vendor check.
+    /// This allows direct manipulation of the solvables map.
+    /// @return Reference to the SolvMap containing solvable IDs that bypass vendor check
+    [[nodiscard]] SolvMap & get_incoming_vendor_bypassed_solvables() noexcept {
+        return incoming_vendor_bypassed_solvables;
+    }
+
+    /// Get a const reference to the map of incoming solvables that bypass vendor check.
+    /// @return Const reference to the SolvMap containing solvable IDs that bypass vendor check
+    [[nodiscard]] const SolvMap & get_incoming_vendor_bypassed_solvables() const noexcept {
+        return incoming_vendor_bypassed_solvables;
+    }
+
 private:
     const Pool & pool;
     std::vector<VendorChangePolicy> vendor_policies_def;
     std::vector<VendorChangeMasks> vendor_masks;
+    SolvMap incoming_vendor_bypassed_solvables{0};
 };
 
 }  // namespace libdnf5::solv

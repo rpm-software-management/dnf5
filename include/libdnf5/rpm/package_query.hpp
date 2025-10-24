@@ -212,6 +212,25 @@ public:
     void filter_arch(
         const std::vector<std::string> & patterns, libdnf5::sack::QueryCmp cmp_type = libdnf5::sack::QueryCmp::EQ);
 
+    /// Filter packages by their `vendor`.
+    ///
+    /// @param pattern          A string the filter is matched against.
+    /// @param cmp_type         A comparison (match) operator, defaults to `QueryCmp::EQ`.
+    ///                         Supported values: `EQ`, `NEQ`, `GLOB`, `NOT_GLOB`, `IEXACT`, `NOT_IEXACT`, `ICONTAINS`, `NOT_ICONTAINS`, `IGLOB`, `NOT_IGLOB`, `CONTAINS`, `NOT_CONTAINS`.
+    /// @since 5.3
+    void filter_vendor(const std::string & pattern, libdnf5::sack::QueryCmp cmp_type = libdnf5::sack::QueryCmp::EQ) {
+        filter_vendor(std::vector<std::string>{pattern}, cmp_type);
+    };
+
+    /// Filter packages by their `vendor`.
+    ///
+    /// @param patterns         A vector of strings the filter is matched against.
+    /// @param cmp_type         A comparison (match) operator, defaults to `QueryCmp::EQ`.
+    ///                         Supported values: `EQ`, `NEQ`, `GLOB`, `NOT_GLOB`, `IEXACT`, `NOT_IEXACT`, `ICONTAINS`, `NOT_ICONTAINS`, `IGLOB`, `NOT_IGLOB`, `CONTAINS`, `NOT_CONTAINS`.
+    /// @since 5.3
+    void filter_vendor(
+        const std::vector<std::string> & patterns, libdnf5::sack::QueryCmp cmp_type = libdnf5::sack::QueryCmp::EQ);
+
     /// Filter packages by their `name` and `arch` based on names and arches of the packages in the `package_set`.
     ///
     /// @param package_set      PackageSet with Package objects the filter is matched against.

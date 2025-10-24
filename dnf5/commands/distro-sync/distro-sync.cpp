@@ -55,6 +55,7 @@ void DistroSyncCommand::set_argument_parser() {
     auto skip_unavailable = std::make_unique<SkipUnavailableOption>(*this);
     create_installed_from_repo_option(*this, installed_from_repos, true);
     create_from_repo_option(*this, from_repos, true);
+    create_from_vendor_option(*this, from_vendors, true);
     create_downloadonly_option(*this);
     create_offline_option(*this);
     create_store_option(*this);
@@ -77,6 +78,9 @@ void DistroSyncCommand::run() {
         // The "--from-repo" option only applies to packages explicitly listed on the command line.
         // Other packages can be used from any enabled repository.
         settings.set_to_repo_ids(from_repos);
+        // The "--from-vendor" option only applies to packages explicitly listed on the command line.
+        // For other packages, vendor change policies are applied, or the vendor is ignored if allow_vendor_change=1.
+        settings.set_to_vendors(from_vendors);
 
         for (auto & pattern : *patterns_to_distro_sync_options) {
             auto option = dynamic_cast<libdnf5::OptionString *>(pattern.get());

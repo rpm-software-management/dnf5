@@ -172,6 +172,8 @@ class GoalJobSettings::Impl {
     std::vector<std::string> from_repo_ids;
     ///// Reduce candidates for the operation according repository ids
     std::vector<std::string> to_repo_ids;
+    ///// Reduce candidates for the operation according to vendors
+    std::vector<std::string> to_vendors;
 
     /// For replaying transactions don't check for extra packages pulled into the transaction.
     /// Used by history undo, system upgrade, ...
@@ -469,6 +471,13 @@ void GoalJobSettings::set_to_repo_ids(std::vector<std::string> to_repo_ids) {
 }
 std::vector<std::string> GoalJobSettings::get_to_repo_ids() const {
     return p_impl->to_repo_ids;
+}
+
+void GoalJobSettings::set_to_vendors(std::vector<std::string> vendors) {
+    p_impl->to_vendors = std::move(vendors);
+}
+const std::vector<std::string> & GoalJobSettings::get_to_vendors() const {
+    return p_impl->to_vendors;
 }
 
 void GoalJobSettings::set_group_no_packages(bool group_no_packages) {
