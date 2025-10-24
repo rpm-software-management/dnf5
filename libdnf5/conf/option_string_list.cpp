@@ -19,13 +19,13 @@
 
 #include "libdnf5/conf/option_string_list.hpp"
 
-#include "utils/string.hpp"
-
 #include "libdnf5/utils/bgettext/bgettext-mark-domain.h"
 
+#include <cctype>
 #include <map>
 #include <optional>
 #include <regex>
+#include <string_view>
 
 namespace libdnf5 {
 
@@ -197,35 +197,70 @@ void OptionStringContainer<T, IsAppend>::test(const ValueType & value) const {
     }
 }
 
-// Since strtok_r modifies its str input we copy `value` param
 template <typename T, bool IsAppend>
 T OptionStringContainer<T, IsAppend>::from_string(std::string value) const {
-    ValueType tmp;
-    char * str = nullptr;
-    char * token = nullptr;
-    char * saveptr = nullptr;
+    ValueType ret;  // Container to hold the resulting parsed items
 
-    // If the first token in the string is empty (we start with a delimiter) it's
-    // a special case, it can be used to clear existing content of the option.
-    auto start = value.find_first_not_of(' ');
-    if (start != std::string::npos && strchr(get_delimiters(), value[start]) != nullptr) {
-        tmp.insert(tmp.end(), "");
+    const std::string_view delimiters{get_delimiters()};
+
+    bool item_started = false;  // True after first non-space or escaped character in current item
+    size_t valid_item_len = 0;  // Length of current item excluding trailing unescaped spaces
+    bool escape = false;        // True when backslash was encountered (next char is escaped)
+    std::string item;           // Current item being built character by character
+
+    const auto end_it = value.end();
+    for (auto it = value.begin(); it != end_it; ++it) {
+        // Handle escaped character: always add it
+        if (escape) {
+            escape = false;
+            item += *it;
+            valid_item_len = item.size();
+            item_started = true;
+            continue;
+        }
+
+        if (*it == '\\') {
+            escape = true;
+            continue;
+        }
+
+        // Character is not a delimiter - process as part of current item
+        if (delimiters.find(*it) == delimiters.npos) {
+            // Non-space character starts the item or extends its valid length
+            if (!std::isspace(*it)) {
+                item_started = true;
+                valid_item_len = item.size() + 1;
+            }
+            // Append character to item only after item has started (skip leading spaces)
+            if (item_started) {
+                item += *it;
+            }
+            continue;
+        }
+
+        // Delimiter encountered - finalize and store current item
+        item.resize(valid_item_len);  // Trim trailing unescaped spaces
+
+        // Store item in result container with special handling for empty items:
+        // - Empty first item with non-space delimiter: stored to signal content clearing
+        // - Other empty items: skipped (consecutive delimiters produce no item)
+        if (!item.empty() || (ret.empty() && !std::isspace(*it))) {
+            ret.insert(ret.end(), item);
+        }
+
+        // Prepare state for parsing next item
+        item_started = false;
+        valid_item_len = 0;
+        item.clear();
     }
 
-    for (str = value.data();; str = nullptr) {
-        token = strtok_r(str, get_delimiters(), &saveptr);
-        if (token == nullptr) {
-            break;
-        }
-        std::string token_str(token);
-        // Since deliemeters don't have to include space, we have to trim the token
-        utils::string::trim(token_str);
-        if (!token_str.empty()) {
-            tmp.insert(tmp.end(), std::move(token_str));
-        }
+    // Store the final item if it contains any content
+    item.resize(valid_item_len);  // Trim trailing unescaped spaces
+    if (!item.empty()) {
+        ret.insert(ret.end(), item);
     }
 
-    return tmp;
+    return ret;
 }
 
 template <typename T, bool IsAppend>

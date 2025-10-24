@@ -97,7 +97,17 @@ public:
     // @replaces libdnf:conf/OptionStringList.hpp:method:OptionStringList.test(const std::vector<std::string> & value)
     void test(const ValueType & value) const;
 
-    /// Parses input string and returns result.
+    /// Parses input string and returns a container of items.
+    ///
+    /// Items in the input string are separated by delimiters (default: space, comma, newline).
+    /// Leading and trailing whitespace is trimmed from each item. Backslash '\' can be used
+    /// to escape any character, allowing it to be included literally in items.
+    ///
+    /// Special case: If the string starts with a non-space delimiter, an empty item is
+    /// inserted as the first element, which can be used to clear existing option content.
+    ///
+    /// @param value The input string to parse
+    /// @return Container with parsed items
     // @replaces libdnf:conf/OptionStringList.hpp:method:OptionStringList.fromString(const std::string & value)
     ValueType from_string(std::string value) const;
 
