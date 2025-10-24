@@ -26,6 +26,7 @@
 #include <map>
 #include <optional>
 #include <regex>
+#include <string_view>
 
 namespace libdnf5 {
 
@@ -197,32 +198,55 @@ void OptionStringContainer<T, IsAppend>::test(const ValueType & value) const {
     }
 }
 
-// Since strtok_r modifies its str input we copy `value` param
 template <typename T, bool IsAppend>
 T OptionStringContainer<T, IsAppend>::from_string(std::string value) const {
     ValueType tmp;
-    char * str = nullptr;
-    char * token = nullptr;
-    char * saveptr = nullptr;
 
-    // If the first token in the string is empty (we start with a delimiter) it's
-    // a special case, it can be used to clear existing content of the option.
-    auto start = value.find_first_not_of(' ');
-    if (start != std::string::npos && strchr(get_delimiters(), value[start]) != nullptr) {
-        tmp.insert(tmp.end(), "");
+    const std::string_view delimiters{get_delimiters()};
+    bool first_item_empty = true;  // Flag to handle the case of an empty first item (string starts with a delimiter)
+    bool escape = false;
+    const auto end_it = value.end();
+    std::string item;
+    for (auto it = value.begin(); it != end_it; ++it) {
+        if (escape) {
+            escape = false;
+            item += *it;
+            if (*it != ' ') {
+                first_item_empty = false;
+            }
+            continue;
+        }
+        if (*it == '\\') {
+            escape = true;
+            continue;
+        }
+        if (delimiters.find(*it) == delimiters.npos) {
+            item += *it;
+            if (*it != ' ') {
+                first_item_empty = false;
+            }
+            continue;
+        }
+
+        utils::string::trim(item);
+        if (item.empty()) {
+            if (first_item_empty && *it != ' ') {
+                first_item_empty = false;
+                // If the first item in the string is empty (we start with a delimiter) it's
+                // a special case, it can be used to clear existing content of the option.
+                tmp.insert(tmp.end(), "");
+            }
+            continue;
+        }
+        tmp.insert(tmp.end(), item);
+
+        item.clear();
     }
 
-    for (str = value.data();; str = nullptr) {
-        token = strtok_r(str, get_delimiters(), &saveptr);
-        if (token == nullptr) {
-            break;
-        }
-        std::string token_str(token);
-        // Since deliemeters don't have to include space, we have to trim the token
-        utils::string::trim(token_str);
-        if (!token_str.empty()) {
-            tmp.insert(tmp.end(), std::move(token_str));
-        }
+    // If the final token is not empty, insert it into the container.
+    utils::string::trim(item);
+    if (!item.empty()) {
+        tmp.insert(tmp.end(), item);
     }
 
     return tmp;
