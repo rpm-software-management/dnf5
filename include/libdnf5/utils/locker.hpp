@@ -32,6 +32,7 @@ class LIBDNF_API Locker {
 public:
     /// Create a Locker object at a given path
     explicit Locker(const std::string & path);
+    Locker(const std::string & path, const bool keep_file);
     ~Locker();
 
     /// @brief Try to acquire read lock on a given file path
@@ -44,15 +45,25 @@ public:
     /// @throws libdnf5::SystemError if an unexpected error occurs when checking the lock state, like insufficient privileges
     bool write_lock();
 
+    /// @brief Block until read lock is acquired on a given file path
+    /// @throws libdnf5::SystemError if an unexpected error occurs when checking the lock state, like insufficient privileges
+    void read_lock_blocking();
+
+    /// @brief Block until write lock is acquired on a given file path
+    /// @throws libdnf5::SystemError if an unexpected error occurs when checking the lock state, like insufficient privileges
+    void write_lock_blocking();
+
     /// @brief Unlock the existing lock and remove the underlying lock file
     /// @throws libdnf5::SystemError if an unexpected error occurs when unlocking
     void unlock();
 
 private:
     LIBDNF_LOCAL bool lock(short int type);
+    LIBDNF_LOCAL void lock_blocking(short int type);
 
     std::string path;
     int lock_fd{-1};
+    bool keep_file;
 };
 
 }  // namespace libdnf5::utils

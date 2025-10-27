@@ -63,6 +63,15 @@ public:
     /// @exception std::filesystem::filesystem_error When an error occurs during renaming the memory file.
     void add_files(const std::vector<std::string> & paths);
 
+    /// @brief Remove a list of file paths from the memory file.
+    /// The memory file is created if it didn't exist before.
+    /// The resulting list contains paths that were in the memory file but were not in `paths`.
+    /// @param paths A list of file paths to be removed from the memory file.
+    /// @exception libdnf5::Error When an error occurs during parsing of the file with temporary files.
+    /// @exception libdnf5::FileSystemprror When an error occurs during accessing or writing the memory file.
+    /// @exception std::filesystem::filesystem_error When an error occurs during renaming the memory file.
+    void remove_files(const std::vector<std::string> & paths);
+
     /// @brief Deletes the memory file.
     /// @exception std::filesystem::filesystem_error When an error occurs during deleting the memory file.
     void clear();
@@ -70,6 +79,7 @@ public:
 private:
     BaseWeakPtr base;
     std::filesystem::path full_memory_path;
+    void write(const std::vector<std::string> & paths);
 };
 
 
