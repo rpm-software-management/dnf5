@@ -87,6 +87,7 @@ Provides:       dnf5-command(versionlock)
 %bcond_without python_plugins_loader
 %bcond_without plugin_local
 
+%bcond_without acl
 %bcond_without comps
 %bcond_without modulemd
 %bcond_without systemd
@@ -155,6 +156,10 @@ BuildRequires:  pkgconfig(rpm) >= 4.17.0
 BuildRequires:  pkgconfig(sqlite3) >= %{sqlite_version}
 BuildRequires:  toml11-static
 BuildRequires:  zlib-devel
+
+%if %{with acl}
+BuildRequires:  pkgconfig(libacl)
+%endif
 
 %if %{with clang}
 BuildRequires:  clang
@@ -967,6 +972,7 @@ DNF5 plugin for working with RPM package manifest files.
     -DWITH_PLUGIN_MANIFEST=%{?with_plugin_manifest:ON}%{!?with_plugin_manifest:OFF} \
     -DWITH_PYTHON_PLUGINS_LOADER=%{?with_python_plugins_loader:ON}%{!?with_python_plugins_loader:OFF} \
     \
+    -DWITH_ACL=%{?with_acl:ON}%{!?with_acl:OFF} \
     -DWITH_COMPS=%{?with_comps:ON}%{!?with_comps:OFF} \
     -DWITH_MODULEMD=%{?with_modulemd:ON}%{!?with_modulemd:OFF} \
     -DWITH_SYSTEMD=%{?with_systemd:ON}%{!?with_systemd:OFF} \

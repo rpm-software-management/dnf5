@@ -17,13 +17,23 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
+#ifndef _GNU_SOURCE
+// For renameat2()
+#define _GNU_SOURCE 1
+#endif
+
 #include "libdnf5/logger/rotating_file_logger.hpp"
 
 #include "libdnf5/utils/bgettext/bgettext-mark-domain.h"
 
 #include <fcntl.h>
 #include <fmt/format.h>
+#include <stdio.h>
 #include <string.h>
+#ifdef HAVE_LIBACL
+#include <sys/acl.h>
+#include <sys/types.h>
+#endif
 #include <sys/file.h>
 #include <sys/stat.h>
 #include <unistd.h>
@@ -73,6 +83,35 @@ RotatingFileLogger::Impl::~Impl() {
     }
 }
 
+namespace {
+// Copy file mode and POSIX access control list from a file descriptor to
+// a file descriptor.
+// @return true on success, false otherwise.
+bool copy_mode(int from, int to) {
+    bool success = true;
+    // File mode
+    struct stat stat;
+    if (fstat(from, &stat))
+        return false;
+    if (fchmod(to, 07777 & stat.st_mode) != 0)
+        success = false;
+#ifdef HAVE_LIBACL
+    // ACL
+    auto acl = acl_get_fd(from);
+    if (!acl) {
+        // Handle file systems which do not support ACL gracefully
+        if (errno != ENOTSUP)
+            success = false;
+        return success;
+    }
+    if (acl_set_fd(to, acl) != 0)
+        success = false;
+    acl_free((void *)acl);
+#endif
+    return success;
+}
+}  // namespace
+
 void RotatingFileLogger::Impl::write(const char * line) noexcept {
     try {
         // required for thread safety
@@ -91,10 +130,11 @@ void RotatingFileLogger::Impl::write(const char * line) noexcept {
             // verify that the log file has not been rotated by another process
             auto check_file_fd = ::open(base_file_path.c_str(), O_RDONLY | O_CLOEXEC);
             if (check_file_fd == -1) {
-                // try to create log file in case it was rotated by another process
+                // try to create log file in case it was removed by another process
                 auto log_file_fd_tmp = ::open(base_file_path.c_str(), LOG_FILE_OPEN_FLAGS, LOG_FILE_OPEN_MODE);
                 if (log_file_fd_tmp != -1) {
                     // log file created, update log_file_fd and retry
+                    copy_mode(log_file_fd, log_file_fd_tmp);
                     ::close(log_file_fd);
                     log_file_fd = log_file_fd_tmp;
                     continue;
@@ -118,7 +158,8 @@ void RotatingFileLogger::Impl::write(const char * line) noexcept {
                 ::close(check_file_fd);
                 if (log_fd_stat.st_ino != check_fd_stat.st_ino) {
                     // log file descriptor belongs to another file than base_file_path.
-                    // Probably the log file was rotated by another process.
+                    // Probably the log file was renamed manually and recreated by another process.
+
                     // Re-open log_file_fd and try again
                     ::close(log_file_fd);
                     log_file_fd = ::open(base_file_path.c_str(), LOG_FILE_OPEN_FLAGS, LOG_FILE_OPEN_MODE);
@@ -126,19 +167,45 @@ void RotatingFileLogger::Impl::write(const char * line) noexcept {
                 }
                 if (should_rotate(line_len)) {
                     // A log file rotation is needed and so far no one has done it.
-                    // Let's rotate the files and start from the beginning.
                     try {
-                        for (auto file_idx = backup_count; file_idx > 0; --file_idx) {
+                        // Let's rotate the files but the last one
+                        for (auto file_idx = backup_count; file_idx > 1; --file_idx) {
                             auto path_old = file_idx > 1 ? fmt::format("{}.{}", base_file_path.string(), file_idx - 1)
                                                          : base_file_path.string();
                             auto path_new = fmt::format("{}.{}", base_file_path.string(), file_idx);
                             ::rename(path_old.c_str(), path_new.c_str());
                         }
+
+                        // Preperate a new log file, with rotated name, copied file
+                        // mode, and held lock. Truncate the file in case
+                        // a strayed file of the name existed before.
+                        // The file will be atomically swapped with the
+                        // current log file later.
+                        auto new_name = fmt::format("{}.1", base_file_path.string());
+                        int new_fd = ::open(new_name.c_str(), LOG_FILE_OPEN_FLAGS | O_TRUNC, LOG_FILE_OPEN_MODE);
+                        if (new_fd != -1) {
+                            copy_mode(log_file_fd, new_fd);
+                            ::flock(new_fd, LOCK_EX);
+
+                            // Rotate the last file by atomically swapping it with
+                            // the prepared file.
+                            if (!renameat2(
+                                    AT_FDCWD,
+                                    base_file_path.string().c_str(),
+                                    AT_FDCWD,
+                                    new_name.c_str(),
+                                    RENAME_EXCHANGE)) {
+                                ::close(log_file_fd);
+                                log_file_fd = new_fd;
+                            } else {
+                                ::close(new_fd);
+                            }
+                        }
                     } catch (...) {
                     }
-                    ::close(log_file_fd);
-                    log_file_fd = ::open(base_file_path.c_str(), LOG_FILE_OPEN_FLAGS, LOG_FILE_OPEN_MODE);
-                    continue;
+
+                    // and proceed with writing regardless the rotation
+                    // succeded, or not.
                 }
             }
 
