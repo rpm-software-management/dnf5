@@ -75,6 +75,10 @@ To setup a development environment, complete the following steps:
    dnf builddep dnf5.spec #[--define '_without_<option> 1 ...]
    ```
 
+   > **NOTE**: Requires Fedora of version at least 43, as the `libpkgmanifest`
+   > is not packaged in the lower versions, or build without the manifest
+   > plugin.
+
 2. Build DNF5:
 
    ```
