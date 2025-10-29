@@ -35,6 +35,7 @@ option(WITH_PYTHON_PLUGINS_LOADER "Build a special dnf5 plugin that loads Python
 option(WITH_PLUGIN_LOCAL "Build a libdnf5 local plugin" ON)
 
 # build options - features
+option(WITH_ACL "Build with POSIX access control list support" ON)
 option(WITH_COMPS "Build with comps groups and environments support" ON)
 option(WITH_MODULEMD "Build with modulemd modules support" ON)
 option(WITH_SYSTEMD "Build with systemd and D-Bus features" ON)
