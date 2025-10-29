@@ -2684,9 +2684,6 @@ void Goal::Impl::add_group_upgrade_to_goal(
     comps::GroupQuery available_groups(base);
     available_groups.filter_installed(false);
 
-    rpm::PackageQuery query_installed(base);
-    query_installed.filter_installed();
-
     for (auto installed_group : group_query) {
         auto group_id = installed_group.get_groupid();
         // find available group of the same id
@@ -2725,9 +2722,11 @@ void Goal::Impl::add_group_upgrade_to_goal(
             old_set.emplace(pkg.get_name());
         }
         // set of package names that are part of the available version of the group
-        std::set<std::string> new_set{};
-        for (const auto & pkg : available_group.get_packages()) {
-            new_set.emplace(pkg.get_name());
+        std::vector<std::string> new_set;
+        const auto & pkgs_from_available_group = available_group.get_packages();
+        new_set.reserve(pkgs_from_available_group.size());
+        for (const auto & pkg : pkgs_from_available_group) {
+            new_set.push_back(pkg.get_name());
         }
 
         // install packages newly added to the group
@@ -2737,16 +2736,17 @@ void Goal::Impl::add_group_upgrade_to_goal(
             }
         }
 
+        // upgrade installed packages that are part of the group (even if not installed with the group)
         auto pkg_settings = GoalJobSettings();
         pkg_settings.set_with_provides(false);
         pkg_settings.set_with_filenames(false);
         pkg_settings.set_with_binaries(false);
-        for (const auto & pkg_name : state_group.packages) {
-            if (new_set.contains(pkg_name)) {
-                // upgrade all packages installed with the group
-                pkg_settings.set_nevra_forms({rpm::Nevra::Form::NAME});
-                add_up_down_distrosync_to_goal(transaction, GoalAction::UPGRADE, pkg_name, pkg_settings);
-            }
+        pkg_settings.set_nevra_forms({rpm::Nevra::Form::NAME});
+        rpm::PackageQuery query_installed(base);
+        query_installed.filter_name(new_set);
+        query_installed.filter_installed();
+        for (const auto & pkg : query_installed) {
+            add_up_down_distrosync_to_goal(transaction, GoalAction::UPGRADE, pkg.get_name(), pkg_settings);
         }
     }
 }
