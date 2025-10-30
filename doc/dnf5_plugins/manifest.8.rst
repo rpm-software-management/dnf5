@@ -9,6 +9,10 @@
  Manifest Command
 ##################
 
+.. warning::
+   The manifest plugin is under development and considered experimental. The
+   interface and behavior may change.
+
 Synopsis
 ========
 
