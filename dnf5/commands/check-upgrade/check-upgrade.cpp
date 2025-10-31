@@ -163,6 +163,7 @@ void CheckUpgradeCommand::run() {
 
     // filter by advisory flags, e.g. `--security`
     size_t size_before_filter_advisories = upgrades_query.size();
+    ErrorHandling error_mode = determine_error_mode(ctx, false);
     auto advisories = advisory_query_from_cli_input(
         ctx.get_base(),
         advisory_name->get_value(),
@@ -173,7 +174,7 @@ void CheckUpgradeCommand::run() {
         advisory_severity->get_value(),
         advisory_bz->get_value(),
         advisory_cve->get_value(),
-        false);
+        error_mode);
     if (advisories.has_value()) {
         upgrades_query.filter_latest_unresolved_advisories(
             std::move(advisories.value()), installed_query, libdnf5::sack::QueryCmp::GTE);

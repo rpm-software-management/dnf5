@@ -81,6 +81,7 @@ void AdvisorySubCommand::configure() {
 void AdvisorySubCommand::run() {
     auto & ctx = get_context();
 
+    ErrorHandling error_mode = determine_error_mode(ctx, false);
     auto advisories_opt = advisory_query_from_cli_input(
         ctx.get_base(),
         advisory_specs->get_value(),
@@ -91,7 +92,7 @@ void AdvisorySubCommand::run() {
         advisory_severity->get_value(),
         advisory_bz->get_value(),
         advisory_cve->get_value(),
-        false);
+        error_mode);
 
     auto advisories = advisories_opt.value_or(libdnf5::advisory::AdvisoryQuery(ctx.get_base()));
 

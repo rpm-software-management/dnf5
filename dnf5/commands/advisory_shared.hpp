@@ -24,6 +24,7 @@
 
 #include "utils/string.hpp"
 
+#include <dnf5/context.hpp>
 #include <libdnf5-cli/session.hpp>
 #include <libdnf5/advisory/advisory_query.hpp>
 #include <libdnf5/base/base_weak.hpp>
@@ -37,6 +38,22 @@
 
 namespace dnf5 {
 
+enum class ErrorHandling {
+    STRICT,      // Throw exceptions immediately on errors
+    PERMISSIVE,  // Print errors to stderr, continue execution
+    SILENT       // Suppress error output (for JSON/programmatic mode)
+};
+
+inline ErrorHandling determine_error_mode(const Context & ctx, bool strict_requested) {
+    if (ctx.get_json_output_requested()) {
+        return ErrorHandling::SILENT;  // JSON mode = no error messages
+    }
+    if (strict_requested) {
+        return ErrorHandling::STRICT;  // Strict mode = throw exceptions
+    }
+    return ErrorHandling::PERMISSIVE;  // Default = print errors, continue
+}
+
 inline std::optional<libdnf5::advisory::AdvisoryQuery> advisory_query_from_cli_input(
     libdnf5::Base & base,
     const std::vector<std::string> & advisory_names,
@@ -47,7 +64,7 @@ inline std::optional<libdnf5::advisory::AdvisoryQuery> advisory_query_from_cli_i
     const std::vector<std::string> & advisory_severities,
     const std::vector<std::string> & advisory_bzs,
     const std::vector<std::string> & advisory_cves,
-    const bool strict) {
+    ErrorHandling error_mode) {
     std::vector<std::string> advisory_types;
     if (advisory_security) {
         advisory_types.emplace_back("security");
@@ -74,13 +91,19 @@ inline std::optional<libdnf5::advisory::AdvisoryQuery> advisory_query_from_cli_i
             if (advisories_names.empty()) {
                 specific_error = std::make_unique<BgettextMessage>(
                     BgettextMessage(M_("No advisory found matching the requested name: \"{}\"")));
-                if (strict) {
-                    throw libdnf5::cli::CommandExitError(
-                        1, *specific_error, libdnf5::utils::string::join(advisory_names, ", "));
-                } else {
-                    std::cerr << libdnf5::utils::sformat(
-                                     TM_(*specific_error, 1), libdnf5::utils::string::join(advisory_names, ", "))
-                              << std::endl;
+                switch (error_mode) {
+                    case ErrorHandling::STRICT:
+                        throw libdnf5::cli::CommandExitError(
+                            1, *specific_error, libdnf5::utils::string::join(advisory_names, ", "));
+                        break;
+                    case ErrorHandling::PERMISSIVE:
+                        std::cerr << libdnf5::utils::sformat(
+                                         TM_(*specific_error, 1), libdnf5::utils::string::join(advisory_names, ", "))
+                                  << std::endl;
+                        break;
+                    case ErrorHandling::SILENT:
+                        // Suppress error output for JSON/programmatic mode
+                        break;
                 }
             }
             advisories |= advisories_names;
@@ -107,13 +130,19 @@ inline std::optional<libdnf5::advisory::AdvisoryQuery> advisory_query_from_cli_i
             if (advisories_bzs.empty()) {
                 specific_error = std::make_unique<BgettextMessage>(
                     BgettextMessage(M_("No advisory found fixing the Bugzilla ID: \"{}\"")));
-                if (strict) {
-                    throw libdnf5::cli::CommandExitError(
-                        1, *specific_error, libdnf5::utils::string::join(advisory_bzs, ", "));
-                } else {
-                    std::cerr << libdnf5::utils::sformat(
-                                     TM_(*specific_error, 1), libdnf5::utils::string::join(advisory_bzs, ", "))
-                              << std::endl;
+                switch (error_mode) {
+                    case ErrorHandling::STRICT:
+                        throw libdnf5::cli::CommandExitError(
+                            1, *specific_error, libdnf5::utils::string::join(advisory_bzs, ", "));
+                        break;
+                    case ErrorHandling::PERMISSIVE:
+                        std::cerr << libdnf5::utils::sformat(
+                                         TM_(*specific_error, 1), libdnf5::utils::string::join(advisory_bzs, ", "))
+                                  << std::endl;
+                        break;
+                    case ErrorHandling::SILENT:
+                        // Suppress error output for JSON/programmatic mode
+                        break;
                 }
             }
             advisories |= advisories_bzs;
@@ -126,20 +155,26 @@ inline std::optional<libdnf5::advisory::AdvisoryQuery> advisory_query_from_cli_i
             if (advisories_cves.empty()) {
                 specific_error = std::make_unique<BgettextMessage>(
                     BgettextMessage(M_("No advisory found fixing the CVE ID: \"{}\"")));
-                if (strict) {
-                    throw libdnf5::cli::CommandExitError(
-                        1, *specific_error, libdnf5::utils::string::join(advisory_cves, ", "));
-                } else {
-                    std::cerr << libdnf5::utils::sformat(
-                                     TM_(*specific_error, 1), libdnf5::utils::string::join(advisory_cves, ", "))
-                              << std::endl;
+                switch (error_mode) {
+                    case ErrorHandling::STRICT:
+                        throw libdnf5::cli::CommandExitError(
+                            1, *specific_error, libdnf5::utils::string::join(advisory_cves, ", "));
+                        break;
+                    case ErrorHandling::PERMISSIVE:
+                        std::cerr << libdnf5::utils::sformat(
+                                         TM_(*specific_error, 1), libdnf5::utils::string::join(advisory_cves, ", "))
+                                  << std::endl;
+                        break;
+                    case ErrorHandling::SILENT:
+                        // Suppress error output for JSON/programmatic mode
+                        break;
                 }
             }
             advisories |= advisories_cves;
         }
 
 
-        if (!specific_error && advisories.empty()) {
+        if (!specific_error && advisories.empty() && error_mode != ErrorHandling::SILENT) {
             std::cerr << _("No advisory found matching the specified filters.") << std::endl;
         }
         return advisories;

@@ -94,6 +94,8 @@ void InstallCommand::run() {
     goal->set_allow_erasing(allow_erasing->get_value());
     auto settings = libdnf5::GoalJobSettings();
     settings.set_to_repo_ids(from_repos);
+    ErrorHandling error_mode =
+        determine_error_mode(ctx, !ctx.get_base().get_config().get_skip_unavailable_option().get_value());
     auto advisories = advisory_query_from_cli_input(
         ctx.get_base(),
         advisory_name->get_value(),
@@ -104,7 +106,7 @@ void InstallCommand::run() {
         advisory_severity->get_value(),
         advisory_bz->get_value(),
         advisory_cve->get_value(),
-        !ctx.get_base().get_config().get_skip_unavailable_option().get_value());
+        error_mode);
     if (advisories.has_value()) {
         settings.set_advisory_filter(std::move(advisories.value()));
     }

@@ -68,7 +68,6 @@ void AdvisoryInfoCommand::process_and_print_queries(
             advisory_info.add_advisory(cli_advisory);
         }
         advisory_info.print();
-        std::cout << std::endl;
     } else {
         for (auto advisory : advisories) {
             libdnf5::cli::output::AdvisoryInfo advisory_info;

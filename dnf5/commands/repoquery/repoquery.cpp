@@ -632,6 +632,7 @@ void RepoqueryCommand::run() {
 
     // APPLY SIMPLE FILTERS - It doesn't matter if the packages are from system or available repo
 
+    ErrorHandling error_mode = determine_error_mode(ctx, false);
     auto advisories = advisory_query_from_cli_input(
         ctx.get_base(),
         advisory_name->get_value(),
@@ -642,7 +643,7 @@ void RepoqueryCommand::run() {
         advisory_severity->get_value(),
         advisory_bz->get_value(),
         advisory_cve->get_value(),
-        false);
+        error_mode);
     if (advisories.has_value()) {
         result_query.filter_advisories(advisories.value(), libdnf5::sack::QueryCmp::GTE);
     }
