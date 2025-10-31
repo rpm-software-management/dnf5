@@ -57,6 +57,7 @@ void InstallCommand::set_argument_parser() {
     auto skip_unavailable = std::make_unique<SkipUnavailableOption>(*this);
     create_allow_downgrade_options(*this);
     create_from_repo_option(*this, from_repos, true);
+    create_from_vendor_option(*this, from_vendors, true);
     create_downloadonly_option(*this);
     create_offline_option(*this);
 
@@ -94,6 +95,7 @@ void InstallCommand::run() {
     goal->set_allow_erasing(allow_erasing->get_value());
     auto settings = libdnf5::GoalJobSettings();
     settings.set_to_repo_ids(from_repos);
+    settings.set_to_vendors(from_vendors);
     auto advisories = advisory_query_from_cli_input(
         ctx.get_base(),
         advisory_name->get_value(),

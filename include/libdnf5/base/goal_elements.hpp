@@ -360,6 +360,13 @@ public:
     void set_to_repo_ids(std::vector<std::string> to_repo_ids);
     std::vector<std::string> get_to_repo_ids() const;
 
+    /// Limit available packages to those with specified vendors.
+    /// These packages will also bypass vendor change check.
+    ///
+    /// Empty by default.
+    void set_to_vendors(std::vector<std::string> vendors);
+    const std::vector<std::string> & get_to_vendors() const;
+
     /// If set to true, after resolving serialized, reverted or redo transactions don't check for
     /// extra packages pulled into the transaction.
     ///

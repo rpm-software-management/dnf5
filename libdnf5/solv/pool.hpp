@@ -178,6 +178,8 @@ public:
 
     const char * get_arch(Id id) const noexcept { return id2str(id2solvable(id)->arch); }
 
+    const char * get_vendor(Id id) const noexcept { return id2str(id2solvable(id)->vendor); }
+
     /// Construct package string ID without epoch when epoch is 0
     /// Returns a temporary object allocated by pool_alloctmpspace
     const char * get_nevra(Id id) const noexcept { return solvable2str(id2solvable(id)); }
@@ -269,6 +271,10 @@ public:
 
     void load_vendor_change_policy(const std::filesystem::path & policy_file) {
         vendor_change_manager.load_vendor_change_policy(policy_file);
+    }
+
+    [[nodiscard]] SolvMap & get_incoming_vendor_bypassed_solvables() noexcept {
+        return vendor_change_manager.get_incoming_vendor_bypassed_solvables();
     }
 
 private:

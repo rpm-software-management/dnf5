@@ -45,6 +45,7 @@ public:
     std::unique_ptr<AllowErasingOption> allow_erasing;
     std::vector<std::string> installed_from_repos;
     std::vector<std::string> from_repos;
+    std::vector<std::string> from_vendors;
 };
 
 

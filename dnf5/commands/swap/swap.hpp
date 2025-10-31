@@ -45,6 +45,7 @@ private:
 
     std::vector<std::string> installed_from_repos;
     std::vector<std::string> from_repos;
+    std::vector<std::string> from_vendors;
 };
 
 }  // namespace dnf5
