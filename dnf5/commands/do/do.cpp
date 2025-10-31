@@ -233,6 +233,8 @@ void DoCommand::run() {
     auto & ctx = get_context();
     auto goal = get_context().get_goal();
     goal->set_allow_erasing(allow_erasing->get_value());
+    ErrorHandling error_mode =
+        determine_error_mode(ctx, !ctx.get_base().get_config().get_skip_unavailable_option().get_value());
     auto advisories = advisory_query_from_cli_input(
         ctx.get_base(),
         advisory_name->get_value(),
@@ -243,7 +245,7 @@ void DoCommand::run() {
         advisory_severity->get_value(),
         advisory_bz->get_value(),
         advisory_cve->get_value(),
-        !ctx.get_base().get_config().get_skip_unavailable_option().get_value());
+        error_mode);
 
     for (auto & item : install_items) {
         if (advisories) {

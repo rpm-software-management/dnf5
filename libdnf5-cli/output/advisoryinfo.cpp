@@ -35,7 +35,7 @@ public:
 
 class AdvisoryInfoJSON::Impl {
 public:
-    Impl() { json_advisories = json_object_new_object(); };
+    Impl() { json_advisories = json_object_new_array(); };
     ~Impl() { json_object_put(json_advisories); };
     void add_advisory(IAdvisory & advisory);
     void print() {
@@ -96,6 +96,7 @@ void AdvisoryInfo::Impl::add_advisory(IAdvisory & advisory) {
     }
 }
 
+// [NOTE] When editing JSON output format, do not forget to update the docs at doc/commands/advisory.8.rst
 void AdvisoryInfoJSON::Impl::add_advisory(IAdvisory & advisory) {
     json_object * json_advisory = json_object_new_object();
     json_object_object_add(json_advisory, "Name", json_object_new_string(advisory.get_name().c_str()));
@@ -105,9 +106,7 @@ void AdvisoryInfoJSON::Impl::add_advisory(IAdvisory & advisory) {
     json_object_object_add(json_advisory, "Status", json_object_new_string(advisory.get_status().c_str()));
     json_object_object_add(json_advisory, "Vendor", json_object_new_string(advisory.get_vendor().c_str()));
     json_object_object_add(
-        json_advisory,
-        "Issued",
-        json_object_new_string(libdnf5::utils::string::format_epoch(advisory.get_buildtime()).c_str()));
+        json_advisory, "Issued", json_object_new_int64(static_cast<int64_t>(advisory.get_buildtime())));
     json_object_object_add(json_advisory, "Description", json_object_new_string(advisory.get_description().c_str()));
     json_object_object_add(json_advisory, "Message", json_object_new_string(advisory.get_message().c_str()));
     json_object_object_add(json_advisory, "Rights", json_object_new_string(advisory.get_rights().c_str()));
@@ -148,7 +147,7 @@ void AdvisoryInfoJSON::Impl::add_advisory(IAdvisory & advisory) {
         }
         json_object_object_add(json_advisory, "collections", json_collections);
     }
-    json_object_object_add(json_advisories, advisory.get_name().c_str(), json_advisory);
+    json_object_array_add(json_advisories, json_advisory);
 }
 
 
