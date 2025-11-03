@@ -560,7 +560,7 @@ PackageId Package::get_id() const noexcept {
 };
 
 std::string Package::to_string() const {
-    return get_nevra();
+    return get_full_nevra();
 };
 
 int Package::get_hash() const {

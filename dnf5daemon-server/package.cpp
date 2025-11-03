@@ -329,10 +329,19 @@ std::string package_to_json(const libdnf5::rpm::Package & libdnf_package, const 
                 add_string_list(json_pkg, cattr, reldeplist_to_strings(libdnf_package.get_supplements()));
                 break;
             case PackageAttribute::evr:
-                json_object_object_add(json_pkg, cattr, json_object_new_string(libdnf_package.get_evr().c_str()));
+                // Always show epoch in EVR (epoch:version-release)
+                {
+                    std::string evr_with_epoch = libdnf_package.get_epoch();
+                    if (evr_with_epoch.empty()) {
+                        evr_with_epoch = "0";
+                    }
+                    evr_with_epoch += ":" + libdnf_package.get_version() + "-" + libdnf_package.get_release();
+                    json_object_object_add(json_pkg, cattr, json_object_new_string(evr_with_epoch.c_str()));
+                }
                 break;
             case PackageAttribute::nevra:
-                json_object_object_add(json_pkg, cattr, json_object_new_string(libdnf_package.get_nevra().c_str()));
+                json_object_object_add(
+                    json_pkg, cattr, json_object_new_string(libdnf_package.get_full_nevra().c_str()));
                 break;
             case PackageAttribute::full_nevra:
                 json_object_object_add(
