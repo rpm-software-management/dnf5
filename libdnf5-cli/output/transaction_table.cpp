@@ -336,7 +336,13 @@ TransactionTable::Impl::Impl(ITransaction & transaction) {
         // column. Thus adding a indentation manualy.
         scols_line_set_data(ln, COL_NAME, (" " + pkg->get_name()).c_str());
         scols_line_set_data(ln, COL_ARCH, pkg->get_arch().c_str());
-        scols_line_set_data(ln, COL_EVR, pkg->get_evr().c_str());
+        // Always show epoch in EVR (epoch:version-release)
+        std::string evr_with_epoch = pkg->get_epoch();
+        if (evr_with_epoch.empty()) {
+            evr_with_epoch = "0";
+        }
+        evr_with_epoch += ":" + pkg->get_version() + "-" + pkg->get_release();
+        scols_line_set_data(ln, COL_EVR, evr_with_epoch.c_str());
         if (tspkg->get_action() == libdnf5::transaction::TransactionItemAction::REMOVE) {
             scols_line_set_data(ln, COL_REPO, pkg->get_from_repo_id().c_str());
         } else {
@@ -373,7 +379,13 @@ TransactionTable::Impl::Impl(ITransaction & transaction) {
             std::string name(libdnf5::utils::sformat(_("replacing {}"), replaced->get_name()));
             scols_line_set_data(ln_replaced, COL_NAME, ("   " + name).c_str());
             scols_line_set_data(ln_replaced, COL_ARCH, replaced->get_arch().c_str());
-            scols_line_set_data(ln_replaced, COL_EVR, replaced->get_evr().c_str());
+            // Always show epoch in EVR (epoch:version-release) for consistency with main package lines
+            std::string replaced_evr_with_epoch = replaced->get_epoch();
+            if (replaced_evr_with_epoch.empty()) {
+                replaced_evr_with_epoch = "0";
+            }
+            replaced_evr_with_epoch += ":" + replaced->get_version() + "-" + replaced->get_release();
+            scols_line_set_data(ln_replaced, COL_EVR, replaced_evr_with_epoch.c_str());
             scols_line_set_data(ln_replaced, COL_REPO, replaced->get_from_repo_id().c_str());
 
             auto replaced_size = static_cast<int64_t>(replaced->get_install_size());
@@ -503,6 +515,7 @@ void TransactionTable::Impl::print_table() {
         return;
     }
     auto fd = scols_table_get_stream(*tb);
+
     for (const auto & section : sections) {
         const auto header = section.get_header();
         if (!header.empty()) {
