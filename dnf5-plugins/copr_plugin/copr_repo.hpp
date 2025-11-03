@@ -76,7 +76,9 @@ public:
         update_from_json_opts(json_dep);
         auto data = json_dep->get_dict_item("data");
         auto pattern = data->get_dict_item("pattern")->string();
+        auto distname = std::regex_replace(chroot, std::regex("-[^-]+-[^-]+$"), "");
         baseurl = std::regex_replace(pattern, std::regex("\\$chroot"), chroot);
+        baseurl = std::regex_replace(baseurl, std::regex("\\$distname"), distname);
     }
 
     explicit CoprRepoPart(
