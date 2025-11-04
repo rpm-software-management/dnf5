@@ -7,22 +7,26 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-07-26 03:48+0000\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Automatically generated\n"
-"Language-Team: none\n"
+"PO-Revision-Date: 2025-09-02 14:20+0000\n"
+"Last-Translator: Tri Phuong Nguyen <triphuongvasa@gmail.com>\n"
+"Language-Team: Vietnamese <https://translate.fedoraproject.org/projects/dnf5/"
+"dnf5-plugin-builddep/vi/>\n"
 "Language: vi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Weblate 5.13\n"
 
 #: builddep.cpp:84
 #, c++-format
 msgid ""
 "Invalid value for macro definition \"{}\". \"macro expr\" format expected."
 msgstr ""
+"Giá trị không hợp lệ cho định nghĩa macro \"{}\". Yêu cầu định dạng "
+"\"macro expr\"."
 
 #. failed to parse some of inputs (invalid spec, no package matched...)
 #: builddep.cpp:341
 msgid "Failed to parse some inputs."
-msgstr ""
+msgstr "Xử lý một số dữ liệu đã nhập thất bại."

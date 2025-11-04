@@ -1,13 +1,13 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# Aleksey Fedorov <aleksejfedorov963@gmail.com>, 2024.
+# Aleksey Fedorov <aleksejfedorov963@gmail.com>, 2024, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-07-26 03:48+0000\n"
-"PO-Revision-Date: 2024-09-19 09:54+0000\n"
+"PO-Revision-Date: 2025-10-29 11:53+0000\n"
 "Last-Translator: Aleksey Fedorov <aleksejfedorov963@gmail.com>\n"
 "Language-Team: Russian <https://translate.fedoraproject.org/projects/dnf5/"
 "libdnf5/ru/>\n"
@@ -17,14 +17,14 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 5.7.2\n"
+"X-Generator: Weblate 5.13.3\n"
 
 #: advisory/advisory.cpp:81
 msgid ""
 "Bad libsolv id for advisory \"{}\", solvable name \"{}\" doesn't have "
 "advisory prefix \"{}\""
 msgstr ""
-"Плохой идентификатор libsolv для рекомендации \"{}\", имя решаемой задачи "
+"Неверный идентификатор libsolv для рекомендации \"{}\", имя решаемой задачи "
 "\"{}\" не имеет префикса рекомендации \"{}\""
 
 #: base/goal.cpp:482
@@ -188,7 +188,7 @@ msgstr "Нет соответствия для аргумента '{0}' в ре�
 
 #: base/log_event.cpp:165
 msgid "No match in selected advisories"
-msgstr ""
+msgstr "Нет совпадений в выбранных рекомендациях"
 
 #: base/log_event.cpp:169
 msgid "No match for argument '{0}' in repositories '{1}'"

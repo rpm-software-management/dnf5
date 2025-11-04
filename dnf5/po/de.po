@@ -11,8 +11,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-07-26 03:48+0000\n"
-"PO-Revision-Date: 2025-05-01 13:57+0000\n"
-"Last-Translator: Mario Blättermann <mario.blaettermann@gmail.com>\n"
+"PO-Revision-Date: 2025-10-06 03:17+0000\n"
+"Last-Translator: Ettore Atalan <atalanttore@googlemail.com>\n"
 "Language-Team: German <https://translate.fedoraproject.org/projects/dnf5/"
 "dnf5/de/>\n"
 "Language: de\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.11.1\n"
+"X-Generator: Weblate 5.13.3\n"
 
 #: cmdline_aliases.cpp:84 context.cpp:301 main.cpp:1357
 msgid ", "
@@ -31,32 +31,38 @@ msgid ""
 "Attached named argument \"{}\" not found: {}: Requested in file \"{}\" on "
 "line {}: {}"
 msgstr ""
+"Angehängtes benanntes Argument „{}“ nicht gefunden: {}: Angefordert in Datei "
+"„{}“ in Zeile {}: {}"
 
 #: cmdline_aliases.cpp:159
 msgid ""
 "Unknown attribute \"{}\" of attached named argument for alias \"{}\" in file "
 "\"{}\" on line {}: {}"
 msgstr ""
+"Unbekanntes Attribut „{}“ des angehängten benannten Arguments für den Alias "
+"„{}“ in der Datei „{}“ in Zeile {}: {}"
 
 #: cmdline_aliases.cpp:171
 msgid "Missing attribute \"id_path\" for alias \"{}\" in file \"{}\""
-msgstr ""
+msgstr "Fehlendes Attribut „id_path” für Alias „{}” in Datei „{}”"
 
 #: cmdline_aliases.cpp:208
 msgid "Unsupported version \"{}\" in file \"{}\". Supported versions: {}"
 msgstr ""
+"Nicht unterstützte Version „{}“ in Datei „{}“. Unterstützte Versionen: {}"
 
 #: cmdline_aliases.cpp:218
 msgid "Bad value type of attribute \"version\" in file \"{}\" on line {}: {}"
 msgstr ""
+"Ungültiger Wertetyp des Attributs „version“ in der Datei „{}“ in Zeile {}: {}"
 
 #: cmdline_aliases.cpp:224
 msgid "Missing attribute \"version\" in file \"{}\""
-msgstr ""
+msgstr "Fehlendes Attribut „version“ in der Datei „{}“"
 
 #: cmdline_aliases.cpp:236
 msgid "Unknown key \"{}\" in file \"{}\" on line {}: {}"
-msgstr ""
+msgstr "Unbekannter Schlüssel „{}“ in Datei „{}“ in Zeile {}: {}"
 
 #: cmdline_aliases.cpp:253
 msgid "Empty or bad element id path in file \"{}\" on line {}: {}"
@@ -66,105 +72,129 @@ msgstr ""
 msgid ""
 "Parent command \"{}\" not found: {}: Requested in file \"{}\" on line {}: {}"
 msgstr ""
+"Übergeordneter Befehl „{}“ nicht gefunden: {}: Angefordert in Datei „{}“ in "
+"Zeile {}: {}"
 
 #: cmdline_aliases.cpp:301
 msgid "Unknown type \"{}\" of element \"{}\" in file \"{}\" on line {}: {}"
 msgstr ""
+"Unbekannter Typ „{}“ des Elements „{}“ in der Datei „{}“ in Zeile {}: {}"
 
 #: cmdline_aliases.cpp:312
 msgid "Missing attribute \"type\" for element \"{}\" in file \"{}\""
-msgstr ""
+msgstr "Fehlendes Attribut „type“ für Element „{}“ in Datei „{}“"
 
 #: cmdline_aliases.cpp:331
 msgid ""
 "Named argument \"{}\" already registered. Requested in file \"{}\" on line "
 "{}: {}"
 msgstr ""
+"Benanntes Argument „{}“ bereits registriert. Angefordert in Datei „{}“ in "
+"Zeile {}: {}"
 
 #: cmdline_aliases.cpp:347
 msgid ""
 "Command \"{}\" already registered. Requested in file \"{}\" on line {}: {}"
 msgstr ""
+"Befehl „{}“ bereits registriert. Angefordert in Datei „{}“ in Zeile {}: {}"
 
 #: cmdline_aliases.cpp:375
 msgid "Unknown attribute \"{}\" of group \"{}\" in file \"{}\" on line {}: {}"
 msgstr ""
+"Unbekanntes Attribut „{}“ der Gruppe „{}“ in der Datei „{}“ in Zeile {}: {}"
 
 #: cmdline_aliases.cpp:387
 msgid "Missing attribute \"header\" for element \"{}\" in file \"{}\""
-msgstr ""
+msgstr "Fehlendes Attribut „header“ für Element „{}“ in Datei „{}“"
 
 #: cmdline_aliases.cpp:428 cmdline_aliases.cpp:538
 msgid ""
 "The \"short_name\" attribute of named argument \"{}\" must be one character "
 "long in file \"{}\" on line {}: {}"
 msgstr ""
+"Das Attribut „short_name” des benannten Arguments „{}” muss ein Zeichen lang "
+"sein in der Datei „{}” in Zeile {}: {}"
 
 #: cmdline_aliases.cpp:446
 msgid "Source \"{}\" not found: {}: Requested in file \"{}\" on line {}: {}"
 msgstr ""
+"Quelle „{}“ nicht gefunden: {}: Angefordert in Datei „{}“ in Zeile {}: {}"
 
 #: cmdline_aliases.cpp:462 cmdline_aliases.cpp:563 cmdline_aliases.cpp:676
 msgid "Group \"{}\" not found: {}: Requested in file \"{}\" on line {}: {}"
 msgstr ""
+"Gruppe „{}“ nicht gefunden: {}: Angefordert in Datei „{}“ in Zeile {}: {}"
 
 #: cmdline_aliases.cpp:476 cmdline_aliases.cpp:579
 msgid ""
 "Unknown attribute \"{}\" of named argument \"{}\" in file \"{}\" on line {}: "
 "{}"
 msgstr ""
+"Unbekanntes Attribut „{}“ des benannten Arguments „{}“ in der Datei „{}“ in "
+"Zeile {}: {}"
 
 #: cmdline_aliases.cpp:489
 msgid "Missing attribute \"source\" for named argument \"{}\" in file \"{}\""
-msgstr ""
+msgstr "Fehlendes Attribut „source“ für benanntes Argument „{}“ in Datei „{}“"
 
 #: cmdline_aliases.cpp:498 cmdline_aliases.cpp:592
 msgid ""
 "At least one of the attributes \"long_name\" and \"short_name\" must be set "
 "for named argument \"{}\" in file \"{}\""
 msgstr ""
+"Mindestens eines der Attribute „long_name” und „short_name” muss für das "
+"benannte Argument „{}” in der Datei „{}” festgelegt sein"
 
 #: cmdline_aliases.cpp:657
 msgid ""
 "Attached command \"{}\" not found: {}: Requested in file \"{}\" on line {}: "
 "{}"
 msgstr ""
+"Angehängter Befehl „{}“ nicht gefunden: {}: Angefordert in Datei „{}“ in "
+"Zeile {}: {}"
 
 #: cmdline_aliases.cpp:691
 msgid ""
 "Used config file version \"1.0\" for attribute \"{}\" of command \"{}\" in "
 "file \"{}\" on line {}: {}"
 msgstr ""
+"Verwendete Konfigurationsdateiversion „1.0“ für Attribut „{}“ des Befehls "
+"„{}“ in Datei „{}“ in Zeile {}: {}"
 
 #: cmdline_aliases.cpp:713
 msgid ""
 "Unknown attribute \"{}\" of required value for alias \"{}\" in file \"{}\" "
 "on line {}: {}"
 msgstr ""
+"Unbekanntes Attribut „{}“ des erforderlichen Werts für den Alias „{}“ in der "
+"Datei „{}“ in Zeile {}: {}"
 
 #: cmdline_aliases.cpp:726
 msgid ""
 "Missing attribute \"value_help\" of required value for alias \"{}\" in file "
 "\"{}\""
 msgstr ""
+"Fehlendes Attribut „value_help” des erforderlichen Werts für den Alias „{}” "
+"in der Datei „{}”"
 
 #: cmdline_aliases.cpp:740
 msgid ""
 "Unknown attribute \"{}\" of command \"{}\" in file \"{}\" on line {}: {}"
 msgstr ""
+"Unbekanntes Attribut „{}“ des Befehls „{}“ in der Datei „{}“ in Zeile {}: {}"
 
 #: cmdline_aliases.cpp:756
 msgid ""
 "Missing attribute \"attached_command\" for command \"{}\" in file \"{}\""
-msgstr ""
+msgstr "Fehlendes Attribut „attached_command” für Befehl „{}” in Datei „{}”"
 
 #: cmdline_aliases.cpp:791
 msgid "Bad value type in file \"{}\" on line {}: {}"
-msgstr ""
+msgstr "Ungültiger Wertetyp in Datei „{}“ in Zeile {}: {}"
 
 #: cmdline_aliases.cpp:804
 msgid "Syntax error in file \"{}\" on line {}:"
-msgstr ""
+msgstr "Syntaxfehler in Datei „{}“ in Zeile {}:"
 
 #: commands/advisory/advisory.cpp:36
 msgid "Manage advisories"
@@ -388,10 +418,8 @@ msgstr ""
 "oder herunterstufen"
 
 #: commands/do/do.cpp:44
-#, fuzzy
-#| msgid "Running transaction"
 msgid "Do transaction"
-msgstr "Transaktion wird ausgeführt"
+msgstr "Transaktion ausführen"
 
 #: commands/do/do.cpp:49
 msgid "Action to be done on the following items."
@@ -399,15 +427,15 @@ msgstr ""
 
 #: commands/do/do.cpp:63
 msgid "Unsupported action \"{}\""
-msgstr ""
+msgstr "Nicht unterstützte Aktion „{}“"
 
 #: commands/do/do.cpp:73
 msgid "Type of the following items."
-msgstr ""
+msgstr "Typ der folgenden Elemente."
 
 #: commands/do/do.cpp:86
 msgid "Unsupported item type \"{}\""
-msgstr ""
+msgstr "Nicht unterstützter Elementtyp „{}“"
 
 #: commands/do/do.cpp:99
 msgid "List of items to take action on"
@@ -419,17 +447,15 @@ msgstr ""
 
 #: commands/do/do.cpp:142 commands/do/do.cpp:146
 msgid "Only package reinstall is supported."
-msgstr ""
+msgstr "Es wird nur die Neuinstallation des Pakets unterstützt."
 
 #: commands/do/do.cpp:152
 msgid "Action was not defined"
-msgstr ""
+msgstr "Aktion wurde nicht definiert"
 
 #: commands/do/do.cpp:230
-#, fuzzy
-#| msgid "Invalid urlprotocol option: {}"
 msgid "Invalid Environmet/Group specification: {}"
-msgstr "Ungültige URL-Protokolloption: {}"
+msgstr "Ungültige Umgebungs-/Gruppenspezifikation: {}"
 
 #: commands/do/do.cpp:314
 msgid "Downgrading environments and groups is not supported."
@@ -437,7 +463,7 @@ msgstr ""
 
 #: commands/do/do.cpp:330
 msgid "Reinstaling environments and groups is not supported."
-msgstr ""
+msgstr "Die Neuinstallation von Umgebungen und Gruppen wird nicht unterstützt."
 
 #: commands/downgrade/downgrade.cpp:42
 msgid "Downgrade software"
@@ -486,16 +512,17 @@ msgid ""
 "The following items can be selected only from the specified repositories. "
 "All enabled repositories will still be used to satisfy dependencies."
 msgstr ""
+"Die folgenden Elemente können nur aus den angegebenen Repositorien "
+"ausgewählt werden. Alle aktivierten Repositorien werden weiterhin verwendet, "
+"um Abhängigkeiten zu erfüllen."
 
 #: commands/from_repo.cpp:38 commands/from_repo.cpp:70
-#, fuzzy
-#| msgid "CVE_ID,..."
 msgid "REPO_ID,..."
-msgstr "CVE_ID,..."
+msgstr "REPO_ID,..."
 
 #: commands/from_repo.cpp:53
 msgid "\"--from_repo\" already defined with diferent value"
-msgstr ""
+msgstr "„--from_repo“ bereits mit einem anderen Wert definiert"
 
 #: commands/from_repo.cpp:68
 #, fuzzy
@@ -510,7 +537,7 @@ msgstr ""
 
 #: commands/from_repo.cpp:79
 msgid "\"--installed-from_repo\" already defined with diferent value"
-msgstr ""
+msgstr "„--installed-from_repo“ bereits mit einem anderen Wert definiert"
 
 #: commands/group/arguments.hpp:34
 msgid "Show only available groups."
@@ -809,10 +836,8 @@ msgid "Another offline transaction tool is running. Exiting."
 msgstr "Ein weiteres Offline-Transaktionstool wird ausgeführt. Wird beendet."
 
 #: commands/offline/offline.cpp:467
-#, fuzzy
-#| msgid "No offline transaction is stored."
 msgid "Starting offline transaction. This will take a while."
-msgstr "Keine Offline-Transaktion ist gespeichert."
+msgstr "Offline-Transaktion wird gestartet. Dies kann eine Weile dauern."
 
 #: commands/offline/offline.cpp:471
 msgid "Starting system upgrade. This will take a while."
@@ -1108,24 +1133,16 @@ msgid "The key was successfully imported."
 msgstr "Der Schlüssel wurde erfolgreich importiert."
 
 #: context.cpp:96
-#, fuzzy
-#| msgid "The following PGP key (0x{}) is about to be removed:"
 msgid "The following OpenPGP key (0x{}) is about to be removed:"
-msgstr "Der folgende PGP-Schlüssel (0x{}) wird demnächst entfernt:"
+msgstr "Der folgende OpenPGP-Schlüssel (0x{}) wird demnächst entfernt:"
 
 #: context.cpp:98
 msgid " Reason     : {}\n"
 msgstr " Grund     : {}\n"
 
 #: context.cpp:102
-#, fuzzy
-#| msgid ""
-#| " Fingerprint: {}\n"
-#| " From       : {}\n"
 msgid " Fingerprint: {}\n"
-msgstr ""
-" Fingerprint: {}\n"
-" Von       : {}\n"
+msgstr " Fingerabdruck: {}\n"
 
 #: context.cpp:104
 msgid "As a result, installing packages signed with this key will fail."
@@ -1147,10 +1164,8 @@ msgid "The system will now proceed with removing the key."
 msgstr "Das System fährt nun mit dem Entfernen des Schlüssels fort."
 
 #: context.cpp:115
-#, fuzzy
-#| msgid "The key was successfully removed."
 msgid "Key 0x{} was successfully removed."
-msgstr "Der Schlüssel wurde erfolgreich entfernt."
+msgstr "Der Schlüssel 0x{} wurde erfolgreich entfernt."
 
 #: context.cpp:295
 msgid "setopt: \"{}.{}\": {}"

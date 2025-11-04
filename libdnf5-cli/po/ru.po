@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-07-26 03:48+0000\n"
-"PO-Revision-Date: 2025-05-31 20:58+0000\n"
+"PO-Revision-Date: 2025-10-29 11:53+0000\n"
 "Last-Translator: Aleksey Fedorov <aleksejfedorov963@gmail.com>\n"
 "Language-Team: Russian <https://translate.fedoraproject.org/projects/dnf5/"
 "libdnf5-cli/ru/>\n"
@@ -17,15 +17,18 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 5.11.4\n"
+"X-Generator: Weblate 5.13.3\n"
 
 #: argument_parser.cpp:68
 msgid "Misconfigured alias \"{}\": cannot convert \"{}\" to a number"
 msgstr ""
+"Неправильно настроенный псевдоним «{}»: невозможно преобразовать «{}» в число"
 
 #: argument_parser.cpp:76
 msgid "Misconfigured alias \"{}\": index \"{}\" out of range"
 msgstr ""
+"Неправильно настроенный псевдоним \"{}\": индекс \"{}\" выходит за пределы "
+"диапазона"
 
 #: argument_parser.cpp:98
 msgid "\"{}\" not allowed together with named argument \"{}\""
@@ -124,10 +127,8 @@ msgid "Missing positional argument \"{}\" for command \"{}\""
 msgstr "Отсутствует позиционный аргумент \"{}\" для команды \"{}\""
 
 #: argument_parser.cpp:1274
-#, fuzzy
-#| msgid "Missing value for named argument \"-{}\""
 msgid "Missing value for command alias \"{}\""
-msgstr "Недостающее значение для именованного аргумента \"-{}\""
+msgstr "Отсутствует значение псевдонима команды \"{}\""
 
 #: argument_parser.cpp:1610
 msgid "Named argument with path id \"{}\" not found"

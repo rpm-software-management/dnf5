@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-07-26 03:48+0000\n"
-"PO-Revision-Date: 2025-07-19 11:40+0000\n"
+"PO-Revision-Date: 2025-09-04 01:43+0000\n"
 "Last-Translator: Ricky Tigg <ricky.tigg@gmail.com>\n"
 "Language-Team: Finnish <https://translate.fedoraproject.org/projects/dnf5/"
 "dnf5/fi/>\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.12.2\n"
+"X-Generator: Weblate 5.13\n"
 
 #: cmdline_aliases.cpp:84 context.cpp:301 main.cpp:1357
 msgid ", "
@@ -252,19 +252,19 @@ msgstr "Näytä vain CVE:hen viittaavat neuvot."
 
 #: commands/advisory_shared.hpp:76
 msgid "No advisory found matching the requested name: \"{}\""
-msgstr ""
+msgstr "Pyydettyä nimeä \"{}\" vastaavaa tiedotetta ei löytynyt"
 
 #: commands/advisory_shared.hpp:109
 msgid "No advisory found fixing the Bugzilla ID: \"{}\""
-msgstr ""
+msgstr "Bugzillan tunnukseen \"{}\" liittyvää korjaustiedotetta ei löytynyt"
 
 #: commands/advisory_shared.hpp:128
 msgid "No advisory found fixing the CVE ID: \"{}\""
-msgstr ""
+msgstr "CVE-tunnuksen \"{}\" korjaavaa tiedotetta ei löytynyt"
 
 #: commands/advisory_shared.hpp:143
 msgid "No advisory found matching the specified filters."
-msgstr ""
+msgstr "Määritettyjä suodattimia vastaavia tiedotteita ei löytynyt."
 
 #: commands/advisory_shared.hpp:158
 msgid ""
@@ -395,56 +395,52 @@ msgstr ""
 "versioihin"
 
 #: commands/do/do.cpp:44
-#, fuzzy
-#| msgid "Running transaction"
 msgid "Do transaction"
-msgstr "Suoritetaan transaktio"
+msgstr "Suorita transaktio"
 
 #: commands/do/do.cpp:49
 msgid "Action to be done on the following items."
-msgstr ""
+msgstr "Seuraaville kohteille tehtävä toimenpide."
 
 #: commands/do/do.cpp:63
 msgid "Unsupported action \"{}\""
-msgstr ""
+msgstr "Ei-tuettu toimenpide \"{}\""
 
 #: commands/do/do.cpp:73
 msgid "Type of the following items."
-msgstr ""
+msgstr "Seuraavien kohteiden tyyppi."
 
 #: commands/do/do.cpp:86
 msgid "Unsupported item type \"{}\""
-msgstr ""
+msgstr "Ei-tuettu kohdetyyppi \"{}\""
 
 #: commands/do/do.cpp:99
 msgid "List of items to take action on"
-msgstr ""
+msgstr "Luettelo kohteista, joille on ryhdyttävä toimenpiteisiin"
 
 #: commands/do/do.cpp:131 commands/do/do.cpp:135
 msgid "Only package downgrade is supported."
-msgstr ""
+msgstr "Vain paketin alempaan versioon päivittämistä tuetaan."
 
 #: commands/do/do.cpp:142 commands/do/do.cpp:146
 msgid "Only package reinstall is supported."
-msgstr ""
+msgstr "Vain paketin uudelleenasennusta tuetaan."
 
 #: commands/do/do.cpp:152
 msgid "Action was not defined"
-msgstr ""
+msgstr "Toimenpidettä ei määritetty"
 
 #: commands/do/do.cpp:230
-#, fuzzy
-#| msgid "Invalid urlprotocol option: {}"
 msgid "Invalid Environmet/Group specification: {}"
-msgstr "Virheellinen URL-protokollan urlprotocol-valitsin: {}"
+msgstr "Virheellinen ympäristön/ryhmän määritys: {}"
 
 #: commands/do/do.cpp:314
 msgid "Downgrading environments and groups is not supported."
-msgstr ""
+msgstr "Ympäristöjen ja ryhmien päivittämistä alempaan versioon ei tueta."
 
 #: commands/do/do.cpp:330
 msgid "Reinstaling environments and groups is not supported."
-msgstr ""
+msgstr "Ympäristöjen ja ryhmien uudelleenasentamista ei tueta."
 
 #: commands/downgrade/downgrade.cpp:42
 msgid "Downgrade software"
@@ -474,6 +470,8 @@ msgstr ""
 msgid ""
 "No package \"{}\" available; You might want to use --skip-unavailable option."
 msgstr ""
+"Pakettia \"{}\" ei ole saatavilla; kannattaa käyttää `--skip-"
+"unavailable`-valitsinta."
 
 #: commands/environment/arguments.hpp:33
 msgid "Show only available environments."
@@ -496,31 +494,29 @@ msgid ""
 "The following items can be selected only from the specified repositories. "
 "All enabled repositories will still be used to satisfy dependencies."
 msgstr ""
+"Seuraavat kohteet voidaan valita vain määritetyistä tietovarastoista. "
+"Kaikkia käytössä olevia tietovarastoja käytetään edelleen riippuvuuksien "
+"täyttämiseen."
 
 #: commands/from_repo.cpp:38 commands/from_repo.cpp:70
-#, fuzzy
-#| msgid "CVE_ID,..."
 msgid "REPO_ID,..."
-msgstr "CVE-TUNNUS,..."
+msgstr "TIETOVARASTON_TUNNUS,..."
 
 #: commands/from_repo.cpp:53
 msgid "\"--from_repo\" already defined with diferent value"
-msgstr ""
+msgstr "\"--from_repo\" jo määritelty eri arvolla"
 
 #: commands/from_repo.cpp:68
-#, fuzzy
-#| msgid ""
-#| "List groups of installed packages not required by other installed packages"
 msgid ""
 "Filters installed packages by the ID of the repository they were installed "
 "from."
 msgstr ""
-"Luettele asennettujen pakettien ryhmät, joita muut asennetut paketit eivät "
-"vaadi"
+"Suodattaa asennetut paketit sen tietovaraston tunnuksen mukaan, josta ne on "
+"asennettu."
 
 #: commands/from_repo.cpp:79
 msgid "\"--installed-from_repo\" already defined with diferent value"
-msgstr ""
+msgstr "\"--installed-from_repo\" jo määritelty eri arvolla"
 
 #: commands/group/arguments.hpp:34
 msgid "Show only available groups."
@@ -642,10 +638,8 @@ msgid "Lists packages depending on the packages' relation to the system"
 msgstr "Luetteloi paketit riippuen pakettien suhteesta järjestelmään"
 
 #: commands/list/list.cpp:50
-#, fuzzy
-#| msgid "List of keys to match case insensitively"
 msgid "List of package-spec-NI to match (case insensitively)"
-msgstr "Luettelo avaimista vastaamaan kirjainkoosta välittämättä"
+msgstr "Vastaavien paketti-spec-NI:n luettelo (kirjainkokoa ei erotella)"
 
 #: commands/list/list.cpp:62
 msgid "Show all versions of the packages, not only the latest ones."
@@ -788,10 +782,9 @@ msgid "{} is not wanted by system-update.target."
 msgstr "System-update.target ei sitä {} halua."
 
 #: commands/offline/offline.cpp:367
-#, fuzzy
-#| msgid "The system will now reboot to upgrade to release version "
 msgid "The system will now reboot to upgrade to release version {}."
-msgstr "Järjestelmä käynnistyy nyt uudelleen päivittääkseen julkaisuversioon "
+msgstr ""
+"Järjestelmä käynnistyy nyt uudelleen päivittääkseen julkaisuversioon {}."
 
 #: commands/offline/offline.cpp:371
 msgid ""
@@ -1037,10 +1030,8 @@ msgid "Add new entry to versionlock configuration"
 msgstr "Lisää uusi merkintä versiolukituskokoonpanoon"
 
 #: commands/versionlock/versionlock_add.cpp:44
-#, fuzzy
-#| msgid "List of package specs to add versionlock for"
 msgid "List of package package-spec-N to add versionlock for"
-msgstr "Luettelo paketin teknisistä tiedoista, joihin versionlock lisätään"
+msgstr "Luettelo paketeista package-spec-N, joihin versionlock lisätään"
 
 #: commands/versionlock/versionlock_add.cpp:107
 #: commands/versionlock/versionlock_exclude.cpp:126
@@ -1077,12 +1068,10 @@ msgid "Add new exclude entry to versionlock configuration"
 msgstr "Lisää uusi poissulkemismerkintä versiolukitusmääritykseen"
 
 #: commands/versionlock/versionlock_exclude.cpp:44
-#, fuzzy
-#| msgid "List of package specs to add versionlock exclude for"
 msgid "List of package-spec-N to add versionlock exclude for"
 msgstr ""
-"Luettelo paketin teknisistä tiedoista, joihin versionlockista poissuljettava "
-"on lisättävä"
+"Luettelo paketti-spec-N:stä, joihin versionlockista poissuljettava on "
+"lisättävä"
 
 #: commands/versionlock/versionlock_exclude.cpp:89
 #: commands/versionlock/versionlock_exclude.cpp:101

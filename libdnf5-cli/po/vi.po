@@ -7,24 +7,27 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-07-26 03:48+0000\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Automatically generated\n"
-"Language-Team: none\n"
+"PO-Revision-Date: 2025-09-02 14:20+0000\n"
+"Last-Translator: Tri Phuong Nguyen <triphuongvasa@gmail.com>\n"
+"Language-Team: Vietnamese <https://translate.fedoraproject.org/projects/dnf5/"
+"libdnf5-cli/vi/>\n"
 "Language: vi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Weblate 5.13\n"
 
 #: argument_parser.cpp:68
 #, c++-format
 msgid "Misconfigured alias \"{}\": cannot convert \"{}\" to a number"
 msgstr ""
+"Biệt danh thiết đặt sai \"{}\": không thể chuyển đổi \"{}\" sang dạng số"
 
 #: argument_parser.cpp:76
 #, c++-format
 msgid "Misconfigured alias \"{}\": index \"{}\" out of range"
-msgstr ""
+msgstr "Biệt danh thiết đặt sai \"{}\": phần tử \"{}\" vượt quá giới hạn"
 
 #: argument_parser.cpp:98
 #, c++-format

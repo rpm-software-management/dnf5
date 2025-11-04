@@ -11,8 +11,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-07-26 03:48+0000\n"
-"PO-Revision-Date: 2025-03-21 02:53+0000\n"
-"Last-Translator: Ricky Tigg <ricky.tigg@gmail.com>\n"
+"PO-Revision-Date: 2025-09-14 13:45+0000\n"
+"Last-Translator: Jan Kuparinen <copper_fin@hotmail.com>\n"
 "Language-Team: Finnish <https://translate.fedoraproject.org/projects/dnf5/"
 "libdnf5/fi/>\n"
 "Language: fi\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.10.4\n"
+"X-Generator: Weblate 5.13.3\n"
 
 #: advisory/advisory.cpp:81
 msgid ""
@@ -182,14 +182,12 @@ msgid "No match for argument: {}"
 msgstr "Ei vastaavaa argumentille: {}"
 
 #: base/log_event.cpp:163
-#, fuzzy
-#| msgid "No match for argument '{0}' in repositories '{1}'"
 msgid "No match for argument '{0}' in selected advisories"
-msgstr "Ei vastaavaa argumentille '{0}' tietovarastoissa '{1}'"
+msgstr "Argumentille '{0}' ei löytynyt osumia valituista tiedotteista"
 
 #: base/log_event.cpp:165
 msgid "No match in selected advisories"
-msgstr ""
+msgstr "Ei osumia valituissa tiedotteissa"
 
 #: base/log_event.cpp:169
 msgid "No match for argument '{0}' in repositories '{1}'"
@@ -961,7 +959,7 @@ msgstr ""
 
 #: repo/librepo.cpp:181
 msgid "'proxy_username' is set but not 'proxy_password'"
-msgstr ""
+msgstr "'proxy_username' on asettettu, mutta 'proxy_password' puuttuu"
 
 #: repo/package_downloader.cpp:154
 msgid "Cannot download the \"{0}\" package, cacheonly option is activated."
@@ -1002,11 +1000,9 @@ msgid "Repository \"{}\" has unsupported type \"{}\", skipping."
 msgstr "Ohjelmistolähteen \"{}\" tyyppiä \"{}\" ei tueta, ohitetaan."
 
 #: repo/repo.cpp:221 repo/repo.cpp:241 repo/repo_sack.cpp:368
-#, fuzzy
-#| msgid "Failed to download metadata ({}: \"{}\") for repository \"{}\""
 msgid "Failed to download metadata ({}: \"{}\") for repository \"{}\": {}"
 msgstr ""
-"Ohjelmistolähteen \"{}\" metatietojen ({}: \"{}\") lataaminen epäonnistui"
+"Tietovaraston \"{}\" metatietojen ({}: \"{}\") lataaminen epäonnistui: {}"
 
 #: repo/repo.cpp:439
 msgid ""
@@ -1042,16 +1038,12 @@ msgid "Librepo error: {}"
 msgstr "Librepo-virhe: {}"
 
 #: repo/repo_downloader.cpp:258
-#, fuzzy
-#| msgid "Failed to resolve module metadata: {}"
 msgid "Failed to set up metadata download"
-msgstr "Moduulin metatietojen ratkaiseminen epäonnistui: {}"
+msgstr "Metatietojen latauksen määrittäminen epäonnistui"
 
 #: repo/repo_downloader.cpp:312 repo/repo_downloader.cpp:362
-#, fuzzy
-#| msgid "Failed to download files"
 msgid "Failed to download metadata"
-msgstr "Tiedostojen lataaminen epäonnistui"
+msgstr "Metatietojen lataaminen epäonnistui"
 
 #: repo/repo_downloader.cpp:426
 msgid "Error checking if metalink \"{}\" is in sync for repository \"{}\""
@@ -1229,14 +1221,19 @@ msgstr "rpm-tapahtuman tilaaminen epäonnistui."
 msgid ""
 "Failed to set scriptlet output file, cannot duplicate file descriptor: {}"
 msgstr ""
+"Sovelman tulostustiedoston asettaminen epäonnistui; tiedoston kuvaajan "
+"monistamista ei voida suorittaa: {}"
 
 #: rpm/transaction.cpp:254
 msgid "Failed to set scriptlet output file, cannot open file \"{}\": {}"
 msgstr ""
+"Sovelman tulostustiedoston asettaminen epäonnistui; tiedostoa \"{}\" ei "
+"voida avata: {}"
 
 #: rpm/transaction.cpp:275
 msgid "Failed to read package header, cannot open file \"{}\": {}"
 msgstr ""
+"Paketin otsikon lukeminen epäonnistui, tiedostoa \"{}\" ei voida avata: {}"
 
 #: rpm/transaction.cpp:292
 msgid "Failed to read package header from file \"{}\""
@@ -1446,7 +1443,7 @@ msgstr ""
 
 #: transaction/transaction_sr.cpp:74
 msgid "Incompatible major version: \"{}\", supported major version is \"{}\""
-msgstr ""
+msgstr "Yhteensopimaton pääversio: \"{}\", tuettu pääversio on \"{}\""
 
 #: transaction/transaction_sr.cpp:81
 msgid "Invalid minor version: \"{}\", number expected"

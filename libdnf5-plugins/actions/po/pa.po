@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-07-26 03:48+0000\n"
-"PO-Revision-Date: 2025-01-04 12:49+0000\n"
+"PO-Revision-Date: 2025-10-16 17:54+0000\n"
 "Last-Translator: A S Alam <aalam@users.noreply.translate.fedoraproject.org>\n"
 "Language-Team: Punjabi <https://translate.fedoraproject.org/projects/dnf5/"
 "libdnf5-plugin-actions/pa/>\n"
@@ -16,13 +16,11 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.9.1\n"
+"X-Generator: Weblate 5.13.3\n"
 
 #: actions.cpp:237
-#, fuzzy
-#| msgid "Error in file \"{}\" on line {}: Unknown hook \"{}\""
 msgid "File \"{}\" on line {}: {}"
-msgstr "\"{}\" ਫ਼ਾਇਲ ਵਿੱਚ {} ਲਾਈਨ ਉੱਤੇ ਗਲਤੀ ਹੈ: ਅਣਪਛਾਤੀ ਹੁੱਕ \"{}\""
+msgstr "\"{}\" ਫ਼ਾਇਲ ਵਿੱਚ {} ਲਾਈਨ ਉੱਤੇ ਗਲਤੀ ਹੈ: {}"
 
 #: actions.cpp:636 actions.cpp:642 actions.cpp:648 actions.cpp:654
 #, fuzzy
@@ -40,7 +38,7 @@ msgstr ""
 
 #: actions.cpp:683
 msgid "Unknown option \"{}\""
-msgstr ""
+msgstr "ਅਣਪਛਾਤੀ ਚੋਣ \"{}\""
 
 #: actions.cpp:711
 msgid "Unknown hook \"{}\""
@@ -53,23 +51,16 @@ msgid ""
 msgstr ""
 
 #: actions.cpp:726
-#, fuzzy
-#| msgid ""
-#| "Error in file \"{}\" on line {}: Cannot use direction without package "
-#| "filter"
 msgid "Cannot use direction without package filter"
-msgstr ""
-"\"{}\" ਫ਼ਾਇਲ ਵਿੱਚ {} ਲਾਈਨ ਉੱਤੇ ਗਲਤੀ ਹੈ: ਪੈਕੇਜ ਫਿਲਟਰ ਦੇ ਬਿਨਾਂ ਦਿਸ਼ਾ ਵਰਤੀ ਨਹੀਂ ਜਾ ਸਕਦੀ ਹੈ"
+msgstr "ਪੈਕੇਜ ਫਿਲਟਰ ਦੇ ਬਿਨਾਂ ਦਿਸ਼ਾ ਵਰਤੀ ਨਹੀਂ ਜਾ ਸਕਦੀ ਹੈ"
 
 #: actions.cpp:740
-#, fuzzy
-#| msgid "Error in file \"{}\" on line {}: Unknown package direction \"{}\""
 msgid "Unknown package direction \"{}\""
-msgstr "\"{}\" ਫ਼ਾਇਲ ਵਿੱਚ {} ਲਾਈਨ ਉੱਤੇ ਗਲਤੀ ਹੈ: ਅਣਪਛਾਤੀ ਪੈਕੇਜ ਦਿਸ਼ਾ \"{}\""
+msgstr "ਅਣਪਛਾਤੀ ਪੈਕੇਜ ਦਿਸ਼ਾ \"{}\""
 
 #: actions.cpp:747
 msgid "Unknown mode \"{}\""
-msgstr ""
+msgstr "ਅਣਪਛਾਤਾ ਮੋਡ \"{}\""
 
 #: actions.cpp:755
 msgid "Unsupported value of the \"raise_error\" option: {}"

@@ -7,18 +7,20 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-07-26 03:48+0000\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Automatically generated\n"
-"Language-Team: none\n"
+"PO-Revision-Date: 2025-09-02 14:20+0000\n"
+"Last-Translator: Tri Phuong Nguyen <triphuongvasa@gmail.com>\n"
+"Language-Team: Vietnamese <https://translate.fedoraproject.org/projects/dnf5/"
+"dnf5/vi/>\n"
 "Language: vi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Weblate 5.13\n"
 
 #: cmdline_aliases.cpp:84 context.cpp:301 main.cpp:1357
 msgid ", "
-msgstr ""
+msgstr ", "
 
 #: cmdline_aliases.cpp:145
 #, c++-format
@@ -26,6 +28,8 @@ msgid ""
 "Attached named argument \"{}\" not found: {}: Requested in file \"{}\" on "
 "line {}: {}"
 msgstr ""
+"Đối số có tên được đính kèm \"{}\" không tìm thấy: {}: Yêu cầu trong tệp "
+"\"{}\" ở dòng {}: {}"
 
 #: cmdline_aliases.cpp:159
 #, c++-format
@@ -191,15 +195,15 @@ msgstr ""
 
 #: commands/advisory/advisory.cpp:36
 msgid "Manage advisories"
-msgstr ""
+msgstr "Quản lý khuyến nghị"
 
 #: commands/advisory/advisory_info.hpp:35
 msgid "Print details about advisories"
-msgstr ""
+msgstr "In thông tin về các khuyến nghị"
 
 #: commands/advisory/advisory_list.hpp:35
 msgid "List advisories"
-msgstr ""
+msgstr "Liệt kê khuyến nghị"
 
 #: commands/advisory/advisory_summary.cpp:44
 msgid "All"
@@ -381,7 +385,7 @@ msgstr ""
 #: commands/clean/clean.cpp:176
 #, c++-format
 msgid "Cache directory \"{}\" does not exist. Nothing to clean."
-msgstr ""
+msgstr "Thư mục cache \"{}\" không tồn tại. Không cần dọn dẹp."
 
 #: commands/clean/clean.cpp:181
 #, c++-format
@@ -734,7 +738,7 @@ msgstr ""
 #: commands/offline/offline.cpp:272
 #, c++-format
 msgid "Couldn't connect to D-Bus: {}"
-msgstr ""
+msgstr "Không thể kết nối tới D-Bus: {}"
 
 #: commands/offline/offline.cpp:303
 msgid ""
@@ -1121,11 +1125,11 @@ msgstr ""
 
 #: context.cpp:355
 msgid "Updating and loading repositories:"
-msgstr ""
+msgstr "Đang cập nhật các kho chứa:"
 
 #: context.cpp:365
 msgid "Repositories loaded."
-msgstr ""
+msgstr "Đã tải kho chứa."
 
 #: context.cpp:371
 msgid "Testing offline transaction"

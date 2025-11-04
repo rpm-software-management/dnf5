@@ -8,13 +8,14 @@
 # caffiendo c <1728778012@qq.com>, 2024, 2025.
 # hg wd <cut-punisher-stays@duck.com>, 2025.
 # z z <3397542367@qq.com>, 2025.
+# Jesse Guo <jesseguotech@outlook.com>, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-07-26 03:48+0000\n"
-"PO-Revision-Date: 2025-07-13 01:47+0000\n"
-"Last-Translator: caffiendo c <1728778012@qq.com>\n"
+"PO-Revision-Date: 2025-10-04 11:30+0000\n"
+"Last-Translator: Jesse Guo <jesseguotech@outlook.com>\n"
 "Language-Team: Chinese (Simplified) <https://translate.fedoraproject.org/"
 "projects/dnf5/dnf5/zh_CN/>\n"
 "Language: zh_CN\n"
@@ -22,7 +23,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.12.2\n"
+"X-Generator: Weblate 5.13.3\n"
 
 #: cmdline_aliases.cpp:84 context.cpp:301 main.cpp:1357
 msgid ", "
@@ -486,19 +487,14 @@ msgid "\"--from_repo\" already defined with diferent value"
 msgstr "\"--from_repo\" 已经被使用不同的值定义"
 
 #: commands/from_repo.cpp:68
-#, fuzzy
-#| msgid ""
-#| "List groups of installed packages not required by other installed packages"
 msgid ""
 "Filters installed packages by the ID of the repository they were installed "
 "from."
-msgstr "列出已安装软件包不需要的其它已安装软件包组"
+msgstr "根据来源仓库的 ID 筛选已安装的软件包。"
 
 #: commands/from_repo.cpp:79
-#, fuzzy
-#| msgid "\"--from_repo\" already defined with diferent value"
 msgid "\"--installed-from_repo\" already defined with diferent value"
-msgstr "\"--from_repo\" 已经被使用不同的值定义"
+msgstr "\"--installed-from_repo\" 已经被使用不同的值定义"
 
 #: commands/group/arguments.hpp:34
 msgid "Show only available groups."

@@ -7,14 +7,16 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-07-26 03:48+0000\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Automatically generated\n"
-"Language-Team: none\n"
+"PO-Revision-Date: 2025-09-02 14:20+0000\n"
+"Last-Translator: Tri Phuong Nguyen <triphuongvasa@gmail.com>\n"
+"Language-Team: Vietnamese <https://translate.fedoraproject.org/projects/dnf5/"
+"libdnf5/vi/>\n"
 "Language: vi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Weblate 5.13\n"
 
 #: advisory/advisory.cpp:81
 #, c++-format
@@ -22,11 +24,13 @@ msgid ""
 "Bad libsolv id for advisory \"{}\", solvable name \"{}\" doesn't have "
 "advisory prefix \"{}\""
 msgstr ""
+"ID libsolv không hợp lệ cho khuyến nghị \"{}\", tên có thể giải quyết được "
+"\"{}\" không có tiền tố khuyến nghị \"{}\""
 
 #: base/goal.cpp:482
 #, c++-format
 msgid "Unsupported argument for REMOVE action: {}"
-msgstr ""
+msgstr "Đối số không hợp lệ cho hành động REMOVE: {}"
 
 #. TODO(lukash) throw a proper exception
 #: base/goal.cpp:1652
@@ -36,7 +40,7 @@ msgstr ""
 
 #: base/goal_elements.cpp:352
 msgid "Install"
-msgstr ""
+msgstr "Cài đặt"
 
 #: base/goal_elements.cpp:354
 msgid "Install via provide"

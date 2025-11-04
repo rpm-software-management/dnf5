@@ -5,12 +5,13 @@
 # hsu zangmen <chzang55@gmail.com>, 2025.
 # Weblate Translation Memory <noreply-mt-weblate-translation-memory@weblate.org>, 2025.
 # Cheng-Chia Tseng <pswo10680@gmail.com>, 2025.
+# madomado nuko <mado@fyralabs.com>, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-07-26 03:48+0000\n"
-"PO-Revision-Date: 2025-08-06 09:53+0000\n"
+"PO-Revision-Date: 2025-10-27 00:54+0000\n"
 "Last-Translator: Cheng-Chia Tseng <pswo10680@gmail.com>\n"
 "Language-Team: Chinese (Traditional) <https://translate.fedoraproject.org/"
 "projects/dnf5/dnf5/zh_TW/>\n"
@@ -19,7 +20,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.12.2\n"
+"X-Generator: Weblate 5.13.3\n"
 
 #: cmdline_aliases.cpp:84 context.cpp:301 main.cpp:1357
 msgid ", "
@@ -55,11 +56,11 @@ msgstr ""
 
 #: cmdline_aliases.cpp:236
 msgid "Unknown key \"{}\" in file \"{}\" on line {}: {}"
-msgstr ""
+msgstr "未知「{}」鍵，位於檔案「{}」的列 {}: {}"
 
 #: cmdline_aliases.cpp:253
 msgid "Empty or bad element id path in file \"{}\" on line {}: {}"
-msgstr ""
+msgstr "空值或有不良元素 id 路徑位於檔案「{}」的列 {}: {}"
 
 #: cmdline_aliases.cpp:272
 msgid ""
@@ -68,11 +69,11 @@ msgstr ""
 
 #: cmdline_aliases.cpp:301
 msgid "Unknown type \"{}\" of element \"{}\" in file \"{}\" on line {}: {}"
-msgstr ""
+msgstr "不明類型「{}」的元素「{}」，位於「{}」檔案的列 {}: {}"
 
 #: cmdline_aliases.cpp:312
 msgid "Missing attribute \"type\" for element \"{}\" in file \"{}\""
-msgstr ""
+msgstr "遺失「type」特性，所在元素「{}」位於檔案「{}」"
 
 #: cmdline_aliases.cpp:331
 msgid ""
@@ -91,7 +92,7 @@ msgstr ""
 
 #: cmdline_aliases.cpp:387
 msgid "Missing attribute \"header\" for element \"{}\" in file \"{}\""
-msgstr ""
+msgstr "遺失「header」特性，所在「{}」元素位於「{}」檔案"
 
 #: cmdline_aliases.cpp:428 cmdline_aliases.cpp:538
 msgid ""
@@ -1065,12 +1066,12 @@ msgstr "因此，安裝以此金鑰簽章的軟體包將會安裝失敗。"
 
 #: context.cpp:105
 msgid "It is recommended to remove the expired key to allow importing"
-msgstr "建議移除過期的金鑰，以允許匯入"
+msgstr "建議移除過期的金鑰，以允許匯入更新後的金鑰。"
 
 #: context.cpp:106
 msgid ""
 "an updated key. This might leave already installed packages unverifiable."
-msgstr "更新後的金鑰。這可能會導致已安裝的軟體包無法核驗。"
+msgstr "這可能會導致已安裝的軟體包無法核驗。"
 
 #: context.cpp:109
 msgid "The system will now proceed with removing the key."

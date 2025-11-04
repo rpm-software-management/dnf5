@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-07-26 03:48+0000\n"
-"PO-Revision-Date: 2025-05-25 08:00+0000\n"
+"PO-Revision-Date: 2025-10-29 11:53+0000\n"
 "Last-Translator: Aleksey Fedorov <aleksejfedorov963@gmail.com>\n"
 "Language-Team: Russian <https://translate.fedoraproject.org/projects/dnf5/"
 "dnf5/ru/>\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 5.11.3\n"
+"X-Generator: Weblate 5.13.3\n"
 
 #: cmdline_aliases.cpp:84 context.cpp:301 main.cpp:1357
 msgid ", "
@@ -29,140 +29,168 @@ msgid ""
 "Attached named argument \"{}\" not found: {}: Requested in file \"{}\" on "
 "line {}: {}"
 msgstr ""
+"Прикрепленный именованный аргумент \"{}\" не найден: {}: Запрошен в файле "
+"\"{}\" в строке {}: {}"
 
 #: cmdline_aliases.cpp:159
 msgid ""
 "Unknown attribute \"{}\" of attached named argument for alias \"{}\" in file "
 "\"{}\" on line {}: {}"
 msgstr ""
+"Неизвестный атрибут \"{}\" прикрепленного именованного аргумента для "
+"псевдонима \"{}\" в файле \"{}\" в строке {}: {}"
 
 #: cmdline_aliases.cpp:171
 msgid "Missing attribute \"id_path\" for alias \"{}\" in file \"{}\""
-msgstr ""
+msgstr "Отсутствует атрибут «id_path» для псевдонима «{}» в файле «{}»"
 
 #: cmdline_aliases.cpp:208
 msgid "Unsupported version \"{}\" in file \"{}\". Supported versions: {}"
 msgstr ""
+"Неподдерживаемая версия \"{}\" в файле \"{}\". Поддерживаемые версии: {}"
 
 #: cmdline_aliases.cpp:218
 msgid "Bad value type of attribute \"version\" in file \"{}\" on line {}: {}"
-msgstr ""
+msgstr "Неверный тип значения атрибута «version» в файле «{}» в строке {}: {}"
 
 #: cmdline_aliases.cpp:224
 msgid "Missing attribute \"version\" in file \"{}\""
-msgstr ""
+msgstr "Отсутствует атрибут «version» в файле «{}»"
 
 #: cmdline_aliases.cpp:236
 msgid "Unknown key \"{}\" in file \"{}\" on line {}: {}"
-msgstr ""
+msgstr "Неизвестный ключ \"{}\" в файле \"{}\" в строке {}: {}"
 
 #: cmdline_aliases.cpp:253
 msgid "Empty or bad element id path in file \"{}\" on line {}: {}"
 msgstr ""
+"Пустой или неверный путь идентификатора элемента в файле \"{}\" в строке {}: "
+"{}"
 
 #: cmdline_aliases.cpp:272
 msgid ""
 "Parent command \"{}\" not found: {}: Requested in file \"{}\" on line {}: {}"
 msgstr ""
+"Родительская команда \"{}\" не найдена: {}: Запрошена в файле \"{}\" в "
+"строке {}: {}"
 
 #: cmdline_aliases.cpp:301
 msgid "Unknown type \"{}\" of element \"{}\" in file \"{}\" on line {}: {}"
-msgstr ""
+msgstr "Неизвестный тип \"{}\" элемента \"{}\" в файле \"{}\" в строке {}: {}"
 
 #: cmdline_aliases.cpp:312
 msgid "Missing attribute \"type\" for element \"{}\" in file \"{}\""
-msgstr ""
+msgstr "Отсутствует атрибут «type» для элемента «{}» в файле «{}»"
 
 #: cmdline_aliases.cpp:331
 msgid ""
 "Named argument \"{}\" already registered. Requested in file \"{}\" on line "
 "{}: {}"
 msgstr ""
+"Именованный аргумент \"{}\" уже зарегистрирован. Запрошен в файле \"{}\" в "
+"строке {}: {}"
 
 #: cmdline_aliases.cpp:347
 msgid ""
 "Command \"{}\" already registered. Requested in file \"{}\" on line {}: {}"
 msgstr ""
+"Команда \"{}\" уже зарегистрирована. Запрошена в файле \"{}\" в строке {}: {}"
 
 #: cmdline_aliases.cpp:375
 msgid "Unknown attribute \"{}\" of group \"{}\" in file \"{}\" on line {}: {}"
-msgstr ""
+msgstr "Неизвестный атрибут \"{}\" группы \"{}\" в файле \"{}\" в строке {}: {}"
 
 #: cmdline_aliases.cpp:387
 msgid "Missing attribute \"header\" for element \"{}\" in file \"{}\""
-msgstr ""
+msgstr "Отсутствует атрибут «header» для элемента «{}» в файле «{}»"
 
 #: cmdline_aliases.cpp:428 cmdline_aliases.cpp:538
 msgid ""
 "The \"short_name\" attribute of named argument \"{}\" must be one character "
 "long in file \"{}\" on line {}: {}"
 msgstr ""
+"Атрибут «short_name» именованного аргумента «{}» должен иметь длину в один "
+"символ в файле «{}» в строке {}: {}"
 
 #: cmdline_aliases.cpp:446
 msgid "Source \"{}\" not found: {}: Requested in file \"{}\" on line {}: {}"
-msgstr ""
+msgstr "Источник \"{}\" не найден: {}: Запрошен в файле \"{}\" в строке {}: {}"
 
 #: cmdline_aliases.cpp:462 cmdline_aliases.cpp:563 cmdline_aliases.cpp:676
 msgid "Group \"{}\" not found: {}: Requested in file \"{}\" on line {}: {}"
-msgstr ""
+msgstr "Группа \"{}\" не найдена: {}: Запрошена в файле \"{}\" в строке {}: {}"
 
 #: cmdline_aliases.cpp:476 cmdline_aliases.cpp:579
 msgid ""
 "Unknown attribute \"{}\" of named argument \"{}\" in file \"{}\" on line {}: "
 "{}"
 msgstr ""
+"Неизвестный атрибут \"{}\" именованного аргумента \"{}\" в файле \"{}\" в "
+"строке {}: {}"
 
 #: cmdline_aliases.cpp:489
 msgid "Missing attribute \"source\" for named argument \"{}\" in file \"{}\""
 msgstr ""
+"Отсутствует атрибут «source» для именованного аргумента «{}» в файле «{}»"
 
 #: cmdline_aliases.cpp:498 cmdline_aliases.cpp:592
 msgid ""
 "At least one of the attributes \"long_name\" and \"short_name\" must be set "
 "for named argument \"{}\" in file \"{}\""
 msgstr ""
+"Для именованного аргумента \"{}\" в файле \"{}\" должен быть установлен хотя "
+"бы один из атрибутов: \"long_name\" и \"short_name\""
 
 #: cmdline_aliases.cpp:657
 msgid ""
 "Attached command \"{}\" not found: {}: Requested in file \"{}\" on line {}: "
 "{}"
 msgstr ""
+"Прикрепленная команда \"{}\" не найдена: {}: Запрошена в файле \"{}\" в "
+"строке {}: {}"
 
 #: cmdline_aliases.cpp:691
 msgid ""
 "Used config file version \"1.0\" for attribute \"{}\" of command \"{}\" in "
 "file \"{}\" on line {}: {}"
 msgstr ""
+"Использована версия файла конфигурации \"1.0\" для атрибута \"{}\" команды "
+"\"{}\" в файле \"{}\" в строке {}: {}"
 
 #: cmdline_aliases.cpp:713
 msgid ""
 "Unknown attribute \"{}\" of required value for alias \"{}\" in file \"{}\" "
 "on line {}: {}"
 msgstr ""
+"Неизвестный атрибут \"{}\" требуемого значения для псевдонима \"{}\" в файле "
+"\"{}\" в строке {}: {}"
 
 #: cmdline_aliases.cpp:726
 msgid ""
 "Missing attribute \"value_help\" of required value for alias \"{}\" in file "
 "\"{}\""
 msgstr ""
+"Отсутствует атрибут «value_help» требуемого значения для псевдонима «{}» в "
+"файле «{}»"
 
 #: cmdline_aliases.cpp:740
 msgid ""
 "Unknown attribute \"{}\" of command \"{}\" in file \"{}\" on line {}: {}"
 msgstr ""
+"Неизвестный атрибут \"{}\" команды \"{}\" в файле \"{}\" в строке {}: {}"
 
 #: cmdline_aliases.cpp:756
 msgid ""
 "Missing attribute \"attached_command\" for command \"{}\" in file \"{}\""
-msgstr ""
+msgstr "Отсутствует атрибут «attached_command» для команды «{}» в файле «{}»"
 
 #: cmdline_aliases.cpp:791
 msgid "Bad value type in file \"{}\" on line {}: {}"
-msgstr ""
+msgstr "Неверный тип значения в файле \"{}\" в строке {}: {}"
 
 #: cmdline_aliases.cpp:804
 msgid "Syntax error in file \"{}\" on line {}:"
-msgstr ""
+msgstr "Синтаксическая ошибка в файле \"{}\" в строке {}:"
 
 #: commands/advisory/advisory.cpp:36
 msgid "Manage advisories"
@@ -493,29 +521,24 @@ msgstr ""
 "зависимостей."
 
 #: commands/from_repo.cpp:38 commands/from_repo.cpp:70
-#, fuzzy
-#| msgid "CVE_ID,..."
 msgid "REPO_ID,..."
-msgstr "ID_CVE,…"
+msgstr "REPO_ID,..."
 
 #: commands/from_repo.cpp:53
 msgid "\"--from_repo\" already defined with diferent value"
-msgstr ""
+msgstr "\"--from_repo\" уже определен с другим значением"
 
 #: commands/from_repo.cpp:68
-#, fuzzy
-#| msgid ""
-#| "List groups of installed packages not required by other installed packages"
 msgid ""
 "Filters installed packages by the ID of the repository they were installed "
 "from."
 msgstr ""
-"Список групп установленных пакетов, не требуемых другими установленными "
-"пакетами"
+"Фильтрует установленные пакеты по идентификатору репозитория, из которого "
+"они были установлены."
 
 #: commands/from_repo.cpp:79
 msgid "\"--installed-from_repo\" already defined with diferent value"
-msgstr ""
+msgstr "\"--installed-from_repo\" уже определен с другим значением"
 
 #: commands/group/arguments.hpp:34
 msgid "Show only available groups."
@@ -638,10 +661,8 @@ msgid "Lists packages depending on the packages' relation to the system"
 msgstr "Показ списка пакетов в зависимости от их отношения к системе"
 
 #: commands/list/list.cpp:50
-#, fuzzy
-#| msgid "List of keys to match case insensitively"
 msgid "List of package-spec-NI to match (case insensitively)"
-msgstr "Список ключей для нечувствительного соответствия регистру"
+msgstr "Список package-spec-NI для сопоставления (без учета регистра)"
 
 #: commands/list/list.cpp:62
 msgid "Show all versions of the packages, not only the latest ones."
@@ -1031,12 +1052,8 @@ msgid "Add new entry to versionlock configuration"
 msgstr "Добавить новую запись в конфигурацию блокировки версий"
 
 #: commands/versionlock/versionlock_add.cpp:44
-#, fuzzy
-#| msgid "List of package specs to add versionlock for"
 msgid "List of package package-spec-N to add versionlock for"
-msgstr ""
-"Список спецификаций пакетов, для которых необходимо добавить блокировку "
-"версий"
+msgstr "Список пакетов package-spec-N для добавления versionlock"
 
 #: commands/versionlock/versionlock_add.cpp:107
 #: commands/versionlock/versionlock_exclude.cpp:126
@@ -1072,12 +1089,8 @@ msgid "Add new exclude entry to versionlock configuration"
 msgstr "Добавить новый исключающий элемент в конфигурацию блокировки версий"
 
 #: commands/versionlock/versionlock_exclude.cpp:44
-#, fuzzy
-#| msgid "List of package specs to add versionlock exclude for"
 msgid "List of package-spec-N to add versionlock exclude for"
-msgstr ""
-"Список спецификаций пакетов, для которых необходимо добавить исключение "
-"блокировки версий"
+msgstr "Список package-spec-N для добавления исключения versionlock"
 
 #: commands/versionlock/versionlock_exclude.cpp:89
 #: commands/versionlock/versionlock_exclude.cpp:101
