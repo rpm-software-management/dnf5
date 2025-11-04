@@ -3,15 +3,15 @@
 # This file is distributed under the same license as the PACKAGE package.
 # Sabri Ünal <libreajans@gmail.com>, 2024.
 # Ali Azbay <aliyapkod@gmail.com>, 2024.
-# Oğuz Ersen <oguz@ersen.moe>, 2024.
+# Oğuz Ersen <oguz@ersen.moe>, 2024, 2025.
 # Demir Kolak <demirkolak8@gmail.com>, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-07-26 03:48+0000\n"
-"PO-Revision-Date: 2025-08-28 02:23+0000\n"
-"Last-Translator: Demir Kolak <demirkolak8@gmail.com>\n"
+"PO-Revision-Date: 2025-10-19 15:53+0000\n"
+"Last-Translator: Oğuz Ersen <oguz@ersen.moe>\n"
 "Language-Team: Turkish <https://translate.fedoraproject.org/projects/dnf5/"
 "libdnf5-cli/tr/>\n"
 "Language: tr\n"
@@ -19,17 +19,15 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.13\n"
+"X-Generator: Weblate 5.13.3\n"
 
 #: argument_parser.cpp:68
-#, fuzzy
 msgid "Misconfigured alias \"{}\": cannot convert \"{}\" to a number"
-msgstr "Yanlış yapılandırılmış takma ad “{}”: “{}” sayıya dönüştürülemiyor."
+msgstr "Yanlış yapılandırılmış takma ad \"{}\": \"{}\" sayıya dönüştürülemiyor"
 
 #: argument_parser.cpp:76
-#, fuzzy
 msgid "Misconfigured alias \"{}\": index \"{}\" out of range"
-msgstr "Yanlış yapılandırılmış takma ad “{}”: “{}” dizini aralık dışı"
+msgstr "Yanlış yapılandırılmış takma ad \"{}\": \"{}\" indeksi aralık dışı"
 
 #: argument_parser.cpp:98
 msgid "\"{}\" not allowed together with named argument \"{}\""
@@ -119,10 +117,8 @@ msgid "Missing positional argument \"{}\" for command \"{}\""
 msgstr "\"{}\" konumsal argümanı eksik (\"{}\" komutu için)"
 
 #: argument_parser.cpp:1274
-#, fuzzy
-#| msgid "Missing value for named argument \"-{}\""
 msgid "Missing value for command alias \"{}\""
-msgstr "Belirtilen \"-{}\" argümanı için değer eksik"
+msgstr "Komut takma adı \"{}\" için değer eksik"
 
 #: argument_parser.cpp:1610
 msgid "Named argument with path id \"{}\" not found"
@@ -424,6 +420,5 @@ msgid "Total"
 msgstr "Toplam"
 
 #: session.cpp:149
-#, fuzzy
 msgid "Missing command"
 msgstr "Eksik komut"

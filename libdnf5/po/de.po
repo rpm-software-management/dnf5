@@ -13,8 +13,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-07-26 03:48+0000\n"
-"PO-Revision-Date: 2025-06-24 20:30+0000\n"
-"Last-Translator: Sijmen Schoon <fedora@vijf.life>\n"
+"PO-Revision-Date: 2025-10-06 03:17+0000\n"
+"Last-Translator: Ettore Atalan <atalanttore@googlemail.com>\n"
 "Language-Team: German <https://translate.fedoraproject.org/projects/dnf5/"
 "libdnf5/de/>\n"
 "Language: de\n"
@@ -22,7 +22,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.12.2\n"
+"X-Generator: Weblate 5.13.3\n"
 
 #: advisory/advisory.cpp:81
 msgid ""
@@ -191,7 +191,7 @@ msgstr "Keine Übereinstimmung für Argument '{0}' in den ausgewählten Hinweise
 
 #: base/log_event.cpp:165
 msgid "No match in selected advisories"
-msgstr ""
+msgstr "Keine Übereinstimmung in den ausgewählten Hinweisen"
 
 #: base/log_event.cpp:169
 msgid "No match for argument '{0}' in repositories '{1}'"
@@ -983,7 +983,7 @@ msgstr ""
 
 #: repo/librepo.cpp:181
 msgid "'proxy_username' is set but not 'proxy_password'"
-msgstr ""
+msgstr "„proxy_username“ ist festgelegt, „proxy_password“ jedoch nicht"
 
 #: repo/package_downloader.cpp:154
 msgid "Cannot download the \"{0}\" package, cacheonly option is activated."
@@ -1070,10 +1070,8 @@ msgid "Failed to set up metadata download"
 msgstr "Auflösen der Metadaten vom Modul fehlgeschlagen: {}"
 
 #: repo/repo_downloader.cpp:312 repo/repo_downloader.cpp:362
-#, fuzzy
-#| msgid "Failed to download files"
 msgid "Failed to download metadata"
-msgstr "Herunterladen der Dateien fehlgeschlagen"
+msgstr "Herunterladen der Metadaten fehlgeschlagen"
 
 #: repo/repo_downloader.cpp:426
 msgid "Error checking if metalink \"{}\" is in sync for repository \"{}\""

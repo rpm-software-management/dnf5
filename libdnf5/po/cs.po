@@ -3,13 +3,14 @@
 # This file is distributed under the same license as the PACKAGE package.
 # Petr Ptacek <petr106@atlas.cz>, 2024.
 # Weblate Translation Memory <noreply-mt-weblate-translation-memory@weblate.org>, 2024.
+# Petr Pisar <ppisar@redhat.com>, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-07-26 03:48+0000\n"
-"PO-Revision-Date: 2024-02-06 09:36+0000\n"
-"Last-Translator: Petr Ptacek <petr106@atlas.cz>\n"
+"PO-Revision-Date: 2025-09-02 14:20+0000\n"
+"Last-Translator: Petr Pisar <ppisar@redhat.com>\n"
 "Language-Team: Czech <https://translate.fedoraproject.org/projects/dnf5/"
 "libdnf5/cs/>\n"
 "Language: cs\n"
@@ -17,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Weblate 5.3.1\n"
+"X-Generator: Weblate 5.13\n"
 
 #: advisory/advisory.cpp:81
 msgid ""
@@ -210,7 +211,7 @@ msgstr ""
 
 #: base/log_event.cpp:180
 msgid "Packages for argument '{}' available, but not installed."
-msgstr "Balíčky je pro argument '{}' jsou dostupné, ale nejsou nainstalovány."
+msgstr "Balíčky pro argument „{}“ jsou dostupné, ale nejsou nainstalovány."
 
 #: base/log_event.cpp:184
 msgid ""

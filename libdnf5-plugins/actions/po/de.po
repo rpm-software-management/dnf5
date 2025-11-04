@@ -4,13 +4,14 @@
 # Dennis Koerner <dennis@bumblebeeman.dev>, 2024.
 # Fabio D <fabio1977@arcor.de>, 2024.
 # Mario Blättermann <mario.blaettermann@gmail.com>, 2025.
+# Ettore Atalan <atalanttore@googlemail.com>, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-07-26 03:48+0000\n"
-"PO-Revision-Date: 2025-05-01 13:57+0000\n"
-"Last-Translator: Mario Blättermann <mario.blaettermann@gmail.com>\n"
+"PO-Revision-Date: 2025-10-06 03:17+0000\n"
+"Last-Translator: Ettore Atalan <atalanttore@googlemail.com>\n"
 "Language-Team: German <https://translate.fedoraproject.org/projects/dnf5/"
 "libdnf5-plugin-actions/de/>\n"
 "Language: de\n"
@@ -18,7 +19,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.11.1\n"
+"X-Generator: Weblate 5.13.3\n"
 
 #: actions.cpp:237
 msgid "File \"{}\" on line {}: {}"
@@ -83,7 +84,7 @@ msgstr "Aktion hat die falsche Protokollierstufe gesendet: {}"
 
 #: actions.cpp:987 actions.cpp:1794
 msgid "Action calls for stop: {}"
-msgstr ""
+msgstr "Aktion fordert Stopp: {}"
 
 #: actions.cpp:990 actions.cpp:1801
 msgid "Action sent error message: {}"
@@ -94,6 +95,8 @@ msgid ""
 "Syntax error: Action output line must start with \"tmp.\" or \"conf.\" or "
 "\"var.\" or \"stop=\" or \"error=\": {}"
 msgstr ""
+"Syntaxfehler: Die Aktionsausgabzeile muss mit „tmp.” oder „conf.” oder „var.”"
+" oder „stop=” oder „error=” beginnen: {}"
 
 #: actions.cpp:1020
 msgid "Error reading from action (from pipe)"

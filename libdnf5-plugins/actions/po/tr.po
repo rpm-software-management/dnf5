@@ -2,15 +2,15 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # Sabri Ünal <yakushabb@gmail.com>, 2024.
-# Oğuz Ersen <oguz@ersen.moe>, 2024.
+# Oğuz Ersen <oguz@ersen.moe>, 2024, 2025.
 # Demir Kolak <demirkolak8@gmail.com>, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-07-26 03:48+0000\n"
-"PO-Revision-Date: 2025-08-28 02:23+0000\n"
-"Last-Translator: Demir Kolak <demirkolak8@gmail.com>\n"
+"PO-Revision-Date: 2025-10-19 15:53+0000\n"
+"Last-Translator: Oğuz Ersen <oguz@ersen.moe>\n"
 "Language-Team: Turkish <https://translate.fedoraproject.org/projects/dnf5/"
 "libdnf5-plugin-actions/tr/>\n"
 "Language: tr\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.13\n"
+"X-Generator: Weblate 5.13.3\n"
 
 #: actions.cpp:237
 msgid "File \"{}\" on line {}: {}"
@@ -26,18 +26,11 @@ msgstr "\"{}\" dosyasının {}. satırında hata. Bilinmeyen bağlantı \"{}\""
 
 #: actions.cpp:636 actions.cpp:642 actions.cpp:648 actions.cpp:654
 msgid "\"HOOK:PKG_FILTER:DIRECTION:OPTIONS:CMD\" format expected"
-msgstr ""
-"\"{}\" dosyasının {}. satırında hata: "
-"\"BAGLANTI:PKT_FİLTRESİ:YÖN:SECENEKLER:KOMUT\" biçimi bekleniyor"
+msgstr "\"BAGLANTI:PKT_FİLTRESİ:YÖN:SECENEKLER:KOMUT\" biçimi bekleniyor"
 
 #: actions.cpp:676
-#, fuzzy
-#| msgid ""
-#| "Error in file \"{}\" on line {}: Unknown \"enabled\" option value \"{}\""
 msgid "Unknown \"enabled\" option value \"{}\""
-msgstr ""
-"\"{}\" dosyasının {}. satırında hata. Bilinmeyen \"enabled\" seçeneği değeri "
-"\"{}\""
+msgstr "Bilinmeyen \"enabled\" seçeneği değeri \"{}\""
 
 #: actions.cpp:683
 msgid "Unknown option \"{}\""
@@ -52,125 +45,114 @@ msgid ""
 "Package filter can only be used in GOAL_RESOLVED, PRE_TRANS and POST_TRANS "
 "hooks"
 msgstr ""
-"\"{}\" dosyasının {}. satırında hata. Paket filtresi yalnızca PRE_TRANS ve "
-"POST_TRANS bağlantılarında kullanılabilir"
+"Paket filtresi yalnızca GOAL_RESOLVED, PRE_TRANS ve POST_TRANS "
+"bağlantılarında kullanılabilir"
 
 #: actions.cpp:726
 msgid "Cannot use direction without package filter"
-msgstr ""
-"\"{}\" dosyasının {}. satırında hata: Paket filtresi olmadan yön kullanılamaz"
+msgstr "Paket filtresi olmadan yön kullanılamaz"
 
 #: actions.cpp:740
-#, fuzzy
-#| msgid "Error in file \"{}\" on line {}: Unknown package direction \"{}\""
 msgid "Unknown package direction \"{}\""
-msgstr "\"{}\" dosyasının {}. satırında hata: Bilinmeyen paket yönü \"{}\""
+msgstr "Bilinmeyen paket yönü \"{}\""
 
 #: actions.cpp:747
-#, fuzzy
 msgid "Unknown mode \"{}\""
 msgstr "Bilinmeyen mod \"{}\""
 
 #: actions.cpp:755
-#, fuzzy
 msgid "Unsupported value of the \"raise_error\" option: {}"
-msgstr "“raise_error” seçeneği için desteklenmeyen değer: {}"
+msgstr "\"raise_error\" seçeneği için desteklenmeyen değer: {}"
 
 #: actions.cpp:760
-#, fuzzy
 msgid "Missing command"
 msgstr "Eksik komut"
 
 #: actions.cpp:953
-#, fuzzy
 msgid "Synax error: Missing equal sign (=) in action output line: {}"
-msgstr "Yazım Hatası: İşlem çıkış satırı {} , eksik eşittir işareti (=)."
+msgstr "Söz dizimi hatası: Eylem çıktı satırı {} , eşittir işareti (=) eksik"
 
 #: actions.cpp:964
-#, fuzzy
 msgid "Cannot set option: Action output line: {}"
-msgstr "Seçenek ayarlanamıyor: Eylem çıkış satırı: {}"
+msgstr "Seçenek ayarlanamıyor: Eylem çıktı satırı: {}"
 
 #: actions.cpp:982
-#, fuzzy
 msgid "Action sent the wrong log level: {}"
-msgstr "Yanlış günlük düzeyi gönderildi: {}"
+msgstr "Eylem yanlış günlük düzeyi gönderdi: {}"
 
 #: actions.cpp:987 actions.cpp:1794
-#, fuzzy
 msgid "Action calls for stop: {}"
-msgstr "{} : Eylem durdurma çağrısında bulundu"
+msgstr "Eylem durdurma çağrısında bulundu: {}"
 
 #: actions.cpp:990 actions.cpp:1801
-#, fuzzy
 msgid "Action sent error message: {}"
-msgstr "{} Eylemi hata mesajı gönderdi."
+msgstr "Eylem hata mesajı gönderdi: {}"
 
 #: actions.cpp:995
 msgid ""
 "Syntax error: Action output line must start with \"tmp.\" or \"conf.\" or "
 "\"var.\" or \"stop=\" or \"error=\": {}"
 msgstr ""
+"Söz dizimi hatası: Eylem çıktı satırı \"tmp.\" veya \"conf.\" veya \"var.\" "
+"veya \"stop=\" veya \"error=\" ile başlamalıdır: {}"
 
 #: actions.cpp:1020
 msgid "Error reading from action (from pipe)"
-msgstr ""
+msgstr "Eylemden (boru (pipe)'dan) okunurken hata oluştu"
 
 #: actions.cpp:1038
 msgid "Syntax error in json request from action: Missing starting '{{' char"
 msgstr ""
+"Eylemden gelen json isteğinde söz dizimi hatası: Başlangıç '{{' karakteri "
+"eksik"
 
 #: actions.cpp:1062
 msgid "Error during processing of a request from action."
-msgstr ""
+msgstr "Eylemden gelen bir isteğin işlenmesi sırasında hata oluştu."
 
 #: actions.cpp:1071
 msgid "Syntax error in json request from action: {}"
-msgstr ""
+msgstr "Eylemden gelen json isteğinde söz dizimi hatası: {}"
 
 #: actions.cpp:1079
 msgid "Syntax error in json request from action: Incomplete input"
-msgstr ""
+msgstr "Eylemden gelen json isteğinde söz dizimi hatası: Eksik girdi"
 
 #: actions.cpp:1154
-#, fuzzy
-#| msgid "Cannot create pipe: {}"
 msgid "Cannot write response"
-msgstr "Boru (pipe) oluşturulamıyor: {}"
+msgstr "Yanıt yazılamıyor"
 
 #: actions.cpp:1821
-#, fuzzy
-#| msgid "Cannot create pipe: {}"
 msgid "Actions plugin: Cannot create pipe"
-msgstr "Boru (pipe) oluşturulamıyor: {}"
+msgstr "Eylemler eklentisi: Boru (pipe) oluşturulamıyor"
 
 #: actions.cpp:1913
 msgid "Actions plugin: Cannot fork"
-msgstr ""
+msgstr "Eylemler eklentisi: Çatal oluşturulamıyor"
 
 #: actions.cpp:1968
 msgid "Actions plugin: Cannot bind command stdin"
-msgstr ""
+msgstr "Eylemler eklentisi: Komut standart girdisi bağlanamıyor"
 
 #: actions.cpp:1970
 msgid "Actions plugin: Cannot bind command stdout"
-msgstr ""
+msgstr "Eylemler eklentisi: Komut standart çıktısı bağlanamıyor"
 
 #: actions.cpp:1988
 msgid "Cannot execute action, command \"{}\" arguments \"{}\""
-msgstr ""
+msgstr "Eylem gerçekleştirilemiyor, komut \"{}\" argümanları \"{}\""
 
 #: actions.cpp:1996
 msgid "Error during preparation child process"
-msgstr ""
+msgstr "Alt işlem hazırlığı sırasında hata"
 
 #: actions.cpp:2015
 msgid "Exit code: {}"
-msgstr ""
+msgstr "Çıkış kodu: {}"
 
 #: actions.cpp:2019
 msgid "Terminated by signal: {}"
-msgstr ""
+msgstr "Sinyal ile sonlandırıldı: {}"
 
 #~ msgid "Error in file \"{}\" on line {}: Unknown option \"{}\""
 #~ msgstr "\"{}\" dosyasının {} satırında hata: \"{}\" seçeneği bilinmiyor"

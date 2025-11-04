@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-07-26 03:48+0000\n"
-"PO-Revision-Date: 2025-08-28 02:23+0000\n"
+"PO-Revision-Date: 2025-10-27 00:54+0000\n"
 "Last-Translator: Arif Budiman <arifpedia@gmail.com>\n"
 "Language-Team: Indonesian <https://translate.fedoraproject.org/projects/dnf5/"
 "dnf5/id/>\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.13\n"
+"X-Generator: Weblate 5.13.3\n"
 
 #: cmdline_aliases.cpp:84 context.cpp:301 main.cpp:1357
 msgid ", "
@@ -1034,7 +1034,7 @@ msgstr ""
 
 #: commands/system-upgrade/system-upgrade.cpp:101
 msgid "Need a --releasever greater than the current system version."
-msgstr "Diperlukan versi rilis yang lebih besar dari versi sistem saat ini."
+msgstr "Diperlukan --releasever yang lebih besar dari versi sistem saat ini."
 
 #: commands/system-upgrade/system-upgrade.cpp:150
 msgid "Store a distro-sync transaction to be performed offline"
@@ -1395,7 +1395,7 @@ msgstr "repofrompath: Spesifikasi repoid dan jalur yang salah \"{}\""
 
 #: main.cpp:238
 msgid "set arbitrary config and repo options"
-msgstr "repofrompath: Spesifikasi repoid dan jalur yang salah \"{}\""
+msgstr "Atur opsi config dan repo secara arbitrer"
 
 #: main.cpp:240
 msgid ""

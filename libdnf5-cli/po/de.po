@@ -4,15 +4,15 @@
 # Dennis Koerner <dennis@bumblebeeman.dev>, 2024.
 # Weblate Translation Memory <noreply-mt-weblate-translation-memory@weblate.org>, 2024.
 # Fabio D <fabio1977@arcor.de>, 2024.
-# Ettore Atalan <atalanttore@googlemail.com>, 2024.
+# Ettore Atalan <atalanttore@googlemail.com>, 2024, 2025.
 # Mario Blättermann <mario.blaettermann@gmail.com>, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-07-26 03:48+0000\n"
-"PO-Revision-Date: 2025-05-01 13:57+0000\n"
-"Last-Translator: Mario Blättermann <mario.blaettermann@gmail.com>\n"
+"PO-Revision-Date: 2025-10-06 03:17+0000\n"
+"Last-Translator: Ettore Atalan <atalanttore@googlemail.com>\n"
 "Language-Team: German <https://translate.fedoraproject.org/projects/dnf5/"
 "libdnf5-cli/de/>\n"
 "Language: de\n"
@@ -20,15 +20,17 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.11.1\n"
+"X-Generator: Weblate 5.13.3\n"
 
 #: argument_parser.cpp:68
 msgid "Misconfigured alias \"{}\": cannot convert \"{}\" to a number"
 msgstr ""
+"Falsch konfigurierter Alias „{}“: „{}“ kann nicht in eine Zahl umgewandelt "
+"werden"
 
 #: argument_parser.cpp:76
 msgid "Misconfigured alias \"{}\": index \"{}\" out of range"
-msgstr ""
+msgstr "Falsch konfigurierter Alias „{}“: Index „{}“ außerhalb des Bereichs"
 
 #: argument_parser.cpp:98
 msgid "\"{}\" not allowed together with named argument \"{}\""
@@ -120,10 +122,8 @@ msgid "Missing positional argument \"{}\" for command \"{}\""
 msgstr "Fehlendes positionsabhängiges Argument \"{}\" für Kommando \"{}\""
 
 #: argument_parser.cpp:1274
-#, fuzzy
-#| msgid "Missing value for named argument \"-{}\""
 msgid "Missing value for command alias \"{}\""
-msgstr "Fehlender Wert für benanntes Argument \"-{}\""
+msgstr "Fehlender Wert für Befehlsalias „{}“"
 
 #: argument_parser.cpp:1610
 msgid "Named argument with path id \"{}\" not found"

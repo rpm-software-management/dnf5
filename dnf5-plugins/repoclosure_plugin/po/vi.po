@@ -7,23 +7,25 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-07-26 03:48+0000\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Automatically generated\n"
-"Language-Team: none\n"
+"PO-Revision-Date: 2025-09-02 14:20+0000\n"
+"Last-Translator: Tri Phuong Nguyen <triphuongvasa@gmail.com>\n"
+"Language-Team: Vietnamese <https://translate.fedoraproject.org/projects/dnf5/"
+"dnf5-plugin-repoclosure/vi/>\n"
 "Language: vi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Weblate 5.13\n"
 
 #: repoclosure.cpp:46
 msgid "Print list of unresolved dependencies for repositories"
-msgstr ""
+msgstr "In ra danh sách phần phụ thuộc chưa giải quyết được cho các kho chứa"
 
 #: repoclosure.cpp:155
 #, c++-format
 msgid "No match for argument \"{}\"."
-msgstr ""
+msgstr "Không tìm thấy đối số trùng khớp \"{}\"."
 
 #: repoclosure.cpp:161
 msgid "Failed to resolve package specifications."

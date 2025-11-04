@@ -9,9 +9,9 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-07-26 03:48+0000\n"
-"PO-Revision-Date: 2025-02-14 13:12+0000\n"
-"Last-Translator: ButterflyOfFire <butterflyoffire@users.noreply.translate."
-"fedoraproject.org>\n"
+"PO-Revision-Date: 2025-10-10 18:54+0000\n"
+"Last-Translator: ButterflyOfFire "
+"<butterflyoffire@users.noreply.translate.fedoraproject.org>\n"
 "Language-Team: Kabyle <https://translate.fedoraproject.org/projects/dnf5/"
 "dnf5/kab/>\n"
 "Language: kab\n"
@@ -19,11 +19,11 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.9.2\n"
+"X-Generator: Weblate 5.13.3\n"
 
 #: cmdline_aliases.cpp:84 context.cpp:301 main.cpp:1357
 msgid ", "
-msgstr ""
+msgstr ", "
 
 #: cmdline_aliases.cpp:145
 msgid ""
@@ -183,7 +183,7 @@ msgstr "Akk"
 
 #: commands/advisory/advisory_summary.cpp:48
 msgid "Installed"
-msgstr ""
+msgstr "Yettwasbedden"
 
 #: commands/advisory/advisory_summary.cpp:52
 msgid "Updates"
@@ -191,7 +191,7 @@ msgstr "Ileqman"
 
 #: commands/advisory/advisory_summary.cpp:65
 msgid "Available"
-msgstr ""
+msgstr "Llan"
 
 #: commands/advisory/advisory_summary.hpp:33
 msgid "Print summary of advisories"
@@ -510,7 +510,7 @@ msgstr ""
 
 #: commands/history/arguments.hpp:37
 msgid "Transaction ID"
-msgstr ""
+msgstr "Asulay ID n tnigawt"
 
 #: commands/history/arguments.hpp:44
 msgid "Reverse the order of transactions."
@@ -535,7 +535,7 @@ msgstr ""
 
 #: commands/history/history.cpp:41
 msgid "Manage transaction history"
-msgstr ""
+msgstr "Sefrek amazray n tnigawt"
 
 #: commands/history/history_info.cpp:70
 msgid ""
@@ -672,7 +672,7 @@ msgstr ""
 
 #: commands/module/module.cpp:43
 msgid "Manage modules"
-msgstr ""
+msgstr "Sefrek izegrar"
 
 #: commands/module/module_list.cpp:85
 msgid "No matches found for \"{}\"."
@@ -756,7 +756,7 @@ msgstr ""
 
 #: commands/offline/offline.cpp:534
 msgid "Transaction failed: "
-msgstr ""
+msgstr "Tuccḍa n tnigawt: "
 
 #: commands/offline/offline.cpp:604
 msgid "Error reading journal: {}"
@@ -1070,7 +1070,7 @@ msgstr ""
 
 #: context.cpp:375 context.cpp:523
 msgid "Transaction failed: {}"
-msgstr ""
+msgstr "Tecceḍ tnigawt: {}"
 
 #: context.cpp:380 context.cpp:528
 msgid "  - {}"
@@ -1103,7 +1103,7 @@ msgstr ""
 
 #: context.cpp:502
 msgid "Running transaction"
-msgstr ""
+msgstr "Aselkem n tnigawt"
 
 #: context.cpp:820
 msgid "Upgrading {}"
@@ -1127,7 +1127,7 @@ msgstr "Asbeddi n {}"
 
 #: context.cpp:866
 msgid "Prepare transaction"
-msgstr ""
+msgstr "Aheyyi n tnigawt"
 
 #: context.cpp:886
 msgid "Removing {}"
@@ -1135,7 +1135,7 @@ msgstr "Tukksa n {}"
 
 #: context.cpp:889
 msgid "Cleanup {}"
-msgstr ""
+msgstr "Aṣfaḍ n {}"
 
 #: context.cpp:907
 msgid "Unpack error: {}"
@@ -1199,7 +1199,7 @@ msgstr ""
 
 #: main.cpp:143
 msgid "Print help"
-msgstr ""
+msgstr "Siggez tallalt"
 
 #: main.cpp:150
 msgid "Configuration file location"
@@ -1340,7 +1340,7 @@ msgstr ""
 
 #: main.cpp:488
 msgid "add a comment to transaction"
-msgstr ""
+msgstr "rnu awennit ar tnigawt"
 
 #: main.cpp:490
 msgid ""
@@ -1478,11 +1478,11 @@ msgstr ""
 
 #: main.cpp:967
 msgid "New leaves:"
-msgstr ""
+msgstr "Ifriwen imaynuten:"
 
 #: main.cpp:969
 msgid " {}"
-msgstr ""
+msgstr " {}"
 
 #: main.cpp:1013
 msgid "{} to skip unavailable packages"
@@ -1541,7 +1541,7 @@ msgstr ""
 
 #: main.cpp:1301
 msgid "{}."
-msgstr ""
+msgstr "{}."
 
 #: main.cpp:1304 main.cpp:1556
 msgid "{}. Add \"--help\" for more information about the arguments."
@@ -1606,7 +1606,7 @@ msgstr ""
 
 #: main.cpp:1578
 msgid "Complete!"
-msgstr ""
+msgstr "Immed!"
 
 #: shared_options.cpp:32
 msgid "Allow removing of installed packages to resolve problems"

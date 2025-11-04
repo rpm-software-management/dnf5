@@ -7,13 +7,16 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-07-26 03:48+0000\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Automatically generated\n"
-"Language-Team: none\n"
+"PO-Revision-Date: 2025-10-16 17:54+0000\n"
+"Last-Translator: A S Alam <aalam@users.noreply.translate.fedoraproject.org>\n"
+"Language-Team: Punjabi <https://translate.fedoraproject.org/projects/dnf5/"
+"dnf5-plugin-config-manager/pa/>\n"
 "Language: pa\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: Weblate 5.13.3\n"
 
 #: addrepo.cpp:136
 msgid "from-repofile: \"{}\" file does not exist"
@@ -89,7 +92,7 @@ msgstr ""
 
 #: config-manager.cpp:43
 msgid "Manage configuration"
-msgstr ""
+msgstr "ਸੰਰਚਨਾ ਦਾ ਇੰਤਜ਼ਾਮ ਕਰੋ"
 
 #: setopt.cpp:91 unsetopt.cpp:72
 msgid ""

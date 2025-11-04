@@ -5,13 +5,14 @@
 # Weblate Translation Memory <noreply-mt-weblate-translation-memory@weblate.org>, 2025.
 # hsu zangmen <chzang55@gmail.com>, 2025.
 # Cheng-Chia Tseng <pswo10680@gmail.com>, 2025.
+# madomado nuko <mado@fyralabs.com>, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-07-26 03:48+0000\n"
-"PO-Revision-Date: 2025-07-31 11:53+0000\n"
-"Last-Translator: hsu zangmen <chzang55@gmail.com>\n"
+"PO-Revision-Date: 2025-10-13 09:54+0000\n"
+"Last-Translator: madomado nuko <mado@fyralabs.com>\n"
 "Language-Team: Chinese (Traditional) <https://translate.fedoraproject.org/"
 "projects/dnf5/libdnf5/zh_TW/>\n"
 "Language: zh_TW\n"
@@ -19,7 +20,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.12.2\n"
+"X-Generator: Weblate 5.13.3\n"
 
 #: advisory/advisory.cpp:81
 msgid ""
@@ -150,23 +151,23 @@ msgstr "處理事項管理"
 
 #: base/log_event.cpp:141
 msgid "No packages to remove for argument: {}"
-msgstr ""
+msgstr "無符合所指定的軟件包可移除：{}"
 
 #: base/log_event.cpp:143
 msgid "No groups to remove for argument: {}"
-msgstr ""
+msgstr "無符合所指定的群組可移除：{}"
 
 #: base/log_event.cpp:146
 msgid "No environmental groups to remove for argument: {}"
-msgstr ""
+msgstr "無符合所指定的環境群組可移除：{}"
 
 #: base/log_event.cpp:148
 msgid "No modules to remove for argument: {}"
-msgstr ""
+msgstr "無符合所指定的模組可移除：{}"
 
 #: base/log_event.cpp:152
 msgid "No match for group from environment: {}"
-msgstr ""
+msgstr "無符合環境群組指定的群組：{}"
 
 #: base/log_event.cpp:154
 msgid "No match for group package: {}"
@@ -174,25 +175,23 @@ msgstr "找不到符合「{}」軟體包群組的項目"
 
 #: base/log_event.cpp:158
 msgid "Cannot perform {0}, no match for: {1}."
-msgstr ""
+msgstr "不能執行{0}，未找到：{1}。"
 
 #: base/log_event.cpp:160
 msgid "No match for argument: {}"
 msgstr "沒有符合引數的項目: {}"
 
 #: base/log_event.cpp:163
-#, fuzzy
-#| msgid "No match for argument: {}"
 msgid "No match for argument '{0}' in selected advisories"
-msgstr "沒有符合引數的項目: {}"
+msgstr "指定通報中無符合此引數之項目：{0}"
 
 #: base/log_event.cpp:165
 msgid "No match in selected advisories"
-msgstr ""
+msgstr "指定通報中無符合項目"
 
 #: base/log_event.cpp:169
 msgid "No match for argument '{0}' in repositories '{1}'"
-msgstr ""
+msgstr "軟體庫「{1}」中無符合此引數之項目：{0}"
 
 #: base/log_event.cpp:175
 msgid "Cannot perform {0} for {1} '{2}' because it is not installed."

@@ -7,14 +7,16 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-07-26 03:48+0000\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Automatically generated\n"
-"Language-Team: none\n"
+"PO-Revision-Date: 2025-10-27 00:54+0000\n"
+"Last-Translator: Arif Budiman <arifpedia@gmail.com>\n"
+"Language-Team: Indonesian <https://translate.fedoraproject.org/projects/dnf5/"
+"libdnf5/id/>\n"
 "Language: id\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Weblate 5.13.3\n"
 
 #: advisory/advisory.cpp:81
 #, c++-format
@@ -22,193 +24,196 @@ msgid ""
 "Bad libsolv id for advisory \"{}\", solvable name \"{}\" doesn't have "
 "advisory prefix \"{}\""
 msgstr ""
+"ID libsolv yang salah untuk advisory \"{}\", nama yang dapat diselesaikan "
+"\"{}\" tidak memiliki awalan advisory \"{}\""
 
 #: base/goal.cpp:482
 #, c++-format
 msgid "Unsupported argument for REMOVE action: {}"
-msgstr ""
+msgstr "Argumen yang tidak didukung untuk tindakan REMOVE: {}"
 
 #. TODO(lukash) throw a proper exception
 #: base/goal.cpp:1652
 #, c++-format
 msgid "Incorrect configuration value for multilib_policy: {}"
-msgstr ""
+msgstr "Nilai konfigurasi yang salah untuk multilib_policy: {}"
 
 #: base/goal_elements.cpp:352
 msgid "Install"
-msgstr ""
+msgstr "Instal"
 
 #: base/goal_elements.cpp:354
 msgid "Install via provide"
-msgstr ""
+msgstr "Instal melalui penyedia"
 
 #: base/goal_elements.cpp:356
 msgid "Install by group"
-msgstr ""
+msgstr "Instalasi berdasarkan grup"
 
 #: base/goal_elements.cpp:358
 msgid "Upgrade"
-msgstr ""
+msgstr "Peningkatan"
 
 #: base/goal_elements.cpp:360
 msgid "Upgrade all"
-msgstr ""
+msgstr "Perbarui semua"
 
 #: base/goal_elements.cpp:362
 msgid "Upgrade minimal"
-msgstr ""
+msgstr "Tingkatkan minimal"
 
 #: base/goal_elements.cpp:364
 msgid "Upgrade all minimal"
-msgstr ""
+msgstr "Tingkatkan semua minimal"
 
 #: base/goal_elements.cpp:366
 msgid "Downgrade"
-msgstr ""
+msgstr "Penurunan"
 
 #: base/goal_elements.cpp:368
 msgid "Reinstall"
-msgstr ""
+msgstr "Instal ulang"
 
 #: base/goal_elements.cpp:370
 msgid "Install or reinstall"
-msgstr ""
+msgstr "Instal atau instal ulang"
 
 #: base/goal_elements.cpp:372
 msgid "Remove"
-msgstr ""
+msgstr "Hapus"
 
 #: base/goal_elements.cpp:374
 msgid "Distrosync"
-msgstr ""
+msgstr "Distrosync"
 
 #: base/goal_elements.cpp:376
 msgid "Distrosync all"
-msgstr ""
+msgstr "Distrosync all"
 
 #: base/goal_elements.cpp:378
 msgid "Reason Change"
-msgstr ""
+msgstr "Alasan Perubahan"
 
 #: base/goal_elements.cpp:380
 msgid "Resolve"
-msgstr ""
+msgstr "Resolve"
 
 #: base/goal_elements.cpp:382
 msgid "Enable"
-msgstr ""
+msgstr "Aktifkan"
 
 #: base/goal_elements.cpp:384
 msgid "Disable"
-msgstr ""
+msgstr "Nonaktifkan"
 
 #: base/goal_elements.cpp:386
 msgid "Reset"
-msgstr ""
+msgstr "Reset"
 
 #: base/goal_elements.cpp:388
 msgid "Parse serialized transaction"
-msgstr ""
+msgstr "Parsing transaksi yang diserialisasi"
 
 #: base/goal_elements.cpp:390
 msgid "Install action"
-msgstr ""
+msgstr "Tindakan instal"
 
 #: base/goal_elements.cpp:392
 msgid "Remove action"
-msgstr ""
+msgstr "Tindakan hapus"
 
 #: base/goal_elements.cpp:394
 msgid "Upgrade action"
-msgstr ""
+msgstr "Tindakan peningkatan"
 
 #: base/goal_elements.cpp:396
 msgid "Reinstall action"
-msgstr ""
+msgstr "Tindakan pemasangan ulang"
 
 #: base/goal_elements.cpp:398
 msgid "Reason change action"
-msgstr ""
+msgstr "Alasan perubahan tindakan"
 
 #: base/goal_elements.cpp:400
 msgid "Reason override"
-msgstr ""
+msgstr "Pengabaian alasan"
 
 #: base/goal_elements.cpp:402
 msgid "Revert comps upgrade"
-msgstr ""
+msgstr "Kembalikan pembaruan comps"
 
 #: base/goal_elements.cpp:404
 msgid "Install debug RPMs"
-msgstr ""
+msgstr "Instal paket RPM debug"
 
 #: base/goal_elements.cpp:406
 msgid "Transaction merge"
-msgstr ""
+msgstr "Penggabungan transaksi"
 
 #: base/log_event.cpp:141
 #, c++-format
 msgid "No packages to remove for argument: {}"
-msgstr ""
+msgstr "Tidak ada paket yang perlu dihapus untuk argumen: {}"
 
 #: base/log_event.cpp:143
 #, c++-format
 msgid "No groups to remove for argument: {}"
-msgstr ""
+msgstr "Tidak ada grup yang perlu dihapus untuk argumen: {}"
 
 #: base/log_event.cpp:146
 #, c++-format
 msgid "No environmental groups to remove for argument: {}"
-msgstr ""
+msgstr "Tidak ada kelompok lingkungan yang perlu dihapus untuk perdebatan: {}"
 
 #: base/log_event.cpp:148
 #, c++-format
 msgid "No modules to remove for argument: {}"
-msgstr ""
+msgstr "Tidak ada modul yang perlu dihapus untuk argumen: {}"
 
 #: base/log_event.cpp:152
 #, c++-format
 msgid "No match for group from environment: {}"
-msgstr ""
+msgstr "Tidak ada yang cocok dengan grup dari lingkungan: {}"
 
 #: base/log_event.cpp:154
 #, c++-format
 msgid "No match for group package: {}"
-msgstr ""
+msgstr "Tidak ada paket grup yang sesuai: {}"
 
 #: base/log_event.cpp:158
 #, c++-format
 msgid "Cannot perform {0}, no match for: {1}."
-msgstr ""
+msgstr "Tidak dapat melakukan {0}, tidak ada kesesuaian untuk: {1}."
 
 #: base/log_event.cpp:160
 #, c++-format
 msgid "No match for argument: {}"
-msgstr ""
+msgstr "Tidak ada yang bisa menandingi argumen: {}"
 
 #: base/log_event.cpp:163
 #, c++-format
 msgid "No match for argument '{0}' in selected advisories"
 msgstr ""
+"Tidak ada kesesuaian untuk argumen '{0}' dalam pemberitahuan yang dipilih"
 
 #: base/log_event.cpp:165
 msgid "No match in selected advisories"
-msgstr ""
+msgstr "Tidak ada kesesuaian dalam pemberitahuan yang dipilih"
 
 #: base/log_event.cpp:169
 #, c++-format
 msgid "No match for argument '{0}' in repositories '{1}'"
-msgstr ""
+msgstr "Tidak ada kesesuaian untuk argumen '{0}' di repositori '{1}'"
 
 #: base/log_event.cpp:175
 #, c++-format
 msgid "Cannot perform {0} for {1} '{2}' because it is not installed."
-msgstr ""
+msgstr "Tidak dapat menjalankan {0} untuk {1} '{2}' karena tidak terinstal."
 
 #: base/log_event.cpp:180
 #, c++-format
 msgid "Packages for argument '{}' available, but not installed."
-msgstr ""
+msgstr "Paket untuk argumen '{}' tersedia, tetapi belum diinstal."
 
 #: base/log_event.cpp:184
 #, c++-format
@@ -216,26 +221,30 @@ msgid ""
 "Packages for argument '{}' available, but installed for a different "
 "architecture."
 msgstr ""
+"Paket untuk argumen '{}' tersedia, tetapi diinstal untuk arsitektur yang "
+"berbeda."
 
 #: base/log_event.cpp:188
 #, c++-format
 msgid "Cannot perform {0} because '{1}' matches only source packages."
-msgstr ""
+msgstr "Tidak dapat melakukan {0} karena '{1}' hanya cocok dengan paket sumber."
 
 #: base/log_event.cpp:192
 #, c++-format
 msgid "Argument '{}' matches only source packages."
-msgstr ""
+msgstr "Argumen '{}' hanya cocok dengan paket sumber."
 
 #: base/log_event.cpp:196
 #, c++-format
 msgid "Cannot perform {0} because '{1}' matches only excluded packages."
 msgstr ""
+"Tidak dapat melakukan {0} karena '{1}' hanya cocok dengan paket yang "
+"dikecualikan."
 
 #: base/log_event.cpp:200
 #, c++-format
 msgid "Argument '{}' matches only excluded packages."
-msgstr ""
+msgstr "Argumen '{}' hanya cocok dengan paket yang dikecualikan."
 
 #: base/log_event.cpp:204
 #, c++-format
@@ -243,21 +252,24 @@ msgid ""
 "Cannot perform {0} because '{1}' matches only packages excluded by "
 "versionlock."
 msgstr ""
+"Tidak dapat melakukan {0} karena '{1}' hanya cocok dengan paket yang "
+"dikecualikan oleh versionlock."
 
 #: base/log_event.cpp:208
 #, c++-format
 msgid "Argument '{}' matches only packages excluded by versionlock."
 msgstr ""
+"Argumen '{}' hanya cocok dengan paket yang dikecualikan oleh versionlock."
 
 #: base/log_event.cpp:213
 #, c++-format
 msgid "  * Maybe you meant: {}"
-msgstr ""
+msgstr "  * Mungkin yang Anda maksud adalah: {}"
 
 #: base/log_event.cpp:216
 #, c++-format
 msgid "There are following alternatives for '{0}': {1}"
-msgstr ""
+msgstr "Berikut ini adalah alternatif untuk '{0}': {1}"
 
 #: base/log_event.cpp:223
 #, c++-format
@@ -265,6 +277,8 @@ msgid ""
 "The lowest available version of the \"{}\" package is already installed, "
 "cannot downgrade it."
 msgstr ""
+"Versi terendah dari paket \"{}\" sudah terpasang, tidak dapat diturunkan "
+"versinya."
 
 #: base/log_event.cpp:229
 #, c++-format
@@ -272,12 +286,16 @@ msgid ""
 "Installed packages for argument '{0}' are not available in repositories in "
 "the same version, available versions: {1}, cannot reinstall."
 msgstr ""
+"Paket yang diinstal untuk argumen '{0}' tidak tersedia di repositori dengan "
+"versi yang sama, versi yang tersedia: {1}, tidak dapat diinstal ulang."
 
 #: base/log_event.cpp:235
 #, c++-format
 msgid ""
 "Cannot perform {0} because '{1}' is installed in a different version: '{2}'."
 msgstr ""
+"Tidak dapat menjalankan {0} karena '{1}' terinstal dalam versi yang berbeda: "
+"'{2}'."
 
 #: base/log_event.cpp:241
 #, c++-format
@@ -285,26 +303,28 @@ msgid ""
 "Packages for argument '{}' installed and available, but in a different "
 "version."
 msgstr ""
+"Paket untuk argumen '{}' telah diinstal dan tersedia, tetapi dalam versi "
+"yang berbeda."
 
 #: base/log_event.cpp:243
 #, c++-format
 msgid "Packages for argument '{}' installed, but not available."
-msgstr ""
+msgstr "Paket untuk argumen '{}' telah diinstal, tetapi tidak tersedia."
 
 #: base/log_event.cpp:252
 #, c++-format
 msgid "Package \"{}\" is already installed with reason \"{}\"."
-msgstr ""
+msgstr "Paket \"{}\" sudah terpasang dengan alasan \"{}\"."
 
 #: base/log_event.cpp:254
 #, c++-format
 msgid "Package \"{}\" is already installed."
-msgstr ""
+msgstr "Paket \"{}\" sudah terpasang."
 
 #: base/log_event.cpp:263
 #, c++-format
 msgid "Debug data written to \"{}\""
-msgstr ""
+msgstr "Data debug yang ditulis ke \"{}\""
 
 #: base/log_event.cpp:267
 #, c++-format
@@ -312,17 +332,19 @@ msgid ""
 "{0} upgrade cannot be reverted, however associated package actions will be. "
 "({1} id: '{2}') ."
 msgstr ""
+"{0} Pembaruan tidak dapat dibatalkan, namun tindakan paket yang terkait "
+"dapat dibatalkan. ({1} id: '{2}') ."
 
 #: base/log_event.cpp:273
 #, c++-format
 msgid "{} action for argument \"{}\" is not supported."
-msgstr ""
+msgstr "{} aksi untuk argumen \"{}\" tidak didukung."
 
 #. Format a leading line of the error message.
 #: base/log_event.cpp:282
 #, c++-format
 msgid "Unable to resolve argument '{}':"
-msgstr ""
+msgstr "Tidak dapat menyelesaikan argumen '{}':"
 
 #: base/log_event.cpp:286
 #, c++-format
@@ -335,23 +357,25 @@ msgid_plural ""
 "  - Argument '{}' matches {} streams ('{}') of module '{}', but none of the "
 "streams are enabled or default."
 msgstr[0] ""
-msgstr[1] ""
+"\n"
+"  - Argumen '{}' kesesuaian {} aliran ('{}') di modul '{}', namun aliran "
+"tidak diaktifkan atau menjadi default."
 
 #: base/log_event.cpp:293
 msgid "', '"
-msgstr ""
+msgstr "', '"
 
 #: base/log_event.cpp:302
 msgid "Modular dependency problems:\n"
-msgstr ""
+msgstr "Masalah ketergantungan modular:\n"
 
 #: base/log_event.cpp:309
 msgid "Modular dependency problems with the latest modules:\n"
-msgstr ""
+msgstr "Masalah ketergantungan modul dengan modul terbaru:\n"
 
 #: base/log_event.cpp:316
 msgid "Modular dependency problems with the defaults:\n"
-msgstr ""
+msgstr "Masalah ketergantungan modul dengan pengaturan default:\n"
 
 #: base/log_event.cpp:331
 #, c++-format
@@ -359,12 +383,17 @@ msgid ""
 "The operation would result in switching of module '{0}' stream '{1}' to "
 "stream '{2}'\n"
 msgstr ""
+"Operasi ini akan mengakibatkan perpindahan modul '{0}' dari aliran '{1}' ke "
+"aliran '{2}'.\n"
 
 #: base/log_event.cpp:336
 msgid ""
 "Error: It is not possible to switch enabled streams of a module unless "
 "explicitly enabled via configuration option module_stream_switch."
 msgstr ""
+"Kesalahan: Tidak mungkin untuk beralih antara aliran yang diaktifkan dari "
+"sebuah modul kecuali jika secara eksplisit diaktifkan melalui opsi "
+"konfigurasi module_stream_switch."
 
 #: base/log_event.cpp:341
 #, c++-format
@@ -372,11 +401,13 @@ msgid ""
 "Extra package '{0}' (with action '{1}') which is not present in the stored "
 "transaction was pulled into the transaction.\n"
 msgstr ""
+"Paket tambahan '{0}' (dengan tindakan '{1}') yang tidak terdapat dalam "
+"transaksi yang disimpan telah dimasukkan ke dalam transaksi.\n"
 
 #: base/log_event.cpp:347
 #, c++-format
 msgid "Cannot parse file: '{0}': {1}.\n"
-msgstr ""
+msgstr "Tidak dapat memproses berkas: '{0}': {1}.\n"
 
 #: base/log_event.cpp:354
 #, c++-format
@@ -384,11 +415,13 @@ msgid ""
 "Could not find debuginfo package for the following packages resolved from "
 "the argument '{0}': {1}"
 msgstr ""
+"Tidak dapat menemukan paket debuginfo untuk paket-paket berikut yang "
+"diselesaikan dari argumen '{0}': {1}"
 
 #: base/log_event.cpp:357 base/log_event.cpp:368
 msgctxt "String for joining NEVRAs - e.g. `foo-4-4.noarch, bar-5-5.noarch`"
 msgid ", "
-msgstr ""
+msgstr ", "
 
 #: base/log_event.cpp:364
 #, c++-format
@@ -396,122 +429,132 @@ msgid ""
 "Could not find debugsource package for the following packages resolved from "
 "the argument '{0}': {1}"
 msgstr ""
+"Tidak dapat menemukan paket debugsource untuk paket-paket berikut yang "
+"diselesaikan dari argumen '{0}': {1}"
 
 #: base/log_event.cpp:371
 #, c++-format
 msgid "Transaction merge error: '{0}'"
-msgstr ""
+msgstr "Kesalahan penggabungan transaksi: '{0}'"
 
 #: base/solver_problems.cpp:41
 #, c++-format
 msgid "{} does not belong to a distupgrade repository"
-msgstr ""
+msgstr "{} tidak termasuk dalam repositori distupgrade"
 
 #: base/solver_problems.cpp:42
 #, c++-format
 msgid "{0} from {1} has inferior architecture"
-msgstr ""
+msgstr "{0} dari {1} memiliki arsitektur yang inferior"
 
 #: base/solver_problems.cpp:43
 msgid "problem with installed package"
-msgstr ""
+msgstr "masalah dengan paket yang terinstal"
 
 #: base/solver_problems.cpp:44 base/solver_problems.cpp:80
 msgid "conflicting requests"
-msgstr ""
+msgstr "permintaan bertentangan"
 
 #: base/solver_problems.cpp:45 base/solver_problems.cpp:81
 msgid "unsupported request"
-msgstr ""
+msgstr "permintaan tidak didukung"
 
 #: base/solver_problems.cpp:46 base/solver_problems.cpp:82
 #, c++-format
 msgid "nothing provides requested {}"
-msgstr ""
+msgstr "tidak ada yang menyediakan yang diminta {}"
 
 #: base/solver_problems.cpp:47
 #, c++-format
 msgid "package {} does not exist"
-msgstr ""
+msgstr "paket {} tidak ada."
 
 #: base/solver_problems.cpp:48 base/solver_problems.cpp:84
 #, c++-format
 msgid "{} is provided by the system"
-msgstr ""
+msgstr "{} disediakan oleh sistem"
 
 #: base/solver_problems.cpp:49 base/solver_problems.cpp:85
 msgid "some dependency problem"
-msgstr ""
+msgstr "masalah ketergantungan"
 
 #: base/solver_problems.cpp:50
 #, c++-format
 msgid "cannot install the best update candidate for package {}"
-msgstr ""
+msgstr "tidak dapat menginstal kandidat pembaruan terbaik untuk paket {}"
 
 #: base/solver_problems.cpp:51 base/solver_problems.cpp:87
 msgid "cannot install the best candidate for the job"
-msgstr ""
+msgstr "tidak dapat menginstal kandidat terbaik untuk pekerjaan tersebut"
 
 #: base/solver_problems.cpp:52
 #, c++-format
 msgid "package {0} from {1} is filtered out by modular filtering"
-msgstr ""
+msgstr "paket {0} dari {1} disaring oleh penyaringan modular"
 
 #: base/solver_problems.cpp:53
 #, c++-format
 msgid "package {0} from {1} does not have a compatible architecture"
-msgstr ""
+msgstr "paket {0} dari {1} tidak memiliki arsitektur yang kompatibel"
 
 #: base/solver_problems.cpp:54
 #, c++-format
 msgid "package {0} from {1} is not installable"
-msgstr ""
+msgstr "paket {0} dari {1} tidak dapat diinstal"
 
 #: base/solver_problems.cpp:55
 #, c++-format
 msgid "package {0} from {1} is filtered out by exclude filtering"
-msgstr ""
+msgstr "paket {0} dari {1} disaring keluar oleh penyaringan pengecualian"
 
 #: base/solver_problems.cpp:56
 #, c++-format
 msgid "nothing provides {0} needed by {1} from {2}"
-msgstr ""
+msgstr "tidak ada yang menyediakan {0} yang dibutuhkan oleh {1} dari {2}"
 
 #: base/solver_problems.cpp:57
 #, c++-format
 msgid "cannot install both {0} from {1} and {2} from {3}"
-msgstr ""
+msgstr "tidak dapat menginstal {0} dari {1} dan {2} dari {3}"
 
 #: base/solver_problems.cpp:58
 #, c++-format
 msgid "package {0} from {1} conflicts with {2} provided by {3} from {4}"
 msgstr ""
+"paket {0} dari {1} bertentangan dengan {2} yang disediakan oleh {3} dari {4}"
 
 #: base/solver_problems.cpp:60
 #, c++-format
 msgid "installed package {0} conflicts with {1} provided by {2} from {3}"
 msgstr ""
+"paket yang diinstal {0} bertentangan dengan {1} yang disediakan oleh {2} "
+"dari {3}"
 
 #: base/solver_problems.cpp:61
 #, c++-format
 msgid "package {0} from {1} obsoletes {2} provided by {3} from {4}"
-msgstr ""
+msgstr "paket {0} dari {1} menggantikan {2} yang disediakan oleh {3} dari {4}"
 
 #: base/solver_problems.cpp:62
 #, c++-format
 msgid "installed package {0} obsoletes {1} provided by {2} from {3}"
 msgstr ""
+"paket yang diinstal {0} menggantikan {1} yang disediakan oleh {2} dari {3}"
 
 #: base/solver_problems.cpp:64
 #, c++-format
 msgid "package {0} from {1} implicitly obsoletes {2} provided by {3} from {4}"
 msgstr ""
+"paket {0} dari {1} secara implisit menggantikan {2} yang disediakan oleh {3} "
+"dari {4}"
 
 #: base/solver_problems.cpp:66
 #, c++-format
 msgid ""
 "package {1} from {2} requires {0}, but none of the providers can be installed"
 msgstr ""
+"paket {1} dari {2} memerlukan {0}, tetapi tidak ada penyedia yang dapat "
+"diinstal"
 
 #: base/solver_problems.cpp:68
 #, c++-format
@@ -519,191 +562,203 @@ msgid ""
 "installed package {1} requires {0}, but none of the providers can be "
 "installed"
 msgstr ""
+"paket yang diinstal {1} memerlukan {0}, tetapi tidak ada penyedia yang dapat "
+"diinstal"
 
 #: base/solver_problems.cpp:69
 #, c++-format
 msgid "package {0} from {1} conflicts with {2} provided by itself"
 msgstr ""
+"paket {0} dari {1} bertentangan dengan {2} yang disediakan oleh dirinya "
+"sendiri"
 
 #: base/solver_problems.cpp:70
 #, c++-format
 msgid "both package {0} from {1} and {3} from {4} obsolete {2}"
-msgstr ""
+msgstr "kedua paket {0} dari {1} dan {3} dari {4} telah usang {2}"
 
 #: base/solver_problems.cpp:72
 #, c++-format
 msgid ""
 "The operation would result in removing the following protected packages: {}"
 msgstr ""
+"Operasi ini akan mengakibatkan penghapusan paket-paket terlindungi berikut: "
+"{}"
 
 #: base/solver_problems.cpp:75
 #, c++-format
 msgid "The operation would result in removing of running kernel: {}"
 msgstr ""
+"Operasi ini akan mengakibatkan penghapusan kernel yang sedang berjalan: {}"
 
 #: base/solver_problems.cpp:77
 #, c++-format
 msgid "module {} does not belong to a distupgrade repository"
-msgstr ""
+msgstr "modul {} tidak termasuk dalam repositori distupgrade"
 
 #: base/solver_problems.cpp:78
 #, c++-format
 msgid "module {} has inferior architecture"
-msgstr ""
+msgstr "modul {} memiliki arsitektur yang inferior"
 
 #: base/solver_problems.cpp:79
 #, c++-format
 msgid "problem with installed module {}"
-msgstr ""
+msgstr "masalah dengan modul yang terpasang {}"
 
 #: base/solver_problems.cpp:83
 #, c++-format
 msgid "module {} does not exist"
-msgstr ""
+msgstr "modul {} tidak ada."
 
 #: base/solver_problems.cpp:86
 #, c++-format
 msgid "cannot install the best update candidate for module {}"
-msgstr ""
+msgstr "tidak dapat menginstal kandidat pembaruan terbaik untuk modul {}"
 
 #: base/solver_problems.cpp:88 base/solver_problems.cpp:91
 #, c++-format
 msgid "module {} is disabled"
-msgstr ""
+msgstr "modul {} dinonaktifkan"
 
 #: base/solver_problems.cpp:89
 #, c++-format
 msgid "module {} does not have a compatible architecture"
-msgstr ""
+msgstr "modul {} tidak memiliki arsitektur yang kompatibel"
 
 #: base/solver_problems.cpp:90
 #, c++-format
 msgid "module {} is not installable"
-msgstr ""
+msgstr "modul {} tidak dapat diinstal"
 
 #: base/solver_problems.cpp:92
 #, c++-format
 msgid "nothing provides {0} needed by module {1}"
-msgstr ""
+msgstr "tidak ada yang menyediakan {0} yang dibutuhkan oleh modul {1}"
 
 #: base/solver_problems.cpp:93
 #, c++-format
 msgid "cannot install both modules {0} and {1}"
-msgstr ""
+msgstr "tidak dapat menginstal kedua modul {0} dan {1}"
 
 #: base/solver_problems.cpp:94
 #, c++-format
 msgid "module {0} conflicts with {1} provided by {2}"
-msgstr ""
+msgstr "modul {0} bertentangan dengan {1} yang disediakan oleh {2}"
 
 #: base/solver_problems.cpp:95
 #, c++-format
 msgid "module {0} obsoletes {1} provided by {2}"
-msgstr ""
+msgstr "modul {0} menggantikan {1} yang disediakan oleh {2}"
 
 #: base/solver_problems.cpp:96
 #, c++-format
 msgid "installed module {0} obsoletes {1} provided by {2}"
-msgstr ""
+msgstr "modul yang diinstal {0} menggantikan {1} yang disediakan oleh {2}"
 
 #: base/solver_problems.cpp:97
 #, c++-format
 msgid "module {0} implicitly obsoletes {1} provided by {2}"
-msgstr ""
+msgstr "modul {0} secara implisit menggantikan {1} yang disediakan oleh {2}"
 
 #: base/solver_problems.cpp:98
 #, c++-format
 msgid "module {1} requires {0}, but none of the providers can be installed"
-msgstr ""
+msgstr "modul {1} memerlukan {0}, tetapi tidak ada penyedia yang dapat diinstal"
 
 #: base/solver_problems.cpp:99
 #, c++-format
 msgid "module {1} conflicts with {0} provided by itself"
 msgstr ""
+"modul {1} bertentangan dengan {0} yang disediakan oleh modul itu sendiri"
 
 #: base/solver_problems.cpp:100
 #, c++-format
 msgid "both module {0} and {2} obsolete {1}"
-msgstr ""
+msgstr "kedua modul {0} dan {2} sudah tidak digunakan lagi {1}"
 
 #: base/solver_problems.cpp:290
 msgid "Problem: "
-msgstr ""
+msgstr "Masalah: "
 
 #: base/solver_problems.cpp:294
 #, c++-format
 msgid "Problem {}: "
-msgstr ""
+msgstr "Masalah {}: "
 
 #: base/transaction.cpp:80
 msgid "This transaction has been already run before."
-msgstr ""
+msgstr "Transaksi ini sudah pernah dilakukan sebelumnya."
 
 #: base/transaction.cpp:81
 msgid "Cannot run transaction with resolving problems."
 msgstr ""
+"Tidak dapat menjalankan transaksi karena masalah yang sedang diselesaikan."
 
 #: base/transaction.cpp:82
 msgid "Rpm transaction check failed."
-msgstr ""
+msgstr "Pemeriksaan transaksi RPM gagal."
 
 #: base/transaction.cpp:84
 msgid ""
 "Failed to obtain rpm transaction lock. Another transaction is in progress."
 msgstr ""
+"Gagal mendapatkan kunci transaksi RPM. Transaksi lain sedang berlangsung."
 
 #: base/transaction.cpp:85
 msgid "Rpm transaction failed."
-msgstr ""
+msgstr "Transaksi RPM gagal."
 
 #: base/transaction.cpp:86
 msgid "Signature verification failed."
-msgstr ""
+msgstr "Verifikasi tanda tangan gagal."
 
 #: base/transaction.cpp:90
 msgid "The repository does not have any OpenPGP keys configured."
-msgstr ""
+msgstr "Repositori ini tidak memiliki kunci OpenPGP yang dikonfigurasi."
 
 #: base/transaction.cpp:91
 msgid "Public key is not installed."
-msgstr ""
+msgstr "Kunci publik tidak terpasang."
 
 #: base/transaction.cpp:92
 msgid "Canceled by the user."
-msgstr ""
+msgstr "Dibatalkan oleh pengguna."
 
 #: base/transaction.cpp:93
 msgid "Public key import failed."
-msgstr ""
+msgstr "Impor kunci publik gagal."
 
 #: base/transaction.cpp:980
 #, c++-format
 msgid "Invalid tsflag: {}"
-msgstr ""
+msgstr "Tsflag tidak valid: {}"
 
 #: base/transaction.cpp:1314
 #, c++-format
 msgid "Public key \"{}\" is already present, not importing."
-msgstr ""
+msgstr "Kunci publik \"{}\" sudah ada, tidak perlu diimpor."
 
 #: base/transaction.cpp:1335
 #, c++-format
 msgid "An error occurred importing key \"{}\": {}"
-msgstr ""
+msgstr "Terjadi kesalahan saat mengimpor kunci \"{}\": {}"
 
 #: base/transaction.cpp:1369
 #, c++-format
 msgid "OpenPGP check for package \"{}\" ({}) from repo \"{}\" has failed: "
 msgstr ""
+"Pemeriksaan OpenPGP untuk paket \"{}\" ({}) dari repositori \"{}\" telah "
+"gagal: "
 
 #: base/transaction.cpp:1397
 msgid "Import of the key didn't help, wrong key?"
-msgstr ""
+msgstr "Impor kunci tidak membantu, apakah kuncinya salah?"
 
 #: base/transaction.cpp:1416
 msgctxt "It is a joining character for repositories IDs"
 msgid ", "
-msgstr ""
+msgstr ", "
 
 #: base/transaction.cpp:1419
 #, c++-format
@@ -711,7 +766,7 @@ msgid "Warning: skipped OpenPGP checks for {0} package from repository: {1}"
 msgid_plural ""
 "Warning: skipped OpenPGP checks for {0} packages from repository: {1}"
 msgstr[0] ""
-msgstr[1] ""
+"Peringatan: Pemeriksaan OpenPGP dilewati untuk paket {0} dari repositori: {1}"
 
 #: base/transaction.cpp:1422
 #, c++-format
@@ -719,155 +774,159 @@ msgid "Warning: skipped OpenPGP checks for {0} package from repositories: {1}"
 msgid_plural ""
 "Warning: skipped OpenPGP checks for {0} packages from repositories: {1}"
 msgstr[0] ""
-msgstr[1] ""
+"Peringatan: Pemeriksaan OpenPGP dilewati untuk paket {0} dari repositori: {1}"
 
 #: common/exception.cpp:78
 msgid "System error"
-msgstr ""
+msgstr "Kesalahan sistem"
 
 #: common/exception.cpp:199
 msgid "General RuntimeError exception"
-msgstr ""
+msgstr "Kecelakaan RuntimeError umum"
 
 #: common/sack/query.cpp:27
 msgid "Query must contain exactly one object."
-msgstr ""
+msgstr "Kueri harus berisi tepat satu objek."
 
 #: common/xdg.cpp:43
 msgid "get_user_home_dir(): Cannot determine the user's home directory"
-msgstr ""
+msgstr "get_user_home_dir(): Tidak dapat menentukan direktori home pengguna"
 
 #: common/xdg.cpp:98
 msgid "get_user_runtime_dir(): Cannot determine the user's runtime directory"
 msgstr ""
+"get_user_runtime_dir(): Tidak dapat menentukan direktori runtime pengguna"
 
 #: comps/environment/environment.cpp:325
 msgid "failed to save xml document for comps"
-msgstr ""
+msgstr "gagal menyimpan dokumen XML untuk comps"
 
 #: comps/group/group.cpp:373
 #, c++-format
 msgid "Failed to save xml document for group \"{}\" to file \"{}\": {}"
-msgstr ""
+msgstr "Gagal menyimpan dokumen XML untuk grup \"{}\" ke berkas \"{}\": {}"
 
 #: comps/group/package.cpp:118 comps/group/package.cpp:121
 #, c++-format
 msgid "Invalid package type: {}"
-msgstr ""
+msgstr "Jenis paket tidak valid: {}"
 
 #: conf/config_main.cpp:57
 msgid "Input is empty. Must contain a value."
-msgstr ""
+msgstr "Masukan kosong. Harus berisi nilai."
 
 #: conf/config_main.cpp:63
 #, c++-format
 msgid "Input value '{}' must not be negative"
-msgstr ""
+msgstr "Nilai masukan '{}' tidak boleh negatif"
 
 #: conf/config_main.cpp:68
 #, c++-format
 msgid "Could not convert '{}' to bytes"
-msgstr ""
+msgstr "Tidak dapat mengonversi '{}' menjadi byte"
 
 #: conf/config_main.cpp:84
 #, c++-format
 msgid "Unknown unit '{}'"
-msgstr ""
+msgstr "Unit yang tidak dikenal '{}'"
 
 #: conf/config_main.cpp:281
 #, c++-format
 msgid "The throttle value {} is outside the allowed range {} ... {}"
-msgstr ""
+msgstr "Nilai throttle {} berada di luar rentang yang diizinkan {} ... {}"
 
 #: conf/config_parser.cpp:54
 #, c++-format
 msgid "Section \"{}\" not found"
-msgstr ""
+msgstr "Bagian \"{}\" tidak ditemukan"
 
 #: conf/config_parser.cpp:59
 #, c++-format
 msgid "Section \"{}\" does not contain option \"{}\""
-msgstr ""
+msgstr "Bagian \"{}\" tidak mengandung opsi \"{}\""
 
 #: conf/config_parser.cpp:96
 #, c++-format
 msgid "Configuration file \"{}\" not found"
-msgstr ""
+msgstr "Berkas konfigurasi \"{}\" tidak ditemukan"
 
 #: conf/config_parser.cpp:99
 #, c++-format
 msgid "Unable to access configuration file \"{}\""
-msgstr ""
+msgstr "Tidak dapat mengakses berkas konfigurasi \"{}\""
 
 #: conf/config_parser.cpp:102
 #, c++-format
 msgid "Error in configuration file \"{}\""
-msgstr ""
+msgstr "Kesalahan dalam berkas konfigurasi \"{}\""
 
 #: conf/option_binds.cpp:29
 #, c++-format
 msgid "Option \"{}\" not found"
-msgstr ""
+msgstr "Opsi \"{}\" tidak ditemukan"
 
 #: conf/option_binds.cpp:32
 #, c++-format
 msgid "Option \"{}\" already exists"
-msgstr ""
+msgstr "Opsi \"{}\" sudah ada"
 
 #: conf/option_bool.cpp:82
 #, c++-format
 msgid "Invalid boolean value \"{}\""
-msgstr ""
+msgstr "Nilai boolean yang tidak valid \"{}\""
 
 #: conf/option_enum.cpp:68
 #, c++-format
 msgid "Enum option value \"{}\" not allowed"
-msgstr ""
+msgstr "Nilai opsi enum \"{}\" tidak diperbolehkan"
 
 #: conf/option_number.cpp:99
 #, c++-format
 msgid "Input value {} is outside the allowed range {} ... {}"
-msgstr ""
+msgstr "Nilai masukan {} berada di luar rentang yang diizinkan {} ... {}"
 
 #: conf/option_number.cpp:112
 #, c++-format
 msgid "Invalid number option value \"{}\""
-msgstr ""
+msgstr "Nilai opsi nomor tidak valid \"{}\""
 
 #: conf/option_path.cpp:93
 #, c++-format
 msgid "Only absolute paths allowed, relative path \"{}\" detected"
-msgstr ""
+msgstr "Hanya jalur absolut yang diizinkan, jalur relatif \"{}\" terdeteksi"
 
 #: conf/option_path.cpp:98
 #, c++-format
 msgid "Path \"{}\" does not exist"
-msgstr ""
+msgstr "Jalur \"{}\" tidak ada."
 
 #: conf/option_seconds.cpp:38
 msgid "Empty time option value"
-msgstr ""
+msgstr "Nilai opsi waktu kosong"
 
 #: conf/option_seconds.cpp:50
 #, c++-format
 msgid "Invalid time option value \"{}\", number or \"never\" expected"
 msgstr ""
+"Nilai opsi waktu yang tidak valid \"{}\", diharapkan angka atau \"never\""
 
 #: conf/option_seconds.cpp:54
 #, c++-format
 msgid ""
 "Invalid time option value \"{}\", negative values except \"-1\" not allowed"
 msgstr ""
+"Nilai opsi waktu yang tidak valid \"{}\", nilai negatif kecuali \"-1\" tidak "
+"diperbolehkan"
 
 #: conf/option_seconds.cpp:59
 #, c++-format
 msgid "Unknown time format \"{}\""
-msgstr ""
+msgstr "Format waktu yang tidak dikenal \"{}\""
 
 #: conf/option_seconds.cpp:78
 #, c++-format
 msgid "Unknown time unit '{}'"
-msgstr ""
+msgstr "Satuan waktu yang tidak dikenal '{}'"
 
 #: conf/option_string.cpp:89
 #, c++-format
@@ -875,12 +934,14 @@ msgid ""
 "Input value \"{}\" not allowed, allowed values for this option are defined "
 "by regular expression \"{}\""
 msgstr ""
+"Nilai masukan \"{}\" tidak diperbolehkan. Nilai yang diperbolehkan untuk "
+"opsi ini didefinisikan oleh ekspresi reguler \"{}\"."
 
 #. TODO(jrohel): We don't know the option name at this time. Add a text name to the options
 #. or extend exception (add name) in upper layer.
 #: conf/option_string.cpp:114
 msgid "Option value is not set"
-msgstr ""
+msgstr "Nilai opsi tidak ditetapkan"
 
 #: conf/option_string_list.cpp:175
 #, c++-format
@@ -888,25 +949,27 @@ msgid ""
 "Input item value \"{}\" not allowed, allowed values for this option are "
 "defined by regular expression \"{}\""
 msgstr ""
+"Nilai item input \"{}\" tidak diperbolehkan. Nilai yang diperbolehkan untuk "
+"opsi ini didefinisikan oleh ekspresi reguler \"{}\"."
 
 #: conf/vars.cpp:313 conf/vars.cpp:353
 #, c++-format
 msgid "Variable \"{}\" is read-only"
-msgstr ""
+msgstr "Variabel \"{}\" merupakan hanya-baca"
 
 #: logger/rotating_file_logger.cpp:65
 msgid "Cannot open log file"
-msgstr ""
+msgstr "Tidak dapat membuka berkas log"
 
 #: module/module_db.cpp:76 module/module_db.cpp:85 module/module_sack.cpp:767
 #, c++-format
 msgid "No such module: {}"
-msgstr ""
+msgstr "Tidak ada modul seperti itu: {}"
 
 #: module/module_db.cpp:268
 #, c++-format
 msgid "Cannot enable multiple streams for module '{}'"
-msgstr ""
+msgstr "Tidak dapat mengaktifkan beberapa aliran untuk modul '{}'"
 
 #. TODO(pkratoch) replace with a proper and descriptive exception
 #. TODO(jmracek) else if (removalOfProtected && removalOfProtected->size()) {
@@ -917,49 +980,49 @@ msgstr ""
 #: module/module_goal_private.cpp:83 rpm/solv/goal_private.cpp:342
 #: rpm/solv/goal_private.cpp:764
 msgid "no solution possible"
-msgstr ""
+msgstr "tidak ada solusi yang mungkin"
 
 #: module/module_metadata.cpp:102
 #, c++-format
 msgid "Failed to update from string: {}"
-msgstr ""
+msgstr "Gagal memperbarui dari string: {}"
 
 #: module/module_metadata.cpp:129
 #, c++-format
 msgid "Failed to resolve module metadata: {}"
-msgstr ""
+msgstr "Gagal memproses metadata modul: {}"
 
 #: module/module_metadata.cpp:140
 #, c++-format
 msgid "Failed to upgrade defaults: {}"
-msgstr ""
+msgstr "Gagal memperbarui pengaturan default: {}"
 
 #: module/module_metadata.cpp:144
 #, c++-format
 msgid "Failed to upgrade streams: {}"
-msgstr ""
+msgstr "Gagal memperbarui aliran: {}"
 
 #: module/module_sack.cpp:93
 #, c++-format
 msgid "Failed to load module metadata for repository \"{}\": {}"
-msgstr ""
+msgstr "Gagal memuat metadata modul untuk repositori \"{}\": {}"
 
 #: module/module_sack.cpp:594
 msgid "Missing '='"
-msgstr ""
+msgstr "Tanda '=' hilang"
 
 #: module/module_sack.cpp:598 module/module_sack.cpp:606
 msgid "Missing '\"' in the value"
-msgstr ""
+msgstr "Tanda '\"' hilang dalam nilai"
 
 #: module/module_sack.cpp:602
 msgid "Missing ':' in the value"
-msgstr ""
+msgstr "Tanda ':' hilang dalam nilai"
 
 #: module/module_sack.cpp:911
 #, c++-format
 msgid "Invalid module status: {}"
-msgstr ""
+msgstr "Status modul tidak valid: {}"
 
 #: plugin/plugins.cpp:67
 #, c++-format
@@ -967,172 +1030,187 @@ msgid ""
 "Unsupported plugin API combination. API version provided by plugin \"{}\" "
 "(\"{}\") is \"{}.{}\". API version in libdnf is \"{}.{}\"."
 msgstr ""
+"Kombinasi API plugin yang tidak didukung. Versi API yang disediakan oleh "
+"plugin \"{}\" (\"{}\") adalah \"{}.{}\". Versi API di libdnf adalah \"{}.{}\""
+"."
 
 #: plugin/plugins.cpp:92
 msgid "Failed to create a libdnf plugin instance"
-msgstr ""
+msgstr "Gagal membuat instance plugin libdnf"
 
 #: plugin/plugins.cpp:146
 #, c++-format
 msgid "Cannot find plugin library \"{}\""
-msgstr ""
+msgstr "Tidak dapat menemukan perpustakaan plugin \"{}\""
 
 #: plugin/plugins.cpp:213
 #, c++-format
 msgid "Invalid option value: enabled={}"
-msgstr ""
+msgstr "Nilai opsi tidak valid: enabled={}"
 
 #: plugin/plugins.cpp:237
 msgid "Plugins::load_plugins(): config_dir_path cannot be empty"
-msgstr ""
+msgstr "Plugins::load_plugins(): config_dir_path tidak boleh kosong"
 
 #: plugin/plugins.cpp:253
 #, c++-format
 msgid "Cannot load libdnf plugin enabled from: {}"
-msgstr ""
+msgstr "Tidak dapat memuat plugin libdnf yang diaktifkan dari: {}"
 
 #: repo/config_repo.cpp:581
 msgid "get_unique_id(): Computation of SHA256 failed"
-msgstr ""
+msgstr "get_unique_id(): Perhitungan SHA256 gagal"
 
 #: repo/file_downloader.cpp:154
 msgid "Cannot download files, cacheonly option is activated."
-msgstr ""
+msgstr "Tidak dapat mengunduh berkas, opsi cacheonly telah diaktifkan."
 
 #: repo/file_downloader.cpp:216
 msgid "Failed to download files"
-msgstr ""
+msgstr "Gagal mengunduh berkas"
 
 #: repo/librepo.cpp:118
 msgid ""
 "Maximum download speed is lower than minimum, please change configuration of "
 "minrate or throttle"
 msgstr ""
+"Kecepatan unduh maksimum lebih rendah dari kecepatan minimum, silakan ubah "
+"konfigurasi minrate atau throttle"
 
 #: repo/librepo.cpp:181
 msgid "'proxy_username' is set but not 'proxy_password'"
-msgstr ""
+msgstr "'proxy_username' telah diatur tetapi 'proxy_password' belum diatur."
 
 #: repo/package_downloader.cpp:154
 #, c++-format
 msgid "Cannot download the \"{0}\" package, cacheonly option is activated."
-msgstr ""
+msgstr "Tidak dapat mengunduh paket \"{0}\", opsi cacheonly telah diaktifkan."
 
 #: repo/package_downloader.cpp:231
 msgid "Already downloaded"
-msgstr ""
+msgstr "Sudah diunduh"
 
 #: repo/package_downloader.cpp:279
 msgid "Failed to download packages"
-msgstr ""
+msgstr "Gagal mengunduh paket"
 
 #: repo/repo.cpp:61
 #, c++-format
 msgid "Failed to load RPM \"{}\": doesn't have the \".rpm\" extension"
-msgstr ""
+msgstr "Gagal memuat RPM \"{}\": tidak memiliki ekstensi \".rpm\""
 
 #: repo/repo.cpp:65
 #, c++-format
 msgid "Failed to access RPM \"{}\": {}"
-msgstr ""
+msgstr "Gagal mengakses RPM \"{}\": {}"
 
 #: repo/repo.cpp:107
 #, c++-format
 msgid "Invalid repository id \"{}\": unexpected character '{}'"
-msgstr ""
+msgstr "ID repositori tidak valid \"{}\": karakter tidak terduga '{}'"
 
 #: repo/repo.cpp:150
 #, c++-format
 msgid "Repository \"{}\" has no source (baseurl, mirrorlist or metalink) set."
 msgstr ""
+"Repositori \"{}\" tidak memiliki sumber (baseurl, mirrorlist, atau metalink) "
+"yang ditetapkan."
 
 #: repo/repo.cpp:161
 #, c++-format
 msgid "Repository \"{}\" has unsupported type \"{}\", skipping."
-msgstr ""
+msgstr "Repositori \"{}\" memiliki tipe yang tidak didukung \"{}\", dilewati."
 
 #: repo/repo.cpp:221 repo/repo.cpp:241 repo/repo_sack.cpp:368
 #, c++-format
 msgid "Failed to download metadata ({}: \"{}\") for repository \"{}\": {}"
-msgstr ""
+msgstr "Gagal mengunduh metadata ({}: \"{}\") untuk repositori \"{}\": {}"
 
 #: repo/repo.cpp:439
 msgid ""
 "Failed to load repository: \"primary\" data not present or in unsupported "
 "format"
 msgstr ""
+"Gagal memuat repositori: data \"primary\" tidak tersedia atau dalam format "
+"yang tidak didukung"
 
 #: repo/repo.cpp:505
 #, c++-format
 msgid "Failed to load comps \"{}\": doesn't have the \".xml\" extension"
-msgstr ""
+msgstr "Gagal memuat berkas \"{}\": tidak memiliki ekstensi \".xml\""
 
 #: repo/repo.cpp:512
 #, c++-format
 msgid "Failed to load xml Comps \"{}\": {}"
-msgstr ""
+msgstr "Gagal memuat XML Comps \"{}\": {}"
 
 #: repo/repo.cpp:530
 #, c++-format
 msgid "Failed to load RPM \"{}\": {}"
-msgstr ""
+msgstr "Gagal memuat RPM \"{}\": {}"
 
 #: repo/repo_cache.cpp:255
 msgid "Unable to determine id of the repository in the cache."
-msgstr ""
+msgstr "Tidak dapat menentukan ID repositori dalam cache."
 
 #: repo/repo_cache_private.hpp:59
 msgid "Empty path to the repository cache directory."
-msgstr ""
+msgstr "Jalur kosong ke direktori cache repositori."
 
 #: repo/repo_downloader.cpp:214
 #, c++-format
 msgid "Librepo error: {}"
-msgstr ""
+msgstr "Kesalahan Librepo: {}"
 
 #: repo/repo_downloader.cpp:258
 msgid "Failed to set up metadata download"
-msgstr ""
+msgstr "Gagal mengatur unduhan metadata"
 
 #: repo/repo_downloader.cpp:312 repo/repo_downloader.cpp:362
 msgid "Failed to download metadata"
-msgstr ""
+msgstr "Gagal mengunduh metadata"
 
 #: repo/repo_downloader.cpp:426
 #, c++-format
 msgid "Error checking if metalink \"{}\" is in sync for repository \"{}\""
 msgstr ""
+"Pemeriksaan kesalahan untuk memastikan apakah metalink \"{}\" sinkron dengan "
+"repositori \"{}\""
 
 #: repo/repo_downloader.cpp:446
 #, c++-format
 msgid "Error checking if repomd ({}: \"{}\") is in sync for repository \"{}\""
 msgstr ""
+"Pemeriksaan kesalahan untuk memastikan apakah repomd ({}: \"{}\") sinkron "
+"dengan repositori \"{}\""
 
 #: repo/repo_downloader.cpp:515
 #, c++-format
 msgid "Error loading local metadata for repository \"{}\""
-msgstr ""
+msgstr "Kesalahan saat memuat metadata lokal untuk repositori \"{}\""
 
 #: repo/repo_downloader.cpp:597
 #, c++-format
 msgid ""
 "No valid source (baseurl, mirrorlist or metalink) found for repository \"{}\""
 msgstr ""
+"Tidak ditemukan sumber yang valid (baseurl, mirrorlist, atau metalink) untuk "
+"repositori \"{}\"."
 
 #: repo/repo_pgp.cpp:60
 #, c++-format
 msgid "Failed to import OpenPGP keys into temporary keyring: {}"
-msgstr ""
+msgstr "Gagal mengimpor kunci OpenPGP ke dalam ring kunci sementara: {}"
 
 #: repo/repo_pgp.cpp:66 repo/repo_pgp.cpp:93
 #, c++-format
 msgid "Failed to list OpenPGP keys: {}"
-msgstr ""
+msgstr "Gagal menampilkan kunci OpenPGP: {}"
 
 #: repo/repo_pgp.cpp:141
 #, c++-format
 msgid "Failed to import OpenPGP keys: {}"
-msgstr ""
+msgstr "Gagal mengimpor kunci OpenPGP: {}"
 
 #: repo/repo_sack.cpp:159
 #, c++-format
@@ -1140,252 +1218,262 @@ msgid ""
 "Failed to create repo \"{}\": Id is present more than once in the "
 "configuration"
 msgstr ""
+"Gagal membuat repositori \"{}\": ID muncul lebih dari sekali dalam "
+"konfigurasi"
 
 #: repo/repo_sack.cpp:631
 #, c++-format
 msgid "Cache-only enabled but no cache for repository \"{}\""
-msgstr ""
+msgstr "Cache-only diaktifkan tetapi tidak ada cache untuk repositori \"{}\""
 
 #: repo/solv_repo.cpp:267
 #, c++-format
 msgid "Failed to load repomd for repo \"{}\" from \"{}\": {}."
-msgstr ""
+msgstr "Gagal memuat repomd untuk repositori \"{}\" dari \"{}\": {}."
 
 #: repo/solv_repo.cpp:275
 #, c++-format
 msgid "Failed to load primary for repo \"{}\" from \"{}\": {}."
-msgstr ""
+msgstr "Gagal memuat repositori utama \"{}\" dari \"{}\": {}."
 
 #: repo/solv_repo.cpp:323
 #, c++-format
 msgid "Unsupported extended repodata type for the system repo: \"{}\"."
 msgstr ""
+"Tipe data repositori yang tidak didukung untuk repositori sistem: \"{}\"."
 
 #: repo/solv_repo.cpp:395
 #, c++-format
 msgid "Failed to load {} extension for repo \"{}\" from \"{}\": {}"
-msgstr ""
+msgstr "Gagal memuat ekstensi {} untuk repositori \"{}\" dari \"{}\": {}"
 
 #: repo/solv_repo.cpp:431
 #, c++-format
 msgid "Failed to load system repo from root \"{}\": {}"
-msgstr ""
+msgstr "Gagal memuat repositori sistem dari direktori akar \"{}\": {}"
 
 #: repo/solv_repo.cpp:532
 #, c++-format
 msgid "Failed to load {} cache for repo \"{}\" from \"{}\": {}"
-msgstr ""
+msgstr "Gagal memuat cache {} untuk repositori \"{}\" dari \"{}\": {}"
 
 #: repo/solv_repo.cpp:586
 #, c++-format
 msgid "Failed to write primary cache for repo \"{}\" to \"{}\": {}"
-msgstr ""
+msgstr "Gagal menulis cache utama untuk repositori \"{}\" ke \"{}\": {}"
 
 #: repo/solv_repo.cpp:608
 #, c++-format
 msgid "Failed to re-load primary cache for repo \"{}\" from \"{}\": {}"
-msgstr ""
+msgstr "Gagal memuat ulang cache utama untuk repositori \"{}\" dari \"{}\": {}"
 
 #: repo/solv_repo.cpp:673
 #, c++-format
 msgid "Failed to write {} cache for repo \"{}\" to \"{}\": {}"
-msgstr ""
+msgstr "Gagal menulis cache {} untuk repositori \"{}\" ke \"{}\": {}"
 
 #: repo/solv_repo.cpp:694
 #, c++-format
 msgid "Failed to re-load {} cache for repo \"{}\" from \"{}\": {}"
-msgstr ""
+msgstr "Gagal memuat ulang cache {} untuk repositori \"{}\" dari \"{}\": {}"
 
 #: repo/temp_files_memory.cpp:52
 #, c++-format
 msgid ""
 "An error occurred when parsing the temporary files memory file at '{}': {}"
-msgstr ""
+msgstr "Terjadi kesalahan saat memproses berkas sementara di '{}': {}"
 
 #: rpm/nevra.cpp:82
 #, c++-format
 msgid "NEVRA string \"{}\" contains ':' multiple times"
-msgstr ""
+msgstr "String NEVRA \"{}\" mengandung karakter ':' beberapa kali"
 
 #: rpm/nevra.cpp:86
 #, c++-format
 msgid "Invalid character '{}' in NEVRA string \"{}\""
-msgstr ""
+msgstr "Karakter tidak valid '{}' dalam string NEVRA \"{}\""
 
 #: rpm/package.cpp:81
 msgid "Package with rpmdbid was not found"
-msgstr ""
+msgstr "Paket dengan rpmdbid tidak ditemukan"
 
 #: rpm/package.cpp:478
 msgid "<unknown>"
-msgstr ""
+msgstr "<tidak diketahui>"
 
 #: rpm/reldep.cpp:116 rpm/reldep.cpp:123
 msgid "Cannot parse a dependency string"
-msgstr ""
+msgstr "Tidak dapat mengurai string dependensi"
 
 #: rpm/rpm_signature.cpp:45
 msgid "No corresponding key was found."
-msgstr ""
+msgstr "Tidak ditemukan kunci yang sesuai."
 
 #: rpm/rpm_signature.cpp:46
 msgid "The signature is valid, but the key is not trusted."
-msgstr ""
+msgstr "Tanda tangan tersebut valid, tetapi kunci tidak dipercaya."
 
 #: rpm/rpm_signature.cpp:47
 msgid "The package is not signed."
-msgstr ""
+msgstr "Paket ini tidak ditandatangani."
 
 #: rpm/rpm_signature.cpp:48
 msgid "Problem occurred when opening the package."
-msgstr ""
+msgstr "Masalah terjadi saat membuka paket."
 
 #: rpm/rpm_signature.cpp:64
 #, c++-format
 msgid "Failed to set rpm transaction rootDir \"{}\"."
-msgstr ""
+msgstr "Gagal menetapkan rootDir transaksi rpm \"{}\"."
 
 #: rpm/rpm_signature.cpp:290
 #, c++-format
 msgid "\"{}\": key is not an armored public key."
-msgstr ""
+msgstr "\"{}\": Kunci ini bukan kunci publik yang dienkripsi."
 
 #: rpm/rpm_signature.cpp:295
 #, c++-format
 msgid "Failed to import public key \"{}\" to rpmdb: {}"
-msgstr ""
+msgstr "Gagal mengimpor kunci publik \"{}\" ke rpmdb: {}"
 
 #. TODO(jrohel): Why? Librpm does not provide this information.
 #: rpm/transaction.cpp:114
 #, c++-format
 msgid "Cannot set root directory \"{}\""
-msgstr ""
+msgstr "Tidak dapat menetapkan direktori akar \"{}\""
 
 #: rpm/transaction.cpp:125
 #, c-format
 msgid "Error %i opening rpm database"
-msgstr ""
+msgstr "Kesalahan %i saat membuka basis data RPM"
 
 #: rpm/transaction.cpp:134
 msgid "The rpmdbCookie() function did not return cookie of rpm database."
-msgstr ""
+msgstr "Fungsi rpmdbCookie() tidak mengembalikan cookie dari basis data RPM."
 
 #: rpm/transaction.cpp:199
 msgid "Failed to order the rpm transaction."
-msgstr ""
+msgstr "Gagal memesan transaksi RPM."
 
 #: rpm/transaction.cpp:235
 #, c++-format
 msgid ""
 "Failed to set scriptlet output file, cannot duplicate file descriptor: {}"
 msgstr ""
+"Gagal menetapkan berkas keluaran scriptlet, tidak dapat menduplikasi "
+"deskriptor berkas: {}"
 
 #: rpm/transaction.cpp:254
 #, c++-format
 msgid "Failed to set scriptlet output file, cannot open file \"{}\": {}"
 msgstr ""
+"Gagal menetapkan berkas output scriptlet, tidak dapat membuka berkas \"{}\": "
+"{}"
 
 #: rpm/transaction.cpp:275
 #, c++-format
 msgid "Failed to read package header, cannot open file \"{}\": {}"
-msgstr ""
+msgstr "Gagal membaca header paket, tidak dapat membuka berkas \"{}\": {}"
 
 #: rpm/transaction.cpp:292
 #, c++-format
 msgid "Failed to read package header from file \"{}\""
-msgstr ""
+msgstr "Gagal membaca header paket dari berkas \"{}\""
 
 #: rpm/transaction.cpp:305
 msgid "Cannot init rpm database iterator"
-msgstr ""
+msgstr "Tidak dapat menginisialisasi iterator basis data RPM"
 
 #: rpm/transaction.cpp:309
 msgid "Package was not found in rpm database"
-msgstr ""
+msgstr "Paket tidak ditemukan dalam basis data RPM"
 
 #. TODO(jrohel): Why? Librpm does not provide this information.
 #: rpm/transaction.cpp:325
 #, c++-format
 msgid "Cannot reinstall package \"{}\""
-msgstr ""
+msgstr "Tidak dapat menginstal ulang paket \"{}\""
 
 #. TODO(jrohel): Why? Librpm does not provide this information.
 #: rpm/transaction.cpp:343
 #, c++-format
 msgid "Cannot remove package \"{}\""
-msgstr ""
+msgstr "Tidak dapat menghapus paket \"{}\""
 
 #: rpm/transaction.cpp:362
 #, c++-format
 msgid "Cannot upgrade package \"{}\""
-msgstr ""
+msgstr "Tidak dapat meningkatkan versi paket \"{}\""
 
 #: rpm/transaction.cpp:366
 #, c++-format
 msgid "Cannot downgrade package \"{}\""
-msgstr ""
+msgstr "Tidak dapat menurunkan versi paket \"{}\""
 
 #: rpm/transaction.cpp:370
 #, c++-format
 msgid "Cannot install package \"{}\""
-msgstr ""
+msgstr "Tidak dapat menginstal paket \"{}\""
 
 #: rpm/versionlock_config.cpp:284 system/state.cpp:605
 #, c++-format
 msgid "{}"
-msgstr ""
+msgstr "{}"
 
 #. TODO(lukash) throw proper exception class
 #: solv/pool.cpp:174
 #, c++-format
 msgid "Failed to convert epoch \"{}\" to number"
-msgstr ""
+msgstr "Gagal mengonversi epoch \"{}\" menjadi angka"
 
 #: solv/solver.cpp:79
 #, c++-format
 msgid "Writing debugsolver data into \"{}\" failed: {}"
-msgstr ""
+msgstr "Gagal menulis data debugsolver ke \"{}\": {}"
 
 #: system/state.cpp:282 system/state.cpp:291
 #, c++-format
 msgid "Invalid TOML version \"{}\", \"MAJOR.MINOR\" expected"
-msgstr ""
+msgstr "Versi TOML tidak valid \"{}\", diharapkan \"MAJOR.MINOR\""
 
 #: system/state.cpp:299
 #, c++-format
 msgid "{} state for \"{}\" not found."
-msgstr ""
+msgstr "{} status untuk \"{}\" tidak ditemukan."
 
 #: system/state.cpp:303
 #, c++-format
 msgid "Loading system state TOML file {} failed (see dnf5-system-state(7)): {}"
 msgstr ""
+"Pemuatan berkas TOML status sistem {} gagal (lihat dnf5-system-state(7)): {}"
 
 #: system/state.cpp:640
 #, c++-format
 msgid "Unsupported TOML version \"{}\", maximum supported version is \"{}\""
 msgstr ""
+"Versi TOML yang tidak didukung \"{}\", versi maksimum yang didukung adalah "
+"\"{}\""
 
 #: transaction/Swdb.cpp:91
 msgid "In progress"
-msgstr ""
+msgstr "Sedang berlangsung"
 
 #: transaction/Swdb.cpp:99 transaction/Swdb.cpp:126 transaction/Swdb.cpp:136
 #: transaction/Swdb.cpp:150 transaction/Swdb.cpp:273 transaction/Swdb.cpp:281
 msgid "Not in progress"
-msgstr ""
+msgstr "Tidak sedang berlangsung"
 
 #: transaction/Swdb.cpp:158
 msgid "No transaction in progress"
-msgstr ""
+msgstr "Tidak ada transaksi yang sedang berlangsung"
 
 #: transaction/Transformer.cpp:647
 msgid "Transformer: can't open history persist dir"
-msgstr ""
+msgstr "Transformer: tidak dapat membuka direktori penyimpanan riwayat"
 
 #: transaction/Transformer.cpp:660
 msgid "Couldn't find a history database"
-msgstr ""
+msgstr "Tidak dapat menemukan basis data sejarah"
 
 #. TODO(dmach): replace with a better exception class
 #: transaction/db/comps_environment_group.cpp:100
@@ -1393,52 +1481,54 @@ msgid ""
 "Failed to insert record into table 'comps_environment_group' in history "
 "database"
 msgstr ""
+"Gagal menyisipkan catatan ke dalam tabel 'comps_environment_group' di basis "
+"data riwayat"
 
 #: transaction/db/db.cpp:71
 msgid "Unable to get 'version' from table 'config'"
-msgstr ""
+msgstr "Tidak dapat mengambil 'version' dari tabel 'config'"
 
 #. TODO(dmach): replace with a better exception class
 #: transaction/db/item.cpp:43
 msgid "Failed to insert record into table 'item' in history database"
-msgstr ""
+msgstr "Gagal menyisipkan catatan ke dalam tabel 'item' di basis data riwayat"
 
 #: transaction/offline.cpp:195
 msgid "error reading offline state file"
-msgstr ""
+msgstr "kesalahan saat membaca berkas state offline"
 
 #: transaction/offline.cpp:200
 msgid "incompatible version of state data"
-msgstr ""
+msgstr "versi data state tidak kompatibel"
 
 #: transaction/transaction.cpp:96
 #, c++-format
 msgid "Invalid transaction state: {}"
-msgstr ""
+msgstr "Status transaksi tidak valid: {}"
 
 #: transaction/transaction.cpp:279
 msgid "Transaction has already started!"
-msgstr ""
+msgstr "Transaksi telah dimulai!"
 
 #: transaction/transaction_item_action.cpp:28
 #, c++-format
 msgid "Invalid transaction item action: {}"
-msgstr ""
+msgstr "Aksi item transaksi tidak valid: {}"
 
 #: transaction/transaction_item_reason.cpp:28
 #, c++-format
 msgid "Invalid transaction item reason: {}"
-msgstr ""
+msgstr "Alasan item transaksi tidak valid: {}"
 
 #: transaction/transaction_item_state.cpp:28
 #, c++-format
 msgid "Invalid transaction item state: {}"
-msgstr ""
+msgstr "Status item transaksi tidak valid: {}"
 
 #: transaction/transaction_item_type.cpp:28
 #, c++-format
 msgid "Invalid transaction item type: {}"
-msgstr ""
+msgstr "Jenis item transaksi tidak valid: {}"
 
 #: transaction/transaction_merge.cpp:102
 #, c++-format
@@ -1446,6 +1536,8 @@ msgid ""
 "Action '{0}' '{1}' cannot be merged after it was '{2}' in preceding "
 "transactions -> setting '{0}'."
 msgstr ""
+"Aksi '{0}' '{1}' tidak dapat digabungkan setelah sebelumnya '{2}' dalam "
+"transaksi sebelumnya -> pengaturan '{0}'."
 
 #: transaction/transaction_merge.cpp:116
 #, c++-format
@@ -1453,6 +1545,8 @@ msgid ""
 "Action 'Upgrade' '{0}' cannot be merged because it is not present at that "
 "point -> setting 'Install'."
 msgstr ""
+"Aksi 'Upgrade' '{0}' tidak dapat digabungkan karena tidak tersedia pada "
+"titik tersebut -> pengaturan 'Install'."
 
 #: transaction/transaction_merge.cpp:174 transaction/transaction_merge.cpp:231
 #, c++-format
@@ -1460,6 +1554,8 @@ msgid ""
 "Action 'Reinstall' '{0}' cannot be merged because it is not present at that "
 "point -> setting 'Install'."
 msgstr ""
+"Aksi 'Reinstall' '{0}' tidak dapat digabungkan karena tidak ada pada titik "
+"tersebut -> pengaturan 'Install'."
 
 #: transaction/transaction_merge.cpp:194
 #, c++-format
@@ -1467,11 +1563,13 @@ msgid ""
 "Action '{0}' '{1}' cannot be merged after it was '{2}' in preceding "
 "transaction -> setting '{0}'."
 msgstr ""
+"Aksi '{0}' '{1}' tidak dapat digabungkan setelah aksi tersebut '{2}' dalam "
+"transaksi sebelumnya -> pengaturan '{0}'."
 
 #: transaction/transaction_merge.cpp:215
 #, c++-format
 msgid "Unexpected action encountered: '{0}' during transaction merge."
-msgstr ""
+msgstr "Tindakan tak terduga terdeteksi: '{0}' selama penggabungan transaksi."
 
 #: transaction/transaction_merge.cpp:224
 #, c++-format
@@ -1479,6 +1577,8 @@ msgid ""
 "Action '{0}' '{1}' cannot be merged because it is not present at that point "
 "-> skipping it."
 msgstr ""
+"Aksi '{0}' '{1}' tidak dapat digabungkan karena tidak ada pada titik "
+"tersebut -> melewatinya."
 
 #: transaction/transaction_merge.cpp:245
 #, c++-format
@@ -1486,6 +1586,8 @@ msgid ""
 "Action '{0}' '{1}' cannot be merged because it is not present at that point "
 "-> setting 'INSTALL'."
 msgstr ""
+"Aksi '{0}' '{1}' tidak dapat digabungkan karena tidak ada pada titik "
+"tersebut -> pengaturan 'INSTALL'."
 
 #: transaction/transaction_merge.cpp:266
 #, c++-format
@@ -1493,6 +1595,8 @@ msgid ""
 "Action '{0}' '{1}' cannot be merged because it is not present at that point "
 "(present versions are: {2}) -> skipping it."
 msgstr ""
+"Aksi '{0}' '{1}' tidak dapat digabungkan karena tidak ada pada titik "
+"tersebut (versi yang ada saat ini adalah: {2}) -> melewatkannya."
 
 #: transaction/transaction_merge.cpp:277
 #, c++-format
@@ -1500,6 +1604,8 @@ msgid ""
 "Action '{0}' '{1}' cannot be merged because it is already present at that "
 "point -> skipping it."
 msgstr ""
+"Aksi '{0}' '{1}' tidak dapat digabungkan karena sudah ada di titik tersebut -"
+"> dilewati."
 
 #: transaction/transaction_merge.cpp:294
 #, c++-format
@@ -1507,306 +1613,320 @@ msgid ""
 "Action '{0}' '{1}' cannot be merged because it is already installed in "
 "version '{2}' -> keeping the action from older transaction with '{1}'."
 msgstr ""
+"Aksi '{0}' '{1}' tidak dapat digabungkan karena sudah terpasang pada versi "
+"'{2}' -> mempertahankan aksi dari transaksi sebelumnya dengan '{1}'."
 
 #: transaction/transaction_merge.cpp:304
 #, c++-format
 msgid "Invalid action encountered: '{0}' during transaction merge."
 msgstr ""
+"Tindakan yang tidak valid terdeteksi: '{0}' selama penggabungan transaksi."
 
 #: transaction/transaction_sr.cpp:49
 msgid "Transaction replay JSON serialized transaction input is empty"
-msgstr ""
+msgstr "Transaksi replay JSON dengan input transaksi yang diserialisasi kosong"
 
 #: transaction/transaction_sr.cpp:58
 #, c++-format
 msgid "Error during transaction replay JSON parsing : {}"
-msgstr ""
+msgstr "Kesalahan saat memproses JSON selama pengulangan transaksi: {}"
 
 #: transaction/transaction_sr.cpp:68
 #, c++-format
 msgid "Unexpected version format: \"{}\", supported version is \"{}\""
 msgstr ""
+"Format versi yang tidak terduga: \"{}\", format versi yang didukung adalah "
+"\"{}\""
 
 #: transaction/transaction_sr.cpp:74
 #, c++-format
 msgid "Incompatible major version: \"{}\", supported major version is \"{}\""
 msgstr ""
+"Versi utama yang tidak kompatibel: \"{}\", versi utama yang didukung adalah "
+"\"{}\""
 
 #: transaction/transaction_sr.cpp:81
 #, c++-format
 msgid "Invalid minor version: \"{}\", number expected"
-msgstr ""
+msgstr "Versi minor tidak valid: \"{}\", nomor diharapkan"
 
 #: transaction/transaction_sr.cpp:84
 msgid "Missing key \"version\""
-msgstr ""
+msgstr "Kunci \"version\" hilang"
 
 #: transaction/transaction_sr.cpp:92
 msgid "Unexpected type of \"environments\", array expected"
-msgstr ""
+msgstr "Jenis \"lingkungan\" yang tidak terduga, diharapkan berupa array"
 
 #: transaction/transaction_sr.cpp:105
 msgid "Missing object key \"id\" in an environment"
-msgstr ""
+msgstr "Kunci objek \"id\" hilang dalam lingkungan"
 
 #: transaction/transaction_sr.cpp:110
 msgid "Missing object key \"action\" in an environment"
-msgstr ""
+msgstr "Kunci objek \"action\" hilang dalam lingkungan"
 
 #: transaction/transaction_sr.cpp:129
 msgid "Unexpected type of \"groups\", array expected"
-msgstr ""
+msgstr "Jenis \"groups\" yang tidak terduga, diharapkan array"
 
 #: transaction/transaction_sr.cpp:145
 msgid "Missing object key \"id\" in a group"
-msgstr ""
+msgstr "Kunci objek \"id\" hilang dalam grup"
 
 #: transaction/transaction_sr.cpp:150
 msgid "Missing object key \"action\" in a group"
-msgstr ""
+msgstr "Kunci objek \"action\" hilang dalam grup"
 
 #: transaction/transaction_sr.cpp:155
 msgid "Missing object key \"reason\" in a group"
-msgstr ""
+msgstr "Kunci objek \"reason\" hilang dalam grup"
 
 #: transaction/transaction_sr.cpp:186
 msgid "Unexpected type of \"rpms\", array expected"
-msgstr ""
+msgstr "Jenis yang tidak terduga dari \"rpms\", diharapkan array"
 
 #: transaction/transaction_sr.cpp:202
 #, c++-format
 msgid "Cannot parse NEVRA for rpm \"{}\""
-msgstr ""
+msgstr "Tidak dapat memproses NEVRA untuk RPM \"{}\""
 
 #: transaction/transaction_sr.cpp:210
 msgid "Either \"nevra\" or \"package_path\" object key is required in an rpm"
 msgstr ""
+"Salah satu dari kunci objek \"nevra\" atau \"package_path\" diharuskan dalam "
+"sebuah paket RPM"
 
 #: transaction/transaction_sr.cpp:215
 msgid "Missing object key \"action\" in an rpm"
-msgstr ""
+msgstr "Kunci objek \"action\" hilang dalam RPM"
 
 #: transaction/transaction_sr.cpp:220
 msgid "Missing object key \"reason\" in an rpm"
-msgstr ""
+msgstr "Kunci objek \"reason\" hilang dalam paket RPM"
 
 #: transaction/transaction_sr.cpp:227
 msgid ""
 "Missing mandatory object key \"group_id\" in an rpm with reason \"Group\" "
 "and action \"Reason Change\""
 msgstr ""
+"Kunci objek wajib \"group_id\" tidak ditemukan dalam paket RPM dengan alasan "
+"\"Group\" dan tindakan \"Alasan Perubahan\""
 
 #: utils/fs/file.cpp:86
 msgid "cannot open file"
-msgstr ""
+msgstr "tidak dapat membuka berkas"
 
 #: utils/fs/file.cpp:99
 msgid "cannot open file from fd"
-msgstr ""
+msgstr "tidak dapat membuka berkas dari fd"
 
 #: utils/fs/file.cpp:109
 msgid "cannot close file"
-msgstr ""
+msgstr "tidak dapat menutup berkas"
 
 #: utils/fs/file.cpp:139 utils/fs/file.cpp:168
 msgid "error reading file"
-msgstr ""
+msgstr "kesalahan saat membaca berkas"
 
 #: utils/fs/file.cpp:154 utils/fs/file.cpp:180
 msgid "error writing file"
-msgstr ""
+msgstr "kesalahan saat menulis berkas"
 
 #: utils/fs/file.cpp:189
 msgid "error flushing file"
-msgstr ""
+msgstr "kesalahan saat menghapus berkas"
 
 #: utils/fs/file.cpp:198
 msgid "error seeking in file"
-msgstr ""
+msgstr "mencari kesalahan dalam berkas"
 
 #: utils/fs/file.cpp:209
 msgid "error retrieving file position"
-msgstr ""
+msgstr "kesalahan saat mengambil posisi berkas"
 
 #: utils/fs/file.cpp:297
 msgid "error reading a line from file"
-msgstr ""
+msgstr "kesalahan saat membaca baris dari berkas"
 
 #: utils/fs/file.cpp:335
 msgid "error retrieving file descriptor"
-msgstr ""
+msgstr "kesalahan saat mengambil deskriptor berkas"
 
 #: utils/fs/temp.cpp:42
 msgid "cannot create temporary directory"
-msgstr ""
+msgstr "tidak dapat membuat direktori sementara"
 
 #: utils/fs/temp.cpp:89
 msgid "cannot create temporary file"
-msgstr ""
+msgstr "tidak dapat membuat berkas sementara"
 
 #: utils/fs/temp.cpp:142
 msgid "cannot close temporary file"
-msgstr ""
+msgstr "tidak dapat menutup berkas sementara"
 
 #: utils/iniparser.cpp:126
 #, c++-format
 msgid "Missing ']' on line {}"
-msgstr ""
+msgstr "Tanda kurung kurawal ']' hilang pada baris {}"
 
 #: utils/iniparser.cpp:129
 #, c++-format
 msgid "Empty section name on line {}"
-msgstr ""
+msgstr "Nama bagian kosong pada baris {}"
 
 #: utils/iniparser.cpp:137
 #, c++-format
 msgid "Text after section on line {}"
-msgstr ""
+msgstr "Teks setelah bagian pada baris {}"
 
 #: utils/iniparser.cpp:147
 #, c++-format
 msgid "Missing section header on line {}"
-msgstr ""
+msgstr "Header bagian hilang pada baris {}"
 
 #: utils/iniparser.cpp:152
 #, c++-format
 msgid "Illegal continuation line on line {}"
-msgstr ""
+msgstr "Baris lanjutan ilegal pada baris {}"
 
 #: utils/iniparser.cpp:159
 #, c++-format
 msgid "Missing option name on line {}"
-msgstr ""
+msgstr "Nama opsi yang hilang pada baris {}"
 
 #: utils/iniparser.cpp:163
 #, c++-format
 msgid "Missing '=' on line {}"
-msgstr ""
+msgstr "Tanda '=' hilang pada baris {}"
 
 #. returns localized message, problem with later translation
 #: utils/library.cpp:34
 #, c++-format
 msgid "Cannot load shared library \"{}\": {}"
-msgstr ""
+msgstr "Tidak dapat memuat perpustakaan bersama \"{}\": {}"
 
 #: utils/library.cpp:48
 #, c++-format
 msgid "Cannot obtain address of symbol \"{}\": {}"
-msgstr ""
+msgstr "Tidak dapat memperoleh alamat simbol \"{}\": {}"
 
 #: utils/locale.cpp:57
 #, c++-format
 msgid "Cannot set the locale \"{}\": {}"
-msgstr ""
+msgstr "Tidak dapat mengatur locale \"{}\": {}"
 
 #: utils/locker.cpp:45
 #, c++-format
 msgid "Failed to open lock file \"{}\""
-msgstr ""
+msgstr "Gagal membuka berkas kunci \"{}\""
 
 #: utils/locker.cpp:60
 #, c++-format
 msgid "Failed to obtain lock \"{}\""
-msgstr ""
+msgstr "Gagal mendapatkan kunci \"{}\""
 
 #: utils/locker.cpp:70
 #, c++-format
 msgid "Failed to close lock file \"{}\""
-msgstr ""
+msgstr "Gagal menutup berkas kunci \"{}\""
 
 #: utils/locker.cpp:73
 #, c++-format
 msgid "Failed to delete lock file \"{}\""
-msgstr ""
+msgstr "Gagal menghapus berkas kunci \"{}\""
 
 #: utils/sqlite3/sqlite3.cpp:29
 #, c++-format
 msgid "SQL statement compilation failed: \"{}\""
-msgstr ""
+msgstr "Kompilasi pernyataan SQL gagal: \"{}\""
 
 #: utils/sqlite3/sqlite3.cpp:31
 #, c++-format
 msgid "Binding integer value to SQL statement failed: \"{}\""
-msgstr ""
+msgstr "Pengikatan nilai integer ke pernyataan SQL gagal: \"{}\""
 
 #: utils/sqlite3/sqlite3.cpp:33
 #, c++-format
 msgid "Binding integer64 value to SQL statement failed: \"{}\""
-msgstr ""
+msgstr "Pengikatan nilai integer64 ke pernyataan SQL gagal: \"{}\""
 
 #: utils/sqlite3/sqlite3.cpp:35
 #, c++-format
 msgid "Binding unsigned integer32 value to SQL statement failed: \"{}\""
 msgstr ""
+"Pengikatan nilai integer32 yang tidak ditandatangani ke pernyataan SQL gagal:"
+" \"{}\""
 
 #: utils/sqlite3/sqlite3.cpp:37
 #, c++-format
 msgid "Binding double value to SQL statement failed: \"{}\""
-msgstr ""
+msgstr "Pengikatan nilai ganda ke pernyataan SQL gagal: \"{}\""
 
 #: utils/sqlite3/sqlite3.cpp:39
 #, c++-format
 msgid "Binding bool value to SQL statement failed: \"{}\""
-msgstr ""
+msgstr "Pengikatan nilai boolean ke pernyataan SQL gagal: \"{}\""
 
 #: utils/sqlite3/sqlite3.cpp:40
 #, c++-format
 msgid "Binding text to SQL statement failed: \"{}\""
-msgstr ""
+msgstr "Pengikatan teks ke pernyataan SQL gagal: \"{}\""
 
 #: utils/sqlite3/sqlite3.cpp:41
 #, c++-format
 msgid "Binding blob to SQL statement failed: \"{}\""
-msgstr ""
+msgstr "Pengikatan blob ke pernyataan SQL gagal: \"{}\""
 
 #: utils/sqlite3/sqlite3.cpp:42
 #, c++-format
 msgid "SQL statement evaluation failed: \"{}\""
-msgstr ""
+msgstr "Evaluasi pernyataan SQL gagal: \"{}\""
 
 #: utils/sqlite3/sqlite3.cpp:44
 msgid "Insufficient memory or result exceed maximum SQLite3 string length"
 msgstr ""
+"Memori tidak mencukupi atau hasil melebihi panjang string maksimum SQLite3"
 
 #: utils/sqlite3/sqlite3.cpp:46
 #, c++-format
 msgid "Column \"{}\" not found"
-msgstr ""
+msgstr "Kolom \"{}\" tidak ditemukan"
 
 #: utils/sqlite3/sqlite3.cpp:48
 #, c++-format
 msgid "SQL statement execution failed: \"{}\""
-msgstr ""
+msgstr "Eksekusi pernyataan SQL gagal: \"{}\""
 
 #: utils/sqlite3/sqlite3.cpp:68
 #, c++-format
 msgid "Failed to open database \"{}\""
-msgstr ""
+msgstr "Gagal membuka database \"{}\""
 
 #: utils/sqlite3/sqlite3.cpp:105
 #, c++-format
 msgid "Failed to close database \"{}\""
-msgstr ""
+msgstr "Gagal menutup database \"{}\""
 
 #: utils/sqlite3/sqlite3.cpp:117 utils/sqlite3/sqlite3.cpp:143
 #, c++-format
 msgid "Failed to open backup database \"{}\""
-msgstr ""
+msgstr "Gagal membuka basis data cadangan \"{}\""
 
 #: utils/sqlite3/sqlite3.cpp:132
 #, c++-format
 msgid "Failed to backup database \"{}\" into \"{}\""
-msgstr ""
+msgstr "Gagal melakukan cadangan basis data \"{}\" ke \"{}\""
 
 #: utils/sqlite3/sqlite3.cpp:158
 #, c++-format
 msgid "Failed to restore database \"{}\""
-msgstr ""
+msgstr "Gagal memulihkan database \"{}\""
 
 #: utils/system.cpp:34
 msgid "failed to read rpm config files"
-msgstr ""
+msgstr "gagal membaca berkas konfigurasi RPM"
 
 #: utils/system.cpp:52
 msgid "Failed to execute uname()"
-msgstr ""
+msgstr "Gagal menjalankan fungsi uname()"
