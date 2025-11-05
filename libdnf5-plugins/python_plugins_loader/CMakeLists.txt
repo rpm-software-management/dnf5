@@ -15,6 +15,13 @@ add_custom_target(swigpyrun-header
     COMMENT "Generating SWIG Python runtime header"
 )
 
+# The generated SWIG Python runtime header: swigpyrun.h contains a problematic section on
+# certain architectures (i686):
+# error: comparison of integer expressions of different signedness: ‘int’ and ‘unsigned int’
+# 658 |     for (cast = head; (cast - head) <= head->value; cast++) {
+# Since we don't control that code don't treat it as an error.
+add_compile_options(-Wno-error=sign-compare)
+
 add_library(python_plugins_loader MODULE python_plugins_loader.cpp)
 
 # python_plugins_loader requires swigpyrun.h so lets generate it
