@@ -101,7 +101,9 @@ public:
     // @replaces libdnf:conf/OptionStringList.hpp:method:OptionStringList.fromString(const std::string & value)
     ValueType from_string(std::string value) const;
 
-    /// Converts input value to the string.
+    /// Converts input container of string items to a single string.
+    /// Items are joined using the first delimiter character. Backslashes and delimiter characters
+    /// within items are escaped with a backslash.
     // @replaces libdnf:conf/OptionStringList.hpp:method:OptionStringList.toString(const ValueType & value)
     std::string to_string(const ValueType & value) const;
 
