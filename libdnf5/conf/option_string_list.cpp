@@ -297,17 +297,28 @@ void OptionStringContainer<T, IsAppend>::add_item(Priority priority, const std::
 
 template <typename T, bool IsAppend>
 std::string OptionStringContainer<T, IsAppend>::to_string(const ValueType & value) const {
-    std::ostringstream oss;
+    std::string result;
+
+    const std::string_view delimiters{get_delimiters()};
+
     bool next{false};
-    for (auto & val : value) {
+    for (auto & item : value) {
         if (next) {
-            oss << ", ";
+            if (!delimiters.empty()) {
+                result += delimiters[0];
+            }
         } else {
             next = true;
         }
-        oss << val;
+        for (const auto ch : item) {
+            if (ch == '\\' || delimiters.find(ch) != delimiters.npos) {
+                result += '\\';
+            }
+            result += ch;
+        }
     }
-    return oss.str();
+
+    return result;
 }
 
 template <typename T, bool IsAppend>
@@ -332,7 +343,7 @@ inline std::string OptionStringContainer<T, IsAppend>::get_value_string() const 
 
 template <typename T, bool IsAppend>
 inline const char * OptionStringContainer<T, IsAppend>::get_default_delimiters() noexcept {
-    return " ,\n";
+    return ", \n";
 }
 
 template <typename T, bool IsAppend>
