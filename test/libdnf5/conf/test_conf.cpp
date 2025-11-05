@@ -100,11 +100,11 @@ void ConfTest::test_config_load_from_config() {
     CPPUNIT_ASSERT_EQUAL(libdnf5::Option::Priority::RUNTIME, config_copy.get_assumeyes_option().get_priority());
     CPPUNIT_ASSERT_EQUAL(true, config_copy.get_assumeyes_option().get_value());
 
-    CPPUNIT_ASSERT_EQUAL(0ul, config_copy.get_excludepkgs_option().get_value().size());
-    CPPUNIT_ASSERT_EQUAL(0ul, config.get_excludepkgs_option().get_value().size());
+    CPPUNIT_ASSERT_EQUAL(static_cast<std::size_t>(0), config_copy.get_excludepkgs_option().get_value().size());
+    CPPUNIT_ASSERT_EQUAL(static_cast<std::size_t>(0), config.get_excludepkgs_option().get_value().size());
 
     config_copy.get_excludepkgs_option().add_item(libdnf5::Option::Priority::RUNTIME, "abc");
 
-    CPPUNIT_ASSERT_EQUAL(1ul, config_copy.get_excludepkgs_option().get_value().size());
-    CPPUNIT_ASSERT_EQUAL(0ul, config.get_excludepkgs_option().get_value().size());
+    CPPUNIT_ASSERT_EQUAL(static_cast<std::size_t>(1), config_copy.get_excludepkgs_option().get_value().size());
+    CPPUNIT_ASSERT_EQUAL(static_cast<std::size_t>(0), config.get_excludepkgs_option().get_value().size());
 }
