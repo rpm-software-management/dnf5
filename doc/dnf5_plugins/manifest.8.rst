@@ -91,6 +91,11 @@ Options
     Consider currently installed system packages for dependency resolution
     and exclude them from the resulting manifest file.
 
+``--use-host-repos``
+    In addition to the repositories defined in the input file, load
+    repositories from host configuration and use them for dependency
+    resolution. Only applies to the ``resolve`` command.
+
 ``--arch``
     Specify a comma-separated list of architectures to work with.
     By default, only packages corresponding to the current system architecture are processed.
