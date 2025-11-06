@@ -1334,6 +1334,9 @@ Types of Options
 
 ``list``
     String representing one or more strings separated by space or comma characters.
+    The backslash ``'\'`` can be used to escape any character, allowing it to be included literally in the individual strings.
+
+    Example: ``'item1,item2\,with\,commas,item3\ with\ spaces item4'``
 
 .. _storage_size-label:
 
