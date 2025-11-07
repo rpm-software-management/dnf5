@@ -1,3 +1,7 @@
+# set gettext domain for translations
+set(GETTEXT_DOMAIN dnf5-plugin-obs)
+add_definitions(-DGETTEXT_DOMAIN=\"${GETTEXT_DOMAIN}\")
+
 file(GLOB OBS_SOURCES *.cpp)
 add_library(obs_cmd_plugin MODULE ${OBS_SOURCES})
 
@@ -12,3 +16,5 @@ target_link_libraries(obs_cmd_plugin PRIVATE libdnf5 libdnf5-cli)
 target_link_libraries(obs_cmd_plugin PRIVATE dnf5)
 
 install(TARGETS obs_cmd_plugin LIBRARY DESTINATION ${CMAKE_INSTALL_FULL_LIBDIR}/dnf5/plugins/)
+
+add_subdirectory(po)
