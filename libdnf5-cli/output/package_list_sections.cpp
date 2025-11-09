@@ -32,7 +32,7 @@
 namespace libdnf5::cli::output {
 
 
-PackageListSections::PackageListSections() : p_impl{new Impl} {}
+PackageListSections::PackageListSections() : p_impl(std::make_unique<Impl>()) {}
 
 
 PackageListSections::~PackageListSections() = default;
