@@ -1474,25 +1474,25 @@ This example shows the order in which override files are processed.
 
 Files with user repos overrides:
 
-- /etc/dnf/repos.overide.d/20-user-overrides.repo
-- /etc/dnf/repos.overide.d/60-something2.repo
-- /etc/dnf/repos.overide.d/80-user-overrides.repo
-- /etc/dnf/repos.overide.d/99-config-manager.repo
+- /etc/dnf/repos.override.d/20-user-overrides.repo
+- /etc/dnf/repos.override.d/60-something2.repo
+- /etc/dnf/repos.override.d/80-user-overrides.repo
+- /etc/dnf/repos.override.d/99-config-manager.repo
 
 Files with distribution repos overrides:
 
-- /usr/share/dnf5/repos.overide.d/50-something2.repo
-- /usr/share/dnf5/repos.overide.d/60-something2.repo
-- /usr/share/dnf5/repos.overide.d/90-something2.repo
+- /usr/share/dnf5/repos.override.d/50-something2.repo
+- /usr/share/dnf5/repos.override.d/60-something2.repo
+- /usr/share/dnf5/repos.override.d/90-something2.repo
 
 Resulting file processing order:
 
-1. /etc/dnf/repos.overide.d/20-user-overrides.repo
-2. /usr/share/dnf5/repos.overide.d/50-something2.repo
-3. /etc/dnf/repos.overide.d/60-something2.repo
-4. /etc/dnf/repos.overide.d/80-user-overrides.repo
-5. /usr/share/dnf5/repos.overide.d/90-something2.repo
-6. /etc/dnf/repos.overide.d/99-config-manager.repo
+1. /etc/dnf/repos.override.d/20-user-overrides.repo
+2. /usr/share/dnf5/repos.override.d/50-something2.repo
+3. /etc/dnf/repos.override.d/60-something2.repo
+4. /etc/dnf/repos.override.d/80-user-overrides.repo
+5. /usr/share/dnf5/repos.override.d/90-something2.repo
+6. /etc/dnf/repos.override.d/99-config-manager.repo
 
 
 .. _repo_files_and_directories-label:
