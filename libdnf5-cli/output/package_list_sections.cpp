@@ -29,6 +29,26 @@
 
 #include <algorithm>
 
+namespace {
+
+template <class Compare>
+std::vector<libdnf5::rpm::Package> to_sorted_vector(const libdnf5::rpm::PackageSet & pkg_set, Compare cmp) {
+    std::vector<libdnf5::rpm::Package> packages;
+    for (const auto & pkg : pkg_set) {
+        // [FIXME](mfocko) Does this ‹std::move› actually move, since ‹pkg› is a const-ref?
+        packages.emplace_back(std::move(pkg));
+    }
+
+    std::sort(packages.begin(), packages.end(), cmp);
+    return packages;
+}
+
+std::vector<libdnf5::rpm::Package> to_sorted_vector(const libdnf5::rpm::PackageSet & pkg_set) {
+    return to_sorted_vector(pkg_set, libdnf5::rpm::cmp_nevra<libdnf5::rpm::Package>);
+}
+
+}  // namespace
+
 namespace libdnf5::cli::output {
 
 
@@ -59,16 +79,11 @@ void PackageListSections::print(const std::unique_ptr<PkgColorizer> & colorizer)
             continue;
         }
 
-        // sort the packages in section according to NEVRA
-        std::vector<libdnf5::rpm::Package> packages;
-        for (const auto & pkg : pkg_set) {
-            packages.emplace_back(std::move(pkg));
-        }
-        std::sort(packages.begin(), packages.end(), libdnf5::rpm::cmp_nevra<libdnf5::rpm::Package>);
-
         struct libscols_line * first_line = nullptr;
         struct libscols_line * last_line = nullptr;
-        for (const auto & pkg : packages) {
+
+        // iterate through the packages in section ordered by NEVRA
+        for (const auto & pkg : to_sorted_vector(pkg_set)) {
             struct libscols_line * ln = scols_table_new_line(table, NULL);
             if (first_line == nullptr) {
                 first_line = ln;
