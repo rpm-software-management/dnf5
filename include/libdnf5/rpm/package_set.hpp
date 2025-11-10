@@ -153,6 +153,17 @@ public:
 
     void swap(PackageSet & other) noexcept;
 
+    /// @return An `std::vector` of packages sorted by the given comparator.
+    ///
+    /// @param cmp Comparator used for sorting.
+    /// @since 5.0 <-- [TODO] What goes here??? Do I guess?
+    template <class Compare>
+    std::vector<Package> to_sorted_vector(Compare cmp) const;
+
+    /// @return An `std::vector` of packages sorted by NEVRA.
+    /// @since 5.0 <-- [TODO] same as above
+    std::vector<Package> to_sorted_vector() const;
+
 private:
     friend PackageSetIterator;
     friend class PackageQuery;
