@@ -121,5 +121,14 @@ BaseWeakPtr PackageSet::get_base() const {
     return p_impl->base;
 }
 
+std::vector<Package> PackageSet::to_sorted_vector() const {
+    std::vector<Package> packages;
+    for (const auto & pkg : *this) {
+        packages.emplace_back(std::move(pkg));
+    }
+
+    std::sort(packages.begin(), packages.end(), cmp_nevra<Package>);
+    return packages;
+}
 
 }  // namespace libdnf5::rpm

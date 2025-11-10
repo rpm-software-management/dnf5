@@ -39,14 +39,6 @@ PackageInfoSections::~PackageInfoSections() = default;
 void PackageInfoSections::print(const std::unique_ptr<PkgColorizer> & colorizer) {
     bool separator_needed = false;
     for (const auto & [heading, pkg_set, obsoletes] : p_impl->sections) {
-        // sort the packages in section according to NEVRA
-        std::vector<libdnf5::rpm::Package> packages;
-        for (const auto & pkg : pkg_set) {
-            packages.emplace_back(std::move(pkg));
-        }
-        std::sort(packages.begin(), packages.end(), libdnf5::rpm::cmp_nevra<libdnf5::rpm::Package>);
-
-
         if (!heading.empty()) {
             if (separator_needed) {
                 std::cout << std::endl;
@@ -55,7 +47,8 @@ void PackageInfoSections::print(const std::unique_ptr<PkgColorizer> & colorizer)
             separator_needed = false;
         }
 
-        for (auto package : packages) {
+        // iterate through the packages in section according to NEVRA
+        for (auto && package : pkg_set.to_sorted_vector()) {
             if (separator_needed) {
                 std::cout << std::endl;
             }

@@ -153,6 +153,10 @@ public:
 
     void swap(PackageSet & other) noexcept;
 
+    /// @return An `std::vector` of packages sorted by NEVRA.
+    /// @since 5.3.1.0
+    std::vector<Package> to_sorted_vector() const;
+
 private:
     friend PackageSetIterator;
     friend class PackageQuery;
