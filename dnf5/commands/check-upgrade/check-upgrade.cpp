@@ -88,6 +88,8 @@ void CheckUpgradeCommand::set_argument_parser() {
     advisory_bugfix = std::make_unique<BugfixOption>(*this);
     advisory_enhancement = std::make_unique<EnhancementOption>(*this);
     advisory_newpackage = std::make_unique<NewpackageOption>(*this);
+
+    create_json_option(*this);
 }
 
 void CheckUpgradeCommand::configure() {
@@ -208,6 +210,11 @@ void CheckUpgradeCommand::run() {
     bool package_matched = false;
     package_matched |= sections->add_section("", upgrades_query);
     package_matched |= sections->add_section("Obsoleting packages", obsoletes_query, obsoletes);
+
+    if (ctx.get_json_output_requested()) {
+        sections->print_json();
+        return;
+    }
 
     if (package_matched) {
         // If any upgrades were found, print a table of them, and optionally print changelogs. Return exit code 100.

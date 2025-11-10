@@ -67,6 +67,9 @@ Options
     | newpackage. In case that any option limiting advisories is used it reports the lowest versions of packages
     | that fix advisories matching selected advisory properties"
 
+``--json``
+    | Request JSON output format.
+
 
 Examples
 ========
@@ -76,6 +79,23 @@ Examples
 
 ``dnf5 check-upgrade --changelogs``
     | Print changelogs for all packages with pending updates.
+
+
+JSON Output
+===========
+
+* ``dnf5 check-upgrade --json``
+
+The command returns a JSON object with the following structure:
+
+- keys represent a section of the “pretty” CLI output
+- values represent the packages in that section as an array of objects with the following structure:
+    - ``name`` (string): package name
+    - ``arch`` (string): package architecture
+    - ``evr`` (string): available update version
+    - ``repository`` (string): repository ID from which the update is available
+    - ``obsoletes`` (array): (only for the “Obsoleting packages” section) list of the packages that
+        obsolete this package (they have the same structure as above, omitting ``obsoletes``)
 
 
 See Also

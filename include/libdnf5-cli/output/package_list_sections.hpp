@@ -45,6 +45,9 @@ public:
     /// @param colorizer Optional class to select color for packages in output
     virtual void print(const std::unique_ptr<PkgColorizer> & colorizer = nullptr);
 
+    /// Print the package list in JSON format
+    virtual void print_json();
+
     /// Adds a new section to the smartcols table
     /// @param heading Header of the section
     /// @param pkg_set List of packages to be printed in this section
