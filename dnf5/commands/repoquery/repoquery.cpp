@@ -842,16 +842,21 @@ void RepoqueryCommand::run() {
 
     if (srpm->get_value()) {
         libdnf5::rpm::PackageQuery srpms(ctx.get_base(), libdnf5::sack::ExcludeFlags::APPLY_EXCLUDES, true);
-        auto only_src_query = result_query;
+
+        libdnf5::rpm::PackageQuery only_src_query(ctx.get_base());
         only_src_query.filter_arch(std::vector<std::string>{"src", "nosrc"});
+
         for (const auto & pkg : result_query) {
-            if (!pkg.get_sourcerpm().empty()) {
-                auto tmp_q = only_src_query;
-                tmp_q.filter_name({pkg.get_source_name()});
-                tmp_q.filter_evr({pkg.get_evr()});
-                srpms |= tmp_q;
+            if (pkg.get_sourcerpm().empty()) {
+                continue;
             }
+
+            auto tmp_q = only_src_query;
+            tmp_q.filter_name({pkg.get_source_name()});
+            tmp_q.filter_evr({pkg.get_evr()});
+            srpms |= tmp_q;
         }
+
         result_query = srpms;
     }
 
