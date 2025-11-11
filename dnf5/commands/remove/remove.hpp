@@ -35,10 +35,15 @@ public:
     void set_argument_parser() override;
     void configure() override;
     void run() override;
+    void goal_resolved() override;
 
 private:
     std::vector<std::string> pkg_specs;
     std::vector<std::string> installed_from_repos;
+    libdnf5::OptionBool * oldinstallonly{nullptr};
+    libdnf5::OptionNumber<std::int32_t> * oldinstallonly_limit{nullptr};
+    bool running_kernel_skipped{false};
+    std::string running_kernel_nevra;
 };
 
 }  // namespace dnf5

@@ -29,6 +29,8 @@ Synopsis
 
 ``dnf5 remove [options] <package-spec-NF>|@<group-spec>|@<environment-spec>...``
 
+``dnf5 remove --oldinstallonly [--limit=<LIMIT>] [<package-spec-NF>...]``
+
 
 Description
 ===========
@@ -39,6 +41,11 @@ environments from the system.
 If you want to keep the dependencies that were installed together with the given package,
 set the ``clean_requirements_on_remove`` configuration option to ``False``.
 
+When the ``--oldinstallonly`` option is used, the command removes old installonly packages
+(e.g. kernels) that exceed the configured ``installonly_limit``. The currently running kernel
+is never removed. If package specs are provided, only matching installonly packages are
+considered for removal.
+
 
 Options
 =======
@@ -48,6 +55,15 @@ Options
 ``--no-autoremove``
     | Disable removal of dependencies that are no longer used.
 
+``--oldinstallonly``
+    | Remove old installonly packages that exceed the ``installonly_limit`` configuration value.
+    | When used without package specs, all installonly package types are considered.
+    | The currently running kernel is automatically skipped.
+
+``--limit=<LIMIT>``
+    | Override the ``installonly_limit`` configuration value. Must be greater than or equal to 1
+      to keep at least the newest installed version. Can only be used with ``--oldinstallonly``.
+
 .. include:: ../_shared/options/transaction.rst
 
 
@@ -56,6 +72,15 @@ Examples
 
 ``dnf5 remove tito``
     | Remove the ``tito`` package.
+
+``dnf5 remove --oldinstallonly``
+    | Remove all old installonly packages exceeding the configured ``installonly_limit``.
+
+``dnf5 remove --oldinstallonly kernel``
+    | Remove old kernel packages exceeding the configured ``installonly_limit``.
+
+``dnf5 remove --oldinstallonly --limit=2``
+    | Remove old installonly packages, keeping only the 2 newest versions of each.
 
 
 See Also
