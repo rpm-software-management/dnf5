@@ -26,6 +26,9 @@
 
 namespace libdnf5::utils {
 
+enum class LIBDNF_API LockAccessType { READ, WRITE };
+enum class LIBDNF_API LockBlockingType { NON_BLOCKING, BLOCKING };
+
 /// Object for implementing a simple file mutex mechanism
 /// or checking read/write access on a given path.
 class LIBDNF_API Locker {
@@ -33,6 +36,11 @@ public:
     /// Create a Locker object at a given path
     explicit Locker(const std::string & path);
     ~Locker();
+
+    /// @brief Acquire a read or write lock on a given file path, either blocking or non-blocking.
+    /// @return True if lock acquisition was successful, otherwise false
+    /// @throws libdnf5::SystemError if an unexpected error occurs when checking the lock state, like insufficient privileges
+    bool lock(LockAccessType access, LockBlockingType blocking);
 
     /// @brief Try to acquire read lock on a given file path
     /// @return True if lock acquisition was successful, otherwise false
@@ -44,22 +52,11 @@ public:
     /// @throws libdnf5::SystemError if an unexpected error occurs when checking the lock state, like insufficient privileges
     bool write_lock();
 
-    /// @brief Block until read lock is acquired on a given file path
-    /// @throws libdnf5::SystemError if an unexpected error occurs when checking the lock state, like insufficient privileges
-    void read_lock_blocking();
-
-    /// @brief Block until write lock is acquired on a given file path
-    /// @throws libdnf5::SystemError if an unexpected error occurs when checking the lock state, like insufficient privileges
-    void write_lock_blocking();
-
     /// @brief Unlock the existing lock and remove the underlying lock file
     /// @throws libdnf5::SystemError if an unexpected error occurs when unlocking
     void unlock();
 
 private:
-    LIBDNF_LOCAL bool lock(short int type);
-    LIBDNF_LOCAL void lock_blocking(short int type);
-
     std::string path;
     int lock_fd{-1};
 };

@@ -32,25 +32,38 @@ namespace libdnf5::utils {
 Locker::Locker(const std::string & path) : path(path) {};
 
 bool Locker::read_lock() {
-    return lock(F_RDLCK);
+    return lock(LockAccessType::READ, LockBlockingType::NON_BLOCKING);
 }
 
 bool Locker::write_lock() {
-    return lock(F_WRLCK);
+    return lock(LockAccessType::WRITE, LockBlockingType::NON_BLOCKING);
 }
 
-void Locker::read_lock_blocking() {
-    lock_blocking(F_RDLCK);
-}
+bool Locker::lock(LockAccessType access, LockBlockingType blocking) {
+    int fcntl_flags = 0;
+    short type = 0;
+    switch (access) {
+        case LockAccessType::READ: {
+            type = F_RDLCK;
+        } break;
+        case LockAccessType::WRITE: {
+            type = F_WRLCK;
+        } break;
+    }
+    switch (blocking) {
+        case LockBlockingType::BLOCKING: {
+            fcntl_flags |= F_SETLKW;
+        } break;
+        case LockBlockingType::NON_BLOCKING: {
+            fcntl_flags |= F_SETLK;
+        } break;
+    }
 
-void Locker::write_lock_blocking() {
-    lock_blocking(F_WRLCK);
-}
-
-bool Locker::lock(short int type) {
-    lock_fd = open(path.c_str(), O_CREAT | O_RDWR | O_CLOEXEC, 0660);
     if (lock_fd == -1) {
-        throw SystemError(errno, M_("Failed to open lock file \"{}\""), path);
+        lock_fd = open(path.c_str(), O_CREAT | O_RDWR | O_CLOEXEC, 0660);
+        if (lock_fd == -1) {
+            throw SystemError(errno, M_("Failed to open lock file \"{}\""), path);
+        }
     }
 
     struct flock fl;
@@ -60,7 +73,7 @@ bool Locker::lock(short int type) {
     fl.l_start = 0;
     fl.l_len = 0;
     fl.l_pid = 0;
-    auto rc = fcntl(lock_fd, F_SETLK, &fl);
+    auto rc = fcntl(lock_fd, fcntl_flags, &fl);
     if (rc == -1) {
         if (errno == EACCES || errno == EAGAIN) {
             return false;
@@ -70,27 +83,6 @@ bool Locker::lock(short int type) {
     }
 
     return true;
-}
-
-void Locker::lock_blocking(short int type) {
-    lock_fd = open(path.c_str(), O_CREAT | O_RDWR | O_CLOEXEC, 0660);
-    if (lock_fd == -1) {
-        throw SystemError(errno, M_("Failed to open lock file \"{}\""), path);
-    }
-
-    struct flock fl;
-    memset(&fl, 0, sizeof(fl));
-    fl.l_type = type;
-    fl.l_whence = SEEK_SET;
-    fl.l_start = 0;
-    fl.l_len = 0;
-    fl.l_pid = 0;
-
-    auto rc = fcntl(lock_fd, F_SETLKW, &fl);
-
-    if (rc == -1) {
-        throw SystemError(errno, M_("Failed to obtain lock \"{}\""), path);
-    }
 }
 
 void Locker::unlock() {
