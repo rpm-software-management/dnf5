@@ -65,6 +65,42 @@ Once you have a contribution ready, complete the following steps to submit the c
    2. Review the PR again.
 3. Merge the PR.
 
+## AI-assisted contributions policy
+
+The following policy is adapted from [the Fedora Council AI-Assisted Contributions Policy](https://docs.fedoraproject.org/en-US/council/policy/ai-contribution-policy/), which was originally authored by Jason Brooks, the Fedora Council, and the Fedora community.
+
+You **MAY** use AI assistance for contributing to this project, as long as you follow the principles described below.
+
+1. **Accountability**:
+
+   You **MUST** take the responsibility for your contribution.
+
+   Contributing to this project means vouching for the quality, license compliance, and utility of your submission.
+
+   All contributions, whether from a human author or assisted by large language models (LLMs) or other generative AI tools, must meet our standards as described in this CONTRIBUTING document.
+
+   The contributor is always the author and is fully accountable for the entirety of these contributions.
+
+2. **Transparency**:
+
+   You **MUST** disclose the use of AI tools when the significant part of the contribution is taken from a tool without changes. You **MUST** use an `Assisted-by: <name of AI tool>` line at the end of your git commit messages to do so, for example:
+
+     * `Assisted-by: generic LLM chatbot`
+
+     * `Assisted-by: ChatGPTv5`
+
+   You **SHOULD** disclose the other uses of AI tools, where it might be useful.
+
+   Routine use of assistive tools for correcting grammar and spelling, or for clarifying language, does not require disclosure.
+
+3. **Contribution & Community Evaluation**:
+
+   AI tools may be used to assist human reviewers by providing analysis and suggestions.
+
+   You **MUST NOT** use AI as the sole or final arbiter in making a substantive or subjective judgment on a contribution.
+
+   The final accountability for accepting a contribution always rests with the human contributor who authorizes the action.
+
 ## Setting up a development environment
 
 To setup a development environment, complete the following steps:
@@ -177,3 +213,5 @@ before you submit your code:
   As part of pre-commit checks, we perform checks such as trailing whitespaces, end of file fixes, clang-format,
   and rpmlint checks. For more information,
   see [.pre-commit-config.yml](https://github.com/rpm-software-management/dnf5/blob/main/.pre-commit-config.yaml).
+
+* AI-assisted commits must be labeled according to the above AI-assisted contributions policy.
