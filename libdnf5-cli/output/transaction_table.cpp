@@ -369,14 +369,20 @@ TransactionTable::Impl::Impl(ITransaction & transaction) {
         }
         for (auto & replaced : tspkg->get_replaces()) {
             // highlight incoming packages with epoch/version change
-            if (tspkg->get_package()->get_epoch() != replaced->get_epoch() ||
-                tspkg->get_package()->get_version() != replaced->get_version()) {
+            if (pkg->get_epoch() != replaced->get_epoch() || pkg->get_version() != replaced->get_version()) {
                 auto cl_evr = scols_line_get_cell(ln, COL_EVR);
                 scols_cell_set_color(cl_evr, "bold");
             }
 
             struct libscols_line * ln_replaced = scols_table_new_line(*tb, ln);
-            std::string name(libdnf5::utils::sformat(_("replacing {}"), replaced->get_name()));
+
+            std::string name;
+            if (pkg->get_name() == replaced->get_name()) {
+                // Abbreviated format for simple version upgrades
+                name = _("replacing");
+            } else {
+                name = libdnf5::utils::sformat(_("replacing {}"), replaced->get_name());
+            }
             scols_line_set_data(ln_replaced, COL_NAME, ("   " + name).c_str());
             scols_line_set_data(ln_replaced, COL_ARCH, replaced->get_arch().c_str());
             // Always show epoch in EVR (epoch:version-release) for consistency with main package lines
