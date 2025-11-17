@@ -25,6 +25,7 @@
 #include "system/state.hpp"
 
 #include "libdnf5/base/base.hpp"
+#include "libdnf5/utils/locker.hpp"
 #ifdef WITH_MODULEMD
 #include "libdnf5/module/module_sack.hpp"
 #endif
@@ -65,6 +66,9 @@ public:
     /// Call a function that loads the config file, catching errors appropriately
     void with_config_file_path(std::function<void(const std::string &)> func);
 
+    bool lock_system_repo(libdnf5::utils::LockAccessType access, libdnf5::utils::LockBlockingType blocking);
+    void unlock_system_repo();
+
 private:
     friend class Base;
     Impl(const libdnf5::BaseWeakPtr & base, std::vector<std::unique_ptr<Logger>> && loggers);
@@ -100,6 +104,7 @@ private:
     transaction::TransactionHistory transaction_history;
     Vars vars;
     std::unique_ptr<repo::DownloadCallbacks> download_callbacks;
+    std::optional<libdnf5::utils::Locker> system_repo_lock;
 
     /// map of plugin names (global patterns) that we want to enable (true) or disable (false)
     PreserveOrderMap<std::string, bool> plugins_enablement;
