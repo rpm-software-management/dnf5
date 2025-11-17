@@ -24,6 +24,9 @@
 
 #include <sys/types.h>
 
+#include <filesystem>
+#include <set>
+#include <vector>
 
 namespace libdnf5 {
 
@@ -40,6 +43,18 @@ LIBDNF_API uid_t read_login_uid_from_proc(pid_t pid) noexcept;
 /// The value is cached.
 /// @since 5.0
 LIBDNF_API uid_t get_login_uid() noexcept;
+
+/// Get the set of PIDs which are accessing the specified path.
+/// Similar to the fuser tool from psmisc.
+/// Ignores entries in procfs that cannot be accessed, e.g. due to insufficient permissions.
+/// @throw libdnf5::SystemError if the specified path cannot be accessed.
+/// @since 5.3.1.0
+LIBDNF_API std::set<pid_t> fuser(const std::filesystem::path & path);
+
+/// Get the cmdline of a process given its PID.
+/// @throw libdnf5::SystemError if the entry in procfs cannot be accessed.
+/// @since 5.3.1.0
+LIBDNF_API std::vector<std::string> pid_cmdline(const pid_t pid);
 
 }  // namespace libdnf5
 
