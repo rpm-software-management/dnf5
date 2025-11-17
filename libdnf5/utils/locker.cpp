@@ -93,6 +93,7 @@ void Locker::unlock() {
         if (unlink(path.c_str()) == -1) {
             throw SystemError(errno, M_("Failed to delete lock file \"{}\""), path);
         }
+        lock_fd = -1;
     }
 }
 
