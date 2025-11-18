@@ -24,15 +24,48 @@
 #include "libdnf5-cli/output/adapters/package.hpp"
 #include "libdnf5-cli/tty.hpp"
 
+#include <json-c/json.h>
 #include <libdnf5/rpm/nevra.hpp>
 #include <libsmartcols/libsmartcols.h>
 
 #include <algorithm>
 
+namespace {
+
+template <class Compare>
+std::vector<libdnf5::rpm::Package> to_sorted_vector(const libdnf5::rpm::PackageSet & pkg_set, Compare cmp) {
+    std::vector<libdnf5::rpm::Package> packages;
+    for (const auto & pkg : pkg_set) {
+        // [FIXME](mfocko) Does this ‹std::move› actually move, since ‹pkg› is a const-ref?
+        packages.emplace_back(std::move(pkg));
+    }
+
+    std::sort(packages.begin(), packages.end(), cmp);
+    return packages;
+}
+
+std::vector<libdnf5::rpm::Package> to_sorted_vector(const libdnf5::rpm::PackageSet & pkg_set) {
+    return to_sorted_vector(pkg_set, libdnf5::rpm::cmp_nevra<libdnf5::rpm::Package>);
+}
+
+json_object * package_to_json(const libdnf5::rpm::Package & pkg) {
+    json_object * j_pkg = json_object_new_object();
+    json_object_object_add(j_pkg, "name", json_object_new_string(pkg.get_name().c_str()));
+    json_object_object_add(j_pkg, "arch", json_object_new_string(pkg.get_arch().c_str()));
+    json_object_object_add(j_pkg, "evr", json_object_new_string(pkg.get_evr().c_str()));
+    json_object_object_add(
+        j_pkg,
+        "repository",
+        json_object_new_string(pkg.is_installed() ? pkg.get_from_repo_id().c_str() : pkg.get_repo_id().c_str()));
+    return j_pkg;
+}
+
+}  // namespace
+
 namespace libdnf5::cli::output {
 
 
-PackageListSections::PackageListSections() : p_impl{new Impl} {}
+PackageListSections::PackageListSections() : p_impl(std::make_unique<Impl>()) {}
 
 
 PackageListSections::~PackageListSections() = default;
@@ -54,46 +87,44 @@ void PackageListSections::print(const std::unique_ptr<PkgColorizer> & colorizer)
     enum { COL_NA, COL_EVR, COL_REPO };
 
     for (const auto & [heading, pkg_set, obsoletes] : p_impl->sections) {
-        if (!pkg_set.empty()) {
-            // sort the packages in section according to NEVRA
-            std::vector<libdnf5::rpm::Package> packages;
-            for (const auto & pkg : pkg_set) {
-                packages.emplace_back(std::move(pkg));
-            }
-            std::sort(packages.begin(), packages.end(), libdnf5::rpm::cmp_nevra<libdnf5::rpm::Package>);
-
-            struct libscols_line * first_line = nullptr;
-            struct libscols_line * last_line = nullptr;
-            for (const auto & pkg : packages) {
-                struct libscols_line * ln = scols_table_new_line(table, NULL);
-                if (first_line == nullptr) {
-                    first_line = ln;
-                }
-                last_line = ln;
-                if (colorizer) {
-                    scols_line_set_color(ln, colorizer->get_pkg_color(PackageAdapter(pkg)).c_str());
-                }
-                scols_line_set_data(ln, COL_NA, pkg.get_na().c_str());
-                scols_line_set_data(ln, COL_EVR, pkg.get_evr().c_str());
-                if (pkg.is_installed()) {
-                    scols_line_set_data(ln, COL_REPO, pkg.get_from_repo_id().c_str());
-                } else {
-                    scols_line_set_data(ln, COL_REPO, pkg.get_repo_id().c_str());
-                }
-
-                auto obsoletes_it = obsoletes.find(pkg.get_id());
-                if (obsoletes_it != obsoletes.end() && !obsoletes_it->second.empty()) {
-                    for (const auto & pkg_ob : obsoletes_it->second) {
-                        struct libscols_line * ln = scols_table_new_line(table, NULL);
-                        last_line = ln;
-                        scols_line_set_data(ln, COL_NA, ("    " + pkg_ob.get_na()).c_str());
-                        scols_line_set_data(ln, COL_EVR, pkg_ob.get_evr().c_str());
-                        scols_line_set_data(ln, COL_REPO, pkg_ob.get_from_repo_id().c_str());
-                    }
-                }
-            }
-            table_sections.emplace_back(heading, first_line, last_line);
+        if (pkg_set.empty()) {
+            // skip empty sections
+            continue;
         }
+
+        struct libscols_line * first_line = nullptr;
+        struct libscols_line * last_line = nullptr;
+
+        // iterate through the packages in section ordered by NEVRA
+        for (const auto & pkg : to_sorted_vector(pkg_set)) {
+            struct libscols_line * ln = scols_table_new_line(table, NULL);
+            if (first_line == nullptr) {
+                first_line = ln;
+            }
+            last_line = ln;
+            if (colorizer) {
+                scols_line_set_color(ln, colorizer->get_pkg_color(PackageAdapter(pkg)).c_str());
+            }
+            scols_line_set_data(ln, COL_NA, pkg.get_na().c_str());
+            scols_line_set_data(ln, COL_EVR, pkg.get_evr().c_str());
+            if (pkg.is_installed()) {
+                scols_line_set_data(ln, COL_REPO, pkg.get_from_repo_id().c_str());
+            } else {
+                scols_line_set_data(ln, COL_REPO, pkg.get_repo_id().c_str());
+            }
+
+            auto obsoletes_it = obsoletes.find(pkg.get_id());
+            if (obsoletes_it != obsoletes.end() && !obsoletes_it->second.empty()) {
+                for (const auto & pkg_ob : obsoletes_it->second) {
+                    struct libscols_line * ln = scols_table_new_line(table, NULL);
+                    last_line = ln;
+                    scols_line_set_data(ln, COL_NA, ("    " + pkg_ob.get_na()).c_str());
+                    scols_line_set_data(ln, COL_EVR, pkg_ob.get_evr().c_str());
+                    scols_line_set_data(ln, COL_REPO, pkg_ob.get_from_repo_id().c_str());
+                }
+            }
+        }
+        table_sections.emplace_back(heading, first_line, last_line);
     }
 
 
@@ -116,6 +147,43 @@ void PackageListSections::print(const std::unique_ptr<PkgColorizer> & colorizer)
     }
 
     scols_unref_table(table);
+}
+
+// [NOTE] When editing JSON output format, do not forget to update the docs at doc/commands/check-upgrade.8.rst
+void PackageListSections::print_json() {
+    json_object * j_output = json_object_new_object();
+    for (const auto & [heading, pkg_set, obsoletes] : p_impl->sections) {
+        if (pkg_set.empty()) {
+            // skip empty sections
+            continue;
+        }
+
+        json_object * j_packages = json_object_new_array();
+
+        // iterate through the packages in section ordered by NEVRA
+        for (const auto & pkg : to_sorted_vector(pkg_set)) {
+            json_object * j_pkg = package_to_json(pkg);
+
+            // add obsoleted packages
+            auto obsoletes_it = obsoletes.find(pkg.get_id());
+            if (obsoletes_it != obsoletes.end() && !obsoletes_it->second.empty()) {
+                json_object * j_obsoleted = json_object_new_array();
+                for (const auto & pkg_ob : obsoletes_it->second) {
+                    json_object_array_add(j_obsoleted, package_to_json(pkg_ob));
+                }
+                json_object_object_add(j_pkg, "obsoletes", j_obsoleted);
+            }
+
+            json_object_array_add(j_packages, j_pkg);
+        }
+
+        // [TODO](mfocko) Consider adding header to CLI “pretty” output too…
+        json_object_object_add(j_output, heading != "" ? heading.c_str() : "upgrades", j_packages);
+    }
+
+    // Print and deallocate
+    std::cout << json_object_to_json_string_ext(j_output, JSON_C_TO_STRING_PRETTY) << std::endl;
+    json_object_put(j_output);
 }
 
 
