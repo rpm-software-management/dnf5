@@ -20,12 +20,21 @@
 #ifndef LIBDNF5_CLI_UTILS_USERCONFIRM_HPP
 #define LIBDNF5_CLI_UTILS_USERCONFIRM_HPP
 
+#include "libdnf5-cli/defs.h"
+
 #include <libdnf5/conf/config_main.hpp>
 
 #include <iostream>
 #include <string>
 
 namespace libdnf5::cli::utils::userconfirm {
+
+// Helper functions implemented in libdnf5-cli/utils/userconfirm.cpp
+LIBDNF_CLI_API const char * get_yes_no_prompt(bool default_yes);
+LIBDNF_CLI_API const char * get_yes_response();
+LIBDNF_CLI_API const char * get_yes_response_upper();
+LIBDNF_CLI_API const char * get_no_response();
+LIBDNF_CLI_API const char * get_no_response_upper();
 
 /// Asks the user for confirmation. The default answer is taken from the configuration.
 
@@ -38,12 +47,9 @@ bool userconfirm(Config & config) {
     if (config.get_assumeyes_option().get_value()) {
         return true;
     }
-    std::string msg;
-    if (config.get_defaultyes_option().get_value()) {
-        msg = "Is this ok [Y/n]: ";
-    } else {
-        msg = "Is this ok [y/N]: ";
-    }
+
+    auto default_yes = config.get_defaultyes_option().get_value();
+    const char * msg = get_yes_no_prompt(default_yes);
     while (true) {
         std::cerr << msg;
 
@@ -51,12 +57,12 @@ bool userconfirm(Config & config) {
         std::getline(std::cin, choice);
 
         if (choice.empty()) {
-            return config.get_defaultyes_option().get_value();
+            return default_yes;
         }
-        if (choice == "y" || choice == "Y") {
+        if (choice == get_yes_response() || choice == get_yes_response_upper()) {
             return true;
         }
-        if (choice == "n" || choice == "N") {
+        if (choice == get_no_response() || choice == get_no_response_upper()) {
             return false;
         }
     }
