@@ -39,6 +39,7 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 
+#include <algorithm>
 #include <map>
 
 
@@ -139,6 +140,15 @@ std::string Transaction::get_db_cookie() const {
 
 void Transaction::fill(const base::Transaction & transaction) {
     transaction_items = transaction.get_transaction_packages();
+
+    // If SOURCE_DATE_EPOCH is set, sort the package list for reproducibility
+    if (std::getenv("SOURCE_DATE_EPOCH") != nullptr) {
+        auto & logger = *base->get_logger();
+        logger.debug("SOURCE_DATE_EPOCH detected; sorting {} packages for reproducibility", transaction_items.size());
+        std::sort(transaction_items.begin(), transaction_items.end(), [](const auto & a, const auto & b) {
+            return a.get_package().get_nevra() < b.get_package().get_nevra();
+        });
+    }
 
     // Auxiliary map name->package with the latest versions of currently
     // installed installonly packages.

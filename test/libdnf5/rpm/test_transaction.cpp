@@ -78,6 +78,23 @@ public:
     int mirror_failure_cnt{0};
 };
 
+class OrderCapturingCallbacks : public libdnf5::rpm::TransactionCallbacks {
+public:
+    explicit OrderCapturingCallbacks(std::vector<std::string> expected) : expected_order(std::move(expected)) {}
+
+    void install_start(const libdnf5::base::TransactionPackage & item, [[maybe_unused]] uint64_t total) override {
+        auto nevra = item.get_package().get_nevra();
+        if (current_index >= expected_order.size() || nevra != expected_order[current_index]) {
+            order_correct = false;
+        }
+        current_index++;
+    }
+
+    std::vector<std::string> expected_order;
+    size_t current_index = 0;
+    bool order_correct = true;
+};
+
 }  // namespace
 
 
@@ -160,4 +177,56 @@ void RpmTransactionTest::test_transaction_temp_files_cleanup() {
     } else {
         CPPUNIT_ASSERT(!std::filesystem::exists(package_path));
     }
+}
+
+void RpmTransactionTest::test_source_date_epoch_sorting() {
+    add_repo_rpm("rpm-repo1", /* load */ false);
+    add_repo_rpm("rpm-repo2", /* load */ false);
+    add_repo_rpm("rpm-repo3", /* load */ true);
+
+    // setting a global var in a test is not great... no other tests right now
+    // relate to SOURCE_DATE_EPOCH at least
+    setenv("SOURCE_DATE_EPOCH", "1234567890", 1);
+
+    std::vector<std::string> packages = {"one", "two", "three"};
+    // The exact final install order chosen by librpm doesn't matter. What
+    // matters is that it's consistent across all permutations. An alternative
+    // approach resilient to potential librpm changes is to capture the order on
+    // the first iteration and then compare future iterations against that.
+    std::vector<std::string> expected_order = {"two-2-2.noarch", "three-1-1.noarch", "one-2-1.noarch"};
+    auto installroot = base.get_config().get_installroot_option().get_value();
+
+    std::sort(packages.begin(), packages.end());
+    do {
+        // recreate the installroot each time so we start from scratch
+        std::filesystem::remove_all(installroot);
+        std::filesystem::create_directory(installroot);
+
+        libdnf5::Goal goal(base);
+        for (const auto & pkg : packages) {
+            goal.add_rpm_install(pkg);
+        }
+
+        auto transaction = goal.resolve();
+        transaction.download();
+
+        auto callbacks = std::make_unique<OrderCapturingCallbacks>(expected_order);
+        auto callbacks_ptr = callbacks.get();
+        transaction.set_callbacks(std::move(callbacks));
+
+        // TODO(jkolarik): Temporarily disable the test to allow further investigation of issues on the RISC-V arch
+        //                 See https://github.com/rpm-software-management/dnf5/issues/503
+        auto res = transaction.run();
+        if (res != libdnf5::base::Transaction::TransactionRunResult::SUCCESS) {
+            std::cout << std::endl << "WARNING: Transaction was not successful" << std::endl;
+            std::cout << libdnf5::utils::string::join(transaction.get_transaction_problems(), ", ") << std::endl;
+            break;  // no point in trying more permutations if arch is broken
+        }
+
+        CPPUNIT_ASSERT(callbacks_ptr->order_correct);
+        CPPUNIT_ASSERT_EQUAL(expected_order.size(), callbacks_ptr->current_index);
+
+    } while (std::next_permutation(packages.begin(), packages.end()));
+
+    unsetenv("SOURCE_DATE_EPOCH");
 }
