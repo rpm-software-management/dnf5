@@ -3,6 +3,9 @@ auto repo_sack = base.get_repo_sack();
 // Create repositories from system configuration files.
 repo_sack->create_repos_from_system_configuration();
 
+// Acquire a write lock on the system repository before loading it
+base.lock_system_repo(libdnf5::utils::LockAccessType::WRITE, libdnf5::utils::LockBlockingType::BLOCKING);
+
 // If out of date, downloads fresh repositories' metadata and loads the
 // repositories into memory.
 //

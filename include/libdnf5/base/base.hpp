@@ -37,6 +37,8 @@
 #include "libdnf5/rpm/package_sack.hpp"
 #include "libdnf5/transaction/transaction_history.hpp"
 
+#include <libdnf5/utils/locker.hpp>
+
 
 namespace libdnf5::module {
 
@@ -114,6 +116,22 @@ public:
     /// might be problematic, because architecture is already fixed for our solver.
     /// Calling the method for the second time result in throwing an exception
     void setup();
+
+    /// Acquire an advisory lock on the installroot's system repository.
+    /// The lock will be automatically released when Base goes out of scope, or manually when unlock_system_repo is called.
+    /// Can be called multiple times to upgrade or downgrade a READ lock to a WRITE lock or vice versa.
+    /// Should be called before the system repo is loaded, and the lock should be held until all transactions are
+    /// complete and other processes can safely re-read the RPMDB and resolve transactions.
+    /// @throw libdnf5::SystemError if an unexpected error occurs when locking
+    /// @return true if acquiring the lock succeeded, false otherwise
+    bool lock_system_repo(
+        libdnf5::utils::LockAccessType access = libdnf5::utils::LockAccessType::WRITE,
+        libdnf5::utils::LockBlockingType blocking = libdnf5::utils::LockBlockingType::NON_BLOCKING);
+
+    /// Release the lock obtained by lock_system_repo.
+    /// Idempotent. No-op if there is currently no lock.
+    /// @throw libdnf5::SystemError if an unexpected error occurs when unlocking
+    void unlock_system_repo();
 
     /// Returns true when setup() (mandatory method in many workflows) was already called
     bool is_initialized();

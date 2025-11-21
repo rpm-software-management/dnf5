@@ -17,6 +17,7 @@
 
     #include "libdnf5/utils/locale.hpp"
     #include "libdnf5/utils/patterns.hpp"
+    #include "libdnf5/utils/locker.hpp"
 %}
 
 #define CV __perl_CV
@@ -35,3 +36,5 @@
 
 // Deletes any previously defined catches
 %catches();
+
+%include "libdnf5/utils/locker.hpp"

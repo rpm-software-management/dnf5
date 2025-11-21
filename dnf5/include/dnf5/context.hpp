@@ -133,6 +133,9 @@ public:
     void set_load_system_repo(bool on);
     bool get_load_system_repo() const noexcept;
 
+    void set_will_modify_system(bool will_modify_system);
+    bool get_will_modify_system() const noexcept;
+
     void set_load_available_repos(LoadAvailableRepos which);
     LoadAvailableRepos get_load_available_repos() const noexcept;
 
