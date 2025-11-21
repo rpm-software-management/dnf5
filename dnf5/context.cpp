@@ -365,12 +365,11 @@ void Context::Impl::load_repos(bool load_system) {
 
     if (load_system) {
         const auto lock_access_type =
-            get_will_modify_system() ? libdnf5::utils::LockAccessType::WRITE : libdnf5::utils::LockAccessType::READ;
-        if (!base.lock_system_repo(lock_access_type, libdnf5::utils::LockBlockingType::NON_BLOCKING)) {
+            get_will_modify_system() ? libdnf5::utils::LockAccess::WRITE : libdnf5::utils::LockAccess::READ;
+        if (!base.lock_system_repo(lock_access_type, libdnf5::utils::LockBlocking::NON_BLOCKING)) {
             // A lock on the system repo could not immediately be acquired.
             // Gather and display information about other processes in line for the lock, then wait.
-            const auto & relative_path = std::filesystem::path{libdnf5::SYSTEM_REPO_LOCK_FILEPATH}.relative_path();
-            const auto & lock_file_path = base.get_config().get_installroot_option().get_value() / relative_path;
+            const auto & lock_file_path = base.get_system_repo_lock()->get_path();
             std::set<pid_t> pids;
             try {
                 pids = libdnf5::fuser(lock_file_path);
@@ -392,7 +391,7 @@ void Context::Impl::load_repos(bool load_system) {
                     }
                 }
             }
-            base.lock_system_repo(lock_access_type, libdnf5::utils::LockBlockingType::BLOCKING);
+            base.lock_system_repo(lock_access_type, libdnf5::utils::LockBlocking::BLOCKING);
         }
     }
 

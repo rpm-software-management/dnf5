@@ -1242,19 +1242,29 @@ static bool cmd_requires_privileges(dnf5::Context & context) {
 }
 
 static bool user_has_privileges(dnf5::Context & context) {
-    std::filesystem::path lock_file_path = context.get_base().get_config().get_installroot_option().get_value();
-    lock_file_path /= std::filesystem::path(libdnf5::TRANSACTION_LOCK_FILEPATH).relative_path();
-    lock_file_path += ".tmp";
+    const auto & installroot = context.get_base().get_config().get_installroot_option().get_value();
+
+    const auto & transaction_lock_path =
+        installroot / std::filesystem::path{libdnf5::TRANSACTION_LOCK_FILEPATH}.relative_path();
+
+    const auto & system_state_dir = context.get_base().get_config().get_system_state_dir_option().get_value();
+    const auto & system_repo_lock_path =
+        installroot / std::filesystem::path{system_state_dir}.relative_path() / libdnf5::SYSTEM_REPO_LOCK_FILENAME;
 
     try {
-        std::filesystem::create_directories(lock_file_path.parent_path());
-        libdnf5::utils::Locker locker(lock_file_path);
-        return locker.write_lock();
+        std::filesystem::create_directories(transaction_lock_path.parent_path());
+        libdnf5::utils::Locker transaction_locker(transaction_lock_path, false);
+        transaction_locker.open_file(libdnf5::utils::LockAccess::WRITE);
+
+        std::filesystem::create_directories(system_repo_lock_path.parent_path());
+        libdnf5::utils::Locker system_repo_locker(system_repo_lock_path, true);
+        system_repo_locker.open_file(libdnf5::utils::LockAccess::WRITE);
     } catch (libdnf5::SystemError & ex) {
         return false;
     } catch (std::filesystem::filesystem_error & ex) {
         return false;
     }
+    return true;
 }
 
 int main(int argc, char * argv[]) try {
