@@ -29,8 +29,7 @@
 
 namespace libdnf5::utils {
 
-Locker::Locker(const std::string & path) : path(path) {};
-
+Locker::Locker(const std::string & path, const bool keep_file) : path(path), keep_file(keep_file) {};
 bool Locker::read_lock() {
     return lock(LockAccessType::READ, LockBlockingType::NON_BLOCKING);
 }
@@ -94,8 +93,10 @@ void Locker::unlock() {
         if (close(lock_fd) == -1) {
             throw SystemError(errno, M_("Failed to close lock file \"{}\""), path);
         }
-        if (unlink(path.c_str()) == -1) {
-            throw SystemError(errno, M_("Failed to delete lock file \"{}\""), path);
+        if (!keep_file) {
+            if (unlink(path.c_str()) == -1) {
+                throw SystemError(errno, M_("Failed to delete lock file \"{}\""), path);
+            }
         }
         lock_fd = -1;
     }
