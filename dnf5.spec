@@ -1,6 +1,6 @@
 %global project_version_prime 5
-%global project_version_major 3
-%global project_version_minor 1
+%global project_version_major 4
+%global project_version_minor 0
 %global project_version_micro 0
 
 %bcond dnf5_obsoletes_dnf %[0%{?fedora} > 40 || 0%{?rhel} > 10]

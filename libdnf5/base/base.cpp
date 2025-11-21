@@ -447,7 +447,7 @@ bool Base::Impl::lock_system_repo(libdnf5::utils::LockAccessType access, libdnf5
         const auto & lock_file_path = installroot.get_value() / relative_path;
         std::filesystem::create_directories(lock_file_path.parent_path());
 
-        system_repo_lock = libdnf5::utils::Locker{lock_file_path};
+        system_repo_lock = libdnf5::utils::Locker{lock_file_path, true};
     }
     return system_repo_lock->lock(access, blocking);
 }

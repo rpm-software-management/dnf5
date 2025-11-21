@@ -34,7 +34,7 @@ enum class LIBDNF_API LockBlockingType { NON_BLOCKING, BLOCKING };
 class LIBDNF_API Locker {
 public:
     /// Create a Locker object at a given path
-    explicit Locker(const std::string & path);
+    explicit Locker(const std::string & path, const bool keep_file = false);
     ~Locker();
 
     /// @brief Acquire a read or write lock on a given file path, either blocking or non-blocking.
@@ -59,6 +59,7 @@ public:
 private:
     std::string path;
     int lock_fd{-1};
+    bool keep_file{false};
 };
 
 }  // namespace libdnf5::utils
