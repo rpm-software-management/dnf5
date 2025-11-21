@@ -85,7 +85,7 @@ std::set<pid_t> fuser(const std::filesystem::path & path) {
 
     struct stat target_st;
     if (stat(path.c_str(), &target_st) == -1) {
-        throw libdnf5::RuntimeError{M_("Cannot stat {}"), path.string()};
+        throw libdnf5::SystemError{errno, M_("Cannot stat {}"), path.string()};
     }
 
     for (const auto & entry : std::filesystem::directory_iterator{"/proc", ec}) {
@@ -100,7 +100,7 @@ std::set<pid_t> fuser(const std::filesystem::path & path) {
         const pid_t pid = std::stoi(entry_name);
 
         const std::filesystem::path fd_dir_path = entry.path() / "fd";
-        for (const auto & fd_entry : std::filesystem::directory_iterator{fd_dir_path}) {
+        for (const auto & fd_entry : std::filesystem::directory_iterator{fd_dir_path, ec}) {
             if (ec) {
                 continue;
             }

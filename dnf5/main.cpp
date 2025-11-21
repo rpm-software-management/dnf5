@@ -1517,12 +1517,15 @@ int main(int argc, char * argv[]) try {
                 dump_repository_configuration(context, repo_id_list);
             }
 
+            const bool will_modify_system{cmd_requires_privileges(context)};
             if (cmd_requires_privileges(context) && !user_has_privileges(context)) {
                 throw libdnf5::cli::InsufficientPrivilegesError(
                     M_("The requested operation requires superuser privileges. Please log in as a user with elevated "
                        "rights, or use the \"--assumeno\" or \"--downloadonly\" options to run the command without "
                        "modifying the system state."));
             }
+
+            context.set_will_modify_system(will_modify_system);
 
             {
                 if (context.get_load_available_repos() != dnf5::Context::LoadAvailableRepos::NONE) {

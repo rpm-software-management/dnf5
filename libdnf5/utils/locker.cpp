@@ -60,9 +60,13 @@ bool Locker::lock(LockAccessType access, LockBlockingType blocking) {
     }
 
     if (lock_fd == -1) {
-        lock_fd = open(path.c_str(), O_CREAT | O_RDWR | O_CLOEXEC, 0660);
+        lock_fd = open(path.c_str(), O_CREAT | O_CLOEXEC | O_RDWR, 0664);
         if (lock_fd == -1) {
-            throw SystemError(errno, M_("Failed to open lock file \"{}\""), path);
+            // Fall back to opening the file in read-only mode.
+            lock_fd = open(path.c_str(), O_CREAT | O_CLOEXEC | O_RDONLY, 0664);
+            if (lock_fd == -1) {
+                throw SystemError(errno, M_("Failed to open lock file \"{}\""), path);
+            }
         }
     }
 
