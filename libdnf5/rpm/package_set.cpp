@@ -123,7 +123,7 @@ BaseWeakPtr PackageSet::get_base() const {
 
 std::vector<Package> PackageSet::to_sorted_vector() const {
     std::vector<Package> packages;
-    for (const auto & pkg : *this) {
+    for (auto && pkg : *this) {
         packages.emplace_back(std::move(pkg));
     }
 
