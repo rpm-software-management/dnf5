@@ -1,0 +1,7 @@
+[obs:lsgobs.ddstreet.org:home:ddstreet42:AzureLinux_3]
+name=home:ddstreet42 (AzureLinux_3)
+type=rpm-md
+baseurl=https://lsgobs.ddstreet.org/download/home:/ddstreet42/AzureLinux_3/
+gpgcheck=1
+gpgkey=https://lsgobs.ddstreet.org/download/home:/ddstreet42/AzureLinux_3/repodata/repomd.xml.key
+enabled=0
