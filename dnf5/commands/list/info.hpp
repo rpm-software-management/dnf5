@@ -23,6 +23,7 @@
 
 #include "list.hpp"
 
+#include <dnf5/shared_options.hpp>
 #include <libdnf5-cli/output/package_info_sections.hpp>
 
 namespace dnf5 {
@@ -31,6 +32,11 @@ namespace dnf5 {
 class InfoCommand : public ListCommand {
 public:
     explicit InfoCommand(Context & context) : ListCommand(context, "info") {}
+
+protected:
+    std::string get_command_description() const override {
+        return _("Lists packages depending on the packages' relation to the system with additional details");
+    }
 
 private:
     std::unique_ptr<libdnf5::cli::output::PackageListSections> create_output() override;
