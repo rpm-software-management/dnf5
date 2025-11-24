@@ -1,0 +1,7 @@
+[home_ddstreet42]
+name=home:ddstreet42 (Fedora_43)
+type=rpm-md
+baseurl=http://standard.ddstreet.org:82/home:/ddstreet42/Fedora_43/
+gpgcheck=1
+gpgkey=http://standard.ddstreet.org:82/home:/ddstreet42/Fedora_43/repodata/repomd.xml.key
+enabled=1
