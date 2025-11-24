@@ -41,7 +41,7 @@ void ListCommand::set_argument_parser() {
     auto & parser = ctx.get_argument_parser();
 
     auto & cmd = *get_argument_parser_command();
-    cmd.set_description(_("Lists packages depending on the packages' relation to the system"));
+    cmd.set_description(get_command_description());
 
     auto specs =
         parser.add_new_positional_arg("package-spec-NI", ArgumentParser::PositionalArg::UNLIMITED, nullptr, nullptr);
