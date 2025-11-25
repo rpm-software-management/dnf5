@@ -426,6 +426,17 @@ TransactionTable::Impl::Impl(ITransaction & transaction) {
         scols_cell_set_color(ce, action_color(tsgrp->get_action()));
         auto & section = add_section(*tsgrp, ln);
         section.set_last_line(ln);
+        if (tsgrp->get_action() == libdnf5::transaction::TransactionItemAction::REASON_CHANGE) {
+            auto replaced_color = action_color(libdnf5::transaction::TransactionItemAction::REPLACED);
+            struct libscols_line * ln_reason = scols_table_new_line(*tb, ln);
+            std::string reason = libdnf5::utils::sformat(
+                _("{} -> {}"),
+                libdnf5::transaction::transaction_item_reason_to_string(grp->get_reason()),
+                libdnf5::transaction::transaction_item_reason_to_string(tsgrp->get_reason()));
+            scols_line_set_data(ln_reason, COL_NAME, ("   " + reason).c_str());
+            scols_cell_set_color(scols_line_get_cell(ln_reason, COL_NAME), replaced_color);
+            section.set_last_line(ln_reason);
+        }
     }
 
     for (const auto & tsenv : transaction.get_transaction_environments()) {
@@ -613,6 +624,9 @@ TransactionTableSection & TransactionTable::Impl::add_section(
                 break;
             case libdnf5::transaction::TransactionItemAction::UPGRADE:
                 text = _("Upgrading groups:");
+                break;
+            case libdnf5::transaction::TransactionItemAction::REASON_CHANGE:
+                text = _("Changing reason of installed groups:");
                 break;
             default:
                 libdnf_throw_assertion(
