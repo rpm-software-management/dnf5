@@ -2708,7 +2708,26 @@ void Goal::Impl::add_group_install_to_goal(
     auto & cfg_main = base->get_config();
     auto allowed_package_types = settings.resolve_group_package_types(cfg_main);
     for (auto group : group_query) {
-        rpm_goal.add_group(group, transaction::TransactionItemAction::INSTALL, reason, allowed_package_types);
+        comps::GroupQuery installed_group = comps::GroupQuery(base, false);
+        installed_group.filter_groupid(group.get_groupid());
+        installed_group.filter_installed(true);
+        if (installed_group.empty()) {
+            // Mark the group for installation since it wasn't previously installed.
+            rpm_goal.add_group(group, transaction::TransactionItemAction::INSTALL, reason, allowed_package_types);
+        } else if (installed_group.get().get_reason() < reason) {
+            // Change the reason of the group.
+            rpm_goal.add_group(group, transaction::TransactionItemAction::REASON_CHANGE, reason, allowed_package_types);
+        } else {
+            // The group is already installed with the same reason, don't mark it for installation again.
+            transaction.p_impl->add_resolve_log(
+                GoalAction::INSTALL,
+                GoalProblem::ALREADY_INSTALLED,
+                settings,
+                libdnf5::transaction::TransactionItemType::GROUP,
+                group.get_groupid(),
+                {},
+                libdnf5::Logger::Level::WARNING);
+        }
         if (settings.get_group_no_packages()) {
             continue;
         }
@@ -2866,7 +2885,23 @@ void Goal::Impl::add_environment_install_to_goal(
     group_settings.set_group_search_groups(true);
     std::vector<GroupSpec> env_group_specs;
     for (auto environment : environment_query) {
-        rpm_goal.add_environment(environment, transaction::TransactionItemAction::INSTALL, with_optional);
+        comps::EnvironmentQuery installed_env = comps::EnvironmentQuery(base, false);
+        installed_env.filter_environmentid(environment.get_environmentid());
+        installed_env.filter_installed(true);
+        if (installed_env.empty()) {
+            // Mark the environment for installation since it wasn't previously installed.
+            rpm_goal.add_environment(environment, transaction::TransactionItemAction::INSTALL, with_optional);
+        } else {
+            // The environment is already installed, don't mark it for installation again.
+            transaction.p_impl->add_resolve_log(
+                GoalAction::INSTALL,
+                GoalProblem::ALREADY_INSTALLED,
+                settings,
+                libdnf5::transaction::TransactionItemType::ENVIRONMENT,
+                environment.get_environmentid(),
+                {},
+                libdnf5::Logger::Level::WARNING);
+        }
         if (settings.get_environment_no_groups()) {
             continue;
         }
