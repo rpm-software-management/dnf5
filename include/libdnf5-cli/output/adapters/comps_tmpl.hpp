@@ -76,6 +76,8 @@ public:
 
     bool get_installed() const override { return grp.get_installed(); }
 
+    libdnf5::transaction::TransactionItemReason get_reason() const override { return grp.get_reason(); }
+
 private:
     T grp;
 };
