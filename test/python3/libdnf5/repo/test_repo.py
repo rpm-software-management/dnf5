@@ -108,3 +108,17 @@ class TestRepo(base_test_case.BaseTestCase):
         self.assertEqual(dl_cbs.fastest_mirror_cnt, 0)
         self.assertEqual(dl_cbs.handle_mirror_failure_cnt, 0)
         self.assertEqual(cbs.repokey_import_cnt, 0)
+
+    def test_iterate_config_options(self):
+        repoid = "repomd-repo1"
+        repo = self.add_repo_repomd(repoid, load=False)
+        config = repo.get_config()
+
+        config.proxy = 'abcd'
+
+        proxy_option = None
+        for option in config.opt_binds():
+            if option.first == 'proxy':
+                proxy_option = (option.first, option.second.get_value_string())
+
+        self.assertEqual(proxy_option, ('proxy', 'abcd'))

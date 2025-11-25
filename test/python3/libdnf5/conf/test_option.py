@@ -88,3 +88,16 @@ class TestConfigurationOptions(base_test_case.BaseTestCase):
     def test_get_unknown_option_by_attribute(self):
         config = self.base.get_config()
         self.assertRaises(AttributeError, lambda: config.xyz)
+
+    def test_iterate_options(self):
+        config = self.base.get_config()
+
+        config.proxy = 'abcd'
+
+        proxy_option = None
+        for option in config.opt_binds():
+            if option.first == 'proxy':
+                proxy_option = (option.first, option.second.get_value_string())
+                break
+
+        self.assertEqual(proxy_option, ('proxy', 'abcd'))

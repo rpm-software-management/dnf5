@@ -14,6 +14,12 @@
 %import "exception.i"
 %import "logger.i"
 
+// This is required because `libdnf5::OptionBinds::Item` is nested
+// inside `libdnf5::OptionBinds` class.
+// While swig claims it shoudn't be needed for Python it seems it is:
+// https://www.swig.org/Doc4.3/SWIGDocumentation.html#SWIGPlus_nested_classes
+%feature("flatnested");
+
 %{
     #include "bindings/libdnf5/exception.hpp"
 
@@ -84,19 +90,44 @@ wrap_unique_ptr(StringUniquePtr, std::string);
 %template(OptionChildEnum) libdnf5::OptionChild<libdnf5::OptionEnum>;
 %template(OptionChildSeconds) libdnf5::OptionChild<libdnf5::OptionSeconds>;
 
+// OptionBinds iterator uses an std::pair for its value type. This is a problem since
+// the implementation of the wrapper for std::pair in SWIG requires a default constructor
+// for the contained elements and we don't want to have a default constructor for
+// OptionBinds::Item. It would allow API users to create invalid Items.
+//
+// To workaround this change the iterator so that the wrapped std::pair contains
+// a pointer to OptionBinds::Item instead of OptionBinds::Item itself.
+%inline %{
+class OptionBindsIterator {
+public:
+    OptionBindsIterator(std::map<std::string, libdnf5::OptionBinds::Item>::iterator it) : it(it) {}
+    void next() { ++it; }
+    std::pair<const std::string, libdnf5::OptionBinds::Item *> value() {
+        auto & val = *it;
+        return {val.first, &val.second};
+    }
+    bool operator==(const OptionBindsIterator & other) { return it == other.it; }
 
-%rename (OptionBinds_Item) libdnf5::OptionBinds::Item;
-%ignore libdnf5::OptionBindsError;
-%ignore libdnf5::OptionBindsOptionNotFoundError;
-%ignore libdnf5::OptionBindsOptionAlreadyExistsError;
-%ignore libdnf5::OptionBinds::add(const std::string & id, Option & option,
-    Item::NewStringFunc new_string_func, Item::GetValueStringFunc get_value_string_func, bool add_value);
+private:
+    std::map<std::string, libdnf5::OptionBinds::Item>::iterator it;
+};
+%}
+
+%extend libdnf5::OptionBinds {
+    OptionBindsIterator begin() { return {$self->begin()}; }
+    OptionBindsIterator end() { return {$self->end()}; }
+    OptionBindsIterator find(const std::string & id) { return {$self->find(id)}; }
+};
+%template(PairConstStringItemPtr) std::pair<const std::string, libdnf5::OptionBinds::Item *>;
+%ignore libdnf5::OptionBinds::add;
 %ignore libdnf5::OptionBinds::begin;
 %ignore libdnf5::OptionBinds::cbegin;
 %ignore libdnf5::OptionBinds::end;
 %ignore libdnf5::OptionBinds::cend;
 %ignore libdnf5::OptionBinds::find;
 %include "libdnf5/conf/option_binds.hpp"
+
+add_iterator(OptionBinds)
 
 %ignore libdnf5::ConfigParserError;
 %ignore libdnf5::InaccessibleConfigError;
