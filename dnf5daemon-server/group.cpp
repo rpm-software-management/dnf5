@@ -36,6 +36,7 @@ const std::map<std::string, GroupAttribute> group_attributes{
     {"default", GroupAttribute::is_default},
     {"packages", GroupAttribute::packages},
     {"installed", GroupAttribute::installed},
+    {"reason", GroupAttribute::reason},
     {"repos", GroupAttribute::repos},
 };
 
@@ -76,6 +77,10 @@ dnfdaemon::KeyValueMap group_to_map(libdnf5::comps::Group & libdnf_group, const 
                 break;
             case GroupAttribute::installed:
                 dbus_group.emplace(attr, libdnf_group.get_installed());
+                break;
+            case GroupAttribute::reason:
+                dbus_group.emplace(
+                    attr, libdnf5::transaction::transaction_item_reason_to_string(libdnf_group.get_reason()));
                 break;
             case GroupAttribute::repos: {
                 auto repos_set = libdnf_group.get_repos();

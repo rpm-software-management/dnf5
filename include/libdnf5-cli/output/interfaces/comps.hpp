@@ -22,6 +22,7 @@
 #define LIBDNF5_CLI_OUTPUT_INTERFACES_COMPS_HPP
 
 #include <libdnf5/comps/group/package_type.hpp>
+#include <libdnf5/transaction/transaction_item_reason.hpp>
 
 #include <memory>
 #include <set>
@@ -53,6 +54,7 @@ public:
     virtual std::vector<std::unique_ptr<IGroupPackage>> get_packages() = 0;
     virtual std::set<std::string> get_repos() const = 0;
     virtual bool get_installed() const = 0;
+    virtual libdnf5::transaction::TransactionItemReason get_reason() const = 0;
 };
 
 
