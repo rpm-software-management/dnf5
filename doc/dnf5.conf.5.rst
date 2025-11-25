@@ -523,6 +523,17 @@ repository configuration file should aside from repo ID consists of baseurl, met
 
     Default: ``False``.
 
+.. _skip_system_repo_lock_options-label:
+
+``skip_system_repo_lock``
+    :ref:`boolean <boolean-label>`
+
+    Skip acquiring a lock on the system repository (equivalent to the RPM
+    database). The lock is used to prevent processes from reading the system
+    repository while another process is running a transaction. Unprivileged
+    users are allowed to acquire a read lock on the system repository, so
+    ``skip_system_repo_lock=true`` may be used to ignore their lock.
+
 .. _skip_unavailable_options-label:
 
 ``skip_unavailable``
