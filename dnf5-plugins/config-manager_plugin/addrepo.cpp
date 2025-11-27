@@ -163,7 +163,7 @@ void ConfigManagerAddRepoCommand::set_argument_parser() {
                                      [[maybe_unused]] cli::ArgumentParser::NamedArg * arg,
                                      [[maybe_unused]] const char * option,
                                      const char * value) {
-        auto val = strchr(value + 1, '=');
+        const auto * const val = strchr(value + 1, '=');
         if (!val) {
             throw cli::ArgumentParserError(
                 M_("{}: Badly formatted argument value \"{}\""), std::string{"set"}, std::string{value});
