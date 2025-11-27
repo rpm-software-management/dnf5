@@ -54,6 +54,11 @@ public:
     /// @return Escape sequence for the color.
     std::string get_pkg_color(const IPackage & package);
 
+    /// Get a string describing the coloring scheme of the output produced by
+    /// the colorizer.
+    /// @return Description string, already escaped.
+    std::string get_coloring_description();
+
 private:
     LIBDNF_CLI_LOCAL std::string to_escape(const std::string & color);
 
