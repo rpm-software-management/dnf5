@@ -29,6 +29,10 @@
 #include <regex>
 #include <stdexcept>
 
+// TODO: Implement proper FNM_EXTMATCH support to fix MUSL errors.
+#if !defined(FNM_EXTMATCH)
+#define FNM_EXTMATCH (0)
+#endif
 
 namespace libdnf5::sack {
 
