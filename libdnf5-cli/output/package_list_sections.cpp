@@ -122,7 +122,11 @@ void PackageListSections::print(const std::unique_ptr<PkgColorizer> & colorizer)
             std::cout << std::endl;
         }
         if (!heading.empty()) {
-            std::cout << heading << std::endl;
+            std::cout << heading;
+            if (libdnf5::cli::tty::is_coloring_enabled()) {
+                std::cout << " " << colorizer->get_coloring_description();
+            }
+            std::cout << std::endl;
         }
         scols_table_print_range(table, first, last);
         separator_needed = true;

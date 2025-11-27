@@ -46,6 +46,7 @@ const std::map<std::string_view, std::string_view> color_to_escape = {
     {"cyan", "\033[36m"},
     {"gray", "\033[37m"},
     {"white", "\033[1;37m"},
+    {"reset", "\033[0m"},
 };
 
 }
@@ -104,6 +105,34 @@ std::string PkgColorizer::to_escape(const std::string & color) {
         }
     }
     return output;
+}
+
+std::string PkgColorizer::get_coloring_description() {
+    std::ostringstream desc;
+
+    std::string separator("(");
+
+    // [NOTE](mfocko) Is there a possibility of any other meaning?
+    // Colorizer is written generically (with respect to the ordering against
+    // the “base set” of packages), but currently it is only used in the meaning
+    // as described below.
+    for (auto && [description, color] : {
+             std::make_pair("install", color_not_found),
+             std::make_pair("downgrade", color_lt),
+             std::make_pair("reinstall", color_eq),
+             std::make_pair("upgrade", color_gt),
+         }) {
+        if (color.empty()) {
+            // skip uncolored packages
+            continue;
+        }
+
+        desc << separator << "available for " << color << description << color_to_escape.at("reset");
+        separator = ", ";
+    }
+    desc << ")";
+
+    return desc.str();
 }
 
 }  // namespace libdnf5::cli::output

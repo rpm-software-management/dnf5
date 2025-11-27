@@ -39,6 +39,11 @@ is provided, it checks for updates for the entire system.
 ``DNF5`` will exit with code `100`` if updates are available and list them; `0` if no updates
 are available.
 
+If terminal is available, list of the packages is colored, packages available for reinstall are
+(by default) colored with bold green and packages available for upgrade with bold blue. This
+behavior can be adjusted in configuration via
+:ref:`color_list_available_upgrade <_color_list_available_upgrade_options-label>` and
+:ref:`color_list_available_reinstall <_color_list_available_reinstall_options-label>` options.
 
 Options
 =======
