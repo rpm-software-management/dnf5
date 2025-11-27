@@ -49,6 +49,7 @@ private:
     libdnf5::OptionBool * url_option{nullptr};
     libdnf5::OptionBool * allmirrors_option{nullptr};
     libdnf5::OptionBool * srpm_option{nullptr};
+    libdnf5::OptionBool * debuginfo_option{nullptr};
 
     std::vector<std::string> from_repos;
     std::vector<std::string> from_vendors;
