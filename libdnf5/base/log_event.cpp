@@ -244,6 +244,12 @@ std::string LogEvent::to_string(
         case GoalProblem::NO_PROBLEM:
             throw std::invalid_argument("Unsupported elements for a goal problem");
         case GoalProblem::ALREADY_INSTALLED:
+            if (spec_type && *spec_type == libdnf5::transaction::TransactionItemType::GROUP) {
+                return ret.append(utils::sformat(_("Group \"{}\" is already installed."), *spec));
+            }
+            if (spec_type && *spec_type == libdnf5::transaction::TransactionItemType::ENVIRONMENT) {
+                return ret.append(utils::sformat(_("Environmental group \"{}\" is already installed."), *spec));
+            }
             if (additional_data.size() != 1) {
                 throw std::invalid_argument("Incorrect number of elements for ALREADY_INSTALLED");
             }

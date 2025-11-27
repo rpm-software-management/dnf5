@@ -1168,7 +1168,8 @@ Transaction::TransactionRunResult Transaction::Impl::_run(
         for (const auto & tsgroup : groups) {
             auto group = tsgroup.get_group();
             auto group_xml_path = comps_xml_dir_groups / (group.get_groupid() + ".xml");
-            if (transaction_item_action_is_inbound(tsgroup.get_action())) {
+            if (transaction_item_action_is_inbound(tsgroup.get_action()) ||
+                tsgroup.get_action() == transaction::TransactionItemAction::REASON_CHANGE) {
                 libdnf5::system::GroupState state;
                 state.userinstalled = tsgroup.get_reason() == transaction::TransactionItemReason::USER;
                 state.package_types = tsgroup.get_package_types();
