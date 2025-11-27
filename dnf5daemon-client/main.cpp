@@ -160,7 +160,7 @@ void RootCommand::set_argument_parser() {
                                     [[maybe_unused]] libdnf5::cli::ArgumentParser::NamedArg * arg,
                                     [[maybe_unused]] const char * option,
                                     const char * value) {
-        auto val = strchr(value + 1, '=');
+        const auto * const val = strchr(value + 1, '=');
         if (!val) {
             throw std::runtime_error(std::string("setopt: Badly formatted argument value") + value);
         }

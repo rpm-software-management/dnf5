@@ -77,7 +77,7 @@ void ConfigManagerSetOptCommand::set_argument_parser() {
                                        const char * const argv[]) {
         for (int i = 0; i < argc; ++i) {
             auto value = argv[i];
-            auto val = strchr(value + 1, '=');
+            const auto * const val = strchr(value + 1, '=');
             if (!val) {
                 throw cli::ArgumentParserError(
                     M_("{}: Badly formatted argument value \"{}\""), std::string{"optval"}, std::string{value});

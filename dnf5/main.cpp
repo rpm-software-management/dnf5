@@ -243,7 +243,7 @@ void RootCommand::set_argument_parser() {
     setopt->set_parse_hook_func(
         [&ctx](
             [[maybe_unused]] ArgumentParser::NamedArg * arg, [[maybe_unused]] const char * option, const char * value) {
-            auto val = strchr(value + 1, '=');
+            const auto * const val = strchr(value + 1, '=');
             if (!val) {
                 throw libdnf5::cli::ArgumentParserError(
                     M_("{}: Badly formatted argument value \"{}\""), std::string{"setopt"}, std::string(value));
@@ -282,7 +282,7 @@ void RootCommand::set_argument_parser() {
     setvar->set_parse_hook_func(
         [&ctx](
             [[maybe_unused]] ArgumentParser::NamedArg * arg, [[maybe_unused]] const char * option, const char * value) {
-            auto val = strchr(value + 1, '=');
+            const auto * const val = strchr(value + 1, '=');
             if (!val) {
                 throw libdnf5::cli::ArgumentParserError(
                     M_("{}: Badly formatted argument value \"{}\""), std::string{"setvar"}, std::string(value));
