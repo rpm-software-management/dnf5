@@ -23,6 +23,7 @@
 
 #include "libdnf5-cli/defs.h"
 
+#include <cstdint>
 #include <string>
 #include <utility>
 

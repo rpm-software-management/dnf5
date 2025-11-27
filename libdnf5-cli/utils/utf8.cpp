@@ -21,6 +21,7 @@
 #include "utf8.hpp"
 
 #include <clocale>
+#include <cstdint>
 #include <cstring>
 #include <cwchar>
 
