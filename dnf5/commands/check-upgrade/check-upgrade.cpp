@@ -211,7 +211,7 @@ void CheckUpgradeCommand::run() {
     package_matched |= sections->add_section("", upgrades_query);
     package_matched |= sections->add_section("Obsoleting packages", obsoletes_query, obsoletes);
 
-    if (package_matched && ctx.get_json_output_requested()) {
+    if (ctx.get_json_output_requested()) {
         sections->print_json();
         return;
     }
