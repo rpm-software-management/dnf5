@@ -159,6 +159,9 @@ install(DIRECTORY DESTINATION "${CMAKE_INSTALL_FULL_SYSCONFDIR}/dnf/libdnf5-plug
 # Creates an empty directory for distribution-supplied vendor change policies configuration files
 install(DIRECTORY DESTINATION "${CMAKE_INSTALL_PREFIX}/share/dnf5/vendors.d")
 
+# Creates an empty directory for distribution-supplied plugin configuration files
+install(DIRECTORY DESTINATION "${CMAKE_INSTALL_PREFIX}/share/dnf5/libdnf.plugins.conf.d")
+
 # Creates an empty directory for user-defined vendor change policies configuration files
 install(DIRECTORY DESTINATION "${CMAKE_INSTALL_FULL_SYSCONFDIR}/dnf/vendors.d")
 

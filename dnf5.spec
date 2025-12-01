@@ -412,6 +412,7 @@ Package management library.
 %dir %{_datadir}/dnf5/repos.d
 %dir %{_datadir}/dnf5/vars.d
 %dir %{_datadir}/dnf5/vendors.d
+%dir %{_datadir}/dnf5/libdnf.plugins.conf.d
 %dir %{_sysconfdir}/dnf/vendors.d
 %dir %{_libdir}/libdnf5
 %{_libdir}/libdnf5.so.2*
