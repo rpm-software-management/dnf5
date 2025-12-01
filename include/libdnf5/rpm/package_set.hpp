@@ -153,6 +153,10 @@ public:
 
     void swap(PackageSet & other) noexcept;
 
+    /// @return An `std::vector` of packages sorted by NEVRA.
+    /// @since 5.3.1.0
+    std::vector<Package> to_sorted_vector() const;
+
 private:
     friend PackageSetIterator;
     friend class PackageQuery;
@@ -167,6 +171,13 @@ private:
 
     class LIBDNF_LOCAL Impl;
     std::unique_ptr<Impl> p_impl;
+
+    /// @return An `std::vector` of packages sorted by the given comparator.
+    ///
+    /// @param cmp Comparator used for sorting.
+    /// @since 5.3.1.0
+    template <class Compare>
+    std::vector<Package> to_sorted_vector(Compare cmp) const;
 };
 
 }  // namespace libdnf5::rpm
