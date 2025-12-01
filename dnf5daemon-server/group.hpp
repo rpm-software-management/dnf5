@@ -40,6 +40,7 @@ enum class GroupAttribute {
     is_default,
     packages,
     installed,
+    reason,
     repos,
 };
 

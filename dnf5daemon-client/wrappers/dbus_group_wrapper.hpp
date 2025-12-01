@@ -23,6 +23,7 @@
 #include <dnf5daemon-server/dbus.hpp>
 #include <dnf5daemon-server/utils.hpp>
 #include <libdnf5/comps/group/package.hpp>
+#include <libdnf5/transaction/transaction_item_reason.hpp>
 
 #include <set>
 #include <vector>
@@ -52,6 +53,9 @@ public:
     int get_order_int() const { return int{rawdata.at("order_int")}; }
     std::string get_langonly() const { return std::string{rawdata.at("langonly")}; }
     bool get_installed() const { return bool{rawdata.at("installed")}; }
+    libdnf5::transaction::TransactionItemReason get_reason() const {
+        return libdnf5::transaction::transaction_item_reason_from_string(std::string{rawdata.at("reason")});
+    }
     bool get_uservisible() const { return bool{rawdata.at("uservisible")}; }
     std::set<std::string> get_repos() const;
     std::vector<DbusGroupPackageWrapper> get_packages() const { return packages; }
