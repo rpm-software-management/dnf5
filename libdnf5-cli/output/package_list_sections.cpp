@@ -106,7 +106,7 @@ void PackageListSections::print(const std::unique_ptr<PkgColorizer> & colorizer)
             std::cout << std::endl;
         }
         if (!heading.empty()) {
-            std::cout << heading << std::endl;
+            std::cout << heading << " " << colorizer->get_coloring_description() << std::endl;
         }
         scols_table_print_range(table, first, last);
         separator_needed = true;
