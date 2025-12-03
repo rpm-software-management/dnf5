@@ -17,13 +17,10 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
-#ifndef LIBDNF5_UTILS_FS_UTILS_HPP
-#define LIBDNF5_UTILS_FS_UTILS_HPP
+#ifndef LIBDNF5_UTILS_FS_UTILS_PRIVATE_HPP
+#define LIBDNF5_UTILS_FS_UTILS_PRIVATE_HPP
 
-#include <filesystem>
-#include <string>
-#include <string_view>
-#include <vector>
+#include "libdnf5/utils/fs/utils.hpp"
 
 
 namespace libdnf5::utils::fs {
@@ -37,12 +34,6 @@ namespace libdnf5::utils::fs {
 /// Implements copy and remove fallback.
 void move_recursive(const std::filesystem::path & src, const std::filesystem::path & dest);
 
-// Creates an alphabetically sorted list of all files with `file_extension` from `directories`.
-// If a file with the same name is in multiple directories, only the first file found is added to the list.
-// Directories are traversed in the same order as they are in the input vector.
-[[nodiscard]] std::vector<std::filesystem::path> create_sorted_file_list(
-    const std::vector<std::filesystem::path> & directories, std::string_view file_extension);
-
 }  // namespace libdnf5::utils::fs
 
-#endif  // LIBDNF5_UTILS_FS_UTILS_HPP
+#endif
