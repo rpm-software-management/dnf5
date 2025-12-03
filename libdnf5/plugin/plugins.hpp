@@ -24,6 +24,7 @@
 #include "libdnf5/conf/config_parser.hpp"
 #include "libdnf5/plugin/iplugin.hpp"
 
+#include <filesystem>
 #include <memory>
 #include <string>
 #include <vector>
@@ -84,8 +85,8 @@ public:
     /// Registers the plugin passed by the argument.
     void register_plugin(std::unique_ptr<Plugin> && plugin);
 
-    /// Loads plugins defined by configuration files in the directory.
-    void load_plugins(const std::string & config_dir_path);
+    /// Loads plugins defined by configuration files in the directories.
+    void load_plugins(const std::vector<std::filesystem::path> & config_dirs);
 
     /// Returns the number of registered plugins.
     size_t count() const noexcept;

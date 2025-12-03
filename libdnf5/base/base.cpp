@@ -207,9 +207,9 @@ void Base::load_plugins() {
     const char * plugins_config_dir = std::getenv("LIBDNF_PLUGINS_CONFIG_DIR");
     if (plugins_config_dir &&
         p_impl->config.get_pluginconfpath_option().get_priority() < Option::Priority::COMMANDLINE) {
-        p_impl->plugins.load_plugins(plugins_config_dir);
+        p_impl->plugins.load_plugins({plugins_config_dir});
     } else {
-        p_impl->plugins.load_plugins(p_impl->config.get_pluginconfpath_option().get_value());
+        p_impl->plugins.load_plugins({p_impl->config.get_pluginconfpath_option().get_value()});
     }
 }
 
