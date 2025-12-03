@@ -855,7 +855,7 @@ Provides:       dnf5-command(repomanage)
 Core DNF5 plugins that enhance dnf5 with builddep, changelog, config-manager,
 copr, obs, needs-restarting, repoclosure, repomanage, and reposync commands.
 
-%files -n dnf5-plugins -f dnf5-plugin-builddep.lang -f dnf5-plugin-changelog.lang -f dnf5-plugin-config-manager.lang -f dnf5-plugin-copr.lang -f dnf5-plugin-obs.lang -f dnf5-plugin-needs-restarting.lang -f dnf5-plugin-repoclosure.lang -f dnf5-plugin-reposync.lang
+%files -n dnf5-plugins -f dnf5-plugin-builddep.lang -f dnf5-plugin-changelog.lang -f dnf5-plugin-config-manager.lang -f dnf5-plugin-copr.lang -f dnf5-plugin-needs-restarting.lang -f dnf5-plugin-repoclosure.lang -f dnf5-plugin-reposync.lang
 %{_libdir}/dnf5/plugins/builddep_cmd_plugin.so
 %{_libdir}/dnf5/plugins/changelog_cmd_plugin.so
 %{_libdir}/dnf5/plugins/config-manager_cmd_plugin.so
@@ -1060,7 +1060,6 @@ mkdir -p %{buildroot}%{_libdir}/libdnf5/plugins
 %find_lang dnf5-plugin-changelog
 %find_lang dnf5-plugin-config-manager
 %find_lang dnf5-plugin-copr
-%find_lang dnf5-plugin-obs
 %find_lang dnf5-plugin-needs-restarting
 %find_lang dnf5-plugin-repoclosure
 %find_lang dnf5-plugin-reposync
