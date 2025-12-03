@@ -25,11 +25,13 @@
 #include <libdnf5/common/exception.hpp>
 #include <libdnf5/common/sack/match_string.hpp>
 #include <libdnf5/plugin/iplugin.hpp>
+#include <libdnf5/plugin/utils.hpp>
 #include <libdnf5/repo/repo_errors.hpp>
 #include <libdnf5/repo/repo_query.hpp>
 #include <libdnf5/rpm/package_query.hpp>
 #include <libdnf5/utils/bgettext/bgettext-lib.h>
 #include <libdnf5/utils/bgettext/bgettext-mark-domain.h>
+#include <libdnf5/utils/fs/utils.hpp>
 #include <libdnf5/utils/patterns.hpp>
 #include <sys/wait.h>
 #include <unistd.h>
@@ -604,22 +606,11 @@ void Actions::on_hook(const std::vector<Action> & actions) {
 }
 
 void Actions::parse_action_files() {
-    const auto & config = get_base().get_config();
-    const char * env_plugins_config_dir = std::getenv("LIBDNF_PLUGINS_CONFIG_DIR");
-    const std::string plugins_config_dir = env_plugins_config_dir && config.get_pluginconfpath_option().get_priority() <
-                                                                         libdnf5::Option::Priority::COMMANDLINE
-                                               ? env_plugins_config_dir
-                                               : config.get_pluginconfpath_option().get_value();
-
-    auto action_dir_path = std::filesystem::path(plugins_config_dir) / "actions.d";
-    std::vector<std::filesystem::path> action_paths;
-    std::error_code ec;  // Do not report errors if config_dir_path refers to a non-existing file or not a directory
-    for (const auto & p : std::filesystem::directory_iterator(action_dir_path, ec)) {
-        if ((p.is_regular_file() || p.is_symlink()) && p.path().extension() == ".actions") {
-            action_paths.emplace_back(p.path());
-        }
+    auto action_files_dirs = plugin::get_config_dirs(get_base());
+    for (auto & action_files_dir : action_files_dirs) {
+        action_files_dir /= "actions.d";
     }
-    std::sort(action_paths.begin(), action_paths.end());
+    const auto action_paths = utils::fs::create_sorted_file_list(action_files_dirs, ".actions");
 
     for (const auto & path : action_paths) {
         std::ifstream action_file(path);
@@ -663,7 +654,7 @@ void Actions::parse_action_files() {
             for (const auto & opt : options) {
                 if (opt.starts_with("enabled=")) {
                     const auto value = opt.substr(8);
-                    auto installroot_path = config.get_installroot_option().get_value();
+                    auto installroot_path = get_base().get_config().get_installroot_option().get_value();
                     bool installroot = installroot_path != "/";
                     if (value == "1") {
                         action_enabled = true;
