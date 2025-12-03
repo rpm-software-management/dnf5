@@ -148,6 +148,7 @@ man_pages = [
     ('dnf5_plugins/changelog.8', 'dnf5-changelog', 'Changelog Command', AUTHORS, 8),
     ('dnf5_plugins/config-manager.8', 'dnf5-config-manager', 'Config-manager Command', AUTHORS, 8),
     ('dnf5_plugins/copr.8', 'dnf5-copr', 'Copr Command', AUTHORS, 8),
+    ('dnf5_plugins/obs.8', 'dnf5-obs', 'OBS Command', AUTHORS, 8),
     ('dnf5_plugins/manifest.8', 'dnf5-manifest', 'Manifest Command', AUTHORS, 8),
     ('dnf5_plugins/needs_restarting.8', 'dnf5-needs-restarting', 'Needs-restarting Command', AUTHORS, 8),
     ('dnf5_plugins/repoclosure.8', 'dnf5-repoclosure', 'Repoclosure Command', AUTHORS, 8),
