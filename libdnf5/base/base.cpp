@@ -363,6 +363,11 @@ bool Base::are_repos_configured() const noexcept {
 ConfigMain & Base::get_config() {
     return p_impl->config;
 }
+
+const ConfigMain & Base::get_config() const {
+    return p_impl->config;
+}
+
 LogRouterWeakPtr Base::get_logger() {
     return {&p_impl->log_router, &p_impl->log_router_guard};
 }

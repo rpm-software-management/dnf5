@@ -85,6 +85,8 @@ public:
 
     /// @return a reference to configuration
     ConfigMain & get_config();
+    const ConfigMain & get_config() const;
+
     LogRouterWeakPtr get_logger();
     comps::CompsSackWeakPtr get_comps_sack();
     repo::RepoSackWeakPtr get_repo_sack();
