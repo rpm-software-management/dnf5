@@ -37,6 +37,7 @@ constexpr const char * CONF_DIRECTORY = "/etc/dnf/libdnf5.conf.d";
 constexpr const char * VERSIONLOCK_CONF_FILENAME = "/etc/dnf/versionlock.toml";
 
 constexpr const char * PLUGINS_CONF_DIR = "/etc/dnf/libdnf5-plugins";
+const std::vector<std::string> PLUGINS_CONF_DIRS{"/etc/dnf/libdnf5-plugins", "/usr/share/dnf5/libdnf.plugins.conf.d"};
 
 const std::vector<std::string> REPOSITORY_CONF_DIRS{
     "/etc/yum.repos.d", "/etc/distro.repos.d", "/usr/share/dnf5/repos.d"};
