@@ -21,6 +21,8 @@
 #include <fmt/format.h>
 #include <libdnf5/base/base.hpp>
 #include <libdnf5/plugin/iplugin.hpp>
+#include <libdnf5/plugin/utils.hpp>
+#include <libdnf5/utils/fs/utils.hpp>
 #include <swigpyrun.h>
 
 #include <cstdlib>
@@ -68,7 +70,7 @@ public:
 private:
     void load_plugin_file(
         const std::string & plugin_name, libdnf5::ConfigParser * plugin_config, const fs::path & plugin_path);
-    void load_plugins_from_dir(const fs::path & config_dir_path, const fs::path & plugins_dir);
+    void load_plugins_from_dirs(const std::vector<fs::path> & config_dirs, const fs::path & plugins_dir);
 
     static int python_ref_counter;
     bool active{false};
@@ -263,27 +265,22 @@ void PythonPluginLoader::load_plugin_file(
 }
 
 
-void PythonPluginLoader::load_plugins_from_dir(const fs::path & config_dir_path, const fs::path & plugins_dir) {
+void PythonPluginLoader::load_plugins_from_dirs(
+    const std::vector<fs::path> & config_dirs, const fs::path & plugins_dir) {
     auto & base = get_base();
     auto & logger = *base.get_logger();
 
-    if (config_dir_path.empty()) {
-        throw std::runtime_error("PythonPluginLoader::load_plugins_from_dir() config_dir_path cannot be empty");
+    if (config_dirs.empty()) {
+        throw std::runtime_error("PythonPluginLoader::load_plugins_from_dir() config_dirs cannot be empty");
     }
 
-    std::vector<fs::path> config_paths;
-    std::error_code ec;  // Do not report errors if config_dir_path refers to a non-existing file or not a directory
-    for (const auto & p : fs::directory_iterator(config_dir_path, ec)) {
-        if ((p.is_regular_file() || p.is_symlink()) && p.path().extension() == ".conf") {
-            config_paths.emplace_back(p.path());
-        }
-    }
-    std::sort(config_paths.begin(), config_paths.end());
+    const auto config_paths = utils::fs::create_sorted_file_list(config_dirs, ".conf");
 
     std::string error_msgs;
     for (const auto & config_file_path : config_paths) {
         auto [plugin_name, plugin_config, is_enabled] = base.load_plugin_config(config_file_path);
         fs::path plugin_path = plugins_dir / (plugin_name + ".py");
+        std::error_code ec;
         if (is_enabled && (fs::is_regular_file(plugin_path, ec) || fs::is_symlink(plugin_path, ec))) {
             try {
                 load_plugin_file(plugin_name, &plugin_config, plugin_path);
@@ -306,11 +303,11 @@ void PythonPluginLoader::load_plugins_from_dir(const fs::path & config_dir_path,
 }
 
 void PythonPluginLoader::load_plugins() {
-    const char * plugin_dir = std::getenv("LIBDNF_PYTHON_PLUGIN_DIR");
-    if (!plugin_dir) {
+    const char * plugins_dir = std::getenv("LIBDNF_PYTHON_PLUGIN_DIR");
+    if (!plugins_dir) {
         return;
     }
-    const fs::path path(plugin_dir);
+    const fs::path python_plugins_dir(plugins_dir);
 
     std::lock_guard<libdnf5::Base> guard(get_base());
 
@@ -338,22 +335,18 @@ void PythonPluginLoader::load_plugins() {
     if (!path_object) {
         fetch_python_error_to_exception("PyDict_GetItemString(sys_dict, \"path\"): ");
     }
-    UniquePtrPyObject append(PyObject_CallMethod(path_object, "append", "(s)", path.c_str()));
+    UniquePtrPyObject append(PyObject_CallMethod(path_object, "append", "(s)", python_plugins_dir.c_str()));
     if (!append) {
         fetch_python_error_to_exception(
-            ("PyDict_CallMethod(path_object, \"append\", \"(s)\", " + path.string() + "): ").c_str());
+            ("PyDict_CallMethod(path_object, \"append\", \"(s)\", " + python_plugins_dir.string() + "): ").c_str());
     }
 
-    auto & conf = get_base().get_config();
-    fs::path python_plugins_conf_dir;
-    const char * plugins_config_dir = std::getenv("LIBDNF_PLUGINS_CONFIG_DIR");
-    if (plugins_config_dir && conf.get_pluginconfpath_option().get_priority() < Option::Priority::COMMANDLINE) {
-        python_plugins_conf_dir = plugins_config_dir;
-    } else {
-        python_plugins_conf_dir = conf.get_pluginconfpath_option().get_value();
+    auto python_plugins_config_dirs = plugin::get_config_dirs(get_base());
+    for (auto & python_plugins_config_dir : python_plugins_config_dirs) {
+        python_plugins_config_dir /= "python_plugins_loader.d";
     }
 
-    load_plugins_from_dir(python_plugins_conf_dir / "python_plugins_loader.d", path);
+    load_plugins_from_dirs(python_plugins_config_dirs, python_plugins_dir);
 }
 
 

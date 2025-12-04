@@ -123,6 +123,7 @@ class ConfigMain::Impl {
     OptionBool plugins{true};
     OptionPath pluginpath{DEFAULT_LIBDNF5_PLUGINS_LIB_DIR};
     OptionPath pluginconfpath{PLUGINS_CONF_DIR};
+    OptionStringList plugin_conf_dir{PLUGINS_CONF_DIRS};
     OptionPath persistdir{PERSISTDIR};
     OptionPath system_state_dir{SYSTEM_STATE_DIR};
     OptionPath transaction_history_dir{SYSTEM_STATE_DIR};
@@ -313,6 +314,7 @@ ConfigMain::Impl::Impl(Config & owner) : owner(owner) {
     owner.opt_binds().add("plugins", plugins);
     owner.opt_binds().add("pluginpath", pluginpath);
     owner.opt_binds().add("pluginconfpath", pluginconfpath);
+    owner.opt_binds().add("plugin_conf_dir", plugin_conf_dir);
     owner.opt_binds().add("persistdir", persistdir);
 
     // Unless transaction_history_dir has been explicitly set, use the system_state_dir as its default
@@ -532,6 +534,13 @@ OptionPath & ConfigMain::get_pluginconfpath_option() {
 }
 const OptionPath & ConfigMain::get_pluginconfpath_option() const {
     return p_impl->pluginconfpath;
+}
+
+OptionStringList & ConfigMain::get_plugin_conf_dir_option() {
+    return p_impl->plugin_conf_dir;
+}
+const OptionStringList & ConfigMain::get_plugin_conf_dir_option() const {
+    return p_impl->plugin_conf_dir;
 }
 
 OptionPath & ConfigMain::get_persistdir_option() {
@@ -1377,6 +1386,7 @@ void ConfigMain::Impl::load_from_config(const ConfigMain::Impl & other) {
     load_option(plugins, other.plugins);
     load_option(pluginpath, other.pluginpath);
     load_option(pluginconfpath, other.pluginconfpath);
+    load_option(plugin_conf_dir, other.plugin_conf_dir);
     load_option(persistdir, other.persistdir);
     load_option(system_state_dir, other.system_state_dir);
     load_option(transaction_history_dir, other.transaction_history_dir);

@@ -38,6 +38,7 @@
 #include "libdnf5/comps/comps_sack.hpp"
 #include "libdnf5/conf/config_parser.hpp"
 #include "libdnf5/conf/const.hpp"
+#include "libdnf5/plugin/utils.hpp"
 #include "libdnf5/utils/bgettext/bgettext-mark-domain.h"
 
 #include <atomic>
@@ -204,13 +205,7 @@ void Base::load_plugins() {
         return;
     }
 
-    const char * plugins_config_dir = std::getenv("LIBDNF_PLUGINS_CONFIG_DIR");
-    if (plugins_config_dir &&
-        p_impl->config.get_pluginconfpath_option().get_priority() < Option::Priority::COMMANDLINE) {
-        p_impl->plugins.load_plugins(plugins_config_dir);
-    } else {
-        p_impl->plugins.load_plugins(p_impl->config.get_pluginconfpath_option().get_value());
-    }
+    p_impl->plugins.load_plugins(plugin::get_config_dirs(*this));
 }
 
 void Base::add_plugin(
@@ -351,6 +346,11 @@ bool Base::are_repos_configured() const noexcept {
 ConfigMain & Base::get_config() {
     return p_impl->config;
 }
+
+const ConfigMain & Base::get_config() const {
+    return p_impl->config;
+}
+
 LogRouterWeakPtr Base::get_logger() {
     return {&p_impl->log_router, &p_impl->log_router_guard};
 }

@@ -22,6 +22,7 @@
 #include "base/base_impl.hpp"
 #include "iplugin_private.hpp"
 #include "plugin_info_impl.hpp"
+#include "utils/fs/utils.hpp"
 #include "utils/library.hpp"
 
 #include "libdnf5/utils/bgettext/bgettext-mark-domain.h"
@@ -174,19 +175,12 @@ void Plugins::load_plugin_library(
     logger.debug("End of loading plugins using the \"{}\" plugin.", name);
 }
 
-void Plugins::load_plugins(const std::string & config_dir_path) {
+void Plugins::load_plugins(const std::vector<std::filesystem::path> & config_dirs) {
     auto & logger = *base->get_logger();
-    if (config_dir_path.empty())
-        throw PluginError(M_("Plugins::load_plugins(): config_dir_path cannot be empty"));
+    if (config_dirs.empty())
+        throw PluginError(M_("Plugins::load_plugins(): config_dirs cannot be empty"));
 
-    std::vector<std::filesystem::path> config_paths;
-    std::error_code ec;  // Do not report errors if config_dir_path refers to a non-existing file or not a directory
-    for (const auto & p : std::filesystem::directory_iterator(config_dir_path, ec)) {
-        if ((p.is_regular_file() || p.is_symlink()) && p.path().extension() == ".conf") {
-            config_paths.emplace_back(p.path());
-        }
-    }
-    std::sort(config_paths.begin(), config_paths.end());
+    const auto config_paths = utils::fs::create_sorted_file_list(config_dirs, ".conf");
 
     for (const auto & path : config_paths) {
         try {
