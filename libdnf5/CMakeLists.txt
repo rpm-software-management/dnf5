@@ -7,9 +7,6 @@ if (NOT WITH_MODULEMD)
     list(REMOVE_ITEM LIBDNF5_SOURCES ${LIBDNF5_SOURCES_MODULES})
 endif()
 
-# create config header file
-configure_file("config.h.in" ${CMAKE_CURRENT_SOURCE_DIR}/conf/config.h)
-
 # gather all pkg-config requires and write them to a .pc file later
 list(APPEND LIBDNF5_PC_REQUIRES)
 list(APPEND LIBDNF5_PC_REQUIRES_PRIVATE)
@@ -137,6 +134,8 @@ list(JOIN LIBDNF5_PC_REQUIRES ", " LIBDNF5_PC_REQUIRES_STRING)
 list(SORT LIBDNF5_PC_REQUIRES_PRIVATE)
 list(JOIN LIBDNF5_PC_REQUIRES_PRIVATE ", " LIBDNF5_PC_REQUIRES_PRIVATE_STRING)
 
+# create config header file after feature detection is complete
+configure_file("config.h.in" ${CMAKE_CURRENT_SOURCE_DIR}/conf/config.h)
 
 # create a .pc file
 configure_file("libdnf5.pc.in" ${CMAKE_CURRENT_BINARY_DIR}/libdnf5.pc @ONLY)
