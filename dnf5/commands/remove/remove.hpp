@@ -39,6 +39,8 @@ public:
 private:
     std::vector<std::string> pkg_specs;
     std::vector<std::string> installed_from_repos;
+    libdnf5::OptionBool * oldinstallonly{nullptr};
+    libdnf5::OptionNumber<std::uint32_t> * oldinstallonly_limit{nullptr};
 };
 
 }  // namespace dnf5
