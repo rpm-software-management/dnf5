@@ -926,7 +926,6 @@ License:        LGPL-2.1-or-later
 Requires:       dnf5%{?_isa} = %{version}-%{release}
 Requires:       libdnf5%{?_isa} = %{version}-%{release}
 Requires:       libdnf5-cli%{?_isa} = %{version}-%{release}
-Requires:       pkgconfig(libpkgmanifest)
 Provides:       dnf5-command(manifest)
 
 %description plugin-manifest
