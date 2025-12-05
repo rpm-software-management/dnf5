@@ -1,0 +1,7 @@
+[obs:build.opensuse.org:home:user:Fedora_40]
+name=home:user (Fedora_40)
+type=rpm-md
+baseurl=https://download.opensuse.org/repositories/home:/user/Fedora_40/
+gpgcheck=1
+gpgkey=https://download.opensuse.org/repositories/home:/user/Fedora_40/repodata/repomd.xml.key
+enabled=1

@@ -1,0 +1,7 @@
+[obs:build.opensuse.org:openSUSE:Tools:Fedora_43]
+name=openSUSE.org tools (Fedora_43)
+type=rpm-md
+baseurl=https://download.opensuse.org/repositories/openSUSE:/Tools/Fedora_43/
+gpgcheck=1
+gpgkey=https://download.opensuse.org/repositories/openSUSE:/Tools/Fedora_43/repodata/repomd.xml.key
+enabled=1
