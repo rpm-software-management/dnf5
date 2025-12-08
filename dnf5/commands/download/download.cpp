@@ -78,6 +78,9 @@ void DownloadCommand::set_argument_parser() {
     debuginfo_option = dynamic_cast<libdnf5::OptionBool *>(
         parser.add_init_value(std::unique_ptr<libdnf5::OptionBool>(new libdnf5::OptionBool(false))));
 
+    debugsource_option = dynamic_cast<libdnf5::OptionBool *>(
+        parser.add_init_value(std::unique_ptr<libdnf5::OptionBool>(new libdnf5::OptionBool(false))));
+
     auto resolve = parser.add_new_named_arg("resolve");
     resolve->set_long_name("resolve");
     resolve->set_description("Resolve and download needed dependencies");
@@ -102,6 +105,12 @@ void DownloadCommand::set_argument_parser() {
     debuginfo->set_description("Download the -debuginfo package instead");
     debuginfo->set_const_value("true");
     debuginfo->link_value(debuginfo_option);
+
+    auto debugsource = parser.add_new_named_arg("debugsource");
+    debugsource->set_long_name("debugsource");
+    debugsource->set_description("Download the -debugsource package instead");
+    debugsource->set_const_value("true");
+    debugsource->link_value(debugsource_option);
 
     auto url = parser.add_new_named_arg("url");
     url->set_long_name("url");
@@ -172,6 +181,7 @@ void DownloadCommand::set_argument_parser() {
     auto skip_unavailable = std::make_unique<SkipUnavailableOption>(*this);
     cmd.register_named_arg(srpm);
     cmd.register_named_arg(debuginfo);
+    cmd.register_named_arg(debugsource);
     cmd.register_named_arg(url);
     cmd.register_named_arg(urlprotocol);
     cmd.register_named_arg(allmirrors);
@@ -203,6 +213,10 @@ void DownloadCommand::configure() {
     }
 
     if (debuginfo_option->get_value()) {
+        context.get_base().get_repo_sack()->enable_debug_repos();
+    }
+
+    if (debugsource_option->get_value()) {
         context.get_base().get_repo_sack()->enable_debug_repos();
     }
 
@@ -332,8 +346,38 @@ void DownloadCommand::run() {
         }
     }
 
+    if (debugsource_option->get_value()) {
+        libdnf5::rpm::PackageQuery debugsource_pkg_query(ctx.get_base());
+        debugsource_pkg_query.filter_available();
+
+        bool found_any_debugsource = false;
+        for (auto & [nevra, pkg] : original_binary_pkgs) {
+            libdnf5::rpm::PackageQuery pkg_query(debugsource_pkg_query);
+
+            std::string debugsource_name = pkg.get_debugsource_name();
+            pkg_query.filter_name({debugsource_name});
+            pkg_query.filter_version({pkg.get_version()});
+            pkg_query.filter_release({pkg.get_release()});
+            pkg_query.filter_arch({pkg.get_arch()});
+            pkg_query.filter_epoch(pkg.get_epoch());
+
+            if (pkg_query.size() > 0) {
+                found_any_debugsource = true;
+                for (const auto & dpkg : pkg_query) {
+                    packages_to_download.insert(create_nevra_pkg_pair(dpkg));
+                }
+            } else {
+                ctx.get_base().get_logger()->info("No debugsource package found for: \"{}\"", pkg.get_name());
+            }
+        }
+
+        if (!found_any_debugsource) {
+            ctx.get_base().get_logger()->warning("No debugsource packages found for any of the specified packages");
+        }
+    }
+
     // If neither option is enabled, use original binary packages
-    if (!srpm_option->get_value() && !debuginfo_option->get_value()) {
+    if (!srpm_option->get_value() && !debuginfo_option->get_value() && !debugsource_option->get_value()) {
         packages_to_download = std::move(original_binary_pkgs);
     }
 
