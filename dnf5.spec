@@ -85,7 +85,12 @@ Provides:       dnf5-command(versionlock)
 %bcond_without plugin_rhsm
 %bcond_without plugin_manifest
 %bcond_without python_plugins_loader
+
+%if 0%{?rhel} >= 10
+%bcond_with plugin_local
+%else
 %bcond_without plugin_local
+%endif
 
 %bcond_without acl
 %bcond_without comps
