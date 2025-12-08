@@ -1151,8 +1151,12 @@ Transaction::TransactionRunResult Transaction::Impl::_run(
                 if (tspkg_reason == transaction::TransactionItemReason::GROUP) {
                     auto group_id = *tspkg.get_reason_change_group_id();
                     auto state = system_state.get_group_state(group_id);
-                    state.packages.emplace_back(pkg.get_name());
-                    system_state.set_group_state(group_id, state);
+                    auto pkg_name = pkg.get_name();
+                    // add package name to the list of group packages if it's not there yet
+                    if (std::find(state.packages.begin(), state.packages.end(), pkg_name) == state.packages.end()) {
+                        state.packages.emplace_back(pkg_name);
+                        system_state.set_group_state(group_id, state);
+                    }
                 } else {
                     system_state.set_package_reason(pkg.get_na(), tspkg_reason);
                 }
