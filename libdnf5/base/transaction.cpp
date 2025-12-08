@@ -1149,6 +1149,8 @@ Transaction::TransactionRunResult Transaction::Impl::_run(
                 system_state.remove_package_nevra_state(pkg.get_nevra());
             } else if (tspkg.get_action() == TransactionPackage::Action::REASON_CHANGE) {
                 if (tspkg_reason == transaction::TransactionItemReason::GROUP) {
+                    // group packages are not stored in packages.toml but in groups.toml using its name
+                    system_state.set_package_reason(pkg.get_na(), transaction::TransactionItemReason::DEPENDENCY);
                     auto group_id = *tspkg.get_reason_change_group_id();
                     auto state = system_state.get_group_state(group_id);
                     auto pkg_name = pkg.get_name();
