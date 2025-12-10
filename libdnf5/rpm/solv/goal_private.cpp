@@ -678,14 +678,6 @@ void GoalPrivate::add_protected_packages(const libdnf5::solv::SolvMap & map) {
     }
 }
 
-void GoalPrivate::set_protected_packages(const libdnf5::solv::SolvMap & map) {
-    protected_packages.reset(new libdnf5::solv::SolvMap(map));
-}
-
-void GoalPrivate::reset_protected_packages() {
-    protected_packages.reset();
-}
-
 void GoalPrivate::set_user_installed_packages(const libdnf5::solv::IdQueue & queue) {
     user_installed_packages.reset(new libdnf5::solv::IdQueue(queue));
 }
