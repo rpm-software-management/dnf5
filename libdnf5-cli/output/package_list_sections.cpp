@@ -23,6 +23,7 @@
 
 #include "libdnf5-cli/output/adapters/package.hpp"
 #include "libdnf5-cli/tty.hpp"
+#include "libdnf5-cli/utils/json.hpp"
 
 #include <json-c/json.h>
 #include <libdnf5/rpm/nevra.hpp>
@@ -162,7 +163,9 @@ void PackageListSections::print_json() {
         }
 
         // [NOTE](mfocko) Consider adding header to CLI “pretty” output too…
-        json_object_object_add(j_output, heading != "" ? heading.c_str() : "upgrades", j_packages);
+        auto json_heading =
+            libdnf5::cli::utils::json::normalize_field(heading != "" ? heading : "Upgradeable packages");
+        json_object_object_add(j_output, json_heading.c_str(), j_packages);
     }
 
     // Print and deallocate
