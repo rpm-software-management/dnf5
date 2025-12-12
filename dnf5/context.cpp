@@ -146,7 +146,7 @@ public:
         const std::vector<std::string> & bzs,
         const std::vector<std::string> & cves);
 
-    void load_repos(bool load_system);
+    void load_repos(bool load_system, bool load_available);
 
     void store_offline(libdnf5::base::Transaction & transaction);
 
@@ -350,13 +350,15 @@ void Context::Impl::update_repo_metadata_from_advisory_options(
     }
 }
 
-void Context::Impl::load_repos(bool load_system) {
-    libdnf5::repo::RepoQuery repos(base);
-    repos.filter_enabled(true);
-    repos.filter_type(libdnf5::repo::Repo::Type::SYSTEM, libdnf5::sack::QueryCmp::NEQ);
+void Context::Impl::load_repos(bool load_system, bool load_available) {
+    if (load_available) {
+        libdnf5::repo::RepoQuery repos(base);
+        repos.filter_enabled(true);
+        repos.filter_type(libdnf5::repo::Repo::Type::SYSTEM, libdnf5::sack::QueryCmp::NEQ);
 
-    for (auto & repo : repos) {
-        repo->set_callbacks(std::make_unique<dnf5::KeyImportRepoCB>(base.get_config()));
+        for (auto & repo : repos) {
+            repo->set_callbacks(std::make_unique<dnf5::KeyImportRepoCB>(base.get_config()));
+        }
     }
 
     const auto skip_system_repo_lock = base.get_config().get_skip_system_repo_lock_option().get_value();
@@ -396,17 +398,25 @@ void Context::Impl::load_repos(bool load_system) {
         }
     }
 
-    print_info(_("Updating and loading repositories:"));
-    if (load_system) {
+    if (load_available) {
+        // If we're only loading the system repo, we can skip the message.
+        print_info(_("Updating and loading repositories:"));
+    }
+
+    if (load_system && load_available) {
         base.get_repo_sack()->load_repos();
-    } else {
+    } else if (load_system) {
+        base.get_repo_sack()->load_repos(libdnf5::repo::Repo::Type::SYSTEM);
+    } else if (load_available) {
         base.get_repo_sack()->load_repos(libdnf5::repo::Repo::Type::AVAILABLE);
     }
 
     if (auto download_callbacks = dynamic_cast<DownloadCallbacks *>(base.get_download_callbacks())) {
         download_callbacks->reset_progress_bar();
     }
-    print_info(_("Repositories loaded."));
+    if (load_available) {
+        print_info(_("Repositories loaded."));
+    }
 }
 
 void Context::Impl::store_offline(libdnf5::base::Transaction & transaction) {
@@ -639,8 +649,8 @@ void Context::update_repo_metadata_from_advisory_options(
         names, security, bugfix, enhancement, newpackage, severity, bzs, cves);
 }
 
-void Context::load_repos(bool load_system) {
-    p_impl->load_repos(load_system);
+void Context::load_repos(bool load_system, bool load_available) {
+    p_impl->load_repos(load_system, load_available);
 }
 
 void Context::store_offline(libdnf5::base::Transaction & transaction) {
@@ -1209,13 +1219,13 @@ std::vector<std::string> match_specs(
                 repo->get_config().get_skip_if_unavailable_option().set(libdnf5::Option::Priority::RUNTIME, true);
             }
 
-            ctx.load_repos(installed);
+            ctx.load_repos(installed, true);
         } catch (...) {
             // Ignores errors when completing available packages, other completions may still work.
         }
     } else if (installed) {
         try {
-            base.get_repo_sack()->load_repos(libdnf5::repo::Repo::Type::SYSTEM);
+            ctx.load_repos(true, false);
         } catch (...) {
             // Ignores errors when completing installed packages, other completions may still work.
         }
