@@ -66,8 +66,9 @@ public:
     /// Call a function that loads the config file, catching errors appropriately
     void with_config_file_path(std::function<void(const std::string &)> func);
 
-    bool lock_system_repo(libdnf5::utils::LockAccessType access, libdnf5::utils::LockBlockingType blocking);
+    bool lock_system_repo(libdnf5::utils::LockAccess type, libdnf5::utils::LockBlocking blocking);
     void unlock_system_repo();
+    const libdnf5::utils::Locker * get_system_repo_lock() const noexcept;
 
 private:
     friend class Base;
