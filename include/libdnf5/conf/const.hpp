@@ -43,7 +43,7 @@ const std::vector<std::string> REPOSITORY_CONF_DIRS{
 constexpr const char * REPOS_OVERRIDE_DIR = "/etc/dnf/repos.override.d";
 
 constexpr const char * TRANSACTION_LOCK_FILEPATH = "/run/dnf/rpmtransaction.lock";
-constexpr const char * SYSTEM_REPO_LOCK_FILEPATH = "/run/dnf/system-repo.lock";
+constexpr const char * SYSTEM_REPO_LOCK_FILENAME = "system-repo.lock";
 
 // More important varsdirs must be on the end of vector
 const std::vector<std::string> VARS_DIRS{"/usr/share/dnf5/vars.d", "/etc/dnf/vars"};

@@ -328,12 +328,16 @@ void Base::setup() {
     p_impl->plugins.post_base_setup();
 }
 
-bool Base::lock_system_repo(libdnf5::utils::LockAccessType access, libdnf5::utils::LockBlockingType blocking) {
+bool Base::lock_system_repo(libdnf5::utils::LockAccess access, libdnf5::utils::LockBlocking blocking) {
     return p_impl->lock_system_repo(access, blocking);
 }
 
 void Base::unlock_system_repo() {
     p_impl->unlock_system_repo();
+}
+
+const libdnf5::utils::Locker * Base::get_system_repo_lock() const noexcept {
+    return p_impl->get_system_repo_lock();
 }
 
 bool Base::is_initialized() {
@@ -438,15 +442,17 @@ libdnf5::system::State & Base::Impl::get_system_state() {
     return *system_state;
 }
 
-bool Base::Impl::lock_system_repo(libdnf5::utils::LockAccessType access, libdnf5::utils::LockBlockingType blocking) {
+bool Base::Impl::lock_system_repo(libdnf5::utils::LockAccess access, libdnf5::utils::LockBlocking blocking) {
     if (!system_repo_lock.has_value()) {
-        auto & installroot = config.get_installroot_option();
-        installroot.lock("Locked by Base::Impl::lock_system_repo()");
+        auto & installroot_option = config.get_installroot_option();
+        installroot_option.lock("Locked by Base::Impl::lock_system_repo()");
+        const auto & system_state_dir = config.get_system_state_dir_option().get_value();
 
-        const auto & relative_path = std::filesystem::path{SYSTEM_REPO_LOCK_FILEPATH}.relative_path();
-        const auto & lock_file_path = installroot.get_value() / relative_path;
+        const auto & relative_path =
+            std::filesystem::path{system_state_dir}.relative_path() / std::filesystem::path{SYSTEM_REPO_LOCK_FILENAME};
+        const auto & lock_file_path = installroot_option.get_value() / relative_path;
+
         std::filesystem::create_directories(lock_file_path.parent_path());
-
         system_repo_lock = libdnf5::utils::Locker{lock_file_path, true};
     }
     return system_repo_lock->lock(access, blocking);
@@ -456,6 +462,10 @@ void Base::Impl::unlock_system_repo() {
     if (system_repo_lock.has_value()) {
         system_repo_lock->unlock();
     }
+}
+
+const libdnf5::utils::Locker * Base::Impl::get_system_repo_lock() const noexcept {
+    return system_repo_lock ? std::to_address(system_repo_lock) : nullptr;
 }
 
 }  // namespace libdnf5

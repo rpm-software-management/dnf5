@@ -435,6 +435,7 @@ Package management library.
 %verify(not md5 size mtime) %attr(0644, root, root) %ghost %{_prefix}/lib/sysimage/libdnf5/packages.toml
 %verify(not md5 size mtime) %attr(0644, root, root) %ghost %{_prefix}/lib/sysimage/libdnf5/system.toml
 %verify(not md5 size mtime) %attr(0644, root, root) %ghost %{_prefix}/lib/sysimage/libdnf5/transaction_history.sqlite{,-shm,-wal}
+%verify(not md5 size mtime) %attr(0664, root, root) %ghost %{_prefix}/lib/sysimage/libdnf5/system-repo.lock
 %license lgpl-2.1.txt
 %ghost %attr(0755, root, root) %dir %{_var}/cache/libdnf5
 %ghost %attr(0755, root, root) %dir %{_sharedstatedir}/dnf
@@ -1033,7 +1034,8 @@ for file in \
     environments.toml groups.toml modules.toml nevras.toml packages.toml \
     system.toml \
     transaction_history.sqlite transaction_history.sqlite-shm \
-    transaction_history.sqlite-wal
+    transaction_history.sqlite-wal \
+    system-repo.lock
 do
     touch %{buildroot}%{_prefix}/lib/sysimage/libdnf5/$file
 done
