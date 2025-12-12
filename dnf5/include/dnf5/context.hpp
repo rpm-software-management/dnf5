@@ -39,6 +39,9 @@
 #include <utility>
 #include <vector>
 
+// Forward declare main in global namescape so we can befriend it
+int main(int argc, char ** argv);
+
 namespace dnf5 {
 
 constexpr const char * TRANSACTION_JSON = "transaction.json";
@@ -47,6 +50,8 @@ class Plugins;
 
 class DNF_API Context : public libdnf5::cli::session::Session {
 public:
+    friend int ::main(int, char **);
+
     enum class LoadAvailableRepos { NONE, ENABLED, ALL };
 
     /// Constructs a new Context instance and sets the destination loggers.
@@ -75,9 +80,6 @@ public:
         const std::vector<std::string> & severity,
         const std::vector<std::string> & bzs,
         const std::vector<std::string> & cves);
-
-    /// Sets callbacks for repositories and loads them, updating metadata if necessary.
-    void load_repos(bool load_system, bool load_available);
 
     void store_offline(libdnf5::base::Transaction & transaction);
 
@@ -179,6 +181,20 @@ public:
     /// Set to true to print version information
     void set_show_version(bool enable);
     bool get_show_version() const;
+
+    /// Returns the names and nevras of the matching packages and
+    /// the paths to the matching package file names and directories.
+    /// The names of the matching packages are returned only if `only_nevras` is false.
+    /// Only files whose names match `file_name_regex` are returned.
+    /// NOTE: This function is intended to be used only for autocompletion purposes as the argument parser's
+    /// complete hook argument. It does the base setup and repos loading inside.
+    std::vector<std::string> match_specs(
+        const std::string & pattern,
+        bool installed,
+        bool available,
+        bool paths,
+        bool only_nevras,
+        const char * file_name_regex = ".*\\.rpm");
 
 private:
     class DNF_LOCAL Impl;
@@ -292,21 +308,6 @@ private:
 };
 
 DNF_API void run_transaction(libdnf5::rpm::Transaction & transaction);
-
-/// Returns the names and nevras of the matching packages and
-/// the paths to the matching package file names and directories.
-/// The names of the matching packages are returned only if `only_nevras` is false.
-/// Only files whose names match `file_name_regex` are returned.
-/// NOTE: This function is intended to be used only for autocompletion purposes as the argument parser's
-/// complete hook argument. It does the base setup and repos loading inside.
-DNF_API std::vector<std::string> match_specs(
-    Context & ctx,
-    const std::string & pattern,
-    bool installed,
-    bool available,
-    bool paths,
-    bool only_nevras,
-    const char * file_name_regex = ".*\\.rpm");
 
 }  // namespace dnf5
 

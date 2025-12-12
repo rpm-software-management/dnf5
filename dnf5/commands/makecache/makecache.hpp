@@ -29,6 +29,7 @@ public:
     explicit MakeCacheCommand(Context & context) : Command(context, "makecache") {}
     void set_parent_command() override;
     void set_argument_parser() override;
+    void configure() override;
     void run() override;
 };
 

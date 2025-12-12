@@ -62,7 +62,7 @@ void BuildDepCommand::set_argument_parser() {
             return true;
         });
     specs->set_complete_hook_func([&ctx](const char * arg) {
-        return match_specs(ctx, arg, false, true, true, false, ".*\\.(spec|src\\.rpm|nosrc\\.rpm)");
+        return ctx.match_specs(arg, false, true, true, false, ".*\\.(spec|src\\.rpm|nosrc\\.rpm)");
     });
     specs->set_nrepeats(ArgumentParser::PositionalArg::AT_LEAST_ONE);
     cmd.register_positional_arg(specs);

@@ -57,7 +57,7 @@ void RemoveCommand::set_argument_parser() {
             }
             return true;
         });
-    keys->set_complete_hook_func([&ctx](const char * arg) { return match_specs(ctx, arg, true, false, false, false); });
+    keys->set_complete_hook_func([&ctx](const char * arg) { return ctx.match_specs(arg, true, false, false, false); });
     cmd.register_positional_arg(keys);
 
     create_offline_option(*this);

@@ -40,11 +40,11 @@ public:
 
 class SearchPatternsArguments : public libdnf5::cli::session::StringArgumentList {
 public:
-    explicit SearchPatternsArguments(libdnf5::cli::session::Command & command, Context & context)
+    explicit SearchPatternsArguments(libdnf5::cli::session::Command & command, Context & ctx)
         : StringArgumentList(
               command, "patterns", _("Patterns"), libdnf5::cli::ArgumentParser::PositionalArg::AT_LEAST_ONE) {
         arg->set_complete_hook_func(
-            [&context](const char * arg) { return match_specs(context, arg, true, true, false, false); });
+            [&ctx](const char * arg) { return ctx.match_specs(arg, true, true, false, false); });
     }
 };
 

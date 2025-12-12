@@ -38,8 +38,10 @@ void MakeCacheCommand::set_argument_parser() {
     get_argument_parser_command()->set_description("Generate the metadata cache");
 }
 
-void MakeCacheCommand::run() {
+void MakeCacheCommand::configure() {
     auto & ctx = get_context();
+    ctx.set_load_system_repo(false);
+    ctx.set_load_available_repos(Context::LoadAvailableRepos::ENABLED);
 
     libdnf5::repo::RepoQuery enabled_repos_query(ctx.get_base());
     enabled_repos_query.filter_enabled(true);
@@ -56,9 +58,9 @@ void MakeCacheCommand::run() {
         std::cout << fmt::format("There are no enabled repositories in {}.", repos_paths) << std::endl;
         return;
     }
+}
 
-    ctx.load_repos(false, true);
-
+void MakeCacheCommand::run() {
     std::cout << "Metadata cache created." << std::endl;
 }
 
