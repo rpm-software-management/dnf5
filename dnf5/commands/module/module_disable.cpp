@@ -42,7 +42,7 @@ void ModuleDisableCommand::set_argument_parser() {
             }
             return true;
         });
-    keys->set_complete_hook_func([&ctx](const char * arg) { return match_specs(ctx, arg, false, true, true, false); });
+    keys->set_complete_hook_func([&ctx](const char * arg) { return ctx.match_specs(arg, false, true, true, false); });
     cmd.register_positional_arg(keys);
 
     auto skip_unavailable = std::make_unique<SkipUnavailableOption>(*this);

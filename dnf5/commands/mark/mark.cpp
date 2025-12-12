@@ -68,7 +68,7 @@ void MarkUserCommand::set_argument_parser() {
         pkg_specs);
     specs_arg->set_description("List of package-spec-NPFB to mark");
     specs_arg->set_complete_hook_func(
-        [&ctx](const char * arg) { return match_specs(ctx, arg, true, false, false, false); });
+        [&ctx](const char * arg) { return ctx.match_specs(arg, true, false, false, false); });
     cmd.register_positional_arg(specs_arg);
 }
 
@@ -114,7 +114,7 @@ void MarkGroupCommand::set_argument_parser() {
         pkg_specs);
     specs_arg->set_description("List of package specs");
     specs_arg->set_complete_hook_func(
-        [&ctx](const char * arg) { return match_specs(ctx, arg, true, false, false, false); });
+        [&ctx](const char * arg) { return ctx.match_specs(arg, true, false, false, false); });
     cmd.register_positional_arg(specs_arg);
 }
 

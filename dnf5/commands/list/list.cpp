@@ -53,7 +53,7 @@ void ListCommand::set_argument_parser() {
             }
             return true;
         });
-    specs->set_complete_hook_func([&ctx](const char * arg) { return match_specs(ctx, arg, true, true, false, false); });
+    specs->set_complete_hook_func([&ctx](const char * arg) { return ctx.match_specs(arg, true, true, false, false); });
     cmd.register_positional_arg(specs);
 
     show_duplicates = std::make_unique<libdnf5::cli::session::BoolOption>(

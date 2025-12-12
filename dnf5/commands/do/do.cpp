@@ -155,7 +155,7 @@ void DoCommand::set_argument_parser() {
         });
         items->set_nrepeats(ArgumentParser::PositionalArg::UNLIMITED);
         items->set_complete_hook_func(
-            [&ctx](const char * arg) { return match_specs(ctx, arg, false, true, true, false); });
+            [&ctx](const char * arg) { return ctx.match_specs(arg, false, true, true, false); });
         cmd.register_positional_arg(items);
     }
 

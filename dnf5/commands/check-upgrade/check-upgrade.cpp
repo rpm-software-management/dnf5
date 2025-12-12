@@ -77,7 +77,7 @@ void CheckUpgradeCommand::set_argument_parser() {
             }
             return true;
         });
-    keys->set_complete_hook_func([&ctx](const char * arg) { return match_specs(ctx, arg, true, false, true, false); });
+    keys->set_complete_hook_func([&ctx](const char * arg) { return ctx.match_specs(arg, true, false, true, false); });
     cmd.register_positional_arg(keys);
 
     advisory_name = std::make_unique<AdvisoryOption>(*this);
