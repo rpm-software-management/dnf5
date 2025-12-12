@@ -233,6 +233,7 @@ class ConfigMain::Impl {
     OptionBool countme{false};
     OptionBool protect_running_kernel{true};
     OptionBool build_cache{true};
+    OptionBool skip_system_repo_lock{false};
 
     // Repo main config
 
@@ -410,6 +411,7 @@ ConfigMain::Impl::Impl(Config & owner) : owner(owner) {
     owner.opt_binds().add("countme", countme);
     owner.opt_binds().add("protect_running_kernel", protect_running_kernel);
     owner.opt_binds().add("build_cache", build_cache);
+    owner.opt_binds().add("skip_system_repo_lock", skip_system_repo_lock);
 
     // Repo main config
 
@@ -1054,6 +1056,12 @@ OptionBool & ConfigMain::get_build_cache_option() {
 const OptionBool & ConfigMain::get_build_cache_option() const {
     return p_impl->build_cache;
 }
+OptionBool & ConfigMain::get_skip_system_repo_lock_option() {
+    return p_impl->skip_system_repo_lock;
+}
+const OptionBool & ConfigMain::get_skip_system_repo_lock_option() const {
+    return p_impl->skip_system_repo_lock;
+}
 
 // Repo main config
 OptionNumber<std::uint32_t> & ConfigMain::get_retries_option() {
@@ -1450,6 +1458,9 @@ void ConfigMain::Impl::load_from_config(const ConfigMain::Impl & other) {
     load_option(countme, other.countme);
     load_option(protect_running_kernel, other.protect_running_kernel);
     load_option(build_cache, other.build_cache);
+    load_option(skip_system_repo_lock, other.skip_system_repo_lock);
+
+    // Repo main config
     load_option(retries, other.retries);
     load_option(cachedir, other.cachedir);
     load_option(fastestmirror, other.fastestmirror);

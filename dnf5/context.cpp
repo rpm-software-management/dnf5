@@ -359,7 +359,8 @@ void Context::Impl::load_repos(bool load_system) {
         repo->set_callbacks(std::make_unique<dnf5::KeyImportRepoCB>(base.get_config()));
     }
 
-    if (load_system) {
+    const auto skip_system_repo_lock = base.get_config().get_skip_system_repo_lock_option().get_value();
+    if (load_system && !skip_system_repo_lock) {
         const auto lock_access_type = libdnf5::utils::LockAccess::WRITE;
         if (!base.lock_system_repo(lock_access_type, libdnf5::utils::LockBlocking::NON_BLOCKING)) {
             // A lock on the system repo could not immediately be acquired.
@@ -374,9 +375,13 @@ void Context::Impl::load_repos(bool load_system) {
             }
             pids.erase(getpid());
             if (pids.empty()) {
-                print_info(_("Waiting for other processes to finish"));
+                print_info(
+                    _("Waiting for a lock on the system repository; another process is currently accessing it. Use the "
+                      "\"--skip-file-locks\" option to bypass the lock."));
             } else {
-                print_info(_("Waiting for other processes to finish:"));
+                print_info(
+                    _("Waiting for a lock on the system repository. The following processes are currently accessing "
+                      "it:"));
                 for (const auto & pid : pids) {
                     try {
                         const auto & cmdline = libdnf5::pid_cmdline(pid);
@@ -385,6 +390,7 @@ void Context::Impl::load_repos(bool load_system) {
                         print_info(libdnf5::utils::sformat("{}", pid));
                     }
                 }
+                print_info(_("Use the \"--skip-file-locks\" option to bypass the lock."));
             }
             base.lock_system_repo(lock_access_type, libdnf5::utils::LockBlocking::BLOCKING);
         }

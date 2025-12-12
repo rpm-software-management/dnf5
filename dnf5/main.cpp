@@ -668,6 +668,15 @@ void RootCommand::set_argument_parser() {
         global_options_group->register_argument(forcearch);
     }
 
+    auto skip_file_locks = parser.add_new_named_arg("skip-file-locks");
+    skip_file_locks->set_long_name("skip-file-locks");
+    skip_file_locks->set_description(_("Skip acquiring file locks, such as the lock on the system repository"));
+    skip_file_locks->set_const_value("true");
+    // For now, --skip-file-locks applies to just the system repository lock.
+    // It should be updated to ignore metadata locks, etc. when we implement those.
+    skip_file_locks->link_value(&config.get_skip_system_repo_lock_option());
+    global_options_group->register_argument(skip_file_locks);
+
     register_group_with_args(cmd, *global_options_group);
 
     parser.set_inherit_named_args(true);
