@@ -125,6 +125,8 @@ public:
     void set_show_version(bool enable) { this->show_version = enable; }
     bool get_show_version() const { return this->show_version; }
 
+    bool cmd_requires_privileges() const;
+
 private:
     Context & owner;
 
