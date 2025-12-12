@@ -1543,13 +1543,8 @@ int main(int argc, char * argv[]) try {
                        "modifying the system state."));
             }
 
-            {
-                if (context.get_load_available_repos() != dnf5::Context::LoadAvailableRepos::NONE) {
-                    context.load_repos(context.get_load_system_repo());
-                } else if (context.get_load_system_repo()) {
-                    repo_sack->load_repos(libdnf5::repo::Repo::Type::SYSTEM);
-                }
-            }
+            const auto load_available = context.get_load_available_repos() != dnf5::Context::LoadAvailableRepos::NONE;
+            context.load_repos(context.get_load_system_repo(), load_available);
 
             command->load_additional_packages();
 

@@ -77,7 +77,7 @@ public:
         const std::vector<std::string> & cves);
 
     /// Sets callbacks for repositories and loads them, updating metadata if necessary.
-    void load_repos(bool load_system);
+    void load_repos(bool load_system, bool load_available);
 
     void store_offline(libdnf5::base::Transaction & transaction);
 
