@@ -209,7 +209,8 @@ void Context::Impl::load_repos(bool load_system, bool load_available) {
 
     const auto skip_system_repo_lock = base.get_config().get_skip_system_repo_lock_option().get_value();
     if (load_system && !skip_system_repo_lock) {
-        const auto lock_access_type = libdnf5::utils::LockAccess::WRITE;
+        const auto lock_access_type =
+            cmd_requires_privileges() ? libdnf5::utils::LockAccess::WRITE : libdnf5::utils::LockAccess::READ;
         if (!base.lock_system_repo(lock_access_type, libdnf5::utils::LockBlocking::NON_BLOCKING)) {
             // A lock on the system repo could not immediately be acquired.
             // Gather and display information about other processes in line for the lock, then wait.
@@ -462,6 +463,46 @@ void Context::Impl::print_error(std::string_view msg) const {
     err_stream.get() << msg << std::endl;
 }
 
+bool Context::Impl::cmd_requires_privileges() const {
+    // the main, dnf5 command, is allowed
+    auto cmd = owner.get_selected_command();
+    auto arg_cmd = cmd->get_argument_parser_command();
+    if (arg_cmd->get_parent() == nullptr) {
+        return false;
+    }
+
+    // first a hard-coded list of commands that always need to be run with elevated privileges
+    auto main_arg_cmd = cmd->get_parent_command() != owner.get_root_command() ? arg_cmd->get_parent() : arg_cmd;
+    std::vector<std::string> privileged_cmds = {"automatic", "offline", "system-upgrade", "replay"};
+    if (std::find(privileged_cmds.begin(), privileged_cmds.end(), main_arg_cmd->get_id()) != privileged_cmds.end()) {
+        return true;
+    }
+
+    // when assumeno is set, system should not be modified
+    auto & config = owner.get_base().get_config();
+    if (config.get_assumeno_option().get_value()) {
+        return false;
+    }
+
+    auto all_cmd_args = arg_cmd->get_named_args();
+    if (main_arg_cmd != arg_cmd) {
+        all_cmd_args.insert(
+            all_cmd_args.end(), main_arg_cmd->get_named_args().begin(), main_arg_cmd->get_named_args().end());
+    }
+
+    // when downloadonly is defined and set, system should not be modified
+    auto it_downloadonly = std::find_if(
+        all_cmd_args.begin(), all_cmd_args.end(), [](auto arg) { return arg->get_long_name() == "downloadonly"; });
+    if (it_downloadonly != all_cmd_args.end() &&
+        ((libdnf5::OptionBool *)(*it_downloadonly)->get_linked_value())->get_value()) {
+        return false;
+    }
+
+    // otherwise, transactional cmds with store option defined are expected to modify the system
+    auto it_store = std::find_if(
+        all_cmd_args.begin(), all_cmd_args.end(), [](auto arg) { return arg->get_long_name() == "store"; });
+    return it_store != all_cmd_args.end();
+}
 
 Context::Context(std::vector<std::unique_ptr<libdnf5::Logger>> && loggers)
     : p_impl{new Impl(*this, std::move(loggers))} {}
