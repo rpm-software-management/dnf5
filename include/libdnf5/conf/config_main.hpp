@@ -222,6 +222,8 @@ public:
     const OptionBool & get_protect_running_kernel_option() const;
     OptionBool & get_build_cache_option();
     const OptionBool & get_build_cache_option() const;
+    OptionBool & get_skip_system_repo_lock_option();
+    const OptionBool & get_skip_system_repo_lock_option() const;
 
     // Repo main config
     /// @deprecated The option does nothing
