@@ -162,9 +162,7 @@ void PackageListSections::print_json() {
             json_object_array_add(j_packages, j_pkg);
         }
 
-        // [NOTE](mfocko) Consider adding header to CLI “pretty” output too…
-        auto json_heading =
-            libdnf5::cli::utils::json::normalize_field(heading != "" ? heading : "Upgradeable packages");
+        auto json_heading = libdnf5::cli::utils::json::normalize_field(heading);
         json_object_object_add(j_output, json_heading.c_str(), j_packages);
     }
 
