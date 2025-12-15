@@ -208,7 +208,7 @@ void CheckUpgradeCommand::run() {
     auto sections = create_output();
 
     bool package_matched = false;
-    package_matched |= sections->add_section("", upgrades_query);
+    package_matched |= sections->add_section("Upgrades", upgrades_query);
     package_matched |= sections->add_section("Obsoleting packages", obsoletes_query, obsoletes);
 
     if (ctx.get_json_output_requested()) {
