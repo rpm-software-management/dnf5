@@ -430,6 +430,20 @@ repository configuration file should aside from repo ID consists of baseurl, met
 
     Default: ``/var/lib/dnf``.
 
+.. _plugin_conf_dir_options-label:
+
+``plugin_conf_dir``
+    :ref:`list <list-label>`
+
+    List of directories from which libdnf5 plugin configuration files are loaded.
+    Only files with the ``.conf`` extension are loaded.
+
+    Directories are processed in the order they are listed in the configuration.
+    If a configuration file with the same name exists in multiple directories,
+    the first one found is used.
+
+    Default: [``/etc/dnf/libdnf5-plugins``, ``/usr/share/dnf5/libdnf.plugins.conf.d``]
+
 .. _pluginconfpath_options-label:
 
 ``pluginconfpath``
@@ -437,6 +451,9 @@ repository configuration file should aside from repo ID consists of baseurl, met
 
     Directory from which libdnf5 plugin configuration files are loaded.
     Only files with the ``.conf`` extension are loaded.
+
+    This option is deprecated. Use :ref:`plugin_conf_dir <plugin_conf_dir_options-label>` instead,
+    which supports a list of directories.
 
     Default: ``/etc/dnf/libdnf5-plugins``.
 
