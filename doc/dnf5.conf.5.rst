@@ -433,22 +433,21 @@ repository configuration file should aside from repo ID consists of baseurl, met
 .. _pluginconfpath_options-label:
 
 ``pluginconfpath``
-    :ref:`list <list-label>`
+    :ref:`string <string-label>`
 
-    List of directories that are searched for libdnf5 plugin configurations to load.
-
-    All configuration files found in these directories, that are named same as a
-    plugin, are parsed.
+    Directory from which libdnf5 plugin configuration files are loaded.
+    Only files with the ``.conf`` extension are loaded.
 
     Default: ``/etc/dnf/libdnf5-plugins``.
 
 .. _pluginpath_options-label:
 
 ``pluginpath``
-    :ref:`list <list-label>`
+    :ref:`string <string-label>`
 
-    List of directories that are searched for libdnf5 plugins to load. Plugins found in
-    *any of the directories* in this configuration option are used.
+    Directory from which libdnf5 plugins are loaded.
+    Only enabled plugins that have a configuration file in the
+    :ref:`pluginconfpath <pluginconfpath_options-label>` directory are loaded.
 
     Default: ``/usr/lib64/libdnf5/plugins/``
 
