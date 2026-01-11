@@ -22,6 +22,7 @@
 
 #include <libdnf5/base/base.hpp>
 #include <libdnf5/conf/config_parser.hpp>
+#include "utils/string.hpp"
 
 namespace dnf5 {
 

@@ -98,6 +98,7 @@ void CoprConfig::load_all_configuration() {
 
     // Set the "name_version" for the later convenience
     std::string name_version = this->get_value("main", "distribution");
+    name_version = libdnf5::utils::string::tolower(name_version);
     name_version += "-" + this->get_value("main", "releasever");
     this->set_value("main", "name_version", name_version);
 
