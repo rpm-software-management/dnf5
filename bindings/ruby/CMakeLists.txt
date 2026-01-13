@@ -15,6 +15,7 @@ include_directories(${Ruby_INCLUDE_DIRS})
 if(CMAKE_CXX_COMPILER_ID MATCHES "Clang")
     add_compile_options(-Wno-attribute-warning)
 endif()
+add_compile_options(-Wno-unused-but-set-variable)
 
 function(add_ruby_module LIBRARY_NAME MODULE_NAME)
     set(TARGET_NAME "ruby_${MODULE_NAME}")
