@@ -20,6 +20,7 @@
 #ifndef LIBDNF5_MODULE_MODULE_METADATA_HPP
 #define LIBDNF5_MODULE_MODULE_METADATA_HPP
 
+#include "libdnf5/base/base.hpp"
 #include "libdnf5/base/base_weak.hpp"
 #include "libdnf5/module/module_item.hpp"
 #include "libdnf5/module/module_sack_weak.hpp"
