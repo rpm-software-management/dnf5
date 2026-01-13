@@ -5,6 +5,7 @@
 
 #include "pool.hpp"
 #include "utils/fs/utils.hpp"
+#include "utils/string.hpp"
 
 #include "libdnf5/common/exception.hpp"
 #include "libdnf5/common/sack/match_string.hpp"
@@ -12,6 +13,9 @@
 
 #include <toml.hpp>
 
+#include <array>
+#include <map>
+#include <optional>
 #include <string_view>
 #include <utility>
 
@@ -20,7 +24,7 @@ namespace libdnf5::solv {
 namespace {
 
 // supported config file version
-constexpr std::string_view CONFIG_FILE_VERSION = "1.0";
+constexpr std::array<std::string_view, 2> CONF_FILE_SUPPORTED_VERSIONS = {"1.0", "1.1"};
 
 const std::map<std::string_view, sack::QueryCmp> VALID_COMPARATORS = {
     {"EXACT", sack::QueryCmp::EXACT},
@@ -122,13 +126,24 @@ void VendorChangeManager::load_vendor_change_policy(const std::filesystem::path 
         auto config = toml::parse(path);
 
         // Check config file version
-        const auto version = toml::find<std::string>(config, "version");
-        if (version != CONFIG_FILE_VERSION) {
+        const auto version = toml::find<std::optional<std::string>>(config, "version");
+        if (!version) {
+            throw VendorChangePolicyConfigFileError(M_("Missing \"version\" key in file \"{}\""), path.native());
+        }
+
+        bool is_supported_version{false};
+        for (const auto supported_version : CONF_FILE_SUPPORTED_VERSIONS) {
+            if (version == supported_version) {
+                is_supported_version = true;
+                break;
+            }
+        }
+        if (!is_supported_version) {
             throw VendorChangePolicyConfigFileError(
-                M_("Unsupported version \"{}\" in file \"{}\". Supported version is {}"),
-                version,
+                M_("Unsupported version \"{}\" in file \"{}\". Supported versions: {}"),
+                *version,
                 path.native(),
-                std::string(CONFIG_FILE_VERSION));
+                libdnf5::utils::string::join(CONF_FILE_SUPPORTED_VERSIONS, ", "));
         }
 
         if (config.contains("equivalent_vendors") &&
