@@ -174,6 +174,23 @@ public:
         add_unsafe(id);
     }
 
+    /// @brief Adds an element by ID and expands storage if the ID is out of range.
+    ///
+    /// If the current capacity is insufficient for the given ID, the storage is
+    /// expanded to a size of (id + 1 + extra_capacity).
+    ///
+    /// @param id The identifier to be added to the set.
+    /// @param extra_capacity Number of additional slots to allocate beyond the minimum required size.
+    void add_grow(Id id, int extra_capacity) {
+        if (extra_capacity < 0) {
+            throw std::out_of_range("extra_capacity cannot be negative");
+        }
+        if (id >= allocated_size()) {
+            grow(id + 1 + extra_capacity);
+        }
+        add(id);
+    }
+
     void add_unsafe(Id id) noexcept { map_set(&map, id); }
 
     [[nodiscard]] bool contains(Id id) const noexcept;
