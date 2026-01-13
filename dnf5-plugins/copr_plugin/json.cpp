@@ -25,6 +25,7 @@
 
 #include <fstream>
 #include <iostream>
+#include <utility>
 
 Json::Json(libdnf5::Base & base, const std::string & url) {
     auto temp_file = libdnf5::utils::fs::TempFile("/tmp", "dnf5-copr-plugin");
@@ -60,6 +61,8 @@ std::vector<std::string> Json::keys() {
     std::vector<std::string> retval;
     json_object_object_foreach(root, key, val) {
         retval.push_back(key);
+        // Silence error: variable ‘val’ set but not used
+        std::ignore = val;
     }
     return retval;
 }
