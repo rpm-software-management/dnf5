@@ -40,7 +40,9 @@ Required Fields
 Vendor Mapping Definition
 --------------------------
 
-The file must contain **one** of the following definition methods:
+The file can use one or more of the following vendor definition methods.
+For version ``"1.0"``, only one method can be used. Version ``"1.1"`` allows
+combining ``equivalent_vendors`` with ``outgoing_vendors`` and ``incoming_vendors``.
 
 **Option 1: Separate Lists (outgoing + incoming)**
 
@@ -66,9 +68,11 @@ The file must contain **one** of the following definition methods:
     between all vendors in this list.
 
     .. NOTE::
-       Cannot combine ``equivalent_vendors`` with ``outgoing_vendors`` or ``incoming_vendors``.
+       For version ``"1.0"``: Cannot combine ``equivalent_vendors`` with ``outgoing_vendors`` or ``incoming_vendors``.
        However, ``equivalent_vendors`` can be replaced by specifying the same list of vendors
        in both ``outgoing_vendors`` and ``incoming_vendors``.
+
+       For version ``"1.1"``: Can be freely combined with ``outgoing_vendors`` and ``incoming_vendors``.
 
 Vendor Entry Fields
 -------------------
@@ -139,7 +143,7 @@ The following configurations are **invalid** and will cause an error:
 
 - Missing ``version`` field
 - Unsupported version (other than ``"1.0"`` or ``"1.1"``)
-- Combination of ``equivalent_vendors`` with ``outgoing_vendors`` or ``incoming_vendors``
+- For version ``"1.0"`` only: Combination of ``equivalent_vendors`` with ``outgoing_vendors`` or ``incoming_vendors``
 - Only ``outgoing_vendors`` without ``incoming_vendors`` (or vice versa)
 - Missing required ``vendor`` field in an entry
 - Unknown ``comparator`` value
@@ -221,7 +225,48 @@ in both directions.
     vendor = 'CentOS'
     comparator = 'ISTARTSWITH'
 
-Example 4: Equivalent vendors with an exclusion
+Example 4: Combining equivalent vendors with incoming vendors
+-------------------------------------------------------------
+
+This example demonstrates combining ``equivalent_vendors`` with ``incoming_vendors``,
+a feature introduced in version ``"1.1"``. "First Vendor" and "Second Vendor" are mutually
+equivalent, and both can change to "Third Vendor".
+
+**Version "1.0"** (cannot combine ``equivalent_vendors`` with ``incoming_vendors``):
+
+.. code-block:: toml
+    version = '1.0'
+
+    [[outgoing_vendors]]
+    vendor = 'First Vendor'
+
+    [[outgoing_vendors]]
+    vendor = 'Second Vendor'
+
+    [[incoming_vendors]]
+    vendor = 'First Vendor'
+
+    [[incoming_vendors]]
+    vendor = 'Second Vendor'
+
+    [[incoming_vendors]]
+    vendor = 'Third Vendor'
+
+**Version "1.1"** (can combine ``equivalent_vendors`` with ``incoming_vendors`` and ``outgoing_vendors``):
+
+.. code-block:: toml
+    version = '1.1'
+
+    [[equivalent_vendors]]
+    vendor = 'First Vendor'
+
+    [[equivalent_vendors]]
+    vendor = 'Second Vendor'
+
+    [[incoming_vendors]]
+    vendor = 'Third Vendor'
+
+Example 5: Equivalent vendors with an exclusion
 -----------------------------------------------
 
 This example shows a vendor policy for SUSE-related vendors with an exclusion
@@ -231,7 +276,7 @@ for openSUSE Build Service.
 
     version = '1.0'
 
-    # Vendors from which changes are allowed
+    # All following vendors are mutually equivalent except excluded ones
     [[equivalent_vendors]]
     vendor = 'openSUSE Build Service'
     comparator = 'ISTARTSWITH'
