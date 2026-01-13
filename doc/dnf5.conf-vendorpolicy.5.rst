@@ -29,13 +29,13 @@ Required Fields
 
     Configuration file format version.
 
-    Supported values: ``"1.0"``
+    Supported values: ``"1.0"``, ``"1.1"``
 
     This field is mandatory and must be specified at the top level of the TOML file.
 
     Example::
 
-        version = '1.0'
+        version = '1.1'
 
 Vendor Mapping Definition
 --------------------------
@@ -138,7 +138,7 @@ Error Conditions
 The following configurations are **invalid** and will cause an error:
 
 - Missing ``version`` field
-- Incorrect version (other than ``"1.0"``)
+- Unsupported version (other than ``"1.0"`` or ``"1.1"``)
 - Combination of ``equivalent_vendors`` with ``outgoing_vendors`` or ``incoming_vendors``
 - Only ``outgoing_vendors`` without ``incoming_vendors`` (or vice versa)
 - Missing required ``vendor`` field in an entry
