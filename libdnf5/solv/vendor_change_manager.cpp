@@ -146,11 +146,11 @@ void VendorChangeManager::load_vendor_change_policy(const std::filesystem::path 
                 libdnf5::utils::string::join(CONF_FILE_SUPPORTED_VERSIONS, ", "));
         }
 
-        if (config.contains("equivalent_vendors") &&
+        if (version == "1.0" && config.contains("equivalent_vendors") &&
             (config.contains("outgoing_vendors") || config.contains("incoming_vendors"))) {
             throw VendorChangePolicyConfigFileError(
-                M_("Unsupported configuration in file \"{}\"."
-                   " \"equivalent_vendors\" cannot be combined with \"outgoing_vendors\" and \"incoming_vendors\""),
+                M_("Configuration file \"{}\" uses version \"1.0\" which does not support combining"
+                   " \"equivalent_vendors\" with \"outgoing_vendors\" and \"incoming_vendors\""),
                 path.native());
         }
 
