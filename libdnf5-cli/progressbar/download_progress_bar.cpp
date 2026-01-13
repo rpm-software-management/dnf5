@@ -217,7 +217,6 @@ void DownloadProgressBar::to_stream(std::ostream & stream) {
         stream << tty::reset;
     }
 
-    std::size_t message_index = 0;
     for (const auto & [message_type, message] : get_messages()) {
         const auto & prefix = get_message_prefix();
 
@@ -249,7 +248,6 @@ void DownloadProgressBar::to_stream(std::ostream & stream) {
         if (color_used) {
             stream << tty::reset;
         }
-        ++message_index;
     }
 }
 
