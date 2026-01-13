@@ -24,6 +24,7 @@
 
 #include <fcntl.h>
 #include <libdnf5/common/exception.hpp>
+#include <unistd.h>
 
 #include <filesystem>
 
