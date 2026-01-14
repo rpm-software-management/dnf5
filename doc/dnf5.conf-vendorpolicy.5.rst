@@ -57,7 +57,9 @@ combining ``equivalent_vendors`` with ``outgoing_vendors`` and ``incoming_vendor
     List of vendors to which changes are allowed.
 
     .. NOTE::
-       ``outgoing_vendors`` and ``incoming_vendors`` must have the same state - either both empty or both non-empty.
+       For version ``"1.0"``: ``outgoing_vendors`` and ``incoming_vendors`` must be either both present or both missing.
+
+       For version ``"1.1"``: Either array can be independently present or missing. A missing vendors array means any vendor is allowed.
 
 **Option 2: Equivalent Vendors**
 
@@ -143,8 +145,11 @@ The following configurations are **invalid** and will cause an error:
 
 - Missing ``version`` field
 - Unsupported version (other than ``"1.0"`` or ``"1.1"``)
-- For version ``"1.0"`` only: Combination of ``equivalent_vendors`` with ``outgoing_vendors`` or ``incoming_vendors``
-- Only ``outgoing_vendors`` without ``incoming_vendors`` (or vice versa)
+- For version ``"1.0"`` only:
+
+  - Combination of ``equivalent_vendors`` with ``outgoing_vendors`` or ``incoming_vendors``
+  - Only ``outgoing_vendors`` without ``incoming_vendors`` (or vice versa)
+
 - Missing required ``vendor`` field in an entry
 - Unknown ``comparator`` value
 - Unknown keys at the top level or inside vendor entries
@@ -189,8 +194,10 @@ This example shows the minimal required configuration, allowing a change from
 Example 2: Allow change from any vendor to "My Trusted Vendor"
 --------------------------------------------------------------
 
-This example shows the minimal required configuration, allowing a change from
-any vendor to "My Trusted Vendor", but not the reverse.
+This example shows allowing a change from any vendor to "My Trusted Vendor",
+but not the reverse.
+
+**Version "1.0"** (requires explicit rule for allowing all vendors):
 
 .. code-block:: toml
 
@@ -199,6 +206,15 @@ any vendor to "My Trusted Vendor", but not the reverse.
     [[outgoing_vendors]]
     vendor = ''
     comparator = 'CONTAINS'
+
+    [[incoming_vendors]]
+    vendor = 'My Trusted Vendor'
+
+**Version "1.1"** (missing ``outgoing_vendors`` means any vendor):
+
+.. code-block:: toml
+
+    version = '1.1'
 
     [[incoming_vendors]]
     vendor = 'My Trusted Vendor'
