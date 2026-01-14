@@ -84,7 +84,7 @@ jobs:
     targets:
       - fedora-all
     fmf_url: https://github.com/rpm-software-management/ci-dnf-stack.git
-    fmf_ref: &CI_DNF_STACK_REF main
+    fmf_ref: &CI_DNF_STACK_REF release-5.2.x.x
     tmt_plan: "^/plans/integration/behave-dnf5$"
     packages: [dnf5]
     tf_extra_params:
