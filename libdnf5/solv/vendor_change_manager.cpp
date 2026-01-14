@@ -73,6 +73,7 @@ VendorChangeManager::VendorChangeManager(const Pool & pool) : pool{pool} {}
 
 
 const VendorChangeManager::VendorChangeMasks & VendorChangeManager::get_vendor_change_masks(Id vendor) {
+    constexpr int EXTRA_CAPACITY = 7;
     static const VendorChangeMasks empty_masks{.vendor = 0};
     VendorChangeMasks masks;
 
@@ -90,26 +91,30 @@ const VendorChangeManager::VendorChangeMasks & VendorChangeManager::get_vendor_c
     auto vendor_str = pool.id2str(vendor);
     for (unsigned int class_idx = 0; class_idx < vendor_policies_def.size(); ++class_idx) {
         const auto & vendor_class_def = vendor_policies_def[class_idx];
-        for (const auto & vendor_def : vendor_class_def.outgoing_vendors) {
-            if (sack::match_string(vendor_str, vendor_def.comparator, vendor_def.vendor)) {
-                if (!vendor_def.is_exclusion) {
-                    if (static_cast<int>(class_idx) >= masks.outgoing_mask.allocated_size()) {
-                        masks.outgoing_mask.grow(static_cast<int>(class_idx) + 8);
+        if (vendor_class_def.outgoing_vendors.empty()) {
+            // Default to permit-all if no specific outgoing vendors are defined
+            masks.outgoing_mask.add_grow(static_cast<int>(class_idx), EXTRA_CAPACITY);
+        } else {
+            for (const auto & vendor_def : vendor_class_def.outgoing_vendors) {
+                if (sack::match_string(vendor_str, vendor_def.comparator, vendor_def.vendor)) {
+                    if (!vendor_def.is_exclusion) {
+                        masks.outgoing_mask.add_grow(static_cast<int>(class_idx), EXTRA_CAPACITY);
                     }
-                    masks.outgoing_mask.add(static_cast<int>(class_idx));
+                    break;
                 }
-                break;
             }
         }
-        for (const auto & vendor_def : vendor_class_def.incoming_vendors) {
-            if (sack::match_string(vendor_str, vendor_def.comparator, vendor_def.vendor)) {
-                if (!vendor_def.is_exclusion) {
-                    if (static_cast<int>(class_idx) >= masks.incoming_mask.allocated_size()) {
-                        masks.incoming_mask.grow(static_cast<int>(class_idx) + 8);
+        if (vendor_class_def.incoming_vendors.empty()) {
+            // Default to permit-all if no specific incoming vendors are defined
+            masks.incoming_mask.add_grow(static_cast<int>(class_idx), EXTRA_CAPACITY);
+        } else {
+            for (const auto & vendor_def : vendor_class_def.incoming_vendors) {
+                if (sack::match_string(vendor_str, vendor_def.comparator, vendor_def.vendor)) {
+                    if (!vendor_def.is_exclusion) {
+                        masks.incoming_mask.add_grow(static_cast<int>(class_idx), EXTRA_CAPACITY);
                     }
-                    masks.incoming_mask.add(static_cast<int>(class_idx));
+                    break;
                 }
-                break;
             }
         }
     }
@@ -120,6 +125,8 @@ const VendorChangeManager::VendorChangeMasks & VendorChangeManager::get_vendor_c
 
 void VendorChangeManager::load_vendor_change_policy(const std::filesystem::path & path) {
     VendorChangePolicy policy;
+
+    bool is_config_version_1_0;
 
     try {
         // Parse the TOML file
@@ -146,7 +153,9 @@ void VendorChangeManager::load_vendor_change_policy(const std::filesystem::path 
                 libdnf5::utils::string::join(CONF_FILE_SUPPORTED_VERSIONS, ", "));
         }
 
-        if (version == "1.0" && config.contains("equivalent_vendors") &&
+        is_config_version_1_0 = version == "1.0";
+
+        if (is_config_version_1_0 && config.contains("equivalent_vendors") &&
             (config.contains("outgoing_vendors") || config.contains("incoming_vendors"))) {
             throw VendorChangePolicyConfigFileError(
                 M_("Configuration file \"{}\" uses version \"1.0\" which does not support combining"
@@ -246,17 +255,17 @@ void VendorChangeManager::load_vendor_change_policy(const std::filesystem::path 
         return;
     }
 
-    if (policy.outgoing_vendors.empty()) {
+    if (is_config_version_1_0 && policy.outgoing_vendors.empty()) {
         throw VendorChangePolicyConfigFileError(
-            M_("Unsupported configuration in file \"{}\"."
-               " There are configured \"incoming_vendors\" but no \"outgoing_vendors\""),
+            M_("Configuration file \"{}\" uses version \"1.0\" which does not support"
+               " \"incoming_vendors\" without \"outgoing_vendors\""),
             path.native());
     }
 
-    if (policy.incoming_vendors.empty()) {
+    if (is_config_version_1_0 && policy.incoming_vendors.empty()) {
         throw VendorChangePolicyConfigFileError(
-            M_("Unsupported configuration in file \"{}\"."
-               " There are configured \"outgoing_vendors\" but no \"incoming_vendors\""),
+            M_("Configuration file \"{}\" uses version \"1.0\" which does not support"
+               " \"outgoing_vendors\" without \"incoming_vendors\""),
             path.native());
     }
 
