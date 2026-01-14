@@ -1,3 +1,103 @@
+# 5.2.18.0
+
+- Create downstream PRs for f42, f43, no rawhide
+- tutorial: libdnf5 plugins: fix `enable` options
+- Add `local` plugin
+- Release 5.3.0.0
+- Update translations from weblate
+- Document 5.3.0.0 API changes
+- copr: support '$distname' replacement in baseurls
+- advisory: Add JSON documentation, standardize timestamps, and suppress error messages in JSON format
+- fix: unify epoch display across all DNF5 commands
+- doc: mention libpkgmanifest in the CONTRIBUTING.md
+- Add JSON output support to history list and info commands
+- manifest docs: mark as experimental
+- comps: Store comps xml files in groups and environments subdirectories
+- comps: Add environment install, remove and upgrade commands
+- comps: Add CompsTypePreferred to set preference for comps operations
+- comps: Fix descriptions of group and environment specs
+- needs-restarting: use std::string to own pid
+- needs-restarting: Drop unnecessary logging; display PID and cmdline for -p
+- needs-restarting: Correctly use sdbus_compat
+- needs-restarting: use org.freedesktop.systemd1.Service interface
+- test: Add framework for needs-restarting plugin tests
+- needs-restarting: Update the man page to reflect current options
+- needs-restarting: Implement the --processes and --exclude-services options
+- doc: document output of `--json` for `repo` command
+- docs: Use only multiline comments in RST files
+- docs: Document vendor change policy TOML config
+- Add directories for vendor change policies configuration to the package
+- Load vendor change policies from configuration files
+- solv::VendorChangeManager: Remove limit on vendor change policies
+- Add unit test for "solv::SolvMap::is_intersection_empty"
+- Add "solv::SolvMap::is_intersection_empty" for optimized bitwise checks
+- New VendorChangeManager: Supports vendor change policies.
+- Pool: Set appdata pointer in libsolv pool to its managing solv::Pool
+- packit: move getting dnf5 version to package config
+- Fix typo in DNF4 and DNF5 documentation
+- Drop mentions of dnf5-testing-nightly and dnf5-testing
+- offline: Store downloaded packages in /var/lib/dnf
+- libdnf5::base::transaction::serialize: don't prefix system repo
+- doc: describe repo mangling for `--store` option
+- Prefix repository names for `--store`ed transactions
+- Simplify a help text for package arguments
+- manifest: remove BOOTSTRAP_REPO_ID logic
+- manifest: descriptive error for duplicate repository IDs
+- manifest: split new and resolve subcommands
+- manifest: error when srpm is missing
+- manifest: s/source/srpm, s/archs/arch, cleanup
+- spec: add `%bcond_without plugin_manifest`
+- manifest: port documentation from dnf-plugins-core
+- manifest: add --source argument
+- manifest: implement existing commands from DNF4 plugin
+- manifest: create plugin skeleton
+- Fix too long line of new `max_downloads_per_mirror`
+- Expose librepo max_downloads_per_mirror configuration
+- vars: add doc comments for detect_release, detect_releasevers
+- Add --releasever-{major,minor} options
+- Override releasever_{major,minor} with provides
+- vars: make releasever_{major,minor} writable
+- tutorial: libdnf5 plugins: fix `enable` options
+- Add `local` plugin
+- libdnf5 actions plugin: Document "json" communication mode, polishing
+- python_plugins_loader: require and read config files for python plugins
+- python_plugins_loader: add `python_plugins_loader.d` config directory
+- libdnf5::Base: add back similar API for loading plugins
+- Inline `Plugins::load_plugin`, its too small to be worth a separate method
+- libdnf5::Base: Separate plugin config loading into a new Base API
+- Extend unused `libdnf5::plugin::Plugin` constructor with cfg parser
+- python_plugins_loader: Fix invalid path read bug
+- python_plugins_loader: update example plugin.py
+- python_plugins_loader: pass wrapped `libdnf5::plugin::IPluginData`
+- python_plugins_loader: store `libdnf5::plugin::IPluginData`
+- python_plugins_loader: the library module is now called `libdnf5`
+- python_plugins_loader: fix the name to match the rest of code and rpm pkg
+- python_plugins_loader: add default config to enable the plugin
+- GHA: Fix weblate-sync-pot workflow
+- RepoSack: only attempt fix_group_missing_xml if system_repo loaded
+- ConfigMain: deprecate `enabled` option
+- daemon: Protect libdnf5 access in D-Bus services with mutex
+- libdnf5 actions plugin: Reply with actual values after set configuration
+- Add .mailmap to set preferred user names and email addresses
+- libdnf5 actions plugin: Add snapshot description in snapper impl example
+- doc: Add Tutorial: API changes in callbacks between DNF and DNF5
+- test: Add tests for code examples for API changes in callbacks tutorial
+- test ConfigMain::load_from_config
+- ConfigMain: add load_from_config
+- pre-commit: Increase autopep8 line length
+- Bump libdnf5-cli rpm and so version
+- Add unit tests for long progress bar messages
+- cli: Clear the screen instead of padding messages
+- progressbar: Do not trim messages to terminal width
+- cli: Add pImpl to libdnf5::cli::progressbar::DownloadProgressBar
+- cli: Add pImpl to libdnf5::cli::progressbar::ProgressBar
+- cli: Add pImpl to libdnf5::cli::progressbar::MultiProgressBar
+- feat: add field-specific search options (--name-only, --summary-only)
+- Add license header requirement to CONTRIBUTING.md
+- Add "Copyright Contributors to the DNF5 project."
+- Add SPDX-License-Identifier
+- repo: When repo age matches `metadata_expire` exactly expire it
+
 # 5.2.17.0
 
 - Update translations from weblate
