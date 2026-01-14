@@ -25,7 +25,7 @@ jobs:
         uses: ./.github/actions/weblate-pull-translations
 
       - name: Prepare release content
-        uses: inknos/prepare-release@v1.2
+        uses: rpm-software-management/prepare-release-dnf5@d39d17f1db15fffb9382ce045e98243b9a856eaf
         with:
           version: ${{ inputs.version }}
           specfiles: dnf5.spec
