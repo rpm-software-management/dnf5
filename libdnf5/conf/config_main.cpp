@@ -97,7 +97,7 @@ static std::string get_user_agent() {
         return "libdnf";
     }
 
-    return std::format(
+    return fmt::format(
         "libdnf ({} {}; {}; {}.{})",
         os_release.get_value("NAME"),
         os_release.get_value("VERSION_ID"),
