@@ -92,7 +92,7 @@ std::filesystem::path get_manifest_path(libdnf5::OptionPath & option, const std:
     std::string path{option.get_value()};
 
     if (option.get_priority() <= libdnf5::Option::Priority::DEFAULT) {
-        const auto & arch_path = std::regex_replace(path, std::regex("\\.yaml$"), std::format(".{}.yaml", arch));
+        const auto & arch_path = std::regex_replace(path, std::regex("\\.yaml$"), fmt::format(".{}.yaml", arch));
         const bool path_exists = std::filesystem::exists(path);
         const bool arch_path_exists = std::filesystem::exists(arch_path);
         if (path_exists && arch_path_exists) {

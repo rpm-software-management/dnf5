@@ -133,7 +133,7 @@ void ManifestNewCommand::run() {
             populate_manifest(manifest, arch, false);
 
             std::string path{manifest_path_option->get_value()};
-            path = std::regex_replace(path, std::regex("\\.yaml$"), std::format(".{}.yaml", arch));
+            path = std::regex_replace(path, std::regex("\\.yaml$"), fmt::format(".{}.yaml", arch));
             serializer.serialize(manifest, path);
         }
     } else {
