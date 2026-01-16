@@ -78,6 +78,8 @@ public:
         const std::vector<libdnf5::advisory::AdvisoryPackage> & adv_pkgs,
         libdnf5::sack::QueryCmp cmp_type);
 
+    static void filter_unneeded(PackageSet & pkg_set, bool mark_protected_userinstalled);
+
 private:
     friend PackageQuery;
     ExcludeFlags flags;

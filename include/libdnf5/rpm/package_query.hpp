@@ -999,6 +999,11 @@ public:
     /// dependencies and are not required by any user-installed package any more.
     void filter_unneeded();
 
+    /// Filter unneeded packages without protected packages. Unneeded not protected packages are those
+    /// which are installed as dependencies and are not required by any user-installed or protected package
+    /// any more and are not protected them self.
+    void filter_unneeded_not_protected();
+
     /// Resolve spec according to provided settings. It tests whether spec is NEVRA type, provide, file or binary.
     /// It returns only the first match type. If spec has a match as NEVRA and provide type it only keeps matches with
     /// the first tested type (NEVRA).
