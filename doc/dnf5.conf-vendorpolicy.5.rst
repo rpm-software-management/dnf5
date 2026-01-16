@@ -89,10 +89,6 @@ can contain the following fields:
 
     Vendor name or pattern for matching.
 
-    Example::
-
-        vendor = 'Fedora*'
-
 ``comparator``
     String
 
@@ -118,10 +114,6 @@ can contain the following fields:
     - ``"IENDSWITH"`` - ends with (case-insensitive)
     - ``"NOT_EXACT"``, ``"NOT_IEXACT"``, ``"NOT_GLOB"``, ``"NOT_IGLOB"``, ``"NOT_CONTAINS"``, ``"NOT_ICONTAINS"`` - negated variants
 
-    Example::
-
-        comparator = 'IGLOB'
-
 ``exclude``
     Boolean
 
@@ -134,9 +126,85 @@ can contain the following fields:
 
     Default: ``false``
 
-    Example::
+Package Filtering
+-----------------
 
-        exclude = true
+For version ``"1.1"``, vendor change policies can be further restricted to apply only
+to specific packages using package filters. These are optional and allow fine-grained
+control over which packages are allowed to change vendors.
+
+``[[outgoing_packages]]``
+    Array of tables
+
+    List of package filters that restrict which outgoing (installed) packages are
+    allowed to change vendors. If omitted, all packages are allowed to change from
+    their current vendor.
+
+``[[incoming_packages]]``
+    Array of tables
+
+    List of package filters that restrict which incoming (new) packages are allowed
+    to be installed with a vendor change. If omitted, all packages are allowed to
+    be installed regardless of vendor.
+
+Package Filter Entry Fields
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Each entry in ``[[outgoing_packages]]`` or ``[[incoming_packages]]`` can contain:
+
+``filters``
+    Array of tables
+
+    Required field.
+
+    List of filter conditions that must all match for the package to be affected by
+    this rule. Each filter is a table with the following fields:
+
+    ``filter``
+        String
+
+        Required field.
+
+        The package attribute to filter on.
+
+        Supported values:
+
+        - ``"name"`` - package name
+        - ``"source_name"`` - source package name
+        - ``"arch"`` - package architecture
+        - ``"repoid"`` - repository ID
+        - ``"cmdline_repo"`` - whether the package is from command-line repository (boolean)
+
+    ``value``
+        String
+
+        Required field.
+
+        The value to match against. For ``cmdline_repo`` filter, use ``"true"``/``"1"``
+        or ``"false"``/``"0"``.
+
+    ``comparator``
+        String
+
+        Optional field.
+
+        The matching method to use. Same values as for vendor comparator (see above).
+
+        Default: ``"EXACT"``
+
+        .. NOTE::
+           The ``cmdline_repo`` filter only supports ``"EXACT"`` comparator.
+
+``exclude``
+    Boolean
+
+    Optional field.
+
+    If ``true``, packages matching the filters are excluded from the rule. This is
+    useful for defining exceptions. Exclusion rules must appear before the rules
+    from which packages should be excluded.
+
+    Default: ``false``
 
 Error Conditions
 ================
@@ -150,9 +218,16 @@ The following configurations are **invalid** and will cause an error:
   - Combination of ``equivalent_vendors`` with ``outgoing_vendors`` or ``incoming_vendors``
   - Only ``outgoing_vendors`` without ``incoming_vendors`` (or vice versa)
 
-- Missing required ``vendor`` field in an entry
+- Missing required ``vendor`` field in a vendor entry
+- Missing required ``filter`` or ``value`` field in a package filter
+- Missing ``filters`` array in a package entry
+- Empty ``filters`` array in a package entry
+- Unknown ``filter`` value (must be one of: "name", "source_name", "arch", "repoid", "cmdline_repo")
 - Unknown ``comparator`` value
-- Unknown keys at the top level or inside vendor entries
+- Invalid ``comparator`` for ``cmdline_repo`` filter (only EXACT is supported)
+- Invalid ``value`` for ``cmdline_repo`` filter (must be "true"/"1" or "false"/"0")
+- Invalid regex pattern in filter value
+- Unknown keys at the top level or inside entries
 
 Configuration File Locations
 ============================
@@ -305,6 +380,62 @@ for openSUSE Build Service.
     [[equivalent_vendors]]
     vendor = 'openSUSE'
     comparator = 'ISTARTSWITH'
+
+Example 6: Allow command-line packages from any vendor
+------------------------------------------------------
+
+This example allows installing packages from the command-line repository
+from any vendor, bypassing vendor restrictions.
+
+.. code-block:: toml
+
+    version = '1.1'
+
+    [[incoming_packages]]
+    filters = [
+      { filter = 'cmdline_repo', value = 'true' }
+    ]
+
+Example 7: Command-line packages with exclusion
+-----------------------------------------------
+
+This example allows installing packages from the command-line repository
+from any vendor, except for packages whose names start with "mypackage".
+
+.. code-block:: toml
+
+    version = '1.1'
+
+    [[incoming_packages]]
+    filters = [
+      { filter = 'name', value = 'mypackage', comparator = 'STARTSWITH' }
+    ]
+    exclude = true
+
+    [[incoming_packages]]
+    filters = [
+      { filter = 'cmdline_repo', value = 'true' }
+    ]
+
+Example 8: Allow change from any vendor to specific one with package filtering
+------------------------------------------------------------------------------
+
+This example allows a change from any vendor to "My Trusted Vendor", but
+only for incoming packages whose source package name is "mypackage" and
+are located in the 'myrepo' repository.
+
+.. code-block:: toml
+
+    version = '1.1'
+
+    [[incoming_packages]]
+    filters = [
+      { filter = 'source_name', value = 'mypackage' },
+      { filter = 'repoid', value = 'myrepo' }
+    ]
+
+    [[incoming_vendors]]
+    vendor = 'My Trusted Vendor'
 
 See Also
 ========
