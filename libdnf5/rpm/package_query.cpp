@@ -2956,20 +2956,30 @@ void PackageQuery::filter_userinstalled() {
     *p_impl &= filter_result;
 }
 
-void PackageQuery::filter_unneeded() {
-    auto & pool = get_rpm_pool(p_impl->base);
+void PackageQuery::PQImpl::filter_unneeded(PackageSet & pkg_set, bool mark_protected_userinstalled) {
+    auto & pool = get_rpm_pool(pkg_set.p_impl->base);
 
     auto * installed_repo = pool->installed;
     if (installed_repo == nullptr) {
-        (*p_impl).clear();
+        (*pkg_set.p_impl).clear();
         return;
     }
 
     libdnf5::solv::IdQueue job_userinstalled;
-    PackageQuery user_installed(p_impl->base);
+    PackageQuery user_installed(pkg_set.p_impl->base);
     user_installed.filter_userinstalled();
     for (const auto & pkg : user_installed) {
         job_userinstalled.push_back(SOLVER_SOLVABLE | SOLVER_USERINSTALLED, pkg.get_id().id);
+    }
+    if (mark_protected_userinstalled) {
+        PackageQuery protected_query(pkg_set.p_impl->base);
+        protected_query.filter_installed();
+        auto & cfg_main = pkg_set.p_impl->base->get_config();
+        auto & protected_packages = cfg_main.get_protected_packages_option().get_value();
+        protected_query.filter_name(protected_packages);
+        for (const auto & pkg : protected_query) {
+            job_userinstalled.push_back(SOLVER_SOLVABLE | SOLVER_USERINSTALLED, pkg.get_id().id);
+        }
     }
 
     // create a temporary libsolv solver to retrieve a list of unneeded packages
@@ -2978,7 +2988,7 @@ void PackageQuery::filter_unneeded() {
     solver.solve(job_userinstalled);
 
     // write autoremove debug data if required
-    auto & cfg_main = p_impl->base->get_config();
+    auto & cfg_main = pkg_set.p_impl->base->get_config();
     if (cfg_main.get_debug_solver_option().get_value()) {
         auto debug_dir =
             std::filesystem::absolute(std::filesystem::path(cfg_main.get_debugdir_option().get_value()) / "autoremove");
@@ -2993,7 +3003,15 @@ void PackageQuery::filter_unneeded() {
         unneeded_solv_map.add(unneeded_queue[i]);
     }
 
-    *p_impl &= unneeded_solv_map;
+    *pkg_set.p_impl &= unneeded_solv_map;
+}
+
+void PackageQuery::filter_unneeded() {
+    PQImpl::filter_unneeded(*this, false);
+}
+
+void PackageQuery::filter_unneeded_not_protected() {
+    PQImpl::filter_unneeded(*this, true);
 }
 
 void PackageQuery::filter_extras(const bool exact_evr) {
