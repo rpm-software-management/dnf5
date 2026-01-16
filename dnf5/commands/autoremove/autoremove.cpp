@@ -56,13 +56,21 @@ void AutoremoveCommand::run() {
     libdnf5::rpm::PackageQuery protected_query(ctx.get_base(), libdnf5::sack::ExcludeFlags::IGNORE_EXCLUDES);
     protected_query.filter_installed();
     protected_query.filter_name(protected_packages);
+
+    bool protected_found = false;
     for (const auto & protected_pkg : protected_query) {
         if (unneeded.contains(protected_pkg)) {
             printf(
                 _("Unneeded protected package: %s (and its dependencies) cannot be removed, either mark it as "
                   "user-installed or change protected_packages configuration option.\n"),
                 protected_pkg.get_full_nevra().c_str());
+            protected_found = true;
         }
+    }
+
+    if (protected_found) {
+        unneeded = libdnf5::rpm::PackageQuery(ctx.get_base());
+        unneeded.filter_unneeded_not_protected();
     }
 
     auto goal = get_context().get_goal();
