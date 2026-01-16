@@ -224,6 +224,21 @@ void VendorChangeManager::load_vendor_change_policy(const std::filesystem::path 
                         location_first_line_num(location));
                 }
 
+                // Validate regex pattern
+                if (vendor_def.comparator == sack::QueryCmp::REGEX || vendor_def.comparator == sack::QueryCmp::IREGEX) {
+                    try {
+                        sack::match_string("", vendor_def.comparator, vendor_def.vendor);
+                    } catch (const std::exception & ex) {
+                        const auto location = vendor_entry.location();
+                        throw VendorChangePolicyConfigFileError(
+                            M_("Invalid vendor pattern \"{}\" in file \"{}\" for table entry on line {}: {}"),
+                            vendor_def.vendor,
+                            path.native(),
+                            location_first_line_num(location),
+                            std::string(ex.what()));
+                    }
+                }
+
                 switch (vendors_group_type) {
                     case VendorsGroupType::OUTGOING:
                         policy.outgoing_vendors.push_back(std::move(vendor_def));
