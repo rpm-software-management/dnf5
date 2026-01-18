@@ -694,7 +694,7 @@ repository configuration file should aside from repo ID consists of baseurl, met
 
 .. _color_update_local_options-label:
 
-``color_update_label``
+``color_update_local``
     :ref:`color <color-label>`
 
     Color of local packages that are installed from the @commandline repository.
