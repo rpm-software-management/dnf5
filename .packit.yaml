@@ -36,25 +36,24 @@ packages:
 jobs:
   - job: propose_downstream
     trigger: release
-    dist_git_branches:
-      - fedora-43
-      - fedora-42
+    dist_git_branches: &DIST_GIT_BRANCHES_REF
+      - f43
+      - f42
     copy_upstream_release_description: false
     packages: [dnf5]
   - job: koji_build
     trigger: commit
-    dist_git_branches:
-      - fedora-all
+    dist_git_branches: *DIST_GIT_BRANCHES_REF
     packages: [dnf5]
   - job: bodhi_update
     trigger: commit
-    dist_git_branches:
-      - fedora-all
+    dist_git_branches: *DIST_GIT_BRANCHES_REF
     packages: [dnf5]
   - job: copr_build
     trigger: pull_request
-    targets:
-      - fedora-all
+    targets: &COPR_TARGETS_REF
+      - fedora-43-x86_64
+      - fedora-42-x86_64
     actions:
       get-current-version:
         - bash -c 'rpmspec -q --queryformat "%{VERSION}\n" dnf5.spec | head -n1'
@@ -64,9 +63,7 @@ jobs:
   - job: copr_build
     identifier: "WITH_MODULEMD=OFF"
     trigger: pull_request
-    branch: main
-    targets:
-      - fedora-rawhide-x86_64
+    targets: *COPR_TARGETS_REF
     actions:
       fix-spec-file:
       # disable modulemd in spec to verify the build is passing without it
@@ -81,8 +78,7 @@ jobs:
   - job: tests
     trigger: pull_request
     identifier: "dnf5-tests"
-    targets:
-      - fedora-all
+    targets: *COPR_TARGETS_REF
     fmf_url: https://github.com/rpm-software-management/ci-dnf-stack.git
     fmf_ref: &CI_DNF_STACK_REF release-5.2.x.x
     tmt_plan: "^/plans/integration/behave-dnf5$"
@@ -96,8 +92,7 @@ jobs:
   - job: tests
     trigger: pull_request
     identifier: "createrepo_c-tests"
-    targets:
-      - fedora-all
+    targets: *COPR_TARGETS_REF
     fmf_url: https://github.com/rpm-software-management/ci-dnf-stack.git
     fmf_ref: *CI_DNF_STACK_REF
     tmt_plan: "^/plans/integration/behave-createrepo_c$"
@@ -112,8 +107,7 @@ jobs:
     trigger: pull_request
     identifier: "dnf-tests"
     manual_trigger: true
-    targets:
-      - fedora-all
+    targets: *COPR_TARGETS_REF
     fmf_url: https://github.com/rpm-software-management/ci-dnf-stack.git
     fmf_ref: *CI_DNF_STACK_REF
     tmt_plan: "^/plans/integration/behave-dnf$"
@@ -127,8 +121,7 @@ jobs:
   - job: tests
     trigger: pull_request
     identifier: "dnf5daemon-tests"
-    targets:
-      - fedora-all
+    targets: *COPR_TARGETS_REF
     fmf_url: https://github.com/rpm-software-management/ci-dnf-stack.git
     fmf_ref: *CI_DNF_STACK_REF
     tmt_plan: "^/plans/integration/behave-dnf5daemon$"
@@ -142,10 +135,9 @@ jobs:
   - job: tests
     trigger: pull_request
     identifier: "ABI-check"
-    targets:
-      - fedora-rawhide-x86_64
+    targets: *COPR_TARGETS_REF
     fmf_url: https://github.com/rpm-software-management/ci-dnf-stack.git
-    fmf_ref: main
+    fmf_ref: *CI_DNF_STACK_REF
     tmt_plan: "^/plans/integration/abi-libdnf5$"
     packages: [dnf5]
     tf_extra_params:
