@@ -171,6 +171,10 @@ Each entry in ``[[outgoing_packages]]`` or ``[[incoming_packages]]`` can contain
 
         - ``"name"`` - package name
         - ``"source_name"`` - source package name
+        - ``"evr"`` - Epoch-Version-Release string
+        - ``"epoch"`` - epoch number
+        - ``"version"`` - version string
+        - ``"release"`` - release string
         - ``"arch"`` - package architecture
         - ``"repoid"`` - repository ID
         - ``"cmdline_repo"`` - whether the package is from command-line repository (boolean)
@@ -180,17 +184,41 @@ Each entry in ``[[outgoing_packages]]`` or ``[[incoming_packages]]`` can contain
 
         Required field.
 
-        The value to match against. For ``cmdline_repo`` filter, use ``"true"``/``"1"``
-        or ``"false"``/``"0"``.
+        The value to match against.
+
+        - For ``cmdline_repo`` filter, use ``"true"``/``"1"`` or ``"false"``/``"0"``
+        - For ``epoch`` filter, use a numeric string (e.g., ``"0"``, ``"1"``)
+        - For other filters, use appropriate string values
 
     ``comparator``
         String
 
         Optional field.
 
-        The matching method to use. Same values as for vendor comparator (see above).
+        The matching method to use.
 
         Default: ``"EXACT"``
+
+        **For string-based filters** (``name``, ``source_name``, ``arch``, ``repoid``):
+
+        Same values as for vendor comparator: ``EXACT``, ``NOT_EXACT``, ``IEXACT``,
+        ``NOT_IEXACT``, ``CONTAINS``, ``NOT_CONTAINS``, ``ICONTAINS``, ``NOT_ICONTAINS``,
+        ``STARTSWITH``, ``ISTARTSWITH``, ``ENDSWITH``, ``IENDSWITH``, ``REGEX``,
+        ``IREGEX``, ``GLOB``, ``NOT_GLOB``, ``IGLOB``, ``NOT_IGLOB``
+
+        **For version-based filters** (``evr``, ``epoch``, ``version``, ``release``):
+
+        - ``"EXACT"`` - equal to
+        - ``"NOT_EXACT"`` - not equal to
+        - ``"GT"`` - greater than
+        - ``"GTE"`` - greater than or equal to
+        - ``"LT"`` - less than
+        - ``"LTE"`` - less than or equal to
+
+        .. NOTE::
+           Version-based filters use proper RPM version comparison semantics
+           instead of lexical string comparison. This ensures correct version
+           ordering (e.g., "1.10" > "1.9").
 
         .. NOTE::
            The ``cmdline_repo`` filter only supports ``"EXACT"`` comparator.
@@ -222,10 +250,13 @@ The following configurations are **invalid** and will cause an error:
 - Missing required ``filter`` or ``value`` field in a package filter
 - Missing ``filters`` array in a package entry
 - Empty ``filters`` array in a package entry
-- Unknown ``filter`` value (must be one of: "name", "source_name", "arch", "repoid", "cmdline_repo")
+- Unknown ``filter`` value (must be one of: "name", "source_name", "evr", "epoch", "version", "release", "arch", "repoid", "cmdline_repo")
 - Unknown ``comparator`` value
+- Invalid ``comparator`` for string-based filters (must be string comparison operators)
+- Invalid ``comparator`` for version-based filters (must be EXACT, NOT_EXACT, GT, GTE, LT, or LTE)
 - Invalid ``comparator`` for ``cmdline_repo`` filter (only EXACT is supported)
 - Invalid ``value`` for ``cmdline_repo`` filter (must be "true"/"1" or "false"/"0")
+- Invalid ``value`` for ``epoch`` filter (must be a valid number)
 - Invalid regex pattern in filter value
 - Unknown keys at the top level or inside entries
 
@@ -420,9 +451,9 @@ from any vendor, except for packages whose names start with "mypackage".
 Example 8: Allow change from any vendor to specific one with package filtering
 ------------------------------------------------------------------------------
 
-This example allows a change from any vendor to "My Trusted Vendor", but
+This example allows a change from any vendor to "My Vendor", but
 only for incoming packages whose source package name is "mypackage" and
-are located in the 'myrepo' repository.
+version is greater than or equal to "2.0".
 
 .. code-block:: toml
 
@@ -431,11 +462,11 @@ are located in the 'myrepo' repository.
     [[incoming_packages]]
     filters = [
       { filter = 'source_name', value = 'mypackage' },
-      { filter = 'repoid', value = 'myrepo' }
+      { filter = 'version', value = '2.0', comparator = 'GTE' }
     ]
 
     [[incoming_vendors]]
-    vendor = 'My Trusted Vendor'
+    vendor = 'My Vendor'
 
 See Also
 ========

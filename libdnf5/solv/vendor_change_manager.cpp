@@ -16,6 +16,7 @@
 #include <array>
 #include <map>
 #include <optional>
+#include <set>
 #include <string_view>
 #include <utility>
 
@@ -45,6 +46,43 @@ const std::map<std::string_view, sack::QueryCmp> VALID_COMPARATORS = {
     {"NOT_GLOB", sack::QueryCmp::NOT_GLOB},
     {"IGLOB", sack::QueryCmp::IGLOB},
     {"NOT_IGLOB", sack::QueryCmp::NOT_IGLOB},
+
+    {"GT", sack::QueryCmp::GT},
+    {"GTE", sack::QueryCmp::GTE},
+    {"LT", sack::QueryCmp::LT},
+    {"LTE", sack::QueryCmp::LTE},
+};
+
+
+const std::set<sack::QueryCmp> string_comparators = {
+    sack::QueryCmp::EXACT,
+    sack::QueryCmp::NOT_EXACT,
+    sack::QueryCmp::IEXACT,
+    sack::QueryCmp::NOT_IEXACT,
+    sack::QueryCmp::CONTAINS,
+    sack::QueryCmp::NOT_CONTAINS,
+    sack::QueryCmp::ICONTAINS,
+    sack::QueryCmp::NOT_ICONTAINS,
+    sack::QueryCmp::STARTSWITH,
+    sack::QueryCmp::ISTARTSWITH,
+    sack::QueryCmp::ENDSWITH,
+    sack::QueryCmp::IENDSWITH,
+    sack::QueryCmp::REGEX,
+    sack::QueryCmp::IREGEX,
+    sack::QueryCmp::GLOB,
+    sack::QueryCmp::NOT_GLOB,
+    sack::QueryCmp::IGLOB,
+    sack::QueryCmp::NOT_IGLOB,
+};
+
+
+const std::set<sack::QueryCmp> relational_comparators = {
+    sack::QueryCmp::EXACT,
+    sack::QueryCmp::NOT_EXACT,
+    sack::QueryCmp::GT,
+    sack::QueryCmp::GTE,
+    sack::QueryCmp::LT,
+    sack::QueryCmp::LTE,
 };
 
 
@@ -238,6 +276,91 @@ bool filter_package_source_name(
 }
 
 
+bool filter_package_evr(
+    const Pool & pool,
+    const Solvable & solvable,
+    const VendorChangeManager::VendorChangePolicy::PackageDef::Filter & filter) {
+    const auto value = libdnf5::utils::string::c_to_str(pool.id2str(solvable.evr));
+    switch (filter.comparator) {
+        case sack::QueryCmp::GT:
+            return pool.evrcmp_str(value.c_str(), filter.value.c_str(), EVRCMP_COMPARE) > 0;
+        case sack::QueryCmp::GTE:
+            return pool.evrcmp_str(value.c_str(), filter.value.c_str(), EVRCMP_COMPARE) >= 0;
+        case sack::QueryCmp::LT:
+            return pool.evrcmp_str(value.c_str(), filter.value.c_str(), EVRCMP_COMPARE) < 0;
+        case sack::QueryCmp::LTE:
+            return pool.evrcmp_str(value.c_str(), filter.value.c_str(), EVRCMP_COMPARE) <= 0;
+        default:
+            return sack::match_string(value, filter.comparator, filter.value);
+    }
+}
+
+
+bool filter_package_epoch(
+    const Pool & pool,
+    const Solvable & solvable,
+    const VendorChangeManager::VendorChangePolicy::PackageDef::Filter & filter) {
+    const auto value = pool.get_epoch_num(pool.solvable2id(const_cast<Solvable *>(&solvable)));
+    const auto pattern = std::stoul(filter.value);
+    switch (filter.comparator) {
+        case sack::QueryCmp::EXACT:
+            return value == pattern;
+        case sack::QueryCmp::NOT_EXACT:
+            return value != pattern;
+        case sack::QueryCmp::GT:
+            return value > pattern;
+        case sack::QueryCmp::GTE:
+            return value >= pattern;
+        case sack::QueryCmp::LT:
+            return value < pattern;
+        case sack::QueryCmp::LTE:
+            return value <= pattern;
+        default:
+            return true;
+    }
+}
+
+
+bool filter_package_version(
+    const Pool & pool,
+    const Solvable & solvable,
+    const VendorChangeManager::VendorChangePolicy::PackageDef::Filter & filter) {
+    const auto value = libdnf5::utils::string::c_to_str(pool.split_evr(pool.id2str(solvable.evr)).v);
+    switch (filter.comparator) {
+        case sack::QueryCmp::GT:
+            return pool.evrcmp_str(value.c_str(), filter.value.c_str(), EVRCMP_COMPARE_EVONLY) > 0;
+        case sack::QueryCmp::GTE:
+            return pool.evrcmp_str(value.c_str(), filter.value.c_str(), EVRCMP_COMPARE_EVONLY) >= 0;
+        case sack::QueryCmp::LT:
+            return pool.evrcmp_str(value.c_str(), filter.value.c_str(), EVRCMP_COMPARE_EVONLY) < 0;
+        case sack::QueryCmp::LTE:
+            return pool.evrcmp_str(value.c_str(), filter.value.c_str(), EVRCMP_COMPARE_EVONLY) <= 0;
+        default:
+            return sack::match_string(value, filter.comparator, filter.value);
+    }
+}
+
+
+bool filter_package_release(
+    const Pool & pool,
+    const Solvable & solvable,
+    const VendorChangeManager::VendorChangePolicy::PackageDef::Filter & filter) {
+    const auto value = '-' + libdnf5::utils::string::c_to_str(pool.split_evr(pool.id2str(solvable.evr)).r);
+    switch (filter.comparator) {
+        case sack::QueryCmp::GT:
+            return pool.evrcmp_str(value.c_str(), filter.value.c_str(), EVRCMP_MATCH_RELEASE) > 0;
+        case sack::QueryCmp::GTE:
+            return pool.evrcmp_str(value.c_str(), filter.value.c_str(), EVRCMP_MATCH_RELEASE) >= 0;
+        case sack::QueryCmp::LT:
+            return pool.evrcmp_str(value.c_str(), filter.value.c_str(), EVRCMP_MATCH_RELEASE) < 0;
+        case sack::QueryCmp::LTE:
+            return pool.evrcmp_str(value.c_str(), filter.value.c_str(), EVRCMP_MATCH_RELEASE) <= 0;
+        default:
+            return sack::match_string(value, filter.comparator, filter.value);
+    }
+}
+
+
 bool filter_package_arch(
     const Pool & pool,
     const Solvable & solvable,
@@ -274,13 +397,22 @@ VendorChangeManager::VendorChangePolicy::PackageDef::Filter read_package_def_fil
 
     bool filter_found = false;
     bool value_found = false;
+    std::string filter_str;
     for (const auto & [key, value] : filter_table.as_table()) {
         if (key == "filter") {
-            const auto filter_str = value.as_string();
+            filter_str = value.as_string();
             if (filter_str == "name") {
                 filter.filter_func = filter_package_name;
             } else if (filter_str == "source_name") {
                 filter.filter_func = filter_package_source_name;
+            } else if (filter_str == "evr") {
+                filter.filter_func = filter_package_evr;
+            } else if (filter_str == "epoch") {
+                filter.filter_func = filter_package_epoch;
+            } else if (filter_str == "version") {
+                filter.filter_func = filter_package_version;
+            } else if (filter_str == "release") {
+                filter.filter_func = filter_package_release;
             } else if (filter_str == "arch") {
                 filter.filter_func = filter_package_arch;
             } else if (filter_str == "repoid") {
@@ -360,6 +492,30 @@ VendorChangeManager::VendorChangePolicy::PackageDef::Filter read_package_def_fil
                 filter.value,
                 path.native(),
                 location_first_line_num(location));
+        }
+    } else if (
+        filter.filter_func == filter_package_evr || filter.filter_func == filter_package_epoch ||
+        filter.filter_func == filter_package_version || filter.filter_func == filter_package_release) {
+        if (!relational_comparators.contains(filter.comparator)) {
+            const auto location = filter_table.location();
+            throw VendorChangePolicyConfigFileError(
+                M_("Filter \"{}\" in file \"{}\" in table starting on line {} "
+                   "does not support comparator \"{}\""),
+                filter_str,
+                path.native(),
+                location_first_line_num(location),
+                comparator_to_string(filter.comparator));
+        }
+    } else {
+        if (!string_comparators.contains(filter.comparator)) {
+            const auto location = filter_table.location();
+            throw VendorChangePolicyConfigFileError(
+                M_("Filter \"{}\" in file \"{}\" in table starting on line {} "
+                   "does not support comparator \"{}\""),
+                filter_str,
+                path.native(),
+                location_first_line_num(location),
+                comparator_to_string(filter.comparator));
         }
     }
 
@@ -537,7 +693,16 @@ void VendorChangeManager::load_vendor_change_policy(const std::filesystem::path 
                                 path.native(),
                                 location_first_line_num(location));
                         }
-                        vendor_def.comparator = it->second;
+                        auto comparator = it->second;
+                        if (!string_comparators.contains(comparator)) {
+                            const auto location = value.location();
+                            throw VendorChangePolicyConfigFileError(
+                                M_("Unsupported comparator \"{}\" for vendor definition in file \"{}\" on line {}"),
+                                comparator_to_string(comparator),
+                                path.native(),
+                                location_first_line_num(location));
+                        }
+                        vendor_def.comparator = comparator;
                     } else if (key == "exclude") {
                         vendor_def.is_exclusion = value.as_boolean();
                     } else {
