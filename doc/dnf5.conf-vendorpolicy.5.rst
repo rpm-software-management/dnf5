@@ -146,7 +146,7 @@ The following configurations are **invalid** and will cause an error:
 - Unknown keys at the top level or inside vendor entries
 
 Configuration File Locations
-=============================
+============================
 
 Vendor change policy files are read from the following directories:
 
@@ -155,6 +155,9 @@ Vendor change policy files are read from the following directories:
 
 ``/usr/share/dnf5/vendors.d/``
     Distribution configuration directory
+
+Only files with the ``.conf`` extension are considered. Configuration files are sorted
+alphanumerically by their filename and then read in this sorted order.
 
 If a file with the same name exists in both directories, the file from ``/etc/dnf/vendors.d/``
 is used. This implies that the distribution configuration file can be simply overridden
