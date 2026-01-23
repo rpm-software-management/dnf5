@@ -493,7 +493,11 @@ void RepoSack::Impl::update_and_load_repos(libdnf5::repo::RepoQuery & repos, boo
 
     for (int run_count = 0; run_count < 2; ++run_count) {
         // Set of repositories for processing. Use a set here since we don't want duplicate entries.
-        std::set<Repo *> repos_for_processing_set;
+        // Use custom sorting by repository ids to process them in stable order otherwise they would
+        // be sorted by their memory addresses.
+        // This order matters especially because libsolv is sensitive to it.
+        auto cmp = [](const Repo * r1, const Repo * r2) { return r1->get_id().compare(r2->get_id()); };
+        std::set<Repo *, decltype(cmp)> repos_for_processing_set;
 
         if (run_count == 0) {
             // First run.
