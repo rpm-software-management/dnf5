@@ -1,3 +1,8 @@
+# 5.2.18.0
+
+- tutorial: libdnf5 plugins: fix `enable` options
+- Add `local` plugin
+
 # 5.2.17.0
 
 - Update translations from weblate

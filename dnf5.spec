@@ -1,6 +1,6 @@
 %global project_version_prime 5
 %global project_version_major 2
-%global project_version_minor 17
+%global project_version_minor 18
 %global project_version_micro 0
 
 %bcond dnf5_obsoletes_dnf %[0%{?fedora} > 40 || 0%{?rhel} > 10]
@@ -1048,6 +1048,9 @@ mkdir -p %{buildroot}%{_libdir}/libdnf5/plugins
 %ldconfig_scriptlets
 
 %changelog
+* Wed Jan 14 2026 Packit Team <hello@packit.dev> - 5.2.18.0-1
+- New upstream release 5.2.18.0
+
 * Tue Sep 02 2025 Packit Team <hello@packit.dev> - 5.2.17.0-1
 - New upstream release 5.2.17.0
 
