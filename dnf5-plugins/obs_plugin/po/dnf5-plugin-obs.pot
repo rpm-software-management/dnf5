@@ -1,0 +1,146 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-12-12 17:49+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: obs.cpp:48
+msgid "OBS hub (the web-UI server) hostname"
+msgstr ""
+
+#: obs.cpp:88
+#, c++-format
+msgid ""
+"OBS project repo ID to {}.  Use either a format PROJECT/REPONAME or HUB/"
+"PROJECT/REPONAME (if HUB is not specified, the default one, or --hub <ARG>, "
+"is used).  PROJECT should be the full colon-delimited project path, and "
+"REPONAME should be the name of the project's repository.  HUB can be either "
+"the OBS hostname (e.g. build.opensuse.org) or the shortcut (e.g. opensuse).  "
+"Example: 'opensuse/system:systemd/openSUSE_Tumbleweed'."
+msgstr ""
+
+#: obs.cpp:104
+#, c++-format
+msgid "Invalid PROJECT_REPO_SPEC format '{}'"
+msgstr ""
+
+#: obs_constants.hpp:29
+msgid ""
+"Manage OBS repositories (add-ons provided by users/community/third-party)"
+msgstr ""
+
+#: obs_constants.hpp:31
+msgid ""
+"Enabling an OBS repository. Please note that this repository is not part\n"
+"of the main distribution, and quality may vary.\n"
+"\n"
+"The openSUSE Project does not exercise any power over the contents of\n"
+"this repository, and packages are not held to any quality or security\n"
+"level.\n"
+"\n"
+"Please do not file bug reports about these packages in openSUSE\n"
+"Bugzilla. In case of problems, contact the owner of this repository.\n"
+msgstr ""
+
+#: obs_debug.cpp:30
+msgid "print useful info about the system, useful for debugging"
+msgstr ""
+
+#: obs_disable.cpp:36
+#, c++-format
+msgid ""
+"disable specified OBS repository (if exists), keep {}/*.repo file - just "
+"mark enabled=0"
+msgstr ""
+
+#: obs_enable.cpp:36
+#, c++-format
+msgid ""
+"download the repository info from an OBS server and install it as a {}/"
+"*.repo file"
+msgstr ""
+
+#: obs_list.cpp:47
+msgid "list OBS repositories"
+msgstr ""
+
+#: obs_remove.cpp:36
+#, c++-format
+msgid ""
+"remove specified OBS repository from the system (removes the {}/*.repo file)"
+msgstr ""
+
+#: obs_repo.cpp:71
+msgid "Can't parse OBS repo spec: "
+msgstr ""
+
+#: obs_repo.cpp:103
+msgid "Can't parse OBS repo id: "
+msgstr ""
+
+#: obs_repo.cpp:155
+msgid "Failed to get repo for spec: "
+msgstr ""
+
+#: obs_repo.cpp:174
+#, c++-format
+msgid "Unexpected repository section '{}'"
+msgstr ""
+
+#: obs_repo.cpp:198
+#, c++-format
+msgid "Repository file '{}' has multiple sections, OBS requires only one"
+msgstr ""
+
+#: obs_repo.cpp:202
+#, c++-format
+msgid "Repository file '{}' has no sections"
+msgstr ""
+
+#: obs_repo.cpp:233
+#, c++-format
+msgid "Can't remove the {} repo file"
+msgstr ""
+
+#: obs_repo.cpp:236
+#, c++-format
+msgid "Repo file {} successfully removed"
+msgstr ""
+
+#: obs_repo.cpp:271
+#, c++-format
+msgid "Repo id '{}' in '{}' is suspicious"
+msgstr ""
+
+#: obs_repo.cpp:279
+#, c++-format
+msgid "Repo id '{}' doesn't belong to '{}' repofile"
+msgstr ""
+
+#: obs_repo.cpp:321
+#, c++-format
+msgid "OBS repository '{}' in '{}' disabled."
+msgstr ""
+
+#: obs_repo.cpp:333 obs_repo.cpp:359
+#, c++-format
+msgid "Repository '{}' not found on this system"
+msgstr ""
+
+#: obs_repo.cpp:348
+#, c++-format
+msgid "OBS repository '{}' in '{}' removed."
+msgstr ""
