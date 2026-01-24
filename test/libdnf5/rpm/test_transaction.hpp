@@ -32,12 +32,14 @@ class RpmTransactionTest : public BaseTestCase {
     CPPUNIT_TEST(test_transaction);
     CPPUNIT_TEST(test_transaction_temp_files_cleanup);
     CPPUNIT_TEST(test_source_date_epoch_sorting);
+    CPPUNIT_TEST(test_source_date_epoch_history_timestamps);
     CPPUNIT_TEST_SUITE_END();
 
 public:
     void test_transaction();
     void test_transaction_temp_files_cleanup();
     void test_source_date_epoch_sorting();
+    void test_source_date_epoch_history_timestamps();
 };
 
 #endif
