@@ -56,6 +56,7 @@
 #include <filesystem>
 #include <iostream>
 #include <ranges>
+#include <sstream>
 #include <string_view>
 #include <thread>
 
@@ -1053,8 +1054,26 @@ Transaction::TransactionRunResult Transaction::Impl::_run(
         db_transaction.fill_transaction_groups(groups, installed_names);
     }
 
-    auto time = std::chrono::system_clock::now().time_since_epoch();
-    db_transaction.set_dt_start(std::chrono::duration_cast<std::chrono::seconds>(time).count());
+    int64_t source_date_epoch = -1;
+    const char * sde = std::getenv("SOURCE_DATE_EPOCH");
+    if (sde != nullptr) {
+        std::istringstream iss(sde);
+        iss >> source_date_epoch;
+        if (iss.fail() || !iss.eof() || source_date_epoch < 0) {
+            auto logger = base->get_logger().get();
+            logger->warning("Invalid SOURCE_DATE_EPOCH value '{}', using current time", sde);
+            source_date_epoch = -1;
+        }
+    }
+
+    int64_t dt_start;
+    if (source_date_epoch >= 0) {
+        dt_start = source_date_epoch;
+    } else {
+        auto time = std::chrono::system_clock::now().time_since_epoch();
+        dt_start = std::chrono::duration_cast<std::chrono::seconds>(time).count();
+    }
+    db_transaction.set_dt_start(dt_start);
     db_transaction.start();
 
 
@@ -1245,8 +1264,14 @@ Transaction::TransactionRunResult Transaction::Impl::_run(
     }
 
     // finish history db transaction
-    time = std::chrono::system_clock::now().time_since_epoch();
-    db_transaction.set_dt_end(std::chrono::duration_cast<std::chrono::seconds>(time).count());
+    int64_t dt_end;
+    if (source_date_epoch >= 0) {
+        dt_end = source_date_epoch;
+    } else {
+        auto time = std::chrono::system_clock::now().time_since_epoch();
+        dt_end = std::chrono::duration_cast<std::chrono::seconds>(time).count();
+    }
+    db_transaction.set_dt_end(dt_end);
     // TODO(jrohel): Also save the rpm db cookie to system state.
     //               Possibility to detect rpm database change without the need for a history database.
     db_transaction.set_rpmdb_version_end(rpm_transaction.get_db_cookie());
