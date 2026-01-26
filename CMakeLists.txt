@@ -126,7 +126,7 @@ endif()
 
 if(WITH_TRANSLATIONS)
     # define common command to generate the pot file from sources
-    list(APPEND XGETTEXT_COMMAND xgettext -F --from-code=UTF-8 --keyword=_ --keyword=M_ --keyword=P_:1,2 --keyword=MP_:1,2 --keyword=C_:1c,2 --keyword=MC_:1c,2 --keyword=CP_:1c,2,3 --keyword=MCP_:1c,2,3 -c)
+    list(APPEND XGETTEXT_COMMAND xgettext -F --from-code=UTF-8 --keyword=_ --keyword=M_ --keyword=P_:1,2 --keyword=MP_:1,2 --keyword=C_:1c,2 --keyword=MC_:1c,2 --keyword=CP_:1c,2,3 --keyword=MCP_:1c,2,3 --keyword=dgettext:2 -c)
     add_custom_target(gettext-potfiles)
 endif()
 

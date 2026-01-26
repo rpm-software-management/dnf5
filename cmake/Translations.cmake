@@ -6,6 +6,15 @@ find_package(Gettext)
 set(COMPONENT_PATH ${CMAKE_CURRENT_SOURCE_DIR}/..)
 file(GLOB_RECURSE POT_SOURCES RELATIVE ${COMPONENT_PATH} ${COMPONENT_PATH}/*.cpp ${COMPONENT_PATH}/*.hpp)
 
+# For libdnf5-cli, also include the userconfirm header file from the global include directory
+if(GETTEXT_DOMAIN STREQUAL "libdnf5-cli")
+    set(USERCONFIRM_HEADER "${CMAKE_SOURCE_DIR}/include/libdnf5-cli/utils/userconfirm.hpp")
+    if(EXISTS ${USERCONFIRM_HEADER})
+        file(RELATIVE_PATH REL_USERCONFIRM ${COMPONENT_PATH} ${USERCONFIRM_HEADER})
+        list(APPEND POT_SOURCES ${REL_USERCONFIRM})
+    endif()
+endif()
+
 # target to refresh pot file from current sources
 add_custom_target(${GETTEXT_DOMAIN}-pot
     COMMENT "Generating fresh ${GETTEXT_DOMAIN}.pot file from sources"
