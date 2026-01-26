@@ -22,6 +22,7 @@
 #include <fmt/format.h>
 
 #include <map>
+#include <optional>
 
 
 // map string group attribute name to actual attribute
@@ -29,6 +30,8 @@ const std::map<std::string, GroupAttribute> group_attributes{
     {"groupid", GroupAttribute::groupid},
     {"name", GroupAttribute::name},
     {"description", GroupAttribute::description},
+    {"translated_name", GroupAttribute::translated_name},
+    {"translated_description", GroupAttribute::translated_description},
     {"order", GroupAttribute::order},
     {"order_int", GroupAttribute::order_int},
     {"langonly", GroupAttribute::langonly},
@@ -40,7 +43,10 @@ const std::map<std::string, GroupAttribute> group_attributes{
     {"repos", GroupAttribute::repos},
 };
 
-dnfdaemon::KeyValueMap group_to_map(libdnf5::comps::Group & libdnf_group, const std::vector<std::string> & attributes) {
+dnfdaemon::KeyValueMap group_to_map(
+    libdnf5::comps::Group & libdnf_group,
+    const std::vector<std::string> & attributes,
+    const std::optional<std::string> & lang) {
     dnfdaemon::KeyValueMap dbus_group;
     // add group id by default
     dbus_group.emplace(std::make_pair("groupid", libdnf_group.get_groupid()));
@@ -59,6 +65,20 @@ dnfdaemon::KeyValueMap group_to_map(libdnf5::comps::Group & libdnf_group, const 
                 break;
             case GroupAttribute::description:
                 dbus_group.emplace(attr, libdnf_group.get_description());
+                break;
+            case GroupAttribute::translated_name:
+                if (lang) {
+                    dbus_group.emplace(attr, libdnf_group.get_translated_name(lang->c_str()));
+                } else {
+                    dbus_group.emplace(attr, libdnf_group.get_translated_name());
+                }
+                break;
+            case GroupAttribute::translated_description:
+                if (lang) {
+                    dbus_group.emplace(attr, libdnf_group.get_translated_description(lang->c_str()));
+                } else {
+                    dbus_group.emplace(attr, libdnf_group.get_translated_description());
+                }
                 break;
             case GroupAttribute::order:
                 dbus_group.emplace(attr, libdnf_group.get_order());
