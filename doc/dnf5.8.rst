@@ -435,6 +435,12 @@ Environment
 ``LIBDNF_PLUGINS_CONFIG_DIR``
     Override a directory with libdnf5 plugin's configuration files.
 
+``SOURCE_DATE_EPOCH``
+    Specifies a timestamp given as number of seconds since UNIX epoch. When set,
+    transaction timestamps in the history database are set to the specified time
+    instead of the current time. Additionally, packages are ordered to ensure
+    consistent transaction order.
+
 ``TEMP``,
 ``TEMPDIR``,
 ``TMP``,
