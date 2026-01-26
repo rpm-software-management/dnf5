@@ -27,6 +27,7 @@
 #include <libdnf5/comps/group/query.hpp>
 #include <sdbus-c++/sdbus-c++.h>
 
+#include <optional>
 #include <string>
 
 
@@ -126,8 +127,14 @@ sdbus::MethodReply Group::list(sdbus::MethodCall & call) {
     dnfdaemon::KeyValueMapList out_groups;
     std::vector<std::string> attributes =
         dnfdaemon::key_value_map_get<std::vector<std::string>>(options, "attributes", std::vector<std::string>{});
+
+    // Get optional language for translations
+    std::optional<std::string> lang;
+    if (options.find("lang") != options.end()) {
+        lang = dnfdaemon::key_value_map_get<std::string>(options, "lang");
+    }
     for (auto grp : query.list()) {
-        out_groups.push_back(group_to_map(grp, attributes));
+        out_groups.push_back(group_to_map(grp, attributes, lang));
     }
 
     auto reply = call.createReply();
