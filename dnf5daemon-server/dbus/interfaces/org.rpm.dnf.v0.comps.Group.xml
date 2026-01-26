@@ -50,6 +50,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
                 any group matching to any of patterns is returned
             - contains_pkgs: list of strings
                 include only groups containing given packages
+            - lang: string (default current locale)
+                language code for translated_name and translated_description attributes
 
         Unknown options are ignored.
     -->

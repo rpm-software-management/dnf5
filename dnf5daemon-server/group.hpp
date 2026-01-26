@@ -24,6 +24,7 @@
 
 #include <libdnf5/comps/group/group.hpp>
 
+#include <optional>
 #include <string>
 #include <vector>
 
@@ -32,7 +33,8 @@ enum class GroupAttribute {
     groupid,
     name,
     description,
-    // TODO(mblaha): translated_name, translated_description, packages, reason
+    translated_name,
+    translated_description,
     order,
     order_int,
     langonly,
@@ -44,6 +46,9 @@ enum class GroupAttribute {
     repos,
 };
 
-dnfdaemon::KeyValueMap group_to_map(libdnf5::comps::Group & libdnf_group, const std::vector<std::string> & attributes);
+dnfdaemon::KeyValueMap group_to_map(
+    libdnf5::comps::Group & libdnf_group,
+    const std::vector<std::string> & attributes,
+    const std::optional<std::string> & lang = std::nullopt);
 
 #endif
