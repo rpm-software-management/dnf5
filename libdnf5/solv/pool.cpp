@@ -35,36 +35,8 @@ namespace libdnf5::solv {
 // Check if an illegal vendor change occurs when an installed solvable is replaced by a new solvable.
 // Returns 1 if the vendor change is illegal, otherwise returns 0.
 int RpmPool::callback_policy_illegal_vendorchange(::Pool * libsolv_pool, Solvable * installed, Solvable * new_solv) {
-    // Treat a missing vendor as an empty string (ID_EMPTY)
-    auto outgoing_vendor = installed->vendor ? installed->vendor : ID_EMPTY;
-    auto incoming_vendor = new_solv->vendor ? new_solv->vendor : ID_EMPTY;
-    if (incoming_vendor == outgoing_vendor) {
-        return 0;  // OK, no vendor change occured
-    }
-
-    auto * pool = reinterpret_cast<RpmPool *>(libsolv_pool->appdata);
-
-    // Check if the incoming solvable bypasses vendor check.
-    // If so, always accept the vendor change without further checks.
-    if (pool->vendor_change_manager.is_incoming_vendor_bypassed_solvable(pool_solvable2id(libsolv_pool, new_solv))) {
-        return 0;  // OK, incoming solvable bypasses vendor check
-    }
-
-    const auto & outgoing_vendor_mask =
-        pool->vendor_change_manager.get_vendor_change_masks(outgoing_vendor).outgoing_mask;
-    if (outgoing_vendor_mask.empty()) {
-        // The outgoing vendor is not involved in any valid policy change.
-        // Therefore, any change is illegal.
-        return 1;
-    }
-
-    const auto & incomin_vendor_mask =
-        pool->vendor_change_manager.get_vendor_change_masks(incoming_vendor).incoming_mask;
-    if (!outgoing_vendor_mask.is_intersection_empty(incomin_vendor_mask)) {
-        return 0;  // OK, a policy match was found
-    }
-
-    return 1;  // Illegal vendor change.
+    auto & vendor_change_manager = reinterpret_cast<RpmPool *>(libsolv_pool->appdata)->vendor_change_manager;
+    return vendor_change_manager.is_vendor_change_allowed(*installed, *new_solv) ? 0 : 1;
 }
 
 
