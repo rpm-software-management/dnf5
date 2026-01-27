@@ -3086,7 +3086,11 @@ GoalProblem Goal::Impl::add_reason_change_to_goal(
         }
     }
     for (const auto & pkg : query) {
-        if (pkg.get_reason() == reason) {
+        // check if the package is already installed with the requested reason or
+        // if the requested reason is GROUP and the package is already part of the group
+        if (pkg.get_reason() == reason &&
+            (reason != transaction::TransactionItemReason::GROUP ||
+             (group_id && base->p_impl->get_system_state().get_package_groups(pkg.get_name()).contains(*group_id)))) {
             // pkg is already installed with correct reason
             transaction.p_impl->add_resolve_log(
                 GoalAction::REASON_CHANGE,
