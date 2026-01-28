@@ -1179,6 +1179,20 @@ Transaction::TransactionRunResult Transaction::Impl::_run(
                         system_state.set_group_state(group_id, state);
                     }
                 } else {
+                    if (tspkg_reason <= transaction::TransactionItemReason::DEPENDENCY) {
+                        // remove package from all group lists in groups.toml
+                        auto pkg_name = pkg.get_name();
+                        for (const auto & group_id : system_state.get_package_groups(pkg_name)) {
+                            try {
+                                auto state = system_state.get_group_state(group_id);
+                                if (std::erase(state.packages, pkg_name) != 0) {
+                                    system_state.set_group_state(group_id, state);
+                                }
+                            } catch (const system::StateNotFoundError &) {
+                                // group state doesn't exist, skip it
+                            }
+                        }
+                    }
                     system_state.set_package_reason(pkg.get_na(), tspkg_reason);
                 }
             }
