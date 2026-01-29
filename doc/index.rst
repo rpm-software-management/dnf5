@@ -18,6 +18,8 @@ Welcome to DNF5's documentation!
     dnf5.8
     dnf5.conf.5
     dnf5.conf-vendorpolicy.5
+    dnf5.conf-vendorpolicy-v1_0.5
+    dnf5.conf-vendorpolicy-v1_1.5
     dnf_daemon/index
     misc/index
     best_practices/index
