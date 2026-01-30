@@ -60,10 +60,10 @@ void AutoremoveCommand::run() {
     bool protected_found = false;
     for (const auto & protected_pkg : protected_query) {
         if (unneeded.contains(protected_pkg)) {
-            printf(
-                _("Unneeded protected package: %s (and its dependencies) cannot be removed, either mark it as "
-                  "user-installed or change protected_packages configuration option.\n"),
-                protected_pkg.get_full_nevra().c_str());
+            ctx.print_info(libdnf5::utils::sformat(
+                _("Unneeded protected package: {0} (and its dependencies) cannot be removed, either mark it as "
+                  "user-installed or change protected_packages configuration option."),
+                protected_pkg.get_full_nevra()));
             protected_found = true;
         }
     }
