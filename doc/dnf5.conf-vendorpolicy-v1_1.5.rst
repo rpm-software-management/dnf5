@@ -238,27 +238,6 @@ Each entry in ``[[outgoing_packages]]`` or ``[[incoming_packages]]`` can contain
 
     Default: ``false``
 
-Error Conditions
-================
-
-The following configurations are **invalid** and will cause an error:
-
-- Missing ``version`` field
-- Version value other than ``"1.1"``
-- Missing required ``vendor`` field in a vendor entry
-- Missing required ``filter`` or ``value`` field in a package filter
-- Missing ``filters`` array in a package entry
-- Empty ``filters`` array in a package entry
-- Unknown ``filter`` value (must be one of: "name", "source_name", "evr", "epoch", "version", "release", "arch", "repoid", "cmdline_repo")
-- Unknown ``comparator`` value
-- Invalid ``comparator`` for string-based filters (must be string comparison operators)
-- Invalid ``comparator`` for version-based filters (must be EXACT, NOT_EXACT, GT, GTE, LT, or LTE)
-- Invalid ``comparator`` for ``cmdline_repo`` filter (only EXACT is supported)
-- Invalid ``value`` for ``cmdline_repo`` filter (must be "true"/"1" or "false"/"0")
-- Invalid ``value`` for ``epoch`` filter (must be a valid number)
-- Invalid regex pattern in filter value
-- Unknown keys at the top level or inside entries
-
 Examples
 ========
 

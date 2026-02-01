@@ -133,19 +133,6 @@ can contain the following fields:
 
     Default: ``false``
 
-Error Conditions
-================
-
-The following configurations are **invalid** and will cause an error:
-
-- Missing ``version`` field
-- Combination of ``equivalent_vendors`` with ``outgoing_vendors`` or ``incoming_vendors``
-- Only ``outgoing_vendors`` without ``incoming_vendors`` (or vice versa)
-- Missing required ``vendor`` field in a vendor entry
-- Unknown ``comparator`` value
-- Invalid regex pattern in vendor value
-- Unknown keys at the top level or inside entries
-
 Examples
 ========
 
