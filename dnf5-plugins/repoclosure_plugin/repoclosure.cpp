@@ -19,7 +19,9 @@
 
 #include "repoclosure.hpp"
 
+#include <json-c/json.h>
 #include <libdnf5-cli/argument_parser.hpp>
+#include <libdnf5-cli/exception.hpp>
 #include <libdnf5/conf/const.hpp>
 #include <libdnf5/rpm/package.hpp>
 #include <libdnf5/rpm/package_query.hpp>
@@ -94,6 +96,8 @@ void RepoclosureCommand::set_argument_parser() {
 
     newest = std::make_unique<libdnf5::cli::session::BoolOption>(
         *this, "newest", '\0', "Only consider the latest version of a package from each repo.", false);
+
+    create_json_option(*this);
 }
 
 void RepoclosureCommand::configure() {
@@ -189,15 +193,41 @@ void RepoclosureCommand::run() {
         }
     }
 
+    // sort unresolved packages
+    std::sort(
+        unresolved_packages.begin(),
+        unresolved_packages.end(),
+        [](const std::pair<libdnf5::rpm::Package, std::vector<std::string>> & l,
+           const std::pair<libdnf5::rpm::Package, std::vector<std::string>> & r) {
+            return libdnf5::rpm::cmp_nevra<libdnf5::rpm::Package>(l.first, r.first);
+        });
+
+    // [NOTE] When editing JSON output format, do not forget to update the docs at doc/dnf5_plugins/repoclosure.8.rst
+    if (get_context().get_json_output_requested()) {
+        json_object * root = json_object_new_array();
+
+        for (auto const & [pkg, unsatisfied] : unresolved_packages) {
+            json_object * j_pkg = json_object_new_object();
+            json_object_object_add(j_pkg, "package", json_object_new_string(pkg.get_nevra().c_str()));
+            json_object_object_add(j_pkg, "repo", json_object_new_string(pkg.get_repo_id().c_str()));
+            json_object * j_unsatisfied = json_object_new_array();
+            for (const auto & dep : unsatisfied) {
+                json_object_array_add(j_unsatisfied, json_object_new_string(dep.c_str()));
+            }
+            json_object_object_add(j_pkg, "unresolved_dependencies", j_unsatisfied);
+            json_object_array_add(root, j_pkg);
+        }
+
+        std::cout << json_object_to_json_string_ext(root, JSON_C_TO_STRING_PRETTY) << std::endl;
+        json_object_put(root);
+
+        if (unresolved_packages.empty()) {
+            return;
+        }
+        throw libdnf5::cli::SilentCommandExitError(1);
+    }
+
     if (!unresolved_packages.empty()) {
-        // sort unresolved packages
-        std::sort(
-            unresolved_packages.begin(),
-            unresolved_packages.end(),
-            [](const std::pair<libdnf5::rpm::Package, std::vector<std::string>> & l,
-               const std::pair<libdnf5::rpm::Package, std::vector<std::string>> & r) {
-                return libdnf5::rpm::cmp_nevra<libdnf5::rpm::Package>(l.first, r.first);
-            });
         int unresolved_deps_count = 0;
 
         for (auto const & [pkg, unsatisfied] : unresolved_packages) {
