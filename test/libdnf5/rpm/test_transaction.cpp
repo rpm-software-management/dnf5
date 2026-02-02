@@ -226,6 +226,16 @@ void RpmTransactionTest::test_source_date_epoch_sorting() {
         CPPUNIT_ASSERT(callbacks_ptr->order_correct);
         CPPUNIT_ASSERT_EQUAL(expected_order.size(), callbacks_ptr->current_index);
 
+        // verify the history db transaction pkg list is also sorted by NEVRA
+        libdnf5::transaction::TransactionHistory history(base.get_weak_ptr());
+        auto transactions = history.list_all_transactions();
+        CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), transactions.size());
+
+        auto trans_packages = transactions[0].get_packages();
+        CPPUNIT_ASSERT(std::is_sorted(trans_packages.begin(), trans_packages.end(), [](const auto & a, const auto & b) {
+            return a.to_string() < b.to_string();
+        }));
+
     } while (std::next_permutation(packages.begin(), packages.end()));
 
     unsetenv("SOURCE_DATE_EPOCH");
