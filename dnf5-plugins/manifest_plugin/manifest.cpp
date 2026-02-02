@@ -109,7 +109,7 @@ std::string replace_all(std::string str, const std::string & from, const std::st
 
 std::string get_arch_generic_url(const std::string & url, const std::string & arch) {
     // TODO this is a hack from the original DNF4 manifest plugin. We should instead somehow grab the unsubstituted URL during loading of the repositories from configuration (RepoSack::create_repos_from_file).
-    return replace_all(url, arch, "$arch");
+    return replace_all(url, arch, "$basearch");
 }
 
 std::filesystem::path get_manifest_path(libdnf5::OptionPath & option, const std::string & arch) {
@@ -152,7 +152,7 @@ void load_host_repos(dnf5::Context & ctx, libdnf5::Base & base) {
 
 std::pair<libdnf5::rpm::PackageSet, std::vector<std::string>> get_packages_from_manifest(
     libdnf5::Base & base, libpkgmanifest::manifest::Manifest & manifest, bool with_srpm) {
-    const auto & arch = base.get_vars()->get_value("arch");
+    const auto & arch = base.get_vars()->get_value("basearch");
     libdnf5::rpm::PackageSet packages(base);
     std::vector<std::string> errors;
     for (auto & manifest_pkg : manifest.get_packages().get(arch, with_srpm)) {
@@ -312,6 +312,7 @@ std::unique_ptr<libdnf5::Base> ManifestSubcommand::create_base_for_arch(const st
     base->get_config().get_skip_unavailable_option().set(false);
 
     base->get_vars()->set("arch", arch, libdnf5::Vars::Priority::RUNTIME);
+    base->get_vars()->set("basearch", arch, libdnf5::Vars::Priority::RUNTIME);
 
     auto download_callbacks_uptr = std::make_unique<dnf5::DownloadCallbacks>();
     auto * download_callbacks = download_callbacks_uptr.get();
@@ -363,7 +364,8 @@ std::vector<libdnf5::rpm::Package> ManifestSubcommand::resolve_goal(
     libdnf5::Goal & goal, libdnf5::Base & base, const bool include_srpms) {
     auto & ctx = get_context();
 
-    ctx.print_info(libdnf5::utils::sformat(_("Resolving transaction for arch {}"), base.get_vars()->get_value("arch")));
+    ctx.print_info(
+        libdnf5::utils::sformat(_("Resolving transaction for arch {}"), base.get_vars()->get_value("basearch")));
 
     // Resolve the goal
     auto transaction = goal.resolve();
