@@ -27,6 +27,7 @@
 #include "db/trans.hpp"
 #include "transaction/transaction_sr.hpp"
 
+#include "libdnf5/base/base.hpp"
 #include "libdnf5/transaction/comps_environment.hpp"
 #include "libdnf5/transaction/comps_group.hpp"
 #include "libdnf5/transaction/rpm_package.hpp"
@@ -209,6 +210,20 @@ void Transaction::fill_transaction_packages(
         new_pkg.set_repoid(tspkg.get_package().get_repo_id());
         new_pkg.set_action(tspkg.get_action());
         new_pkg.set_reason(tspkg.get_reason());
+    }
+
+    // If SOURCE_DATE_EPOCH is set, sort the package list for reproducibility.
+    // TODO(jlebon): This duplicates the RPM transaction code. Ideally we'd sort
+    // the package list once, but currently it's ordered a specific way for the
+    // system state update logic.
+    if (std::getenv("SOURCE_DATE_EPOCH") != nullptr && p_impl->packages) {
+        auto & logger = *p_impl->base->get_logger();
+        logger.debug(
+            "SOURCE_DATE_EPOCH detected; sorting {} packages for history DB reproducibility", p_impl->packages->size());
+        std::sort(p_impl->packages->begin(), p_impl->packages->end(), [](const auto & a, const auto & b) {
+            // we need to compare across different packages, so just do a stringy NEVRA cmp
+            return a.to_string() < b.to_string();
+        });
     }
 }
 
