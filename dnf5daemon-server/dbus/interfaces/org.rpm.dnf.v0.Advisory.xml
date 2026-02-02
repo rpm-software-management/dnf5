@@ -49,17 +49,17 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
                 - "updates" - to return only advisories containing newer versions of installed packages for which an update is available
             - names: list of strings
-                Consider only advisories with one of given names.
+                Consider only advisories with one of the given advisory identifiers. Values must be exact advisory IDs (e.g., "FEDORA-2025-beb4c9a336" or "RHSA-2024:1234"). Globs/wildcards and package names are not accepted in this option.
             - types: list of strings
                 Consider only advisories of given types. Possible types are "security", "bugfix", "enhancement", and "newpackage".
             - contains_pkgs: list of strings
-                Consider only advisories containing one of given packages.
+                Consider only advisories containing packages with names matching one of given glob patterns. Matching is performed against package base names (for example "kernel", "bash", "buildah"). NEVRA strings or name.arch forms are not supported.
             - severities: list of strings
                 Consider only advisories of given severity. Possible values are "critical", "important", "moderate", "low", and "none".
             - reference_bzs: list of strings
                 Consider only advisories referencing given Bugzilla ticket ID. Expected values are numeric IDs, e.g. 123456.
             - reference_cves: list of strings
-                Consider only advisoried referencing given CVE ID. Expected values are strings IDs in CVE format, e.g. CVE-2201-0123.
+                Consider only advisories referencing given CVE ID. Expected values are strings IDs in CVE format, e.g. CVE-2201-0123.
             - with_bz: boolean, default False
                 Consider only advisories referencing a Bugzilla ticket.
             - with_cve: boolean, default False
