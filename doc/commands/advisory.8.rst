@@ -38,18 +38,30 @@ advisories and packages related to them.
 
 Optional ``advisory-spec`` arguments could be passed to filter only advisories with given names.
 
+.. note::
+
+   The ``updateinfo`` command is available as a compatibility alias for ``advisory``.
+   For example, ``dnf5 updateinfo list`` is equivalent to ``dnf5 advisory list``.
+
 
 Subcommands
 ===========
 
 ``list``
-    | List available advisories.
+    | List advisories matching the specified criteria.
+    | Displays a table with the following columns: Name (advisory ID), Type, Severity, Package (NEVRA), and Issued (date).
+    | When ``--with-bz`` or ``--with-cve`` is specified, the first column shows the Bugzilla or CVE reference ID instead of the advisory name.
+    | Installed advisory packages are highlighted in green.
 
 ``info``
-    | Print details about advisories.
+    | Print detailed information about advisories.
+    | For each matching advisory, displays: Name, Title, Severity, Type, Status, Vendor, Issued date, Description, Message, Rights, References (with Title, Id, Type, and URL), and affected packages/modules organized by collection.
 
 ``summary``
-    | Print a summary of advisories.
+    | Print a summary count of advisories by type and severity.
+    | Displays a hierarchical summary showing the number of advisories in each category:
+    | Security (with subcategories: Critical, Important, Moderate, Low, Other), Bugfix, Enhancement, and Other.
+    | The output header indicates the filter mode: Available (default), All, Installed, or Updates.
 
 
 Options
