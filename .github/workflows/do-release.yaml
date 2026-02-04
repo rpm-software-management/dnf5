@@ -17,14 +17,22 @@ jobs:
         with:
           app-id: ${{ vars.RSM_CI_APP_ID }}
           private-key: ${{ secrets.RSM_CI_APP_PRIVATE_KEY }}
+
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.base.ref }}
+
       - name: Create GitHub release
         run: |
           VERSION=$(grep -oP '^# \K[0-9.]*' CHANGELOG.md | head -n 1)
           # Take the lines between the first two headers from CHANGELOG.md,
           # and use it as a description for the new release.
           CHANGELOG=$(awk 'BEGIN { first = 0 } /^# / { if (first == 0) { first = 1 } else { exit } } /^[^#]/ { print $0 }' CHANGELOG.md)
-          # Use the changelog re-calculated to create a new release
-          gh release create ${VERSION} --draft --title ${VERSION} -n "${CHANGELOG}"
+
+          gh release create ${VERSION} \
+            --target ${{ github.event.pull_request.base.ref }} \
+            --draft \
+            --title ${VERSION} \
+            -n "${CHANGELOG}"
         env:
           GH_TOKEN: ${{ steps.app-token.outputs.token }}
