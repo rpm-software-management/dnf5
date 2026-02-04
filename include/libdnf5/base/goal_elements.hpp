@@ -92,7 +92,7 @@ enum class ProblemRules {
 };
 
 /// Define a type of information, hint, or problem gathered during libdnf5::Goal::resolve()
-enum class GoalProblem : uint32_t {
+enum class GoalProblem : uint64_t {
     NO_PROBLEM = 0,
     SOLVER_ERROR = (1 << 0),
     NOT_FOUND = (1 << 1),
