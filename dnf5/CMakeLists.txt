@@ -42,7 +42,7 @@ set_target_properties(dnf5 PROPERTIES C_VISIBILITY_PRESET hidden CXX_VISIBILITY_
 target_link_libraries(dnf5 PRIVATE common_obj libdnf5 libdnf5-cli Threads::Threads)
 install(TARGETS dnf5 RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
 
-pkg_check_modules(RPM REQUIRED rpm>=4.17.0)
+pkg_check_modules(RPM REQUIRED rpm>=4.19.0)
 
 if(WITH_SYSTEMD)
   include(sdbus_cpp)
