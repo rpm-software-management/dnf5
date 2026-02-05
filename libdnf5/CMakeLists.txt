@@ -96,7 +96,7 @@ list(APPEND LIBDNF5_PC_REQUIRES_PRIVATE "${LIBSOLVEXT_MODULE_NAME}")
 target_link_libraries(libdnf5 PRIVATE ${LIBSOLVEXT_LIBRARIES})
 target_link_libraries(libdnf5_iface INTERFACE ${LIBSOLVEXT_LIBRARIES})
 
-pkg_check_modules(RPM REQUIRED rpm>=4.17.0)
+pkg_check_modules(RPM REQUIRED rpm>=4.19.0)
 list(APPEND LIBDNF5_PC_REQUIRES "${RPM_MODULE_NAME}")
 target_link_libraries(libdnf5 PRIVATE ${RPM_LIBRARIES})
 target_link_libraries(libdnf5_iface INTERFACE ${RPM_LIBRARIES})
