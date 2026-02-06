@@ -61,12 +61,16 @@ else()
   message (STATUS "Using fallback bash completion dir ${BASH_COMPLETION_COMPLETIONSDIR}")
 endif()
 
+set(ZSH_COMPLETION_COMPLETIONSDIR "${CMAKE_INSTALL_PREFIX}/share/zsh/site-functions")
+message(STATUS "Using zsh completion dir ${ZSH_COMPLETION_COMPLETIONSDIR}")
+
 find_package(toml11 REQUIRED)
 if (toml11_VERSION VERSION_LESS 4.0.0)
     add_definitions(-DTOML11_COMPAT)
 endif()
 
 install(FILES bash-completion/dnf5 DESTINATION ${BASH_COMPLETION_COMPLETIONSDIR})
+install(FILES zsh-completion/_dnf5 DESTINATION ${ZSH_COMPLETION_COMPLETIONSDIR})
 install(FILES "README.plugins" DESTINATION "${CMAKE_INSTALL_FULL_LIBDIR}/dnf5/plugins" RENAME "README")
 install(DIRECTORY "config/usr/" DESTINATION "${CMAKE_INSTALL_PREFIX}" PATTERN ".gitkeep" EXCLUDE)
 install(DIRECTORY "config/etc/" DESTINATION "${CMAKE_INSTALL_FULL_SYSCONFDIR}" PATTERN ".gitkeep" EXCLUDE)
