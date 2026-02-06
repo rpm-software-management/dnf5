@@ -75,7 +75,7 @@
 #include <libdnf5/logger/factory.hpp>
 #include <libdnf5/logger/global_logger.hpp>
 #include <libdnf5/logger/memory_buffer_logger.hpp>
-#include <libdnf5/logger/stream_logger.hpp>
+#include <libdnf5/logger/null_logger.hpp>
 #include <libdnf5/repo/repo_cache.hpp>
 #include <libdnf5/rpm/arch.hpp>
 #include <libdnf5/rpm/package_query.hpp>
@@ -1452,11 +1452,16 @@ int main(int argc, char * argv[]) try {
             std::unique_ptr<libdnf5::Logger> destination_logger;
 
             // In case file system is read only or logger file is not writable for other reasons
-            // let's fallback to StdCStreamLogger to make logs appear on the screen.
+            // let's don't write any logs then.
             try {
                 destination_logger = libdnf5::create_rotating_file_logger(base, DNF5_LOGGER_FILENAME);
-            } catch (const libdnf5::FileSystemError &) {
-                destination_logger = std::make_unique<libdnf5::StdCStreamLogger>(std::cerr);
+            } catch (const libdnf5::FileSystemError & ex) {
+                std::cerr << libdnf5::utils::sformat(
+                                 _("{}. Dropping all logs. To redirect the log file location use the \"logdir\" "
+                                   "configuration option."),
+                                 ex.what())
+                          << std::endl;
+                destination_logger = std::make_unique<libdnf5::NullLogger>();
             }
 
             // Swap to destination logger
