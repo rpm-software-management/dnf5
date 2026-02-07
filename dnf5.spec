@@ -45,6 +45,7 @@ Provides:       dnf5-command(autoremove)
 Provides:       dnf5-command(check)
 Provides:       dnf5-command(check-upgrade)
 Provides:       dnf5-command(clean)
+Provides:       dnf5-command(debuginfo-install)
 Provides:       dnf5-command(distro-sync)
 Provides:       dnf5-command(downgrade)
 Provides:       dnf5-command(download)
@@ -332,6 +333,7 @@ It supports RPM packages, modulemd modules, and comps groups & environments.
 %{_mandir}/man8/dnf*-check.8.*
 %{_mandir}/man8/dnf*-check-upgrade.8.*
 %{_mandir}/man8/dnf*-clean.8.*
+%{_mandir}/man8/dnf*-debuginfo-install.8.*
 %{_mandir}/man8/dnf*-distro-sync.8.*
 %{_mandir}/man8/dnf*-do.8.*
 %{_mandir}/man8/dnf*-downgrade.8.*
@@ -340,7 +342,10 @@ It supports RPM packages, modulemd modules, and comps groups & environments.
 %{_mandir}/man8/dnf*-group.8.*
 %{_mandir}/man8/dnf*-history.8.*
 %{_mandir}/man8/dnf*-info.8.*
-%{_mandir}/man8/dnf*-install.8.*
+%{_mandir}/man8/dnf5-install.8.*
+%if %{with dnf5_obsoletes_dnf}
+%{_mandir}/man8/dnf-install.8.*
+%endif
 %{_mandir}/man8/dnf*-leaves.8.*
 %{_mandir}/man8/dnf*-list.8.*
 %{_mandir}/man8/dnf*-makecache.8.*
@@ -356,7 +361,10 @@ It supports RPM packages, modulemd modules, and comps groups & environments.
 %{_mandir}/man8/dnf*-search.8.*
 %{_mandir}/man8/dnf*-swap.8.*
 %{_mandir}/man8/dnf*-system-upgrade.8.*
-%{_mandir}/man8/dnf*-upgrade.8.*
+%{_mandir}/man8/dnf5-upgrade.8.*
+%if %{with dnf5_obsoletes_dnf}
+%{_mandir}/man8/dnf-upgrade.8.*
+%endif
 %{_mandir}/man8/dnf*-versionlock.8.*
 %{_mandir}/man7/dnf*-aliases.7.*
 %{_mandir}/man7/dnf*-caching.7.*
