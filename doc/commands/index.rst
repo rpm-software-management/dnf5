@@ -11,6 +11,7 @@ DNF5 Commands
     check.8
     check-upgrade.8
     clean.8
+    debuginfo-install.8
     distro-sync.8
     do.8
     downgrade.8
