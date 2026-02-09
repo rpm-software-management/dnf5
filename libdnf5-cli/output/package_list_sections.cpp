@@ -139,6 +139,7 @@ void PackageListSections::print(const std::unique_ptr<PkgColorizer> & colorizer)
 }
 
 // [NOTE] When editing JSON output format, do not forget to update the docs at doc/commands/check-upgrade.8.rst
+// [NOTE] When editing JSON output format, do not forget to update the docs at doc/commands/list.8.rst
 void PackageListSections::print_json() {
     json_object * j_output = json_object_new_object();
     for (const auto & [heading, pkg_set, obsoletes] : p_impl->sections) {

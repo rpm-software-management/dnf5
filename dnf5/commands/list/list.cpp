@@ -107,6 +107,8 @@ void ListCommand::set_argument_parser() {
     recent->get_arg()->set_conflict_arguments(conflicts);
     upgrades->get_arg()->set_conflict_arguments(conflicts);
     autoremove->get_arg()->set_conflict_arguments(conflicts);
+
+    create_json_option(*this);
 }
 
 void ListCommand::configure() {
@@ -258,6 +260,11 @@ void ListCommand::run() {
             base_query.filter_recent(now - (recent_limit_days * 86400));
             package_matched |= sections->add_section(_("Recently added packages"), base_query);
             break;
+    }
+
+    if (ctx.get_json_output_requested()) {
+        sections->print_json();
+        return;
     }
 
     if (!package_matched && !pkg_specs.empty()) {
