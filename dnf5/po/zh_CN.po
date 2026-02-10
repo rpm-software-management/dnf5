@@ -1161,7 +1161,7 @@ msgstr "软件包事务中出现意外操作: {}"
 
 #: context.cpp:845
 msgid "Installing {}"
-msgstr "安装{}"
+msgstr "安装 {}"
 
 #: context.cpp:866
 msgid "Prepare transaction"
