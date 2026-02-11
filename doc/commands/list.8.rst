@@ -88,18 +88,19 @@ Examples
 JSON Output
 ===========
 
-* ``dnf5 list --json``
+``dnf5 list --json``
 
 The command returns a JSON object with the following structure:
 
 - keys represent a section of the “pretty” CLI output
 - values represent the packages in that section as an array of objects with the following structure:
+
     - ``name`` (string): package name
     - ``arch`` (string): package architecture
     - ``evr`` (string): available update version
     - ``repository`` (string): repository ID from which the update is available
     - ``obsoletes`` (array): (only for the “Obsoleting packages” section) list of the packages that
-        obsolete this package (they have the same structure as above, omitting ``obsoletes``)
+      obsolete this package (they have the same structure as above, omitting ``obsoletes``)
 
 See Also
 ========
