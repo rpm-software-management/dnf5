@@ -36,7 +36,7 @@ Description
 Non-interactively checks for available updates of specified packages. If no ``<package-spec-N>``
 is provided, it checks for updates for the entire system.
 
-``DNF5`` will exit with code `100`` if updates are available and list them; `0` if no updates
+``DNF5`` will exit with code `100` if updates are available and list them; `0` if no updates
 are available.
 
 If terminal is available, list of the packages is colored, packages available for reinstall are
