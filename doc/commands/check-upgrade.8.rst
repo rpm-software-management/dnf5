@@ -41,9 +41,8 @@ are available.
 
 If terminal is available, list of the packages is colored, packages available for reinstall are
 (by default) colored with bold green and packages available for upgrade with bold blue. This
-behavior can be adjusted in configuration via
-:ref:`color_list_available_upgrade <_color_list_available_upgrade_options-label>` and
-:ref:`color_list_available_reinstall <_color_list_available_reinstall_options-label>` options.
+behavior can be adjusted in :manpage:`dnf5.conf(5)` via `color_list_available_upgrade` and
+`color_list_available_reinstall` options.
 
 Options
 =======
