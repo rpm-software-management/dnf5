@@ -114,8 +114,8 @@ void NeedsRestartingTest::test_processes_and_exclude_services() {
     libdnf5::OptionBool exclude_services_option(false);
 
     // Test that both options can be set
-    processes_option.set("true");
-    exclude_services_option.set("true");
+    processes_option.set(true);
+    exclude_services_option.set(true);
 
     CPPUNIT_ASSERT_EQUAL(true, processes_option.get_value());
     CPPUNIT_ASSERT_EQUAL(true, exclude_services_option.get_value());
