@@ -140,23 +140,23 @@ The command returns a JSON array, each element describing one advisory.
 
 **Basic format** (without ``--with-cve`` or ``--with-bz``):
 
-- ``name`` (string) - Advisory identifier.
-- ``type`` (string) - Advisory type (security, bugfix, enhancement).
-- ``severity`` (string) - Advisory severity level.
-- ``nevra`` (string) - Package name-epoch:version-release.architecture.
-- ``buildtime`` (integer) - Advisory build time, UNIX time.
+    - ``name`` (string) - Advisory identifier.
+    - ``type`` (string) - Advisory type (security, bugfix, enhancement).
+    - ``severity`` (string) - Advisory severity level.
+    - ``nevra`` (string) - Package name-epoch:version-release.architecture.
+    - ``buildtime`` (integer) - Advisory build time, UNIX time.
 
 **Extended format** (with ``--with-cve`` or ``--with-bz``):
 
-- ``advisory_name`` (string) - Advisory identifier.
-- ``advisory_type`` (string) - Advisory type (security, bugfix, enhancement).
-- ``advisory_severity`` (string) - Advisory severity level.
-- ``advisory_buildtime`` (integer) - Advisory build time, UNIX time.
-- ``nevra`` (string) - Package name-epoch:version-release.architecture.
-- ``references`` (array) - List of references (CVE/Bugzilla). Each reference contains:
+    - ``advisory_name`` (string) - Advisory identifier.
+    - ``advisory_type`` (string) - Advisory type (security, bugfix, enhancement).
+    - ``advisory_severity`` (string) - Advisory severity level.
+    - ``advisory_buildtime`` (integer) - Advisory build time, UNIX time.
+    - ``nevra`` (string) - Package name-epoch:version-release.architecture.
+    - ``references`` (array) - List of references (CVE/Bugzilla). Each reference contains:
 
-  - ``reference_id`` (string) - Reference identifier (e.g., CVE-2024-1234).
-  - ``reference_type`` (string) - Reference type (cve or bugzilla).
+     - ``reference_id`` (string) - Reference identifier (e.g., CVE-2024-1234).
+     - ``reference_type`` (string) - Reference type (cve or bugzilla).
 
 * ``dnf5 advisory info --json``
 
