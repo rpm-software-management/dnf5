@@ -3,15 +3,15 @@
 # This file is distributed under the same license as the PACKAGE package.
 # Dennis Koerner <dennis@bumblebeeman.dev>, 2024.
 # Fabio D <fabio1977@arcor.de>, 2024.
-# Mario Blättermann <mario.blaettermann@gmail.com>, 2025.
+# Mario Blättermann <mario.blaettermann@gmail.com>, 2025, 2026.
 # Ettore Atalan <atalanttore@googlemail.com>, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-07-26 03:48+0000\n"
-"PO-Revision-Date: 2025-10-06 03:17+0000\n"
-"Last-Translator: Ettore Atalan <atalanttore@googlemail.com>\n"
+"PO-Revision-Date: 2026-02-13 11:58+0000\n"
+"Last-Translator: Mario Blättermann <mario.blaettermann@gmail.com>\n"
 "Language-Team: German <https://translate.fedoraproject.org/projects/dnf5/"
 "libdnf5-plugin-actions/de/>\n"
 "Language: de\n"
@@ -19,27 +19,27 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.13.3\n"
+"X-Generator: Weblate 5.15.2\n"
 
 #: actions.cpp:237
 msgid "File \"{}\" on line {}: {}"
-msgstr "Datei »{}« in Zeile {}: {}"
+msgstr "Datei „{}“ in Zeile {}: {}"
 
 #: actions.cpp:636 actions.cpp:642 actions.cpp:648 actions.cpp:654
 msgid "\"HOOK:PKG_FILTER:DIRECTION:OPTIONS:CMD\" format expected"
-msgstr "»HOOK:PAKETFILTER:RICHTUNG:OPTIONEN:BEFEHL«-Format erwartet"
+msgstr "„HOOK:PAKETFILTER:RICHTUNG:OPTIONEN:BEFEHL“-Format erwartet"
 
 #: actions.cpp:676
 msgid "Unknown \"enabled\" option value \"{}\""
-msgstr "Unbekannter Wert »{}« der Option »aktiviert«"
+msgstr "Unbekannter Wert „{}“ der Option „enabled“"
 
 #: actions.cpp:683
 msgid "Unknown option \"{}\""
-msgstr "Unbekannte Option »{}«"
+msgstr "Unbekannte Option „{}“"
 
 #: actions.cpp:711
 msgid "Unknown hook \"{}\""
-msgstr "Unbekannte Hook »{}«"
+msgstr "Unbekannte Hook „{}“"
 
 #: actions.cpp:720
 msgid ""
@@ -55,15 +55,15 @@ msgstr "Richtung kann nicht ohne Paketfilter genutzt werden"
 
 #: actions.cpp:740
 msgid "Unknown package direction \"{}\""
-msgstr "Unbekannte Paketrichtung »{}«"
+msgstr "Unbekannte Paketrichtung „{}“"
 
 #: actions.cpp:747
 msgid "Unknown mode \"{}\""
-msgstr "Unbekannter Modus »{}«"
+msgstr "Unbekannter Modus „{}“"
 
 #: actions.cpp:755
 msgid "Unsupported value of the \"raise_error\" option: {}"
-msgstr "Nicht unterstützter Wert der Option »raise_error«: {}"
+msgstr "Nicht unterstützter Wert der Option „raise_error“: {}"
 
 #: actions.cpp:760
 msgid "Missing command"
@@ -105,7 +105,7 @@ msgstr "Fehler beim Lesen aus der Aktion (aus der Pipe)"
 #: actions.cpp:1038
 msgid "Syntax error in json request from action: Missing starting '{{' char"
 msgstr ""
-"Syntaxfehler in JSON-Anfrage von der Aktion: Zeichen »{{« am Anfang fehlt"
+"Syntaxfehler in JSON-Anfrage von der Aktion: Zeichen „{{“ am Anfang fehlt"
 
 #: actions.cpp:1062
 msgid "Error during processing of a request from action."
@@ -125,23 +125,23 @@ msgstr "Antwort kann nicht geschrieben werden"
 
 #: actions.cpp:1821
 msgid "Actions plugin: Cannot create pipe"
-msgstr "Actions-Plugin: Pipe kann nicht erstellt werden"
+msgstr "Aktionen-Plugin: Pipe kann nicht erstellt werden"
 
 #: actions.cpp:1913
 msgid "Actions plugin: Cannot fork"
-msgstr "Actions-Plugin: Forken nicht möglich"
+msgstr "Aktionen-Plugin: Forken nicht möglich"
 
 #: actions.cpp:1968
 msgid "Actions plugin: Cannot bind command stdin"
-msgstr ""
+msgstr "Aktionen-Plugin: Befehls-Standardeingabe kann nicht gebunden werden"
 
 #: actions.cpp:1970
 msgid "Actions plugin: Cannot bind command stdout"
-msgstr ""
+msgstr "Aktionen-Plugin: Befehls-Standardausgabe kann nicht gebunden werden"
 
 #: actions.cpp:1988
 msgid "Cannot execute action, command \"{}\" arguments \"{}\""
-msgstr "Aktion kann nicht ausgeführt werden, Befehl »{}«, Argumente »{}«"
+msgstr "Aktion kann nicht ausgeführt werden, Befehl „{}“, Argumente „{}“"
 
 #: actions.cpp:1996
 msgid "Error during preparation child process"

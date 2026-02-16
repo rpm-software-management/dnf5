@@ -4,14 +4,14 @@
 # ButterflyOfFire <butterflyoffire@protonmail.com>, 2024.
 # Rachida SA <rgebbid@gmail.com>, 2024.
 # ButterflyOfFire <butterflyoffire@users.noreply.translate.fedoraproject.org>, 2024, 2025.
+# Massii Aqvayli <massiin@proton.me>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-07-26 03:48+0000\n"
-"PO-Revision-Date: 2025-10-10 18:54+0000\n"
-"Last-Translator: ButterflyOfFire "
-"<butterflyoffire@users.noreply.translate.fedoraproject.org>\n"
+"PO-Revision-Date: 2026-02-13 11:58+0000\n"
+"Last-Translator: Massii Aqvayli <massiin@proton.me>\n"
 "Language-Team: Kabyle <https://translate.fedoraproject.org/projects/dnf5/"
 "dnf5/kab/>\n"
 "Language: kab\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.13.3\n"
+"X-Generator: Weblate 5.15.2\n"
 
 #: cmdline_aliases.cpp:84 context.cpp:301 main.cpp:1357
 msgid ", "
@@ -30,6 +30,8 @@ msgid ""
 "Attached named argument \"{}\" not found: {}: Requested in file \"{}\" on "
 "line {}: {}"
 msgstr ""
+"Afakul yeddan s yisem \"{}\" ur yettwaf ara:{}: Yettwasuter deg ufaylu \"{}"
+"\" deg izirig {}: {}"
 
 #: cmdline_aliases.cpp:159
 msgid ""
@@ -39,7 +41,7 @@ msgstr ""
 
 #: cmdline_aliases.cpp:171
 msgid "Missing attribute \"id_path\" for alias \"{}\" in file \"{}\""
-msgstr ""
+msgstr "ixuṣṣ imyerr \"id_path\" i tzaẓlut \"{}\" deg ufaylu \"{}\""
 
 #: cmdline_aliases.cpp:208
 msgid "Unsupported version \"{}\" in file \"{}\". Supported versions: {}"
@@ -65,20 +67,25 @@ msgstr ""
 msgid ""
 "Parent command \"{}\" not found: {}: Requested in file \"{}\" on line {}: {}"
 msgstr ""
+"Taladna tamarawt \"{}\" ur tettwaf ara: {}: yettwasra deg ufaylu \"{}\" deg "
+"yizirig {}: {}"
 
 #: cmdline_aliases.cpp:301
 msgid "Unknown type \"{}\" of element \"{}\" in file \"{}\" on line {}: {}"
 msgstr ""
+"Anaw arussin \"{}\" n uferdis \"{}\" deg ufaylu \"{}\" deg yizirig {}: {}"
 
 #: cmdline_aliases.cpp:312
 msgid "Missing attribute \"type\" for element \"{}\" in file \"{}\""
-msgstr ""
+msgstr "Ixuṣṣ imyerr \"type\" i uferdis \"{}\" deg ufaylu \"{}\""
 
 #: cmdline_aliases.cpp:331
 msgid ""
 "Named argument \"{}\" already registered. Requested in file \"{}\" on line "
 "{}: {}"
 msgstr ""
+"Afakul s yisem \"{}\" yettwasekles yakan. Yettwasuter deg ufaylu \"{}\" deg "
+"yizirig {}: {}"
 
 #: cmdline_aliases.cpp:347
 msgid ""
@@ -91,13 +98,15 @@ msgstr ""
 
 #: cmdline_aliases.cpp:387
 msgid "Missing attribute \"header\" for element \"{}\" in file \"{}\""
-msgstr ""
+msgstr "Ixuṣṣ imyerr \"header\" i uferdis \"{}\" deg ufaylu \"{}\""
 
 #: cmdline_aliases.cpp:428 cmdline_aliases.cpp:538
 msgid ""
 "The \"short_name\" attribute of named argument \"{}\" must be one character "
 "long in file \"{}\" on line {}: {}"
 msgstr ""
+"Imyerr \"short_name\" n ufakul yettusemman \"{}\" ilaq ad yili yiwen usekkil "
+"deg ufaylu \"{}\" deg yizirig {}: {}"
 
 #: cmdline_aliases.cpp:446
 msgid "Source \"{}\" not found: {}: Requested in file \"{}\" on line {}: {}"
@@ -167,7 +176,7 @@ msgstr ""
 
 #: commands/advisory/advisory.cpp:36
 msgid "Manage advisories"
-msgstr ""
+msgstr "Sefrek iwellihen"
 
 #: commands/advisory/advisory_info.hpp:35
 msgid "Print details about advisories"
@@ -175,7 +184,7 @@ msgstr ""
 
 #: commands/advisory/advisory_list.hpp:35
 msgid "List advisories"
-msgstr ""
+msgstr "Tabdart iwellihen"
 
 #: commands/advisory/advisory_summary.cpp:44
 msgid "All"
@@ -199,7 +208,7 @@ msgstr ""
 
 #: commands/advisory/arguments.hpp:34
 msgid "Show advisories containing any version of installed packages."
-msgstr ""
+msgstr "Sken iwellihen igebren akk lqem n yikemmusen yettwasbedden."
 
 #: commands/advisory/arguments.hpp:45
 msgid ""
@@ -1255,7 +1264,7 @@ msgstr ""
 
 #: main.cpp:249 main.cpp:288
 msgid "{}: Badly formatted argument value \"{}\""
-msgstr ""
+msgstr "{}: Azal n ufakul yettwamsel s wudem arameɣtu \"{}\""
 
 #: main.cpp:256
 msgid ""

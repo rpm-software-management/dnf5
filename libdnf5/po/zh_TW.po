@@ -11,8 +11,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-07-26 03:48+0000\n"
-"PO-Revision-Date: 2025-10-13 09:54+0000\n"
-"Last-Translator: madomado nuko <mado@fyralabs.com>\n"
+"PO-Revision-Date: 2025-11-13 08:59+0000\n"
+"Last-Translator: Cheng-Chia Tseng <pswo10680@gmail.com>\n"
 "Language-Team: Chinese (Traditional) <https://translate.fedoraproject.org/"
 "projects/dnf5/libdnf5/zh_TW/>\n"
 "Language: zh_TW\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.13.3\n"
+"X-Generator: Weblate 5.14.3\n"
 
 #: advisory/advisory.cpp:81
 msgid ""
@@ -270,11 +270,11 @@ msgstr ""
 
 #: base/log_event.cpp:252
 msgid "Package \"{}\" is already installed with reason \"{}\"."
-msgstr ""
+msgstr "「{}」軟體包已經安裝，原因為「{}」。"
 
 #: base/log_event.cpp:254
 msgid "Package \"{}\" is already installed."
-msgstr ""
+msgstr "「{}」軟體包已經安裝。"
 
 #: base/log_event.cpp:263
 msgid "Debug data written to \"{}\""

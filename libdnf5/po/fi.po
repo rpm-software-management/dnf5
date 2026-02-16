@@ -2,17 +2,19 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # Ricky Tigg <ricky.tigg@gmail.com>, 2024, 2025.
-# Weblate Translation Memory <noreply-mt-weblate-translation-memory@weblate.org>, 2024, 2025.
+# Weblate Translation Memory <noreply-mt-weblate-translation-memory@weblate.org>, 2024, 2025, 2026.
 # Jiri Grönroos <jiri.gronroos@iki.fi>, 2024.
 # Ville-Pekka Vainio <vpvainio@iki.fi>, 2024.
-# Jan Kuparinen <copper_fin@hotmail.com>, 2025.
+# Jan Kuparinen <copper_fin@hotmail.com>, 2025, 2026.
+# Jouko Tiilikainen <jti65@users.noreply.translate.fedoraproject.org>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-07-26 03:48+0000\n"
-"PO-Revision-Date: 2025-09-14 13:45+0000\n"
-"Last-Translator: Jan Kuparinen <copper_fin@hotmail.com>\n"
+"PO-Revision-Date: 2026-01-22 08:58+0000\n"
+"Last-Translator: Jouko Tiilikainen "
+"<jti65@users.noreply.translate.fedoraproject.org>\n"
 "Language-Team: Finnish <https://translate.fedoraproject.org/projects/dnf5/"
 "libdnf5/fi/>\n"
 "Language: fi\n"
@@ -20,13 +22,15 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.13.3\n"
+"X-Generator: Weblate 5.15.2\n"
 
 #: advisory/advisory.cpp:81
 msgid ""
 "Bad libsolv id for advisory \"{}\", solvable name \"{}\" doesn't have "
 "advisory prefix \"{}\""
 msgstr ""
+"Virheellinen libsolv-tunnus neuvonta-arvolle \"{}\", ratkaistavana olevalla "
+"nimellä \"{}\" ei ole neuvonta-arvo-etuliitettä \"{}\""
 
 #: base/goal.cpp:482
 msgid "Unsupported argument for REMOVE action: {}"
@@ -319,7 +323,14 @@ msgid_plural ""
 "  - Argument '{}' matches {} streams ('{}') of module '{}', but none of the "
 "streams are enabled or default."
 msgstr[0] ""
+"\n"
+"  - Argumentti '{}' vastaa moduulin '{}' {}-virtaa ('{}'), mutta virta ei "
+"ole käytössä tai oletusarvoinen"
 msgstr[1] ""
+"\n"
+"  Argumentti ”{argument}” täsmää {stream_count} virtaan (”{streams}”) "
+"moduulille ”{module}”, mutta mitkään virroista eivät ole käytössä tai "
+"oletuksena"
 
 #: base/log_event.cpp:293
 msgid "', '"
@@ -1241,7 +1252,7 @@ msgstr "Paketin otsikon lukeminen tiedostosta \"{}\" epäonnistui"
 
 #: rpm/transaction.cpp:305
 msgid "Cannot init rpm database iterator"
-msgstr ""
+msgstr "RPM-tietokannan iteraattoria ei voida alustaa"
 
 #: rpm/transaction.cpp:309
 msgid "Package was not found in rpm database"
@@ -1288,15 +1299,17 @@ msgstr "Virheellinen TOML-versio \"{}\", odotettiin muotoa \"MAJOR.MINOR\""
 
 #: system/state.cpp:299
 msgid "{} state for \"{}\" not found."
-msgstr ""
+msgstr "{} tilaa kohteelle \"{}\" ei löytynyt.{}."
 
 #: system/state.cpp:303
 msgid "Loading system state TOML file {} failed (see dnf5-system-state(7)): {}"
 msgstr ""
+"Järjestelmän tilan TOML-tiedoston {} lataus epäonnistui (katso dnf5-system-"
+"state(7)): {}"
 
 #: system/state.cpp:640
 msgid "Unsupported TOML version \"{}\", maximum supported version is \"{}\""
-msgstr ""
+msgstr "Ei-tuettu TOML-versio \"{}\", suurin tuettu versio on \"{}\""
 
 #: transaction/Swdb.cpp:91
 msgid "In progress"
@@ -1325,15 +1338,17 @@ msgid ""
 "Failed to insert record into table 'comps_environment_group' in history "
 "database"
 msgstr ""
+"Tietueen lisääminen historiatietokannan taulukkoon 'comps_environment_group' "
+"epäonnistui"
 
 #: transaction/db/db.cpp:71
 msgid "Unable to get 'version' from table 'config'"
-msgstr ""
+msgstr "Taulukosta 'config' ei saatu 'version'-arvoa"
 
 #. TODO(dmach): replace with a better exception class
 #: transaction/db/item.cpp:43
 msgid "Failed to insert record into table 'item' in history database"
-msgstr ""
+msgstr "Tietueen lisääminen historiatietokannan taulukkoon 'item' epäonnistui"
 
 #: transaction/offline.cpp:195
 msgid "error reading offline state file"
@@ -1353,93 +1368,111 @@ msgstr "Tapahtuma on jo aloitettu!"
 
 #: transaction/transaction_item_action.cpp:28
 msgid "Invalid transaction item action: {}"
-msgstr ""
+msgstr "Virheellinen tapahtumanimikkeen toiminto: {}"
 
 #: transaction/transaction_item_reason.cpp:28
 msgid "Invalid transaction item reason: {}"
-msgstr ""
+msgstr "Virheellisen tapahtuman syy: {}"
 
 #: transaction/transaction_item_state.cpp:28
 msgid "Invalid transaction item state: {}"
-msgstr ""
+msgstr "Virheellinen tapahtumanimikkeen tila: {}"
 
 #: transaction/transaction_item_type.cpp:28
 msgid "Invalid transaction item type: {}"
-msgstr ""
+msgstr "Virheellinen tapahtuman kohdetyyppi: {}"
 
 #: transaction/transaction_merge.cpp:102
 msgid ""
 "Action '{0}' '{1}' cannot be merged after it was '{2}' in preceding "
 "transactions -> setting '{0}'."
 msgstr ""
+"Toimintoa '{0}' '{1}' ei voida yhdistää sen jälkeen, kun se oli '{2}' "
+"edellisissä tapahtumissa -> asetus '{0}'."
 
 #: transaction/transaction_merge.cpp:116
 msgid ""
 "Action 'Upgrade' '{0}' cannot be merged because it is not present at that "
 "point -> setting 'Install'."
 msgstr ""
+"Toimintoa 'Päivitä' '{0}' ei voida yhdistää, koska sitä ei ole siinä "
+"vaiheessa -> asetus 'Asenna'."
 
 #: transaction/transaction_merge.cpp:174 transaction/transaction_merge.cpp:231
 msgid ""
 "Action 'Reinstall' '{0}' cannot be merged because it is not present at that "
 "point -> setting 'Install'."
 msgstr ""
+"Toimintoa 'Asenna uudelleen' '{0}' ei voida yhdistää, koska sitä ei ole "
+"siinä vaiheessa -> asetus 'Asenna'."
 
 #: transaction/transaction_merge.cpp:194
 msgid ""
 "Action '{0}' '{1}' cannot be merged after it was '{2}' in preceding "
 "transaction -> setting '{0}'."
 msgstr ""
+"Toimintoa '{0}' '{1}' ei voida yhdistää sen jälkeen, kun se oli '{2}' "
+"edellisessä tapahtumassa -> asetus '{0}'."
 
 #: transaction/transaction_merge.cpp:215
 msgid "Unexpected action encountered: '{0}' during transaction merge."
-msgstr ""
+msgstr "Odottamaton toiminto: '{0}' tapahtumien yhdistämisen aikana."
 
 #: transaction/transaction_merge.cpp:224
 msgid ""
 "Action '{0}' '{1}' cannot be merged because it is not present at that point -"
 "> skipping it."
 msgstr ""
+"Toimintoa '{0}' '{1}' ei voida yhdistää, koska sitä ei ole siinä kohdassa -> "
+"ohitetaan se."
 
 #: transaction/transaction_merge.cpp:245
 msgid ""
 "Action '{0}' '{1}' cannot be merged because it is not present at that point -"
 "> setting 'INSTALL'."
 msgstr ""
+"Toimintoa '{0}' '{1}' ei voida yhdistää, koska sitä ei ole siinä "
+"vaiheessa -> asetus 'INSTALL'."
 
 #: transaction/transaction_merge.cpp:266
 msgid ""
 "Action '{0}' '{1}' cannot be merged because it is not present at that point "
 "(present versions are: {2}) -> skipping it."
 msgstr ""
+"Toimintoa '{0}' '{1}' ei voida yhdistää, koska sitä ei ole siinä kohdassa "
+"(nykyiset versiot ovat: {2}) -> ohitetaan se."
 
 #: transaction/transaction_merge.cpp:277
 msgid ""
 "Action '{0}' '{1}' cannot be merged because it is already present at that "
 "point -> skipping it."
 msgstr ""
+"Toimintoa '{0}' '{1}' ei voida yhdistää, koska se on jo siinä kohdassa -> "
+"ohitetaan se."
 
 #: transaction/transaction_merge.cpp:294
 msgid ""
 "Action '{0}' '{1}' cannot be merged because it is already installed in "
 "version '{2}' -> keeping the action from older transaction with '{1}'."
 msgstr ""
+"Toimintoa '{0}' '{1}' ei voida yhdistää, koska se on jo asennettu versioon '"
+"{2}' -> säilytetään toiminto vanhemmasta tapahtumasta versiolla '{1}'."
 
 #: transaction/transaction_merge.cpp:304
 msgid "Invalid action encountered: '{0}' during transaction merge."
-msgstr ""
+msgstr "Virheellinen toiminto: '{0}' tapahtumien yhdistämisen aikana."
 
 #: transaction/transaction_sr.cpp:49
 msgid "Transaction replay JSON serialized transaction input is empty"
-msgstr ""
+msgstr "Transaktion toisto JSON-sarjallistettu transaktiosyöte on tyhjä"
 
 #: transaction/transaction_sr.cpp:58
 msgid "Error during transaction replay JSON parsing : {}"
-msgstr ""
+msgstr "Virhe tapahtuman toiston JSON-jäsennyksessä: {}"
 
 #: transaction/transaction_sr.cpp:68
 msgid "Unexpected version format: \"{}\", supported version is \"{}\""
-msgstr ""
+msgstr "Odottamaton versiomuoto: \"{}\", tuettu versio on \"{}\""
 
 #: transaction/transaction_sr.cpp:74
 msgid "Incompatible major version: \"{}\", supported major version is \"{}\""
@@ -1451,61 +1484,64 @@ msgstr "Virheellinen sivuversio: \"{}\", odotettiin numeroa"
 
 #: transaction/transaction_sr.cpp:84
 msgid "Missing key \"version\""
-msgstr ""
+msgstr "Puuttuva avain \"versio\""
 
 #: transaction/transaction_sr.cpp:92
 msgid "Unexpected type of \"environments\", array expected"
-msgstr ""
+msgstr "Odottamaton \"ympäristöt\"-tyyppi, odotettiin taulukkoa"
 
 #: transaction/transaction_sr.cpp:105
 msgid "Missing object key \"id\" in an environment"
-msgstr ""
+msgstr "Puuttuva objektiavain ”id” jossain ympäristössä"
 
 #: transaction/transaction_sr.cpp:110
 msgid "Missing object key \"action\" in an environment"
-msgstr ""
+msgstr "Puuttuva objektiavain ”action” jossain ympäristössä"
 
 #: transaction/transaction_sr.cpp:129
 msgid "Unexpected type of \"groups\", array expected"
-msgstr ""
+msgstr "Odottamaton \"groups\"-tyyppi, odotettiin taulukkoa"
 
 #: transaction/transaction_sr.cpp:145
 msgid "Missing object key \"id\" in a group"
-msgstr ""
+msgstr "Puuttuva objektiavain ”id” jossain ryhmässä"
 
 #: transaction/transaction_sr.cpp:150
 msgid "Missing object key \"action\" in a group"
-msgstr ""
+msgstr "Ryhmästä puuttuu objektiavain \"action\""
 
 #: transaction/transaction_sr.cpp:155
 msgid "Missing object key \"reason\" in a group"
-msgstr ""
+msgstr "Puuttuva objektiavain ”reason” jossain ryhmässä"
 
 #: transaction/transaction_sr.cpp:186
 msgid "Unexpected type of \"rpms\", array expected"
-msgstr ""
+msgstr "Odottamaton \"rpms\"-tyyppi, odotettiin taulukkoa"
 
 #: transaction/transaction_sr.cpp:202
 msgid "Cannot parse NEVRA for rpm \"{}\""
-msgstr ""
+msgstr "NEVRA:n jäsentäminen paketille ”{}” epäonnistui"
 
 #: transaction/transaction_sr.cpp:210
 msgid "Either \"nevra\" or \"package_path\" object key is required in an rpm"
 msgstr ""
+"RPM-käskyssä vaaditaan joko \"nevra\"- tai \"package_path\"-objektiavain"
 
 #: transaction/transaction_sr.cpp:215
 msgid "Missing object key \"action\" in an rpm"
-msgstr ""
+msgstr "Puuttuva objektiavain ”action” rpm:ssä"
 
 #: transaction/transaction_sr.cpp:220
 msgid "Missing object key \"reason\" in an rpm"
-msgstr ""
+msgstr "Puuttuva objektiavain ”reason” rpm:ssä"
 
 #: transaction/transaction_sr.cpp:227
 msgid ""
 "Missing mandatory object key \"group_id\" in an rpm with reason \"Group\" "
 "and action \"Reason Change\""
 msgstr ""
+"Pakollinen objektiavain \"group_id\" puuttuu rpm-funktiosta, jonka syy on "
+"\"Group\" ja toiminto on \"Reason Change\""
 
 #: utils/fs/file.cpp:86
 msgid "cannot open file"
@@ -1513,11 +1549,11 @@ msgstr "tiedostoa ei voi avata"
 
 #: utils/fs/file.cpp:99
 msgid "cannot open file from fd"
-msgstr ""
+msgstr "tiedostoa ei voida avata"
 
 #: utils/fs/file.cpp:109
 msgid "cannot close file"
-msgstr ""
+msgstr "tiedostoa ei voida sulkea"
 
 #: utils/fs/file.cpp:139 utils/fs/file.cpp:168
 msgid "error reading file"
@@ -1529,35 +1565,35 @@ msgstr "virhe tiedostoa kirjoittaessa"
 
 #: utils/fs/file.cpp:189
 msgid "error flushing file"
-msgstr ""
+msgstr "tiedoston tyhjennysvirhe"
 
 #: utils/fs/file.cpp:198
 msgid "error seeking in file"
-msgstr ""
+msgstr "tiedostosta etsintävirhe"
 
 #: utils/fs/file.cpp:209
 msgid "error retrieving file position"
-msgstr ""
+msgstr "virhe tiedoston sijainnin noutamisessa"
 
 #: utils/fs/file.cpp:297
 msgid "error reading a line from file"
-msgstr ""
+msgstr "virhe luettaessa riviä tiedostosta"
 
 #: utils/fs/file.cpp:335
 msgid "error retrieving file descriptor"
-msgstr ""
+msgstr "virhe tiedostokuvaajan noutamisessa"
 
 #: utils/fs/temp.cpp:42
 msgid "cannot create temporary directory"
-msgstr ""
+msgstr "Tilapäistä hakemistoa ei voi luoda"
 
 #: utils/fs/temp.cpp:89
 msgid "cannot create temporary file"
-msgstr ""
+msgstr "väliaikaistiedostoa ei voi luoda"
 
 #: utils/fs/temp.cpp:142
 msgid "cannot close temporary file"
-msgstr ""
+msgstr "väliaikaistiedostoa ei voi sulkea"
 
 #: utils/iniparser.cpp:126
 msgid "Missing ']' on line {}"
@@ -1565,23 +1601,23 @@ msgstr "Puuttuva ']' rivillä {}"
 
 #: utils/iniparser.cpp:129
 msgid "Empty section name on line {}"
-msgstr ""
+msgstr "Tyhjä osion nimi rivillä {}"
 
 #: utils/iniparser.cpp:137
 msgid "Text after section on line {}"
-msgstr ""
+msgstr "Teksti osan jälkeen rivillä {}"
 
 #: utils/iniparser.cpp:147
 msgid "Missing section header on line {}"
-msgstr ""
+msgstr "Rivillä {} puuttuu osion otsikko"
 
 #: utils/iniparser.cpp:152
 msgid "Illegal continuation line on line {}"
-msgstr ""
+msgstr "Virheellinen jatkorivi rivillä {}"
 
 #: utils/iniparser.cpp:159
 msgid "Missing option name on line {}"
-msgstr ""
+msgstr "Rivillä {} puuttuu vaihtoehdon nimi"
 
 #: utils/iniparser.cpp:163
 msgid "Missing '=' on line {}"
@@ -1618,43 +1654,45 @@ msgstr "Lukkotiedoston \"{}\" poistaminen epäonnistui"
 
 #: utils/sqlite3/sqlite3.cpp:29
 msgid "SQL statement compilation failed: \"{}\""
-msgstr ""
+msgstr "SQL-lausekkeen kääntäminen epäonnistui: \"{}\""
 
 #: utils/sqlite3/sqlite3.cpp:31
 msgid "Binding integer value to SQL statement failed: \"{}\""
-msgstr ""
+msgstr "Kokonaisluvun arvon sitominen SQL-lausekkeeseen epäonnistui: \"{}"
 
 #: utils/sqlite3/sqlite3.cpp:33
 msgid "Binding integer64 value to SQL statement failed: \"{}\""
-msgstr ""
+msgstr "Kokonaisluvun 64 arvon sitominen SQL-lausekkeeseen epäonnistui: \"{}\""
 
 #: utils/sqlite3/sqlite3.cpp:35
 msgid "Binding unsigned integer32 value to SQL statement failed: \"{}\""
 msgstr ""
+"Allekirjoittamattoman kokonaisluvun 32 arvon sitominen SQL-lausekkeeseen "
+"epäonnistui: \"{}"
 
 #: utils/sqlite3/sqlite3.cpp:37
 msgid "Binding double value to SQL statement failed: \"{}\""
-msgstr ""
+msgstr "Tupla-arvon sitominen SQL-lausekkeeseen epäonnistui: \"{}\""
 
 #: utils/sqlite3/sqlite3.cpp:39
 msgid "Binding bool value to SQL statement failed: \"{}\""
-msgstr ""
+msgstr "Bool-arvon sitominen SQL-lausekkeeseen epäonnistui: \"{}\""
 
 #: utils/sqlite3/sqlite3.cpp:40
 msgid "Binding text to SQL statement failed: \"{}\""
-msgstr ""
+msgstr "Tekstin sitominen SQL-lausekkeeseen epäonnistui: \"{}\""
 
 #: utils/sqlite3/sqlite3.cpp:41
 msgid "Binding blob to SQL statement failed: \"{}\""
-msgstr ""
+msgstr "Blobin sitominen SQL-lausekkeeseen epäonnistui: \"{}\""
 
 #: utils/sqlite3/sqlite3.cpp:42
 msgid "SQL statement evaluation failed: \"{}\""
-msgstr ""
+msgstr "SQL-lausekkeen arviointi epäonnistui: \"{}\""
 
 #: utils/sqlite3/sqlite3.cpp:44
 msgid "Insufficient memory or result exceed maximum SQLite3 string length"
-msgstr ""
+msgstr "Muisti ei riitä tai tulos ylittää SQLite3-merkkijonon enimmäispituuden"
 
 #: utils/sqlite3/sqlite3.cpp:46
 msgid "Column \"{}\" not found"
@@ -1662,7 +1700,7 @@ msgstr "Saraketta \"{}\" ei löydy"
 
 #: utils/sqlite3/sqlite3.cpp:48
 msgid "SQL statement execution failed: \"{}\""
-msgstr ""
+msgstr "SQL-lausekkeen suoritus epäonnistui: \"{}\""
 
 #: utils/sqlite3/sqlite3.cpp:68
 msgid "Failed to open database \"{}\""
@@ -1674,11 +1712,11 @@ msgstr "Tietokannan \"{}\" sulkeminen epäonnistui"
 
 #: utils/sqlite3/sqlite3.cpp:117 utils/sqlite3/sqlite3.cpp:143
 msgid "Failed to open backup database \"{}\""
-msgstr ""
+msgstr "Varmuuskopiotietokannan \"{}\" avaaminen epäonnistui"
 
 #: utils/sqlite3/sqlite3.cpp:132
 msgid "Failed to backup database \"{}\" into \"{}\""
-msgstr ""
+msgstr "Tietokannan \"{}\" varmuuskopiointi tiedostoon \"{}\" epäonnistui"
 
 #: utils/sqlite3/sqlite3.cpp:158
 msgid "Failed to restore database \"{}\""

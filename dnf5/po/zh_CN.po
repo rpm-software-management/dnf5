@@ -9,13 +9,15 @@
 # hg wd <cut-punisher-stays@duck.com>, 2025.
 # z z <3397542367@qq.com>, 2025.
 # Jesse Guo <jesseguotech@outlook.com>, 2025.
+# Tzuhsi Liu <GAKMOTS@outlook.com>, 2026.
+# Pesy Wu <gamernotitle@outlook.com>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-07-26 03:48+0000\n"
-"PO-Revision-Date: 2025-10-04 11:30+0000\n"
-"Last-Translator: Jesse Guo <jesseguotech@outlook.com>\n"
+"PO-Revision-Date: 2026-02-11 18:58+0000\n"
+"Last-Translator: Pesy Wu <gamernotitle@outlook.com>\n"
 "Language-Team: Chinese (Simplified) <https://translate.fedoraproject.org/"
 "projects/dnf5/dnf5/zh_CN/>\n"
 "Language: zh_CN\n"
@@ -23,7 +25,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.13.3\n"
+"X-Generator: Weblate 5.15.2\n"
 
 #: cmdline_aliases.cpp:84 context.cpp:301 main.cpp:1357
 msgid ", "
@@ -1161,7 +1163,7 @@ msgstr "软件包事务中出现意外操作: {}"
 
 #: context.cpp:845
 msgid "Installing {}"
-msgstr "安装{}"
+msgstr "安装 {}"
 
 #: context.cpp:866
 msgid "Prepare transaction"
@@ -1298,12 +1300,12 @@ msgstr ""
 
 #: main.cpp:249 main.cpp:288
 msgid "{}: Badly formatted argument value \"{}\""
-msgstr "{}: 不符合格式的参数值 \"{}\""
+msgstr "{}：错误的参数值格式 \"{}\""
 
 #: main.cpp:256
 msgid ""
 "{}: Badly formatted argument value: Last key character cannot be '.': {}"
-msgstr "{}: 不符合格式的参数值: 最后一个字符不能是 '.': {}"
+msgstr "{}：错误的参数值格式：键名的结尾字符不能是\".\"：{}"
 
 #: main.cpp:269
 msgid "setopt: \"{0}\": {1}"

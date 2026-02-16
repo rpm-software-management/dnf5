@@ -1,13 +1,13 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# Aleksey Fedorov <aleksejfedorov963@gmail.com>, 2024, 2025.
+# Aleksey Fedorov <aleksejfedorov963@gmail.com>, 2024, 2025, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-07-26 03:48+0000\n"
-"PO-Revision-Date: 2025-10-29 11:53+0000\n"
+"PO-Revision-Date: 2026-02-10 07:58+0000\n"
 "Last-Translator: Aleksey Fedorov <aleksejfedorov963@gmail.com>\n"
 "Language-Team: Russian <https://translate.fedoraproject.org/projects/dnf5/"
 "libdnf5/ru/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 5.13.3\n"
+"X-Generator: Weblate 5.15.2\n"
 
 #: advisory/advisory.cpp:81
 msgid ""
@@ -181,10 +181,8 @@ msgid "No match for argument: {}"
 msgstr "Нет соответствия для аргумента: {}"
 
 #: base/log_event.cpp:163
-#, fuzzy
-#| msgid "No match for argument '{0}' in repositories '{1}'"
 msgid "No match for argument '{0}' in selected advisories"
-msgstr "Нет соответствия для аргумента '{0}' в репозиториях '{1}'"
+msgstr "Нет совпадений для аргумента «{0}» в выбранных рекомендациях"
 
 #: base/log_event.cpp:165
 msgid "No match in selected advisories"
@@ -626,10 +624,8 @@ msgid "Signature verification failed."
 msgstr "Сбой проверки подписей."
 
 #: base/transaction.cpp:90
-#, fuzzy
-#| msgid "The repository does not have any PGP keys configured."
 msgid "The repository does not have any OpenPGP keys configured."
-msgstr "В репозитории не настроено ни одного ключа PGP."
+msgstr "В репозитории не настроено ни одного ключа OpenPGP."
 
 #: base/transaction.cpp:91
 msgid "Public key is not installed."
@@ -656,10 +652,8 @@ msgid "An error occurred importing key \"{}\": {}"
 msgstr "Произошла ошибка при импорте ключа \"{}\": {}"
 
 #: base/transaction.cpp:1369
-#, fuzzy
-#| msgid "PGP check for package \"{}\" ({}) from repo \"{}\" has failed: "
 msgid "OpenPGP check for package \"{}\" ({}) from repo \"{}\" has failed: "
-msgstr "Сбой проверки PGP для пакета \"{}\" ({}) из репозитория \"{}\": "
+msgstr "Сбой проверки OpenPGP для пакета \"{}\" ({}) из репозитория \"{}\": "
 
 #: base/transaction.cpp:1397
 msgid "Import of the key didn't help, wrong key?"
@@ -671,34 +665,31 @@ msgid ", "
 msgstr ", "
 
 #: base/transaction.cpp:1419
-#, fuzzy
-#| msgid "Warning: skipped PGP checks for {0} packages from repository: {1}"
-#| msgid_plural ""
-#| "Warning: skipped PGP checks for {0} packages from repositories: {1}"
 msgid "Warning: skipped OpenPGP checks for {0} package from repository: {1}"
 msgid_plural ""
 "Warning: skipped OpenPGP checks for {0} packages from repository: {1}"
 msgstr[0] ""
-"Предупреждение: пропущены проверки PGP для {0} пакетов из репозитория: {1}"
+"Предупреждение: пропущены проверки OpenPGP для {0} пакета из репозитория: {1}"
 msgstr[1] ""
-"Предупреждение: пропущены проверки PGP для {0} пакетов из репозиториев: {1}"
+"Предупреждение: пропущены проверки OpenPGP для {0} пакетов из репозитория: "
+"{1}"
 msgstr[2] ""
-"Предупреждение: пропущены проверки PGP для {0} пакетов из репозиториев: {1}"
+"Предупреждение: пропущены проверки OpenPGP для {0} пакетов из репозитория: "
+"{1}"
 
 #: base/transaction.cpp:1422
-#, fuzzy
-#| msgid "Warning: skipped PGP checks for {0} packages from repository: {1}"
-#| msgid_plural ""
-#| "Warning: skipped PGP checks for {0} packages from repositories: {1}"
 msgid "Warning: skipped OpenPGP checks for {0} package from repositories: {1}"
 msgid_plural ""
 "Warning: skipped OpenPGP checks for {0} packages from repositories: {1}"
 msgstr[0] ""
-"Предупреждение: пропущены проверки PGP для {0} пакетов из репозитория: {1}"
+"Предупреждение: пропущены проверки OpenPGP для {0} пакета из репозиториев: "
+"{1}"
 msgstr[1] ""
-"Предупреждение: пропущены проверки PGP для {0} пакетов из репозиториев: {1}"
+"Предупреждение: пропущены проверки OpenPGP для {0} пакетов из репозиториев: "
+"{1}"
 msgstr[2] ""
-"Предупреждение: пропущены проверки PGP для {0} пакетов из репозиториев: {1}"
+"Предупреждение: пропущены проверки OpenPGP для {0} пакетов из репозиториев: "
+"{1}"
 
 #: common/exception.cpp:78
 msgid "System error"
@@ -927,7 +918,7 @@ msgstr ""
 
 #: plugin/plugins.cpp:92
 msgid "Failed to create a libdnf plugin instance"
-msgstr ""
+msgstr "Не удалось создать экземпляр плагина libdnf"
 
 #: plugin/plugins.cpp:146
 msgid "Cannot find plugin library \"{}\""
@@ -942,10 +933,8 @@ msgid "Plugins::load_plugins(): config_dir_path cannot be empty"
 msgstr "Plugins::load_plugins(): config_dir_path не может быть пустым"
 
 #: plugin/plugins.cpp:253
-#, fuzzy
-#| msgid "Cannot load plugins: {}"
 msgid "Cannot load libdnf plugin enabled from: {}"
-msgstr "Невозможно загрузить плагины: {}"
+msgstr "Невозможно загрузить плагин libdnf, включенный из: {}"
 
 #: repo/config_repo.cpp:581
 msgid "get_unique_id(): Computation of SHA256 failed"
@@ -970,16 +959,15 @@ msgstr ""
 #: repo/librepo.cpp:181
 msgid "'proxy_username' is set but not 'proxy_password'"
 msgstr ""
+"Установлено значение «proxy_username», но не установлено «proxy_password»"
 
 #: repo/package_downloader.cpp:154
 msgid "Cannot download the \"{0}\" package, cacheonly option is activated."
 msgstr "Невозможно загрузить пакет \"{0}\", активирована опция \"cacheonly\"."
 
 #: repo/package_downloader.cpp:231
-#, fuzzy
-#| msgid "Failed to download files"
 msgid "Already downloaded"
-msgstr "Не удалось загрузить файлы"
+msgstr "Уже загружено"
 
 #: repo/package_downloader.cpp:279
 msgid "Failed to download packages"
@@ -1008,10 +996,8 @@ msgid "Repository \"{}\" has unsupported type \"{}\", skipping."
 msgstr "Репозиторий \"{}\" имеет неподдерживаемый тип \"{}\", пропуск."
 
 #: repo/repo.cpp:221 repo/repo.cpp:241 repo/repo_sack.cpp:368
-#, fuzzy
-#| msgid "Failed to download metadata ({}: \"{}\") for repository \"{}\""
 msgid "Failed to download metadata ({}: \"{}\") for repository \"{}\": {}"
-msgstr "Не удалось загрузить метаданные ({}: \"{}\") для репозитория \"{}\""
+msgstr "Не удалось загрузить метаданные ({}: «{}») для репозитория «{}»: {}"
 
 #: repo/repo.cpp:439
 msgid ""
@@ -1046,16 +1032,12 @@ msgid "Librepo error: {}"
 msgstr "Ошибка Librepo: {}"
 
 #: repo/repo_downloader.cpp:258
-#, fuzzy
-#| msgid "Failed to resolve module metadata: {}"
 msgid "Failed to set up metadata download"
-msgstr "Не удалось разрешить метаданные модуля: {}"
+msgstr "Не удалось настроить загрузку метаданных"
 
 #: repo/repo_downloader.cpp:312 repo/repo_downloader.cpp:362
-#, fuzzy
-#| msgid "Failed to download files"
 msgid "Failed to download metadata"
-msgstr "Не удалось загрузить файлы"
+msgstr "Не удалось загрузить метаданные"
 
 #: repo/repo_downloader.cpp:426
 msgid "Error checking if metalink \"{}\" is in sync for repository \"{}\""
@@ -1079,22 +1061,16 @@ msgstr ""
 "mirrorlist или metalink)"
 
 #: repo/repo_pgp.cpp:60
-#, fuzzy
-#| msgid "Failed to import pgp keys into temporary keyring: {}"
 msgid "Failed to import OpenPGP keys into temporary keyring: {}"
-msgstr "Не удалось импортировать pgp-ключи во временную связку ключей: {}"
+msgstr "Не удалось импортировать OpenPGP-ключи во временную связку ключей: {}"
 
 #: repo/repo_pgp.cpp:66 repo/repo_pgp.cpp:93
-#, fuzzy
-#| msgid "Failed to list pgp keys: {}"
 msgid "Failed to list OpenPGP keys: {}"
-msgstr "Не удалось перечислить pgp-ключи: {}"
+msgstr "Не удалось перечислить OpenPGP-ключи: {}"
 
 #: repo/repo_pgp.cpp:141
-#, fuzzy
-#| msgid "Failed to import pgp keys: {}"
 msgid "Failed to import OpenPGP keys: {}"
-msgstr "Не удалось импортировать pgp-ключи: {}"
+msgstr "Не удалось импортировать OpenPGP-ключи: {}"
 
 #: repo/repo_sack.cpp:159
 msgid ""
@@ -1173,7 +1149,7 @@ msgstr "Пакет с rpmdbid не найден"
 
 #: rpm/package.cpp:478
 msgid "<unknown>"
-msgstr ""
+msgstr "<неизвестно>"
 
 #: rpm/reldep.cpp:116 rpm/reldep.cpp:123
 msgid "Cannot parse a dependency string"
@@ -1636,10 +1612,8 @@ msgid "Cannot obtain address of symbol \"{}\": {}"
 msgstr "Невозможно получить адрес символа \"{}\": {}"
 
 #: utils/locale.cpp:57
-#, fuzzy
-#| msgid "Cannot load shared library \"{}\": {}"
 msgid "Cannot set the locale \"{}\": {}"
-msgstr "Невозможно загрузить общую библиотеку \"{}\": {}"
+msgstr "Невозможно установить локаль «{}»: {}"
 
 #: utils/locker.cpp:45
 msgid "Failed to open lock file \"{}\""

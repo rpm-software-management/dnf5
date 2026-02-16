@@ -5,13 +5,14 @@
 # Wenyin Root <ruojiner@hotmail.com>, 2024.
 # caffiendo c <1728778012@qq.com>, 2024, 2025.
 # Weblate Translation Memory <noreply-mt-weblate-translation-memory@weblate.org>, 2024.
+# Tzuhsi Liu <GAKMOTS@outlook.com>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-07-26 03:48+0000\n"
-"PO-Revision-Date: 2025-05-07 17:34+0000\n"
-"Last-Translator: caffiendo c <1728778012@qq.com>\n"
+"PO-Revision-Date: 2026-01-19 12:58+0000\n"
+"Last-Translator: Tzuhsi Liu <GAKMOTS@outlook.com>\n"
 "Language-Team: Chinese (Simplified) <https://translate.fedoraproject.org/"
 "projects/dnf5/dnf5daemon-client/zh_CN/>\n"
 "Language: zh_CN\n"
@@ -19,7 +20,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.11.3\n"
+"X-Generator: Weblate 5.15.2\n"
 
 #: commands/advisory/advisory.cpp:35
 msgid "Manage advisories"
@@ -188,7 +189,7 @@ msgstr "该命令必须以管理员权限运行(大多数系统是在root用户�
 #: main.cpp:158
 msgid ""
 "{}: Badly formatted argument value: Last key character cannot be '.': {}"
-msgstr "{}: 不符合格式的参数值: 最后一个字符不能是 '.': {}"
+msgstr "{}：错误的参数值格式：键名的结尾字符不能是\".\"：{}"
 
 #: main.cpp:258 main.cpp:308
 msgid ". Add \"--help\" for more information about the arguments."

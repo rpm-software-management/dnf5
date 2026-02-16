@@ -4,13 +4,13 @@
 # Dennis Koerner <dennis@bumblebeeman.dev>, 2024.
 # Weblate Translation Memory <noreply-mt-weblate-translation-memory@weblate.org>, 2024.
 # Fabio D <fabio1977@arcor.de>, 2024.
-# Mario Blättermann <mario.blaettermann@gmail.com>, 2025.
+# Mario Blättermann <mario.blaettermann@gmail.com>, 2025, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-07-26 03:48+0000\n"
-"PO-Revision-Date: 2025-05-01 13:57+0000\n"
+"PO-Revision-Date: 2026-02-13 11:58+0000\n"
 "Last-Translator: Mario Blättermann <mario.blaettermann@gmail.com>\n"
 "Language-Team: German <https://translate.fedoraproject.org/projects/dnf5/"
 "dnf5daemon-client/de/>\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.11.1\n"
+"X-Generator: Weblate 5.15.2\n"
 
 #: commands/advisory/advisory.cpp:35
 msgid "Manage advisories"
@@ -69,7 +69,7 @@ msgstr ""
 
 #: commands/advisory/arguments.hpp:81
 msgid "PACKAGE_NAME,..."
-msgstr "PAKET_NAME,..."
+msgstr "PAKETNAME, …"
 
 #: commands/advisory/arguments.hpp:88
 msgid "List of patterns matched against advisory names."
@@ -90,7 +90,7 @@ msgstr "Inhalte in Hinweisen mit angegebenem Namen einbeziehen. Listenoption."
 
 #: commands/advisory/arguments.hpp:114
 msgid "ADVISORY_NAME,..."
-msgstr "HINWEIS_NAME,..."
+msgstr "HINWEISNAME, …"
 
 #: commands/advisory/arguments.hpp:121
 msgid "Include content contained in security advisories."
@@ -116,11 +116,11 @@ msgid ""
 "option. Can be \"critical\", \"important\", \"moderate\", \"low\", \"none\"."
 msgstr ""
 "Inhalte in Hinweisen mit angegebenem Schweregrad einbeziehen. Listenoption. "
-"Mögliche Werte \"critical\", \"important\", \"moderate\", \"low\", \"none\"."
+"Mögliche Werte: „critical“, „important“, „moderate“, „low“, „none“."
 
 #: commands/advisory/arguments.hpp:157
 msgid "ADVISORY_SEVERITY,..."
-msgstr "HINWEIS_SCHWEREGRAD,..."
+msgstr "HINWEIS_SCHWEREGRAD, …"
 
 #: commands/advisory/arguments.hpp:169
 msgid ""
@@ -132,7 +132,7 @@ msgstr ""
 
 #: commands/advisory/arguments.hpp:170
 msgid "BUGZILLA_ID,..."
-msgstr "BUGZILLA_ID,..."
+msgstr "BUGZILLA-ID, …"
 
 #: commands/advisory/arguments.hpp:180
 msgid ""
@@ -144,7 +144,7 @@ msgstr ""
 
 #: commands/advisory/arguments.hpp:182
 msgid "CVE_ID,..."
-msgstr "CVE_ID,..."
+msgstr "CVE-ID, …"
 
 #: commands/clean/clean.cpp:88
 msgid "Error cleaning the cache: {}"
@@ -191,7 +191,7 @@ msgstr "nach Paketen suchen, die verschiedene Kriterien erfüllen"
 
 #: commands/repoquery/repoquery.cpp:159
 msgid "Error parsing JSON object \"{}\": {}"
-msgstr "Fehler beim Parsen des JSON-Objekts »{}«: {}"
+msgstr "Fehler beim Parsen des JSON-Objekts „{}“: {}"
 
 #: exception.cpp:28
 msgid ""
@@ -205,11 +205,11 @@ msgstr ""
 msgid ""
 "{}: Badly formatted argument value: Last key character cannot be '.': {}"
 msgstr ""
-"{}: Fehlerhaft formatierter Argumentwert: Letzter Schlüsselwert kann nicht "
-"».« sein: {}"
+"{}: Fehlerhaft formatierter Argumentwert: Letzter Schlüsselwert darf nicht "
+"„.“ sein: {}"
 
 #: main.cpp:258 main.cpp:308
 msgid ". Add \"--help\" for more information about the arguments."
 msgstr ""
-". Fügen Sie »--help« hinzu, um weitere Informationen zu den Argumenten zu "
+". Fügen Sie „--help“ hinzu, um weitere Informationen zu den Argumenten zu "
 "erhalten."

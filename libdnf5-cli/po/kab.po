@@ -3,14 +3,14 @@
 # This file is distributed under the same license as the PACKAGE package.
 # ButterflyOfFire <butterflyoffire@protonmail.com>, 2024.
 # ButterflyOfFire <butterflyoffire@users.noreply.translate.fedoraproject.org>, 2024, 2025.
+# Massii Aqvayli <massiin@proton.me>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-07-26 03:48+0000\n"
-"PO-Revision-Date: 2025-10-10 18:54+0000\n"
-"Last-Translator: ButterflyOfFire "
-"<butterflyoffire@users.noreply.translate.fedoraproject.org>\n"
+"PO-Revision-Date: 2026-02-13 11:58+0000\n"
+"Last-Translator: Massii Aqvayli <massiin@proton.me>\n"
 "Language-Team: Kabyle <https://translate.fedoraproject.org/projects/dnf5/"
 "libdnf5-cli/kab/>\n"
 "Language: kab\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.13.3\n"
+"X-Generator: Weblate 5.15.2\n"
 
 #: argument_parser.cpp:68
 msgid "Misconfigured alias \"{}\": cannot convert \"{}\" to a number"
@@ -30,11 +30,11 @@ msgstr ""
 
 #: argument_parser.cpp:98
 msgid "\"{}\" not allowed together with named argument \"{}\""
-msgstr ""
+msgstr "\"{}\" ur yettwasireg ara lwaḥi d ufakul yettwasemman \"{}\""
 
 #: argument_parser.cpp:100
 msgid "\"{}\" not allowed in command \"{}\""
-msgstr ""
+msgstr "\"{}\" ur yettusireg ara deg tladana \"{}\""
 
 #: argument_parser.cpp:102
 msgid "\"{}\" not allowed together with positional argument \"{}\""
@@ -58,11 +58,11 @@ msgstr ""
 
 #: argument_parser.cpp:556
 msgid "Unexpected value for named argument \"--{}\""
-msgstr ""
+msgstr "Azal ur nettwaṛǧi ara i ufakul s yisem \"--{}\""
 
 #: argument_parser.cpp:598
 msgid "Missing value for named argument \"-{}\""
-msgstr ""
+msgstr "Ixuṣṣ wazal i ufakul yettwasemman \"-{}\""
 
 #. print usage
 #: argument_parser.cpp:694
@@ -75,7 +75,7 @@ msgstr "Aglam:"
 
 #: argument_parser.cpp:979
 msgid "Command id \"{}\" already registered for command \"{}\""
-msgstr ""
+msgstr "Asulay n tladna \"{}\" yettwasekles yakan i tladna \"{}\""
 
 #: argument_parser.cpp:990
 msgid "Named argument id \"{}\" already registered for command \"{}\""
@@ -87,7 +87,7 @@ msgstr ""
 
 #: argument_parser.cpp:1010
 msgid "Group id \"{}\" already registered for command \"{}\""
-msgstr ""
+msgstr "Asulay n ugraw \"{}\" yettwasekles yakan i tladna \"{}\""
 
 #: argument_parser.cpp:1037
 msgid "Command id \"{}\" does not contain subcommand with id \"{}\""
@@ -418,4 +418,4 @@ msgstr "Aɣrud"
 
 #: session.cpp:149
 msgid "Missing command"
-msgstr ""
+msgstr "Txuṣṣ tladna"

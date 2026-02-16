@@ -2,15 +2,15 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # ButterflyOfFire <butterflyoffire@protonmail.com>, 2024.
-# ButterflyOfFire <butterflyoffire@users.noreply.translate.fedoraproject.org>, 2024, 2025.
+# ButterflyOfFire <butterflyoffire@users.noreply.translate.fedoraproject.org>, 2024, 2025, 2026.
+# Massii Aqvayli <massiin@proton.me>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-07-26 03:48+0000\n"
-"PO-Revision-Date: 2025-09-04 01:43+0000\n"
-"Last-Translator: ButterflyOfFire "
-"<butterflyoffire@users.noreply.translate.fedoraproject.org>\n"
+"PO-Revision-Date: 2026-02-13 11:58+0000\n"
+"Last-Translator: Massii Aqvayli <massiin@proton.me>\n"
 "Language-Team: Kabyle <https://translate.fedoraproject.org/projects/dnf5/"
 "libdnf5/kab/>\n"
 "Language: kab\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.13\n"
+"X-Generator: Weblate 5.15.2\n"
 
 #: advisory/advisory.cpp:81
 msgid ""
@@ -28,12 +28,12 @@ msgstr ""
 
 #: base/goal.cpp:482
 msgid "Unsupported argument for REMOVE action: {}"
-msgstr ""
+msgstr "Afakul ur yettwasefrak ara i tigawt KKES: {}"
 
 #. TODO(lukash) throw a proper exception
 #: base/goal.cpp:1652
 msgid "Incorrect configuration value for multilib_policy: {}"
-msgstr ""
+msgstr "Azal n twila mačči d ameɣtu i multilib_policy: {}"
 
 #: base/goal_elements.cpp:352
 msgid "Install"
@@ -49,11 +49,11 @@ msgstr ""
 
 #: base/goal_elements.cpp:358
 msgid "Upgrade"
-msgstr ""
+msgstr "Mucceḍ"
 
 #: base/goal_elements.cpp:360
 msgid "Upgrade all"
-msgstr ""
+msgstr "Mucceḍ-iten akk"
 
 #: base/goal_elements.cpp:362
 msgid "Upgrade minimal"
@@ -69,11 +69,11 @@ msgstr ""
 
 #: base/goal_elements.cpp:368
 msgid "Reinstall"
-msgstr ""
+msgstr "Ales asbeddi"
 
 #: base/goal_elements.cpp:370
 msgid "Install or reinstall"
-msgstr ""
+msgstr "Sebded neɣ ales asbeddi"
 
 #: base/goal_elements.cpp:372
 msgid "Remove"
@@ -88,8 +88,9 @@ msgid "Distrosync all"
 msgstr ""
 
 #: base/goal_elements.cpp:378
+#, fuzzy
 msgid "Reason Change"
-msgstr ""
+msgstr "Tamentilt n unfal"
 
 #: base/goal_elements.cpp:380
 msgid "Resolve"
@@ -101,7 +102,7 @@ msgstr "Sermed"
 
 #: base/goal_elements.cpp:384
 msgid "Disable"
-msgstr ""
+msgstr "Kkes armad"
 
 #: base/goal_elements.cpp:386
 msgid "Reset"

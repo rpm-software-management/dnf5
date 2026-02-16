@@ -4,13 +4,14 @@
 # Joan Aymà <joan@ayma.cat>, 2024, 2025.
 # David Medina <dmedinacpnl@gmail.com>, 2025.
 # Weblate Translation Memory <noreply-mt-weblate-translation-memory@weblate.org>, 2025.
+# naly zzwd <xeanhort007@gmail.com>, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-07-26 03:48+0000\n"
-"PO-Revision-Date: 2025-07-25 17:09+0000\n"
-"Last-Translator: David Medina <dmedinacpnl@gmail.com>\n"
+"PO-Revision-Date: 2025-12-25 11:09+0000\n"
+"Last-Translator: naly zzwd <xeanhort007@gmail.com>\n"
 "Language-Team: Catalan <https://translate.fedoraproject.org/projects/dnf5/"
 "dnf5/ca/>\n"
 "Language: ca\n"
@@ -18,7 +19,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.12.2\n"
+"X-Generator: Weblate 5.15.1\n"
 
 #: cmdline_aliases.cpp:84 context.cpp:301 main.cpp:1357
 msgid ", "
@@ -794,7 +795,7 @@ msgstr ""
 
 #: commands/offline/offline.cpp:272
 msgid "Couldn't connect to D-Bus: {}"
-msgstr "No s'ha pogut connectar al D-Bus: {}"
+msgstr "No s'ha pogut connectar a D-Bus: {}"
 
 #: commands/offline/offline.cpp:303
 msgid ""

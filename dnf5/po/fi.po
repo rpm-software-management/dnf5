@@ -5,13 +5,15 @@
 # Weblate Translation Memory <noreply-mt-weblate-translation-memory@weblate.org>, 2024.
 # Jiri Grönroos <jiri.gronroos@iki.fi>, 2024, 2025.
 # Ville-Pekka Vainio <vpvainio@iki.fi>, 2024.
+# Jouko Tiilikainen <jti65@users.noreply.translate.fedoraproject.org>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-07-26 03:48+0000\n"
-"PO-Revision-Date: 2025-09-04 01:43+0000\n"
-"Last-Translator: Ricky Tigg <ricky.tigg@gmail.com>\n"
+"PO-Revision-Date: 2026-01-19 12:58+0000\n"
+"Last-Translator: Jouko Tiilikainen "
+"<jti65@users.noreply.translate.fedoraproject.org>\n"
 "Language-Team: Finnish <https://translate.fedoraproject.org/projects/dnf5/"
 "dnf5/fi/>\n"
 "Language: fi\n"
@@ -19,7 +21,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.13\n"
+"X-Generator: Weblate 5.15.2\n"
 
 #: cmdline_aliases.cpp:84 context.cpp:301 main.cpp:1357
 msgid ", "
@@ -30,140 +32,176 @@ msgid ""
 "Attached named argument \"{}\" not found: {}: Requested in file \"{}\" on "
 "line {}: {}"
 msgstr ""
+"Liitettyä argumenttia \"{}\" ei löydy: {}: Pyydetty tiedostossa \"{}\" "
+"rivillä {}: {}"
 
 #: cmdline_aliases.cpp:159
 msgid ""
 "Unknown attribute \"{}\" of attached named argument for alias \"{}\" in file "
 "\"{}\" on line {}: {}"
 msgstr ""
+"Tuntematon attribuutti \"{}\" liitteenä olevan nimetyn argumentin aliakselle "
+"\"{}\" tiedostossa \"{}\" rivillä {}: {}"
 
 #: cmdline_aliases.cpp:171
 msgid "Missing attribute \"id_path\" for alias \"{}\" in file \"{}\""
-msgstr ""
+msgstr "Tiedostosta \"{}\" puuttuu aliaksen \"{}\" attribuutti \"id_path\""
 
 #: cmdline_aliases.cpp:208
 msgid "Unsupported version \"{}\" in file \"{}\". Supported versions: {}"
-msgstr ""
+msgstr "Ei tuettu versio \"{}\" tiedostossa \"{}\". Tuetut versiot: {}"
 
 #: cmdline_aliases.cpp:218
 msgid "Bad value type of attribute \"version\" in file \"{}\" on line {}: {}"
 msgstr ""
+"Virheellinen attribuutin \"versio\" arvotyyppi tiedostossa \"{}\" rivillä {}"
+": {}"
 
 #: cmdline_aliases.cpp:224
 msgid "Missing attribute \"version\" in file \"{}\""
-msgstr ""
+msgstr "Tiedostosta \"{}\" puuttuu attribuutti \"versio\""
 
 #: cmdline_aliases.cpp:236
 msgid "Unknown key \"{}\" in file \"{}\" on line {}: {}"
-msgstr ""
+msgstr "Tuntematon avain \"{}\" tiedostossa \"{}\" rivillä {}: {}"
 
 #: cmdline_aliases.cpp:253
 msgid "Empty or bad element id path in file \"{}\" on line {}: {}"
 msgstr ""
+"Tyhjä tai virheellinen elementin tunnuspolku tiedostossa \"{}\" rivillä {}: "
+"{}"
 
 #: cmdline_aliases.cpp:272
 msgid ""
 "Parent command \"{}\" not found: {}: Requested in file \"{}\" on line {}: {}"
 msgstr ""
+"Pääkomentoa \"{}\" ei löydy: {}: Pyydetty tiedostossa \"{}\" rivillä {}: {}"
 
 #: cmdline_aliases.cpp:301
 msgid "Unknown type \"{}\" of element \"{}\" in file \"{}\" on line {}: {}"
 msgstr ""
+"Tuntematon tyyppi \"{}\" elementin \"{}\" tiedostossa \"{}\" rivillä {}: {}"
 
 #: cmdline_aliases.cpp:312
 msgid "Missing attribute \"type\" for element \"{}\" in file \"{}\""
-msgstr ""
+msgstr "Tiedoston \"{}\" elementistä \"{}\" puuttuu attribuutti \"type\""
 
 #: cmdline_aliases.cpp:331
 msgid ""
 "Named argument \"{}\" already registered. Requested in file \"{}\" on line "
 "{}: {}"
 msgstr ""
+"Nimetty argumentti \"{}\" on jo rekisteröity. Pyydetty tiedostossa \"{}\" "
+"rivillä {}: {}"
 
 #: cmdline_aliases.cpp:347
 msgid ""
 "Command \"{}\" already registered. Requested in file \"{}\" on line {}: {}"
 msgstr ""
+"Komento \"{}\" on jo rekisteröity. Pyydetty tiedostossa \"{}\" rivillä {}: {}"
 
 #: cmdline_aliases.cpp:375
 msgid "Unknown attribute \"{}\" of group \"{}\" in file \"{}\" on line {}: {}"
 msgstr ""
+"Tuntematon attribuutti \"{}\" ryhmästä \"{}\" tiedostossa \"{}\" rivillä {}: "
+"{}"
 
 #: cmdline_aliases.cpp:387
 msgid "Missing attribute \"header\" for element \"{}\" in file \"{}\""
-msgstr ""
+msgstr "Tiedoston \"{}\" elementistä \"{}\" puuttuu attribuutti \"header\""
 
 #: cmdline_aliases.cpp:428 cmdline_aliases.cpp:538
 msgid ""
 "The \"short_name\" attribute of named argument \"{}\" must be one character "
 "long in file \"{}\" on line {}: {}"
 msgstr ""
+"Nimetyn argumentin \"{}\" attribuutin \"short_name\" on oltava yksi merkki "
+"tiedostossa \"{}\" rivillä {}: {}"
 
 #: cmdline_aliases.cpp:446
 msgid "Source \"{}\" not found: {}: Requested in file \"{}\" on line {}: {}"
 msgstr ""
+"Lähdettä \"{}\" ei löydy: {}: Pyydetty tiedostossa \"{}\" rivillä {}: {}"
 
 #: cmdline_aliases.cpp:462 cmdline_aliases.cpp:563 cmdline_aliases.cpp:676
 msgid "Group \"{}\" not found: {}: Requested in file \"{}\" on line {}: {}"
-msgstr ""
+msgstr "Ryhmää \"{}\" ei löydy: {}: Pyydetty tiedostossa \"{}\" rivillä {}: {}"
 
 #: cmdline_aliases.cpp:476 cmdline_aliases.cpp:579
 msgid ""
 "Unknown attribute \"{}\" of named argument \"{}\" in file \"{}\" on line {}: "
 "{}"
 msgstr ""
+"Nimetyn argumentin \"{}\" tuntematon attribuutti \"{}\" tiedostossa \"{}\" "
+"rivillä {}: {}"
 
 #: cmdline_aliases.cpp:489
 msgid "Missing attribute \"source\" for named argument \"{}\" in file \"{}\""
 msgstr ""
+"Tiedostossa \"{}\" nimetylle argumentille \"{}\" puuttuu attribuutti "
+"\"source\""
 
 #: cmdline_aliases.cpp:498 cmdline_aliases.cpp:592
 msgid ""
 "At least one of the attributes \"long_name\" and \"short_name\" must be set "
 "for named argument \"{}\" in file \"{}\""
 msgstr ""
+"Vähintään yksi attribuuteista \"long_name\" ja \"short_name\" on asetettava "
+"nimetylle argumentille \"{}\" tiedostossa \"{}\""
 
 #: cmdline_aliases.cpp:657
 msgid ""
 "Attached command \"{}\" not found: {}: Requested in file \"{}\" on line {}: "
 "{}"
 msgstr ""
+"Liitettyä komentoa \"{}\" ei löydy: {}: Pyydetty tiedostossa \"{}\" rivillä "
+"{}: {}"
 
 #: cmdline_aliases.cpp:691
 msgid ""
 "Used config file version \"1.0\" for attribute \"{}\" of command \"{}\" in "
 "file \"{}\" on line {}: {}"
 msgstr ""
+"Käytettiin konfiguraatiotiedoston versiota \"1.0\" komennon \"{}\" "
+"attribuutille \"{}\" tiedostossa \"{}\" rivillä {}: {}"
 
 #: cmdline_aliases.cpp:713
 msgid ""
 "Unknown attribute \"{}\" of required value for alias \"{}\" in file \"{}\" "
 "on line {}: {}"
 msgstr ""
+"Tuntematon attribuutti \"{}\", jonka vaadittu arvo aliakselle \"{}\" "
+"tiedostossa \"{}\" rivillä {}: {}"
 
 #: cmdline_aliases.cpp:726
 msgid ""
 "Missing attribute \"value_help\" of required value for alias \"{}\" in file "
 "\"{}\""
 msgstr ""
+"Aliaksen \"{}\" pakollisen arvon attribuutti \"value_help\" puuttuu "
+"tiedostosta \"{}\""
 
 #: cmdline_aliases.cpp:740
 msgid ""
 "Unknown attribute \"{}\" of command \"{}\" in file \"{}\" on line {}: {}"
 msgstr ""
+"Tuntematon attribuutti \"{}\" komennon \"{}\" tiedostossa \"{}\" rivillä {}: "
+"{}"
 
 #: cmdline_aliases.cpp:756
 msgid ""
 "Missing attribute \"attached_command\" for command \"{}\" in file \"{}\""
 msgstr ""
+"Puuttuva attribuutti \"attached_command\" komennolta \"{}\" tiedostosta \"{}"
+"\""
 
 #: cmdline_aliases.cpp:791
 msgid "Bad value type in file \"{}\" on line {}: {}"
-msgstr ""
+msgstr "Virheellinen arvotyyppi tiedostossa \"{}\" rivillä {}: {}"
 
 #: cmdline_aliases.cpp:804
 msgid "Syntax error in file \"{}\" on line {}:"
-msgstr ""
+msgstr "Syntaksivirhe tiedostossa \"{}\" rivillä {}:"
 
 #: commands/advisory/advisory.cpp:36
 msgid "Manage advisories"
