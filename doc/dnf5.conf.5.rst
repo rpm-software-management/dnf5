@@ -111,7 +111,7 @@ repository configuration file should aside from repo ID consists of baseurl, met
 
     Regular user default: ``~/.cache/libdnf5``.
 
-    For superuser the value is overwritten by :ref:`system_cachedir <_system_cachedir_options-label>` option.
+    For superuser the value is overwritten by :ref:`system_cachedir <system_cachedir_options-label>` option.
 
 .. _cacheonly_options-label:
 
@@ -165,7 +165,7 @@ repository configuration file should aside from repo ID consists of baseurl, met
     :ref:`string <string-label>`
 
     Location where libsolv debug files will be created when enabled
-    by :ref:`debug_solver <_debug_solver_options-label>`.
+    by :ref:`debug_solver <debug_solver_options-label>`.
 
     Default `./debugdata`.
 
@@ -175,7 +175,7 @@ repository configuration file should aside from repo ID consists of baseurl, met
     :ref:`boolean <boolean-label>`
 
     If enabled, libsolv debug files will be created when solving the
-    transaction. The debug files are created in the :ref:`debugdir <_debugdir_options-label>` directory.
+    transaction. The debug files are created in the :ref:`debugdir <debugdir_options-label>` directory.
 
     Default: ``False``.
 
@@ -573,7 +573,7 @@ repository configuration file should aside from repo ID consists of baseurl, met
 
     History database location.
 
-    By default it has the same value as :ref:`system_state_dir <_system_state_dir_options-label>`.
+    By default it has the same value as :ref:`system_state_dir <system_state_dir_options-label>`.
 
 .. _tsflags_options-label:
 
@@ -1216,7 +1216,7 @@ configuration.
     If enabled, DNF5 will continue running and disable the repository that couldn't be synchronized
     for any reason. This option doesn't affect skipping of unavailable packages after dependency
     resolution. To check inaccessibility of repository use it in combination with
-    :ref:`refresh command line option <refresh_command_options-label>`.
+    :ref:`refresh command line option <refresh_option-label>`.
 
     Default: ``False``.
 

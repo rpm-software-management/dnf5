@@ -134,4 +134,4 @@ For more details about the fields, see the ``REPO OPTIONS`` section in dnf5.conf
 See Also
 ========
 
-      :manpage:`dnf5.conf(5)`, :ref:`Repo options <_repo_options-label>`
+      :manpage:`dnf5.conf(5)`, :ref:`Repo options <repo_options-label>`

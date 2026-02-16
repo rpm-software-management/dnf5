@@ -69,7 +69,7 @@ Arguments
 ``<package-spec-NPFB>``
     Specification for including a package in the manifest file.
     Local RPMs are not supported.
-    For more information, refer to :ref:`Specifying Packages <specifying_packages-label>`.
+    For more information, refer to :ref:`Specifying Packages <specs_misc_ref-label>`.
 
 -------
 Options
