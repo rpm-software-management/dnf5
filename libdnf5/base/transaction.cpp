@@ -30,6 +30,7 @@
 #include "rpm/package_set_impl.hpp"
 #include "solv/pool.hpp"
 #include "solver_problems_internal.hpp"
+#include "system/state.hpp"
 #include "transaction/transaction_sr.hpp"
 #include "transaction_impl.hpp"
 #include "transaction_module_impl.hpp"
@@ -1210,7 +1211,17 @@ Transaction::TransactionRunResult Transaction::Impl::_run(
             if (transaction_item_action_is_inbound(tsgroup.get_action()) ||
                 tsgroup.get_action() == transaction::TransactionItemAction::REASON_CHANGE) {
                 libdnf5::system::GroupState state;
-                state.userinstalled = tsgroup.get_reason() == transaction::TransactionItemReason::USER;
+                bool preserve_userinstalled = false;
+                if (tsgroup.get_action() != transaction::TransactionItemAction::REASON_CHANGE &&
+                    tsgroup.get_reason() != transaction::TransactionItemReason::USER) {
+                    try {
+                        auto existing_state = system_state.get_group_state(group.get_groupid());
+                        preserve_userinstalled = existing_state.userinstalled;
+                    } catch (const libdnf5::system::StateNotFoundError &) {
+                    }
+                }
+                state.userinstalled =
+                    preserve_userinstalled || (tsgroup.get_reason() == transaction::TransactionItemReason::USER);
                 state.package_types = tsgroup.get_package_types();
                 // Remember packages installed by this group
                 for (const auto & pkg : group.get_packages()) {
