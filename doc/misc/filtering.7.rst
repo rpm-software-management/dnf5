@@ -50,7 +50,7 @@ Similar to global excludes, but this configuration is repository-specific and on
 User excludes filtering
 =======================
 
-API users have an additional option how to fine-tune excluded packages using ``*_user_excludes()`` and ``*_user_includes`` methods of the ``PackageSack`` object. See :ref:`PackageSack API <api_packagesack-label>`.
+API users have an additional option how to fine-tune excluded packages using ``*_user_excludes()`` and ``*_user_includes`` methods of the ``PackageSack`` object. See `libdnf5::rpm::PackageSack`_.
 
 
 Versionlock

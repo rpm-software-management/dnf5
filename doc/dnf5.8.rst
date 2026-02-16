@@ -277,6 +277,7 @@ Following options are applicable in the general context for any ``dnf5`` command
     In combination with a non-interactive command, shows just the relevant content.
     Suppresses messages notifying about the current state or actions of ``DNF5``.
 
+.. _refresh_option-label:
 ``--refresh``
     | Force refreshing metadata before running the command.
 
