@@ -133,9 +133,8 @@ Examples
     under the default file name, automatically answering "yes" to all prompts during the
     transaction resolution.
 
---------
 See Also
---------
+========
 
-* `libpkgmanifest upstream <https://github.com/rpm-software-management/libpkgmanifest>`_
-* `Prototype input file specification <https://github.com/konflux-ci/rpm-lockfile-prototype?tab=readme-ov-file#whats-the-input_file>`_
+    | `libpkgmanifest upstream <https://github.com/rpm-software-management/libpkgmanifest>`_
+    | `Prototype input file specification <https://github.com/konflux-ci/rpm-lockfile-prototype?tab=readme-ov-file#whats-the-input_file>`_
