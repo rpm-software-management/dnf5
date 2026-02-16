@@ -28,7 +28,7 @@ Description
 
 For working with RPM package manifest files using the `libpkgmanifest <https://github.com/rpm-software-management/libpkgmanifest>`_ library.
 
-:ref:`skip_if_unavailable <_skip_if_unavailable_options-label>` and `skip_broken <_skip_broken_options-label` will be set to ``false`` for all operations.
+:ref:`skip_if_unavailable <skip_if_unavailable_options-label>` and :ref:`skip_broken <skip_broken_options-label>` will be set to ``false`` for all operations.
 
 
 ``new``
