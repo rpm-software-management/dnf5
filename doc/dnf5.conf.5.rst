@@ -1380,7 +1380,7 @@ files<distro_configuration_files-label>`.
 The configuration files are processed following this order:
 
 1. Configuration files are alphabetically sorted in a list of names from the
-   :ref:`distribution configuration directory<distro_configuration_dir-label>.
+   :ref:`distribution configuration directory<distro_configuration_dir-label>`.
    and the :ref:`user configuration directory<user_configuration_dir-label>`. If
    a file with the same name is present in both directories, only the file from
    the user configuration directory is added to the list. The
