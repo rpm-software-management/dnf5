@@ -1,0 +1,173 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# Languages add-on <noreply-addon-languages@weblate.org>, 2026.
+# Arif Budiman <arifpedia@gmail.com>, 2026.
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-07-26 03:48+0000\n"
+"PO-Revision-Date: 2026-01-23 15:21+0000\n"
+"Last-Translator: Arif Budiman <arifpedia@gmail.com>\n"
+"Language-Team: Indonesian <https://translate.fedoraproject.org/projects/dnf5/"
+"libdnf5-plugin-actions/id/>\n"
+"Language: id\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Weblate 5.15.2\n"
+
+#: actions.cpp:237
+#, c++-format
+msgid "File \"{}\" on line {}: {}"
+msgstr "Berkas \"{}\" pada baris {}: {}"
+
+#: actions.cpp:636 actions.cpp:642 actions.cpp:648 actions.cpp:654
+msgid "\"HOOK:PKG_FILTER:DIRECTION:OPTIONS:CMD\" format expected"
+msgstr "Format \"HOOK:PKG_FILTER:DIRECTION:OPTIONS:CMD\" diharapkan"
+
+#: actions.cpp:676
+#, c++-format
+msgid "Unknown \"enabled\" option value \"{}\""
+msgstr "Nilai opsi \"enabled\" tidak dikenal \"{}\""
+
+#: actions.cpp:683
+#, c++-format
+msgid "Unknown option \"{}\""
+msgstr "Opsi \"{}\" tidak dikenal"
+
+#: actions.cpp:711
+#, c++-format
+msgid "Unknown hook \"{}\""
+msgstr "Hook \"{}\" tidak dikenal"
+
+#: actions.cpp:720
+msgid ""
+"Package filter can only be used in GOAL_RESOLVED, PRE_TRANS and POST_TRANS "
+"hooks"
+msgstr ""
+"Filter paket hanya dapat digunakan dalam hook GOAL_RESOLVED, PRE_TRANS, dan "
+"POST_TRANS"
+
+#: actions.cpp:726
+msgid "Cannot use direction without package filter"
+msgstr "Tidak dapat menggunakan direction tanpa filter paket"
+
+#: actions.cpp:740
+#, c++-format
+msgid "Unknown package direction \"{}\""
+msgstr "Arah paket \"{}\" tidak dikenal"
+
+#: actions.cpp:747
+#, c++-format
+msgid "Unknown mode \"{}\""
+msgstr "Mode \"{}\" tidak dikenal"
+
+#: actions.cpp:755
+#, c++-format
+msgid "Unsupported value of the \"raise_error\" option: {}"
+msgstr "Nilai opsi \"raise_error\" tidak didukung: {}"
+
+#: actions.cpp:760
+msgid "Missing command"
+msgstr "Perintah tidak ada"
+
+#: actions.cpp:953
+#, c++-format
+msgid "Synax error: Missing equal sign (=) in action output line: {}"
+msgstr ""
+"Kesalahan sintaks: Tanda sama dengan (=) tidak ada pada baris output aksi: {}"
+
+#: actions.cpp:964
+#, c++-format
+msgid "Cannot set option: Action output line: {}"
+msgstr "Tidak dapat menetapkan opsi: Baris output aksi: {}"
+
+#: actions.cpp:982
+#, c++-format
+msgid "Action sent the wrong log level: {}"
+msgstr "Aksi mengirimkan level log yang salah: {}"
+
+#: actions.cpp:987 actions.cpp:1794
+#, c++-format
+msgid "Action calls for stop: {}"
+msgstr "Aksi meminta untuk berhenti: {}"
+
+#: actions.cpp:990 actions.cpp:1801
+#, c++-format
+msgid "Action sent error message: {}"
+msgstr "Aksi mengirimkan pesan kesalahan: {}"
+
+#: actions.cpp:995
+#, c++-format
+msgid ""
+"Syntax error: Action output line must start with \"tmp.\" or \"conf.\" or "
+"\"var.\" or \"stop=\" or \"error=\": {}"
+msgstr ""
+"Kesalahan sintaks: Baris output aksi harus diawali dengan \"tmp.\" atau "
+"\"conf.\" atau \"var.\" atau \"stop=\" atau \"error=\": {}"
+
+#: actions.cpp:1020
+msgid "Error reading from action (from pipe)"
+msgstr "Kesalahan saat membaca dari aksi (dari pipe)"
+
+#: actions.cpp:1038
+#, c++-format
+msgid "Syntax error in json request from action: Missing starting '{{' char"
+msgstr ""
+"Kesalahan sintaks pada permintaan json dari aksi: Karakter awal '{{' tidak "
+"ada"
+
+#: actions.cpp:1062
+msgid "Error during processing of a request from action."
+msgstr "Kesalahan selama pemrosesan permintaan dari aksi."
+
+#: actions.cpp:1071
+#, c++-format
+msgid "Syntax error in json request from action: {}"
+msgstr "Kesalahan sintaks pada permintaan json dari aksi: {}"
+
+#: actions.cpp:1079
+msgid "Syntax error in json request from action: Incomplete input"
+msgstr "Kesalahan sintaks pada permintaan json dari aksi: Input tidak lengkap"
+
+#: actions.cpp:1154
+msgid "Cannot write response"
+msgstr "Tidak dapat menulis respons"
+
+#: actions.cpp:1821
+msgid "Actions plugin: Cannot create pipe"
+msgstr "Plugin Actions: Tidak dapat membuat pipe"
+
+#: actions.cpp:1913
+msgid "Actions plugin: Cannot fork"
+msgstr "Plugin Actions: Tidak dapat melakukan fork"
+
+#: actions.cpp:1968
+msgid "Actions plugin: Cannot bind command stdin"
+msgstr "Plugin Actions: Tidak dapat mengikat stdin perintah"
+
+#: actions.cpp:1970
+msgid "Actions plugin: Cannot bind command stdout"
+msgstr "Plugin Actions: Tidak dapat mengikat stdout perintah"
+
+#: actions.cpp:1988
+#, c++-format
+msgid "Cannot execute action, command \"{}\" arguments \"{}\""
+msgstr "Tidak dapat mengeksekusi aksi, argumen perintah \"{}\" \"{}\""
+
+#: actions.cpp:1996
+msgid "Error during preparation child process"
+msgstr "Kesalahan saat menyiapkan proses anak"
+
+#: actions.cpp:2015
+#, c++-format
+msgid "Exit code: {}"
+msgstr "Kode keluar: {}"
+
+#: actions.cpp:2019
+#, c++-format
+msgid "Terminated by signal: {}"
+msgstr "Dihentikan oleh sinyal: {}"

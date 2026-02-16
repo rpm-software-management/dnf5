@@ -3,13 +3,14 @@
 # This file is distributed under the same license as the PACKAGE package.
 # Jingge Chen <mariocanfly@hotmail.com>, 2025.
 # caffiendo c <1728778012@qq.com>, 2025.
+# Zongyuan He <lovenemesis@gmail.com>, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-07-26 03:48+0000\n"
-"PO-Revision-Date: 2025-02-20 14:19+0000\n"
-"Last-Translator: caffiendo c <1728778012@qq.com>\n"
+"PO-Revision-Date: 2025-12-30 19:58+0000\n"
+"Last-Translator: Zongyuan He <lovenemesis@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://translate.fedoraproject.org/"
 "projects/dnf5/libdnf5-plugin-actions/zh_CN/>\n"
 "Language: zh_CN\n"
@@ -17,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.10\n"
+"X-Generator: Weblate 5.15.1\n"
 
 #: actions.cpp:237
 msgid "File \"{}\" on line {}: {}"
@@ -63,7 +64,7 @@ msgstr "不支持的 \"raise_error\" 选项的值： {}"
 
 #: actions.cpp:760
 msgid "Missing command"
-msgstr "缺少命令"
+msgstr "缺失的命令"
 
 #: actions.cpp:953
 msgid "Synax error: Missing equal sign (=) in action output line: {}"

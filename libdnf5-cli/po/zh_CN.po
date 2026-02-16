@@ -1,0 +1,448 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# Charles Lee <lchopn@gmail.com>, 2025.
+# Weblate Translation Memory <noreply-mt-weblate-translation-memory@weblate.org>, 2025.
+# Zongyuan He <lovenemesis@gmail.com>, 2025.
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-07-26 03:48+0000\n"
+"PO-Revision-Date: 2025-12-30 19:58+0000\n"
+"Last-Translator: Weblate Translation Memory <noreply-mt-weblate-translation-"
+"memory@weblate.org>\n"
+"Language-Team: Chinese (Simplified) <https://translate.fedoraproject.org/"
+"projects/dnf5/libdnf5-cli/zh_CN/>\n"
+"Language: zh_CN\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Weblate 5.15.1\n"
+
+#: argument_parser.cpp:68
+#, c++-format
+msgid "Misconfigured alias \"{}\": cannot convert \"{}\" to a number"
+msgstr "配置错误的别名 \"{}\"：无法将 \"{}\" 转换为数字"
+
+#: argument_parser.cpp:76
+#, c++-format
+msgid "Misconfigured alias \"{}\": index \"{}\" out of range"
+msgstr "配置错误的别名 \"{}\"：索引 \"{}\" 超出范围"
+
+#: argument_parser.cpp:98
+#, c++-format
+msgid "\"{}\" not allowed together with named argument \"{}\""
+msgstr "\"{}\" 不允许同时使用命名参数 \"{}\""
+
+#: argument_parser.cpp:100
+#, c++-format
+msgid "\"{}\" not allowed in command \"{}\""
+msgstr "\"{}\" 不允许在命令 \"{}\" 中使用"
+
+#: argument_parser.cpp:102
+#, c++-format
+msgid "\"{}\" not allowed together with positional argument \"{}\""
+msgstr "\"{}\" 不允许和位置参数 \"{}\" 一起使用"
+
+#: argument_parser.cpp:147
+#, c++-format
+msgid "Argument id \"{}\" already registered in group \"{}\""
+msgstr "参数id“{}”已在组“{}”中注册"
+
+#: argument_parser.cpp:274
+#, c++-format
+msgid "Invalid character '.' in argument id \"{}\""
+msgstr "参数id \"{}\" 中包含无效字符\".\""
+
+#: argument_parser.cpp:382 argument_parser.cpp:387
+#, c++-format
+msgid "Too few values for positional argument \"{}\""
+msgstr "位置参数 \"{}\" 的值太少"
+
+#: argument_parser.cpp:548
+#, c++-format
+msgid "Missing value for named argument \"--{}\""
+msgstr "命名参数 \"--{}\" 的值缺失"
+
+#: argument_parser.cpp:556
+#, c++-format
+msgid "Unexpected value for named argument \"--{}\""
+msgstr "命名参数 \"--{}\" 的值不正确"
+
+#: argument_parser.cpp:598
+#, c++-format
+msgid "Missing value for named argument \"-{}\""
+msgstr "命名参数“-{}”的值缺失"
+
+#. print usage
+#: argument_parser.cpp:694
+msgid "Usage:"
+msgstr "用法："
+
+#: argument_parser.cpp:702
+msgid "Description:"
+msgstr "描述："
+
+#: argument_parser.cpp:979
+#, c++-format
+msgid "Command id \"{}\" already registered for command \"{}\""
+msgstr "命令 ID \"{}\" 已注册为命令 \"{}\""
+
+#: argument_parser.cpp:990
+#, c++-format
+msgid "Named argument id \"{}\" already registered for command \"{}\""
+msgstr "命名参数 ID \"{}\" 中已注册为命令 \"{}\""
+
+#: argument_parser.cpp:1000
+#, c++-format
+msgid "Positional argument id \"{}\" already registered for command \"{}\""
+msgstr "位置参数 id \"{}\" 已注册为命令 \"{}\""
+
+#: argument_parser.cpp:1010
+#, c++-format
+msgid "Group id \"{}\" already registered for command \"{}\""
+msgstr "组 ID \"{}\"已注册为命令 \"{}\""
+
+#: argument_parser.cpp:1037
+#, c++-format
+msgid "Command id \"{}\" does not contain subcommand with id \"{}\""
+msgstr "命令ID \"{}\" 不包含ID为 \"{}\" 的子命令"
+
+#: argument_parser.cpp:1045
+#, c++-format
+msgid "Command id \"{}\" does not contain named argument with id \"{}\""
+msgstr "命令ID \"{}\" 不包含ID为 \"{}\" 的命名参数"
+
+#: argument_parser.cpp:1053
+#, c++-format
+msgid "Command id \"{}\" does not contain positional argument with id \"{}\""
+msgstr "命令ID \"{}\" 不包含ID为 \"{}\" 的位置参数"
+
+#: argument_parser.cpp:1060
+#, c++-format
+msgid "Command id \"{}\" does not contain group with id \"{}\""
+msgstr "命令ID \"{}\" 不包含ID为 \"{}\" 的组"
+
+#: argument_parser.cpp:1177 argument_parser.cpp:1388
+#, c++-format
+msgid "Unknown argument \"{}\" for command \"{}\""
+msgstr "未知参数 \"{}\" 存在于命令 \"{}\" 中"
+
+#: argument_parser.cpp:1192 argument_parser.cpp:1403
+#, c++-format
+msgid "Missing positional argument \"{}\" for command \"{}\""
+msgstr "缺失位置参数 \"{}\" 于命令 \"{}\" 中"
+
+#: argument_parser.cpp:1274
+#, c++-format
+msgid "Missing value for command alias \"{}\""
+msgstr "命令别名 \"{}\" 缺失值"
+
+#: argument_parser.cpp:1610
+#, c++-format
+msgid "Named argument with path id \"{}\" not found"
+msgstr "未找到路径ID为 \"{}\" 的命名参数"
+
+#: argument_parser.cpp:1620
+#, c++-format
+msgid "Positional argument with path id \"{}\" not found"
+msgstr "路径ID为\"{}\"的位置参数未找到"
+
+#: exception.cpp:30
+msgid "Operation aborted by the user."
+msgstr "操作被用户中止。"
+
+#: exception.cpp:33
+msgid "Failed to resolve the transaction"
+msgstr "无法解析事务"
+
+#: output/moduleinfo.cpp:36
+msgid "Hint: [d]efault, [e]nabled, [x]disabled, [i]nstalled, [a]ctive"
+msgstr "提示：[d]默认，[e]已启用，[x]已禁用，[i]已安装，[a]已激活"
+
+#: output/modulelist.cpp:39
+msgid "Hint: [d]efault, [e]nabled, [x]disabled, [i]nstalled"
+msgstr "提示：[d]默认，[e]已启用，[x]已禁用，[i]已安装"
+
+#. Note for translators: This is a right-aligned column separator in
+#. a package properties table as in "Name    : bash".
+#: output/packageinfo.cpp:57
+msgid " : "
+msgstr " : "
+
+#. Add package
+#: output/packageinfo.cpp:63
+msgid "Name"
+msgstr "名称"
+
+#: output/packageinfo.cpp:68
+msgid "Epoch"
+msgstr "时期"
+
+#: output/packageinfo.cpp:69 output/transaction_table.cpp:289
+msgid "Version"
+msgstr "版本"
+
+#: output/packageinfo.cpp:70
+msgid "Release"
+msgstr "发布"
+
+#: output/packageinfo.cpp:71
+msgid "Architecture"
+msgstr "架构"
+
+#: output/packageinfo.cpp:75
+msgid "Obsoletes"
+msgstr "废弃"
+
+#: output/packageinfo.cpp:85
+msgid "Download size"
+msgstr "下载大小"
+
+#: output/packageinfo.cpp:89
+msgid "Installed size"
+msgstr "安装大小"
+
+#: output/packageinfo.cpp:91
+msgid "Source"
+msgstr "来源"
+
+#: output/packageinfo.cpp:94
+msgid "From repository"
+msgstr "来自仓库"
+
+#: output/packageinfo.cpp:96 output/transaction_table.cpp:295
+msgid "Repository"
+msgstr "仓库"
+
+#: output/packageinfo.cpp:98
+msgid "Summary"
+msgstr "概况"
+
+#: output/packageinfo.cpp:99
+msgid "URL"
+msgstr "URL"
+
+#: output/packageinfo.cpp:100
+msgid "License"
+msgstr "协议"
+
+#: output/packageinfo.cpp:104
+msgid "Description"
+msgstr "描述"
+
+#: output/packageinfo.cpp:109
+msgid "Vendor"
+msgstr "供应商"
+
+#: output/search.cpp:45
+msgid " (exact)"
+msgstr " （精确）"
+
+#: output/search.cpp:90
+msgid "No matches found."
+msgstr "未找到匹配项。"
+
+#: output/search.cpp:101
+msgid "Matched fields: "
+msgstr "匹配字段： "
+
+#: output/transaction_table.cpp:127
+msgid "Transaction Summary:\n"
+msgstr "事务摘要：\n"
+
+#. Keep the replaceble number aligned across all messages.
+#: output/transaction_table.cpp:132
+#, c++-format
+msgid " Installing:      {:4} package\n"
+msgid_plural " Installing:      {:4} packages\n"
+msgstr[0] " 正在安装:      {:4} 个软件包\n"
+
+#. Keep the replaceble number aligned across all messages.
+#: output/transaction_table.cpp:141
+#, c++-format
+msgid " Reinstalling:    {:4} package\n"
+msgid_plural " Reinstalling:    {:4} packages\n"
+msgstr[0] " 正在重新安装:    {:4} 个软件包\n"
+
+#. Keep the replaceble number aligned across all messages.
+#: output/transaction_table.cpp:150
+#, c++-format
+msgid " Upgrading:       {:4} package\n"
+msgid_plural " Upgrading:       {:4} packages\n"
+msgstr[0] " 正在升级:       {:4} 个软件包\n"
+
+#. Keep the replaceble number aligned across all messages.
+#: output/transaction_table.cpp:159
+#, c++-format
+msgid " Replacing:       {:4} package\n"
+msgid_plural " Replacing:       {:4} packages\n"
+msgstr[0] " 正在替换:       {:4} 个软件包\n"
+
+#. Keep the replaceble number aligned across all messages.
+#: output/transaction_table.cpp:168
+#, c++-format
+msgid " Removing:        {:4} package\n"
+msgid_plural " Removing:        {:4} packages\n"
+msgstr[0] " 正在移除:        {:4} 个软件包\n"
+
+#. Keep the replaceble number aligned across all messages.
+#: output/transaction_table.cpp:177
+#, c++-format
+msgid " Downgrading:     {:4} package\n"
+msgid_plural " Downgrading:     {:4} packages\n"
+msgstr[0] " 正在降级:     {:4} 个软件包\n"
+
+#. Keep the replaceble number aligned across all messages.
+#: output/transaction_table.cpp:186
+#, c++-format
+msgid " Changing reason: {:4} package\n"
+msgid_plural " Changing reason: {:4} packages\n"
+msgstr[0] " 正在变更原因: {:4} 个软件包\n"
+
+#. Keep the replaceble number aligned across all messages.
+#: output/transaction_table.cpp:195
+#, c++-format
+msgid " Skipping:        {:4} package\n"
+msgid_plural " Skipping:        {:4} packages\n"
+msgstr[0] " 正在跳过:        {:4} 个软件包\n"
+
+#: output/transaction_table.cpp:277
+msgid "Package"
+msgstr "软件包"
+
+#: output/transaction_table.cpp:283
+msgid "Arch"
+msgstr "架构"
+
+#: output/transaction_table.cpp:301
+msgid "Size"
+msgstr "大小"
+
+#: output/transaction_table.cpp:357 output/transaction_table.cpp:451
+#, c++-format
+msgid "{} -> {}"
+msgstr "{} -> {}"
+
+#: output/transaction_table.cpp:373
+#, c++-format
+msgid "replacing {}"
+msgstr "替换 {}"
+
+#: output/transaction_table.cpp:409 output/transaction_table.cpp:426
+msgid " <name-unset>"
+msgstr " <名称未设置>"
+
+#: output/transaction_table.cpp:457
+msgid "replacing "
+msgstr "替换 "
+
+#: output/transaction_table.cpp:470
+msgid "Skipping packages with conflicts:"
+msgstr "跳过有冲突的包："
+
+#: output/transaction_table.cpp:472
+msgid "Skipping packages with broken dependencies:"
+msgstr "跳过依赖关系损坏的软件包："
+
+#: output/transaction_table.cpp:533
+msgid "Installing dependencies:"
+msgstr "安装依赖项："
+
+#: output/transaction_table.cpp:535
+msgid "Installing weak dependencies:"
+msgstr "安装弱依赖项:"
+
+#: output/transaction_table.cpp:537
+msgid "Installing group/module packages:"
+msgstr "安装组/模块包:"
+
+#: output/transaction_table.cpp:539
+msgid "Installing:"
+msgstr "正在安装:"
+
+#: output/transaction_table.cpp:543
+msgid "Upgrading:"
+msgstr "正在升级:"
+
+#: output/transaction_table.cpp:546
+msgid "Downgrading:"
+msgstr "正在降级:"
+
+#: output/transaction_table.cpp:549
+msgid "Reinstalling:"
+msgstr "正在重新安装:"
+
+#: output/transaction_table.cpp:553
+msgid "Removing dependent packages:"
+msgstr "正在移除依赖软件包:"
+
+#: output/transaction_table.cpp:555
+msgid "Removing unused dependencies:"
+msgstr "正在移除未使用的依赖项:"
+
+#: output/transaction_table.cpp:557
+msgid "Removing:"
+msgstr "正在移除:"
+
+#: output/transaction_table.cpp:561
+msgid "Changing reason:"
+msgstr "变更原因："
+
+#: output/transaction_table.cpp:593
+msgid "Installing groups dependencies:"
+msgstr "正在安装组依赖:"
+
+#: output/transaction_table.cpp:595
+msgid "Installing groups:"
+msgstr "正在安装组:"
+
+#: output/transaction_table.cpp:599
+msgid "Removing groups:"
+msgstr "正在移除组:"
+
+#: output/transaction_table.cpp:602
+msgid "Upgrading groups:"
+msgstr "正在升级组:"
+
+#: output/transaction_table.cpp:629
+msgid "Installing environmental groups:"
+msgstr "正在安装环境组:"
+
+#: output/transaction_table.cpp:632
+msgid "Removing environmental groups:"
+msgstr "正在移除环境组:"
+
+#: output/transaction_table.cpp:635
+msgid "Upgrading environmental groups:"
+msgstr "正在升级环境组:"
+
+#: output/transaction_table.cpp:662
+msgid "Enabling module streams:"
+msgstr "正在启用模块流:"
+
+#: output/transaction_table.cpp:665
+msgid "Disabling modules:"
+msgstr "正在禁用模块:"
+
+#: output/transaction_table.cpp:668
+msgid "Resetting modules:"
+msgstr "正在重置模块:"
+
+#: output/transaction_table.cpp:671
+msgid "Switching module streams:"
+msgstr "正在切换模块流:"
+
+#: output/transaction_table.cpp:745
+msgid "Nothing to do."
+msgstr "无需任何处理。"
+
+#: progressbar/multi_progress_bar.cpp:36
+msgid "Total"
+msgstr "总计"
+
+#: session.cpp:149
+msgid "Missing command"
+msgstr "缺失的命令"

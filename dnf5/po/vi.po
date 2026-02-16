@@ -2,13 +2,14 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # Tri Phuong Nguyen <triphuongvasa@gmail.com>, 2025.
+# Khoa Le <inctenone@gmail.com>, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-07-26 03:48+0000\n"
-"PO-Revision-Date: 2025-09-02 14:20+0000\n"
-"Last-Translator: Tri Phuong Nguyen <triphuongvasa@gmail.com>\n"
+"PO-Revision-Date: 2025-11-28 17:00+0000\n"
+"Last-Translator: Khoa Le <inctenone@gmail.com>\n"
 "Language-Team: Vietnamese <https://translate.fedoraproject.org/projects/dnf5/"
 "dnf5/vi/>\n"
 "Language: vi\n"
@@ -16,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.13\n"
+"X-Generator: Weblate 5.14.3\n"
 
 #: cmdline_aliases.cpp:84 context.cpp:301 main.cpp:1357
 msgid ", "
@@ -37,6 +38,8 @@ msgid ""
 "Unknown attribute \"{}\" of attached named argument for alias \"{}\" in file "
 "\"{}\" on line {}: {}"
 msgstr ""
+"Thuộc tính không xác định \"{}\" của đối số có tên đính kèm cho bí danh "
+"\"{}\" trong tệp \"{}\" trên dòng {}: {}"
 
 #: cmdline_aliases.cpp:171
 #, c++-format
@@ -1343,7 +1346,7 @@ msgstr ""
 #: main.cpp:249 main.cpp:288
 #, c++-format
 msgid "{}: Badly formatted argument value \"{}\""
-msgstr ""
+msgstr "{}: Giá trị đối số \"{}\" được định dạng sai"
 
 #: main.cpp:256
 #, c++-format

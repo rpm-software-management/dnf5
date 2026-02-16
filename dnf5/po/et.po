@@ -3,13 +3,14 @@
 # This file is distributed under the same license as the PACKAGE package.
 # H A <contact+fedora@hen.ee>, 2025.
 # Henri Aunin <contact+fedora@hen.ee>, 2025.
+# Vahur Schwarze <schwarzevahur@gmail.com>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-07-26 03:48+0000\n"
-"PO-Revision-Date: 2025-03-09 03:55+0000\n"
-"Last-Translator: Henri Aunin <contact+fedora@hen.ee>\n"
+"PO-Revision-Date: 2026-01-05 10:20+0000\n"
+"Last-Translator: Vahur Schwarze <schwarzevahur@gmail.com>\n"
 "Language-Team: Estonian <https://translate.fedoraproject.org/projects/dnf5/"
 "dnf5/et/>\n"
 "Language: et\n"
@@ -17,47 +18,52 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.10.2\n"
+"X-Generator: Weblate 5.15.1\n"
 
 #: cmdline_aliases.cpp:84 context.cpp:301 main.cpp:1357
 msgid ", "
-msgstr ""
+msgstr ", "
 
 #: cmdline_aliases.cpp:145
 msgid ""
 "Attached named argument \"{}\" not found: {}: Requested in file \"{}\" on "
 "line {}: {}"
 msgstr ""
+"Lisatud nimetatud argumenti \"{}\" ei leitud {}: nõutud failis \"{}\" real {}"
+": {}"
 
 #: cmdline_aliases.cpp:159
 msgid ""
 "Unknown attribute \"{}\" of attached named argument for alias \"{}\" in file "
 "\"{}\" on line {}: {}"
 msgstr ""
+"Lisetatud nimetatud argumendi tundmatu atribuut \"{}\" aliase \"{}\" jaoks "
+"failis \"{}\" real {}: {}"
 
 #: cmdline_aliases.cpp:171
 msgid "Missing attribute \"id_path\" for alias \"{}\" in file \"{}\""
-msgstr ""
+msgstr "Puuduv atribuut \"id_asukoht\" aliase \"{}\" jaoks failis \"{}\""
 
 #: cmdline_aliases.cpp:208
 msgid "Unsupported version \"{}\" in file \"{}\". Supported versions: {}"
 msgstr ""
+"Mittetoetatatav versioon \"{}\" failis \"{}\". Toetatavad versioonid: \"{}\""
 
 #: cmdline_aliases.cpp:218
 msgid "Bad value type of attribute \"version\" in file \"{}\" on line {}: {}"
-msgstr ""
+msgstr "Halb atribuuti väärtuse tüüp \"versioon\" failis \"{}\" real {}: {}"
 
 #: cmdline_aliases.cpp:224
 msgid "Missing attribute \"version\" in file \"{}\""
-msgstr ""
+msgstr "Puuduv atribuut \"versioon\" failis \"{}\""
 
 #: cmdline_aliases.cpp:236
 msgid "Unknown key \"{}\" in file \"{}\" on line {}: {}"
-msgstr ""
+msgstr "Tundmatu võti \"{}\" failis \"{}\" real {}: {}"
 
 #: cmdline_aliases.cpp:253
 msgid "Empty or bad element id path in file \"{}\" on line {}: {}"
-msgstr ""
+msgstr "Tühi või vale elementi ID asukoht failis \"{}\" real {}: {}"
 
 #: cmdline_aliases.cpp:272
 msgid ""

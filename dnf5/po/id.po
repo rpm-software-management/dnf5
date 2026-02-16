@@ -3,13 +3,13 @@
 # This file is distributed under the same license as the PACKAGE package.
 # Ega Natha <ega8642@gmail.com>, 2025.
 # Weblate Translation Memory <noreply-mt-weblate-translation-memory@weblate.org>, 2025.
-# Arif Budiman <arifpedia@gmail.com>, 2025.
+# Arif Budiman <arifpedia@gmail.com>, 2025, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-07-26 03:48+0000\n"
-"PO-Revision-Date: 2025-10-27 00:54+0000\n"
+"PO-Revision-Date: 2026-01-24 15:58+0000\n"
 "Last-Translator: Arif Budiman <arifpedia@gmail.com>\n"
 "Language-Team: Indonesian <https://translate.fedoraproject.org/projects/dnf5/"
 "dnf5/id/>\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.13.3\n"
+"X-Generator: Weblate 5.15.2\n"
 
 #: cmdline_aliases.cpp:84 context.cpp:301 main.cpp:1357
 msgid ", "
@@ -248,14 +248,14 @@ msgid ""
 "Show advisories containing newer versions of installed packages. This is the "
 "default behavior."
 msgstr ""
-"Tampilkan advisori yang berisi versi terbaru dari paket yang telah dipasang. "
-"Ini adalah perilaku default."
+"Tampilkan advisori yang berisi versi yang lebih baru dari paket yang "
+"terpasang. Ini adalah perilaku default."
 
 #: commands/advisory/arguments.hpp:57
 msgid ""
 "Show advisories containing equal and older versions of installed packages."
 msgstr ""
-"Tampilkan advisori yang berisi versi yang sama atau lebih lama dari paket "
+"Tampilkan advisori yang berisi versi yang sama dan lebih lama dari paket "
 "yang terpasang."
 
 #: commands/advisory/arguments.hpp:69
@@ -263,16 +263,16 @@ msgid ""
 "Show advisories containing newer versions of installed packages for which a "
 "newer version is available."
 msgstr ""
-"Tampilkan advisori yang berisi versi terbaru dari paket yang telah dipasang, "
-"untuk paket-paket tersebut tersedia versi yang lebih baru."
+"Tampilkan advisori yang berisi versi yang lebih baru dari paket yang "
+"terpasang yang untuknya versi yang lebih baru tersedia."
 
 #: commands/advisory/arguments.hpp:82
 msgid ""
 "Show only advisories containing packages with specified names. List option, "
 "supports globs."
 msgstr ""
-"Tampilkan hanya advisori yang berisi paket dengan nama yang ditentukan. "
-"Daftar opsi, mendukung globs."
+"Tampilkan hanya advisori yang berisi paket dengan nama yang ditentukan. Opsi "
+"daftar, mendukung glob."
 
 #: commands/advisory/arguments.hpp:83 commands/history/arguments.hpp:81
 msgid "PACKAGE_NAME,..."
@@ -280,15 +280,15 @@ msgstr "NAMA_PAKET,..."
 
 #: commands/advisory/arguments.hpp:90
 msgid "List of patterns matched against advisory names."
-msgstr "Daftar pola yang cocok dengan nama advisori."
+msgstr "Daftar pola yang dicocokkan terhadap nama advisori."
 
 #: commands/advisory/arguments.hpp:100
 msgid "Show only advisories referencing a bugzilla."
-msgstr "Hanya tampilkan advisori yang mereferensikan bugzilla."
+msgstr "Tampilkan hanya advisori yang merujuk ke Bugzilla."
 
 #: commands/advisory/arguments.hpp:107
 msgid "Show only advisories referencing a CVE."
-msgstr "Hanya tampilkan advisori yang mereferensikan CVE."
+msgstr "Tampilkan hanya advisori yang merujuk ke CVE."
 
 #: commands/advisory_shared.hpp:76
 msgid "No advisory found matching the requested name: \"{}\""
@@ -311,7 +311,7 @@ msgid ""
 "Include content contained in advisories with specified name. List option."
 msgstr ""
 "Sertakan konten yang terdapat dalam advisori dengan nama yang ditentukan. "
-"Pilihan daftar."
+"Opsi daftar."
 
 #: commands/advisory_shared.hpp:159
 msgid "ADVISORY_NAME,..."
@@ -339,12 +339,12 @@ msgid ""
 "option. Can be \"critical\", \"important\", \"moderate\", \"low\", \"none\"."
 msgstr ""
 "Sertakan konten yang terdapat dalam advisori dengan tingkat keparahan yang "
-"ditentukan. Daftar opsi. Dapat berupa \"kritis\", \"penting\", \"sedang\", "
-"‘rendah’, \"tidak ada\"."
+"ditentukan. Opsi daftar. Dapat berupa \"critical\", \"important\", "
+"\"moderate\", \"low\", \"none\"."
 
 #: commands/advisory_shared.hpp:200
 msgid "ADVISORY_SEVERITY,..."
-msgstr "KEPARAHAN_ADVISORI,..."
+msgstr "TINGKAT_KEPARAHAN_ADVISORI,..."
 
 #: commands/advisory_shared.hpp:212
 msgid ""
@@ -352,11 +352,11 @@ msgid ""
 "List option."
 msgstr ""
 "Sertakan konten yang terdapat dalam advisori yang memperbaiki ID Bugzilla, "
-"misalnya 123123. Daftar opsi."
+"mis. 123123. Opsi daftar."
 
 #: commands/advisory_shared.hpp:213
 msgid "BUGZILLA_ID,..."
-msgstr "BUGZILLA_ID,..."
+msgstr "ID_BUGZILLA,..."
 
 #: commands/advisory_shared.hpp:223
 msgid ""
@@ -364,11 +364,11 @@ msgid ""
 "Vulnerabilities and Exposures) ID, Eg. CVE-2201-0123. List option."
 msgstr ""
 "Sertakan konten yang terdapat dalam advisori yang memperbaiki ID CVE (Common "
-"Vulnerabilities and Exposures), misalnya CVE-2201-0123. Daftar opsi."
+"Vulnerabilities and Exposures), mis. CVE-2201-0123. Opsi daftar."
 
 #: commands/advisory_shared.hpp:225
 msgid "CVE_ID,..."
-msgstr "CVE_ID,..."
+msgstr "ID_CVE,..."
 
 #: commands/autoremove/autoremove.cpp:38
 msgid "Remove all unneeded packages originally installed as dependencies."
@@ -429,7 +429,7 @@ msgstr "Pasang paket debuginfo."
 msgid ""
 "Upgrade or downgrade installed software to the latest available versions"
 msgstr ""
-"Tingkatkan atau turunkan perangkat lunak terpasang ke versi terakhir yang "
+"Upgrade atau downgrade perangkat lunak yang terpasang ke versi terbaru yang "
 "tersedia"
 
 #: commands/do/do.cpp:44
@@ -562,7 +562,7 @@ msgstr "Tampilkan hanya grup yang tersedia."
 
 #: commands/group/arguments.hpp:41
 msgid "Show also hidden groups."
-msgstr "Tampilkan juga grup yang tersembunyi."
+msgstr "Tampilkan juga grup tersembunyi."
 
 #: commands/group/arguments.hpp:48
 msgid "Show only installed groups."
@@ -573,8 +573,8 @@ msgid ""
 "Show only groups containing packages with specified names. List option, "
 "supports globs."
 msgstr ""
-"Tampilkan hanya grup yang berisi paket dengan nama yang ditentukan. Daftar "
-"opsi, mendukung globs."
+"Tampilkan hanya grup yang berisi paket dengan nama yang ditentukan. Opsi "
+"daftar, mendukung glob."
 
 #: commands/group/arguments.hpp:67
 msgid "Pattern matching group IDS."
@@ -1416,14 +1416,14 @@ msgstr ""
 
 #: main.cpp:249 main.cpp:288
 msgid "{}: Badly formatted argument value \"{}\""
-msgstr "{}: Nilai argumen yang tidak valid \"{}\""
+msgstr "{}: Nilai argumen berformat buruk \"{}\""
 
 #: main.cpp:256
 msgid ""
 "{}: Badly formatted argument value: Last key character cannot be '.': {}"
 msgstr ""
-"{}: Nilai argumen yang tidak valid: Karakter terakhir tidak boleh berupa ‘.’:"
-" {}"
+"{}: Nilai argumen berformat buruk: Karakter terakhir kunci tidak boleh '.': "
+"{}"
 
 #: main.cpp:269
 msgid "setopt: \"{0}\": {1}"

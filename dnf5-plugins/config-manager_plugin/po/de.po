@@ -4,13 +4,13 @@
 # Dennis Koerner <dennis@bumblebeeman.dev>, 2024.
 # Weblate Translation Memory <noreply-mt-weblate-translation-memory@weblate.org>, 2024.
 # Fabio D <fabio1977@arcor.de>, 2024.
-# Mario Blättermann <mario.blaettermann@gmail.com>, 2025.
+# Mario Blättermann <mario.blaettermann@gmail.com>, 2025, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-07-26 03:48+0000\n"
-"PO-Revision-Date: 2025-05-01 13:57+0000\n"
+"PO-Revision-Date: 2026-02-13 11:58+0000\n"
 "Last-Translator: Mario Blättermann <mario.blaettermann@gmail.com>\n"
 "Language-Team: German <https://translate.fedoraproject.org/projects/dnf5/"
 "dnf5-plugin-config-manager/de/>\n"
@@ -19,11 +19,11 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.11.1\n"
+"X-Generator: Weblate 5.15.2\n"
 
 #: addrepo.cpp:136
 msgid "from-repofile: \"{}\" file does not exist"
-msgstr "from-repofile: \"{}\" Datei existiert nicht"
+msgstr "from-repofile: „{}“ Datei existiert nicht"
 
 #: addrepo.cpp:139
 msgid "from-repofile: {}"
@@ -31,37 +31,36 @@ msgstr "from-repofile: {}"
 
 #: addrepo.cpp:169 setopt.cpp:83 setvar.cpp:49
 msgid "{}: Badly formatted argument value \"{}\""
-msgstr "{}: Schlecht formatierter Argumentwert \"{}\""
+msgstr "{}: Fehlerhaft formatierter Argumentwert „{}“"
 
 #: addrepo.cpp:179
 msgid "Cannot set repository option \"{}={}\": {}"
-msgstr "Repository-Option kann nicht gesetzt werden \"{}={}\": {}"
+msgstr "Paketquellen-Option „{}={}“ kann nicht gesetzt werden: {}"
 
 #: addrepo.cpp:187 setopt.cpp:138
 msgid "Sets the \"{}\" option again with a different value: \"{}\" != \"{}\""
-msgstr ""
-"Setzt die \"{}\" Option wieder auf einen anderen Wert: \"{}\" != \"{}\""
+msgstr "Setzt die „{}“-Option wieder auf einen anderen Wert: „{}“ != „{}“"
 
 #: addrepo.cpp:253
 msgid "Missing path to repository configuration directory"
-msgstr "Fehlender Pfad zum Repository-Konfigurationsverzeichnis"
+msgstr "Fehlender Pfad zum Paketquellen-Konfigurationsverzeichnis"
 
 #: addrepo.cpp:303
 msgid "Failed to copy repository configuration file \"{}\": {}"
-msgstr "Kopieren der Repository-Konfigurationsdatei \"{}\" fehlgeschlagen: {}"
+msgstr "Kopieren der Paketquellen-Konfigurationsdatei „{}“ fehlgeschlagen: {}"
 
 #: addrepo.cpp:314
 msgid "Failed to download repository configuration file \"{}\": {}"
 msgstr ""
-"Herunterladen der Repository-Konfigurationsdatei \"{}\" fehlgeschlagen: {}"
+"Herunterladen der Paketquellen-Konfigurationsdatei „{}“ fehlgeschlagen: {}"
 
 #: addrepo.cpp:342
 msgid ""
 "Error in added repository configuration file. Cannot set repository option "
 "\"{}={}\": {}"
 msgstr ""
-"Fehler in der hinzugefügten Repository-Konfigurationsdatei. Repository-"
-"Option kann nicht gesetzt werden \"{}={}\": {}"
+"Fehler in der hinzugefügten Paketquellen-Konfigurationsdatei. Paketquellen-"
+"Option „{}={}“ kann nicht gesetzt werden: {}"
 
 #: addrepo.cpp:376
 msgid "Bad baseurl: {}={}"
@@ -78,31 +77,31 @@ msgstr ""
 
 #: addrepo.cpp:429
 msgid "Failed to save repository configuration file \"{}\": {}"
-msgstr "Speichern der Repository-Konfigurationsdatei \"{}\" fehlgeschlagen: {}"
+msgstr "Speichern der Paketquellen-Konfigurationsdatei „{}“ fehlgeschlagen: {}"
 
 #: addrepo.cpp:451
 msgid ""
 "File \"{}\" already exists and configures repositories with IDs \"{}\". Add "
 "\"--add-or-replace\" or \"--overwrite\"."
 msgstr ""
-"Datei \"{}\" existiert bereits und konfiguriert Repositories mit IDs\"{}\". "
-"Fügen Sie \"--add-or-replace\" oder \"--overwrite\" hinzu."
+"Datei „{}“ existiert bereits und konfiguriert Paketquellen mit IDs „{}“. "
+"Fügen Sie „--add-or-replace“ oder „--overwrite“ hinzu."
 
 #: addrepo.cpp:454
 msgid ""
 "File \"{}\" already exists and configures repositories with IDs \"{}\". Add "
 "\"--overwrite\" to overwrite."
 msgstr ""
-"Datei \"{}\" existiert bereits und konfiguriert Repositories mit IDs \"{}\". "
-"Fügen Sie \"--overwrite\" zum Überschreiben hinzu."
+"Datei „{}“ existiert bereits und konfiguriert Paketquellen mit IDs „{}“. "
+"Fügen Sie „--overwrite“ zum Überschreiben hinzu."
 
 #: addrepo.cpp:474 addrepo.cpp:500
 msgid "A repository with id \"{}\" already configured in file: {}"
-msgstr "Ein Repository mit ID \"{}\" ist bereits konfiguriert in Datei: {}"
+msgstr "Eine Paketquelle mit ID „{}“ ist bereits konfiguriert in Datei: {}"
 
 #: addrepo.cpp:486 setopt.cpp:263
 msgid "Cannot read repositories from directory \"{}\": {}"
-msgstr "Kann Repositories nicht aus dem Verzeichnis \"{}\" lesen: {}"
+msgstr "Paketquellen können nicht aus dem Verzeichnis „{}“ gelesen werden: {}"
 
 #: config-manager.cpp:43
 msgid "Manage configuration"
@@ -112,41 +111,40 @@ msgstr "Konfiguration verwalten"
 msgid ""
 "{}: Badly formatted argument value: Last key character cannot be '.': {}"
 msgstr ""
-"{}: Fehlerhaft formatierter Argumentwert: Letzter Schlüsselwert kann nicht "
-"».« sein: {}"
+"{}: Fehlerhaft formatierter Argumentwert: Letzter Schlüsselwert darf nicht "
+"„.“ sein: {}"
 
 #: setopt.cpp:100 unsetopt.cpp:81
 msgid "{}: Empty repository id is not allowed: {}"
-msgstr "{}: Leere Repository-ID ist nicht erlaubt: {}"
+msgstr "{}: Leere Paketquellen-ID ist nicht erlaubt: {}"
 
 #: setopt.cpp:109
 msgid "Cannot set repository option \"{}\": {}"
-msgstr "Kann Repository-Option \"{}\" nicht setzen: {}"
+msgstr "Paketquellen-Option „{}“ kann nicht gesetzt werden: {}"
 
 #: setopt.cpp:116 setopt.cpp:179
 msgid ""
 "Sets the \"{}\" option of the repository \"{}\" again with a different "
 "value: \"{}\" != \"{}\""
 msgstr ""
-"Setzt die \"{}\" Option des Repository \"{}\" mit einem anderen Wert erneut: "
-"\"{}\" != \"{}\""
+"Setzt die „{}“-Option der Paketquelle „{}“ mit einem anderen Wert erneut: „{}"
+"“ != „{}“"
 
 #: setopt.cpp:130
 msgid "Cannot set option: \"{}\": {}"
-msgstr "Kann Option nicht setzen: \"{}\": {}"
+msgstr "Option kann nicht gesetzt werden: \"{}\": {}"
 
 #: setopt.cpp:170
 msgid "No matching repository to modify: {}"
-msgstr "Kein passendes Repository zum Ändern gefunden: {}"
+msgstr "Keine passende Paketquelle zum Ändern gefunden: {}"
 
 #: setvar.cpp:60
 msgid "Cannot set \"{}\": Variable \"{}\" is read-only"
-msgstr "Kann \"{}\" nicht setzen: Variable \"{}\" ist schreibgeschützt"
+msgstr "„{}“ kann nicht gesetzt werden: Variable „{}“ ist schreibgeschützt"
 
 #: setvar.cpp:68
 msgid "Sets the \"{}\" variable again with a different value: \"{}\" != \"{}\""
-msgstr ""
-"Setzt die Variable \"{}\" mit einem anderen Wert erneut: \"{}\" != \"{}\""
+msgstr "Setzt die Variable „{}“ mit einem anderen Wert erneut: „{}“ != „{}“"
 
 #: setvar.cpp:97 unsetvar.cpp:63
 msgid "Missing path to vars directory"
@@ -154,20 +152,20 @@ msgstr "Fehlender Pfad zum Variablenverzeichnis"
 
 #: setvar.cpp:110
 msgid "Cannot write variable to file \"{}\": {}"
-msgstr "Kann Variable nicht in Datei \"{}\" schreiben: {}"
+msgstr "Variable kann nicht in Datei „{}“ geschrieben werden: {}"
 
 #: shared.hpp:58
 msgid ""
 "The path \"{}\" exists, but it is not a directory or a symlink to a "
 "directory."
 msgstr ""
-"Der Pfad \"{}\" existiert, ist aber kein Verzeichnis oder symbolischer Link "
-"zu einem Verzeichnis."
+"Der Pfad „{}“ existiert, ist aber kein Verzeichnis oder symbolischer Link zu "
+"einem Verzeichnis."
 
 #: shared.hpp:63
 msgid "The path \"{}\" exists, but it is a symlink to a non-existent object."
 msgstr ""
-"Der Pfad \"{}\" existiert, ist aber ein symbolischer Link zu einem nicht "
+"Der Pfad „{}“ existiert, ist aber ein symbolischer Link zu einem nicht "
 "existierenden Objekt."
 
 #: shared.hpp:69
@@ -175,18 +173,18 @@ msgid ""
 "Directory \"{}\" does not exist. Add \"--create-missing-dir\" to create "
 "missing directories."
 msgstr ""
-"Verzeichnis \"{}\" existiert nicht. Fügen Sie \"--create-missing-dir\" "
-"hinzu, um fehlende Verzeichnisse zu erzeugen."
+"Verzeichnis „{}“ existiert nicht. Fügen Sie „--create-missing-dir“ hinzu, um "
+"fehlende Verzeichnisse anzulegen."
 
 #: shared.hpp:80
 msgid "Variable name can contain only ASCII letters, numbers and '_': {}"
-msgstr "Variablenname kann nur ASCII-Zeichen, Zahlen und '_' enthalten:{}"
+msgstr "Variablenname darf nur ASCII-Zeichen, Zahlen und '_' enthalten: {}"
 
 #: unsetopt.cpp:93
 msgid "config-manager: Request to remove unsupported repository option: {}"
 msgstr ""
 "config-manager: Anforderung zur Entfernung einer nicht unterstützten "
-"Repository-Option: {}"
+"Paketquellen-Option: {}"
 
 #: unsetopt.cpp:105
 msgid "config-manager: Request to remove unsupported main option: {}"
@@ -214,23 +212,23 @@ msgid ""
 "config-manager: Request to remove repository option but repoid is not "
 "present in the overrides: {}"
 msgstr ""
-"config-manager: Anfrage zur Entfernung einer Repository-Option, dessen Repo-"
-"ID nicht in den Überschreibungen vorhanden ist: {}"
+"config-manager: Anfrage zur Entfernung einer Paketquellen-Option, deren "
+"Paketquellen-ID nicht in den Überschreibungen vorhanden ist: {}"
 
 #: unsetopt.cpp:194
 msgid ""
 "config-manager: Request to remove repository option but it is not present in "
 "the overrides: {}.{}"
 msgstr ""
-"config-manager: Anfrage zur Entfernung einer Repository-Option, die nicht in "
-"den Überschreibungen vorhanden ist: {}"
+"config-manager: Anfrage zur Entfernung einer Paketquellen-Option, die nicht "
+"in den Überschreibungen vorhanden ist: {}"
 
 #: unsetopt.cpp:214
 msgid ""
 "config-manager: Request to remove repository option but file with overrides "
 "not found: {}"
 msgstr ""
-"config-manager: Anfrage zur Entfernung einer Repository-Option, aber die "
+"config-manager: Anfrage zur Entfernung einer Paketquellen-Option, aber die "
 "Datei mit Überschreibungen wurde nicht gefunden: {}"
 
 #: unsetvar.cpp:69
@@ -251,4 +249,4 @@ msgstr ""
 
 #: unsetvar.cpp:88
 msgid "Cannot remove variable file \"{}\": {}"
-msgstr "Kann Variablendatei \"{}\" nicht entfernen:{}"
+msgstr "Variablendatei „{}“ kann nicht entfernt werden:{}"
