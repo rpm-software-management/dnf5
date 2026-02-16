@@ -1091,6 +1091,9 @@ mkdir -p %{buildroot}%{_libdir}/libdnf5/plugins
 %ldconfig_scriptlets
 
 %changelog
+* Mon Feb 16 2026 Packit Team <hello@packit.dev> - 5.4.0.0-1
+- New upstream release 5.4.0.0
+
 * Fri Nov 21 2025 Petr Pisar <ppisar@redhat.com> - 5.3.1.0-2
 - Postrelease version bump
 
