@@ -1,7 +1,7 @@
-libdnf5::xdg
-============
+libdnf5::sack
+=============
 
 
-.. doxygennamespace:: libdnf5::xdg
+.. doxygennamespace:: libdnf5::sack
     :members:
     :content-only:
