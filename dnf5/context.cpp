@@ -44,6 +44,7 @@
 #include <libdnf5/utils/fs/file.hpp>
 #include <libdnf5/utils/patterns.hpp>
 #include <rpm/rpmtypes.h>
+#include <signal.h>
 
 #include <algorithm>
 #include <cctype>
@@ -61,6 +62,47 @@ namespace dnf5 {
 namespace {
 
 constexpr const char * STORED_REPO_PREFIX = "@stored_transaction";
+
+// Helper function to format active transaction information for error messages
+std::string format_active_transaction_info(const libdnf5::base::ActiveTransactionInfo & info) {
+    std::string result;
+
+    if (!info.get_description().empty()) {
+        result += libdnf5::utils::sformat(_("Command: {}"), info.get_description());
+    }
+
+    if (info.get_pid() > 0) {
+        if (!result.empty()) {
+            result += "\n";
+        }
+        if (kill(info.get_pid(), 0) == 0) {
+            result += libdnf5::utils::sformat(_("Process ID: {} (still running)"), info.get_pid());
+        } else {
+            result += libdnf5::utils::sformat(_("Process ID: {}"), info.get_pid());
+        }
+    }
+
+    if (info.get_start_time() > 0) {
+        if (!result.empty()) {
+            result += "\n";
+        }
+        result +=
+            libdnf5::utils::sformat(_("Started: {}"), libdnf5::utils::string::format_epoch(info.get_start_time()));
+    }
+
+    if (!info.get_comment().empty()) {
+        if (!result.empty()) {
+            result += "\n";
+        }
+        result += libdnf5::utils::sformat(_("Comment: {}"), info.get_comment());
+    }
+
+    if (!result.empty()) {
+        result = _("Details about the currently running transaction:\n") + result;
+    }
+
+    return result;
+}
 
 // The `KeyImportRepoCB` class implements callback only for importing repository key.
 class KeyImportRepoCB : public libdnf5::repo::RepoCallbacks2_1 {
@@ -274,6 +316,18 @@ void Context::Impl::store_offline(libdnf5::base::Transaction & transaction) {
     if (result != libdnf5::base::Transaction::TransactionRunResult::SUCCESS) {
         print_error(libdnf5::utils::sformat(
             _("Transaction failed: {}"), libdnf5::base::Transaction::transaction_result_to_string(result)));
+
+        // For transaction lock errors, provide detailed information about the running transaction
+        if (result == libdnf5::base::Transaction::TransactionRunResult::ERROR_LOCK) {
+            auto * active_info = transaction.get_concurrent_transaction();
+            if (active_info) {
+                auto info_str = format_active_transaction_info(*active_info);
+                if (!info_str.empty()) {
+                    print_error(info_str);
+                }
+            }
+        }
+
         for (auto const & entry : transaction.get_gpg_signature_problems()) {
             print_error(entry);
         }
@@ -429,6 +483,18 @@ void Context::Impl::download_and_run(libdnf5::base::Transaction & transaction) {
     if (result != libdnf5::base::Transaction::TransactionRunResult::SUCCESS) {
         print_error(libdnf5::utils::sformat(
             _("Transaction failed: {}"), libdnf5::base::Transaction::transaction_result_to_string(result)));
+
+        // For transaction lock errors, provide detailed information about the running transaction
+        if (result == libdnf5::base::Transaction::TransactionRunResult::ERROR_LOCK) {
+            auto * active_info = transaction.get_concurrent_transaction();
+            if (active_info) {
+                auto info_str = format_active_transaction_info(*active_info);
+                if (!info_str.empty()) {
+                    print_error(info_str);
+                }
+            }
+        }
+
         for (auto const & entry : transaction.get_gpg_signature_problems()) {
             print_error(entry);
         }
