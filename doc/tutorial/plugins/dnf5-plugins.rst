@@ -32,7 +32,7 @@ in the ``dnf5/main.cpp`` file. Instead, we will implement the ``dnf5::IPlugin``
 interface by reusing the existing boilerplate code, as shown below (refer to the
 comments in the provided code for the expected input locations):
 
-.. literalinclude:: ../../templates/dnf5-plugin/template_cmd_plugin.cpp
+.. literalinclude:: ../../templates/tests/dnf5-plugin/template_cmd_plugin.cpp
     :language: c++
     :linenos:
 
@@ -60,7 +60,7 @@ Building the Binary
 
 To create the plugin binary, add a CMake build script:
 
-.. literalinclude:: ../../templates/dnf5-plugin/CMakeLists.txt
+.. literalinclude:: ../../templates/tests/dnf5-plugin/CMakeLists.txt
     :language: cmake
     :linenos:
 

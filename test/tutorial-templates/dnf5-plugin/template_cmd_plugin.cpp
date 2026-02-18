@@ -1,4 +1,4 @@
-#include "template.hpp"
+#include "template_cmd.hpp"
 
 #include <dnf5/iplugin.hpp>
 
@@ -6,7 +6,7 @@ using namespace dnf5;
 
 namespace {
 
-constexpr const char * PLUGIN_NAME{"template"};
+constexpr const char * PLUGIN_NAME{"dnf5_template_plugin"};
 constexpr PluginVersion PLUGIN_VERSION{.major = 1, .minor = 0, .micro = 0};
 constexpr PluginAPIVersion REQUIRED_PLUGIN_API_VERSION{.major = 2, .minor = 0};
 

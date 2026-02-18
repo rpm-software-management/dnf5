@@ -1,1 +1,0 @@
-../command/template.cpp
