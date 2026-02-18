@@ -422,10 +422,16 @@ int Transaction::ts_change_callback(int event, rpmte te, rpmte other, void * dat
         rpmteSetUserdata(te, transaction->last_added_item);
         transaction->last_item_added_ts_element = true;
 #if defined(HAVE_RPMTE_SETVFYLEVEL)
-        // honor per-repo pkg_gpgcheck=0 in rpm's enforcing signature mode
-        auto pkg = transaction->last_added_item->get_package();
-        auto gpgcheck = pkg.get_repo()->get_config().get_pkg_gpgcheck_option();
-        if (gpgcheck.get_value() == false) {
+        auto repo = transaction->last_added_item->get_package().get_repo();
+        bool gpgcheck = true;
+        if (repo->get_type() == libdnf5::repo::Repo::Type::COMMANDLINE) {
+            // honor localpkg_gpgcheck=0 in rpm's enforcing signature mode
+            gpgcheck = transaction->get_base()->get_config().get_localpkg_gpgcheck_option().get_value();
+        } else {
+            // honor per-repo pkg_gpgcheck=0 in rpm's enforcing signature mode
+            gpgcheck = repo->get_config().get_pkg_gpgcheck_option().get_value();
+        }
+        if (gpgcheck == false) {
             rpmteSetVfyLevel(te, RPMSIG_DIGEST_TYPE);
         }
 #endif
