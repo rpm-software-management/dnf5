@@ -15,27 +15,24 @@ This page focuses on how to write a command with two options in dnf5.
 The command header
 ------------------
 
-.. literalinclude:: command/template.hpp
+.. literalinclude:: tests/dnf5-plugin/template_cmd.hpp
     :language: c++
     :linenos:
-    :caption: ``dnf5/command/template.hpp``
 
 The command source
 ------------------
 
-.. literalinclude:: command/template.cpp
+.. literalinclude:: tests/dnf5-plugin/template_cmd.cpp
     :language: c++
     :linenos:
     :lines: 3-
-    :caption: ``dnf5/command/template.cpp``
 
 The argument class(es)
 ----------------------
 
-.. literalinclude:: command/arguments.hpp
+.. literalinclude:: tests/dnf5-plugin/arguments.hpp
     :language: c++
     :linenos:
-    :caption: ``dnf5/command/arguments.hpp``
 
 Direct integration into dnf5 codebase
 -------------------------------------
