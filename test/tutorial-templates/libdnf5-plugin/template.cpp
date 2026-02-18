@@ -15,12 +15,12 @@ constexpr PluginAPIVersion REQUIRED_PLUGIN_API_VERSION{.major = 2, .minor = 0};
 constexpr const char * attrs[]{"author.name", "author.email", "description", nullptr};
 constexpr const char * attrs_value[]{"Fatima Freedom", "dummy@email.com", "Plugin description."};
 
-class TemplatePlugin final : public plugin::IPlugin {
+class TemplatePlugin final : public plugin::IPlugin2_1 {
 public:
     /// Implement custom constructor for the new plugin.
     /// This is not necessary when you only need Base object for your implementation.
     /// Optional to override.
-    TemplatePlugin(libdnf5::plugin::IPluginData & data, libdnf5::ConfigParser &) : IPlugin(data) {}
+    TemplatePlugin(libdnf5::plugin::IPluginData & data, libdnf5::ConfigParser &) : IPlugin2_1(data) {}
 
     /// Fill in the API version of your plugin.
     /// This is used to check if the provided plugin API version is compatible with the library's plugin API version.
@@ -84,6 +84,10 @@ void TemplatePlugin::pre_transaction_magic(const libdnf5::base::Transaction & tr
     logger.info("Libdnf5 template plugin: {} packages in transaction", transaction.get_transaction_packages_count());
 }
 
+// Global variable to store the last exception from plugin initialization
+// Allows capturing exceptions from C linkage functions that cannot propagate C++ exceptions
+std::exception_ptr last_exception;
+
 }  // namespace
 
 /// Below is a block of functions with C linkage used for loading the plugin binaries from disk.
@@ -111,10 +115,20 @@ plugin::IPlugin * libdnf_plugin_new_instance(
     libdnf5::ConfigParser & parser) try {
     return new TemplatePlugin(data, parser);
 } catch (...) {
-    return nullptr;
+    // Capture any exception that occurs during plugin instance creation
+    // std::current_exception() retrieves the current exception and stores it for later processing
+    last_exception = std::current_exception();
+
+    return nullptr;  // Return nullptr as failure indicator (C function cannot throw exceptions)
 }
 
 /// Delete the plugin instance.
 void libdnf_plugin_delete_instance(plugin::IPlugin * plugin_object) {
     delete plugin_object;
+}
+
+// libdnf5 use this function to determine the actual failure cause
+// when libdnf_plugin_new_instance() returns nullptr
+std::exception_ptr * libdnf_plugin_get_last_exception(void) {
+    return &last_exception;
 }
