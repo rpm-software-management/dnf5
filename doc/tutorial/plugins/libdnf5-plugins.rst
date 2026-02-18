@@ -19,7 +19,7 @@ In the following code block, a simple example plugin introduces logic in two
 different steps. The first is after preparing the ``libdnf5::Base`` object.
 The second is before the start of the transaction.
 
-.. literalinclude:: ../../templates/libdnf5-plugin/template.cpp
+.. literalinclude:: ../../templates/tests/libdnf5-plugin/template.cpp
     :language: c++
     :linenos:
 
@@ -40,7 +40,7 @@ Building the Binary
 
 To create the plugin binary, include a CMake build script:
 
-.. literalinclude:: ../../templates/libdnf5-plugin/CMakeLists.txt
+.. literalinclude:: ../../templates/tests/libdnf5-plugin/CMakeLists.txt
     :language: cmake
     :linenos:
 
@@ -87,7 +87,7 @@ and specify when to enable it during runtime. Options include:
 Additional optional configuration options and sections can be defined and then accessed from
 the plugin implementation. Here's an example configuration file:
 
-.. literalinclude:: ../../templates/libdnf5-plugin/template.conf
+.. literalinclude:: ../../templates/tests/libdnf5-plugin/template.conf
     :language: cfg
     :linenos:
 

@@ -1,5 +1,6 @@
 #include <libdnf5/base/base.hpp>
 #include <libdnf5/common/exception.hpp>
+#include <libdnf5/plugin/iplugin.hpp>
 
 #include <algorithm>
 
@@ -14,12 +15,12 @@ constexpr PluginAPIVersion REQUIRED_PLUGIN_API_VERSION{.major = 2, .minor = 0};
 constexpr const char * attrs[]{"author.name", "author.email", "description", nullptr};
 constexpr const char * attrs_value[]{"Fatima Freedom", "dummy@email.com", "Plugin description."};
 
-class TemplatePlugin : public plugin::IPlugin {
+class TemplatePlugin final : public plugin::IPlugin {
 public:
     /// Implement custom constructor for the new plugin.
     /// This is not necessary when you only need Base object for your implementation.
     /// Optional to override.
-    TemplatePlugin(libdnf5::Base & base, libdnf5::ConfigParser &) : IPlugin(base) {}
+    TemplatePlugin(libdnf5::plugin::IPluginData & data, libdnf5::ConfigParser &) : IPlugin(data) {}
 
     /// Fill in the API version of your plugin.
     /// This is used to check if the provided plugin API version is compatible with the library's plugin API version.
@@ -78,7 +79,9 @@ void TemplatePlugin::post_base_magic() {
 
 /// Example how to implement additional logic before starting the transaction.
 void TemplatePlugin::pre_transaction_magic(const libdnf5::base::Transaction & transaction) {
-    transaction.set_description("This is our important transaction.");
+    auto & base = get_base();
+    auto & logger = *base.get_logger();
+    logger.info("Libdnf5 template plugin: {} packages in transaction", transaction.get_transaction_packages_count());
 }
 
 }  // namespace
@@ -103,8 +106,10 @@ plugin::Version libdnf_plugin_get_version(void) {
 
 /// Return the instance of the implemented plugin.
 plugin::IPlugin * libdnf_plugin_new_instance(
-    [[maybe_unused]] LibraryVersion library_version, libdnf5::Base & base, libdnf5::ConfigParser & parser) try {
-    return new TemplatePlugin(base, parser);
+    [[maybe_unused]] LibraryVersion library_version,
+    libdnf5::plugin::IPluginData & data,
+    libdnf5::ConfigParser & parser) try {
+    return new TemplatePlugin(data, parser);
 } catch (...) {
     return nullptr;
 }

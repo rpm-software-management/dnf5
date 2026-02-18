@@ -1,6 +1,6 @@
 // Adjust :lines: in template-command.rst if removing/modifying these comment lines!
 // clang-format off
-#include "template.hpp"
+#include "template_cmd.hpp"
 
 #include <iostream>
 

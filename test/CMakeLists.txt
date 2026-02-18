@@ -34,6 +34,7 @@ add_subdirectory(libdnf5-cli)
 
 # tutorial
 add_subdirectory(tutorial)
+add_subdirectory(tutorial-templates)
 
 # bindings
 add_subdirectory(go)
