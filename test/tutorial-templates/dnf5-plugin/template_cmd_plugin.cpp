@@ -1,4 +1,4 @@
-#include "template.hpp"
+#include "template_cmd.hpp"
 
 #include <dnf5/iplugin.hpp>
 
