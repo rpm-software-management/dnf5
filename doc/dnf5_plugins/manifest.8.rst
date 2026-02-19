@@ -28,7 +28,7 @@ Description
 
 For working with RPM package manifest files using the `libpkgmanifest <https://github.com/rpm-software-management/libpkgmanifest>`_ library.
 
-:ref:`skip_if_unavailable <_skip_if_unavailable_options-label>` and `skip_broken <_skip_broken_options-label` will be set to ``false`` for all operations.
+:ref:`skip_if_unavailable <skip_if_unavailable_options-label>` and :ref:`skip_broken <skip_broken_options-label>` will be set to ``false`` for all operations.
 
 
 ``new``
@@ -69,7 +69,7 @@ Arguments
 ``<package-spec-NPFB>``
     Specification for including a package in the manifest file.
     Local RPMs are not supported.
-    For more information, refer to :ref:`Specifying Packages <specifying_packages-label>`.
+    For more information, refer to :ref:`Specifying Packages <specs_misc_ref-label>`.
 
 -------
 Options
@@ -133,9 +133,8 @@ Examples
     under the default file name, automatically answering "yes" to all prompts during the
     transaction resolution.
 
---------
 See Also
---------
+========
 
-* `libpkgmanifest upstream <https://github.com/rpm-software-management/libpkgmanifest>`_
-* `Prototype input file specification <https://github.com/konflux-ci/rpm-lockfile-prototype?tab=readme-ov-file#whats-the-input_file>`_
+    | `libpkgmanifest upstream <https://github.com/rpm-software-management/libpkgmanifest>`_
+    | `Prototype input file specification <https://github.com/konflux-ci/rpm-lockfile-prototype?tab=readme-ov-file#whats-the-input_file>`_
