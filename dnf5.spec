@@ -1055,6 +1055,12 @@ pushd %{buildroot}%{_unitdir}/system-update.target.wants/
 popd
 %endif
 
+%if %{without plugin_local}
+rm -fv %{buildroot}%{_libdir}/libdnf5/plugins/local.*
+rm -fv %{buildroot}%{_sysconfdir}/dnf/libdnf5-plugins/local.conf
+rm -fv %{buildroot}%{_mandir}/man8/libdnf5-local.8*
+%endif
+
 mkdir -p %{buildroot}%{_libdir}/libdnf5/plugins
 
 %find_lang dnf5
