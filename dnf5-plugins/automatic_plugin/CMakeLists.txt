@@ -12,7 +12,10 @@ target_link_libraries(automatic_cmd_plugin PRIVATE libdnf5 libdnf5-cli)
 target_link_libraries(automatic_cmd_plugin PRIVATE dnf5)
 
 install(TARGETS automatic_cmd_plugin LIBRARY DESTINATION ${CMAKE_INSTALL_FULL_LIBDIR}/dnf5/plugins/)
-install(DIRECTORY "config/usr/" DESTINATION "${CMAKE_INSTALL_PREFIX}")
+install(DIRECTORY "config/usr/share" DESTINATION "${CMAKE_INSTALL_PREFIX}")
+if (WITH_SYSTEMD)
+  install(DIRECTORY "config/usr/lib" DESTINATION "${CMAKE_INSTALL_PREFIX}")
+endif()
 
 install(PROGRAMS bin/dnf-automatic TYPE BIN)
 
