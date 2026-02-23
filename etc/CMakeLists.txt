@@ -1,1 +1,3 @@
-add_subdirectory("systemd")
+if (WITH_SYSTEMD)
+  add_subdirectory("systemd")
+endif()
