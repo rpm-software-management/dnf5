@@ -25,4 +25,7 @@ target_link_libraries(run_tests_copr PRIVATE ${JSONC_LIBRARIES})
 add_compile_definitions(TEST_DATADIR="${CMAKE_CURRENT_SOURCE_DIR}/data")
 
 add_test(NAME test_copr COMMAND run_tests_copr)
-set_tests_properties(test_copr PROPERTIES RUN_SERIAL TRUE)
+set_tests_properties(test_copr PROPERTIES
+    RUN_SERIAL TRUE
+    ENVIRONMENT "LC_ALL=C"
+)

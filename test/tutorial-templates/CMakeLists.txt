@@ -27,4 +27,7 @@ target_compile_definitions(run_tests_tutorial_templates PRIVATE
 add_dependencies(run_tests_tutorial_templates template_plugin template_dnf5_cmd_plugin dnf5)
 
 add_test(NAME test_tutorial_templates COMMAND run_tests_tutorial_templates)
-set_tests_properties(test_tutorial_templates PROPERTIES RUN_SERIAL TRUE)
+set_tests_properties(test_tutorial_templates PROPERTIES
+    RUN_SERIAL TRUE
+    ENVIRONMENT "LC_ALL=C"
+)

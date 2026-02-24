@@ -32,4 +32,7 @@ endif()
 
 
 add_test(NAME test_libdnf COMMAND run_tests)
-set_tests_properties(test_libdnf PROPERTIES RUN_SERIAL TRUE)
+set_tests_properties(test_libdnf PROPERTIES
+    RUN_SERIAL TRUE
+    ENVIRONMENT "LC_ALL=C"
+)

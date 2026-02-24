@@ -20,3 +20,7 @@ target_link_libraries(run_tests_cli PRIVATE stdc++ libdnf5 libdnf5-cli test_shar
 
 
 add_test(NAME test_libdnf_cli COMMAND run_tests_cli)
+set_tests_properties(test_libdnf_cli PROPERTIES
+    RUN_SERIAL TRUE
+    ENVIRONMENT "LC_ALL=C"
+)

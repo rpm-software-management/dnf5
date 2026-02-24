@@ -14,4 +14,7 @@ add_executable(run_tests_automatic ${TEST_AUTOMATIC_SOURCES})
 target_link_libraries(run_tests_automatic PRIVATE stdc++ libdnf5 libdnf5-cli test_shared)
 
 add_test(NAME test_automatic COMMAND run_tests_automatic)
-set_tests_properties(test_automatic PROPERTIES RUN_SERIAL FALSE)
+set_tests_properties(test_automatic PROPERTIES
+    RUN_SERIAL FALSE
+    ENVIRONMENT "LC_ALL=C"
+)

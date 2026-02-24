@@ -20,6 +20,7 @@ macro(add_ruby_test)
     # should be fixed
     set(ASAN_OPTIONS "${ASAN_OPTIONS},detect_odr_violation=0")
     set_property(TEST ${target} PROPERTY ENVIRONMENT
+        "LC_ALL=C"
         "PROJECT_BINARY_DIR=${PROJECT_BINARY_DIR}"
         "PROJECT_SOURCE_DIR=${PROJECT_SOURCE_DIR}"
         "${ASAN_OPTIONS}"

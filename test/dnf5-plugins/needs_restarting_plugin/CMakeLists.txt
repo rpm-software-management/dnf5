@@ -24,4 +24,7 @@ add_executable(run_tests_needs_restarting ${TEST_NEEDS_RESTARTING_SOURCES})
 target_link_libraries(run_tests_needs_restarting PRIVATE common_obj stdc++ libdnf5 libdnf5-cli test_shared ${SDBUS_CPP_LIBRARIES} ${RPM_LIBRARIES})
 
 add_test(NAME test_needs_restarting COMMAND run_tests_needs_restarting)
-set_tests_properties(test_needs_restarting PROPERTIES RUN_SERIAL TRUE)
+set_tests_properties(test_needs_restarting PROPERTIES
+    RUN_SERIAL TRUE
+    ENVIRONMENT "LC_ALL=C"
+)
