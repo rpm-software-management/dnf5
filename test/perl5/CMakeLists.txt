@@ -27,6 +27,7 @@ macro(add_perl_test)
     set_property(TEST "${target}" PROPERTY RUN_SERIAL TRUE)
 
     set_property(TEST ${target} PROPERTY ENVIRONMENT
+        "LC_ALL=C"
         "PROJECT_BINARY_DIR=${PROJECT_BINARY_DIR}"
         "PROJECT_SOURCE_DIR=${PROJECT_SOURCE_DIR}"
         "${ASAN_OPTIONS}"
