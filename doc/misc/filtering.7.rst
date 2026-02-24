@@ -50,7 +50,10 @@ Similar to global excludes, but this configuration is repository-specific and on
 User excludes filtering
 =======================
 
-API users have an additional option how to fine-tune excluded packages using ``*_user_excludes()`` and ``*_user_includes`` methods of the ``PackageSack`` object. See `libdnf5::rpm::PackageSack`_.
+..
+    [TODO](mfocko): fix the reference to PackageSack once https://github.com/breathe-doc/breathe/issues/1054 is resolved
+
+API users have an additional option how to fine-tune excluded packages using ``*_user_excludes()`` and ``*_user_includes`` methods of the ``PackageSack`` object. See :cpp:class:`libdnf5::rpm::libdnf5::rpm::PackageSack`.
 
 
 Versionlock

@@ -96,8 +96,8 @@ repository configuration file should aside from repo ID consists of baseurl, met
     Default: ``True``.
 
     .. NOTE::
-       This option in particular :ref:`can be set in your configuration file by
-       your distribution <conf_distribution_specific_options-label>`.
+       This option in particular can be overriden by a distribution-specific
+       configuration. For more details see :ref:`drop-in configuration directories <drop_in_configuration_directories-label>`.
 
 .. _cachedir_options-label:
 
@@ -1221,8 +1221,8 @@ configuration.
     Default: ``False``.
 
     .. NOTE::
-       this option in particular :ref:`can be set in your configuration file
-       by your distribution <conf_distribution_specific_options-label>`.
+       This option in particular can be overriden by a distribution-specific
+       configuration. For more details see :ref:`drop-in configuration directories <drop_in_configuration_directories-label>`.
 
 .. _sslcacert_options-label:
 
@@ -1380,7 +1380,7 @@ files<distro_configuration_files-label>`.
 The configuration files are processed following this order:
 
 1. Configuration files are alphabetically sorted in a list of names from the
-   :ref:`distribution configuration directory<distro_configuration_dir-label>`.
+   :ref:`distribution configuration directory<distro_configuration_dir-label>`
    and the :ref:`user configuration directory<user_configuration_dir-label>`. If
    a file with the same name is present in both directories, only the file from
    the user configuration directory is added to the list. The
