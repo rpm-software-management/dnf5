@@ -33,7 +33,7 @@
 #include <thread>
 
 // TODO(mblaha): Make this constant configurable
-const unsigned int MAX_SESSIONS = 3;
+const unsigned int MAX_SESSIONS = 10;
 
 SessionManager::SessionManager() {
     connection = sdbus::createSystemBusConnection(dnfdaemon::DBUS_NAME);
