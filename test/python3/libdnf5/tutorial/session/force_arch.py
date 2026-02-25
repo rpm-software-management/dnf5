@@ -6,6 +6,10 @@ base = libdnf5.base.Base()
 # Optionally load configuration from the config files.
 base.load_config()
 
+# For unit tests only - Prevent loading plugins from the host system.
+# In production code, plugins are typically left enabled (default behavior).
+base.get_config().get_plugins_option().set(False)
+
 # Override the detected system architecture, similar to how the
 # `--forcearch=aarch64` switch works in the dnf5 command line tool.
 vars = base.get_vars().get()

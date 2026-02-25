@@ -7,6 +7,8 @@ base = libdnf5.base.Base()
 base_config = base.get_config()
 base_config.cachedir = cachedir
 base_config.installroot = installroot
+# For unit tests only - Prevent loading plugins from the host system.
+# In production code, plugins are typically left enabled (default behavior).
 base_config.plugins = False
 
 # Optionally, load configuration from the file defined in the current
