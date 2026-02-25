@@ -27,14 +27,14 @@ DNF5 Python:
 .. literalinclude:: ../tests/bindings/python3/api_changes_from_dnf4/create_base.py
     :language: py
     :linenos:
-    :lines: -5,12-
+    :lines: -5,14-
 
 DNF5 C++:
 
 .. literalinclude:: ../tests/api_changes_from_dnf4/create_base.cpp
     :language: c++
     :linenos:
-    :lines: 2,4-7,14-
+    :lines: 2,4-7,16-
 
 Setting of configuration and variables should be done before calling the ``libdnf5::Base::setup`` in DNF5.
 

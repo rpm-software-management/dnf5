@@ -23,4 +23,4 @@ option is available. Here's how you can achieve the same effect using the API:
 .. literalinclude:: tests/session/force_arch.cpp
     :language: c++
     :linenos:
-    :lines: 2,4-
+    :lines: 2,4-10,15-

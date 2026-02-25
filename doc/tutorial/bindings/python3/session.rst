@@ -21,3 +21,4 @@ option is available. Here's how you can achieve the same effect using the Python
 .. literalinclude:: ../../tests/bindings/python3/session/force_arch.py
     :language: python
     :linenos:
+    :lines: -8,13-
