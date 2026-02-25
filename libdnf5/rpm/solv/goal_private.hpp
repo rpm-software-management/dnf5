@@ -132,10 +132,6 @@ public:
     const libdnf5::solv::SolvMap * get_protected_packages() { return protected_packages.get(); };
     /// Add Ids of protected packages
     void add_protected_packages(const libdnf5::solv::SolvMap & map);
-    /// Set Ids of protected packages
-    void set_protected_packages(const libdnf5::solv::SolvMap & map);
-    /// Reset all protected packages
-    void reset_protected_packages();
     /// Set running kernel that mus be not removed
     void set_protected_running_kernel(PackageId kernel) { protected_running_kernel = kernel; };
     /// Set Ids of user-installed packages
