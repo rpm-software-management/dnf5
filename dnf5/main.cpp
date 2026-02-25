@@ -1511,11 +1511,22 @@ int main(int argc, char * argv[]) try {
                 dump_repository_configuration(context, repo_id_list);
             }
 
-            if (context.p_impl->cmd_requires_privileges() && !user_has_privileges(context)) {
-                throw libdnf5::cli::InsufficientPrivilegesError(
-                    M_("The requested operation requires superuser privileges. Please log in as a user with elevated "
-                       "rights, or use the \"--assumeno\" or \"--downloadonly\" options to run the command without "
-                       "modifying the system state."));
+            if (context.p_impl->cmd_requires_privileges()) {
+                const auto & installroot = base.get_config().get_installroot_option().get_value();
+                if (libdnf5::utils::bootc::is_bootc_system() && installroot == "/") {
+                    if (!libdnf5::utils::bootc::is_writable()) {
+                        throw libdnf5::cli::ReadOnlySystemError(
+                            M_("Error: this bootc system is configured to be read-only. For more information, run "
+                               "`bootc --help`."));
+                    }
+                }
+
+                if (!user_has_privileges(context)) {
+                    throw libdnf5::cli::InsufficientPrivilegesError(M_(
+                        "The requested operation requires superuser privileges. Please log in as a user with elevated "
+                        "rights, or use the \"--assumeno\" or \"--downloadonly\" options to run the command without "
+                        "modifying the system state."));
+                }
             }
 
             const auto load_available = context.get_load_available_repos() != dnf5::Context::LoadAvailableRepos::NONE;
@@ -1558,14 +1569,6 @@ int main(int argc, char * argv[]) try {
                             context.print_error(_(
                                 "Test mode enabled: Only package downloads, OpenPGP key installations and transaction "
                                 "checks will be performed."));
-                        }
-                    }
-                    const auto & installroot = base.get_config().get_installroot_option().get_value();
-                    if (libdnf5::utils::bootc::is_bootc_system() && installroot == "/") {
-                        if (!libdnf5::utils::bootc::is_writable()) {
-                            throw libdnf5::cli::ReadOnlySystemError(
-                                M_("Error: this bootc system is configured to be read-only. For more information, run "
-                                   "`bootc --help`."));
                         }
                     }
                 }
