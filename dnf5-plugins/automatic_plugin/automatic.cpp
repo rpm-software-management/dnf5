@@ -95,6 +95,17 @@ static bool server_available(std::string_view host, std::string_view service) {
     return retval;
 }
 
+/// Check whether the installed libcurl supports the given protocol (e.g. "smtp", "smtps").
+static bool curl_protocol_supported(std::string_view protocol) {
+    auto * ver = curl_version_info(CURLVERSION_NOW);
+    for (auto ptr = ver->protocols; ptr && *ptr; ++ptr) {
+        if (*ptr == protocol) {
+            return true;
+        }
+    }
+    return false;
+}
+
 }  // namespace
 
 
@@ -322,6 +333,22 @@ void AutomaticCommand::pre_configure() {
 
 void AutomaticCommand::configure() {
     auto & context = get_context();
+
+    // check whether email emitter can work with the installed libcurl
+    for (const auto & emitter_name : config_automatic.config_emitters.emit_via.get_value()) {
+        if (emitter_name == "email") {
+            std::string protocol = config_automatic.config_email.email_tls.get_value() == "yes" ? "smtps" : "smtp";
+            if (!curl_protocol_supported(protocol)) {
+                throw libdnf5::cli::CommandExitError(
+                    1,
+                    M_("The \"email\" emitter is configured but the installed libcurl does not support "
+                       "the {} protocol."),
+                    protocol);
+            }
+            break;
+        }
+    }
+
     context.set_load_system_repo(true);
     context.update_repo_metadata_from_advisory_options(
         {}, config_automatic.config_commands.upgrade_type.get_value() == "security", false, false, false, {}, {}, {});
