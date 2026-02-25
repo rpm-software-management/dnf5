@@ -135,7 +135,7 @@ Choosing how the results should be reported.
 ``emit_via``
     list, default: ``stdio``
 
-    List of emitters to report the results through. Available emitters are ``stdio`` to print the result to standard output, ``command`` to send the result to a custom command, ``command_email`` to send an email using a command, ``email`` to send the report via email using SMTP sever, and ``motd`` sends the result to */etc/motd.d/dnf5-automatic* file.
+    List of emitters to report the results through. Available emitters are ``stdio`` to print the result to standard output, ``command`` to send the result to a custom command, ``command_email`` to send an email using a command, ``email`` to send the report via email using SMTP server (see ``[email]`` section for requirements), and ``motd`` sends the result to */etc/motd.d/dnf5-automatic* file.
 
 ``system_name``
     string, default: hostname of the given system
@@ -196,7 +196,7 @@ The command email emitter configuration. Variables usable in format string argum
 ``[email]`` section
 -------------------
 
-The email emitter configuration.
+The email emitter configuration. This emitter sends messages directly via an SMTP server using ``libcurl``. It requires ``libcurl`` with SMTP protocol support. Some distributions ship a minimal variant of libcurl without SMTP support. On Fedora, this can be resolved by running ``dnf5 swap libcurl-minimal libcurl``. Alternatively, use the ``command_email`` emitter which does not require SMTP support in libcurl. Credentials for the SMTP server are read from the ``~/.netrc`` file.
 
 ``email_from``
     string, default: ``root``
