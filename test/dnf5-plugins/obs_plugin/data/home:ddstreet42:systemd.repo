@@ -1,0 +1,7 @@
+[home_ddstreet42_systemd]
+name=home:ddstreet42:systemd (Fedora_Rawhide)
+type=rpm-md
+baseurl=https://download.opensuse.org/repositories/home:/ddstreet42:/systemd/Fedora_Rawhide/
+gpgcheck=1
+gpgkey=https://download.opensuse.org/repositories/home:/ddstreet42:/systemd/Fedora_Rawhide/repodata/repomd.xml.key
+enabled=0

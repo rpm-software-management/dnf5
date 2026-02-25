@@ -163,6 +163,9 @@ These are available after installing the ``dnf5-plugins`` package.
 :ref:`copr <copr_plugin_ref-label>`
     | Manage Copr repositories (add-ons provided by users/community/third-party).
 
+:ref:`obs <obs_plugin_ref-label>`
+    | Manage OBS repositories (add-ons provided by users/community/third-party).
+
 :ref:`needs-restarting <needs_restarting_plugin_ref-label>`
     | Determine whether the system should be rebooted.
 
@@ -490,6 +493,7 @@ Application Plugins:
     | :manpage:`dnf5-changelog(8)`, :ref:`Changelog command <changelog_plugin_ref-label>`
     | :manpage:`dnf5-config-manager(8)`, :ref:`Config-manager command <config_manager_plugin_ref-label>`
     | :manpage:`dnf5-copr(8)`, :ref:`Copr command <copr_plugin_ref-label>`
+    | :manpage:`dnf5-obs(8)`, :ref:`OBS command <obs_plugin_ref-label>`
     | :manpage:`dnf5-needs-restarting(8)`, :ref:`Needs-Restarting command <needs_restarting_plugin_ref-label>`
     | :manpage:`dnf5-repoclosure(8)`, :ref:`Repoclosure command <repoclosure_plugin_ref-label>`
     | :manpage:`dnf5-repomanage(8)`, :ref:`Repomanage command <repomanage_plugin_ref-label>`
