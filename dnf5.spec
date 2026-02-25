@@ -940,9 +940,9 @@ copr, needs-restarting, repoclosure, repomanage, and reposync commands.
 Summary:        Package manager - automated upgrades
 License:        LGPL-2.1-or-later
 Requires:       dnf5%{?_isa} = %{version}-%{release}
-Requires:       libcurl-full%{?_isa}
 Requires:       libdnf5%{?_isa} = %{version}-%{release}
 Requires:       libdnf5-cli%{?_isa} = %{version}-%{release}
+Recommends:     libcurl-full%{?_isa}
 Provides:       dnf5-command(automatic)
 %if %{with dnf5_obsoletes_dnf}
 Provides:       dnf-automatic = %{version}-%{release}
