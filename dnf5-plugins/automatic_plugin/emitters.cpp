@@ -25,8 +25,6 @@
 #include <libdnf5/base/transaction_package.hpp>
 #include <libdnf5/utils/bgettext/bgettext-lib.h>
 #include <libdnf5/utils/format.hpp>
-#include <stdio.h>
-#include <string.h>
 
 #include <cstdio>
 #include <fstream>
@@ -192,46 +190,29 @@ void EmitterEmail::notify() {
                 protocol = "smtps";
             }
 
-            // TODO(mblaha): check smtp protocol availability?
-            curl_version_info_data * ver;
-            ver = curl_version_info(CURLVERSION_NOW);
-            bool protocol_supported = false;
-            for (auto ptr = ver->protocols; *ptr; ++ptr) {
-                if (strcmp(*ptr, protocol) == 0) {
-                    protocol_supported = true;
-                    break;
-                }
+            std::string email_host = libdnf5::utils::sformat(
+                "{}://{}:{}/",
+                protocol,
+                config_automatic.config_email.email_host.get_value(),
+                config_automatic.config_email.email_port.get_value());
+            curl_easy_setopt(curl, CURLOPT_URL, email_host.c_str());
+
+            curl_easy_setopt(curl, CURLOPT_MAIL_FROM, from.c_str());
+
+            for (const auto & eml : to) {
+                recipients = curl_slist_append(recipients, eml.c_str());
             }
-            if (protocol_supported) {
-                std::string email_host = libdnf5::utils::sformat(
-                    "{}://{}:{}/",
-                    protocol,
-                    config_automatic.config_email.email_host.get_value(),
-                    config_automatic.config_email.email_port.get_value());
-                curl_easy_setopt(curl, CURLOPT_URL, email_host.c_str());
+            curl_easy_setopt(curl, CURLOPT_MAIL_RCPT, recipients);
 
-                curl_easy_setopt(curl, CURLOPT_MAIL_FROM, from.c_str());
+            FILE * payload_file = fmemopen(payload.data(), payload.size(), "r");
+            curl_easy_setopt(curl, CURLOPT_READDATA, payload_file);
 
-                for (const auto & eml : to) {
-                    recipients = curl_slist_append(recipients, eml.c_str());
-                }
-                curl_easy_setopt(curl, CURLOPT_MAIL_RCPT, recipients);
+            curl_easy_setopt(curl, CURLOPT_UPLOAD, 1L);
 
-                FILE * payload_file = fmemopen(payload.data(), payload.size(), "r");
-                curl_easy_setopt(curl, CURLOPT_READDATA, payload_file);
-
-                curl_easy_setopt(curl, CURLOPT_UPLOAD, 1L);
-
-                res = curl_easy_perform(curl);
-                fclose(payload_file);
-                if (res != CURLE_OK) {
-                    std::cerr << "libcurl error while sending e-mail: " << curl_easy_strerror(res) << std::endl;
-                }
-            } else {
-                std::cerr << "Error: installed version of libcurl does not support " << protocol
-                          << " protocol. Cannot use \"email\" emitter to send the results. On Fedora please check that "
-                             "libcurl package is installed."
-                          << std::endl;
+            res = curl_easy_perform(curl);
+            fclose(payload_file);
+            if (res != CURLE_OK) {
+                std::cerr << "libcurl error while sending e-mail: " << curl_easy_strerror(res) << std::endl;
             }
 
             curl_slist_free_all(recipients);
