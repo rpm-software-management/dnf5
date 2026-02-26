@@ -60,6 +60,9 @@ Options
 ``--disabled``
     | Show information only about disabled repositories.
 
+``--json``
+    | Show information in JSON format.
+    | Similar information can be obtained with ``dnf5 --dump-repo-config REPO_ID`` command.
 
 Examples
 ========
@@ -134,4 +137,5 @@ For more details about the fields, see the ``REPO OPTIONS`` section in dnf5.conf
 See Also
 ========
 
-      :manpage:`dnf5.conf(5)`, :ref:`Repo options <repo_options-label>`
+    | :manpage:`dnf5(8)`, :ref:`--dump-repo-config option <dump_repo_config_option_ref-label>`
+    | :manpage:`dnf5.conf(5)`, :ref:`Repo Options <repo_options-label>`
