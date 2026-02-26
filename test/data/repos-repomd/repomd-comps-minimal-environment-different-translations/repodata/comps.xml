@@ -11,8 +11,8 @@
       <groupid>core</groupid>
     </grouplist>
     <optionlist>
+      <groupid default="true">standard</groupid>
       <groupid>guest-agents</groupid>
-      <groupid>standard</groupid>
     </optionlist>
   </environment>
 </comps>
