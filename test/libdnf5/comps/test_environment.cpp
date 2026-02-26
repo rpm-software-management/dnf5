@@ -91,7 +91,10 @@ void CompsEnvironmentTest::test_merge() {
     std::set<std::string> expected = {"core", "core-2"};
     const auto groups = minimal_env.get_groups();
     CPPUNIT_ASSERT_EQUAL(expected, std::set<std::string>(groups.begin(), groups.end()));
-    std::set<std::string> expected_optional = {"guest-agents", "guest-agents-2", "standard"};
+    std::set<std::string> expected_default = {"standard"};
+    const auto default_groups = minimal_env.get_default_groups();
+    CPPUNIT_ASSERT_EQUAL(expected_default, std::set<std::string>(default_groups.begin(), default_groups.end()));
+    std::set<std::string> expected_optional = {"guest-agents", "guest-agents-2"};
     const auto optional_groups = minimal_env.get_optional_groups();
     CPPUNIT_ASSERT_EQUAL(expected_optional, std::set<std::string>(optional_groups.begin(), optional_groups.end()));
 }
@@ -119,7 +122,10 @@ void CompsEnvironmentTest::test_merge_when_different_load_order() {
     std::set<std::string> expected = {"core", "core-2"};
     const auto groups = minimal_env.get_groups();
     CPPUNIT_ASSERT_EQUAL(expected, std::set<std::string>(groups.begin(), groups.end()));
-    std::set<std::string> expected_optional = {"guest-agents", "guest-agents-2", "standard"};
+    std::set<std::string> expected_default = {"standard"};
+    const auto default_groups = minimal_env.get_default_groups();
+    CPPUNIT_ASSERT_EQUAL(expected_default, std::set<std::string>(default_groups.begin(), default_groups.end()));
+    std::set<std::string> expected_optional = {"guest-agents", "guest-agents-2"};
     const auto optional_groups = minimal_env.get_optional_groups();
     CPPUNIT_ASSERT_EQUAL(expected_optional, std::set<std::string>(optional_groups.begin(), optional_groups.end()));
 }
@@ -147,7 +153,10 @@ void CompsEnvironmentTest::test_merge_with_empty() {
 
     std::vector<std::string> expected = {"core"};
     CPPUNIT_ASSERT_EQUAL(expected, minimal_empty.get_groups());
-    std::set<std::string> expected_optional = {"guest-agents", "standard"};
+    std::set<std::string> expected_default = {"standard"};
+    const auto default_groups = minimal_empty.get_default_groups();
+    CPPUNIT_ASSERT_EQUAL(expected_default, std::set<std::string>(default_groups.begin(), default_groups.end()));
+    std::set<std::string> expected_optional = {"guest-agents"};
     const auto optional_groups = minimal_empty.get_optional_groups();
     CPPUNIT_ASSERT_EQUAL(expected_optional, std::set<std::string>(optional_groups.begin(), optional_groups.end()));
 }
@@ -175,7 +184,10 @@ void CompsEnvironmentTest::test_merge_empty_with_nonempty() {
 
     std::vector<std::string> expected = {"core"};
     CPPUNIT_ASSERT_EQUAL(expected, minimal_env.get_groups());
-    std::set<std::string> expected_optional = {"guest-agents", "standard"};
+    std::set<std::string> expected_default = {"standard"};
+    const auto default_groups = minimal_env.get_default_groups();
+    CPPUNIT_ASSERT_EQUAL(expected_default, std::set<std::string>(default_groups.begin(), default_groups.end()));
+    std::set<std::string> expected_optional = {"guest-agents"};
     const auto optional_groups = minimal_env.get_optional_groups();
     CPPUNIT_ASSERT_EQUAL(expected_optional, std::set<std::string>(optional_groups.begin(), optional_groups.end()));
 }
@@ -201,7 +213,10 @@ void CompsEnvironmentTest::test_merge_different_translations() {
 
     std::vector<std::string> expected = {"core"};
     CPPUNIT_ASSERT_EQUAL(expected, minimal_env.get_groups());
-    std::set<std::string> expected_optional = {"guest-agents", "standard"};
+    std::set<std::string> expected_default = {"standard"};
+    const auto default_groups = minimal_env.get_default_groups();
+    CPPUNIT_ASSERT_EQUAL(expected_default, std::set<std::string>(default_groups.begin(), default_groups.end()));
+    std::set<std::string> expected_optional = {"guest-agents"};
     const auto optional_groups = minimal_env.get_optional_groups();
     CPPUNIT_ASSERT_EQUAL(expected_optional, std::set<std::string>(optional_groups.begin(), optional_groups.end()));
 }
