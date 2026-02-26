@@ -24,6 +24,7 @@
 
 #include "libdnf5/base/base.hpp"
 #include "libdnf5/base/base_weak.hpp"
+#include "libdnf5/comps/environment/group_type.hpp"
 #include "libdnf5/comps/environment/query.hpp"
 #include "libdnf5/utils/bgettext/bgettext-mark-domain.h"
 
@@ -64,6 +65,7 @@ private:
     std::vector<EnvironmentId> environment_ids;
 
     std::vector<std::string> groups;
+    std::vector<std::string> default_groups;
     std::vector<std::string> optional_groups;
 };
 
@@ -171,20 +173,27 @@ int Environment::get_order_int() const {
 
 
 std::vector<std::string> load_groups_from_pool(
-    libdnf5::solv::CompsPool & pool, const std::vector<EnvironmentId> & environment_ids, bool required = true) {
+    libdnf5::solv::CompsPool & pool,
+    const std::vector<EnvironmentId> & environment_ids,
+    GroupType type = GroupType::MANDATORY) {
     std::set<std::string> groups;
     std::string_view group_solvable_name;
 
     for (auto environment_id : environment_ids) {
         Solvable * solvable = pool.id2solvable(environment_id.id);
-        Offset offset;
-        if (required) {
-            offset = solvable->dep_requires;
-        } else {
-            offset = solvable->dep_suggests;
+
+        std::vector<Offset> offsets;
+        if (any(type & GroupType::MANDATORY)) {
+            offsets.push_back(solvable->dep_requires);
+        }
+        if (any(type & GroupType::DEFAULT)) {
+            offsets.push_back(solvable->dep_recommends);
+        }
+        if (any(type & GroupType::OPTIONAL)) {
+            offsets.push_back(solvable->dep_suggests);
         }
 
-        if (offset) {
+        for (const auto offset : offsets) {
             for (Id * r_id = solvable->repo->idarraydata + offset; *r_id; ++r_id) {
                 group_solvable_name = pool.id2str(*r_id);
                 groups.emplace(solv::CompsPool::split_solvable_name(group_solvable_name).second);
@@ -204,9 +213,19 @@ std::vector<std::string> Environment::get_groups() {
 }
 
 
+std::vector<std::string> Environment::get_default_groups() {
+    if (p_impl->default_groups.empty()) {
+        p_impl->default_groups =
+            load_groups_from_pool(get_comps_pool(p_impl->base), p_impl->environment_ids, GroupType::DEFAULT);
+    }
+    return p_impl->default_groups;
+}
+
+
 std::vector<std::string> Environment::get_optional_groups() {
     if (p_impl->optional_groups.empty()) {
-        p_impl->optional_groups = load_groups_from_pool(get_comps_pool(p_impl->base), p_impl->environment_ids, false);
+        p_impl->optional_groups =
+            load_groups_from_pool(get_comps_pool(p_impl->base), p_impl->environment_ids, GroupType::OPTIONAL);
     }
     return p_impl->optional_groups;
 }
@@ -310,13 +329,18 @@ void Environment::serialize(const std::string & path) {
     xmlNodePtr node_grouplist = xmlNewNode(NULL, BAD_CAST "grouplist");
     xmlAddChild(node_environment, node_grouplist);
     for (const auto & group : get_groups()) {
-        // Create an XML node for this package
+        // Create an XML node for this group
         node = utils::xml::add_subnode_with_text(node_grouplist, "groupid", group);
     }
     xmlNodePtr node_optionlist = xmlNewNode(NULL, BAD_CAST "optionlist");
     xmlAddChild(node_environment, node_optionlist);
+    for (const auto & group : get_default_groups()) {
+        // Create an XML node for this group
+        node = utils::xml::add_subnode_with_text(node_optionlist, "groupid", group);
+        xmlNewProp(node, BAD_CAST "default", BAD_CAST "true");
+    }
     for (const auto & group : get_optional_groups()) {
-        // Create an XML node for this package
+        // Create an XML node for this group
         node = utils::xml::add_subnode_with_text(node_optionlist, "groupid", group);
     }
 
