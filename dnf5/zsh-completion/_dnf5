@@ -1,0 +1,9 @@
+#compdef dnf5 dnf
+
+_dnf5() {
+    local -a completions
+    completions=("${(@f)$(dnf5 --complete=$((CURRENT-1)) "${words[@]}" 2>/dev/null)}")
+    compadd -a completions
+}
+
+_dnf5 "$@"
