@@ -19,8 +19,13 @@
 
 #include "libdnf5/utils/bootc.hpp"
 
+#include "libdnf5/common/exception.hpp"
+#include "libdnf5/utils/bgettext/bgettext-mark-domain.h"
+
+#include <sys/statvfs.h>
 #include <unistd.h>
 
+#include <cerrno>
 #include <filesystem>
 
 namespace libdnf5::utils::bootc {
@@ -31,7 +36,11 @@ bool is_bootc_system() {
 }
 
 bool is_writable() {
-    return access("/usr", W_OK) == 0;
+    struct statvfs vfs;
+    if (statvfs("/usr", &vfs) != 0) {
+        throw libdnf5::SystemError(errno, M_("Failed to stat /usr filesystem"));
+    }
+    return (vfs.f_flag & ST_RDONLY) == 0;
 }
 
 }  // namespace libdnf5::utils::bootc
