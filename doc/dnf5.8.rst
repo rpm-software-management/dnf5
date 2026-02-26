@@ -226,6 +226,8 @@ Following options are applicable in the general context for any ``dnf5`` command
 ``--dump-main-config``
     | Print main configuration values to stdout.
 
+.. _dump_repo_config_option_ref-label:
+
 ``--dump-repo-config=REPO_ID,...``
     | Print repository configuration values to stdout.
     | This is a list option which can be specified multiple times.
