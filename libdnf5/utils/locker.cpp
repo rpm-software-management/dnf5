@@ -120,6 +120,58 @@ void Locker::open_file(LockAccess access) {
     }
 }
 
+void Locker::write_content(const std::string & content) {
+    if (p_impl->lock_fd == -1) {
+        throw RuntimeError(M_("The lock file \"{}\" is not opened"), p_impl->path.string());
+    }
+
+    // Truncate the file first
+    if (ftruncate(p_impl->lock_fd, 0) == -1) {
+        throw SystemError(errno, M_("Failed to truncate lock file \"{}\""), p_impl->path.string());
+    }
+    if (lseek(p_impl->lock_fd, 0, SEEK_SET) == -1) {
+        throw SystemError(errno, M_("Failed to seek lock file \"{}\""), p_impl->path.string());
+    }
+
+    // Write the content
+    ssize_t written = ::write(p_impl->lock_fd, content.c_str(), content.size());
+    if (written == -1) {
+        throw SystemError(errno, M_("Failed to write to lock file \"{}\""), p_impl->path.string());
+    }
+
+    // Ensure data is written to disk
+    if (fsync(p_impl->lock_fd) == -1) {
+        throw SystemError(errno, M_("Failed to sync lock file \"{}\""), p_impl->path.string());
+    }
+}
+
+std::string Locker::read_content() {
+    if (p_impl->lock_fd == -1) {
+        throw RuntimeError(M_("Cannot read content: no lock held on file \"{}\""), p_impl->path.string());
+    }
+
+    std::string content;
+    content.reserve(1024);
+    char buffer[1024];
+
+    if (lseek(p_impl->lock_fd, 0, SEEK_SET) == -1) {
+        throw SystemError(errno, M_("Failed to seek lock file \"{}\""), p_impl->path.string());
+    }
+
+    while (true) {
+        auto read_bytes = ::read(p_impl->lock_fd, buffer, sizeof(buffer));
+        if (read_bytes == -1) {
+            throw SystemError(errno, M_("Failed to read from lock file \"{}\""), p_impl->path.string());
+        }
+        if (read_bytes == 0) {
+            break;
+        }
+        content.append(buffer, static_cast<size_t>(read_bytes));
+    }
+
+    return content;
+}
+
 void Locker::Impl::unlock() {
     if (lock_fd != -1) {
         if (close(lock_fd) == -1) {

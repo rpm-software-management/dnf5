@@ -26,6 +26,7 @@
 #endif
 #include "rpm/solv/goal_private.hpp"
 
+#include "libdnf5/base/active_transaction_info.hpp"
 #include "libdnf5/base/transaction.hpp"
 #include "libdnf5/base/transaction_environment.hpp"
 #include "libdnf5/base/transaction_group.hpp"
@@ -158,6 +159,10 @@ private:
     std::unordered_map<std::string, transaction::TransactionItemReason> rpm_reason_overrides;
     // Used during transaction replay to verify no extra packages were pulled into the transaction
     std::vector<std::tuple<std::unordered_set<std::string>, GoalJobSettings>> rpm_replays_nevra_cache;
+
+    // If a transaction run fails due to a concurrent transaction,
+    // store information about that concurrent transaction.
+    std::unique_ptr<base::ActiveTransactionInfo> concurrent_transaction{nullptr};
 };
 
 

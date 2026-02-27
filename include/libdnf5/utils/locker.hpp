@@ -59,6 +59,16 @@ public:
     /// @throws libdnf5::SystemError if an unexpected error occurs when checking the lock state, like insufficient privileges
     bool write_lock();
 
+    /// @brief Write content to the lock file
+    /// @param content The content to write to the lock file
+    /// @throws libdnf5::SystemError if the lock file is not opened or writing fails
+    void write_content(const std::string & content);
+
+    /// @brief Read content from the lock file, requires acquiring a lock first.
+    /// @return The content of the lock file
+    /// @throws libdnf5::SystemError if reading fails (or if the file doesn't exist)
+    std::string read_content();
+
     /// @brief Unlock the existing lock and remove the underlying lock file
     /// @throws libdnf5::SystemError if an unexpected error occurs when unlocking
     void unlock();
