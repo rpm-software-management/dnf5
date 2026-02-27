@@ -63,7 +63,7 @@ static const struct {
     {"sh3", {"sh3", nullptr}},
     {"sh4", {"sh4", "sh4a", nullptr}},
     {"sparc", {"sparc", "sparc64", "sparc64v", "sparcv8", "sparcv9", "sparcv9v", nullptr}},
-    {"x86_64", {"x86_64", "amd64", "ia32e", nullptr}},
+    {"x86_64", {"x86_64", "amd64", "ia32e", "x86_64_v2", "x86_64_v3", "x86_64_v4", nullptr}},
     {"loongarch64", {"loongarch64", nullptr}},
     {nullptr, {nullptr}}};
 
