@@ -464,9 +464,14 @@ void Context::Impl::print_error(std::string_view msg) const {
 }
 
 bool Context::Impl::cmd_requires_privileges() const {
-    // the main, dnf5 command, is allowed
     auto cmd = owner.get_selected_command();
+    // During bash completion the selected command in session is not set.
+    // Privileges are not required during completion.
+    if (!cmd) {
+        return false;
+    }
     auto arg_cmd = cmd->get_argument_parser_command();
+    // the main, dnf5 command, is allowed
     if (arg_cmd->get_parent() == nullptr) {
         return false;
     }
