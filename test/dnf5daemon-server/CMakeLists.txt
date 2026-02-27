@@ -13,6 +13,7 @@ add_test(
 set_property(TEST test_dnf5daemon_server PROPERTY RUN_SERIAL TRUE)
 
 set_property(TEST test_dnf5daemon_server PROPERTY ENVIRONMENT
+    "LC_ALL=C"
     "${ASAN_OPTIONS}"
     "PROJECT_BINARY_DIR=${PROJECT_BINARY_DIR}"
 )
