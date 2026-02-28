@@ -1513,12 +1513,17 @@ int main(int argc, char * argv[]) try {
 
             if (context.p_impl->cmd_requires_privileges()) {
                 const auto & installroot = base.get_config().get_installroot_option().get_value();
-                if (libdnf5::utils::bootc::is_bootc_system() && installroot == "/") {
-                    if (!libdnf5::utils::bootc::is_writable()) {
+
+                if (installroot == "/" && !libdnf5::utils::bootc::is_writable()) {
+                    if (libdnf5::utils::bootc::is_bootc_system()) {
                         throw libdnf5::cli::ReadOnlySystemError(
                             M_("Error: this bootc system is configured to be read-only. For more information, run "
                                "`bootc --help`."));
                     }
+                    throw libdnf5::cli::ReadOnlySystemError(
+                        M_("Error: /usr is configured to be read-only. You may be running an image-based or immutable "
+                           "operating system. For more information, refer to your "
+                           "distribution's documentation."));
                 }
 
                 if (!user_has_privileges(context)) {
