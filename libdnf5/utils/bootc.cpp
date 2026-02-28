@@ -19,20 +19,68 @@
 
 #include "libdnf5/utils/bootc.hpp"
 
+#include "utils/subprocess.hpp"
+
 #include "libdnf5/common/exception.hpp"
 #include "libdnf5/utils/bgettext/bgettext-mark-domain.h"
 
+#include <json.h>
+#include <libdnf5/utils/bgettext/bgettext-lib.h>
 #include <sys/statvfs.h>
-#include <unistd.h>
 
 #include <cerrno>
-#include <filesystem>
+#include <iostream>
+#include <memory>
+#include <string>
 
 namespace libdnf5::utils::bootc {
 
 bool is_bootc_system() {
-    const std::filesystem::path ostree_booted{"/run/ostree-booted"};
-    return std::filesystem::is_regular_file(ostree_booted);
+    // Per https://raw.githubusercontent.com/bootc-dev/bootc/11cba840a4cc6dca9afc528f306ebe1406b647fa/docs/src/package-managers.md,
+    // check `bootc status --format=json` has non-null .spec.image to determine whether bootc is in use.
+
+    CompletedProcess result;
+    try {
+        result = run("bootc", {"bootc", "status", "--format=json"});
+    } catch (const libdnf5::SystemError & ex) {
+        if (ex.get_error_code() == ENOENT) {
+            return false;
+        }
+        throw libdnf5::RuntimeError(M_("Failed to query status of bootc system: {}"), std::string(ex.what()));
+    }
+
+    // Check if command failed (non-zero exit code)
+    if (result.returncode != 0) {
+        // Command ran but failed - show stderr to user
+        std::string stderr_content(reinterpret_cast<const char *>(result.stderr.data()), result.stderr.size());
+        if (!stderr_content.empty()) {
+            throw libdnf5::RuntimeError(M_("Got the following error checking bootc status: {}"), stderr_content);
+        } else {
+            throw libdnf5::RuntimeError(
+                M_("Got the following error checking bootc status: bootc command failed with exit code {}"),
+                result.returncode);
+        }
+    }
+
+    // Parse JSON output to check if .spec.image is not null
+    std::string stdout_content(reinterpret_cast<const char *>(result.stdout.data()), result.stdout.size());
+    std::unique_ptr<json_object, decltype(&json_object_put)> root(
+        json_tokener_parse(stdout_content.c_str()), json_object_put);
+
+    if (!root) {
+        // Failed to parse JSON
+        throw libdnf5::RuntimeError(M_("Got the following error checking bootc status: Failed to parse JSON output"));
+    }
+
+    json_object * spec_obj = nullptr;
+    if (!json_object_object_get_ex(root.get(), "spec", &spec_obj)) {
+        return false;
+    }
+    json_object * image_obj = nullptr;
+    if (!json_object_object_get_ex(spec_obj, "image", &image_obj)) {
+        return false;
+    }
+    return !json_object_is_type(image_obj, json_type_null);
 }
 
 bool is_writable() {
