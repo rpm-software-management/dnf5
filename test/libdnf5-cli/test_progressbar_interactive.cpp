@@ -152,7 +152,8 @@ void ProgressbarInteractiveTest::setUp() {
     // Force columns to 70 to make output independ of where it is run
     setenv("FORCE_COLUMNS", "70", 1);
     // Wide characters do not work at all until we set locales in the code
-    setlocale(LC_ALL, "C.UTF-8");
+    // Different locale variants are parameterized in ctest
+    setlocale(LC_ALL, "");
 }
 
 void ProgressbarInteractiveTest::tearDown() {
@@ -314,8 +315,9 @@ void ProgressbarInteractiveTest::test_download_progress_bar_with_long_messages()
         download_progress_bar_raw->pop_message();
         oss << multi_progress_bar;
         expected = "\\[1/1\\] test                     40% | ????? ??B\\/s |   4.0   B | ???????\n";
-        // two "cursor up" lines expected
-        CPPUNIT_ASSERT_EQUAL(2, count_cursor_up_lines(oss.str()));
+        // locale dependent
+        auto expected_lines = strcmp(setlocale(LC_ALL, NULL), "C") == 0 ? 1 : 2;
+        CPPUNIT_ASSERT_EQUAL(expected_lines, count_cursor_up_lines(oss.str()));
     }
 }
 
