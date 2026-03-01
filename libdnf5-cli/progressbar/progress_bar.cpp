@@ -98,7 +98,9 @@ const ProgressBar::Impl::MessageMetrics & ProgressBar::Impl::get_message_metrics
         // calculate the display width of the character
         wchar_t wc;
         auto bytes_consumed = std::mbrtowc(&wc, message.data(), message.size(), &mbstate);
-        if (bytes_consumed <= 0) {
+        // mbrtowc returns 0 if a null wide character was found.
+        // it returns (size_t)-1 or (size_t)-2 on invalid or incomplete wide character.
+        if (bytes_consumed == 0 || bytes_consumed >= SIZE_MAX-1) {
             break;
         }
         auto char_width = static_cast<std::size_t>(wcwidth(wc));
