@@ -20,8 +20,6 @@
 
 #include "libdnf5-cli/progressbar/download_progress_bar.hpp"
 
-#include "../utils/utf8.hpp"
-
 #include "libdnf5-cli/tty.hpp"
 
 #include <algorithm>
