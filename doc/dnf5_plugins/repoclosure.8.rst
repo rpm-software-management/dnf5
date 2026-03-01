@@ -51,6 +51,9 @@ Options
     | Specify repositories to check, can be specified multiple times (default is all enabled repositories).
     | Accepted values are repository ids, or a glob of ids.
 
+``--json``
+    | Request JSON output format for machine-readable results.
+
 ``--newest``
     | Check only the newest packages in the repos.
 
@@ -72,3 +75,24 @@ Examples
 
 ``dnf5 repoclosure --repo rawhide --check myrepo``
     | Display a list of unresolved dependencies for myrepo, an add-on for the rawhide repository.
+
+``dnf5 repoclosure --json``
+    | List all unresolved dependencies in JSON format for machine-readable results.
+
+
+JSON Output
+===========
+
+* ``dnf5 repoclosure --json``
+
+The command returns a JSON array, each element describing one package with unresolved dependencies.
+Each package object contains the following fields:
+
+- ``package`` (string) - Package NEVRA.
+- ``repo`` (string) - Repository identifier.
+- ``unresolved_dependencies`` (array) - List of unsatisfied requirements (strings).
+
+For empty results, ``dnf5 repoclosure --json`` will return ``[]`` (empty array).
+
+If unresolved dependencies are found, the command exits with code ``1``.
+If any package specifications fail to resolve, error messages are printed to ``stderr`` and the command exits with code ``1``.
