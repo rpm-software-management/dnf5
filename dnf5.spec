@@ -175,10 +175,6 @@ BuildRequires:  pkgconfig(cppunit)
 BuildRequires:  rpm-build
 %endif
 
-%if %{with comps}
-BuildRequires:  pkgconfig(libcomps)
-%endif
-
 %if %{with modulemd}
 BuildRequires:  pkgconfig(modulemd-2.0) >= %{libmodulemd_version}
 %endif
