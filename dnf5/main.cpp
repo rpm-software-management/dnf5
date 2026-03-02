@@ -1107,6 +1107,7 @@ static void print_resolve_hints(dnf5::Context & context) {
         bool conflict = false;
         bool broken_file_dep = false;
         bool best = false;
+        bool vendor_change = false;
         // walk through all solver problem to detect a conflict, missing file dependency and best
         for (const auto & resolve_log : context.get_transaction()->get_resolve_logs()) {
             if (resolve_log.get_problem() == libdnf5::GoalProblem::SOLVER_ERROR) {
@@ -1129,6 +1130,9 @@ static void print_resolve_hints(dnf5::Context & context) {
                             case libdnf5::ProblemRules::RULE_BEST_2:
                                 best = true;
                                 break;
+                            case libdnf5::ProblemRules::RULE_UPDATE:
+                                vendor_change = true;
+                                break;
                             default:
                                 break;
                         }
@@ -1149,6 +1153,11 @@ static void print_resolve_hints(dnf5::Context & context) {
                 hints.emplace_back(
                     libdnf5::utils::sformat(_("{} to allow removing of installed packages to resolve problems"), arg));
             }
+        }
+
+        if (!conf.get_allow_vendor_change_option().get_value() && vendor_change) {
+            const std::string_view arg{"--setopt=allow_vendor_change=true"};
+            hints.emplace_back(libdnf5::utils::sformat(_("{} to allow changing package vendors"), arg));
         }
 
         if (broken_file_dep) {
