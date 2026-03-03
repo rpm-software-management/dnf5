@@ -27,7 +27,7 @@ needs-restarting Command
 Synopsis
 ========
 
-``dnf5 needs-restarting [-p | --processes [-e | --exclude-services]] [-s | --services] [-r | --reboothint]``
+``dnf5 needs-restarting [-p | --processes [-e | --exclude-services]] [-s | --services] [-r | --reboothint] [--json]``
 
 
 Description
@@ -52,3 +52,38 @@ Options
 
 ``-r, --reboothint``
     | Has no effect, kept for compatibility with DNF 4. "dnf4 needs-restarting -r" provides the same functionality as "dnf5 needs-restarting".
+
+``--json``
+    | Request JSON output format for machine-readable results.
+
+JSON Output
+===========
+
+* ``dnf5 needs-restarting --json``
+
+The command returns a JSON array containing a single object with the reboot hint information. The object contains the following fields:
+
+    - ``type`` (string) - Type of output, always "reboot".
+    - ``reboot_required`` (boolean) - Whether a reboot is required.
+    - ``packages`` (array of strings) - List of packages that were updated since boot-up.
+    - ``documentation`` (string) - Link to documentation explaining the reboot requirement.
+
+* ``dnf5 needs-restarting --services --json``
+
+The command returns a JSON array of objects, each describing a systemd service that needs restarting. Each object contains the following fields:
+
+    - ``type`` (string) - Type of output, always "unit".
+    - ``unit`` (string) - Name of the systemd service.
+
+* ``dnf5 needs-restarting --processes --json``
+
+The command returns a JSON array of objects, each describing a running process that needs restarting. Each object contains the following fields:
+
+    - ``type`` (string) - Type of output, always "process".
+    - ``pid`` (integer) - Process ID.
+    - ``cmdline`` (array of strings) - Command line of the process.
+    - ``package`` (string) - Package providing the executable.
+
+The ``--json`` option can be combined with ``--exclude-services`` when using ``--processes`` to filter out processes managed by systemd services (e.g. ``dnf5 needs-restarting --processes --exclude-services --json``).
+
+For empty results for services or processes, the commands return ``[]``. For reboot hints, even if no reboot is recommended, the command returns a JSON array containing a single object with ``reboot_required`` set to false, an empty array of ``packages``, and the ``documentation`` link.

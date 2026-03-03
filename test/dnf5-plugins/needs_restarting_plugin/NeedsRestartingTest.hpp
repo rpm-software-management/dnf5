@@ -31,6 +31,7 @@ class NeedsRestartingTest : public CppUnit::TestCase {
     CPPUNIT_TEST(test_exclude_services_without_processes);
     CPPUNIT_TEST(test_services_option);
     CPPUNIT_TEST(test_reboothint_option);
+    CPPUNIT_TEST(test_json_option);
     CPPUNIT_TEST(test_all_options_registered);
     CPPUNIT_TEST_SUITE_END();
 
@@ -44,6 +45,7 @@ public:
     void test_exclude_services_without_processes();
     void test_services_option();
     void test_reboothint_option();
+    void test_json_option();
     void test_all_options_registered();
 };
 
