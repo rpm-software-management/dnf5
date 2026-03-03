@@ -96,8 +96,8 @@ namespace libdnf5::utils::subprocess {
 CompletedProcess run(const std::string & command, const std::vector<std::string> & args) {
     // Struct is used to pass a possible error from a child process before starting a new program.
     struct ErrorMessage {
-        enum { BIND_STDOUT, BIND_STDERR, EXEC } error;  // what failed
-        int err_code;                                   // errno
+        enum { BIND_STDIN, BIND_STDOUT, BIND_STDERR, EXEC } error;  // what failed
+        int err_code;                                               // errno
     };
 
     Pipe pipe_error_msg_from_child;
@@ -127,12 +127,28 @@ CompletedProcess run(const std::string & command, const std::vector<std::string>
         pipe_out_from_child.close_in();  // close reading end of the pipe on the child side
         pipe_err_from_child.close_in();  // close reading end of the pipe on the child side
 
+        // redirect stdin to /dev/null so the child doesn't inherit parent's stdin
+        const int dev_null_fd = open("/dev/null", O_RDONLY);
+        if (dev_null_fd == -1) {
+            ErrorMessage msg{ErrorMessage::BIND_STDIN, errno};
+            if (write(pipe_error_msg_from_child.get_out(), &msg, sizeof(msg)) != sizeof(msg)) {
+                // Ignore errors generated when sending an error.
+                // The process terminates which is detected as an error in the parent process anyway.
+            }
+            _exit(255);
+        }
+        if (dup2(dev_null_fd, fileno(stdin)) == -1) {
+            ErrorMessage msg{ErrorMessage::BIND_STDIN, errno};
+            if (write(pipe_error_msg_from_child.get_out(), &msg, sizeof(msg)) != sizeof(msg)) {
+            }
+            _exit(255);
+        }
+        ::close(dev_null_fd);
+
         // bind stdout of the child process to the writing end of the pipe
         if (dup2(pipe_out_from_child.get_out(), fileno(stdout)) == -1) {
             ErrorMessage msg{ErrorMessage::BIND_STDOUT, errno};
             if (write(pipe_error_msg_from_child.get_out(), &msg, sizeof(msg)) != sizeof(msg)) {
-                // Ignore errors generated when sending an error.
-                // The process terminates which is detected as an error in the parent process anyway.
             }
             _exit(255);
         }
@@ -170,9 +186,11 @@ CompletedProcess run(const std::string & command, const std::vector<std::string>
 
         // Check the pipe for errors. The child process will close it empty or write an error.
         ErrorMessage err_msg;
-        auto ret = read(pipe_error_msg_from_child.get_in(), &err_msg, sizeof(err_msg));
+        const auto ret = read(pipe_error_msg_from_child.get_in(), &err_msg, sizeof(err_msg));
         if (ret == sizeof(err_msg)) {
             switch (err_msg.error) {
+                case ErrorMessage::BIND_STDIN:
+                    throw SystemError(err_msg.err_code, M_("cannot bind child stdin"));
                 case ErrorMessage::BIND_STDOUT:
                     throw SystemError(err_msg.err_code, M_("cannot bind child stdout"));
                 case ErrorMessage::BIND_STDERR:
