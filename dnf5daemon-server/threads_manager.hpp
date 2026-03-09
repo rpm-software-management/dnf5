@@ -59,8 +59,14 @@ public:
                 std::optional<std::string> thread_locale = std::nullopt) {
                 locale_t new_locale{nullptr};
                 locale_t orig_locale{nullptr};
+
                 if (thread_locale) {
-                    orig_locale = set_thread_locale(thread_locale.value(), new_locale);
+                    try {
+                        orig_locale = set_thread_locale(thread_locale.value(), new_locale);
+                    } catch (const std::exception &) {
+                        // Cannot switch to the requested locale, continue with the current one
+                        thread_locale = std::nullopt;
+                    }
                 }
 
                 sdbus::MethodReply reply;
@@ -127,8 +133,14 @@ public:
                 static unsigned int counter{0};
                 locale_t new_locale{nullptr};
                 locale_t orig_locale{nullptr};
+
                 if (thread_locale) {
-                    orig_locale = set_thread_locale(thread_locale.value(), new_locale);
+                    try {
+                        orig_locale = set_thread_locale(thread_locale.value(), new_locale);
+                    } catch (const std::exception &) {
+                        // Cannot switch to the requested locale, continue with the current one
+                        thread_locale = std::nullopt;
+                    }
                 }
 
                 sdbus::MethodReply reply = call.createReply();
