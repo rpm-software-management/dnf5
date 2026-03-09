@@ -594,6 +594,7 @@ repository configuration file should aside from repo ID consists of baseurl, met
     ``nocaps``        ``RPMTRANS_FLAG_NOCAPS``
     ``nocrypto``      ``RPMTRANS_FLAG_NOFILEDIGEST``
     ``deploops``      ``RPMTRANS_FLAG_DEPLOOPS``
+    ``noplugins``     ``RPMTRANS_FLAG_NOPLUGINS``
     ================  ===============================
 
     The ``nocrypto`` option will also set the ``_RPMVSF_NOSIGNATURES`` and
@@ -603,8 +604,7 @@ repository configuration file should aside from repo ID consists of baseurl, met
     It includes downloading of packages, OpenPGP keys check (including permanent import of
     additional keys if necessary), and rpm check to prevent file conflicts.
 
-    The ``nocaps`` is supported with rpm-4.14 or later. When ``nocaps`` is used but rpm
-    doesn't support it, DNF5 only reports it as an invalid tsflag.
+    The ``noplugins`` option disables use of rpm plugins.
 
     Default: empty.
 
