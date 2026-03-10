@@ -989,9 +989,9 @@ DNF5 plugin for working with RPM package manifest files.
 %if %{with man}
 %{_mandir}/man8/dnf*-manifest.8.*
 %endif
-%endif  # %{with plugin_manifest}
+%endif  # %%{with plugin_manifest}
 
-%endif  # %{with dnf5_plugins}
+%endif  # %%{with dnf5_plugins}
 
 
 # ========== unpack, build, check & install ==========
