@@ -24,6 +24,7 @@
 
 #include <libdnf5-cli/progressbar/download_progress_bar.hpp>
 #include <libdnf5-cli/progressbar/multi_progress_bar.hpp>
+
 #include <clocale>
 #include <cstring>
 
@@ -49,7 +50,10 @@ void ProgressbarTest::test_progress_bar_multi_byte_character() {
     auto progress_bar = std::make_unique<libdnf5::cli::progressbar::DownloadProgressBar>(10, "test");
     progress_bar->set_ticks(4);
     progress_bar->set_state(libdnf5::cli::progressbar::ProgressBarState::STARTED);
-    progress_bar->add_message(libdnf5::cli::progressbar::MessageType::WARNING, "Created symlink '/etc/systemd/user/sockets.target.wants/pipewire.socket' \342\206\222 '/usr/lib/systemd/user/pipewire.socket'.");
+    progress_bar->add_message(
+        libdnf5::cli::progressbar::MessageType::WARNING,
+        "Created symlink '/etc/systemd/user/sockets.target.wants/pipewire.socket' \342\206\222 "
+        "'/usr/lib/systemd/user/pipewire.socket'.");
     auto num_lines = progress_bar->calculate_messages_terminal_lines(106);
     auto expected = strcmp(setlocale(LC_ALL, NULL), "C") == 0 ? 1UL : 2UL;
     CPPUNIT_ASSERT_EQUAL(expected, num_lines);
