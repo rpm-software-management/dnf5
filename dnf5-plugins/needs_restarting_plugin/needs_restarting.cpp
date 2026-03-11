@@ -656,7 +656,6 @@ void NeedsRestartingCommand::processes_need_restarting(Context & ctx, bool exclu
 
     // Now check which processes need restarting
     std::set<ProcessResult> processes_needing_restart;
-    libdnf5::rpm::PackageSet updated_packages{ctx.get_base()};
 
     for (const auto & [exe_path, process_info] : running_processes) {
         // Recursively get all dependencies of the package that
@@ -669,8 +668,6 @@ void NeedsRestartingCommand::processes_need_restarting(Context & ctx, bool exclu
             if (install_time > process_info.start_time) {
                 processes_needing_restart.insert(
                     {process_info.pid, process_info.cmdline, process_info.package.get_name()});
-                // Track this package as updated so we can check reverse dependencies
-                updated_packages.add(dep);
                 break;
             }
         }
