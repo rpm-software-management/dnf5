@@ -496,7 +496,7 @@ void RepoSack::Impl::update_and_load_repos(libdnf5::repo::RepoQuery & repos, boo
         // Use custom sorting by repository ids to process them in stable order otherwise they would
         // be sorted by their memory addresses.
         // This order matters especially because libsolv is sensitive to it.
-        auto cmp = [](const Repo * r1, const Repo * r2) { return r1->get_id().compare(r2->get_id()); };
+        auto cmp = [](const Repo * r1, const Repo * r2) { return r1->get_id() < r2->get_id(); };
         std::set<Repo *, decltype(cmp)> repos_for_processing_set;
 
         if (run_count == 0) {
