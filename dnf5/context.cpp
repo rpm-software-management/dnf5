@@ -39,6 +39,7 @@
 #include <libdnf5/rpm/package_set.hpp>
 #include <libdnf5/rpm/rpm_signature.hpp>
 #include <libdnf5/transaction/offline.hpp>
+#include <libdnf5/transaction/transaction_item_action.hpp>
 #include <libdnf5/utils/bgettext/bgettext-lib.h>
 #include <libdnf5/utils/bgettext/bgettext-mark-domain.h>
 #include <libdnf5/utils/fs/file.hpp>
@@ -337,6 +338,41 @@ void Context::Impl::store_offline(libdnf5::base::Transaction & transaction) {
     state.write();
 }
 
+/// Prepopulate the offline destdir with already-cached packages from the repo
+/// cache to avoid re-downloading them.  Must be called before setting destdir,
+/// so that get_package_path() / is_available_locally() still resolve to the
+/// repo cache.
+static void prepopulate_offline_cache(
+    libdnf5::base::Transaction & transaction, const std::filesystem::path & packages_dir) {
+    std::filesystem::create_directories(packages_dir);
+    for (auto & tspkg : transaction.get_transaction_packages()) {
+        if (!libdnf5::transaction::transaction_item_action_is_inbound(tspkg.get_action())) {
+            continue;
+        }
+        auto pkg = tspkg.get_package();
+        if (pkg.get_repo()->get_type() == libdnf5::repo::Repo::Type::COMMANDLINE) {
+            continue;
+        }
+        if (!pkg.is_available_locally()) {
+            continue;
+        }
+        auto cached_path = std::filesystem::path(pkg.get_package_path());
+        auto dest_path = packages_dir / cached_path.filename();
+        std::error_code ec;
+        if (!std::filesystem::exists(dest_path, ec)) {
+            // Try rename (fast on same filesystem), fall back to
+            // copy + delete across filesystems.
+            std::filesystem::rename(cached_path, dest_path, ec);
+            if (ec) {
+                std::filesystem::copy_file(cached_path, dest_path, ec);
+                if (!ec) {
+                    std::filesystem::remove(cached_path, ec);
+                }
+            }
+        }
+    }
+}
+
 void Context::Impl::download_and_run(libdnf5::base::Transaction & transaction) {
     if (!transaction_store_path.empty()) {
         auto & config = base.get_config();
@@ -389,7 +425,9 @@ void Context::Impl::download_and_run(libdnf5::base::Transaction & transaction) {
                 throw libdnf5::cli::AbortedByUserError();
             }
         }
-        base.get_config().get_destdir_option().set(offline_destdir / "packages");
+        const auto & packages_dir = offline_destdir / "packages";
+        prepopulate_offline_cache(transaction, packages_dir);
+        base.get_config().get_destdir_option().set(packages_dir);
         transaction.set_download_local_pkgs(true);
     }
 
