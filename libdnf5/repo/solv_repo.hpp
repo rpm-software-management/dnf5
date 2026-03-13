@@ -166,6 +166,12 @@ public:
     ::Repo * comps_repo{nullptr};
 };
 
+/// Pre-builds .solv and .solvx cache files for a repository in an isolated
+/// libsolv pool. Designed to be called from worker threads so the main loader
+/// thread can later do fast binary reads instead of XML parsing.
+/// Silently returns on any error (the loader thread will fall back to XML).
+void pre_build_solv_cache(const ConfigRepo & config, const DownloadData & download_data);
+
 }  // namespace libdnf5::repo
 
 #endif  // LIBDNF5_REPO_SOLV_REPO_HPP

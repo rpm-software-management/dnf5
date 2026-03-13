@@ -51,6 +51,7 @@ public:
     void * get_user_data() const noexcept;
 
     const std::string & get_metadata_path(const std::string & metadata_type) const;
+    const std::string & get_repomd_filename() const noexcept { return repomd_filename; }
     std::vector<std::pair<std::string, std::string>> get_appstream_metadata() const;
 
 private:

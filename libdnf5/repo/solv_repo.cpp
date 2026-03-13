@@ -821,4 +821,325 @@ void SolvRepo::create_environment_solvable(
     repodata_internalize(data);
 }
 
+/// Writes a .solv file from a temporary libsolv repo into the given path,
+/// embedding the provided checksum in the userdata header.
+static void write_solv_file(
+    ::Repo * temp_repo,
+    const unsigned char * chksum,
+    const std::filesystem::path & target_path,
+    int solvables_start,
+    int solvables_end,
+    int repodata_start,
+    int repodata_end) {
+    auto parent_dir = target_path.parent_path();
+    std::filesystem::create_directories(parent_dir);
+
+    auto tmp_file = fs::TempFile(parent_dir, target_path.filename());
+    auto & cache_file = tmp_file.open_as_file("w+");
+
+    SolvUserdata solv_userdata{};
+    memcpy(solv_userdata.dnf_magic, SOLV_USERDATA_MAGIC.data(), SOLV_USERDATA_MAGIC.size());
+    memcpy(solv_userdata.dnf_version, SOLV_USERDATA_DNF_VERSION.data(), SOLV_USERDATA_DNF_VERSION.size());
+    memcpy(solv_userdata.libsolv_version, get_padded_solv_toolversion().data(), SOLV_USERDATA_SOLV_TOOLVERSION_SIZE);
+    memcpy(solv_userdata.checksum, chksum, CHKSUM_BYTES);
+
+    Repowriter * writer = repowriter_create(temp_repo);
+    repowriter_set_userdata(writer, &solv_userdata, SOLV_USERDATA_SIZE);
+    repowriter_set_solvablerange(writer, solvables_start, solvables_end);
+    repowriter_set_repodatarange(writer, repodata_start, repodata_end);
+    int res = repowriter_write(writer, cache_file.get());
+    repowriter_free(writer);
+
+    if (res != 0) {
+        return;
+    }
+
+    tmp_file.close();
+    std::filesystem::permissions(
+        tmp_file.get_path(),
+        std::filesystem::perms::group_read | std::filesystem::perms::others_read,
+        std::filesystem::perm_options::add);
+    std::filesystem::rename(tmp_file.get_path(), target_path);
+    tmp_file.release();
+}
+
+/// Writes a .solvx extension cache file from a temporary libsolv repo.
+static void write_solvx_file(
+    ::Repo * temp_repo,
+    const unsigned char * chksum,
+    const std::filesystem::path & target_path,
+    Id repodata_id,
+    RepodataType type,
+    int solvables_start,
+    int solvables_end) {
+    auto parent_dir = target_path.parent_path();
+    std::filesystem::create_directories(parent_dir);
+
+    auto tmp_file = fs::TempFile(parent_dir, target_path.filename());
+    auto & cache_file = tmp_file.open_as_file("w+");
+
+    SolvUserdata solv_userdata{};
+    memcpy(solv_userdata.dnf_magic, SOLV_USERDATA_MAGIC.data(), SOLV_USERDATA_MAGIC.size());
+    memcpy(solv_userdata.dnf_version, SOLV_USERDATA_DNF_VERSION.data(), SOLV_USERDATA_DNF_VERSION.size());
+    memcpy(solv_userdata.libsolv_version, get_padded_solv_toolversion().data(), SOLV_USERDATA_SOLV_TOOLVERSION_SIZE);
+    memcpy(solv_userdata.checksum, chksum, CHKSUM_BYTES);
+
+    Repowriter * writer = repowriter_create(temp_repo);
+    repowriter_set_userdata(writer, &solv_userdata, SOLV_USERDATA_SIZE);
+    repowriter_set_repodatarange(writer, repodata_id, repodata_id + 1);
+
+    if (type == RepodataType::UPDATEINFO) {
+        repowriter_set_solvablerange(writer, solvables_start, solvables_end);
+    }
+    if (type != RepodataType::COMPS && type != RepodataType::UPDATEINFO) {
+        repowriter_set_flags(writer, REPOWRITER_NO_STORAGE_SOLVABLE);
+    }
+
+    int res = repowriter_write(writer, cache_file.get());
+    repowriter_free(writer);
+
+    if (res != 0) {
+        return;
+    }
+
+    tmp_file.close();
+    std::filesystem::permissions(
+        tmp_file.get_path(),
+        std::filesystem::perms::group_read | std::filesystem::perms::others_read,
+        std::filesystem::perm_options::add);
+    std::filesystem::rename(tmp_file.get_path(), target_path);
+    tmp_file.release();
+}
+
+/// Computes the solv cache file path for a given repo config and optional type.
+static std::filesystem::path compute_solv_file_path(const ConfigRepo & config, const char * type) {
+    std::string filename;
+    if (type != nullptr) {
+        filename = fmt::format("{}-{}.solvx", config.get_id(), type);
+    } else {
+        filename = config.get_id() + ".solv";
+    }
+    return std::filesystem::path(config.get_cachedir()) / CACHE_SOLV_FILES_DIR / filename;
+}
+
+/// Checks if a solv cache file exists and matches the given checksum, without
+/// requiring a SolvRepo instance. Used by the pre-builder to skip work.
+static bool solv_cache_is_valid(const unsigned char * chksum, const std::filesystem::path & path) {
+    try {
+        fs::File cache_file(path, "r");
+        unsigned char * userdata_read;
+        int userdata_len;
+        if (solv_read_userdata(cache_file.get(), &userdata_read, &userdata_len) != 0) {
+            return false;
+        }
+        std::unique_ptr<SolvUserdata, decltype(&solv_free)> ud(
+            reinterpret_cast<SolvUserdata *>(userdata_read), &solv_free);
+        if (userdata_len != static_cast<int>(SOLV_USERDATA_SIZE)) {
+            return false;
+        }
+        if (memcmp(ud->dnf_magic, SOLV_USERDATA_MAGIC.data(), SOLV_USERDATA_MAGIC.size()) != 0) {
+            return false;
+        }
+        if (memcmp(ud->dnf_version, SOLV_USERDATA_DNF_VERSION.data(), SOLV_USERDATA_DNF_VERSION.size()) != 0) {
+            return false;
+        }
+        if (memcmp(ud->libsolv_version, get_padded_solv_toolversion().data(), SOLV_USERDATA_SOLV_TOOLVERSION_SIZE) !=
+            0) {
+            return false;
+        }
+        if (memcmp(ud->checksum, chksum, CHKSUM_BYTES) != 0) {
+            return false;
+        }
+        return true;
+    } catch (...) {
+        return false;
+    }
+}
+
+/// Pre-build a single extension .solvx file in the given temp pool/repo.
+static void pre_build_ext(
+    Pool * temp_pool,
+    ::Repo * temp_repo,
+    const unsigned char * chksum,
+    const ConfigRepo & config,
+    const DownloadData & download_data,
+    RepodataType type,
+    const char * md_type_name) {
+    auto target_path = compute_solv_file_path(config, md_type_name);
+    if (solv_cache_is_valid(chksum, target_path)) {
+        return;
+    }
+
+    std::string ext_fn;
+    if (type == RepodataType::COMPS) {
+        ext_fn = download_data.get_metadata_path(RepoDownloader::MD_FILENAME_GROUP_GZ);
+        if (ext_fn.empty()) {
+            ext_fn = download_data.get_metadata_path(md_type_name);
+        }
+    } else {
+        ext_fn = download_data.get_metadata_path(md_type_name);
+    }
+    if (ext_fn.empty()) {
+        return;
+    }
+
+    int solvables_start = temp_pool->nsolvables;
+    int repodata_start = temp_repo->nrepodata;
+
+    fs::File ext_file(ext_fn, "r", true);
+    int res = 0;
+    switch (type) {
+        case RepodataType::FILELISTS:
+            res = repo_add_rpmmd(temp_repo, ext_file.get(), "FL", REPO_EXTEND_SOLVABLES);
+            break;
+        case RepodataType::PRESTO:
+            res = repo_add_deltainfoxml(temp_repo, ext_file.get(), 0);
+            break;
+        case RepodataType::UPDATEINFO:
+            res = repo_add_updateinfoxml(temp_repo, ext_file.get(), 0);
+            break;
+        case RepodataType::COMPS:
+            res = repo_add_comps(temp_repo, ext_file.get(), 0);
+            break;
+        case RepodataType::OTHER:
+            res = repo_add_rpmmd(temp_repo, ext_file.get(), 0, REPO_EXTEND_SOLVABLES);
+            break;
+        case RepodataType::APPSTREAM:
+            return;
+    }
+    if (res != 0) {
+        return;
+    }
+
+    Id repodata_id = temp_repo->nrepodata - 1;
+    (void)repodata_start;
+    write_solvx_file(
+        temp_repo, chksum, target_path, repodata_id, type, solvables_start, temp_pool->nsolvables);
+}
+
+void pre_build_solv_cache(const ConfigRepo & config, const DownloadData & download_data) {
+    try {
+        auto repomd_fn = download_data.get_repomd_filename();
+        auto primary_fn = download_data.get_metadata_path(RepoDownloader::MD_FILENAME_PRIMARY);
+        if (repomd_fn.empty() || primary_fn.empty()) {
+            return;
+        }
+
+        // Compute checksum of repomd.xml (same as SolvRepo::load_repo_main)
+        unsigned char chksum[CHKSUM_BYTES];
+        {
+            fs::File repomd_file(repomd_fn, "r");
+            checksum_calc(chksum, repomd_file);
+        }
+
+        // Check if primary .solv already exists and is valid
+        auto primary_solv_path = compute_solv_file_path(config, nullptr);
+        if (solv_cache_is_valid(chksum, primary_solv_path)) {
+            // Primary is valid; check extensions too (they use the same checksum)
+            // If all valid, nothing to do
+            bool all_ext_valid = true;
+            struct ExtInfo {
+                RepodataType type;
+                const char * md_name;
+            };
+            ExtInfo extensions[] = {
+                {RepodataType::FILELISTS, RepoDownloader::MD_FILENAME_FILELISTS},
+                {RepodataType::OTHER, RepoDownloader::MD_FILENAME_OTHER},
+                {RepodataType::PRESTO, RepoDownloader::MD_FILENAME_PRESTODELTA},
+                {RepodataType::UPDATEINFO, RepoDownloader::MD_FILENAME_UPDATEINFO},
+                {RepodataType::COMPS, RepoDownloader::MD_FILENAME_GROUP},
+            };
+            for (const auto & ext : extensions) {
+                auto ext_fn = download_data.get_metadata_path(ext.md_name);
+                if (!ext_fn.empty()) {
+                    auto ext_path = compute_solv_file_path(config, ext.md_name);
+                    if (!solv_cache_is_valid(chksum, ext_path)) {
+                        all_ext_valid = false;
+                        break;
+                    }
+                }
+            }
+            if (all_ext_valid) {
+                return;
+            }
+        }
+
+        // Create an isolated libsolv pool and repo for this thread
+        Pool * temp_pool = pool_create();
+        ::Repo * temp_repo = repo_create(temp_pool, config.get_id().c_str());
+
+        // Parse repomd + primary XML
+        {
+            fs::File repomd_file(repomd_fn, "r");
+            if (repo_add_repomdxml(temp_repo, repomd_file.get(), 0) != 0) {
+                repo_free(temp_repo, 0);
+                pool_free(temp_pool);
+                return;
+            }
+        }
+
+        int solvables_start = 0;
+        int repodata_start = 0;
+        {
+            solvables_start = temp_pool->nsolvables;
+            repodata_start = temp_repo->nrepodata;
+
+            fs::File primary_file(primary_fn, "r", true);
+            if (repo_add_rpmmd(temp_repo, primary_file.get(), 0, 0) != 0) {
+                repo_free(temp_repo, 0);
+                pool_free(temp_pool);
+                return;
+            }
+        }
+
+        int solvables_end = temp_pool->nsolvables;
+        int repodata_end = temp_repo->nrepodata;
+
+        // Write primary .solv
+        write_solv_file(temp_repo, chksum, primary_solv_path, solvables_start, solvables_end, repodata_start, repodata_end);
+
+        // Build extension caches. Each extension uses a fresh temp pool/repo
+        // because extension writers need isolated repodata ranges.
+        struct ExtInfo {
+            RepodataType type;
+            const char * md_name;
+        };
+        ExtInfo extensions[] = {
+            {RepodataType::FILELISTS, RepoDownloader::MD_FILENAME_FILELISTS},
+            {RepodataType::OTHER, RepoDownloader::MD_FILENAME_OTHER},
+            {RepodataType::PRESTO, RepoDownloader::MD_FILENAME_PRESTODELTA},
+            {RepodataType::UPDATEINFO, RepoDownloader::MD_FILENAME_UPDATEINFO},
+            {RepodataType::COMPS, RepoDownloader::MD_FILENAME_GROUP},
+        };
+
+        for (const auto & ext : extensions) {
+            // Each extension needs its own pool because the solvable and
+            // repodata ranges must map correctly for the repowriter.
+            Pool * ext_pool = pool_create();
+            ::Repo * ext_repo = repo_create(ext_pool, config.get_id().c_str());
+
+            // For extensions that use REPO_EXTEND_SOLVABLES we must first
+            // load the primary solvables so there's something to extend.
+            if (ext.type == RepodataType::FILELISTS || ext.type == RepodataType::OTHER ||
+                ext.type == RepodataType::PRESTO) {
+                fs::File repomd_file(repomd_fn, "r");
+                repo_add_repomdxml(ext_repo, repomd_file.get(), 0);
+                fs::File pf(primary_fn, "r", true);
+                repo_add_rpmmd(ext_repo, pf.get(), 0, 0);
+            }
+
+            pre_build_ext(ext_pool, ext_repo, chksum, config, download_data, ext.type, ext.md_name);
+
+            repo_free(ext_repo, 0);
+            pool_free(ext_pool);
+        }
+
+        repo_free(temp_repo, 0);
+        pool_free(temp_pool);
+    } catch (...) {
+        // Pre-builder is best-effort; any failure is silently ignored.
+        // The loader thread will fall back to parsing XML directly.
+    }
+}
+
 }  // namespace libdnf5::repo
