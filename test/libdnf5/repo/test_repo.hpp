@@ -34,6 +34,8 @@ class RepoTest : public BaseTestCase {
     CPPUNIT_TEST(test_load_repos_invalid_type);
     CPPUNIT_TEST(test_load_repos_load_available);
     CPPUNIT_TEST(test_load_repos_load_available_system);
+    CPPUNIT_TEST(test_parallel_load_produces_identical_results);
+    CPPUNIT_TEST(test_thread_pool_basic);
     CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -44,6 +46,8 @@ public:
     void test_load_repos_invalid_type();
     void test_load_repos_load_available();
     void test_load_repos_load_available_system();
+    void test_parallel_load_produces_identical_results();
+    void test_thread_pool_basic();
 };
 
 #endif
