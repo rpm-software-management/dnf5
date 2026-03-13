@@ -102,6 +102,10 @@ public:
     // @replaces dnf:dnf/comps.py:attribute:Environment.mandatory_groups
     std::vector<std::string> get_groups();
 
+    /// @return std::vector of default Group ids belonging to the Environment.
+    /// @since 5.4.0.1
+    std::vector<std::string> get_default_groups();
+
     /// @return std::vector of optional Group ids belonging to the Environment.
     /// @since 5.0
     //
