@@ -56,6 +56,10 @@ target_link_libraries(libdnf5_iface INTERFACE $<TARGET_OBJECTS:common_obj>)
 
 # link libraries and set pkg-config requires
 
+find_package(Threads REQUIRED)
+target_link_libraries(libdnf5 PRIVATE Threads::Threads)
+target_link_libraries(libdnf5_iface INTERFACE Threads::Threads)
+
 find_package(toml11 REQUIRED)
 if (toml11_VERSION VERSION_LESS 4.0.0)
     add_definitions(-DTOML11_COMPAT)
