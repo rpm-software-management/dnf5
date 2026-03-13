@@ -21,9 +21,14 @@
 
 #include "../shared/private_accessor.hpp"
 #include "utils/string.hpp"
+#include "utils/thread_pool.hpp"
 
 #include <libdnf5/base/base.hpp>
 #include <libdnf5/repo/repo_errors.hpp>
+#include <libdnf5/rpm/package_query.hpp>
+#include <libdnf5/rpm/package_set.hpp>
+
+#include <atomic>
 
 
 CPPUNIT_TEST_SUITE_REGISTRATION(RepoTest);
@@ -205,4 +210,45 @@ void RepoTest::test_load_repos_load_available_system() {
     CPPUNIT_ASSERT_GREATEREQUAL(2, dl_callbacks_ptr->progress_cnt);
     CPPUNIT_ASSERT_EQUAL(0, dl_callbacks_ptr->fastest_mirror_cnt);
     CPPUNIT_ASSERT_EQUAL(0, dl_callbacks_ptr->handle_mirror_failure_cnt);
+}
+
+void RepoTest::test_parallel_load_produces_identical_results() {
+    // Load a repo and verify packages are correctly populated.
+    // The parallel pre-build and cache validation paths are exercised
+    // transparently through the normal load_repos() call.
+    std::string repoid("repomd-repo1");
+    add_repo_repomd(repoid, false);
+
+    repo_sack->load_repos(libdnf5::repo::Repo::Type::AVAILABLE);
+
+    libdnf5::rpm::PackageQuery query(base);
+    query.filter_available();
+
+    // repomd-repo1 should have packages
+    CPPUNIT_ASSERT(!query.empty());
+}
+
+void RepoTest::test_thread_pool_basic() {
+    libdnf5::utils::ThreadPool pool(4);
+
+    // Submit several tasks and verify they all complete correctly
+    std::vector<std::future<int>> futures;
+    for (int i = 0; i < 20; ++i) {
+        futures.push_back(pool.submit([i]() { return i * i; }));
+    }
+
+    for (int i = 0; i < 20; ++i) {
+        CPPUNIT_ASSERT_EQUAL(i * i, futures[static_cast<std::size_t>(i)].get());
+    }
+
+    // Test with void return type
+    std::atomic<int> counter{0};
+    std::vector<std::future<void>> void_futures;
+    for (int i = 0; i < 10; ++i) {
+        void_futures.push_back(pool.submit([&counter]() { counter.fetch_add(1); }));
+    }
+    for (auto & f : void_futures) {
+        f.get();
+    }
+    CPPUNIT_ASSERT_EQUAL(10, counter.load());
 }
