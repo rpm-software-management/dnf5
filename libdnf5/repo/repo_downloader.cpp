@@ -67,15 +67,48 @@ int RepoDownloader::end_cb_full_download(void * data, LrTransferStatus status, c
     auto download_callback_data = static_cast<CallbackData *>(data);
     auto cb_status = static_cast<DownloadCallbacks::TransferStatus>(status);
     if (cb_status == DownloadCallbacks::TransferStatus::SUCCESSFUL && download_callback_data) {
+        auto tmpdir = download_callback_data->temp_download_target->get_path();
+
         // move all downloaded object from tmpdir to destdir
-        for (auto & dir :
-             std::filesystem::directory_iterator(download_callback_data->temp_download_target->get_path())) {
+        for (auto & dir : std::filesystem::directory_iterator(tmpdir)) {
             auto tmp_item = dir.path();
 
             auto target_item = download_callback_data->destination / tmp_item.filename();
             std::filesystem::remove_all(target_item);
 
             utils::fs::move_recursive(tmp_item, target_item);
+        }
+
+        // Populate download_data.metadata_paths from the lr_target result,
+        // remapping tmpdir-based paths to destdir-based paths. This avoids a
+        // redundant load_local / librepo perform() call later.
+        if (download_callback_data->lr_target && download_callback_data->lr_target->repo) {
+            auto & download_data = download_callback_data->repo->get_download_data();
+            auto tmpdir_str = tmpdir.string();
+            auto destdir_str = download_callback_data->destination;
+
+            download_data.metadata_paths.clear();
+            for (auto * elem = download_callback_data->lr_target->repo->paths; elem; elem = g_slist_next(elem)) {
+                if (elem->data) {
+                    auto yumrepopath = static_cast<LrYumRepoPath *>(elem->data);
+                    std::string path = yumrepopath->path;
+                    // Remap path from tmpdir to destdir
+                    if (path.starts_with(tmpdir_str)) {
+                        path = destdir_str + path.substr(tmpdir_str.size());
+                    }
+                    download_data.metadata_paths[yumrepopath->type] = path;
+                }
+            }
+
+            if (download_callback_data->lr_target->repo->repomd) {
+                std::string repomd_path = download_callback_data->lr_target->repo->repomd;
+                if (repomd_path.starts_with(tmpdir_str)) {
+                    repomd_path = destdir_str + repomd_path.substr(tmpdir_str.size());
+                }
+                download_data.repomd_filename = repomd_path;
+            }
+
+            download_data.metadata_paths_from_download = true;
         }
 
         if (download_callback_data->load_repo) {

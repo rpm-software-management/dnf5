@@ -32,6 +32,8 @@
 #include <solv/repo.h>
 
 #include <filesystem>
+#include <future>
+#include <vector>
 
 
 static const constexpr size_t CHKSUM_BYTES = 32;
@@ -159,12 +161,22 @@ private:
     /// List of system repo environmental groups without valid file with xml definition
     std::vector<std::string> environments_missing_xml;
 
+    // Deferred solv cache file writes (permissions + rename) running in background.
+    // Waited on in the destructor to ensure writes complete.
+    std::vector<std::future<void>> deferred_solv_writes;
+
 public:
     ::Repo * repo{nullptr};  // libsolv pool retains ownership
     // Solvables for groups and environments are kept in separate pool. It means
     // we need also separate Repo object created in that pool.
     ::Repo * comps_repo{nullptr};
 };
+
+/// Pre-builds .solv and .solvx cache files for a repository in an isolated
+/// libsolv pool. Designed to be called from worker threads so the main loader
+/// thread can later do fast binary reads instead of XML parsing.
+/// Silently returns on any error (the loader thread will fall back to XML).
+void pre_build_solv_cache(const ConfigRepo & config, const DownloadData & download_data);
 
 }  // namespace libdnf5::repo
 
