@@ -76,6 +76,7 @@ constexpr std::pair<const char *, rpmtransFlags_e> string_tsflag_map[]{
     {"nocaps", RPMTRANS_FLAG_NOCAPS},
     {"nocrypto", RPMTRANS_FLAG_NOFILEDIGEST},
     {"deploops", RPMTRANS_FLAG_DEPLOOPS},
+    {"noplugins", RPMTRANS_FLAG_NOPLUGINS},
 };
 
 const std::map<base::Transaction::TransactionRunResult, BgettextMessage> TRANSACTION_RUN_RESULT_DICT = {
@@ -947,15 +948,7 @@ Transaction::TransactionRunResult Transaction::Impl::_run(
         return TransactionRunResult::ERROR_LOCK;
     }
 
-    // fill and check the rpm transaction
     libdnf5::rpm::Transaction rpm_transaction(base);
-    rpm_transaction.fill(*transaction);
-    if (!rpm_transaction.check()) {
-        for (auto it : rpm_transaction.get_problems()) {
-            transaction_problems.emplace_back(it.to_string());
-        }
-        return TransactionRunResult::ERROR_CHECK;
-    }
 
     rpmtransFlags rpm_transaction_flags{RPMTRANS_FLAG_NONE};
     for (const auto & tsflag : config.get_tsflags_option().get_value()) {
@@ -976,6 +969,18 @@ Transaction::TransactionRunResult Transaction::Impl::_run(
             rpm_transaction.set_signature_verify_flags(
                 rpm_transaction.get_signature_verify_flags() | RPMVSF_MASK_NOSIGNATURES | RPMVSF_MASK_NODIGESTS);
         }
+    }
+
+    // Set flags to ensure "noplugins" option is set before transactions are started
+    rpm_transaction.set_flags(rpm_transaction_flags);
+
+    // fill and check the rpm transaction
+    rpm_transaction.fill(*transaction);
+    if (!rpm_transaction.check()) {
+        for (auto it : rpm_transaction.get_problems()) {
+            transaction_problems.emplace_back(it.to_string());
+        }
+        return TransactionRunResult::ERROR_CHECK;
     }
 
     // Run rpm transaction test
