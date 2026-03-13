@@ -39,6 +39,7 @@
 #include <libdnf5/rpm/package_set.hpp>
 #include <libdnf5/rpm/rpm_signature.hpp>
 #include <libdnf5/transaction/offline.hpp>
+#include <libdnf5/transaction/transaction_item_action.hpp>
 #include <libdnf5/utils/bgettext/bgettext-lib.h>
 #include <libdnf5/utils/bgettext/bgettext-mark-domain.h>
 #include <libdnf5/utils/fs/file.hpp>
@@ -337,6 +338,37 @@ void Context::Impl::store_offline(libdnf5::base::Transaction & transaction) {
     state.write();
 }
 
+/// Move all inbound transaction packages to a target directory.
+/// Called after transaction.download() to gather downloaded packages
+/// from the repo cache into a self-contained directory (for offline
+/// transactions or transaction store/replay).
+static void move_packages_to(libdnf5::base::Transaction & transaction, const std::filesystem::path & packages_dir) {
+    std::filesystem::create_directories(packages_dir);
+    for (const auto & tspkg : transaction.get_transaction_packages()) {
+        if (!libdnf5::transaction::transaction_item_action_is_inbound(tspkg.get_action())) {
+            continue;
+        }
+        auto pkg = tspkg.get_package();
+        auto src = std::filesystem::path(pkg.get_package_path());
+        auto dest = packages_dir / src.filename();
+        std::error_code ec;
+        if (pkg.get_repo()->get_type() == libdnf5::repo::Repo::Type::COMMANDLINE) {
+            // Copy rather than move — the source is the user's original file.
+            std::filesystem::copy_file(src, dest, std::filesystem::copy_options::overwrite_existing, ec);
+        } else {
+            // Try rename (fast on same filesystem), fall back to
+            // copy + delete across filesystems.
+            std::filesystem::rename(src, dest, ec);
+            if (ec) {
+                std::filesystem::copy_file(src, dest, std::filesystem::copy_options::overwrite_existing, ec);
+                if (!ec) {
+                    std::filesystem::remove(src, ec);
+                }
+            }
+        }
+    }
+}
+
 void Context::Impl::download_and_run(libdnf5::base::Transaction & transaction) {
     if (!transaction_store_path.empty()) {
         auto & config = base.get_config();
@@ -356,24 +388,20 @@ void Context::Impl::download_and_run(libdnf5::base::Transaction & transaction) {
                 throw libdnf5::cli::AbortedByUserError();
             }
         }
-        auto & destdir_opt = config.get_destdir_option();
-        destdir_opt.set(packages_location);
         std::filesystem::create_directories(transaction_store_path);
-        // Override keepcache option because stored transaction packages should be always kept.
-        // Following transactions should never remove them.
-        auto & keepcache_opt = config.get_keepcache_option();
-        keepcache_opt.set(true);
         transaction.download();
+        move_packages_to(transaction, packages_location);
         transaction.store_comps(comps_location);
         libdnf5::utils::fs::File transfile(transaction_location, "w");
         transfile.write(transaction.serialize(packages_in_trans_dir, comps_in_trans_dir, STORED_REPO_PREFIX));
         return;
     }
 
+    std::filesystem::path offline_destdir;
     if (should_store_offline) {
         const auto & installroot = base.get_config().get_installroot_option().get_value();
         const auto & offline_datadir = installroot / libdnf5::offline::DEFAULT_DATADIR.relative_path();
-        const auto & offline_destdir = installroot / libdnf5::offline::DEFAULT_DESTDIR.relative_path();
+        offline_destdir = installroot / libdnf5::offline::DEFAULT_DESTDIR.relative_path();
         std::filesystem::create_directories(offline_datadir);
         std::filesystem::create_directories(offline_destdir);
         const std::filesystem::path state_path{offline_datadir / libdnf5::offline::TRANSACTION_STATE_FILENAME};
@@ -389,11 +417,16 @@ void Context::Impl::download_and_run(libdnf5::base::Transaction & transaction) {
                 throw libdnf5::cli::AbortedByUserError();
             }
         }
-        base.get_config().get_destdir_option().set(offline_destdir / "packages");
-        transaction.set_download_local_pkgs(true);
     }
 
     transaction.download();
+
+    if (should_store_offline) {
+        const auto & packages_dir = offline_destdir / "packages";
+        move_packages_to(transaction, packages_dir);
+        base.get_config().get_destdir_option().set(packages_dir);
+    }
+
     if (base.get_config().get_downloadonly_option().get_value()) {
         return;
     }
