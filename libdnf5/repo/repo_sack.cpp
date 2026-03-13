@@ -450,16 +450,25 @@ void RepoSack::Impl::update_and_load_repos(libdnf5::repo::RepoQuery & repos, boo
         solv_builder_pool.emplace(std::min<std::size_t>(std::thread::hardware_concurrency(), 8));
     }
 
+    // Tracks in-flight pre-build futures so we can wait for all of them before
+    // finishing the sack loader.
+    std::vector<std::future<void>> pre_build_futures;
+    std::mutex pre_build_futures_mutex;
+
+    // Submits a pre-build task on a worker thread. Once the .solv files are
+    // ready, the worker thread itself sends the repo to the loader — this
+    // allows pre-build of repo B to overlap with the loader consuming repo A.
     auto pre_build_and_send = [&](repo::Repo * repo) {
         if (!solv_builder_pool) {
             send_to_sack_loader(repo);
             return;
         }
-        auto future = solv_builder_pool->submit([repo] {
+        auto future = solv_builder_pool->submit([repo, &send_to_sack_loader] {
             pre_build_solv_cache(repo->get_config(), repo->get_download_data());
+            send_to_sack_loader(repo);
         });
-        future.get();
-        send_to_sack_loader(repo);
+        std::lock_guard<std::mutex> lock(pre_build_futures_mutex);
+        pre_build_futures.push_back(std::move(future));
     };
 
     // Adds information that all repos are updated (nullptr tag) and is waiting for thread_sack_loader to complete.
@@ -472,6 +481,12 @@ void RepoSack::Impl::update_and_load_repos(libdnf5::repo::RepoQuery & repos, boo
     // the thread_sack_loader is properly terminated and joined.
     utils::OnScopeExit finish_sack_loader_on_exit([&]() noexcept {
         try {
+            // Wait for any in-flight pre-builds before shutting down the loader
+            for (auto & f : pre_build_futures) {
+                if (f.valid()) {
+                    try { f.get(); } catch (...) {}
+                }
+            }
             if (thread_sack_loader.joinable()) {
                 // thread_sack_loader not yet joined -> update_and_load_repos exits due to exception
                 except_in_main_thread = true;
@@ -745,6 +760,14 @@ void RepoSack::Impl::update_and_load_repos(libdnf5::repo::RepoQuery & repos, boo
         catch_thread_sack_loader_exceptions();
         repos_for_processing.clear();
     };
+
+    // Wait for all in-flight pre-build tasks to complete and propagate
+    // any exceptions before signaling the sack loader to stop.
+    for (auto & f : pre_build_futures) {
+        if (f.valid()) {
+            f.get();
+        }
+    }
 
     finish_sack_loader();
     catch_thread_sack_loader_exceptions();
