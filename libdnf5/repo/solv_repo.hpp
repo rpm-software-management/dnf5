@@ -32,6 +32,8 @@
 #include <solv/repo.h>
 
 #include <filesystem>
+#include <future>
+#include <vector>
 
 
 static const constexpr size_t CHKSUM_BYTES = 32;
@@ -158,6 +160,10 @@ private:
 
     /// List of system repo environmental groups without valid file with xml definition
     std::vector<std::string> environments_missing_xml;
+
+    // Deferred solv cache file writes (permissions + rename) running in background.
+    // Waited on in the destructor to ensure writes complete.
+    std::vector<std::future<void>> deferred_solv_writes;
 
 public:
     ::Repo * repo{nullptr};  // libsolv pool retains ownership
