@@ -9,6 +9,7 @@ file(GLOB TEST_NEEDS_RESTARTING_SOURCES *.cpp
     ${PROJECT_SOURCE_DIR}/dnf5/download_callbacks.cpp
     ${PROJECT_SOURCE_DIR}/dnf5/library.cpp
     ${PROJECT_SOURCE_DIR}/dnf5/version.cpp
+    ${PROJECT_SOURCE_DIR}/dnf5/shared_options.cpp
 )
 
 include_directories(${PROJECT_SOURCE_DIR}/dnf5-plugins/needs_restarting_plugin)
@@ -20,8 +21,10 @@ include(sdbus_cpp)
 
 pkg_check_modules(RPM REQUIRED rpm>=4.19.0)
 
+pkg_check_modules(JSONC REQUIRED json-c)
+
 add_executable(run_tests_needs_restarting ${TEST_NEEDS_RESTARTING_SOURCES})
-target_link_libraries(run_tests_needs_restarting PRIVATE common_obj stdc++ libdnf5 libdnf5-cli test_shared ${SDBUS_CPP_LIBRARIES} ${RPM_LIBRARIES})
+target_link_libraries(run_tests_needs_restarting PRIVATE common_obj stdc++ libdnf5 libdnf5-cli test_shared ${SDBUS_CPP_LIBRARIES} ${RPM_LIBRARIES} ${JSONC_LIBRARIES})
 
 add_test(NAME test_needs_restarting COMMAND run_tests_needs_restarting)
 set_tests_properties(test_needs_restarting PROPERTIES

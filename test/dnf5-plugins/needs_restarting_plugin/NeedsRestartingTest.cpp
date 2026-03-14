@@ -201,6 +201,31 @@ void NeedsRestartingTest::test_reboothint_option() {
         description.find("DNF 4") != std::string::npos || description.find("compatibility") != std::string::npos);
 }
 
+void NeedsRestartingTest::test_json_option() {
+    // Test that the --json option is properly registered and configured
+    std::vector<std::unique_ptr<libdnf5::Logger>> loggers;
+    Context context(std::move(loggers));
+
+    // Set up a root command for the argument parser
+    auto & parser = context.get_argument_parser();
+    auto root_cmd = parser.add_new_command("test");
+    parser.set_root_command(root_cmd);
+
+    NeedsRestartingCommand cmd(context);
+    cmd.set_argument_parser();
+
+    // Get arguments from the command, not the parser
+    auto & cmd_parser = *cmd.get_argument_parser_command();
+    auto & json_arg = cmd_parser.get_named_arg("json");
+
+    // Verify long name
+    CPPUNIT_ASSERT_EQUAL(std::string("json"), json_arg.get_long_name());
+
+    // Verify description
+    std::string description = json_arg.get_description();
+    CPPUNIT_ASSERT(!description.empty());
+}
+
 void NeedsRestartingTest::test_all_options_registered() {
     // Test that all command-line options are properly registered
     std::vector<std::unique_ptr<libdnf5::Logger>> loggers;
@@ -222,6 +247,9 @@ void NeedsRestartingTest::test_all_options_registered() {
     auto & processes_arg = cmd_parser.get_named_arg("processes");
     auto & exclude_services_arg = cmd_parser.get_named_arg("exclude-services");
     auto & reboothint_arg = cmd_parser.get_named_arg("reboothint");
+    auto & json_arg = cmd_parser.get_named_arg("json");
+
+    CPPUNIT_ASSERT_EQUAL(std::string("json"), json_arg.get_long_name());
 
     CPPUNIT_ASSERT(services_arg.get_short_name() != processes_arg.get_short_name());
     CPPUNIT_ASSERT(services_arg.get_short_name() != exclude_services_arg.get_short_name());
