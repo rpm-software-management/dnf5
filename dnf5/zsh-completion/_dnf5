@@ -1,9 +1,27 @@
 #compdef dnf5 dnf
 
 _dnf5() {
-    local -a completions
-    completions=("${(@f)$(dnf5 --complete=$((CURRENT-1)) "${words[@]}" 2>/dev/null)}")
-    compadd -a completions
+    local -a entries entries_nospace
+    local line word entry
+
+    while IFS= read -r line; do
+        [[ -z "$line" ]] && continue
+        word="${line%%[[:space:]]*}"
+        [[ -z "$word" ]] && continue
+        if [[ "$line" =~ '\((.+)\)$' ]]; then
+            entry="${word}:${match[1]}"
+        else
+            entry="${word}"
+        fi
+        if [[ "$word" == *= ]]; then
+            entries_nospace+=("$entry")
+        else
+            entries+=("$entry")
+        fi
+    done < <(dnf5 --complete=$((CURRENT-1)) "${words[@]}" 2>/dev/null)
+
+    (( ${#entries} )) && _describe -V 'dnf5' entries
+    (( ${#entries_nospace} )) && _describe -V 'dnf5 options' entries_nospace -S ''
 }
 
 _dnf5 "$@"
