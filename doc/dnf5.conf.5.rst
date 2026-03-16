@@ -817,6 +817,8 @@ Repo Options
     Default: empty.
 
 
+.. _repo_names-label:
+
 Source and debuginfo repository names
 =====================================
 

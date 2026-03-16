@@ -39,6 +39,10 @@ Install missing dependencies for building an RPM package.
              than you would expect because dependencies were evaluated according macros
              set on the package build host.
 
+.. warning:: Because build dependency information is only available in source
+             packages, the ``dnf5 builddep`` command ignores `enabled=0` on the
+             source repositories matching :ref:`the naming convention <repo_names-label>`.
+
 
 Options
 =======
