@@ -36,8 +36,6 @@ public:
     void configure() override;
 
 private:
-    std::set<std::string> load_existing_repo_ids() const;
-
     libdnf5::ConfigMain tmp_config;
     libdnf5::repo::ConfigRepo tmp_repo_conf{tmp_config, "temporary_to_check_repository_options"};
     std::map<std::string, std::string> main_setopts;
