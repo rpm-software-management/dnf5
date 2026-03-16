@@ -20,6 +20,7 @@
 #include "config-manager.hpp"
 
 #include "addrepo.hpp"
+#include "repos.hpp"
 #include "setopt.hpp"
 #include "setvar.hpp"
 #include "unsetopt.hpp"
@@ -53,6 +54,8 @@ void ConfigManagerCommand::register_subcommands() {
     register_subcommand(std::make_unique<ConfigManagerUnsetOptCommand>(get_context()), config_manager_commands_group);
     register_subcommand(std::make_unique<ConfigManagerSetVarCommand>(get_context()), config_manager_commands_group);
     register_subcommand(std::make_unique<ConfigManagerUnsetVarCommand>(get_context()), config_manager_commands_group);
+    register_subcommand(std::make_unique<ConfigManagerEnableCommand>(get_context()), config_manager_commands_group);
+    register_subcommand(std::make_unique<ConfigManagerDisableCommand>(get_context()), config_manager_commands_group);
 }
 
 void ConfigManagerCommand::pre_configure() {
