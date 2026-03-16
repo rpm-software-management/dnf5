@@ -119,7 +119,7 @@ void Session::setup_base() {
         libdnf5::ConfigParser parser;
         parser.read(dnfdaemon_conf_file_path);
         // Load options from the dnf5daemon-server.conf with greater priority than
-        // Priority::MAINCONFIG to by-pass cachedir option being automatically overriden
+        // Priority::MAINCONFIG to by-pass cachedir option being automatically overridden
         // from system_cachedir. With different cachedir and system_cachedir, quick
         // clone_root_metadata() method is available.
         base->get_config().load_from_parser(

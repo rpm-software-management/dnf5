@@ -399,10 +399,10 @@ bool RepoDownloader::is_metalink_in_sync(Repo & repo, LrMetalink * metalink) try
 
     std::ifstream repomd(download_data.repomd_filename, std::ifstream::binary);
     char buf[4096];
-    int readed;
-    while ((readed = static_cast<int>(repomd.readsome(buf, sizeof(buf)))) > 0) {
+    int n_read;
+    while ((n_read = static_cast<int>(repomd.readsome(buf, sizeof(buf)))) > 0) {
         for (auto & hash : hashes)
-            solv_chksum_add(hash.chksum.get(), buf, readed);
+            solv_chksum_add(hash.chksum.get(), buf, n_read);
     }
 
     for (auto & hash : hashes) {

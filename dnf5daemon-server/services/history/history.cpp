@@ -171,7 +171,7 @@ sdbus::MethodReply History::recent_changes(sdbus::MethodCall & call) {
             }
             auto added = seen_pkg.insert(pkg_key);
             if (!added.second) {
-                // only interested in the first occurence of given key
+                // only interested in the first occurrence of given key
                 continue;
             }
 
