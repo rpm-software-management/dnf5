@@ -55,7 +55,7 @@ void ProgressbarTest::test_progress_bar_multi_byte_character() {
         "Created symlink '/etc/systemd/user/sockets.target.wants/pipewire.socket' \342\206\222 "
         "'/usr/lib/systemd/user/pipewire.socket'.");
     auto num_lines = progress_bar->calculate_messages_terminal_lines(106);
-    auto expected = strcmp(setlocale(LC_ALL, NULL), "C") == 0 ? 1UL : 2UL;
+    std::size_t expected = strcmp(setlocale(LC_ALL, NULL), "C") == 0 ? 1U : 2U;
     CPPUNIT_ASSERT_EQUAL(expected, num_lines);
 }
 
