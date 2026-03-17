@@ -279,7 +279,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
         @session_object_path: object path of the dnf5daemon session
         @nevra: full NEVRA of the package
         @action: one of the dnfdaemon::RpmTransactionItem::Actions enum
-        @total: total to process
+        @total: the disk space used/freed by the package after the action finishes
 
         Processing (installation or removal) of the package has started.
     -->
@@ -294,10 +294,14 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
         transaction_action_progress:
         @session_object_path: object path of the dnf5daemon session
         @nevra: full NEVRA of the package
-        @processed: amount already processed
-        @total: total to process
+        @processed: the portion of the package already installed/removed
+        @total: the disk space used/freed by the package after the action finishes
 
         Progress in processing of the package.
+        Note that there is a hardcoded limit that prevents sending more than one signal every
+        400 milliseconds to avoid overwhelming the user or D-Bus with excessive signals.
+        For smaller packages there might be no progress signals or only the starting
+        progress signal with @processed equal to 0.
     -->
     <signal name="transaction_action_progress">
         <arg name="session_object_path" type="o" />
@@ -310,7 +314,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
         transaction_action_stop:
         @session_object_path: object path of the dnf5daemon session
         @nevra: full NEVRA of the package
-        @total: total processed
+        @total: the disk space used/freed by the package after the action finishes
 
         Processing of the package has finished.
     -->
