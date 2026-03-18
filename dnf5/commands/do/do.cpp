@@ -227,7 +227,7 @@ std::string DoCommand::group_spec(ItemType type, const std::string & spec, libdn
         settings.set_group_with_name(true);
         return spec.substr(5);
     }
-    throw std::runtime_error(libdnf5::utils::sformat(_("Invalid Environmet/Group specification: {}"), spec));
+    throw std::runtime_error(libdnf5::utils::sformat(_("Invalid Environment/Group specification: {}"), spec));
 }
 
 
@@ -319,7 +319,6 @@ void DoCommand::run() {
     }
 
     for (const auto & item : reinstall_items) {
-        goal->add_reinstall(item.spec, item.settings);
         switch (item.type) {
             case ItemType::AUTO:
                 goal->add_reinstall(item.spec, item.settings);
@@ -329,7 +328,7 @@ void DoCommand::run() {
                 break;
             case ItemType::GROUP:
             case ItemType::ENVIRONMENT:
-                throw std::runtime_error(_("Reinstaling environments and groups is not supported."));
+                throw std::runtime_error(_("Reinstalling environments and groups is not supported."));
                 break;
         }
     }
