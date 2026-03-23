@@ -7,7 +7,7 @@
 
 Name:           dnf5
 Version:        %{project_version_prime}.%{project_version_major}.%{project_version_minor}.%{project_version_micro}
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Command-line package manager
 License:        GPL-2.0-or-later
 URL:            https://github.com/rpm-software-management/dnf5
@@ -892,7 +892,7 @@ trusted repositories using dnf5daemon-server.
 
 %package -n dnf5-plugins
 Summary:        Plugins for dnf5
-License:        LGPL-2.1-or-later
+License:        LGPL-2.1-or-later AND GPL-2.0-or-later
 Requires:       dnf5%{?_isa} = %{version}-%{release}
 Requires:       libcurl%{?_isa} >= 7.62.0
 Requires:       libdnf5%{?_isa} = %{version}-%{release}
@@ -1141,6 +1141,9 @@ mkdir -p %{buildroot}%{_libdir}/libdnf5/plugins
 %ldconfig_scriptlets
 
 %changelog
+* Mon Mar 23 2026 Matej Focko <mfocko@redhat.com> - 5.4.0.0-2
+- Adjust the license for the DNF5 plugins
+
 * Mon Feb 16 2026 Packit Team <hello@packit.dev> - 5.4.0.0-1
 - New upstream release 5.4.0.0
 
