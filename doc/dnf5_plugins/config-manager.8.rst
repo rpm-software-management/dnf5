@@ -84,7 +84,7 @@ Subcommands
 
     The ``setopt`` command writes the repositories configuration overrides to a file named ``99-config_manager.repo``
     located in the system repository override directory. Repository settings are written only to this override file.
-    The original repository configuration file is not changed. Reposiory ID may contain globs.
+    The original repository configuration file is not changed. Repository ID may contain globs.
     Override files also support globs. But the ``setopt`` command resolves the ``repoid`` pattern, and overrides are set
     for each matching repository independently. This means repositories added later will not be affected by these overrides.
 
