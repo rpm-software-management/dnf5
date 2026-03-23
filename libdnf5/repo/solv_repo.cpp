@@ -73,75 +73,104 @@ void SolvRepo::userdata_fill(SolvUserdata * userdata) {
     memcpy(userdata->checksum, checksum, CHKSUM_BYTES);
 }
 
-bool SolvRepo::can_use_solvfile_cache(solv::Pool & pool, fs::File & solvfile_cache) {
-    auto & logger = *base->get_logger();
+static bool validate_solv_cache(
+    FILE * fp,
+    const unsigned char * chksum,
+    const std::string & path,
+    libdnf5::Logger * logger,
+    ::Pool * libsolv_pool) {
+    unsigned char * userdata_read;
+    int userdata_len;
 
-    if (!solvfile_cache) {
-        logger.debug(("Missing solvfile cache: \"{}\""), solvfile_cache.get_path().native());
-        return false;
-    }
-
-    unsigned char * dnf_solv_userdata_read;
-    int dnf_solv_userdata_len_read;
-
-    int ret_code = solv_read_userdata(solvfile_cache.get(), &dnf_solv_userdata_read, &dnf_solv_userdata_len_read);
-    if (ret_code != 0) {
-        logger.warning(
-            ("Failed to read solv userdata: \"{}\": for: {}"), pool_errstr(*pool), solvfile_cache.get_path().native());
+    if (solv_read_userdata(fp, &userdata_read, &userdata_len) != 0) {
+        if (logger) {
+            if (libsolv_pool) {
+                logger->warning("Failed to read solv userdata: \"{}\": for: {}", pool_errstr(libsolv_pool), path);
+            } else {
+                logger->warning("Failed to read solv userdata for: {}", path);
+            }
+        }
         return false;
     }
     std::unique_ptr<SolvUserdata, decltype(&solv_free)> solv_userdata(
-        reinterpret_cast<SolvUserdata *>(dnf_solv_userdata_read), &solv_free);
+        reinterpret_cast<SolvUserdata *>(userdata_read), &solv_free);
 
-    if (dnf_solv_userdata_len_read != SOLV_USERDATA_SIZE) {
-        logger.warning(
-            ("Solv userdata length mismatch read: \"{}\" vs expected \"{}\" for: {}"),
-            dnf_solv_userdata_len_read,
-            SOLV_USERDATA_SIZE,
-            solvfile_cache.get_path().native());
+    if (userdata_len != static_cast<int>(SOLV_USERDATA_SIZE)) {
+        if (logger) {
+            logger->warning(
+                "Solv userdata length mismatch read: \"{}\" vs expected \"{}\" for: {}",
+                userdata_len,
+                SOLV_USERDATA_SIZE,
+                path);
+        }
         return false;
     }
 
-    // check dnf solvfile magic bytes
     if (memcmp(solv_userdata->dnf_magic, SOLV_USERDATA_MAGIC.data(), SOLV_USERDATA_MAGIC.size()) != 0) {
-        logger.warning(
-            "Magic bytes don't match, read: \"{}\" vs. dnf solvfile magic: \"{}\" for: {}",
-            solv_userdata->dnf_magic,
-            SOLV_USERDATA_MAGIC.data(),
-            solvfile_cache.get_path().native());
+        if (logger) {
+            logger->warning(
+                "Magic bytes don't match, read: \"{}\" vs. dnf solvfile magic: \"{}\" for: {}",
+                solv_userdata->dnf_magic,
+                SOLV_USERDATA_MAGIC.data(),
+                path);
+        }
         return false;
     }
 
-    // check dnf solvfile version
     if (memcmp(solv_userdata->dnf_version, SOLV_USERDATA_DNF_VERSION.data(), SOLV_USERDATA_DNF_VERSION.size()) != 0) {
-        logger.warning(
-            "Dnf solvfile version doesn't match, read: \"{}\" vs. expected dnf solvfile version: \"{}\" for: {}",
-            solv_userdata->dnf_version,
-            SOLV_USERDATA_DNF_VERSION.data(),
-            solvfile_cache.get_path().native());
+        if (logger) {
+            logger->warning(
+                "Dnf solvfile version doesn't match, read: \"{}\" vs. expected dnf solvfile version: \"{}\" for: {}",
+                solv_userdata->dnf_version,
+                SOLV_USERDATA_DNF_VERSION.data(),
+                path);
+        }
         return false;
     }
 
-    // check libsolv solvfile version
     if (memcmp(
             solv_userdata->libsolv_version,
             get_padded_solv_toolversion().data(),
             SOLV_USERDATA_SOLV_TOOLVERSION_SIZE) != 0) {
-        logger.warning(
-            "Libsolv solvfile version doesn't match, read: \"{}\" vs. expected libsolv version: \"{}\" for: {}",
-            solv_userdata->libsolv_version,
-            solv_toolversion,
-            solvfile_cache.get_path().native());
+        if (logger) {
+            logger->warning(
+                "Libsolv solvfile version doesn't match, read: \"{}\" vs. expected libsolv version: \"{}\" for: {}",
+                solv_userdata->libsolv_version,
+                solv_toolversion,
+                path);
+        }
         return false;
     }
 
-    // check solvfile checksum
-    if (memcmp(solv_userdata->checksum, checksum, CHKSUM_BYTES) != 0) {
-        logger.debug(
-            "Solvfile's repomd checksum doesn't match, read: \"{}\" vs. expected repomd checksum: \"{}\" for: {}",
-            pool_bin2hex(*pool, solv_userdata->checksum, sizeof solv_userdata->checksum),
-            pool_bin2hex(*pool, checksum, sizeof checksum),
-            solvfile_cache.get_path().native());
+    if (memcmp(solv_userdata->checksum, chksum, CHKSUM_BYTES) != 0) {
+        if (logger) {
+            if (libsolv_pool) {
+                logger->debug(
+                    "Solvfile's repomd checksum doesn't match, read: \"{}\" vs. expected repomd checksum: \"{}\" "
+                    "for: {}",
+                    pool_bin2hex(libsolv_pool, solv_userdata->checksum, sizeof solv_userdata->checksum),
+                    pool_bin2hex(libsolv_pool, chksum, CHKSUM_BYTES),
+                    path);
+            } else {
+                logger->debug("Solvfile's repomd checksum doesn't match for: {}", path);
+            }
+        }
+        return false;
+    }
+
+    return true;
+}
+
+
+bool SolvRepo::can_use_solvfile_cache(solv::Pool & pool, fs::File & solvfile_cache) {
+    auto & logger = *base->get_logger();
+
+    if (!solvfile_cache) {
+        logger.debug("Missing solvfile cache: \"{}\"", solvfile_cache.get_path().native());
+        return false;
+    }
+
+    if (!validate_solv_cache(solvfile_cache.get(), checksum, solvfile_cache.get_path().native(), &logger, *pool)) {
         return false;
     }
 
@@ -868,35 +897,10 @@ static void write_solv_file(
     tmp_file.release();
 }
 
-/// Checks if a solv cache file exists and matches the given checksum, without
-/// requiring a SolvRepo instance. Used by the pre-builder to skip work.
 static bool solv_cache_is_valid(const unsigned char * chksum, const std::filesystem::path & path) {
     try {
         fs::File cache_file(path, "r");
-        unsigned char * userdata_read;
-        int userdata_len;
-        if (solv_read_userdata(cache_file.get(), &userdata_read, &userdata_len) != 0) {
-            return false;
-        }
-        std::unique_ptr<SolvUserdata, decltype(&solv_free)> ud(
-            reinterpret_cast<SolvUserdata *>(userdata_read), &solv_free);
-        if (userdata_len != static_cast<int>(SOLV_USERDATA_SIZE)) {
-            return false;
-        }
-        if (memcmp(ud->dnf_magic, SOLV_USERDATA_MAGIC.data(), SOLV_USERDATA_MAGIC.size()) != 0) {
-            return false;
-        }
-        if (memcmp(ud->dnf_version, SOLV_USERDATA_DNF_VERSION.data(), SOLV_USERDATA_DNF_VERSION.size()) != 0) {
-            return false;
-        }
-        if (memcmp(ud->libsolv_version, get_padded_solv_toolversion().data(), SOLV_USERDATA_SOLV_TOOLVERSION_SIZE) !=
-            0) {
-            return false;
-        }
-        if (memcmp(ud->checksum, chksum, CHKSUM_BYTES) != 0) {
-            return false;
-        }
-        return true;
+        return validate_solv_cache(cache_file.get(), chksum, path.native(), nullptr, nullptr);
     } catch (...) {
         return false;
     }
