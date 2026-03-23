@@ -709,12 +709,17 @@ void SolvRepo::write_ext(Id repodata_id, RepodataType type, const std::string & 
 }
 
 
-std::string SolvRepo::solv_file_name(const char * type) {
+static std::string solv_file_name(const ConfigRepo & config, const char * type) {
     if (type != nullptr) {
         return fmt::format("{}-{}.solvx", config.get_id(), type);
     } else {
         return config.get_id() + ".solv";
     }
+}
+
+
+std::string SolvRepo::solv_file_name(const char * type) {
+    return ::libdnf5::repo::solv_file_name(config, type);
 }
 
 
@@ -863,17 +868,6 @@ static void write_solv_file(
     tmp_file.release();
 }
 
-/// Computes the solv cache file path for a given repo config and optional type.
-static std::filesystem::path compute_solv_file_path(const ConfigRepo & config, const char * type) {
-    std::string filename;
-    if (type != nullptr) {
-        filename = fmt::format("{}-{}.solvx", config.get_id(), type);
-    } else {
-        filename = config.get_id() + ".solv";
-    }
-    return std::filesystem::path(config.get_cachedir()) / CACHE_SOLV_FILES_DIR / filename;
-}
-
 /// Checks if a solv cache file exists and matches the given checksum, without
 /// requiring a SolvRepo instance. Used by the pre-builder to skip work.
 static bool solv_cache_is_valid(const unsigned char * chksum, const std::filesystem::path & path) {
@@ -928,7 +922,8 @@ void pre_build_solv_cache(const ConfigRepo & config, const DownloadData & downlo
         }
 
         // Check if primary .solv already exists and is valid — skip if so
-        auto primary_solv_path = compute_solv_file_path(config, nullptr);
+        auto primary_solv_path =
+            std::filesystem::path(config.get_cachedir()) / CACHE_SOLV_FILES_DIR / solv_file_name(config, nullptr);
         if (solv_cache_is_valid(chksum, primary_solv_path)) {
             return;
         }
