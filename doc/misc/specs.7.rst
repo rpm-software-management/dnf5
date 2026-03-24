@@ -73,15 +73,15 @@ sequentially until a match is found.
 For example ``<package-spec-NP>`` is first matched against NEVRAs and if no
 matching NEVRA is found it is matched against Provides.
 
-When ``<package-spec>`` is a package name or a provide, the user can provide
+When filtering by Provides [P], the user can specify
 additional restriction rules for matching the arguments. Basic version comparisons
-can be used for this purpose (=, >, <, >=, <=), like this ``<package-spec> >= <version>``,
+can be used for this purpose (=, >, <, >=, <=), like this ``<provide> >= <version>``,
 where the ``<version>`` argument is in a ``[EPOCH:]VERSION[-RELEASE]`` format
 as specified in the :ref:`NEVRA matching <nevra_matching_ref-label>` section.
 
-To build more complex expressions, a rich dependency feature
-is also supported, which is always enclosed in parentheses. Boolean
-operators and nesting can be used, f.e. ``(<spec1> or (<spec2> and <spec3>))``.
+To build more complex provides expressions, a rich dependency feature
+is supported. It is always enclosed in parentheses and boolean
+operators and nesting can be used, f.e. ``(<provide1> or (<provide2> and <provide3>))``.
 For more information, please see :ref:`RPM boolean dependencies <rpm_bool_deps_ref-label>`.
 
 .. _nevra_matching_ref-label:
