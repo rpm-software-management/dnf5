@@ -49,6 +49,7 @@ void DownloadData::reset_loaded() {
     distro_tags.clear();
     metadata_locations.clear();
     metadata_paths.clear();
+    metadata_paths_from_download = false;
 }
 
 void DownloadData::set_callbacks(std::unique_ptr<libdnf5::repo::RepoCallbacks> && cbs) noexcept {

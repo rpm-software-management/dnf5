@@ -51,6 +51,7 @@ public:
     void * get_user_data() const noexcept;
 
     const std::string & get_metadata_path(const std::string & metadata_type) const;
+    const std::string & get_repomd_filename() const noexcept { return repomd_filename; }
     std::vector<std::pair<std::string, std::string>> get_appstream_metadata() const;
 
 private:
@@ -87,6 +88,10 @@ private:
     std::map<std::string, std::string> metadata_paths;
 
     std::optional<LibrepoHandle> handle;
+
+    // Set to true when metadata_paths was populated directly from the download
+    // result, so a redundant load_local() call can be skipped.
+    bool metadata_paths_from_download{false};
 };
 
 }  // namespace libdnf5::repo

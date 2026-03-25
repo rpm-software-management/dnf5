@@ -56,9 +56,12 @@ extern "C" {
 #include <solv/testcase.h>
 }
 
+#include "utils/thread_pool.hpp"
+
 #include <atomic>
 #include <condition_variable>
 #include <filesystem>
+#include <future>
 #include <mutex>
 #include <sstream>
 #include <thread>
@@ -435,6 +438,28 @@ void RepoSack::Impl::update_and_load_repos(libdnf5::repo::RepoQuery & repos, boo
         signal_prepared_repo.notify_one();
     };
 
+    // Thread pool for pre-building .solv caches in parallel.
+    // Available repos get their XML parsed in isolated pools on worker threads,
+    // producing .solv/.solvx files before the loader thread picks them up.
+    utils::ThreadPool solv_builder_pool(std::min<std::size_t>(std::thread::hardware_concurrency(), 8));
+
+    // Tracks in-flight pre-build futures so we can wait for all of them before
+    // finishing the sack loader.
+    std::vector<std::future<void>> pre_build_futures;
+    std::mutex pre_build_futures_mutex;
+
+    // Submits a pre-build task on a worker thread. Once the .solv files are
+    // ready, the worker thread itself sends the repo to the loader — this
+    // allows pre-build of repo B to overlap with the loader consuming repo A.
+    auto pre_build_and_send = [&](repo::Repo * repo) {
+        auto future = solv_builder_pool.submit([repo, &send_to_sack_loader] {
+            pre_build_solv_cache(repo->get_config(), repo->get_download_data());
+            send_to_sack_loader(repo);
+        });
+        std::lock_guard<std::mutex> lock(pre_build_futures_mutex);
+        pre_build_futures.push_back(std::move(future));
+    };
+
     // Adds information that all repos are updated (nullptr tag) and is waiting for thread_sack_loader to complete.
     auto finish_sack_loader = [&]() {
         send_to_sack_loader(nullptr);
@@ -445,6 +470,12 @@ void RepoSack::Impl::update_and_load_repos(libdnf5::repo::RepoQuery & repos, boo
     // the thread_sack_loader is properly terminated and joined.
     utils::OnScopeExit finish_sack_loader_on_exit([&]() noexcept {
         try {
+            // Wait for any in-flight pre-builds before shutting down the loader
+            for (auto & f : pre_build_futures) {
+                if (f.valid()) {
+                    try { f.get(); } catch (...) {}
+                }
+            }
             if (thread_sack_loader.joinable()) {
                 // thread_sack_loader not yet joined -> update_and_load_repos exits due to exception
                 except_in_main_thread = true;
@@ -466,7 +497,7 @@ void RepoSack::Impl::update_and_load_repos(libdnf5::repo::RepoQuery & repos, boo
 
     std::map<Repo *, std::exception_ptr> repo_signature_errors;
 
-    auto load_downloaded_repo = [&send_to_sack_loader, &import_keys, &repo_signature_errors](
+    auto load_downloaded_repo = [&pre_build_and_send, &import_keys, &repo_signature_errors](
                                     Repo * repo, bool reusing) -> void {
         try {
             auto cache_dir = repo->get_config().get_cachedir();
@@ -479,7 +510,9 @@ void RepoSack::Impl::update_and_load_repos(libdnf5::repo::RepoQuery & repos, boo
                 libdnf_user_assert(!primary_path.empty(), "The metadata cache must be read before it can be reused.");
                 // Mark that the expired metadata still reflect their origin
                 utimes(primary_path.c_str(), nullptr);
-            } else {
+            } else if (!repo->get_download_data().metadata_paths_from_download) {
+                // Only call read_metadata_cache when paths weren't already
+                // populated from the download callback.
                 repo->read_metadata_cache();
             }
         } catch (const RepoDownloadError &) {
@@ -488,7 +521,7 @@ void RepoSack::Impl::update_and_load_repos(libdnf5::repo::RepoQuery & repos, boo
                 repo_signature_errors.insert({&(*repo), ep});
             }
         }
-        send_to_sack_loader(repo);
+        pre_build_and_send(repo);
     };
 
     for (int run_count = 0; run_count < 2; ++run_count) {
@@ -595,11 +628,45 @@ void RepoSack::Impl::update_and_load_repos(libdnf5::repo::RepoQuery & repos, boo
         }
         std::vector<Repo *> repos_for_processing{repos_for_processing_set.begin(), repos_for_processing_set.end()};
 
+        // Phase 1: Read metadata caches in parallel. Each repo's read_metadata_cache
+        // is independent local I/O that can safely run concurrently.
+        struct CacheCheckResult {
+            Repo * repo;
+            bool cache_read_ok{false};
+            bool has_primary{false};
+        };
+        std::vector<std::future<CacheCheckResult>> cache_futures;
+        cache_futures.reserve(repos_for_processing.size());
+        for (auto * repo : repos_for_processing) {
+            cache_futures.push_back(solv_builder_pool.submit([repo]() -> CacheCheckResult {
+                CacheCheckResult result;
+                result.repo = repo;
+                try {
+                    repo->read_metadata_cache();
+                    result.has_primary =
+                        !repo->get_download_data().get_metadata_path(RepoDownloader::MD_FILENAME_PRIMARY).empty();
+                    result.cache_read_ok = true;
+                } catch (const std::runtime_error &) {
+                }
+                return result;
+            }));
+        }
+
+        // Collect parallel cache check results
+        std::vector<CacheCheckResult> cache_results;
+        cache_results.reserve(cache_futures.size());
+        for (auto & f : cache_futures) {
+            cache_results.push_back(f.get());
+        }
+
+        // Phase 2: Serial decision-making (expiry, root cache clone, sync strategy).
+        // This part stays serial because clone_root_metadata has retry semantics
+        // and we need to call catch_thread_sack_loader_exceptions between repos.
+        std::vector<Repo *> remaining;
         std::string prev_repo_id;
         bool root_cache_tried = false;
-        // Prepares repositories that are not expired or have ONLY_CACHE or LAZY SynStrategy.
-        for (std::size_t idx = 0; idx < repos_for_processing.size();) {
-            auto * const repo = repos_for_processing[idx];
+        for (auto & cr : cache_results) {
+            auto * const repo = cr.repo;
             if (prev_repo_id != repo->get_id()) {
                 prev_repo_id = repo->get_id();
                 root_cache_tried = false;
@@ -607,41 +674,52 @@ void RepoSack::Impl::update_and_load_repos(libdnf5::repo::RepoQuery & repos, boo
             catch_thread_sack_loader_exceptions();
             try {
                 bool valid_metadata{false};
-                try {
-                    repo->read_metadata_cache();
-                    if (!repo->get_download_data().get_metadata_path(RepoDownloader::MD_FILENAME_PRIMARY).empty()) {
-                        // cache loaded
-                        repo->recompute_expired();
-                        valid_metadata = !repo->is_expired() ||
-                                         repo->get_sync_strategy() == Repo::SyncStrategy::ONLY_CACHE ||
-                                         repo->get_sync_strategy() == Repo::SyncStrategy::LAZY;
-                    }
-                } catch (const std::runtime_error & e) {
+                if (cr.cache_read_ok && cr.has_primary) {
+                    repo->recompute_expired();
+                    valid_metadata = !repo->is_expired() ||
+                                     repo->get_sync_strategy() == Repo::SyncStrategy::ONLY_CACHE ||
+                                     repo->get_sync_strategy() == Repo::SyncStrategy::LAZY;
                 }
 
                 if (valid_metadata) {
-                    repos_for_processing.erase(repos_for_processing.begin() + static_cast<ssize_t>(idx));
                     logger->debug("Using cache for repo \"{}\"", repo->get_config().get_id());
-                    send_to_sack_loader(repo);
+                    pre_build_and_send(repo);
                 } else {
                     // Try reusing the root cache
                     if (!root_cache_tried && repo->clone_root_metadata()) {
                         root_cache_tried = true;
-                        continue;
+                        // Re-read cache after cloning root metadata
+                        try {
+                            repo->read_metadata_cache();
+                            if (!repo->get_download_data()
+                                     .get_metadata_path(RepoDownloader::MD_FILENAME_PRIMARY)
+                                     .empty()) {
+                                repo->recompute_expired();
+                                valid_metadata = !repo->is_expired() ||
+                                                 repo->get_sync_strategy() == Repo::SyncStrategy::ONLY_CACHE ||
+                                                 repo->get_sync_strategy() == Repo::SyncStrategy::LAZY;
+                            }
+                        } catch (const std::runtime_error &) {
+                        }
+                        if (valid_metadata) {
+                            logger->debug("Using cache for repo \"{}\"", repo->get_config().get_id());
+                            pre_build_and_send(repo);
+                            continue;
+                        }
                     }
 
                     if (repo->get_sync_strategy() == Repo::SyncStrategy::ONLY_CACHE) {
                         throw RepoDownloadError(
                             M_("Cache-only enabled but no cache for repository \"{}\""), repo->get_config().get_id());
                     }
-                    ++idx;
+                    remaining.push_back(repo);
                 }
 
             } catch (const RepoDownloadError &) {
                 handle_repo_exception(repo, std::current_exception(), false);
-                repos_for_processing.erase(repos_for_processing.begin() + static_cast<ssize_t>(idx));
             }
         }
+        repos_for_processing = std::move(remaining);
 
         RepoDownloader repo_downloader{};
         for (const auto & repo : repos_for_processing) {
@@ -662,6 +740,14 @@ void RepoSack::Impl::update_and_load_repos(libdnf5::repo::RepoQuery & repos, boo
         catch_thread_sack_loader_exceptions();
         repos_for_processing.clear();
     };
+
+    // Wait for all in-flight pre-build tasks to complete and propagate
+    // any exceptions before signaling the sack loader to stop.
+    for (auto & f : pre_build_futures) {
+        if (f.valid()) {
+            f.get();
+        }
+    }
 
     finish_sack_loader();
     catch_thread_sack_loader_exceptions();
