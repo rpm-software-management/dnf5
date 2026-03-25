@@ -2909,6 +2909,10 @@ void Goal::Impl::add_environment_install_to_goal(
             env_group_specs.emplace_back(
                 GoalAction::INSTALL_BY_COMPS, transaction::TransactionItemReason::DEPENDENCY, grp_id, group_settings);
         }
+        for (const auto & grp_id : environment.get_default_groups()) {
+            env_group_specs.emplace_back(
+                GoalAction::INSTALL_BY_COMPS, transaction::TransactionItemReason::DEPENDENCY, grp_id, group_settings);
+        }
         if (with_optional) {
             for (const auto & grp_id : environment.get_optional_groups()) {
                 env_group_specs.emplace_back(
@@ -3023,9 +3027,13 @@ void Goal::Impl::add_environment_upgrade_to_goal(
 
         // group names that are part of the installed version of the environment
         auto old_groups = installed_environment.get_groups();
+        auto old_defaults = installed_environment.get_default_groups();
+        old_groups.insert(old_groups.end(), old_defaults.begin(), old_defaults.end());
 
         // group names that are part of the new version of the environment
         auto available_groups = available_environment.get_groups();
+        auto available_defaults = available_environment.get_default_groups();
+        available_groups.insert(available_groups.end(), available_defaults.begin(), available_defaults.end());
 
         for (const auto & grp : available_groups) {
             if (std::find(old_groups.begin(), old_groups.end(), grp) != old_groups.end()) {
