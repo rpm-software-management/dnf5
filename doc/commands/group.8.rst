@@ -67,6 +67,8 @@ Subcommands
 
     In case both groups and environments match, only groups are affected.
 
+    For environments, all groups from their grouplist and default groups from their optionlist are installed.
+
     If the ``--with-optional`` option is used, also include ``Optional`` packages of groups. By default,
     all ``Mandatory`` and ``Default`` packages will be installed whenever possible. ``Conditional``
     packages are installed if they meet their requirement. This can be configured by

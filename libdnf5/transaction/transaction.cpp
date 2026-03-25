@@ -251,6 +251,12 @@ void Transaction::fill_transaction_environments(
             new_env_grp.set_group_type(libdnf5::comps::PackageType::MANDATORY);
             new_env_grp.set_installed(installed_group_ids.contains(group_id));
         }
+        for (const auto & group_id : environment.get_default_groups()) {
+            auto & new_env_grp = new_env.new_group();
+            new_env_grp.set_group_id(group_id);
+            new_env_grp.set_group_type(libdnf5::comps::PackageType::DEFAULT);
+            new_env_grp.set_installed(installed_group_ids.contains(group_id));
+        }
         for (const auto & group_id : environment.get_optional_groups()) {
             auto & new_env_grp = new_env.new_group();
             new_env_grp.set_group_id(group_id);
