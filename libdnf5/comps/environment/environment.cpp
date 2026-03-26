@@ -95,6 +95,9 @@ Environment & Environment::operator=(Environment && src) noexcept = default;
 Environment & Environment::operator+=(const Environment & rhs) {
     p_impl->environment_ids.insert(
         p_impl->environment_ids.begin(), rhs.p_impl->environment_ids.begin(), rhs.p_impl->environment_ids.end());
+    p_impl->groups.clear();
+    p_impl->default_groups.clear();
+    p_impl->optional_groups.clear();
     return *this;
 }
 
@@ -355,6 +358,9 @@ void Environment::serialize(const std::string & path) {
 
 void Environment::add_environment_id(const EnvironmentId & environment_id) {
     p_impl->environment_ids.push_back(environment_id);
+    p_impl->groups.clear();
+    p_impl->default_groups.clear();
+    p_impl->optional_groups.clear();
 }
 
 }  // namespace libdnf5::comps
