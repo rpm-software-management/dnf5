@@ -1260,6 +1260,11 @@ Transaction::TransactionRunResult Transaction::Impl::_run(
                 for (const auto & grpid : environment.get_groups()) {
                     state.groups.emplace_back(grpid);
                 }
+                for (const auto & grpid : environment.get_default_groups()) {
+                    if (std::find(state.groups.begin(), state.groups.end(), grpid) == state.groups.end()) {
+                        state.groups.emplace_back(grpid);
+                    }
+                }
                 system_state.set_environment_state(environment.get_environmentid(), state);
                 // save the current xml group definition
                 environment.serialize(environment_xml_path);

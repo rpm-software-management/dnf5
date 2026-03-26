@@ -41,7 +41,7 @@ public:
     // TODO(mblaha) proper installed value
     bool get_installed() const { return false; }
     std::set<std::string> get_repos() const;
-    // TODO(mblaha) get_groups() and get_optional_groups()
+    // TODO(mblaha) get_groups(), get_default_groups() and get_optional_groups()
 
 private:
     dnfdaemon::KeyValueMap rawdata{};

@@ -68,6 +68,7 @@ public:
     virtual std::string get_order() const = 0;
     virtual int get_order_int() const = 0;
     virtual std::vector<std::string> get_groups() = 0;
+    virtual std::vector<std::string> get_default_groups() = 0;
     virtual std::vector<std::string> get_optional_groups() = 0;
     virtual std::set<std::string> get_repos() const = 0;
     virtual bool get_installed() const = 0;

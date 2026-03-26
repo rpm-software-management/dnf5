@@ -86,7 +86,7 @@ if (WITH_MODULEMD)
     target_link_libraries(libdnf5_iface INTERFACE ${LIBMODULEMD_LIBRARIES})
 endif()
 
-pkg_check_modules(LIBSOLV REQUIRED libsolv>=0.7.35)
+pkg_check_modules(LIBSOLV REQUIRED libsolv>=0.7.36)
 list(APPEND LIBDNF5_PC_REQUIRES "${LIBSOLV_MODULE_NAME}")
 target_link_libraries(libdnf5 PRIVATE ${LIBSOLV_LIBRARIES})
 target_link_libraries(libdnf5_iface INTERFACE ${LIBSOLV_LIBRARIES})

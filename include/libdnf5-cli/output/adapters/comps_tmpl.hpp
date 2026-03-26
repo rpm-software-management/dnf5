@@ -108,6 +108,14 @@ public:
         }
     }
 
+    std::vector<std::string> get_default_groups() override {
+        if constexpr (requires { env.get_default_groups(); }) {
+            return env.get_default_groups();
+        } else {
+            return {};
+        }
+    }
+
     std::vector<std::string> get_optional_groups() override {
         if constexpr (requires { env.get_groups(); }) {
             return env.get_optional_groups();

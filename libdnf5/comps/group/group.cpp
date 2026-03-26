@@ -93,6 +93,7 @@ Group & Group::operator=(Group && src) noexcept = default;
 
 Group & Group::operator+=(const Group & rhs) {
     p_impl->group_ids.insert(p_impl->group_ids.begin(), rhs.p_impl->group_ids.begin(), rhs.p_impl->group_ids.end());
+    p_impl->packages.clear();
     return *this;
 }
 
@@ -396,6 +397,7 @@ libdnf5::transaction::TransactionItemReason Group::get_reason() const {
 
 void Group::add_group_id(const GroupId & group_id) {
     p_impl->group_ids.push_back(group_id);
+    p_impl->packages.clear();
 }
 
 }  // namespace libdnf5::comps
