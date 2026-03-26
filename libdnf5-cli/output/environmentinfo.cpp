@@ -98,6 +98,7 @@ struct libscols_table * create_environmentinfo_table(IEnvironment & environment)
         table, "Repositories", libdnf5::utils::string::join(environment.get_repos(), ", ").c_str());
 
     add_groups(table, environment.get_groups(), "Required groups");
+    add_groups(table, environment.get_default_groups(), "Default groups");
     add_groups(table, environment.get_optional_groups(), "Optional groups");
 
     return table;
