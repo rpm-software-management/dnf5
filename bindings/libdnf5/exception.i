@@ -14,6 +14,7 @@
 
 %{
     #include "bindings/libdnf5/exception.hpp"
+    #include "libdnf5/base/active_transaction_info_errors.hpp"
 %}
 
 %typemap(throws, noblock=1) libdnf5::AssertionError, libdnf5::UserAssertionError, libdnf5::Error, NonLibdnf5Exception, std::runtime_error {
@@ -65,6 +66,10 @@
 %ignore libdnf5::NestedException::NestedException;
 %ignore libdnf5::format;
 %include "libdnf5/common/exception.hpp"
+
+%ignore libdnf5::base::ActiveTransactionInfoParseError::ActiveTransactionInfoParseError;
+%rename(BaseActiveTransactionInfoParseError) libdnf5::base::ActiveTransactionInfoParseError;
+%include "libdnf5/base/active_transaction_info_errors.hpp"
 
 %ignore libdnf5::base::TransactionError::TransactionError;
 %rename(BaseTransactionError) libdnf5::base::TransactionError;
@@ -257,6 +262,7 @@
 %template(FileSystemErrorNested) libdnf5::NestedException<libdnf5::FileSystemError>;
 %template(RuntimeErrorNested) libdnf5::NestedException<libdnf5::RuntimeError>;
 
+%template(BaseActiveTransactionInfoParseErrorNested) libdnf5::NestedException<libdnf5::base::ActiveTransactionInfoParseError>;
 %template(BaseTransactionErrorNested) libdnf5::NestedException<libdnf5::base::TransactionError>;
 
 %template(CompsInvalidPackageTypeNested) libdnf5::NestedException<libdnf5::comps::InvalidPackageType>;

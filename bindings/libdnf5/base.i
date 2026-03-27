@@ -62,6 +62,8 @@
 %include "libdnf5/base/solver_problems.hpp"
 %include "libdnf5/base/log_event.hpp"
 
+%include "libdnf5/base/active_transaction_info.hpp"
+
 %ignore libdnf5::base::TransactionError;
 %include "libdnf5/base/transaction.hpp"
 
