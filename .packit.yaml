@@ -4,6 +4,8 @@
 packages:
   dnf5:
     specfile_path: dnf5.spec
+    version_suffix: "^{PACKIT_PROJECT_SNAPSHOTID}"
+    update_release: false
 
     # add or remove files that should be synced
     files_to_sync:
@@ -26,6 +28,8 @@ packages:
   # https://github.com/packit/packit-service/issues/1720
   dnf5-without-modules:
     specfile_path: dnf5.spec
+    version_suffix: "^{PACKIT_PROJECT_SNAPSHOTID}"
+    update_release: false
 
     # add or remove files that should be synced
     files_to_sync:
