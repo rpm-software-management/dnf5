@@ -367,7 +367,7 @@ void ReposyncCommand::run() {
                 for (const auto & base_url : repo->get_config().get_baseurl_option().get_value()) {
                     remote_locations.emplace_back(base_url);
                 }
-                // find first available mirror prefering file and https schemes
+                // find first available mirror preferring file and https schemes
                 std::string repo_location{};
                 for (const auto & scheme : schemes) {
                     for (const auto & mirror : remote_locations) {

@@ -31,15 +31,15 @@
 namespace libdnf5 {
 
 static void read(ConfigParser & cfg_parser, IniParser & parser) {
-    IniParser::ItemType readed_type;
-    while ((readed_type = parser.next()) != IniParser::ItemType::END_OF_INPUT) {
+    IniParser::ItemType item_type;
+    while ((item_type = parser.next()) != IniParser::ItemType::END_OF_INPUT) {
         auto section = parser.get_section();
-        if (readed_type == IniParser::ItemType::SECTION) {
+        if (item_type == IniParser::ItemType::SECTION) {
             cfg_parser.add_section(std::move(section), std::move(parser.get_raw_item()));
-        } else if (readed_type == IniParser::ItemType::KEY_VAL) {
+        } else if (item_type == IniParser::ItemType::KEY_VAL) {
             cfg_parser.set_value(
                 section, std::move(parser.get_key()), std::move(parser.get_value()), std::move(parser.get_raw_item()));
-        } else if (readed_type == IniParser::ItemType::COMMENT_LINE || readed_type == IniParser::ItemType::EMPTY_LINE) {
+        } else if (item_type == IniParser::ItemType::COMMENT_LINE || item_type == IniParser::ItemType::EMPTY_LINE) {
             if (section.empty()) {
                 cfg_parser.get_header() += parser.get_raw_item();
             } else {
