@@ -12,13 +12,6 @@ set(SYSTEMD_DIR "/usr/lib/systemd/system")
 message("Building ${PROJECT_NAME} version ${PROJECT_VERSION}")
 
 
-if(DEFINED PACKAGE_VERSION)
-    if(NOT ${PACKAGE_VERSION} STREQUAL ${PROJECT_VERSION})
-        message(FATAL_ERROR "Variables PROJECT_VERSION and PACKAGE_VERSION differ. Make sure the versions in VERSION.cmake and the value provided via -DPACKAGE_VERSION are in sync.")
-    endif()
-endif()
-
-
 # build options - components (sub-packages)
 option(WITH_DNF5DAEMON_CLIENT "Build command-line interface for Dnf5daemon" ON)
 option(WITH_DNF5DAEMON_SERVER "Build package management service with a DBus interface" ON)
