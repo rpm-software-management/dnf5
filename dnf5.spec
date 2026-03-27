@@ -1005,7 +1005,6 @@ DNF5 plugin for working with RPM package manifest files.
 
 %build
 %cmake \
-    -DPACKAGE_VERSION=%{version} \
     -DPERL_INSTALLDIRS=vendor \
     \
     -DENABLE_SOLV_FOCUSNEW=%{?with_focus_new:ON}%{!?with_focus_new:OFF} \
