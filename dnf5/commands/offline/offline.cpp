@@ -481,7 +481,7 @@ void OfflineExecuteCommand::run() {
 
     PlymouthOutput plymouth;
     plymouth.progress(0);
-    plymouth.message(message.c_str());
+    plymouth.message(message);
 
     std::filesystem::remove(libdnf5::offline::MAGIC_SYMLINK);
 
