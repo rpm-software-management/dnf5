@@ -29,6 +29,8 @@
 #include <libdnf5/rpm/package_query.hpp>
 #include <libdnf5/transaction/rpm_package.hpp>
 #include <libdnf5/transaction/transaction_history.hpp>
+#include <libdnf5/transaction/transaction_item_action.hpp>
+#include <libdnf5/transaction/transaction_item_reason.hpp>
 #include <libdnf5/utils/format.hpp>
 #include <sdbus-c++/sdbus-c++.h>
 
@@ -38,17 +40,28 @@ void History::dbus_register() {
     auto dbus_object = session.get_dbus_object();
 #ifdef SDBUS_CPP_VERSION_2
     dbus_object
-        ->addVTable(sdbus::MethodVTableItem{
-            sdbus::MethodName{"recent_changes"},
-            sdbus::Signature{"a{sv}"},
-            {"options"},
-            sdbus::Signature{"a{saa{sv}}"},
-            {"changeset"},
-            [this](sdbus::MethodCall call) -> void {
-                session.get_threads_manager().handle_method(
-                    *this, &History::recent_changes, call, session.session_locale);
-            },
-            {}})
+        ->addVTable(
+            sdbus::MethodVTableItem{
+                sdbus::MethodName{"recent_changes"},
+                sdbus::Signature{"a{sv}"},
+                {"options"},
+                sdbus::Signature{"a{saa{sv}}"},
+                {"changeset"},
+                [this](sdbus::MethodCall call) -> void {
+                    session.get_threads_manager().handle_method(
+                        *this, &History::recent_changes, call, session.session_locale);
+                },
+                {}},
+            sdbus::MethodVTableItem{
+                sdbus::MethodName{"list"},
+                sdbus::Signature{"a{sv}"},
+                {"options"},
+                sdbus::Signature{"aa{sv}"},
+                {"transactions"},
+                [this](sdbus::MethodCall call) -> void {
+                    session.get_threads_manager().handle_method(*this, &History::list, call, session.session_locale);
+                },
+                {}})
         .forInterface(dnfdaemon::INTERFACE_HISTORY);
 #else
     dbus_object->registerMethod(
@@ -60,6 +73,16 @@ void History::dbus_register() {
         {"changeset"},
         [this](sdbus::MethodCall call) -> void {
             session.get_threads_manager().handle_method(*this, &History::recent_changes, call, session.session_locale);
+        });
+    dbus_object->registerMethod(
+        dnfdaemon::INTERFACE_HISTORY,
+        "list",
+        sdbus::Signature{"a{sv}"},
+        {"options"},
+        sdbus::Signature{"aa{sv}"},
+        {"transactions"},
+        [this](sdbus::MethodCall call) -> void {
+            session.get_threads_manager().handle_method(*this, &History::list, call, session.session_locale);
         });
 #endif
 }
@@ -269,6 +292,196 @@ sdbus::MethodReply History::recent_changes(sdbus::MethodCall & call) {
         output["removed"] = out_removed;
     }
 
+    reply << output;
+    return reply;
+}
+
+/// Convert a transaction::Package to a D-Bus compatible map with the requested attributes.
+dnfdaemon::KeyValueMap trans_package_to_map(
+    const libdnf5::transaction::Package & pkg, const std::vector<std::string> & attrs) {
+    dnfdaemon::KeyValueMap dbus_pkg;
+    for (const auto & attr : attrs) {
+        if (attr == "name") {
+            dbus_pkg.emplace("name", pkg.get_name());
+        } else if (attr == "epoch") {
+            dbus_pkg.emplace("epoch", pkg.get_epoch());
+        } else if (attr == "version") {
+            dbus_pkg.emplace("version", pkg.get_version());
+        } else if (attr == "release") {
+            dbus_pkg.emplace("release", pkg.get_release());
+        } else if (attr == "arch") {
+            dbus_pkg.emplace("arch", pkg.get_arch());
+        } else if (attr == "evr") {
+            dbus_pkg.emplace("evr", get_evr(pkg));
+        } else if (attr == "repo_id") {
+            dbus_pkg.emplace("repo_id", pkg.get_repoid());
+        } else if (attr == "action") {
+            dbus_pkg.emplace("action", libdnf5::transaction::transaction_item_action_to_string(pkg.get_action()));
+        } else if (attr == "reason") {
+            dbus_pkg.emplace("reason", libdnf5::transaction::transaction_item_reason_to_string(pkg.get_reason()));
+        }
+    }
+    return dbus_pkg;
+}
+
+sdbus::MethodReply History::list(sdbus::MethodCall & call) {
+    dnfdaemon::KeyValueMap options;
+    call >> options;
+
+    // Parse options
+    auto limit = dnfdaemon::key_value_map_get<int64_t>(options, "limit", 0);
+    auto reverse = dnfdaemon::key_value_map_get<bool>(options, "reverse", false);
+    auto include_packages = dnfdaemon::key_value_map_get<bool>(options, "include_packages", true);
+    auto contains_pkgs =
+        dnfdaemon::key_value_map_get<std::vector<std::string>>(options, "contains_pkgs", std::vector<std::string>{});
+    auto transaction_attrs = dnfdaemon::key_value_map_get<std::vector<std::string>>(
+        options,
+        "transaction_attrs",
+        std::vector<std::string>{"id", "start", "end", "user_id", "description", "status"});
+    auto package_attrs = dnfdaemon::key_value_map_get<std::vector<std::string>>(
+        options, "package_attrs", std::vector<std::string>{"name", "arch", "evr"});
+
+    auto & base = *session.get_base();
+    libdnf5::transaction::TransactionHistory history(base);
+
+    // Get transactions
+    std::vector<libdnf5::transaction::Transaction> transactions;
+    if (options.contains("since")) {
+        int64_t timestamp = dnfdaemon::key_value_map_get<int64_t>(options, "since");
+        auto all_transactions = history.list_all_transactions();
+        for (auto & trans : all_transactions) {
+            if (trans.get_dt_end() > timestamp) {
+                transactions.emplace_back(std::move(trans));
+            }
+        }
+    } else {
+        transactions = history.list_all_transactions();
+    }
+
+    // Filter by package names if requested
+    if (!contains_pkgs.empty()) {
+        history.filter_transactions_by_pkg_names(transactions, contains_pkgs);
+    }
+
+    // Sort transactions (default: newest first, i.e., descending by id)
+    // Transaction::operator< is "reversed" (a < b means a.id > b.id)
+    if (reverse) {
+        // oldest first = ascending by id = use std::greater with the reversed operator
+        std::sort(transactions.begin(), transactions.end(), std::greater{});
+    } else {
+        // newest first = descending by id = use std::less with the reversed operator
+        std::sort(transactions.begin(), transactions.end());
+    }
+
+    // Apply limit
+    if (limit > 0 && transactions.size() > static_cast<size_t>(limit)) {
+        transactions.erase(transactions.begin() + limit, transactions.end());
+    }
+
+    // Build output
+    dnfdaemon::KeyValueMapList output;
+    using Action = libdnf5::transaction::TransactionItemAction;
+
+    for (auto & trans : transactions) {
+        dnfdaemon::KeyValueMap trans_map;
+
+        // Add transaction attributes
+        for (const auto & attr : transaction_attrs) {
+            if (attr == "id") {
+                trans_map.emplace("id", trans.get_id());
+            } else if (attr == "start") {
+                trans_map.emplace("start", trans.get_dt_start());
+            } else if (attr == "end") {
+                trans_map.emplace("end", trans.get_dt_end());
+            } else if (attr == "user_id") {
+                trans_map.emplace("user_id", static_cast<uint32_t>(trans.get_user_id()));
+            } else if (attr == "description") {
+                trans_map.emplace("description", trans.get_description());
+            } else if (attr == "status") {
+                trans_map.emplace("status", libdnf5::transaction::transaction_state_to_string(trans.get_state()));
+            } else if (attr == "releasever") {
+                trans_map.emplace("releasever", trans.get_releasever());
+            } else if (attr == "comment") {
+                trans_map.emplace("comment", trans.get_comment());
+            }
+        }
+
+        // Add packages if requested
+        if (include_packages) {
+            dnfdaemon::KeyValueMapList installed;
+            dnfdaemon::KeyValueMapList removed;
+            dnfdaemon::KeyValueMapList upgraded;
+            dnfdaemon::KeyValueMapList downgraded;
+            dnfdaemon::KeyValueMapList reinstalled;
+
+            // Track replaced packages to associate them with upgrades/downgrades
+            // Map from NA to the replaced package
+            std::unordered_map<std::string, libdnf5::transaction::Package> replaced_packages;
+
+            // First pass: collect replaced packages
+            for (const auto & pkg : trans.get_packages()) {
+                if (pkg.get_action() == Action::REPLACED) {
+                    std::string na = pkg.get_name() + "." + pkg.get_arch();
+                    replaced_packages.emplace(na, pkg);
+                }
+            }
+
+            // Second pass: categorize packages
+            for (const auto & pkg : trans.get_packages()) {
+                const auto action = pkg.get_action();
+                auto pkg_map = trans_package_to_map(pkg, package_attrs);
+
+                switch (action) {
+                    case Action::INSTALL:
+                        installed.push_back(std::move(pkg_map));
+                        break;
+                    case Action::REMOVE:
+                        removed.push_back(std::move(pkg_map));
+                        break;
+                    case Action::UPGRADE: {
+                        std::string na = pkg.get_name() + "." + pkg.get_arch();
+                        auto it = replaced_packages.find(na);
+                        if (it != replaced_packages.end()) {
+                            pkg_map.emplace("original_evr", get_evr(it->second));
+                        }
+                        upgraded.push_back(std::move(pkg_map));
+                        break;
+                    }
+                    case Action::DOWNGRADE: {
+                        std::string na = pkg.get_name() + "." + pkg.get_arch();
+                        auto it = replaced_packages.find(na);
+                        if (it != replaced_packages.end()) {
+                            pkg_map.emplace("original_evr", get_evr(it->second));
+                        }
+                        downgraded.push_back(std::move(pkg_map));
+                        break;
+                    }
+                    case Action::REINSTALL:
+                        reinstalled.push_back(std::move(pkg_map));
+                        break;
+                    case Action::REPLACED:
+                    case Action::REASON_CHANGE:
+                    case Action::ENABLE:
+                    case Action::DISABLE:
+                    case Action::RESET:
+                    case Action::SWITCH:
+                        // Skip these actions - REPLACED is handled above,
+                        // others are module-related or reason changes
+                        break;
+                }
+            }
+
+            trans_map.emplace("installed", installed);
+            trans_map.emplace("removed", removed);
+            trans_map.emplace("upgraded", upgraded);
+            trans_map.emplace("downgraded", downgraded);
+            trans_map.emplace("reinstalled", reinstalled);
+        }
+
+        output.push_back(std::move(trans_map));
+    }
+
+    auto reply = call.createReply();
     reply << output;
     return reply;
 }
