@@ -33,6 +33,7 @@ public:
 
 private:
     sdbus::MethodReply recent_changes(sdbus::MethodCall & call);
+    sdbus::MethodReply list(sdbus::MethodCall & call);
 };
 
 #endif
