@@ -38,6 +38,10 @@
 #include <libdnf5/rpm/package_query.hpp>
 #include <libdnf5/rpm/package_set.hpp>
 #include <libdnf5/rpm/rpm_signature.hpp>
+#include <libdnf5/repo/repo_query.hpp>
+
+#include <ctime>
+#include <limits>
 #include <libdnf5/transaction/offline.hpp>
 #include <libdnf5/transaction/transaction_item_action.hpp>
 #include <libdnf5/utils/bgettext/bgettext-lib.h>
@@ -263,6 +267,45 @@ void Context::Impl::load_repos(bool load_system, bool load_available) {
         download_callbacks->reset_progress_bar();
     }
     if (load_available) {
+        // Print metadata cache age, mirroring dnf4's "Last metadata expiration check" output.
+        // Show oldest age (most stale repo) with the newest repomd timestamp.
+        int64_t min_age = std::numeric_limits<int64_t>::max();
+        int64_t max_ts = 0;
+
+        libdnf5::repo::RepoQuery loaded_repos(base);
+        loaded_repos.filter_enabled(true);
+        loaded_repos.filter_type(libdnf5::repo::Repo::Type::SYSTEM, libdnf5::sack::QueryCmp::NEQ);
+
+        for (const auto & repo : loaded_repos) {
+            int64_t ts = repo->get_timestamp();
+            if (ts > 0) {
+                int64_t age = repo->get_age();
+                if (age < min_age) {
+                    min_age = age;
+                }
+                if (ts > max_ts) {
+                    max_ts = ts;
+                }
+            }
+        }
+
+        if (min_age != std::numeric_limits<int64_t>::max() && max_ts > 0) {
+            long total_secs = static_cast<long>(min_age);
+            long hours = total_secs / 3600;
+            long mins  = (total_secs % 3600) / 60;
+            long secs  = total_secs % 60;
+
+            time_t ts_time = static_cast<time_t>(max_ts);
+            struct tm tm_buf;
+            localtime_r(&ts_time, &tm_buf);
+            char date_buf[128];
+            strftime(date_buf, sizeof(date_buf), "%c", &tm_buf);
+
+            print_info(libdnf5::utils::sformat(
+                _("Last metadata expiration check: {}:{:02d}:{:02d} ago on {}."),
+                hours, mins, secs, date_buf));
+        }
+
         print_info(_("Repositories loaded."));
     }
 }
@@ -1197,3 +1240,4 @@ std::vector<std::string> Context::match_specs(
 }
 
 }  // namespace dnf5
+
