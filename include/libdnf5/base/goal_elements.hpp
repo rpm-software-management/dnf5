@@ -350,11 +350,15 @@ public:
     void set_clean_requirements_on_remove(GoalSetting clean_requirements_on_remove);
     GoalSetting get_clean_requirements_on_remove() const;
 
-    /// Not implemented yet
+    /// Limit installed packages to those that were installed from the specified repositories.
+    /// Repository IDs can contain globs. An empty list means no limit.
+    ///
+    /// Empty by default.
     void set_from_repo_ids(std::vector<std::string> from_repo_ids);
     std::vector<std::string> get_from_repo_ids() const;
 
     /// Limit available packages to specified repositories.
+    /// Repository IDs can contain globs. An empty list means no limit.
     ///
     /// Empty by default.
     void set_to_repo_ids(std::vector<std::string> to_repo_ids);
