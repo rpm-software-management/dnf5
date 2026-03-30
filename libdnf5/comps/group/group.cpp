@@ -329,7 +329,13 @@ void Group::serialize(const std::string & path) {
                 // If it's successful (wasn't already present), create an XML node for this translation
                 if (name_langs.insert(lang).second) {
                     node = utils::xml::add_subnode_with_text(node_group, "name", std::string(di.kv.str));
-                    xmlNewProp(node, BAD_CAST "xml:lang", BAD_CAST lang.c_str());
+                    if (!node) {
+                        name_langs.erase(lang);
+                    } else if (!xmlNewProp(node, BAD_CAST "xml:lang", BAD_CAST lang.c_str())) {
+                        xmlUnlinkNode(node);
+                        xmlFreeNode(node);
+                        name_langs.erase(lang);
+                    }
                 }
             }
             // If keyname starts with "solvable:description:", it's a description translation
@@ -339,7 +345,13 @@ void Group::serialize(const std::string & path) {
                 // If it's successful (wasn't already present), create an XML node for this translation
                 if (description_langs.insert(lang).second) {
                     node = utils::xml::add_subnode_with_text(node_group, "description", std::string(di.kv.str));
-                    xmlNewProp(node, BAD_CAST "xml:lang", BAD_CAST lang.c_str());
+                    if (!node) {
+                        description_langs.erase(lang);
+                    } else if (!xmlNewProp(node, BAD_CAST "xml:lang", BAD_CAST lang.c_str())) {
+                        xmlUnlinkNode(node);
+                        xmlFreeNode(node);
+                        description_langs.erase(lang);
+                    }
                 }
             }
         }
