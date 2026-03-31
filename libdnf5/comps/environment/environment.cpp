@@ -20,6 +20,7 @@
 #include "libdnf5/comps/environment/environment.hpp"
 
 #include "solv/pool.hpp"
+#include "utils/string.hpp"
 #include "utils/xml.hpp"
 
 #include "libdnf5/base/base.hpp"
@@ -267,7 +268,23 @@ bool Environment::get_installed() const {
 }
 
 
+// libxml2 error handler. By default libxml2 prints errors directly to stderr which
+// makes a mess of the outputs.
+// This stores the errors in a vector of strings;
+__attribute__((__format__(printf, 2, 0))) static void error_to_strings(void * ctx, const char * fmt, ...) {
+    auto xml_errors = static_cast<std::vector<std::string> *>(ctx);
+    char buffer[256];
+    va_list args;
+    va_start(args, fmt);
+    vsnprintf(buffer, 256, fmt, args);
+    va_end(args);
+    xml_errors->push_back(buffer);
+}
+
 void Environment::serialize(const std::string & path) {
+    std::vector<std::string> xml_errors;
+    xmlSetGenericErrorFunc(&xml_errors, &error_to_strings);
+
     // Create doc with root node "comps"
     xmlDocPtr doc = xmlNewDoc(BAD_CAST "1.0");
     xmlNodePtr node_comps = xmlNewNode(NULL, BAD_CAST "comps");
@@ -311,7 +328,13 @@ void Environment::serialize(const std::string & path) {
                 // If it's successful (wasn't already present), create an XML node for this translation
                 if (name_langs.insert(lang).second) {
                     node = utils::xml::add_subnode_with_text(node_environment, "name", std::string(di.kv.str));
-                    xmlNewProp(node, BAD_CAST "xml:lang", BAD_CAST lang.c_str());
+                    if (!node) {
+                        name_langs.erase(lang);
+                    } else if (!xmlNewProp(node, BAD_CAST "xml:lang", BAD_CAST lang.c_str())) {
+                        xmlUnlinkNode(node);
+                        xmlFreeNode(node);
+                        name_langs.erase(lang);
+                    }
                 }
             }
             // If keyname starts with "solvable:description:", it's a description translation
@@ -321,7 +344,13 @@ void Environment::serialize(const std::string & path) {
                 // If it's successful (wasn't already present), create an XML node for this translation
                 if (description_langs.insert(lang).second) {
                     node = utils::xml::add_subnode_with_text(node_environment, "description", std::string(di.kv.str));
-                    xmlNewProp(node, BAD_CAST "xml:lang", BAD_CAST lang.c_str());
+                    if (!node) {
+                        description_langs.erase(lang);
+                    } else if (!xmlNewProp(node, BAD_CAST "xml:lang", BAD_CAST lang.c_str())) {
+                        xmlUnlinkNode(node);
+                        xmlFreeNode(node);
+                        description_langs.erase(lang);
+                    }
                 }
             }
         }
@@ -348,12 +377,23 @@ void Environment::serialize(const std::string & path) {
     }
 
     // Save the document
-    if (xmlSaveFormatFileEnc(path.c_str(), doc, "utf-8", 1) == -1) {
-        throw utils::xml::XMLSaveError(M_("failed to save xml document for comps"));
-    }
+    auto save_result = xmlSaveFormatFileEnc(path.c_str(), doc, "utf-8", 1);
 
     // Memory free
     xmlFreeDoc(doc);
+    // reset the error handler to default
+    xmlSetGenericErrorFunc(NULL, NULL);
+
+    if (save_result == -1) {
+        // There can be duplicit messages in the libxml2 errors so make them unique
+        auto it = unique(xml_errors.begin(), xml_errors.end());
+        xml_errors.resize(static_cast<size_t>(distance(xml_errors.begin(), it)));
+        throw utils::xml::XMLSaveError(
+            M_("Failed to save xml document for environment \"{}\" to file \"{}\": {}"),
+            get_environmentid(),
+            path,
+            libdnf5::utils::string::join(xml_errors, ", "));
+    }
 }
 
 void Environment::add_environment_id(const EnvironmentId & environment_id) {
