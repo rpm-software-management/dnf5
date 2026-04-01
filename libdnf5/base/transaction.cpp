@@ -21,6 +21,7 @@
 #include "rpm/transaction.hpp"
 
 #include "base_impl.hpp"
+
 #ifdef WITH_MODULEMD
 #include "module/module_db.hpp"
 #include "module/module_sack_impl.hpp"
@@ -36,6 +37,7 @@
 #include "transaction_package_impl.hpp"
 #include "utils/string.hpp"
 
+#include "libdnf5/base/active_transaction_info.hpp"
 #include "libdnf5/base/base.hpp"
 #include "libdnf5/common/exception.hpp"
 #include "libdnf5/common/sack/exclude_flags.hpp"
@@ -159,6 +161,24 @@ static std::vector<std::pair<ProblemRules, std::vector<std::string>>> get_remova
         }
     }
     return problem_output;
+}
+
+class TransactionLocker : public libdnf5::utils::Locker {
+public:
+    TransactionLocker(const std::filesystem::path & path, const ActiveTransactionInfo & info);
+
+    void write_metadata();
+
+private:
+    ActiveTransactionInfo transaction_info;
+};
+
+TransactionLocker::TransactionLocker(const std::filesystem::path & path, const ActiveTransactionInfo & info)
+    : Locker(path.string()),
+      transaction_info(info) {}
+
+void TransactionLocker::write_metadata() {
+    write_content(transaction_info.to_toml());
 }
 
 }  // namespace
@@ -922,6 +942,8 @@ Transaction::TransactionRunResult Transaction::Impl::_run(
     const std::optional<uint32_t> user_id,
     const std::string & comment,
     const bool test_only) {
+    concurrent_transaction.reset();
+
     // do not allow running a transaction multiple times
     if (history_db_id > 0) {
         return TransactionRunResult::ERROR_RERUN;
@@ -938,15 +960,31 @@ Transaction::TransactionRunResult Transaction::Impl::_run(
 
     auto & config = base->get_config();
 
+    // prepare transaction info
+    ActiveTransactionInfo info;
+    info.set_description(description);
+    info.set_comment(comment);
+    info.set_pid(getpid());
+    info.set_start_time(
+        std::chrono::duration_cast<std::chrono::seconds>(std::chrono::system_clock::now().time_since_epoch()).count());
+
     // acquire the lock
     std::filesystem::path lock_file_path = config.get_installroot_option().get_value();
     lock_file_path /= std::filesystem::path(libdnf5::TRANSACTION_LOCK_FILEPATH).relative_path();
     std::filesystem::create_directories(lock_file_path.parent_path());
 
-    libdnf5::utils::Locker locker(lock_file_path);
-    if (!locker.write_lock()) {
+    auto logger = base->get_logger().get();
+    TransactionLocker transaction_locker(lock_file_path, info);
+    if (!transaction_locker.write_lock()) {
+        auto content = transaction_locker.read_content();
+        try {
+            concurrent_transaction = std::make_unique<ActiveTransactionInfo>(ActiveTransactionInfo::from_toml(content));
+        } catch (const ActiveTransactionInfoParseError & ex) {
+            logger->warning(ex.what());
+        }
         return TransactionRunResult::ERROR_LOCK;
     }
+    transaction_locker.write_metadata();
 
     libdnf5::rpm::Transaction rpm_transaction(base);
 
@@ -1021,6 +1059,7 @@ Transaction::TransactionRunResult Transaction::Impl::_run(
     } else {
         db_transaction.set_user_id(get_login_uid());
     }
+
     //
     // TODO(jrohel): nevra of running dnf5?
     //db_transaction.add_runtime_package("dnf5");
@@ -1080,9 +1119,6 @@ Transaction::TransactionRunResult Transaction::Impl::_run(
     }
     db_transaction.set_dt_start(dt_start);
     db_transaction.start();
-
-
-    auto logger = base->get_logger().get();
 
     int pipe_out_from_scriptlets[2];
     if (pipe2(pipe_out_from_scriptlets, O_CLOEXEC) == -1) {
@@ -1651,6 +1687,10 @@ std::vector<std::string> Transaction::get_rpm_messages() {
 
 void Transaction::set_rpm_messages(std::vector<std::string> && rpm_messages) {
     p_impl->set_rpm_messages(std::move(rpm_messages));
+}
+
+const ActiveTransactionInfo * Transaction::get_concurrent_transaction() const noexcept {
+    return p_impl->concurrent_transaction.get();
 }
 
 }  // namespace libdnf5::base

@@ -1,6 +1,7 @@
 #ifndef _BINDINGS_LIBDNF5_EXCEPTINON_HPP_
 #define _BINDINGS_LIBDNF5_EXCEPTINON_HPP_
 
+#include "libdnf5/base/active_transaction_info_errors.hpp"
 #include "libdnf5/base/transaction_errors.hpp"
 #include "libdnf5/common/exception.hpp"
 #include "libdnf5/comps/group/package_errors.hpp"
@@ -63,6 +64,7 @@ public:
 
 static void create_swig_exception(const std::exception & e) {
     do {
+        swig_if_exception(e, libdnf5::base::ActiveTransactionInfoParseError);
         swig_if_exception(e, libdnf5::base::TransactionError);
 
         swig_if_exception(e, libdnf5::comps::InvalidPackageType);
