@@ -205,7 +205,7 @@ void RotatingFileLogger::Impl::write(const char * line) noexcept {
                     }
 
                     // and proceed with writing regardless the rotation
-                    // succeded, or not.
+                    // succeeded, or not.
                 }
             }
 

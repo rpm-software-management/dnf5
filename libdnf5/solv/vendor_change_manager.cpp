@@ -126,7 +126,7 @@ bool VendorChangeManager::is_vendor_change_allowed(Solvable & outgoing, Solvable
     auto incoming_vendor = incoming.vendor ? incoming.vendor : ID_EMPTY;
 
     if (incoming_vendor == outgoing_vendor) {
-        return true;  // OK, no vendor change occured
+        return true;  // OK, no vendor change occurred
     }
 
     // Check if the incoming solvable bypasses vendor check.
