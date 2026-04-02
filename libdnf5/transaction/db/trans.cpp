@@ -109,6 +109,29 @@ std::vector<Transaction> TransactionDbUtils::select_transactions_by_ids(
     return TransactionDbUtils::load_from_select(base, query);
 }
 
+std::vector<Transaction> TransactionDbUtils::select_transactions_since(const BaseWeakPtr & base, int64_t start) {
+    auto conn = transaction_db_connect(*base);
+
+    std::string sql = select_sql;
+    sql += "WHERE \"dt_end\" > ?";
+
+    auto query = libdnf5::utils::SQLite3::Query(*conn, sql);
+    query.bindv(start);
+
+    return TransactionDbUtils::load_from_select(base, query);
+}
+
+
+Transaction TransactionDbUtils::select_latest_transaction(const BaseWeakPtr & base) {
+    auto conn = transaction_db_connect(*base);
+
+    std::string sql = select_sql;
+    sql += "ORDER BY \"trans\".\"id\" DESC LIMIT 1";
+
+    auto query = libdnf5::utils::SQLite3::Query(*conn, sql);
+    return TransactionDbUtils::load_from_select(base, query).front();
+}
+
 
 std::vector<Transaction> TransactionDbUtils::select_transactions_by_range(
     const BaseWeakPtr & base, int64_t start, int64_t end) {

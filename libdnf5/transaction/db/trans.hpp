@@ -49,6 +49,12 @@ public:
     static std::vector<Transaction> select_transactions_by_ids(
         const BaseWeakPtr & base, const std::vector<int64_t> & ids);
 
+    // Selects all transactions that were finished after the ‹start› timestamp.
+    static std::vector<Transaction> select_transactions_since(const BaseWeakPtr & base, int64_t start);
+
+    /// Selects latest transaction.
+    static Transaction select_latest_transaction(const BaseWeakPtr & base);
+
     /// Selects transactions with ids within the [start, end] range (inclusive).
     static std::vector<Transaction> select_transactions_by_range(const BaseWeakPtr & base, int64_t start, int64_t end);
 

@@ -65,10 +65,22 @@ public:
     /// @return The listed transactions.
     std::vector<Transaction> list_transactions(int64_t start, int64_t end);
 
+    /// Lists all transactions that are newer than the provided timestamp.
+    ///
+    /// @param start The point of time against which is compared the timestamp
+    ///              of the end of the transaction.
+    /// @return List of all transaction that ended after the timestamp.
+    std::vector<Transaction> list_transactions_since(int64_t start);
+
     /// Lists all transactions from the transaction history.
     ///
     /// @return The listed transactions.
     std::vector<Transaction> list_all_transactions();
+
+    /// Returns the latest transaction.
+    ///
+    /// @return The latest transaction.
+    Transaction get_latest_transaction();
 
     /// @return The `Base` object to which this object belongs.
     /// @since 5.0
