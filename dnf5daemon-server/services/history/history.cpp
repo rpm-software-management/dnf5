@@ -128,19 +128,11 @@ sdbus::MethodReply History::recent_changes(sdbus::MethodCall & call) {
 
     if (options.contains("since")) {
         // only interested in transactions newer than the timestamp
-        // TODO(mblaha): Add a new method TransactionHistory::list_transactions_since()
-        // to retrieve transactions newer than a given point in time
         int64_t timestamp = dnfdaemon::key_value_map_get<int64_t>(options, "since");
-        auto all_transactions = history.list_all_transactions();
-        for (auto & trans : all_transactions) {
-            if (trans.get_dt_end() > timestamp) {
-                transactions.emplace_back(std::move(trans));
-            }
-        }
+        transactions = history.list_transactions_since(timestamp);
     } else {
         // if timestamp is not present, use only the latest transaction
-        auto trans_ids = history.list_transaction_ids();
-        transactions = history.list_transactions(std::vector<int64_t>{trans_ids.back()});
+        transactions = std::vector{history.get_latest_transaction()};
     }
     // the operator < for the Transaction class is kind of "reversed".
     // transA < transB means that transA.get_id() > transB.get_id()
