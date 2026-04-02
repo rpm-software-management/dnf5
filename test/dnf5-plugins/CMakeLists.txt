@@ -1,3 +1,4 @@
 add_subdirectory(automatic_plugin)
 add_subdirectory(copr_plugin)
+add_subdirectory(obs_plugin)
 add_subdirectory(needs_restarting_plugin)
