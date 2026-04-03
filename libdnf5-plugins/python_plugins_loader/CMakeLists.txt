@@ -28,9 +28,9 @@ add_library(python_plugins_loader MODULE python_plugins_loader.cpp)
 add_dependencies(python_plugins_loader swigpyrun-header)
 # Include directory with the gereated swigpyrun.h header
 target_include_directories(python_plugins_loader PRIVATE ${CMAKE_CURRENT_BINARY_DIR})
-# This is need because the generated swigpyrun.h contains warnings
+# This is needed because the generated swigpyrun.h contains warnings
 # (which get treated as errors)
-target_compile_options(python_plugins_loader PRIVATE -Wno-sign-conversion -Wno-missing-field-initializers)
+target_compile_options(python_plugins_loader PRIVATE -Wno-sign-conversion -Wno-missing-field-initializers -Wno-conversion)
 
 # disable the 'lib' prefix in order to create python_plugins_loader.so
 set_target_properties(python_plugins_loader PROPERTIES PREFIX "")
