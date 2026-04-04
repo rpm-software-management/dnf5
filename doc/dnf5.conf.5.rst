@@ -60,7 +60,7 @@ repository configuration file should aside from repo ID consists of baseurl, met
     If disabled, DNF5 will stick to the original vendor during RPM upgrades or downgrades.
     This preference, however, can be fine-tuned using :ref:`Vendor change policies <dnf5_vendor_change_policy-label>`.
 
-    Default: ``True``.
+    Default: ``False``.
 
     .. WARNING:: This option is currently not supported for `downgrade` and `distro-sync` commands
 
