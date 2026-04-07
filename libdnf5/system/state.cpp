@@ -666,29 +666,20 @@ void State::load() {
     try {
         auto new_suffix_files = gather_suffix_new_files(this->path);
         if (!new_suffix_files.empty()) {
+            // The .new files are either stale leftovers from a previously
+            // crashed save(), or they belong to a concurrent save() in another
+            // process. We cannot safely delete or rename them - doing so would
+            // race with a concurrent save() and cause errors (
+            // https://github.com/rpm-software-management/dnf5/issues/2601).
+            // Load from the non-.new files which are always in a consistent
+            // state from the last successful save(). Stale .new
+            // files will be overwritten by the next save().
+            // TODO(amatej): Once https://github.com/rpm-software-management/dnf5/issues/1610
+            //               is done we should suggest to rebuild the system state.
             auto logger = base->get_logger();
-            logger->warning("System state: unfinished update found");
-
-            try {
-                // package_state new file is renamed first, if it exists the .new system state
-                // files are likely incomplete and we cannot use them
-                if (std::filesystem::exists(suffix_new(get_package_state_path()))) {
-                    // TODO(amatej): Once https://github.com/rpm-software-management/dnf5/issues/1610 is done we should
-                    //               suggest to rebuild the system state, some information is likely missing because
-                    //               system state update happens after the transaction is finished.
-                    logger->error("System state: cannot use partially written system state files");
-                    for (const auto & f : new_suffix_files) {
-                        std::filesystem::remove(f);
-                    }
-                } else {
-                    logger->warning(
-                        "System state: update interruption happened during renaming which means all the new system "
-                        "state files were written, using them.");
-                    rename_new_system_state_files(true);
-                }
-            } catch (const std::filesystem::filesystem_error & ex) {
-                logger->error("System state: cannot recover: ", ex.what());
-            }
+            logger->warning(
+                "System state: found .new state files from an unfinished transaction, "
+                "loading from last successfully written state files");
         }
 
         path = get_package_state_path();
