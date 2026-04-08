@@ -30,7 +30,6 @@ private:
             return 0;
         }
 
-        std::string message;
         switch (status) {
             case TransferStatus::SUCCESSFUL:
                 std::cout << "  Downloaded: " << *description << std::endl;
