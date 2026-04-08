@@ -55,15 +55,15 @@ namespace stdfs = std::filesystem;
         lseek(fd2, 0, SEEK_SET);
         char buf1[block_size];
         char buf2[block_size];
-        ssize_t readed;
+        ssize_t n_read;
         do {
-            readed = read(fd1, &buf1, block_size);
-            auto readed2 = read(fd2, &buf2, block_size);
-            if (readed2 != readed || std::memcmp(&buf1, &buf2, static_cast<size_t>(readed)) != 0) {
+            n_read = read(fd1, &buf1, block_size);
+            auto n_read2 = read(fd2, &buf2, block_size);
+            if (n_read2 != n_read || std::memcmp(&buf1, &buf2, static_cast<size_t>(n_read)) != 0) {
                 ret = false;
                 break;
             }
-        } while (readed == block_size);
+        } while (n_read == block_size);
     } while (false);
 
     if (fd1 != -1) {

@@ -79,7 +79,7 @@ void RepomanageCommand::set_argument_parser() {
 }
 
 void RepomanageCommand::pre_configure() {
-    // We are not intereseted in any configured repositories.
+    // We are not interested in any configured repositories.
     // Don't create them and don't load them.
     get_context().set_create_repos(false);
 }
