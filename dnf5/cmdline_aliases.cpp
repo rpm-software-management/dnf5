@@ -831,7 +831,6 @@ void load_cmdline_aliases(
     std::sort(config_paths.begin(), config_paths.end());
 
     const std::string locale_name = locale.substr(0, locale.find('.'));  // Strip encoding (e.g. ".UTF-8") from locale
-    std::string failed_filenames;
     for (const auto & path : config_paths) {
         load_aliases_from_toml_file(context, path, locale_name);
     }

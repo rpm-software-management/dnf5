@@ -153,7 +153,6 @@ std::vector<libdnf5::rpm::Package> ManifestNewCommand::resolve_pkgs(libdnf5::Bas
         return sort_pkgs(std::move(installed));
     }
 
-    std::set<libdnf5::rpm::Package> resolved_pkgs;
     libdnf5::Goal goal(base);
     for (const auto & spec : pkg_specs) {
         goal.add_rpm_install(spec);

@@ -750,7 +750,6 @@ GoalProblem Goal::Impl::add_module_specs_to_goal(base::Transaction & transaction
     auto ret = GoalProblem::NO_PROBLEM;
     module::ModuleSack & module_sack = *base->get_module_sack();
 
-    std::vector<std::string> missing_module_specs;
     for (auto & [action, spec, settings] : module_specs) {
         try {
             switch (action) {
