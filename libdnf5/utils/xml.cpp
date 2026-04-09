@@ -22,10 +22,30 @@
 
 #include <libxml/tree.h>
 
+#include <algorithm>
 #include <string>
 
 
 namespace libdnf5::utils::xml {
+
+
+__attribute__((__format__(printf, 2, 0))) void error_to_strings(void * ctx, const char * fmt, ...) {
+    auto xml_errors = static_cast<std::vector<std::string> *>(ctx);
+    char buffer[256];
+    va_list args;
+    va_start(args, fmt);
+    vsnprintf(buffer, 256, fmt, args);
+    va_end(args);
+    xml_errors->push_back(buffer);
+}
+
+
+std::vector<std::string> make_errors_unique(std::vector<std::string> xml_errors) {
+    std::sort(xml_errors.begin(), xml_errors.end());
+    auto it = std::unique(xml_errors.begin(), xml_errors.end());
+    xml_errors.resize(static_cast<size_t>(std::distance(xml_errors.begin(), it)));
+    return xml_errors;
+}
 
 
 xmlNodePtr add_subnode_with_text(xmlNodePtr parent, std::string child_name, std::string child_text) {
