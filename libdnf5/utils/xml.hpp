@@ -60,6 +60,15 @@ __attribute__((__format__(printf, 2, 0))) void error_to_strings(void * ctx, cons
 std::vector<std::string> make_errors_unique(std::vector<std::string> xml_errors);
 
 
+struct XmlDocDeleter {
+    void operator()(xmlDoc * doc) const noexcept {
+        if (doc != nullptr) {
+            xmlFreeDoc(doc);
+        }
+    }
+};
+
+
 xmlNodePtr add_subnode_with_text(xmlNodePtr parent, std::string child_name, std::string child_text);
 
 }  // namespace libdnf5::utils::xml
