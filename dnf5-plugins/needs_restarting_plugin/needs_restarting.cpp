@@ -640,7 +640,7 @@ void NeedsRestartingCommand::processes_need_restarting(Context & ctx, bool exclu
             std::string exe_path_str(exe_path);
             const std::string deleted_suffix = " (deleted)";
             if (libdnf5::utils::string::ends_with(exe_path_str, deleted_suffix)) {
-                exe_path_str = exe_path_str.substr(0, exe_path_str.length() - deleted_suffix.length());
+                exe_path_str.resize(exe_path_str.size() - deleted_suffix.size());
             }
 
             // Check if this executable is from an installed package

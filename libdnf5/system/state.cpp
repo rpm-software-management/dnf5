@@ -327,9 +327,9 @@ transaction::TransactionItemReason State::get_package_reason(const std::string &
         // group packages are not stored in packages.toml but in groups.toml
         // using its name
         std::string name = na;
-        auto dot_pos = name.find('.');
+        const auto dot_pos = name.find('.');
         if (dot_pos != name.npos) {
-            name = name.substr(0, dot_pos);
+            name.resize(dot_pos);
         }
         if (get_package_groups_cache().contains(name)) {
             return transaction::TransactionItemReason::GROUP;
