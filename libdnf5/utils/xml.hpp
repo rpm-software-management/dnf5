@@ -23,8 +23,10 @@
 #include "libdnf5/common/exception.hpp"
 
 #include <libxml/tree.h>
+#include <libxml/xmlerror.h>
 
 #include <string>
+#include <vector>
 
 
 namespace libdnf5::utils::xml {
@@ -34,6 +36,28 @@ struct XMLSaveError : public Error {
     const char * get_domain_name() const noexcept override { return "libdnf5::utils"; }
     const char * get_name() const noexcept override { return "XMLSaveError"; }
 };
+
+
+/// Restore the default generic error handler when destroyed.
+struct GenericErrorFuncGuard {
+    GenericErrorFuncGuard(void * ctx, xmlGenericErrorFunc handler) noexcept { xmlSetGenericErrorFunc(ctx, handler); }
+    ~GenericErrorFuncGuard() { xmlSetGenericErrorFunc(NULL, NULL); }
+
+    GenericErrorFuncGuard(const GenericErrorFuncGuard &) = delete;
+    GenericErrorFuncGuard & operator=(const GenericErrorFuncGuard &) = delete;
+    GenericErrorFuncGuard(GenericErrorFuncGuard &&) = delete;
+    GenericErrorFuncGuard & operator=(GenericErrorFuncGuard &&) = delete;
+};
+
+
+// libxml2 error handler. By default libxml2 prints errors directly to stderr which
+// makes a mess of the outputs.
+// This stores the errors in a vector of strings.
+__attribute__((__format__(printf, 2, 0))) void error_to_strings(void * ctx, const char * fmt, ...);
+
+
+// There can be duplicate messages in the libxml2 errors, so make them unique.
+std::vector<std::string> make_errors_unique(std::vector<std::string> xml_errors);
 
 
 xmlNodePtr add_subnode_with_text(xmlNodePtr parent, std::string child_name, std::string child_text);

@@ -268,22 +268,9 @@ bool Environment::get_installed() const {
 }
 
 
-// libxml2 error handler. By default libxml2 prints errors directly to stderr which
-// makes a mess of the outputs.
-// This stores the errors in a vector of strings;
-__attribute__((__format__(printf, 2, 0))) static void error_to_strings(void * ctx, const char * fmt, ...) {
-    auto xml_errors = static_cast<std::vector<std::string> *>(ctx);
-    char buffer[256];
-    va_list args;
-    va_start(args, fmt);
-    vsnprintf(buffer, 256, fmt, args);
-    va_end(args);
-    xml_errors->push_back(buffer);
-}
-
 void Environment::serialize(const std::string & path) {
     std::vector<std::string> xml_errors;
-    xmlSetGenericErrorFunc(&xml_errors, &error_to_strings);
+    utils::xml::GenericErrorFuncGuard error_guard(&xml_errors, &utils::xml::error_to_strings);
 
     // Create doc with root node "comps"
     xmlDocPtr doc = xmlNewDoc(BAD_CAST "1.0");
@@ -369,18 +356,13 @@ void Environment::serialize(const std::string & path) {
 
     // Memory free
     xmlFreeDoc(doc);
-    // reset the error handler to default
-    xmlSetGenericErrorFunc(NULL, NULL);
 
     if (save_result == -1) {
-        // There can be duplicit messages in the libxml2 errors so make them unique
-        auto it = unique(xml_errors.begin(), xml_errors.end());
-        xml_errors.resize(static_cast<size_t>(distance(xml_errors.begin(), it)));
         throw utils::xml::XMLSaveError(
             M_("Failed to save xml document for environment \"{}\" to file \"{}\": {}"),
             get_environmentid(),
             path,
-            libdnf5::utils::string::join(xml_errors, ", "));
+            libdnf5::utils::string::join(utils::xml::make_errors_unique(std::move(xml_errors)), ", "));
     }
 }
 
