@@ -48,10 +48,41 @@ std::vector<std::string> make_errors_unique(std::vector<std::string> xml_errors)
 }
 
 
-xmlNodePtr add_subnode_with_text(xmlNodePtr parent, std::string child_name, std::string child_text) {
-    xmlNodePtr node = xmlNewNode(NULL, BAD_CAST child_name.c_str());
-    xmlAddChild(parent, node);
-    xmlAddChild(node, xmlNewText(BAD_CAST child_text.c_str()));
+xmlNodePtr new_node(const std::string & node_name) {
+    xmlNodePtr node = xmlNewNode(NULL, BAD_CAST node_name.c_str());
+    if (!node) {
+        throw std::bad_alloc();
+    }
+    return node;
+}
+
+
+xmlAttrPtr new_prop(xmlNodePtr node, const std::string & name, const std::string & value) {
+    xmlAttrPtr prop = xmlNewProp(node, BAD_CAST name.c_str(), BAD_CAST value.c_str());
+    if (!prop) {
+        throw std::bad_alloc();
+    }
+    return prop;
+}
+
+
+xmlNodePtr add_child(xmlNodePtr parent, xmlNodePtr child) {
+    libdnf_assert(parent && child && parent != child, "Invalid parent or child node");
+    if (!xmlAddChild(parent, child)) {
+        throw std::bad_alloc();
+    }
+    return child;
+}
+
+
+xmlNodePtr add_subnode_with_text(xmlNodePtr parent, const std::string & child_name, const std::string & child_text) {
+    xmlNodePtr node = new_node(child_name);
+    add_child(parent, node);
+    xmlNodePtr text = xmlNewText(BAD_CAST child_text.c_str());
+    if (!text) {
+        throw std::bad_alloc();
+    }
+    add_child(node, text);
     return node;
 }
 

@@ -69,7 +69,16 @@ struct XmlDocDeleter {
 };
 
 
-xmlNodePtr add_subnode_with_text(xmlNodePtr parent, std::string child_name, std::string child_text);
+xmlNodePtr new_node(const std::string & node_name);
+
+
+xmlAttrPtr new_prop(xmlNodePtr node, const std::string & name, const std::string & value);
+
+
+xmlNodePtr add_child(xmlNodePtr parent, xmlNodePtr child);
+
+
+xmlNodePtr add_subnode_with_text(xmlNodePtr parent, const std::string & child_name, const std::string & child_text);
 
 }  // namespace libdnf5::utils::xml
 

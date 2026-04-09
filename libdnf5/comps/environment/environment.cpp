@@ -275,12 +275,15 @@ void Environment::serialize(const std::string & path) {
 
     // Create doc with root node "comps"
     std::unique_ptr<xmlDoc, utils::xml::XmlDocDeleter> doc(xmlNewDoc(BAD_CAST "1.0"));
-    xmlNodePtr node_comps = xmlNewNode(NULL, BAD_CAST "comps");
+    if (!doc) {
+        throw std::bad_alloc();
+    }
+    xmlNodePtr node_comps = utils::xml::new_node("comps");
     xmlDocSetRootElement(doc.get(), node_comps);
 
     // Create "environment" node
-    xmlNodePtr node_environment = xmlNewNode(NULL, BAD_CAST "environment");
-    xmlAddChild(node_comps, node_environment);
+    xmlNodePtr node_environment = utils::xml::new_node("environment");
+    utils::xml::add_child(node_comps, node_environment);
 
     // Add id, name, description, display_order
     utils::xml::add_subnode_with_text(node_environment, "id", get_environmentid());
@@ -316,7 +319,7 @@ void Environment::serialize(const std::string & path) {
                 // If it's successful (wasn't already present), create an XML node for this translation
                 if (name_langs.insert(lang).second) {
                     node = utils::xml::add_subnode_with_text(node_environment, "name", std::string(di.kv.str));
-                    xmlNewProp(node, BAD_CAST "xml:lang", BAD_CAST lang.c_str());
+                    utils::xml::new_prop(node, "xml:lang", lang);
                 }
             }
             // If keyname starts with "solvable:description:", it's a description translation
@@ -326,7 +329,7 @@ void Environment::serialize(const std::string & path) {
                 // If it's successful (wasn't already present), create an XML node for this translation
                 if (description_langs.insert(lang).second) {
                     node = utils::xml::add_subnode_with_text(node_environment, "description", std::string(di.kv.str));
-                    xmlNewProp(node, BAD_CAST "xml:lang", BAD_CAST lang.c_str());
+                    utils::xml::new_prop(node, "xml:lang", lang);
                 }
             }
         }
@@ -334,18 +337,18 @@ void Environment::serialize(const std::string & path) {
     }
 
     // Add grouplist
-    xmlNodePtr node_grouplist = xmlNewNode(NULL, BAD_CAST "grouplist");
-    xmlAddChild(node_environment, node_grouplist);
+    xmlNodePtr node_grouplist = utils::xml::new_node("grouplist");
+    utils::xml::add_child(node_environment, node_grouplist);
     for (const auto & group : get_groups()) {
         // Create an XML node for this group
         node = utils::xml::add_subnode_with_text(node_grouplist, "groupid", group);
     }
-    xmlNodePtr node_optionlist = xmlNewNode(NULL, BAD_CAST "optionlist");
-    xmlAddChild(node_environment, node_optionlist);
+    xmlNodePtr node_optionlist = utils::xml::new_node("optionlist");
+    utils::xml::add_child(node_environment, node_optionlist);
     for (const auto & group : get_default_groups()) {
         // Create an XML node for this group
         node = utils::xml::add_subnode_with_text(node_optionlist, "groupid", group);
-        xmlNewProp(node, BAD_CAST "default", BAD_CAST "true");
+        utils::xml::new_prop(node, "default", "true");
     }
     for (const auto & group : get_optional_groups()) {
         // Create an XML node for this group
