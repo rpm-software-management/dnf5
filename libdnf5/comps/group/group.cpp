@@ -272,12 +272,15 @@ void Group::serialize(const std::string & path) {
 
     // Create doc with root node "comps"
     std::unique_ptr<xmlDoc, utils::xml::XmlDocDeleter> doc(xmlNewDoc(BAD_CAST "1.0"));
-    xmlNodePtr node_comps = xmlNewNode(NULL, BAD_CAST "comps");
+    if (!doc) {
+        throw std::bad_alloc();
+    }
+    xmlNodePtr node_comps = utils::xml::new_node("comps");
     xmlDocSetRootElement(doc.get(), node_comps);
 
     // Create "group" node
-    xmlNodePtr node_group = xmlNewNode(NULL, BAD_CAST "group");
-    xmlAddChild(node_comps, node_group);
+    xmlNodePtr node_group = utils::xml::new_node("group");
+    utils::xml::add_child(node_comps, node_group);
 
     // Add id, name, description, default, uservisible, display_order, langonly
     utils::xml::add_subnode_with_text(node_group, "id", get_groupid());
@@ -316,7 +319,7 @@ void Group::serialize(const std::string & path) {
                 // If it's successful (wasn't already present), create an XML node for this translation
                 if (name_langs.insert(lang).second) {
                     node = utils::xml::add_subnode_with_text(node_group, "name", std::string(di.kv.str));
-                    xmlNewProp(node, BAD_CAST "xml:lang", BAD_CAST lang.c_str());
+                    utils::xml::new_prop(node, "xml:lang", lang);
                 }
             }
             // If keyname starts with "solvable:description:", it's a description translation
@@ -326,7 +329,7 @@ void Group::serialize(const std::string & path) {
                 // If it's successful (wasn't already present), create an XML node for this translation
                 if (description_langs.insert(lang).second) {
                     node = utils::xml::add_subnode_with_text(node_group, "description", std::string(di.kv.str));
-                    xmlNewProp(node, BAD_CAST "xml:lang", BAD_CAST lang.c_str());
+                    utils::xml::new_prop(node, "xml:lang", lang);
                 }
             }
         }
@@ -334,14 +337,14 @@ void Group::serialize(const std::string & path) {
     }
 
     // Add packagelist
-    xmlNodePtr node_packagelist = xmlNewNode(NULL, BAD_CAST "packagelist");
-    xmlAddChild(node_group, node_packagelist);
+    xmlNodePtr node_packagelist = utils::xml::new_node("packagelist");
+    utils::xml::add_child(node_group, node_packagelist);
     for (const auto & pkg : get_packages()) {
         // Create an XML node for this package
         node = utils::xml::add_subnode_with_text(node_packagelist, "packagereq", pkg.get_name());
-        xmlNewProp(node, BAD_CAST "type", BAD_CAST pkg.get_type_string().c_str());
+        utils::xml::new_prop(node, "type", pkg.get_type_string());
         if (pkg.get_type() == PackageType::CONDITIONAL) {
-            xmlNewProp(node, BAD_CAST "requires", BAD_CAST pkg.get_condition().c_str());
+            utils::xml::new_prop(node, "requires", pkg.get_condition());
         }
     }
 
