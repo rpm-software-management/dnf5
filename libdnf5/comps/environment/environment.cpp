@@ -39,6 +39,7 @@ extern "C" {
 #include <libxml/tree.h>
 #include <limits.h>
 
+#include <memory>
 #include <set>
 #include <string>
 #include <string_view>
@@ -273,9 +274,9 @@ void Environment::serialize(const std::string & path) {
     utils::xml::GenericErrorFuncGuard error_guard(&xml_errors, &utils::xml::error_to_strings);
 
     // Create doc with root node "comps"
-    xmlDocPtr doc = xmlNewDoc(BAD_CAST "1.0");
+    std::unique_ptr<xmlDoc, utils::xml::XmlDocDeleter> doc(xmlNewDoc(BAD_CAST "1.0"));
     xmlNodePtr node_comps = xmlNewNode(NULL, BAD_CAST "comps");
-    xmlDocSetRootElement(doc, node_comps);
+    xmlDocSetRootElement(doc.get(), node_comps);
 
     // Create "environment" node
     xmlNodePtr node_environment = xmlNewNode(NULL, BAD_CAST "environment");
@@ -352,12 +353,7 @@ void Environment::serialize(const std::string & path) {
     }
 
     // Save the document
-    auto save_result = xmlSaveFormatFileEnc(path.c_str(), doc, "utf-8", 1);
-
-    // Memory free
-    xmlFreeDoc(doc);
-
-    if (save_result == -1) {
+    if (xmlSaveFormatFileEnc(path.c_str(), doc.get(), "utf-8", 1) == -1) {
         throw utils::xml::XMLSaveError(
             M_("Failed to save xml document for environment \"{}\" to file \"{}\": {}"),
             get_environmentid(),
