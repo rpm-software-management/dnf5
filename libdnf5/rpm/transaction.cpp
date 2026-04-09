@@ -432,7 +432,10 @@ int Transaction::ts_change_callback(int event, rpmte te, rpmte other, void * dat
             gpgcheck = repo->get_config().get_pkg_gpgcheck_option().get_value();
         }
         if (gpgcheck == false) {
-            rpmteSetVfyLevel(te, RPMSIG_DIGEST_TYPE);
+            // When nocrypto tsflag is set, skip digest verification as well
+            auto & tsflags = transaction->base->get_config().get_tsflags_option().get_value();
+            bool nocrypto = std::find(tsflags.begin(), tsflags.end(), "nocrypto") != tsflags.end();
+            rpmteSetVfyLevel(te, nocrypto ? RPMSIG_NONE_TYPE : RPMSIG_DIGEST_TYPE);
         }
 #endif
     } else {
