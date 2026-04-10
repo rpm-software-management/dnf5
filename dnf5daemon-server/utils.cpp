@@ -40,10 +40,9 @@ bool write_to_fd(const std::string & message, int out_fd, std::string & error_ms
     ssize_t total_bytes_written = 0;
     size_t bytes_remaining = message.size();
 
-    int ready = -1;
     bool success = true;
     while (bytes_remaining > 0 && success) {
-        ready = poll(pfds.data(), pfds.size(), timeout);
+        const int ready = poll(pfds.data(), pfds.size(), timeout);
         switch (ready) {
             case -1:
                 // poll call failed
