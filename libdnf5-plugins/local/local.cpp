@@ -87,7 +87,6 @@ public:
     void post_transaction(const libdnf5::base::Transaction & transaction) override {
         std::filesystem::create_directories(repodir);
 
-        std::vector<libdnf5::base::TransactionPackage> trans_packages = transaction.get_transaction_packages();
         bool need_rebuild = false;
         for (auto & tspkg : transaction.get_transaction_packages()) {
             if (transaction_item_action_is_inbound(tspkg.get_action())) {
