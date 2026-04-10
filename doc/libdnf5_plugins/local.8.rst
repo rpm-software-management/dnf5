@@ -11,20 +11,29 @@ Local Plugin
 Description
 ===========
 
-After each libdnf5 transaction copy all downloaded packages to a ``_dnf_local`` repository on the local filesystem and generate repository metadata.
+After each libdnf5 transaction copy all downloaded packages to local repositories on the filesystem and generate repository metadata.
 
-The repository is automatically added by the plugin with the following options::
+The plugin creates two repositories:
 
-    [_dnf_local]
-    name = Local libdnf5 plugin repo
-    baseurl = <repodir>
+* ``_dnf_local`` for packages from repositories with ``pkg_gpgcheck`` enabled.
+  The ``pkg_gpgcheck`` setting is inherited from the main configuration.
+  The repository doesn't specify any ``gpgkey``, it assumes all required keys
+  were already imported.
+* ``_dnf_local_nogpgcheck`` for packages from repositories with ``pkg_gpgcheck``
+  disabled. This repository has ``pkg_gpgcheck`` set to ``false``.
+
+Each repository is only created when there are cached packages in it.
+
+Both repositories are configured with the following options::
+
     skip_if_unavailable = true
-    cost = 500
     metadata_expire = 0
 
-Note that the repository has ``pkg_gpgcheck`` verification enabled by default but doesn't specify any ``gpgkey``, it assumes all required keys were already imported.
+The ``_dnf_local`` repository has ``cost = 500`` and the ``_dnf_local_nogpgcheck``
+repository has ``cost = 501``, so the gpgcheck-enabled repository is preferred
+when both contain the same package.
 
-To generate the metedata `createrepo_c` is required.
+To generate the metadata `createrepo_c` is required.
 
 Configuration
 =============
@@ -52,6 +61,13 @@ It can also contain:
 
     Path where the local repository is located.
     By default it is in :ref:`persistdir <persistdir_options-label>` in ``plugins/local`` subdirectory.
+
+``repodir_nogpgcheck``
+    :ref:`string <string-label>`
+
+    Path where the local repository for packages from repos with ``pkg_gpgcheck``
+    disabled is located.
+    By default it is in :ref:`persistdir <persistdir_options-label>` in ``plugins/local-nogpgcheck`` subdirectory.
 
 
 The ``createrepo`` section requires:
