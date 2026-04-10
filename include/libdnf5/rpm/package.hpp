@@ -503,6 +503,11 @@ public:
     // @replaces libdnf:libdnf/dnf-package.h:function:dnf_package_get_repo(DnfPackage * pkg)
     libdnf5::repo::RepoWeakPtr get_repo() const;
 
+    /// Whether OpenPGP signature verification is required for this package
+    /// based on its repository configuration. Checks localpkg_gpgcheck for
+    /// command-line packages and pkg_gpgcheck for repository packages.
+    bool is_pkg_gpgcheck_enabled() const;
+
     /// @return Id of the repository the package belongs to.
     /// @since 5.0
     /// @note This isn't the repository the package was installed from.

@@ -459,6 +459,14 @@ libdnf5::repo::RepoWeakPtr Package::get_repo() const {
     return get_rpm_pool(p_impl->base).get_repo(p_impl->id.id).get_weak_ptr();
 }
 
+bool Package::is_pkg_gpgcheck_enabled() const {
+    auto repo = get_repo();
+    if (repo->get_type() == libdnf5::repo::Repo::Type::COMMANDLINE) {
+        return p_impl->base->get_config().get_localpkg_gpgcheck_option().get_value();
+    }
+    return repo->get_config().get_pkg_gpgcheck_option().get_value();
+}
+
 std::string Package::get_repo_id() const {
     return get_rpm_pool(p_impl->base).get_repo(p_impl->id.id).get_id();
 }

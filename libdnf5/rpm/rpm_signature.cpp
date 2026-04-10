@@ -257,16 +257,8 @@ RpmSignature::CheckResult RpmSignature::check_package_signature(const std::strin
 
 RpmSignature::CheckResult RpmSignature::check_package_signature(const rpm::Package & pkg) const {
     // is package OpenPGP check even required?
-    auto repo = pkg.get_repo();
-    if (repo->get_type() == libdnf5::repo::Repo::Type::COMMANDLINE) {
-        if (!p_impl->base->get_config().get_localpkg_gpgcheck_option().get_value()) {
-            return CheckResult::SKIPPED;
-        }
-    } else {
-        auto & repo_config = repo->get_config();
-        if (!repo_config.get_pkg_gpgcheck_option().get_value()) {
-            return CheckResult::SKIPPED;
-        }
+    if (!pkg.is_pkg_gpgcheck_enabled()) {
+        return CheckResult::SKIPPED;
     }
 
     return check_package_signature(pkg.get_package_path());
