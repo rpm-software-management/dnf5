@@ -31,6 +31,7 @@ extern "C" {
 #include <stdio.h>
 
 #include <algorithm>
+#include <optional>
 
 #define libdnf_assert_file_open() libdnf_assert(file != nullptr, "The operation requires an open file");
 
@@ -229,13 +230,11 @@ std::string File::read(std::size_t count) {
     libdnf_assert_file_open();
 
     // Try to detect the length to the end of the file.
-    std::size_t length_to_end;
-    bool length_detected{false};
+    std::optional<std::size_t> length_to_end;
     if (auto cur_pos = std::ftell(file); cur_pos != -1) {
-        if (std::fseek(file, 0, SEEK_END) != -1) {
+        if (std::fseek(file, 0, SEEK_END) == 0) {
             if (auto end_pos = std::ftell(file); end_pos != -1) {
                 length_to_end = static_cast<std::size_t>(end_pos - cur_pos);
-                length_detected = true;
             }
         }
         std::fseek(file, cur_pos, SEEK_SET);
@@ -243,9 +242,9 @@ std::string File::read(std::size_t count) {
 
     std::string res;
 
-    if (length_detected) {
+    if (length_to_end) {
         // The file length is known. Allocate memory at once and read data.
-        std::size_t to_read = count == 0 ? length_to_end : std::min(length_to_end, count);
+        std::size_t to_read = count == 0 ? length_to_end.value() : std::min(length_to_end.value(), count);
         res.resize(to_read);
         std::size_t size = read(res.data(), to_read);
         libdnf_assert(size == to_read, "Short read occurred: expected to read {}, have read {}.", to_read, size);
