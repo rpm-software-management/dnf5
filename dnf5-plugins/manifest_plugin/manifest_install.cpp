@@ -36,7 +36,7 @@ void ManifestInstallCommand::configure() {
     auto & ctx = get_context();
     auto & base = ctx.get_base();
 
-    const auto & arch = base.get_vars()->get_value("arch");
+    const auto & arch = base.get_vars()->get_value("basearch");
 
     const auto & manifest_path = get_manifest_path(*manifest_path_option, arch);
 
@@ -55,7 +55,7 @@ void ManifestInstallCommand::run() {
     auto & base = ctx.get_base();
 
     auto * goal = ctx.get_goal();
-    const auto & arch = base.get_vars()->get_value("arch");
+    const auto & arch = base.get_vars()->get_value("basearch");
     for (auto & manifest_pkg : manifest.get_packages().get(arch)) {
         libdnf5::GoalJobSettings settings;
         settings.set_to_repo_ids({manifest_pkg.get_repo_id()});
