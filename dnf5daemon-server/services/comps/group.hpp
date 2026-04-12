@@ -28,7 +28,7 @@ class Group : public IDbusSessionService {
 public:
     using IDbusSessionService::IDbusSessionService;
     ~Group() = default;
-    void dbus_register();
+    void dbus_register() override;
     void dbus_deregister();
 
 private:

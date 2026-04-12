@@ -30,7 +30,7 @@ class Rpm : public IDbusSessionService {
 public:
     using IDbusSessionService::IDbusSessionService;
     ~Rpm() = default;
-    void dbus_register();
+    void dbus_register() override;
     void dbus_deregister();
 
 private:
