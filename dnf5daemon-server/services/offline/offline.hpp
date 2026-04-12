@@ -30,7 +30,7 @@ class Offline : public IDbusSessionService {
 public:
     using IDbusSessionService::IDbusSessionService;
     ~Offline() = default;
-    void dbus_register();
+    void dbus_register() override;
     void dbus_deregister();
 
 private:
