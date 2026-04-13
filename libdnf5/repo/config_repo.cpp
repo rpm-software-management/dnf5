@@ -59,6 +59,7 @@ class ConfigRepo::Impl {
     OptionChild<OptionString> username{main_config.get_username_option()};
     OptionChild<OptionString> password{main_config.get_password_option()};
     OptionChild<OptionStringAppendList> protected_packages{main_config.get_protected_packages_option()};
+    OptionBool gpgcheck{false};
     OptionChild<OptionBool> pkg_gpgcheck{main_config.get_pkg_gpgcheck_option()};
     OptionChild<OptionBool> repo_gpgcheck{main_config.get_repo_gpgcheck_option()};
     OptionChild<OptionBool> enablegroups{main_config.get_enablegroups_option()};
@@ -152,9 +153,8 @@ ConfigRepo::Impl::Impl(Config & owner, ConfigMain & main_config, const std::stri
     owner.opt_binds().add("username", username);
     owner.opt_binds().add("password", password);
     owner.opt_binds().add("protected_packages", protected_packages);
+    owner.opt_binds().add("gpgcheck", gpgcheck);
     owner.opt_binds().add("pkg_gpgcheck", pkg_gpgcheck);
-    // Compatibility alias for pkg_gpgcheck
-    owner.opt_binds().add("gpgcheck", pkg_gpgcheck);
     owner.opt_binds().add("repo_gpgcheck", repo_gpgcheck);
     owner.opt_binds().add("enablegroups", enablegroups);
     owner.opt_binds().add("retries", retries);
@@ -616,6 +616,33 @@ void ConfigRepo::load_from_parser(
     Logger & logger,
     Option::Priority priority) {
     Config::load_from_parser(parser, section, vars, logger, priority);
+
+    // Apply gpgcheck_policy: if gpgcheck was set in this repo section, expand it
+    if (p_impl->gpgcheck.get_priority() >= priority) {
+        const auto gpgcheck_val = p_impl->gpgcheck.get_value();
+        const auto & policy = p_impl->main_config.get_gpgcheck_policy_option().get_value();
+
+        // Check which target options were explicitly set in this section
+        bool pkg_gpgcheck_explicit = false;
+        bool repo_gpgcheck_explicit = false;
+        auto section_iter = parser.get_data().find(section);
+        if (section_iter != parser.get_data().end()) {
+            pkg_gpgcheck_explicit = section_iter->second.find("pkg_gpgcheck") != section_iter->second.end();
+            repo_gpgcheck_explicit = section_iter->second.find("repo_gpgcheck") != section_iter->second.end();
+        }
+
+        // All policies: gpgcheck implies pkg_gpgcheck
+        if (!pkg_gpgcheck_explicit) {
+            p_impl->pkg_gpgcheck.set(priority, gpgcheck_val);
+        }
+
+        // "full" or "all": also set repo_gpgcheck
+        if (policy == "full" || policy == "all") {
+            if (!repo_gpgcheck_explicit) {
+                p_impl->repo_gpgcheck.set(priority, gpgcheck_val);
+            }
+        }
+    }
 }
 
 }  // namespace libdnf5::repo
