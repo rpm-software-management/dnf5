@@ -243,6 +243,41 @@ repository configuration file should aside from repo ID consists of baseurl, met
 
     Default: ``[]``.
 
+.. _gpgcheck_options-label:
+
+``gpgcheck``
+
+    Due to compatibility ``gpgcheck`` option is supported as well but ``pkg_gpgcheck`` is preferred.
+    The meaning of ``gpgcheck`` is controlled by the
+    :ref:`gpgcheck_policy <gpgcheck_policy_options-label>` option.
+    :ref:`pkg_gpgcheck <_gpgcheck_options-label>` option.
+.. :
+
+.. _gpgcheck_policy_options-label:
+
+``gpgcheck_policy``
+    ``legacy``, ``full``, or ``all``
+
+    Controls how the deprecated``gpgcheck`` option expands when set in a configuration section.
+
+    ``legacy``
+        ``gpgcheck=1`` sets only ``pkg_gpgcheck=1``.
+        This preserves the original DNF behavior.
+
+    ``full``
+        ``gpgcheck=1`` sets both ``pkg_gpgcheck=1`` and ``repo_gpgcheck=1``.
+
+    ``all``
+        ``gpgcheck=1`` sets ``pkg_gpgcheck=1``, ``repo_gpgcheck=1``, and ``localpkg_gpgcheck=1``.
+
+    Explicitly setting ``pkg_gpgcheck``, ``repo_gpgcheck``, or ``localpkg_gpgcheck`` in the
+    same configuration section overrides the policy for that specific option.
+
+    The policy is a global setting defined in ``[main]`` and affects all repository
+    sections that use ``gpgcheck``.
+
+    Default: ``full``.
+
 .. _group_package_types_options-label:
 
 ``group_package_types``
@@ -1003,8 +1038,6 @@ configuration.
 
     Doesn't apply for packages passed directly as arguments, as they are not in any repository,
     see :ref:`localpkg_gpgcheck <localpkg_gpgcheck_options-label>`.
-
-    Due to compatibility `gpgcheck` option is supported as well but `pkg_gpgcheck` is preferred.
 
 .. _includepkgs_options-label:
 
