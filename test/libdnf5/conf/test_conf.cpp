@@ -72,6 +72,112 @@ void ConfTest::test_config_pkg_gpgcheck() {
 #pragma GCC diagnostic pop
 }
 
+void ConfTest::test_gpgcheck_policy_legacy() {
+    ConfigMain cfg;
+    ConfigParser parser;
+    parser.add_section("main");
+    parser.set_value("main", "gpgcheck_policy", "legacy");
+    parser.set_value("main", "gpgcheck", "1");
+    cfg.load_from_parser(parser, "main", *base->get_vars(), logger);
+
+    CPPUNIT_ASSERT_EQUAL(true, cfg.get_pkg_gpgcheck_option().get_value());
+    CPPUNIT_ASSERT_EQUAL(false, cfg.get_repo_gpgcheck_option().get_value());
+    CPPUNIT_ASSERT_EQUAL(false, cfg.get_localpkg_gpgcheck_option().get_value());
+}
+
+void ConfTest::test_gpgcheck_policy_full() {
+    ConfigMain cfg;
+    ConfigParser parser;
+    parser.add_section("main");
+    parser.set_value("main", "gpgcheck_policy", "full");
+    parser.set_value("main", "gpgcheck", "1");
+    cfg.load_from_parser(parser, "main", *base->get_vars(), logger);
+
+    CPPUNIT_ASSERT_EQUAL(true, cfg.get_pkg_gpgcheck_option().get_value());
+    CPPUNIT_ASSERT_EQUAL(true, cfg.get_repo_gpgcheck_option().get_value());
+    CPPUNIT_ASSERT_EQUAL(false, cfg.get_localpkg_gpgcheck_option().get_value());
+}
+
+void ConfTest::test_gpgcheck_policy_all() {
+    ConfigMain cfg;
+    ConfigParser parser;
+    parser.add_section("main");
+    parser.set_value("main", "gpgcheck_policy", "all");
+    parser.set_value("main", "gpgcheck", "1");
+    cfg.load_from_parser(parser, "main", *base->get_vars(), logger);
+
+    CPPUNIT_ASSERT_EQUAL(true, cfg.get_pkg_gpgcheck_option().get_value());
+    CPPUNIT_ASSERT_EQUAL(true, cfg.get_repo_gpgcheck_option().get_value());
+    CPPUNIT_ASSERT_EQUAL(true, cfg.get_localpkg_gpgcheck_option().get_value());
+}
+
+void ConfTest::test_gpgcheck_policy_explicit_override() {
+    ConfigMain cfg;
+    ConfigParser parser;
+    parser.add_section("main");
+    parser.set_value("main", "gpgcheck_policy", "full");
+    parser.set_value("main", "gpgcheck", "1");
+    parser.set_value("main", "repo_gpgcheck", "0");
+    cfg.load_from_parser(parser, "main", *base->get_vars(), logger);
+
+    CPPUNIT_ASSERT_EQUAL(true, cfg.get_pkg_gpgcheck_option().get_value());
+    CPPUNIT_ASSERT_EQUAL(false, cfg.get_repo_gpgcheck_option().get_value());
+    CPPUNIT_ASSERT_EQUAL(false, cfg.get_localpkg_gpgcheck_option().get_value());
+}
+
+void ConfTest::test_gpgcheck_policy_repo() {
+    ConfigMain main_cfg;
+    {
+        ConfigParser parser;
+        parser.add_section("main");
+        parser.set_value("main", "gpgcheck_policy", "full");
+        main_cfg.load_from_parser(parser, "main", *base->get_vars(), logger);
+    }
+
+    repo::ConfigRepo repo_cfg(main_cfg, "test-repo");
+    ConfigParser repo_parser;
+    repo_parser.add_section("test-repo");
+    repo_parser.set_value("test-repo", "gpgcheck", "1");
+    repo_cfg.load_from_parser(repo_parser, "test-repo", *base->get_vars(), logger);
+
+    CPPUNIT_ASSERT_EQUAL(true, repo_cfg.get_pkg_gpgcheck_option().get_value());
+    CPPUNIT_ASSERT_EQUAL(true, repo_cfg.get_repo_gpgcheck_option().get_value());
+
+    repo::ConfigRepo repo_cfg2(main_cfg, "test-repo-2");
+    ConfigParser repo_parser2;
+    repo_parser2.add_section("test-repo-2");
+    repo_parser2.set_value("test-repo-2", "gpgcheck", "1");
+    repo_parser2.set_value("test-repo-2", "repo_gpgcheck", "0");
+    repo_cfg2.load_from_parser(repo_parser2, "test-repo-2", *base->get_vars(), logger);
+
+    CPPUNIT_ASSERT_EQUAL(true, repo_cfg2.get_pkg_gpgcheck_option().get_value());
+    CPPUNIT_ASSERT_EQUAL(false, repo_cfg2.get_repo_gpgcheck_option().get_value());
+}
+
+void ConfTest::test_gpgcheck_policy_pkg_gpgcheck_no_expand() {
+    // pkg_gpgcheck=1 should NOT trigger policy expansion — only gpgcheck=1 should
+    ConfigMain main_cfg;
+    {
+        ConfigParser parser;
+        parser.add_section("main");
+        parser.set_value("main", "gpgcheck_policy", "full");
+        parser.set_value("main", "pkg_gpgcheck", "1");
+        main_cfg.load_from_parser(parser, "main", *base->get_vars(), logger);
+    }
+
+    CPPUNIT_ASSERT_EQUAL(true, main_cfg.get_pkg_gpgcheck_option().get_value());
+    CPPUNIT_ASSERT_EQUAL(false, main_cfg.get_repo_gpgcheck_option().get_value());
+
+    repo::ConfigRepo repo_cfg(main_cfg, "test-repo");
+    ConfigParser repo_parser;
+    repo_parser.add_section("test-repo");
+    repo_parser.set_value("test-repo", "pkg_gpgcheck", "1");
+    repo_cfg.load_from_parser(repo_parser, "test-repo", *base->get_vars(), logger);
+
+    CPPUNIT_ASSERT_EQUAL(true, repo_cfg.get_pkg_gpgcheck_option().get_value());
+    CPPUNIT_ASSERT_EQUAL(false, repo_cfg.get_repo_gpgcheck_option().get_value());
+}
+
 void ConfTest::test_config_load_from_config() {
     libdnf5::ConfigMain config;
 

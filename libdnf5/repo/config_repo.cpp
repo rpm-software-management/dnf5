@@ -19,9 +19,9 @@
 
 #include "libdnf5/repo/config_repo.hpp"
 
-#include "conf/config_utils.hpp"
 #include "utils/deprecate.hpp"
 
+#include "libdnf5/conf/config_parser.hpp"
 #include "libdnf5/conf/const.hpp"
 #include "libdnf5/utils/bgettext/bgettext-mark-domain.h"
 
@@ -616,6 +616,19 @@ void ConfigRepo::load_from_parser(
     Logger & logger,
     Option::Priority priority) {
     Config::load_from_parser(parser, section, vars, logger, priority);
+
+    // Only expand when the "gpgcheck" key is present — "pkg_gpgcheck" should not trigger expansion.
+    auto section_iter = parser.get_data().find(section);
+    if (section_iter != parser.get_data().end() &&
+        section_iter->second.find("gpgcheck") != section_iter->second.end()) {
+        const auto & policy = p_impl->main_config.get_gpgcheck_policy_option().get_value();
+        if (policy == "full" || policy == "all") {
+            bool repo_gpgcheck_explicit = section_iter->second.find("repo_gpgcheck") != section_iter->second.end();
+            if (!repo_gpgcheck_explicit) {
+                p_impl->repo_gpgcheck.set(priority, p_impl->pkg_gpgcheck.get_value());
+            }
+        }
+    }
 }
 
 }  // namespace libdnf5::repo

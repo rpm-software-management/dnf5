@@ -20,7 +20,8 @@
 #ifndef LIBDNF5_CONF_CONFIG_PRIVATE_HPP
 #define LIBDNF5_CONF_CONFIG_PRIVATE_HPP
 
-#include "libdnf5/conf/option.hpp"
+#include <filesystem>
+#include <string>
 
 
 namespace libdnf5 {

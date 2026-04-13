@@ -23,6 +23,8 @@
 
 #include <glob.h>
 
+#include <cstring>
+
 
 namespace libdnf5 {
 
