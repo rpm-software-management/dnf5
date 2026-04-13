@@ -34,6 +34,12 @@ class ConfTest : public TestCaseFixture {
     CPPUNIT_TEST(test_config_repo);
     CPPUNIT_TEST(test_config_pkg_gpgcheck);
     CPPUNIT_TEST(test_config_load_from_config);
+    CPPUNIT_TEST(test_gpgcheck_policy_legacy);
+    CPPUNIT_TEST(test_gpgcheck_policy_full);
+    CPPUNIT_TEST(test_gpgcheck_policy_all);
+    CPPUNIT_TEST(test_gpgcheck_policy_explicit_override);
+    CPPUNIT_TEST(test_gpgcheck_policy_repo);
+    CPPUNIT_TEST(test_gpgcheck_policy_pkg_gpgcheck_no_expand);
     CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -43,6 +49,12 @@ public:
     void test_config_repo();
     void test_config_pkg_gpgcheck();
     void test_config_load_from_config();
+    void test_gpgcheck_policy_legacy();
+    void test_gpgcheck_policy_full();
+    void test_gpgcheck_policy_all();
+    void test_gpgcheck_policy_explicit_override();
+    void test_gpgcheck_policy_repo();
+    void test_gpgcheck_policy_pkg_gpgcheck_no_expand();
 
     std::unique_ptr<libdnf5::Base> base;
     libdnf5::LogRouter logger;
