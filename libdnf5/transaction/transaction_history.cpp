@@ -63,8 +63,16 @@ std::vector<Transaction> TransactionHistory::list_transactions(int64_t start, in
     return TransactionDbUtils::select_transactions_by_range(p_impl->base, start, end);
 }
 
+std::vector<Transaction> TransactionHistory::list_transactions_since(int64_t start) {
+    return TransactionDbUtils::select_transactions_since(p_impl->base, start);
+}
+
 std::vector<Transaction> TransactionHistory::list_all_transactions() {
     return TransactionDbUtils::select_transactions_by_ids(p_impl->base, {});
+}
+
+Transaction TransactionHistory::get_latest_transaction() {
+    return TransactionDbUtils::select_latest_transaction(p_impl->base);
 }
 
 BaseWeakPtr TransactionHistory::get_base() const {
