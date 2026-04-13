@@ -188,7 +188,8 @@ void AdvisoryQuery::filter_name(const std::string & pattern, sack::QueryCmp cmp_
 
 void AdvisoryQuery::filter_name(const std::vector<std::string> & patterns, sack::QueryCmp cmp_type) {
     std::vector<std::string> prefixed_patterns;
-    for (std::string pattern : patterns) {
+    prefixed_patterns.reserve(patterns.size());
+    for (const auto & pattern : patterns) {
         prefixed_patterns.push_back(std::string(libdnf5::solv::SOLVABLE_NAME_ADVISORY_PREFIX) + pattern);
     }
     filter_dataiterator_internal(
