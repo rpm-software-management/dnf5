@@ -18,6 +18,7 @@
 // along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <Python.h>
+#include <dlfcn.h>
 #include <fmt/format.h>
 #include <libdnf5/base/base.hpp>
 #include <libdnf5/plugin/iplugin.hpp>
@@ -312,6 +313,26 @@ void PythonPluginLoader::load_plugins() {
     std::lock_guard<libdnf5::Base> guard(get_base());
 
     if (python_ref_counter == 0) {
+        auto & logger = *get_base().get_logger();
+        // Open libpython with RTLD_GLOBAL so that its symbols are globally
+        // visible. Without this, Python C extension modules (e.g. math)
+        // fail to resolve symbols like PyFloat_Type at import time.
+        Dl_info info;
+        if (dladdr(reinterpret_cast<void *>(&Py_InitializeEx), &info)) {
+            void * handle = dlopen(info.dli_fname, RTLD_LAZY | RTLD_GLOBAL);
+            if (!handle) {
+                const char * err_msg = dlerror();
+                logger.warning(
+                    "PythonPluginLoader: Failed to open libpython with RTLD_GLOBAL: {}",
+                    err_msg ? err_msg : "unknown error");
+                return;
+            }
+        } else {
+            logger.warning(
+                "PythonPluginLoader: dladdr() failed, cannot promote libpython symbols to global visibility");
+            return;
+        }
+
         Py_InitializeEx(0);
         if (!Py_IsInitialized()) {
             return;
