@@ -1,3 +1,101 @@
+# 5.4.1.0
+
+- Update translations from weblate
+- local plugin: Use separate repo for packages from nogpgcheck repos
+- package: Add is_pkg_gpgcheck_enabled() method
+- GH workflow: Fix permission syntax in "Upload *.pot files to dnf5-l10n repository"
+- refactor(advisory_query): optimise `AdvisoryQuery::filter_name`
+- spec: Require rpm-libs >= 5.99.90 because of rpmteSetVfyLevel()
+- Fix typos and non-standard variable names found by codespell
+- style(dnf5daemon-server): add missing `override`
+- refactor(fs): simplify and correct logic of `File::read`
+- refactor: remove some unread variables
+- comps: Throw bad_alloc when memory allocation fails in a libxml function
+- comps: Make sure the doc is always freed at the end of serialization
+- comps: Make sure the xml error handler is restored when destroyed
+- comps: Handle errors while serializing environments
+- transaction: Respect nocrypto tsflag per-element
+- refactor: avoid using `substr` on prefixes as this involves a full copy
+- state: Don't delete .new files in State::load()
+- refactor: remove unused variables
+- Handle TOML parsing errors for ActiveTransactionInfo
+- dnf5: Print details about concurrent running transaction
+- transaction: Store info about concurrently running transaction
+- transaction: Use TransactionLocker instead of Locker
+- Specialized TransactionLocker class
+- Add ActiveTransactionInfo class
+- Add unit tests for the Locker class
+- locker: Add methods to read/write lock file content
+- fix(python_plugins_loader): suppress -Wconversion for SWIG-generated code
+- refactor(advisory_query): prefer range-based for loop
+- comps: Clear package and group lists when adding new group or environment ids
+- comps: List default groups of environments in the info command
+- comps: Install and upgrade also default groups of environments
+- comps: Test default groups in environments
+- comps: Differentiate between optional and default groups in environments
+- Configure packit to use caret notation for postrelease snapshots
+- Drop duplicit cmake var `PACKAGE_VERSION` and its check
+- refactor(offline): remove redundant `.c_str()` call
+- Clarify packages provides pattern specification
+- Add '--noplugins' tsflag config value
+- dnf5: Reuse cached packages for offline and store transactions
+- docs(config-manager): fix typo
+- docs(config-manager): add enable/disable
+- fix(spec): adjust the license for the plugins
+- docs(config-manager): keep consistent spacing between sections
+- feat(config-manager): implement ‹enable›/‹disable›
+- fix(config-manager): factor out config functions
+- docs(builddep): add warning about enabling repos
+- fix(completion): parse descriptions properly in zsh completion
+- feat(completion): add native zsh completion support
+- do: fix duplicate reinstall goal entry and typos
+- dnf5daemon-server: enhance transaction_action_* docs
+- tests: Fix a type mismatch in libdnf5-cli/test_progressbar
+- needs-restarting: Remove unused variable `updated_packages`
+- needs-restarting: Add JSON output support and documentation
+- fix: prevent UB in repo sorting
+- doc: Name manual pages for versioned vendorpolicies
+- spec: Escape macros in spec comments
+- Remove unused old dnf4 transaction history code
+- libdnf5-cli: fix clang-format
+- libdnf5-cli: handle C or POSIX locale gracefully in progressbar width calculation
+- libdnf5-cli: remove unused utils::utf8 module
+- dnf5daemon-server: Fix daemon crash for invalid locale
+- subprocess: Bind /dev/null to child stdin
+- test: Test libdnf5::utils::subprocess::run
+- bootc: Handle read-only /usr on non-bootc system
+- bootc: Check for bootc system by calling bootc status
+- Add libdnf5::utils::subprocess::run
+- bootc: check /usr mounted read-only, not permissions
+- bootc: Check filesystem writability before permissions
+- tests: Set LC_ALL=C to prevent locale-dependent test failures
+- repoclosure: Add JSON output support and documentation
+- spec: Do not build-require long unused libcomps-devel
+- Fix segmentation fault in cmd_requires_privileges
+- doc: repo: Add --json option and a link to --dump-repo-config option
+- tests: Disable plugins in tutorial tests to prevent host dependency
+- automatic: fail if libcurl lacks smtp support
+- automatic: relax libcurl-full dependency
+- automatic: document SMTP requirement for email emitter
+- docs: add remarks from review
+- doc(manifest): use correct “See Also” header
+- doc(manifest): add missing ref to reference
+- doc: add missing backtick to reference
+- doc: fix the references to labels
+- doc(json): indent for different formats
+- doc(api): fix the headers and references
+- Add --oldinstallonly option to remove command
+- dnfdaemon: Increase the number of concurrent sessions
+- only install systemd service files if WITH_SYSTEMD is set
+- tests: Add unit test verifying tutorial plugins load correctly
+- libdnf5 plugin template: use newer API, libdnf_plugin_get_last_exception
+- Move plugin templates to test directory and ensure they compile
+- spec: split dnf5 and dnf manpage entries
+- Add dnf5-debuginfo-install(8) manual page and package provides
+- local plugin: propagate spec local plugin build option to cmake
+- dnf-automatic: use /bin/sh
+- Honor localpkg_gpgcheck in RPM transaction per-element policy
+
 # 5.4.0.0
 
 - Update translations from weblate
