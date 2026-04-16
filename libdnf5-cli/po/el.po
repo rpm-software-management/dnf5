@@ -4,13 +4,14 @@
 # Languages add-on <noreply-addon-languages@weblate.org>, 2026.
 # Weblate Translation Memory <noreply-mt-weblate-translation-memory@weblate.org>, 2026.
 # Jim Spentzos <jimspentzos2000@gmail.com>, 2026.
+# Efstathios Iosifidis <eiosifidis@yandex.com>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-07-26 03:48+0000\n"
-"PO-Revision-Date: 2026-01-22 08:58+0000\n"
-"Last-Translator: Jim Spentzos <jimspentzos2000@gmail.com>\n"
+"PO-Revision-Date: 2026-02-27 00:58+0000\n"
+"Last-Translator: Efstathios Iosifidis <eiosifidis@yandex.com>\n"
 "Language-Team: Greek <https://translate.fedoraproject.org/projects/dnf5/"
 "libdnf5-cli/el/>\n"
 "Language: el\n"
@@ -18,62 +19,63 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.15.2\n"
+"X-Generator: Weblate 5.16.1\n"
 
 #: argument_parser.cpp:68
 #, c++-format
 msgid "Misconfigured alias \"{}\": cannot convert \"{}\" to a number"
 msgstr ""
+"Λανθασμένα ρυθμισμένο ψευδώνυμο «{}»: αδυναμία μετατροπής του «{}» σε αριθμό"
 
 #: argument_parser.cpp:76
 #, c++-format
 msgid "Misconfigured alias \"{}\": index \"{}\" out of range"
-msgstr ""
+msgstr "Λανθασμένα ρυθμισμένο ψευδώνυμο «{}»: ο δείκτης «{}» είναι εκτός ορίων"
 
 #: argument_parser.cpp:98
 #, c++-format
 msgid "\"{}\" not allowed together with named argument \"{}\""
-msgstr ""
+msgstr "Το «{}» δεν επιτρέπεται μαζί με το ονομαστικό όρισμα «{}»"
 
 #: argument_parser.cpp:100
 #, c++-format
 msgid "\"{}\" not allowed in command \"{}\""
-msgstr ""
+msgstr "Το «{}» δεν επιτρέπεται στην εντολή «{}»"
 
 #: argument_parser.cpp:102
 #, c++-format
 msgid "\"{}\" not allowed together with positional argument \"{}\""
-msgstr ""
+msgstr "Το «{}» δεν επιτρέπεται μαζί με το όρισμα θέσης «{}»"
 
 #: argument_parser.cpp:147
 #, c++-format
 msgid "Argument id \"{}\" already registered in group \"{}\""
-msgstr ""
+msgstr "Το αναγνωριστικό ορίσματος «{}» είναι ήδη καταχωρισμένο στην ομάδα «{}»"
 
 #: argument_parser.cpp:274
 #, c++-format
 msgid "Invalid character '.' in argument id \"{}\""
-msgstr ""
+msgstr "Μη έγκυρος χαρακτήρας «.» στο αναγνωριστικό ορίσματος «{}»"
 
 #: argument_parser.cpp:382 argument_parser.cpp:387
 #, c++-format
 msgid "Too few values for positional argument \"{}\""
-msgstr ""
+msgstr "Πολύ λίγες τιμές για το όρισμα θέσης «{}»"
 
 #: argument_parser.cpp:548
 #, c++-format
 msgid "Missing value for named argument \"--{}\""
-msgstr ""
+msgstr "Λείπει η τιμή για το ονομαστικό όρισμα «--{}»"
 
 #: argument_parser.cpp:556
 #, c++-format
 msgid "Unexpected value for named argument \"--{}\""
-msgstr ""
+msgstr "Μη αναμενόμενη τιμή για το ονομαστικό όρισμα «--{}»"
 
 #: argument_parser.cpp:598
 #, c++-format
 msgid "Missing value for named argument \"-{}\""
-msgstr ""
+msgstr "Λείπει η τιμή για το ονομαστικό όρισμα «-{}»"
 
 #. print usage
 #: argument_parser.cpp:694
@@ -88,41 +90,51 @@ msgstr "Περιγραφή:"
 #, c++-format
 msgid "Command id \"{}\" already registered for command \"{}\""
 msgstr ""
+"Το αναγνωριστικό εντολής «{}» είναι ήδη καταχωρισμένο για την εντολή «{}»"
 
 #: argument_parser.cpp:990
 #, c++-format
 msgid "Named argument id \"{}\" already registered for command \"{}\""
 msgstr ""
+"Το αναγνωριστικό ονομαστικού ορίσματος «{}» είναι ήδη καταχωρισμένο για την "
+"εντολή «{}»"
 
 #: argument_parser.cpp:1000
 #, c++-format
 msgid "Positional argument id \"{}\" already registered for command \"{}\""
 msgstr ""
+"Το αναγνωριστικό ορίσματος θέσης «{}» είναι ήδη καταχωρισμένο για την εντολή "
+"«{}»"
 
 #: argument_parser.cpp:1010
 #, c++-format
 msgid "Group id \"{}\" already registered for command \"{}\""
 msgstr ""
+"Το αναγνωριστικό ομάδας «{}» είναι ήδη καταχωρισμένο για την εντολή «{}»"
 
 #: argument_parser.cpp:1037
 #, c++-format
 msgid "Command id \"{}\" does not contain subcommand with id \"{}\""
 msgstr ""
+"Το αναγνωριστικό εντολής «{}» δεν περιέχει υποεντολή με αναγνωριστικό «{}»"
 
 #: argument_parser.cpp:1045
 #, c++-format
 msgid "Command id \"{}\" does not contain named argument with id \"{}\""
 msgstr ""
+"Το αναγνωριστικό εντολής «{}» δεν περιέχει ονομαστικό όρισμα με "
+"αναγνωριστικό «{}»"
 
 #: argument_parser.cpp:1053
 #, c++-format
 msgid "Command id \"{}\" does not contain positional argument with id \"{}\""
 msgstr ""
+"Το αναγνωριστικό εντολής «{}» δεν περιέχει όρισμα θέσης με αναγνωριστικό «{}»"
 
 #: argument_parser.cpp:1060
 #, c++-format
 msgid "Command id \"{}\" does not contain group with id \"{}\""
-msgstr ""
+msgstr "Το αναγνωριστικό εντολής «{}» δεν περιέχει ομάδα με αναγνωριστικό «{}»"
 
 #: argument_parser.cpp:1177 argument_parser.cpp:1388
 #, c++-format
@@ -132,38 +144,40 @@ msgstr "Άγνωστο όρισμα «{}» για την εντολή «{}»"
 #: argument_parser.cpp:1192 argument_parser.cpp:1403
 #, c++-format
 msgid "Missing positional argument \"{}\" for command \"{}\""
-msgstr ""
+msgstr "Λείπει το όρισμα θέσης «{}» για την εντολή «{}»"
 
 #: argument_parser.cpp:1274
 #, c++-format
 msgid "Missing value for command alias \"{}\""
-msgstr ""
+msgstr "Λείπει η τιμή για το ψευδώνυμο εντολής «{}»"
 
 #: argument_parser.cpp:1610
 #, c++-format
 msgid "Named argument with path id \"{}\" not found"
-msgstr ""
+msgstr "Το ονομαστικό όρισμα με αναγνωριστικό διαδρομής «{}» δεν βρέθηκε"
 
 #: argument_parser.cpp:1620
 #, c++-format
 msgid "Positional argument with path id \"{}\" not found"
-msgstr ""
+msgstr "Το όρισμα θέσης με αναγνωριστικό διαδρομής «{}» δεν βρέθηκε"
 
 #: exception.cpp:30
 msgid "Operation aborted by the user."
-msgstr ""
+msgstr "Η λειτουργία ακυρώθηκε από τον χρήστη."
 
 #: exception.cpp:33
 msgid "Failed to resolve the transaction"
-msgstr ""
+msgstr "Αποτυχία επίλυσης της συναλλαγής"
 
 #: output/moduleinfo.cpp:36
 msgid "Hint: [d]efault, [e]nabled, [x]disabled, [i]nstalled, [a]ctive"
 msgstr ""
+"Συμβουλή: [d]προεπιλογή, [e]ενεργό, [x]ανενεργό, [i]εγκατεστημένο, "
+"[a]δραστικό"
 
 #: output/modulelist.cpp:39
 msgid "Hint: [d]efault, [e]nabled, [x]disabled, [i]nstalled"
-msgstr ""
+msgstr "Συμβουλή: [d]προεπιλογή, [e]ενεργό, [x]ανενεργό, [i]εγκατεστημένο"
 
 #. Note for translators: This is a right-aligned column separator in
 #. a package properties table as in "Name    : bash".
@@ -178,7 +192,7 @@ msgstr "Όνομα"
 
 #: output/packageinfo.cpp:68
 msgid "Epoch"
-msgstr ""
+msgstr "Εποχή (Epoch)"
 
 #: output/packageinfo.cpp:69 output/transaction_table.cpp:289
 msgid "Version"
@@ -186,7 +200,7 @@ msgstr "Έκδοση"
 
 #: output/packageinfo.cpp:70
 msgid "Release"
-msgstr ""
+msgstr "Κυκλοφορία"
 
 #: output/packageinfo.cpp:71
 msgid "Architecture"
@@ -194,7 +208,7 @@ msgstr "Αρχιτεκτονική"
 
 #: output/packageinfo.cpp:75
 msgid "Obsoletes"
-msgstr ""
+msgstr "Αντικαθιστά (Obsoletes)"
 
 #: output/packageinfo.cpp:85
 msgid "Download size"
@@ -234,11 +248,11 @@ msgstr "Περιγραφή"
 
 #: output/packageinfo.cpp:109
 msgid "Vendor"
-msgstr ""
+msgstr "Προμηθευτής"
 
 #: output/search.cpp:45
 msgid " (exact)"
-msgstr ""
+msgstr " (ακριβές)"
 
 #: output/search.cpp:90
 msgid "No matches found."
@@ -246,7 +260,7 @@ msgstr "Δεν βρέθηκαν αποτελέσματα."
 
 #: output/search.cpp:101
 msgid "Matched fields: "
-msgstr ""
+msgstr "Πεδία που ταιριάζουν: "
 
 #: output/transaction_table.cpp:127
 msgid "Transaction Summary:\n"
@@ -305,8 +319,8 @@ msgstr[1] ""
 #, c++-format
 msgid " Changing reason: {:4} package\n"
 msgid_plural " Changing reason: {:4} packages\n"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] " Αλλαγή αιτίας: {:4} πακέτο\n"
+msgstr[1] " Αλλαγή αιτίας: {:4} πακέτα\n"
 
 #. Keep the replaceble number aligned across all messages.
 #: output/transaction_table.cpp:195
@@ -322,7 +336,7 @@ msgstr "Πακέτο"
 
 #: output/transaction_table.cpp:283
 msgid "Arch"
-msgstr ""
+msgstr "Αρχιτεκτονική (Arch)"
 
 #: output/transaction_table.cpp:301
 msgid "Size"
@@ -336,35 +350,35 @@ msgstr "{} -> {}"
 #: output/transaction_table.cpp:373
 #, c++-format
 msgid "replacing {}"
-msgstr ""
+msgstr "αντικατάσταση του {}"
 
 #: output/transaction_table.cpp:409 output/transaction_table.cpp:426
 msgid " <name-unset>"
-msgstr ""
+msgstr " <μη ορισμένο όνομα>"
 
 #: output/transaction_table.cpp:457
 msgid "replacing "
-msgstr ""
+msgstr "αντικατάσταση "
 
 #: output/transaction_table.cpp:470
 msgid "Skipping packages with conflicts:"
-msgstr ""
+msgstr "Παράλειψη πακέτων με συγκρούσεις:"
 
 #: output/transaction_table.cpp:472
 msgid "Skipping packages with broken dependencies:"
-msgstr ""
+msgstr "Παράλειψη πακέτων με κατεστραμμένες εξαρτήσεις:"
 
 #: output/transaction_table.cpp:533
 msgid "Installing dependencies:"
-msgstr ""
+msgstr "Εγκατάσταση εξαρτήσεων:"
 
 #: output/transaction_table.cpp:535
 msgid "Installing weak dependencies:"
-msgstr ""
+msgstr "Εγκατάσταση ασθενών εξαρτήσεων:"
 
 #: output/transaction_table.cpp:537
 msgid "Installing group/module packages:"
-msgstr ""
+msgstr "Εγκατάσταση πακέτων ομάδας/αρθρώματος:"
 
 #: output/transaction_table.cpp:539
 msgid "Installing:"
@@ -380,7 +394,7 @@ msgstr "Υποβάθμιση:"
 
 #: output/transaction_table.cpp:549
 msgid "Reinstalling:"
-msgstr ""
+msgstr "Επανεγκατάσταση:"
 
 #: output/transaction_table.cpp:553
 msgid "Removing dependent packages:"
@@ -388,7 +402,7 @@ msgstr "Αφαίρεση εξαρτημένων πακέτων:"
 
 #: output/transaction_table.cpp:555
 msgid "Removing unused dependencies:"
-msgstr ""
+msgstr "Αφαίρεση μη χρησιμοποιούμενων εξαρτήσεων:"
 
 #: output/transaction_table.cpp:557
 msgid "Removing:"
@@ -396,55 +410,55 @@ msgstr "Αφαίρεση:"
 
 #: output/transaction_table.cpp:561
 msgid "Changing reason:"
-msgstr ""
+msgstr "Αλλαγή αιτίας:"
 
 #: output/transaction_table.cpp:593
 msgid "Installing groups dependencies:"
-msgstr ""
+msgstr "Εγκατάσταση εξαρτήσεων ομάδων:"
 
 #: output/transaction_table.cpp:595
 msgid "Installing groups:"
-msgstr ""
+msgstr "Εγκατάσταση ομάδων:"
 
 #: output/transaction_table.cpp:599
 msgid "Removing groups:"
-msgstr ""
+msgstr "Αφαίρεση ομάδων:"
 
 #: output/transaction_table.cpp:602
 msgid "Upgrading groups:"
-msgstr ""
+msgstr "Αναβάθμιση ομάδων:"
 
 #: output/transaction_table.cpp:629
 msgid "Installing environmental groups:"
-msgstr ""
+msgstr "Εγκατάσταση ομάδων περιβάλλοντος:"
 
 #: output/transaction_table.cpp:632
 msgid "Removing environmental groups:"
-msgstr ""
+msgstr "Αφαίρεση ομάδων περιβάλλοντος:"
 
 #: output/transaction_table.cpp:635
 msgid "Upgrading environmental groups:"
-msgstr ""
+msgstr "Αναβάθμιση ομάδων περιβάλλοντος:"
 
 #: output/transaction_table.cpp:662
 msgid "Enabling module streams:"
-msgstr ""
+msgstr "Ενεργοποίηση ροών αρθρώματος:"
 
 #: output/transaction_table.cpp:665
 msgid "Disabling modules:"
-msgstr ""
+msgstr "Απενεργοποίηση αρθρωμάτων:"
 
 #: output/transaction_table.cpp:668
 msgid "Resetting modules:"
-msgstr ""
+msgstr "Επαναφορά αρθρωμάτων:"
 
 #: output/transaction_table.cpp:671
 msgid "Switching module streams:"
-msgstr ""
+msgstr "Εναλλαγή ροών αρθρώματος:"
 
 #: output/transaction_table.cpp:745
 msgid "Nothing to do."
-msgstr ""
+msgstr "Καμία ενέργεια προς εκτέλεση."
 
 #: progressbar/multi_progress_bar.cpp:36
 msgid "Total"
@@ -452,4 +466,4 @@ msgstr "Σύνολο"
 
 #: session.cpp:149
 msgid "Missing command"
-msgstr ""
+msgstr "Λείπει η εντολή"

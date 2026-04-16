@@ -1,0 +1,168 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# Keith Bowes <zooplah@gmail.com>, 2026.
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-07-26 03:48+0000\n"
+"PO-Revision-Date: 2026-04-05 19:58+0000\n"
+"Last-Translator: Keith Bowes <zooplah@gmail.com>\n"
+"Language-Team: Esperanto <https://translate.fedoraproject.org/projects/dnf5/"
+"libdnf5-plugin-actions/eo/>\n"
+"Language: eo\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.16.2\n"
+
+#: actions.cpp:237
+#, c++-format
+msgid "File \"{}\" on line {}: {}"
+msgstr "Dosiero \"{}\" en linio {}: {}"
+
+#: actions.cpp:636 actions.cpp:642 actions.cpp:648 actions.cpp:654
+msgid "\"HOOK:PKG_FILTER:DIRECTION:OPTIONS:CMD\" format expected"
+msgstr "Formato \"HOKO:PAKA_FILTRILO:DIREKTO:OPCIO:KOMANDO\" atendita"
+
+#: actions.cpp:676
+#, c++-format
+msgid "Unknown \"enabled\" option value \"{}\""
+msgstr "Nekonata opcia valoro \"{}\" por \"enabled\""
+
+#: actions.cpp:683
+#, c++-format
+msgid "Unknown option \"{}\""
+msgstr "Nekonata opcio \"{}\""
+
+#: actions.cpp:711
+#, c++-format
+msgid "Unknown hook \"{}\""
+msgstr "Nekonata hoko \"{}\""
+
+#: actions.cpp:720
+msgid ""
+"Package filter can only be used in GOAL_RESOLVED, PRE_TRANS and POST_TRANS "
+"hooks"
+msgstr ""
+"Paka filtro uzeblas nur en hokoj de GOAL_RESULTED, PRE_TRANS kaj POST_TRANS"
+
+#: actions.cpp:726
+msgid "Cannot use direction without package filter"
+msgstr "Ne eblas uzi direkton sen paka filtrilo"
+
+#: actions.cpp:740
+#, c++-format
+msgid "Unknown package direction \"{}\""
+msgstr "Nekonata paka direkto \"{}\""
+
+#: actions.cpp:747
+#, c++-format
+msgid "Unknown mode \"{}\""
+msgstr "Nekonata reĝimo \"{}\""
+
+#: actions.cpp:755
+#, c++-format
+msgid "Unsupported value of the \"raise_error\" option: {}"
+msgstr "Nekonata valoro de la opcio \"raise_error\": {}"
+
+#: actions.cpp:760
+msgid "Missing command"
+msgstr "Mankas komando"
+
+#: actions.cpp:953
+#, c++-format
+msgid "Synax error: Missing equal sign (=) in action output line: {}"
+msgstr "Sintaksa eraro: Mankas egalsigno (=) en ago-eliga linio: {}"
+
+#: actions.cpp:964
+#, c++-format
+msgid "Cannot set option: Action output line: {}"
+msgstr "Ne eblas agordi opcion: Ago-eliga linio: {}"
+
+#: actions.cpp:982
+#, c++-format
+msgid "Action sent the wrong log level: {}"
+msgstr "Ago sendis malĝustan protokolan nivelon: {}"
+
+#: actions.cpp:987 actions.cpp:1794
+#, c++-format
+msgid "Action calls for stop: {}"
+msgstr "Ago petas ĉeson: {}"
+
+#: actions.cpp:990 actions.cpp:1801
+#, c++-format
+msgid "Action sent error message: {}"
+msgstr "Ago sendis eraran mesaĝon: {}"
+
+#: actions.cpp:995
+#, c++-format
+msgid ""
+"Syntax error: Action output line must start with \"tmp.\" or \"conf.\" or "
+"\"var.\" or \"stop=\" or \"error=\": {}"
+msgstr ""
+"Sintaksa eraro: Ago-eliga linio devas komenciĝi per \"tmp.\" aŭ \"conf.\" aŭ "
+"\"var.\" aŭ \"stop=\" aŭ \"error=\": {}"
+
+#: actions.cpp:1020
+msgid "Error reading from action (from pipe)"
+msgstr "Eraro dum legi de ago (de dukto)"
+
+#: actions.cpp:1038
+#, c++-format
+msgid "Syntax error in json request from action: Missing starting '{{' char"
+msgstr "Sintaksa eraro en JSON-peto de ago: Mankas komencaj signoj '{{'"
+
+#: actions.cpp:1062
+msgid "Error during processing of a request from action."
+msgstr "Eraro dum trakti peton de ago."
+
+#: actions.cpp:1071
+#, c++-format
+msgid "Syntax error in json request from action: {}"
+msgstr "Sintaksa eraro en JSON-peto de ago: {}"
+
+#: actions.cpp:1079
+msgid "Syntax error in json request from action: Incomplete input"
+msgstr "Sintaksa eraro en JSON-peto de ago: Nekompleta enmeto"
+
+#: actions.cpp:1154
+msgid "Cannot write response"
+msgstr "Ne eblas skribi respondon"
+
+#: actions.cpp:1821
+msgid "Actions plugin: Cannot create pipe"
+msgstr "Ago-kromprogramo: Ne eblas krei dukton"
+
+#: actions.cpp:1913
+msgid "Actions plugin: Cannot fork"
+msgstr "Ago-kromprogramo: Ne eblas disbranĉiĝi"
+
+#: actions.cpp:1968
+msgid "Actions plugin: Cannot bind command stdin"
+msgstr "Ago-kromprogramo: Ne eblas ligi komandon al ĉefenigujo"
+
+#: actions.cpp:1970
+msgid "Actions plugin: Cannot bind command stdout"
+msgstr "Ago-kromprogramo: Ne eblas ligi komandan al ĉefeligujo"
+
+#: actions.cpp:1988
+#, c++-format
+msgid "Cannot execute action, command \"{}\" arguments \"{}\""
+msgstr "Ne eblas plenumi agon: komando \"{}\", argumentoj \"{}\""
+
+#: actions.cpp:1996
+msgid "Error during preparation child process"
+msgstr "Eraro dum pretigo de ida procezo"
+
+#: actions.cpp:2015
+#, c++-format
+msgid "Exit code: {}"
+msgstr "Elira kodo: {}"
+
+#: actions.cpp:2019
+#, c++-format
+msgid "Terminated by signal: {}"
+msgstr "Finigita per signalo: {}"

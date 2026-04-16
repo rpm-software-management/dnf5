@@ -2,13 +2,14 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # Tri Phuong Nguyen <triphuongvasa@gmail.com>, 2025.
+# Khoa Le <inctenone@gmail.com>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-07-26 03:48+0000\n"
-"PO-Revision-Date: 2025-09-02 14:20+0000\n"
-"Last-Translator: Tri Phuong Nguyen <triphuongvasa@gmail.com>\n"
+"PO-Revision-Date: 2026-04-11 05:58+0000\n"
+"Last-Translator: Khoa Le <inctenone@gmail.com>\n"
 "Language-Team: Vietnamese <https://translate.fedoraproject.org/projects/dnf5/"
 "dnf5-plugin-repoclosure/vi/>\n"
 "Language: vi\n"
@@ -16,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.13\n"
+"X-Generator: Weblate 5.16.2\n"
 
 #: repoclosure.cpp:46
 msgid "Print list of unresolved dependencies for repositories"
@@ -29,7 +30,7 @@ msgstr "Không tìm thấy đối số trùng khớp \"{}\"."
 
 #: repoclosure.cpp:161
 msgid "Failed to resolve package specifications."
-msgstr ""
+msgstr "Không thể xử lý các thông số kỹ thuật của gói."
 
 #: repoclosure.cpp:220
 #, c++-format
@@ -37,3 +38,5 @@ msgid ""
 "Error: Repoclosure ended with unresolved dependencies ({}) across {} "
 "packages."
 msgstr ""
+"Lỗi: Repoclosure kết thúc với các phụ thuộc chưa được giải quyết ({}) trên "
+"{} gói."

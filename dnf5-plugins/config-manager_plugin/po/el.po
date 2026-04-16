@@ -3,13 +3,14 @@
 # This file is distributed under the same license as the PACKAGE package.
 # Languages add-on <noreply-addon-languages@weblate.org>, 2026.
 # Jim Spentzos <jimspentzos2000@gmail.com>, 2026.
+# Efstathios Iosifidis <eiosifidis@yandex.com>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-07-26 03:48+0000\n"
-"PO-Revision-Date: 2026-01-22 08:58+0000\n"
-"Last-Translator: Jim Spentzos <jimspentzos2000@gmail.com>\n"
+"PO-Revision-Date: 2026-02-26 00:48+0000\n"
+"Last-Translator: Efstathios Iosifidis <eiosifidis@yandex.com>\n"
 "Language-Team: Greek <https://translate.fedoraproject.org/projects/dnf5/dnf5-"
 "plugin-config-manager/el/>\n"
 "Language: el\n"
@@ -17,12 +18,12 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.15.2\n"
+"X-Generator: Weblate 5.16\n"
 
 #: addrepo.cpp:136
 #, c++-format
 msgid "from-repofile: \"{}\" file does not exist"
-msgstr ""
+msgstr "from-repofile: το αρχείο «{}» δεν υπάρχει"
 
 #: addrepo.cpp:139
 #, c++-format
@@ -32,31 +33,31 @@ msgstr "from-repofile: {}"
 #: addrepo.cpp:169 setopt.cpp:83 setvar.cpp:49
 #, c++-format
 msgid "{}: Badly formatted argument value \"{}\""
-msgstr ""
+msgstr "{}: Κακώς μορφοποιημένη τιμή ορίσματος «{}»"
 
 #: addrepo.cpp:179
 #, c++-format
 msgid "Cannot set repository option \"{}={}\": {}"
-msgstr ""
+msgstr "Αδυναμία ορισμού της επιλογής αποθετηρίου «{}={}»: {}"
 
 #: addrepo.cpp:187 setopt.cpp:138
 #, c++-format
 msgid "Sets the \"{}\" option again with a different value: \"{}\" != \"{}\""
-msgstr ""
+msgstr "Ορισμός της επιλογής «{}» ξανά με διαφορετική τιμή: «{}» != «{}»"
 
 #: addrepo.cpp:253
 msgid "Missing path to repository configuration directory"
-msgstr ""
+msgstr "Λείπει η διαδρομή προς τον κατάλογο ρυθμίσεων των αποθετηρίων"
 
 #: addrepo.cpp:303
 #, c++-format
 msgid "Failed to copy repository configuration file \"{}\": {}"
-msgstr ""
+msgstr "Αποτυχία αντιγραφής του αρχείου ρυθμίσεων αποθετηρίου «{}»: {}"
 
 #: addrepo.cpp:314
 #, c++-format
 msgid "Failed to download repository configuration file \"{}\": {}"
-msgstr ""
+msgstr "Αποτυχία λήψης του αρχείου ρυθμίσεων αποθετηρίου «{}»: {}"
 
 #: addrepo.cpp:342
 #, c++-format
@@ -64,22 +65,26 @@ msgid ""
 "Error in added repository configuration file. Cannot set repository option "
 "\"{}={}\": {}"
 msgstr ""
+"Σφάλμα στο αρχείο ρυθμίσεων του προστεθέντος αποθετηρίου. Αδυναμία ορισμού "
+"της επιλογής αποθετηρίου «{}={}»: {}"
 
 #: addrepo.cpp:376
 #, c++-format
 msgid "Bad baseurl: {}={}"
-msgstr ""
+msgstr "Εσφαλμένο baseurl: {}={}"
 
 #: addrepo.cpp:384
 msgid ""
 "One of --from-repofile=<URL>, --set=baseurl=<URL>, --set=mirrorlist=<URL>, --"
 "set=metalink=<URL> must be set to a non-empty URL"
 msgstr ""
+"Ένα από τα --from-repofile=<URL>, --set=baseurl=<URL>, --set=mirrorlist=<URL>"
+", --set=metalink=<URL> πρέπει να οριστεί σε ένα μη κενό URL"
 
 #: addrepo.cpp:429
 #, c++-format
 msgid "Failed to save repository configuration file \"{}\": {}"
-msgstr ""
+msgstr "Αποτυχία αποθήκευσης του αρχείου ρυθμίσεων αποθετηρίου «{}»: {}"
 
 #: addrepo.cpp:451
 #, c++-format
@@ -87,6 +92,8 @@ msgid ""
 "File \"{}\" already exists and configures repositories with IDs \"{}\". Add "
 "\"--add-or-replace\" or \"--overwrite\"."
 msgstr ""
+"Το αρχείο «{}» υπάρχει ήδη και ρυθμίζει αποθετήρια με ID «{}». Προσθέστε «--"
+"add-or-replace» ή «--overwrite»."
 
 #: addrepo.cpp:454
 #, c++-format
@@ -94,36 +101,40 @@ msgid ""
 "File \"{}\" already exists and configures repositories with IDs \"{}\". Add "
 "\"--overwrite\" to overwrite."
 msgstr ""
+"Το αρχείο «{}» υπάρχει ήδη και ρυθμίζει αποθετήρια με ID «{}». Προσθέστε «--"
+"overwrite» για αντικατάσταση."
 
 #: addrepo.cpp:474 addrepo.cpp:500
 #, c++-format
 msgid "A repository with id \"{}\" already configured in file: {}"
-msgstr ""
+msgstr "Ένα αποθετήριο με id «{}» είναι ήδη ρυθμισμένο στο αρχείο: {}"
 
 #: addrepo.cpp:486 setopt.cpp:263
 #, c++-format
 msgid "Cannot read repositories from directory \"{}\": {}"
-msgstr ""
+msgstr "Αδυναμία ανάγνωσης αποθετηρίων από τον κατάλογο «{}»: {}"
 
 #: config-manager.cpp:43
 msgid "Manage configuration"
-msgstr ""
+msgstr "Διαχείριση ρυθμίσεων"
 
 #: setopt.cpp:91 unsetopt.cpp:72
 #, c++-format
 msgid ""
 "{}: Badly formatted argument value: Last key character cannot be '.': {}"
 msgstr ""
+"{}: Κακώς μορφοποιημένη τιμή ορίσματος: Ο τελευταίος χαρακτήρας του κλειδιού "
+"δεν μπορεί να είναι «.»: {}"
 
 #: setopt.cpp:100 unsetopt.cpp:81
 #, c++-format
 msgid "{}: Empty repository id is not allowed: {}"
-msgstr ""
+msgstr "{}: Δεν επιτρέπεται κενό id αποθετηρίου: {}"
 
 #: setopt.cpp:109
 #, c++-format
 msgid "Cannot set repository option \"{}\": {}"
-msgstr ""
+msgstr "Αδυναμία ορισμού της επιλογής αποθετηρίου «{}»: {}"
 
 #: setopt.cpp:116 setopt.cpp:179
 #, c++-format
@@ -131,35 +142,37 @@ msgid ""
 "Sets the \"{}\" option of the repository \"{}\" again with a different "
 "value: \"{}\" != \"{}\""
 msgstr ""
+"Ορισμός της επιλογής «{}» του αποθετηρίου «{}» ξανά με διαφορετική τιμή: «{}"
+"» != «{}»"
 
 #: setopt.cpp:130
 #, c++-format
 msgid "Cannot set option: \"{}\": {}"
-msgstr ""
+msgstr "Αδυναμία ορισμού επιλογής: «{}»: {}"
 
 #: setopt.cpp:170
 #, c++-format
 msgid "No matching repository to modify: {}"
-msgstr ""
+msgstr "Δεν βρέθηκε αντίστοιχο αποθετήριο προς τροποποίηση: {}"
 
 #: setvar.cpp:60
 #, c++-format
 msgid "Cannot set \"{}\": Variable \"{}\" is read-only"
-msgstr ""
+msgstr "Αδυναμία ορισμού «{}»: Η μεταβλητή «{}» είναι μόνο για ανάγνωση"
 
 #: setvar.cpp:68
 #, c++-format
 msgid "Sets the \"{}\" variable again with a different value: \"{}\" != \"{}\""
-msgstr ""
+msgstr "Ορισμός της μεταβλητής «{}» ξανά με διαφορετική τιμή: «{}» != «{}»"
 
 #: setvar.cpp:97 unsetvar.cpp:63
 msgid "Missing path to vars directory"
-msgstr ""
+msgstr "Λείπει η διαδρομή προς τον κατάλογο μεταβλητών (vars)"
 
 #: setvar.cpp:110
 #, c++-format
 msgid "Cannot write variable to file \"{}\": {}"
-msgstr ""
+msgstr "Αδυναμία εγγραφής μεταβλητής στο αρχείο «{}»: {}"
 
 #: shared.hpp:58
 #, c++-format
@@ -167,11 +180,15 @@ msgid ""
 "The path \"{}\" exists, but it is not a directory or a symlink to a "
 "directory."
 msgstr ""
+"Η διαδρομή «{}» υπάρχει, αλλά δεν είναι κατάλογος ή συμβολικός σύνδεσμος "
+"(symlink) σε κατάλογο."
 
 #: shared.hpp:63
 #, c++-format
 msgid "The path \"{}\" exists, but it is a symlink to a non-existent object."
 msgstr ""
+"Η διαδρομή «{}» υπάρχει, αλλά είναι συμβολικός σύνδεσμος σε ανύπαρκτο "
+"αντικείμενο."
 
 #: shared.hpp:69
 #, c++-format
@@ -179,21 +196,28 @@ msgid ""
 "Directory \"{}\" does not exist. Add \"--create-missing-dir\" to create "
 "missing directories."
 msgstr ""
+"Ο κατάλογος «{}» δεν υπάρχει. Προσθέστε «--create-missing-dir» για να "
+"δημιουργήσετε τους καταλόγους που λείπουν."
 
 #: shared.hpp:80
 #, c++-format
 msgid "Variable name can contain only ASCII letters, numbers and '_': {}"
 msgstr ""
+"Το όνομα της μεταβλητής μπορεί να περιέχει μόνο ASCII γράμματα, αριθμούς και "
+"«_»: {}"
 
 #: unsetopt.cpp:93
 #, c++-format
 msgid "config-manager: Request to remove unsupported repository option: {}"
 msgstr ""
+"config-manager: Αίτημα αφαίρεσης μη υποστηριζόμενης επιλογής αποθετηρίου: {}"
 
 #: unsetopt.cpp:105
 #, c++-format
 msgid "config-manager: Request to remove unsupported main option: {}"
 msgstr ""
+"config-manager: Αίτημα αφαίρεσης μη υποστηριζόμενης κύριας (main) επιλογής: "
+"{}"
 
 #: unsetopt.cpp:140
 #, c++-format
@@ -201,12 +225,16 @@ msgid ""
 "config-manager: Request to remove main option but it is not present in the "
 "config file: {}"
 msgstr ""
+"config-manager: Αίτημα αφαίρεσης κύριας επιλογής, αλλά αυτή δεν υπάρχει στο "
+"αρχείο ρυθμίσεων: {}"
 
 #: unsetopt.cpp:152
 #, c++-format
 msgid ""
 "config-manager: Request to remove main option but config file not found: {}"
 msgstr ""
+"config-manager: Αίτημα αφαίρεσης κύριας επιλογής, αλλά το αρχείο ρυθμίσεων "
+"δεν βρέθηκε: {}"
 
 #: unsetopt.cpp:186
 #, c++-format
@@ -214,6 +242,8 @@ msgid ""
 "config-manager: Request to remove repository option but repoid is not "
 "present in the overrides: {}"
 msgstr ""
+"config-manager: Αίτημα αφαίρεσης επιλογής αποθετηρίου, αλλά το repoid δεν "
+"υπάρχει στις παρακάμψεις (overrides): {}"
 
 #: unsetopt.cpp:194
 #, c++-format
@@ -221,6 +251,8 @@ msgid ""
 "config-manager: Request to remove repository option but it is not present in "
 "the overrides: {}.{}"
 msgstr ""
+"config-manager: Αίτημα αφαίρεσης επιλογής αποθετηρίου, αλλά αυτή δεν υπάρχει "
+"στις παρακάμψεις: {}.{}"
 
 #: unsetopt.cpp:214
 #, c++-format
@@ -228,6 +260,8 @@ msgid ""
 "config-manager: Request to remove repository option but file with overrides "
 "not found: {}"
 msgstr ""
+"config-manager: Αίτημα αφαίρεσης επιλογής αποθετηρίου, αλλά το αρχείο με τις "
+"παρακάμψεις δεν βρέθηκε: {}"
 
 #: unsetvar.cpp:69
 #, c++-format
@@ -235,6 +269,8 @@ msgid ""
 "config-manager: Request to remove variable but vars directory was not found: "
 "{}"
 msgstr ""
+"config-manager: Αίτημα αφαίρεσης μεταβλητής, αλλά ο κατάλογος μεταβλητών "
+"(vars) δεν βρέθηκε: {}"
 
 #: unsetvar.cpp:82
 #, c++-format
@@ -242,8 +278,10 @@ msgid ""
 "config-manager: Request to remove variable but it is not present in the vars "
 "directory: {}"
 msgstr ""
+"config-manager: Αίτημα αφαίρεσης μεταβλητής, αλλά αυτή δεν υπάρχει στον "
+"κατάλογο μεταβλητών: {}"
 
 #: unsetvar.cpp:88
 #, c++-format
 msgid "Cannot remove variable file \"{}\": {}"
-msgstr ""
+msgstr "Αδυναμία αφαίρεσης του αρχείου μεταβλητής «{}»: {}"

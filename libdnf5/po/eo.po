@@ -1,0 +1,1900 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# Keith Bowes <zooplah@gmail.com>, 2026.
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-07-26 03:48+0000\n"
+"PO-Revision-Date: 2026-04-06 22:59+0000\n"
+"Last-Translator: Keith Bowes <zooplah@gmail.com>\n"
+"Language-Team: Esperanto <https://translate.fedoraproject.org/projects/dnf5/"
+"libdnf5/eo/>\n"
+"Language: eo\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.16.2\n"
+
+#: advisory/advisory.cpp:81
+#, c++-format
+msgid ""
+"Bad libsolv id for advisory \"{}\", solvable name \"{}\" doesn't have "
+"advisory prefix \"{}\""
+msgstr ""
+"Malbona libsolv-identigilo por avizo \"{}\", solvebla nomo \"{}\" ne havas "
+"avizan prefikson \"{}\""
+
+#: base/goal.cpp:482
+#, c++-format
+msgid "Unsupported argument for REMOVE action: {}"
+msgstr "Nekonata argumento por ago REMOVE: {}"
+
+#. TODO(lukash) throw a proper exception
+#: base/goal.cpp:1652
+#, c++-format
+msgid "Incorrect configuration value for multilib_policy: {}"
+msgstr "Malĝusta agordo-valoro por multilib_ploticy: {}"
+
+#: base/goal_elements.cpp:352
+msgid "Install"
+msgstr "Instali"
+
+#: base/goal_elements.cpp:354
+msgid "Install via provide"
+msgstr "Instali laŭ provizo"
+
+#: base/goal_elements.cpp:356
+msgid "Install by group"
+msgstr "Instali laŭ grupo"
+
+#: base/goal_elements.cpp:358
+msgid "Upgrade"
+msgstr "Promocii"
+
+#: base/goal_elements.cpp:360
+msgid "Upgrade all"
+msgstr "Promocii ĉion"
+
+#: base/goal_elements.cpp:362
+msgid "Upgrade minimal"
+msgstr "Minimume promocii"
+
+#: base/goal_elements.cpp:364
+msgid "Upgrade all minimal"
+msgstr "Minimume promocii ĉion"
+
+#: base/goal_elements.cpp:366
+msgid "Downgrade"
+msgstr "Malpromocii"
+
+#: base/goal_elements.cpp:368
+msgid "Reinstall"
+msgstr "Reinstali"
+
+#: base/goal_elements.cpp:370
+msgid "Install or reinstall"
+msgstr "Instali aŭ reinstali"
+
+#: base/goal_elements.cpp:372
+msgid "Remove"
+msgstr "Forigi"
+
+#: base/goal_elements.cpp:374
+msgid "Distrosync"
+msgstr "Sinkronigi la distribuaĵon"
+
+#: base/goal_elements.cpp:376
+msgid "Distrosync all"
+msgstr "Tute sinkronigi la distribuaĵon"
+
+#: base/goal_elements.cpp:378
+msgid "Reason Change"
+msgstr "Ŝanĝo de kialo"
+
+#: base/goal_elements.cpp:380
+msgid "Resolve"
+msgstr "Solvi"
+
+#: base/goal_elements.cpp:382
+msgid "Enable"
+msgstr "Ŝalti"
+
+#: base/goal_elements.cpp:384
+msgid "Disable"
+msgstr "Malŝalti"
+
+#: base/goal_elements.cpp:386
+msgid "Reset"
+msgstr "Restarigi"
+
+#: base/goal_elements.cpp:388
+msgid "Parse serialized transaction"
+msgstr "Analizi seriigitan transakcion"
+
+#: base/goal_elements.cpp:390
+msgid "Install action"
+msgstr "Instali agon"
+
+#: base/goal_elements.cpp:392
+msgid "Remove action"
+msgstr "Forigi agon"
+
+#: base/goal_elements.cpp:394
+msgid "Upgrade action"
+msgstr "Promocii agon"
+
+#: base/goal_elements.cpp:396
+msgid "Reinstall action"
+msgstr "Reinstali agon"
+
+#: base/goal_elements.cpp:398
+msgid "Reason change action"
+msgstr "Ŝanĝi agon de kialo"
+
+#: base/goal_elements.cpp:400
+msgid "Reason override"
+msgstr "Transpaso de kialo"
+
+#: base/goal_elements.cpp:402
+msgid "Revert comps upgrade"
+msgstr "Inversigi promocion de comps"
+
+#: base/goal_elements.cpp:404
+msgid "Install debug RPMs"
+msgstr "Instali senerarigan RPM-ojn"
+
+#: base/goal_elements.cpp:406
+msgid "Transaction merge"
+msgstr "Kunfandiĝo de transakcio"
+
+#: base/log_event.cpp:141
+#, c++-format
+msgid "No packages to remove for argument: {}"
+msgstr "Neniuj forigeblaj pakoj por argumento: {}"
+
+#: base/log_event.cpp:143
+#, c++-format
+msgid "No groups to remove for argument: {}"
+msgstr "Neniuj forigeblaj grupoj por argumento: {}"
+
+#: base/log_event.cpp:146
+#, c++-format
+msgid "No environmental groups to remove for argument: {}"
+msgstr "Neniuj forigeblaj medio-grupoj por argumento: {}"
+
+#: base/log_event.cpp:148
+#, c++-format
+msgid "No modules to remove for argument: {}"
+msgstr "Neniuj forigeblaj moduloj por argumento: {}"
+
+#: base/log_event.cpp:152
+#, c++-format
+msgid "No match for group from environment: {}"
+msgstr "Neniu kongruo por grupo el medio: {}"
+
+#: base/log_event.cpp:154
+#, c++-format
+msgid "No match for group package: {}"
+msgstr "Neniu kongruo por grupa pako: {}"
+
+#: base/log_event.cpp:158
+#, c++-format
+msgid "Cannot perform {0}, no match for: {1}."
+msgstr "Ne eblas fari {0}, neniu kongruo por: {1}."
+
+#: base/log_event.cpp:160
+#, c++-format
+msgid "No match for argument: {}"
+msgstr "Neniu kongruo por argumento: {}"
+
+#: base/log_event.cpp:163
+#, c++-format
+msgid "No match for argument '{0}' in selected advisories"
+msgstr "Neniu kongruo por argumento '{0}' en elektitaj avizoj"
+
+#: base/log_event.cpp:165
+msgid "No match in selected advisories"
+msgstr "Neniu kongruo en elektitaj avizoj"
+
+#: base/log_event.cpp:169
+#, c++-format
+msgid "No match for argument '{0}' in repositories '{1}'"
+msgstr "Neniu kongruo por argumento '{0}' en deponejoj '{1}'"
+
+#: base/log_event.cpp:175
+#, c++-format
+msgid "Cannot perform {0} for {1} '{2}' because it is not installed."
+msgstr "Ne fareblas {0} por {1} '{2}' ĉar ĝi ne estas instalita."
+
+#: base/log_event.cpp:180
+#, c++-format
+msgid "Packages for argument '{}' available, but not installed."
+msgstr "Pakoj por argumento '{}' disponeblas, sed ne instalita."
+
+#: base/log_event.cpp:184
+#, c++-format
+msgid ""
+"Packages for argument '{}' available, but installed for a different "
+"architecture."
+msgstr ""
+"Pakoj por argumento '{}' disponeblas, sed instalita por alia arĥitekturo."
+
+#: base/log_event.cpp:188
+#, c++-format
+msgid "Cannot perform {0} because '{1}' matches only source packages."
+msgstr "{0} ne fareblas ĉar '{1}' kongruas kun nur fontaj pakoj."
+
+#: base/log_event.cpp:192
+#, c++-format
+msgid "Argument '{}' matches only source packages."
+msgstr "Argumento '{}' kongruas kun nur fontaj pakoj."
+
+#: base/log_event.cpp:196
+#, c++-format
+msgid "Cannot perform {0} because '{1}' matches only excluded packages."
+msgstr "{0} ne fareblas ĉar '{1}' kongruas kun nur ekskluzivigitaj pakoj."
+
+#: base/log_event.cpp:200
+#, c++-format
+msgid "Argument '{}' matches only excluded packages."
+msgstr "Argumento '{}' kongruas kun nur ekskluzivigitaj pakoj."
+
+#: base/log_event.cpp:204
+#, c++-format
+msgid ""
+"Cannot perform {0} because '{1}' matches only packages excluded by "
+"versionlock."
+msgstr ""
+"{0} ne fareblas ĉar '{1}' kongruas kun nur pakoj ekskluzivigitaj de "
+"versionlock."
+
+#: base/log_event.cpp:208
+#, c++-format
+msgid "Argument '{}' matches only packages excluded by versionlock."
+msgstr "Argumento '{}' kongruas kun nur pakoj ekskluzivigitaj de versionlock."
+
+#: base/log_event.cpp:213
+#, c++-format
+msgid "  * Maybe you meant: {}"
+msgstr "  * Eble vi celis: {}"
+
+#: base/log_event.cpp:216
+#, c++-format
+msgid "There are following alternatives for '{0}': {1}"
+msgstr "Ekzistas jenaj alternativoj por '{0}': {1}"
+
+#: base/log_event.cpp:223
+#, c++-format
+msgid ""
+"The lowest available version of the \"{}\" package is already installed, "
+"cannot downgrade it."
+msgstr ""
+"La plej malnova eldono de la pako \"{}\" jam estas instalita, ne eblas "
+"malpromocii ĝin."
+
+#: base/log_event.cpp:229
+#, c++-format
+msgid ""
+"Installed packages for argument '{0}' are not available in repositories in "
+"the same version, available versions: {1}, cannot reinstall."
+msgstr ""
+"Instalitaj pakoj por argumento '{0}' ne estas disponeblaj en deponejoj en la "
+"sama eldono, disponeblaj eldonoj: {1}, ne eblas reinstali."
+
+#: base/log_event.cpp:235
+#, c++-format
+msgid ""
+"Cannot perform {0} because '{1}' is installed in a different version: '{2}'."
+msgstr "{0} ne fareblas ĉar '{1} estas instalita en alia eldono: '{2}'."
+
+#: base/log_event.cpp:241
+#, c++-format
+msgid ""
+"Packages for argument '{}' installed and available, but in a different "
+"version."
+msgstr ""
+"Pakoj kun argumento '{}' instalitaj kaj disponeblaj, sed de alia eldono."
+
+#: base/log_event.cpp:243
+#, c++-format
+msgid "Packages for argument '{}' installed, but not available."
+msgstr "Pakoj por argumento '{}' instalitaj, sed ne disponeblaj."
+
+#: base/log_event.cpp:252
+#, c++-format
+msgid "Package \"{}\" is already installed with reason \"{}\"."
+msgstr "Pako \"{}\" jam estas instalita kun kialo \"{}\"."
+
+#: base/log_event.cpp:254
+#, c++-format
+msgid "Package \"{}\" is already installed."
+msgstr "Pako \"{}\" jam estas instalita."
+
+#: base/log_event.cpp:263
+#, c++-format
+msgid "Debug data written to \"{}\""
+msgstr "Senerarigaj datumoj skribitaj al \"{}\""
+
+#: base/log_event.cpp:267
+#, c++-format
+msgid ""
+"{0} upgrade cannot be reverted, however associated package actions will be. "
+"({1} id: '{2}') ."
+msgstr ""
+"Promocio de {0} ne estas inversigebla, sed kunligitaj pakaj agoj estos. ({1} "
+"id: '{2}') ."
+
+#: base/log_event.cpp:273
+#, c++-format
+msgid "{} action for argument \"{}\" is not supported."
+msgstr "Ago {} por argumento \"{}\" ne estas rekonata."
+
+#. Format a leading line of the error message.
+#: base/log_event.cpp:282
+#, c++-format
+msgid "Unable to resolve argument '{}':"
+msgstr "Ne eblas solvi argumenton '{}':"
+
+#: base/log_event.cpp:286
+#, c++-format
+msgid ""
+"\n"
+"  - Argument '{}' matches {} stream ('{}') of module '{}', but the stream is "
+"not enabled or default."
+msgid_plural ""
+"\n"
+"  - Argument '{}' matches {} streams ('{}') of module '{}', but none of the "
+"streams are enabled or default."
+msgstr[0] ""
+"\n"
+"  - Argumento '{}' kongruas kun {} fluo ('{}') de modulo '{}', sed la fluo "
+"ne estas ŝaltita aŭ apriora."
+msgstr[1] ""
+"\n"
+"  - Argumento '{}' kongruas kun {} fluoj ('{}') de modulo '{}', sed neniuj "
+"el la fluoj estas ŝaltitaj aŭ aprioraj."
+
+#: base/log_event.cpp:293
+msgid "', '"
+msgstr "', '"
+
+#: base/log_event.cpp:302
+msgid "Modular dependency problems:\n"
+msgstr "Problemoj de modulaj dependaĵoj:\n"
+
+#: base/log_event.cpp:309
+msgid "Modular dependency problems with the latest modules:\n"
+msgstr "Problemoj de modulaj dependaĵoj en la plej freŝaj moduloj:\n"
+
+#: base/log_event.cpp:316
+msgid "Modular dependency problems with the defaults:\n"
+msgstr "Problemoj de modulaj dependaĵoj kun la aprioraĵoj:\n"
+
+#: base/log_event.cpp:331
+#, c++-format
+msgid ""
+"The operation would result in switching of module '{0}' stream '{1}' to "
+"stream '{2}'\n"
+msgstr ""
+"La operacio kaŭzus la ŝanĝiĝon de modulo '{0}' de fluo '{1}' al fluo '{2}'\n"
+
+#: base/log_event.cpp:336
+msgid ""
+"Error: It is not possible to switch enabled streams of a module unless "
+"explicitly enabled via configuration option module_stream_switch."
+msgstr ""
+"Eraro: Ne eblas ŝanĝi ŝaltitajn fluojn de modulo se ne malimplice ŝaltita "
+"per la agordaĵo module_stream_switch."
+
+#: base/log_event.cpp:341
+#, c++-format
+msgid ""
+"Extra package '{0}' (with action '{1}') which is not present in the stored "
+"transaction was pulled into the transaction.\n"
+msgstr ""
+"Ekstra pako '{0}' (kun ago '{1}'), kiu ne estas ĉeesta en la konservita "
+"transakcio, estis tirita en la transakcion.\n"
+
+#: base/log_event.cpp:347
+#, c++-format
+msgid "Cannot parse file: '{0}': {1}.\n"
+msgstr "Ne eblas analizi dosieron: '{0}': {1}.\n"
+
+#: base/log_event.cpp:354
+#, c++-format
+msgid ""
+"Could not find debuginfo package for the following packages resolved from "
+"the argument '{0}': {1}"
+msgstr ""
+"Ne eblis trovi debuginfo-pakon por la jenaj pakoj solvitaj de la argumento '"
+"{0}': {1}"
+
+#: base/log_event.cpp:357 base/log_event.cpp:368
+msgctxt "String for joining NEVRAs - e.g. `foo-4-4.noarch, bar-5-5.noarch`"
+msgid ", "
+msgstr ", "
+
+#: base/log_event.cpp:364
+#, c++-format
+msgid ""
+"Could not find debugsource package for the following packages resolved from "
+"the argument '{0}': {1}"
+msgstr ""
+"Ne eblis trovi debugsource-pakon por la jenaj pakoj solvitaj de la argumento "
+"'{0}': {1}"
+
+#: base/log_event.cpp:371
+#, c++-format
+msgid "Transaction merge error: '{0}'"
+msgstr "Eraro de transkacia kunfandiĝo: '{0}'"
+
+#: base/solver_problems.cpp:41
+#, c++-format
+msgid "{} does not belong to a distupgrade repository"
+msgstr "{} ne apartenas al depenejo de distribuaĵa promocio"
+
+#: base/solver_problems.cpp:42
+#, c++-format
+msgid "{0} from {1} has inferior architecture"
+msgstr "{0} de {1} havas malsuperan arĥitekturon"
+
+#: base/solver_problems.cpp:43
+msgid "problem with installed package"
+msgstr "problemo kun instalita pako"
+
+#: base/solver_problems.cpp:44 base/solver_problems.cpp:80
+msgid "conflicting requests"
+msgstr "konfliktaj petoj"
+
+#: base/solver_problems.cpp:45 base/solver_problems.cpp:81
+msgid "unsupported request"
+msgstr "nekomprenata peto"
+
+#: base/solver_problems.cpp:46 base/solver_problems.cpp:82
+#, c++-format
+msgid "nothing provides requested {}"
+msgstr "nenio provizas petitan {}"
+
+#: base/solver_problems.cpp:47
+#, c++-format
+msgid "package {} does not exist"
+msgstr "pako {} ne ekzistas"
+
+#: base/solver_problems.cpp:48 base/solver_problems.cpp:84
+#, c++-format
+msgid "{} is provided by the system"
+msgstr "{} estas provizita de la sistemo"
+
+#: base/solver_problems.cpp:49 base/solver_problems.cpp:85
+msgid "some dependency problem"
+msgstr "ia problemo de dependaĵo"
+
+#: base/solver_problems.cpp:50
+#, c++-format
+msgid "cannot install the best update candidate for package {}"
+msgstr "ne eblas instali la plej bonan ĝisdatigan kandidaton por pako {}"
+
+#: base/solver_problems.cpp:51 base/solver_problems.cpp:87
+msgid "cannot install the best candidate for the job"
+msgstr "ne povas instali la plej bonan kandidaton por la tasko"
+
+#: base/solver_problems.cpp:52
+#, c++-format
+msgid "package {0} from {1} is filtered out by modular filtering"
+msgstr "pako {0} el {1} estas elfiltrita per modula filtrado"
+
+#: base/solver_problems.cpp:53
+#, c++-format
+msgid "package {0} from {1} does not have a compatible architecture"
+msgstr "pako {0} el {1} ne havas kongruan arĥitekturo"
+
+#: base/solver_problems.cpp:54
+#, c++-format
+msgid "package {0} from {1} is not installable"
+msgstr "pako {0} el {1} ne instaleblas"
+
+#: base/solver_problems.cpp:55
+#, c++-format
+msgid "package {0} from {1} is filtered out by exclude filtering"
+msgstr "pako {0} el {1} estas elfiltrita per ekskluziviga filtrado"
+
+#: base/solver_problems.cpp:56
+#, c++-format
+msgid "nothing provides {0} needed by {1} from {2}"
+msgstr "{0}, postulata de {1} el {2}, estas provizata de nenio"
+
+#: base/solver_problems.cpp:57
+#, c++-format
+msgid "cannot install both {0} from {1} and {2} from {3}"
+msgstr "ne eblas instali kaj {0} el {1} kaj {2} el {3}"
+
+#: base/solver_problems.cpp:58
+#, c++-format
+msgid "package {0} from {1} conflicts with {2} provided by {3} from {4}"
+msgstr "pako {0} el {1} konfliktas kun {2} provizita de {3} el {4}"
+
+#: base/solver_problems.cpp:60
+#, c++-format
+msgid "installed package {0} conflicts with {1} provided by {2} from {3}"
+msgstr "instalita pako {0} konfliktas kun {1} provizita de {2} el {3}"
+
+#: base/solver_problems.cpp:61
+#, c++-format
+msgid "package {0} from {1} obsoletes {2} provided by {3} from {4}"
+msgstr "pako {2} provizita de {3} el {4} estas anstataŭota de {0} el {1}"
+
+#: base/solver_problems.cpp:62
+#, c++-format
+msgid "installed package {0} obsoletes {1} provided by {2} from {3}"
+msgstr "{1} provizita de {2} el {3} anstataŭas instalitan pakon {0}"
+
+#: base/solver_problems.cpp:64
+#, c++-format
+msgid "package {0} from {1} implicitly obsoletes {2} provided by {3} from {4}"
+msgstr "pako {2} provizita de {3} el {4} implice anstataŭas pakon {0} el {1}"
+
+#: base/solver_problems.cpp:66
+#, c++-format
+msgid ""
+"package {1} from {2} requires {0}, but none of the providers can be installed"
+msgstr ""
+"pako {0} estas postulata de {1} el {2}, sed neniu provizanto instaleblas"
+
+#: base/solver_problems.cpp:68
+#, c++-format
+msgid ""
+"installed package {1} requires {0}, but none of the providers can be "
+"installed"
+msgstr "{0} estas postulata de {1}, sed neniu provizanto instaleblas"
+
+#: base/solver_problems.cpp:69
+#, c++-format
+msgid "package {0} from {1} conflicts with {2} provided by itself"
+msgstr "pako {0} el {1} konfliktas kun {2} provizita de si mem"
+
+#: base/solver_problems.cpp:70
+#, c++-format
+msgid "both package {0} from {1} and {3} from {4} obsolete {2}"
+msgstr "{2} anstataŭas kaj pakon {0} el {1} kaj pakon {3} el {4}"
+
+#: base/solver_problems.cpp:72
+#, c++-format
+msgid ""
+"The operation would result in removing the following protected packages: {}"
+msgstr "La operacio kaŭzus la forigon de la jenaj protektataj pakoj: {}"
+
+#: base/solver_problems.cpp:75
+#, c++-format
+msgid "The operation would result in removing of running kernel: {}"
+msgstr "La operacio kaŭzus la forigon de plenumanta kerno: {}"
+
+#: base/solver_problems.cpp:77
+#, c++-format
+msgid "module {} does not belong to a distupgrade repository"
+msgstr "modulo {} ne apartenas al deponejo de distribuaĵa promocio"
+
+#: base/solver_problems.cpp:78
+#, c++-format
+msgid "module {} has inferior architecture"
+msgstr "modulo {} havas malsuperan arĥitekturon"
+
+#: base/solver_problems.cpp:79
+#, c++-format
+msgid "problem with installed module {}"
+msgstr "problemo kun instalita modulo {}"
+
+#: base/solver_problems.cpp:83
+#, c++-format
+msgid "module {} does not exist"
+msgstr "modulo {} ne ekzistas"
+
+#: base/solver_problems.cpp:86
+#, c++-format
+msgid "cannot install the best update candidate for module {}"
+msgstr "ne eblas instali la plej bonan ĝisdatigan kandidaton por modulo {}"
+
+#: base/solver_problems.cpp:88 base/solver_problems.cpp:91
+#, c++-format
+msgid "module {} is disabled"
+msgstr "modulo {} estas malŝaltita"
+
+#: base/solver_problems.cpp:89
+#, c++-format
+msgid "module {} does not have a compatible architecture"
+msgstr "modulo {} ne havas kongruan arĥitekturon"
+
+#: base/solver_problems.cpp:90
+#, c++-format
+msgid "module {} is not installable"
+msgstr "modulo {} ne instaleblas"
+
+#: base/solver_problems.cpp:92
+#, c++-format
+msgid "nothing provides {0} needed by module {1}"
+msgstr "{0}, postulata de modulo {1}, estas provizita de nenio"
+
+#: base/solver_problems.cpp:93
+#, c++-format
+msgid "cannot install both modules {0} and {1}"
+msgstr "moduloj {0} kaj {1} ne estas samtempe instaleblaj"
+
+#: base/solver_problems.cpp:94
+#, c++-format
+msgid "module {0} conflicts with {1} provided by {2}"
+msgstr "modulo {0} konfliktas kun {1}, provizita de {2}"
+
+#: base/solver_problems.cpp:95
+#, c++-format
+msgid "module {0} obsoletes {1} provided by {2}"
+msgstr "{1} provizita de {2} estas anstataŭota de modulo {0}"
+
+#: base/solver_problems.cpp:96
+#, c++-format
+msgid "installed module {0} obsoletes {1} provided by {2}"
+msgstr "{1} provizita de {2} estas anstataŭota de instalita modulo {0}"
+
+#: base/solver_problems.cpp:97
+#, c++-format
+msgid "module {0} implicitly obsoletes {1} provided by {2}"
+msgstr "{1} provizita de {2} estas implice anstataŭota de modulo {0}"
+
+#: base/solver_problems.cpp:98
+#, c++-format
+msgid "module {1} requires {0}, but none of the providers can be installed"
+msgstr "{0} estas postulata de modulo {1}, sed neniu provizanto insntaleblas"
+
+#: base/solver_problems.cpp:99
+#, c++-format
+msgid "module {1} conflicts with {0} provided by itself"
+msgstr "modulo {1} konfliktas kun {0} provizata de si mem"
+
+#: base/solver_problems.cpp:100
+#, c++-format
+msgid "both module {0} and {2} obsolete {1}"
+msgstr "{1} estas anstataŭota de kaj modulo {0} kaj {2}"
+
+#: base/solver_problems.cpp:290
+msgid "Problem: "
+msgstr "Problemo: "
+
+#: base/solver_problems.cpp:294
+#, c++-format
+msgid "Problem {}: "
+msgstr "Problemo {}: "
+
+#: base/transaction.cpp:80
+msgid "This transaction has been already run before."
+msgstr "Tiu transakcio jam estas plenumita."
+
+#: base/transaction.cpp:81
+msgid "Cannot run transaction with resolving problems."
+msgstr "Ne eblas plenumi transakacion kun solvaj problemoj."
+
+#: base/transaction.cpp:82
+msgid "Rpm transaction check failed."
+msgstr "Kontrolo de rpm-transakcio malsukcesis"
+
+#: base/transaction.cpp:84
+msgid ""
+"Failed to obtain rpm transaction lock. Another transaction is in progress."
+msgstr "Malsukcesis atingi rpm-transakcian ŝloson. Alia transakcio okazas."
+
+#: base/transaction.cpp:85
+msgid "Rpm transaction failed."
+msgstr "Rpm-transakcio malsukcesis."
+
+#: base/transaction.cpp:86
+msgid "Signature verification failed."
+msgstr "Subskriba kontrolo malsukcesis."
+
+#: base/transaction.cpp:90
+msgid "The repository does not have any OpenPGP keys configured."
+msgstr "La deponejo ne havas agorditajn OpenPGP-ŝlosilojn."
+
+#: base/transaction.cpp:91
+msgid "Public key is not installed."
+msgstr "Publika ŝlosilo ne estas instalita."
+
+#: base/transaction.cpp:92
+msgid "Canceled by the user."
+msgstr "Nuligita de la uzulo."
+
+#: base/transaction.cpp:93
+msgid "Public key import failed."
+msgstr "Importo de publika ŝlosilo malsukcesis."
+
+#: base/transaction.cpp:980
+#, c++-format
+msgid "Invalid tsflag: {}"
+msgstr "Nevalida tsflag: {}"
+
+#: base/transaction.cpp:1314
+#, c++-format
+msgid "Public key \"{}\" is already present, not importing."
+msgstr "Publika ŝlosila \"{}\" jam ekzistas, ne importos."
+
+#: base/transaction.cpp:1335
+#, c++-format
+msgid "An error occurred importing key \"{}\": {}"
+msgstr "Eraro okazis dum importado de ŝlosilo: \"{}\": {}"
+
+#: base/transaction.cpp:1369
+#, c++-format
+msgid "OpenPGP check for package \"{}\" ({}) from repo \"{}\" has failed: "
+msgstr "OpenPGP-kontrolo por pako \"{}\" ({}) el deponejo \"{}\" malsukcesis: "
+
+#: base/transaction.cpp:1397
+msgid "Import of the key didn't help, wrong key?"
+msgstr "Importo de la ŝlosilo ne helpis, ĉu malĝusta ŝlosilo?"
+
+#: base/transaction.cpp:1416
+msgctxt "It is a joining character for repositories IDs"
+msgid ", "
+msgstr ", "
+
+#: base/transaction.cpp:1419
+#, c++-format
+msgid "Warning: skipped OpenPGP checks for {0} package from repository: {1}"
+msgid_plural ""
+"Warning: skipped OpenPGP checks for {0} packages from repository: {1}"
+msgstr[0] "Averto: preterpasis OpenPGP-kontrolojn por {0} pako el deponejo: {1}"
+msgstr[1] "Averto: preterpasis OpenPGP-kontrolojn por {0} pakoj el deponejo: {1}"
+
+#: base/transaction.cpp:1422
+#, c++-format
+msgid "Warning: skipped OpenPGP checks for {0} package from repositories: {1}"
+msgid_plural ""
+"Warning: skipped OpenPGP checks for {0} packages from repositories: {1}"
+msgstr[0] "Averto: preterpasis OpenPGP-kontrolojn por {0} pako el deponejoj: {1}"
+msgstr[1] "Averto: preterpasis OpenPGP-kontrolojn por {0} pakoj el deponejoj: {1}"
+
+#: common/exception.cpp:78
+msgid "System error"
+msgstr "Sistema eraro"
+
+#: common/exception.cpp:199
+msgid "General RuntimeError exception"
+msgstr "Ĝenerala escepto RuntimeError"
+
+#: common/sack/query.cpp:27
+msgid "Query must contain exactly one object."
+msgstr "Informopeto devas enhavi ĝuste unu objekton."
+
+#: common/xdg.cpp:43
+msgid "get_user_home_dir(): Cannot determine the user's home directory"
+msgstr "get_user_home_dir(): Ne eblas determini la hejmdosierujon de la uzulo"
+
+#: common/xdg.cpp:98
+msgid "get_user_runtime_dir(): Cannot determine the user's runtime directory"
+msgstr ""
+"get_user_runtime_dir(): Ne eblas determina la plenumtempan dosierujon de la "
+"uzulo"
+
+#: comps/environment/environment.cpp:325
+msgid "failed to save xml document for comps"
+msgstr "malsukcesis savi xml-dosieron por comps"
+
+#: comps/group/group.cpp:373
+#, c++-format
+msgid "Failed to save xml document for group \"{}\" to file \"{}\": {}"
+msgstr ""
+"Malsukcesis konservi xml-dokumenton por grupo \"{}\" al dosiero \"{}\": {}"
+
+#: comps/group/package.cpp:118 comps/group/package.cpp:121
+#, c++-format
+msgid "Invalid package type: {}"
+msgstr "Nevalida pako-tipo: {}"
+
+#: conf/config_main.cpp:57
+msgid "Input is empty. Must contain a value."
+msgstr "Enmeto malplenas. Devas enhavi valoron."
+
+#: conf/config_main.cpp:63
+#, c++-format
+msgid "Input value '{}' must not be negative"
+msgstr "Enmeta valoro '{}' devas esti nenegativa"
+
+#: conf/config_main.cpp:68
+#, c++-format
+msgid "Could not convert '{}' to bytes"
+msgstr "'{} ne konverteblas al bajtoj"
+
+#: conf/config_main.cpp:84
+#, c++-format
+msgid "Unknown unit '{}'"
+msgstr "Nekonata unuo '{}'"
+
+#: conf/config_main.cpp:281
+#, c++-format
+msgid "The throttle value {} is outside the allowed range {} ... {}"
+msgstr "La baskula valoro {} estas ekster la permesata skalo {} ... {}"
+
+#: conf/config_parser.cpp:54
+#, c++-format
+msgid "Section \"{}\" not found"
+msgstr "Sekcio \"{}\" ne troveblas"
+
+#: conf/config_parser.cpp:59
+#, c++-format
+msgid "Section \"{}\" does not contain option \"{}\""
+msgstr "Sekcio \"{}\" en enhavas opcion \"{}\""
+
+#: conf/config_parser.cpp:96
+#, c++-format
+msgid "Configuration file \"{}\" not found"
+msgstr "Agordo-dosieron \"{}\" ne troveblas"
+
+#: conf/config_parser.cpp:99
+#, c++-format
+msgid "Unable to access configuration file \"{}\""
+msgstr "Ne eblas atingi agordo-dosieron \"{}\""
+
+#: conf/config_parser.cpp:102
+#, c++-format
+msgid "Error in configuration file \"{}\""
+msgstr "Eraro en agordo-dosiero \"{}\""
+
+#: conf/option_binds.cpp:29
+#, c++-format
+msgid "Option \"{}\" not found"
+msgstr "Opcio \"{}\" ne troveblas"
+
+#: conf/option_binds.cpp:32
+#, c++-format
+msgid "Option \"{}\" already exists"
+msgstr "Opcio \"{}\" jam ekzistas"
+
+#: conf/option_bool.cpp:82
+#, c++-format
+msgid "Invalid boolean value \"{}\""
+msgstr "Nevalida bulea valoro \"{}\""
+
+#: conf/option_enum.cpp:68
+#, c++-format
+msgid "Enum option value \"{}\" not allowed"
+msgstr "Enumeracia opcia valoro \"{}\" ne permesita"
+
+#: conf/option_number.cpp:99
+#, c++-format
+msgid "Input value {} is outside the allowed range {} ... {}"
+msgstr "Enmeta valoro {} estas ekster la permesata skalo {} ... {}"
+
+#: conf/option_number.cpp:112
+#, c++-format
+msgid "Invalid number option value \"{}\""
+msgstr "Nevalida nombra opcia valoro \"{}\""
+
+#: conf/option_path.cpp:93
+#, c++-format
+msgid "Only absolute paths allowed, relative path \"{}\" detected"
+msgstr "Permesata nur absolutaj vojoj, detektita relativa vojoj \"{}\""
+
+#: conf/option_path.cpp:98
+#, c++-format
+msgid "Path \"{}\" does not exist"
+msgstr "Vojo \"{}\" ne ekzistas"
+
+#: conf/option_seconds.cpp:38
+msgid "Empty time option value"
+msgstr "Malplena tempa opcio valoro"
+
+#: conf/option_seconds.cpp:50
+#, c++-format
+msgid "Invalid time option value \"{}\", number or \"never\" expected"
+msgstr "Nevalida tempa opcia voloro \"{}\", atendita nombro aŭ \"never\""
+
+#: conf/option_seconds.cpp:54
+#, c++-format
+msgid ""
+"Invalid time option value \"{}\", negative values except \"-1\" not allowed"
+msgstr ""
+"Nevalida tempa opcia valoro \"{}\", negativaj valoroj ekster \"-1\" ne "
+"permesata"
+
+#: conf/option_seconds.cpp:59
+#, c++-format
+msgid "Unknown time format \"{}\""
+msgstr "Nekonata tempa formato \"{}\""
+
+#: conf/option_seconds.cpp:78
+#, c++-format
+msgid "Unknown time unit '{}'"
+msgstr "Nevalida tempa unuo '{}'"
+
+#: conf/option_string.cpp:89
+#, c++-format
+msgid ""
+"Input value \"{}\" not allowed, allowed values for this option are defined "
+"by regular expression \"{}\""
+msgstr ""
+"Enmeta valoro \"{}\" ne permesatas, permesataj valoroj por tiu opcio estas "
+"difinitaj laŭ la regulesprimo \"{}\""
+
+#. TODO(jrohel): We don't know the option name at this time. Add a text name to the options
+#. or extend exception (add name) in upper layer.
+#: conf/option_string.cpp:114
+msgid "Option value is not set"
+msgstr "Opcia valoro ne agordita"
+
+#: conf/option_string_list.cpp:175
+#, c++-format
+msgid ""
+"Input item value \"{}\" not allowed, allowed values for this option are "
+"defined by regular expression \"{}\""
+msgstr ""
+"Enmeto-era valoro \"{}\" ne permesatas, permesataj valoroj por tiu opcio "
+"estas difinitaj laŭ regulesprimo \"{}\""
+
+#: conf/vars.cpp:313 conf/vars.cpp:353
+#, c++-format
+msgid "Variable \"{}\" is read-only"
+msgstr "Variablo \"{}\" estas nurlega"
+
+#: logger/rotating_file_logger.cpp:65
+msgid "Cannot open log file"
+msgstr "Ne eblas malfermi protokolon"
+
+#: module/module_db.cpp:76 module/module_db.cpp:85 module/module_sack.cpp:767
+#, c++-format
+msgid "No such module: {}"
+msgstr "Modulo ne ekzistas: {}"
+
+#: module/module_db.cpp:268
+#, c++-format
+msgid "Cannot enable multiple streams for module '{}'"
+msgstr "Ne eblas ŝalti plurajn fluojn por modulo '{}'"
+
+#. TODO(pkratoch) replace with a proper and descriptive exception
+#. TODO(jmracek) else if (removalOfProtected && removalOfProtected->size()) {
+#. throw Goal::Error(_("no solution, cannot remove protected package"),
+#. DNF_ERROR_REMOVAL_OF_PROTECTED_PKG);
+#. }
+#. TODO(lukash) replace with a proper and descriptive exception
+#: module/module_goal_private.cpp:83 rpm/solv/goal_private.cpp:342
+#: rpm/solv/goal_private.cpp:764
+msgid "no solution possible"
+msgstr "neniu ebla solvo"
+
+#: module/module_metadata.cpp:102
+#, c++-format
+msgid "Failed to update from string: {}"
+msgstr "Malsukcesis ĝisdatigi laŭ ĉeno: {}"
+
+#: module/module_metadata.cpp:129
+#, c++-format
+msgid "Failed to resolve module metadata: {}"
+msgstr "Malsukcesis solvi modulan metadatumojn: {}"
+
+#: module/module_metadata.cpp:140
+#, c++-format
+msgid "Failed to upgrade defaults: {}"
+msgstr "Malsukcesis promocii aprioraĵojn: {}"
+
+#: module/module_metadata.cpp:144
+#, c++-format
+msgid "Failed to upgrade streams: {}"
+msgstr "Malsukcesis promocii fluojn: {}"
+
+#: module/module_sack.cpp:93
+#, c++-format
+msgid "Failed to load module metadata for repository \"{}\": {}"
+msgstr "Malsukcesis ŝargi modulajn metadatumojn por deponejo \"{}\": {}"
+
+#: module/module_sack.cpp:594
+msgid "Missing '='"
+msgstr "Mankanta '='"
+
+#: module/module_sack.cpp:598 module/module_sack.cpp:606
+msgid "Missing '\"' in the value"
+msgstr "'\"' mankas en la valoro"
+
+#: module/module_sack.cpp:602
+msgid "Missing ':' in the value"
+msgstr "':' mankas en la valoro"
+
+#: module/module_sack.cpp:911
+#, c++-format
+msgid "Invalid module status: {}"
+msgstr "Nevalida modula stato: {}"
+
+#: plugin/plugins.cpp:67
+#, c++-format
+msgid ""
+"Unsupported plugin API combination. API version provided by plugin \"{}\" "
+"(\"{}\") is \"{}.{}\". API version in libdnf is \"{}.{}\"."
+msgstr ""
+"Nekongruanta kombino de la kromprograma API. La API-eldono provizita de "
+"kromprogramo \"{}\" (\"{}\") estas \"{}.{}\". API-eldono en libdnf estas \"{}"
+".{}\"."
+
+#: plugin/plugins.cpp:92
+msgid "Failed to create a libdnf plugin instance"
+msgstr "Ne eblas krei okazon de la libdnf-kromprogramo"
+
+#: plugin/plugins.cpp:146
+#, c++-format
+msgid "Cannot find plugin library \"{}\""
+msgstr "Ne eblas trovi kromprograman bibliotekon \"{}\""
+
+#: plugin/plugins.cpp:213
+#, c++-format
+msgid "Invalid option value: enabled={}"
+msgstr "Nevalida opcia valoro: enabled={}"
+
+#: plugin/plugins.cpp:237
+msgid "Plugins::load_plugins(): config_dir_path cannot be empty"
+msgstr "Plugins::load_plugins(): config_dir_path ne rajtas esti malplena"
+
+#: plugin/plugins.cpp:253
+#, c++-format
+msgid "Cannot load libdnf plugin enabled from: {}"
+msgstr "Ne povas ŝargi libdnf-kromprogramon ŝaltita de: {}"
+
+#: repo/config_repo.cpp:581
+msgid "get_unique_id(): Computation of SHA256 failed"
+msgstr "get_unique_id(): Komputo de SHA256 malsukcesis"
+
+#: repo/file_downloader.cpp:154
+msgid "Cannot download files, cacheonly option is activated."
+msgstr "Ne eblas elŝuti dosierojn, opcio cacheonly estas aktivigita."
+
+#: repo/file_downloader.cpp:216
+msgid "Failed to download files"
+msgstr "Malsukcesis elŝuti dosierojn"
+
+#: repo/librepo.cpp:118
+msgid ""
+"Maximum download speed is lower than minimum, please change configuration of "
+"minrate or throttle"
+msgstr ""
+"Maksimuma elŝuta rapido estas pli minimumo, bonvolu ŝanĝi agordon de minrate "
+"aŭ throttle"
+
+#: repo/librepo.cpp:181
+msgid "'proxy_username' is set but not 'proxy_password'"
+msgstr "'proxy_username' estas agordita sed ne 'proxy_password'"
+
+#: repo/package_downloader.cpp:154
+#, c++-format
+msgid "Cannot download the \"{0}\" package, cacheonly option is activated."
+msgstr "Ne eblas elŝuti la pakon \"{0}\", opcio cacheonly estas aktivigita."
+
+#: repo/package_downloader.cpp:231
+msgid "Already downloaded"
+msgstr "Jam elŝutita"
+
+#: repo/package_downloader.cpp:279
+msgid "Failed to download packages"
+msgstr "Malsukcesis elŝuti pakojn"
+
+#: repo/repo.cpp:61
+#, c++-format
+msgid "Failed to load RPM \"{}\": doesn't have the \".rpm\" extension"
+msgstr "Malsukcesis ŝargi RPM-dosieron \"{}\": ne havas la sufikson \"rpm\""
+
+#: repo/repo.cpp:65
+#, c++-format
+msgid "Failed to access RPM \"{}\": {}"
+msgstr "Malsukcesis atingi RPM-dosieron \"{}\": {}"
+
+#: repo/repo.cpp:107
+#, c++-format
+msgid "Invalid repository id \"{}\": unexpected character '{}'"
+msgstr "Nevalida deponeja identigilo \"{}\": neatendita signo '{}'"
+
+#: repo/repo.cpp:150
+#, c++-format
+msgid "Repository \"{}\" has no source (baseurl, mirrorlist or metalink) set."
+msgstr ""
+"Deponejo \"{}\" havas neniun fonton (baseurl, mirrorlist aŭ metalink) "
+"agordita."
+
+#: repo/repo.cpp:161
+#, c++-format
+msgid "Repository \"{}\" has unsupported type \"{}\", skipping."
+msgstr "Deponejo \"{}\" havas nekonatan tipon \"{}\", preterpasas."
+
+#: repo/repo.cpp:221 repo/repo.cpp:241 repo/repo_sack.cpp:368
+#, c++-format
+msgid "Failed to download metadata ({}: \"{}\") for repository \"{}\": {}"
+msgstr "Malsukcesis elŝuti metadatumojn ({}: \"{}\") por deponejo \"{}\": {}"
+
+#: repo/repo.cpp:439
+msgid ""
+"Failed to load repository: \"primary\" data not present or in unsupported "
+"format"
+msgstr ""
+"Malsukcesis ŝargi deponejon: \"primary\"-datumoj ne ĉeestas aŭ estas en "
+"nekonata formato"
+
+#: repo/repo.cpp:505
+#, c++-format
+msgid "Failed to load comps \"{}\": doesn't have the \".xml\" extension"
+msgstr "Malsukcesis ŝargi comps-dosieron \"{}\": ne havas la sufikson \".xml\""
+
+#: repo/repo.cpp:512
+#, c++-format
+msgid "Failed to load xml Comps \"{}\": {}"
+msgstr "Malsukcesis ŝargi XML-an comps-dosieron \"{}\": {}"
+
+#: repo/repo.cpp:530
+#, c++-format
+msgid "Failed to load RPM \"{}\": {}"
+msgstr "Malsukcesis ŝargi RPM-dosieron \"{}\": {}"
+
+#: repo/repo_cache.cpp:255
+msgid "Unable to determine id of the repository in the cache."
+msgstr "Ne eblas determini identigilon de la deponejo en la kaŝmemoro."
+
+#: repo/repo_cache_private.hpp:59
+msgid "Empty path to the repository cache directory."
+msgstr "Malplena vojo al la kaŝmemora dosierujo de la deponejo."
+
+#: repo/repo_downloader.cpp:214
+#, c++-format
+msgid "Librepo error: {}"
+msgstr "Librepo-eraro: {}"
+
+#: repo/repo_downloader.cpp:258
+msgid "Failed to set up metadata download"
+msgstr "Malsukcesis konektiĝi por elŝuti metadatumojn"
+
+#: repo/repo_downloader.cpp:312 repo/repo_downloader.cpp:362
+msgid "Failed to download metadata"
+msgstr "Malsukcesis elŝuti metadatumojn"
+
+#: repo/repo_downloader.cpp:426
+#, c++-format
+msgid "Error checking if metalink \"{}\" is in sync for repository \"{}\""
+msgstr ""
+"Eraro dum kontrolo, ĉu metalink-dosieron \"{}\" estas sinkronigita por "
+"deponejo \"{}\""
+
+#: repo/repo_downloader.cpp:446
+#, c++-format
+msgid "Error checking if repomd ({}: \"{}\") is in sync for repository \"{}\""
+msgstr ""
+"Eraro dum kontrolo, ĉu repomd-dosieron ({}: \"{}\") estas sinkronigita por "
+"deponejo \"{}\""
+
+#: repo/repo_downloader.cpp:515
+#, c++-format
+msgid "Error loading local metadata for repository \"{}\""
+msgstr "Eraro dum ŝargo de lokaj metadatumoj por deponejo \"{}\""
+
+#: repo/repo_downloader.cpp:597
+#, c++-format
+msgid ""
+"No valid source (baseurl, mirrorlist or metalink) found for repository \"{}\""
+msgstr ""
+"Neniu valida fonto (baseurl, mirrorlist aŭ metalink) troveblas por deponejo "
+"\"{}\""
+
+#: repo/repo_pgp.cpp:60
+#, c++-format
+msgid "Failed to import OpenPGP keys into temporary keyring: {}"
+msgstr "Malsukcesis importi OpenPGP-ŝlosilon en provizoran ŝlosilaron: {}"
+
+#: repo/repo_pgp.cpp:66 repo/repo_pgp.cpp:93
+#, c++-format
+msgid "Failed to list OpenPGP keys: {}"
+msgstr "Malsukcesis listigi OpenPGP-ŝlosilojn: {}"
+
+#: repo/repo_pgp.cpp:141
+#, c++-format
+msgid "Failed to import OpenPGP keys: {}"
+msgstr "Malsukcesis importi OpenPGP-ŝlosilojn: {}"
+
+#: repo/repo_sack.cpp:159
+#, c++-format
+msgid ""
+"Failed to create repo \"{}\": Id is present more than once in the "
+"configuration"
+msgstr ""
+"Malsukcesis krei deponejon \"{}\": Identigilo pli ol unufoje ĉeestas en la "
+"agordo"
+
+#: repo/repo_sack.cpp:631
+#, c++-format
+msgid "Cache-only enabled but no cache for repository \"{}\""
+msgstr "Nurkaŝmemora ŝaltita sed neniu kaŝmemoro por deponejo \"{}\""
+
+#: repo/solv_repo.cpp:267
+#, c++-format
+msgid "Failed to load repomd for repo \"{}\" from \"{}\": {}."
+msgstr "Malsukcesis ŝargi repomd-dosieron por deponejo \"{}\" el \"{}\": {}."
+
+#: repo/solv_repo.cpp:275
+#, c++-format
+msgid "Failed to load primary for repo \"{}\" from \"{}\": {}."
+msgstr "Malsukcesis ŝargi primary-datumojn por deponejo \"{}\" el \"{}\": {}."
+
+#: repo/solv_repo.cpp:323
+#, c++-format
+msgid "Unsupported extended repodata type for the system repo: \"{}\"."
+msgstr "Nekonata etendita repodata-tipo por la sistema deponejo: \"{}\"."
+
+#: repo/solv_repo.cpp:395
+#, c++-format
+msgid "Failed to load {} extension for repo \"{}\" from \"{}\": {}"
+msgstr "Malsukcesis ŝargi etendaĵon {} por deponejo \"{}\" el \"{}\": {}"
+
+#: repo/solv_repo.cpp:431
+#, c++-format
+msgid "Failed to load system repo from root \"{}\": {}"
+msgstr "Malsukcesis ŝargi sisteman deponejon el radiko \"{}\": {}"
+
+#: repo/solv_repo.cpp:532
+#, c++-format
+msgid "Failed to load {} cache for repo \"{}\" from \"{}\": {}"
+msgstr "Malsukcesis ŝargi kaŝmemoron {} por deponejo \"{}\" el \"{}\": {}"
+
+#: repo/solv_repo.cpp:586
+#, c++-format
+msgid "Failed to write primary cache for repo \"{}\" to \"{}\": {}"
+msgstr "Malsukcesis skribi ĉefan kaŝmemoron por deponejo \"{}\" al \"{}\": {}"
+
+#: repo/solv_repo.cpp:608
+#, c++-format
+msgid "Failed to re-load primary cache for repo \"{}\" from \"{}\": {}"
+msgstr "Malsukcesis reŝargi ĉefan kaŝmemoron por deponejo \"{}\" el \"{}\": {}"
+
+#: repo/solv_repo.cpp:673
+#, c++-format
+msgid "Failed to write {} cache for repo \"{}\" to \"{}\": {}"
+msgstr "Malsukcesis skribi kaŝmemoron {} por deponejo \"{}\" al \"{}\": {}"
+
+#: repo/solv_repo.cpp:694
+#, c++-format
+msgid "Failed to re-load {} cache for repo \"{}\" from \"{}\": {}"
+msgstr "Malsukcesis reŝargi kaŝmemoron {} por deponejo \"{}\" el \"{}\": {}"
+
+#: repo/temp_files_memory.cpp:52
+#, c++-format
+msgid ""
+"An error occurred when parsing the temporary files memory file at '{}': {}"
+msgstr ""
+"Eraro okazis dum analizo de provizoraj dosieroj, memora dosiero en '{}': {}"
+
+#: rpm/nevra.cpp:82
+#, c++-format
+msgid "NEVRA string \"{}\" contains ':' multiple times"
+msgstr "NEENA-ĉeno \"{}\" enhavas la signon ':' plurfoje"
+
+#: rpm/nevra.cpp:86
+#, c++-format
+msgid "Invalid character '{}' in NEVRA string \"{}\""
+msgstr "Nevalida signo '{}' en la NEENA-ĉeno \"{}\""
+
+#: rpm/package.cpp:81
+msgid "Package with rpmdbid was not found"
+msgstr "Pako kun rpm-identigilo ne troveblis."
+
+#: rpm/package.cpp:478
+msgid "<unknown>"
+msgstr "<nekonata>"
+
+#: rpm/reldep.cpp:116 rpm/reldep.cpp:123
+msgid "Cannot parse a dependency string"
+msgstr "Ne eblas analizi dependaĵan ĉenon"
+
+#: rpm/rpm_signature.cpp:45
+msgid "No corresponding key was found."
+msgstr "Neniu kunresponda ŝlosilo estis trovita."
+
+#: rpm/rpm_signature.cpp:46
+msgid "The signature is valid, but the key is not trusted."
+msgstr "La subskribo estas valida, sed la ŝlosilo ne estas fidinda."
+
+#: rpm/rpm_signature.cpp:47
+msgid "The package is not signed."
+msgstr "La pako ne estas subskribita."
+
+#: rpm/rpm_signature.cpp:48
+msgid "Problem occurred when opening the package."
+msgstr "Problemo okazis dum malfermo de la pako."
+
+#: rpm/rpm_signature.cpp:64
+#, c++-format
+msgid "Failed to set rpm transaction rootDir \"{}\"."
+msgstr "Malsukcesis elekti la radikan dosierujon de la rpm-transakcio: \"{}\"."
+
+#: rpm/rpm_signature.cpp:290
+#, c++-format
+msgid "\"{}\": key is not an armored public key."
+msgstr "\"{}\": ŝlosilo ne estas fortikigita publika ŝlosilo."
+
+#: rpm/rpm_signature.cpp:295
+#, c++-format
+msgid "Failed to import public key \"{}\" to rpmdb: {}"
+msgstr "Malsukcesis importi publikan ŝlosilon \"{}\" al rpm-datumbazo: {}"
+
+#. TODO(jrohel): Why? Librpm does not provide this information.
+#: rpm/transaction.cpp:114
+#, c++-format
+msgid "Cannot set root directory \"{}\""
+msgstr "Ne eblas elekti radikan dosiuerujon \"{}\""
+
+#: rpm/transaction.cpp:125
+#, c-format
+msgid "Error %i opening rpm database"
+msgstr "Eraro %i dum malfermo de rpm-datumbazo"
+
+#: rpm/transaction.cpp:134
+msgid "The rpmdbCookie() function did not return cookie of rpm database."
+msgstr "La funkcio rpmdbCookie() ne redonis kuketon de rpm-datumbazo."
+
+#: rpm/transaction.cpp:199
+msgid "Failed to order the rpm transaction."
+msgstr "Malsukcesis ordigi la rpm-transakcion."
+
+#: rpm/transaction.cpp:235
+#, c++-format
+msgid ""
+"Failed to set scriptlet output file, cannot duplicate file descriptor: {}"
+msgstr ""
+"Malsukcesis elekti skriptetan eligo-dosieron, ne eblas duobligi la "
+"dosierpriskribilon: {}"
+
+#: rpm/transaction.cpp:254
+#, c++-format
+msgid "Failed to set scriptlet output file, cannot open file \"{}\": {}"
+msgstr ""
+"Malsukcesis elekti skriptetan eligo-dosieron, ne eblas malfermi dosieron \"{}"
+"\": {}"
+
+#: rpm/transaction.cpp:275
+#, c++-format
+msgid "Failed to read package header, cannot open file \"{}\": {}"
+msgstr "Malsukcesis legi pakan ĉapon, ne eblas malfermi dosieron \"{}\": {}"
+
+#: rpm/transaction.cpp:292
+#, c++-format
+msgid "Failed to read package header from file \"{}\""
+msgstr "Malsukcesis legi pakan ĉapon el dosiero \"{}\""
+
+#: rpm/transaction.cpp:305
+msgid "Cannot init rpm database iterator"
+msgstr "Ne eblas iniciati rpm-datumbazan iteraciilo"
+
+#: rpm/transaction.cpp:309
+msgid "Package was not found in rpm database"
+msgstr "Pako ne trovebla en rpm-datumbazo"
+
+#. TODO(jrohel): Why? Librpm does not provide this information.
+#: rpm/transaction.cpp:325
+#, c++-format
+msgid "Cannot reinstall package \"{}\""
+msgstr "Ne eblas reinstali pakon \"{}\""
+
+#. TODO(jrohel): Why? Librpm does not provide this information.
+#: rpm/transaction.cpp:343
+#, c++-format
+msgid "Cannot remove package \"{}\""
+msgstr "Ne eblas forigi pakon \"{}\""
+
+#: rpm/transaction.cpp:362
+#, c++-format
+msgid "Cannot upgrade package \"{}\""
+msgstr "Ne eblas promocii pakon \"{}\""
+
+#: rpm/transaction.cpp:366
+#, c++-format
+msgid "Cannot downgrade package \"{}\""
+msgstr "Ne eblas malpromocii pakon \"{}\""
+
+#: rpm/transaction.cpp:370
+#, c++-format
+msgid "Cannot install package \"{}\""
+msgstr "Ne eblas instali pakon \"{}\""
+
+#: rpm/versionlock_config.cpp:284 system/state.cpp:605
+#, c++-format
+msgid "{}"
+msgstr "{}"
+
+#. TODO(lukash) throw proper exception class
+#: solv/pool.cpp:174
+#, c++-format
+msgid "Failed to convert epoch \"{}\" to number"
+msgstr "Malsukcesis konverti epokon \"{}\" al nombro"
+
+#: solv/solver.cpp:79
+#, c++-format
+msgid "Writing debugsolver data into \"{}\" failed: {}"
+msgstr "Skribo de datumoj de senerariga solvilo al \"{}\" malsukcesis: {}"
+
+#: system/state.cpp:282 system/state.cpp:291
+#, c++-format
+msgid "Invalid TOML version \"{}\", \"MAJOR.MINOR\" expected"
+msgstr "Nevalida TOML-eldono \"{}\", \"ĈEFA.AKCESORA\" atendita"
+
+#: system/state.cpp:299
+#, c++-format
+msgid "{} state for \"{}\" not found."
+msgstr "Stato {} por \"{}\" ne troveblas."
+
+#: system/state.cpp:303
+#, c++-format
+msgid "Loading system state TOML file {} failed (see dnf5-system-state(7)): {}"
+msgstr ""
+"ŝargo de sistemo stato el TOML-dosiero {} malsukcesis (pliaj informoj en dnf-"
+"system-state(7)): {}"
+
+#: system/state.cpp:640
+#, c++-format
+msgid "Unsupported TOML version \"{}\", maximum supported version is \"{}\""
+msgstr "Neregata TOML-eldono \"{}\", maksimuma regata eldono estas \"{}\""
+
+#: transaction/Swdb.cpp:91
+msgid "In progress"
+msgstr "Okazanta"
+
+#: transaction/Swdb.cpp:99 transaction/Swdb.cpp:126 transaction/Swdb.cpp:136
+#: transaction/Swdb.cpp:150 transaction/Swdb.cpp:273 transaction/Swdb.cpp:281
+msgid "Not in progress"
+msgstr "Ne okazanta"
+
+#: transaction/Swdb.cpp:158
+msgid "No transaction in progress"
+msgstr "Neniu transakcio okazanta"
+
+#: transaction/Transformer.cpp:647
+msgid "Transformer: can't open history persist dir"
+msgstr "Transformilo: ne eblas malfermi dosierujon de persista historio"
+
+#: transaction/Transformer.cpp:660
+msgid "Couldn't find a history database"
+msgstr "Ne eblas trovi historian datumbazon"
+
+#. TODO(dmach): replace with a better exception class
+#: transaction/db/comps_environment_group.cpp:100
+msgid ""
+"Failed to insert record into table 'comps_environment_group' in history "
+"database"
+msgstr ""
+"Malsukcesis enmeti rikordon en tabelon 'comps_environment_group' en historia "
+"datumbazo"
+
+#: transaction/db/db.cpp:71
+msgid "Unable to get 'version' from table 'config'"
+msgstr "Ne eblas atingi rikordon 'version' el tabelo 'config'"
+
+#. TODO(dmach): replace with a better exception class
+#: transaction/db/item.cpp:43
+msgid "Failed to insert record into table 'item' in history database"
+msgstr "Malsukcesis enmeti rikordon en tabelon 'item' en historia datumbazo"
+
+#: transaction/offline.cpp:195
+msgid "error reading offline state file"
+msgstr "eraro dum lego de eksterreta stato-dosiero"
+
+#: transaction/offline.cpp:200
+msgid "incompatible version of state data"
+msgstr "nekongruanta eldono de stataj datumoj"
+
+#: transaction/transaction.cpp:96
+#, c++-format
+msgid "Invalid transaction state: {}"
+msgstr "Nevalida transakcia stato: {}"
+
+#: transaction/transaction.cpp:279
+msgid "Transaction has already started!"
+msgstr "Transakcio jam komenciĝis!"
+
+#: transaction/transaction_item_action.cpp:28
+#, c++-format
+msgid "Invalid transaction item action: {}"
+msgstr "Nevalida ago de transakcia ero: {}"
+
+#: transaction/transaction_item_reason.cpp:28
+#, c++-format
+msgid "Invalid transaction item reason: {}"
+msgstr "Nevalida kialo de transakcia ero: {}"
+
+#: transaction/transaction_item_state.cpp:28
+#, c++-format
+msgid "Invalid transaction item state: {}"
+msgstr "Nevalida stato de transakcia ero: {}"
+
+#: transaction/transaction_item_type.cpp:28
+#, c++-format
+msgid "Invalid transaction item type: {}"
+msgstr "Nevalida tipo de transackcia ero: {}"
+
+#: transaction/transaction_merge.cpp:102
+#, c++-format
+msgid ""
+"Action '{0}' '{1}' cannot be merged after it was '{2}' in preceding "
+"transactions -> setting '{0}'."
+msgstr ""
+"Ago '{0}' '{1}' ne eblas kunfuniĝi post kiam ĝi estas '{2}' en antaŭa "
+"transakcioj -> agordo '{0}'."
+
+#: transaction/transaction_merge.cpp:116
+#, c++-format
+msgid ""
+"Action 'Upgrade' '{0}' cannot be merged because it is not present at that "
+"point -> setting 'Install'."
+msgstr ""
+"Ago 'Upgrade' '{0}' ne eblas kunfandiĝi ĉar ĝi ne ĉeestas en tiu momento -> "
+"agordo 'Install'."
+
+#: transaction/transaction_merge.cpp:174 transaction/transaction_merge.cpp:231
+#, c++-format
+msgid ""
+"Action 'Reinstall' '{0}' cannot be merged because it is not present at that "
+"point -> setting 'Install'."
+msgstr ""
+"Ago 'Reinstall' '{0}' ne eblas kunfandiĝi ĉar ĝi ne ĉeestas en tiu "
+"momento -> agordo 'Reinstall'."
+
+#: transaction/transaction_merge.cpp:194
+#, c++-format
+msgid ""
+"Action '{0}' '{1}' cannot be merged after it was '{2}' in preceding "
+"transaction -> setting '{0}'."
+msgstr ""
+"Ago '{0}' '{1}' ne eblas kunfandiĝi post kiam ĝi estis '{2}' en antaŭa "
+"transkacio -> agordo '{0}'."
+
+#: transaction/transaction_merge.cpp:215
+#, c++-format
+msgid "Unexpected action encountered: '{0}' during transaction merge."
+msgstr "Neatendita akcio okazis: '{0}' dum transakcia kunfandiĝo."
+
+#: transaction/transaction_merge.cpp:224
+#, c++-format
+msgid ""
+"Action '{0}' '{1}' cannot be merged because it is not present at that point "
+"-> skipping it."
+msgstr ""
+"Ago '{0}' '{1}' ne eblas kunfandiĝi ĉar ĝi ne ĉeestis en tiu momento -> "
+"preterpasas."
+
+#: transaction/transaction_merge.cpp:245
+#, c++-format
+msgid ""
+"Action '{0}' '{1}' cannot be merged because it is not present at that point "
+"-> setting 'INSTALL'."
+msgstr ""
+"Ago '{0}' '{1}' ne eblas kunfandiĝi ĉar ĝi ne ĉeestas en tiu momento -> "
+"agordo 'INSTALL'."
+
+#: transaction/transaction_merge.cpp:266
+#, c++-format
+msgid ""
+"Action '{0}' '{1}' cannot be merged because it is not present at that point "
+"(present versions are: {2}) -> skipping it."
+msgstr ""
+"Ago '{0}' '{1}' ne eblas kunfandiĝi ĉar ĝi ne ĉeestas en tiu momento (nunaj "
+"eldonoj estas: {2}) → preterpasas."
+
+#: transaction/transaction_merge.cpp:277
+#, c++-format
+msgid ""
+"Action '{0}' '{1}' cannot be merged because it is already present at that "
+"point -> skipping it."
+msgstr ""
+"Ago '{0}' '{1}' ne eblas kundandiĝi ĉar ĝi jam ĉeestas en tiu mememto -> "
+"preterpasas."
+
+#: transaction/transaction_merge.cpp:294
+#, c++-format
+msgid ""
+"Action '{0}' '{1}' cannot be merged because it is already installed in "
+"version '{2}' -> keeping the action from older transaction with '{1}'."
+msgstr ""
+"Ago '{0}' '{1}' ne eblas kundandiĝi ĉar ĝi jam instaliĝis en eldono '{2}' -> "
+"estas konservita la ago el la pli malnova transakcio kun '{1}'."
+
+#: transaction/transaction_merge.cpp:304
+#, c++-format
+msgid "Invalid action encountered: '{0}' during transaction merge."
+msgstr "Nevalida ago okazis: '{0}' dum transakcia kunfandiĝo."
+
+#: transaction/transaction_sr.cpp:49
+msgid "Transaction replay JSON serialized transaction input is empty"
+msgstr "Transakcia refaro de JSON-seriigita transakcia enmeto estas malplena"
+
+#: transaction/transaction_sr.cpp:58
+#, c++-format
+msgid "Error during transaction replay JSON parsing : {}"
+msgstr "Eraro dum transakcia refaro de JSON-analizo: {}"
+
+#: transaction/transaction_sr.cpp:68
+#, c++-format
+msgid "Unexpected version format: \"{}\", supported version is \"{}\""
+msgstr "Neatendita eldona formato \"{}\", regata eldono \"{}\""
+
+#: transaction/transaction_sr.cpp:74
+#, c++-format
+msgid "Incompatible major version: \"{}\", supported major version is \"{}\""
+msgstr "Nevalida ĉefa eldono: \"{}\", regata ĉefa eldono estas \"{}\""
+
+#: transaction/transaction_sr.cpp:81
+#, c++-format
+msgid "Invalid minor version: \"{}\", number expected"
+msgstr "Nevalida akcesora eldono: \"{}\" nombro atendita"
+
+#: transaction/transaction_sr.cpp:84
+msgid "Missing key \"version\""
+msgstr "Ŝlosilo \"version\" mankas"
+
+#: transaction/transaction_sr.cpp:92
+msgid "Unexpected type of \"environments\", array expected"
+msgstr "Neatendita tipo de \"environments\", tabelo atendita"
+
+#: transaction/transaction_sr.cpp:105
+msgid "Missing object key \"id\" in an environment"
+msgstr "Objekta ŝlosilo \"id\" en medio mankas"
+
+#: transaction/transaction_sr.cpp:110
+msgid "Missing object key \"action\" in an environment"
+msgstr "Objekto ŝlosilo \"action\" en medio mankas"
+
+#: transaction/transaction_sr.cpp:129
+msgid "Unexpected type of \"groups\", array expected"
+msgstr "Neatendita tipo de \"groups\", tabelo atendita"
+
+#: transaction/transaction_sr.cpp:145
+msgid "Missing object key \"id\" in a group"
+msgstr "Objekta ŝlosilo \"id\" en grupo mankas"
+
+#: transaction/transaction_sr.cpp:150
+msgid "Missing object key \"action\" in a group"
+msgstr "Objekta ŝlosilo \"action\" en grupo mankas"
+
+#: transaction/transaction_sr.cpp:155
+msgid "Missing object key \"reason\" in a group"
+msgstr "Objekto ŝlosilo \"reason\" en grupo mankas"
+
+#: transaction/transaction_sr.cpp:186
+msgid "Unexpected type of \"rpms\", array expected"
+msgstr "Neatendita tipo de \"rpms\", tabelo atendita"
+
+#: transaction/transaction_sr.cpp:202
+#, c++-format
+msgid "Cannot parse NEVRA for rpm \"{}\""
+msgstr "Ne eblas analiza NEENA-ĉenon por rpm \"{}\""
+
+#: transaction/transaction_sr.cpp:210
+msgid "Either \"nevra\" or \"package_path\" object key is required in an rpm"
+msgstr ""
+"Unu el la objektaj ŝlosiloj \"nevra\" aŭ \"package_path\" estas postulata en "
+"rpm"
+
+#: transaction/transaction_sr.cpp:215
+msgid "Missing object key \"action\" in an rpm"
+msgstr "Objekta ŝlosilo \"action\" en rpm mankas"
+
+#: transaction/transaction_sr.cpp:220
+msgid "Missing object key \"reason\" in an rpm"
+msgstr "Objekto ŝlosilo \"reason\" en rpm mankas"
+
+#: transaction/transaction_sr.cpp:227
+msgid ""
+"Missing mandatory object key \"group_id\" in an rpm with reason \"Group\" "
+"and action \"Reason Change\""
+msgstr ""
+"Mankas deviga objekta ŝlosilo \"group_id\" en rpm kun kialo \"Group\" kaj "
+"ago \"Reason Change\""
+
+#: utils/fs/file.cpp:86
+msgid "cannot open file"
+msgstr "ne eblas malfermi dosieron"
+
+#: utils/fs/file.cpp:99
+msgid "cannot open file from fd"
+msgstr "ne eblas malfermi dosieron laŭ dosierpriskribilo"
+
+#: utils/fs/file.cpp:109
+msgid "cannot close file"
+msgstr "ne eblas fermi dosieron"
+
+#: utils/fs/file.cpp:139 utils/fs/file.cpp:168
+msgid "error reading file"
+msgstr "eraro dum lego de dosiero"
+
+#: utils/fs/file.cpp:154 utils/fs/file.cpp:180
+msgid "error writing file"
+msgstr "eraro dum skribo de dosiero"
+
+#: utils/fs/file.cpp:189
+msgid "error flushing file"
+msgstr "eraro dum elbufrigo de dosiero"
+
+#: utils/fs/file.cpp:198
+msgid "error seeking in file"
+msgstr "eraro dum serĉo de dosiero"
+
+#: utils/fs/file.cpp:209
+msgid "error retrieving file position"
+msgstr "eraro dum atingo de dosierpozicio"
+
+#: utils/fs/file.cpp:297
+msgid "error reading a line from file"
+msgstr "eraro dum lego de linio de dosiero"
+
+#: utils/fs/file.cpp:335
+msgid "error retrieving file descriptor"
+msgstr "eraro dum atingo de dosiera priskribilo"
+
+#: utils/fs/temp.cpp:42
+msgid "cannot create temporary directory"
+msgstr "ne eblas krei provizoran dosierujon"
+
+#: utils/fs/temp.cpp:89
+msgid "cannot create temporary file"
+msgstr "ne eblas krei provizoran dosieron"
+
+#: utils/fs/temp.cpp:142
+msgid "cannot close temporary file"
+msgstr "ne eblas fermi provizoran dosieron"
+
+#: utils/iniparser.cpp:126
+#, c++-format
+msgid "Missing ']' on line {}"
+msgstr "']' en linio {} mankas"
+
+#: utils/iniparser.cpp:129
+#, c++-format
+msgid "Empty section name on line {}"
+msgstr "Malplena sekcinomo en linio {}"
+
+#: utils/iniparser.cpp:137
+#, c++-format
+msgid "Text after section on line {}"
+msgstr "Teksto post sekcio en linio {}"
+
+#: utils/iniparser.cpp:147
+#, c++-format
+msgid "Missing section header on line {}"
+msgstr "Sekcia ĉapo en linio {} mankas"
+
+#: utils/iniparser.cpp:152
+#, c++-format
+msgid "Illegal continuation line on line {}"
+msgstr "Nevalida daŭriga linio en linio {}"
+
+#: utils/iniparser.cpp:159
+#, c++-format
+msgid "Missing option name on line {}"
+msgstr "Opcinomo en linio {} mankas"
+
+#: utils/iniparser.cpp:163
+#, c++-format
+msgid "Missing '=' on line {}"
+msgstr "'=' en linio {} mankas"
+
+#. returns localized message, problem with later translation
+#: utils/library.cpp:34
+#, c++-format
+msgid "Cannot load shared library \"{}\": {}"
+msgstr "Ne eblas ŝargi dinamikan bibliotekon \"{}\": {}"
+
+#: utils/library.cpp:48
+#, c++-format
+msgid "Cannot obtain address of symbol \"{}\": {}"
+msgstr "Ne eblas atingi adreson de simbolo \"{}\": {}"
+
+#: utils/locale.cpp:57
+#, c++-format
+msgid "Cannot set the locale \"{}\": {}"
+msgstr "Ne eblas starigi lokaĵaron \"{}\": {}"
+
+#: utils/locker.cpp:45
+#, c++-format
+msgid "Failed to open lock file \"{}\""
+msgstr "Malsukcesis malfermi ŝlosodosieron \"{}\""
+
+#: utils/locker.cpp:60
+#, c++-format
+msgid "Failed to obtain lock \"{}\""
+msgstr "Malsukcesis krei ŝlosodosieron \"{}\""
+
+#: utils/locker.cpp:70
+#, c++-format
+msgid "Failed to close lock file \"{}\""
+msgstr "Malsukcesis fermi ŝlosodosieron \"{}\""
+
+#: utils/locker.cpp:73
+#, c++-format
+msgid "Failed to delete lock file \"{}\""
+msgstr "Malsukcesis forigi ŝlosodosieron \"{}\""
+
+#: utils/sqlite3/sqlite3.cpp:29
+#, c++-format
+msgid "SQL statement compilation failed: \"{}\""
+msgstr "Traduko de SQL-ordono malsukcesis: \"{}\""
+
+#: utils/sqlite3/sqlite3.cpp:31
+#, c++-format
+msgid "Binding integer value to SQL statement failed: \"{}\""
+msgstr "Ligi entjeran valoron al SQL-ordonon malsukcesis: \"{}\""
+
+#: utils/sqlite3/sqlite3.cpp:33
+#, c++-format
+msgid "Binding integer64 value to SQL statement failed: \"{}\""
+msgstr "Ligi 64-bitan entjeran valoron al SQL-ordono malsukcesis: \"{}\""
+
+#: utils/sqlite3/sqlite3.cpp:35
+#, c++-format
+msgid "Binding unsigned integer32 value to SQL statement failed: \"{}\""
+msgstr ""
+"Ligi sensignan 32-bitan entjeran valoron al SQL-ordono malsukcesis: \"{}\""
+
+#: utils/sqlite3/sqlite3.cpp:37
+#, c++-format
+msgid "Binding double value to SQL statement failed: \"{}\""
+msgstr "Ligi glitkoman valoron al SQL-ordono malsukcesis: \"{}\""
+
+#: utils/sqlite3/sqlite3.cpp:39
+#, c++-format
+msgid "Binding bool value to SQL statement failed: \"{}\""
+msgstr "Ligi bulean valoron al SQL-ordono malsukcesis: \"{}\""
+
+#: utils/sqlite3/sqlite3.cpp:40
+#, c++-format
+msgid "Binding text to SQL statement failed: \"{}\""
+msgstr "Ligi tekston al SQL-ordono malsukcesis: \"{}\""
+
+#: utils/sqlite3/sqlite3.cpp:41
+#, c++-format
+msgid "Binding blob to SQL statement failed: \"{}\""
+msgstr "Ligi senformaĵon al SQL-ordono malsukcesis: \"{}\""
+
+#: utils/sqlite3/sqlite3.cpp:42
+#, c++-format
+msgid "SQL statement evaluation failed: \"{}\""
+msgstr "Evaluo de SQL-ordono malsukcesis: \"{}\""
+
+#: utils/sqlite3/sqlite3.cpp:44
+msgid "Insufficient memory or result exceed maximum SQLite3 string length"
+msgstr "Nesufiĉa memoro aŭ rezulto superis maksimuman ĉeno-longon de SQLite3"
+
+#: utils/sqlite3/sqlite3.cpp:46
+#, c++-format
+msgid "Column \"{}\" not found"
+msgstr "Kolumno \"{}\" ne trovita"
+
+#: utils/sqlite3/sqlite3.cpp:48
+#, c++-format
+msgid "SQL statement execution failed: \"{}\""
+msgstr "Plenumo do SQL-ordono malsukcesis: \"{}\""
+
+#: utils/sqlite3/sqlite3.cpp:68
+#, c++-format
+msgid "Failed to open database \"{}\""
+msgstr "Malsukcesis malfermi datumbazon \"{}\""
+
+#: utils/sqlite3/sqlite3.cpp:105
+#, c++-format
+msgid "Failed to close database \"{}\""
+msgstr "Malsukcesis malfermi datumbazon \"{}\""
+
+#: utils/sqlite3/sqlite3.cpp:117 utils/sqlite3/sqlite3.cpp:143
+#, c++-format
+msgid "Failed to open backup database \"{}\""
+msgstr "Malsukcesis malfermi savodatumbazon \"{}\""
+
+#: utils/sqlite3/sqlite3.cpp:132
+#, c++-format
+msgid "Failed to backup database \"{}\" into \"{}\""
+msgstr "Fari savokopion de datumbazo \"{}\" en \"{}\" malsukcesis"
+
+#: utils/sqlite3/sqlite3.cpp:158
+#, c++-format
+msgid "Failed to restore database \"{}\""
+msgstr "Malsukcesis restarigi datumbazon \"{}\""
+
+#: utils/system.cpp:34
+msgid "failed to read rpm config files"
+msgstr "malsukcesis legi agordodosierojn de rpm"
+
+#: utils/system.cpp:52
+msgid "Failed to execute uname()"
+msgstr "uname() ne plenumeblas"

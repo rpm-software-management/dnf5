@@ -2,13 +2,13 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # Tri Phuong Nguyen <triphuongvasa@gmail.com>, 2025.
-# Khoa Le <inctenone@gmail.com>, 2025.
+# Khoa Le <inctenone@gmail.com>, 2025, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-07-26 03:48+0000\n"
-"PO-Revision-Date: 2025-11-28 17:00+0000\n"
+"PO-Revision-Date: 2026-04-12 12:58+0000\n"
 "Last-Translator: Khoa Le <inctenone@gmail.com>\n"
 "Language-Team: Vietnamese <https://translate.fedoraproject.org/projects/dnf5/"
 "dnf5-plugin-copr/vi/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.14.3\n"
+"X-Generator: Weblate 5.16.2\n"
 
 #: copr.cpp:48
 msgid "Copr hub (the web-UI/API server) hostname"
@@ -51,6 +51,8 @@ msgstr "Định dạng PROJECT_SPEC không hợp lệ: '{}'"
 msgid ""
 "Manage Copr repositories (add-ons provided by users/community/third-party)"
 msgstr ""
+"Quản lý các kho Copr (các tiện ích bổ sung do người dùng/cộng đồng/bên thứ "
+"ba cung cấp)"
 
 #: copr_constants.hpp:29
 msgid ""
@@ -66,6 +68,20 @@ msgid ""
 "Please do not file bug reports about these packages in Fedora\n"
 "Bugzilla. In case of problems, contact the owner of this repository.\n"
 msgstr ""
+"Đang kích hoạt một kho Copr. Xin lưu ý rằng kho này không phải là một phần\n"
+"của bản phân phối chính, và chất lượng có thể khác nhau.\n"
+"\n"
+"Dự án Fedora không thực hiện bất kỳ quyền kiểm soát nào đối với nội dung "
+"của\n"
+"kho này ngoài các quy tắc được nêu trong FAQ Copr tại\n"
+"<https://docs.pagure.org/copr.copr/user_documentation.html#what-i-can-build-"
+"in-copr>,\n"
+"và các gói không bị ràng buộc bởi bất kỳ tiêu chuẩn chất lượng hoặc bảo mật "
+"nào.\n"
+"\n"
+"Vui lòng không gửi báo cáo lỗi về các gói này trong Fedora\n"
+"Bugzilla. Trong trường hợp có vấn đề, hãy liên hệ với chủ sở hữu của kho "
+"này.\n"
 
 #: copr_constants.hpp:41
 #, c++-format
@@ -83,10 +99,22 @@ msgid ""
 "These repositories are being enabled together with the main\n"
 "repository.\n"
 msgstr ""
+"Người duy trì của kho Copr đã bật quyết định làm cho nó\n"
+"phụ thuộc vào các kho khác. Những kho như vậy\n"
+"thường cần thiết để cài đặt thành công các RPM từ\n"
+"kho Copr chính (chúng cung cấp các phụ thuộc thời gian chạy).\n"
+"\n"
+"Hãy lưu ý rằng ghi chú về chất lượng và báo cáo lỗi\n"
+"ở trên cũng áp dụng ở đây, Dự án Fedora không kiểm soát\n"
+"nội dung. Vui lòng xem lại danh sách:\n"
+"\n"
+"{}\n"
+"Các kho này sẽ được bật cùng với kho\n"
+"chính.\n"
 
 #: copr_debug.cpp:30
 msgid "print useful info about the system, useful for debugging"
-msgstr ""
+msgstr "in thông tin hữu ích về hệ thống, hữu ích cho việc gỡ lỗi"
 
 #: copr_disable.cpp:35
 #, c++-format
@@ -94,6 +122,8 @@ msgid ""
 "disable specified Copr repository (if exists), keep {}/*.repo file - just "
 "mark enabled=0"
 msgstr ""
+"vô hiệu hóa kho Copr được chỉ định (nếu tồn tại), giữ nguyên tệp {}/*.repo - "
+"chỉ cần đặt enabled=0"
 
 #: copr_enable.cpp:38
 #, c++-format
@@ -101,75 +131,80 @@ msgid ""
 "download the repository info from a Copr server and install it as a {}/"
 "*.repo file"
 msgstr ""
+"tải thông tin kho lưu trữ từ một máy chủ Copr và cài đặt nó dưới dạng tệp {}/"
+"*.repo"
 
 #: copr_enable.cpp:46
 msgid ""
 "Chroot specified in the NAME-RELEASE-ARCH format, e.g. 'fedora-rawhide-"
 "ppc64le'.  When not specified, the 'dnf copr' command attempts to detect it."
 msgstr ""
+"Chroot được chỉ định theo định dạng NAME-RELEASE-ARCH, ví dụ: 'fedora-"
+"rawhide-ppc64le'. Khi không được chỉ định, lệnh 'dnf copr' sẽ cố gắng tự "
+"động phát hiện."
 
 #: copr_list.cpp:51
 msgid "list Copr repositories"
-msgstr ""
+msgstr "liệt kê các kho Copr"
 
 #: copr_remove.cpp:35
 #, c++-format
 msgid ""
 "remove specified Copr repository from the system (removes the {}/*.repo file)"
-msgstr ""
+msgstr "xóa kho Copr được chỉ định khỏi hệ thống (xóa tệp {}/*.repo)"
 
 #: copr_repo.cpp:91
 #, c++-format
 msgid "Directory '{}' not found in '{}' Copr project."
-msgstr ""
+msgstr "Thư mục '{}' không được tìm thấy trong dự án Copr '{}'."
 
 #: copr_repo.cpp:97
 msgid "You can use one of these available directories:"
-msgstr ""
+msgstr "Bạn có thể sử dụng một trong các thư mục có sẵn này:"
 
 #: copr_repo.cpp:113
 msgid "Chroot not found in the given Copr project"
-msgstr ""
+msgstr "Không tìm thấy chroot trong dự án Copr đã cho"
 
 #: copr_repo.cpp:115
 msgid "Unable to detect chroot, specify it explicitly."
-msgstr ""
+msgstr "Không thể phát hiện chroot, hãy chỉ định rõ ràng."
 
 #: copr_repo.cpp:121
 msgid "We tried to find these repos without a success:"
-msgstr ""
+msgstr "Chúng tôi đã cố gắng tìm các kho lưu trữ này nhưng không thành công:"
 
 #: copr_repo.cpp:126
 msgid "You can choose one of the available chroots explicitly:"
-msgstr ""
+msgstr "Bạn có thể chọn một trong các chroot có sẵn một cách rõ ràng:"
 
 #: copr_repo.cpp:200
 msgid "Can't parse Copr repo spec: "
-msgstr ""
+msgstr "Không thể phân tích cú pháp đặc tả repo Copr: "
 
 #: copr_repo.cpp:344
 #, c++-format
 msgid "Can't remove the {} repo file"
-msgstr ""
+msgstr "Không thể xóa tệp repo {}"
 
 #: copr_repo.cpp:347
 #, c++-format
 msgid "Repo file {} successfully removed"
-msgstr ""
+msgstr "Tệp repo {} đã được xóa thành công"
 
 #: copr_repo.cpp:393
 #, c++-format
 msgid "Can't find item {} in {}"
-msgstr ""
+msgstr "Không thể tìm thấy mục {} trong {}"
 
 #: copr_repo.cpp:449
 #, c++-format
 msgid "Removing old config file '{}'"
-msgstr ""
+msgstr "Đang xóa tệp cấu hình cũ '{}'"
 
 #: copr_repo.cpp:452
 msgid "Can't remove"
-msgstr ""
+msgstr "Không thể xóa"
 
 #: copr_repo.cpp:526
 #, c++-format
@@ -177,23 +212,25 @@ msgid ""
 "Copr repofile '{}' has an old format, fix by re-enabling it $ {} copr enable "
 "{}"
 msgstr ""
+"Hồ sơ Copr '{}' có định dạng cũ, hãy khắc phục bằng cách kích hoạt lại nó: $ "
+"{} copr enable {}"
 
 #: copr_repo.cpp:560
 #, c++-format
 msgid "Repo id '{}' in '{}' is suspicious"
-msgstr ""
+msgstr "Mã ID '{}' trong '{}' có dấu hiệu đáng ngờ"
 
 #: copr_repo.cpp:567
 #, c++-format
 msgid "Repo id '{}' doesn't belong to '{}' repofile"
-msgstr ""
+msgstr "ID kho lưu trữ '{}' không thuộc về tệp thông tin kho lưu trữ '{}'"
 
 #: copr_repo.cpp:618
 #, c++-format
 msgid "Copr repository '{}' in '{}' disabled."
-msgstr ""
+msgstr "Kho lưu trữ Copr '{}' trong '{}' đã bị vô hiệu hóa."
 
 #: copr_repo.cpp:632 copr_repo.cpp:657
 #, c++-format
 msgid "Repository '{}' not found on this system"
-msgstr ""
+msgstr "Không tìm thấy kho lưu trữ '{}' trên hệ thống"

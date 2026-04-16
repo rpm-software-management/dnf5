@@ -3,13 +3,14 @@
 # This file is distributed under the same license as the PACKAGE package.
 # Javier Francisco <fserrador@gmail.com>, 2025.
 # Weblate Translation Memory <noreply-mt-weblate-translation-memory@weblate.org>, 2025.
+# "Fco. Javier F. Serrador" <fserrador@gmail.com>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-07-26 03:48+0000\n"
-"PO-Revision-Date: 2025-04-12 13:53+0000\n"
-"Last-Translator: Javier Francisco <fserrador@gmail.com>\n"
+"PO-Revision-Date: 2026-04-13 13:58+0000\n"
+"Last-Translator: \"Fco. Javier F. Serrador\" <fserrador@gmail.com>\n"
 "Language-Team: Spanish <https://translate.fedoraproject.org/projects/dnf5/"
 "dnf5-plugin-copr/es/>\n"
 "Language: es\n"
@@ -17,11 +18,11 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.10.4\n"
+"X-Generator: Weblate 5.16.2\n"
 
 #: copr.cpp:48
 msgid "Copr hub (the web-UI/API server) hostname"
-msgstr "Hub Copr (la web-IU/servidor API) nombre-hospedaje"
+msgstr "Centro Copr (la IU web/servidor API) nombre de host"
 
 #: copr.cpp:88
 msgid ""

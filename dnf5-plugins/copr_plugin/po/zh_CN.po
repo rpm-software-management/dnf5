@@ -4,13 +4,14 @@
 # caffiendo c <1728778012@qq.com>, 2024.
 # ashton su <suguyu45@gmail.com>, 2024.
 # Jingge Chen <mariocanfly@hotmail.com>, 2025.
+# 耗子 <haozi@loli.email>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-07-26 03:48+0000\n"
-"PO-Revision-Date: 2025-02-20 09:31+0000\n"
-"Last-Translator: Jingge Chen <mariocanfly@hotmail.com>\n"
+"PO-Revision-Date: 2026-04-06 22:59+0000\n"
+"Last-Translator: 耗子 <haozi@loli.email>\n"
 "Language-Team: Chinese (Simplified) <https://translate.fedoraproject.org/"
 "projects/dnf5/dnf5-plugin-copr/zh_CN/>\n"
 "Language: zh_CN\n"
@@ -18,7 +19,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.10\n"
+"X-Generator: Weblate 5.16.2\n"
 
 #: copr.cpp:48
 msgid "Copr hub (the web-UI/API server) hostname"
@@ -34,16 +35,16 @@ msgid ""
 "fedorainfracloud.org ) or the shortcut (e.g. fedora).  Example: 'fedora/"
 "@footeam/coolproject'."
 msgstr ""
-"Copr 项目 ID 格式为 {}。  可以使用格式 OWNER/PROJECT 或 HUB/OWNER/PROJECT（如"
+"Copr 项目 ID 格式为 {}。 可以使用格式 OWNER/PROJECT 或 HUB/OWNER/PROJECT（如"
 "果未指定 HUB，则使用默认的 HUB，或使用 --hub <ARG>）。OWNER 可以是用户名，也"
-"可以是 @groupname。  PROJECT 可以仅是项目名称，也可以是包含冒号的“项目目录”，"
-"例如 'project:custom:123'。HUB 可以是 Copr 前端主机名（例如 copr."
-"fedorainfracloud.org）或简写（例如 fedora）。示例：'fedora/@footeam/"
-"coolproject'。"
+"可以是 @groupname。 PROJECT 可以仅是项目名称，也可以是包含冒号的「项目目录」"
+"，例如「project:custom:123」。HUB 可以是 Copr 前端主机名（例如 "
+"copr.fedorainfracloud.org）或简写（例如 fedora）。示例：「fedora/@footeam/"
+"coolproject」。"
 
 #: copr.cpp:106
 msgid "Invalid PROJECT_SPEC format '{}'"
-msgstr "无效的 PROJECT_SPEC 格式 '{}'"
+msgstr "无效的 PROJECT_SPEC 格式「{}」"
 
 #: copr_constants.hpp:27
 msgid ""
@@ -98,9 +99,7 @@ msgstr ""
 "\n"
 "请注意，上述关于质量和 bug 报告的说明\n"
 "同样适用于此，Fedora 项目不控制\n"
-"这些内容。请查看以下列表：\n"
-"\n"
-"{}\n"
+"这些内容。请查看以下列表：{}\n"
 "这些仓库将与主仓库一起启用。\n"
 
 #: copr_debug.cpp:30
@@ -111,35 +110,34 @@ msgstr "打印关于系统的有用信息，用于调试"
 msgid ""
 "disable specified Copr repository (if exists), keep {}/*.repo file - just "
 "mark enabled=0"
-msgstr ""
-"禁用指定的 Copr 版本库（如果存在），保留 {}/*.repo 文件 - 仅标记 enabled=0"
+msgstr "禁用指定的 Copr 仓库（如果存在），保留 {}/*.repo 文件 - 仅标记 enabled=0"
 
 #: copr_enable.cpp:38
 msgid ""
 "download the repository info from a Copr server and install it as a {}/*."
 "repo file"
-msgstr "从 Copr 服务器下载版本库信息，并将其安装为 {}/*.repo 文件"
+msgstr "从 Copr 服务器下载仓库信息，并将其安装为 {}/*.repo 文件"
 
 #: copr_enable.cpp:46
 msgid ""
 "Chroot specified in the NAME-RELEASE-ARCH format, e.g. 'fedora-rawhide-"
 "ppc64le'.  When not specified, the 'dnf copr' command attempts to detect it."
 msgstr ""
-"以 NAME-RELEASE-ARCH 格式指定的 Chroot，例如 \"fedora-rawhide-ppc64le\"。  未"
-"指定时，\"dnf copr \"命令会尝试检测。"
+"以 NAME-RELEASE-ARCH 格式指定的 Chroot，例如「fedora-rawhide-ppc64le」。 未指"
+"定时，「dnf copr」命令会尝试检测。"
 
 #: copr_list.cpp:51
 msgid "list Copr repositories"
-msgstr "列出 Copr 资源库"
+msgstr "列出 Copr 仓库"
 
 #: copr_remove.cpp:35
 msgid ""
 "remove specified Copr repository from the system (removes the {}/*.repo file)"
-msgstr "从系统中移除指定的 Copr 版本库（移除 {}/*.repo 文件）"
+msgstr "从系统中移除指定的 Copr 仓库（移除 {}/*.repo 文件）"
 
 #: copr_repo.cpp:91
 msgid "Directory '{}' not found in '{}' Copr project."
-msgstr "目录 '{}' 不在 '{}' Copr 项目中。"
+msgstr "目录「{}」不在「{}」 Copr 项目中。"
 
 #: copr_repo.cpp:97
 msgid "You can use one of these available directories:"
@@ -155,7 +153,7 @@ msgstr "无法检测到 chroot，请明确指定。"
 
 #: copr_repo.cpp:121
 msgid "We tried to find these repos without a success:"
-msgstr "我们试图找到这些 repos，但没有成功："
+msgstr "我们试图找到这些仓库，但没有成功："
 
 #: copr_repo.cpp:126
 msgid "You can choose one of the available chroots explicitly:"
@@ -167,7 +165,7 @@ msgstr "无法解析 Copr 仓库配置： "
 
 #: copr_repo.cpp:344
 msgid "Can't remove the {} repo file"
-msgstr "无法删除 {} repo 文件"
+msgstr "无法删除 {} 仓库文件"
 
 #: copr_repo.cpp:347
 msgid "Repo file {} successfully removed"
@@ -175,11 +173,11 @@ msgstr "成功删除仓库文件 {}"
 
 #: copr_repo.cpp:393
 msgid "Can't find item {} in {}"
-msgstr "项目 {} 在 {} 中找不到"
+msgstr "项目 {} 在 {} 中未找到"
 
 #: copr_repo.cpp:449
 msgid "Removing old config file '{}'"
-msgstr "删除旧的配置文件 '{}'"
+msgstr "删除旧的配置文件「{}」"
 
 #: copr_repo.cpp:452
 msgid "Can't remove"
@@ -189,20 +187,20 @@ msgstr "无法移除"
 msgid ""
 "Copr repofile '{}' has an old format, fix by re-enabling it $ {} copr enable "
 "{}"
-msgstr "Copr repofile '{}' 的格式已过时，重新启用即可修复 $ {} copr enable {}"
+msgstr "Copr 仓库文件「{}」的格式已过时，重新启用即可修复 $ {} copr enable {}"
 
 #: copr_repo.cpp:560
 msgid "Repo id '{}' in '{}' is suspicious"
-msgstr "仓库 ID '{}' （'{}'中）有些可疑"
+msgstr "仓库 ID 「{}」 （「{}」中）有些可疑"
 
 #: copr_repo.cpp:567
 msgid "Repo id '{}' doesn't belong to '{}' repofile"
-msgstr "仓库 ID '{}' 不属于 '{}' 仓库配置文件"
+msgstr "仓库 ID 「{}」不属于「{}」仓库配置文件"
 
 #: copr_repo.cpp:618
 msgid "Copr repository '{}' in '{}' disabled."
-msgstr "Copr 存储库 '{}' （位于 '{}' ） 已禁用。"
+msgstr "Copr 仓库「{}」 （位于「{}」） 已禁用。"
 
 #: copr_repo.cpp:632 copr_repo.cpp:657
 msgid "Repository '{}' not found on this system"
-msgstr "本系统未找到存储库 '{}'"
+msgstr "本系统未找到仓库「{}」"

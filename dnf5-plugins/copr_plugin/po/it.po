@@ -2,13 +2,14 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # Salvatore Cocuzza <info@salvatorecocuzza.it>, 2025.
+# Ali Ciloqlu <ali.ciloqlu@murena.io>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-07-26 03:48+0000\n"
-"PO-Revision-Date: 2025-04-25 14:44+0000\n"
-"Last-Translator: Salvatore Cocuzza <info@salvatorecocuzza.it>\n"
+"PO-Revision-Date: 2026-04-08 08:58+0000\n"
+"Last-Translator: Ali Ciloqlu <ali.ciloqlu@murena.io>\n"
 "Language-Team: Italian <https://translate.fedoraproject.org/projects/dnf5/"
 "dnf5-plugin-copr/it/>\n"
 "Language: it\n"
@@ -16,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.11\n"
+"X-Generator: Weblate 5.16.2\n"
 
 #: copr.cpp:48
 msgid "Copr hub (the web-UI/API server) hostname"
@@ -206,11 +207,11 @@ msgstr ""
 
 #: copr_repo.cpp:560
 msgid "Repo id '{}' in '{}' is suspicious"
-msgstr "L'ID repo '{}' in '{}' è sospetto"
+msgstr "L'id repo '{}' in '{}' è sospetto"
 
 #: copr_repo.cpp:567
 msgid "Repo id '{}' doesn't belong to '{}' repofile"
-msgstr "L'ID repo '{}' non appartiene al file repo '{}'"
+msgstr "L'id repo '{}' non appartiene al file repo '{}'"
 
 #: copr_repo.cpp:618
 msgid "Copr repository '{}' in '{}' disabled."

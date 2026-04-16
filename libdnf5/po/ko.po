@@ -1,7 +1,7 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# 김인수 <simmon@nplob.com>, 2024, 2025.
+# 김인수 <simmon@nplob.com>, 2024, 2025, 2026.
 # Weblate Translation Memory <noreply-mt-weblate-translation-memory@weblate.org>, 2024, 2025.
 # Joungmin Lee <leejm516@gmail.com>, 2024.
 msgid ""
@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-07-26 03:48+0000\n"
-"PO-Revision-Date: 2025-06-01 05:33+0000\n"
+"PO-Revision-Date: 2026-03-17 19:58+0000\n"
 "Last-Translator: 김인수 <simmon@nplob.com>\n"
 "Language-Team: Korean <https://translate.fedoraproject.org/projects/dnf5/"
 "libdnf5/ko/>\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.11.4\n"
+"X-Generator: Weblate 5.16.2\n"
 
 #: advisory/advisory.cpp:81
 msgid ""
@@ -1131,7 +1131,7 @@ msgstr "꾸러미를 여는 중에 문제가 발생되었습니다."
 
 #: rpm/rpm_signature.cpp:64
 msgid "Failed to set rpm transaction rootDir \"{}\"."
-msgstr "rpm 연결 rootDIR 설정하는 데 실패함 \"{}\"."
+msgstr "rpm 연결 rootDir 설정하는 데 실패함 \"{}\"."
 
 #: rpm/rpm_signature.cpp:290
 msgid "\"{}\": key is not an armored public key."

@@ -6,13 +6,14 @@
 # Weblate Translation Memory <noreply-mt-weblate-translation-memory@weblate.org>, 2025.
 # Cheng-Chia Tseng <pswo10680@gmail.com>, 2025.
 # madomado nuko <mado@fyralabs.com>, 2025.
+# Shihfu Juan <xlion@xlion.tw>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-07-26 03:48+0000\n"
-"PO-Revision-Date: 2025-10-27 00:54+0000\n"
-"Last-Translator: Cheng-Chia Tseng <pswo10680@gmail.com>\n"
+"PO-Revision-Date: 2026-03-02 17:35+0000\n"
+"Last-Translator: Shihfu Juan <xlion@xlion.tw>\n"
 "Language-Team: Chinese (Traditional) <https://translate.fedoraproject.org/"
 "projects/dnf5/dnf5/zh_TW/>\n"
 "Language: zh_TW\n"
@@ -20,7 +21,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.13.3\n"
+"X-Generator: Weblate 5.16.1\n"
 
 #: cmdline_aliases.cpp:84 context.cpp:301 main.cpp:1357
 msgid ", "
@@ -30,29 +31,29 @@ msgstr ", "
 msgid ""
 "Attached named argument \"{}\" not found: {}: Requested in file \"{}\" on "
 "line {}: {}"
-msgstr ""
+msgstr "附加的具名引數「{}」找不到：{}：於檔案「{}」第 {} 行請求：{}"
 
 #: cmdline_aliases.cpp:159
 msgid ""
 "Unknown attribute \"{}\" of attached named argument for alias \"{}\" in file "
 "\"{}\" on line {}: {}"
-msgstr ""
+msgstr "檔案「{}」第 {} 行：別名「{}」的附加具名引數有未知屬性「{}」：{}"
 
 #: cmdline_aliases.cpp:171
 msgid "Missing attribute \"id_path\" for alias \"{}\" in file \"{}\""
-msgstr ""
+msgstr "檔案「{}」中缺少別名「{}」的屬性「id_path」"
 
 #: cmdline_aliases.cpp:208
 msgid "Unsupported version \"{}\" in file \"{}\". Supported versions: {}"
-msgstr ""
+msgstr "檔案「{}」中的版本「{}」不受支援。支援的版本：{}"
 
 #: cmdline_aliases.cpp:218
 msgid "Bad value type of attribute \"version\" in file \"{}\" on line {}: {}"
-msgstr ""
+msgstr "檔案「{}」第 {} 行：屬性「version」的值類型錯誤：{}"
 
 #: cmdline_aliases.cpp:224
 msgid "Missing attribute \"version\" in file \"{}\""
-msgstr ""
+msgstr "檔案「{}」中缺少屬性「version」"
 
 #: cmdline_aliases.cpp:236
 msgid "Unknown key \"{}\" in file \"{}\" on line {}: {}"
@@ -65,7 +66,7 @@ msgstr "空值或有不良元素 id 路徑位於檔案「{}」的列 {}: {}"
 #: cmdline_aliases.cpp:272
 msgid ""
 "Parent command \"{}\" not found: {}: Requested in file \"{}\" on line {}: {}"
-msgstr ""
+msgstr "找不到父命令「{}」：{}：於檔案「{}」第 {} 行請求：{}"
 
 #: cmdline_aliases.cpp:301
 msgid "Unknown type \"{}\" of element \"{}\" in file \"{}\" on line {}: {}"
@@ -79,16 +80,16 @@ msgstr "遺失「type」特性，所在元素「{}」位於檔案「{}」"
 msgid ""
 "Named argument \"{}\" already registered. Requested in file \"{}\" on line "
 "{}: {}"
-msgstr ""
+msgstr "具名引數「{}」已註冊。於檔案「{}」第 {} 行請求：{}"
 
 #: cmdline_aliases.cpp:347
 msgid ""
 "Command \"{}\" already registered. Requested in file \"{}\" on line {}: {}"
-msgstr ""
+msgstr "命令「{}」已註冊。於檔案「{}」第 {} 行請求：{}"
 
 #: cmdline_aliases.cpp:375
 msgid "Unknown attribute \"{}\" of group \"{}\" in file \"{}\" on line {}: {}"
-msgstr ""
+msgstr "檔案「{}」第 {} 行：群組「{}」有未知屬性「{}」：{}"
 
 #: cmdline_aliases.cpp:387
 msgid "Missing attribute \"header\" for element \"{}\" in file \"{}\""
@@ -98,73 +99,75 @@ msgstr "遺失「header」特性，所在「{}」元素位於「{}」檔案"
 msgid ""
 "The \"short_name\" attribute of named argument \"{}\" must be one character "
 "long in file \"{}\" on line {}: {}"
-msgstr ""
+msgstr "檔案「{}」第 {} 行：具名引數「{}」的「short_name」屬性必須為一個字元長：{}"
 
 #: cmdline_aliases.cpp:446
 msgid "Source \"{}\" not found: {}: Requested in file \"{}\" on line {}: {}"
-msgstr ""
+msgstr "找不到來源「{}」：{}：於檔案「{}」第 {} 行請求：{}"
 
 #: cmdline_aliases.cpp:462 cmdline_aliases.cpp:563 cmdline_aliases.cpp:676
 msgid "Group \"{}\" not found: {}: Requested in file \"{}\" on line {}: {}"
-msgstr ""
+msgstr "找不到群組「{}」：{}：於檔案「{}」第 {} 行請求：{}"
 
 #: cmdline_aliases.cpp:476 cmdline_aliases.cpp:579
 msgid ""
 "Unknown attribute \"{}\" of named argument \"{}\" in file \"{}\" on line {}: "
 "{}"
-msgstr ""
+msgstr "檔案「{}」第 {} 行：具名引數「{}」有未知屬性「{}」：{}"
 
 #: cmdline_aliases.cpp:489
 msgid "Missing attribute \"source\" for named argument \"{}\" in file \"{}\""
-msgstr ""
+msgstr "檔案「{}」中缺少具名引數「{}」的屬性「source」"
 
 #: cmdline_aliases.cpp:498 cmdline_aliases.cpp:592
 msgid ""
 "At least one of the attributes \"long_name\" and \"short_name\" must be set "
 "for named argument \"{}\" in file \"{}\""
 msgstr ""
+"檔案「{}」中，具名引數「{}」必須設定「long_name」或「short_name」屬性至少其中"
+"之一"
 
 #: cmdline_aliases.cpp:657
 msgid ""
 "Attached command \"{}\" not found: {}: Requested in file \"{}\" on line {}: "
 "{}"
-msgstr ""
+msgstr "找不到附加命令「{}」：{}：於檔案「{}」第 {} 行請求：{}"
 
 #: cmdline_aliases.cpp:691
 msgid ""
 "Used config file version \"1.0\" for attribute \"{}\" of command \"{}\" in "
 "file \"{}\" on line {}: {}"
-msgstr ""
+msgstr "檔案「{}」第 {} 行：命令「{}」的屬性「{}」使用了設定檔版本「1.0」：{}"
 
 #: cmdline_aliases.cpp:713
 msgid ""
 "Unknown attribute \"{}\" of required value for alias \"{}\" in file \"{}\" "
 "on line {}: {}"
-msgstr ""
+msgstr "檔案「{}」第 {} 行：別名「{}」的必要值有未知屬性「{}」：{}"
 
 #: cmdline_aliases.cpp:726
 msgid ""
 "Missing attribute \"value_help\" of required value for alias \"{}\" in file "
 "\"{}\""
-msgstr ""
+msgstr "檔案「{}」中缺少別名「{}」的必要值的屬性「value_help」"
 
 #: cmdline_aliases.cpp:740
 msgid ""
 "Unknown attribute \"{}\" of command \"{}\" in file \"{}\" on line {}: {}"
-msgstr ""
+msgstr "檔案「{}」第 {} 行：命令「{}」有未知屬性「{}」：{}"
 
 #: cmdline_aliases.cpp:756
 msgid ""
 "Missing attribute \"attached_command\" for command \"{}\" in file \"{}\""
-msgstr ""
+msgstr "檔案「{}」中缺少命令「{}」的屬性「attached_command」"
 
 #: cmdline_aliases.cpp:791
 msgid "Bad value type in file \"{}\" on line {}: {}"
-msgstr ""
+msgstr "檔案「{}」第 {} 行：值類型錯誤：{}"
 
 #: cmdline_aliases.cpp:804
 msgid "Syntax error in file \"{}\" on line {}:"
-msgstr ""
+msgstr "檔案「{}」第 {} 行：語法錯誤："
 
 #: commands/advisory/advisory.cpp:36
 msgid "Manage advisories"
@@ -373,56 +376,52 @@ msgid ""
 msgstr "升級或降級已安裝的軟體至最新可用版本"
 
 #: commands/do/do.cpp:44
-#, fuzzy
-#| msgid "Running transaction"
 msgid "Do transaction"
 msgstr "執行處理事項"
 
 #: commands/do/do.cpp:49
 msgid "Action to be done on the following items."
-msgstr ""
+msgstr "以下項目要執行的動作。"
 
 #: commands/do/do.cpp:63
 msgid "Unsupported action \"{}\""
-msgstr ""
+msgstr "不支援的動作：「{}」"
 
 #: commands/do/do.cpp:73
 msgid "Type of the following items."
-msgstr ""
+msgstr "以下項目的類型。"
 
 #: commands/do/do.cpp:86
 msgid "Unsupported item type \"{}\""
-msgstr ""
+msgstr "不支援的項目類型：「{}」"
 
 #: commands/do/do.cpp:99
 msgid "List of items to take action on"
-msgstr ""
+msgstr "要執行動作的項目清單"
 
 #: commands/do/do.cpp:131 commands/do/do.cpp:135
 msgid "Only package downgrade is supported."
-msgstr ""
+msgstr "僅支援套件降級。"
 
 #: commands/do/do.cpp:142 commands/do/do.cpp:146
 msgid "Only package reinstall is supported."
-msgstr ""
+msgstr "僅支援套件重新安裝。"
 
 #: commands/do/do.cpp:152
 msgid "Action was not defined"
-msgstr ""
+msgstr "動作未定義"
 
 #: commands/do/do.cpp:230
-#, fuzzy
-#| msgid "Invalid urlprotocol option: {}"
 msgid "Invalid Environmet/Group specification: {}"
-msgstr "無效的 urlprotocol 選項：{}"
+msgstr "無效的環境/群組規格：{}"
 
 #: commands/do/do.cpp:314
 msgid "Downgrading environments and groups is not supported."
-msgstr ""
+msgstr "不支援降級環境和群組。"
 
 #: commands/do/do.cpp:330
 msgid "Reinstaling environments and groups is not supported."
-msgstr ""
+msgstr "不支援重新安裝環境和群組。"
 
 #: commands/downgrade/downgrade.cpp:42
 msgid "Downgrade software"
@@ -470,30 +469,25 @@ msgstr "管理 comps 環境"
 msgid ""
 "The following items can be selected only from the specified repositories. "
 "All enabled repositories will still be used to satisfy dependencies."
-msgstr ""
+msgstr "以下項目只能從指定的儲存庫選擇。所有已啟用的儲存庫仍會用於滿足相依性。"
 
 #: commands/from_repo.cpp:38 commands/from_repo.cpp:70
-#, fuzzy
-#| msgid "CVE_ID,..."
 msgid "REPO_ID,..."
-msgstr "CVE_ID,..."
+msgstr "REPO_ID,..."
 
 #: commands/from_repo.cpp:53
 msgid "\"--from_repo\" already defined with diferent value"
-msgstr ""
+msgstr "「--from_repo」已使用不同的值定義"
 
 #: commands/from_repo.cpp:68
-#, fuzzy
-#| msgid ""
-#| "List groups of installed packages not required by other installed packages"
 msgid ""
 "Filters installed packages by the ID of the repository they were installed "
 "from."
-msgstr "列出其他已安裝軟體包不需要的已安裝軟體包群組"
+msgstr "依據安裝來源的儲存庫 ID 篩選已安裝的軟體包。"
 
 #: commands/from_repo.cpp:79
 msgid "\"--installed-from_repo\" already defined with diferent value"
-msgstr ""
+msgstr "「--installed-from_repo」已使用不同的值定義"
 
 #: commands/group/arguments.hpp:34
 msgid "Show only available groups."
@@ -606,10 +600,8 @@ msgid "Lists packages depending on the packages' relation to the system"
 msgstr "依據軟體包與系統間的關係列出軟體包"
 
 #: commands/list/list.cpp:50
-#, fuzzy
-#| msgid "List of keys to match case insensitively"
 msgid "List of package-spec-NI to match (case insensitively)"
-msgstr "不考慮大小寫的鍵比對清單"
+msgstr "不考慮大小寫的軟體包規格比對清單"
 
 #: commands/list/list.cpp:62
 msgid "Show all versions of the packages, not only the latest ones."
@@ -975,8 +967,6 @@ msgid "Add new entry to versionlock configuration"
 msgstr "在版本鎖組態中加入新項目"
 
 #: commands/versionlock/versionlock_add.cpp:44
-#, fuzzy
-#| msgid "List of package specs to add versionlock for"
 msgid "List of package package-spec-N to add versionlock for"
 msgstr "要新增版本鎖的軟體包規格清單"
 
@@ -1014,8 +1004,6 @@ msgid "Add new exclude entry to versionlock configuration"
 msgstr "在版本鎖的組態設定中新增排除項目"
 
 #: commands/versionlock/versionlock_exclude.cpp:44
-#, fuzzy
-#| msgid "List of package specs to add versionlock exclude for"
 msgid "List of package-spec-N to add versionlock exclude for"
 msgstr "要新增版本鎖排除的軟體包規格清單"
 

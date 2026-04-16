@@ -1,0 +1,1910 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# Keith Bowes <zooplah@gmail.com>, 2026.
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-07-26 03:48+0000\n"
+"PO-Revision-Date: 2026-04-08 08:58+0000\n"
+"Last-Translator: Keith Bowes <zooplah@gmail.com>\n"
+"Language-Team: Esperanto <https://translate.fedoraproject.org/projects/dnf5/"
+"dnf5/eo/>\n"
+"Language: eo\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.16.2\n"
+
+#: cmdline_aliases.cpp:84 context.cpp:301 main.cpp:1357
+msgid ", "
+msgstr ", "
+
+#: cmdline_aliases.cpp:145
+#, c++-format
+msgid ""
+"Attached named argument \"{}\" not found: {}: Requested in file \"{}\" on "
+"line {}: {}"
+msgstr ""
+"Alkroĉita nomita argumento \"{}\" ne trovita: {}: Petita en dosiero \"{}\" "
+"en linio {}: {}"
+
+#: cmdline_aliases.cpp:159
+#, c++-format
+msgid ""
+"Unknown attribute \"{}\" of attached named argument for alias \"{}\" in file "
+"\"{}\" on line {}: {}"
+msgstr ""
+"Nekonata atributo \"{}\" de alkroĉita nomita argumento por alinomo \"{}\" en "
+"dosiero \"{}\" en linio {}: {}"
+
+#: cmdline_aliases.cpp:171
+#, c++-format
+msgid "Missing attribute \"id_path\" for alias \"{}\" in file \"{}\""
+msgstr "Atributo \"id_path\" por alinomo \"{}\" en dosiero \"{}\" mankas"
+
+#: cmdline_aliases.cpp:208
+#, c++-format
+msgid "Unsupported version \"{}\" in file \"{}\". Supported versions: {}"
+msgstr "Nekonata eldono \"{}\" en dosiero \"{}\". Konataj eldonoj: {}"
+
+#: cmdline_aliases.cpp:218
+#, c++-format
+msgid "Bad value type of attribute \"version\" in file \"{}\" on line {}: {}"
+msgstr ""
+"Malbona valora tipo de atributo \"version\" en dosiero \"{}\" en linio {}: {}"
+
+#: cmdline_aliases.cpp:224
+#, c++-format
+msgid "Missing attribute \"version\" in file \"{}\""
+msgstr "Atributo \"version\" en dosiero \"{}\" mankas"
+
+#: cmdline_aliases.cpp:236
+#, c++-format
+msgid "Unknown key \"{}\" in file \"{}\" on line {}: {}"
+msgstr "Nekonata ŝlosilo \"{}\" en dosiero \"{}\" en linio {}: {}"
+
+#: cmdline_aliases.cpp:253
+#, c++-format
+msgid "Empty or bad element id path in file \"{}\" on line {}: {}"
+msgstr ""
+"Malplena aŭ malbona vojo de elemento-identigilo en dosiero \"{}\" en linio {}"
+": {}"
+
+#: cmdline_aliases.cpp:272
+#, c++-format
+msgid ""
+"Parent command \"{}\" not found: {}: Requested in file \"{}\" on line {}: {}"
+msgstr ""
+"Patra komando \"{}\" ne trovebla: {}: Petita en dosiero \"{}\" en linio {}: "
+"{}"
+
+#: cmdline_aliases.cpp:301
+#, c++-format
+msgid "Unknown type \"{}\" of element \"{}\" in file \"{}\" on line {}: {}"
+msgstr ""
+"Nekonata tipo \"{}\" de elemento \"{}\" en dosiero \"{}\" en linio {}: {}"
+
+#: cmdline_aliases.cpp:312
+#, c++-format
+msgid "Missing attribute \"type\" for element \"{}\" in file \"{}\""
+msgstr "Atributo \"type\" por elemento \"{}\" en dosiero \"{}\" mankas"
+
+#: cmdline_aliases.cpp:331
+#, c++-format
+msgid ""
+"Named argument \"{}\" already registered. Requested in file \"{}\" on line "
+"{}: {}"
+msgstr ""
+"Nomita argumento \"{}\" jam registrita. Petita en dosiero \"{}\" en linio {}"
+": {}"
+
+#: cmdline_aliases.cpp:347
+#, c++-format
+msgid ""
+"Command \"{}\" already registered. Requested in file \"{}\" on line {}: {}"
+msgstr "Komando \"{}\" jam registrita. Petita en dosiero \"{}\" en linio {}: {}"
+
+#: cmdline_aliases.cpp:375
+#, c++-format
+msgid "Unknown attribute \"{}\" of group \"{}\" in file \"{}\" on line {}: {}"
+msgstr ""
+"Nekonata atributo \"{}\" de grupo \"{}\" en dosiero \"{}\" en linio {}: {}"
+
+#: cmdline_aliases.cpp:387
+#, c++-format
+msgid "Missing attribute \"header\" for element \"{}\" in file \"{}\""
+msgstr "Atributo \"header\" por elemento \"{}\" en dosiero \"{}\" mankas"
+
+#: cmdline_aliases.cpp:428 cmdline_aliases.cpp:538
+#, c++-format
+msgid ""
+"The \"short_name\" attribute of named argument \"{}\" must be one character "
+"long in file \"{}\" on line {}: {}"
+msgstr ""
+"La atributo \"short_name\" de nomita argumento \"{}\" devas esti unusigna en "
+"dosiero \"{}\" en linio {}: {}"
+
+#: cmdline_aliases.cpp:446
+#, c++-format
+msgid "Source \"{}\" not found: {}: Requested in file \"{}\" on line {}: {}"
+msgstr "Fonto \"{}\" ne trovita: {}: Petita en dosiero \"{}\" en linio {}: {}"
+
+#: cmdline_aliases.cpp:462 cmdline_aliases.cpp:563 cmdline_aliases.cpp:676
+#, c++-format
+msgid "Group \"{}\" not found: {}: Requested in file \"{}\" on line {}: {}"
+msgstr "Grupo \"{}\" ne trovita: {}: Petita en dosiero \"{}\" en linio {}: {}"
+
+#: cmdline_aliases.cpp:476 cmdline_aliases.cpp:579
+#, c++-format
+msgid ""
+"Unknown attribute \"{}\" of named argument \"{}\" in file \"{}\" on line {}: "
+"{}"
+msgstr ""
+"Nekonata atributo \"{}\" de nomita argumento \"{}\" en dosiero \"{}\" en "
+"linio {}: {}"
+
+#: cmdline_aliases.cpp:489
+#, c++-format
+msgid "Missing attribute \"source\" for named argument \"{}\" in file \"{}\""
+msgstr ""
+"Atributo \"source\" por nomita argumento \"{}\" en dosiero \"{}\" mankas"
+
+#: cmdline_aliases.cpp:498 cmdline_aliases.cpp:592
+#, c++-format
+msgid ""
+"At least one of the attributes \"long_name\" and \"short_name\" must be set "
+"for named argument \"{}\" in file \"{}\""
+msgstr ""
+"Minimume unu el la atributoj \"long_name\" kaj \"short_name\" devas esti "
+"uzata por nomita argumento \"{}\" en dosiero \"{}\""
+
+#: cmdline_aliases.cpp:657
+#, c++-format
+msgid ""
+"Attached command \"{}\" not found: {}: Requested in file \"{}\" on line {}: "
+"{}"
+msgstr ""
+"Alkroĉita komando \"{}\" ne trovita: {}: Petita en dosiero \"{}\" en linio {}"
+": {}"
+
+#: cmdline_aliases.cpp:691
+#, c++-format
+msgid ""
+"Used config file version \"1.0\" for attribute \"{}\" of command \"{}\" in "
+"file \"{}\" on line {}: {}"
+msgstr ""
+"Uzis agordo-dosieron eldonon \"1.0\" por atributo \"{}\" de komando \"{}\" "
+"en dosiero \"{}\" en linio {}: {}"
+
+#: cmdline_aliases.cpp:713
+#, c++-format
+msgid ""
+"Unknown attribute \"{}\" of required value for alias \"{}\" in file \"{}\" "
+"on line {}: {}"
+msgstr ""
+"Nekonata atributo \"{}\" de postulata valoro por alinomo \"{}\" en dosiero \""
+"{}\" en linio {}: {}"
+
+#: cmdline_aliases.cpp:726
+#, c++-format
+msgid ""
+"Missing attribute \"value_help\" of required value for alias \"{}\" in file "
+"\"{}\""
+msgstr ""
+"Atributo \"value_help\" de la postulata valoro por alinomo \"{}\" en dosiero "
+"\"{}\" mankas"
+
+#: cmdline_aliases.cpp:740
+#, c++-format
+msgid ""
+"Unknown attribute \"{}\" of command \"{}\" in file \"{}\" on line {}: {}"
+msgstr ""
+"Nekonata atributo \"{}\" de komando \"{}\" en dosiero \"{}\" en linio {}: {}"
+
+#: cmdline_aliases.cpp:756
+#, c++-format
+msgid ""
+"Missing attribute \"attached_command\" for command \"{}\" in file \"{}\""
+msgstr ""
+"Atributo \"attached_command\" por komando \"{}\" en dosiero \"{}\" mankas"
+
+#: cmdline_aliases.cpp:791
+#, c++-format
+msgid "Bad value type in file \"{}\" on line {}: {}"
+msgstr "Malbona valortipo en dosiero \"{}\" en linio {}: {}"
+
+#: cmdline_aliases.cpp:804
+#, c++-format
+msgid "Syntax error in file \"{}\" on line {}:"
+msgstr "Sintaksa eraro en dosiero \"{}\" en linio {}:"
+
+#: commands/advisory/advisory.cpp:36
+msgid "Manage advisories"
+msgstr "Administri avizojn"
+
+#: commands/advisory/advisory_info.hpp:35
+msgid "Print details about advisories"
+msgstr "Listigi detalojn pri avizoj"
+
+#: commands/advisory/advisory_list.hpp:35
+msgid "List advisories"
+msgstr "Listigi avizojn"
+
+#: commands/advisory/advisory_summary.cpp:44
+msgid "All"
+msgstr "Ĉiuj"
+
+#: commands/advisory/advisory_summary.cpp:48
+msgid "Installed"
+msgstr "Instalitaj"
+
+#: commands/advisory/advisory_summary.cpp:52
+msgid "Updates"
+msgstr "Ĝisdatigoj"
+
+#: commands/advisory/advisory_summary.cpp:65
+msgid "Available"
+msgstr "Disponeblaj"
+
+#: commands/advisory/advisory_summary.hpp:33
+msgid "Print summary of advisories"
+msgstr "Eligi resumon de avizoj"
+
+#: commands/advisory/arguments.hpp:34
+msgid "Show advisories containing any version of installed packages."
+msgstr "Montri avizojn enhavantaj ĉiun ajn eldonon de instalitaj pakoj."
+
+#: commands/advisory/arguments.hpp:45
+msgid ""
+"Show advisories containing newer versions of installed packages. This is the "
+"default behavior."
+msgstr ""
+"Montri avizojn, kiuj enhavas pli novajn eldonojn de instalitaj pakoj. Tio "
+"estas la apriora konduto."
+
+#: commands/advisory/arguments.hpp:57
+msgid ""
+"Show advisories containing equal and older versions of installed packages."
+msgstr ""
+"Montri avizojn enhavantaj eldonojn de instalitaj pakoj, kiuj ne estas pli "
+"novaj."
+
+#: commands/advisory/arguments.hpp:69
+msgid ""
+"Show advisories containing newer versions of installed packages for which a "
+"newer version is available."
+msgstr ""
+"Montri avizojn enhavantaj pli novajn eldonojn de instalitaj pakoj por kiuj "
+"pli nova eldono disponeblas."
+
+#: commands/advisory/arguments.hpp:82
+msgid ""
+"Show only advisories containing packages with specified names. List option, "
+"supports globs."
+msgstr ""
+"Montri nur tiujn avizojn, kiuj enhavas pakojn kun specifitaj nomoj. Lista "
+"opcio, regas ĵokerojn."
+
+#: commands/advisory/arguments.hpp:83 commands/history/arguments.hpp:81
+msgid "PACKAGE_NAME,..."
+msgstr "PAKO_NOMO,..."
+
+#: commands/advisory/arguments.hpp:90
+msgid "List of patterns matched against advisory names."
+msgstr "Listo da ŝablonoj kongruantaj kun avizaj nomoj."
+
+#: commands/advisory/arguments.hpp:100
+msgid "Show only advisories referencing a bugzilla."
+msgstr "Montri tiujn avizojn kun Bugzilla-raporto."
+
+#: commands/advisory/arguments.hpp:107
+msgid "Show only advisories referencing a CVE."
+msgstr "Montri nur avizojn, kiuj mencias CVE-on."
+
+#: commands/advisory_shared.hpp:76
+#, c++-format
+msgid "No advisory found matching the requested name: \"{}\""
+msgstr "Neniu trovebla avizo kongruas kun la petita nomo: \"{}\""
+
+#: commands/advisory_shared.hpp:109
+#, c++-format
+msgid "No advisory found fixing the Bugzilla ID: \"{}\""
+msgstr "Neniu trovebla avizo, kiu riparas la Bugzilla-identigilon: \"{}\""
+
+#: commands/advisory_shared.hpp:128
+#, c++-format
+msgid "No advisory found fixing the CVE ID: \"{}\""
+msgstr "Neniu trovebla avizo, kiu riparas la CVE-identigilon: \"{}\""
+
+#: commands/advisory_shared.hpp:143
+msgid "No advisory found matching the specified filters."
+msgstr "Neniu avizo kongruanta kun la specifitaj filtriloj trovita."
+
+#: commands/advisory_shared.hpp:158
+msgid ""
+"Include content contained in advisories with specified name. List option."
+msgstr "Inkluzivigi enhavon enhavita en avizoj kun specifita nomo. Lista opcio."
+
+#: commands/advisory_shared.hpp:159
+msgid "ADVISORY_NAME,..."
+msgstr "AVIZA_NOMO,..."
+
+#: commands/advisory_shared.hpp:166
+msgid "Include content contained in security advisories."
+msgstr "Inkluzivigi enhavon enhavita en sekurecaj avizoj."
+
+#: commands/advisory_shared.hpp:173
+msgid "Include content contained in bugfix advisories."
+msgstr "Inkluzivgi enhavon enhavita en cimriparaj avizoj."
+
+#: commands/advisory_shared.hpp:180
+msgid "Include content contained in enhancement advisories."
+msgstr "Inkluzivgi enhavon enhavita en plibonigaj avizoj."
+
+#: commands/advisory_shared.hpp:187
+msgid "Include content contained in newpackage advisories."
+msgstr "Inkluzivigi enhavon enhavitan en avizoj pri novaj pakoj."
+
+#: commands/advisory_shared.hpp:198
+msgid ""
+"Include content contained in advisories with specified severity. List "
+"option. Can be \"critical\", \"important\", \"moderate\", \"low\", \"none\"."
+msgstr ""
+"Inkluzivigi enhavon enhavita en avizoj kun specifita severeco. Lista opcio. "
+"Povas esti \"critical\", \"important\", \"moderate\", \"low\", \"none\"."
+
+#: commands/advisory_shared.hpp:200
+msgid "ADVISORY_SEVERITY,..."
+msgstr "AVIZA_SEVERECO,..."
+
+#: commands/advisory_shared.hpp:212
+msgid ""
+"Include content contained in advisories that fix a Bugzilla ID, Eg. 123123. "
+"List option."
+msgstr ""
+"Inkluzivgi enhavon enhavita en avizoj, kiuj riparas Bugzilla-numeron, ekz-e "
+"123123. Lista opcio."
+
+#: commands/advisory_shared.hpp:213
+msgid "BUGZILLA_ID,..."
+msgstr "BUGZILLA_INTENTIGILO,..."
+
+#: commands/advisory_shared.hpp:223
+msgid ""
+"Include content contained in advisories that fix a CVE (Common "
+"Vulnerabilities and Exposures) ID, Eg. CVE-2201-0123. List option."
+msgstr ""
+"Inkluzivigi enhavon enhavita en avizoj, kiuj ripari identigilon de CVE "
+"(Komunaj vundebloj kaj elmetoj). Ekz-e CVE-2201-0123. Lista opcio."
+
+#: commands/advisory_shared.hpp:225
+msgid "CVE_ID,..."
+msgstr "CVE_IDENTIGILO,..."
+
+#: commands/autoremove/autoremove.cpp:38
+msgid "Remove all unneeded packages originally installed as dependencies."
+msgstr "Forigi ĉiujn nebezonatajn pakojn unufoje instalitajn kiel dependaĵojn."
+
+#: commands/check-upgrade/check-upgrade.cpp:47
+msgid "Check for available package upgrades"
+msgstr "Serĉi disponeblajn pakajn promociojn"
+
+#: commands/check-upgrade/check-upgrade.cpp:54
+msgid ""
+"Reports the lowest versions of packages that fix advisories of type bugfix, "
+"enhancement, security, or newpackage. In case that any option limiting "
+"advisories is used it reports the lowest versions of packages that fix "
+"advisories matching selected advisory properties"
+msgstr ""
+"Raportas la plej malaltajn eldonojn de pakojn, kiuj riparas avizojn de tipo "
+"bugfix, enhancement, security, aŭ newpackage. Okaze de tio, ke iu opcio, kiu "
+"limigas avizojn estas uzata, ĝi raportas la plej malaltajn eldonojn de "
+"pakoj, kiuj riparas avizojn kongruantaj kun elektitaj avizaj ecoj"
+
+#: commands/check/check.cpp:247
+msgid "Check for problems in the packagedb"
+msgstr "Kontroli problemojn en la pako-datumbazo"
+
+#: commands/check/check.cpp:335
+#, c++-format
+msgid "Check discovered {} problem(s) in {} package(s)"
+msgstr "Kontrolo malkovris {} problemo(j)n en {} pako(j)"
+
+#: commands/clean/clean.cpp:91
+#, c++-format
+msgid "List of cache types to clean up. Supported types: {0}"
+msgstr "Listo de kaŝmemoro-tipoj purigeblaj. Konataj tipoj: {0}"
+
+#: commands/clean/clean.cpp:109
+#, c++-format
+msgid "Unknown cache type \"{0}\". Supported types: {1}"
+msgstr "Nekonata kaŝmemora tipo \"{0}\". Konataj tipoj: {1}"
+
+#: commands/clean/clean.cpp:166
+#, c++-format
+msgid "Failed to cleanup repository cache in path \"{0}\": {1}"
+msgstr "Malsukcesis purigi deponejan kaŝmemoron en vojo \"{0}\": {1}"
+
+#: commands/clean/clean.cpp:176
+#, c++-format
+msgid "Cache directory \"{}\" does not exist. Nothing to clean."
+msgstr "Kaŝmemora dosierujo \"{}\" ne ekzistas. Nenio purigota."
+
+#: commands/clean/clean.cpp:181
+#, c++-format
+msgid "Cannot iterate cache directory \"{}\": {}"
+msgstr "Ne eblas iteracii kaŝmemoran dosierujon \"{}\": {}"
+
+#: commands/debuginfo-install/debuginfo-install.cpp:45
+msgid "Install debuginfo packages."
+msgstr "Instali senerarigajn pakojn."
+
+#: commands/distro-sync/distro-sync.cpp:44
+msgid ""
+"Upgrade or downgrade installed software to the latest available versions"
+msgstr ""
+"Promocii aŭ malpromocii instalitajn programojn al la plej freŝaj disponeblaj "
+"eldonoj"
+
+#: commands/do/do.cpp:44
+msgid "Do transaction"
+msgstr "Fari transakcion"
+
+#: commands/do/do.cpp:49
+msgid "Action to be done on the following items."
+msgstr "Ago farota al la jenaj eroj."
+
+#: commands/do/do.cpp:63
+#, c++-format
+msgid "Unsupported action \"{}\""
+msgstr "Nekonata ago \"{}\""
+
+#: commands/do/do.cpp:73
+msgid "Type of the following items."
+msgstr "Tipo de la jenaj eroj."
+
+#: commands/do/do.cpp:86
+#, c++-format
+msgid "Unsupported item type \"{}\""
+msgstr "Nekonata ero-tipo \"{}\""
+
+#: commands/do/do.cpp:99
+msgid "List of items to take action on"
+msgstr "Listo da eroj sur kiujn agi"
+
+#: commands/do/do.cpp:131 commands/do/do.cpp:135
+msgid "Only package downgrade is supported."
+msgstr "Nur malpromocio de pako eblas."
+
+#: commands/do/do.cpp:142 commands/do/do.cpp:146
+msgid "Only package reinstall is supported."
+msgstr "Nur reinstalo de pako eblas."
+
+#: commands/do/do.cpp:152
+msgid "Action was not defined"
+msgstr "Ago ne estas difinita"
+
+#: commands/do/do.cpp:230
+#, c++-format
+msgid "Invalid Environmet/Group specification: {}"
+msgstr "Nevalida media/grupa specifo: {}"
+
+#: commands/do/do.cpp:314
+msgid "Downgrading environments and groups is not supported."
+msgstr "Malpromocio de medioj kaj grupoj ne eblas."
+
+#: commands/do/do.cpp:330
+msgid "Reinstaling environments and groups is not supported."
+msgstr "Reinstalo de medioj kaj grupoj ne eblas."
+
+#: commands/downgrade/downgrade.cpp:42
+msgid "Downgrade software"
+msgstr "Malpromocii programon"
+
+#: commands/download/download.cpp:106
+msgid "When running with --url, prints URLs from all available mirrors"
+msgstr "Kiam plenumigas kun --url, eligas URL-oj de ĉiuj disponeblaj speguloj"
+
+#: commands/download/download.cpp:122
+#, c++-format
+msgid "Invalid urlprotocol option: {}"
+msgstr "Nevalida opcio de urlprotocol: {}"
+
+#: commands/download/download.cpp:149 main.cpp:627
+#, c++-format
+msgid "Unsupported architecture \"{0}\". Please choose one from {1}"
+msgstr "Neregata arĥitekturo \"{0}\". Bonvolu elekti ian el {1}"
+
+#. TODO(jrohel): Add support for requiring an argument by another argument in ArgumentParser?
+#: commands/download/download.cpp:186
+msgid "Option \"--alldeps\" should be used with \"--resolve\""
+msgstr "Konsilindas uzi la opcion \"--alldeps\" kun \"--resolve\""
+
+#: commands/download/download.cpp:226
+#, c++-format
+msgid ""
+"No package \"{}\" available; You might want to use --skip-unavailable option."
+msgstr ""
+"Neniu pako \"{}\" disponeblas. Eble vi volas uzi la opcion --skip-"
+"unavailable."
+
+#: commands/environment/arguments.hpp:33
+msgid "Show only available environments."
+msgstr "Montri nur disponeblajn mediojn."
+
+#: commands/environment/arguments.hpp:40
+msgid "Show only installed environments."
+msgstr "Montri nur instalitajn mediojn."
+
+#: commands/environment/arguments.hpp:47
+msgid "Pattern matching environment IDs."
+msgstr "Ŝablona kongruado de mediaj identigiloj."
+
+#: commands/environment/environment.cpp:35
+msgid "Manage comps environments"
+msgstr "Administri comps-mediojn"
+
+#: commands/from_repo.cpp:35
+msgid ""
+"The following items can be selected only from the specified repositories. "
+"All enabled repositories will still be used to satisfy dependencies."
+msgstr ""
+"La jenaj eroj estas elekteblaj nur el la specifitaj deponejoj. Ĉiuj ŝaltitaj "
+"deponejoj ja uziĝos por plenumi dependaĵojn."
+
+#: commands/from_repo.cpp:38 commands/from_repo.cpp:70
+msgid "REPO_ID,..."
+msgstr "DEPONEJO_ID,..."
+
+#: commands/from_repo.cpp:53
+msgid "\"--from_repo\" already defined with diferent value"
+msgstr "\"--from-repo\" jam estas difinita kun alia valoro"
+
+#: commands/from_repo.cpp:68
+msgid ""
+"Filters installed packages by the ID of the repository they were installed "
+"from."
+msgstr ""
+"Filtriloj instalis pakojn laŭ la identigilo de la deponejo el kiu ili "
+"instaliĝis."
+
+#: commands/from_repo.cpp:79
+msgid "\"--installed-from_repo\" already defined with diferent value"
+msgstr "\"--installed-from_repo\" jam estas difinita kun alia valoro"
+
+#: commands/group/arguments.hpp:34
+msgid "Show only available groups."
+msgstr "Montri nur disponeblajn grupojn."
+
+#: commands/group/arguments.hpp:41
+msgid "Show also hidden groups."
+msgstr "Ankaŭ montri kaŝitajn grupojn."
+
+#: commands/group/arguments.hpp:48
+msgid "Show only installed groups."
+msgstr "Montri nur instalitajn grupojn."
+
+#: commands/group/arguments.hpp:59
+msgid ""
+"Show only groups containing packages with specified names. List option, "
+"supports globs."
+msgstr ""
+"Montri nur grupojn enhavantaj pakojn kun specifaj nomoj. Lista opcio, regas "
+"ĵokerojn."
+
+#: commands/group/arguments.hpp:67
+msgid "Pattern matching group IDS."
+msgstr "Ŝablono kongruanta kun grupaj identigiloj."
+
+#: commands/group/arguments.hpp:76
+msgid "Include optional packages from group."
+msgstr "Inkluzivigi libervolajn pakojn el grupo."
+
+#: commands/group/arguments.hpp:83
+msgid "Operate on groups only, no packages are changed."
+msgstr "Funkcii en nur grupoj, neniuj pakoj estas ŝanĝotaj."
+
+#: commands/history/arguments.hpp:37
+msgid "Transaction ID"
+msgstr "Transakcia identigilo"
+
+#: commands/history/arguments.hpp:44
+msgid "Reverse the order of transactions."
+msgstr "Inversigi la ordon de transakcioj."
+
+#: commands/history/arguments.hpp:54
+msgid ""
+"Don't consider mismatches between installed and stored transaction packages "
+"as errors. This can result in an empty transaction because among other "
+"things the option can ignore failing Remove actions."
+msgstr ""
+"Ne konsideri miskongruojn inter instalitaj kaj konservitaj transakciaj pakoj "
+"kiel eraraj. Tio povas kaŭzi malplenan transakcion ĉar interalie la opcio "
+"povas ignori malsukcesajn forigo-agojn."
+
+#: commands/history/arguments.hpp:67
+msgid "Don't consider extra packages pulled into the transaction as errors."
+msgstr "Ne konsideru ekstrajn pakojn tiritajn en la transakcion kiel eraraj."
+
+#: commands/history/arguments.hpp:80
+msgid ""
+"Show only transactions containing packages with specified names. List "
+"option, supports globs."
+msgstr ""
+"Montri nur transakciojn enhavintajn pakojn kun specifitaj nomoj. Lista "
+"opcioj, ĵokeroj eblas."
+
+#: commands/history/history.cpp:41
+msgid "Manage transaction history"
+msgstr "Administri transakcian historion"
+
+#: commands/history/history_info.cpp:70
+msgid ""
+"No match found, history info defaults to considering only the last "
+"transaction, specify \"1..last\" range to search all transactions."
+msgstr ""
+"Neniu kongruo trovita, apriore historiaj informoj konsideras nur la lastan "
+"transakcion. \"1..last\" estas uzata por serĉi ĉiujn transakciojn."
+
+#: commands/history/history_redo.cpp:54
+#: commands/history/history_rollback.cpp:58
+#: commands/history/history_store.cpp:65 commands/history/history_undo.cpp:57
+msgid "No matching transaction ID found, exactly one required."
+msgstr "Neniu kongruanta transakcia identigilo troveblas, ĝuste nur postulata."
+
+#: commands/history/history_redo.cpp:58
+#: commands/history/history_rollback.cpp:62
+#: commands/history/history_undo.cpp:61
+msgid "Matched more than one transaction ID, exactly one required."
+msgstr "Kongruas kun pli ol unu transakcia identigilo, ĝuste unu postulata."
+
+#: commands/history/history_store.cpp:68
+msgid "Multiple transactions selected for storing, only one allowed."
+msgstr "Pluraj transakcioj elektitaj por konservo, nur unu permesita."
+
+#: commands/history/history_store.cpp:80
+#, c++-format
+msgid "File \"{}\" already exists, it will be overwritten.\n"
+msgstr "Dosiero \"{}\" jam ekzistas, ĝi anstataŭiĝos.\n"
+
+#: commands/history/transaction_id.cpp:32
+#, c++-format
+msgid ""
+"Invalid transaction ID range \"{}\", \"ID\" or \"ID..ID\" expected, where ID "
+"is \"NUMBER\", \"last\" or \"last-NUMBER\"."
+msgstr ""
+"Nevalida transakcia identigila amplekso \"{}\". \"ID\" aŭ \"ID..ID\" "
+"atendata. ID estas \"NOMBRO\", \"last\" aŭ \"last-NOMBRO\"."
+
+#: commands/install/install.cpp:43
+msgid "Install software"
+msgstr "Instali programon"
+
+#: commands/leaves/leaves.cpp:42
+msgid ""
+"List groups of installed packages not required by other installed packages"
+msgstr ""
+"Listigi grupojn de instalitaj pakoj ne postulataj de aliaj instalitaj pakoj"
+
+#: commands/list/list.cpp:46
+msgid "Lists packages depending on the packages' relation to the system"
+msgstr "Listigas pakojn, kiuj dependas de la rilato de la pakoj al la sistemo"
+
+#: commands/list/list.cpp:50
+msgid "List of package-spec-NI to match (case insensitively)"
+msgstr "Listo de kongruoj kun pako-spec-NI (ne ignoras usklecon)"
+
+#: commands/list/list.cpp:62
+msgid "Show all versions of the packages, not only the latest ones."
+msgstr "Montri ĉiujn eldonoj de la pakoj, ne nur la plej freŝaj."
+
+#: commands/list/list.cpp:70
+msgid "List installed packages."
+msgstr "Listigi instalitajn pakojn."
+
+#: commands/list/list.cpp:74
+msgid "List available packages."
+msgstr "Listigi disponeblaj pakojn"
+
+#: commands/list/list.cpp:81
+msgid ""
+"List extras, that is packages installed on the system that are not available "
+"in any known repository."
+msgstr ""
+"Listigas ekstrojn, alivorte pakoj instalitaj en la sistemo sed ne "
+"disponeblaj en iu konata deponejo."
+
+#: commands/list/list.cpp:89
+msgid ""
+"List packages installed on the system that are obsoleted by packages in any "
+"known repository."
+msgstr ""
+"Listigas pakojn instalitaj en la sistemo sed anstataŭigotaj per pakoj en iu "
+"konta deponejo."
+
+#: commands/list/list.cpp:94
+msgid "List packages recently added into the repositories."
+msgstr "Listoj de pakoj ĵuse aldonitaj al la deponejoj."
+
+#: commands/list/list.cpp:98
+msgid "List upgrades available for the installed packages."
+msgstr "Listigi promociojn disponeblajn por la instalitaj pakoj."
+
+#: commands/list/list.cpp:102
+msgid "List packages which will be removed by the 'dnf autoremove' command."
+msgstr "Listigi pakojn, kiuj estos forigitaj per la komando 'dnf autoremove'."
+
+#: commands/list/list.cpp:203 commands/list/list.cpp:208
+msgid "Installed packages"
+msgstr "Instalitaj pakoj"
+
+#: commands/list/list.cpp:204 commands/list/list.cpp:217
+msgid "Available packages"
+msgstr "Disponeblaj pakoj"
+
+#: commands/list/list.cpp:225
+msgid "Available upgrades"
+msgstr "Disponeblaj promocioj"
+
+#: commands/list/list.cpp:241
+msgid "Obsoleting packages"
+msgstr "Anstataŭiĝontaj pakoj"
+
+#: commands/list/list.cpp:246
+msgid "Autoremove packages"
+msgstr "Aŭtomate forigotaj pakoj"
+
+#: commands/list/list.cpp:250
+msgid "Extra packages"
+msgstr "Ekstraj pakoj"
+
+#: commands/list/list.cpp:261
+msgid "Recently added packages"
+msgstr "Ĵuse aldonitaj pakoj"
+
+#: commands/list/list.cpp:266
+msgid "No matching packages to list"
+msgstr "Neniuj kongruantoj pakoj listigeblas"
+
+#: commands/mark/mark.cpp:38
+msgid "Change the reason of an installed package"
+msgstr "Ŝanĝi la kialon de instalita pako"
+
+#: commands/module/arguments.hpp:36
+msgid "Show enabled modules."
+msgstr "Montri ŝaltitajn modulojn."
+
+#: commands/module/arguments.hpp:43
+msgid "Show disabled modules."
+msgstr "Montri malŝaltitajn modulojn."
+
+#: commands/module/arguments.hpp:50
+msgid "Pattern matching module NSVCAs."
+msgstr "Modulo por sablona kongruado konraŭ NSVCA-oj."
+
+#: commands/module/module.cpp:43
+msgid "Manage modules"
+msgstr "Administri modulojn"
+
+#: commands/module/module_list.cpp:85
+#, c++-format
+msgid "No matches found for \"{}\"."
+msgstr "Neniuj troveblaj kongruoj por \"{}\"."
+
+#: commands/offline/offline.cpp:217
+msgid "Manage offline transactions"
+msgstr "Administri eksterretajn transakciojn"
+
+#: commands/offline/offline.cpp:249
+#, c++-format
+msgid ""
+"Error reading state: {}. Rerun the command you used to initiate the offline "
+"transaction, e.g. `dnf5 system-upgrade download [OPTIONS]`."
+msgstr ""
+"Eraro dum lego de stato: {}. Replenumigi la komandon, kiun vi uzis por "
+"iniciati la eksterretan transakcion, ekz-e `dnf system-upgrade download "
+"[OPCIOJN]`."
+
+#: commands/offline/offline.cpp:272
+#, c++-format
+msgid "Couldn't connect to D-Bus: {}"
+msgstr "Ne eblas konektiĝi al D-Bus: {}"
+
+#: commands/offline/offline.cpp:303
+msgid ""
+"Prepare the system to perform the offline transaction and reboot to start "
+"the transaction."
+msgstr ""
+"Pretigi la sistemon por plenumi la eksterretan transakcion kaj restarti por "
+"startigi la transakcion."
+
+#: commands/offline/offline.cpp:310
+msgid "Power off the system after the operation is complete"
+msgstr "Malŝalti la sistemon post kompletiĝo de la operacio"
+
+#: commands/offline/offline.cpp:321
+msgid "No offline transaction is stored."
+msgstr "Neniu eksterreta transakcio estas konservita."
+
+#: commands/offline/offline.cpp:329
+msgid "System is not ready for offline transaction."
+msgstr "Sistemo ne pretas por eksterreta transakcio."
+
+#: commands/offline/offline.cpp:332
+#, c++-format
+msgid "Data directory {} does not exist."
+msgstr "Datuma dosierujo {} ne ekzistas."
+
+#: commands/offline/offline.cpp:357
+#, c++-format
+msgid "{} is not wanted by system-update.target."
+msgstr "{} ne volata de system-update.target."
+
+#: commands/offline/offline.cpp:367
+#, c++-format
+msgid "The system will now reboot to upgrade to release version {}."
+msgstr "La sistemo nun restartos por promocii al eldono {}."
+
+#: commands/offline/offline.cpp:371
+msgid ""
+"The system will now reboot to perform the offline transaction initiated by "
+"the following command:"
+msgstr ""
+"La sistemo nun restartos por plenumi la eksterretan transakcion iniciatita "
+"de la jena komando:"
+
+#: commands/offline/offline.cpp:402
+msgid ""
+"Internal use only, not intended to be run by the user. Execute the "
+"transaction in the offline environment."
+msgstr ""
+"Nur por interna uzo, ne plenumigota de la uzulo. Plenumigi la transakcion en "
+"la eksterreta medio."
+
+#: commands/offline/offline.cpp:436
+msgid "Trigger file does not exist. Exiting."
+msgstr "Ekagiga dosiero ne ekzistas. Finas."
+
+#: commands/offline/offline.cpp:440
+msgid "Another offline transaction tool is running. Exiting."
+msgstr "Alia ilo por eksterreta transakcio plenumiĝas. Finas."
+
+#: commands/offline/offline.cpp:467
+msgid "Starting offline transaction. This will take a while."
+msgstr "Startigas eksterretan transakcion. Tio eble longe daŭros."
+
+#: commands/offline/offline.cpp:471
+msgid "Starting system upgrade. This will take a while."
+msgstr "Komencas sisteman promocion. Tio longe daŭros."
+
+#: commands/offline/offline.cpp:483
+msgid "Use `dnf5 offline reboot` to begin the transaction."
+msgstr "Komenci la transakcion per `dnf5 offline reboot`."
+
+#: commands/offline/offline.cpp:534
+msgid "Transaction failed: "
+msgstr "Transakcio malsukcesis: "
+
+#: commands/offline/offline.cpp:604
+#, c++-format
+msgid "Error reading journal: {}"
+msgstr "Ne eblas legi protokolon: {}"
+
+#: commands/offline/offline.cpp:610
+#, c++-format
+msgid "Add journal match failed: {}"
+msgstr "Aldono de protokola kongruo malsukcesis: {}"
+
+#: commands/offline/offline.cpp:638
+msgid "No logs were found."
+msgstr "Neniuj protokoloj troviĝis."
+
+#: commands/offline/offline.cpp:642
+msgid "The following boots appear to contain offline transaction logs:"
+msgstr "La jenaj ŝargoj ŝajne enhavas eksterretajn transakciajn protokolojn:"
+
+#: commands/offline/offline.cpp:659
+msgid "Cannot find logs with this index."
+msgstr "Ne eblas trovi protokolojn kun tiu indico."
+
+#: commands/offline/offline.cpp:666
+msgid "Unable to match systemd journal entry."
+msgstr "Ne eblas trovi egalan eron de systemd-registro."
+
+#: commands/offline/offline.cpp:678
+msgid "Show logs from past offline transactions"
+msgstr "Montri protokolojn de pasintaj eksterretaj transakcioj"
+
+#: commands/offline/offline.cpp:686
+msgid ""
+"Which log to show. Run without any arguments to get a list of available logs."
+msgstr "Ku protokolo montrota. Sen argumentoj listigas montreblajn protokolojn."
+
+#: commands/offline/offline.cpp:701
+msgid ""
+"systemd is not supported in this build of DNF 5; the `log` subcommand is "
+"unavailable."
+msgstr ""
+"systemd ne disponeblas en ĉi tiu munto de dNF5; la subkomando `log` estas "
+"nedisponebla."
+
+#: commands/offline/offline.cpp:706
+msgid "Show status of the current offline transaction"
+msgstr "Montri staton de nuna eksterreta transakcio"
+
+#: commands/offline/offline.cpp:722
+msgid "An offline transaction was initiated by the following command:"
+msgstr "Eksterreta transakcio estis iniciatata per la jena komando:"
+
+#: commands/offline/offline.cpp:724
+msgid ""
+"Run `dnf5 offline reboot` to reboot and perform the offline transaction."
+msgstr ""
+"Plenumigu la komandon `dnf5 offline reboot` por restartigi kaj fori la "
+"eksterretan transakcion."
+
+#: commands/offline/offline.cpp:726
+msgid ""
+"An offline transaction was started, but it did not finish. Run `dnf5 offline "
+"log` for more information. The command that initiated the transaction was:"
+msgstr ""
+"Eksterreta transakcio komenciĝis sed ne finiĝis. Uzu la komandon `dnf "
+"offline log` por pliaj informoj. La komando, kiu iniciatis la transakcion "
+"estis:"
+
+#: commands/offline/offline.cpp:731
+msgid "Unknown offline transaction status: "
+msgstr "Nekonata stato de eksterreta transakcio: "
+
+#: commands/provides/provides.cpp:48
+msgid "Find what package provides the given value"
+msgstr "Trovi tion, kiu pako provizas la donitan valoron"
+
+#: commands/reinstall/reinstall.cpp:42
+msgid "Reinstall software"
+msgstr "Reinstali pakon"
+
+#: commands/remove/remove.cpp:42
+msgid "Remove (uninstall) software"
+msgstr "Forigi (malinstali) pakon"
+
+#: commands/replay/replay.cpp:38
+msgid "Replay a transaction that was previously stored to a directory"
+msgstr "Refari transakcion, kiu antaŭe estis konservita en dosierujo"
+
+#: commands/repo/arguments.hpp:35
+msgid "Show all repositories."
+msgstr "Montri ĉiujn deponejojn."
+
+#: commands/repo/arguments.hpp:42
+msgid "Show enabled repositories (default)."
+msgstr "Montri ŝaltitajn deponejojn (apriore)."
+
+#: commands/repo/arguments.hpp:49
+msgid "Show disabled repositories."
+msgstr "Montri malŝaltitajn deponejojn."
+
+#: commands/repo/arguments.hpp:56
+msgid "Pattern matching repo IDs."
+msgstr "Ŝablona kongruado de deponejaj identigiloj."
+
+#: commands/repo/repo.cpp:38
+msgid "Manage repositories"
+msgstr "Administri deponejojn"
+
+#: commands/repoquery/repoquery.cpp:82
+msgid "Search for packages matching various criteria"
+msgstr "Serĉi pakojn, kiuj kongruas kun diversaj kriterioj"
+
+#: commands/repoquery/repoquery.cpp:525
+msgid ""
+"Option \"--exactdeps\" has to be used either with \"--whatrequires\" or \"--"
+"whatdepends\""
+msgstr ""
+"Opcio \"--exactdeps\" devas esti uzata kun aŭ \"--whatrequires\" aŭ \"--"
+"whatdepends\""
+
+#: commands/repoquery/repoquery.cpp:530
+msgid ""
+"Option \"--recursive\" has to be used either with \"--whatrequires\" or \"--"
+"providers-of=requires\""
+msgstr ""
+"Opcio \"--requires\" devas esti uzata kun aŭ \"--whatrequires\" aŭ \"--"
+"providers-of/requires\""
+
+#: commands/search/arguments.hpp:37
+msgid "Search also package description and URL."
+msgstr "Serĉi ankaŭ pakan priskribon kaj URL-on."
+
+#: commands/search/arguments.hpp:45
+msgid "Patterns"
+msgstr "Ŝablonoj"
+
+#: commands/search/search.cpp:44
+msgid "Search for software matching all specified strings"
+msgstr "Serĉi programojn kongruantaj kun ĉiuj specifitaj ĉenoj"
+
+#: commands/swap/swap.cpp:44
+msgid "Remove software and install another in one transaction"
+msgstr "Forigi pakon kaj instali alian per unu transakcio"
+
+#: commands/system-upgrade/system-upgrade.cpp:56
+msgid "Prepare system for upgrade to a new release"
+msgstr "Pretigi sistemon por promocio al nova eldono"
+
+#: commands/system-upgrade/system-upgrade.cpp:72
+msgid "Download everything needed to upgrade to a new release"
+msgstr "Malŝalti ĉion, kio estas postulata por promocii al nova eldono"
+
+#: commands/system-upgrade/system-upgrade.cpp:80
+msgid ""
+"Do not install packages from the new release if they are older than what is "
+"currently installed"
+msgstr ""
+"Ne instali pakojn el la nova eldono se ili estas pli malnovaj ol la nune "
+"instalitaj"
+
+#: commands/system-upgrade/system-upgrade.cpp:101
+msgid "Need a --releasever greater than the current system version."
+msgstr ""
+"Bezonas argumenton --releasever pli grandan ol la eldonon de la nuna sistemo."
+
+#: commands/system-upgrade/system-upgrade.cpp:150
+msgid "Store a distro-sync transaction to be performed offline"
+msgstr "Konservi transakcion de distro-sync por esti eksterrete plenumota"
+
+#: commands/system-upgrade/system-upgrade.cpp:172
+msgid "Store an upgrade transaction to be performed offline"
+msgstr "Konservi promocian transakcion por esti eksterreta plenumota"
+
+#: commands/upgrade/upgrade.cpp:43
+msgid "Upgrade software"
+msgstr "Promocii pakon"
+
+#: commands/upgrade/upgrade.cpp:50
+msgid ""
+"Upgrade packages only to the lowest versions that fix advisories of type "
+"bugfix, enhancement, security, or newpackage. In case that any option "
+"limiting advisories is used it upgrades packages only to the lowest versions "
+"that fix advisories that matching selected advisory property"
+msgstr ""
+"Promocii pakojn nur al la plej malgrandaj eldonoj, kiuj riparas avizojn de "
+"tipo bugfix, enhancement, security aŭ newpackage. Okaze de iu opcio, kiu "
+"limigas avizojn, estas uzata, ĝi promocias pakojn nur al la plej malgrandaj "
+"eldonoj, kiuj riparas avizojn, kiuj kongruas kun elektita aviza eco"
+
+#. TODO(mblaha): add full command line
+#: commands/versionlock/utils.cpp:35
+#, c++-format
+msgid "Added by 'versionlock {}' command on {}"
+msgstr "Aldonita de komando 'versionlock {}' de {}"
+
+#: commands/versionlock/versionlock.cpp:40
+msgid "Manage versionlock configuration"
+msgstr "Administri eldonoŝloso-agordon"
+
+#: commands/versionlock/versionlock_add.cpp:37
+msgid "Add new entry to versionlock configuration"
+msgstr "Aldoni novan eron al eldonoŝloso-agordo"
+
+#: commands/versionlock/versionlock_add.cpp:44
+msgid "List of package package-spec-N to add versionlock for"
+msgstr "Listo de pakoj (pako-specifo-N) al kiuj aldoni eldonoŝloson"
+
+#: commands/versionlock/versionlock_add.cpp:107
+#: commands/versionlock/versionlock_exclude.cpp:126
+#, c++-format
+msgid "No package found for \"{}\"."
+msgstr "Neniu pako trovita por \"{}\"."
+
+#: commands/versionlock/versionlock_add.cpp:134
+#, c++-format
+msgid "Adding versionlock on \"{0} = {1}\"."
+msgstr "Aldonas eldonoŝloso en \"{0} = {1}\"."
+
+#: commands/versionlock/versionlock_add.cpp:137
+#, c++-format
+msgid "Package \"{}\" is already locked."
+msgstr "Pako \"{}\" jam estas ŝlosita."
+
+#: commands/versionlock/versionlock_clear.cpp:32
+msgid "Remove all entries from versionlock configuration"
+msgstr "Forigi ĉiujn erojn de la eldonoŝloso-agordo"
+
+#: commands/versionlock/versionlock_delete.cpp:35
+msgid "Remove any matching versionlock configuration entries"
+msgstr "Forigi ĉiujn kongruantajn erojn de eldonoŝloso-agordo"
+
+#: commands/versionlock/versionlock_delete.cpp:41
+msgid "List of package specs to remove versionlock for"
+msgstr "Listo de pako-specifoj por kiuj forigi eldonoŝlosojn"
+
+#: commands/versionlock/versionlock_delete.cpp:55
+msgid "Deleting versionlock entry:"
+msgstr "Forigi eldonoŝlosan eron:"
+
+#: commands/versionlock/versionlock_exclude.cpp:37
+msgid "Add new exclude entry to versionlock configuration"
+msgstr "Aldonis novan ekskluzivigan eron al eldonoŝloso-agordo"
+
+#: commands/versionlock/versionlock_exclude.cpp:44
+msgid "List of package-spec-N to add versionlock exclude for"
+msgstr "Listo de pako-specifoj al kiuj aldoni eldonoŝlosan ekskluzivigo"
+
+#: commands/versionlock/versionlock_exclude.cpp:89
+#: commands/versionlock/versionlock_exclude.cpp:101
+#, c++-format
+msgid "Adding versionlock exclude on \"{0} = {1}\"."
+msgstr "Aldonas eldonoŝlosan ekskluzivigon al \"{0} = {1}\"."
+
+#: commands/versionlock/versionlock_exclude.cpp:140
+#, c++-format
+msgid "Package \"{}\" is already excluded."
+msgstr "Pako \"{}\" jam estas ekskluzivigita."
+
+#: context.cpp:73
+#, c++-format
+msgid "Importing OpenPGP key 0x{}:\n"
+msgstr "Importas OpenPGP-ŝlosilon 0x{}:\n"
+
+#: context.cpp:75 context.cpp:100
+#, c++-format
+msgid " UserID     : \"{}\"\n"
+msgstr " UzulID     : \"{}\"\n"
+
+#: context.cpp:78
+#, c++-format
+msgid ""
+" Fingerprint: {}\n"
+" From       : {}\n"
+msgstr ""
+" Fingropremaĵo: {}\n"
+" El           : {}\n"
+
+#: context.cpp:87
+msgid "The key was successfully imported."
+msgstr "La ŝlosilo estis sukcese importita."
+
+#: context.cpp:96
+#, c++-format
+msgid "The following OpenPGP key (0x{}) is about to be removed:"
+msgstr "La jena OpenPGP-ŝlosilo (0x{}) estas forigota:"
+
+#: context.cpp:98
+#, c++-format
+msgid " Reason     : {}\n"
+msgstr " Kialo      : {}\n"
+
+#: context.cpp:102
+#, c++-format
+msgid " Fingerprint: {}\n"
+msgstr " Fingropremĵo: {}\n"
+
+#: context.cpp:104
+msgid "As a result, installing packages signed with this key will fail."
+msgstr "Pro tio instalo de pakoj subskribitaj per tiu ŝlosilo malsukcesos."
+
+#: context.cpp:105
+msgid "It is recommended to remove the expired key to allow importing"
+msgstr ""
+"Rekomendinde estas forigi la eksvalidiĝinta ŝlosilo por permesi importadon"
+
+#: context.cpp:106
+msgid ""
+"an updated key. This might leave already installed packages unverifiable."
+msgstr ""
+"ĝisdatigita ŝlosilo. Tio eble restigos jam instalitajn pakojn nekontroleblaj."
+
+#: context.cpp:109
+msgid "The system will now proceed with removing the key."
+msgstr "La sistemo nun forigos la ŝlosilon."
+
+#: context.cpp:115
+#, c++-format
+msgid "Key 0x{} was successfully removed."
+msgstr "Ŝlosilo 0x{} sukcese estis forigita."
+
+#: context.cpp:295
+#, c++-format
+msgid "setopt: \"{}.{}\": {}"
+msgstr "setopt: \"{}.{}\": {}"
+
+#: context.cpp:305
+#, c++-format
+msgid ""
+"No matching repositories for {}. To use repositories from a host system, "
+"pass --use-host-config option"
+msgstr ""
+"Neniuj kongruantaj deponejoj por {}. Por uzi deponejen el fora sistemo, donu "
+"la opcion --use-host-config"
+
+#: context.cpp:309
+#, c++-format
+msgid "No matching repositories for {}"
+msgstr "Neniuj kongruantaj deponejoj por {}"
+
+#: context.cpp:355
+msgid "Updating and loading repositories:"
+msgstr "Ĝisdatigas kaj ŝargas deponejojn:"
+
+#: context.cpp:365
+msgid "Repositories loaded."
+msgstr "Deponejoj ŝargitaj."
+
+#: context.cpp:371
+msgid "Testing offline transaction"
+msgstr "Testas eksterretan transakcion"
+
+#: context.cpp:375 context.cpp:523
+#, c++-format
+msgid "Transaction failed: {}"
+msgstr "Transakcio malsukcesis: {}"
+
+#: context.cpp:380 context.cpp:528
+#, c++-format
+msgid "  - {}"
+msgstr "  - {}"
+
+#: context.cpp:447
+#, c++-format
+msgid ""
+"Location \"{}\" already contains a stored transaction, it will be "
+"overwritten."
+msgstr ""
+"Loko \"{}\" jam enhavas konservitan transakcion. Ĝi estos anstataŭigita."
+
+#: context.cpp:476
+msgid ""
+"There is already an offline transaction queued, initiated by the following "
+"command:"
+msgstr ""
+"Jam estas atendanta eksterreta transakcio, iniciatita de la jena komando:"
+
+#: context.cpp:478
+msgid ""
+"Continuing will cancel the old offline transaction and replace it with this "
+"one."
+msgstr ""
+"Daŭrigo nuligos la eksan eksterretan transakcion kaj anstataŭigi ĝin per ĉi "
+"tio."
+
+#: context.cpp:496
+msgid ""
+"Transaction stored to be performed offline. Run `dnf5 offline reboot` to "
+"reboot and run the transaction. To cancel the transaction and delete the "
+"downloaded files, use `dnf5 offline clean`."
+msgstr ""
+"Transakcio konservita eksterrete plenumota. Uzu la komandon 'dnf "
+"offlinereboot` por plenumigi la transakcion. Por nuligi la transakcion kaj "
+"forigi la elŝutitajn dosierojn, uzu la komandon `dnf offline clean`."
+
+#: context.cpp:502
+msgid "Running transaction"
+msgstr "Plenumas transakcion"
+
+#: context.cpp:820
+#, c++-format
+msgid "Upgrading {}"
+msgstr "Promocio de {}"
+
+#: context.cpp:823
+#, c++-format
+msgid "Downgrading {}"
+msgstr "Malpromocio de {}"
+
+#: context.cpp:826
+#, c++-format
+msgid "Reinstalling {}"
+msgstr "Reinstalo de {}"
+
+#: context.cpp:839
+#, c++-format
+msgid "Unexpected action in TransactionPackage: {}"
+msgstr "Neatendita ago en TransactionPackage: {}"
+
+#: context.cpp:845
+#, c++-format
+msgid "Installing {}"
+msgstr "Instalo de {}"
+
+#: context.cpp:866
+msgid "Prepare transaction"
+msgstr "Pretigi transakcion"
+
+#: context.cpp:886
+#, c++-format
+msgid "Removing {}"
+msgstr "Forigo de {}"
+
+#: context.cpp:889
+#, c++-format
+msgid "Cleanup {}"
+msgstr "Purigo de {}"
+
+#: context.cpp:907
+#, c++-format
+msgid "Unpack error: {}"
+msgstr "Eraro dum maldensigo: {}"
+
+#: context.cpp:915
+#, c++-format
+msgid "Cpio error: {}"
+msgstr "Cpio-eraro: {}"
+
+#: context.cpp:925
+msgid "Scriptlet output:"
+msgstr "Skripteta eligo:"
+
+#: context.cpp:948
+msgid "Running scriptlets"
+msgstr "Plenumas skriptetojn"
+
+#: context.cpp:953
+#, c++-format
+msgid "Running {} scriptlet: {}"
+msgstr "Plenumas skripteton {}: {}"
+
+#: context.cpp:968
+#, c++-format
+msgid "Finished {} scriptlet: {}"
+msgstr "Finis skripteto {}: {}"
+
+#: context.cpp:974
+#, c++-format
+msgid "Non-critical error in {} scriptlet: {}"
+msgstr "Negrava eraro en skripteto {}: {}"
+
+#: context.cpp:983
+#, c++-format
+msgid "Error in {} scriptlet: {}"
+msgstr "Eraro en skripteto {}: {}"
+
+#: context.cpp:1018
+msgid "Verify package files"
+msgstr "Kontrolas pako-dosierojn"
+
+#: library.cpp:33
+#, c++-format
+msgid "Cannot load shared library \"{}\": {}"
+msgstr "Ne eblas ŝargi dinamikan bibliotekon \"{}\": {}"
+
+#: library.cpp:47
+#, c++-format
+msgid "Cannot obtain address of symbol \"{}\": {}"
+msgstr "Ne eblas atingi adreson de simbolo \"{}\": {}"
+
+#: main.cpp:133
+msgid "Utility for packages maintaining"
+msgstr "Ilo por prizorgi pakojn"
+
+#: main.cpp:134
+msgid "DNF5 is a program for maintaining packages."
+msgstr "DNF5 estas programo por prizorgi pakojn."
+
+#: main.cpp:135
+msgid "Unclassified options:"
+msgstr "Neklasifikitaj opcioj:"
+
+#: main.cpp:138
+msgid "Global options:"
+msgstr "Ĝeneralaj opcioj:"
+
+#: main.cpp:143
+msgid "Print help"
+msgstr "Eligi helpon"
+
+#: main.cpp:150
+msgid "Configuration file location"
+msgstr "Loko de agordo-dosiero"
+
+#: main.cpp:158
+msgid ""
+"In combination with a non-interactive command, shows just the relevant "
+"content. Suppresses messages notifying about the current state or actions of "
+"dnf5."
+msgstr ""
+"Kombinita kun neinteraga komando montras nur la koncernantan enhavon. "
+"Silentigas mesaĝojn, kiuj sciigas pri la nuna stato aŭ agoj de dnf5."
+
+#: main.cpp:173
+msgid ""
+"Run entirely from system cache, don't update the cache and use it even in "
+"case it is expired."
+msgstr ""
+"Plenumigi tute el la sistema kaŝmemoro. Ne promocii la kaŝmemoron kaj uzi "
+"ĝin eĉ okaze de ĝia eksvalidiĝo."
+
+#: main.cpp:182
+msgid "Control whether color is used."
+msgstr "Regi, ĉu koloroj estas uzataj."
+
+#: main.cpp:188
+msgid "Force refreshing metadata before running the command."
+msgstr "Eldevigi refreŝigi metadatumojn antaŭ plenumo de la komando."
+
+#: main.cpp:204
+#, c++-format
+msgid "Failed to expire repository cache in path \"{0}\": {1}"
+msgstr "Malsukcesis eksvalidigi deponejan kaŝmemoron en vojo: \"{0}\": {1}"
+
+#: main.cpp:218
+msgid "create additional repository using id and path"
+msgstr "krei aldonan deponejon per identigilon kaj vojon"
+
+#: main.cpp:226
+#, c++-format
+msgid "repofrompath: Incorrect repoid and path specification \"{}\""
+msgstr "repofrompath: Malĝusta deponeja kaj voja specifo \"{}\""
+
+#: main.cpp:238
+msgid "set arbitrary config and repo options"
+msgstr "agordi arbitrajn agordajn kaj deponejajn opciojn"
+
+#: main.cpp:240
+msgid ""
+"Override a configuration option from the configuration file. To override "
+"configuration options for repositories, use repoid.option for  the\n"
+"              <option>.  Values  for configuration options like excludepkgs, "
+"includepkgs, installonlypkgs and tsflags are appended to the original "
+"value,\n"
+"              they do not override it. However, specifying an empty value "
+"(e.g. --setopt=tsflags=) will clear the option."
+msgstr ""
+"Transpasi agordan opcion de la agordo-dosiero. Por transpasi agordajn "
+"opciojn por deponejoj uzu la notacion deponejo.opcio por la\n"
+"              <opcio>. Valoroj por agordaj opcioj tiaj excludepkgs, "
+"includepkgs, installonlypkgs kaj tsflags estas alkroĉitaj al la origina "
+"valoro,\n"
+"              ili ne transpasas ĝin. Tamen specifi malplenan valoron (ekz-"
+"e --setopt=tsflags=) viŝos la opcion."
+
+#: main.cpp:249 main.cpp:288
+#, c++-format
+msgid "{}: Badly formatted argument value \"{}\""
+msgstr "{}: Malbone formatita argumenta valoro \"{}\""
+
+#: main.cpp:256
+#, c++-format
+msgid ""
+"{}: Badly formatted argument value: Last key character cannot be '.': {}"
+msgstr ""
+"{}: Malbone formita argumenta valoro: Lasta ŝlosila signo ne povas esti '.': "
+"{}"
+
+#: main.cpp:269
+#, c++-format
+msgid "setopt: \"{0}\": {1}"
+msgstr "setopt: \"{0}\": {1}"
+
+#: main.cpp:281
+msgid "set arbitrary variable"
+msgstr "agordi arbitran variablon"
+
+#: main.cpp:295
+#, c++-format
+msgid "setvar: {}"
+msgstr "setvar: {}"
+
+#: main.cpp:304
+msgid "automatically answer yes for all questions"
+msgstr "aŭtomate jesi ĉiujn demandojn"
+
+#: main.cpp:311
+msgid "automatically answer no for all questions"
+msgstr "aŭtomate nei ĉiujn demandojn"
+
+#: main.cpp:318
+msgid "try the best available package versions in transactions"
+msgstr "provi la plej bonajn disponeblajn eldonojn de pako en transakcioj"
+
+#: main.cpp:325
+msgid "do not limit the transaction to the best candidate"
+msgstr "ne limigi la transakcion al la plej bona kandidato"
+
+#: main.cpp:336
+msgid ""
+"Don't install files that are marked as documentation (which includes man "
+"pages and texinfo documents)"
+msgstr ""
+"Ne instali dosierojn, kiuj estas markitaj kiel dokumentaj (kiuj inkluzivas "
+"manlibrajn paĝojn kaj texinfo-dokumentojn)"
+
+#: main.cpp:352
+msgid "exclude packages by name or glob"
+msgstr "ekskluzivigi pakojn laŭ nomo aŭ ĵokero"
+
+#: main.cpp:371
+msgid ""
+"Enable additional repositories. List option. Supports globs, can be "
+"specified multiple times."
+msgstr ""
+"Ŝalti aldonajn deponejojn. Lista opcio. Uzeblas ĵokeroj, eblas esti "
+"specifita plurfoje."
+
+#: main.cpp:389
+msgid ""
+"Disable repositories. List option. Supports globs, can be specified multiple "
+"times."
+msgstr ""
+"Malŝalti deponejojn. Lista opcio. Uzeblas ĵokeroj, eblas esti specifita "
+"plurfoje."
+
+#: main.cpp:407
+msgid ""
+"Enable just specific repositories. List option. Supports globs, can be "
+"specified multiple times."
+msgstr ""
+"Ŝalti nur specifitajn deponejojn. Lista opcio. Uzeblas ĵokeroj, eblas esti "
+"plurfoje specifita."
+
+#: main.cpp:429
+msgid "disable OpenPGP signature checking (if RPM policy allows)"
+msgstr "malŝalti kontrolon de OpenPG-subskriboj (se RPM-politikon permesas)"
+
+#: main.cpp:446
+msgid "Disable all libdnf5 plugins"
+msgstr "Malŝalti ĉiujn libdnf5-kromprogramojn"
+
+#: main.cpp:456
+msgid ""
+"Enable libdnf5 plugins by name. List option. Supports globs, can be "
+"specified multiple times."
+msgstr ""
+"Ŝalti libdnf-kromprogramojn laŭ nomo. Lista opcio. Uzeblas ĵokoj, eblas esti "
+"plurfoje specifita."
+
+#: main.cpp:471
+msgid ""
+"Disable libdnf5 plugins by name. List option. Supports globs, can be "
+"specified multiple times."
+msgstr ""
+"Malŝalti libdnf5-kromprogramojn laŭ nomo. Lista opcio. Uzeblas ĵokeroj, "
+"eblas esti plurfoje specifita."
+
+#: main.cpp:488
+msgid "add a comment to transaction"
+msgstr "aldoni komenton al la transakcion"
+
+#: main.cpp:490
+msgid ""
+"Adds a comment to the action. If a transaction takes place, the comment is "
+"stored in it."
+msgstr ""
+"Aldonas komenton al la ago. Se transakcio okazas la komento estas konservita "
+"en ĝi."
+
+#: main.cpp:503
+msgid "set install root"
+msgstr "agordi instalan radikon"
+
+#: main.cpp:510
+msgid ""
+"use configuration, reposdir, and vars from the host system rather than the "
+"installroot"
+msgstr ""
+"uzi agordon, deponejan dosierujon kaj variablon el la sistemo anstataŭ el la "
+"instala radiko"
+
+#: main.cpp:519
+msgid "override the value of $releasever in config and repo files"
+msgstr "transpasas la valoron de $releasever en agordaj kaj deponejaj dosieroj"
+
+#: main.cpp:532
+msgid ""
+"Show newly installed leaf packages and packages that became leaves after a "
+"transaction."
+msgstr ""
+"Montri nove instalitajn foliajn pakojn kaj pakojn, kiuj foliiĝis post "
+"transakcio."
+
+#: main.cpp:546
+msgid "Dump detailed solving results into files"
+msgstr "Ŝuti detalajn solvajn rezultojn en dosierojn"
+
+#: main.cpp:555
+msgid "Print main configuration values to stdout"
+msgstr "Eligi ĉefajn agordajn valorojn al ĉefeligujo"
+
+#: main.cpp:572
+msgid ""
+"Print repository configuration values to stdout. List option. Supports globs"
+msgstr ""
+"Eligi deponejajn agordajn valorojn al ĉefeligujo. Lista opcio. Uzeblas "
+"ĵokeroj"
+
+#: main.cpp:587
+msgid "Print variable values to stdout"
+msgstr "Eligi variablajn valorojn al la ĉefeligujo"
+
+#: main.cpp:601
+msgid "Show DNF5 version and exit"
+msgstr "Montri DNF5-eldonon kaj fini"
+
+#: main.cpp:608
+msgid "Force the use of a different architecture."
+msgstr "Eldevigi la uzon de alia arĥitekturo."
+
+#: main.cpp:646
+msgid "Software Management Commands:"
+msgstr "Komandoj por administrado de pakoj:"
+
+#: main.cpp:653
+msgid "Query Commands:"
+msgstr "Informopetaj komandoj:"
+
+#: main.cpp:660
+msgid "Subcommands:"
+msgstr "Subkomandoj:"
+
+#: main.cpp:759
+#, c++-format
+msgid "{} version {}.{}.{}.{}"
+msgstr "{} eldono {}.{}.{}.{}"
+
+#: main.cpp:762
+#, c++-format
+msgid "{} plugin API version {}.{}"
+msgstr "{} eldono de kromprograma API: {}.{}"
+
+#: main.cpp:767
+#, c++-format
+msgid "libdnf5 version {}.{}.{}.{}"
+msgstr "libdnf5-eldono {}.{}.{}.{}"
+
+#: main.cpp:770
+#, c++-format
+msgid "libdnf5 plugin API version {}.{}"
+msgstr "eldono de libdnf5-kromprograma API: {}.{}"
+
+#: main.cpp:777
+#, c++-format
+msgid ""
+"\n"
+"Loaded {} plugins:"
+msgstr ""
+"\n"
+"Ŝargis {} kromprogramojn:"
+
+#: main.cpp:782
+#, c++-format
+msgid "  name: {}"
+msgstr "  nomo: {}"
+
+#: main.cpp:785
+#, c++-format
+msgid "  version: {}.{}.{}"
+msgstr "  eldono: {}.{}.{}"
+
+#: main.cpp:787
+#, c++-format
+msgid "  API version: {}.{}"
+msgstr "  API-eldono: {}.{}"
+
+#: main.cpp:825
+#, c++-format
+msgid ""
+"Total size of inbound packages is {:.0f} {:s}. Need to download {:.0f} {:s}."
+msgstr ""
+"Totala grando de ricevantaj pakoj estas {:.0f} {:s}. Devas elŝuti {:.0f} {:s}"
+"."
+
+#: main.cpp:842
+#, c++-format
+msgid ""
+"After this operation, {:.0f} {:s} extra will be used (install {:.0f} {:s}, "
+"remove {:.0f} {:s})."
+msgstr ""
+"Post la operacio {:.0f} {:s} aldona uziĝos (instalo {:.0f} {:s}, forigo "
+"{:.0f} {:s})."
+
+#: main.cpp:853
+#, c++-format
+msgid ""
+"After this operation, {:.0f} {:s} will be freed (install {:.0f} {:s}, remove "
+"{:.0f} {:s})."
+msgstr ""
+"Post la operacio {:.0f} {:s} liberiĝos (instalo {:.0f} {:s}, forigo {:.0f} "
+"{:s})."
+
+#: main.cpp:865
+msgid "======== Main configuration: ========"
+msgstr "======== Ĉefa agordo: ========"
+
+#: main.cpp:902
+#, c++-format
+msgid "No matching repo to dump configuration: \"{}\""
+msgstr "Neniu kongruanta deponejo por ŝuti agordon: \"{}\""
+
+#: main.cpp:907
+#, c++-format
+msgid "======== \"{}\" repository configuration: ========"
+msgstr "======== Agordo pri deponejo \"{}\": ========"
+
+#: main.cpp:927
+msgid "======== Variables: ========"
+msgstr "======== Variabloj: ========"
+
+#: main.cpp:967
+msgid "New leaves:"
+msgstr "Novaj folioj:"
+
+#: main.cpp:969
+#, c++-format
+msgid " {}"
+msgstr " {}"
+
+#: main.cpp:1013
+#, c++-format
+msgid "{} to skip unavailable packages"
+msgstr "{} por preterpasi nedisponeblajn pakojn"
+
+#: main.cpp:1021
+#, c++-format
+msgid "{} to allow extra packages in the transaction"
+msgstr "{} por permesi aldonajn pakojn en la transakcio"
+
+#: main.cpp:1034
+#, c++-format
+msgid ""
+"{} to allow mismatches between installed and stored transaction packages. "
+"This can result in an empty transaction because among other things the "
+"option can ignore failing Remove actions."
+msgstr ""
+"{} por permesi malkongruoj inter instalitaj kaj konservitaj transakciaj "
+"pakoj. Tio povas kaŭzi malplenan transakcion ĉar interalie la opcio povas "
+"ignori malsukcesajn agojn de Remove."
+
+#: main.cpp:1081
+#, c++-format
+msgid "{} to not limit the transaction to the best candidates"
+msgstr "{} por ne limigi la transakcion al la plej bonaj kandidatoj"
+
+#: main.cpp:1088
+#, c++-format
+msgid "{} to allow removing of installed packages to resolve problems"
+msgstr "{} por permesi forigi instalitajn pakojn por solvi problemojn"
+
+#: main.cpp:1097
+#, c++-format
+msgid "{} to load additional filelists metadata"
+msgstr "{} por ŝargi metadatumojn de aldonaj dosiero-listoj"
+
+#: main.cpp:1104
+#, c++-format
+msgid "{} to skip uninstallable packages"
+msgstr "{} por preterpasi neinstaleblajn pakojn"
+
+#: main.cpp:1110
+msgid "You can try to add to command line:"
+msgstr "Vi povas provi aldoni al la komandlinio:"
+
+#: main.cpp:1128
+#, c++-format
+msgid ""
+"No matches were found for the following plugin name patterns while enabling "
+"libdnf plugins: {}"
+msgstr ""
+"Neniuj kongruoj estis trovitaj por la jenaj ŝablonoj de kromprogramaj nomoj "
+"dum ebligo de libdnf-kromprogramoj: {}"
+
+#: main.cpp:1129
+#, c++-format
+msgid ""
+"No matches were found for the following plugin name patterns while disabling "
+"libdnf plugins: {}"
+msgstr ""
+"Neniuj kongruoj troveblis por la jenaj kromprogramo-nomaj ŝablonoj dum la "
+"malŝalto de libdnf-kromprogramoj: {}"
+
+#: main.cpp:1226
+#, c++-format
+msgid "--- DNF5 launched with arguments: \"{}\" ---"
+msgstr "--- DNF plenumiĝos kun argumentoj: \"{}\" ---"
+
+#: main.cpp:1262
+#, c++-format
+msgid "Invalid \"index\" in \"--complete=<index>[,...]\": {}"
+msgstr "Nevalida \"indico\" en \"--complete=<indico>[,...]\": {}"
+
+#: main.cpp:1301
+#, c++-format
+msgid "{}."
+msgstr "{}."
+
+#: main.cpp:1304 main.cpp:1556
+#, c++-format
+msgid "{}. Add \"--help\" for more information about the arguments."
+msgstr "{}. \"--help\" uziĝas por pliaj informoj pri la argumentoj."
+
+#: main.cpp:1313
+#, c++-format
+msgid ""
+"It could be a command provided by a plugin, try: dnf5 install 'dnf5-"
+"command({})'"
+msgstr ""
+"Tio eble estas komando provizita per kromprogramo. provu: dnf install 'dnf5-"
+"command({})'"
+
+#: main.cpp:1355
+#, c++-format
+msgid ""
+"The argument is available for commands: {}. (It has to be placed after the "
+"command.)"
+msgstr ""
+"La argumento disponeblas por komandoj: {}. (Ĝe devas esti metita post la "
+"komando.)"
+
+#: main.cpp:1399
+msgid "No read/execute access in current directory, moving to /"
+msgstr "Neniuj legaj/plenumigaj atingorajtoj en la nuna dosierujo, moviĝas al /"
+
+#: main.cpp:1471
+msgid ""
+"The requested operation requires superuser privileges. Please log in as a "
+"user with elevated rights, or use the \"--assumeno\" or \"--downloadonly\" "
+"options to run the command without modifying the system state."
+msgstr ""
+"La petita operacio postulas privilegiojn de la ĉefuzanto. Bonvolu ensaluti "
+"kiel uzulo kun pli da rajtoj, aŭ uzi la opciojn \"--assumeno\" aŭ \"----"
+"downloadonly\" por plenumigi la komandon sen modifo de la sistema stato."
+
+#: main.cpp:1512
+#, c++-format
+msgid "The operation will only store the transaction in {}"
+msgstr "La operacio konservos la transakcion nur en {}"
+
+#: main.cpp:1514
+msgid "The operation will only download packages for the transaction."
+msgstr "La operacio elŝutos nur pakojn por la transakcio."
+
+#: main.cpp:1519
+msgid ""
+"Test mode enabled: Only package downloads, OpenPGP key installations and "
+"transaction checks will be performed."
+msgstr ""
+"Testreĝimo ŝaltita: Nur pakaj elŝutaĵoj, OpenPGP-ŝlosilaj instaloj kaj "
+"transakciaj kontroloj plenumiĝos."
+
+#: main.cpp:1527
+msgid ""
+"Error: this bootc system is configured to be read-only. For more "
+"information, run `bootc --help`."
+msgstr ""
+"Eraro: ĉi tiu bootc-sistemo estas agordita kiel nurlega. Por pliaj informoj "
+"uzu la komandon `bootc --help`."
+
+#: main.cpp:1544
+msgid ""
+"No repositories were loaded from the installroot. To use the configuration "
+"and repositories of the host system, pass --use-host-config."
+msgstr ""
+"Neniuj deponejoj estis ŝargitaj el la instala radiko. Por uzi la agordon kaj "
+"deponejojn de la sistemo, uzu la opcion --use-host-config."
+
+#: main.cpp:1566
+#, c++-format
+msgid "Command returned error: {}"
+msgstr "Komando donis eraron: {}"
+
+#: main.cpp:1574
+msgid "DNF5 finished"
+msgstr "DNF5 finiĝis"
+
+#: main.cpp:1578
+msgid "Complete!"
+msgstr "Kompleta!"
+
+#: shared_options.cpp:32
+msgid "Allow removing of installed packages to resolve problems"
+msgstr "Permesi forigon de instalitaj pakoj por solvi problemojn"
+
+#: shared_options.cpp:42
+msgid "Allow resolving of depsolve problems by skipping packages"
+msgstr "Permesi solvi problemojn pri dependaĵa solvado per preterlaso de pakoj"
+
+#: shared_options.cpp:54
+msgid "Allow skipping unavailable packages"
+msgstr "Permesi preterpasi nedisponeblajn pakojn"

@@ -2,23 +2,26 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # Languages add-on <noreply-addon-languages@weblate.org>, 2026.
+# Efstathios Iosifidis <eiosifidis@yandex.com>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-07-26 03:48+0000\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Automatically generated\n"
-"Language-Team: none\n"
+"PO-Revision-Date: 2026-02-26 00:30+0000\n"
+"Last-Translator: Efstathios Iosifidis <eiosifidis@yandex.com>\n"
+"Language-Team: Greek <https://translate.fedoraproject.org/projects/dnf5/dnf5-"
+"plugin-copr/el/>\n"
 "Language: el\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.16\n"
 
 #: copr.cpp:48
 msgid "Copr hub (the web-UI/API server) hostname"
-msgstr ""
+msgstr "Το όνομα κεντρικού υπολογιστή του Copr hub (διακομιστής web-UI/API)"
 
 #: copr.cpp:88
 #, c++-format
@@ -35,12 +38,14 @@ msgstr ""
 #: copr.cpp:106
 #, c++-format
 msgid "Invalid PROJECT_SPEC format '{}'"
-msgstr ""
+msgstr "Μη έγκυρη μορφή PROJECT_SPEC '{}'"
 
 #: copr_constants.hpp:27
 msgid ""
 "Manage Copr repositories (add-ons provided by users/community/third-party)"
 msgstr ""
+"Διαχείριση αποθετηρίων Copr (πρόσθετα που παρέχονται από χρήστες/κοινότητα/"
+"τρίτους)"
 
 #: copr_constants.hpp:29
 msgid ""
@@ -56,6 +61,20 @@ msgid ""
 "Please do not file bug reports about these packages in Fedora\n"
 "Bugzilla. In case of problems, contact the owner of this repository.\n"
 msgstr ""
+"Ενεργοποίηση αποθετηρίου Copr. Λάβετε υπόψη ότι αυτό το αποθετήριο δεν "
+"αποτελεί\n"
+"μέρος της κύριας διανομής και η ποιότητα ενδέχεται να ποικίλλει.\n"
+"\n"
+"Το Fedora Project δεν ασκεί κανέναν έλεγχο στο περιεχόμενο αυτού του\n"
+"αποθετηρίου πέρα από τους κανόνες που περιγράφονται στο Copr FAQ στη "
+"διεύθυνση\n"
+"<https://docs.pagure.org/copr.copr/user_documentation.html#what-i-can-build-"
+"in-copr>,\n"
+"και τα πακέτα δεν εγγυώνται κανένα επίπεδο ποιότητας ή ασφάλειας.\n"
+"\n"
+"Παρακαλούμε μην υποβάλλετε αναφορές σφαλμάτων για αυτά τα πακέτα στο Fedora\n"
+"Bugzilla. Σε περίπτωση προβλημάτων, επικοινωνήστε με τον ιδιοκτήτη του "
+"αποθετηρίου.\n"
 
 #: copr_constants.hpp:41
 #, c++-format
@@ -73,10 +92,22 @@ msgid ""
 "These repositories are being enabled together with the main\n"
 "repository.\n"
 msgstr ""
+"Ο συντηρητής του ενεργοποιημένου αποθετηρίου Copr αποφάσισε να το\n"
+"καταστήσει εξαρτώμενο από άλλα αποθετήρια. Τέτοια αποθετήρια είναι\n"
+"συνήθως απαραίτητα για την επιτυχή εγκατάσταση RPM από το κύριο\n"
+"αποθετήριο Copr (παρέχουν εξαρτήσεις χρόνου εκτέλεσης).\n"
+"\n"
+"Έχετε υπόψη ότι η παραπάνω σημείωση σχετικά με την ποιότητα και την αναφορά "
+"σφαλμάτων\n"
+"ισχύει και εδώ, το Fedora Project δεν ελέγχει το περιεχόμενο.\n"
+"Παρακαλούμε ελέγξτε τη λίστα:\n"
+"\n"
+"{}\n"
+"Αυτά τα αποθετήρια ενεργοποιούνται μαζί με το κύριο αποθετήριο.\n"
 
 #: copr_debug.cpp:30
 msgid "print useful info about the system, useful for debugging"
-msgstr ""
+msgstr "εκτύπωση χρήσιμων πληροφοριών για το σύστημα, χρήσιμο για αποσφαλμάτωση"
 
 #: copr_disable.cpp:35
 #, c++-format
@@ -84,6 +115,8 @@ msgid ""
 "disable specified Copr repository (if exists), keep {}/*.repo file - just "
 "mark enabled=0"
 msgstr ""
+"απενεργοποίηση του καθορισμένου αποθετηρίου Copr (αν υπάρχει), διατήρηση του "
+"αρχείου {}/*.repo - απλή σήμανση ως enabled=0"
 
 #: copr_enable.cpp:38
 #, c++-format
@@ -91,6 +124,8 @@ msgid ""
 "download the repository info from a Copr server and install it as a {}/"
 "*.repo file"
 msgstr ""
+"λήψη των πληροφοριών αποθετηρίου από έναν διακομιστή Copr και εγκατάστασή "
+"του ως αρχείο {}/*.repo"
 
 #: copr_enable.cpp:46
 msgid ""
@@ -100,66 +135,69 @@ msgstr ""
 
 #: copr_list.cpp:51
 msgid "list Copr repositories"
-msgstr ""
+msgstr "προβολή λίστας αποθετηρίων Copr"
 
 #: copr_remove.cpp:35
 #, c++-format
 msgid ""
 "remove specified Copr repository from the system (removes the {}/*.repo file)"
 msgstr ""
+"αφαίρεση του καθορισμένου αποθετηρίου Copr από το σύστημα (διαγράφει το "
+"αρχείο {}/*.repo)"
 
 #: copr_repo.cpp:91
 #, c++-format
 msgid "Directory '{}' not found in '{}' Copr project."
-msgstr ""
+msgstr "Ο κατάλογος '{}' δεν βρέθηκε στο έργο Copr '{}'."
 
 #: copr_repo.cpp:97
 msgid "You can use one of these available directories:"
 msgstr ""
+"Μπορείτε να χρησιμοποιήσετε έναν από αυτούς τους διαθέσιμους καταλόγους:"
 
 #: copr_repo.cpp:113
 msgid "Chroot not found in the given Copr project"
-msgstr ""
+msgstr "Το Chroot δεν βρέθηκε στο δοθέν έργο Copr"
 
 #: copr_repo.cpp:115
 msgid "Unable to detect chroot, specify it explicitly."
-msgstr ""
+msgstr "Αδυναμία ανίχνευσης chroot, καθορίστε το ρητά."
 
 #: copr_repo.cpp:121
 msgid "We tried to find these repos without a success:"
-msgstr ""
+msgstr "Προσπαθήσαμε να βρούμε αυτά τα αποθετήρια χωρίς επιτυχία:"
 
 #: copr_repo.cpp:126
 msgid "You can choose one of the available chroots explicitly:"
-msgstr ""
+msgstr "Μπορείτε να επιλέξετε ρητά ένα από τα διαθέσιμα chroots:"
 
 #: copr_repo.cpp:200
 msgid "Can't parse Copr repo spec: "
-msgstr ""
+msgstr "Αδυναμία ανάλυσης της προδιαγραφής αποθετηρίου Copr: "
 
 #: copr_repo.cpp:344
 #, c++-format
 msgid "Can't remove the {} repo file"
-msgstr ""
+msgstr "Αδυναμία αφαίρεσης του αρχείου αποθετηρίου {}"
 
 #: copr_repo.cpp:347
 #, c++-format
 msgid "Repo file {} successfully removed"
-msgstr ""
+msgstr "Το αρχείο αποθετηρίου {} αφαιρέθηκε επιτυχώς"
 
 #: copr_repo.cpp:393
 #, c++-format
 msgid "Can't find item {} in {}"
-msgstr ""
+msgstr "Αδυναμία εύρεσης του στοιχείου {} στο {}"
 
 #: copr_repo.cpp:449
 #, c++-format
 msgid "Removing old config file '{}'"
-msgstr ""
+msgstr "Αφαίρεση παλιού αρχείου ρυθμίσεων '{}'"
 
 #: copr_repo.cpp:452
 msgid "Can't remove"
-msgstr ""
+msgstr "Αδυναμία αφαίρεσης"
 
 #: copr_repo.cpp:526
 #, c++-format
@@ -167,23 +205,25 @@ msgid ""
 "Copr repofile '{}' has an old format, fix by re-enabling it $ {} copr enable "
 "{}"
 msgstr ""
+"Το αρχείο αποθετηρίου Copr '{}' έχει παλιά μορφή, διορθώστε το "
+"επανενεργοποιώντας το $ {} copr enable {}"
 
 #: copr_repo.cpp:560
 #, c++-format
 msgid "Repo id '{}' in '{}' is suspicious"
-msgstr ""
+msgstr "Το id αποθετηρίου '{}' στο '{}' είναι ύποπτο"
 
 #: copr_repo.cpp:567
 #, c++-format
 msgid "Repo id '{}' doesn't belong to '{}' repofile"
-msgstr ""
+msgstr "Το id αποθετηρίου '{}' δεν ανήκει στο αρχείο αποθετηρίου '{}'"
 
 #: copr_repo.cpp:618
 #, c++-format
 msgid "Copr repository '{}' in '{}' disabled."
-msgstr ""
+msgstr "Το αποθετήριο Copr '{}' στο '{}' απενεργοποιήθηκε."
 
 #: copr_repo.cpp:632 copr_repo.cpp:657
 #, c++-format
 msgid "Repository '{}' not found on this system"
-msgstr ""
+msgstr "Το αποθετήριο '{}' δεν βρέθηκε σε αυτό το σύστημα"

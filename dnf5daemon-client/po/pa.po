@@ -2,19 +2,22 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # Languages add-on <noreply-addon-languages@weblate.org>, 2026.
+# A S Alam <aalam@users.noreply.translate.fedoraproject.org>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-07-26 03:48+0000\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Automatically generated\n"
-"Language-Team: none\n"
+"PO-Revision-Date: 2026-03-17 19:58+0000\n"
+"Last-Translator: A S Alam <aalam@users.noreply.translate.fedoraproject.org>\n"
+"Language-Team: Punjabi <https://translate.fedoraproject.org/projects/dnf5/"
+"dnf5daemon-client/pa/>\n"
 "Language: pa\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: Weblate 5.16.2\n"
 
 #: commands/advisory/advisory.cpp:35
 msgid "Manage advisories"
@@ -57,7 +60,7 @@ msgstr ""
 
 #: commands/advisory/arguments.hpp:81
 msgid "PACKAGE_NAME,..."
-msgstr ""
+msgstr "ਪੈਕੇਜ_ਨਾਂ,..."
 
 #: commands/advisory/arguments.hpp:88
 msgid "List of patterns matched against advisory names."
@@ -126,17 +129,18 @@ msgstr ""
 
 #: commands/advisory/arguments.hpp:182
 msgid "CVE_ID,..."
-msgstr ""
+msgstr "CVE_ID,..."
 
 #: commands/clean/clean.cpp:88
 #, c++-format
 msgid "Error cleaning the cache: {}"
-msgstr ""
+msgstr "ਕੈਸ਼ ਮਿਟਾਉਣ ਦੌਰਾਨ ਗਲਤੀ: {}"
 
 #: commands/distro-sync/distro-sync.cpp:48
 msgid ""
 "Upgrade or downgrade installed software to the latest available versions"
 msgstr ""
+"ਇੰਸਟਾਲ ਹੋਏ ਸਾਫਟਵੇਅਰਾਂ ਨੂੰ ਉਹਨਾਂ ਦੇ ਮੌਜੂਦ ਨਵੇਂ ਵਰਜ਼ਨ ਲਈ ਅੱਪਗਰੇਡ ਜਾਂ ਡਾਊਨਗਰੇਡ ਕਰੋ"
 
 #: commands/group/group.cpp:41
 msgid "Manage comps groups"
@@ -144,15 +148,15 @@ msgstr ""
 
 #: commands/group/group_list.hpp:37
 msgid "Show only available groups."
-msgstr ""
+msgstr "ਸਿਰਫ਼ ਮੌਜੂਦ ਗਰੁੱਪ ਹੀ ਵੇਖਾਓ।"
 
 #: commands/group/group_list.hpp:43
 msgid "Show only installed groups."
-msgstr ""
+msgstr "ਸਿਰਫ਼ ਇੰਸਟਾਲ ਹੋਏ ਗਰੁੱਪ ਹੀ ਵੇਖਾਓ।"
 
 #: commands/group/group_list.hpp:49
 msgid "Show also hidden groups."
-msgstr ""
+msgstr "ਸਿਰਫ਼ ਲੁਕਵੇਂ ਗਰੁੱਪ ਹੀ ਵੇਖਾਓ।"
 
 #: commands/group/group_list.hpp:59
 msgid ""
@@ -162,7 +166,7 @@ msgstr ""
 
 #: commands/repo/repo.cpp:37
 msgid "Manage repositories"
-msgstr ""
+msgstr "ਰਿਪੋਜ਼ਟਰੀਆਂ ਦਾ ਇੰਤਜ਼ਾਮ"
 
 #: commands/repoquery/repoquery.cpp:95
 msgid "search for packages matching various criteria"

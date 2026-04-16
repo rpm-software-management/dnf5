@@ -3,13 +3,14 @@
 # This file is distributed under the same license as the PACKAGE package.
 # Angelo Schirinzi <odi-3@users.noreply.translate.fedoraproject.org>, 2025.
 # Salvatore Cocuzza <info@salvatorecocuzza.it>, 2025.
+# Ali Ciloqlu <ali.ciloqlu@murena.io>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-07-26 03:48+0000\n"
-"PO-Revision-Date: 2025-04-25 14:44+0000\n"
-"Last-Translator: Salvatore Cocuzza <info@salvatorecocuzza.it>\n"
+"PO-Revision-Date: 2026-04-08 08:58+0000\n"
+"Last-Translator: Ali Ciloqlu <ali.ciloqlu@murena.io>\n"
 "Language-Team: Italian <https://translate.fedoraproject.org/projects/dnf5/"
 "libdnf5-plugin-actions/it/>\n"
 "Language: it\n"
@@ -17,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.11\n"
+"X-Generator: Weblate 5.16.2\n"
 
 #: actions.cpp:237
 msgid "File \"{}\" on line {}: {}"
@@ -104,7 +105,7 @@ msgstr "Errore durante la lettura dall'azione (dalla pipe)"
 #: actions.cpp:1038
 msgid "Syntax error in json request from action: Missing starting '{{' char"
 msgstr ""
-"Errore di sintassi nella richiesta JSON dall'azione: Manca il carattere "
+"Errore di sintassi nella richiesta json dall'azione: Manca il carattere "
 "iniziale '{{'"
 
 #: actions.cpp:1062
@@ -113,11 +114,11 @@ msgstr "Errore durante l'elaborazione di una richiesta dall'azione."
 
 #: actions.cpp:1071
 msgid "Syntax error in json request from action: {}"
-msgstr "Errore di sintassi nella richiesta JSON dall'azione: {}"
+msgstr "Errore di sintassi nella richiesta json dall'azione: {}"
 
 #: actions.cpp:1079
 msgid "Syntax error in json request from action: Incomplete input"
-msgstr "Errore di sintassi nella richiesta JSON dall'azione: Input incompleto"
+msgstr "Errore di sintassi nella richiesta json dall'azione: Input incompleto"
 
 #: actions.cpp:1154
 msgid "Cannot write response"

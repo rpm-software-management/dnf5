@@ -1,13 +1,13 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# A S Alam <aalam@users.noreply.translate.fedoraproject.org>, 2024.
+# A S Alam <aalam@users.noreply.translate.fedoraproject.org>, 2024, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-07-26 03:48+0000\n"
-"PO-Revision-Date: 2024-11-19 09:15+0000\n"
+"PO-Revision-Date: 2026-03-17 19:58+0000\n"
 "Last-Translator: A S Alam <aalam@users.noreply.translate.fedoraproject.org>\n"
 "Language-Team: Punjabi <https://translate.fedoraproject.org/projects/dnf5/"
 "libdnf5/pa/>\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.8.2\n"
+"X-Generator: Weblate 5.16.2\n"
 
 #: advisory/advisory.cpp:81
 msgid ""
@@ -127,7 +127,7 @@ msgstr "ਮੁੜ-ਇੰਸਟਾਲ ਕਾਰਵਾਈ"
 
 #: base/goal_elements.cpp:398
 msgid "Reason change action"
-msgstr ""
+msgstr "ਤਬਦੀਲੀ ਕਾਰਵਾਈ ਦਾ ਕਾਰਨ"
 
 #: base/goal_elements.cpp:400
 msgid "Reason override"

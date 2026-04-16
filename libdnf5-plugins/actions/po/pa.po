@@ -1,13 +1,13 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# A S Alam <aalam@users.noreply.translate.fedoraproject.org>, 2025.
+# A S Alam <aalam@users.noreply.translate.fedoraproject.org>, 2025, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-07-26 03:48+0000\n"
-"PO-Revision-Date: 2025-10-16 17:54+0000\n"
+"PO-Revision-Date: 2026-03-17 19:58+0000\n"
 "Last-Translator: A S Alam <aalam@users.noreply.translate.fedoraproject.org>\n"
 "Language-Team: Punjabi <https://translate.fedoraproject.org/projects/dnf5/"
 "libdnf5-plugin-actions/pa/>\n"
@@ -16,21 +16,15 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.13.3\n"
+"X-Generator: Weblate 5.16.2\n"
 
 #: actions.cpp:237
 msgid "File \"{}\" on line {}: {}"
 msgstr "\"{}\" ਫ਼ਾਇਲ ਵਿੱਚ {} ਲਾਈਨ ਉੱਤੇ ਗਲਤੀ ਹੈ: {}"
 
 #: actions.cpp:636 actions.cpp:642 actions.cpp:648 actions.cpp:654
-#, fuzzy
-#| msgid ""
-#| "Error in file \"{}\" on line {}: \"HOOK:PKG_FILTER:DIRECTION:OPTIONS:"
-#| "CMD\" format expected"
 msgid "\"HOOK:PKG_FILTER:DIRECTION:OPTIONS:CMD\" format expected"
-msgstr ""
-"\"{}\" ਫ਼ਾਇਲ ਵਿੱਚ {} ਲਾਈਨ ਉੱਤੇ ਗਲਤੀ ਹੈ: \"HOOK:PKG_FILTER:DIRECTION:OPTIONS:CMD\" "
-"ਫਾਰਮੈਟ ਦੀ ਆਸ ਸੀ"
+msgstr "\"HOOK:PKG_FILTER:DIRECTION:OPTIONS:CMD\" ਫਾਰਮੈਟ ਦੀ ਆਸ ਸੀ"
 
 #: actions.cpp:676
 msgid "Unknown \"enabled\" option value \"{}\""
@@ -68,7 +62,7 @@ msgstr ""
 
 #: actions.cpp:760
 msgid "Missing command"
-msgstr ""
+msgstr "ਗ਼ੈਰ-ਮੌਜੂਦ ਕਮਾਂਡ"
 
 #: actions.cpp:953
 msgid "Synax error: Missing equal sign (=) in action output line: {}"
@@ -150,7 +144,7 @@ msgstr ""
 
 #: actions.cpp:2019
 msgid "Terminated by signal: {}"
-msgstr ""
+msgstr "ਇਸ ਸਿਗਨਲ ਨਾਲ ਖ਼ਤਮ ਕੀਤਾ: {}"
 
 #~ msgid "Error in file \"{}\" on line {}: Unknown option \"{}\""
 #~ msgstr "\"{}\" ਫ਼ਾਇਲ ਵਿੱਚ {} ਲਾਈਨ ਉੱਤੇ ਗਲਤੀ ਹੈ: ਅਣਪਛਾਤੀ ਚੋਣ \"{}\""

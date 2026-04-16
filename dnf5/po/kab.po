@@ -3,15 +3,16 @@
 # This file is distributed under the same license as the PACKAGE package.
 # ButterflyOfFire <butterflyoffire@protonmail.com>, 2024.
 # Rachida SA <rgebbid@gmail.com>, 2024.
-# ButterflyOfFire <butterflyoffire@users.noreply.translate.fedoraproject.org>, 2024, 2025.
+# ButterflyOfFire <butterflyoffire@users.noreply.translate.fedoraproject.org>, 2024, 2025, 2026.
 # Massii Aqvayli <massiin@proton.me>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-07-26 03:48+0000\n"
-"PO-Revision-Date: 2026-02-13 11:58+0000\n"
-"Last-Translator: Massii Aqvayli <massiin@proton.me>\n"
+"PO-Revision-Date: 2026-04-13 13:58+0000\n"
+"Last-Translator: ButterflyOfFire "
+"<butterflyoffire@users.noreply.translate.fedoraproject.org>\n"
 "Language-Team: Kabyle <https://translate.fedoraproject.org/projects/dnf5/"
 "dnf5/kab/>\n"
 "Language: kab\n"
@@ -19,7 +20,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.15.2\n"
+"X-Generator: Weblate 5.16.2\n"
 
 #: cmdline_aliases.cpp:84 context.cpp:301 main.cpp:1357
 msgid ", "
@@ -46,22 +47,27 @@ msgstr "ixuṣṣ imyerr \"id_path\" i tzaẓlut \"{}\" deg ufaylu \"{}\""
 #: cmdline_aliases.cpp:208
 msgid "Unsupported version \"{}\" in file \"{}\". Supported versions: {}"
 msgstr ""
+"Lqem ur yettwasefrak ara \"{}\" deg ufaylu \"{}\". Ileqman yettwasefraken: {}"
 
 #: cmdline_aliases.cpp:218
 msgid "Bad value type of attribute \"version\" in file \"{}\" on line {}: {}"
 msgstr ""
+"Anaw n wazal n umyerr \"version\" d armeɣtu deg ufaylu \"{}\" deg izirig {}: "
+"{}"
 
 #: cmdline_aliases.cpp:224
 msgid "Missing attribute \"version\" in file \"{}\""
-msgstr ""
+msgstr "Ixuṣṣ Imyerr \"version\" deg ufaylu \"{}\""
 
 #: cmdline_aliases.cpp:236
 msgid "Unknown key \"{}\" in file \"{}\" on line {}: {}"
-msgstr ""
+msgstr "Tasarut tarussint \"{}\" deg ufaylu \"{}\" deg izirig {}: {}"
 
 #: cmdline_aliases.cpp:253
 msgid "Empty or bad element id path in file \"{}\" on line {}: {}"
 msgstr ""
+"Abrid usulay n uferdis d ilem neɣ d armeɣtu deg ufaylu \"{}\" deg izirig {}: "
+"{}"
 
 #: cmdline_aliases.cpp:272
 msgid ""
@@ -115,40 +121,52 @@ msgstr ""
 #: cmdline_aliases.cpp:462 cmdline_aliases.cpp:563 cmdline_aliases.cpp:676
 msgid "Group \"{}\" not found: {}: Requested in file \"{}\" on line {}: {}"
 msgstr ""
+"Agraw \"{}\" ur yettwaf ara: {}: Yettwasuter deg ufaylu \"{}\" deg izirig {}"
+": {}"
 
 #: cmdline_aliases.cpp:476 cmdline_aliases.cpp:579
 msgid ""
 "Unknown attribute \"{}\" of named argument \"{}\" in file \"{}\" on line {}: "
 "{}"
 msgstr ""
+"Imyerr arussin \"{}\" n ufakul yettwasemman \"{}\" deg ufaylu \"{}\" deg "
+"izirig {}: {}"
 
 #: cmdline_aliases.cpp:489
 msgid "Missing attribute \"source\" for named argument \"{}\" in file \"{}\""
-msgstr ""
+msgstr "Ixuṣṣ imyerr \"source\" i ufakul s yisem-is \"{}\" deg ufaylu \"{}\""
 
 #: cmdline_aliases.cpp:498 cmdline_aliases.cpp:592
 msgid ""
 "At least one of the attributes \"long_name\" and \"short_name\" must be set "
 "for named argument \"{}\" in file \"{}\""
 msgstr ""
+"Ma drus yiwen seg yimyerren \"long_name\" akked \"short_name\" ilaq ad "
+"ittusbadu i ufakul yettusemman \"{}\" deg ufaylu \"{}\""
 
 #: cmdline_aliases.cpp:657
 msgid ""
 "Attached command \"{}\" not found: {}: Requested in file \"{}\" on line {}: "
 "{}"
 msgstr ""
+"Taladna icudden \"{}\" ur yettwaf ara: {}: Yettwasutred deg ufaylu \"{}\" "
+"deg izirig {}: {}"
 
 #: cmdline_aliases.cpp:691
 msgid ""
 "Used config file version \"1.0\" for attribute \"{}\" of command \"{}\" in "
 "file \"{}\" on line {}: {}"
 msgstr ""
+"Lqem \"1.0\" n ufaylu n twila yettwaseqdec i yimyerr \"{}\" n tladna \"{}\" "
+"deg ufaylu \"{}\" deg izirig {}: {}"
 
 #: cmdline_aliases.cpp:713
 msgid ""
 "Unknown attribute \"{}\" of required value for alias \"{}\" in file \"{}\" "
 "on line {}: {}"
 msgstr ""
+"Imyerr \"{}\" arussin i wazal yettwasran i tzaẓlut \"{}\" deg ufaylu \"{}\" "
+"deg izirig {}: {}"
 
 #: cmdline_aliases.cpp:726
 msgid ""
@@ -168,11 +186,11 @@ msgstr ""
 
 #: cmdline_aliases.cpp:791
 msgid "Bad value type in file \"{}\" on line {}: {}"
-msgstr ""
+msgstr "Yir azal deg ufaylu \"{}\" deg izirig {}: {}"
 
 #: cmdline_aliases.cpp:804
 msgid "Syntax error in file \"{}\" on line {}:"
-msgstr ""
+msgstr "Tuccḍa n tseddast deg ufaylu \"{}\" deg izirig {}:"
 
 #: commands/advisory/advisory.cpp:36
 msgid "Manage advisories"
@@ -215,11 +233,15 @@ msgid ""
 "Show advisories containing newer versions of installed packages. This is the "
 "default behavior."
 msgstr ""
+"Sken iwellihen igebren ileqman imaynuten n ikemmusen yettwasbedden. D tagi i "
+"tiddin tamezwert."
 
 #: commands/advisory/arguments.hpp:57
 msgid ""
 "Show advisories containing equal and older versions of installed packages."
 msgstr ""
+"Sken iwellihen igebren ileqman iqburen neɣ wid n tura n ikemmusen "
+"yettwasbedden."
 
 #: commands/advisory/arguments.hpp:69
 msgid ""
@@ -288,7 +310,7 @@ msgstr ""
 
 #: commands/advisory_shared.hpp:187
 msgid "Include content contained in newpackage advisories."
-msgstr ""
+msgstr "Seddu-d agbur yettwabedren deg iwellihen n newpackage."
 
 #: commands/advisory_shared.hpp:198
 msgid ""
@@ -346,36 +368,38 @@ msgstr ""
 
 #: commands/clean/clean.cpp:91
 msgid "List of cache types to clean up. Supported types: {0}"
-msgstr ""
+msgstr "Tabdart n wanawen n tzarkatut ara tsefḍeḍ. Anawen i yettwasefraken: {0}"
 
 #: commands/clean/clean.cpp:109
 msgid "Unknown cache type \"{0}\". Supported types: {1}"
-msgstr ""
+msgstr "Anaw n tzarkatut d arussin \"{0}\". Anawen i yettwasefraken: {1}"
 
 #: commands/clean/clean.cpp:166
 msgid "Failed to cleanup repository cache in path \"{0}\": {1}"
-msgstr ""
+msgstr "Ulamek asfeḍ n tzarkatut n ukufi deg ubrid \"{0}\": {1}"
 
 #: commands/clean/clean.cpp:176
 msgid "Cache directory \"{}\" does not exist. Nothing to clean."
-msgstr ""
+msgstr "Akaram n tzarkatut \"{}\" ulac-it. Ulac d acu ara yettwasafḍen."
 
 #: commands/clean/clean.cpp:181
 msgid "Cannot iterate cache directory \"{}\": {}"
-msgstr ""
+msgstr "Ur izmir ara ad isnirem akaram n tzarkatut \"{}\": {}"
 
 #: commands/debuginfo-install/debuginfo-install.cpp:45
 msgid "Install debuginfo packages."
-msgstr ""
+msgstr "Sbedd ikemmusen debuginfo."
 
 #: commands/distro-sync/distro-sync.cpp:44
 msgid ""
 "Upgrade or downgrade installed software to the latest available versions"
 msgstr ""
+"Sebded lqem aneggaru n iseɣẓanen yettusbedden (ales asbeddi n yileqman "
+"yezrin yella wamek)"
 
 #: commands/do/do.cpp:44
 msgid "Do transaction"
-msgstr ""
+msgstr "Egg tanigawt"
 
 #: commands/do/do.cpp:49
 msgid "Action to be done on the following items."
@@ -489,15 +513,15 @@ msgstr ""
 
 #: commands/group/arguments.hpp:34
 msgid "Show only available groups."
-msgstr ""
+msgstr "Sken kan igrawen yellan."
 
 #: commands/group/arguments.hpp:41
 msgid "Show also hidden groups."
-msgstr ""
+msgstr "Sken daɣen igrawen yeffren."
 
 #: commands/group/arguments.hpp:48
 msgid "Show only installed groups."
-msgstr ""
+msgstr "Sken kan igrawen yettwasbedden."
 
 #: commands/group/arguments.hpp:59
 msgid ""
@@ -621,59 +645,59 @@ msgstr ""
 
 #: commands/list/list.cpp:94
 msgid "List packages recently added into the repositories."
-msgstr ""
+msgstr "Bder ikemmusen yettwarnan melmi kan ɣer ikufiyen."
 
 #: commands/list/list.cpp:98
 msgid "List upgrades available for the installed packages."
-msgstr ""
+msgstr "Sebder ileqman iwejden i yikemmusen yettusbedden."
 
 #: commands/list/list.cpp:102
 msgid "List packages which will be removed by the 'dnf autoremove' command."
-msgstr ""
+msgstr "Bder ikemmusen ara yettwakksen s tladna 'dnf autoremove'."
 
 #: commands/list/list.cpp:203 commands/list/list.cpp:208
 msgid "Installed packages"
-msgstr ""
+msgstr "Ikemmusen yettusbedden"
 
 #: commands/list/list.cpp:204 commands/list/list.cpp:217
 msgid "Available packages"
-msgstr ""
+msgstr "Ikemmusen iwejden"
 
 #: commands/list/list.cpp:225
 msgid "Available upgrades"
-msgstr ""
+msgstr "Ilqemen iwejden"
 
 #: commands/list/list.cpp:241
 msgid "Obsoleting packages"
-msgstr ""
+msgstr "Ikemmusen iqbuṛen"
 
 #: commands/list/list.cpp:246
 msgid "Autoremove packages"
-msgstr ""
+msgstr "Tukksa tawurmant n yikemmusen"
 
 #: commands/list/list.cpp:250
 msgid "Extra packages"
-msgstr ""
+msgstr "Ikemmusen imernanen"
 
 #: commands/list/list.cpp:261
 msgid "Recently added packages"
-msgstr ""
+msgstr "Ikemmusen yettwarnan melmi kan"
 
 #: commands/list/list.cpp:266
 msgid "No matching packages to list"
-msgstr ""
+msgstr "Ulac ikemmusen inmeɣran i usebder"
 
 #: commands/mark/mark.cpp:38
 msgid "Change the reason of an installed package"
-msgstr ""
+msgstr "Snifel tamentilt n ukemmus yettwasbedden"
 
 #: commands/module/arguments.hpp:36
 msgid "Show enabled modules."
-msgstr ""
+msgstr "Sken izegrar iremden."
 
 #: commands/module/arguments.hpp:43
 msgid "Show disabled modules."
-msgstr ""
+msgstr "Sken izegrar yensan."
 
 #: commands/module/arguments.hpp:50
 msgid "Pattern matching module NSVCAs."
@@ -685,17 +709,20 @@ msgstr "Sefrek izegrar"
 
 #: commands/module/module_list.cpp:85
 msgid "No matches found for \"{}\"."
-msgstr ""
+msgstr "Ur d-nufi ara inmeɣrayen i \"{}\"."
 
 #: commands/offline/offline.cpp:217
 msgid "Manage offline transactions"
-msgstr ""
+msgstr "Sefrek tinigiwin s uskar aruqqin"
 
 #: commands/offline/offline.cpp:249
 msgid ""
 "Error reading state: {}. Rerun the command you used to initiate the offline "
 "transaction, e.g. `dnf5 system-upgrade download [OPTIONS]`."
 msgstr ""
+"Tuccḍa deg tɣuri n waddad: {}. Ales aselkem n tladna i tesqedceḍ iwakken ad "
+"twennezeḍ tamyigawt n war tuqqna, amedya. `dnf5 system-upgrade download "
+"[OPTIONS]`."
 
 #: commands/offline/offline.cpp:272
 msgid "Couldn't connect to D-Bus: {}"
@@ -706,22 +733,24 @@ msgid ""
 "Prepare the system to perform the offline transaction and reboot to start "
 "the transaction."
 msgstr ""
+"Aheyyi n unagraw iwakken ad iselkem tanigawt s uskar aruqqin akked wales "
+"usenker iwakken ad tebduḍ tanigawt."
 
 #: commands/offline/offline.cpp:310
 msgid "Power off the system after the operation is complete"
-msgstr ""
+msgstr "Sexsi anagraw ticki tfukk temhelt"
 
 #: commands/offline/offline.cpp:321
 msgid "No offline transaction is stored."
-msgstr ""
+msgstr "Ulac tanigawt s uskar aruqqin yettwaskelsen."
 
 #: commands/offline/offline.cpp:329
 msgid "System is not ready for offline transaction."
-msgstr ""
+msgstr "Anagraw ur yewjid ara i tnigawt s uskar aruqqin."
 
 #: commands/offline/offline.cpp:332
 msgid "Data directory {} does not exist."
-msgstr ""
+msgstr "Akaram n isefka {} ulac-it."
 
 #: commands/offline/offline.cpp:357
 msgid "{} is not wanted by system-update.target."
@@ -729,13 +758,15 @@ msgstr ""
 
 #: commands/offline/offline.cpp:367
 msgid "The system will now reboot to upgrade to release version {}."
-msgstr ""
+msgstr "Anagraw ad yekker tikkelt-nniḍen iwakken ad tleqqemeḍ ɣer lqem {}."
 
 #: commands/offline/offline.cpp:371
 msgid ""
 "The system will now reboot to perform the offline transaction initiated by "
 "the following command:"
 msgstr ""
+"Anagraw ad yekker tikkelt-nniḍen iwakken ad yeg tanigawt s uskar aruqqin i "
+"yellan tettuwennez s taladna-agi:"
 
 #: commands/offline/offline.cpp:402
 msgid ""
@@ -745,23 +776,23 @@ msgstr ""
 
 #: commands/offline/offline.cpp:436
 msgid "Trigger file does not exist. Exiting."
-msgstr ""
+msgstr "Afaylu n zznad ulac-it. Tuffɣa."
 
 #: commands/offline/offline.cpp:440
 msgid "Another offline transaction tool is running. Exiting."
-msgstr ""
+msgstr "Afecku-nniḍen n temyigawt s war tuqqna itteddu. Tuffɣa."
 
 #: commands/offline/offline.cpp:467
 msgid "Starting offline transaction. This will take a while."
-msgstr ""
+msgstr "Asenker n temyigawt deg uskar aruqqin. Aya ad yeṭṭef kra n wakud."
 
 #: commands/offline/offline.cpp:471
 msgid "Starting system upgrade. This will take a while."
-msgstr ""
+msgstr "Asenker n uleqqem n unagraw. Aya ad yeṭṭef kra n wakud."
 
 #: commands/offline/offline.cpp:483
 msgid "Use `dnf5 offline reboot` to begin the transaction."
-msgstr ""
+msgstr "Seqdec `dnf5 offline reboot`akken ad tebduḍ tanigawt."
 
 #: commands/offline/offline.cpp:534
 msgid "Transaction failed: "
@@ -769,7 +800,7 @@ msgstr "Tuccḍa n tnigawt: "
 
 #: commands/offline/offline.cpp:604
 msgid "Error reading journal: {}"
-msgstr ""
+msgstr "Tuccḍa deg tɣuri n uɣmis: {}"
 
 #: commands/offline/offline.cpp:610
 msgid "Add journal match failed: {}"
@@ -777,7 +808,7 @@ msgstr ""
 
 #: commands/offline/offline.cpp:638
 msgid "No logs were found."
-msgstr ""
+msgstr "Ulac iɣmisen yettwafen."
 
 #: commands/offline/offline.cpp:642
 msgid "The following boots appear to contain offline transaction logs:"
@@ -785,7 +816,7 @@ msgstr ""
 
 #: commands/offline/offline.cpp:659
 msgid "Cannot find logs with this index."
-msgstr ""
+msgstr "Ur izmir ara ad d-yaf iɣmisen s umatar-agi."
 
 #: commands/offline/offline.cpp:666
 msgid "Unable to match systemd journal entry."
@@ -891,11 +922,11 @@ msgstr "Tineɣrufin"
 
 #: commands/search/search.cpp:44
 msgid "Search for software matching all specified strings"
-msgstr ""
+msgstr "Nadi ɣef iseɣẓanen inmeɣran akked meṛṛa izraren i d-ittunefken"
 
 #: commands/swap/swap.cpp:44
 msgid "Remove software and install another in one transaction"
-msgstr ""
+msgstr "Kkes aseɣẓan sakin sebded wayeḍ deg yiwet n tnigawt"
 
 #: commands/system-upgrade/system-upgrade.cpp:56
 msgid "Prepare system for upgrade to a new release"
@@ -910,22 +941,24 @@ msgid ""
 "Do not install packages from the new release if they are older than what is "
 "currently installed"
 msgstr ""
+"Ur sebdad ara ikemmusen n lqem amaynut ma llan d iqbuṛen ɣef ikemmusen "
+"ibedden yakan"
 
 #: commands/system-upgrade/system-upgrade.cpp:101
 msgid "Need a --releasever greater than the current system version."
-msgstr ""
+msgstr "--releasever issefk ad yili ugar n lqem amiran n unagraw."
 
 #: commands/system-upgrade/system-upgrade.cpp:150
 msgid "Store a distro-sync transaction to be performed offline"
-msgstr ""
+msgstr "Sekles tanigawt distro-sync iwakken ad tgeḍ deg uskar aruqqin"
 
 #: commands/system-upgrade/system-upgrade.cpp:172
 msgid "Store an upgrade transaction to be performed offline"
-msgstr ""
+msgstr "Sekles tanigawt n uleqqem i wakken ad tettwaselkem s uskar aruqqin"
 
 #: commands/upgrade/upgrade.cpp:43
 msgid "Upgrade software"
-msgstr ""
+msgstr "Sali aswir uleqqem n useɣẓan"
 
 #: commands/upgrade/upgrade.cpp:50
 msgid ""
@@ -938,15 +971,15 @@ msgstr ""
 #. TODO(mblaha): add full command line
 #: commands/versionlock/utils.cpp:35
 msgid "Added by 'versionlock {}' command on {}"
-msgstr ""
+msgstr "Yettwarna s tladna 'versionlock {}' {}"
 
 #: commands/versionlock/versionlock.cpp:40
 msgid "Manage versionlock configuration"
-msgstr ""
+msgstr "Sefrek tawila n versionlock"
 
 #: commands/versionlock/versionlock_add.cpp:37
 msgid "Add new entry to versionlock configuration"
-msgstr ""
+msgstr "Rnu anekcum amaynut ɣer twila n versionlock"
 
 #: commands/versionlock/versionlock_add.cpp:44
 msgid "List of package package-spec-N to add versionlock for"
@@ -955,19 +988,19 @@ msgstr ""
 #: commands/versionlock/versionlock_add.cpp:107
 #: commands/versionlock/versionlock_exclude.cpp:126
 msgid "No package found for \"{}\"."
-msgstr ""
+msgstr "Ulac akemmus yettwafen i \"{}\"."
 
 #: commands/versionlock/versionlock_add.cpp:134
 msgid "Adding versionlock on \"{0} = {1}\"."
-msgstr ""
+msgstr "Timerna n usekkeṛ uleqqem deg \"{0} = {1}\"."
 
 #: commands/versionlock/versionlock_add.cpp:137
 msgid "Package \"{}\" is already locked."
-msgstr ""
+msgstr "Akemmus \"{}\" yettwasekkeṛ yakan."
 
 #: commands/versionlock/versionlock_clear.cpp:32
 msgid "Remove all entries from versionlock configuration"
-msgstr ""
+msgstr "Kkes akk inekcumen seg twila n usekkeṛ uleqqem"
 
 #: commands/versionlock/versionlock_delete.cpp:35
 msgid "Remove any matching versionlock configuration entries"
@@ -1021,10 +1054,8 @@ msgid "The following OpenPGP key (0x{}) is about to be removed:"
 msgstr ""
 
 #: context.cpp:98
-#, fuzzy
-#| msgid " UserID     : \"{}\"\n"
 msgid " Reason     : {}\n"
-msgstr " UserID     : \"{}\"\n"
+msgstr " Taɣẓint     : {}\n"
 
 #: context.cpp:102
 msgid " Fingerprint: {}\n"
@@ -1096,12 +1127,13 @@ msgid ""
 "There is already an offline transaction queued, initiated by the following "
 "command:"
 msgstr ""
+"Tella yakan tnigawt deg udras s uskar n tuqqna, ittuwennez s tladna-agi:"
 
 #: context.cpp:478
 msgid ""
 "Continuing will cancel the old offline transaction and replace it with this "
 "one."
-msgstr ""
+msgstr "S ukemmel, tanigawt taqburt ad tettwasefsex udiɣ ad tettwabeddel s wa."
 
 #: context.cpp:496
 msgid ""
@@ -1120,15 +1152,15 @@ msgstr "Aleqqem n {}"
 
 #: context.cpp:823
 msgid "Downgrading {}"
-msgstr ""
+msgstr "Asebded n lqem yezrin n {}"
 
 #: context.cpp:826
 msgid "Reinstalling {}"
-msgstr ""
+msgstr "Ales asbeddi n {}"
 
 #: context.cpp:839
 msgid "Unexpected action in TransactionPackage: {}"
-msgstr ""
+msgstr "Tigawt ur tettwarǧi ara deg TransactionPackage: {}"
 
 #: context.cpp:845
 msgid "Installing {}"
@@ -1148,7 +1180,7 @@ msgstr "Aṣfaḍ n {}"
 
 #: context.cpp:907
 msgid "Unpack error: {}"
-msgstr ""
+msgstr "Tuccḍa deg usefruri: {}"
 
 #: context.cpp:915
 msgid "Cpio error: {}"
@@ -1156,19 +1188,19 @@ msgstr "Tuccḍa Cpio: {}"
 
 #: context.cpp:925
 msgid "Scriptlet output:"
-msgstr ""
+msgstr "Tasufeɣt n scriptlet:"
 
 #: context.cpp:948
 msgid "Running scriptlets"
-msgstr ""
+msgstr "Aselkem n scriptlets"
 
 #: context.cpp:953
 msgid "Running {} scriptlet: {}"
-msgstr ""
+msgstr "Aselkem n scriptlets {}: {}"
 
 #: context.cpp:968
 msgid "Finished {} scriptlet: {}"
-msgstr ""
+msgstr "Scriptlet {} iffuk: {}"
 
 #: context.cpp:974
 msgid "Non-critical error in {} scriptlet: {}"
@@ -1176,7 +1208,7 @@ msgstr ""
 
 #: context.cpp:983
 msgid "Error in {} scriptlet: {}"
-msgstr ""
+msgstr "Tuccḍa deg scriptlet {}: {}"
 
 #: context.cpp:1018
 msgid "Verify package files"
@@ -1184,19 +1216,19 @@ msgstr "Asenqed n yifuyla n ikemmusen"
 
 #: library.cpp:33
 msgid "Cannot load shared library \"{}\": {}"
-msgstr ""
+msgstr "D awezɣi asali n temkarḍit yettwabḍan \"{}\": {}"
 
 #: library.cpp:47
 msgid "Cannot obtain address of symbol \"{}\": {}"
-msgstr ""
+msgstr "Ur izmir ara ad d-yawi tansa n uzamul \"{}\": {}"
 
 #: main.cpp:133
 msgid "Utility for packages maintaining"
-msgstr ""
+msgstr "Afecku n useggem n yikemmusen"
 
 #: main.cpp:134
 msgid "DNF5 is a program for maintaining packages."
-msgstr ""
+msgstr "DNF5 d ahil n useggem n yikemmusen."
 
 #: main.cpp:135
 msgid "Unclassified options:"
@@ -1204,7 +1236,7 @@ msgstr ""
 
 #: main.cpp:138
 msgid "Global options:"
-msgstr ""
+msgstr "Tinefrunin imuta:"
 
 #: main.cpp:143
 msgid "Print help"
@@ -1212,7 +1244,7 @@ msgstr "Siggez tallalt"
 
 #: main.cpp:150
 msgid "Configuration file location"
-msgstr ""
+msgstr "Ideg n ufaylu n twila"
 
 #: main.cpp:158
 msgid ""
@@ -1241,7 +1273,7 @@ msgstr ""
 
 #: main.cpp:218
 msgid "create additional repository using id and path"
-msgstr ""
+msgstr "rnu akufi-nniḍen s ttawil n usulay akked ubrid"
 
 #: main.cpp:226
 msgid "repofrompath: Incorrect repoid and path specification \"{}\""
@@ -1270,6 +1302,8 @@ msgstr "{}: Azal n ufakul yettwamsel s wudem arameɣtu \"{}\""
 msgid ""
 "{}: Badly formatted argument value: Last key character cannot be '.': {}"
 msgstr ""
+"{}: Azal n ufakul ur yemsil ara akken iwata: Asekkil aneggaru ur izmir ara "
+"ad yili d '.': {}"
 
 #: main.cpp:269
 msgid "setopt: \"{0}\": {1}"
@@ -1468,22 +1502,24 @@ msgid ""
 "After this operation, {:.0f} {:s} will be freed (install {:.0f} {:s}, remove "
 "{:.0f} {:s})."
 msgstr ""
+"Seld tamhelt-agi, {:.0f} {:s} ad yettuslelli (sbedd {:.0f} {:s}, kkes {:.0f} "
+"{:s})."
 
 #: main.cpp:865
 msgid "======== Main configuration: ========"
-msgstr ""
+msgstr "======== Tawila tagejdant: ========"
 
 #: main.cpp:902
 msgid "No matching repo to dump configuration: \"{}\""
-msgstr ""
+msgstr "Ulac akufi inmeɣran akked twila: \"{}\""
 
 #: main.cpp:907
 msgid "======== \"{}\" repository configuration: ========"
-msgstr ""
+msgstr "======== Tawila n ukufi \"{}\" : ========"
 
 #: main.cpp:927
 msgid "======== Variables: ========"
-msgstr ""
+msgstr "======== Imuttiyen: ========"
 
 #: main.cpp:967
 msgid "New leaves:"
@@ -1495,11 +1531,11 @@ msgstr " {}"
 
 #: main.cpp:1013
 msgid "{} to skip unavailable packages"
-msgstr ""
+msgstr "{} akken ad tzegleḍ ikemmusen ur nelli ara"
 
 #: main.cpp:1021
 msgid "{} to allow extra packages in the transaction"
-msgstr ""
+msgstr "{} iwakken ad tsirgeḍ ikemmusen imernan deg tnigawt"
 
 #: main.cpp:1034
 msgid ""
@@ -1510,23 +1546,23 @@ msgstr ""
 
 #: main.cpp:1081
 msgid "{} to not limit the transaction to the best candidates"
-msgstr ""
+msgstr "{} akken ur ttarran ara talast n tnigawt i yimazwaren ifazen"
 
 #: main.cpp:1088
 msgid "{} to allow removing of installed packages to resolve problems"
-msgstr ""
+msgstr "{} akken ad teǧǧeḍ tukksa n yikemmusen yettwasbedden i tifrat n wuguren"
 
 #: main.cpp:1097
 msgid "{} to load additional filelists metadata"
-msgstr ""
+msgstr "{} i usali n yiɣefisefka niḍen filelists n yifuyla"
 
 #: main.cpp:1104
 msgid "{} to skip uninstallable packages"
-msgstr ""
+msgstr "{} akken ad tzegleḍ ikemmusen ur nettwasbeddi ara"
 
 #: main.cpp:1110
 msgid "You can try to add to command line:"
-msgstr ""
+msgstr "Tzemreḍ ad tɛerḍeḍ ad ternuḍ ɣer izirig n tladna:"
 
 #: main.cpp:1128
 msgid ""
@@ -1542,7 +1578,7 @@ msgstr ""
 
 #: main.cpp:1226
 msgid "--- DNF5 launched with arguments: \"{}\" ---"
-msgstr ""
+msgstr "--- DNF5 yettwasenker s yifukal: \"{}\" ---"
 
 #: main.cpp:1262
 msgid "Invalid \"index\" in \"--complete=<index>[,...]\": {}"
@@ -1554,23 +1590,25 @@ msgstr "{}."
 
 #: main.cpp:1304 main.cpp:1556
 msgid "{}. Add \"--help\" for more information about the arguments."
-msgstr ""
+msgstr "{}. Rnu \"--help\" i wugar n telɣut ɣef yifukal."
 
 #: main.cpp:1313
 msgid ""
 "It could be a command provided by a plugin, try: dnf5 install 'dnf5-"
 "command({})'"
 msgstr ""
+"Yezmer ad yili d tladna i d-yettunefken sɣur azegrir, ɛreḍ: dnf5 install "
+"'dnf5-command({})'"
 
 #: main.cpp:1355
 msgid ""
 "The argument is available for commands: {}. (It has to be placed after the "
 "command.)"
-msgstr ""
+msgstr "Afakul yewjed i tiludna: {}. (Yessefk ad yettwasers seld taladna.)"
 
 #: main.cpp:1399
 msgid "No read/execute access in current directory, moving to /"
-msgstr ""
+msgstr "Ulac addaf n tɣuri/uselkem deg ukaram amiran, asmutti ɣer /"
 
 #: main.cpp:1471
 msgid ""
@@ -1581,11 +1619,11 @@ msgstr ""
 
 #: main.cpp:1512
 msgid "The operation will only store the transaction in {}"
-msgstr ""
+msgstr "Tamhelt ad tessekles kan tanigawt deg {}"
 
 #: main.cpp:1514
 msgid "The operation will only download packages for the transaction."
-msgstr ""
+msgstr "Tamhelt ad tessider kan ikemmusen i tnigawt."
 
 #: main.cpp:1519
 msgid ""
@@ -1607,11 +1645,11 @@ msgstr ""
 
 #: main.cpp:1566
 msgid "Command returned error: {}"
-msgstr ""
+msgstr "Taladna terra-d tuccḍa: {}"
 
 #: main.cpp:1574
 msgid "DNF5 finished"
-msgstr ""
+msgstr "DNF5 ifukk"
 
 #: main.cpp:1578
 msgid "Complete!"
@@ -1619,15 +1657,15 @@ msgstr "Immed!"
 
 #: shared_options.cpp:32
 msgid "Allow removing of installed packages to resolve problems"
-msgstr ""
+msgstr "Sireg tukksa n yikemmusen yettwasbedden i ferru n wuguren"
 
 #: shared_options.cpp:42
 msgid "Allow resolving of depsolve problems by skipping packages"
-msgstr ""
+msgstr "Sireg ferru n wuguren depsolve s tezgel n yikemmusen"
 
 #: shared_options.cpp:54
 msgid "Allow skipping unavailable packages"
-msgstr ""
+msgstr "Sireg dnf5 akken ad yezgel ikemmusen ur nelli ara"
 
 #, fuzzy
 #~| msgid " UserID     : \"{}\"\n"

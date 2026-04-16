@@ -2,13 +2,14 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # Tri Phuong Nguyen <triphuongvasa@gmail.com>, 2025.
+# Khoa Le <inctenone@gmail.com>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-07-26 03:48+0000\n"
-"PO-Revision-Date: 2025-09-02 14:20+0000\n"
-"Last-Translator: Tri Phuong Nguyen <triphuongvasa@gmail.com>\n"
+"PO-Revision-Date: 2026-04-12 12:58+0000\n"
+"Last-Translator: Khoa Le <inctenone@gmail.com>\n"
 "Language-Team: Vietnamese <https://translate.fedoraproject.org/projects/dnf5/"
 "dnf5daemon-client/vi/>\n"
 "Language: vi\n"
@@ -16,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.13\n"
+"X-Generator: Weblate 5.16.2\n"
 
 #: commands/advisory/advisory.cpp:35
 msgid "Manage advisories"
@@ -32,71 +33,81 @@ msgstr "Liệt kê khuyến nghị"
 
 #: commands/advisory/arguments.hpp:32
 msgid "Show advisories containing any version of installed packages."
-msgstr ""
+msgstr "Hiển thị các cảnh báo chứa bất kỳ phiên bản nào của các gói đã cài đặt."
 
 #: commands/advisory/arguments.hpp:43
 msgid ""
 "Show advisories containing newer versions of installed packages. This is the "
 "default behavior."
 msgstr ""
+"Hiển thị các khuyến nghị chứa các phiên bản mới hơn của các gói đã cài đặt. "
+"Đây là hành vi mặc định."
 
 #: commands/advisory/arguments.hpp:55
 msgid ""
 "Show advisories containing equal and older versions of installed packages."
 msgstr ""
+"Hiển thị các cảnh báo chứa các phiên bản bằng hoặc cũ hơn của các gói đã cài "
+"đặt."
 
 #: commands/advisory/arguments.hpp:67
 msgid ""
 "Show advisories containing newer versions of installed packages for which a "
 "newer version is available."
 msgstr ""
+"Hiển thị các thông báo về các phiên bản mới hơn của các gói đã cài đặt mà "
+"hiện có phiên bản mới hơn."
 
 #: commands/advisory/arguments.hpp:80
 msgid ""
 "Show only advisories containing packages with specified names. List option, "
 "supports globs."
 msgstr ""
+"Chỉ hiển thị các thông báo liên quan đến các gói có tên được chỉ định. Tùy "
+"chọn liệt kê, hỗ trợ ký tự đại diện."
 
 #: commands/advisory/arguments.hpp:81
 msgid "PACKAGE_NAME,..."
-msgstr ""
+msgstr "PACKAGE_NAME,..."
 
 #: commands/advisory/arguments.hpp:88
 msgid "List of patterns matched against advisory names."
-msgstr ""
+msgstr "Danh sách các mẫu được đối chiếu với tên cảnh báo."
 
 #: commands/advisory/arguments.hpp:95
 msgid "Show only advisories referencing a bugzilla."
-msgstr ""
+msgstr "Chỉ hiển thị các cảnh báo tham chiếu đến một bugzilla."
 
 #: commands/advisory/arguments.hpp:102
 msgid "Show only advisories referencing a CVE."
-msgstr ""
+msgstr "Chỉ hiển thị các thông báo tư vấn có tham chiếu đến một CVE."
 
 #: commands/advisory/arguments.hpp:113
 msgid ""
 "Include content contained in advisories with specified name. List option."
 msgstr ""
+"Bao gồm nội dung có trong các thông báo tư vấn với tên được chỉ định. Tùy "
+"chọn danh sách."
 
 #: commands/advisory/arguments.hpp:114
 msgid "ADVISORY_NAME,..."
-msgstr ""
+msgstr "ADVISORY_NAME,..."
 
 #: commands/advisory/arguments.hpp:121
 msgid "Include content contained in security advisories."
-msgstr ""
+msgstr "Bao gồm nội dung được chứa trong các thông báo bảo mật."
 
 #: commands/advisory/arguments.hpp:128
 msgid "Include content contained in bugfix advisories."
-msgstr ""
+msgstr "Bao gồm nội dung có trong các thông báo sửa lỗi."
 
 #: commands/advisory/arguments.hpp:135
 msgid "Include content contained in enhancement advisories."
-msgstr ""
+msgstr "Bao gồm nội dung được chứa trong các khuyến nghị cải tiến."
 
 #: commands/advisory/arguments.hpp:142
 msgid "Include content contained in newpackage advisories."
-msgstr ""
+msgstr "Bao gồm nội dung có trong các khuyến nghị newpackage."
 
 #. Note for translators: "critical" etc. quoted words are
 #. literals that should not be translated.
@@ -105,88 +116,102 @@ msgid ""
 "Include content contained in advisories with specified severity. List "
 "option. Can be \"critical\", \"important\", \"moderate\", \"low\", \"none\"."
 msgstr ""
+"Bao gồm nội dung nằm trong các khuyến cáo với mức độ nghiêm trọng được chỉ "
+"định. Tùy chọn danh sách. Có thể là \"critical\", \"important\", "
+"\"moderate\", \"low\", \"none\"."
 
 #: commands/advisory/arguments.hpp:157
 msgid "ADVISORY_SEVERITY,..."
-msgstr ""
+msgstr "ADVISORY_SEVERITY,..."
 
 #: commands/advisory/arguments.hpp:169
 msgid ""
 "Include content contained in advisories that fix a Bugzilla ID, Eg. 123123. "
 "List option."
 msgstr ""
+"Bao gồm nội dung chứa trong các bản khuyến cáo sửa một Bugzilla ID, ví dụ: "
+"123123. Tùy chọn danh sách."
 
 #: commands/advisory/arguments.hpp:170
 msgid "BUGZILLA_ID,..."
-msgstr ""
+msgstr "BUGZILLA_ID,..."
 
 #: commands/advisory/arguments.hpp:180
 msgid ""
 "Include content contained in advisories that fix a CVE (Common "
 "Vulnerabilities and Exposures) ID, Eg. CVE-2201-0123. List option."
 msgstr ""
+"Bao gồm nội dung có trong các bản tư vấn khắc phục một mã CVE (Common "
+"Vulnerabilities and Exposures), ví dụ: CVE-2201-0123. Tùy chọn danh sách."
 
 #: commands/advisory/arguments.hpp:182
 msgid "CVE_ID,..."
-msgstr ""
+msgstr "CVE_ID,..."
 
 #: commands/clean/clean.cpp:88
 #, c++-format
 msgid "Error cleaning the cache: {}"
-msgstr ""
+msgstr "Lỗi khi dọn dẹp bộ nhớ đệm: {}"
 
 #: commands/distro-sync/distro-sync.cpp:48
 msgid ""
 "Upgrade or downgrade installed software to the latest available versions"
 msgstr ""
+"Nâng cấp hoặc hạ cấp phần mềm đã cài đặt lên các phiên bản mới nhất hiện có"
 
 #: commands/group/group.cpp:41
 msgid "Manage comps groups"
-msgstr ""
+msgstr "Quản lý các nhóm comps"
 
 #: commands/group/group_list.hpp:37
 msgid "Show only available groups."
-msgstr ""
+msgstr "Chỉ hiển thị các nhóm có sẵn."
 
 #: commands/group/group_list.hpp:43
 msgid "Show only installed groups."
-msgstr ""
+msgstr "Chỉ hiển thị các nhóm đã được cài đặt."
 
 #: commands/group/group_list.hpp:49
 msgid "Show also hidden groups."
-msgstr ""
+msgstr "Hiển thị cả các nhóm ẩn."
 
 #: commands/group/group_list.hpp:59
 msgid ""
 "Show only groups containing packages with specified names. List option, "
 "supports globs."
 msgstr ""
+"Chỉ hiển thị các nhóm chứa các gói có tên được chỉ định. Tùy chọn danh sách, "
+"hỗ trợ ký tự đại diện."
 
 #: commands/repo/repo.cpp:37
 msgid "Manage repositories"
-msgstr ""
+msgstr "Quản lý kho lưu trữ"
 
 #: commands/repoquery/repoquery.cpp:95
 msgid "search for packages matching various criteria"
-msgstr ""
+msgstr "tìm kiếm các gói phù hợp với nhiều tiêu chí khác nhau"
 
 #: commands/repoquery/repoquery.cpp:159
 #, c++-format
 msgid "Error parsing JSON object \"{}\": {}"
-msgstr ""
+msgstr "Lỗi phân tích cú pháp đối tượng JSON \"{}\": {}"
 
 #: exception.cpp:28
 msgid ""
 "This command has to be run with superuser privileges (under the root user on "
 "most systems)."
 msgstr ""
+"Lệnh này phải được chạy với quyền siêu người dùng (dưới tài khoản root trên "
+"hầu hết các hệ thống)."
 
 #: main.cpp:158
 #, c++-format
 msgid ""
 "{}: Badly formatted argument value: Last key character cannot be '.': {}"
 msgstr ""
+"{}: Giá trị đối số định dạng không đúng: Ký tự cuối cùng của khóa không được "
+"là '.': {}"
 
 #: main.cpp:258 main.cpp:308
 msgid ". Add \"--help\" for more information about the arguments."
-msgstr ""
+msgstr ". Thêm \"--help\" để biết thêm thông tin về các tham số."

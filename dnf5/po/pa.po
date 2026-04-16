@@ -1,13 +1,13 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# A S Alam <aalam@users.noreply.translate.fedoraproject.org>, 2024, 2025.
+# A S Alam <aalam@users.noreply.translate.fedoraproject.org>, 2024, 2025, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-07-26 03:48+0000\n"
-"PO-Revision-Date: 2025-01-03 15:05+0000\n"
+"PO-Revision-Date: 2026-03-17 19:58+0000\n"
 "Last-Translator: A S Alam <aalam@users.noreply.translate.fedoraproject.org>\n"
 "Language-Team: Punjabi <https://translate.fedoraproject.org/projects/dnf5/"
 "dnf5/pa/>\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.9.1\n"
+"X-Generator: Weblate 5.16.2\n"
 
 #: cmdline_aliases.cpp:84 context.cpp:301 main.cpp:1357
 msgid ", "
@@ -359,7 +359,8 @@ msgstr "debuginfo ਪੈਕੇਜ ਇੰਸਟਾਲ ਕਰੋ।"
 #: commands/distro-sync/distro-sync.cpp:44
 msgid ""
 "Upgrade or downgrade installed software to the latest available versions"
-msgstr "ਇੰਸਟਾਲ ਹੋਏ ਸਾਫਟਵੇਅਰਾਂ ਨੂੰ ਉਹਨਾਂ ਦੇ ਨਵੇਂ ਮੌਜੂਦ ਵਰਜ਼ਨਾਂ ਲਈ ਅੱਪਗਰੇਡ ਜਾਂ ਡਾਊਨਗਰੇਡ ਕਰੋ"
+msgstr ""
+"ਇੰਸਟਾਲ ਹੋਏ ਸਾਫਟਵੇਅਰਾਂ ਨੂੰ ਉਹਨਾਂ ਦੇ ਮੌਜੂਦ ਨਵੇਂ ਵਰਜ਼ਨ ਲਈ ਅੱਪਗਰੇਡ ਜਾਂ ਡਾਊਨਗਰੇਡ ਕਰੋ"
 
 #: commands/do/do.cpp:44
 #, fuzzy
@@ -485,11 +486,11 @@ msgstr "ਸਿਰਫ਼ ਮੌਜੂਦ ਗਰੁੱਪ ਹੀ ਵੇਖਾਓ।"
 
 #: commands/group/arguments.hpp:41
 msgid "Show also hidden groups."
-msgstr "ਲੁਕਵੇਂ ਗਰੁੱਪ ਵੀ ਵੇਖਾਓ।"
+msgstr "ਸਿਰਫ਼ ਲੁਕਵੇਂ ਗਰੁੱਪ ਹੀ ਵੇਖਾਓ।"
 
 #: commands/group/arguments.hpp:48
 msgid "Show only installed groups."
-msgstr "ਸਿਰਫ਼ ਇੰਸਟਾਲ ਹੋਏ ਪੈਕੇਜ ਹੀ ਵੇਖਾਓ।"
+msgstr "ਸਿਰਫ਼ ਇੰਸਟਾਲ ਹੋਏ ਗਰੁੱਪ ਹੀ ਵੇਖਾਓ।"
 
 #: commands/group/arguments.hpp:59
 msgid ""
@@ -859,7 +860,7 @@ msgstr ""
 
 #: commands/repo/repo.cpp:38
 msgid "Manage repositories"
-msgstr "ਰਿਪੋਜ਼ਟਰੀਆਂ ਦੀ ਇੰਤਜ਼ਾਮ ਕਰੋ"
+msgstr "ਰਿਪੋਜ਼ਟਰੀਆਂ ਦਾ ਇੰਤਜ਼ਾਮ"
 
 #: commands/repoquery/repoquery.cpp:82
 msgid "Search for packages matching various criteria"

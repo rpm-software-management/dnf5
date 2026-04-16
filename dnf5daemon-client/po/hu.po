@@ -2,27 +2,30 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # Languages add-on <noreply-addon-languages@weblate.org>, 2026.
+# Balázs Meskó <meskobalazs@mailbox.org>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-07-26 03:48+0000\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Automatically generated\n"
-"Language-Team: none\n"
+"PO-Revision-Date: 2026-04-04 03:58+0000\n"
+"Last-Translator: Balázs Meskó <meskobalazs@mailbox.org>\n"
+"Language-Team: Hungarian <https://translate.fedoraproject.org/projects/dnf5/"
+"dnf5daemon-client/hu/>\n"
 "Language: hu\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.16.2\n"
 
 #: commands/advisory/advisory.cpp:35
 msgid "Manage advisories"
-msgstr ""
+msgstr "Tájékoztatók kezelése"
 
 #: commands/advisory/advisory_info.hpp:34
 msgid "Print details about advisories"
-msgstr ""
+msgstr "Részletek kiírása a tájékoztatókról"
 
 #: commands/advisory/advisory_list.hpp:34
 msgid "List advisories"
@@ -30,7 +33,7 @@ msgstr ""
 
 #: commands/advisory/arguments.hpp:32
 msgid "Show advisories containing any version of installed packages."
-msgstr ""
+msgstr "Telepített csomagverziókat tartalmazó tájékoztatók megtekintése."
 
 #: commands/advisory/arguments.hpp:43
 msgid ""
@@ -48,41 +51,45 @@ msgid ""
 "Show advisories containing newer versions of installed packages for which a "
 "newer version is available."
 msgstr ""
+"Telepített csomagok újabb verzióját tartalmazó tájékoztatók megjelenítése, "
+"ha új verziók érhetőek el."
 
 #: commands/advisory/arguments.hpp:80
 msgid ""
 "Show only advisories containing packages with specified names. List option, "
 "supports globs."
 msgstr ""
+"Csak a megadott nevű csomagokat tartalmazó tájékoztatók megjelenítése. "
+"Felsorolás, támogatja a helyettesítő karaktereket."
 
 #: commands/advisory/arguments.hpp:81
 msgid "PACKAGE_NAME,..."
-msgstr ""
+msgstr "CSOMAGNÉV,…"
 
 #: commands/advisory/arguments.hpp:88
 msgid "List of patterns matched against advisory names."
-msgstr ""
+msgstr "A tájékoztatók nevének megfeleltetendő minták."
 
 #: commands/advisory/arguments.hpp:95
 msgid "Show only advisories referencing a bugzilla."
-msgstr ""
+msgstr "Csak bugzillát említő tájékoztatók megjelenítése."
 
 #: commands/advisory/arguments.hpp:102
 msgid "Show only advisories referencing a CVE."
-msgstr ""
+msgstr "Csak CVE-t említő tájékoztatók megjelenítése."
 
 #: commands/advisory/arguments.hpp:113
 msgid ""
 "Include content contained in advisories with specified name. List option."
-msgstr ""
+msgstr "A megadott nevű tájékoztatók tartalmának belevétele. Felsorolás."
 
 #: commands/advisory/arguments.hpp:114
 msgid "ADVISORY_NAME,..."
-msgstr ""
+msgstr "TÁJÉKOZTATÓ_NEVE,…"
 
 #: commands/advisory/arguments.hpp:121
 msgid "Include content contained in security advisories."
-msgstr ""
+msgstr "A biztonsági tájékoztatókban található tartalom belevétele."
 
 #: commands/advisory/arguments.hpp:128
 msgid "Include content contained in bugfix advisories."
@@ -90,11 +97,11 @@ msgstr ""
 
 #: commands/advisory/arguments.hpp:135
 msgid "Include content contained in enhancement advisories."
-msgstr ""
+msgstr "A fejlesztési tájékoztatókban található tartalom belevétele."
 
 #: commands/advisory/arguments.hpp:142
 msgid "Include content contained in newpackage advisories."
-msgstr ""
+msgstr "Az új csomagok tájékoztatóiban található tartalom belevétele."
 
 #. Note for translators: "critical" etc. quoted words are
 #. literals that should not be translated.
@@ -103,6 +110,9 @@ msgid ""
 "Include content contained in advisories with specified severity. List "
 "option. Can be \"critical\", \"important\", \"moderate\", \"low\", \"none\"."
 msgstr ""
+"A megadott súlyosságú tájékoztatókban található tartalom belevétele. "
+"Felsorolás a következőkből: „critical”, „important”, „moderate”, „low”, „none"
+"”."
 
 #: commands/advisory/arguments.hpp:157
 msgid "ADVISORY_SEVERITY,..."
@@ -113,20 +123,25 @@ msgid ""
 "Include content contained in advisories that fix a Bugzilla ID, Eg. 123123. "
 "List option."
 msgstr ""
+"Azon tájékoztatókban található tartalom belevétele, mely a megadott Bugzilla "
+"azonosítókat javítja, például 123213. Felsorolás."
 
 #: commands/advisory/arguments.hpp:170
 msgid "BUGZILLA_ID,..."
-msgstr ""
+msgstr "BUGZILLA_AZONOSÍTÓ,…"
 
 #: commands/advisory/arguments.hpp:180
 msgid ""
 "Include content contained in advisories that fix a CVE (Common "
 "Vulnerabilities and Exposures) ID, Eg. CVE-2201-0123. List option."
 msgstr ""
+"Azon tájékoztatókban található tartalom belevétele, mely a megadott CVE "
+"(Common Vulnerabilities and Exposures) azonosítókat javítja, például 123213. "
+"Felsorolás."
 
 #: commands/advisory/arguments.hpp:182
 msgid "CVE_ID,..."
-msgstr ""
+msgstr "CVE_AZONOSÍTÓ,…"
 
 #: commands/clean/clean.cpp:88
 #, c++-format
@@ -144,15 +159,15 @@ msgstr ""
 
 #: commands/group/group_list.hpp:37
 msgid "Show only available groups."
-msgstr ""
+msgstr "Csak az elérhető csoportok megjelenítése."
 
 #: commands/group/group_list.hpp:43
 msgid "Show only installed groups."
-msgstr ""
+msgstr "Csak a telepített csoportok megjelenítése."
 
 #: commands/group/group_list.hpp:49
 msgid "Show also hidden groups."
-msgstr ""
+msgstr "Rejtett csoportok megjelenítése."
 
 #: commands/group/group_list.hpp:59
 msgid ""

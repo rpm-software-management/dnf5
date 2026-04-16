@@ -2,13 +2,14 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # Aleksey Fedorov <aleksejfedorov963@gmail.com>, 2024.
+# Igor Gorbounov <igor.gorbounov@gmail.com>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-07-26 03:48+0000\n"
-"PO-Revision-Date: 2024-09-22 16:14+0000\n"
-"Last-Translator: Aleksey Fedorov <aleksejfedorov963@gmail.com>\n"
+"PO-Revision-Date: 2026-03-31 19:58+0000\n"
+"Last-Translator: Igor Gorbounov <igor.gorbounov@gmail.com>\n"
 "Language-Team: Russian <https://translate.fedoraproject.org/projects/dnf5/"
 "libdnf5-plugin-actions/ru/>\n"
 "Language: ru\n"
@@ -17,93 +18,71 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 5.7.2\n"
+"X-Generator: Weblate 5.16.2\n"
 
 #: actions.cpp:237
-#, fuzzy
-#| msgid "Error in file \"{}\" on line {}: Unknown hook \"{}\""
 msgid "File \"{}\" on line {}: {}"
-msgstr "Ошибка в файле \"{}\" в строке {}: Неизвестный хук \"{}\""
+msgstr "Файл \"{}\", строка {}: {}"
 
 #: actions.cpp:636 actions.cpp:642 actions.cpp:648 actions.cpp:654
-#, fuzzy
-#| msgid ""
-#| "Error in file \"{}\" on line {}: \"HOOK:PKG_FILTER:DIRECTION:OPTIONS:"
-#| "CMD\" format expected"
 msgid "\"HOOK:PKG_FILTER:DIRECTION:OPTIONS:CMD\" format expected"
-msgstr ""
-"Ошибка в файле \"{}\" в строке {}: Ожидается формат \"HOOK:PKG_FILTER:"
-"DIRECTION:OPTIONS:CMD\""
+msgstr "Ожидается формат «HOOK:PKG_FILTER:DIRECTION:OPTIONS:CMD»"
 
 #: actions.cpp:676
-#, fuzzy
-#| msgid ""
-#| "Error in file \"{}\" on line {}: Unknown \"enabled\" option value \"{}\""
 msgid "Unknown \"enabled\" option value \"{}\""
-msgstr ""
-"Ошибка в файле \"{}\" в строке {}: Неизвестное значение опции \"enabled\" "
-"\"{}\""
+msgstr "Неизвестное значение «{}» параметра «enabled»"
 
 #: actions.cpp:683
 msgid "Unknown option \"{}\""
-msgstr ""
+msgstr "Неизвестный параметр «{}»"
 
 #: actions.cpp:711
 msgid "Unknown hook \"{}\""
-msgstr ""
+msgstr "Неизвестный хук «{}»"
 
 #: actions.cpp:720
-#, fuzzy
-#| msgid ""
-#| "Error in file \"{}\" on line {}: Package filter can only be used in "
-#| "PRE_TRANS and POST_TRANS hooks"
 msgid ""
 "Package filter can only be used in GOAL_RESOLVED, PRE_TRANS and POST_TRANS "
 "hooks"
 msgstr ""
-"Ошибка в файле \"{}\" в строке {}: Пакетный фильтр может быть использован "
-"только в хуках PRE_TRANS и POST_TRANS"
+"Пакетный фильтр может быть использован только в хуках GOAL_RESOLVED, "
+"PRE_TRANS и POST_TRANS"
 
 #: actions.cpp:726
-#, fuzzy
-#| msgid ""
-#| "Error in file \"{}\" on line {}: Cannot use direction without package "
-#| "filter"
 msgid "Cannot use direction without package filter"
-msgstr ""
-"Ошибка в файле \"{}\" в строке {}: Невозможно использовать направление без "
-"фильтра пакетов"
+msgstr "Невозможно использовать направление без фильтра пакетов"
 
 #: actions.cpp:740
-#, fuzzy
-#| msgid "Error in file \"{}\" on line {}: Unknown package direction \"{}\""
 msgid "Unknown package direction \"{}\""
-msgstr ""
-"Ошибка в файле \"{}\" в строке {}: Неизвестное направление пакета \"{}\""
+msgstr "Неизвестное направление пакета «{}»"
 
 #: actions.cpp:747
 msgid "Unknown mode \"{}\""
-msgstr ""
+msgstr "Неизвестный режим «{}»"
 
 #: actions.cpp:755
 msgid "Unsupported value of the \"raise_error\" option: {}"
-msgstr ""
+msgstr "Неподдерживаемое значение параметра «raise_error»: {}"
 
 #: actions.cpp:760
 msgid "Missing command"
-msgstr ""
+msgstr "Отсутствует команда"
 
 #: actions.cpp:953
 msgid "Synax error: Missing equal sign (=) in action output line: {}"
 msgstr ""
+"Синтаксическая ошибка: Отсутствует знак равенства (=) в строке вывода "
+"действия: {}"
 
 #: actions.cpp:964
 msgid "Cannot set option: Action output line: {}"
-msgstr ""
+msgstr "Невозможно установить параметр: Строка вывода действия: {}"
 
 #: actions.cpp:982
 msgid "Action sent the wrong log level: {}"
 msgstr ""
+"В результате выполнения действия был отправлен неверный уровень "
+"журналирования: {}"
 
 #: actions.cpp:987 actions.cpp:1794
 msgid "Action calls for stop: {}"
