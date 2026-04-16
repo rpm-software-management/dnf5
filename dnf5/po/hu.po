@@ -1,14 +1,14 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# Balázs Meskó <meskobalazs@mailbox.org>, 2024, 2025.
+# Balázs Meskó <meskobalazs@mailbox.org>, 2024, 2025, 2026.
 # Weblate Translation Memory <noreply-mt-weblate-translation-memory@weblate.org>, 2024, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-07-26 03:48+0000\n"
-"PO-Revision-Date: 2025-05-06 02:23+0000\n"
+"PO-Revision-Date: 2026-04-04 03:58+0000\n"
 "Last-Translator: Balázs Meskó <meskobalazs@mailbox.org>\n"
 "Language-Team: Hungarian <https://translate.fedoraproject.org/projects/dnf5/"
 "dnf5/hu/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.11.3\n"
+"X-Generator: Weblate 5.16.2\n"
 
 #: cmdline_aliases.cpp:84 context.cpp:301 main.cpp:1357
 msgid ", "
@@ -28,140 +28,171 @@ msgid ""
 "Attached named argument \"{}\" not found: {}: Requested in file \"{}\" on "
 "line {}: {}"
 msgstr ""
+"A csatolt „{}” nevesített argumentum nem található: {}: A(z) „{}” fájl {}. "
+"sorában kérve: {}"
 
 #: cmdline_aliases.cpp:159
 msgid ""
 "Unknown attribute \"{}\" of attached named argument for alias \"{}\" in file "
 "\"{}\" on line {}: {}"
 msgstr ""
+"Ismeretlen „{}” attribútum a csatolt nevesített argumentumban a(z) „{}” "
+"álnévhez, a(z) „{}” fájl {}. sorában: {}"
 
 #: cmdline_aliases.cpp:171
 msgid "Missing attribute \"id_path\" for alias \"{}\" in file \"{}\""
-msgstr ""
+msgstr "Hiányzó „id_path” attribútum a(z) „{}” álnévhez a(z) „{}” fájlban"
 
 #: cmdline_aliases.cpp:208
 msgid "Unsupported version \"{}\" in file \"{}\". Supported versions: {}"
-msgstr ""
+msgstr "Nem támogatott „{}” verzió a(z) „{}” fájlban. Támogatott verziók: {}"
 
 #: cmdline_aliases.cpp:218
 msgid "Bad value type of attribute \"version\" in file \"{}\" on line {}: {}"
-msgstr ""
+msgstr "A „version” attribútum értéktípusa hibás a(z) „{}” fájl {}. sorában: {}"
 
 #: cmdline_aliases.cpp:224
 msgid "Missing attribute \"version\" in file \"{}\""
-msgstr ""
+msgstr "Hiányzó „version” attribútum a(z) „{}” fájlban"
 
 #: cmdline_aliases.cpp:236
 msgid "Unknown key \"{}\" in file \"{}\" on line {}: {}"
-msgstr ""
+msgstr "Ismeretlen „{}” kulcs a(z) „{}” fájl {}. sorában: {}"
 
 #: cmdline_aliases.cpp:253
 msgid "Empty or bad element id path in file \"{}\" on line {}: {}"
-msgstr ""
+msgstr "Üres vagy hibás elemazonosító-útvonal a(z) „{}” fájl {}. sorában: {}"
 
 #: cmdline_aliases.cpp:272
 msgid ""
 "Parent command \"{}\" not found: {}: Requested in file \"{}\" on line {}: {}"
 msgstr ""
+"A(z) „{}” szülőparancsa nem található: {}: A(z) „{}” fájl {}. sorában kérve: "
+"{}"
 
 #: cmdline_aliases.cpp:301
 msgid "Unknown type \"{}\" of element \"{}\" in file \"{}\" on line {}: {}"
-msgstr ""
+msgstr "Ismeretlen „{}” típus a(z) „{}” elemnél a(z) „{}” fájl {}. sorában: {}"
 
 #: cmdline_aliases.cpp:312
 msgid "Missing attribute \"type\" for element \"{}\" in file \"{}\""
-msgstr ""
+msgstr "Hiányzó „type” attribútum a(z) „{}” elemnél a(z) „{}” fájlban"
 
 #: cmdline_aliases.cpp:331
 msgid ""
 "Named argument \"{}\" already registered. Requested in file \"{}\" on line "
 "{}: {}"
 msgstr ""
+"A(z) „{}” nevesített argumentum már regisztrálva van. A(z) „{}” fájl {}. "
+"sorában kérve: {}"
 
 #: cmdline_aliases.cpp:347
 msgid ""
 "Command \"{}\" already registered. Requested in file \"{}\" on line {}: {}"
 msgstr ""
+"A(z) „{}” parancs már regisztrálva van. A(z) „{}” fájl {}. sorában kérve: {}"
 
 #: cmdline_aliases.cpp:375
 msgid "Unknown attribute \"{}\" of group \"{}\" in file \"{}\" on line {}: {}"
 msgstr ""
+"Ismeretlen „{}” attribútum a(z) {} csoportban a(z) „{}” fájl {}. sorában: {}"
 
 #: cmdline_aliases.cpp:387
 msgid "Missing attribute \"header\" for element \"{}\" in file \"{}\""
-msgstr ""
+msgstr "Hiányzó „header” attribútum a(z) „{}” elemnél a(z) „{}” fájlban"
 
 #: cmdline_aliases.cpp:428 cmdline_aliases.cpp:538
 msgid ""
 "The \"short_name\" attribute of named argument \"{}\" must be one character "
 "long in file \"{}\" on line {}: {}"
 msgstr ""
+"A(z) „{}” nevesített argumentum „short_name” attribútumának egy karakter "
+"hosszúságúnak kell lennie a(z) „{}” fájl {}. sorában: {}"
 
 #: cmdline_aliases.cpp:446
 msgid "Source \"{}\" not found: {}: Requested in file \"{}\" on line {}: {}"
 msgstr ""
+"A(z) „{}” forrás nem található: {}: A(z) „{}” fájl {}. sorában kérve: {}"
 
 #: cmdline_aliases.cpp:462 cmdline_aliases.cpp:563 cmdline_aliases.cpp:676
 msgid "Group \"{}\" not found: {}: Requested in file \"{}\" on line {}: {}"
 msgstr ""
+"A(z) „{}” csoport nem található: {}: A(z) „{}” fájl {}. sorában kérve: {}"
 
 #: cmdline_aliases.cpp:476 cmdline_aliases.cpp:579
 msgid ""
 "Unknown attribute \"{}\" of named argument \"{}\" in file \"{}\" on line {}: "
 "{}"
 msgstr ""
+"Ismeretlen „{}” attribútum a(z) „{}” nevesített argumentumban a(z) „{}” fájl "
+"{}. sorában: {}"
 
 #: cmdline_aliases.cpp:489
 msgid "Missing attribute \"source\" for named argument \"{}\" in file \"{}\""
 msgstr ""
+"Hiányzó „source” attribútum a(z) „{}” nevesített argumentumban a(z) „{}” "
+"fájlban"
 
 #: cmdline_aliases.cpp:498 cmdline_aliases.cpp:592
 msgid ""
 "At least one of the attributes \"long_name\" and \"short_name\" must be set "
 "for named argument \"{}\" in file \"{}\""
 msgstr ""
+"A „long_name” és „short_name” attribútumok legalább egyikét be kell állítani "
+"a(z) „{}” nevesített argumentumhoz a(z) „{}” fájlban"
 
 #: cmdline_aliases.cpp:657
 msgid ""
 "Attached command \"{}\" not found: {}: Requested in file \"{}\" on line {}: "
 "{}"
 msgstr ""
+"A csatolt „{}” parancs nem található: {}. A(z) „{}” fájl {}. sorában kérve: "
+"{}"
 
 #: cmdline_aliases.cpp:691
 msgid ""
 "Used config file version \"1.0\" for attribute \"{}\" of command \"{}\" in "
 "file \"{}\" on line {}: {}"
 msgstr ""
+"„1.0” használva a(z) „{1}” parancs „{0}” attribútumának konfigurációsfájl-"
+"verziójaként a(z) „{2}” fájl {3}. sorában: {4}"
 
 #: cmdline_aliases.cpp:713
 msgid ""
 "Unknown attribute \"{}\" of required value for alias \"{}\" in file \"{}\" "
 "on line {}: {}"
 msgstr ""
+"Ismeretlen „{}” attribútum a szükséges értéknél a(z) „{}” álnévhez a(z) „{}” "
+"fájl {}. sorában: {}"
 
 #: cmdline_aliases.cpp:726
 msgid ""
 "Missing attribute \"value_help\" of required value for alias \"{}\" in file "
 "\"{}\""
 msgstr ""
+"Hiányzú „value_help” attribútum a szükséges értéknél a(z) „{}” álnévhez a(z) "
+"„{}” fájlban"
 
 #: cmdline_aliases.cpp:740
 msgid ""
 "Unknown attribute \"{}\" of command \"{}\" in file \"{}\" on line {}: {}"
 msgstr ""
+"Ismeretlen „{}” attribútum a(z) „{}” parancshoz a(z) „{}” fájl {}. sorában: "
+"{}"
 
 #: cmdline_aliases.cpp:756
 msgid ""
 "Missing attribute \"attached_command\" for command \"{}\" in file \"{}\""
 msgstr ""
+"Hiányzó „attached_command” attribútum a(z) „{}” parancshoz a(z) „{}” fájlban"
 
 #: cmdline_aliases.cpp:791
 msgid "Bad value type in file \"{}\" on line {}: {}"
-msgstr ""
+msgstr "Hibás értéktípus a(z) „{}” fájl {}. sorában: {}"
 
 #: cmdline_aliases.cpp:804
 msgid "Syntax error in file \"{}\" on line {}:"
-msgstr ""
+msgstr "Szintaktikai hiba a(z) „{}” fájl {}. sorában:"
 
 #: commands/advisory/advisory.cpp:36
 msgid "Manage advisories"
@@ -220,7 +251,7 @@ msgid ""
 "newer version is available."
 msgstr ""
 "Telepített csomagok újabb verzióját tartalmazó tájékoztatók megjelenítése, "
-"ha az új verziók elérhetőek."
+"ha új verziók érhetőek el."
 
 #: commands/advisory/arguments.hpp:82
 msgid ""
@@ -248,19 +279,19 @@ msgstr "Csak CVE-t említő tájékoztatók megjelenítése."
 
 #: commands/advisory_shared.hpp:76
 msgid "No advisory found matching the requested name: \"{}\""
-msgstr ""
+msgstr "Nem található a kért névnek megfelelő tájékoztató: „{}”"
 
 #: commands/advisory_shared.hpp:109
 msgid "No advisory found fixing the Bugzilla ID: \"{}\""
-msgstr ""
+msgstr "Nem található a Bugzilla azonosítót javító tájékoztató: „{}”"
 
 #: commands/advisory_shared.hpp:128
 msgid "No advisory found fixing the CVE ID: \"{}\""
-msgstr ""
+msgstr "Nem található a CVE azonosítót javító tájékoztató: „{}”"
 
 #: commands/advisory_shared.hpp:143
 msgid "No advisory found matching the specified filters."
-msgstr ""
+msgstr "Nem található a megadott szűrőknek megfelelő tájékoztató."
 
 #: commands/advisory_shared.hpp:158
 msgid ""
@@ -293,8 +324,8 @@ msgid ""
 "option. Can be \"critical\", \"important\", \"moderate\", \"low\", \"none\"."
 msgstr ""
 "A megadott súlyosságú tájékoztatókban található tartalom belevétele. "
-"Felsorolás a következőkből: „critical”, „important”, „moderate”, „low”, "
-"„none”."
+"Felsorolás a következőkből: „critical”, „important”, „moderate”, „low”, „none"
+"”."
 
 #: commands/advisory_shared.hpp:200
 msgid "ADVISORY_SEVERITY,..."
@@ -323,7 +354,7 @@ msgstr ""
 
 #: commands/advisory_shared.hpp:225
 msgid "CVE_ID,..."
-msgstr "CVE_ID,…"
+msgstr "CVE_AZONOSÍTÓ,…"
 
 #: commands/autoremove/autoremove.cpp:38
 msgid "Remove all unneeded packages originally installed as dependencies."
@@ -387,56 +418,52 @@ msgstr ""
 "verziókra"
 
 #: commands/do/do.cpp:44
-#, fuzzy
-#| msgid "Running transaction"
 msgid "Do transaction"
-msgstr "Tranzakció futtatása"
+msgstr "Tranzakció elvégzése"
 
 #: commands/do/do.cpp:49
 msgid "Action to be done on the following items."
-msgstr ""
+msgstr "Elvégzendő művelet a következő elemeken."
 
 #: commands/do/do.cpp:63
 msgid "Unsupported action \"{}\""
-msgstr ""
+msgstr "Nem támogatott „{}” művelet"
 
 #: commands/do/do.cpp:73
 msgid "Type of the following items."
-msgstr ""
+msgstr "A következő elemek típusa."
 
 #: commands/do/do.cpp:86
 msgid "Unsupported item type \"{}\""
-msgstr ""
+msgstr "Nem támogatott „{}” elemtípus"
 
 #: commands/do/do.cpp:99
 msgid "List of items to take action on"
-msgstr ""
+msgstr "Műveletvégzést igénylő elemek"
 
 #: commands/do/do.cpp:131 commands/do/do.cpp:135
 msgid "Only package downgrade is supported."
-msgstr ""
+msgstr "Csak a csomag-visszaállítás támogatott."
 
 #: commands/do/do.cpp:142 commands/do/do.cpp:146
 msgid "Only package reinstall is supported."
-msgstr ""
+msgstr "Csak a csomag-újratelepítés támogatott."
 
 #: commands/do/do.cpp:152
 msgid "Action was not defined"
-msgstr ""
+msgstr "A művelet nem volt meghatározva"
 
 #: commands/do/do.cpp:230
-#, fuzzy
-#| msgid "Invalid urlprotocol option: {}"
 msgid "Invalid Environmet/Group specification: {}"
-msgstr "Érvénytelen urlprotocol kapcsoló: {}"
+msgstr "Érvénytelen környezet-/csoportmegadás: {}"
 
 #: commands/do/do.cpp:314
 msgid "Downgrading environments and groups is not supported."
-msgstr ""
+msgstr "A környezetek és csoportok visszaállítása nem támogatott."
 
 #: commands/do/do.cpp:330
 msgid "Reinstaling environments and groups is not supported."
-msgstr ""
+msgstr "A környezetek és csoportok újratelepítése nem támogatott."
 
 #: commands/downgrade/downgrade.cpp:42
 msgid "Downgrade software"
@@ -490,31 +517,28 @@ msgid ""
 "The following items can be selected only from the specified repositories. "
 "All enabled repositories will still be used to satisfy dependencies."
 msgstr ""
+"A következő elemek csak a megadott tárolókból választhatóak ki. A függőségek "
+"kielégítéséhez továbbra is az összes engedélyezett tároló használva lesz."
 
 #: commands/from_repo.cpp:38 commands/from_repo.cpp:70
-#, fuzzy
-#| msgid "CVE_ID,..."
 msgid "REPO_ID,..."
-msgstr "CVE_ID,…"
+msgstr "TÁROLÓAZONOSÍTÓ,…"
 
 #: commands/from_repo.cpp:53
 msgid "\"--from_repo\" already defined with diferent value"
-msgstr ""
+msgstr "A „--from_repo” már egy másik értékkel meg van adva"
 
 #: commands/from_repo.cpp:68
-#, fuzzy
-#| msgid ""
-#| "List groups of installed packages not required by other installed packages"
 msgid ""
 "Filters installed packages by the ID of the repository they were installed "
 "from."
 msgstr ""
-"Azon telepített csomagcsoportok felsorolása, melyek nem szükségesek más "
-"telepített csomagokhoz"
+"Leszűri a telepített csomagokat a tároló azonosítója alapján, amelyből "
+"telepítve vannak."
 
 #: commands/from_repo.cpp:79
 msgid "\"--installed-from_repo\" already defined with diferent value"
-msgstr ""
+msgstr "Az „--installed-from_repo” már egy másik értékkel meg van adva"
 
 #: commands/group/arguments.hpp:34
 msgid "Show only available groups."
@@ -636,12 +660,10 @@ msgid "Lists packages depending on the packages' relation to the system"
 msgstr "Aszerint sorolja fel a csomagokat, hogy mi a kapcsolatuk a rendszerrel"
 
 #: commands/list/list.cpp:50
-#, fuzzy
-#| msgid "List of keys to match case insensitively"
 msgid "List of package-spec-NI to match (case insensitively)"
 msgstr ""
-"Kulcsok felsorolása a kis- és nagybetűket egyezőnek tekintő "
-"összehasonlításhoz"
+"Illesztendő package-spec-NI (kis- és nagybetűk megegyeznek) elemek "
+"felsorolása"
 
 #: commands/list/list.cpp:62
 msgid "Show all versions of the packages, not only the latest ones."
@@ -788,11 +810,8 @@ msgid "{} is not wanted by system-update.target."
 msgstr "A {} egységet nem kéri a system-update.target."
 
 #: commands/offline/offline.cpp:367
-#, fuzzy
-#| msgid "The system will now reboot to upgrade to release version "
 msgid "The system will now reboot to upgrade to release version {}."
-msgstr ""
-"A rendszer most újraindul, hogy a legfrissebb kiadási verzióra frissítsen "
+msgstr "A rendszer most újraindul, hogy a(z) „{}” kiadási verzióra frissítsen."
 
 #: commands/offline/offline.cpp:371
 msgid ""
@@ -1040,10 +1059,8 @@ msgid "Add new entry to versionlock configuration"
 msgstr "Új bejegyzés hozzáadása a verziózár-konfigurációhoz"
 
 #: commands/versionlock/versionlock_add.cpp:44
-#, fuzzy
-#| msgid "List of package specs to add versionlock for"
 msgid "List of package package-spec-N to add versionlock for"
-msgstr "Csomagmegadások listája, melyekhez verziózár lesz adva"
+msgstr "A package-spec-N elemek felsorolása, melyekhez verziózár lesz adva"
 
 #: commands/versionlock/versionlock_add.cpp:107
 #: commands/versionlock/versionlock_exclude.cpp:126
@@ -1079,10 +1096,9 @@ msgid "Add new exclude entry to versionlock configuration"
 msgstr "Új kizárási bejegyzés hozzáadása a verziózár-konfigurációhoz"
 
 #: commands/versionlock/versionlock_exclude.cpp:44
-#, fuzzy
-#| msgid "List of package specs to add versionlock exclude for"
 msgid "List of package-spec-N to add versionlock exclude for"
-msgstr "Csomagmegadások listája, melyekhez verziózár-kizárás lesz adva"
+msgstr ""
+"A package-spec-N elemek felsorolása, melyekhez verziózár-kizárás lesz adva"
 
 #: commands/versionlock/versionlock_exclude.cpp:89
 #: commands/versionlock/versionlock_exclude.cpp:101
@@ -1461,7 +1477,7 @@ msgstr ""
 #: main.cpp:429
 msgid "disable OpenPGP signature checking (if RPM policy allows)"
 msgstr ""
-"OpenGPG aláírások ellenőrzésének letiltása (ha az RPM házirend engedélyezi)"
+"OpenGPG-aláírások ellenőrzésének letiltása (ha az RPM házirend engedélyezi)"
 
 #: main.cpp:446
 msgid "Disable all libdnf5 plugins"

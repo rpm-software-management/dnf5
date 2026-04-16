@@ -1,16 +1,15 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# "Fco. Javier F. Serrador" <fserrador@gmail.com>, 2025.
+# "Fco. Javier F. Serrador" <fserrador@gmail.com>, 2025, 2026.
 # Weblate Translation Memory <noreply-mt-weblate-translation-memory@weblate.org>, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-07-26 03:48+0000\n"
-"PO-Revision-Date: 2025-06-03 16:14+0000\n"
-"Last-Translator: Weblate Translation Memory <noreply-mt-weblate-translation-"
-"memory@weblate.org>\n"
+"PO-Revision-Date: 2026-04-02 22:59+0000\n"
+"Last-Translator: \"Fco. Javier F. Serrador\" <fserrador@gmail.com>\n"
 "Language-Team: Spanish <https://translate.fedoraproject.org/projects/dnf5/"
 "libdnf5/es/>\n"
 "Language: es\n"
@@ -18,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.11.4\n"
+"X-Generator: Weblate 5.16.2\n"
 
 #: advisory/advisory.cpp:81
 msgid ""
@@ -985,7 +984,7 @@ msgstr "Incorrecto al acceder al RPM «{}»: {}"
 
 #: repo/repo.cpp:107
 msgid "Invalid repository id \"{}\": unexpected character '{}'"
-msgstr "ID «{}» de repositorio inválido: carácter '{}' inesperado"
+msgstr "ID “{}” de repositorio inválido: carácter ‘{}’ inesperado"
 
 #: repo/repo.cpp:150
 msgid "Repository \"{}\" has no source (baseurl, mirrorlist or metalink) set."
@@ -1080,7 +1079,7 @@ msgid ""
 "Failed to create repo \"{}\": Id is present more than once in the "
 "configuration"
 msgstr ""
-"Incorrecto al crear repo \"{}\": ID está presente más de una vez en la "
+"Incorrecto al crear repo “{}”: Id está presente más de una vez en la "
 "configuración"
 
 #: repo/repo_sack.cpp:631

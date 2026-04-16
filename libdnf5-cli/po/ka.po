@@ -1,11 +1,11 @@
-# Temuri Doghonadze <temuri.doghonadze@gmail.com>, 2023, 2024, 2025.
+# Temuri Doghonadze <temuri.doghonadze@gmail.com>, 2023, 2024, 2025, 2026.
 # Weblate Translation Memory <noreply-mt-weblate-translation-memory@weblate.org>, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-07-26 03:48+0000\n"
-"PO-Revision-Date: 2025-06-10 05:33+0000\n"
+"PO-Revision-Date: 2026-03-16 06:58+0000\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <https://translate.fedoraproject.org/projects/dnf5/"
 "libdnf5-cli/ka/>\n"
@@ -14,7 +14,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.11.4\n"
+"X-Generator: Weblate 5.16.2\n"
 
 #: argument_parser.cpp:68
 msgid "Misconfigured alias \"{}\": cannot convert \"{}\" to a number"
@@ -74,37 +74,37 @@ msgstr "აღწერა:"
 
 #: argument_parser.cpp:979
 msgid "Command id \"{}\" already registered for command \"{}\""
-msgstr "ბრძანების ID \"{}\" უკვე რეგისტრირებულია ბრძანებისთვის \"{}\""
+msgstr "ბრძანების id \"{}\" უკვე რეგისტრირებულია ბრძანებისთვის \"{}\""
 
 #: argument_parser.cpp:990
 msgid "Named argument id \"{}\" already registered for command \"{}\""
 msgstr ""
-"მითითებული არგუმენტის ID \"{}\" უკვე რეგისტრირებულია ბრძანებისთვის \"{}\""
+"მითითებული არგუმენტის id \"{}\" უკვე რეგისტრირებულია ბრძანებისთვის \"{}\""
 
 #: argument_parser.cpp:1000
 msgid "Positional argument id \"{}\" already registered for command \"{}\""
 msgstr ""
-"პოზიციური არგუმენტის ID \"{}\" უკვე რეგისტრირებულია ბრძანებისთვის \"{}\""
+"პოზიციური არგუმენტის id \"{}\" უკვე რეგისტრირებულია ბრძანებისთვის \"{}\""
 
 #: argument_parser.cpp:1010
 msgid "Group id \"{}\" already registered for command \"{}\""
-msgstr "ჯგუფის ID \"{}\" უკვე რეგისტრირებულია ბრძანებისთვის \"{}\""
+msgstr "ჯგუფის id \"{}\" უკვე რეგისტრირებულია ბრძანებისთვის \"{}\""
 
 #: argument_parser.cpp:1037
 msgid "Command id \"{}\" does not contain subcommand with id \"{}\""
-msgstr "ბრძანება ID-ით \"{}\" ქვებრძანებას ID-ით \"{}\" არ შეიცავს"
+msgstr "ბრძანება id-ით \"{}\" ქვებრძანებას id-ით \"{}\" არ შეიცავს"
 
 #: argument_parser.cpp:1045
 msgid "Command id \"{}\" does not contain named argument with id \"{}\""
-msgstr "ბრძანება ID-ით \"{}\" მითითებულ არგუმენტს ID-ით \"{}\" არ შეიცავს"
+msgstr "ბრძანება id-ით \"{}\" მითითებულ არგუმენტს id-ით \"{}\" არ შეიცავს"
 
 #: argument_parser.cpp:1053
 msgid "Command id \"{}\" does not contain positional argument with id \"{}\""
-msgstr "ბრძანება ID-ით \"{}\" პოზიციურ არგუმენტს ID-ით \"{}\" არ შეიცავს"
+msgstr "ბრძანება id-ით \"{}\" პოზიციურ არგუმენტს id-ით \"{}\" არ შეიცავს"
 
 #: argument_parser.cpp:1060
 msgid "Command id \"{}\" does not contain group with id \"{}\""
-msgstr "ბრძანება ID-ით \"{}\" ჯგუფს ID-ით \"{}\" არ შეიცავს"
+msgstr "ბრძანება id-ით \"{}\" ჯგუფს id-ით \"{}\" არ შეიცავს"
 
 #: argument_parser.cpp:1177 argument_parser.cpp:1388
 msgid "Unknown argument \"{}\" for command \"{}\""
@@ -120,11 +120,11 @@ msgstr "აკლია მნიშვნელობა ბრძანებ�
 
 #: argument_parser.cpp:1610
 msgid "Named argument with path id \"{}\" not found"
-msgstr "მითითებული არგუმენტი ბილიკის ID-ით \"{}\" არ არსებობს"
+msgstr "მითითებული არგუმენტი ბილიკის id-ით \"{}\" არ არსებობს"
 
 #: argument_parser.cpp:1620
 msgid "Positional argument with path id \"{}\" not found"
-msgstr "პოზიციური არგუმენტი ბილიკის ID-ით \"{}\" არ არსებობს"
+msgstr "პოზიციური არგუმენტი ბილიკის id-ით \"{}\" არ არსებობს"
 
 #: exception.cpp:30
 msgid "Operation aborted by the user."

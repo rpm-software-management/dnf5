@@ -2,13 +2,14 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # Salvatore Cocuzza <info@salvatorecocuzza.it>, 2025.
+# Ali Ciloqlu <ali.ciloqlu@murena.io>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-07-26 03:48+0000\n"
-"PO-Revision-Date: 2025-06-15 15:13+0000\n"
-"Last-Translator: Salvatore Cocuzza <info@salvatorecocuzza.it>\n"
+"PO-Revision-Date: 2026-04-08 08:58+0000\n"
+"Last-Translator: Ali Ciloqlu <ali.ciloqlu@murena.io>\n"
 "Language-Team: Italian <https://translate.fedoraproject.org/projects/dnf5/"
 "libdnf5-cli/it/>\n"
 "Language: it\n"
@@ -16,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.11.4\n"
+"X-Generator: Weblate 5.16.2\n"
 
 #: argument_parser.cpp:68
 msgid "Misconfigured alias \"{}\": cannot convert \"{}\" to a number"
@@ -43,11 +44,11 @@ msgstr "\"{}\" non consentito insieme all'argomento posizionale \"{}\""
 
 #: argument_parser.cpp:147
 msgid "Argument id \"{}\" already registered in group \"{}\""
-msgstr "ID argomento \"{}\" già registrato nel gruppo \"{}\""
+msgstr "Id argomento \"{}\" già registrato nel gruppo \"{}\""
 
 #: argument_parser.cpp:274
 msgid "Invalid character '.' in argument id \"{}\""
-msgstr "Carattere non valido '.' nell'ID argomento \"{}\""
+msgstr "Carattere non valido '.' nell'id argomento \"{}\""
 
 #: argument_parser.cpp:382 argument_parser.cpp:387
 msgid "Too few values for positional argument \"{}\""
@@ -76,37 +77,37 @@ msgstr "Descrizione:"
 
 #: argument_parser.cpp:979
 msgid "Command id \"{}\" already registered for command \"{}\""
-msgstr "ID comando \"{}\" già registrato per il comando \"{}\""
+msgstr "Id comando \"{}\" già registrato per il comando \"{}\""
 
 #: argument_parser.cpp:990
 msgid "Named argument id \"{}\" already registered for command \"{}\""
-msgstr "ID argomento con nome \"{}\" già registrato per il comando \"{}\""
+msgstr "Id argomento con nome \"{}\" già registrato per il comando \"{}\""
 
 #: argument_parser.cpp:1000
 msgid "Positional argument id \"{}\" already registered for command \"{}\""
-msgstr "ID argomento posizionale \"{}\" già registrato per il comando \"{}\""
+msgstr "Id argomento posizionale \"{}\" già registrato per il comando \"{}\""
 
 #: argument_parser.cpp:1010
 msgid "Group id \"{}\" already registered for command \"{}\""
-msgstr "ID gruppo \"{}\" già registrato per il comando \"{}\""
+msgstr "Id gruppo \"{}\" già registrato per il comando \"{}\""
 
 #: argument_parser.cpp:1037
 msgid "Command id \"{}\" does not contain subcommand with id \"{}\""
-msgstr "Il comando con ID \"{}\" non contiene un sottocomando con ID \"{}\""
+msgstr "Il comando con id \"{}\" non contiene un sottocomando con id \"{}\""
 
 #: argument_parser.cpp:1045
 msgid "Command id \"{}\" does not contain named argument with id \"{}\""
 msgstr ""
-"Il comando con ID \"{}\" non contiene un argomento con nome con ID \"{}\""
+"Il comando con id \"{}\" non contiene un argomento con nome con id \"{}\""
 
 #: argument_parser.cpp:1053
 msgid "Command id \"{}\" does not contain positional argument with id \"{}\""
 msgstr ""
-"Il comando con ID \"{}\" non contiene un argomento posizionale con ID \"{}\""
+"Il comando con id \"{}\" non contiene un argomento posizionale con id \"{}\""
 
 #: argument_parser.cpp:1060
 msgid "Command id \"{}\" does not contain group with id \"{}\""
-msgstr "Il comando con ID \"{}\" non contiene un gruppo con ID \"{}\""
+msgstr "Il comando con id \"{}\" non contiene un gruppo con id \"{}\""
 
 #: argument_parser.cpp:1177 argument_parser.cpp:1388
 msgid "Unknown argument \"{}\" for command \"{}\""
@@ -122,11 +123,11 @@ msgstr "Valore mancante per l'alias del comando \"{}\""
 
 #: argument_parser.cpp:1610
 msgid "Named argument with path id \"{}\" not found"
-msgstr "Argomento con nome con ID percorso \"{}\" non trovato"
+msgstr "Argomento con nome con id percorso \"{}\" non trovato"
 
 #: argument_parser.cpp:1620
 msgid "Positional argument with path id \"{}\" not found"
-msgstr "Argomento posizionale con ID percorso \"{}\" non trovato"
+msgstr "Argomento posizionale con id percorso \"{}\" non trovato"
 
 #: exception.cpp:30
 msgid "Operation aborted by the user."

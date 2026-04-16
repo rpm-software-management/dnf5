@@ -2,13 +2,13 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # Tri Phuong Nguyen <triphuongvasa@gmail.com>, 2025.
-# Khoa Le <inctenone@gmail.com>, 2025.
+# Khoa Le <inctenone@gmail.com>, 2025, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-07-26 03:48+0000\n"
-"PO-Revision-Date: 2025-11-28 17:00+0000\n"
+"PO-Revision-Date: 2026-04-12 12:58+0000\n"
 "Last-Translator: Khoa Le <inctenone@gmail.com>\n"
 "Language-Team: Vietnamese <https://translate.fedoraproject.org/projects/dnf5/"
 "dnf5-plugin-config-manager/vi/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.14.3\n"
+"X-Generator: Weblate 5.16.2\n"
 
 #: addrepo.cpp:136
 #, c++-format
@@ -37,12 +37,12 @@ msgstr "{}: Giá trị đối số \"{}\" được định dạng sai"
 #: addrepo.cpp:179
 #, c++-format
 msgid "Cannot set repository option \"{}={}\": {}"
-msgstr ""
+msgstr "Không thể thiết lập tùy chọn kho lưu trữ \"{}={}\": {}"
 
 #: addrepo.cpp:187 setopt.cpp:138
 #, c++-format
 msgid "Sets the \"{}\" option again with a different value: \"{}\" != \"{}\""
-msgstr ""
+msgstr "Đặt lại tùy chọn \"{}\" với một giá trị khác: \"{}\" ≠ \"{}\""
 
 #: addrepo.cpp:253
 msgid "Missing path to repository configuration directory"
@@ -51,12 +51,12 @@ msgstr "Thiếu đường dẫn tới thư mục cài đặt kho chứa"
 #: addrepo.cpp:303
 #, c++-format
 msgid "Failed to copy repository configuration file \"{}\": {}"
-msgstr ""
+msgstr "Không sao chép được tệp cấu hình kho lưu trữ \"{}\": {}"
 
 #: addrepo.cpp:314
 #, c++-format
 msgid "Failed to download repository configuration file \"{}\": {}"
-msgstr ""
+msgstr "Không thể tải xuống được tệp cấu hình kho lưu trữ \"{}\": {}"
 
 #: addrepo.cpp:342
 #, c++-format
@@ -64,22 +64,27 @@ msgid ""
 "Error in added repository configuration file. Cannot set repository option "
 "\"{}={}\": {}"
 msgstr ""
+"Lỗi trong tệp cấu hình kho lưu trữ đã thêm. Không thể thiết lập tùy chọn kho "
+"lưu trữ \"{}={}\": {}"
 
 #: addrepo.cpp:376
 #, c++-format
 msgid "Bad baseurl: {}={}"
-msgstr ""
+msgstr "URL cơ sở không hợp lệ: {}={}"
 
 #: addrepo.cpp:384
 msgid ""
 "One of --from-repofile=<URL>, --set=baseurl=<URL>, --set=mirrorlist=<URL>, --"
 "set=metalink=<URL> must be set to a non-empty URL"
 msgstr ""
+"Phải thiết lập ít nhất một trong các tham số --from-repofile, --"
+"set=baseurl, --set=mirrorlist, hoặc --set=metalink với một URL không được để "
+"trống"
 
 #: addrepo.cpp:429
 #, c++-format
 msgid "Failed to save repository configuration file \"{}\": {}"
-msgstr ""
+msgstr "Không thể lưu tệp cấu hình kho lưu trữ \"{}\": {}"
 
 #: addrepo.cpp:451
 #, c++-format
@@ -87,6 +92,8 @@ msgid ""
 "File \"{}\" already exists and configures repositories with IDs \"{}\". Add "
 "\"--add-or-replace\" or \"--overwrite\"."
 msgstr ""
+"Tệp \"{}\" đã tồn tại và cấu hình các kho lưu trữ có ID là \"{}\". Hãy thêm "
+"tùy chọn \"--add-or-replace\" hoặc \"--overwrite\"."
 
 #: addrepo.cpp:454
 #, c++-format
@@ -94,36 +101,40 @@ msgid ""
 "File \"{}\" already exists and configures repositories with IDs \"{}\". Add "
 "\"--overwrite\" to overwrite."
 msgstr ""
+"Tệp \"{}\" đã tồn tại và cấu hình các kho lưu trữ có ID là \"{}\". Hãy thêm "
+"tùy chọn \"--overwrite\" để ghi đè."
 
 #: addrepo.cpp:474 addrepo.cpp:500
 #, c++-format
 msgid "A repository with id \"{}\" already configured in file: {}"
-msgstr ""
+msgstr "Một kho lưu trữ có ID \"{}\" đã được cấu hình trong tệp: {}"
 
 #: addrepo.cpp:486 setopt.cpp:263
 #, c++-format
 msgid "Cannot read repositories from directory \"{}\": {}"
-msgstr ""
+msgstr "Không thể đọc các kho lưu trữ từ thư mục \"{}\": {}"
 
 #: config-manager.cpp:43
 msgid "Manage configuration"
-msgstr ""
+msgstr "Quản lý cấu hình"
 
 #: setopt.cpp:91 unsetopt.cpp:72
 #, c++-format
 msgid ""
 "{}: Badly formatted argument value: Last key character cannot be '.': {}"
 msgstr ""
+"{}: Giá trị đối số định dạng không đúng: Ký tự cuối cùng của khóa không được "
+"là '.': {}"
 
 #: setopt.cpp:100 unsetopt.cpp:81
 #, c++-format
 msgid "{}: Empty repository id is not allowed: {}"
-msgstr ""
+msgstr "{}: Không được phép sử dụng ID kho trống: {}"
 
 #: setopt.cpp:109
 #, c++-format
 msgid "Cannot set repository option \"{}\": {}"
-msgstr ""
+msgstr "Không thể thiết lập tùy chọn kho lưu trữ \"{}\": {}"
 
 #: setopt.cpp:116 setopt.cpp:179
 #, c++-format
@@ -131,35 +142,37 @@ msgid ""
 "Sets the \"{}\" option of the repository \"{}\" again with a different "
 "value: \"{}\" != \"{}\""
 msgstr ""
+"Đặt lại tùy chọn \"{}\" của kho lưu trữ \"{}\" một lần nữa với một giá trị "
+"khác: \"{}\" != \"{}\""
 
 #: setopt.cpp:130
 #, c++-format
 msgid "Cannot set option: \"{}\": {}"
-msgstr ""
+msgstr "Không thể đặt tùy chọn: \"{}\": {}"
 
 #: setopt.cpp:170
 #, c++-format
 msgid "No matching repository to modify: {}"
-msgstr ""
+msgstr "Không có kho lưu trữ phù hợp để chỉnh sửa: {}"
 
 #: setvar.cpp:60
 #, c++-format
 msgid "Cannot set \"{}\": Variable \"{}\" is read-only"
-msgstr ""
+msgstr "Không thể đặt \"{}\": Biến \"{}\" là chỉ đọc"
 
 #: setvar.cpp:68
 #, c++-format
 msgid "Sets the \"{}\" variable again with a different value: \"{}\" != \"{}\""
-msgstr ""
+msgstr "Đặt lại biến \"{}\" một lần nữa với một giá trị khác: \"{}\" != \"{}\""
 
 #: setvar.cpp:97 unsetvar.cpp:63
 msgid "Missing path to vars directory"
-msgstr ""
+msgstr "Thiếu đường dẫn đến thư mục vars"
 
 #: setvar.cpp:110
 #, c++-format
 msgid "Cannot write variable to file \"{}\": {}"
-msgstr ""
+msgstr "Không thể ghi biến vào tệp \"{}\": {}"
 
 #: shared.hpp:58
 #, c++-format
@@ -167,11 +180,15 @@ msgid ""
 "The path \"{}\" exists, but it is not a directory or a symlink to a "
 "directory."
 msgstr ""
+"Đường dẫn \"{}\" tồn tại, nhưng nó không phải là một thư mục hoặc một liên "
+"kết tượng trưng đến một thư mục."
 
 #: shared.hpp:63
 #, c++-format
 msgid "The path \"{}\" exists, but it is a symlink to a non-existent object."
 msgstr ""
+"Đường dẫn \"{}\" tồn tại, nhưng nó là một liên kết tượng trưng đến một đối "
+"tượng không tồn tại."
 
 #: shared.hpp:69
 #, c++-format
@@ -179,21 +196,24 @@ msgid ""
 "Directory \"{}\" does not exist. Add \"--create-missing-dir\" to create "
 "missing directories."
 msgstr ""
+"Thư mục \"{}\" không tồn tại. Thêm \"--create-missing-dir\" để tạo các thư "
+"mục còn thiếu."
 
 #: shared.hpp:80
 #, c++-format
 msgid "Variable name can contain only ASCII letters, numbers and '_': {}"
-msgstr ""
+msgstr "Tên biến chỉ có thể chứa các chữ cái ASCII, số và '_': {}"
 
 #: unsetopt.cpp:93
 #, c++-format
 msgid "config-manager: Request to remove unsupported repository option: {}"
 msgstr ""
+"config-manager: Yêu cầu loại bỏ tùy chọn kho lưu trữ không được hỗ trợ: {}"
 
 #: unsetopt.cpp:105
 #, c++-format
 msgid "config-manager: Request to remove unsupported main option: {}"
-msgstr ""
+msgstr "config-manager: Yêu cầu xóa tùy chọn chính không được hỗ trợ: {}"
 
 #: unsetopt.cpp:140
 #, c++-format
@@ -201,12 +221,16 @@ msgid ""
 "config-manager: Request to remove main option but it is not present in the "
 "config file: {}"
 msgstr ""
+"config-manager: Yêu cầu xóa tùy chọn chính nhưng nó không tồn tại trong tệp "
+"cấu hình: {}"
 
 #: unsetopt.cpp:152
 #, c++-format
 msgid ""
 "config-manager: Request to remove main option but config file not found: {}"
 msgstr ""
+"config-manager: Yêu cầu xóa tùy chọn chính nhưng không tìm thấy tệp cấu "
+"hình: {}"
 
 #: unsetopt.cpp:186
 #, c++-format
@@ -214,6 +238,8 @@ msgid ""
 "config-manager: Request to remove repository option but repoid is not "
 "present in the overrides: {}"
 msgstr ""
+"config-manager: Yêu cầu xóa tùy chọn kho lưu trữ nhưng repoid không có trong "
+"danh sách ghi đè: {}"
 
 #: unsetopt.cpp:194
 #, c++-format
@@ -221,6 +247,8 @@ msgid ""
 "config-manager: Request to remove repository option but it is not present in "
 "the overrides: {}.{}"
 msgstr ""
+"config-manager: Yêu cầu xóa tùy chọn kho lưu trữ nhưng tùy chọn này không có "
+"trong phần ghi đè: {}.{}"
 
 #: unsetopt.cpp:214
 #, c++-format
@@ -228,13 +256,15 @@ msgid ""
 "config-manager: Request to remove repository option but file with overrides "
 "not found: {}"
 msgstr ""
+"config-manager: Yêu cầu xóa tùy chọn kho lưu trữ nhưng không tìm thấy tệp "
+"chứa các thiết lập ghi đè: {}"
 
 #: unsetvar.cpp:69
 #, c++-format
 msgid ""
 "config-manager: Request to remove variable but vars directory was not found: "
 "{}"
-msgstr ""
+msgstr "config-manager: Yêu cầu xóa biến nhưng không tìm thấy thư mục biến: {}"
 
 #: unsetvar.cpp:82
 #, c++-format
@@ -242,8 +272,10 @@ msgid ""
 "config-manager: Request to remove variable but it is not present in the vars "
 "directory: {}"
 msgstr ""
+"config-manager: Yêu cầu xóa biến nhưng biến này không tồn tại trong thư mục "
+"vars: {}"
 
 #: unsetvar.cpp:88
 #, c++-format
 msgid "Cannot remove variable file \"{}\": {}"
-msgstr ""
+msgstr "Không thể xóa tệp biến \"{}\": {}"

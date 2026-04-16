@@ -2,23 +2,24 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # Petr Ptacek <petr106@atlas.cz>, 2024.
-# Jonáš Loskot <alius@users.noreply.translate.fedoraproject.org>, 2025.
+# Jonáš Loskot <alius@users.noreply.translate.fedoraproject.org>, 2025, 2026.
 # Petr Pisar <ppisar@redhat.com>, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-07-26 03:48+0000\n"
-"PO-Revision-Date: 2025-08-22 12:53+0000\n"
-"Last-Translator: Petr Pisar <ppisar@redhat.com>\n"
-"Language-Team: Czech <https://translate.fedoraproject.org/projects/dnf5/"
-"dnf5-plugin-config-manager/cs/>\n"
+"PO-Revision-Date: 2026-02-19 22:58+0000\n"
+"Last-Translator: Jonáš Loskot "
+"<alius@users.noreply.translate.fedoraproject.org>\n"
+"Language-Team: Czech <https://translate.fedoraproject.org/projects/dnf5/dnf5-"
+"plugin-config-manager/cs/>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Weblate 5.13\n"
+"X-Generator: Weblate 5.16\n"
 
 #: addrepo.cpp:136
 msgid "from-repofile: \"{}\" file does not exist"
@@ -62,7 +63,7 @@ msgstr ""
 
 #: addrepo.cpp:376
 msgid "Bad baseurl: {}={}"
-msgstr "Špatná základní adresa URL: {}={}"
+msgstr "Špatná základní adresa: {}={}"
 
 #: addrepo.cpp:384
 msgid ""
@@ -94,7 +95,7 @@ msgstr ""
 
 #: addrepo.cpp:474 addrepo.cpp:500
 msgid "A repository with id \"{}\" already configured in file: {}"
-msgstr "Repozitář s ID \"{}\" již má konfiguraci v souboru: {}"
+msgstr "Repozitář s ID „{}“ již má konfiguraci v souboru: {}"
 
 #: addrepo.cpp:486 setopt.cpp:263
 msgid "Cannot read repositories from directory \"{}\": {}"

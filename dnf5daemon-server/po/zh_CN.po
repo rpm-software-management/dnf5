@@ -3,13 +3,14 @@
 # This file is distributed under the same license as the PACKAGE package.
 # Languages add-on <noreply-addon-languages@weblate.org>, 2026.
 # Tzuhsi Liu <GAKMOTS@outlook.com>, 2026.
+# 耗子 <haozi@loli.email>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-07-26 03:48+0000\n"
-"PO-Revision-Date: 2026-01-19 12:58+0000\n"
-"Last-Translator: Tzuhsi Liu <GAKMOTS@outlook.com>\n"
+"PO-Revision-Date: 2026-04-06 22:58+0000\n"
+"Last-Translator: 耗子 <haozi@loli.email>\n"
 "Language-Team: Chinese (Simplified) <https://translate.fedoraproject.org/"
 "projects/dnf5/dnf5daemon-server/zh_CN/>\n"
 "Language: zh_CN\n"
@@ -17,14 +18,14 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.15.2\n"
+"X-Generator: Weblate 5.16.2\n"
 
 #: threads_manager.cpp:94
 #, c++-format
 msgid "Failed to create locale \"{}\"."
-msgstr "创建区域设置 \"{}\" 失败。"
+msgstr "创建区域设置「{}」失败。"
 
 #: threads_manager.cpp:99
 #, c++-format
 msgid "Failed to use locale \"{}\"."
-msgstr "使用语言区码 \"{}\" 失败。"
+msgstr "使用语言区码「{}」失败。"

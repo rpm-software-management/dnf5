@@ -1,0 +1,278 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# Keith Bowes <zooplah@gmail.com>, 2026.
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-07-26 03:48+0000\n"
+"PO-Revision-Date: 2026-04-05 19:58+0000\n"
+"Last-Translator: Keith Bowes <zooplah@gmail.com>\n"
+"Language-Team: Esperanto <https://translate.fedoraproject.org/projects/dnf5/"
+"dnf5-plugin-config-manager/eo/>\n"
+"Language: eo\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.16.2\n"
+
+#: addrepo.cpp:136
+#, c++-format
+msgid "from-repofile: \"{}\" file does not exist"
+msgstr "from-repofile: dosiero \"{}\" ne ekzistas"
+
+#: addrepo.cpp:139
+#, c++-format
+msgid "from-repofile: {}"
+msgstr "from-repofile: {}"
+
+#: addrepo.cpp:169 setopt.cpp:83 setvar.cpp:49
+#, c++-format
+msgid "{}: Badly formatted argument value \"{}\""
+msgstr "{}: Malbone formatita argumenta valoro \"{}\""
+
+#: addrepo.cpp:179
+#, c++-format
+msgid "Cannot set repository option \"{}={}\": {}"
+msgstr "Ne eblas agordi deponejan opcion \"{}={}\": {}"
+
+#: addrepo.cpp:187 setopt.cpp:138
+#, c++-format
+msgid "Sets the \"{}\" option again with a different value: \"{}\" != \"{}\""
+msgstr "Reagordas la opcion \"{}\" kun alia valoro: \"{}\" != \"{}\""
+
+#: addrepo.cpp:253
+msgid "Missing path to repository configuration directory"
+msgstr "Mankas vojo al dosierujo de deponeja agordo"
+
+#: addrepo.cpp:303
+#, c++-format
+msgid "Failed to copy repository configuration file \"{}\": {}"
+msgstr "Malsukcesis kopii deponejan agordo-dosieron \"{}\": {}"
+
+#: addrepo.cpp:314
+#, c++-format
+msgid "Failed to download repository configuration file \"{}\": {}"
+msgstr "Malsukcesis elŝuti deponejan agordo-dosieron \"{}\": {}"
+
+#: addrepo.cpp:342
+#, c++-format
+msgid ""
+"Error in added repository configuration file. Cannot set repository option "
+"\"{}={}\": {}"
+msgstr ""
+"Eraro en aldonita deponeja agordo-dosiero. Ne eblas agordi deponejan opcion "
+"\"{}={}\": {}"
+
+#: addrepo.cpp:376
+#, c++-format
+msgid "Bad baseurl: {}={}"
+msgstr "Malbona baseurl: {}={}"
+
+#: addrepo.cpp:384
+msgid ""
+"One of --from-repofile=<URL>, --set=baseurl=<URL>, --set=mirrorlist=<URL>, --"
+"set=metalink=<URL> must be set to a non-empty URL"
+msgstr ""
+"Unu el --from-repofile=<URL>, --set=baseurl=<URL>, --set=mirrorlist=<URL>, --"
+"set=metalink=<URL> devas esti ne malplena URL"
+
+#: addrepo.cpp:429
+#, c++-format
+msgid "Failed to save repository configuration file \"{}\": {}"
+msgstr "Malsukcesis konservi deponejan agordo-dosieron \"{}\": {}"
+
+#: addrepo.cpp:451
+#, c++-format
+msgid ""
+"File \"{}\" already exists and configures repositories with IDs \"{}\". Add "
+"\"--add-or-replace\" or \"--overwrite\"."
+msgstr ""
+"Dosiero \"{}\" jam ekzistas kaj agordas deponejojn kun identigiloj \"{}\". "
+"Aldonu opcion \"--add-or-replace\" aŭ \"--overwrite\"."
+
+#: addrepo.cpp:454
+#, c++-format
+msgid ""
+"File \"{}\" already exists and configures repositories with IDs \"{}\". Add "
+"\"--overwrite\" to overwrite."
+msgstr ""
+"Dosiero \"{}\" jam ekzistas kaj agordas deponejojn kun identigiloj \"{}\". "
+"Aldonu la opcion \"--overwrite\" por anstataŭigi ĝin."
+
+#: addrepo.cpp:474 addrepo.cpp:500
+#, c++-format
+msgid "A repository with id \"{}\" already configured in file: {}"
+msgstr "Deponejo kun la identigilo \"{}\" jam agordita en dosiero: {}"
+
+#: addrepo.cpp:486 setopt.cpp:263
+#, c++-format
+msgid "Cannot read repositories from directory \"{}\": {}"
+msgstr "Ne eblas legi deponejojn el dosierujo \"{}\": {}"
+
+#: config-manager.cpp:43
+msgid "Manage configuration"
+msgstr "Administri agordon"
+
+#: setopt.cpp:91 unsetopt.cpp:72
+#, c++-format
+msgid ""
+"{}: Badly formatted argument value: Last key character cannot be '.': {}"
+msgstr ""
+"{}: Malbone formita argumenta valoro: Lasta ŝlosila signo ne povas esti '.': "
+"{}"
+
+#: setopt.cpp:100 unsetopt.cpp:81
+#, c++-format
+msgid "{}: Empty repository id is not allowed: {}"
+msgstr "{}: Malplena deponeja identigilo ne estas permesata: {}"
+
+#: setopt.cpp:109
+#, c++-format
+msgid "Cannot set repository option \"{}\": {}"
+msgstr "Ne eblas agordi deponejan opcion \"{}\": {}"
+
+#: setopt.cpp:116 setopt.cpp:179
+#, c++-format
+msgid ""
+"Sets the \"{}\" option of the repository \"{}\" again with a different "
+"value: \"{}\" != \"{}\""
+msgstr ""
+"Reagordas la opcion \"{}\" de la deponejo \"{}\" kun alia valoro: \"{}\" != "
+"\"{}\""
+
+#: setopt.cpp:130
+#, c++-format
+msgid "Cannot set option: \"{}\": {}"
+msgstr "Ne eblas agordi la opcion: \"{}\": {}"
+
+#: setopt.cpp:170
+#, c++-format
+msgid "No matching repository to modify: {}"
+msgstr "Neniu kongruanta deponejo modifota: {}"
+
+#: setvar.cpp:60
+#, c++-format
+msgid "Cannot set \"{}\": Variable \"{}\" is read-only"
+msgstr "Ne eblas agordi je \"{}\": Variablo \"{}\" estas nurlega"
+
+#: setvar.cpp:68
+#, c++-format
+msgid "Sets the \"{}\" variable again with a different value: \"{}\" != \"{}\""
+msgstr "Reagordas la variablon \"{}\" kun alia valoro: \"{}\" != \"{}\""
+
+#: setvar.cpp:97 unsetvar.cpp:63
+msgid "Missing path to vars directory"
+msgstr "Mankas vojo al la dosierujo de variabloj"
+
+#: setvar.cpp:110
+#, c++-format
+msgid "Cannot write variable to file \"{}\": {}"
+msgstr "Ne eblas skribi variablon al dosiero \"{}\": {}"
+
+#: shared.hpp:58
+#, c++-format
+msgid ""
+"The path \"{}\" exists, but it is not a directory or a symlink to a "
+"directory."
+msgstr ""
+"La vojo \"{} ekzistas sed ĝi ne estas dosierujo aŭ simbola ligilo al "
+"dosierujo."
+
+#: shared.hpp:63
+#, c++-format
+msgid "The path \"{}\" exists, but it is a symlink to a non-existent object."
+msgstr ""
+"La vojo \"{}\" ekzistas sed ĝi estas simbola ligilo al neekzista objekto."
+
+#: shared.hpp:69
+#, c++-format
+msgid ""
+"Directory \"{}\" does not exist. Add \"--create-missing-dir\" to create "
+"missing directories."
+msgstr ""
+"Dosierujo \"{}\" ne ekzistas. Aldonu la opcion \"--create-missing-dir\" por "
+"krei mankaj dosierujoj."
+
+#: shared.hpp:80
+#, c++-format
+msgid "Variable name can contain only ASCII letters, numbers and '_': {}"
+msgstr "Variabla nomo povas enhavi nur askiajn literojn, ciferojn kaj '_': {}"
+
+#: unsetopt.cpp:93
+#, c++-format
+msgid "config-manager: Request to remove unsupported repository option: {}"
+msgstr "config-manager: Peto forigi nekonatan deponejan opcion: {}"
+
+#: unsetopt.cpp:105
+#, c++-format
+msgid "config-manager: Request to remove unsupported main option: {}"
+msgstr "config-manager: Peto forigi nekonatan ĉefan opcion: {}"
+
+#: unsetopt.cpp:140
+#, c++-format
+msgid ""
+"config-manager: Request to remove main option but it is not present in the "
+"config file: {}"
+msgstr ""
+"config-manager: Peto forigi ĉefan opcion sed ĝi ne ĉeestas en la agordo-"
+"dosiero: {}"
+
+#: unsetopt.cpp:152
+#, c++-format
+msgid ""
+"config-manager: Request to remove main option but config file not found: {}"
+msgstr ""
+"config-manager: Peto forigi ĉefan opcion sed agordo-dosiero ne troveblas: {}"
+
+#: unsetopt.cpp:186
+#, c++-format
+msgid ""
+"config-manager: Request to remove repository option but repoid is not "
+"present in the overrides: {}"
+msgstr ""
+"config-manager: Peto forigi deponejan opcion sed deponeja identigilo ne "
+"ĉeestas en la transpasoj: {}"
+
+#: unsetopt.cpp:194
+#, c++-format
+msgid ""
+"config-manager: Request to remove repository option but it is not present in "
+"the overrides: {}.{}"
+msgstr ""
+"config-manager: Peto forigi deponejan opcion sed ĝi ne ĉeestas en la "
+"transpasoj: {}.{}"
+
+#: unsetopt.cpp:214
+#, c++-format
+msgid ""
+"config-manager: Request to remove repository option but file with overrides "
+"not found: {}"
+msgstr ""
+"config-manager: Peto forigi deponeja opcio sed dosiero kun transpasoj ne "
+"troveblas: {}"
+
+#: unsetvar.cpp:69
+#, c++-format
+msgid ""
+"config-manager: Request to remove variable but vars directory was not found: "
+"{}"
+msgstr ""
+"config-manager: Peto forigi variablon sed dosierujo de variabloj ne "
+"troveblis: {}"
+
+#: unsetvar.cpp:82
+#, c++-format
+msgid ""
+"config-manager: Request to remove variable but it is not present in the vars "
+"directory: {}"
+msgstr ""
+"config-manager: Peto forigi variablon sed ĝi ne ĉeestas en la dosierujo de "
+"variabloj: {}"
+
+#: unsetvar.cpp:88
+#, c++-format
+msgid "Cannot remove variable file \"{}\": {}"
+msgstr "Ne eblas forigi variablo-dosieron \"{}\": {}"

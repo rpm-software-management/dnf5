@@ -2,15 +2,16 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # Petr Ptacek <petr106@atlas.cz>, 2024.
-# Weblate Translation Memory <noreply-mt-weblate-translation-memory@weblate.org>, 2024.
+# Weblate Translation Memory <noreply-mt-weblate-translation-memory@weblate.org>, 2024, 2026.
 # Petr Pisar <ppisar@redhat.com>, 2025.
+# Pavel Borecki <pavel.borecki@gmail.com>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-07-26 03:48+0000\n"
-"PO-Revision-Date: 2025-09-02 14:20+0000\n"
-"Last-Translator: Petr Pisar <ppisar@redhat.com>\n"
+"PO-Revision-Date: 2026-04-16 07:09+0000\n"
+"Last-Translator: Pavel Borecki <pavel.borecki@gmail.com>\n"
 "Language-Team: Czech <https://translate.fedoraproject.org/projects/dnf5/"
 "libdnf5/cs/>\n"
 "Language: cs\n"
@@ -18,7 +19,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Weblate 5.13\n"
+"X-Generator: Weblate 5.17\n"
 
 #: advisory/advisory.cpp:81
 msgid ""
@@ -39,7 +40,7 @@ msgstr "Nesprávná hodnota konfigurace pro multilib_policy: {}"
 
 #: base/goal_elements.cpp:352
 msgid "Install"
-msgstr ""
+msgstr "Nainstalovat"
 
 #: base/goal_elements.cpp:354
 msgid "Install via provide"
@@ -47,39 +48,39 @@ msgstr ""
 
 #: base/goal_elements.cpp:356
 msgid "Install by group"
-msgstr ""
+msgstr "Nainstalovat podle skupiny"
 
 #: base/goal_elements.cpp:358
 msgid "Upgrade"
-msgstr ""
+msgstr "Přejít na novější verzi"
 
 #: base/goal_elements.cpp:360
 msgid "Upgrade all"
-msgstr ""
+msgstr "Přejít na novější verze všeho"
 
 #: base/goal_elements.cpp:362
 msgid "Upgrade minimal"
-msgstr ""
+msgstr "Přejít na nejnižší možnou novější verzi"
 
 #: base/goal_elements.cpp:364
 msgid "Upgrade all minimal"
-msgstr ""
+msgstr "Přejít na nejnižší možnou novější verzi u všeho"
 
 #: base/goal_elements.cpp:366
 msgid "Downgrade"
-msgstr ""
+msgstr "Vrátit na starší verzi"
 
 #: base/goal_elements.cpp:368
 msgid "Reinstall"
-msgstr ""
+msgstr "Přeinstalovat"
 
 #: base/goal_elements.cpp:370
 msgid "Install or reinstall"
-msgstr ""
+msgstr "Nainstalovat nebo přeinstalovat"
 
 #: base/goal_elements.cpp:372
 msgid "Remove"
-msgstr ""
+msgstr "Odstranit"
 
 #: base/goal_elements.cpp:374
 msgid "Distrosync"
@@ -91,27 +92,27 @@ msgstr ""
 
 #: base/goal_elements.cpp:378
 msgid "Reason Change"
-msgstr ""
+msgstr "Změna důvodu"
 
 #: base/goal_elements.cpp:380
 msgid "Resolve"
-msgstr ""
+msgstr "Vyřešit"
 
 #: base/goal_elements.cpp:382
 msgid "Enable"
-msgstr ""
+msgstr "Povolit"
 
 #: base/goal_elements.cpp:384
 msgid "Disable"
-msgstr ""
+msgstr "Zakázat"
 
 #: base/goal_elements.cpp:386
 msgid "Reset"
-msgstr ""
+msgstr "Reset"
 
 #: base/goal_elements.cpp:388
 msgid "Parse serialized transaction"
-msgstr ""
+msgstr "Zpracovat serializované transakce"
 
 #: base/goal_elements.cpp:390
 msgid "Install action"
@@ -192,10 +193,8 @@ msgid "No match for argument: {}"
 msgstr "Žádná shoda pro argument: {}"
 
 #: base/log_event.cpp:163
-#, fuzzy
-#| msgid "No match for argument '{0}' in repositories '{1}'"
 msgid "No match for argument '{0}' in selected advisories"
-msgstr "Žádná shoda pro argument '{0}' v repozitářích '{1}'"
+msgstr "Žádná shoda pro argument „{0}“ ve vybraných upozorněních"
 
 #: base/log_event.cpp:165
 msgid "No match in selected advisories"
@@ -207,7 +206,7 @@ msgstr "Žádná shoda pro argument '{0}' v repozitářích '{1}'"
 
 #: base/log_event.cpp:175
 msgid "Cannot perform {0} for {1} '{2}' because it is not installed."
-msgstr ""
+msgstr "Není možné provést {0} pro {1} „{2}“, protože není nainstalované."
 
 #: base/log_event.cpp:180
 msgid "Packages for argument '{}' available, but not installed."
@@ -222,38 +221,34 @@ msgstr ""
 "architekturu."
 
 #: base/log_event.cpp:188
-#, fuzzy
-#| msgid "Argument '{}' matches only source packages."
 msgid "Cannot perform {0} because '{1}' matches only source packages."
-msgstr "Argument '{}' odpovídá pouze zdrojovým balíčkům."
+msgstr ""
+"Nebylo možné provést {0} protože „{1}“ odpovídá pouze zdrojovým balíčkům."
 
 #: base/log_event.cpp:192
 msgid "Argument '{}' matches only source packages."
 msgstr "Argument '{}' odpovídá pouze zdrojovým balíčkům."
 
 #: base/log_event.cpp:196
-#, fuzzy
-#| msgid "Argument '{}' matches only excluded packages."
 msgid "Cannot perform {0} because '{1}' matches only excluded packages."
-msgstr "Argument '{}' odpovídá pouze vyloučeným balíkům."
+msgstr ""
+"Není možné provést {0}, protože „{1}“ odpovídá pouze vyloučeným balíkům."
 
 #: base/log_event.cpp:200
 msgid "Argument '{}' matches only excluded packages."
 msgstr "Argument '{}' odpovídá pouze vyloučeným balíkům."
 
 #: base/log_event.cpp:204
-#, fuzzy
-#| msgid "Argument '{}' matches only excluded packages."
 msgid ""
 "Cannot perform {0} because '{1}' matches only packages excluded by "
 "versionlock."
-msgstr "Argument '{}' odpovídá pouze vyloučeným balíkům."
+msgstr ""
+"Není možné provést {0}, protože „{1}“ odpovídá pouze balíkům, vyloučeným "
+"pomocí versionlock."
 
 #: base/log_event.cpp:208
-#, fuzzy
-#| msgid "Argument '{}' matches only excluded packages."
 msgid "Argument '{}' matches only packages excluded by versionlock."
-msgstr "Argument '{}' odpovídá pouze vyloučeným balíkům."
+msgstr "Argument „{}“ odpovídá pouze balíkům, vyloučeným pomocí versionlock."
 
 #: base/log_event.cpp:213
 msgid "  * Maybe you meant: {}"
@@ -272,26 +267,18 @@ msgstr ""
 "downgradovat."
 
 #: base/log_event.cpp:229
-#, fuzzy
-#| msgid ""
-#| "Packages for argument '{}' installed and available, but in a different "
-#| "version => cannot reinstall"
 msgid ""
 "Installed packages for argument '{0}' are not available in repositories in "
 "the same version, available versions: {1}, cannot reinstall."
 msgstr ""
-"Balíčky pro argument '{}' jsou nainstalované a dostupné, ale v jiné verzi => "
-"nelze přeinstalovat"
+"Nainstalované balíčky pro argument „{0}“ nejsou k dispozici ve stejných "
+"verzích v repozitářích. Verze k dispozici: {1} – není možné přeinstalovat."
 
 #: base/log_event.cpp:235
-#, fuzzy
-#| msgid ""
-#| "Packages for argument '{}' installed and available, but in a different "
-#| "version."
 msgid ""
 "Cannot perform {0} because '{1}' is installed in a different version: '{2}'."
 msgstr ""
-"Balíčky pro argument '{}' jsou nainstalované a dostupné, ale v jiné verzi."
+"Není možné provést {0}, protože „{1}“ je nainstalované v jiné verzi: „{2}“."
 
 #: base/log_event.cpp:241
 msgid ""
@@ -321,6 +308,8 @@ msgid ""
 "{0} upgrade cannot be reverted, however associated package actions will be. "
 "({1} id: '{2}') ."
 msgstr ""
+"Přechod na novější verzi {0} není možné vzít zpět, nicméně s balíčkem "
+"související akce budou (vzaty zpět). ({1} identif.: „{2}“)."
 
 #: base/log_event.cpp:273
 msgid "{} action for argument \"{}\" is not supported."
@@ -328,10 +317,8 @@ msgstr "Akce {} pro argument \"{}\" není podporována."
 
 #. Format a leading line of the error message.
 #: base/log_event.cpp:282
-#, fuzzy
-#| msgid "Unable to resolve argument '{}':{}"
 msgid "Unable to resolve argument '{}':"
-msgstr "Nelze vyřešit argument '{}':{}"
+msgstr "Nebylo možné vyřešit argument „{}“:"
 
 #: base/log_event.cpp:286
 #, fuzzy
@@ -365,32 +352,30 @@ msgid "', '"
 msgstr ""
 
 #: base/log_event.cpp:302
-#, fuzzy
-#| msgid "some dependency problem"
 msgid "Modular dependency problems:\n"
-msgstr "nějaký problém se závislostí"
+msgstr "Problémy s modulární závislostí:\n"
 
 #: base/log_event.cpp:309
 msgid "Modular dependency problems with the latest modules:\n"
-msgstr ""
+msgstr "Problémy modulárních závislostí s nejnovějšími moduly: %s\n"
 
 #: base/log_event.cpp:316
 msgid "Modular dependency problems with the defaults:\n"
-msgstr ""
+msgstr "Problémy modulárních závislostí s výchozími:\n"
 
 #: base/log_event.cpp:331
-#, fuzzy
-#| msgid "The operation would result in removing of running kernel: {}"
 msgid ""
 "The operation would result in switching of module '{0}' stream '{1}' to "
 "stream '{2}'\n"
-msgstr "Operace by vedla k odstranění běžícího jádra: {}"
+msgstr "Operace by vedla k streamu „{1}“ modulu „{0}“ na stream „{2}“\n"
 
 #: base/log_event.cpp:336
 msgid ""
 "Error: It is not possible to switch enabled streams of a module unless "
 "explicitly enabled via configuration option module_stream_switch."
 msgstr ""
+"Chyba: Není možné přepnout povolené streamy modulu pokud není výslovně "
+"povoleno prostřednictvím předvolby nastavení module_stream_switch."
 
 #: base/log_event.cpp:341
 msgid ""

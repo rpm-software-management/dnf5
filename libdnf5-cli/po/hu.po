@@ -1,14 +1,14 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# Balázs Meskó <meskobalazs@mailbox.org>, 2025.
-# Weblate Translation Memory <noreply-mt-weblate-translation-memory@weblate.org>, 2025.
+# Balázs Meskó <meskobalazs@mailbox.org>, 2025, 2026.
+# Weblate Translation Memory <noreply-mt-weblate-translation-memory@weblate.org>, 2025, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-07-26 03:48+0000\n"
-"PO-Revision-Date: 2025-01-11 03:00+0000\n"
+"PO-Revision-Date: 2026-04-04 03:58+0000\n"
 "Last-Translator: Weblate Translation Memory <noreply-mt-weblate-translation-"
 "memory@weblate.org>\n"
 "Language-Team: Hungarian <https://translate.fedoraproject.org/projects/dnf5/"
@@ -18,15 +18,15 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.9.2\n"
+"X-Generator: Weblate 5.16.2\n"
 
 #: argument_parser.cpp:68
 msgid "Misconfigured alias \"{}\": cannot convert \"{}\" to a number"
-msgstr ""
+msgstr "Hibásan beállított „{}” álnév: a(z) „{}” nem alakítható át számmá"
 
 #: argument_parser.cpp:76
 msgid "Misconfigured alias \"{}\": index \"{}\" out of range"
-msgstr ""
+msgstr "Hibásan beállított „{}” álnév: a(z) „{}” index a tartományon kívül esik"
 
 #: argument_parser.cpp:98
 msgid "\"{}\" not allowed together with named argument \"{}\""
@@ -122,10 +122,8 @@ msgid "Missing positional argument \"{}\" for command \"{}\""
 msgstr "Hiányzó „{}” pozicionális argumentum a(z) „{}” parancshoz"
 
 #: argument_parser.cpp:1274
-#, fuzzy
-#| msgid "Missing value for named argument \"-{}\""
 msgid "Missing value for command alias \"{}\""
-msgstr "Hiányzó érték a(z) „-{}” nevesített argumentumhoz"
+msgstr "Hiányzó érték a(z) „-{}” parancsálnévhez"
 
 #: argument_parser.cpp:1610
 msgid "Named argument with path id \"{}\" not found"
@@ -330,7 +328,7 @@ msgstr "Ütköző csomagok kihagyása:"
 
 #: output/transaction_table.cpp:472
 msgid "Skipping packages with broken dependencies:"
-msgstr "Hibás függőségekkel rendelkező csomag kihagyása:"
+msgstr "Hibás függőségekkel rendelkező csomagok kihagyása:"
 
 #: output/transaction_table.cpp:533
 msgid "Installing dependencies:"
@@ -354,7 +352,7 @@ msgstr "Frissítés:"
 
 #: output/transaction_table.cpp:546
 msgid "Downgrading:"
-msgstr "Visszafejlesztés:"
+msgstr "Visszaállítás:"
 
 #: output/transaction_table.cpp:549
 msgid "Reinstalling:"
@@ -414,7 +412,7 @@ msgstr "Modulok letiltása:"
 
 #: output/transaction_table.cpp:668
 msgid "Resetting modules:"
-msgstr "Modulok visszaállítása:"
+msgstr "Modulok alaphelyzetbe állítása:"
 
 #: output/transaction_table.cpp:671
 msgid "Switching module streams:"

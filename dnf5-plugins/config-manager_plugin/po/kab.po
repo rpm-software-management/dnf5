@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-07-26 03:48+0000\n"
-"PO-Revision-Date: 2026-02-13 11:58+0000\n"
+"PO-Revision-Date: 2026-03-05 02:22+0000\n"
 "Last-Translator: Massii Aqvayli <massiin@proton.me>\n"
 "Language-Team: Kabyle <https://translate.fedoraproject.org/projects/dnf5/"
 "dnf5-plugin-config-manager/kab/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.15.2\n"
+"X-Generator: Weblate 5.16.1\n"
 
 #: addrepo.cpp:136
 #, c++-format
@@ -37,26 +37,27 @@ msgstr "{}: Azal n ufakul yettwamsel s wudem arameɣtu \"{}\""
 #: addrepo.cpp:179
 #, c++-format
 msgid "Cannot set repository option \"{}={}\": {}"
-msgstr ""
+msgstr "Ur izmir ara ad isbadu tanefrunt n ukufi \"{}={}\": {}"
 
 #: addrepo.cpp:187 setopt.cpp:138
 #, c++-format
 msgid "Sets the \"{}\" option again with a different value: \"{}\" != \"{}\""
 msgstr ""
+"Sbadu tanefrunt \"{}\" tikkelt nniḍen s wazal yemgaraden: \"{}\" != \"{}\""
 
 #: addrepo.cpp:253
 msgid "Missing path to repository configuration directory"
-msgstr ""
+msgstr "Abrid ukaram n twila ukufi ixuṣṣ"
 
 #: addrepo.cpp:303
 #, c++-format
 msgid "Failed to copy repository configuration file \"{}\": {}"
-msgstr ""
+msgstr "Ur yeddi ara unɣal ufaylu n twila ukufi \"{}\": {}"
 
 #: addrepo.cpp:314
 #, c++-format
 msgid "Failed to download repository configuration file \"{}\": {}"
-msgstr ""
+msgstr "Ur yeddi ara usider n ufaylu n twila ukufi \"{}\": {}"
 
 #: addrepo.cpp:342
 #, c++-format
@@ -114,16 +115,18 @@ msgstr "Sefrek tawila"
 msgid ""
 "{}: Badly formatted argument value: Last key character cannot be '.': {}"
 msgstr ""
+"{}: Azal n ufakul ur yemsil ara akken iwata: Asekkil aneggaru ur izmir ara "
+"ad yili d '.': {}"
 
 #: setopt.cpp:100 unsetopt.cpp:81
 #, c++-format
 msgid "{}: Empty repository id is not allowed: {}"
-msgstr ""
+msgstr "{}: Asulay n ukufi ilem ur yettwasireg ara: {}"
 
 #: setopt.cpp:109
 #, c++-format
 msgid "Cannot set repository option \"{}\": {}"
-msgstr ""
+msgstr "Ur izmir ara ad isbadu tanefrunt n ukufi \"{}\": {}"
 
 #: setopt.cpp:116 setopt.cpp:179
 #, c++-format
@@ -131,26 +134,29 @@ msgid ""
 "Sets the \"{}\" option of the repository \"{}\" again with a different "
 "value: \"{}\" != \"{}\""
 msgstr ""
+"Sbadu tanefrunt \"{}\" n ukufi \"{}\" tikkelt nniḍen s wazal yemgaraden: \"{}"
+"\" != \"{}\""
 
 #: setopt.cpp:130
 #, c++-format
 msgid "Cannot set option: \"{}\": {}"
-msgstr ""
+msgstr "Ur izmir ara ad isbadu tanefrunt: \"{}\": {}"
 
 #: setopt.cpp:170
 #, c++-format
 msgid "No matching repository to modify: {}"
-msgstr ""
+msgstr "Ulac akufi inmeɣran i usnifel n: {}"
 
 #: setvar.cpp:60
 #, c++-format
 msgid "Cannot set \"{}\": Variable \"{}\" is read-only"
-msgstr ""
+msgstr "Ur izmer ara asbadu n \"{}\": Amutti \"{}\" i tɣuṛi kan"
 
 #: setvar.cpp:68
 #, c++-format
 msgid "Sets the \"{}\" variable again with a different value: \"{}\" != \"{}\""
 msgstr ""
+"Sbadu amutti \"{}\" i tikkelt nniḍen s wazal yemgaraden: \"{}\" != \"{}\""
 
 #: setvar.cpp:97 unsetvar.cpp:63
 msgid "Missing path to vars directory"
@@ -167,11 +173,12 @@ msgid ""
 "The path \"{}\" exists, but it is not a directory or a symlink to a "
 "directory."
 msgstr ""
+"Abrid \"{}\" yella, maca mačči d akaram neɣ d aseɣwen azamulan ɣer ukaram."
 
 #: shared.hpp:63
 #, c++-format
 msgid "The path \"{}\" exists, but it is a symlink to a non-existent object."
-msgstr ""
+msgstr "Abrid \"{}\" yella, maca d aseɣwen azamulan ɣer tɣawsa ur nelli."
 
 #: shared.hpp:69
 #, c++-format
@@ -179,6 +186,8 @@ msgid ""
 "Directory \"{}\" does not exist. Add \"--create-missing-dir\" to create "
 "missing directories."
 msgstr ""
+"Akaram \"{}\" ur yella ara. Rnu \"--create-missing-dir\" iwakken ad d-"
+"tesnulfuḍ ikaramen i ixuṣṣen."
 
 #: shared.hpp:80
 #, c++-format

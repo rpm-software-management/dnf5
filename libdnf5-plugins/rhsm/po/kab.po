@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-11-07 11:21+0100\n"
-"PO-Revision-Date: 2026-02-10 07:58+0000\n"
+"PO-Revision-Date: 2026-02-24 20:58+0000\n"
 "Last-Translator: Massii Aqvayli <massiin@proton.me>\n"
 "Language-Team: Kabyle <https://translate.fedoraproject.org/projects/dnf5/"
 "libdnf5-plugin-rhsm/kab/>\n"
@@ -17,11 +17,11 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.15.2\n"
+"X-Generator: Weblate 5.16\n"
 
 #: rhsm.cpp:97
 msgid "Missing path to repository configuration directory"
-msgstr ""
+msgstr "Abrid ukaram n twila ukufi ixuṣṣ"
 
 #: rhsm.cpp:134
 msgid "Cannot save repository configuration to file \"{}\": {}"

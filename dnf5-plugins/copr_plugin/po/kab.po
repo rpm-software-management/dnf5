@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-07-26 03:48+0000\n"
-"PO-Revision-Date: 2026-02-13 11:58+0000\n"
+"PO-Revision-Date: 2026-03-05 02:22+0000\n"
 "Last-Translator: Massii Aqvayli <massiin@proton.me>\n"
 "Language-Team: Kabyle <https://translate.fedoraproject.org/projects/dnf5/"
 "dnf5-plugin-copr/kab/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.15.2\n"
+"X-Generator: Weblate 5.16.1\n"
 
 #: copr.cpp:48
 msgid "Copr hub (the web-UI/API server) hostname"
@@ -138,31 +138,31 @@ msgstr ""
 
 #: copr_repo.cpp:200
 msgid "Can't parse Copr repo spec: "
-msgstr ""
+msgstr "Ur izmir ara ad isleḍ isefra n ukufi Copr: "
 
 #: copr_repo.cpp:344
 #, c++-format
 msgid "Can't remove the {} repo file"
-msgstr ""
+msgstr "Ur izmir ara ad yekkes afaylu n ukufi {}"
 
 #: copr_repo.cpp:347
 #, c++-format
 msgid "Repo file {} successfully removed"
-msgstr ""
+msgstr "Afaylu ukufi {} yettwakkes akken iwata"
 
 #: copr_repo.cpp:393
 #, c++-format
 msgid "Can't find item {} in {}"
-msgstr ""
+msgstr "Ur izmir ara ad yaf aferdis {} deg {}"
 
 #: copr_repo.cpp:449
 #, c++-format
 msgid "Removing old config file '{}'"
-msgstr ""
+msgstr "Tukksa n ufaylu n twila aqbur '{}'"
 
 #: copr_repo.cpp:452
 msgid "Can't remove"
-msgstr ""
+msgstr "Ur izmir ara ad yekkes"
 
 #: copr_repo.cpp:526
 #, c++-format
@@ -189,4 +189,4 @@ msgstr ""
 #: copr_repo.cpp:632 copr_repo.cpp:657
 #, c++-format
 msgid "Repository '{}' not found on this system"
-msgstr ""
+msgstr "Akufi '{}' ur yettwaf ara deg unagraw-agi"

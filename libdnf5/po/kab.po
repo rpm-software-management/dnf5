@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-07-26 03:48+0000\n"
-"PO-Revision-Date: 2026-02-13 11:58+0000\n"
+"PO-Revision-Date: 2026-03-19 21:58+0000\n"
 "Last-Translator: Massii Aqvayli <massiin@proton.me>\n"
 "Language-Team: Kabyle <https://translate.fedoraproject.org/projects/dnf5/"
 "libdnf5/kab/>\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.15.2\n"
+"X-Generator: Weblate 5.16.2\n"
 
 #: advisory/advisory.cpp:81
 msgid ""
@@ -41,11 +41,11 @@ msgstr "Sbedd"
 
 #: base/goal_elements.cpp:354
 msgid "Install via provide"
-msgstr ""
+msgstr "Sebded (s usaǧǧaw)"
 
 #: base/goal_elements.cpp:356
 msgid "Install by group"
-msgstr ""
+msgstr "Sebded s ugraw"
 
 #: base/goal_elements.cpp:358
 msgid "Upgrade"
@@ -57,7 +57,7 @@ msgstr "Mucceḍ-iten akk"
 
 #: base/goal_elements.cpp:362
 msgid "Upgrade minimal"
-msgstr ""
+msgstr "Mucceḍ (Leqqem adday)"
 
 #: base/goal_elements.cpp:364
 msgid "Upgrade all minimal"
@@ -110,7 +110,7 @@ msgstr "Wennez"
 
 #: base/goal_elements.cpp:388
 msgid "Parse serialized transaction"
-msgstr ""
+msgstr "Sleḍ tanigawt usmizrer"
 
 #: base/goal_elements.cpp:390
 msgid "Install action"
@@ -122,11 +122,11 @@ msgstr "Tigawt n tukksa"
 
 #: base/goal_elements.cpp:394
 msgid "Upgrade action"
-msgstr ""
+msgstr "Tigawt umucceḍ"
 
 #: base/goal_elements.cpp:396
 msgid "Reinstall action"
-msgstr ""
+msgstr "Tigawt n tulsa usbeddi"
 
 #: base/goal_elements.cpp:398
 msgid "Reason change action"
@@ -142,11 +142,11 @@ msgstr ""
 
 #: base/goal_elements.cpp:404
 msgid "Install debug RPMs"
-msgstr ""
+msgstr "Sebded RPMs n useɣti"
 
 #: base/goal_elements.cpp:406
 msgid "Transaction merge"
-msgstr ""
+msgstr "Azday n tinigawin"
 
 #: base/log_event.cpp:141
 msgid "No packages to remove for argument: {}"
@@ -327,6 +327,8 @@ msgid ""
 "The operation would result in switching of module '{0}' stream '{1}' to "
 "stream '{2}'\n"
 msgstr ""
+"Tamhelt-a ad d-teglu s usnifel n usuddem '{1}' uzegrir '{0}' ɣer usuddem '{2}"
+"'\n"
 
 #: base/log_event.cpp:336
 msgid ""
@@ -339,16 +341,20 @@ msgid ""
 "Extra package '{0}' (with action '{1}') which is not present in the stored "
 "transaction was pulled into the transaction.\n"
 msgstr ""
+"Akemmus amernan '{0}' (s tigawt '{1}') ur nelli ara deg tnigawt "
+"yettwaḥerzen, yettwarna ɣer tnigawt.\n"
 
 #: base/log_event.cpp:347
 msgid "Cannot parse file: '{0}': {1}.\n"
-msgstr ""
+msgstr "Ur izmir ara ad isleḍ afaylu: '{0}': {1}.\n"
 
 #: base/log_event.cpp:354
 msgid ""
 "Could not find debuginfo package for the following packages resolved from "
 "the argument '{0}': {1}"
 msgstr ""
+"Ur izmir ara ad yaf akemmus debuginfo i ikemmusen-a yefran seg ufakul '{0}': "
+"{1}"
 
 #: base/log_event.cpp:357 base/log_event.cpp:368
 msgctxt "String for joining NEVRAs - e.g. `foo-4-4.noarch, bar-5-5.noarch`"
@@ -584,39 +590,39 @@ msgstr ""
 
 #: base/transaction.cpp:90
 msgid "The repository does not have any OpenPGP keys configured."
-msgstr ""
+msgstr "Akufi-nni ur yesɛi ula d yiwet n tsura OpenPGP i yettusewlen."
 
 #: base/transaction.cpp:91
 msgid "Public key is not installed."
-msgstr ""
+msgstr "Tasarut tazayezt ur tettwasbedd ara."
 
 #: base/transaction.cpp:92
 msgid "Canceled by the user."
-msgstr ""
+msgstr "Yettwasefsex sɣur useqdac."
 
 #: base/transaction.cpp:93
 msgid "Public key import failed."
-msgstr ""
+msgstr "Aktar n tsarut tazayezt yecceḍ."
 
 #: base/transaction.cpp:980
 msgid "Invalid tsflag: {}"
-msgstr ""
+msgstr "tsflag d tarameɣtut: {}"
 
 #: base/transaction.cpp:1314
 msgid "Public key \"{}\" is already present, not importing."
-msgstr ""
+msgstr "Tasarut tazayezt \"{}\" tella yakan, ur d-tettukter ara."
 
 #: base/transaction.cpp:1335
 msgid "An error occurred importing key \"{}\": {}"
-msgstr ""
+msgstr "Teḍra-d tuccḍa deg ukter n tsarut \"{}\": {}"
 
 #: base/transaction.cpp:1369
 msgid "OpenPGP check for package \"{}\" ({}) from repo \"{}\" has failed: "
-msgstr ""
+msgstr "Aselken OpenPGP i ukemmus \"{}\" ({}) seg ukufi \"{}\" yecceḍ: "
 
 #: base/transaction.cpp:1397
 msgid "Import of the key didn't help, wrong key?"
-msgstr ""
+msgstr "Aktar n tsarut ur d-imudd ara tallelt, d tasarut tarameɣtut?"
 
 #: base/transaction.cpp:1416
 msgctxt "It is a joining character for repositories IDs"
@@ -627,15 +633,15 @@ msgstr ", "
 msgid "Warning: skipped OpenPGP checks for {0} package from repository: {1}"
 msgid_plural ""
 "Warning: skipped OpenPGP checks for {0} packages from repository: {1}"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Ɣur-k·m: yettwazgel uselken OpenPGP i {0} ukemmus seg ukufi: {1}"
+msgstr[1] "Ɣur-k·m: yettwazgel uselken OpenPGP i {0} ikemmusen seg ukufi: {1}"
 
 #: base/transaction.cpp:1422
 msgid "Warning: skipped OpenPGP checks for {0} package from repositories: {1}"
 msgid_plural ""
 "Warning: skipped OpenPGP checks for {0} packages from repositories: {1}"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Ɣur-k·m: yettwazgel uselken OpenPGP i {0} ukemmus seg ikufiyen: {1}"
+msgstr[1] "Ɣur-k·m: yettwazgel uselken OpenPGP i {0} ikemmusen seg ikufiyen: {1}"
 
 #: common/exception.cpp:78
 msgid "System error"
@@ -643,95 +649,95 @@ msgstr "Tuccḍa n unagraw"
 
 #: common/exception.cpp:199
 msgid "General RuntimeError exception"
-msgstr ""
+msgstr "Tasureft RuntimeError tamatut"
 
 #: common/sack/query.cpp:27
 msgid "Query must contain exactly one object."
-msgstr ""
+msgstr "Tuttra issefk ad tegber swaswa 1 n tɣawsa."
 
 #: common/xdg.cpp:43
 msgid "get_user_home_dir(): Cannot determine the user's home directory"
-msgstr ""
+msgstr "get_user_home_dir(): D awezɣi tifin n ukaram agejdan n useqdac"
 
 #: common/xdg.cpp:98
 msgid "get_user_runtime_dir(): Cannot determine the user's runtime directory"
-msgstr ""
+msgstr "get_user_runtime_dir(): D awezɣi tifin n ukaram agejdan n uselkam"
 
 #: comps/environment/environment.cpp:325
 msgid "failed to save xml document for comps"
-msgstr ""
+msgstr "ur izmir ara ad isekles isemli xml igebren comps"
 
 #: comps/group/group.cpp:373
 msgid "Failed to save xml document for group \"{}\" to file \"{}\": {}"
-msgstr ""
+msgstr "Yecceḍ usekles n yisemli xml i wegraw \"{}\" ɣer ufaylu \"{}\":{}"
 
 #: comps/group/package.cpp:118 comps/group/package.cpp:121
 msgid "Invalid package type: {}"
-msgstr ""
+msgstr "Anaw n ukemmus d armeɣtu: {}"
 
 #: conf/config_main.cpp:57
 msgid "Input is empty. Must contain a value."
-msgstr ""
+msgstr "Asekcem d ilem. Ilaq ad igber azal."
 
 #: conf/config_main.cpp:63
 msgid "Input value '{}' must not be negative"
-msgstr ""
+msgstr "Azal n unekcum '{}' ur ilaq ara ad yili d uzdir"
 
 #: conf/config_main.cpp:68
 msgid "Could not convert '{}' to bytes"
-msgstr ""
+msgstr "Ulamek aselket n '{}' ɣer iṭamḍanen"
 
 #: conf/config_main.cpp:84
 msgid "Unknown unit '{}'"
-msgstr ""
+msgstr "Aferdis arussin '{}'"
 
 #: conf/config_main.cpp:281
 msgid "The throttle value {} is outside the allowed range {} ... {}"
-msgstr ""
+msgstr "Azal n {} ur yettwagza ara deg uzilal {} … {}"
 
 #: conf/config_parser.cpp:54
 msgid "Section \"{}\" not found"
-msgstr ""
+msgstr "Tigezmi \"{}\" ulac-itt"
 
 #: conf/config_parser.cpp:59
 msgid "Section \"{}\" does not contain option \"{}\""
-msgstr ""
+msgstr "Tigezmi \"{}\" ur tesɛi ara tanefrunt \"{}\""
 
 #: conf/config_parser.cpp:96
 msgid "Configuration file \"{}\" not found"
-msgstr ""
+msgstr "Afaylu n twila \"{}\" ulac-it"
 
 #: conf/config_parser.cpp:99
 msgid "Unable to access configuration file \"{}\""
-msgstr ""
+msgstr "D awezɣi adduf ɣer ufaylu n twila \"{}\""
 
 #: conf/config_parser.cpp:102
 msgid "Error in configuration file \"{}\""
-msgstr ""
+msgstr "Tuccḍa deg ufaylu n twila \"{}\""
 
 #: conf/option_binds.cpp:29
 msgid "Option \"{}\" not found"
-msgstr ""
+msgstr "Tafrant \"{}\" ur tettwaf ara"
 
 #: conf/option_binds.cpp:32
 msgid "Option \"{}\" already exists"
-msgstr ""
+msgstr "Tafrant \"{}\" tella yakan"
 
 #: conf/option_bool.cpp:82
 msgid "Invalid boolean value \"{}\""
-msgstr ""
+msgstr "Azal n ubulan d arameɣtu \"{}\""
 
 #: conf/option_enum.cpp:68
 msgid "Enum option value \"{}\" not allowed"
-msgstr ""
+msgstr "Azal n tnefrunt \"{}\" ur yettwasireg ara"
 
 #: conf/option_number.cpp:99
 msgid "Input value {} is outside the allowed range {} ... {}"
-msgstr ""
+msgstr "Azal n unekcum {} atan beṛṛa n uzilal yettwasirgen {} … {}"
 
 #: conf/option_number.cpp:112
 msgid "Invalid number option value \"{}\""
-msgstr ""
+msgstr "Azal n tnefrunt tumḍint \"{}\" d tarameɣtut"
 
 #: conf/option_path.cpp:93
 msgid "Only absolute paths allowed, relative path \"{}\" detected"
@@ -739,11 +745,11 @@ msgstr ""
 
 #: conf/option_path.cpp:98
 msgid "Path \"{}\" does not exist"
-msgstr ""
+msgstr "Abrid \"{}\" ur yelli ara"
 
 #: conf/option_seconds.cpp:38
 msgid "Empty time option value"
-msgstr ""
+msgstr "Azal n tnefrunt n wakud d tilemt"
 
 #: conf/option_seconds.cpp:50
 msgid "Invalid time option value \"{}\", number or \"never\" expected"
@@ -859,79 +865,84 @@ msgstr ""
 
 #: plugin/plugins.cpp:213
 msgid "Invalid option value: enabled={}"
-msgstr ""
+msgstr "Azal n uɣewwaṛ d armeɣtu: yermed={}"
 
 #: plugin/plugins.cpp:237
 msgid "Plugins::load_plugins(): config_dir_path cannot be empty"
-msgstr ""
+msgstr "Plugins::load_plugins(): config_dir_path ur izmir ara ad yili d ilem"
 
 #: plugin/plugins.cpp:253
 msgid "Cannot load libdnf plugin enabled from: {}"
-msgstr ""
+msgstr "Ur izmir ara ad d-isali azegrir libdnf iremden seg: {}"
 
 #: repo/config_repo.cpp:581
 msgid "get_unique_id(): Computation of SHA256 failed"
-msgstr ""
+msgstr "get_unique_id(): Asiḍen n SHA256 ur yeddi ara"
 
 #: repo/file_downloader.cpp:154
 msgid "Cannot download files, cacheonly option is activated."
-msgstr ""
+msgstr "D awezɣi asider n yifuyla, tanefrunt cacheonly termed."
 
 #: repo/file_downloader.cpp:216
 msgid "Failed to download files"
-msgstr ""
+msgstr "Asider n ifuyla ur yeddi ara"
 
 #: repo/librepo.cpp:118
 msgid ""
 "Maximum download speed is lower than minimum, please change configuration of "
 "minrate or throttle"
 msgstr ""
+"Arured afellay n usider d amecṭuḥ ɣef adday, ttxil-k·m, senfel tawila n "
+"minrate neɣ throttle"
 
 #: repo/librepo.cpp:181
 msgid "'proxy_username' is set but not 'proxy_password'"
-msgstr ""
+msgstr "'proxy_username' Ittusbadu, maca mačči 'proxy_password'"
 
 #: repo/package_downloader.cpp:154
 msgid "Cannot download the \"{0}\" package, cacheonly option is activated."
-msgstr ""
+msgstr "Ulamek asider n ukemmus \"{0}\", tanefrunt cacheonly termed."
 
 #: repo/package_downloader.cpp:231
 msgid "Already downloaded"
-msgstr ""
+msgstr "Yettusider yakan"
 
 #: repo/package_downloader.cpp:279
 msgid "Failed to download packages"
-msgstr ""
+msgstr "Asider n ikemmusen ur yeddi ara"
 
 #: repo/repo.cpp:61
 msgid "Failed to load RPM \"{}\": doesn't have the \".rpm\" extension"
-msgstr ""
+msgstr "Asali n RPM \"{}\" ur yeddi ara: ur yesɛi ara asiɣzef \".rpm\""
 
 #: repo/repo.cpp:65
 msgid "Failed to access RPM \"{}\": {}"
-msgstr ""
+msgstr "Anekcum ur yeddi ara ɣer RPM \"{}\": {}"
 
 #: repo/repo.cpp:107
 msgid "Invalid repository id \"{}\": unexpected character '{}'"
-msgstr ""
+msgstr "Asulay n ukufi d arameɣtu \"{}\": asekkil ur yettwarǧan ara '{}'"
 
 #: repo/repo.cpp:150
 msgid "Repository \"{}\" has no source (baseurl, mirrorlist or metalink) set."
 msgstr ""
+"Ulac aɣbalu(baseurl, mirrorlist neɣ metalink) yettusbadun i ukufi \"{}\"."
 
 #: repo/repo.cpp:161
 msgid "Repository \"{}\" has unsupported type \"{}\", skipping."
-msgstr ""
+msgstr "Akufi \"{}\" ur yettusefrak ara anaw \"{}\", zgel."
 
 #: repo/repo.cpp:221 repo/repo.cpp:241 repo/repo_sack.cpp:368
 msgid "Failed to download metadata ({}: \"{}\") for repository \"{}\": {}"
-msgstr ""
+msgstr "Ur yeddi ara usider n yiɣefisefka ({}: \"{}\") i ukufi \"{}\": {}"
 
 #: repo/repo.cpp:439
 msgid ""
 "Failed to load repository: \"primary\" data not present or in unsupported "
 "format"
 msgstr ""
+"Yecceḍ usali n ukufi: isefka \"primary\" ulac-iten neɣ s umasal ur "
+"yettusefraken ara"
 
 #: repo/repo.cpp:505
 msgid "Failed to load comps \"{}\": doesn't have the \".xml\" extension"
@@ -1051,15 +1062,15 @@ msgstr ""
 
 #: rpm/nevra.cpp:82
 msgid "NEVRA string \"{}\" contains ':' multiple times"
-msgstr ""
+msgstr "Azrar NEVRA \"{}\" yegber ddeqs n ':'"
 
 #: rpm/nevra.cpp:86
 msgid "Invalid character '{}' in NEVRA string \"{}\""
-msgstr ""
+msgstr "Asekkil armeɣtu '{}' deg uzrar NEVRA \"{}\""
 
 #: rpm/package.cpp:81
 msgid "Package with rpmdbid was not found"
-msgstr ""
+msgstr "Akemmus s rpmdbid ur yettwaf ara"
 
 #: rpm/package.cpp:478
 msgid "<unknown>"
@@ -1067,27 +1078,27 @@ msgstr "<d arussin>"
 
 #: rpm/reldep.cpp:116 rpm/reldep.cpp:123
 msgid "Cannot parse a dependency string"
-msgstr ""
+msgstr "Ur izmir ara ad isleḍ azrir n tagelt"
 
 #: rpm/rpm_signature.cpp:45
 msgid "No corresponding key was found."
-msgstr ""
+msgstr "Ulac tasarut inmeɣran i yettwafen."
 
 #: rpm/rpm_signature.cpp:46
 msgid "The signature is valid, but the key is not trusted."
-msgstr ""
+msgstr "Azmul d ameɣtu, maca tasarut ur tettwaman ara."
 
 #: rpm/rpm_signature.cpp:47
 msgid "The package is not signed."
-msgstr ""
+msgstr "Akemmus ur yettwazmel ara."
 
 #: rpm/rpm_signature.cpp:48
 msgid "Problem occurred when opening the package."
-msgstr ""
+msgstr "Yeḍra-d wugur deg ulday n ukemmus."
 
 #: rpm/rpm_signature.cpp:64
 msgid "Failed to set rpm transaction rootDir \"{}\"."
-msgstr ""
+msgstr "D awezɣi asbadu n rootDir n tnigawt rpm s wazal \"{}\"."
 
 #: rpm/rpm_signature.cpp:290
 msgid "\"{}\": key is not an armored public key."
@@ -1095,17 +1106,17 @@ msgstr ""
 
 #: rpm/rpm_signature.cpp:295
 msgid "Failed to import public key \"{}\" to rpmdb: {}"
-msgstr ""
+msgstr "Yecceḍ uktar n tsarut tazayezt \"{}\" ɣer rpmdb: {}"
 
 #. TODO(jrohel): Why? Librpm does not provide this information.
 #: rpm/transaction.cpp:114
 msgid "Cannot set root directory \"{}\""
-msgstr ""
+msgstr "D awezɣi asbadu n ukaram aẓar \"{}\""
 
 #: rpm/transaction.cpp:125
 #, c-format
 msgid "Error %i opening rpm database"
-msgstr ""
+msgstr "Tuccḍa %i deg ulday n taffa n yisefka rpm"
 
 #: rpm/transaction.cpp:134
 msgid "The rpmdbCookie() function did not return cookie of rpm database."
@@ -1113,7 +1124,7 @@ msgstr ""
 
 #: rpm/transaction.cpp:199
 msgid "Failed to order the rpm transaction."
-msgstr ""
+msgstr "D awezɣi amizzwer n tnigawt rpm."
 
 #: rpm/transaction.cpp:235
 msgid ""
@@ -1123,14 +1134,17 @@ msgstr ""
 #: rpm/transaction.cpp:254
 msgid "Failed to set scriptlet output file, cannot open file \"{}\": {}"
 msgstr ""
+"Ur izmir ara ad isbadu afaylu n tuffɣa n scriptlet, ur yezmir ara ad yeldi "
+"ufaylu \"{}\": {}"
 
 #: rpm/transaction.cpp:275
 msgid "Failed to read package header, cannot open file \"{}\": {}"
 msgstr ""
+"Tecceḍ tɣuri n uqerru n ukemmus, ur yezmir ara ad yeldi ufaylu \"{}\": {}"
 
 #: rpm/transaction.cpp:292
 msgid "Failed to read package header from file \"{}\""
-msgstr ""
+msgstr "Tecceḍ tɣuri n uqerru n ukemmus seg ufaylu \"{}\""
 
 #: rpm/transaction.cpp:305
 msgid "Cannot init rpm database iterator"
@@ -1138,29 +1152,29 @@ msgstr ""
 
 #: rpm/transaction.cpp:309
 msgid "Package was not found in rpm database"
-msgstr ""
+msgstr "Akemmus ur yettwaf ara deg taffa n yisefka rpm"
 
 #. TODO(jrohel): Why? Librpm does not provide this information.
 #: rpm/transaction.cpp:325
 msgid "Cannot reinstall package \"{}\""
-msgstr ""
+msgstr "Ur izmir ara ad yales asbeddi ukemmus \"{}\""
 
 #. TODO(jrohel): Why? Librpm does not provide this information.
 #: rpm/transaction.cpp:343
 msgid "Cannot remove package \"{}\""
-msgstr ""
+msgstr "D awezɣi tukksa n ukemmus \"{}\""
 
 #: rpm/transaction.cpp:362
 msgid "Cannot upgrade package \"{}\""
-msgstr ""
+msgstr "Ulamek aleqqem n ukemmus \"{}\""
 
 #: rpm/transaction.cpp:366
 msgid "Cannot downgrade package \"{}\""
-msgstr ""
+msgstr "Ur izmir ara ad isebded lqem yezrin n ukemmus \"{}\""
 
 #: rpm/transaction.cpp:370
 msgid "Cannot install package \"{}\""
-msgstr ""
+msgstr "Ulamek asbeddi n ukemmus \"{}\""
 
 #: rpm/versionlock_config.cpp:284 system/state.cpp:605
 msgid "{}"
@@ -1169,7 +1183,7 @@ msgstr "{}"
 #. TODO(lukash) throw proper exception class
 #: solv/pool.cpp:174
 msgid "Failed to convert epoch \"{}\" to number"
-msgstr ""
+msgstr "D awezɣi aselket n epoch \"{}\" ɣer umḍan"
 
 #: solv/solver.cpp:79
 msgid "Writing debugsolver data into \"{}\" failed: {}"
@@ -1198,11 +1212,11 @@ msgstr "Iteddu"
 #: transaction/Swdb.cpp:99 transaction/Swdb.cpp:126 transaction/Swdb.cpp:136
 #: transaction/Swdb.cpp:150 transaction/Swdb.cpp:273 transaction/Swdb.cpp:281
 msgid "Not in progress"
-msgstr ""
+msgstr "Ulac deg usfari"
 
 #: transaction/Swdb.cpp:158
 msgid "No transaction in progress"
-msgstr ""
+msgstr "Ulac tanigawt iteddun"
 
 #: transaction/Transformer.cpp:647
 msgid "Transformer: can't open history persist dir"
@@ -1210,7 +1224,7 @@ msgstr ""
 
 #: transaction/Transformer.cpp:660
 msgid "Couldn't find a history database"
-msgstr ""
+msgstr "D awezɣi tifin n taffa n yisefka n uzray"
 
 #. TODO(dmach): replace with a better exception class
 #: transaction/db/comps_environment_group.cpp:100
@@ -1406,19 +1420,19 @@ msgstr ""
 
 #: utils/fs/file.cpp:99
 msgid "cannot open file from fd"
-msgstr ""
+msgstr "Ur izmir ara ad d-yeldi afaylu seg uglam"
 
 #: utils/fs/file.cpp:109
 msgid "cannot close file"
-msgstr ""
+msgstr "ur izmir ara ad yemdel afaylu"
 
 #: utils/fs/file.cpp:139 utils/fs/file.cpp:168
 msgid "error reading file"
-msgstr ""
+msgstr "tuccḍa deg tɣuri n ufaylu"
 
 #: utils/fs/file.cpp:154 utils/fs/file.cpp:180
 msgid "error writing file"
-msgstr ""
+msgstr "tuccḍa deg tira n ufaylu"
 
 #: utils/fs/file.cpp:189
 msgid "error flushing file"
@@ -1426,92 +1440,92 @@ msgstr ""
 
 #: utils/fs/file.cpp:198
 msgid "error seeking in file"
-msgstr ""
+msgstr "tuccḍa deg unadi deg ufaylu"
 
 #: utils/fs/file.cpp:209
 msgid "error retrieving file position"
-msgstr ""
+msgstr "Tuccḍa deg tririt n wadig deg ufaylu"
 
 #: utils/fs/file.cpp:297
 msgid "error reading a line from file"
-msgstr ""
+msgstr "tuccḍa deg tɣuri n yizirig seg ufaylu"
 
 #: utils/fs/file.cpp:335
 msgid "error retrieving file descriptor"
-msgstr ""
+msgstr "tuccḍa deg tririt n ufaylu anaglam"
 
 #: utils/fs/temp.cpp:42
 msgid "cannot create temporary directory"
-msgstr ""
+msgstr "ur yezmer ara asnulfu n ukaram askudan"
 
 #: utils/fs/temp.cpp:89
 msgid "cannot create temporary file"
-msgstr ""
+msgstr "ur yezmer ara asnulfu n ufaylu askudan"
 
 #: utils/fs/temp.cpp:142
 msgid "cannot close temporary file"
-msgstr ""
+msgstr "ur izmir ara ad imdel afaylu askudan"
 
 #: utils/iniparser.cpp:126
 msgid "Missing ']' on line {}"
-msgstr ""
+msgstr "Ixuṣṣ ']' deg izirig {}"
 
 #: utils/iniparser.cpp:129
 msgid "Empty section name on line {}"
-msgstr ""
+msgstr "Isem n tgezmi d ilem deg izirig {}"
 
 #: utils/iniparser.cpp:137
 msgid "Text after section on line {}"
-msgstr ""
+msgstr "Aḍris seld tigezmi deg izirig {}"
 
 #: utils/iniparser.cpp:147
 msgid "Missing section header on line {}"
-msgstr ""
+msgstr "Tasenṭit n tgezmi txuṣṣ deg yizirig {}"
 
 #: utils/iniparser.cpp:152
 msgid "Illegal continuation line on line {}"
-msgstr ""
+msgstr "Izirig n ukemmel ulac-it deg izirig {}"
 
 #: utils/iniparser.cpp:159
 msgid "Missing option name on line {}"
-msgstr ""
+msgstr "Isem n tnefrunin ixuṣṣ deg izirig {}"
 
 #: utils/iniparser.cpp:163
 msgid "Missing '=' on line {}"
-msgstr ""
+msgstr "'=' ixuṣṣ deg izirig {}"
 
 #. returns localized message, problem with later translation
 #: utils/library.cpp:34
 msgid "Cannot load shared library \"{}\": {}"
-msgstr ""
+msgstr "D awezɣi asali n temkarḍit yettwabḍan \"{}\": {}"
 
 #: utils/library.cpp:48
 msgid "Cannot obtain address of symbol \"{}\": {}"
-msgstr ""
+msgstr "Ur izmir ara ad d-yawi tansa n uzamul \"{}\": {}"
 
 #: utils/locale.cpp:57
 msgid "Cannot set the locale \"{}\": {}"
-msgstr ""
+msgstr "D awezɣi asbadu n uɣewwaṛ adigan \"{}\": {}"
 
 #: utils/locker.cpp:45
 msgid "Failed to open lock file \"{}\""
-msgstr ""
+msgstr "Yecceḍ ulday n ufaylu n usekkeṛ \"{}\""
 
 #: utils/locker.cpp:60
 msgid "Failed to obtain lock \"{}\""
-msgstr ""
+msgstr "Yecceḍ wawway n usekkeṛ \"{}\""
 
 #: utils/locker.cpp:70
 msgid "Failed to close lock file \"{}\""
-msgstr ""
+msgstr "Yecceḍ umdal n ufaylu n usekkeṛ \"{}\""
 
 #: utils/locker.cpp:73
 msgid "Failed to delete lock file \"{}\""
-msgstr ""
+msgstr "Tecceḍ tukksa n ufaylu n usekkeṛ \"{}\""
 
 #: utils/sqlite3/sqlite3.cpp:29
 msgid "SQL statement compilation failed: \"{}\""
-msgstr ""
+msgstr "Asefsu n tanaṭ SQL ur yeddi ara: \"{}\""
 
 #: utils/sqlite3/sqlite3.cpp:31
 msgid "Binding integer value to SQL statement failed: \"{}\""
@@ -1551,36 +1565,36 @@ msgstr ""
 
 #: utils/sqlite3/sqlite3.cpp:46
 msgid "Column \"{}\" not found"
-msgstr ""
+msgstr "Tigejdit \"{}\" ur tettwaf ara"
 
 #: utils/sqlite3/sqlite3.cpp:48
 msgid "SQL statement execution failed: \"{}\""
-msgstr ""
+msgstr "Aselkem n tanaṭ SQL ur yeddi ara: \"{}\""
 
 #: utils/sqlite3/sqlite3.cpp:68
 msgid "Failed to open database \"{}\""
-msgstr ""
+msgstr "Yecceḍ ulday n taffa n yisefka \"{}\""
 
 #: utils/sqlite3/sqlite3.cpp:105
 msgid "Failed to close database \"{}\""
-msgstr ""
+msgstr "Yecceḍ umdal n taffa n yisefka \"{}\""
 
 #: utils/sqlite3/sqlite3.cpp:117 utils/sqlite3/sqlite3.cpp:143
 msgid "Failed to open backup database \"{}\""
-msgstr ""
+msgstr "Yecceḍ ulday n weḥraz n taffa n yisefka \"{}\""
 
 #: utils/sqlite3/sqlite3.cpp:132
 msgid "Failed to backup database \"{}\" into \"{}\""
-msgstr ""
+msgstr "Yecceḍ weḥraz n taffa n yisefka \"{}\" deg \"{}\""
 
 #: utils/sqlite3/sqlite3.cpp:158
 msgid "Failed to restore database \"{}\""
-msgstr ""
+msgstr "Tecceḍ tririt n taffa n yisefka \"{}\""
 
 #: utils/system.cpp:34
 msgid "failed to read rpm config files"
-msgstr ""
+msgstr "tecceḍ tɣuri n yifuyla n twila rpm"
 
 #: utils/system.cpp:52
 msgid "Failed to execute uname()"
-msgstr ""
+msgstr "Yecceḍ uselkem n uname()"

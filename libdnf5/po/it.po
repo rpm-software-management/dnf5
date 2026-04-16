@@ -3,13 +3,14 @@
 # This file is distributed under the same license as the PACKAGE package.
 # Alessio <alciregi@posteo.net>, 2024.
 # Salvatore Cocuzza <info@salvatorecocuzza.it>, 2025.
+# Ali Ciloqlu <ali.ciloqlu@murena.io>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-07-26 03:48+0000\n"
-"PO-Revision-Date: 2025-06-01 10:41+0000\n"
-"Last-Translator: Salvatore Cocuzza <info@salvatorecocuzza.it>\n"
+"PO-Revision-Date: 2026-04-08 08:58+0000\n"
+"Last-Translator: Ali Ciloqlu <ali.ciloqlu@murena.io>\n"
 "Language-Team: Italian <https://translate.fedoraproject.org/projects/dnf5/"
 "libdnf5/it/>\n"
 "Language: it\n"
@@ -17,14 +18,14 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.11.4\n"
+"X-Generator: Weblate 5.16.2\n"
 
 #: advisory/advisory.cpp:81
 msgid ""
 "Bad libsolv id for advisory \"{}\", solvable name \"{}\" doesn't have "
 "advisory prefix \"{}\""
 msgstr ""
-"ID libsolv non valido per l'avviso \"{}\", il nome risolvibile \"{}\" non ha "
+"Id libsolv non valido per l'avviso \"{}\", il nome risolvibile \"{}\" non ha "
 "il prefisso dell'avviso \"{}\""
 
 #: base/goal.cpp:482
@@ -300,7 +301,7 @@ msgid ""
 "({1} id: '{2}') ."
 msgstr ""
 "L'aggiornamento {0} non può essere annullato, tuttavia lo saranno le azioni "
-"associate ai pacchetti. (ID {1}: '{2}') ."
+"associate ai pacchetti. (id {1}: '{2}') ."
 
 #: base/log_event.cpp:273
 msgid "{} action for argument \"{}\" is not supported."
@@ -616,18 +617,18 @@ msgstr "Impossibile eseguire la transazione con problemi di risoluzione."
 
 #: base/transaction.cpp:82
 msgid "Rpm transaction check failed."
-msgstr "Controllo della transazione RPM fallito."
+msgstr "Controllo della transazione rpm fallito."
 
 #: base/transaction.cpp:84
 msgid ""
 "Failed to obtain rpm transaction lock. Another transaction is in progress."
 msgstr ""
-"Impossibile ottenere il blocco della transazione RPM. Un'altra transazione è "
+"Impossibile ottenere il blocco della transazione rpm. Un'altra transazione è "
 "in corso."
 
 #: base/transaction.cpp:85
 msgid "Rpm transaction failed."
-msgstr "Transazione RPM fallita."
+msgstr "Transazione rpm fallita."
 
 #: base/transaction.cpp:86
 msgid "Signature verification failed."
@@ -990,7 +991,7 @@ msgstr "Impossibile accedere a RPM \"{}\": {}"
 
 #: repo/repo.cpp:107
 msgid "Invalid repository id \"{}\": unexpected character '{}'"
-msgstr "ID repository \"{}\" non valido: carattere inatteso '{}'"
+msgstr "Id repository \"{}\" non valido: carattere inatteso '{}'"
 
 #: repo/repo.cpp:150
 msgid "Repository \"{}\" has no source (baseurl, mirrorlist or metalink) set."
@@ -1029,7 +1030,7 @@ msgstr "Impossibile caricare RPM \"{}\": {}"
 
 #: repo/repo_cache.cpp:255
 msgid "Unable to determine id of the repository in the cache."
-msgstr "Impossibile determinare l'ID del repository nella cache."
+msgstr "Impossibile determinare l'id del repository nella cache."
 
 #: repo/repo_cache_private.hpp:59
 msgid "Empty path to the repository cache directory."
@@ -1088,7 +1089,7 @@ msgid ""
 "Failed to create repo \"{}\": Id is present more than once in the "
 "configuration"
 msgstr ""
-"Impossibile creare il repo \"{}\": l'ID è presente più di una volta nella "
+"Impossibile creare il repo \"{}\": l'id è presente più di una volta nella "
 "configurazione"
 
 #: repo/repo_sack.cpp:631
@@ -1200,12 +1201,11 @@ msgstr "Impossibile impostare la directory radice \"{}\""
 #: rpm/transaction.cpp:125
 #, c-format
 msgid "Error %i opening rpm database"
-msgstr "Errore %i nell'apertura del database RPM"
+msgstr "Errore %i nell'apertura del database rpm"
 
 #: rpm/transaction.cpp:134
 msgid "The rpmdbCookie() function did not return cookie of rpm database."
-msgstr ""
-"La funzione rpmdbCookie() non ha restituito il cookie del database RPM."
+msgstr "La funzione rpmdbCookie() non ha restituito il cookie del database rpm."
 
 #: rpm/transaction.cpp:199
 msgid "Failed to order the rpm transaction."

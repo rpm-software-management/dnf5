@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-07-26 03:48+0000\n"
-"PO-Revision-Date: 2026-02-13 11:58+0000\n"
+"PO-Revision-Date: 2026-03-05 02:22+0000\n"
 "Last-Translator: Massii Aqvayli <massiin@proton.me>\n"
 "Language-Team: Kabyle <https://translate.fedoraproject.org/projects/dnf5/"
 "libdnf5-plugin-actions/kab/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.15.2\n"
+"X-Generator: Weblate 5.16.1\n"
 
 #: actions.cpp:237
 #, c++-format
@@ -41,7 +41,7 @@ msgstr "Tanefrunt tarussint \"{}\""
 #: actions.cpp:711
 #, c++-format
 msgid "Unknown hook \"{}\""
-msgstr ""
+msgstr "Tagust tarussint \"{}\""
 
 #: actions.cpp:720
 msgid ""
@@ -51,12 +51,12 @@ msgstr ""
 
 #: actions.cpp:726
 msgid "Cannot use direction without package filter"
-msgstr ""
+msgstr "Ur izmir ara ad iseqdec tanila war tastayt n ukemmus"
 
 #: actions.cpp:740
 #, c++-format
 msgid "Unknown package direction \"{}\""
-msgstr ""
+msgstr "Akaram ukemmus arussin \"{}\""
 
 #: actions.cpp:747
 #, c++-format
@@ -109,33 +109,33 @@ msgstr ""
 
 #: actions.cpp:1020
 msgid "Error reading from action (from pipe)"
-msgstr ""
+msgstr "Tuccḍa deg tɣuri n tigawt (seg uqadus)"
 
 #: actions.cpp:1038
 #, c++-format
 msgid "Syntax error in json request from action: Missing starting '{{' char"
-msgstr ""
+msgstr "Tuccḍa n tseddast deg tuttra n json seg tigawt: Isekkilen '{{' xuṣṣen"
 
 #: actions.cpp:1062
 msgid "Error during processing of a request from action."
-msgstr ""
+msgstr "Tuccḍa deg usesfer n usuter seg tigawt."
 
 #: actions.cpp:1071
 #, c++-format
 msgid "Syntax error in json request from action: {}"
-msgstr ""
+msgstr "Tuccḍa n tseddast deg usuter n json seg tigawt: {}"
 
 #: actions.cpp:1079
 msgid "Syntax error in json request from action: Incomplete input"
-msgstr ""
+msgstr "Tuccḍa n tseddast deg usuter n json seg tigawt: Anekcum arummid"
 
 #: actions.cpp:1154
 msgid "Cannot write response"
-msgstr ""
+msgstr "Ur izmir ara ad yaru tiririt"
 
 #: actions.cpp:1821
 msgid "Actions plugin: Cannot create pipe"
-msgstr ""
+msgstr "Azegrir n tigawin: D awezɣi asnulfu n uqadus"
 
 #: actions.cpp:1913
 msgid "Actions plugin: Cannot fork"
@@ -152,16 +152,16 @@ msgstr ""
 #: actions.cpp:1988
 #, c++-format
 msgid "Cannot execute action, command \"{}\" arguments \"{}\""
-msgstr ""
+msgstr "Ur izmir ara ad iselkem tigawt, taladna \"{}\" ifukal \"{}\""
 
 #: actions.cpp:1996
 msgid "Error during preparation child process"
-msgstr ""
+msgstr "Tuccḍa deg uheggi ukala n uqrur"
 
 #: actions.cpp:2015
 #, c++-format
 msgid "Exit code: {}"
-msgstr ""
+msgstr "Tangalt n tuffɣa: {}"
 
 #: actions.cpp:2019
 #, c++-format

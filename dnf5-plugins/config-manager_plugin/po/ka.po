@@ -1,13 +1,13 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# Temuri Doghonadze <temuri.doghonadze@gmail.com>, 2023, 2024.
+# Temuri Doghonadze <temuri.doghonadze@gmail.com>, 2023, 2024, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-07-26 03:48+0000\n"
-"PO-Revision-Date: 2024-10-09 04:13+0000\n"
+"PO-Revision-Date: 2026-02-24 20:58+0000\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <https://translate.fedoraproject.org/projects/dnf5/"
 "dnf5-plugin-config-manager/ka/>\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.7.2\n"
+"X-Generator: Weblate 5.16\n"
 
 #: addrepo.cpp:136
 msgid "from-repofile: \"{}\" file does not exist"
@@ -93,7 +93,7 @@ msgstr ""
 
 #: addrepo.cpp:474 addrepo.cpp:500
 msgid "A repository with id \"{}\" already configured in file: {}"
-msgstr "რეპოზიტორია ID-ით \"{}\" უკვე მორგებულია ფაილში:{}"
+msgstr "რეპოზიტორია id-ით \"{}\" უკვე მორგებულია ფაილში:{}"
 
 #: addrepo.cpp:486 setopt.cpp:263
 msgid "Cannot read repositories from directory \"{}\": {}"
@@ -112,7 +112,7 @@ msgstr ""
 
 #: setopt.cpp:100 unsetopt.cpp:81
 msgid "{}: Empty repository id is not allowed: {}"
-msgstr "{}: ცარიელი რეპოზიტორიის ID დაშვებული არაა: {}"
+msgstr "{}: ცარიელი რეპოზიტორიის id დაშვებული არაა: {}"
 
 #: setopt.cpp:109
 msgid "Cannot set repository option \"{}\": {}"

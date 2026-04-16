@@ -3,13 +3,14 @@
 # This file is distributed under the same license as the PACKAGE package.
 # Languages add-on <noreply-addon-languages@weblate.org>, 2026.
 # Jim Spentzos <jimspentzos2000@gmail.com>, 2026.
+# Efstathios Iosifidis <eiosifidis@yandex.com>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-07-26 03:48+0000\n"
-"PO-Revision-Date: 2026-01-22 08:58+0000\n"
-"Last-Translator: Jim Spentzos <jimspentzos2000@gmail.com>\n"
+"PO-Revision-Date: 2026-02-26 00:48+0000\n"
+"Last-Translator: Efstathios Iosifidis <eiosifidis@yandex.com>\n"
 "Language-Team: Greek <https://translate.fedoraproject.org/projects/dnf5/"
 "libdnf5/el/>\n"
 "Language: el\n"
@@ -17,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.15.2\n"
+"X-Generator: Weblate 5.16\n"
 
 #: advisory/advisory.cpp:81
 #, c++-format
@@ -25,17 +26,19 @@ msgid ""
 "Bad libsolv id for advisory \"{}\", solvable name \"{}\" doesn't have "
 "advisory prefix \"{}\""
 msgstr ""
+"Εσφαλμένο id libsolv για την ειδοποίηση \"{}\", το επιλύσιμο όνομα \"{}\" "
+"δεν έχει το πρόθεμα ειδοποίησης \"{}\""
 
 #: base/goal.cpp:482
 #, c++-format
 msgid "Unsupported argument for REMOVE action: {}"
-msgstr ""
+msgstr "Μη υποστηριζόμενο όρισμα για την ενέργεια REMOVE: {}"
 
 #. TODO(lukash) throw a proper exception
 #: base/goal.cpp:1652
 #, c++-format
 msgid "Incorrect configuration value for multilib_policy: {}"
-msgstr ""
+msgstr "Εσφαλμένη τιμή ρύθμισης για το multilib_policy: {}"
 
 #: base/goal_elements.cpp:352
 msgid "Install"
@@ -43,7 +46,7 @@ msgstr "Εγκατάσταση"
 
 #: base/goal_elements.cpp:354
 msgid "Install via provide"
-msgstr ""
+msgstr "Εγκατάσταση μέσω παροχής (provide)"
 
 #: base/goal_elements.cpp:356
 msgid "Install by group"
@@ -59,11 +62,11 @@ msgstr "Αναβάθμιση όλων"
 
 #: base/goal_elements.cpp:362
 msgid "Upgrade minimal"
-msgstr ""
+msgstr "Ελάχιστη αναβάθμιση"
 
 #: base/goal_elements.cpp:364
 msgid "Upgrade all minimal"
-msgstr ""
+msgstr "Ελάχιστη αναβάθμιση όλων"
 
 #: base/goal_elements.cpp:366
 msgid "Downgrade"
@@ -71,27 +74,27 @@ msgstr "Υποβάθμιση"
 
 #: base/goal_elements.cpp:368
 msgid "Reinstall"
-msgstr ""
+msgstr "Επανεγκατάσταση"
 
 #: base/goal_elements.cpp:370
 msgid "Install or reinstall"
-msgstr ""
+msgstr "Εγκατάσταση ή επανεγκατάσταση"
 
 #: base/goal_elements.cpp:372
 msgid "Remove"
-msgstr ""
+msgstr "Αφαίρεση"
 
 #: base/goal_elements.cpp:374
 msgid "Distrosync"
-msgstr ""
+msgstr "Συγχρονισμός διανομής (Distrosync)"
 
 #: base/goal_elements.cpp:376
 msgid "Distrosync all"
-msgstr ""
+msgstr "Συγχρονισμός διανομής όλων"
 
 #: base/goal_elements.cpp:378
 msgid "Reason Change"
-msgstr ""
+msgstr "Αλλαγή αιτίας"
 
 #: base/goal_elements.cpp:380
 msgid "Resolve"
@@ -111,107 +114,107 @@ msgstr "Επαναφορά"
 
 #: base/goal_elements.cpp:388
 msgid "Parse serialized transaction"
-msgstr ""
+msgstr "Ανάλυση σειριοποιημένης συναλλαγής"
 
 #: base/goal_elements.cpp:390
 msgid "Install action"
-msgstr ""
+msgstr "Ενέργεια εγκατάστασης"
 
 #: base/goal_elements.cpp:392
 msgid "Remove action"
-msgstr ""
+msgstr "Ενέργεια αφαίρεσης"
 
 #: base/goal_elements.cpp:394
 msgid "Upgrade action"
-msgstr ""
+msgstr "Ενέργεια αναβάθμισης"
 
 #: base/goal_elements.cpp:396
 msgid "Reinstall action"
-msgstr ""
+msgstr "Ενέργεια επανεγκατάστασης"
 
 #: base/goal_elements.cpp:398
 msgid "Reason change action"
-msgstr ""
+msgstr "Ενέργεια αλλαγής αιτίας"
 
 #: base/goal_elements.cpp:400
 msgid "Reason override"
-msgstr ""
+msgstr "Παράκαμψη αιτίας"
 
 #: base/goal_elements.cpp:402
 msgid "Revert comps upgrade"
-msgstr ""
+msgstr "Επαναφορά αναβάθμισης comps"
 
 #: base/goal_elements.cpp:404
 msgid "Install debug RPMs"
-msgstr ""
+msgstr "Εγκατάσταση RPM αποσφαλμάτωσης"
 
 #: base/goal_elements.cpp:406
 msgid "Transaction merge"
-msgstr ""
+msgstr "Συγχώνευση συναλλαγής"
 
 #: base/log_event.cpp:141
 #, c++-format
 msgid "No packages to remove for argument: {}"
-msgstr ""
+msgstr "Δεν υπάρχουν πακέτα προς αφαίρεση για το όρισμα: {}"
 
 #: base/log_event.cpp:143
 #, c++-format
 msgid "No groups to remove for argument: {}"
-msgstr ""
+msgstr "Δεν υπάρχουν ομάδες προς αφαίρεση για το όρισμα: {}"
 
 #: base/log_event.cpp:146
 #, c++-format
 msgid "No environmental groups to remove for argument: {}"
-msgstr ""
+msgstr "Δεν υπάρχουν ομάδες περιβάλλοντος προς αφαίρεση για το όρισμα: {}"
 
 #: base/log_event.cpp:148
 #, c++-format
 msgid "No modules to remove for argument: {}"
-msgstr ""
+msgstr "Δεν υπάρχουν αρθρώματα προς αφαίρεση για το όρισμα: {}"
 
 #: base/log_event.cpp:152
 #, c++-format
 msgid "No match for group from environment: {}"
-msgstr ""
+msgstr "Καμία αντιστοιχία για ομάδα από το περιβάλλον: {}"
 
 #: base/log_event.cpp:154
 #, c++-format
 msgid "No match for group package: {}"
-msgstr ""
+msgstr "Καμία αντιστοιχία για πακέτο ομάδας: {}"
 
 #: base/log_event.cpp:158
 #, c++-format
 msgid "Cannot perform {0}, no match for: {1}."
-msgstr ""
+msgstr "Αδυναμία εκτέλεσης {0}, καμία αντιστοιχία για: {1}."
 
 #: base/log_event.cpp:160
 #, c++-format
 msgid "No match for argument: {}"
-msgstr ""
+msgstr "Καμία αντιστοιχία για το όρισμα: {}"
 
 #: base/log_event.cpp:163
 #, c++-format
 msgid "No match for argument '{0}' in selected advisories"
-msgstr ""
+msgstr "Καμία αντιστοιχία για το όρισμα '{0}' στις επιλεγμένες ειδοποιήσεις"
 
 #: base/log_event.cpp:165
 msgid "No match in selected advisories"
-msgstr ""
+msgstr "Καμία αντιστοιχία στις επιλεγμένες ειδοποιήσεις"
 
 #: base/log_event.cpp:169
 #, c++-format
 msgid "No match for argument '{0}' in repositories '{1}'"
-msgstr ""
+msgstr "Καμία αντιστοιχία για το όρισμα '{0}' στα αποθετήρια '{1}'"
 
 #: base/log_event.cpp:175
 #, c++-format
 msgid "Cannot perform {0} for {1} '{2}' because it is not installed."
-msgstr ""
+msgstr "Αδυναμία εκτέλεσης {0} για το {1} '{2}' επειδή δεν είναι εγκατεστημένο."
 
 #: base/log_event.cpp:180
 #, c++-format
 msgid "Packages for argument '{}' available, but not installed."
-msgstr ""
+msgstr "Πακέτα για το όρισμα '{}' είναι διαθέσιμα, αλλά όχι εγκατεστημένα."
 
 #: base/log_event.cpp:184
 #, c++-format
@@ -219,26 +222,32 @@ msgid ""
 "Packages for argument '{}' available, but installed for a different "
 "architecture."
 msgstr ""
+"Πακέτα για το όρισμα '{}' είναι διαθέσιμα, αλλά εγκατεστημένα για "
+"διαφορετική αρχιτεκτονική."
 
 #: base/log_event.cpp:188
 #, c++-format
 msgid "Cannot perform {0} because '{1}' matches only source packages."
 msgstr ""
+"Αδυναμία εκτέλεσης {0} επειδή το '{1}' αντιστοιχεί μόνο σε πακέτα πηγαίου "
+"κώδικα."
 
 #: base/log_event.cpp:192
 #, c++-format
 msgid "Argument '{}' matches only source packages."
-msgstr ""
+msgstr "Το όρισμα '{}' αντιστοιχεί μόνο σε πακέτα πηγαίου κώδικα."
 
 #: base/log_event.cpp:196
 #, c++-format
 msgid "Cannot perform {0} because '{1}' matches only excluded packages."
 msgstr ""
+"Αδυναμία εκτέλεσης {0} επειδή το '{1}' αντιστοιχεί μόνο σε εξαιρούμενα "
+"πακέτα."
 
 #: base/log_event.cpp:200
 #, c++-format
 msgid "Argument '{}' matches only excluded packages."
-msgstr ""
+msgstr "Το όρισμα '{}' αντιστοιχεί μόνο σε εξαιρούμενα πακέτα."
 
 #: base/log_event.cpp:204
 #, c++-format
@@ -246,11 +255,14 @@ msgid ""
 "Cannot perform {0} because '{1}' matches only packages excluded by "
 "versionlock."
 msgstr ""
+"Αδυναμία εκτέλεσης {0} επειδή το '{1}' αντιστοιχεί μόνο σε πακέτα που "
+"εξαιρούνται από το versionlock."
 
 #: base/log_event.cpp:208
 #, c++-format
 msgid "Argument '{}' matches only packages excluded by versionlock."
 msgstr ""
+"Το όρισμα '{}' αντιστοιχεί μόνο σε πακέτα που εξαιρούνται από το versionlock."
 
 #: base/log_event.cpp:213
 #, c++-format
@@ -260,7 +272,7 @@ msgstr ""
 #: base/log_event.cpp:216
 #, c++-format
 msgid "There are following alternatives for '{0}': {1}"
-msgstr ""
+msgstr "Υπάρχουν οι ακόλουθες εναλλακτικές για το '{0}': {1}"
 
 #: base/log_event.cpp:223
 #, c++-format
@@ -268,6 +280,8 @@ msgid ""
 "The lowest available version of the \"{}\" package is already installed, "
 "cannot downgrade it."
 msgstr ""
+"Η χαμηλότερη διαθέσιμη έκδοση του πακέτου \"{}\" είναι ήδη εγκατεστημένη, "
+"δεν είναι δυνατή η υποβάθμισή του."
 
 #: base/log_event.cpp:229
 #, c++-format
@@ -275,12 +289,17 @@ msgid ""
 "Installed packages for argument '{0}' are not available in repositories in "
 "the same version, available versions: {1}, cannot reinstall."
 msgstr ""
+"Τα εγκατεστημένα πακέτα για το όρισμα '{0}' δεν είναι διαθέσιμα στα "
+"αποθετήρια στην ίδια έκδοση, διαθέσιμες εκδόσεις: {1}, αδυναμία "
+"επανεγκατάστασης."
 
 #: base/log_event.cpp:235
 #, c++-format
 msgid ""
 "Cannot perform {0} because '{1}' is installed in a different version: '{2}'."
 msgstr ""
+"Αδυναμία εκτέλεσης {0} επειδή το '{1}' είναι εγκατεστημένο σε διαφορετική "
+"έκδοση: '{2}'."
 
 #: base/log_event.cpp:241
 #, c++-format
@@ -288,26 +307,28 @@ msgid ""
 "Packages for argument '{}' installed and available, but in a different "
 "version."
 msgstr ""
+"Πακέτα για το όρισμα '{}' είναι εγκατεστημένα και διαθέσιμα, αλλά σε "
+"διαφορετική έκδοση."
 
 #: base/log_event.cpp:243
 #, c++-format
 msgid "Packages for argument '{}' installed, but not available."
-msgstr ""
+msgstr "Πακέτα για το όρισμα '{}' είναι εγκατεστημένα, αλλά όχι διαθέσιμα."
 
 #: base/log_event.cpp:252
 #, c++-format
 msgid "Package \"{}\" is already installed with reason \"{}\"."
-msgstr ""
+msgstr "Το πακέτο \"{}\" είναι ήδη εγκατεστημένο με αιτία \"{}\"."
 
 #: base/log_event.cpp:254
 #, c++-format
 msgid "Package \"{}\" is already installed."
-msgstr ""
+msgstr "Το πακέτο \"{}\" είναι ήδη εγκατεστημένο."
 
 #: base/log_event.cpp:263
 #, c++-format
 msgid "Debug data written to \"{}\""
-msgstr ""
+msgstr "Τα δεδομένα αποσφαλμάτωσης εγγράφηκαν στο \"{}\""
 
 #: base/log_event.cpp:267
 #, c++-format
@@ -315,17 +336,19 @@ msgid ""
 "{0} upgrade cannot be reverted, however associated package actions will be. "
 "({1} id: '{2}') ."
 msgstr ""
+"Η αναβάθμιση {0} δεν μπορεί να αναιρεθεί, ωστόσο οι σχετικές ενέργειες "
+"πακέτων θα αναιρεθούν. ({1} id: '{2}') ."
 
 #: base/log_event.cpp:273
 #, c++-format
 msgid "{} action for argument \"{}\" is not supported."
-msgstr ""
+msgstr "Η ενέργεια {} για το όρισμα \"{}\" δεν υποστηρίζεται."
 
 #. Format a leading line of the error message.
 #: base/log_event.cpp:282
 #, c++-format
 msgid "Unable to resolve argument '{}':"
-msgstr ""
+msgstr "Αδυναμία επίλυσης του ορίσματος '{}':"
 
 #: base/log_event.cpp:286
 #, c++-format
@@ -342,19 +365,19 @@ msgstr[1] ""
 
 #: base/log_event.cpp:293
 msgid "', '"
-msgstr ""
+msgstr "', '"
 
 #: base/log_event.cpp:302
 msgid "Modular dependency problems:\n"
-msgstr ""
+msgstr "Προβλήματα αρθρωτών εξαρτήσεων:\n"
 
 #: base/log_event.cpp:309
 msgid "Modular dependency problems with the latest modules:\n"
-msgstr ""
+msgstr "Προβλήματα αρθρωτών εξαρτήσεων με τα τελευταία αρθρώματα:\n"
 
 #: base/log_event.cpp:316
 msgid "Modular dependency problems with the defaults:\n"
-msgstr ""
+msgstr "Προβλήματα αρθρωτών εξαρτήσεων με τις προεπιλογές:\n"
 
 #: base/log_event.cpp:331
 #, c++-format
@@ -362,12 +385,17 @@ msgid ""
 "The operation would result in switching of module '{0}' stream '{1}' to "
 "stream '{2}'\n"
 msgstr ""
+"Η λειτουργία θα είχε ως αποτέλεσμα την αλλαγή του αρθρώματος '{0}' από τη "
+"ροή '{1}' στη ροή '{2}'\n"
 
 #: base/log_event.cpp:336
 msgid ""
 "Error: It is not possible to switch enabled streams of a module unless "
 "explicitly enabled via configuration option module_stream_switch."
 msgstr ""
+"Σφάλμα: Δεν είναι δυνατή η αλλαγή των ενεργοποιημένων ροών ενός αρθρώματος, "
+"εκτός εάν έχει ενεργοποιηθεί ρητά μέσω της επιλογής ρύθμισης "
+"module_stream_switch."
 
 #: base/log_event.cpp:341
 #, c++-format
@@ -375,11 +403,13 @@ msgid ""
 "Extra package '{0}' (with action '{1}') which is not present in the stored "
 "transaction was pulled into the transaction.\n"
 msgstr ""
+"Το επιπλέον πακέτο '{0}' (με ενέργεια '{1}') το οποίο δεν υπάρχει στην "
+"αποθηκευμένη συναλλαγή, εισήχθη στη συναλλαγή.\n"
 
 #: base/log_event.cpp:347
 #, c++-format
 msgid "Cannot parse file: '{0}': {1}.\n"
-msgstr ""
+msgstr "Αδυναμία ανάλυσης αρχείου: '{0}': {1}.\n"
 
 #: base/log_event.cpp:354
 #, c++-format
@@ -387,11 +417,13 @@ msgid ""
 "Could not find debuginfo package for the following packages resolved from "
 "the argument '{0}': {1}"
 msgstr ""
+"Δεν ήταν δυνατή η εύρεση του πακέτου debuginfo για τα ακόλουθα πακέτα που "
+"επιλύθηκαν από το όρισμα '{0}': {1}"
 
 #: base/log_event.cpp:357 base/log_event.cpp:368
 msgctxt "String for joining NEVRAs - e.g. `foo-4-4.noarch, bar-5-5.noarch`"
 msgid ", "
-msgstr ""
+msgstr ", "
 
 #: base/log_event.cpp:364
 #, c++-format
@@ -399,122 +431,137 @@ msgid ""
 "Could not find debugsource package for the following packages resolved from "
 "the argument '{0}': {1}"
 msgstr ""
+"Δεν ήταν δυνατή η εύρεση του πακέτου debugsource για τα ακόλουθα πακέτα που "
+"επιλύθηκαν από το όρισμα '{0}': {1}"
 
 #: base/log_event.cpp:371
 #, c++-format
 msgid "Transaction merge error: '{0}'"
-msgstr ""
+msgstr "Σφάλμα συγχώνευσης συναλλαγής: '{0}'"
 
 #: base/solver_problems.cpp:41
 #, c++-format
 msgid "{} does not belong to a distupgrade repository"
-msgstr ""
+msgstr "Το {} δεν ανήκει σε αποθετήριο distupgrade"
 
 #: base/solver_problems.cpp:42
 #, c++-format
 msgid "{0} from {1} has inferior architecture"
-msgstr ""
+msgstr "Το {0} από το {1} έχει κατώτερη αρχιτεκτονική"
 
 #: base/solver_problems.cpp:43
 msgid "problem with installed package"
-msgstr ""
+msgstr "πρόβλημα με το εγκατεστημένο πακέτο"
 
 #: base/solver_problems.cpp:44 base/solver_problems.cpp:80
 msgid "conflicting requests"
-msgstr ""
+msgstr "συγκρουόμενα αιτήματα"
 
 #: base/solver_problems.cpp:45 base/solver_problems.cpp:81
 msgid "unsupported request"
-msgstr ""
+msgstr "μη υποστηριζόμενο αίτημα"
 
 #: base/solver_problems.cpp:46 base/solver_problems.cpp:82
 #, c++-format
 msgid "nothing provides requested {}"
-msgstr ""
+msgstr "τίποτα δεν παρέχει το ζητούμενο {}"
 
 #: base/solver_problems.cpp:47
 #, c++-format
 msgid "package {} does not exist"
-msgstr ""
+msgstr "το πακέτο {} δεν υπάρχει"
 
 #: base/solver_problems.cpp:48 base/solver_problems.cpp:84
 #, c++-format
 msgid "{} is provided by the system"
-msgstr ""
+msgstr "το {} παρέχεται από το σύστημα"
 
 #: base/solver_problems.cpp:49 base/solver_problems.cpp:85
 msgid "some dependency problem"
-msgstr ""
+msgstr "κάποιο πρόβλημα εξάρτησης"
 
 #: base/solver_problems.cpp:50
 #, c++-format
 msgid "cannot install the best update candidate for package {}"
 msgstr ""
+"αδυναμία εγκατάστασης του βέλτιστου υποψηφίου ενημέρωσης για το πακέτο {}"
 
 #: base/solver_problems.cpp:51 base/solver_problems.cpp:87
 msgid "cannot install the best candidate for the job"
-msgstr ""
+msgstr "αδυναμία εγκατάστασης του βέλτιστου υποψηφίου για την εργασία"
 
 #: base/solver_problems.cpp:52
 #, c++-format
 msgid "package {0} from {1} is filtered out by modular filtering"
-msgstr ""
+msgstr "το πακέτο {0} από το {1} αποκλείστηκε από το αρθρωτό φιλτράρισμα"
 
 #: base/solver_problems.cpp:53
 #, c++-format
 msgid "package {0} from {1} does not have a compatible architecture"
-msgstr ""
+msgstr "το πακέτο {0} από το {1} δεν έχει συμβατή αρχιτεκτονική"
 
 #: base/solver_problems.cpp:54
 #, c++-format
 msgid "package {0} from {1} is not installable"
-msgstr ""
+msgstr "το πακέτο {0} από το {1} δεν μπορεί να εγκατασταθεί"
 
 #: base/solver_problems.cpp:55
 #, c++-format
 msgid "package {0} from {1} is filtered out by exclude filtering"
-msgstr ""
+msgstr "το πακέτο {0} από το {1} αποκλείστηκε από το φιλτράρισμα εξαιρέσεων"
 
 #: base/solver_problems.cpp:56
 #, c++-format
 msgid "nothing provides {0} needed by {1} from {2}"
-msgstr ""
+msgstr "τίποτα δεν παρέχει το {0} που απαιτείται από το {1} από το {2}"
 
 #: base/solver_problems.cpp:57
 #, c++-format
 msgid "cannot install both {0} from {1} and {2} from {3}"
-msgstr ""
+msgstr "αδυναμία ταυτόχρονης εγκατάστασης των {0} από το {1} και {2} από το {3}"
 
 #: base/solver_problems.cpp:58
 #, c++-format
 msgid "package {0} from {1} conflicts with {2} provided by {3} from {4}"
 msgstr ""
+"το πακέτο {0} από το {1} συγκρούεται με το {2} που παρέχεται από το {3} από "
+"το {4}"
 
 #: base/solver_problems.cpp:60
 #, c++-format
 msgid "installed package {0} conflicts with {1} provided by {2} from {3}"
 msgstr ""
+"το εγκατεστημένο πακέτο {0} συγκρούεται με το {1} που παρέχεται από το {2} "
+"από το {3}"
 
 #: base/solver_problems.cpp:61
 #, c++-format
 msgid "package {0} from {1} obsoletes {2} provided by {3} from {4}"
 msgstr ""
+"το πακέτο {0} από το {1} αντικαθιστά το {2} που παρέχεται από το {3} από το "
+"{4}"
 
 #: base/solver_problems.cpp:62
 #, c++-format
 msgid "installed package {0} obsoletes {1} provided by {2} from {3}"
 msgstr ""
+"το εγκατεστημένο πακέτο {0} αντικαθιστά το {1} που παρέχεται από το {2} από "
+"το {3}"
 
 #: base/solver_problems.cpp:64
 #, c++-format
 msgid "package {0} from {1} implicitly obsoletes {2} provided by {3} from {4}"
 msgstr ""
+"το πακέτο {0} από το {1} αντικαθιστά έμμεσα το {2} που παρέχεται από το {3} "
+"από το {4}"
 
 #: base/solver_problems.cpp:66
 #, c++-format
 msgid ""
 "package {1} from {2} requires {0}, but none of the providers can be installed"
 msgstr ""
+"το πακέτο {1} από το {2} απαιτεί το {0}, αλλά κανένας από τους παρόχους δεν "
+"μπορεί να εγκατασταθεί"
 
 #: base/solver_problems.cpp:68
 #, c++-format
@@ -522,191 +569,206 @@ msgid ""
 "installed package {1} requires {0}, but none of the providers can be "
 "installed"
 msgstr ""
+"το εγκατεστημένο πακέτο {1} απαιτεί το {0}, αλλά κανένας από τους παρόχους "
+"δεν μπορεί να εγκατασταθεί"
 
 #: base/solver_problems.cpp:69
 #, c++-format
 msgid "package {0} from {1} conflicts with {2} provided by itself"
 msgstr ""
+"το πακέτο {0} από το {1} συγκρούεται με το {2} που παρέχεται από το ίδιο"
 
 #: base/solver_problems.cpp:70
 #, c++-format
 msgid "both package {0} from {1} and {3} from {4} obsolete {2}"
 msgstr ""
+"τα πακέτα {0} από το {1} και {3} από το {4} αντικαθιστούν και τα δύο το {2}"
 
 #: base/solver_problems.cpp:72
 #, c++-format
 msgid ""
 "The operation would result in removing the following protected packages: {}"
 msgstr ""
+"Η λειτουργία θα είχε ως αποτέλεσμα την αφαίρεση των εξής προστατευμένων "
+"πακέτων: {}"
 
 #: base/solver_problems.cpp:75
 #, c++-format
 msgid "The operation would result in removing of running kernel: {}"
 msgstr ""
+"Η λειτουργία θα είχε ως αποτέλεσμα την αφαίρεση του τρέχοντος πυρήνα: {}"
 
 #: base/solver_problems.cpp:77
 #, c++-format
 msgid "module {} does not belong to a distupgrade repository"
-msgstr ""
+msgstr "το άρθρωμα {} δεν ανήκει σε αποθετήριο distupgrade"
 
 #: base/solver_problems.cpp:78
 #, c++-format
 msgid "module {} has inferior architecture"
-msgstr ""
+msgstr "το άρθρωμα {} έχει κατώτερη αρχιτεκτονική"
 
 #: base/solver_problems.cpp:79
 #, c++-format
 msgid "problem with installed module {}"
-msgstr ""
+msgstr "πρόβλημα με το εγκατεστημένο άρθρωμα {}"
 
 #: base/solver_problems.cpp:83
 #, c++-format
 msgid "module {} does not exist"
-msgstr ""
+msgstr "το άρθρωμα {} δεν υπάρχει"
 
 #: base/solver_problems.cpp:86
 #, c++-format
 msgid "cannot install the best update candidate for module {}"
 msgstr ""
+"αδυναμία εγκατάστασης του βέλτιστου υποψηφίου ενημέρωσης για το άρθρωμα {}"
 
 #: base/solver_problems.cpp:88 base/solver_problems.cpp:91
 #, c++-format
 msgid "module {} is disabled"
-msgstr ""
+msgstr "το άρθρωμα {} είναι απενεργοποιημένο"
 
 #: base/solver_problems.cpp:89
 #, c++-format
 msgid "module {} does not have a compatible architecture"
-msgstr ""
+msgstr "το άρθρωμα {} δεν έχει συμβατή αρχιτεκτονική"
 
 #: base/solver_problems.cpp:90
 #, c++-format
 msgid "module {} is not installable"
-msgstr ""
+msgstr "το άρθρωμα {} δεν μπορεί να εγκατασταθεί"
 
 #: base/solver_problems.cpp:92
 #, c++-format
 msgid "nothing provides {0} needed by module {1}"
-msgstr ""
+msgstr "τίποτα δεν παρέχει το {0} που απαιτείται από το άρθρωμα {1}"
 
 #: base/solver_problems.cpp:93
 #, c++-format
 msgid "cannot install both modules {0} and {1}"
-msgstr ""
+msgstr "αδυναμία ταυτόχρονης εγκατάστασης των αρθρωμάτων {0} και {1}"
 
 #: base/solver_problems.cpp:94
 #, c++-format
 msgid "module {0} conflicts with {1} provided by {2}"
-msgstr ""
+msgstr "το άρθρωμα {0} συγκρούεται με το {1} που παρέχεται από το {2}"
 
 #: base/solver_problems.cpp:95
 #, c++-format
 msgid "module {0} obsoletes {1} provided by {2}"
-msgstr ""
+msgstr "το άρθρωμα {0} αντικαθιστά το {1} που παρέχεται από το {2}"
 
 #: base/solver_problems.cpp:96
 #, c++-format
 msgid "installed module {0} obsoletes {1} provided by {2}"
 msgstr ""
+"το εγκατεστημένο άρθρωμα {0} αντικαθιστά το {1} που παρέχεται από το {2}"
 
 #: base/solver_problems.cpp:97
 #, c++-format
 msgid "module {0} implicitly obsoletes {1} provided by {2}"
-msgstr ""
+msgstr "το άρθρωμα {0} αντικαθιστά έμμεσα το {1} που παρέχεται από το {2}"
 
 #: base/solver_problems.cpp:98
 #, c++-format
 msgid "module {1} requires {0}, but none of the providers can be installed"
 msgstr ""
+"το άρθρωμα {1} απαιτεί το {0}, αλλά κανένας από τους παρόχους δεν μπορεί να "
+"εγκατασταθεί"
 
 #: base/solver_problems.cpp:99
 #, c++-format
 msgid "module {1} conflicts with {0} provided by itself"
-msgstr ""
+msgstr "το άρθρωμα {1} συγκρούεται με το {0} που παρέχεται από το ίδιο"
 
 #: base/solver_problems.cpp:100
 #, c++-format
 msgid "both module {0} and {2} obsolete {1}"
-msgstr ""
+msgstr "τα αρθρώματα {0} και {2} αντικαθιστούν και τα δύο το {1}"
 
 #: base/solver_problems.cpp:290
 msgid "Problem: "
-msgstr ""
+msgstr "Πρόβλημα: "
 
 #: base/solver_problems.cpp:294
 #, c++-format
 msgid "Problem {}: "
-msgstr ""
+msgstr "Πρόβλημα {}: "
 
 #: base/transaction.cpp:80
 msgid "This transaction has been already run before."
-msgstr ""
+msgstr "Αυτή η συναλλαγή έχει ήδη εκτελεστεί στο παρελθόν."
 
 #: base/transaction.cpp:81
 msgid "Cannot run transaction with resolving problems."
-msgstr ""
+msgstr "Αδυναμία εκτέλεσης συναλλαγής με προβλήματα επίλυσης."
 
 #: base/transaction.cpp:82
 msgid "Rpm transaction check failed."
-msgstr ""
+msgstr "Ο έλεγχος συναλλαγής RPM απέτυχε."
 
 #: base/transaction.cpp:84
 msgid ""
 "Failed to obtain rpm transaction lock. Another transaction is in progress."
 msgstr ""
+"Αποτυχία λήψης κλειδώματος συναλλαγής RPM. Μια άλλη συναλλαγή βρίσκεται σε "
+"εξέλιξη."
 
 #: base/transaction.cpp:85
 msgid "Rpm transaction failed."
-msgstr ""
+msgstr "Η συναλλαγή RPM απέτυχε."
 
 #: base/transaction.cpp:86
 msgid "Signature verification failed."
-msgstr ""
+msgstr "Η επαλήθευση υπογραφής απέτυχε."
 
 #: base/transaction.cpp:90
 msgid "The repository does not have any OpenPGP keys configured."
-msgstr ""
+msgstr "Το αποθετήριο δεν έχει ρυθμισμένα κλειδιά OpenPGP."
 
 #: base/transaction.cpp:91
 msgid "Public key is not installed."
-msgstr ""
+msgstr "Το δημόσιο κλειδί δεν είναι εγκατεστημένο."
 
 #: base/transaction.cpp:92
 msgid "Canceled by the user."
-msgstr ""
+msgstr "Ακυρώθηκε από τον χρήστη."
 
 #: base/transaction.cpp:93
 msgid "Public key import failed."
-msgstr ""
+msgstr "Η εισαγωγή δημόσιου κλειδιού απέτυχε."
 
 #: base/transaction.cpp:980
 #, c++-format
 msgid "Invalid tsflag: {}"
-msgstr ""
+msgstr "Μη έγκυρο tsflag: {}"
 
 #: base/transaction.cpp:1314
 #, c++-format
 msgid "Public key \"{}\" is already present, not importing."
-msgstr ""
+msgstr "Το δημόσιο κλειδί \"{}\" υπάρχει ήδη, δεν θα γίνει εισαγωγή."
 
 #: base/transaction.cpp:1335
 #, c++-format
 msgid "An error occurred importing key \"{}\": {}"
-msgstr ""
+msgstr "Προέκυψε σφάλμα κατά την εισαγωγή του κλειδιού \"{}\": {}"
 
 #: base/transaction.cpp:1369
 #, c++-format
 msgid "OpenPGP check for package \"{}\" ({}) from repo \"{}\" has failed: "
 msgstr ""
+"Ο έλεγχος OpenPGP για το πακέτο \"{}\" ({}) από το αποθετήριο \"{}\" "
+"απέτυχε: "
 
 #: base/transaction.cpp:1397
 msgid "Import of the key didn't help, wrong key?"
-msgstr ""
+msgstr "Η εισαγωγή του κλειδιού δεν βοήθησε, μήπως είναι λάθος κλειδί;"
 
 #: base/transaction.cpp:1416
 msgctxt "It is a joining character for repositories IDs"
 msgid ", "
-msgstr ""
+msgstr ", "
 
 #: base/transaction.cpp:1419
 #, c++-format
@@ -714,7 +776,11 @@ msgid "Warning: skipped OpenPGP checks for {0} package from repository: {1}"
 msgid_plural ""
 "Warning: skipped OpenPGP checks for {0} packages from repository: {1}"
 msgstr[0] ""
+"Προειδοποίηση: παραλείφθηκαν οι έλεγχοι OpenPGP για {0} πακέτο από το "
+"αποθετήριο: {1}"
 msgstr[1] ""
+"Προειδοποίηση: παραλείφθηκαν οι έλεγχοι OpenPGP για {0} πακέτα από το "
+"αποθετήριο: {1}"
 
 #: base/transaction.cpp:1422
 #, c++-format
@@ -722,155 +788,168 @@ msgid "Warning: skipped OpenPGP checks for {0} package from repositories: {1}"
 msgid_plural ""
 "Warning: skipped OpenPGP checks for {0} packages from repositories: {1}"
 msgstr[0] ""
+"Προειδοποίηση: παραλείφθηκαν οι έλεγχοι OpenPGP για {0} πακέτο από τα "
+"αποθετήρια: {1}"
 msgstr[1] ""
+"Προειδοποίηση: παραλείφθηκαν οι έλεγχοι OpenPGP για {0} πακέτα από τα "
+"αποθετήρια: {1}"
 
 #: common/exception.cpp:78
 msgid "System error"
-msgstr ""
+msgstr "Σφάλμα συστήματος"
 
 #: common/exception.cpp:199
 msgid "General RuntimeError exception"
-msgstr ""
+msgstr "Γενική εξαίρεση σφάλματος χρόνου εκτέλεσης (RuntimeError)"
 
 #: common/sack/query.cpp:27
 msgid "Query must contain exactly one object."
-msgstr ""
+msgstr "Το ερώτημα πρέπει να περιέχει ακριβώς ένα αντικείμενο."
 
 #: common/xdg.cpp:43
 msgid "get_user_home_dir(): Cannot determine the user's home directory"
 msgstr ""
+"get_user_home_dir(): Αδυναμία προσδιορισμού του αρχικού καταλόγου του χρήστη"
 
 #: common/xdg.cpp:98
 msgid "get_user_runtime_dir(): Cannot determine the user's runtime directory"
 msgstr ""
+"get_user_runtime_dir(): Αδυναμία προσδιορισμού του καταλόγου χρόνου "
+"εκτέλεσης του χρήστη"
 
 #: comps/environment/environment.cpp:325
 msgid "failed to save xml document for comps"
-msgstr ""
+msgstr "αποτυχία αποθήκευσης του εγγράφου XML για τα comps"
 
 #: comps/group/group.cpp:373
 #, c++-format
 msgid "Failed to save xml document for group \"{}\" to file \"{}\": {}"
 msgstr ""
+"Αποτυχία αποθήκευσης εγγράφου XML για την ομάδα \"{}\" στο αρχείο \"{}\": {}"
 
 #: comps/group/package.cpp:118 comps/group/package.cpp:121
 #, c++-format
 msgid "Invalid package type: {}"
-msgstr ""
+msgstr "Μη έγκυρος τύπος πακέτου: {}"
 
 #: conf/config_main.cpp:57
 msgid "Input is empty. Must contain a value."
-msgstr ""
+msgstr "Η είσοδος είναι κενή. Πρέπει να περιέχει μια τιμή."
 
 #: conf/config_main.cpp:63
 #, c++-format
 msgid "Input value '{}' must not be negative"
-msgstr ""
+msgstr "Η τιμή εισόδου '{}' δεν πρέπει να είναι αρνητική"
 
 #: conf/config_main.cpp:68
 #, c++-format
 msgid "Could not convert '{}' to bytes"
-msgstr ""
+msgstr "Αδυναμία μετατροπής του '{}' σε bytes"
 
 #: conf/config_main.cpp:84
 #, c++-format
 msgid "Unknown unit '{}'"
-msgstr ""
+msgstr "Άγνωστη μονάδα '{}'"
 
 #: conf/config_main.cpp:281
 #, c++-format
 msgid "The throttle value {} is outside the allowed range {} ... {}"
 msgstr ""
+"Η τιμή στραγγαλισμού (throttle) {} είναι εκτός του επιτρεπόμενου εύρους {} "
+"... {}"
 
 #: conf/config_parser.cpp:54
 #, c++-format
 msgid "Section \"{}\" not found"
-msgstr ""
+msgstr "Η ενότητα \"{}\" δεν βρέθηκε"
 
 #: conf/config_parser.cpp:59
 #, c++-format
 msgid "Section \"{}\" does not contain option \"{}\""
-msgstr ""
+msgstr "Η ενότητα \"{}\" δεν περιέχει την επιλογή \"{}\""
 
 #: conf/config_parser.cpp:96
 #, c++-format
 msgid "Configuration file \"{}\" not found"
-msgstr ""
+msgstr "Το αρχείο ρυθμίσεων \"{}\" δεν βρέθηκε"
 
 #: conf/config_parser.cpp:99
 #, c++-format
 msgid "Unable to access configuration file \"{}\""
-msgstr ""
+msgstr "Αδυναμία πρόσβασης στο αρχείο ρυθμίσεων \"{}\""
 
 #: conf/config_parser.cpp:102
 #, c++-format
 msgid "Error in configuration file \"{}\""
-msgstr ""
+msgstr "Σφάλμα στο αρχείο ρυθμίσεων \"{}\""
 
 #: conf/option_binds.cpp:29
 #, c++-format
 msgid "Option \"{}\" not found"
-msgstr ""
+msgstr "Η επιλογή \"{}\" δεν βρέθηκε"
 
 #: conf/option_binds.cpp:32
 #, c++-format
 msgid "Option \"{}\" already exists"
-msgstr ""
+msgstr "Η επιλογή \"{}\" υπάρχει ήδη"
 
 #: conf/option_bool.cpp:82
 #, c++-format
 msgid "Invalid boolean value \"{}\""
-msgstr ""
+msgstr "Μη έγκυρη τιμή boolean \"{}\""
 
 #: conf/option_enum.cpp:68
 #, c++-format
 msgid "Enum option value \"{}\" not allowed"
-msgstr ""
+msgstr "Η τιμή επιλογής απαρίθμησης (Enum) \"{}\" δεν επιτρέπεται"
 
 #: conf/option_number.cpp:99
 #, c++-format
 msgid "Input value {} is outside the allowed range {} ... {}"
-msgstr ""
+msgstr "Η τιμή εισόδου {} είναι εκτός του επιτρεπόμενου εύρους {} ... {}"
 
 #: conf/option_number.cpp:112
 #, c++-format
 msgid "Invalid number option value \"{}\""
-msgstr ""
+msgstr "Μη έγκυρη τιμή αριθμητικής επιλογής \"{}\""
 
 #: conf/option_path.cpp:93
 #, c++-format
 msgid "Only absolute paths allowed, relative path \"{}\" detected"
 msgstr ""
+"Επιτρέπονται μόνο απόλυτες διαδρομές, ανιχνεύθηκε σχετική διαδρομή \"{}\""
 
 #: conf/option_path.cpp:98
 #, c++-format
 msgid "Path \"{}\" does not exist"
-msgstr ""
+msgstr "Η διαδρομή \"{}\" δεν υπάρχει"
 
 #: conf/option_seconds.cpp:38
 msgid "Empty time option value"
-msgstr ""
+msgstr "Κενή τιμή επιλογής χρόνου"
 
 #: conf/option_seconds.cpp:50
 #, c++-format
 msgid "Invalid time option value \"{}\", number or \"never\" expected"
-msgstr ""
+msgstr "Μη έγκυρη τιμή επιλογής χρόνου \"{}\", αναμενόταν αριθμός ή \"never\""
 
 #: conf/option_seconds.cpp:54
 #, c++-format
 msgid ""
 "Invalid time option value \"{}\", negative values except \"-1\" not allowed"
 msgstr ""
+"Μη έγκυρη τιμή επιλογής χρόνου \"{}\", δεν επιτρέπονται αρνητικές τιμές "
+"εκτός από \"-1\""
 
 #: conf/option_seconds.cpp:59
 #, c++-format
 msgid "Unknown time format \"{}\""
-msgstr ""
+msgstr "Άγνωστη μορφή ώρας \"{}\""
 
 #: conf/option_seconds.cpp:78
 #, c++-format
 msgid "Unknown time unit '{}'"
-msgstr ""
+msgstr "Άγνωστη μονάδα χρόνου '{}'"
 
 #: conf/option_string.cpp:89
 #, c++-format
@@ -878,12 +957,14 @@ msgid ""
 "Input value \"{}\" not allowed, allowed values for this option are defined "
 "by regular expression \"{}\""
 msgstr ""
+"Η τιμή εισόδου \"{}\" δεν επιτρέπεται, οι επιτρεπόμενες τιμές για αυτήν την "
+"επιλογή ορίζονται από την κανονική έκφραση \"{}\""
 
 #. TODO(jrohel): We don't know the option name at this time. Add a text name to the options
 #. or extend exception (add name) in upper layer.
 #: conf/option_string.cpp:114
 msgid "Option value is not set"
-msgstr ""
+msgstr "Η τιμή της επιλογής δεν έχει οριστεί"
 
 #: conf/option_string_list.cpp:175
 #, c++-format
@@ -891,25 +972,27 @@ msgid ""
 "Input item value \"{}\" not allowed, allowed values for this option are "
 "defined by regular expression \"{}\""
 msgstr ""
+"Η τιμή του στοιχείου εισόδου \"{}\" δεν επιτρέπεται, οι επιτρεπόμενες τιμές "
+"για αυτήν την επιλογή ορίζονται από την κανονική έκφραση \"{}\""
 
 #: conf/vars.cpp:313 conf/vars.cpp:353
 #, c++-format
 msgid "Variable \"{}\" is read-only"
-msgstr ""
+msgstr "Η μεταβλητή \"{}\" είναι μόνο για ανάγνωση"
 
 #: logger/rotating_file_logger.cpp:65
 msgid "Cannot open log file"
-msgstr ""
+msgstr "Αδυναμία ανοίγματος του αρχείου καταγραφής"
 
 #: module/module_db.cpp:76 module/module_db.cpp:85 module/module_sack.cpp:767
 #, c++-format
 msgid "No such module: {}"
-msgstr ""
+msgstr "Δεν υπάρχει τέτοιο άρθρωμα: {}"
 
 #: module/module_db.cpp:268
 #, c++-format
 msgid "Cannot enable multiple streams for module '{}'"
-msgstr ""
+msgstr "Αδυναμία ενεργοποίησης πολλαπλών ροών (streams) για το άρθρωμα '{}'"
 
 #. TODO(pkratoch) replace with a proper and descriptive exception
 #. TODO(jmracek) else if (removalOfProtected && removalOfProtected->size()) {
@@ -920,49 +1003,49 @@ msgstr ""
 #: module/module_goal_private.cpp:83 rpm/solv/goal_private.cpp:342
 #: rpm/solv/goal_private.cpp:764
 msgid "no solution possible"
-msgstr ""
+msgstr "δεν υπάρχει δυνατή λύση"
 
 #: module/module_metadata.cpp:102
 #, c++-format
 msgid "Failed to update from string: {}"
-msgstr ""
+msgstr "Αποτυχία ενημέρωσης από συμβολοσειρά: {}"
 
 #: module/module_metadata.cpp:129
 #, c++-format
 msgid "Failed to resolve module metadata: {}"
-msgstr ""
+msgstr "Αποτυχία επίλυσης μεταδεδομένων αρθρώματος: {}"
 
 #: module/module_metadata.cpp:140
 #, c++-format
 msgid "Failed to upgrade defaults: {}"
-msgstr ""
+msgstr "Αποτυχία αναβάθμισης προεπιλογών: {}"
 
 #: module/module_metadata.cpp:144
 #, c++-format
 msgid "Failed to upgrade streams: {}"
-msgstr ""
+msgstr "Αποτυχία αναβάθμισης ροών (streams): {}"
 
 #: module/module_sack.cpp:93
 #, c++-format
 msgid "Failed to load module metadata for repository \"{}\": {}"
-msgstr ""
+msgstr "Αποτυχία φόρτωσης μεταδεδομένων αρθρώματος για το αποθετήριο \"{}\": {}"
 
 #: module/module_sack.cpp:594
 msgid "Missing '='"
-msgstr ""
+msgstr "Λείπει το '='"
 
 #: module/module_sack.cpp:598 module/module_sack.cpp:606
 msgid "Missing '\"' in the value"
-msgstr ""
+msgstr "Λείπουν τα εισαγωγικά '\"' στην τιμή"
 
 #: module/module_sack.cpp:602
 msgid "Missing ':' in the value"
-msgstr ""
+msgstr "Λείπει η άνω-κάτω τελεία ':' στην τιμή"
 
 #: module/module_sack.cpp:911
 #, c++-format
 msgid "Invalid module status: {}"
-msgstr ""
+msgstr "Μη έγκυρη κατάσταση αρθρώματος: {}"
 
 #: plugin/plugins.cpp:67
 #, c++-format
@@ -970,172 +1053,188 @@ msgid ""
 "Unsupported plugin API combination. API version provided by plugin \"{}\" "
 "(\"{}\") is \"{}.{}\". API version in libdnf is \"{}.{}\"."
 msgstr ""
+"Μη υποστηριζόμενος συνδυασμός API προσθέτου. Η έκδοση API που παρέχεται από "
+"το πρόσθετο \"{}\" (\"{}\") είναι \"{}.{}\". Η έκδοση API στο libdnf είναι \""
+"{}.{}\"."
 
 #: plugin/plugins.cpp:92
 msgid "Failed to create a libdnf plugin instance"
-msgstr ""
+msgstr "Αποτυχία δημιουργίας στιγμιότυπου προσθέτου libdnf"
 
 #: plugin/plugins.cpp:146
 #, c++-format
 msgid "Cannot find plugin library \"{}\""
-msgstr ""
+msgstr "Αδυναμία εύρεσης της βιβλιοθήκης προσθέτου \"{}\""
 
 #: plugin/plugins.cpp:213
 #, c++-format
 msgid "Invalid option value: enabled={}"
-msgstr ""
+msgstr "Μη έγκυρη τιμή επιλογής: enabled={}"
 
 #: plugin/plugins.cpp:237
 msgid "Plugins::load_plugins(): config_dir_path cannot be empty"
 msgstr ""
+"Plugins::load_plugins(): η διαδρομή config_dir_path δεν μπορεί να είναι κενή"
 
 #: plugin/plugins.cpp:253
 #, c++-format
 msgid "Cannot load libdnf plugin enabled from: {}"
-msgstr ""
+msgstr "Αδυναμία φόρτωσης ενεργοποιημένου προσθέτου libdnf από: {}"
 
 #: repo/config_repo.cpp:581
 msgid "get_unique_id(): Computation of SHA256 failed"
-msgstr ""
+msgstr "get_unique_id(): Ο υπολογισμός του SHA256 απέτυχε"
 
 #: repo/file_downloader.cpp:154
 msgid "Cannot download files, cacheonly option is activated."
-msgstr ""
+msgstr "Αδυναμία λήψης αρχείων, η επιλογή cacheonly είναι ενεργοποιημένη."
 
 #: repo/file_downloader.cpp:216
 msgid "Failed to download files"
-msgstr ""
+msgstr "Αποτυχία λήψης αρχείων"
 
 #: repo/librepo.cpp:118
 msgid ""
 "Maximum download speed is lower than minimum, please change configuration of "
 "minrate or throttle"
 msgstr ""
+"Η μέγιστη ταχύτητα λήψης είναι χαμηλότερη από την ελάχιστη, παρακαλούμε "
+"αλλάξτε τη ρύθμιση του minrate ή του throttle"
 
 #: repo/librepo.cpp:181
 msgid "'proxy_username' is set but not 'proxy_password'"
-msgstr ""
+msgstr "το 'proxy_username' έχει οριστεί αλλά όχι το 'proxy_password'"
 
 #: repo/package_downloader.cpp:154
 #, c++-format
 msgid "Cannot download the \"{0}\" package, cacheonly option is activated."
 msgstr ""
+"Αδυναμία λήψης του πακέτου \"{0}\", η επιλογή cacheonly είναι ενεργοποιημένη."
 
 #: repo/package_downloader.cpp:231
 msgid "Already downloaded"
-msgstr ""
+msgstr "Έχει ήδη ληφθεί"
 
 #: repo/package_downloader.cpp:279
 msgid "Failed to download packages"
-msgstr ""
+msgstr "Αποτυχία λήψης πακέτων"
 
 #: repo/repo.cpp:61
 #, c++-format
 msgid "Failed to load RPM \"{}\": doesn't have the \".rpm\" extension"
-msgstr ""
+msgstr "Αποτυχία φόρτωσης του RPM \"{}\": δεν έχει την επέκταση \".rpm\""
 
 #: repo/repo.cpp:65
 #, c++-format
 msgid "Failed to access RPM \"{}\": {}"
-msgstr ""
+msgstr "Αποτυχία πρόσβασης στο RPM \"{}\": {}"
 
 #: repo/repo.cpp:107
 #, c++-format
 msgid "Invalid repository id \"{}\": unexpected character '{}'"
-msgstr ""
+msgstr "Μη έγκυρο id αποθετηρίου \"{}\": μη αναμενόμενος χαρακτήρας '{}'"
 
 #: repo/repo.cpp:150
 #, c++-format
 msgid "Repository \"{}\" has no source (baseurl, mirrorlist or metalink) set."
 msgstr ""
+"Το αποθετήριο \"{}\" δεν έχει ορισμένη πηγή (baseurl, mirrorlist ή metalink)."
 
 #: repo/repo.cpp:161
 #, c++-format
 msgid "Repository \"{}\" has unsupported type \"{}\", skipping."
-msgstr ""
+msgstr "Το αποθετήριο \"{}\" έχει μη υποστηριζόμενο τύπο \"{}\", παράλειψη."
 
 #: repo/repo.cpp:221 repo/repo.cpp:241 repo/repo_sack.cpp:368
 #, c++-format
 msgid "Failed to download metadata ({}: \"{}\") for repository \"{}\": {}"
-msgstr ""
+msgstr "Αποτυχία λήψης μεταδεδομένων ({}: \"{}\") για το αποθετήριο \"{}\": {}"
 
 #: repo/repo.cpp:439
 msgid ""
 "Failed to load repository: \"primary\" data not present or in unsupported "
 "format"
 msgstr ""
+"Αποτυχία φόρτωσης αποθετηρίου: τα δεδομένα \"primary\" δεν υπάρχουν ή είναι "
+"σε μη υποστηριζόμενη μορφή"
 
 #: repo/repo.cpp:505
 #, c++-format
 msgid "Failed to load comps \"{}\": doesn't have the \".xml\" extension"
-msgstr ""
+msgstr "Αποτυχία φόρτωσης comps \"{}\": δεν έχει την επέκταση \".xml\""
 
 #: repo/repo.cpp:512
 #, c++-format
 msgid "Failed to load xml Comps \"{}\": {}"
-msgstr ""
+msgstr "Αποτυχία φόρτωσης xml Comps \"{}\": {}"
 
 #: repo/repo.cpp:530
 #, c++-format
 msgid "Failed to load RPM \"{}\": {}"
-msgstr ""
+msgstr "Αποτυχία φόρτωσης RPM \"{}\": {}"
 
 #: repo/repo_cache.cpp:255
 msgid "Unable to determine id of the repository in the cache."
-msgstr ""
+msgstr "Αδυναμία προσδιορισμού του id του αποθετηρίου στην προσωρινή μνήμη."
 
 #: repo/repo_cache_private.hpp:59
 msgid "Empty path to the repository cache directory."
-msgstr ""
+msgstr "Κενή διαδρομή προς τον κατάλογο προσωρινής μνήμης του αποθετηρίου."
 
 #: repo/repo_downloader.cpp:214
 #, c++-format
 msgid "Librepo error: {}"
-msgstr ""
+msgstr "Σφάλμα Librepo: {}"
 
 #: repo/repo_downloader.cpp:258
 msgid "Failed to set up metadata download"
-msgstr ""
+msgstr "Αποτυχία προετοιμασίας λήψης μεταδεδομένων"
 
 #: repo/repo_downloader.cpp:312 repo/repo_downloader.cpp:362
 msgid "Failed to download metadata"
-msgstr ""
+msgstr "Αποτυχία λήψης μεταδεδομένων"
 
 #: repo/repo_downloader.cpp:426
 #, c++-format
 msgid "Error checking if metalink \"{}\" is in sync for repository \"{}\""
 msgstr ""
+"Σφάλμα κατά τον έλεγχο συγχρονισμού του metalink \"{}\" για το αποθετήριο \""
+"{}\""
 
 #: repo/repo_downloader.cpp:446
 #, c++-format
 msgid "Error checking if repomd ({}: \"{}\") is in sync for repository \"{}\""
 msgstr ""
+"Σφάλμα κατά τον έλεγχο συγχρονισμού του repomd ({}: \"{}\") για το "
+"αποθετήριο \"{}\""
 
 #: repo/repo_downloader.cpp:515
 #, c++-format
 msgid "Error loading local metadata for repository \"{}\""
-msgstr ""
+msgstr "Σφάλμα κατά τη φόρτωση τοπικών μεταδεδομένων για το αποθετήριο \"{}\""
 
 #: repo/repo_downloader.cpp:597
 #, c++-format
 msgid ""
 "No valid source (baseurl, mirrorlist or metalink) found for repository \"{}\""
 msgstr ""
+"Δεν βρέθηκε έγκυρη πηγή (baseurl, mirrorlist ή metalink) για το αποθετήριο \""
+"{}\""
 
 #: repo/repo_pgp.cpp:60
 #, c++-format
 msgid "Failed to import OpenPGP keys into temporary keyring: {}"
-msgstr ""
+msgstr "Αποτυχία εισαγωγής κλειδιών OpenPGP στην προσωρινή κλειδοθήκη: {}"
 
 #: repo/repo_pgp.cpp:66 repo/repo_pgp.cpp:93
 #, c++-format
 msgid "Failed to list OpenPGP keys: {}"
-msgstr ""
+msgstr "Αποτυχία προβολής λίστας κλειδιών OpenPGP: {}"
 
 #: repo/repo_pgp.cpp:141
 #, c++-format
 msgid "Failed to import OpenPGP keys: {}"
-msgstr ""
+msgstr "Αποτυχία εισαγωγής κλειδιών OpenPGP: {}"
 
 #: repo/repo_sack.cpp:159
 #, c++-format
@@ -1143,252 +1242,268 @@ msgid ""
 "Failed to create repo \"{}\": Id is present more than once in the "
 "configuration"
 msgstr ""
+"Αποτυχία δημιουργίας αποθετηρίου \"{}\": Το Id υπάρχει περισσότερες από μία "
+"φορές στις ρυθμίσεις"
 
 #: repo/repo_sack.cpp:631
 #, c++-format
 msgid "Cache-only enabled but no cache for repository \"{}\""
 msgstr ""
+"Ενεργοποιήθηκε η λειτουργία 'μόνο προσωρινή μνήμη' αλλά δεν υπάρχει cache "
+"για το αποθετήριο \"{}\""
 
 #: repo/solv_repo.cpp:267
 #, c++-format
 msgid "Failed to load repomd for repo \"{}\" from \"{}\": {}."
-msgstr ""
+msgstr "Αποτυχία φόρτωσης repomd για το repo \"{}\" από το \"{}\": {}."
 
 #: repo/solv_repo.cpp:275
 #, c++-format
 msgid "Failed to load primary for repo \"{}\" from \"{}\": {}."
-msgstr ""
+msgstr "Αποτυχία φόρτωσης primary για το repo \"{}\" από το \"{}\": {}."
 
 #: repo/solv_repo.cpp:323
 #, c++-format
 msgid "Unsupported extended repodata type for the system repo: \"{}\"."
 msgstr ""
+"Μη υποστηριζόμενος εκτεταμένος τύπος repodata για το αποθετήριο συστήματος: "
+"\"{}\"."
 
 #: repo/solv_repo.cpp:395
 #, c++-format
 msgid "Failed to load {} extension for repo \"{}\" from \"{}\": {}"
-msgstr ""
+msgstr "Αποτυχία φόρτωσης της επέκτασης {} για το repo \"{}\" από το \"{}\": {}"
 
 #: repo/solv_repo.cpp:431
 #, c++-format
 msgid "Failed to load system repo from root \"{}\": {}"
-msgstr ""
+msgstr "Αποτυχία φόρτωσης αποθετηρίου συστήματος από το root \"{}\": {}"
 
 #: repo/solv_repo.cpp:532
 #, c++-format
 msgid "Failed to load {} cache for repo \"{}\" from \"{}\": {}"
-msgstr ""
+msgstr "Αποτυχία φόρτωσης της cache {} για το repo \"{}\" από το \"{}\": {}"
 
 #: repo/solv_repo.cpp:586
 #, c++-format
 msgid "Failed to write primary cache for repo \"{}\" to \"{}\": {}"
-msgstr ""
+msgstr "Αποτυχία εγγραφής της primary cache για το repo \"{}\" στο \"{}\": {}"
 
 #: repo/solv_repo.cpp:608
 #, c++-format
 msgid "Failed to re-load primary cache for repo \"{}\" from \"{}\": {}"
 msgstr ""
+"Αποτυχία επαναφόρτωσης της primary cache για το repo \"{}\" από το \"{}\": {}"
 
 #: repo/solv_repo.cpp:673
 #, c++-format
 msgid "Failed to write {} cache for repo \"{}\" to \"{}\": {}"
-msgstr ""
+msgstr "Αποτυχία εγγραφής της cache {} για το repo \"{}\" στο \"{}\": {}"
 
 #: repo/solv_repo.cpp:694
 #, c++-format
 msgid "Failed to re-load {} cache for repo \"{}\" from \"{}\": {}"
 msgstr ""
+"Αποτυχία επαναφόρτωσης της cache {} για το repo \"{}\" από το \"{}\": {}"
 
 #: repo/temp_files_memory.cpp:52
 #, c++-format
 msgid ""
 "An error occurred when parsing the temporary files memory file at '{}': {}"
 msgstr ""
+"Προέκυψε σφάλμα κατά την ανάλυση του αρχείου μνήμης προσωρινών αρχείων στο '"
+"{}': {}"
 
 #: rpm/nevra.cpp:82
 #, c++-format
 msgid "NEVRA string \"{}\" contains ':' multiple times"
-msgstr ""
+msgstr "Η συμβολοσειρά NEVRA \"{}\" περιέχει το ':' πολλαπλές φορές"
 
 #: rpm/nevra.cpp:86
 #, c++-format
 msgid "Invalid character '{}' in NEVRA string \"{}\""
-msgstr ""
+msgstr "Μη έγκυρος χαρακτήρας '{}' στη συμβολοσειρά NEVRA \"{}\""
 
 #: rpm/package.cpp:81
 msgid "Package with rpmdbid was not found"
-msgstr ""
+msgstr "Το πακέτο με rpmdbid δεν βρέθηκε"
 
 #: rpm/package.cpp:478
 msgid "<unknown>"
-msgstr ""
+msgstr "<άγνωστο>"
 
 #: rpm/reldep.cpp:116 rpm/reldep.cpp:123
 msgid "Cannot parse a dependency string"
-msgstr ""
+msgstr "Αδυναμία ανάλυσης συμβολοσειράς εξάρτησης"
 
 #: rpm/rpm_signature.cpp:45
 msgid "No corresponding key was found."
-msgstr ""
+msgstr "Δεν βρέθηκε αντίστοιχο κλειδί."
 
 #: rpm/rpm_signature.cpp:46
 msgid "The signature is valid, but the key is not trusted."
-msgstr ""
+msgstr "Η υπογραφή είναι έγκυρη, αλλά το κλειδί δεν είναι έμπιστο."
 
 #: rpm/rpm_signature.cpp:47
 msgid "The package is not signed."
-msgstr ""
+msgstr "Το πακέτο δεν είναι υπογεγραμμένο."
 
 #: rpm/rpm_signature.cpp:48
 msgid "Problem occurred when opening the package."
-msgstr ""
+msgstr "Προέκυψε πρόβλημα κατά το άνοιγμα του πακέτου."
 
 #: rpm/rpm_signature.cpp:64
 #, c++-format
 msgid "Failed to set rpm transaction rootDir \"{}\"."
-msgstr ""
+msgstr "Αποτυχία ορισμού του rootDir συναλλαγής rpm \"{}\"."
 
 #: rpm/rpm_signature.cpp:290
 #, c++-format
 msgid "\"{}\": key is not an armored public key."
-msgstr ""
+msgstr "\"{}\": το κλειδί δεν είναι θωρακισμένο (armored) δημόσιο κλειδί."
 
 #: rpm/rpm_signature.cpp:295
 #, c++-format
 msgid "Failed to import public key \"{}\" to rpmdb: {}"
-msgstr ""
+msgstr "Αποτυχία εισαγωγής δημόσιου κλειδιού \"{}\" στη βάση rpmdb: {}"
 
 #. TODO(jrohel): Why? Librpm does not provide this information.
 #: rpm/transaction.cpp:114
 #, c++-format
 msgid "Cannot set root directory \"{}\""
-msgstr ""
+msgstr "Αδυναμία ορισμού ριζικού καταλόγου \"{}\""
 
 #: rpm/transaction.cpp:125
 #, c-format
 msgid "Error %i opening rpm database"
-msgstr ""
+msgstr "Σφάλμα %i κατά το άνοιγμα της βάσης δεδομένων rpm"
 
 #: rpm/transaction.cpp:134
 msgid "The rpmdbCookie() function did not return cookie of rpm database."
-msgstr ""
+msgstr "Η συνάρτηση rpmdbCookie() δεν επέστρεψε cookie της βάσης δεδομένων rpm."
 
 #: rpm/transaction.cpp:199
 msgid "Failed to order the rpm transaction."
-msgstr ""
+msgstr "Αποτυχία ταξινόμησης της συναλλαγής rpm."
 
 #: rpm/transaction.cpp:235
 #, c++-format
 msgid ""
 "Failed to set scriptlet output file, cannot duplicate file descriptor: {}"
 msgstr ""
+"Αποτυχία ορισμού αρχείου εξόδου scriptlet, αδυναμία διπλασιασμού περιγραφέα "
+"αρχείου: {}"
 
 #: rpm/transaction.cpp:254
 #, c++-format
 msgid "Failed to set scriptlet output file, cannot open file \"{}\": {}"
 msgstr ""
+"Αποτυχία ορισμού αρχείου εξόδου scriptlet, αδυναμία ανοίγματος αρχείου \"{}"
+"\": {}"
 
 #: rpm/transaction.cpp:275
 #, c++-format
 msgid "Failed to read package header, cannot open file \"{}\": {}"
 msgstr ""
+"Αποτυχία ανάγνωσης κεφαλίδας πακέτου, αδυναμία ανοίγματος αρχείου \"{}\": {}"
 
 #: rpm/transaction.cpp:292
 #, c++-format
 msgid "Failed to read package header from file \"{}\""
-msgstr ""
+msgstr "Αποτυχία ανάγνωσης κεφαλίδας πακέτου από το αρχείο \"{}\""
 
 #: rpm/transaction.cpp:305
 msgid "Cannot init rpm database iterator"
-msgstr ""
+msgstr "Αδυναμία αρχικοποίησης επαναλήπτη (iterator) βάσης δεδομένων rpm"
 
 #: rpm/transaction.cpp:309
 msgid "Package was not found in rpm database"
-msgstr ""
+msgstr "Το πακέτο δεν βρέθηκε στη βάση δεδομένων rpm"
 
 #. TODO(jrohel): Why? Librpm does not provide this information.
 #: rpm/transaction.cpp:325
 #, c++-format
 msgid "Cannot reinstall package \"{}\""
-msgstr ""
+msgstr "Αδυναμία επανεγκατάστασης πακέτου \"{}\""
 
 #. TODO(jrohel): Why? Librpm does not provide this information.
 #: rpm/transaction.cpp:343
 #, c++-format
 msgid "Cannot remove package \"{}\""
-msgstr ""
+msgstr "Αδυναμία αφαίρεσης πακέτου \"{}\""
 
 #: rpm/transaction.cpp:362
 #, c++-format
 msgid "Cannot upgrade package \"{}\""
-msgstr ""
+msgstr "Αδυναμία αναβάθμισης πακέτου \"{}\""
 
 #: rpm/transaction.cpp:366
 #, c++-format
 msgid "Cannot downgrade package \"{}\""
-msgstr ""
+msgstr "Αδυναμία υποβάθμισης πακέτου \"{}\""
 
 #: rpm/transaction.cpp:370
 #, c++-format
 msgid "Cannot install package \"{}\""
-msgstr ""
+msgstr "Αδυναμία εγκατάστασης πακέτου \"{}\""
 
 #: rpm/versionlock_config.cpp:284 system/state.cpp:605
 #, c++-format
 msgid "{}"
-msgstr ""
+msgstr "{}"
 
 #. TODO(lukash) throw proper exception class
 #: solv/pool.cpp:174
 #, c++-format
 msgid "Failed to convert epoch \"{}\" to number"
-msgstr ""
+msgstr "Αποτυχία μετατροπής της εποχής (epoch) \"{}\" σε αριθμό"
 
 #: solv/solver.cpp:79
 #, c++-format
 msgid "Writing debugsolver data into \"{}\" failed: {}"
-msgstr ""
+msgstr "Η εγγραφή δεδομένων debugsolver στο \"{}\" απέτυχε: {}"
 
 #: system/state.cpp:282 system/state.cpp:291
 #, c++-format
 msgid "Invalid TOML version \"{}\", \"MAJOR.MINOR\" expected"
-msgstr ""
+msgstr "Μη έγκυρη έκδοση TOML \"{}\", αναμενόταν \"MAJOR.MINOR\""
 
 #: system/state.cpp:299
 #, c++-format
 msgid "{} state for \"{}\" not found."
-msgstr ""
+msgstr "Η κατάσταση {} για το \"{}\" δεν βρέθηκε."
 
 #: system/state.cpp:303
 #, c++-format
 msgid "Loading system state TOML file {} failed (see dnf5-system-state(7)): {}"
-msgstr ""
+msgstr "Η φόρτωση του αρχείου TOML κατάστασης συστήματος {} απέτυχε: {}"
 
 #: system/state.cpp:640
 #, c++-format
 msgid "Unsupported TOML version \"{}\", maximum supported version is \"{}\""
 msgstr ""
+"Μη υποστηριζόμενη έκδοση TOML \"{}\", η μέγιστη υποστηριζόμενη είναι \"{}\""
 
 #: transaction/Swdb.cpp:91
 msgid "In progress"
-msgstr ""
+msgstr "Σε εξέλιξη"
 
 #: transaction/Swdb.cpp:99 transaction/Swdb.cpp:126 transaction/Swdb.cpp:136
 #: transaction/Swdb.cpp:150 transaction/Swdb.cpp:273 transaction/Swdb.cpp:281
 msgid "Not in progress"
-msgstr ""
+msgstr "Δεν βρίσκεται σε εξέλιξη"
 
 #: transaction/Swdb.cpp:158
 msgid "No transaction in progress"
-msgstr ""
+msgstr "Καμία συναλλαγή σε εξέλιξη"
 
 #: transaction/Transformer.cpp:647
 msgid "Transformer: can't open history persist dir"
-msgstr ""
+msgstr "Transformer: αδυναμία ανοίγματος του καταλόγου ιστορικού (persist dir)"
 
 #: transaction/Transformer.cpp:660
 msgid "Couldn't find a history database"
-msgstr ""
+msgstr "Αδυναμία εύρεσης βάσης δεδομένων ιστορικού"
 
 #. TODO(dmach): replace with a better exception class
 #: transaction/db/comps_environment_group.cpp:100
@@ -1396,52 +1511,55 @@ msgid ""
 "Failed to insert record into table 'comps_environment_group' in history "
 "database"
 msgstr ""
+"Αποτυχία εισαγωγής εγγραφής στον πίνακα 'comps_environment_group' της βάσης "
+"δεδομένων ιστορικού"
 
 #: transaction/db/db.cpp:71
 msgid "Unable to get 'version' from table 'config'"
-msgstr ""
+msgstr "Αδυναμία λήψης της 'έκδοσης' από τον πίνακα 'config'"
 
 #. TODO(dmach): replace with a better exception class
 #: transaction/db/item.cpp:43
 msgid "Failed to insert record into table 'item' in history database"
 msgstr ""
+"Αποτυχία εισαγωγής εγγραφής στον πίνακα 'item' της βάσης δεδομένων ιστορικού"
 
 #: transaction/offline.cpp:195
 msgid "error reading offline state file"
-msgstr ""
+msgstr "σφάλμα κατά την ανάγνωση του αρχείου κατάστασης offline"
 
 #: transaction/offline.cpp:200
 msgid "incompatible version of state data"
-msgstr ""
+msgstr "μη συμβατή έκδοση δεδομένων κατάστασης"
 
 #: transaction/transaction.cpp:96
 #, c++-format
 msgid "Invalid transaction state: {}"
-msgstr ""
+msgstr "Μη έγκυρη κατάσταση συναλλαγής: {}"
 
 #: transaction/transaction.cpp:279
 msgid "Transaction has already started!"
-msgstr ""
+msgstr "Η συναλλαγή έχει ήδη ξεκινήσει!"
 
 #: transaction/transaction_item_action.cpp:28
 #, c++-format
 msgid "Invalid transaction item action: {}"
-msgstr ""
+msgstr "Μη έγκυρη ενέργεια στοιχείου συναλλαγής: {}"
 
 #: transaction/transaction_item_reason.cpp:28
 #, c++-format
 msgid "Invalid transaction item reason: {}"
-msgstr ""
+msgstr "Μη έγκυρη αιτία στοιχείου συναλλαγής: {}"
 
 #: transaction/transaction_item_state.cpp:28
 #, c++-format
 msgid "Invalid transaction item state: {}"
-msgstr ""
+msgstr "Μη έγκυρη κατάσταση στοιχείου συναλλαγής: {}"
 
 #: transaction/transaction_item_type.cpp:28
 #, c++-format
 msgid "Invalid transaction item type: {}"
-msgstr ""
+msgstr "Μη έγκυρος τύπος στοιχείου συναλλαγής: {}"
 
 #: transaction/transaction_merge.cpp:102
 #, c++-format
@@ -1449,6 +1567,8 @@ msgid ""
 "Action '{0}' '{1}' cannot be merged after it was '{2}' in preceding "
 "transactions -> setting '{0}'."
 msgstr ""
+"Η ενέργεια '{0}' '{1}' δεν μπορεί να συγχωνευθεί αφού ήταν '{2}' σε "
+"προηγούμενες συναλλαγές -> ορισμός '{0}'."
 
 #: transaction/transaction_merge.cpp:116
 #, c++-format
@@ -1456,6 +1576,8 @@ msgid ""
 "Action 'Upgrade' '{0}' cannot be merged because it is not present at that "
 "point -> setting 'Install'."
 msgstr ""
+"Η ενέργεια 'Αναβάθμιση' '{0}' δεν μπορεί να συγχωνευθεί επειδή δεν υπάρχει "
+"σε εκείνο το σημείο -> ορισμός 'Εγκατάσταση'."
 
 #: transaction/transaction_merge.cpp:174 transaction/transaction_merge.cpp:231
 #, c++-format
@@ -1463,6 +1585,8 @@ msgid ""
 "Action 'Reinstall' '{0}' cannot be merged because it is not present at that "
 "point -> setting 'Install'."
 msgstr ""
+"Η ενέργεια 'Επανεγκατάσταση' '{0}' δεν μπορεί να συγχωνευθεί επειδή δεν "
+"υπάρχει σε εκείνο το σημείο -> ορισμός 'Εγκατάσταση'."
 
 #: transaction/transaction_merge.cpp:194
 #, c++-format
@@ -1470,11 +1594,13 @@ msgid ""
 "Action '{0}' '{1}' cannot be merged after it was '{2}' in preceding "
 "transaction -> setting '{0}'."
 msgstr ""
+"Η ενέργεια '{0}' '{1}' δεν μπορεί να συγχωνευθεί αφού ήταν '{2}' στην "
+"προηγούμενη συναλλαγή -> ορισμός '{0}'."
 
 #: transaction/transaction_merge.cpp:215
 #, c++-format
 msgid "Unexpected action encountered: '{0}' during transaction merge."
-msgstr ""
+msgstr "Εντοπίστηκε απροσδόκητη ενέργεια: '{0}' κατά τη συγχώνευση συναλλαγής."
 
 #: transaction/transaction_merge.cpp:224
 #, c++-format
@@ -1482,6 +1608,8 @@ msgid ""
 "Action '{0}' '{1}' cannot be merged because it is not present at that point "
 "-> skipping it."
 msgstr ""
+"Η ενέργεια '{0}' '{1}' δεν μπορεί να συγχωνευθεί επειδή δεν υπάρχει σε "
+"εκείνο το σημείο -> παράλειψη."
 
 #: transaction/transaction_merge.cpp:245
 #, c++-format
@@ -1489,6 +1617,8 @@ msgid ""
 "Action '{0}' '{1}' cannot be merged because it is not present at that point "
 "-> setting 'INSTALL'."
 msgstr ""
+"Η ενέργεια '{0}' '{1}' δεν μπορεί να συγχωνευθεί επειδή δεν υπάρχει σε "
+"εκείνο το σημείο -> ορισμός 'INSTALL'."
 
 #: transaction/transaction_merge.cpp:266
 #, c++-format
@@ -1496,6 +1626,8 @@ msgid ""
 "Action '{0}' '{1}' cannot be merged because it is not present at that point "
 "(present versions are: {2}) -> skipping it."
 msgstr ""
+"Η ενέργεια '{0}' '{1}' δεν μπορεί να συγχωνευθεί επειδή δεν υπάρχει σε "
+"εκείνο το σημείο (οι τρέχουσες εκδόσεις είναι: {2}) -> παράλειψη."
 
 #: transaction/transaction_merge.cpp:277
 #, c++-format
@@ -1503,6 +1635,8 @@ msgid ""
 "Action '{0}' '{1}' cannot be merged because it is already present at that "
 "point -> skipping it."
 msgstr ""
+"Η ενέργεια '{0}' '{1}' δεν μπορεί να συγχωνευθεί επειδή υπάρχει ήδη σε "
+"εκείνο το σημείο -> παράλειψη."
 
 #: transaction/transaction_merge.cpp:294
 #, c++-format
@@ -1510,306 +1644,321 @@ msgid ""
 "Action '{0}' '{1}' cannot be merged because it is already installed in "
 "version '{2}' -> keeping the action from older transaction with '{1}'."
 msgstr ""
+"Η ενέργεια '{0}' '{1}' δεν μπορεί να συγχωνευθεί επειδή είναι ήδη "
+"εγκατεστημένη στην έκδοση '{2}' -> διατήρηση της ενέργειας από παλαιότερη "
+"συναλλαγή."
 
 #: transaction/transaction_merge.cpp:304
 #, c++-format
 msgid "Invalid action encountered: '{0}' during transaction merge."
-msgstr ""
+msgstr "Εντοπίστηκε μη έγκυρη ενέργεια: '{0}' κατά τη συγχώνευση συναλλαγής."
 
 #: transaction/transaction_sr.cpp:49
 msgid "Transaction replay JSON serialized transaction input is empty"
 msgstr ""
+"Η είσοδος σειριοποιημένης συναλλαγής JSON για την αναπαραγωγή είναι κενή"
 
 #: transaction/transaction_sr.cpp:58
 #, c++-format
 msgid "Error during transaction replay JSON parsing : {}"
-msgstr ""
+msgstr "Σφάλμα κατά την ανάλυση JSON της αναπαραγωγής συναλλαγής: {}"
 
 #: transaction/transaction_sr.cpp:68
 #, c++-format
 msgid "Unexpected version format: \"{}\", supported version is \"{}\""
 msgstr ""
+"Μη αναμενόμενη μορφή έκδοσης: \"{}\", η υποστηριζόμενη έκδοση είναι \"{}\""
 
 #: transaction/transaction_sr.cpp:74
 #, c++-format
 msgid "Incompatible major version: \"{}\", supported major version is \"{}\""
 msgstr ""
+"Μη συμβατή κύρια έκδοση: \"{}\", η υποστηριζόμενη κύρια έκδοση είναι \"{}\""
 
 #: transaction/transaction_sr.cpp:81
 #, c++-format
 msgid "Invalid minor version: \"{}\", number expected"
-msgstr ""
+msgstr "Μη έγκυρη δευτερεύουσα έκδοση: \"{}\", αναμενόταν αριθμός"
 
 #: transaction/transaction_sr.cpp:84
 msgid "Missing key \"version\""
-msgstr ""
+msgstr "Λείπει το κλειδί \"version\""
 
 #: transaction/transaction_sr.cpp:92
 msgid "Unexpected type of \"environments\", array expected"
 msgstr ""
+"Μη αναμενόμενος τύπος για το \"environments\", αναμενόταν πίνακας (array)"
 
 #: transaction/transaction_sr.cpp:105
 msgid "Missing object key \"id\" in an environment"
-msgstr ""
+msgstr "Λείπει το κλειδί αντικειμένου \"id\" σε ένα περιβάλλον"
 
 #: transaction/transaction_sr.cpp:110
 msgid "Missing object key \"action\" in an environment"
-msgstr ""
+msgstr "Λείπει το κλειδί αντικειμένου \"action\" σε ένα περιβάλλον"
 
 #: transaction/transaction_sr.cpp:129
 msgid "Unexpected type of \"groups\", array expected"
-msgstr ""
+msgstr "Μη αναμενόμενος τύπος για το \"groups\", αναμενόταν πίνακας (array)"
 
 #: transaction/transaction_sr.cpp:145
 msgid "Missing object key \"id\" in a group"
-msgstr ""
+msgstr "Λείπει το κλειδί αντικειμένου \"id\" σε μια ομάδα"
 
 #: transaction/transaction_sr.cpp:150
 msgid "Missing object key \"action\" in a group"
-msgstr ""
+msgstr "Λείπει το κλειδί αντικειμένου \"action\" σε μια ομάδα"
 
 #: transaction/transaction_sr.cpp:155
 msgid "Missing object key \"reason\" in a group"
-msgstr ""
+msgstr "Λείπει το κλειδί αντικειμένου \"reason\" σε μια ομάδα"
 
 #: transaction/transaction_sr.cpp:186
 msgid "Unexpected type of \"rpms\", array expected"
-msgstr ""
+msgstr "Μη αναμενόμενος τύπος για το \"rpms\", αναμενόταν πίνακας (array)"
 
 #: transaction/transaction_sr.cpp:202
 #, c++-format
 msgid "Cannot parse NEVRA for rpm \"{}\""
-msgstr ""
+msgstr "Αδυναμία ανάλυσης NEVRA για το rpm \"{}\""
 
 #: transaction/transaction_sr.cpp:210
 msgid "Either \"nevra\" or \"package_path\" object key is required in an rpm"
-msgstr ""
+msgstr "Απαιτείται είτε το κλειδί \"nevra\" είτε το \"package_path\" σε ένα rpm"
 
 #: transaction/transaction_sr.cpp:215
 msgid "Missing object key \"action\" in an rpm"
-msgstr ""
+msgstr "Λείπει το κλειδί αντικειμένου \"action\" σε ένα rpm"
 
 #: transaction/transaction_sr.cpp:220
 msgid "Missing object key \"reason\" in an rpm"
-msgstr ""
+msgstr "Λείπει το κλειδί αντικειμένου \"reason\" σε ένα rpm"
 
 #: transaction/transaction_sr.cpp:227
 msgid ""
 "Missing mandatory object key \"group_id\" in an rpm with reason \"Group\" "
 "and action \"Reason Change\""
 msgstr ""
+"Λείπει το υποχρεωτικό κλειδί \"group_id\" σε ένα rpm με αιτία \"Group\" και "
+"ενέργεια \"Reason Change\""
 
 #: utils/fs/file.cpp:86
 msgid "cannot open file"
-msgstr ""
+msgstr "αδυναμία ανοίγματος αρχείου"
 
 #: utils/fs/file.cpp:99
 msgid "cannot open file from fd"
-msgstr ""
+msgstr "αδυναμία ανοίγματος αρχείου από περιγραφέα (fd)"
 
 #: utils/fs/file.cpp:109
 msgid "cannot close file"
-msgstr ""
+msgstr "αδυναμία κλεισίματος αρχείου"
 
 #: utils/fs/file.cpp:139 utils/fs/file.cpp:168
 msgid "error reading file"
-msgstr ""
+msgstr "σφάλμα κατά την ανάγνωση του αρχείου"
 
 #: utils/fs/file.cpp:154 utils/fs/file.cpp:180
 msgid "error writing file"
-msgstr ""
+msgstr "σφάλμα κατά την εγγραφή του αρχείου"
 
 #: utils/fs/file.cpp:189
 msgid "error flushing file"
-msgstr ""
+msgstr "σφάλμα κατά την εκκένωση (flush) του αρχείου"
 
 #: utils/fs/file.cpp:198
 msgid "error seeking in file"
-msgstr ""
+msgstr "σφάλμα κατά την αναζήτηση (seek) μέσα στο αρχείο"
 
 #: utils/fs/file.cpp:209
 msgid "error retrieving file position"
-msgstr ""
+msgstr "σφάλμα κατά την ανάκτηση της θέσης του αρχείου"
 
 #: utils/fs/file.cpp:297
 msgid "error reading a line from file"
-msgstr ""
+msgstr "σφάλμα κατά την ανάγνωση γραμμής από το αρχείο"
 
 #: utils/fs/file.cpp:335
 msgid "error retrieving file descriptor"
-msgstr ""
+msgstr "σφάλμα κατά την ανάκτηση του περιγραφέα αρχείου"
 
 #: utils/fs/temp.cpp:42
 msgid "cannot create temporary directory"
-msgstr ""
+msgstr "αδυναμία δημιουργίας προσωρινού καταλόγου"
 
 #: utils/fs/temp.cpp:89
 msgid "cannot create temporary file"
-msgstr ""
+msgstr "αδυναμία δημιουργίας προσωρινού αρχείου"
 
 #: utils/fs/temp.cpp:142
 msgid "cannot close temporary file"
-msgstr ""
+msgstr "αδυναμία κλεισίματος προσωρινού αρχείου"
 
 #: utils/iniparser.cpp:126
 #, c++-format
 msgid "Missing ']' on line {}"
-msgstr ""
+msgstr "Λείπει το ']' στη γραμμή {}"
 
 #: utils/iniparser.cpp:129
 #, c++-format
 msgid "Empty section name on line {}"
-msgstr ""
+msgstr "Κενό όνομα ενότητας στη γραμμή {}"
 
 #: utils/iniparser.cpp:137
 #, c++-format
 msgid "Text after section on line {}"
-msgstr ""
+msgstr "Κείμενο μετά την ενότητα στη γραμμή {}"
 
 #: utils/iniparser.cpp:147
 #, c++-format
 msgid "Missing section header on line {}"
-msgstr ""
+msgstr "Λείπει η κεφαλίδα ενότητας στη γραμμή {}"
 
 #: utils/iniparser.cpp:152
 #, c++-format
 msgid "Illegal continuation line on line {}"
-msgstr ""
+msgstr "Μη επιτρεπτή γραμμή συνέχειας στη γραμμή {}"
 
 #: utils/iniparser.cpp:159
 #, c++-format
 msgid "Missing option name on line {}"
-msgstr ""
+msgstr "Λείπει το όνομα της επιλογής στη γραμμή {}"
 
 #: utils/iniparser.cpp:163
 #, c++-format
 msgid "Missing '=' on line {}"
-msgstr ""
+msgstr "Λείπει το '=' στη γραμμή {}"
 
 #. returns localized message, problem with later translation
 #: utils/library.cpp:34
 #, c++-format
 msgid "Cannot load shared library \"{}\": {}"
-msgstr ""
+msgstr "Αδυναμία φόρτωσης κοινόχρηστης βιβλιοθήκης \"{}\": {}"
 
 #: utils/library.cpp:48
 #, c++-format
 msgid "Cannot obtain address of symbol \"{}\": {}"
-msgstr ""
+msgstr "Αδυναμία λήψης διεύθυνσης του συμβόλου \"{}\": {}"
 
 #: utils/locale.cpp:57
 #, c++-format
 msgid "Cannot set the locale \"{}\": {}"
-msgstr ""
+msgstr "Αδυναμία ορισμού τοπικών ρυθμίσεων (locale) \"{}\": {}"
 
 #: utils/locker.cpp:45
 #, c++-format
 msgid "Failed to open lock file \"{}\""
-msgstr ""
+msgstr "Αποτυχία ανοίγματος αρχείου κλειδώματος \"{}\""
 
 #: utils/locker.cpp:60
 #, c++-format
 msgid "Failed to obtain lock \"{}\""
-msgstr ""
+msgstr "Αποτυχία λήψης κλειδώματος \"{}\""
 
 #: utils/locker.cpp:70
 #, c++-format
 msgid "Failed to close lock file \"{}\""
-msgstr ""
+msgstr "Αποτυχία κλεισίματος του αρχείου κλειδώματος \"{}\""
 
 #: utils/locker.cpp:73
 #, c++-format
 msgid "Failed to delete lock file \"{}\""
-msgstr ""
+msgstr "Αποτυχία διαγραφής του αρχείου κλειδώματος \"{}\""
 
 #: utils/sqlite3/sqlite3.cpp:29
 #, c++-format
 msgid "SQL statement compilation failed: \"{}\""
-msgstr ""
+msgstr "Η μεταγλώττιση της δήλωσης SQL απέτυχε: \"{}\""
 
 #: utils/sqlite3/sqlite3.cpp:31
 #, c++-format
 msgid "Binding integer value to SQL statement failed: \"{}\""
-msgstr ""
+msgstr "Η δέσμευση ακέραιας τιμής στη δήλωση SQL απέτυχε: \"{}\""
 
 #: utils/sqlite3/sqlite3.cpp:33
 #, c++-format
 msgid "Binding integer64 value to SQL statement failed: \"{}\""
-msgstr ""
+msgstr "Η δέσμευση τιμής integer64 στη δήλωση SQL απέτυχε: \"{}\""
 
 #: utils/sqlite3/sqlite3.cpp:35
 #, c++-format
 msgid "Binding unsigned integer32 value to SQL statement failed: \"{}\""
 msgstr ""
+"Η δέσμευση τιμής μη προσημασμένου ακέραιου 32-bit στη δήλωση SQL απέτυχε: \""
+"{}\""
 
 #: utils/sqlite3/sqlite3.cpp:37
 #, c++-format
 msgid "Binding double value to SQL statement failed: \"{}\""
-msgstr ""
+msgstr "Η δέσμευση τιμής double στη δήλωση SQL απέτυχε: \"{}\""
 
 #: utils/sqlite3/sqlite3.cpp:39
 #, c++-format
 msgid "Binding bool value to SQL statement failed: \"{}\""
-msgstr ""
+msgstr "Η δέσμευση τιμής bool στη δήλωση SQL απέτυχε: \"{}\""
 
 #: utils/sqlite3/sqlite3.cpp:40
 #, c++-format
 msgid "Binding text to SQL statement failed: \"{}\""
-msgstr ""
+msgstr "Η δέσμευση κειμένου στη δήλωση SQL απέτυχε: \"{}\""
 
 #: utils/sqlite3/sqlite3.cpp:41
 #, c++-format
 msgid "Binding blob to SQL statement failed: \"{}\""
-msgstr ""
+msgstr "Η δέσμευση blob στη δήλωση SQL απέτυχε: \"{}\""
 
 #: utils/sqlite3/sqlite3.cpp:42
 #, c++-format
 msgid "SQL statement evaluation failed: \"{}\""
-msgstr ""
+msgstr "Η αξιολόγηση της δήλωσης SQL απέτυχε: \"{}\""
 
 #: utils/sqlite3/sqlite3.cpp:44
 msgid "Insufficient memory or result exceed maximum SQLite3 string length"
 msgstr ""
+"Ανεπαρκής μνήμη ή το αποτέλεσμα υπερβαίνει το μέγιστο μήκος συμβολοσειράς "
+"του SQLite3"
 
 #: utils/sqlite3/sqlite3.cpp:46
 #, c++-format
 msgid "Column \"{}\" not found"
-msgstr ""
+msgstr "Η στήλη \"{}\" δεν βρέθηκε"
 
 #: utils/sqlite3/sqlite3.cpp:48
 #, c++-format
 msgid "SQL statement execution failed: \"{}\""
-msgstr ""
+msgstr "Η εκτέλεση της δήλωσης SQL απέτυχε: \"{}\""
 
 #: utils/sqlite3/sqlite3.cpp:68
 #, c++-format
 msgid "Failed to open database \"{}\""
-msgstr ""
+msgstr "Αποτυχία ανοίγματος της βάσης δεδομένων \"{}\""
 
 #: utils/sqlite3/sqlite3.cpp:105
 #, c++-format
 msgid "Failed to close database \"{}\""
-msgstr ""
+msgstr "Αποτυχία κλεισίματος της βάσης δεδομένων \"{}\""
 
 #: utils/sqlite3/sqlite3.cpp:117 utils/sqlite3/sqlite3.cpp:143
 #, c++-format
 msgid "Failed to open backup database \"{}\""
-msgstr ""
+msgstr "Αποτυχία ανοίγματος της βάσης δεδομένων εφεδρείας \"{}\""
 
 #: utils/sqlite3/sqlite3.cpp:132
 #, c++-format
 msgid "Failed to backup database \"{}\" into \"{}\""
 msgstr ""
+"Αποτυχία δημιουργίας αντιγράφου ασφαλείας της βάσης δεδομένων \"{}\" στο \"{}"
+"\""
 
 #: utils/sqlite3/sqlite3.cpp:158
 #, c++-format
 msgid "Failed to restore database \"{}\""
-msgstr ""
+msgstr "Αποτυχία επαναφοράς της βάσης δεδομένων \"{}\""
 
 #: utils/system.cpp:34
 msgid "failed to read rpm config files"
-msgstr ""
+msgstr "αποτυχία ανάγνωσης των αρχείων ρυθμίσεων rpm"
 
 #: utils/system.cpp:52
 msgid "Failed to execute uname()"
-msgstr ""
+msgstr "Αποτυχία εκτέλεσης της uname()"

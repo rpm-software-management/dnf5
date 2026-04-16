@@ -1,7 +1,7 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# Paweł Marciniak <sunwire+fas@gmail.com>, 2024, 2025.
+# Paweł Marciniak <sunwire+fas@gmail.com>, 2024, 2025, 2026.
 # Weblate Translation Memory <noreply-mt-weblate-translation-memory@weblate.org>, 2024.
 # Karol Kosek <krkkx@protonmail.com>, 2025.
 # Marcin Juszkiewicz <mjuszkie@redhat.com>, 2025.
@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-07-26 03:48+0000\n"
-"PO-Revision-Date: 2025-07-24 13:01+0000\n"
+"PO-Revision-Date: 2026-02-27 00:58+0000\n"
 "Last-Translator: Paweł Marciniak <sunwire+fas@gmail.com>\n"
 "Language-Team: Polish <https://translate.fedoraproject.org/projects/dnf5/"
 "dnf5/pl/>\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 5.12.2\n"
+"X-Generator: Weblate 5.16.1\n"
 
 #: cmdline_aliases.cpp:84 context.cpp:301 main.cpp:1357
 msgid ", "
@@ -420,7 +420,7 @@ msgstr ""
 
 #: commands/do/do.cpp:44
 msgid "Do transaction"
-msgstr "Wykonywanie transakcji"
+msgstr "Wykonywaj transakcje"
 
 #: commands/do/do.cpp:49
 msgid "Action to be done on the following items."

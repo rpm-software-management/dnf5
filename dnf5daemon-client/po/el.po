@@ -2,13 +2,14 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # Jim Spentzos <jimspentzos2000@gmail.com>, 2025, 2026.
+# Efstathios Iosifidis <eiosifidis@yandex.com>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-07-26 03:48+0000\n"
-"PO-Revision-Date: 2026-01-22 08:58+0000\n"
-"Last-Translator: Jim Spentzos <jimspentzos2000@gmail.com>\n"
+"PO-Revision-Date: 2026-02-27 00:58+0000\n"
+"Last-Translator: Efstathios Iosifidis <eiosifidis@yandex.com>\n"
 "Language-Team: Greek <https://translate.fedoraproject.org/projects/dnf5/"
 "dnf5daemon-client/el/>\n"
 "Language: el\n"
@@ -16,46 +17,56 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.15.2\n"
+"X-Generator: Weblate 5.16.1\n"
 
 #: commands/advisory/advisory.cpp:35
 msgid "Manage advisories"
-msgstr ""
+msgstr "Διαχείριση ειδοποιήσεων"
 
 #: commands/advisory/advisory_info.hpp:34
 msgid "Print details about advisories"
-msgstr ""
+msgstr "Εκτύπωση λεπτομερειών σχετικά με τις ειδοποιήσεις"
 
 #: commands/advisory/advisory_list.hpp:34
 msgid "List advisories"
-msgstr ""
+msgstr "Λίστα ειδοποιήσεων"
 
 #: commands/advisory/arguments.hpp:32
 msgid "Show advisories containing any version of installed packages."
 msgstr ""
+"Εμφάνιση ειδοποιήσεων που περιέχουν οποιαδήποτε έκδοση των εγκατεστημένων "
+"πακέτων."
 
 #: commands/advisory/arguments.hpp:43
 msgid ""
 "Show advisories containing newer versions of installed packages. This is the "
 "default behavior."
 msgstr ""
+"Εμφάνιση ειδοποιήσεων που περιέχουν νεότερες εκδόσεις των εγκατεστημένων "
+"πακέτων. Αυτή είναι η προεπιλεγμένη συμπεριφορά."
 
 #: commands/advisory/arguments.hpp:55
 msgid ""
 "Show advisories containing equal and older versions of installed packages."
 msgstr ""
+"Εμφάνιση ειδοποιήσεων που περιέχουν ίσες και παλαιότερες εκδόσεις των "
+"εγκατεστημένων πακέτων."
 
 #: commands/advisory/arguments.hpp:67
 msgid ""
 "Show advisories containing newer versions of installed packages for which a "
 "newer version is available."
 msgstr ""
+"Εμφάνιση ειδοποιήσεων που περιέχουν νεότερες εκδόσεις εγκατεστημένων πακέτων "
+"για τις οποίες είναι διαθέσιμη μια νεότερη έκδοση."
 
 #: commands/advisory/arguments.hpp:80
 msgid ""
 "Show only advisories containing packages with specified names. List option, "
 "supports globs."
 msgstr ""
+"Εμφάνιση μόνο ειδοποιήσεων που περιέχουν πακέτα με συγκεκριμένα ονόματα. "
+"Επιλογή λίστας, υποστηρίζει globs."
 
 #: commands/advisory/arguments.hpp:81
 msgid "PACKAGE_NAME,..."
@@ -63,40 +74,45 @@ msgstr "ΟΝΟΜΑ_ΠΑΚΕΤΟΥ,..."
 
 #: commands/advisory/arguments.hpp:88
 msgid "List of patterns matched against advisory names."
-msgstr ""
+msgstr "Λίστα μοτίβων προς αντιστοίχιση με τα ονόματα ειδοποιήσεων."
 
 #: commands/advisory/arguments.hpp:95
 msgid "Show only advisories referencing a bugzilla."
-msgstr ""
+msgstr "Εμφάνιση μόνο ειδοποιήσεων που αναφέρονται σε bugzilla."
 
 #: commands/advisory/arguments.hpp:102
 msgid "Show only advisories referencing a CVE."
-msgstr ""
+msgstr "Εμφάνιση μόνο ειδοποιήσεων που αναφέρονται σε CVE."
 
 #: commands/advisory/arguments.hpp:113
 msgid ""
 "Include content contained in advisories with specified name. List option."
 msgstr ""
+"Συμπερίληψη περιεχομένου που περιλαμβάνεται σε ειδοποιήσεις με συγκεκριμένο "
+"όνομα. Επιλογή λίστας."
 
 #: commands/advisory/arguments.hpp:114
 msgid "ADVISORY_NAME,..."
-msgstr ""
+msgstr "ΟΝΟΜΑ_ΕΙΔΟΠΟΙΗΣΗΣ,..."
 
 #: commands/advisory/arguments.hpp:121
 msgid "Include content contained in security advisories."
-msgstr ""
+msgstr "Συμπερίληψη περιεχομένου που περιλαμβάνεται σε ειδοποιήσεις ασφαλείας."
 
 #: commands/advisory/arguments.hpp:128
 msgid "Include content contained in bugfix advisories."
 msgstr ""
+"Συμπερίληψη περιεχομένου που περιλαμβάνεται σε ειδοποιήσεις διορθώσεων "
+"σφαλμάτων (bugfix)."
 
 #: commands/advisory/arguments.hpp:135
 msgid "Include content contained in enhancement advisories."
-msgstr ""
+msgstr "Συμπερίληψη περιεχομένου που περιλαμβάνεται σε ειδοποιήσεις βελτιώσεων."
 
 #: commands/advisory/arguments.hpp:142
 msgid "Include content contained in newpackage advisories."
 msgstr ""
+"Συμπερίληψη περιεχομένου που περιλαμβάνεται σε ειδοποιήσεις νέων πακέτων."
 
 #. Note for translators: "critical" etc. quoted words are
 #. literals that should not be translated.
@@ -105,43 +121,53 @@ msgid ""
 "Include content contained in advisories with specified severity. List "
 "option. Can be \"critical\", \"important\", \"moderate\", \"low\", \"none\"."
 msgstr ""
+"Συμπερίληψη περιεχομένου που περιλαμβάνεται σε ειδοποιήσεις με συγκεκριμένη "
+"σοβαρότητα. Επιλογή λίστας. Μπορεί να είναι \"critical\", \"important\", "
+"\"moderate\", \"low\", \"none\"."
 
 #: commands/advisory/arguments.hpp:157
 msgid "ADVISORY_SEVERITY,..."
-msgstr ""
+msgstr "ΣΟΒΑΡΟΤΗΤΑ_ΕΙΔΟΠΟΙΗΣΗΣ,..."
 
 #: commands/advisory/arguments.hpp:169
 msgid ""
 "Include content contained in advisories that fix a Bugzilla ID, Eg. 123123. "
 "List option."
 msgstr ""
+"Συμπερίληψη περιεχομένου που περιλαμβάνεται σε ειδοποιήσεις που διορθώνουν "
+"ένα Bugzilla ID, π.χ. 123123. Επιλογή λίστας."
 
 #: commands/advisory/arguments.hpp:170
 msgid "BUGZILLA_ID,..."
-msgstr ""
+msgstr "BUGZILLA_ID,..."
 
 #: commands/advisory/arguments.hpp:180
 msgid ""
 "Include content contained in advisories that fix a CVE (Common "
 "Vulnerabilities and Exposures) ID, Eg. CVE-2201-0123. List option."
 msgstr ""
+"Συμπερίληψη περιεχομένου που περιλαμβάνεται σε ειδοποιήσεις που διορθώνουν "
+"ένα CVE (Common Vulnerabilities and Exposures) ID, π.χ. CVE-2201-0123. "
+"Επιλογή λίστας."
 
 #: commands/advisory/arguments.hpp:182
 msgid "CVE_ID,..."
-msgstr ""
+msgstr "CVE_ID,..."
 
 #: commands/clean/clean.cpp:88
 msgid "Error cleaning the cache: {}"
-msgstr ""
+msgstr "Σφάλμα κατά τον καθαρισμό της προσωρινής μνήμης: {}"
 
 #: commands/distro-sync/distro-sync.cpp:48
 msgid ""
 "Upgrade or downgrade installed software to the latest available versions"
 msgstr ""
+"Αναβάθμιση ή υποβάθμιση του εγκατεστημένου λογισμικού στις τελευταίες "
+"διαθέσιμες εκδόσεις"
 
 #: commands/group/group.cpp:41
 msgid "Manage comps groups"
-msgstr ""
+msgstr "Διαχείριση ομάδων comps"
 
 #: commands/group/group_list.hpp:37
 msgid "Show only available groups."
@@ -153,13 +179,15 @@ msgstr "Εμφάνιση μόνο των εγκατεστημένων ομάδω
 
 #: commands/group/group_list.hpp:49
 msgid "Show also hidden groups."
-msgstr "Εμφάνιση μόνο των κρυμμένων ομάδων."
+msgstr "Εμφάνιση και των κρυμμένων ομάδων."
 
 #: commands/group/group_list.hpp:59
 msgid ""
 "Show only groups containing packages with specified names. List option, "
 "supports globs."
 msgstr ""
+"Εμφάνιση μόνο ομάδων που περιέχουν πακέτα με συγκεκριμένα ονόματα. Επιλογή "
+"λίστας, υποστηρίζει globs."
 
 #: commands/repo/repo.cpp:37
 msgid "Manage repositories"
@@ -167,7 +195,7 @@ msgstr "Διαχείριση αποθετηρίων"
 
 #: commands/repoquery/repoquery.cpp:95
 msgid "search for packages matching various criteria"
-msgstr ""
+msgstr "αναζήτηση πακέτων που ταιριάζουν σε διάφορα κριτήρια"
 
 #: commands/repoquery/repoquery.cpp:159
 msgid "Error parsing JSON object \"{}\": {}"
@@ -178,12 +206,17 @@ msgid ""
 "This command has to be run with superuser privileges (under the root user on "
 "most systems)."
 msgstr ""
+"Αυτή η εντολή πρέπει να εκτελεστεί με προνόμια υπερχρήστη (ως χρήστης root "
+"στα περισσότερα συστήματα)."
 
 #: main.cpp:158
 msgid ""
 "{}: Badly formatted argument value: Last key character cannot be '.': {}"
 msgstr ""
+"{}: Κακώς μορφοποιημένη τιμή ορίσματος: Ο τελευταίος χαρακτήρας του κλειδιού "
+"δεν μπορεί να είναι «.»: {}"
 
 #: main.cpp:258 main.cpp:308
 msgid ". Add \"--help\" for more information about the arguments."
 msgstr ""
+". Προσθέστε «--help» για περισσότερες πληροφορίες σχετικά με τα ορίσματα."
