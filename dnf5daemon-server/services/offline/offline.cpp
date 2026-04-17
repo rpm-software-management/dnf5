@@ -260,11 +260,10 @@ void Offline::dbus_register() {
 sdbus::MethodReply Offline::get_status(sdbus::MethodCall & call) {
     dnfdaemon::KeyValueMap transaction_state;
 
-    const std::filesystem::path state_path{get_datadir() / libdnf5::offline::TRANSACTION_STATE_FILENAME};
-    // try load the offline transaction state
-    libdnf5::offline::OfflineTransactionState state{state_path};
-    if (!state.get_read_exception()) {
-        const auto & state_data = state.get_data();
+    std::string state_error;
+    auto state = read_transaction_state(state_error);
+    if (state) {
+        const auto & state_data = state->get_data();
         transaction_state["status"] = sdbus::Variant(state_data.get_status());
         transaction_state["cachedir"] = sdbus::Variant(state_data.get_cachedir());
         transaction_state["target_releasever"] = sdbus::Variant(state_data.get_target_releasever());
@@ -298,14 +297,11 @@ sdbus::MethodReply Offline::impl_cancel(sdbus::MethodCall & call, const dnfdaemo
             } else {
                 // Reset the status back to download-complete since the transaction
                 // is no longer scheduled for the next boot.
-                const std::filesystem::path state_path{get_datadir() / libdnf5::offline::TRANSACTION_STATE_FILENAME};
-                if (std::filesystem::exists(state_path, ec)) {
-                    libdnf5::offline::OfflineTransactionState state{state_path};
-                    if (!state.get_read_exception() &&
-                        state.get_data().get_status() == libdnf5::offline::STATUS_READY) {
-                        state.get_data().set_status(libdnf5::offline::STATUS_DOWNLOAD_COMPLETE);
-                        state.write();
-                    }
+                std::string state_error;
+                auto state = read_transaction_state(state_error);
+                if (state && state->get_data().get_status() == libdnf5::offline::STATUS_READY) {
+                    state->get_data().set_status(libdnf5::offline::STATUS_DOWNLOAD_COMPLETE);
+                    state->write();
                 }
             }
         } break;
@@ -399,28 +395,13 @@ sdbus::MethodReply Offline::impl_set_finish_action(
         error_msg =
             fmt::format("Unsupported finish action \"{}\". Valid options are \"reboot\", or \"poweroff\".", action);
     } else {
-        const std::filesystem::path state_path{get_datadir() / libdnf5::offline::TRANSACTION_STATE_FILENAME};
-        std::error_code ec;
-        // check presence of transaction state file
-        if (!std::filesystem::exists(state_path, ec)) {
-            error_msg = "No offline transaction is configured. Cannot set the finish action.";
-        } else {
-            // try load the offline transaction state
-            libdnf5::offline::OfflineTransactionState state{state_path};
-            const auto & read_exception = state.get_read_exception();
-            if (read_exception == nullptr) {
-                // set the poweroff_after item accordingly
-                state.get_data().set_poweroff_after(action == "poweroff");
-                // write the new state
-                state.write();
-                success = true;
-            } else {
-                try {
-                    std::rethrow_exception(read_exception);
-                } catch (const std::exception & ex) {
-                    error_msg = ex.what();
-                }
-            }
+        auto state = read_transaction_state(error_msg);
+        if (state) {
+            // set the poweroff_after item accordingly
+            state->get_data().set_poweroff_after(action == "poweroff");
+            // write the new state
+            state->write();
+            success = true;
         }
     }
     auto reply = call.createReply();
