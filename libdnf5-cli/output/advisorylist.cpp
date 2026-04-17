@@ -75,7 +75,7 @@ void add_line_into_advisorylist_table(
 
 }  // namespace
 
-static std::string get_reference_type_pretty_name(std::string type) {
+static std::string get_reference_type_pretty_name(const std::string & type) {
     if (type == "bugzilla") {
         return "Bugzilla";
     } else if (type == "cve") {

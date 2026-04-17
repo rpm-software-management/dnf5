@@ -49,7 +49,7 @@ void add_line_into_environmentinfo_table(struct libscols_table * table, const ch
 }
 
 
-void add_groups(struct libscols_table * table, std::vector<std::string> groups, const char * group_type_desc) {
+void add_groups(struct libscols_table * table, const std::vector<std::string> & groups, const char * group_type_desc) {
     if (groups.empty()) {
         // don't even print the group type description
         return;
