@@ -253,6 +253,18 @@ sdbus::MethodReply Offline::impl_cancel(sdbus::MethodCall & call, const dnfdaemo
             if (!std::filesystem::remove(libdnf5::offline::MAGIC_SYMLINK, ec) && ec) {
                 success = false;
                 error_msg = ec.message();
+            } else {
+                // Reset the status back to download-complete since the transaction
+                // is no longer scheduled for the next boot.
+                const std::filesystem::path state_path{get_datadir() / libdnf5::offline::TRANSACTION_STATE_FILENAME};
+                if (std::filesystem::exists(state_path, ec)) {
+                    libdnf5::offline::OfflineTransactionState state{state_path};
+                    if (!state.get_read_exception() &&
+                        state.get_data().get_status() == libdnf5::offline::STATUS_READY) {
+                        state.get_data().set_status(libdnf5::offline::STATUS_DOWNLOAD_COMPLETE);
+                        state.write();
+                    }
+                }
             }
         } break;
         case Scheduled::ANOTHER_TOOL:
