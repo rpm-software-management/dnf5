@@ -114,6 +114,7 @@ class ConfigMain::Impl {
     Config & owner;
 
     void load_from_config(const Impl & other);
+    void apply_gpgcheck_policy(const ConfigParser & parser, const std::string & section, Option::Priority priority);
 
     OptionNumber<std::int32_t> debuglevel{2, 0, 10};
     OptionNumber<std::int32_t> errorlevel{3, 0, 10};
@@ -254,6 +255,8 @@ class ConfigMain::Impl {
     OptionStringAppendList protected_packages{std::vector<std::string>{"dnf5", "glob:/etc/dnf/protected.d/*.conf"}};
     OptionString username{""};
     OptionString password{""};
+    OptionBool gpgcheck{false};
+    OptionEnum gpgcheck_policy{"full", {"legacy", "full", "all"}};
     OptionBool pkg_gpgcheck{false};
     OptionBool repo_gpgcheck{false};
     OptionBool enabled{true};
@@ -447,9 +450,9 @@ ConfigMain::Impl::Impl(Config & owner) : owner(owner) {
     owner.opt_binds().add("protected_packages", protected_packages);
     owner.opt_binds().add("username", username);
     owner.opt_binds().add("password", password);
+    owner.opt_binds().add("gpgcheck", gpgcheck);
+    owner.opt_binds().add("gpgcheck_policy", gpgcheck_policy);
     owner.opt_binds().add("pkg_gpgcheck", pkg_gpgcheck);
-    // Compatiblity alias for pkg_gpgcheck
-    owner.opt_binds().add("gpgcheck", pkg_gpgcheck);
     owner.opt_binds().add("repo_gpgcheck", repo_gpgcheck);
     owner.opt_binds().add("enabled", enabled);
     owner.opt_binds().add("enablegroups", enablegroups);
@@ -1189,11 +1192,11 @@ const OptionString & ConfigMain::get_password_option() const {
 
 OptionBool & ConfigMain::get_gpgcheck_option() {
     LIBDNF5_DEPRECATED("Use get_pkg_gpgcheck_option()");
-    return p_impl->pkg_gpgcheck;
+    return p_impl->gpgcheck;
 }
 const OptionBool & ConfigMain::get_gpgcheck_option() const {
     LIBDNF5_DEPRECATED("Use get_pkg_gpgcheck_option() const");
-    return p_impl->pkg_gpgcheck;
+    return p_impl->gpgcheck;
 }
 
 OptionBool & ConfigMain::get_pkg_gpgcheck_option() {
@@ -1208,6 +1211,13 @@ OptionBool & ConfigMain::get_repo_gpgcheck_option() {
 }
 const OptionBool & ConfigMain::get_repo_gpgcheck_option() const {
     return p_impl->repo_gpgcheck;
+}
+
+OptionEnum & ConfigMain::get_gpgcheck_policy_option() {
+    return p_impl->gpgcheck_policy;
+}
+const OptionEnum & ConfigMain::get_gpgcheck_policy_option() const {
+    return p_impl->gpgcheck_policy;
 }
 
 OptionBool & ConfigMain::get_enabled_option() {
@@ -1363,6 +1373,47 @@ const OptionBool & ConfigMain::get_skip_if_unavailable_option() const {
     return p_impl->skip_if_unavailable;
 }
 
+void ConfigMain::Impl::apply_gpgcheck_policy(
+    const ConfigParser & parser, const std::string & section, Option::Priority priority) {
+    // Only apply if gpgcheck was explicitly set in this parsing round
+    if (gpgcheck.get_priority() < priority) {
+        return;
+    }
+
+    const auto gpgcheck_val = gpgcheck.get_value();
+    const auto & policy = gpgcheck_policy.get_value();
+
+    // Check which target options were explicitly set in the config section
+    bool pkg_gpgcheck_explicit = false;
+    bool repo_gpgcheck_explicit = false;
+    bool localpkg_gpgcheck_explicit = false;
+    auto section_iter = parser.get_data().find(section);
+    if (section_iter != parser.get_data().end()) {
+        pkg_gpgcheck_explicit = section_iter->second.find("pkg_gpgcheck") != section_iter->second.end();
+        repo_gpgcheck_explicit = section_iter->second.find("repo_gpgcheck") != section_iter->second.end();
+        localpkg_gpgcheck_explicit = section_iter->second.find("localpkg_gpgcheck") != section_iter->second.end();
+    }
+
+    // All policies: gpgcheck implies pkg_gpgcheck
+    if (!pkg_gpgcheck_explicit) {
+        pkg_gpgcheck.set(priority, gpgcheck_val);
+    }
+
+    // "full" or "all": also set repo_gpgcheck
+    if (policy == "full" || policy == "all") {
+        if (!repo_gpgcheck_explicit) {
+            repo_gpgcheck.set(priority, gpgcheck_val);
+        }
+    }
+
+    // "all": also set localpkg_gpgcheck
+    if (policy == "all") {
+        if (!localpkg_gpgcheck_explicit) {
+            localpkg_gpgcheck.set(priority, gpgcheck_val);
+        }
+    }
+}
+
 void ConfigMain::load_from_parser(
     const ConfigParser & parser,
     const std::string & section,
@@ -1370,6 +1421,8 @@ void ConfigMain::load_from_parser(
     Logger & logger,
     Option::Priority priority) {
     Config::load_from_parser(parser, section, vars, logger, priority);
+
+    p_impl->apply_gpgcheck_policy(parser, section, priority);
 
     if (geteuid() == 0) {
         p_impl->cachedir.set(Option::Priority::MAINCONFIG, p_impl->system_cachedir.get_value());
@@ -1487,6 +1540,8 @@ void ConfigMain::Impl::load_from_config(const ConfigMain::Impl & other) {
     load_option(protected_packages, other.protected_packages);
     load_option(username, other.username);
     load_option(password, other.password);
+    load_option(gpgcheck, other.gpgcheck);
+    load_option(gpgcheck_policy, other.gpgcheck_policy);
     load_option(pkg_gpgcheck, other.pkg_gpgcheck);
     load_option(repo_gpgcheck, other.repo_gpgcheck);
     load_option(enabled, other.enabled);
