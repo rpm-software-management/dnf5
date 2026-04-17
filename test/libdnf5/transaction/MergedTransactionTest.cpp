@@ -306,7 +306,7 @@ void MergedTransactionTest::testMergeAlterAlter() {
 }
 
 
-static std::shared_ptr<Package> nevraToPackage(Transaction & trans, std::string nevra) {
+static std::shared_ptr<Package> nevraToPackage(Transaction & trans, const std::string & nevra) {
     libdnf5::rpm::Nevra nevraObject;
     if (!nevraObject.parse(nevra.c_str(), libdnf5::rpm::Nevra::Form::NEVRA)) {
         return nullptr;
