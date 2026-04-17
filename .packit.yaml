@@ -64,6 +64,7 @@ jobs:
     trigger: pull_request
     targets:
       - fedora-all
+      - fedora-eln
     packages: [dnf5]
     additional_repos:
       - "copr://rpmsoftwaremanagement/dnf-nightly"
@@ -89,6 +90,7 @@ jobs:
     identifier: "dnf5-tests"
     targets:
       - fedora-all
+      - fedora-eln
     fmf_url: https://github.com/rpm-software-management/ci-dnf-stack.git
     fmf_ref: &CI_DNF_STACK_REF main
     tmt_plan: "^/plans/integration/behave-dnf5$"
@@ -104,6 +106,7 @@ jobs:
     identifier: "createrepo_c-tests"
     targets:
       - fedora-all
+      - fedora-eln
     fmf_url: https://github.com/rpm-software-management/ci-dnf-stack.git
     fmf_ref: *CI_DNF_STACK_REF
     tmt_plan: "^/plans/integration/behave-createrepo_c$"
@@ -135,6 +138,7 @@ jobs:
     identifier: "dnf5daemon-tests"
     targets:
       - fedora-all
+      - fedora-eln
     fmf_url: https://github.com/rpm-software-management/ci-dnf-stack.git
     fmf_ref: *CI_DNF_STACK_REF
     tmt_plan: "^/plans/integration/behave-dnf5daemon$"
