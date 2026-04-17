@@ -31,7 +31,7 @@ static const char * const COPR_THIRD_PARTY_WARNING =
       "\n"
       "The Fedora Project does not exercise any power over the contents of\n"
       "this repository beyond the rules outlined in the Copr FAQ at\n"
-      "<https://docs.pagure.org/copr.copr/user_documentation.html#what-i-can-build-in-copr>,\n"
+      "<https://docs.copr.fedorainfracloud.org/user_documentation.html#what-i-can-build-in-copr>,\n"
       "and packages are not held to any quality or security level.\n"
       "\n"
       "Please do not file bug reports about these packages in Fedora\n"
