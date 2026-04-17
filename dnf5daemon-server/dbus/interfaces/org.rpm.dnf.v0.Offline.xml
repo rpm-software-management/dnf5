@@ -148,6 +148,31 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
         <arg name="error_msg" type="s" direction="out" />
     </method>
 
+    <!--
+        schedule_for_next_boot:
+        @options: an array of key/value pairs to modify the call behavior
+        @success: boolean, true if the offline transaction was successfully scheduled for the next boot
+        @error_msg: string, contains error encountered while scheduling the transaction
+
+        Schedule the prepared offline transaction for the next boot. This creates the magic symlink
+        /system-update and sets the transaction status to "ready". The system will not be rebooted;
+        the caller is responsible for initiating the reboot when appropriate.
+
+        The call might fail if there is no offline transaction in the "download-complete" or "ready" state,
+        or the transaction was not prepared using libdnf5.
+
+        Following @options are supported:
+            - interactive: boolean, default true
+                Set to "true", when the operation is done by a user, thus user interaction like password prompts can be done.
+
+        Unknown options are ignored.
+    -->
+    <method name="schedule_for_next_boot">
+        <arg name="options" type="a{sv}" direction="in" />
+        <arg name="success" type="b" direction="out" />
+        <arg name="error_msg" type="s" direction="out" />
+    </method>
+
 </interface>
 
 </node>
