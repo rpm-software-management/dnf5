@@ -38,7 +38,7 @@ namespace {
 // and perform them. It basically simulates a terminal emulator.
 //
 // It can look like: "\x1b[9A\r" = move cursor 9 times up followed by carriage return
-std::string perform_control_sequences(std::string target) {
+std::string perform_control_sequences(const std::string & target) {
     const char * raw_string = target.c_str();
 
     std::string amount_str = "";
