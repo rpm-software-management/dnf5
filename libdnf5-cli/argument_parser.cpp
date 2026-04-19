@@ -925,30 +925,22 @@ void ArgumentParser::Command::print_complete(
                 } else {
                     suggestions.emplace_back(name);
                 }
-                last = name;
-                if (!opt->get_has_value()) {
-                    last += ' ';
-                }
+                last = name + ' ';
             }
             if (!opt->get_long_name().empty()) {
                 std::string name = "--" + opt->get_long_name();
                 if (name.compare(0, strlen(arg), arg) == 0) {
-                    if (opt->get_has_value()) {
-                        name += '=';
-                    }
                     if (add_description) {
                         std::string extended_name = name;
                         if (opt->get_has_value()) {
+                            extended_name += ' ';
                             extended_name += opt->get_arg_value_help().empty() ? "VALUE" : opt->get_arg_value_help();
                         }
                         help.add_line(extended_name, '(' + opt->get_description() + ')', nullptr);
                     } else {
                         suggestions.emplace_back(name);
                     }
-                    last = name;
-                    if (!opt->get_has_value()) {
-                        last += ' ';
-                    }
+                    last = name + ' ';
                 }
             }
         }
