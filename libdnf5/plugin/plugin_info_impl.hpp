@@ -27,7 +27,7 @@ namespace libdnf5::plugin {
 
 class PluginInfo::Impl {
 public:
-    static PluginInfo create_plugin_info(std::string name_from_config, const IPlugin * iplugin) {
+    static PluginInfo create_plugin_info(const std::string & name_from_config, const IPlugin * iplugin) {
         return PluginInfo(*new Impl(name_from_config, iplugin));
     }
 
