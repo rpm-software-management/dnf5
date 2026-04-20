@@ -41,7 +41,7 @@ public:
 
 static void insert_or_append(
     std::unordered_map<std::string, std::vector<std::string>> & map,
-    const std::string name_arch,
+    const std::string & name_arch,
     const std::string & nevra) {
     if (map.contains(name_arch)) {
         map[name_arch].push_back(nevra);
@@ -52,7 +52,7 @@ static void insert_or_append(
 
 static void remove(
     std::unordered_map<std::string, std::vector<std::string>> & map,
-    const std::string name_arch,
+    const std::string & name_arch,
     const std::string & nevra) {
     auto itr = std::find(map[name_arch].begin(), map[name_arch].end(), nevra);
     if (itr != map[name_arch].end()) {
@@ -62,7 +62,7 @@ static void remove(
 
 static bool contains(
     std::unordered_map<std::string, std::vector<std::string>> & map,
-    const std::string name_arch,
+    const std::string & name_arch,
     const std::string & nevra) {
     if (!map.contains(name_arch)) {
         return false;
