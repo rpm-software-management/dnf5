@@ -430,25 +430,41 @@ repository configuration file should aside from repo ID consists of baseurl, met
 
     Default: ``/var/lib/dnf``.
 
+.. _plugin_conf_dir_options-label:
+
+``plugin_conf_dir``
+    :ref:`list <list-label>`
+
+    List of directories from which libdnf5 plugin configuration files are loaded.
+    Only files with the ``.conf`` extension are loaded.
+
+    Directories are processed in the order they are listed in the configuration.
+    If a configuration file with the same name exists in multiple directories,
+    the first one found is used.
+
+    Default: [``/etc/dnf/libdnf5-plugins``, ``/usr/share/dnf5/libdnf.plugins.conf.d``]
+
 .. _pluginconfpath_options-label:
 
 ``pluginconfpath``
-    :ref:`list <list-label>`
+    :ref:`string <string-label>`
 
-    List of directories that are searched for libdnf5 plugin configurations to load.
+    Directory from which libdnf5 plugin configuration files are loaded.
+    Only files with the ``.conf`` extension are loaded.
 
-    All configuration files found in these directories, that are named same as a
-    plugin, are parsed.
+    This option is deprecated. Use :ref:`plugin_conf_dir <plugin_conf_dir_options-label>` instead,
+    which supports a list of directories.
 
     Default: ``/etc/dnf/libdnf5-plugins``.
 
 .. _pluginpath_options-label:
 
 ``pluginpath``
-    :ref:`list <list-label>`
+    :ref:`string <string-label>`
 
-    List of directories that are searched for libdnf5 plugins to load. Plugins found in
-    *any of the directories* in this configuration option are used.
+    Directory from which libdnf5 plugins are loaded.
+    Only enabled plugins that have a configuration file in the
+    :ref:`pluginconfpath <pluginconfpath_options-label>` directory are loaded.
 
     Default: ``/usr/lib64/libdnf5/plugins/``
 
