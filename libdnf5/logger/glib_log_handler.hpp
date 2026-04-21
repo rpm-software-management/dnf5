@@ -28,7 +28,7 @@ namespace libdnf5 {
 
 class GlibLogHandler {
 public:
-    GlibLogHandler(Logger & logger, std::string domain, Logger::Level verbosity) {
+    GlibLogHandler(Logger & logger, const std::string & domain, Logger::Level verbosity) {
         set_handler(logger, domain, verbosity);
     }
     ~GlibLogHandler() { remove_handler(); }

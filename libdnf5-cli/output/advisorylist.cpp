@@ -34,7 +34,7 @@ namespace {
 // advisory list table columns
 enum { COL_ADVISORY_ID, COL_ADVISORY_TYPE, COL_ADVISORY_SEVERITY, COL_ADVISORY_PACKAGE, COL_ADVISORY_BUILDTIME };
 
-struct libscols_table * create_advisorylist_table(std::string column_id_name) {
+struct libscols_table * create_advisorylist_table(const std::string & column_id_name) {
     struct libscols_table * table = scols_new_table();
     if (isatty(1)) {
         scols_table_enable_colors(table, 1);

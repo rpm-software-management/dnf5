@@ -35,7 +35,7 @@ namespace dnfdaemon::client {
 
 class DbusGoalWrapper {
 public:
-    DbusGoalWrapper(std::vector<dnfdaemon::DbusTransactionItem>);
+    DbusGoalWrapper(const std::vector<dnfdaemon::DbusTransactionItem> &);
 
     std::vector<DbusTransactionPackageWrapper> get_transaction_packages() const { return transaction_packages; };
     std::vector<DbusTransactionGroupWrapper> get_transaction_groups() const { return transaction_groups; };
@@ -45,7 +45,7 @@ public:
     std::vector<DbusTransactionModuleWrapper> get_transaction_modules() const { return transaction_modules; };
     bool empty() const;
     std::vector<std::string> get_resolve_logs_as_strings() const { return resolve_logs; }
-    void set_resolve_logs(std::vector<std::string> logs) { resolve_logs = logs; }
+    void set_resolve_logs(const std::vector<std::string> & logs) { resolve_logs = logs; }
 
     std::vector<DbusPackageWrapper> get_conflicting_packages() const { return conflicting_packages; }
     std::vector<DbusPackageWrapper> get_broken_dependency_packages() const { return broken_dependency_packages; }
