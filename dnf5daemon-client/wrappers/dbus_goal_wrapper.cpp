@@ -25,7 +25,7 @@
 
 namespace dnfdaemon::client {
 
-DbusGoalWrapper::DbusGoalWrapper(std::vector<dnfdaemon::DbusTransactionItem> transaction) {
+DbusGoalWrapper::DbusGoalWrapper(const std::vector<dnfdaemon::DbusTransactionItem> & transaction) {
     // auxiliary map transaction_package.id -> index of package in transaction_package
     // used to resolve replaces from id to DbusPackageWrapper instance
     std::map<int, size_t> transaction_packages_by_id;
