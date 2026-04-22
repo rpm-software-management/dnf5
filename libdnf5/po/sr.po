@@ -1,0 +1,1906 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# "Марко Костић (Marko Kostić)" <marko.m.kostic@gmail.com>, 2026.
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-07-26 03:48+0000\n"
+"PO-Revision-Date: 2026-04-22 02:28+0000\n"
+"Last-Translator: \"Марко Костић (Marko Kostić)\" <marko.m.kostic@gmail.com>\n"
+"Language-Team: Serbian <https://translate.fedoraproject.org/projects/dnf5/"
+"libdnf5/sr/>\n"
+"Language: sr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"X-Generator: Weblate 5.17\n"
+
+#: advisory/advisory.cpp:81
+#, c++-format
+msgid ""
+"Bad libsolv id for advisory \"{}\", solvable name \"{}\" doesn't have "
+"advisory prefix \"{}\""
+msgstr ""
+"Лош libsolv ид за обавештење „{}“, назив решивог „{}“ нема префикс "
+"обавештења „{}“"
+
+#: base/goal.cpp:482
+#, c++-format
+msgid "Unsupported argument for REMOVE action: {}"
+msgstr "Неподржан аргумент за радњу „REMOVE“: {}"
+
+#. TODO(lukash) throw a proper exception
+#: base/goal.cpp:1652
+#, c++-format
+msgid "Incorrect configuration value for multilib_policy: {}"
+msgstr "Нетачна вредност подешавања за „multilib_policy“: {}"
+
+#: base/goal_elements.cpp:352
+msgid "Install"
+msgstr "Инсталирај"
+
+#: base/goal_elements.cpp:354
+msgid "Install via provide"
+msgstr "Инсталирај путем „provide“"
+
+#: base/goal_elements.cpp:356
+msgid "Install by group"
+msgstr "Инсталирај по групи"
+
+#: base/goal_elements.cpp:358
+msgid "Upgrade"
+msgstr "Надогради"
+
+#: base/goal_elements.cpp:360
+msgid "Upgrade all"
+msgstr "Надогради све"
+
+#: base/goal_elements.cpp:362
+msgid "Upgrade minimal"
+msgstr "Надогради минимално"
+
+#: base/goal_elements.cpp:364
+msgid "Upgrade all minimal"
+msgstr "Надогради све минимално"
+
+#: base/goal_elements.cpp:366
+msgid "Downgrade"
+msgstr "Уназади"
+
+#: base/goal_elements.cpp:368
+msgid "Reinstall"
+msgstr "Поново инсталирај"
+
+#: base/goal_elements.cpp:370
+msgid "Install or reinstall"
+msgstr "Инсталирај или поново инсталирај"
+
+#: base/goal_elements.cpp:372
+msgid "Remove"
+msgstr "Уклони"
+
+#: base/goal_elements.cpp:374
+msgid "Distrosync"
+msgstr "Дистро-усклади"
+
+#: base/goal_elements.cpp:376
+msgid "Distrosync all"
+msgstr "Дистро-усклади све"
+
+#: base/goal_elements.cpp:378
+msgid "Reason Change"
+msgstr "Промена разлога"
+
+#: base/goal_elements.cpp:380
+msgid "Resolve"
+msgstr "Разреши"
+
+#: base/goal_elements.cpp:382
+msgid "Enable"
+msgstr "Омогући"
+
+#: base/goal_elements.cpp:384
+msgid "Disable"
+msgstr "Онемогући"
+
+#: base/goal_elements.cpp:386
+msgid "Reset"
+msgstr "Врати"
+
+#: base/goal_elements.cpp:388
+msgid "Parse serialized transaction"
+msgstr "Обради серијализовани пренос"
+
+#: base/goal_elements.cpp:390
+msgid "Install action"
+msgstr "Радња инсталирања"
+
+#: base/goal_elements.cpp:392
+msgid "Remove action"
+msgstr "Радња уклањања"
+
+#: base/goal_elements.cpp:394
+msgid "Upgrade action"
+msgstr "Радња надоградње"
+
+#: base/goal_elements.cpp:396
+msgid "Reinstall action"
+msgstr "Радња поновног инсталирања"
+
+#: base/goal_elements.cpp:398
+msgid "Reason change action"
+msgstr "Радња промене разлога"
+
+#: base/goal_elements.cpp:400
+msgid "Reason override"
+msgstr "Преклапање разлога"
+
+#: base/goal_elements.cpp:402
+msgid "Revert comps upgrade"
+msgstr "Поврати надоградњу компоненти"
+
+#: base/goal_elements.cpp:404
+msgid "Install debug RPMs"
+msgstr "Инсталирај дебаг РПМ-ове"
+
+#: base/goal_elements.cpp:406
+msgid "Transaction merge"
+msgstr "Спајање преноса"
+
+#: base/log_event.cpp:141
+#, c++-format
+msgid "No packages to remove for argument: {}"
+msgstr "Нема пакета за уклањање за аргумент: {}"
+
+#: base/log_event.cpp:143
+#, c++-format
+msgid "No groups to remove for argument: {}"
+msgstr "Нема група за уклањање за аргумент: {}"
+
+#: base/log_event.cpp:146
+#, c++-format
+msgid "No environmental groups to remove for argument: {}"
+msgstr "Нема група окружења за уклањање за аргумент: {}"
+
+#: base/log_event.cpp:148
+#, c++-format
+msgid "No modules to remove for argument: {}"
+msgstr "Нема модула за уклањање за аргумент: {}"
+
+#: base/log_event.cpp:152
+#, c++-format
+msgid "No match for group from environment: {}"
+msgstr "Нема поклапања за групу из окружења: {}"
+
+#: base/log_event.cpp:154
+#, c++-format
+msgid "No match for group package: {}"
+msgstr "Нема поклапања за пакет групе: {}"
+
+#: base/log_event.cpp:158
+#, c++-format
+msgid "Cannot perform {0}, no match for: {1}."
+msgstr "Не могу да извршим {0}, нема поклапања за: {1}."
+
+#: base/log_event.cpp:160
+#, c++-format
+msgid "No match for argument: {}"
+msgstr "Нема подударања за аргумент: {}"
+
+#: base/log_event.cpp:163
+#, c++-format
+msgid "No match for argument '{0}' in selected advisories"
+msgstr "Нема поклапања за аргумент „{0}“ у одабраним обавештењима"
+
+#: base/log_event.cpp:165
+msgid "No match in selected advisories"
+msgstr "Нема поклапања у одабраним обавештењима"
+
+#: base/log_event.cpp:169
+#, c++-format
+msgid "No match for argument '{0}' in repositories '{1}'"
+msgstr "Нема поклапања за аргумент „{0}“ у ризницама „{1}“"
+
+#: base/log_event.cpp:175
+#, c++-format
+msgid "Cannot perform {0} for {1} '{2}' because it is not installed."
+msgstr "Не могу да извршим {0} за {1} „{2}“ јер није инсталиран."
+
+#: base/log_event.cpp:180
+#, c++-format
+msgid "Packages for argument '{}' available, but not installed."
+msgstr "Пакети за аргумент „{}“ су доступни, али нису инсталирани."
+
+#: base/log_event.cpp:184
+#, c++-format
+msgid ""
+"Packages for argument '{}' available, but installed for a different "
+"architecture."
+msgstr ""
+"Пакети за аргумент „{}“ су доступни, али су инсталирани за другачију "
+"архитектуру."
+
+#: base/log_event.cpp:188
+#, c++-format
+msgid "Cannot perform {0} because '{1}' matches only source packages."
+msgstr "Не могу да извршим {0} јер се „{1}“ поклапа само са изворним пакетима."
+
+#: base/log_event.cpp:192
+#, c++-format
+msgid "Argument '{}' matches only source packages."
+msgstr "Аргумент „{}“ се поклапа само са изворним пакетима."
+
+#: base/log_event.cpp:196
+#, c++-format
+msgid "Cannot perform {0} because '{1}' matches only excluded packages."
+msgstr ""
+"Не могу да извршим {0} јер се „{1}“ поклапа само са искљученим пакетима."
+
+#: base/log_event.cpp:200
+#, c++-format
+msgid "Argument '{}' matches only excluded packages."
+msgstr "Аргумент „{}“ се поклапа само са искљученим пакетима."
+
+#: base/log_event.cpp:204
+#, c++-format
+msgid ""
+"Cannot perform {0} because '{1}' matches only packages excluded by "
+"versionlock."
+msgstr ""
+"Не могу да извршим {0} јер се „{1}“ поклапа само са пакетима који су "
+"искључени закључавањем издања."
+
+#: base/log_event.cpp:208
+#, c++-format
+msgid "Argument '{}' matches only packages excluded by versionlock."
+msgstr ""
+"Аргумент „{}“ се поклапа само са пакетима који су искључени закључавањем "
+"издања."
+
+#: base/log_event.cpp:213
+#, c++-format
+msgid "  * Maybe you meant: {}"
+msgstr "  * Можда сте хтели: {}"
+
+#: base/log_event.cpp:216
+#, c++-format
+msgid "There are following alternatives for '{0}': {1}"
+msgstr "Постоје следеће алтернативе за „{0}“: {1}"
+
+#: base/log_event.cpp:223
+#, c++-format
+msgid ""
+"The lowest available version of the \"{}\" package is already installed, "
+"cannot downgrade it."
+msgstr ""
+"Најниже доступно издање пакета „{}“ је већ инсталирано, не могу га уназадити "
+"на старије."
+
+#: base/log_event.cpp:229
+#, c++-format
+msgid ""
+"Installed packages for argument '{0}' are not available in repositories in "
+"the same version, available versions: {1}, cannot reinstall."
+msgstr ""
+"Инсталирани пакети за аргумент „{0}“ нису доступни у ризницама у истом "
+"издању, доступна издања: {1}, не могу поново инсталирати."
+
+#: base/log_event.cpp:235
+#, c++-format
+msgid ""
+"Cannot perform {0} because '{1}' is installed in a different version: '{2}'."
+msgstr "Не могу да извршим {0} јер је „{1}“ инсталиран у другом издању: „{2}“."
+
+#: base/log_event.cpp:241
+#, c++-format
+msgid ""
+"Packages for argument '{}' installed and available, but in a different "
+"version."
+msgstr "Пакети за аргумент „{}“ су инсталирани и доступни, али у другом издању."
+
+#: base/log_event.cpp:243
+#, c++-format
+msgid "Packages for argument '{}' installed, but not available."
+msgstr "Пакети за аргумент „{}“ су инсталирани, али нису доступни."
+
+#: base/log_event.cpp:252
+#, c++-format
+msgid "Package \"{}\" is already installed with reason \"{}\"."
+msgstr "Пакет „{}“ је већ инсталиран са разлогом „{}“."
+
+#: base/log_event.cpp:254
+#, c++-format
+msgid "Package \"{}\" is already installed."
+msgstr "Пакет „{}“ је већ инсталиран."
+
+#: base/log_event.cpp:263
+#, c++-format
+msgid "Debug data written to \"{}\""
+msgstr "Подаци за прочишћавање су уписани у „{}“"
+
+#: base/log_event.cpp:267
+#, c++-format
+msgid ""
+"{0} upgrade cannot be reverted, however associated package actions will be. "
+"({1} id: '{2}') ."
+msgstr ""
+"Надоградња {0} се не може поништити, међутим повезане радње над пакетима ће "
+"бити. ({1} ид: „{2}“) ."
+
+#: base/log_event.cpp:273
+#, c++-format
+msgid "{} action for argument \"{}\" is not supported."
+msgstr "Радња {} за аргумент „{}“ није подржана."
+
+#. Format a leading line of the error message.
+#: base/log_event.cpp:282
+#, c++-format
+msgid "Unable to resolve argument '{}':"
+msgstr "Не могу да разрешим аргумент „{}“:"
+
+#: base/log_event.cpp:286
+#, c++-format
+msgid ""
+"\n"
+"  - Argument '{}' matches {} stream ('{}') of module '{}', but the stream is "
+"not enabled or default."
+msgid_plural ""
+"\n"
+"  - Argument '{}' matches {} streams ('{}') of module '{}', but none of the "
+"streams are enabled or default."
+msgstr[0] ""
+"\n"
+"  — Аргумент „{}“ се поклапа са {} током („{}“) модула „{}“, али ток није "
+"омогућен или подразумеван."
+msgstr[1] ""
+"\n"
+"  — Аргумент „{}“ се поклапа са {} тока („{}“) модула „{}“, али ниједан од "
+"токова није омогућен или подразумеван."
+msgstr[2] ""
+"\n"
+"  — Аргумент „{}“ се поклапа са {} тока („{}“) модула „{}“, али ниједан од "
+"токова није омогућен или подразумеван."
+
+#: base/log_event.cpp:293
+msgid "', '"
+msgstr "', '"
+
+#: base/log_event.cpp:302
+msgid "Modular dependency problems:\n"
+msgstr "Проблеми са модуларним зависностима:\n"
+
+#: base/log_event.cpp:309
+msgid "Modular dependency problems with the latest modules:\n"
+msgstr "Проблеми са модуларним зависностима са најновијим модулима:\n"
+
+#: base/log_event.cpp:316
+msgid "Modular dependency problems with the defaults:\n"
+msgstr "Проблеми са модуларним зависностима са подразумеваним вредностима:\n"
+
+#: base/log_event.cpp:331
+#, c++-format
+msgid ""
+"The operation would result in switching of module '{0}' stream '{1}' to "
+"stream '{2}'\n"
+msgstr "Радња би довела до промене тока модула „{0}“ са „{1}“ на „{2}“\n"
+
+#: base/log_event.cpp:336
+msgid ""
+"Error: It is not possible to switch enabled streams of a module unless "
+"explicitly enabled via configuration option module_stream_switch."
+msgstr ""
+"Грешка: Није могуће променити омогућене токове модула осим ако то није "
+"изричито омогућено путем опције подешавања „module_stream_switch“."
+
+#: base/log_event.cpp:341
+#, c++-format
+msgid ""
+"Extra package '{0}' (with action '{1}') which is not present in the stored "
+"transaction was pulled into the transaction.\n"
+msgstr ""
+"Додатни пакет „{0}“ (са радњом „{1}“), који није присутан у сачуваном "
+"преносу, увучен је у пренос.\n"
+
+#: base/log_event.cpp:347
+#, c++-format
+msgid "Cannot parse file: '{0}': {1}.\n"
+msgstr "Не могу да обрадим датотеку: „{0}“: {1}.\n"
+
+#: base/log_event.cpp:354
+#, c++-format
+msgid ""
+"Could not find debuginfo package for the following packages resolved from "
+"the argument '{0}': {1}"
+msgstr ""
+"Не могу да пронађем „debuginfo“ пакет за следеће пакете разрешене из "
+"аргумента „{0}“: {1}"
+
+#: base/log_event.cpp:357 base/log_event.cpp:368
+msgctxt "String for joining NEVRAs - e.g. `foo-4-4.noarch, bar-5-5.noarch`"
+msgid ", "
+msgstr ", "
+
+#: base/log_event.cpp:364
+#, c++-format
+msgid ""
+"Could not find debugsource package for the following packages resolved from "
+"the argument '{0}': {1}"
+msgstr ""
+"Не могу да пронађем „debugsource“ пакет за следеће пакете разрешене из "
+"аргумента „{0}“: {1}"
+
+#: base/log_event.cpp:371
+#, c++-format
+msgid "Transaction merge error: '{0}'"
+msgstr "Грешка при спајању преноса: „{0}“"
+
+#: base/solver_problems.cpp:41
+#, c++-format
+msgid "{} does not belong to a distupgrade repository"
+msgstr "{} не припада ризници за надградњу дистрибуције"
+
+#: base/solver_problems.cpp:42
+#, c++-format
+msgid "{0} from {1} has inferior architecture"
+msgstr "{0} из {1} има лошију архитектуру"
+
+#: base/solver_problems.cpp:43
+msgid "problem with installed package"
+msgstr "проблем са инсталираним пакетом"
+
+#: base/solver_problems.cpp:44 base/solver_problems.cpp:80
+msgid "conflicting requests"
+msgstr "сукобљени захтеви"
+
+#: base/solver_problems.cpp:45 base/solver_problems.cpp:81
+msgid "unsupported request"
+msgstr "неподржан захтев"
+
+#: base/solver_problems.cpp:46 base/solver_problems.cpp:82
+#, c++-format
+msgid "nothing provides requested {}"
+msgstr "ништа не обезбеђује захтевано {}"
+
+#: base/solver_problems.cpp:47
+#, c++-format
+msgid "package {} does not exist"
+msgstr "пакет {} не постоји"
+
+#: base/solver_problems.cpp:48 base/solver_problems.cpp:84
+#, c++-format
+msgid "{} is provided by the system"
+msgstr "{} обезбеђује систем"
+
+#: base/solver_problems.cpp:49 base/solver_problems.cpp:85
+msgid "some dependency problem"
+msgstr "неки проблем са зависностима"
+
+#: base/solver_problems.cpp:50
+#, c++-format
+msgid "cannot install the best update candidate for package {}"
+msgstr "не могу да инсталирам најбољег кандидата за ажурирање за пакет {}"
+
+#: base/solver_problems.cpp:51 base/solver_problems.cpp:87
+msgid "cannot install the best candidate for the job"
+msgstr "не могу да инсталирам најбољег кандидата за овај посао"
+
+#: base/solver_problems.cpp:52
+#, c++-format
+msgid "package {0} from {1} is filtered out by modular filtering"
+msgstr "пакет {0} из {1} је издвојен модуларним филтрирањем"
+
+#: base/solver_problems.cpp:53
+#, c++-format
+msgid "package {0} from {1} does not have a compatible architecture"
+msgstr "пакет {0} из {1} нема сагласну архитектуру"
+
+#: base/solver_problems.cpp:54
+#, c++-format
+msgid "package {0} from {1} is not installable"
+msgstr "пакет {0} из {1} се не може инсталирати"
+
+#: base/solver_problems.cpp:55
+#, c++-format
+msgid "package {0} from {1} is filtered out by exclude filtering"
+msgstr "пакет {0} из {1} је издвојен филтрирањем изузимања"
+
+#: base/solver_problems.cpp:56
+#, c++-format
+msgid "nothing provides {0} needed by {1} from {2}"
+msgstr "ништа не обезбеђује {0} што је потребно за {1} из {2}"
+
+#: base/solver_problems.cpp:57
+#, c++-format
+msgid "cannot install both {0} from {1} and {2} from {3}"
+msgstr "не могу да инсталирам и {0} из {1} и {2} из {3}"
+
+#: base/solver_problems.cpp:58
+#, c++-format
+msgid "package {0} from {1} conflicts with {2} provided by {3} from {4}"
+msgstr "пакет {0} из {1} је у сукобу са {2} који обезбеђује {3} из {4}"
+
+#: base/solver_problems.cpp:60
+#, c++-format
+msgid "installed package {0} conflicts with {1} provided by {2} from {3}"
+msgstr "инсталирани пакет {0} је у сукобу са {1} који обезбеђује {2} из {3}"
+
+#: base/solver_problems.cpp:61
+#, c++-format
+msgid "package {0} from {1} obsoletes {2} provided by {3} from {4}"
+msgstr "пакет {0} из {1} замењује {2} који обезбеђује {3} из {4}"
+
+#: base/solver_problems.cpp:62
+#, c++-format
+msgid "installed package {0} obsoletes {1} provided by {2} from {3}"
+msgstr "инсталирани пакет {0} замењује {1} који обезбеђује {2} из {3}"
+
+#: base/solver_problems.cpp:64
+#, c++-format
+msgid "package {0} from {1} implicitly obsoletes {2} provided by {3} from {4}"
+msgstr "пакет {0} из {1} прећутно замењује {2} који обезбеђује {3} из {4}"
+
+#: base/solver_problems.cpp:66
+#, c++-format
+msgid ""
+"package {1} from {2} requires {0}, but none of the providers can be installed"
+msgstr ""
+"пакет {1} из {2} захтева {0}, али ниједан од достављача не може бити "
+"инсталиран"
+
+#: base/solver_problems.cpp:68
+#, c++-format
+msgid ""
+"installed package {1} requires {0}, but none of the providers can be "
+"installed"
+msgstr ""
+"инсталирани пакет {1} захтева {0}, али ниједан од достављача не може бити "
+"инсталиран"
+
+#: base/solver_problems.cpp:69
+#, c++-format
+msgid "package {0} from {1} conflicts with {2} provided by itself"
+msgstr "пакет {0} из {1} је у сукобу са {2} који обезбеђује он сам"
+
+#: base/solver_problems.cpp:70
+#, c++-format
+msgid "both package {0} from {1} and {3} from {4} obsolete {2}"
+msgstr "и пакет {0} из {1} и {3} из {4} замењују {2}"
+
+#: base/solver_problems.cpp:72
+#, c++-format
+msgid ""
+"The operation would result in removing the following protected packages: {}"
+msgstr "Радња би довела до уклањања следећих заштићених пакета: {}"
+
+#: base/solver_problems.cpp:75
+#, c++-format
+msgid "The operation would result in removing of running kernel: {}"
+msgstr "Радња би довела до уклањања текућег језгра: {}"
+
+#: base/solver_problems.cpp:77
+#, c++-format
+msgid "module {} does not belong to a distupgrade repository"
+msgstr "модул {} не припада ризници за надоградњу дистрибуције"
+
+#: base/solver_problems.cpp:78
+#, c++-format
+msgid "module {} has inferior architecture"
+msgstr "модул {} има лошију архитектуру"
+
+#: base/solver_problems.cpp:79
+#, c++-format
+msgid "problem with installed module {}"
+msgstr "проблем са инсталираним модулом {}"
+
+#: base/solver_problems.cpp:83
+#, c++-format
+msgid "module {} does not exist"
+msgstr "модул {} не постоји"
+
+#: base/solver_problems.cpp:86
+#, c++-format
+msgid "cannot install the best update candidate for module {}"
+msgstr "не могу да инсталирам најбољег кандидата за ажурирање за модул {}"
+
+#: base/solver_problems.cpp:88 base/solver_problems.cpp:91
+#, c++-format
+msgid "module {} is disabled"
+msgstr "модул {} је онемогућен"
+
+#: base/solver_problems.cpp:89
+#, c++-format
+msgid "module {} does not have a compatible architecture"
+msgstr "модул {} нема одговарајућу архитектуру"
+
+#: base/solver_problems.cpp:90
+#, c++-format
+msgid "module {} is not installable"
+msgstr "модул {} се не може инсталирати"
+
+#: base/solver_problems.cpp:92
+#, c++-format
+msgid "nothing provides {0} needed by module {1}"
+msgstr "ништа не обезбеђује {0} што је потребно модулу {1}"
+
+#: base/solver_problems.cpp:93
+#, c++-format
+msgid "cannot install both modules {0} and {1}"
+msgstr "не могу се инсталирати оба модула {0} и {1}"
+
+#: base/solver_problems.cpp:94
+#, c++-format
+msgid "module {0} conflicts with {1} provided by {2}"
+msgstr "модул {0} је у сукобу са {1} који обезбеђује {2}"
+
+#: base/solver_problems.cpp:95
+#, c++-format
+msgid "module {0} obsoletes {1} provided by {2}"
+msgstr "модул {0} замењује {1} који обезбеђује {2}"
+
+#: base/solver_problems.cpp:96
+#, c++-format
+msgid "installed module {0} obsoletes {1} provided by {2}"
+msgstr "инсталирани модул {0} замењује {1} који обезбеђује {2}"
+
+#: base/solver_problems.cpp:97
+#, c++-format
+msgid "module {0} implicitly obsoletes {1} provided by {2}"
+msgstr "модул {0} прећутно замењује {1} који обезбеђује {2}"
+
+#: base/solver_problems.cpp:98
+#, c++-format
+msgid "module {1} requires {0}, but none of the providers can be installed"
+msgstr ""
+"модул {1} захтева {0}, али ниједан од достављача не може бити инсталиран"
+
+#: base/solver_problems.cpp:99
+#, c++-format
+msgid "module {1} conflicts with {0} provided by itself"
+msgstr "модул {1} је у сукобу са {0} који сам обезбеђује"
+
+#: base/solver_problems.cpp:100
+#, c++-format
+msgid "both module {0} and {2} obsolete {1}"
+msgstr "и модул {0} и {2} замењују {1}"
+
+#: base/solver_problems.cpp:290
+msgid "Problem: "
+msgstr "Проблем: "
+
+#: base/solver_problems.cpp:294
+#, c++-format
+msgid "Problem {}: "
+msgstr "Проблем {}: "
+
+#: base/transaction.cpp:80
+msgid "This transaction has been already run before."
+msgstr "Овај пренос је већ извршен раније."
+
+#: base/transaction.cpp:81
+msgid "Cannot run transaction with resolving problems."
+msgstr "Не могу покренути пренос са решавањем проблема."
+
+#: base/transaction.cpp:82
+msgid "Rpm transaction check failed."
+msgstr "Провера РПМ преноса није успела."
+
+#: base/transaction.cpp:84
+msgid ""
+"Failed to obtain rpm transaction lock. Another transaction is in progress."
+msgstr "Није успело прибављање катанца РПМ преноса. Други пренос је у току."
+
+#: base/transaction.cpp:85
+msgid "Rpm transaction failed."
+msgstr "РПМ пренос није успео."
+
+#: base/transaction.cpp:86
+msgid "Signature verification failed."
+msgstr "Провера потписа није успела."
+
+#: base/transaction.cpp:90
+msgid "The repository does not have any OpenPGP keys configured."
+msgstr "Ризница нема подешених OpenPGP кључева."
+
+#: base/transaction.cpp:91
+msgid "Public key is not installed."
+msgstr "Јавни кључ није инсталиран."
+
+#: base/transaction.cpp:92
+msgid "Canceled by the user."
+msgstr "Отказ од стране корисника."
+
+#: base/transaction.cpp:93
+msgid "Public key import failed."
+msgstr "Није успео увоз јавног кључа."
+
+#: base/transaction.cpp:980
+#, c++-format
+msgid "Invalid tsflag: {}"
+msgstr "Неисправна заставица преноса (tsflag): {}"
+
+#: base/transaction.cpp:1314
+#, c++-format
+msgid "Public key \"{}\" is already present, not importing."
+msgstr "Јавни кључ „{}“ је већ присутан, не увозим га."
+
+#: base/transaction.cpp:1335
+#, c++-format
+msgid "An error occurred importing key \"{}\": {}"
+msgstr "Дошло је до грешке приликом увоза кључа „{}“: {}"
+
+#: base/transaction.cpp:1369
+#, c++-format
+msgid "OpenPGP check for package \"{}\" ({}) from repo \"{}\" has failed: "
+msgstr "Провера OpenPGP-а за пакет „{}“ ({}) из ризнице „{}“ није успела: "
+
+#: base/transaction.cpp:1397
+msgid "Import of the key didn't help, wrong key?"
+msgstr "Увоз кључа није помогао, погрешан кључ?"
+
+#: base/transaction.cpp:1416
+msgctxt "It is a joining character for repositories IDs"
+msgid ", "
+msgstr ", "
+
+#: base/transaction.cpp:1419
+#, c++-format
+msgid "Warning: skipped OpenPGP checks for {0} package from repository: {1}"
+msgid_plural ""
+"Warning: skipped OpenPGP checks for {0} packages from repository: {1}"
+msgstr[0] "Упозорење: прескочене су OpenPGP провере за {0} пакет из ризнице: {1}"
+msgstr[1] "Упозорење: прескочене су OpenPGP провере за {0} пакета из ризнице: {1}"
+msgstr[2] "Упозорење: прескочене су OpenPGP провере за {0} пакета из ризнице: {1}"
+
+#: base/transaction.cpp:1422
+#, c++-format
+msgid "Warning: skipped OpenPGP checks for {0} package from repositories: {1}"
+msgid_plural ""
+"Warning: skipped OpenPGP checks for {0} packages from repositories: {1}"
+msgstr[0] "Упозорење: прескочене су OpenPGP провере за {0} пакет из ризница: {1}"
+msgstr[1] "Упозорење: прескочене су OpenPGP провере за {0} пакета из ризница: {1}"
+msgstr[2] "Упозорење: прескочене су OpenPGP провере за {0} пакета из ризница: {1}"
+
+#: common/exception.cpp:78
+msgid "System error"
+msgstr "Системска грешка"
+
+#: common/exception.cpp:199
+msgid "General RuntimeError exception"
+msgstr "Општи изузетак RuntimeError"
+
+#: common/sack/query.cpp:27
+msgid "Query must contain exactly one object."
+msgstr "Упит мора да садржи тачно један објекат."
+
+#: common/xdg.cpp:43
+msgid "get_user_home_dir(): Cannot determine the user's home directory"
+msgstr "get_user_home_dir(): Не могу да одредим корисников матични директоријум"
+
+#: common/xdg.cpp:98
+msgid "get_user_runtime_dir(): Cannot determine the user's runtime directory"
+msgstr ""
+"get_user_runtime_dir(): Не могу да одредим корисников извршни директоријум"
+
+#: comps/environment/environment.cpp:325
+msgid "failed to save xml document for comps"
+msgstr "није успело чување xml документа за comps"
+
+#: comps/group/group.cpp:373
+#, c++-format
+msgid "Failed to save xml document for group \"{}\" to file \"{}\": {}"
+msgstr "Није успело чување xml документа за групу „{}“ у датотеку „{}“: {}"
+
+#: comps/group/package.cpp:118 comps/group/package.cpp:121
+#, c++-format
+msgid "Invalid package type: {}"
+msgstr "Неисправна врста пакета: {}"
+
+#: conf/config_main.cpp:57
+msgid "Input is empty. Must contain a value."
+msgstr "Унос је празан. Мора садржати вредност."
+
+#: conf/config_main.cpp:63
+#, c++-format
+msgid "Input value '{}' must not be negative"
+msgstr "Вредност уноса „{}“ не сме бити негативна"
+
+#: conf/config_main.cpp:68
+#, c++-format
+msgid "Could not convert '{}' to bytes"
+msgstr "Не могу да претворим „{}“ у бајтове"
+
+#: conf/config_main.cpp:84
+#, c++-format
+msgid "Unknown unit '{}'"
+msgstr "Непозната јединица „{}“"
+
+#: conf/config_main.cpp:281
+#, c++-format
+msgid "The throttle value {} is outside the allowed range {} ... {}"
+msgstr "Вредност ограничења протока {} је изван дозвољеног опсега {} ... {}"
+
+#: conf/config_parser.cpp:54
+#, c++-format
+msgid "Section \"{}\" not found"
+msgstr "Одељак „{}“ није пронађен"
+
+#: conf/config_parser.cpp:59
+#, c++-format
+msgid "Section \"{}\" does not contain option \"{}\""
+msgstr "Одељак „{}“ не садржи опцију „{}“"
+
+#: conf/config_parser.cpp:96
+#, c++-format
+msgid "Configuration file \"{}\" not found"
+msgstr "Датотека подешавања „{}“ није пронађена"
+
+#: conf/config_parser.cpp:99
+#, c++-format
+msgid "Unable to access configuration file \"{}\""
+msgstr "Не могу да приступим датотеци подешавања „{}“"
+
+#: conf/config_parser.cpp:102
+#, c++-format
+msgid "Error in configuration file \"{}\""
+msgstr "Грешка у датотеци подешавања „{}“"
+
+#: conf/option_binds.cpp:29
+#, c++-format
+msgid "Option \"{}\" not found"
+msgstr "Опција „{}“ није пронађена"
+
+#: conf/option_binds.cpp:32
+#, c++-format
+msgid "Option \"{}\" already exists"
+msgstr "Опција „{}“ већ постоји"
+
+#: conf/option_bool.cpp:82
+#, c++-format
+msgid "Invalid boolean value \"{}\""
+msgstr "Неисправна логичка вредност „{}“"
+
+#: conf/option_enum.cpp:68
+#, c++-format
+msgid "Enum option value \"{}\" not allowed"
+msgstr "Вредност опције набрајања „{}“ није дозвољена"
+
+#: conf/option_number.cpp:99
+#, c++-format
+msgid "Input value {} is outside the allowed range {} ... {}"
+msgstr "Вредност уноса {} је изван дозвољеног опсега {} ... {}"
+
+#: conf/option_number.cpp:112
+#, c++-format
+msgid "Invalid number option value \"{}\""
+msgstr "Неисправна вредност опције броја „{}“"
+
+#: conf/option_path.cpp:93
+#, c++-format
+msgid "Only absolute paths allowed, relative path \"{}\" detected"
+msgstr "Дозвољене су само апсолутне путање, откривена је релативна путања „{}“"
+
+#: conf/option_path.cpp:98
+#, c++-format
+msgid "Path \"{}\" does not exist"
+msgstr "Путања „{}“ не постоји"
+
+#: conf/option_seconds.cpp:38
+msgid "Empty time option value"
+msgstr "Празна вредност опције времена"
+
+#: conf/option_seconds.cpp:50
+#, c++-format
+msgid "Invalid time option value \"{}\", number or \"never\" expected"
+msgstr "Неисправна вредност опције времена „{}“, очекује се број или „never“"
+
+#: conf/option_seconds.cpp:54
+#, c++-format
+msgid ""
+"Invalid time option value \"{}\", negative values except \"-1\" not allowed"
+msgstr ""
+"Неисправна вредност опције времена „{}“, негативне вредности осим „-1“ нису "
+"дозвољене"
+
+#: conf/option_seconds.cpp:59
+#, c++-format
+msgid "Unknown time format \"{}\""
+msgstr "Непознат формат времена „{}“"
+
+#: conf/option_seconds.cpp:78
+#, c++-format
+msgid "Unknown time unit '{}'"
+msgstr "Непозната јединица времена „{}“"
+
+#: conf/option_string.cpp:89
+#, c++-format
+msgid ""
+"Input value \"{}\" not allowed, allowed values for this option are defined "
+"by regular expression \"{}\""
+msgstr ""
+"Вредност уноса „{}“ није дозвољена, дозвољене вредности за ову опцију су "
+"дефинисане регуларним изразом „{}“"
+
+#. TODO(jrohel): We don't know the option name at this time. Add a text name to the options
+#. or extend exception (add name) in upper layer.
+#: conf/option_string.cpp:114
+msgid "Option value is not set"
+msgstr "Вредност опције није постављена"
+
+#: conf/option_string_list.cpp:175
+#, c++-format
+msgid ""
+"Input item value \"{}\" not allowed, allowed values for this option are "
+"defined by regular expression \"{}\""
+msgstr ""
+"Вредност ставке уноса „{}“ није дозвољена, дозвољене вредности за ову опцију "
+"су дефинисане регуларним изразом „{}“"
+
+#: conf/vars.cpp:313 conf/vars.cpp:353
+#, c++-format
+msgid "Variable \"{}\" is read-only"
+msgstr "Променљива „{}“ је само за читање"
+
+#: logger/rotating_file_logger.cpp:65
+msgid "Cannot open log file"
+msgstr "Не могу да отворим датотеку дневника"
+
+#: module/module_db.cpp:76 module/module_db.cpp:85 module/module_sack.cpp:767
+#, c++-format
+msgid "No such module: {}"
+msgstr "Нема таквог модула: {}"
+
+#: module/module_db.cpp:268
+#, c++-format
+msgid "Cannot enable multiple streams for module '{}'"
+msgstr "Не могу да омогућим више токова за модул „{}“"
+
+#. TODO(pkratoch) replace with a proper and descriptive exception
+#. TODO(jmracek) else if (removalOfProtected && removalOfProtected->size()) {
+#. throw Goal::Error(_("no solution, cannot remove protected package"),
+#. DNF_ERROR_REMOVAL_OF_PROTECTED_PKG);
+#. }
+#. TODO(lukash) replace with a proper and descriptive exception
+#: module/module_goal_private.cpp:83 rpm/solv/goal_private.cpp:342
+#: rpm/solv/goal_private.cpp:764
+msgid "no solution possible"
+msgstr "решење није могуће"
+
+#: module/module_metadata.cpp:102
+#, c++-format
+msgid "Failed to update from string: {}"
+msgstr "Нисам успео да ажурирам из ниске: {}"
+
+#: module/module_metadata.cpp:129
+#, c++-format
+msgid "Failed to resolve module metadata: {}"
+msgstr "Нисам успео да разрешим метаподатке модула: {}"
+
+#: module/module_metadata.cpp:140
+#, c++-format
+msgid "Failed to upgrade defaults: {}"
+msgstr "Нисам успео да надоградим подразумеване вредности: {}"
+
+#: module/module_metadata.cpp:144
+#, c++-format
+msgid "Failed to upgrade streams: {}"
+msgstr "Нисам успео да надоградим токове: {}"
+
+#: module/module_sack.cpp:93
+#, c++-format
+msgid "Failed to load module metadata for repository \"{}\": {}"
+msgstr "Нисам успео да учитам метаподатке модула за ризницу „{}“: {}"
+
+#: module/module_sack.cpp:594
+msgid "Missing '='"
+msgstr "Недостаје „=“"
+
+#: module/module_sack.cpp:598 module/module_sack.cpp:606
+msgid "Missing '\"' in the value"
+msgstr "Недостаје „\"“ у вредности"
+
+#: module/module_sack.cpp:602
+msgid "Missing ':' in the value"
+msgstr "Недостаје „:“ у вредности"
+
+#: module/module_sack.cpp:911
+#, c++-format
+msgid "Invalid module status: {}"
+msgstr "Неисправно стање модула: {}"
+
+#: plugin/plugins.cpp:67
+#, c++-format
+msgid ""
+"Unsupported plugin API combination. API version provided by plugin \"{}\" "
+"(\"{}\") is \"{}.{}\". API version in libdnf is \"{}.{}\"."
+msgstr ""
+"Неподржана комбинација АПИ-ја прикључка. Издање АПИ-ја коју даје прикључак „"
+"{}“ („{}“) је „{}.{}“. Издање АПИ-ја у libdnf је „{}.{}“."
+
+#: plugin/plugins.cpp:92
+msgid "Failed to create a libdnf plugin instance"
+msgstr "Није успело прављење примерка прикључка libdnf"
+
+#: plugin/plugins.cpp:146
+#, c++-format
+msgid "Cannot find plugin library \"{}\""
+msgstr "Не могу да пронађем библиотеку прикључка „{}“"
+
+#: plugin/plugins.cpp:213
+#, c++-format
+msgid "Invalid option value: enabled={}"
+msgstr "Неисправна вредност опције: омогућено={}"
+
+#: plugin/plugins.cpp:237
+msgid "Plugins::load_plugins(): config_dir_path cannot be empty"
+msgstr "Plugins::load_plugins(): config_dir_path не може бити празно"
+
+#: plugin/plugins.cpp:253
+#, c++-format
+msgid "Cannot load libdnf plugin enabled from: {}"
+msgstr "Не могу да учитам омогућени libdnf прикључак из: {}"
+
+#: repo/config_repo.cpp:581
+msgid "get_unique_id(): Computation of SHA256 failed"
+msgstr "get_unique_id(): Рачунање SHA256 није успело"
+
+#: repo/file_downloader.cpp:154
+msgid "Cannot download files, cacheonly option is activated."
+msgstr ""
+"Не могу да преузмем датотеке, опција „само кеш“ (cacheonly) је активирана."
+
+#: repo/file_downloader.cpp:216
+msgid "Failed to download files"
+msgstr "Није успело преузимање датотека"
+
+#: repo/librepo.cpp:118
+msgid ""
+"Maximum download speed is lower than minimum, please change configuration of "
+"minrate or throttle"
+msgstr ""
+"Највећа брзина преузимања је мања од најмање, промените подешавање за „"
+"minrate“ или „throttle“"
+
+#: repo/librepo.cpp:181
+msgid "'proxy_username' is set but not 'proxy_password'"
+msgstr "„proxy_username“ је постављено, али не и „proxy_password“"
+
+#: repo/package_downloader.cpp:154
+#, c++-format
+msgid "Cannot download the \"{0}\" package, cacheonly option is activated."
+msgstr ""
+"Не могу да преузмем пакет „{0}“, опција „само кеш“ (cacheonly) је активирана."
+
+#: repo/package_downloader.cpp:231
+msgid "Already downloaded"
+msgstr "Већ је преузето"
+
+#: repo/package_downloader.cpp:279
+msgid "Failed to download packages"
+msgstr "Није успело преузимање пакета"
+
+#: repo/repo.cpp:61
+#, c++-format
+msgid "Failed to load RPM \"{}\": doesn't have the \".rpm\" extension"
+msgstr "Није успело учитавање RPM-а „{}“: нема екстензију „.rpm“"
+
+#: repo/repo.cpp:65
+#, c++-format
+msgid "Failed to access RPM \"{}\": {}"
+msgstr "Није успео приступ RPM-у „{}“: {}"
+
+#: repo/repo.cpp:107
+#, c++-format
+msgid "Invalid repository id \"{}\": unexpected character '{}'"
+msgstr "Неисправан ид ризнице „{}“: неочекивани знак „{}“"
+
+#: repo/repo.cpp:150
+#, c++-format
+msgid "Repository \"{}\" has no source (baseurl, mirrorlist or metalink) set."
+msgstr "Ризница „{}“ нема постављен извор (baseurl, mirrorlist или metalink)."
+
+#: repo/repo.cpp:161
+#, c++-format
+msgid "Repository \"{}\" has unsupported type \"{}\", skipping."
+msgstr "Ризница „{}“ има неподржану врсту „{}“, прескачем."
+
+#: repo/repo.cpp:221 repo/repo.cpp:241 repo/repo_sack.cpp:368
+#, c++-format
+msgid "Failed to download metadata ({}: \"{}\") for repository \"{}\": {}"
+msgstr "Није успело преузимање метаподатака ({}: „{}“) за ризницу „{}“: {}"
+
+#: repo/repo.cpp:439
+msgid ""
+"Failed to load repository: \"primary\" data not present or in unsupported "
+"format"
+msgstr ""
+"Није успело учитавање ризнице: „primary“ подаци нису присутни или су у "
+"неподржаном формату"
+
+#: repo/repo.cpp:505
+#, c++-format
+msgid "Failed to load comps \"{}\": doesn't have the \".xml\" extension"
+msgstr "Није успело учитавање састава „{}“: нема проширење „.xml“"
+
+#: repo/repo.cpp:512
+#, c++-format
+msgid "Failed to load xml Comps \"{}\": {}"
+msgstr "Није успело учитавање xml састава „{}“: {}"
+
+#: repo/repo.cpp:530
+#, c++-format
+msgid "Failed to load RPM \"{}\": {}"
+msgstr "Није успело учитавање RPM-а „{}“: {}"
+
+#: repo/repo_cache.cpp:255
+msgid "Unable to determine id of the repository in the cache."
+msgstr "Није могуће одредити ид ризнице у кешу."
+
+#: repo/repo_cache_private.hpp:59
+msgid "Empty path to the repository cache directory."
+msgstr "Празна путања до директоријума кеша ризнице."
+
+#: repo/repo_downloader.cpp:214
+#, c++-format
+msgid "Librepo error: {}"
+msgstr "Грешка Librepo-а: {}"
+
+#: repo/repo_downloader.cpp:258
+msgid "Failed to set up metadata download"
+msgstr "Није успело подешавање преузимања метаподатака"
+
+#: repo/repo_downloader.cpp:312 repo/repo_downloader.cpp:362
+msgid "Failed to download metadata"
+msgstr "Није успело преузимање метаподатака"
+
+#: repo/repo_downloader.cpp:426
+#, c++-format
+msgid "Error checking if metalink \"{}\" is in sync for repository \"{}\""
+msgstr "Грешка при провери да ли је метавеза „{}“ усклађена за ризницу „{}“"
+
+#: repo/repo_downloader.cpp:446
+#, c++-format
+msgid "Error checking if repomd ({}: \"{}\") is in sync for repository \"{}\""
+msgstr "Грешка при провери да ли је repomd ({}: „{}“) усклађен за ризницу „{}“"
+
+#: repo/repo_downloader.cpp:515
+#, c++-format
+msgid "Error loading local metadata for repository \"{}\""
+msgstr "Грешка при учитавању локалних метаподатака за ризницу „{}“"
+
+#: repo/repo_downloader.cpp:597
+#, c++-format
+msgid ""
+"No valid source (baseurl, mirrorlist or metalink) found for repository \"{}\""
+msgstr ""
+"Није пронађен важећи извор (baseurl, mirrorlist или metalink) за ризницу „{}“"
+
+#: repo/repo_pgp.cpp:60
+#, c++-format
+msgid "Failed to import OpenPGP keys into temporary keyring: {}"
+msgstr "Није успео увоз OpenPGP кључева у привремени привезак: {}"
+
+#: repo/repo_pgp.cpp:66 repo/repo_pgp.cpp:93
+#, c++-format
+msgid "Failed to list OpenPGP keys: {}"
+msgstr "Није успело излиставање OpenPGP кључева: {}"
+
+#: repo/repo_pgp.cpp:141
+#, c++-format
+msgid "Failed to import OpenPGP keys: {}"
+msgstr "Није успео увоз OpenPGP кључева: {}"
+
+#: repo/repo_sack.cpp:159
+#, c++-format
+msgid ""
+"Failed to create repo \"{}\": Id is present more than once in the "
+"configuration"
+msgstr ""
+"Није успело прављење ризнице „{}“: ид је присутан више пута у подешавањима"
+
+#: repo/repo_sack.cpp:631
+#, c++-format
+msgid "Cache-only enabled but no cache for repository \"{}\""
+msgstr "Омогућен је само кеш, али нема кеша за ризницу „{}“"
+
+#: repo/solv_repo.cpp:267
+#, c++-format
+msgid "Failed to load repomd for repo \"{}\" from \"{}\": {}."
+msgstr "Није успело учитавање repomd-а за ризницу „{}“ из „{}“: {}."
+
+#: repo/solv_repo.cpp:275
+#, c++-format
+msgid "Failed to load primary for repo \"{}\" from \"{}\": {}."
+msgstr "Није успело учитавање примарне датотеке за ризницу „{}“ из „{}“: {}."
+
+#: repo/solv_repo.cpp:323
+#, c++-format
+msgid "Unsupported extended repodata type for the system repo: \"{}\"."
+msgstr ""
+"Неподржана врста проширених података ризнице за системску ризницу: „{}“."
+
+#: repo/solv_repo.cpp:395
+#, c++-format
+msgid "Failed to load {} extension for repo \"{}\" from \"{}\": {}"
+msgstr "Није успело учитавање проширења {} за ризницу „{}“ из „{}“: {}"
+
+#: repo/solv_repo.cpp:431
+#, c++-format
+msgid "Failed to load system repo from root \"{}\": {}"
+msgstr "Није успело учитавање системске ризнице из корена „{}“: {}"
+
+#: repo/solv_repo.cpp:532
+#, c++-format
+msgid "Failed to load {} cache for repo \"{}\" from \"{}\": {}"
+msgstr "Није успело учитавање {} оставе за ризницу „{}“ из „{}“: {}"
+
+#: repo/solv_repo.cpp:586
+#, c++-format
+msgid "Failed to write primary cache for repo \"{}\" to \"{}\": {}"
+msgstr "Није успело уписивање главне оставе за ризницу „{}“ у „{}“: {}"
+
+#: repo/solv_repo.cpp:608
+#, c++-format
+msgid "Failed to re-load primary cache for repo \"{}\" from \"{}\": {}"
+msgstr "Није успело поновно учитавање главне оставе за ризницу „{}“ из „{}“: {}"
+
+#: repo/solv_repo.cpp:673
+#, c++-format
+msgid "Failed to write {} cache for repo \"{}\" to \"{}\": {}"
+msgstr "Није успело уписивање {} оставе за ризницу „{}“ у „{}“: {}"
+
+#: repo/solv_repo.cpp:694
+#, c++-format
+msgid "Failed to re-load {} cache for repo \"{}\" from \"{}\": {}"
+msgstr "Није успело поновно учитавање {} оставе за ризницу „{}“ из „{}“: {}"
+
+#: repo/temp_files_memory.cpp:52
+#, c++-format
+msgid ""
+"An error occurred when parsing the temporary files memory file at '{}': {}"
+msgstr ""
+"Дошло је до грешке приликом рашчлањивања меморијске датотеке привремених "
+"датотека на „{}“: {}"
+
+#: rpm/nevra.cpp:82
+#, c++-format
+msgid "NEVRA string \"{}\" contains ':' multiple times"
+msgstr "NEVRA ниска „{}“ садржи „:“ више пута"
+
+#: rpm/nevra.cpp:86
+#, c++-format
+msgid "Invalid character '{}' in NEVRA string \"{}\""
+msgstr "Неисправан знак „{}“ у NEVRA ниски „{}“"
+
+#: rpm/package.cpp:81
+msgid "Package with rpmdbid was not found"
+msgstr "Пакет са rpmdbid није пронађен"
+
+#: rpm/package.cpp:478
+msgid "<unknown>"
+msgstr "<непознато>"
+
+#: rpm/reldep.cpp:116 rpm/reldep.cpp:123
+msgid "Cannot parse a dependency string"
+msgstr "Не могу да рашчланим ниску зависности"
+
+#: rpm/rpm_signature.cpp:45
+msgid "No corresponding key was found."
+msgstr "Није пронађен одговарајући кључ."
+
+#: rpm/rpm_signature.cpp:46
+msgid "The signature is valid, but the key is not trusted."
+msgstr "Потпис је исправан, али кључ није од поверења."
+
+#: rpm/rpm_signature.cpp:47
+msgid "The package is not signed."
+msgstr "Пакет није потписан."
+
+#: rpm/rpm_signature.cpp:48
+msgid "Problem occurred when opening the package."
+msgstr "Дошло је до проблема приликом отварања пакета."
+
+#: rpm/rpm_signature.cpp:64
+#, c++-format
+msgid "Failed to set rpm transaction rootDir \"{}\"."
+msgstr "Није успело постављање коренског директоријума рпм преноса „{}“."
+
+#: rpm/rpm_signature.cpp:290
+#, c++-format
+msgid "\"{}\": key is not an armored public key."
+msgstr "„{}“: кључ није оклопљени јавни кључ."
+
+#: rpm/rpm_signature.cpp:295
+#, c++-format
+msgid "Failed to import public key \"{}\" to rpmdb: {}"
+msgstr "Није успело увожење јавног кључа „{}“ у rpmdb: {}"
+
+#. TODO(jrohel): Why? Librpm does not provide this information.
+#: rpm/transaction.cpp:114
+#, c++-format
+msgid "Cannot set root directory \"{}\""
+msgstr "Не могу да поставим коренски директоријум „{}“"
+
+#: rpm/transaction.cpp:125
+#, c-format
+msgid "Error %i opening rpm database"
+msgstr "Грешка %i при отварању рпм базе података"
+
+#: rpm/transaction.cpp:134
+msgid "The rpmdbCookie() function did not return cookie of rpm database."
+msgstr "Функција rpmdbCookie() није вратила колачић рпм базе података."
+
+#: rpm/transaction.cpp:199
+msgid "Failed to order the rpm transaction."
+msgstr "Нисам успео да поређам рпм пренос."
+
+#: rpm/transaction.cpp:235
+#, c++-format
+msgid ""
+"Failed to set scriptlet output file, cannot duplicate file descriptor: {}"
+msgstr ""
+"Нисам успео да поставим излазну датотеку скриптице, не могу да удвостручим "
+"описник датотеке: {}"
+
+#: rpm/transaction.cpp:254
+#, c++-format
+msgid "Failed to set scriptlet output file, cannot open file \"{}\": {}"
+msgstr ""
+"Нисам успео да поставим излазну датотеку скриптице, не могу да отворим "
+"датотеку „{}“: {}"
+
+#: rpm/transaction.cpp:275
+#, c++-format
+msgid "Failed to read package header, cannot open file \"{}\": {}"
+msgstr ""
+"Нисам успео да прочитам заглавље пакета, не могу да отворим датотеку „{}“: {}"
+
+#: rpm/transaction.cpp:292
+#, c++-format
+msgid "Failed to read package header from file \"{}\""
+msgstr "Нисам успео да прочитам заглавље пакета из датотеке „{}“"
+
+#: rpm/transaction.cpp:305
+msgid "Cannot init rpm database iterator"
+msgstr "Не могу да покренем итератор рпм базе података"
+
+#: rpm/transaction.cpp:309
+msgid "Package was not found in rpm database"
+msgstr "Пакет није пронађен у рпм бази података"
+
+#. TODO(jrohel): Why? Librpm does not provide this information.
+#: rpm/transaction.cpp:325
+#, c++-format
+msgid "Cannot reinstall package \"{}\""
+msgstr "Не могу поново да инсталирам пакет „{}“"
+
+#. TODO(jrohel): Why? Librpm does not provide this information.
+#: rpm/transaction.cpp:343
+#, c++-format
+msgid "Cannot remove package \"{}\""
+msgstr "Не могу да уклоним пакет „{}“"
+
+#: rpm/transaction.cpp:362
+#, c++-format
+msgid "Cannot upgrade package \"{}\""
+msgstr "Не могу да надоградим пакет „{}“"
+
+#: rpm/transaction.cpp:366
+#, c++-format
+msgid "Cannot downgrade package \"{}\""
+msgstr "Не могу да уназадим пакет „{}“"
+
+#: rpm/transaction.cpp:370
+#, c++-format
+msgid "Cannot install package \"{}\""
+msgstr "Не могу да инсталирам пакет „{}“"
+
+#: rpm/versionlock_config.cpp:284 system/state.cpp:605
+#, c++-format
+msgid "{}"
+msgstr "{}"
+
+#. TODO(lukash) throw proper exception class
+#: solv/pool.cpp:174
+#, c++-format
+msgid "Failed to convert epoch \"{}\" to number"
+msgstr "Нисам успео да претворим епоху „{}“ у број"
+
+#: solv/solver.cpp:79
+#, c++-format
+msgid "Writing debugsolver data into \"{}\" failed: {}"
+msgstr "Уписивање података решавача грешака у „{}“ није успело: {}"
+
+#: system/state.cpp:282 system/state.cpp:291
+#, c++-format
+msgid "Invalid TOML version \"{}\", \"MAJOR.MINOR\" expected"
+msgstr "Неисправно издање TOML-а „{}“, очекивано је „ГЛАВНО.СПОРЕДНО“"
+
+#: system/state.cpp:299
+#, c++-format
+msgid "{} state for \"{}\" not found."
+msgstr "Стање {} за „{}“ није пронађено."
+
+#: system/state.cpp:303
+#, c++-format
+msgid "Loading system state TOML file {} failed (see dnf5-system-state(7)): {}"
+msgstr ""
+"Учитавање TOML датотеке системског стања {} није успело (погледајте dnf5-"
+"system-state(7)): {}"
+
+#: system/state.cpp:640
+#, c++-format
+msgid "Unsupported TOML version \"{}\", maximum supported version is \"{}\""
+msgstr "Неподржано ТОМЛ издање „{}“, највеће подржано издање је „{}“"
+
+#: transaction/Swdb.cpp:91
+msgid "In progress"
+msgstr "У току"
+
+#: transaction/Swdb.cpp:99 transaction/Swdb.cpp:126 transaction/Swdb.cpp:136
+#: transaction/Swdb.cpp:150 transaction/Swdb.cpp:273 transaction/Swdb.cpp:281
+msgid "Not in progress"
+msgstr "Није у току"
+
+#: transaction/Swdb.cpp:158
+msgid "No transaction in progress"
+msgstr "Нема преноса у току"
+
+#: transaction/Transformer.cpp:647
+msgid "Transformer: can't open history persist dir"
+msgstr "Трансформатор: не могу да отворим директоријум за трајност историјата"
+
+#: transaction/Transformer.cpp:660
+msgid "Couldn't find a history database"
+msgstr "Нисам успео да пронађем базу података историјата"
+
+#. TODO(dmach): replace with a better exception class
+#: transaction/db/comps_environment_group.cpp:100
+msgid ""
+"Failed to insert record into table 'comps_environment_group' in history "
+"database"
+msgstr ""
+"Није успело уметање записа у табелу „comps_environment_group“ у бази "
+"података историјата"
+
+#: transaction/db/db.cpp:71
+msgid "Unable to get 'version' from table 'config'"
+msgstr "Не могу да добавим „version“ из табеле „config“"
+
+#. TODO(dmach): replace with a better exception class
+#: transaction/db/item.cpp:43
+msgid "Failed to insert record into table 'item' in history database"
+msgstr "Није успело уметање записа у табелу „item“ у бази података историјата"
+
+#: transaction/offline.cpp:195
+msgid "error reading offline state file"
+msgstr "грешка при читању датотеке стања ван мреже"
+
+#: transaction/offline.cpp:200
+msgid "incompatible version of state data"
+msgstr "неусаглашено издање података стања"
+
+#: transaction/transaction.cpp:96
+#, c++-format
+msgid "Invalid transaction state: {}"
+msgstr "Неисправно стање преноса: {}"
+
+#: transaction/transaction.cpp:279
+msgid "Transaction has already started!"
+msgstr "Пренос је већ покренут!"
+
+#: transaction/transaction_item_action.cpp:28
+#, c++-format
+msgid "Invalid transaction item action: {}"
+msgstr "Неисправна радња ставке преноса: {}"
+
+#: transaction/transaction_item_reason.cpp:28
+#, c++-format
+msgid "Invalid transaction item reason: {}"
+msgstr "Неисправан разлог ставке преноса: {}"
+
+#: transaction/transaction_item_state.cpp:28
+#, c++-format
+msgid "Invalid transaction item state: {}"
+msgstr "Неисправно стање ставке преноса: {}"
+
+#: transaction/transaction_item_type.cpp:28
+#, c++-format
+msgid "Invalid transaction item type: {}"
+msgstr "Неисправна врста ставке преноса: {}"
+
+#: transaction/transaction_merge.cpp:102
+#, c++-format
+msgid ""
+"Action '{0}' '{1}' cannot be merged after it was '{2}' in preceding "
+"transactions -> setting '{0}'."
+msgstr ""
+"Радња „{0}“ „{1}“ се не може спојити након што је била „{2}“ у претходним "
+"преносима -> постављам „{0}“."
+
+#: transaction/transaction_merge.cpp:116
+#, c++-format
+msgid ""
+"Action 'Upgrade' '{0}' cannot be merged because it is not present at that "
+"point -> setting 'Install'."
+msgstr ""
+"Радња „Надогради“ „{0}“ се не може спојити јер није присутна у тој тачки -> "
+"постављам „Инсталирај“."
+
+#: transaction/transaction_merge.cpp:174 transaction/transaction_merge.cpp:231
+#, c++-format
+msgid ""
+"Action 'Reinstall' '{0}' cannot be merged because it is not present at that "
+"point -> setting 'Install'."
+msgstr ""
+"Радња „Поново инсталирај“ „{0}“ се не може спојити јер није присутна у тој "
+"тачки -> постављам „Инсталирај“."
+
+#: transaction/transaction_merge.cpp:194
+#, c++-format
+msgid ""
+"Action '{0}' '{1}' cannot be merged after it was '{2}' in preceding "
+"transaction -> setting '{0}'."
+msgstr ""
+"Радња „{0}“ „{1}“ се не може спојити након што је била „{2}“ у претходном "
+"преносу -> постављам „{0}“."
+
+#: transaction/transaction_merge.cpp:215
+#, c++-format
+msgid "Unexpected action encountered: '{0}' during transaction merge."
+msgstr "Наишао сам на неочекивану радњу: „{0}“ током спајања преноса."
+
+#: transaction/transaction_merge.cpp:224
+#, c++-format
+msgid ""
+"Action '{0}' '{1}' cannot be merged because it is not present at that point "
+"-> skipping it."
+msgstr ""
+"Радња „{0}“ „{1}“ се не може спојити јер није присутна у тој тачки -> "
+"прескачем је."
+
+#: transaction/transaction_merge.cpp:245
+#, c++-format
+msgid ""
+"Action '{0}' '{1}' cannot be merged because it is not present at that point "
+"-> setting 'INSTALL'."
+msgstr ""
+"Радња „{0}“ „{1}“ се не може спојити јер није присутна у тој тачки -> "
+"постављам „INSTALL“."
+
+#: transaction/transaction_merge.cpp:266
+#, c++-format
+msgid ""
+"Action '{0}' '{1}' cannot be merged because it is not present at that point "
+"(present versions are: {2}) -> skipping it."
+msgstr ""
+"Радња „{0}“ „{1}“ се не може спојити јер није присутна у тој тачки (присутна "
+"издања су: {2}) -> прескачем је."
+
+#: transaction/transaction_merge.cpp:277
+#, c++-format
+msgid ""
+"Action '{0}' '{1}' cannot be merged because it is already present at that "
+"point -> skipping it."
+msgstr ""
+"Радња „{0}“ „{1}“ не може бити спојена јер је већ присутна у тој тачки -> "
+"прескачем је."
+
+#: transaction/transaction_merge.cpp:294
+#, c++-format
+msgid ""
+"Action '{0}' '{1}' cannot be merged because it is already installed in "
+"version '{2}' -> keeping the action from older transaction with '{1}'."
+msgstr ""
+"Радња „{0}“ „{1}“ не може бити спојена јер је већ инсталирана у издању „{2}"
+"“ -> задржавам радњу из старијег преноса са „{1}“."
+
+#: transaction/transaction_merge.cpp:304
+#, c++-format
+msgid "Invalid action encountered: '{0}' during transaction merge."
+msgstr "Наишао сам на неисправну радњу: „{0}“ током спајања преноса."
+
+#: transaction/transaction_sr.cpp:49
+msgid "Transaction replay JSON serialized transaction input is empty"
+msgstr ""
+"Улаз серијализованог преноса ЈСОН-а за поновно покретање преноса је празан"
+
+#: transaction/transaction_sr.cpp:58
+#, c++-format
+msgid "Error during transaction replay JSON parsing : {}"
+msgstr "Грешка током обраде ЈСОН-а за поновно покретање преноса: {}"
+
+#: transaction/transaction_sr.cpp:68
+#, c++-format
+msgid "Unexpected version format: \"{}\", supported version is \"{}\""
+msgstr "Неочекивани формат издања: „{}“, подржано издање је „{}“"
+
+#: transaction/transaction_sr.cpp:74
+#, c++-format
+msgid "Incompatible major version: \"{}\", supported major version is \"{}\""
+msgstr "Неусаглашено главно издање: „{}“, подржано главно издање је „{}“"
+
+#: transaction/transaction_sr.cpp:81
+#, c++-format
+msgid "Invalid minor version: \"{}\", number expected"
+msgstr "Неисправно споредно издање: „{}“, очекиван је број"
+
+#: transaction/transaction_sr.cpp:84
+msgid "Missing key \"version\""
+msgstr "Недостаје кључ „version“"
+
+#: transaction/transaction_sr.cpp:92
+msgid "Unexpected type of \"environments\", array expected"
+msgstr "Неочекивана врста за „environments“, очекиван је низ"
+
+#: transaction/transaction_sr.cpp:105
+msgid "Missing object key \"id\" in an environment"
+msgstr "Недостаје кључ објекта „id“ у окружењу"
+
+#: transaction/transaction_sr.cpp:110
+msgid "Missing object key \"action\" in an environment"
+msgstr "Недостаје кључ објекта „action“ у окружењу"
+
+#: transaction/transaction_sr.cpp:129
+msgid "Unexpected type of \"groups\", array expected"
+msgstr "Неочекивана врста за „groups“, очекиван је низ"
+
+#: transaction/transaction_sr.cpp:145
+msgid "Missing object key \"id\" in a group"
+msgstr "Недостаје кључ објекта „id“ у групи"
+
+#: transaction/transaction_sr.cpp:150
+msgid "Missing object key \"action\" in a group"
+msgstr "Недостаје кључ објекта „action“ у групи"
+
+#: transaction/transaction_sr.cpp:155
+msgid "Missing object key \"reason\" in a group"
+msgstr "Недостаје кључ објекта „reason“ у групи"
+
+#: transaction/transaction_sr.cpp:186
+msgid "Unexpected type of \"rpms\", array expected"
+msgstr "Неочекивана врста за „rpms“, очекиван је низ"
+
+#: transaction/transaction_sr.cpp:202
+#, c++-format
+msgid "Cannot parse NEVRA for rpm \"{}\""
+msgstr "Не могу да обрадим NEVRA за рпм „{}“"
+
+#: transaction/transaction_sr.cpp:210
+msgid "Either \"nevra\" or \"package_path\" object key is required in an rpm"
+msgstr "Кључ објекта „nevra“ или „package_path“ је обавезан у рпм-у"
+
+#: transaction/transaction_sr.cpp:215
+msgid "Missing object key \"action\" in an rpm"
+msgstr "Недостаје кључ објекта „action“ у рпм-у"
+
+#: transaction/transaction_sr.cpp:220
+msgid "Missing object key \"reason\" in an rpm"
+msgstr "Недостаје кључ објекта „reason“ у рпм-у"
+
+#: transaction/transaction_sr.cpp:227
+msgid ""
+"Missing mandatory object key \"group_id\" in an rpm with reason \"Group\" "
+"and action \"Reason Change\""
+msgstr ""
+"Недостаје обавезан кључ објекта „group_id“ у рпм-у са разлогом „Group“ и "
+"радњом „Reason Change“"
+
+#: utils/fs/file.cpp:86
+msgid "cannot open file"
+msgstr "не могу да отворим датотеку"
+
+#: utils/fs/file.cpp:99
+msgid "cannot open file from fd"
+msgstr "не могу да отворим датотеку из описника датотеке (fd)"
+
+#: utils/fs/file.cpp:109
+msgid "cannot close file"
+msgstr "не могу да затворим датотеку"
+
+#: utils/fs/file.cpp:139 utils/fs/file.cpp:168
+msgid "error reading file"
+msgstr "грешка при читању датотеке"
+
+#: utils/fs/file.cpp:154 utils/fs/file.cpp:180
+msgid "error writing file"
+msgstr "грешка при уписивању у датотеку"
+
+#: utils/fs/file.cpp:189
+msgid "error flushing file"
+msgstr "грешка при пражњењу датотеке"
+
+#: utils/fs/file.cpp:198
+msgid "error seeking in file"
+msgstr "грешка при премотавању у датотеци"
+
+#: utils/fs/file.cpp:209
+msgid "error retrieving file position"
+msgstr "грешка при добављању положаја у датотеци"
+
+#: utils/fs/file.cpp:297
+msgid "error reading a line from file"
+msgstr "грешка при читању реда из датотеке"
+
+#: utils/fs/file.cpp:335
+msgid "error retrieving file descriptor"
+msgstr "грешка при добављању описника датотеке"
+
+#: utils/fs/temp.cpp:42
+msgid "cannot create temporary directory"
+msgstr "не могу да направим привремени директоријум"
+
+#: utils/fs/temp.cpp:89
+msgid "cannot create temporary file"
+msgstr "не могу да направим привремену датотеку"
+
+#: utils/fs/temp.cpp:142
+msgid "cannot close temporary file"
+msgstr "не могу да затворим привремену датотеку"
+
+#: utils/iniparser.cpp:126
+#, c++-format
+msgid "Missing ']' on line {}"
+msgstr "Недостаје „]“ у {}. реду"
+
+#: utils/iniparser.cpp:129
+#, c++-format
+msgid "Empty section name on line {}"
+msgstr "Празан назив одељка у {}. реду"
+
+#: utils/iniparser.cpp:137
+#, c++-format
+msgid "Text after section on line {}"
+msgstr "Текст након одељка у {}. реду"
+
+#: utils/iniparser.cpp:147
+#, c++-format
+msgid "Missing section header on line {}"
+msgstr "Недостаје заглавље одељка у {}. реду"
+
+#: utils/iniparser.cpp:152
+#, c++-format
+msgid "Illegal continuation line on line {}"
+msgstr "Недозвољен наставак реда у {}. реду"
+
+#: utils/iniparser.cpp:159
+#, c++-format
+msgid "Missing option name on line {}"
+msgstr "Недостаје назив опције у {}. реду"
+
+#: utils/iniparser.cpp:163
+#, c++-format
+msgid "Missing '=' on line {}"
+msgstr "Недостаје „=“ у {}. реду"
+
+#. returns localized message, problem with later translation
+#: utils/library.cpp:34
+#, c++-format
+msgid "Cannot load shared library \"{}\": {}"
+msgstr "Не могу да учитам дељену библиотеку „{}“: {}"
+
+#: utils/library.cpp:48
+#, c++-format
+msgid "Cannot obtain address of symbol \"{}\": {}"
+msgstr "Не могу да добијем адресу симбола „{}“: {}"
+
+#: utils/locale.cpp:57
+#, c++-format
+msgid "Cannot set the locale \"{}\": {}"
+msgstr "Не могу да поставим локалитет „{}“: {}"
+
+#: utils/locker.cpp:45
+#, c++-format
+msgid "Failed to open lock file \"{}\""
+msgstr "Нисам успео да отворим датотеку закључавања „{}“"
+
+#: utils/locker.cpp:60
+#, c++-format
+msgid "Failed to obtain lock \"{}\""
+msgstr "Нисам успео да добијем закључавање „{}“"
+
+#: utils/locker.cpp:70
+#, c++-format
+msgid "Failed to close lock file \"{}\""
+msgstr "Нисам успео да затворим датотеку закључавања „{}“"
+
+#: utils/locker.cpp:73
+#, c++-format
+msgid "Failed to delete lock file \"{}\""
+msgstr "Нисам успео да обришем датотеку закључавања „{}“"
+
+#: utils/sqlite3/sqlite3.cpp:29
+#, c++-format
+msgid "SQL statement compilation failed: \"{}\""
+msgstr "Није успело превођење SQL наредбе: „{}“"
+
+#: utils/sqlite3/sqlite3.cpp:31
+#, c++-format
+msgid "Binding integer value to SQL statement failed: \"{}\""
+msgstr "Није успело увезивање целобројне вредности са SQL наредбом: „{}“"
+
+#: utils/sqlite3/sqlite3.cpp:33
+#, c++-format
+msgid "Binding integer64 value to SQL statement failed: \"{}\""
+msgstr "Није успело увезивање integer64 вредности са SQL наредбом: „{}“"
+
+#: utils/sqlite3/sqlite3.cpp:35
+#, c++-format
+msgid "Binding unsigned integer32 value to SQL statement failed: \"{}\""
+msgstr ""
+"Није успело увезивање неозначене integer32 вредности са SQL наредбом: „{}“"
+
+#: utils/sqlite3/sqlite3.cpp:37
+#, c++-format
+msgid "Binding double value to SQL statement failed: \"{}\""
+msgstr "Није успело увезивање double вредности са SQL наредбом: „{}“"
+
+#: utils/sqlite3/sqlite3.cpp:39
+#, c++-format
+msgid "Binding bool value to SQL statement failed: \"{}\""
+msgstr "Није успело увезивање логичке вредности са SQL наредбом: „{}“"
+
+#: utils/sqlite3/sqlite3.cpp:40
+#, c++-format
+msgid "Binding text to SQL statement failed: \"{}\""
+msgstr "Није успело увезивање текста са SQL наредбом: „{}“"
+
+#: utils/sqlite3/sqlite3.cpp:41
+#, c++-format
+msgid "Binding blob to SQL statement failed: \"{}\""
+msgstr "Није успело увезивање blob-а са SQL наредбом: „{}“"
+
+#: utils/sqlite3/sqlite3.cpp:42
+#, c++-format
+msgid "SQL statement evaluation failed: \"{}\""
+msgstr "Није успела обрада SQL наредбе: „{}“"
+
+#: utils/sqlite3/sqlite3.cpp:44
+msgid "Insufficient memory or result exceed maximum SQLite3 string length"
+msgstr "Недовољно меморије или резултат премашује највећу дужину SQLite3 ниске"
+
+#: utils/sqlite3/sqlite3.cpp:46
+#, c++-format
+msgid "Column \"{}\" not found"
+msgstr "Колона „{}“ није пронађена"
+
+#: utils/sqlite3/sqlite3.cpp:48
+#, c++-format
+msgid "SQL statement execution failed: \"{}\""
+msgstr "Није успело извршавање SQL наредбе: \"{}\""
+
+#: utils/sqlite3/sqlite3.cpp:68
+#, c++-format
+msgid "Failed to open database \"{}\""
+msgstr "Није успело отварање базе података \"{}\""
+
+#: utils/sqlite3/sqlite3.cpp:105
+#, c++-format
+msgid "Failed to close database \"{}\""
+msgstr "Није успело затварање базе података \"{}\""
+
+#: utils/sqlite3/sqlite3.cpp:117 utils/sqlite3/sqlite3.cpp:143
+#, c++-format
+msgid "Failed to open backup database \"{}\""
+msgstr "Није успело отварање резервне базе података \"{}\""
+
+#: utils/sqlite3/sqlite3.cpp:132
+#, c++-format
+msgid "Failed to backup database \"{}\" into \"{}\""
+msgstr "Није успело прављење резервне копије базе података \"{}\" у \"{}\""
+
+#: utils/sqlite3/sqlite3.cpp:158
+#, c++-format
+msgid "Failed to restore database \"{}\""
+msgstr "Није успело враћање базе података \"{}\""
+
+#: utils/system.cpp:34
+msgid "failed to read rpm config files"
+msgstr "није успело читање rpm датотека подешавања"
+
+#: utils/system.cpp:52
+msgid "Failed to execute uname()"
+msgstr "Није успело извршавање функције uname()"

@@ -1,0 +1,464 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# "Марко Костић (Marko Kostić)" <marko.m.kostic@gmail.com>, 2026.
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-07-26 03:48+0000\n"
+"PO-Revision-Date: 2026-04-22 02:28+0000\n"
+"Last-Translator: \"Марко Костић (Marko Kostić)\" <marko.m.kostic@gmail.com>\n"
+"Language-Team: Serbian <https://translate.fedoraproject.org/projects/dnf5/"
+"libdnf5-cli/sr/>\n"
+"Language: sr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"X-Generator: Weblate 5.17\n"
+
+#: argument_parser.cpp:68
+#, c++-format
+msgid "Misconfigured alias \"{}\": cannot convert \"{}\" to a number"
+msgstr "Лоше подешен псеудоним „{}“: не могу да претворим „{}“ у број"
+
+#: argument_parser.cpp:76
+#, c++-format
+msgid "Misconfigured alias \"{}\": index \"{}\" out of range"
+msgstr "Лоше подешен псеудоним „{}“: индекс „{}“ је ван опсега"
+
+#: argument_parser.cpp:98
+#, c++-format
+msgid "\"{}\" not allowed together with named argument \"{}\""
+msgstr "„{}“ није дозвољено заједно са именованим аргументом „{}“"
+
+#: argument_parser.cpp:100
+#, c++-format
+msgid "\"{}\" not allowed in command \"{}\""
+msgstr "„{}“ није дозвољено у наредби „{}“"
+
+#: argument_parser.cpp:102
+#, c++-format
+msgid "\"{}\" not allowed together with positional argument \"{}\""
+msgstr "„{}“ није дозвољено заједно са позиционим аргументом „{}“"
+
+#: argument_parser.cpp:147
+#, c++-format
+msgid "Argument id \"{}\" already registered in group \"{}\""
+msgstr "ИД аргумента „{}“ је већ регистрован у групи „{}“"
+
+#: argument_parser.cpp:274
+#, c++-format
+msgid "Invalid character '.' in argument id \"{}\""
+msgstr "Неисправан знак „.“ у ид-у аргумента „{}“"
+
+#: argument_parser.cpp:382 argument_parser.cpp:387
+#, c++-format
+msgid "Too few values for positional argument \"{}\""
+msgstr "Премало вредности за позициони аргумент „{}“"
+
+#: argument_parser.cpp:548
+#, c++-format
+msgid "Missing value for named argument \"--{}\""
+msgstr "Недостаје вредност за именовани аргумент „--{}“"
+
+#: argument_parser.cpp:556
+#, c++-format
+msgid "Unexpected value for named argument \"--{}\""
+msgstr "Неочекивана вредност за именовани аргумент „--{}“"
+
+#: argument_parser.cpp:598
+#, c++-format
+msgid "Missing value for named argument \"-{}\""
+msgstr "Недостаје вредност за именовани аргумент „-{}“"
+
+#. print usage
+#: argument_parser.cpp:694
+msgid "Usage:"
+msgstr "Начин коришћења:"
+
+#: argument_parser.cpp:702
+msgid "Description:"
+msgstr "Опис:"
+
+#: argument_parser.cpp:979
+#, c++-format
+msgid "Command id \"{}\" already registered for command \"{}\""
+msgstr "ИД наредбе „{}“ је већ регистрован за наредбу „{}“"
+
+#: argument_parser.cpp:990
+#, c++-format
+msgid "Named argument id \"{}\" already registered for command \"{}\""
+msgstr "ИД именованог аргумента „{}“ је већ регистрован за наредбу „{}“"
+
+#: argument_parser.cpp:1000
+#, c++-format
+msgid "Positional argument id \"{}\" already registered for command \"{}\""
+msgstr "ИД позиционог аргумента „{}“ је већ регистрован за наредбу „{}“"
+
+#: argument_parser.cpp:1010
+#, c++-format
+msgid "Group id \"{}\" already registered for command \"{}\""
+msgstr "ИД групе „{}“ је већ регистрован за наредбу „{}“"
+
+#: argument_parser.cpp:1037
+#, c++-format
+msgid "Command id \"{}\" does not contain subcommand with id \"{}\""
+msgstr "ИД наредбе „{}“ не садржи поднаредбу са ИД-ом „{}“"
+
+#: argument_parser.cpp:1045
+#, c++-format
+msgid "Command id \"{}\" does not contain named argument with id \"{}\""
+msgstr "ИД наредбе „{}“ не садржи именовани аргумент са ИД-ом „{}“"
+
+#: argument_parser.cpp:1053
+#, c++-format
+msgid "Command id \"{}\" does not contain positional argument with id \"{}\""
+msgstr "ИД наредбе „{}“ не садржи позициони аргумент са ИД-ом „{}“"
+
+#: argument_parser.cpp:1060
+#, c++-format
+msgid "Command id \"{}\" does not contain group with id \"{}\""
+msgstr "ИД наредбе „{}“ не садржи групу са ИД-ом „{}“"
+
+#: argument_parser.cpp:1177 argument_parser.cpp:1388
+#, c++-format
+msgid "Unknown argument \"{}\" for command \"{}\""
+msgstr "Непознат аргумент „{}“ за наредбу „{}“"
+
+#: argument_parser.cpp:1192 argument_parser.cpp:1403
+#, c++-format
+msgid "Missing positional argument \"{}\" for command \"{}\""
+msgstr "Недостаје позициони аргумент „{}“ за наредбу „{}“"
+
+#: argument_parser.cpp:1274
+#, c++-format
+msgid "Missing value for command alias \"{}\""
+msgstr "Недостаје вредност за псеудоним наредбе „{}“"
+
+#: argument_parser.cpp:1610
+#, c++-format
+msgid "Named argument with path id \"{}\" not found"
+msgstr "Није пронађен именовани аргумент са иб-ом путање „{}“"
+
+#: argument_parser.cpp:1620
+#, c++-format
+msgid "Positional argument with path id \"{}\" not found"
+msgstr "Није пронађен позициони аргумент са иб-ом путање „{}“"
+
+#: exception.cpp:30
+msgid "Operation aborted by the user."
+msgstr "Корисник је прекинуо радњу."
+
+#: exception.cpp:33
+msgid "Failed to resolve the transaction"
+msgstr "Није успело разрешавање преноса"
+
+#: output/moduleinfo.cpp:36
+msgid "Hint: [d]efault, [e]nabled, [x]disabled, [i]nstalled, [a]ctive"
+msgstr ""
+"Савет: [d]подразумевано, [e]омогућено, [x]онемогућено, [i]нсталирано, "
+"[a]ктивно"
+
+#: output/modulelist.cpp:39
+msgid "Hint: [d]efault, [e]nabled, [x]disabled, [i]nstalled"
+msgstr "Савет: [d]подразумевано, [e]омогућено, [x]онемогућено, [i]нсталирано"
+
+#. Note for translators: This is a right-aligned column separator in
+#. a package properties table as in "Name    : bash".
+#: output/packageinfo.cpp:57
+msgid " : "
+msgstr " : "
+
+#. Add package
+#: output/packageinfo.cpp:63
+msgid "Name"
+msgstr "Назив"
+
+#: output/packageinfo.cpp:68
+msgid "Epoch"
+msgstr "Епоха"
+
+#: output/packageinfo.cpp:69 output/transaction_table.cpp:289
+msgid "Version"
+msgstr "Издање"
+
+#: output/packageinfo.cpp:70
+msgid "Release"
+msgstr "Објава"
+
+#: output/packageinfo.cpp:71
+msgid "Architecture"
+msgstr "Архитектура"
+
+#: output/packageinfo.cpp:75
+msgid "Obsoletes"
+msgstr "Застарева"
+
+#: output/packageinfo.cpp:85
+msgid "Download size"
+msgstr "За преузимање"
+
+#: output/packageinfo.cpp:89
+msgid "Installed size"
+msgstr "Величина инсталираног"
+
+#: output/packageinfo.cpp:91
+msgid "Source"
+msgstr "Извор"
+
+#: output/packageinfo.cpp:94
+msgid "From repository"
+msgstr "Из ризнице"
+
+#: output/packageinfo.cpp:96 output/transaction_table.cpp:295
+msgid "Repository"
+msgstr "Ризница"
+
+#: output/packageinfo.cpp:98
+msgid "Summary"
+msgstr "Сажетак"
+
+#: output/packageinfo.cpp:99
+msgid "URL"
+msgstr "Адреса"
+
+#: output/packageinfo.cpp:100
+msgid "License"
+msgstr "Лиценца"
+
+#: output/packageinfo.cpp:104
+msgid "Description"
+msgstr "Опис"
+
+#: output/packageinfo.cpp:109
+msgid "Vendor"
+msgstr "Произвођач"
+
+#: output/search.cpp:45
+msgid " (exact)"
+msgstr " (тачно)"
+
+#: output/search.cpp:90
+msgid "No matches found."
+msgstr "Није пронађено ниједно поклапање."
+
+#: output/search.cpp:101
+msgid "Matched fields: "
+msgstr "Поклопљена поља: "
+
+#: output/transaction_table.cpp:127
+msgid "Transaction Summary:\n"
+msgstr "Сажетак преноса:\n"
+
+#. Keep the replaceble number aligned across all messages.
+#: output/transaction_table.cpp:132
+#, c++-format
+msgid " Installing:      {:4} package\n"
+msgid_plural " Installing:      {:4} packages\n"
+msgstr[0] " Инсталирам:      {:4} пакет\n"
+msgstr[1] " Инсталирам:      {:4} пакета\n"
+msgstr[2] " Инсталирам:      {:4} пакета\n"
+
+#. Keep the replaceble number aligned across all messages.
+#: output/transaction_table.cpp:141
+#, c++-format
+msgid " Reinstalling:    {:4} package\n"
+msgid_plural " Reinstalling:    {:4} packages\n"
+msgstr[0] " Поново инст.:    {:4} пакет\n"
+msgstr[1] " Поново инст.:    {:4} пакета\n"
+msgstr[2] " Поново инст.:    {:4} пакета\n"
+
+#. Keep the replaceble number aligned across all messages.
+#: output/transaction_table.cpp:150
+#, c++-format
+msgid " Upgrading:       {:4} package\n"
+msgid_plural " Upgrading:       {:4} packages\n"
+msgstr[0] " Надограђујем:    {:4} пакет\n"
+msgstr[1] " Надограђујем:    {:4} пакета\n"
+msgstr[2] " Надограђујем:    {:4} пакета\n"
+
+#. Keep the replaceble number aligned across all messages.
+#: output/transaction_table.cpp:159
+#, c++-format
+msgid " Replacing:       {:4} package\n"
+msgid_plural " Replacing:       {:4} packages\n"
+msgstr[0] " Замењујем:       {:4} пакет\n"
+msgstr[1] " Замењујем:       {:4} пакета\n"
+msgstr[2] " Замењујем:       {:4} пакета\n"
+
+#. Keep the replaceble number aligned across all messages.
+#: output/transaction_table.cpp:168
+#, c++-format
+msgid " Removing:        {:4} package\n"
+msgid_plural " Removing:        {:4} packages\n"
+msgstr[0] " Уклањам:         {:4} пакет\n"
+msgstr[1] " Уклањам:         {:4} пакета\n"
+msgstr[2] " Уклањам:         {:4} пакета\n"
+
+#. Keep the replaceble number aligned across all messages.
+#: output/transaction_table.cpp:177
+#, c++-format
+msgid " Downgrading:     {:4} package\n"
+msgid_plural " Downgrading:     {:4} packages\n"
+msgstr[0] " Уназађујем:      {:4} пакет\n"
+msgstr[1] " Уназађујем:      {:4} пакета\n"
+msgstr[2] " Уназађујем:      {:4} пакета\n"
+
+#. Keep the replaceble number aligned across all messages.
+#: output/transaction_table.cpp:186
+#, c++-format
+msgid " Changing reason: {:4} package\n"
+msgid_plural " Changing reason: {:4} packages\n"
+msgstr[0] " Промена разлога: {:4} пакет\n"
+msgstr[1] " Промена разлога: {:4} пакета\n"
+msgstr[2] " Промена разлога: {:4} пакета\n"
+
+#. Keep the replaceble number aligned across all messages.
+#: output/transaction_table.cpp:195
+#, c++-format
+msgid " Skipping:        {:4} package\n"
+msgid_plural " Skipping:        {:4} packages\n"
+msgstr[0] " Прескачем:        {:4} пакет\n"
+msgstr[1] " Прескачем:        {:4} пакета\n"
+msgstr[2] " Прескачем:        {:4} пакета\n"
+
+#: output/transaction_table.cpp:277
+msgid "Package"
+msgstr "Пакет"
+
+#: output/transaction_table.cpp:283
+msgid "Arch"
+msgstr "Архит."
+
+#: output/transaction_table.cpp:301
+msgid "Size"
+msgstr "Величина"
+
+#: output/transaction_table.cpp:357 output/transaction_table.cpp:451
+#, c++-format
+msgid "{} -> {}"
+msgstr "{} -> {}"
+
+#: output/transaction_table.cpp:373
+#, c++-format
+msgid "replacing {}"
+msgstr "замењујем {}"
+
+#: output/transaction_table.cpp:409 output/transaction_table.cpp:426
+msgid " <name-unset>"
+msgstr " <непостављен-назив>"
+
+#: output/transaction_table.cpp:457
+msgid "replacing "
+msgstr "замењујем "
+
+#: output/transaction_table.cpp:470
+msgid "Skipping packages with conflicts:"
+msgstr "Прескачем пакете са сукобима:"
+
+#: output/transaction_table.cpp:472
+msgid "Skipping packages with broken dependencies:"
+msgstr "Прескачем пакете са оштећеним зависностима:"
+
+#: output/transaction_table.cpp:533
+msgid "Installing dependencies:"
+msgstr "Инсталирам зависности:"
+
+#: output/transaction_table.cpp:535
+msgid "Installing weak dependencies:"
+msgstr "Инсталирам слабе зависности:"
+
+#: output/transaction_table.cpp:537
+msgid "Installing group/module packages:"
+msgstr "Инсталирам пакете групе/модула:"
+
+#: output/transaction_table.cpp:539
+msgid "Installing:"
+msgstr "Инсталирам:"
+
+#: output/transaction_table.cpp:543
+msgid "Upgrading:"
+msgstr "Надограђујем:"
+
+#: output/transaction_table.cpp:546
+msgid "Downgrading:"
+msgstr "Уназађујем:"
+
+#: output/transaction_table.cpp:549
+msgid "Reinstalling:"
+msgstr "Поново инсталирам:"
+
+#: output/transaction_table.cpp:553
+msgid "Removing dependent packages:"
+msgstr "Уклањам зависне пакете:"
+
+#: output/transaction_table.cpp:555
+msgid "Removing unused dependencies:"
+msgstr "Уклањам некоришћене зависности:"
+
+#: output/transaction_table.cpp:557
+msgid "Removing:"
+msgstr "Уклањање:"
+
+#: output/transaction_table.cpp:561
+msgid "Changing reason:"
+msgstr "Промена разлога:"
+
+#: output/transaction_table.cpp:593
+msgid "Installing groups dependencies:"
+msgstr "Инсталирање зависности група:"
+
+#: output/transaction_table.cpp:595
+msgid "Installing groups:"
+msgstr "Инсталирање група:"
+
+#: output/transaction_table.cpp:599
+msgid "Removing groups:"
+msgstr "Уклањање група:"
+
+#: output/transaction_table.cpp:602
+msgid "Upgrading groups:"
+msgstr "Надограђивање група:"
+
+#: output/transaction_table.cpp:629
+msgid "Installing environmental groups:"
+msgstr "Инсталирање група окружења:"
+
+#: output/transaction_table.cpp:632
+msgid "Removing environmental groups:"
+msgstr "Уклањање група окружења:"
+
+#: output/transaction_table.cpp:635
+msgid "Upgrading environmental groups:"
+msgstr "Надограђивање група окружења:"
+
+#: output/transaction_table.cpp:662
+msgid "Enabling module streams:"
+msgstr "Омогућавање токова модула:"
+
+#: output/transaction_table.cpp:665
+msgid "Disabling modules:"
+msgstr "Онемогућавање модула:"
+
+#: output/transaction_table.cpp:668
+msgid "Resetting modules:"
+msgstr "Враћање модула:"
+
+#: output/transaction_table.cpp:671
+msgid "Switching module streams:"
+msgstr "Промена токова модула:"
+
+#: output/transaction_table.cpp:745
+msgid "Nothing to do."
+msgstr "Ништа није потребно урадити."
+
+#: progressbar/multi_progress_bar.cpp:36
+msgid "Total"
+msgstr "Укупно"
+
+#: session.cpp:149
+msgid "Missing command"
+msgstr "Недостаје наредба"
