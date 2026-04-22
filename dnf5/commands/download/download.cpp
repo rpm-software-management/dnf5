@@ -27,8 +27,10 @@
 #include <libdnf5/rpm/package.hpp>
 #include <libdnf5/rpm/package_query.hpp>
 #include <libdnf5/rpm/package_set.hpp>
+#include <libdnf5/rpm/rpm_signature.hpp>
 #include <libdnf5/utils/bgettext/bgettext-mark-domain.h>
 
+#include <filesystem>
 #include <algorithm>
 #include <iostream>
 #include <map>
@@ -170,7 +172,6 @@ void DownloadCommand::set_argument_parser() {
             arch_option.emplace(value);
             return true;
         });
-
 
     cmd.register_named_arg(arch);
     cmd.register_named_arg(resolve);
@@ -415,6 +416,36 @@ void DownloadCommand::run() {
         std::cout << "Downloading Packages:" << std::endl;
     }
     downloader.download();
+
+    // gpg verification
+    bool all_ok = true;
+    std::error_code ec;
+    libdnf5::rpm::RpmSignature rpm_signature(ctx.get_base());
+
+    for (const auto & [nevra, pkg] : packages_to_download) {
+        if (!pkg.is_pkg_gpgcheck_enabled()) {
+            continue;
+        }
+
+        auto pkg_path = pkg.get_package_path();
+        if (std::filesystem::exists(pkg_path, ec)) {
+            auto check_result = rpm_signature.check_package_signature(pkg_path);
+            if (check_result != libdnf5::rpm::RpmSignature::CheckResult::OK) {
+                std::cerr << libdnf5::utils::sformat(
+                    _("OpenPGP verification FAILED for '{}': {}"),
+                    std::filesystem::path(pkg_path).filename().c_str(),
+                    rpm_signature.check_result_to_string(check_result))
+                          << std::endl;
+                std::filesystem::remove(pkg_path, ec);
+                all_ok = false;
+            }
+        }
+    }
+
+    if (!all_ok) {
+        throw libdnf5::cli::CommandExitError(
+            1, M_("OpenPGP signature verification failed for some packages."));
+    }
 }
 
 
