@@ -1,3 +1,16 @@
+# 5.4.2.0
+
+- Update translations from weblate
+- dnf5daemon: Use read_transaction_state helper in existing methods
+- dnf5daemon: Add schedule_for_next_boot method to Offline interface
+- dnf5daemon: Reset offline transaction status to download-complete on cancel
+- refactor: pass by const reference
+- refactor(transaction): pass by const reference
+- refactor(plugin_info_impl): pass by const reference
+- refactor: pass by const reference
+- docs(GoalJobSettings): document set_from_repo_ids and set_to_repo_ids
+- python libdnf5 plugins: Export libpython symbols globally
+
 # 5.4.1.0
 
 - Update translations from weblate
