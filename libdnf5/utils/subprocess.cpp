@@ -231,7 +231,7 @@ CompletedProcess run(const std::string & command, const std::vector<std::string>
                 throw SystemError(errno, M_("poll failed during subprocess I/O"));
             }
 
-            if (fds[STDOUT_FD].revents & POLLIN) {
+            if (fds[STDOUT_FD].revents & (POLLIN | POLLHUP)) {
                 const ssize_t bytes_read = read(fds[STDOUT_FD].fd, buffer, sizeof(buffer));
                 if (bytes_read > 0) {
                     stdout_bytes.insert(
@@ -245,7 +245,7 @@ CompletedProcess run(const std::string & command, const std::vector<std::string>
                 }
             }
 
-            if (fds[STDERR_FD].revents & POLLIN) {
+            if (fds[STDERR_FD].revents & (POLLIN | POLLHUP)) {
                 const ssize_t bytes_read = read(fds[STDERR_FD].fd, buffer, sizeof(buffer));
                 if (bytes_read > 0) {
                     stderr_bytes.insert(
@@ -259,11 +259,10 @@ CompletedProcess run(const std::string & command, const std::vector<std::string>
                 }
             }
 
-            // Check for errors or hangup on any descriptor
-            if (fds[STDOUT_FD].revents & (POLLERR | POLLHUP)) {
+            if (fds[STDOUT_FD].revents & POLLERR) {
                 fds[STDOUT_FD].fd = -1;
             }
-            if (fds[STDERR_FD].revents & (POLLERR | POLLHUP)) {
+            if (fds[STDERR_FD].revents & POLLERR) {
                 fds[STDERR_FD].fd = -1;
             }
         }
