@@ -92,7 +92,7 @@ void UtilsSubprocessTest::test_binary_data() {
     // Test that binary data (non-text) is captured correctly
     // Use printf to output bytes including null bytes and non-printable characters
     const auto result = libdnf5::utils::subprocess::run(
-        "/usr/bin/env", {"/usr/bin/env", "sh", "-c", "printf '\\x00\\x01\\x02\\xff\\xfe'; printf '\\x03\\x04' >&2"});
+        "/usr/bin/env", {"/usr/bin/env", "sh", "-c", "printf '\\000\\001\\002\\377\\376'; printf '\\003\\004' >&2"});
 
     CPPUNIT_ASSERT_EQUAL(0, result.returncode);
 
