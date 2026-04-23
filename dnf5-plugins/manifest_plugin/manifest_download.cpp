@@ -81,7 +81,6 @@ void ManifestDownloadCommand::download_packages(
     auto & ctx = get_context();
 
     auto base = create_base_for_arch(arch);
-    const auto & manifest_path_base = std::filesystem::path{manifest_path_option->get_value()}.stem();
     base->get_config().get_destdir_option().set(libdnf5::Option::Priority::PLUGINDEFAULT, default_destdir);
 
     // Load repositories
