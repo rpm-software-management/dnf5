@@ -73,7 +73,7 @@
 - libdnf5-cli: fix clang-format
 - libdnf5-cli: handle C or POSIX locale gracefully in progressbar width calculation
 - libdnf5-cli: remove unused utils::utf8 module
-- dnf5daemon-server: Fix daemon crash for invalid locale
+- dnf5daemon-server: Fix daemon crash for invalid locale (CVE-2026-3836)
 - subprocess: Bind /dev/null to child stdin
 - test: Test libdnf5::utils::subprocess::run
 - bootc: Handle read-only /usr on non-bootc system
