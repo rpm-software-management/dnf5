@@ -119,6 +119,7 @@ private:
         const std::filesystem::path & default_destdir);
 
     libdnf5::OptionStringList * arch_option{nullptr};
+    libdnf5::OptionBool * per_arch_option{nullptr};
     libdnf5::OptionBool * srpm_option{nullptr};
 
     std::vector<std::string> arches;
