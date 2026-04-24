@@ -29,6 +29,15 @@ void ManifestDownloadCommand::set_argument_parser() {
 
     cmd.set_description(_("Download all packages specified in the manifest file to disk."));
 
+    per_arch_option =
+        dynamic_cast<libdnf5::OptionBool *>(parser.add_init_value(std::make_unique<libdnf5::OptionBool>(false)));
+    auto * per_arch_arg = parser.add_new_named_arg("per-arch");
+    per_arch_arg->set_long_name("per-arch");
+    per_arch_arg->set_description(_("Separate packages by basearch into individual directories"));
+    per_arch_arg->set_const_value("true");
+    per_arch_arg->link_value(per_arch_option);
+    cmd.register_named_arg(per_arch_arg);
+
     arch_option = dynamic_cast<libdnf5::OptionStringList *>(
         parser.add_init_value(std::make_unique<libdnf5::OptionStringList>(std::vector<std::string>())));
     auto * arch_arg = parser.add_new_named_arg("arch");
@@ -107,7 +116,13 @@ void ManifestDownloadCommand::download_packages(
             throw libdnf5::cli::CommandExitError(1, M_("No package {} available."), to_nevra_string(nevra));
         }
         const auto & pkg = *query.begin();
-        downloader.add(*query.begin());
+        const auto & pkg_arch = pkg.get_arch();
+        // If split per arch, download noarch/src packages into separate subdirectories.
+        if (per_arch_option->get_value()) {
+            downloader.add(pkg, default_destdir / ((pkg_arch == "noarch" || pkg_arch == "src") ? pkg_arch : arch));
+        } else {
+            downloader.add(pkg);
+        }
     }
     downloader.download();
 }
