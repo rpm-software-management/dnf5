@@ -43,9 +43,7 @@ public:
 
 
 std::vector<std::unique_ptr<Command>> AutomaticCmdPlugin::create_commands() {
-    std::vector<std::unique_ptr<Command>> commands;
-    commands.push_back(std::make_unique<AutomaticCommand>(get_context()));
-    return commands;
+    return {std::make_unique<AutomaticCommand>(get_context())};
 }
 
 
