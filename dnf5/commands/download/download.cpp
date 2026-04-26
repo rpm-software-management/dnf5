@@ -192,6 +192,7 @@ void DownloadCommand::configure() {
     auto & context = get_context();
 
     std::vector<std::string> pkg_specs;
+    pkg_specs.reserve(patterns_to_download_options->size());
     for (auto & pattern : *patterns_to_download_options) {
         auto option = dynamic_cast<libdnf5::OptionString *>(pattern.get());
         pkg_specs.push_back(option->get_value());
