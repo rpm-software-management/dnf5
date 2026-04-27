@@ -617,32 +617,15 @@ void ConfigRepo::load_from_parser(
     Option::Priority priority) {
     Config::load_from_parser(parser, section, vars, logger, priority);
 
-    // Apply gpgcheck_policy: if gpgcheck was set in this repo section, expand it
-    if (p_impl->gpgcheck.get_priority() >= priority) {
-        const auto gpgcheck_val = p_impl->gpgcheck.get_value();
-        const auto & policy = p_impl->main_config.get_gpgcheck_policy_option().get_value();
-
-        // Check which target options were explicitly set in this section
-        bool pkg_gpgcheck_explicit = false;
-        bool repo_gpgcheck_explicit = false;
-        auto section_iter = parser.get_data().find(section);
-        if (section_iter != parser.get_data().end()) {
-            pkg_gpgcheck_explicit = section_iter->second.find("pkg_gpgcheck") != section_iter->second.end();
-            repo_gpgcheck_explicit = section_iter->second.find("repo_gpgcheck") != section_iter->second.end();
-        }
-
-        // All policies: gpgcheck implies pkg_gpgcheck
-        if (!pkg_gpgcheck_explicit) {
-            p_impl->pkg_gpgcheck.set(priority, gpgcheck_val);
-        }
-
-        // "full" or "all": also set repo_gpgcheck
-        if (policy == "full" || policy == "all") {
-            if (!repo_gpgcheck_explicit) {
-                p_impl->repo_gpgcheck.set(priority, gpgcheck_val);
-            }
-        }
-    }
+    apply_gpgcheck_policy(
+        parser,
+        section,
+        priority,
+        p_impl->gpgcheck.get_priority(),
+        p_impl->gpgcheck.get_value(),
+        p_impl->main_config.get_gpgcheck_policy_option().get_value(),
+        p_impl->pkg_gpgcheck,
+        p_impl->repo_gpgcheck);
 }
 
 }  // namespace libdnf5::repo

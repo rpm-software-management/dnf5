@@ -1375,43 +1375,16 @@ const OptionBool & ConfigMain::get_skip_if_unavailable_option() const {
 
 void ConfigMain::Impl::apply_gpgcheck_policy(
     const ConfigParser & parser, const std::string & section, Option::Priority priority) {
-    // Only apply if gpgcheck was explicitly set in this parsing round
-    if (gpgcheck.get_priority() < priority) {
-        return;
-    }
-
-    const auto gpgcheck_val = gpgcheck.get_value();
-    const auto & policy = gpgcheck_policy.get_value();
-
-    // Check which target options were explicitly set in the config section
-    bool pkg_gpgcheck_explicit = false;
-    bool repo_gpgcheck_explicit = false;
-    bool localpkg_gpgcheck_explicit = false;
-    auto section_iter = parser.get_data().find(section);
-    if (section_iter != parser.get_data().end()) {
-        pkg_gpgcheck_explicit = section_iter->second.find("pkg_gpgcheck") != section_iter->second.end();
-        repo_gpgcheck_explicit = section_iter->second.find("repo_gpgcheck") != section_iter->second.end();
-        localpkg_gpgcheck_explicit = section_iter->second.find("localpkg_gpgcheck") != section_iter->second.end();
-    }
-
-    // All policies: gpgcheck implies pkg_gpgcheck
-    if (!pkg_gpgcheck_explicit) {
-        pkg_gpgcheck.set(priority, gpgcheck_val);
-    }
-
-    // "full" or "all": also set repo_gpgcheck
-    if (policy == "full" || policy == "all") {
-        if (!repo_gpgcheck_explicit) {
-            repo_gpgcheck.set(priority, gpgcheck_val);
-        }
-    }
-
-    // "all": also set localpkg_gpgcheck
-    if (policy == "all") {
-        if (!localpkg_gpgcheck_explicit) {
-            localpkg_gpgcheck.set(priority, gpgcheck_val);
-        }
-    }
+    libdnf5::apply_gpgcheck_policy(
+        parser,
+        section,
+        priority,
+        gpgcheck.get_priority(),
+        gpgcheck.get_value(),
+        gpgcheck_policy.get_value(),
+        pkg_gpgcheck,
+        repo_gpgcheck,
+        &localpkg_gpgcheck);
 }
 
 void ConfigMain::load_from_parser(
