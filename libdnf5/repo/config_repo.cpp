@@ -59,6 +59,7 @@ class ConfigRepo::Impl {
     OptionChild<OptionString> username{main_config.get_username_option()};
     OptionChild<OptionString> password{main_config.get_password_option()};
     OptionChild<OptionStringAppendList> protected_packages{main_config.get_protected_packages_option()};
+    OptionBool gpgcheck{false};
     OptionChild<OptionBool> pkg_gpgcheck{main_config.get_pkg_gpgcheck_option()};
     OptionChild<OptionBool> repo_gpgcheck{main_config.get_repo_gpgcheck_option()};
     OptionChild<OptionBool> enablegroups{main_config.get_enablegroups_option()};
@@ -152,9 +153,8 @@ ConfigRepo::Impl::Impl(Config & owner, ConfigMain & main_config, const std::stri
     owner.opt_binds().add("username", username);
     owner.opt_binds().add("password", password);
     owner.opt_binds().add("protected_packages", protected_packages);
+    owner.opt_binds().add("gpgcheck", gpgcheck);
     owner.opt_binds().add("pkg_gpgcheck", pkg_gpgcheck);
-    // Compatibility alias for pkg_gpgcheck
-    owner.opt_binds().add("gpgcheck", pkg_gpgcheck);
     owner.opt_binds().add("repo_gpgcheck", repo_gpgcheck);
     owner.opt_binds().add("enablegroups", enablegroups);
     owner.opt_binds().add("retries", retries);
@@ -616,6 +616,16 @@ void ConfigRepo::load_from_parser(
     Logger & logger,
     Option::Priority priority) {
     Config::load_from_parser(parser, section, vars, logger, priority);
+
+    apply_gpgcheck_policy(
+        parser,
+        section,
+        priority,
+        p_impl->gpgcheck.get_priority(),
+        p_impl->gpgcheck.get_value(),
+        p_impl->main_config.get_gpgcheck_policy_option().get_value(),
+        p_impl->pkg_gpgcheck,
+        p_impl->repo_gpgcheck);
 }
 
 }  // namespace libdnf5::repo
