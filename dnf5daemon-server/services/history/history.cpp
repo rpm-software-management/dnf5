@@ -88,7 +88,8 @@ sdbus::MethodReply History::recent_changes(sdbus::MethodCall & call) {
     dnfdaemon::KeyValueMap options;
     call >> options;
     // TODO(mblaha): Automatically add "updateinfo" metadata?
-    session.fill_sack();
+    bool interactive = dnfdaemon::key_value_map_get<bool>(options, "interactive", false);
+    session.fill_sack(interactive);
 
     auto upgraded_requested = dnfdaemon::key_value_map_get<bool>(options, "upgraded_packages", true);
     auto downgraded_requested = dnfdaemon::key_value_map_get<bool>(options, "downgraded_packages", true);

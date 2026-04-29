@@ -466,7 +466,8 @@ sdbus::MethodReply Repo::list(sdbus::MethodCall & call) {
     // always return repoid
     repo_attrs.push_back("id");
     if (fill_sack_needed) {
-        session.fill_sack();
+        bool interactive = dnfdaemon::key_value_map_get<bool>(options, "interactive", false);
+        session.fill_sack(interactive);
     }
 
     // prepare repository query filtered by options

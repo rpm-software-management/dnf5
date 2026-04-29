@@ -164,7 +164,8 @@ sdbus::MethodReply Advisory::list(sdbus::MethodCall & call) {
     KeyValueMap options;
     call >> options;
 
-    session.fill_sack();
+    bool interactive = dnfdaemon::key_value_map_get<bool>(options, "interactive", false);
+    session.fill_sack(interactive);
 
     auto base = session.get_base();
     auto advisory_query = advisory_query_from_options(*base, options);

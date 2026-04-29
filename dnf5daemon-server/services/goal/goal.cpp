@@ -199,8 +199,9 @@ sdbus::MethodReply Goal::resolve(sdbus::MethodCall & call) {
     dnfdaemon::KeyValueMap options;
     call >> options;
     bool allow_erasing = dnfdaemon::key_value_map_get<bool>(options, "allow_erasing", false);
+    bool interactive = dnfdaemon::key_value_map_get<bool>(options, "interactive", false);
 
-    session.fill_sack();
+    session.fill_sack(interactive);
 
     auto & goal = session.get_goal();
     goal.set_allow_erasing(allow_erasing);

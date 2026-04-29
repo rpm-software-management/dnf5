@@ -592,7 +592,8 @@ sdbus::MethodReply Rpm::list(sdbus::MethodCall & call) {
     dnfdaemon::KeyValueMap options;
     call >> options;
 
-    session.fill_sack();
+    bool interactive = dnfdaemon::key_value_map_get<bool>(options, "interactive", false);
+    session.fill_sack(interactive);
 
     auto query = filter_packages(options);
 
@@ -620,7 +621,8 @@ void Rpm::list_fd(sdbus::MethodCall & call, const std::string & transfer_id) {
 
     int out_fd = dbus_unix_fd.get();
 
-    session.fill_sack();
+    bool interactive = dnfdaemon::key_value_map_get<bool>(options, "interactive", false);
+    session.fill_sack(interactive);
 
     auto query = filter_packages(options);
 
