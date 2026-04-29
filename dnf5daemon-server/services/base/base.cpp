@@ -114,6 +114,11 @@ void Base::dbus_register() {
                 dnfdaemon::SIGNAL_REPO_KEY_IMPORT_REQUEST,
                 sdbus::Signature{"osasssx"},
                 {"session_object_path", "key_id", "user_ids", "key_fingerprint", "key_url", "timestamp"},
+                {}},
+            sdbus::SignalVTableItem{
+                dnfdaemon::SIGNAL_REPO_KEY_IMPORTED,
+                sdbus::Signature{"osasssx"},
+                {"session_object_path", "key_id", "user_ids", "key_fingerprint", "key_url", "timestamp"},
                 {}})
         .forInterface(dnfdaemon::INTERFACE_BASE);
 #else
@@ -175,6 +180,11 @@ void Base::dbus_register() {
     dbus_object->registerSignal(
         dnfdaemon::INTERFACE_BASE,
         dnfdaemon::SIGNAL_REPO_KEY_IMPORT_REQUEST,
+        "osasssx",
+        {"session_object_path", "key_id", "user_ids", "key_fingerprint", "key_url", "timestamp"});
+    dbus_object->registerSignal(
+        dnfdaemon::INTERFACE_BASE,
+        dnfdaemon::SIGNAL_REPO_KEY_IMPORTED,
         "osasssx",
         {"session_object_path", "key_id", "user_ids", "key_fingerprint", "key_url", "timestamp"});
 #endif

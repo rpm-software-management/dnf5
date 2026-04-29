@@ -87,6 +87,7 @@ public:
     KeyImportRepoCB(Session & session, bool interactive) : DbusCallback(session), interactive(interactive) {}
 
     bool repokey_import(const libdnf5::rpm::KeyInfo & key_info) override;
+    void repokey_imported(const libdnf5::rpm::KeyInfo & key_info) override;
 
 private:
     bool interactive;

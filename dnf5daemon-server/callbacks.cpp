@@ -137,6 +137,18 @@ bool KeyImportRepoCB::repokey_import(const libdnf5::rpm::KeyInfo & key_info) {
     return confirmed;
 }
 
+void KeyImportRepoCB::repokey_imported(const libdnf5::rpm::KeyInfo & key_info) {
+    try {
+        auto signal = create_signal(dnfdaemon::INTERFACE_BASE, dnfdaemon::SIGNAL_REPO_KEY_IMPORTED);
+        signal << key_info.get_short_key_id() << key_info.get_user_ids() << key_info.get_fingerprint()
+               << key_info.get_url() << static_cast<int64_t>(key_info.get_timestamp());
+        dbus_object->emitSignal(signal);
+    } catch (...) {
+        // Ignore errors in informational signal emission
+    }
+}
+
+
 sdbus::Signal DbusTransactionCB::create_signal_pkg(
     const SDBUS_INTERFACE_NAME_TYPE & interface,
     const SDBUS_SIGNAL_NAME_TYPE & signal_name,
