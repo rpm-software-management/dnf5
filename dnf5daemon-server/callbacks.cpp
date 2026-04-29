@@ -110,6 +110,10 @@ int DownloadCB::mirror_failure(void * user_cb_data, const char * msg, const char
 
 
 bool KeyImportRepoCB::repokey_import(const libdnf5::rpm::KeyInfo & key_info) {
+    if (!interactive) {
+        return false;
+    }
+
     bool confirmed;
     try {
         auto signal = create_signal(dnfdaemon::INTERFACE_BASE, dnfdaemon::SIGNAL_REPO_KEY_IMPORT_REQUEST);

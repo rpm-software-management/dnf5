@@ -84,9 +84,12 @@ private:
 
 class KeyImportRepoCB : public DbusCallback, public libdnf5::repo::RepoCallbacks {
 public:
-    KeyImportRepoCB(Session & session) : DbusCallback(session) {}
+    KeyImportRepoCB(Session & session, bool interactive) : DbusCallback(session), interactive(interactive) {}
 
     bool repokey_import(const libdnf5::rpm::KeyInfo & key_info) override;
+
+private:
+    bool interactive;
 };
 
 
