@@ -24,8 +24,23 @@
 
 namespace libdnf5::utils::bootc {
 
+/// @brief Call `bootc status` to check whether the system is deployed via
+/// bootc
+///
+/// Per bootc documentation, "bootc is not the only image based system; there
+/// are many. Detect bootc specifically via `bootc status`." Works on both
+/// OSTree and composefs-backed systems.
+///
+/// @throws libdnf5::RuntimeError if the bootc command is available but cannot
+/// be called, or it exits with non-zero code, or it outputs invalid JSON
+/// @returns true if the bootc command is available and `bootc status --json`
+/// has a .spec.image. Otherwise, returns false.
 LIBDNF_API bool is_bootc_system();
 
+/// @brief Check whether /usr is mounted read/write or read-only
+/// @throws libdnf5::SystemError if fails to stat /usr
+/// @returns false if the filesystem backing /usr is mounted read-only, true
+/// otherwise
 LIBDNF_API bool is_writable();
 
 }  // namespace libdnf5::utils::bootc
