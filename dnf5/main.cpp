@@ -57,6 +57,7 @@
 #include "download_callbacks.hpp"
 #include "plugins.hpp"
 #include "signal_handlers.hpp"
+#include "utils/auth.hpp"
 
 #include <fcntl.h>
 #include <fmt/format.h>
@@ -1521,26 +1522,29 @@ int main(int argc, char * argv[]) try {
                 dump_repository_configuration(context, repo_id_list);
             }
 
+            std::optional<bool> is_bootc_system;
             if (context.p_impl->cmd_requires_privileges()) {
                 const auto & installroot = base.get_config().get_installroot_option().get_value();
 
-                if (installroot == "/" && !libdnf5::utils::bootc::is_writable()) {
-                    if (libdnf5::utils::bootc::is_bootc_system()) {
-                        throw libdnf5::cli::ReadOnlySystemError(
-                            M_("Error: this bootc system is configured to be read-only. For more information, run "
-                               "`bootc --help`."));
-                    }
-                    throw libdnf5::cli::ReadOnlySystemError(
-                        M_("Error: /usr is configured to be read-only. You may be running an image-based or immutable "
-                           "operating system. For more information, refer to your "
-                           "distribution's documentation."));
-                }
+                const auto & insufficient_privileges_error = libdnf5::cli::InsufficientPrivilegesError(
+                    M_("The requested operation requires superuser privileges. Please log in as a user with elevated "
+                       "rights, or use the \"--assumeno\" or \"--downloadonly\" options to run the command without "
+                       "modifying the system state."));
 
-                if (!user_has_privileges(context)) {
-                    throw libdnf5::cli::InsufficientPrivilegesError(M_(
-                        "The requested operation requires superuser privileges. Please log in as a user with elevated "
-                        "rights, or use the \"--assumeno\" or \"--downloadonly\" options to run the command without "
-                        "modifying the system state."));
+                if (installroot == "/" && !libdnf5::utils::bootc::is_writable()) {
+                    // is_bootc_system calls `bootc status` which errors unless run by UID 0.
+                    if (!libdnf5::utils::am_i_root()) {
+                        throw insufficient_privileges_error;
+                    }
+                    is_bootc_system = libdnf5::utils::bootc::is_bootc_system();
+                    if (!is_bootc_system) {
+                        throw libdnf5::cli::ReadOnlySystemError(
+                            M_("Error: /usr is configured to be read-only. You may be running an image-based or "
+                               "immutable operating system. For more information, refer to your "
+                               "distribution's documentation."));
+                    }
+                } else if (!user_has_privileges(context)) {
+                    throw insufficient_privileges_error;
                 }
             }
 
