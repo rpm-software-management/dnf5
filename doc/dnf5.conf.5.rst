@@ -466,6 +466,24 @@ repository configuration file should aside from repo ID consists of baseurl, met
 
     Default: ``/var/lib/dnf``.
 
+.. _persistence_options-label:
+
+``persistence``
+    :ref:`string <string-label>`
+
+    Whether changes should persist across system reboots.
+    Passing ``--transient`` (see :ref:`transient option <transient_option-label>`) will override this setting to ``transient``.
+    Valid values are:
+
+    * ``auto``: Changes will persist across reboots, unless the target is a running bootc system
+      and the system is already in an unlocked state (i.e. ``/usr`` is writable).
+    * ``transient``: Changes will be lost on the next reboot. Only applicable on bootc systems.
+      Beware that changes to ``/etc`` and ``/var`` will persist, depending on the configuration
+      of your bootc system. See also https://bootc.dev/bootc//man/bootc-usr-overlay.8.html.
+    * ``persist``: Changes will persist across reboots.
+
+    Default: ``auto``.
+
 .. _pluginconfpath_options-label:
 
 ``pluginconfpath``
