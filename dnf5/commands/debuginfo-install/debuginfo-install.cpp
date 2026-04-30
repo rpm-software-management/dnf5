@@ -58,6 +58,7 @@ void DebuginfoInstallCommand::set_argument_parser() {
     cmd.register_positional_arg(patterns_arg);
     create_offline_option(*this);
     create_store_option(*this);
+    create_transient_option(*this);
 }
 
 void DebuginfoInstallCommand::configure() {

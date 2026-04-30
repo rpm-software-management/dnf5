@@ -39,6 +39,7 @@ void MarkCommand::set_argument_parser() {
     auto skip_unavailable = std::make_unique<SkipUnavailableOption>(*this);
     create_offline_option(*this);
     create_store_option(*this);
+    create_transient_option(*this);
 }
 
 void MarkCommand::register_subcommands() {

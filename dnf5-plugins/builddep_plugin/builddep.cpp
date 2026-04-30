@@ -127,6 +127,7 @@ void BuildDepCommand::set_argument_parser() {
     create_from_vendor_option(*this, from_vendors, true);
 
     create_store_option(*this);
+    create_transient_option(*this);
     create_offline_option(*this);
 
     auto spec_arg = parser.add_new_named_arg("spec");
