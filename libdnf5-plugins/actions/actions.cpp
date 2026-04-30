@@ -943,7 +943,7 @@ void Actions::process_command_output_line(const CommandToRun & command, std::str
         process_action_error(
             *base.get_logger(),
             command,
-            M_("Synax error: Missing equal sign (=) in action output line: {}"),
+            M_("Syntax error: Missing equal sign (=) in action output line: {}"),
             std::string(line));
         return;
     }

@@ -448,7 +448,7 @@ ConfigMain::Impl::Impl(Config & owner) : owner(owner) {
     owner.opt_binds().add("username", username);
     owner.opt_binds().add("password", password);
     owner.opt_binds().add("pkg_gpgcheck", pkg_gpgcheck);
-    // Compatiblity alias for pkg_gpgcheck
+    // Compatibility alias for pkg_gpgcheck
     owner.opt_binds().add("gpgcheck", pkg_gpgcheck);
     owner.opt_binds().add("repo_gpgcheck", repo_gpgcheck);
     owner.opt_binds().add("enabled", enabled);

@@ -548,7 +548,7 @@ void Goal::Impl::filter_candidates_for_advisory_upgrade(
     candidates.filter_priority();
 
     // Since we want to satisfy all advisory packages we can keep just the latest
-    // (all lower EVR adv pkgs are satistified by the latests)
+    // (all lower EVR adv pkgs are satisfied by the latests)
     // We also want to skip already resolved advisories.
     candidates.filter_latest_unresolved_advisories(advisories, installed, libdnf5::sack::QueryCmp::GTE);
 }
@@ -898,7 +898,7 @@ GoalProblem Goal::Impl::add_replay_to_goal(
             // - There is another versions installed for this package (name-arch).
             // - The package isn't installonly.
             // - The transaction doesn't contain an outbound action for this name-arch.
-            //   This could happend during transaction reverting because upgrade/downgrade/reinstall (and obsoleting) actions are reverted as a REMOVE.
+            //   This could happen during transaction reverting because upgrade/downgrade/reinstall (and obsoleting) actions are reverted as a REMOVE.
             //   For example upgrade transaction: [a-2 Upgrade, a-1 Replaced] is reverted to [a-2 Remove, a-1 Install].
             //   This is because we don't store the "replaces" relationship in history DB (there is a table `item_replaced_by`, but it is not populated
             //   and it doesn't seem worth it to populate it because of this use case) so we don't know which action to pick. We could try to guess
@@ -1306,14 +1306,14 @@ GoalProblem Goal::Impl::resolve_group_specs(std::vector<GroupSpec> & specs, base
             }
         }
 
-        // Use the environment query only if environments are preffered or if the spec didn't match any groups.
+        // Use the environment query only if environments are preferred or if the spec didn't match any groups.
         if (!environment_query.empty() &&
             (settings.get_comps_type_preferred() != CompsTypePreferred::GROUP || group_query.empty())) {
             resolved_environment_specs[action].push_back({spec, std::move(environment_query), settings});
             spec_resolved = true;
         }
 
-        // Use the group query only if groups are preffered or if the spec didn't match any environments.
+        // Use the group query only if groups are preferred or if the spec didn't match any environments.
         if (!group_query.empty() &&
             (settings.get_comps_type_preferred() != CompsTypePreferred::ENVIRONMENT || !spec_resolved)) {
             comps::GroupQuery already_handled_groups(base, true);

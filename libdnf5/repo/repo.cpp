@@ -551,7 +551,7 @@ bool Repo::clone_root_metadata() {
     auto base_cachedir = p_impl->config.get_basecachedir_option().get_value();
     auto system_cachedir = p_impl->config.get_main_config().get_system_cachedir_option().get_value();
 
-    // return fast if the system_cachedir does not exist or is equivelent to base_cachedir
+    // return fast if the system_cachedir does not exist or is equivalent to base_cachedir
     std::error_code ec;
     if (!std::filesystem::exists(system_cachedir, ec) ||
         std::filesystem::equivalent(base_cachedir, system_cachedir, ec)) {
@@ -673,7 +673,7 @@ bool Repo::is_loaded() const {
 }
 
 SolvRepo & Repo::get_solv_repo() const {
-    libdnf_user_assert(p_impl->solv_repo, "repo must be loaded to acess solv_repo");
+    libdnf_user_assert(p_impl->solv_repo, "repo must be loaded to access solv_repo");
     return *p_impl->solv_repo;
 }
 

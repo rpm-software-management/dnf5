@@ -645,7 +645,7 @@ static T load_toml_data(const std::string & path, const std::string & key) {
 }
 
 
-// In a given directory find all files endig with ".new" suffix and return them
+// In a given directory find all files ending with ".new" suffix and return them
 static std::vector<std::filesystem::path> gather_suffix_new_files(const std::filesystem::path & directory) {
     std::vector<std::filesystem::path> new_files;
     if (!std::filesystem::exists(directory) || !std::filesystem::is_directory(directory)) {

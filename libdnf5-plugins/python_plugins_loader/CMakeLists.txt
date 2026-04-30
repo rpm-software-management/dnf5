@@ -26,7 +26,7 @@ add_library(python_plugins_loader MODULE python_plugins_loader.cpp)
 
 # python_plugins_loader requires swigpyrun.h so lets generate it
 add_dependencies(python_plugins_loader swigpyrun-header)
-# Include directory with the gereated swigpyrun.h header
+# Include directory with the generated swigpyrun.h header
 target_include_directories(python_plugins_loader PRIVATE ${CMAKE_CURRENT_BINARY_DIR})
 # This is needed because the generated swigpyrun.h contains warnings
 # (which get treated as errors)

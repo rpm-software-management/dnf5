@@ -333,7 +333,7 @@ TransactionTable::Impl::Impl(ITransaction & transaction) {
 
         struct libscols_line * ln = scols_table_new_line(*tb, header_ln);
         // scols_table_print_range does not work if SCOLS_FL_TREE flag was used on any
-        // column. Thus adding a indentation manualy.
+        // column. Thus adding a indentation manually.
         scols_line_set_data(ln, COL_NAME, (" " + pkg->get_name()).c_str());
         scols_line_set_data(ln, COL_ARCH, pkg->get_arch().c_str());
         // Always show epoch in EVR (epoch:version-release)

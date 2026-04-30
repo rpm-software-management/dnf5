@@ -46,7 +46,7 @@ struct LIBDNF_API RepoCacheRemoveStatistics {
     std::size_t get_files_removed();     // Number of removed files and links.
     std::size_t get_dirs_removed();      // Number of removed directorires.
     std::uintmax_t get_bytes_removed();  // Number of removed bytes.
-    std::size_t get_errors();            // Numbes of errors.
+    std::size_t get_errors();            // Number of errors.
 
     RepoCacheRemoveStatistics & operator+=(const RepoCacheRemoveStatistics & rhs) noexcept;
 

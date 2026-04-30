@@ -96,7 +96,7 @@ repository configuration file should aside from repo ID consists of baseurl, met
     Default: ``True``.
 
     .. NOTE::
-       This option in particular can be overriden by a distribution-specific
+       This option in particular can be overridden by a distribution-specific
        configuration. For more details see :ref:`drop-in configuration directories <drop_in_configuration_directories-label>`.
 
 .. _cachedir_options-label:
@@ -1223,7 +1223,7 @@ configuration.
     Default: ``False``.
 
     .. NOTE::
-       This option in particular can be overriden by a distribution-specific
+       This option in particular can be overridden by a distribution-specific
        configuration. For more details see :ref:`drop-in configuration directories <drop_in_configuration_directories-label>`.
 
 .. _sslcacert_options-label:

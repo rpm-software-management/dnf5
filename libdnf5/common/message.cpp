@@ -27,7 +27,7 @@ class Message::Impl {};
 // Constructors optimization:
 // `p_impl` is initialized by the default constructor. -> It is empty (set to `nullptr`).
 // The real object will need to be created when the `Impl` class will contain data members.
-// For now, only a placeholder is enought.
+// For now, only a placeholder is enough.
 Message::Message() = default;
 Message::Message(const Message & src) = default;
 Message::Message(Message && src) noexcept = default;

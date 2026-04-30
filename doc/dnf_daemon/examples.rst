@@ -27,7 +27,7 @@ Perform a system-upgrade.
 `list_fd()`
 ===========
 
-:doc:`dnf5daemon_dbus_api.8` `org.rpm.dnf.v0.rpm.Rpm.list_fd()` exmaple.
+:doc:`dnf5daemon_dbus_api.8` `org.rpm.dnf.v0.rpm.Rpm.list_fd()` example.
 
 .. literalinclude:: examples/system_upgrade.py
     :language: Python

@@ -1224,7 +1224,7 @@ std::vector<std::string> Context::match_specs(
         for (const auto & package : matched_pkgs_query) {
             if (!only_nevras) {
                 if (auto name = package.get_name(); name.length() >= pattern.length()) {
-                    // The output must not include a package name shorter than the length of the input patter
+                    // The output must not include a package name shorter than the length of the input pattern
                     // (we don't want to shorten the user-specified input).
                     result_set.insert(std::move(name));
                 }

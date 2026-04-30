@@ -284,7 +284,7 @@ public:
     }
 
     /// Fill the RPM transaction from base::Transaction.
-    /// @param transcation The base::Transaction object.
+    /// @param transaction The base::Transaction object.
     void fill(const base::Transaction & transaction);
 
     /// Perform a dependency check on the transaction set.

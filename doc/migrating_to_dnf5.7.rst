@@ -73,7 +73,7 @@ was possible to have both dnf and dnf5 installed concurrently.
 
 These days the legacy dnf project is no longer actively developed,
 though patches are still accepted from distributions that are using
-it.  New releases are occassionally made of the legacy dnf project,
+it.  New releases are occasionally made of the legacy dnf project,
 though that will likely stop in the future once no active OS is using
 it.
 

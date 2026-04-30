@@ -54,7 +54,7 @@ private:
 class LogCaptureListener : public CppUnit::TestListener {
 public:
     void startTest(CppUnit::Test *) override {
-        // Global test_logger is used. Clear it befor starting new test.
+        // Global test_logger is used. Clear it before starting new test.
         test_logger.clear();
     }
 
