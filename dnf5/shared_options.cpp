@@ -138,6 +138,16 @@ void create_store_option(dnf5::Command & command) {
     });
 }
 
+void create_transient_option(dnf5::Command & command) {
+    auto & parser = command.get_context().get_argument_parser();
+    auto transient = parser.add_new_named_arg("transient");
+    transient->set_long_name("transient");
+    transient->set_description("Set up a transient overlay on /usr that will be discarded on reboot.");
+    transient->set_const_value("transient");
+    transient->link_value(&command.get_context().get_base().get_config().get_persistence_option());
+    command.get_argument_parser_command()->register_named_arg(transient);
+}
+
 void create_json_option(dnf5::Command & command) {
     auto & ctx = command.get_context();
     auto & parser = command.get_context().get_argument_parser();

@@ -75,6 +75,7 @@ void SwapCommand::set_argument_parser() {
 
     create_offline_option(*this);
     create_store_option(*this);
+    create_transient_option(*this);
 }
 
 void SwapCommand::configure() {

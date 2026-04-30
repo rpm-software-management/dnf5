@@ -65,6 +65,10 @@ DNF_API void create_downloadonly_option(dnf5::Command & command);
 /// The value is stored in Context::transaction_store_path.
 DNF_API void create_store_option(dnf5::Command & command);
 
+/// Create the `--transient` option for a command provided as an argument.
+/// Sets the `persistence` configuration option to "transient".
+DNF_API void create_transient_option(dnf5::Command & command);
+
 /// Create the `--offline` option for a command provided as an argument.
 DNF_API void create_offline_option(dnf5::Command & command);
 
