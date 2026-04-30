@@ -28,6 +28,7 @@
 #include "libdnf5/base/goal_elements.hpp"
 #include "libdnf5/base/log_event.hpp"
 #include "libdnf5/base/solver_problems.hpp"
+#include "libdnf5/base/transaction_persistence.hpp"
 #include "libdnf5/common/proc.hpp"
 #include "libdnf5/defs.h"
 #include "libdnf5/rpm/transaction_callbacks.hpp"
@@ -150,6 +151,10 @@ public:
     /// @param comment Any string value.
     void set_comment(const std::string & comment);
 
+    /// @brief Setup the persistence of the transaction (persist or transient).
+    /// @param persistence TransactionPersistence value.
+    void set_persistence(libdnf5::base::TransactionPersistence persistence);
+
     /// Return string representation of the TransactionRunResult enum
     static std::string transaction_result_to_string(const TransactionRunResult result);
 
@@ -219,6 +224,7 @@ private:
     std::optional<uint32_t> user_id;
     std::string comment;
     std::string description;
+    libdnf5::base::TransactionPersistence persistence = libdnf5::base::TransactionPersistence::UNKNOWN;
 
     /// Clear the recorded last scriptlet output
     LIBDNF_LOCAL void clear_last_script_output();

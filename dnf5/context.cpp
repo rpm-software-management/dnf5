@@ -508,6 +508,8 @@ void Context::Impl::download_and_run(libdnf5::base::Transaction & transaction) {
         transaction.set_comment(comment);
     }
 
+    transaction.set_persistence(persistence);
+
     auto result = transaction.run();
     if (result != libdnf5::base::Transaction::TransactionRunResult::SUCCESS) {
         print_error(libdnf5::utils::sformat(
@@ -662,6 +664,14 @@ const char * Context::get_comment() const noexcept {
 
 void Context::set_comment(const char * comment) noexcept {
     p_impl->set_comment(comment);
+}
+
+libdnf5::base::TransactionPersistence Context::get_persistence() const noexcept {
+    return p_impl->get_persistence();
+}
+
+void Context::set_persistence(libdnf5::base::TransactionPersistence persistence) noexcept {
+    p_impl->set_persistence(persistence);
 }
 
 std::string Context::get_cmdline() {
