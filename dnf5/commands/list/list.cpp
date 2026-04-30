@@ -59,7 +59,7 @@ void ListCommand::set_argument_parser() {
     show_duplicates = std::make_unique<libdnf5::cli::session::BoolOption>(
         *this, "showduplicates", '\0', _("Show all versions of the packages, not only the latest ones."), false);
 
-    create_installed_from_repo_option(*this, installed_from_repos, true);
+    auto * installed_from_repo_opt = create_installed_from_repo_option(*this, installed_from_repos, true);
 
     auto conflicts =
         parser.add_conflict_args_group(std::make_unique<std::vector<libdnf5::cli::ArgumentParser::Argument *>>());
@@ -67,6 +67,7 @@ void ListCommand::set_argument_parser() {
     installed = std::make_unique<libdnf5::cli::session::BoolOption>(
         *this, "installed", '\0', _("List installed packages."), false);
     conflicts->push_back(installed->get_arg());
+    conflicts->push_back(installed_from_repo_opt);
 
     available = std::make_unique<libdnf5::cli::session::BoolOption>(
         *this, "available", '\0', _("List available packages."), false);
@@ -107,6 +108,7 @@ void ListCommand::set_argument_parser() {
     recent->get_arg()->set_conflict_arguments(conflicts);
     upgrades->get_arg()->set_conflict_arguments(conflicts);
     autoremove->get_arg()->set_conflict_arguments(conflicts);
+    installed_from_repo_opt->set_conflict_arguments(conflicts);
 
     create_json_option(*this);
 }
@@ -132,6 +134,9 @@ void ListCommand::configure() {
     } else if (autoremove->get_value()) {
         load_available = Context::LoadAvailableRepos::NONE;
         pkg_narrow = PkgNarrow::AUTOREMOVE;
+    } else if (!installed_from_repos.empty()) {
+        load_available = Context::LoadAvailableRepos::NONE;
+        pkg_narrow = PkgNarrow::INSTALLED;
     }
     auto & context = get_context();
     context.set_load_available_repos(load_available);
