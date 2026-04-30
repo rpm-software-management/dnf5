@@ -81,6 +81,44 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
         <arg name="options" type="a{sv}" direction="in" />
         <arg name="changeset" type="a{saa{sv}}" direction="out" />
     </method>
+
+    <!--
+        list:
+        @options: an array of key/value pairs
+        @transactions: array of transactions with their packages
+
+        Get a list of transactions from the history database. Each transaction
+        includes metadata and categorized package changes.
+
+        The packages in each category are represented as dictionaries containing
+        the requested set of attributes. For upgraded and downgraded packages,
+        a "from_evr" attribute is included with the original package EVR.
+
+        Following options are supported:
+
+            - limit: int64
+                Maximum number of transactions to return.
+            - since: int64, unix timestamp
+                Only return transactions completed after this time.
+            - reverse: boolean, default "false"
+                If true, return oldest transactions first. Default is newest first.
+            - contains_pkgs: list of strings
+                Filter to transactions containing packages with these names.
+            - transaction_attrs: list of strings, default ["id", "start", "end", "user_id", "description", "status"]
+                List of transaction attributes to include. Supported: id, start, end,
+                user_id, description, status, releasever, comment.
+            - package_attrs: list of strings, default ["name", "arch", "evr"]
+                List of package attributes to include. Supported: name, epoch,
+                version, release, arch, evr, repo_id, action, reason.
+            - include_packages: boolean, default "true"
+                Whether to include package lists (installed, removed, upgraded, downgraded).
+
+        Unknown options are ignored.
+    -->
+    <method name="list">
+        <arg name="options" type="a{sv}" direction="in" />
+        <arg name="transactions" type="aa{sv}" direction="out" />
+    </method>
 </interface>
 
 </node>
