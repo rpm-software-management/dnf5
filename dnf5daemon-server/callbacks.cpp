@@ -110,6 +110,20 @@ int DownloadCB::mirror_failure(void * user_cb_data, const char * msg, const char
 
 
 bool KeyImportRepoCB::repokey_import(const libdnf5::rpm::KeyInfo & key_info) {
+    // Check Polkit authorization directly. When the dnf5daemon-server-polkit subpackage
+    // is installed, active local wheel-group users are pre-authorized and the key can be
+    // imported without the D-Bus signal/wait roundtrip that would otherwise hang clients
+    // like GNOME Software that don't handle the confirmation signal.
+    if (session.check_authorization(dnfdaemon::POLKIT_CONFIRM_KEY_IMPORT, session.get_sender(), interactive)) {
+        return true;
+    }
+
+    // If non-interactive and not authorized, reject immediately instead of waiting for a
+    // client confirmation that will never come.
+    if (!interactive) {
+        return false;
+    }
+
     bool confirmed;
     try {
         auto signal = create_signal(dnfdaemon::INTERFACE_BASE, dnfdaemon::SIGNAL_REPO_KEY_IMPORT_REQUEST);
@@ -121,6 +135,17 @@ bool KeyImportRepoCB::repokey_import(const libdnf5::rpm::KeyInfo & key_info) {
         confirmed = false;
     }
     return confirmed;
+}
+
+void KeyImportRepoCB::repokey_imported(const libdnf5::rpm::KeyInfo & key_info) {
+    try {
+        auto signal = create_signal(dnfdaemon::INTERFACE_BASE, dnfdaemon::SIGNAL_REPO_KEY_IMPORTED);
+        signal << key_info.get_short_key_id() << key_info.get_user_ids() << key_info.get_fingerprint()
+               << key_info.get_url() << static_cast<int64_t>(key_info.get_timestamp());
+        dbus_object->emitSignal(signal);
+    } catch (...) {
+        // Ignore errors in informational signal emission
+    }
 }
 
 

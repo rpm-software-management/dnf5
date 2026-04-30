@@ -65,7 +65,8 @@ sdbus::MethodReply Group::list(sdbus::MethodCall & call) {
     dnfdaemon::KeyValueMap options;
     call >> options;
 
-    session.fill_sack();
+    bool interactive = dnfdaemon::key_value_map_get<bool>(options, "interactive", false);
+    session.fill_sack(interactive);
     auto base = session.get_base();
 
     libdnf5::comps::GroupQuery query(base->get_weak_ptr());

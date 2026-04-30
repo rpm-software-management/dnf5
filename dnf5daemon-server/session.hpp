@@ -83,8 +83,8 @@ public:
 
     bool check_authorization(
         const std::string & actionid, const std::string & sender, bool allow_user_interaction = true);
-    void fill_sack();
-    bool read_all_repos();
+    void fill_sack(bool interactive = false);
+    bool read_all_repos(bool interactive = false);
     std::optional<std::string> session_locale;
     void confirm_key(const std::string & key_id, const bool confirmed);
     bool wait_for_key_confirmation(const std::string & key_id, sdbus::Signal & signal);

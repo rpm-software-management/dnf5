@@ -230,13 +230,13 @@ bool Session::wait_for_key_confirmation(const std::string & key_id, sdbus::Signa
     return confirmation == KeyConfirmationStatus::CONFIRMED;
 }
 
-void Session::fill_sack() {
-    if (!read_all_repos()) {
+void Session::fill_sack(bool interactive) {
+    if (!read_all_repos(interactive)) {
         throw std::runtime_error("Cannot load repositories.");
     }
 }
 
-bool Session::read_all_repos() {
+bool Session::read_all_repos(bool interactive) {
     while (repositories_status == dnfdaemon::RepoStatus::PENDING) {
         std::this_thread::sleep_for(std::chrono::milliseconds(100));
     }
@@ -268,7 +268,7 @@ bool Session::read_all_repos() {
             auto & user_data = repos_user_data.emplace_back(std::make_unique<dnf5daemon::DownloadUserData>());
             user_data->download_id = "repo:" + repo->get_id();
             repo->set_user_data(user_data.get());
-            repo->set_callbacks(std::make_unique<dnf5daemon::KeyImportRepoCB>(*this));
+            repo->set_callbacks(std::make_unique<dnf5daemon::KeyImportRepoCB>(*this, interactive));
         }
 
         try {
