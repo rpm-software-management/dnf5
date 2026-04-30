@@ -1589,6 +1589,7 @@ int main(int argc, char * argv[]) try {
                                "the system reboots."));
                     }
                 }
+                context.set_persistence(libdnf5::base::TransactionPersistence::TRANSIENT);
 
             } else {
                 // Not a bootc transaction.
@@ -1596,6 +1597,7 @@ int main(int argc, char * argv[]) try {
                     throw libdnf5::cli::CommandExitError(
                         1, M_("Error: transient transactions are only supported on bootc systems."));
                 }
+                context.set_persistence(libdnf5::base::TransactionPersistence::PERSIST);
             }
 
             const auto load_available = context.get_load_available_repos() != dnf5::Context::LoadAvailableRepos::NONE;
