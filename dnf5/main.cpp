@@ -1522,29 +1522,79 @@ int main(int argc, char * argv[]) try {
                 dump_repository_configuration(context, repo_id_list);
             }
 
+            // std::nullopt == Unknown whether system is bootc
             std::optional<bool> is_bootc_system;
-            if (context.p_impl->cmd_requires_privileges()) {
-                const auto & installroot = base.get_config().get_installroot_option().get_value();
 
+            const bool cmd_requires_privileges = context.p_impl->cmd_requires_privileges();
+            if (cmd_requires_privileges) {
                 const auto & insufficient_privileges_error = libdnf5::cli::InsufficientPrivilegesError(
                     M_("The requested operation requires superuser privileges. Please log in as a user with elevated "
                        "rights, or use the \"--assumeno\" or \"--downloadonly\" options to run the command without "
                        "modifying the system state."));
 
-                if (installroot == "/" && !libdnf5::utils::bootc::is_writable()) {
-                    // is_bootc_system calls `bootc status` which errors unless run by UID 0.
-                    if (!libdnf5::utils::am_i_root()) {
-                        throw insufficient_privileges_error;
+                // If the installroot is /, we care whether the system is bootc.
+                const auto & installroot = base.get_config().get_installroot_option().get_value();
+                if (installroot == "/") {
+                    if (libdnf5::utils::bootc::is_writable()) {
+                        // If the system is writable, we shouldn't error if
+                        // `bootc status` could not be determined.
+                        if (libdnf5::utils::am_i_root()) {
+                            try {
+                                is_bootc_system = libdnf5::utils::bootc::is_bootc_system();
+                            } catch (const libdnf5::RuntimeError & e) {
+                                context.print_info(libdnf5::utils::sformat(_("Warning: {}"), e.what()));
+                            }
+                        }
+                    } else {
+                        // /usr is not writable. We should try harder to
+                        // ascertain `bootc status` to avoid showing a bootc
+                        // user the generic error for read-only /usr.
+                        if (!libdnf5::utils::am_i_root()) {
+                            throw insufficient_privileges_error;
+                        }
+                        is_bootc_system = libdnf5::utils::bootc::is_bootc_system();
+                        if (!*is_bootc_system) {
+                            throw libdnf5::cli::ReadOnlySystemError(
+                                M_("Error: /usr is configured to be read-only. You may be running an image-based or "
+                                   "immutable operating system. For more information, refer to your "
+                                   "distribution's documentation."));
+                        }
                     }
-                    is_bootc_system = libdnf5::utils::bootc::is_bootc_system();
-                    if (!is_bootc_system) {
-                        throw libdnf5::cli::ReadOnlySystemError(
-                            M_("Error: /usr is configured to be read-only. You may be running an image-based or "
-                               "immutable operating system. For more information, refer to your "
-                               "distribution's documentation."));
-                    }
-                } else if (!user_has_privileges(context)) {
+                }
+
+                if (!user_has_privileges(context)) {
                     throw insufficient_privileges_error;
+                }
+            }
+
+            const bool is_bootc_transaction = cmd_requires_privileges && is_bootc_system.value_or(false);
+            bool bootc_system_needs_unlock = false;
+            const auto & persistence = base.get_config().get_persistence_option().get_value();
+            if (is_bootc_transaction) {
+                if (persistence == "persist") {
+                    throw libdnf5::cli::CommandExitError(
+                        1,
+                        M_("Error: persistent transactions aren't supported on bootc systems. Pass --transient to "
+                           "perform "
+                           "this operation in a transient overlay which will reset when the system reboots."));
+                }
+
+                if (!libdnf5::utils::bootc::is_writable()) {
+                    bootc_system_needs_unlock = true;
+                    if (persistence == "auto") {
+                        throw libdnf5::cli::CommandExitError(
+                            1,
+                            M_("Error: this bootc system is configured to be read-only. Pass --transient to "
+                               "perform this operation in a transient overlay which will reset when "
+                               "the system reboots."));
+                    }
+                }
+
+            } else {
+                // Not a bootc transaction.
+                if (persistence == "transient") {
+                    throw libdnf5::cli::CommandExitError(
+                        1, M_("Error: transient transactions are only supported on bootc systems."));
                 }
             }
 
@@ -1606,8 +1656,21 @@ int main(int argc, char * argv[]) try {
                     }
                 }
 
+                if (bootc_system_needs_unlock && !libdnf5::utils::bootc::has_read_only_usr_overlay()) {
+                    // Only tell the user about the transient overlay if
+                    // it's not already in place
+                    context.print_error(
+                        _("A transient overlay will be created on /usr that will be discarded on reboot. "
+                          "Keep in mind that changes to /etc and /var will still persist, and packages "
+                          "commonly modify these directories."));
+                }
+
                 if (!libdnf5::cli::utils::userconfirm::userconfirm(context.get_base().get_config())) {
                     throw libdnf5::cli::AbortedByUserError();
+                }
+
+                if (bootc_system_needs_unlock) {
+                    libdnf5::utils::bootc::make_usr_writable();
                 }
 
                 context.download_and_run(*context.get_transaction());
