@@ -607,7 +607,7 @@ void OptionTest::test_options_string_append_list() {
     // are also appended)
     option.set(Option::Priority::MAINCONFIG, ",Pkg5");
     CPPUNIT_ASSERT_EQUAL((std::vector<std::string>{"Pkg5", "Pkg3"}), option.get_value());
-    // emty item on other than first place is skipped and does not clear the value
+    // empty item on other than first place is skipped and does not clear the value
     option.set(Option::Priority::COMMANDLINE, "Pkg6, ,Pkg7");
     CPPUNIT_ASSERT_EQUAL((std::vector<std::string>{"Pkg5", "Pkg3", "Pkg6", "Pkg7"}), option.get_value());
     // I can clear the option an using empty value

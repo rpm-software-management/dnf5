@@ -3,7 +3,7 @@ Changes in creating queries
 
 To get a list of packages based on given criteria, they can be queried using ``dnf.query.Query`` class in DNF4 and ``libdnf5::rpm::PackageQuery`` class in DNF5.
 
-In DNF4, the ``filter`` method doesn't actually modify the query, but rather return a new query limiting it according to the given arguments. In DNF5, the original query is modifed by the filters.
+In DNF4, the ``filter`` method doesn't actually modify the query, but rather return a new query limiting it according to the given arguments. In DNF5, the original query is modified by the filters.
 
 DNF4 Python:
 

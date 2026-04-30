@@ -48,7 +48,7 @@ def repoquery(iface_rpm, options):
     # close the write end - otherwise poll cannot detect the end of transmission
     os.close(pipe_w)
 
-    # decoder that will be used to parse incomming data
+    # decoder that will be used to parse incoming data
     parser = json.JSONDecoder()
 
     # prepare for polling

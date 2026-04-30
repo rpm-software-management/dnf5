@@ -1630,7 +1630,7 @@ int main(int argc, char * argv[]) try {
 
     log_router.info(_("DNF5 finished"));
 
-    // Print Complete! message only when transaction is created to prevent poluting output from repoquery or other command
+    // Print Complete! message only when transaction is created to prevent polluting output from repoquery or other command
     if (auto * transaction = context.get_transaction(); transaction && !transaction->empty()) {
         context.print_info(_("Complete!"));
     }

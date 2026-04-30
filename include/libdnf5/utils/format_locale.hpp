@@ -31,9 +31,9 @@ namespace libdnf5::utils {
 /// Format `args` according to the `format_string`, and return the result as a string.
 ///
 /// @param translate     If `true`, it will attempt to translate the message to the requested locale.
-/// @param format_string message contains formating string
+/// @param format_string message contains formatting string
 /// @param plural_form   number is used to select the appropriate plural form of the format string
-/// @param args          arguments to be formated
+/// @param args          arguments to be formatted
 /// @return A string object holding the formatted result.
 template <typename... Args>
 std::string format(bool translate, BgettextMessage format_string, unsigned long plural_form, Args &&... args) {
@@ -56,11 +56,11 @@ std::string format(bool translate, BgettextMessage format_string, unsigned long 
 
 /// Format `args` according to the `format_string`, and return the result as a string.
 ///
-/// @param locale        requested locale for translation and argument formating, nullptr = use global/thread locale
+/// @param locale        requested locale for translation and argument formatting, nullptr = use global/thread locale
 /// @param translate     If `true`, it will attempt to translate the message to the requested locale.
-/// @param format_string message contains formating string
+/// @param format_string message contains formatting string
 /// @param plural_form   number is used to select the appropriate plural form of the format string
-/// @param args          arguments to be formated
+/// @param args          arguments to be formatted
 /// @return A string object holding the formatted result.
 template <typename... Args>
 std::string format(

@@ -34,7 +34,7 @@ CPPUNIT_TEST_SUITE_REGISTRATION(ProgressbarTest);
 void ProgressbarTest::setUp() {
     // MultiProgressBar behaves differently depending on interactivity
     setenv("DNF5_FORCE_INTERACTIVE", "0", 1);
-    // Force columns to 70 to make output independ of where it is run
+    // Force columns to 70 to make output independent of where it is run
     setenv("FORCE_COLUMNS", "70", 1);
     // Wide characters do not work at all until we set locales in the code
     // Different locale variants are parameterized in ctest

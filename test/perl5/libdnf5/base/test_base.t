@@ -91,7 +91,7 @@ use libdnf5::base;
     # Checking the nested exception.
     throws_ok {
         $ex->rethrow_if_nested();
-    } 'libdnf5::exception::FileSystemError', 'load_config() thows nested exception libdnf5::exception::FileSystemError';
+    } 'libdnf5::exception::FileSystemError', 'load_config() throws nested exception libdnf5::exception::FileSystemError';
     my $nested_ex = $@;
     like($nested_ex->what(), qr/cannot open file/);
     like($nested_ex->format($libdnf5::exception::FormatDetailLevel_WithDomainAndName),

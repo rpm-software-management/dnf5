@@ -47,7 +47,7 @@ void DistroSyncCommand::set_argument_parser() {
         ArgumentParser::PositionalArg::UNLIMITED,
         parser.add_init_value(std::unique_ptr<libdnf5::Option>(new libdnf5::OptionString(nullptr))),
         patterns_to_distro_sync_options);
-    patterns_arg->set_description("List of package-spec-NPFB specifing which packages will be synced");
+    patterns_arg->set_description("List of package-spec-NPFB specifying which packages will be synced");
     cmd.register_positional_arg(patterns_arg);
 
     allow_erasing = std::make_unique<AllowErasingOption>(*this);

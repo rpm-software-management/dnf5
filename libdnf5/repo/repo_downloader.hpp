@@ -74,7 +74,7 @@ public:
     // all the added repos are in sync or not.
     // NOTE(amatej): If the API should become public we might
     // want to change it so that its possible to tell which
-    // repos will be donwloaded in the following download() call.
+    // repos will be downloaded in the following download() call.
     std::tuple<std::unordered_map<Repo *, std::vector<std::string>>, bool> download_repos_descriptions();
 
     // Download the previously added repos.

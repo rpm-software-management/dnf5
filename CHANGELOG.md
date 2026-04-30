@@ -508,7 +508,7 @@
 - doc: Correct handling the translations
 - dnfdaemon-client: Call server methods asynchronously
 - offline: Require D-Bus socket service from dnf5-offline-transaction.service
-- offline: Perform gracefull powerof/reboot instead of immediate one
+- offline: Perform graceful powerof/reboot instead of immediate one
 - readthedocs: add swig include to fix doc builds
 - readthedocs: extract `SOURCE_DIR` variable
 - readthedocs: fix path joining
@@ -552,7 +552,7 @@
 - Update `max_parallel_downloads` doc, it now affects also repo downloads
 - Remove no longer needed `RepoDownloader::perform`
 - Use new RepoDownloader API to download repo descriptions
-- Add new `RepoDownloader` API to donwload only repomd/metalink
+- Add new `RepoDownloader` API to download only repomd/metalink
 - Rename `end_cb` to `end_cb_full_download`, there will be more end cbs
 - Move `lr_target`s to `callback_data` and move setup to `add`
 - Name `load_repo` function type and add `reusing` option
@@ -647,7 +647,7 @@
 - spec: Fix building without man pages
 - doc: DNF_SYSTEM_UPGRADE_NO_REBOOT environment variable
 - doc: Environment variables for a terminal and temporary files
-- Add `-i` and `-f` shoft options for repoquery
+- Add `-i` and `-f` short options for repoquery
 - Reimplement `--color` flag
 - expired-pgp-keys: Respect install root
 - comps: Add configuration options for group and environment excludes
@@ -817,7 +817,7 @@
 - Own /var/lib/dnf by libdnf5
 - Display remaining time as nonnegative number
 - automatic: Substitute variables in command_format
-- Bumb readthedocs ubuntu image version to fix the docs generation
+- Bump readthedocs ubuntu image version to fix the docs generation
 - automatic: add a default setting to not emit boring messages
 - Incorrect library name in libdnf5-cli.pc
 - Fix reporting disk space to be freed on a pure package removal
@@ -857,7 +857,7 @@
 - Update translations from weblate
 - doc: Use PGP instead of GPG
 - Install defs.h for /usr/include/dnf5/context.hpp
-- Download cmd: Require at leats one argument/package to download
+- Download cmd: Require at least one argument/package to download
 - Fix copr chroot specification: replace faulty regex with simpler split
 - Add packit job to run ABI check plan on testing farm
 - changelog_plugin: Limit required metadata to "other"
@@ -1059,7 +1059,7 @@
 - Clarify `group` command man page: `environment` note
 - Add some docs about environments
 - dnfdaemon-client: Fix repoquery command
-- dnfdaemon-client: Clean command implemetation
+- dnfdaemon-client: Clean command implementation
 - dnfdaemon: D-Bus API for cleaning caches
 - Add an example how to disable repo to `repo` command man page
 - Improve "After this operation" disk usage messages
@@ -1111,7 +1111,7 @@
 # 5.2.4.0
 
 - Update translations from weblate
-- Add "Complete!" message after succesfull transaction
+- Add "Complete!" message after successful transaction
 - Handle exceptions when parsing replay `JSON`
 - `TransactionReplayError` move to header `transaction_sr.hpp`
 - Add `replay` command to replay stored transactions
@@ -1245,7 +1245,7 @@
 - system-upgrade: fix poweroff_after
 - copr: the dnf5 copr enable sets CoprRepoPart.enabled = true
 - Add file search result for repoquery --whatprovides
-- doc: Add enviroment variables and clarify options for loading the plugins
+- doc: Add environment variables and clarify options for loading the plugins
 - dnfdaemon: Fix Rpm interface introspection file
 
 # 5.2.0.0
@@ -1293,7 +1293,7 @@
 - libdnf5 IPlugin: Use pImpl
 - libdnf5 IPlugin: Do not use inline methods
 - dnf5 IPlugin: Do not use inline methods on API
-- libdnf5 IPlugin: Add argumets description
+- libdnf5 IPlugin: Add arguments description
 - libdnf5 plugins: New hooks `pre/post_add_cmdline_packages`
 - libdnf5 plugins: New hook `repos_loaded`
 - libdnf5 plugins: New hook `repos_configured`
@@ -1371,7 +1371,7 @@
 - comps::PackageType: Move to separate header file
 - cmp_naevr: Fix: pass by reference
 - modules: Report module solver problems
-- Accept SolverProblems for transacion resolve log
+- Accept SolverProblems for transaction resolve log
 - modules: Return problems from the module solver
 - modules: Add a method to process module solver problems
 - modules: Add a separate set of problem rules for modules
@@ -1491,7 +1491,7 @@
 - Document system-upgrade aliases
 - Improved Bash Completion
 - Print command line hints after resolve failure
-- Docuent Advisory.list() API usage
+- Document Advisory.list() API usage
 - Add NEVRA field to advisory packages in dnf5daemon
 - Review and fix missing commands
 - Document dnf5daemon advisory
@@ -1524,7 +1524,7 @@
 - Make the error to resolve module metadata more descriptive
 - Switch off deltarpm support
 - Limit number of dnf5daemon simultaneously active sessions
-- Make info and list commands case insesitive
+- Make info and list commands case insensitive
 - Allow dnf5daemon configuration overrides for root
 - Add repoquery.hpp for swig-4.2.1 support
 
@@ -1539,7 +1539,7 @@
 - Implement dnf5-automatic: Tool for managing automatic upgrades
 - Parametrize output stream in transaction table
 - Add `download --srpm` option
-- Add missing dbus signal registations
+- Add missing dbus signal registrations
 - Add new versionlock bindings
 - Implement `dnf5 versionlock` command
 

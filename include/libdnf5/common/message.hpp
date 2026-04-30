@@ -45,7 +45,7 @@ public:
     /// Formats the contained message according to the specified arguments and returns the result as a string.
     ///
     /// @param translate  If `true`, it will attempt to translate the message to the requested locale.
-    /// @param locale     requested locale for translation and argument formating, nullptr = use global/thread locale
+    /// @param locale     requested locale for translation and argument formatting, nullptr = use global/thread locale
     /// @return A string object holding the formatted result.
     virtual std::string format(bool translate, const libdnf5::utils::Locale * locale = nullptr) const = 0;
 

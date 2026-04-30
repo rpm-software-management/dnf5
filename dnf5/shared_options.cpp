@@ -180,7 +180,7 @@ libdnf5::cli::ArgumentParser::NamedArg * create_from_repo_option(
             } else {
                 if (repo_ids != libdnf5::OptionStringList(value).get_value()) {
                     throw libdnf5::cli::ArgumentParserConflictingArgumentsError(
-                        M_("\"--from_repo\" already defined with diferent value"));
+                        M_("\"--from_repo\" already defined with different value"));
                 }
             }
             return true;
@@ -207,7 +207,7 @@ libdnf5::cli::ArgumentParser::NamedArg * create_installed_from_repo_option(
             } else {
                 if (repo_ids != libdnf5::OptionStringList(value).get_value()) {
                     throw libdnf5::cli::ArgumentParserConflictingArgumentsError(
-                        M_("\"--installed-from_repo\" already defined with diferent value"));
+                        M_("\"--installed-from_repo\" already defined with different value"));
                 }
             }
             return true;
@@ -235,7 +235,7 @@ libdnf5::cli::ArgumentParser::NamedArg * create_from_vendor_option(
             } else {
                 if (vendors != libdnf5::OptionStringList(value).get_value()) {
                     throw libdnf5::cli::ArgumentParserConflictingArgumentsError(
-                        M_("\"--from_vendor\" already defined with diferent value"));
+                        M_("\"--from_vendor\" already defined with different value"));
                 }
             }
             return true;

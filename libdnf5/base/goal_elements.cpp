@@ -146,7 +146,7 @@ class GoalJobSettings::Impl {
     /// with the environment itself, but will not add any groups to the transaction.
     bool environment_no_groups{false};
 
-    /// Set which comps type (GROUP or ENVIRONMENT) is preffered in case both match.
+    /// Set which comps type (GROUP or ENVIRONMENT) is preferred in case both match.
     /// If only one type matches, it is selected regardless.
     CompsTypePreferred comps_type_preferred{CompsTypePreferred::BOTH};
 

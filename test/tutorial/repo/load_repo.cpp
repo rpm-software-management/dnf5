@@ -20,5 +20,5 @@ repo->get_config().get_baseurl_option().set(baseurl);
 // loads the repositories into memory.
 //
 // `libdnf5.repo.Repo.Type_AVAILABLE` as first argument says to load only the available
-// repositories (repository SYSTEM, that contains installed pacakges, is not loaded).
+// repositories (repository SYSTEM, that contains installed packages, is not loaded).
 repo_sack->load_repos(libdnf5::repo::Repo::Type::AVAILABLE);

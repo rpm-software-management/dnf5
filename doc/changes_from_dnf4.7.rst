@@ -346,7 +346,7 @@ Changes to individual commands
 Changes on the API
 ==================
 
-The differences between DNF4 and DNF5 API are not only in minor tweeks, but there are major architectural changes, therefore, it is not feasible to cover all the changes. The :ref:`tutorial_api_changes_ref-label` section describes the most common use cases and points out the main differences.
+The differences between DNF4 and DNF5 API are not only in minor tweaks, but there are major architectural changes, therefore, it is not feasible to cover all the changes. The :ref:`tutorial_api_changes_ref-label` section describes the most common use cases and points out the main differences.
 
 .. _other_api_changes_ref-label:
 

@@ -163,7 +163,7 @@ void TransactionMergeTest::install_install() {
     CPPUNIT_ASSERT_EQUAL(expected_problems, problems);
 
     na_to_installed_nevras.clear();
-    // Order matters when merging transacitons, we perfer the latest transaction
+    // Order matters when merging transactions, we prefer the latest transaction
     auto [replay2, problems2] = libdnf5::transaction::merge_transactions({trans2, trans1}, na_to_installed_nevras);
 
     std::vector<PackageReplay> expected2 = {

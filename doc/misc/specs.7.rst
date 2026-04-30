@@ -63,7 +63,7 @@ Many commands take a ``<package-spec*>`` parameter that selects a package for
 the operation. Depending on the command the ``<package-spec*>`` argument is
 matched against:
 
-- :ref:`NEVRA [N] <nevra_matching_ref-label>` or case Insentive NEVRA [NI]
+- :ref:`NEVRA [N] <nevra_matching_ref-label>` or case Insensitive NEVRA [NI]
 - Provides [P]
 - :ref:`File provides [F] <file_provides_ref-label>`
 - :ref:`Binaries [B] <binaries_matching_ref-label>`

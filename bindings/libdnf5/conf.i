@@ -16,7 +16,7 @@
 
 // This is required because `libdnf5::OptionBinds::Item` is nested
 // inside `libdnf5::OptionBinds` class.
-// While swig claims it shoudn't be needed for Python it seems it is:
+// While swig claims it shouldn't be needed for Python it seems it is:
 // https://www.swig.org/Doc4.3/SWIGDocumentation.html#SWIGPlus_nested_classes
 %feature("flatnested");
 

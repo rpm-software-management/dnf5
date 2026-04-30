@@ -190,7 +190,7 @@ void ExpiredPgpKeys::process_expired_pgp_keys(const libdnf5::base::Transaction &
 
     // Obtain callbacks for getting confirmation from a user.
     // TODO: Where to get callbacks without repositories? E.g. if all are
-    // disabled? For now use calbacks of the first repository. The callbacks
+    // disabled? For now use callbacks of the first repository. The callbacks
     // API should become independent from libdnf5::repo.
     libdnf5::repo::RepoQuery enabled_repos(get_base());
     enabled_repos.filter_enabled(true);
@@ -223,7 +223,7 @@ void ExpiredPgpKeys::process_expired_pgp_keys(const libdnf5::base::Transaction &
         if (!raw_key)
             continue;
 
-        // Serialize raw key into a file becuse parse_key_file() requires a file.
+        // Serialize raw key into a file because parse_key_file() requires a file.
         // (Or use lr_gpg_import_key_from_memory() directly?)
         auto key_tfile = libdnf5::utils::fs::TempFile("key");
         auto & key_ffile = key_tfile.open_as_file("w+");
@@ -237,7 +237,7 @@ void ExpiredPgpKeys::process_expired_pgp_keys(const libdnf5::base::Transaction &
         // a single gpg-pubkey package, parse_key_file() method always returns
         // a vector of at most one KeyInfo object. The vector is empty if the
         // primary key had no signing subkey.
-        // XXX: That effectivelly ignores expiration time of other subkeys.
+        // XXX: That effectively ignores expiration time of other subkeys.
         auto parsed_keys = rpm_signature.parse_key_file("file://" + key_tfile.get_path().string());
         if (parsed_keys.empty())
             continue;
