@@ -150,12 +150,12 @@ void RepolistCommand::run() {
     options["repo_attrs"] = sdbus::Variant(attrs);
 
     // call list() method on repo interface via dbus
-    dnfdaemon::KeyValueMapList repositories;
-    ctx.session_proxy->callMethod("list")
-        .onInterface(dnfdaemon::INTERFACE_REPO)
-        .withTimeout(static_cast<uint64_t>(-1))
-        .withArguments(options)
-        .storeResultsTo(repositories);
+    auto list_result = ctx.session_proxy->callMethodAsync("list")
+                           .onInterface(dnfdaemon::INTERFACE_REPO)
+                           .withTimeout(static_cast<uint64_t>(-1))
+                           .withArguments(options)
+                           .getResultAsFuture<dnfdaemon::KeyValueMapList>();
+    auto repositories = list_result.get();
 
     if (command == "repolist") {
         // print the output table

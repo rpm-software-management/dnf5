@@ -451,6 +451,7 @@ sdbus::MethodReply Repo::list(sdbus::MethodCall & call) {
     // check demanded attributes
     std::vector<std::string> repo_attrs =
         dnfdaemon::key_value_map_get<std::vector<std::string>>(options, "repo_attrs", empty_list);
+    bool interactive = dnfdaemon::key_value_map_get<bool>(options, "interactive", false);
     bool fill_sack_needed = false;
     for (auto & attr_str : repo_attrs) {
         if (repo_attributes.count(attr_str) == 0) {
@@ -466,7 +467,7 @@ sdbus::MethodReply Repo::list(sdbus::MethodCall & call) {
     // always return repoid
     repo_attrs.push_back("id");
     if (fill_sack_needed) {
-        session.fill_sack();
+        session.fill_sack(interactive);
     }
 
     // prepare repository query filtered by options
