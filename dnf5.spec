@@ -488,10 +488,10 @@ Package management library.
 %verify(not md5 size mtime) %attr(0644, root, root) %ghost %{_prefix}/lib/sysimage/libdnf5/packages.toml
 %verify(not md5 size mtime) %attr(0644, root, root) %ghost %{_prefix}/lib/sysimage/libdnf5/system.toml
 %verify(not md5 size mtime) %attr(0644, root, root) %ghost %{_prefix}/lib/sysimage/libdnf5/transaction_history.sqlite{,-shm,-wal}
-%verify(not md5 size mtime) %attr(0664, root, root) %ghost %{_prefix}/lib/sysimage/libdnf5/system-repo.lock
 %license lgpl-2.1.txt
 %ghost %attr(0755, root, root) %dir %{_var}/cache/libdnf5
-%ghost %attr(0755, root, root) %dir %{_sharedstatedir}/dnf
+%attr(0755, root, root) %dir %{_sharedstatedir}/dnf
+%verify(not md5 size mtime) %attr(0644, root, root) %{_sharedstatedir}/dnf/system-repo.lock
 
 # ========== libdnf5-cli ==========
 
@@ -1087,14 +1087,15 @@ for file in \
     environments.toml groups.toml modules.toml nevras.toml packages.toml \
     system.toml \
     transaction_history.sqlite transaction_history.sqlite-shm \
-    transaction_history.sqlite-wal \
-    system-repo.lock
+    transaction_history.sqlite-wal
 do
     touch %{buildroot}%{_prefix}/lib/sysimage/libdnf5/$file
 done
 mkdir -p %{buildroot}%{_prefix}/lib/sysimage/libdnf5/comps_groups
 mkdir -p %{buildroot}%{_prefix}/lib/sysimage/libdnf5/offline
 touch %{buildroot}%{_sysconfdir}/dnf/versionlock.toml
+mkdir -p %{buildroot}%{_sharedstatedir}/dnf
+touch %{buildroot}%{_sharedstatedir}/dnf/system-repo.lock
 
 %if 0%{?fedora} || 0%{?rhel} > 10
 ln -sr %{buildroot}%{_bindir}/dnf5 %{buildroot}%{_bindir}/microdnf

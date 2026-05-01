@@ -1226,9 +1226,9 @@ static bool user_has_privileges(dnf5::Context & context) {
     const auto & transaction_lock_path =
         installroot / std::filesystem::path{libdnf5::TRANSACTION_LOCK_FILEPATH}.relative_path();
 
-    const auto & system_state_dir = context.get_base().get_config().get_system_state_dir_option().get_value();
+    const auto & persistdir = context.get_base().get_config().get_persistdir_option().get_value();
     const auto & system_repo_lock_path =
-        installroot / std::filesystem::path{system_state_dir}.relative_path() / libdnf5::SYSTEM_REPO_LOCK_FILENAME;
+        installroot / std::filesystem::path{persistdir}.relative_path() / libdnf5::SYSTEM_REPO_LOCK_FILENAME;
 
     try {
         std::filesystem::create_directories(transaction_lock_path.parent_path());

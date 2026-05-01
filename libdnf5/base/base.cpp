@@ -446,10 +446,10 @@ bool Base::Impl::lock_system_repo(libdnf5::utils::LockAccess access, libdnf5::ut
     if (!system_repo_lock.has_value()) {
         auto & installroot_option = config.get_installroot_option();
         installroot_option.lock("Locked by Base::Impl::lock_system_repo()");
-        const auto & system_state_dir = config.get_system_state_dir_option().get_value();
+        const auto & persistdir = config.get_persistdir_option().get_value();
 
         const auto & relative_path =
-            std::filesystem::path{system_state_dir}.relative_path() / std::filesystem::path{SYSTEM_REPO_LOCK_FILENAME};
+            std::filesystem::path{persistdir}.relative_path() / std::filesystem::path{SYSTEM_REPO_LOCK_FILENAME};
         const auto & lock_file_path = installroot_option.get_value() / relative_path;
 
         std::filesystem::create_directories(lock_file_path.parent_path());
