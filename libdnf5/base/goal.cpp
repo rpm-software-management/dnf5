@@ -1527,6 +1527,13 @@ std::pair<GoalProblem, libdnf5::solv::IdQueue> Goal::Impl::add_install_to_goal(
             spec,
             {pool.get_nevra(package_id)},
             libdnf5::Logger::Level::WARNING);
+
+        // If the package was installed outside of DNF (e.g. via rpm), adopt it
+        // into the system state by changing its reason from EXTERNAL_USER to USER.
+        rpm::Package installed_pkg(base, rpm::PackageId(package_id));
+        if (installed_pkg.get_reason() == transaction::TransactionItemReason::EXTERNAL_USER) {
+            rpm_goal.add_reason_change(installed_pkg, transaction::TransactionItemReason::USER, std::nullopt);
+        }
     }
 
     if (!to_vendors.empty()) {
@@ -2152,6 +2159,12 @@ void Goal::Impl::add_rpms_to_goal(base::Transaction & transaction) {
                         {},
                         {pool.get_nevra(package_id)},
                         log_level);
+
+                    rpm::Package installed_pkg(base, rpm::PackageId(package_id));
+                    if (installed_pkg.get_reason() == transaction::TransactionItemReason::EXTERNAL_USER) {
+                        rpm_goal.add_reason_change(
+                            installed_pkg, transaction::TransactionItemReason::USER, std::nullopt);
+                    }
                     ids.push_back(package_id);
                 }
                 rpm_goal.add_install(ids, skip_broken, best, clean_requirements_on_remove);
