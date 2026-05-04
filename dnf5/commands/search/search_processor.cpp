@@ -176,6 +176,7 @@ SearchResults SearchProcessor::get_results() {
 
     // In the end just push everything into the final result structure.
     SearchResults results;
+    results.group_results.reserve(priority_matches.size());
     for (auto const & [priority, packages] : priority_matches) {
         results.group_results.push_back(
             {.matched_keys = get_matched_keys(priority), .matched_packages = std::move(packages)});
