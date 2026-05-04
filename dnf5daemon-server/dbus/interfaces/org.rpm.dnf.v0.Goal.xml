@@ -38,6 +38,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
         Following @options are supported:
             - allow_erasing: boolean, default false
                 Whether removal of installed package is allowed to resolve the transaction.
+            - interactive: boolean, default false
+                Set to "true", when the operation is done by a user, thus user interaction like password prompts can be done.
 
         Unknown options are ignored.
     -->

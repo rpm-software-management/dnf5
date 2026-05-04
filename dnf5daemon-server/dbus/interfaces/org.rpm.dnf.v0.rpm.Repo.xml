@@ -42,6 +42,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
                 list of repository attributes that are returned
             - enable_disable: string (default "enabled")
                 When set to "enabled" or "disabled", only enabled / disabled repositories are listed. Any other value means all repositories are returned.
+            - interactive: boolean, default false
+                Set to "true", when the operation is done by a user, thus user interaction like password prompts can be done.
 
         Unknown options are ignored.
     -->

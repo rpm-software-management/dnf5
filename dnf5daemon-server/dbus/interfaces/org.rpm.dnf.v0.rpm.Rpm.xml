@@ -55,6 +55,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
                 include source rpms into the results
             - icase: bool (default true)
                 ignore case while matching patterns
+            - interactive: boolean, default false
+                Set to "true", when the operation is done by a user, thus user interaction like password prompts can be done.
 
             - patterns: list of strings
                 any package matching to any of patterns is returned

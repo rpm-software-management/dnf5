@@ -52,6 +52,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
                 include only groups containing given packages
             - lang: string (default current locale)
                 language code for translated_name and translated_description attributes
+            - interactive: boolean, default false
+                Set to "true", when the operation is done by a user, thus user interaction like password prompts can be done.
 
         Unknown options are ignored.
     -->

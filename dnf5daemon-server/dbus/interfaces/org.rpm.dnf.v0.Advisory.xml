@@ -64,6 +64,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
                 Consider only advisories referencing a Bugzilla ticket.
             - with_cve: boolean, default False
                 Consider only advisories referencing a CVE ticket.
+            - interactive: boolean, default false
+                Set to "true", when the operation is done by a user, thus user interaction like password prompts can be done.
 
         Unknown options are ignored.
     -->

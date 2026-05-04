@@ -74,6 +74,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
                 the Rpm interface.
             - since: int64, unix timestamp
                 Get changes since a given point in time.
+            - interactive: boolean, default false
+                Set to "true", when the operation is done by a user, thus user interaction like password prompts can be done.
 
         Unknown options are ignored.
     -->
