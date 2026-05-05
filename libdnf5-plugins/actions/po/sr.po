@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-07-26 03:48+0000\n"
-"PO-Revision-Date: 2026-04-22 02:28+0000\n"
+"PO-Revision-Date: 2026-04-23 03:58+0000\n"
 "Last-Translator: \"Марко Костић (Marko Kostić)\" <marko.m.kostic@gmail.com>\n"
 "Language-Team: Serbian <https://translate.fedoraproject.org/projects/dnf5/"
 "libdnf5-plugin-actions/sr/>\n"
@@ -22,51 +22,53 @@ msgstr ""
 #: actions.cpp:237
 #, c++-format
 msgid "File \"{}\" on line {}: {}"
-msgstr ""
+msgstr "Датотека „{}“ у реду {}: {}"
 
 #: actions.cpp:636 actions.cpp:642 actions.cpp:648 actions.cpp:654
 msgid "\"HOOK:PKG_FILTER:DIRECTION:OPTIONS:CMD\" format expected"
-msgstr ""
+msgstr "Очекиван је формат „HOOK:PKG_FILTER:DIRECTION:OPTIONS:CMD“"
 
 #: actions.cpp:676
 #, c++-format
 msgid "Unknown \"enabled\" option value \"{}\""
-msgstr ""
+msgstr "Непозната вредност опције „enabled“: „{}“"
 
 #: actions.cpp:683
 #, c++-format
 msgid "Unknown option \"{}\""
-msgstr ""
+msgstr "Непозната опција „{}“"
 
 #: actions.cpp:711
 #, c++-format
 msgid "Unknown hook \"{}\""
-msgstr ""
+msgstr "Непозната кука „{}“"
 
 #: actions.cpp:720
 msgid ""
 "Package filter can only be used in GOAL_RESOLVED, PRE_TRANS and POST_TRANS "
 "hooks"
 msgstr ""
+"Филтер пакета се може користити само у кукама GOAL_RESOLVED, PRE_TRANS и "
+"POST_TRANS"
 
 #: actions.cpp:726
 msgid "Cannot use direction without package filter"
-msgstr ""
+msgstr "Не могу користити смер без филтера пакета"
 
 #: actions.cpp:740
 #, c++-format
 msgid "Unknown package direction \"{}\""
-msgstr ""
+msgstr "Непознат смер пакета „{}“"
 
 #: actions.cpp:747
 #, c++-format
 msgid "Unknown mode \"{}\""
-msgstr ""
+msgstr "Непознат режим „{}“"
 
 #: actions.cpp:755
 #, c++-format
 msgid "Unsupported value of the \"raise_error\" option: {}"
-msgstr ""
+msgstr "Неподржана вредност опције „raise_error“: {}"
 
 #: actions.cpp:760
 msgid "Missing command"
@@ -76,26 +78,27 @@ msgstr "Недостаје наредба"
 #, c++-format
 msgid "Synax error: Missing equal sign (=) in action output line: {}"
 msgstr ""
+"Синтаксна грешка: недостаје знак једнакости (=) у излазном реду радње: {}"
 
 #: actions.cpp:964
 #, c++-format
 msgid "Cannot set option: Action output line: {}"
-msgstr ""
+msgstr "Не могу поставити опцију: излазни ред радње: {}"
 
 #: actions.cpp:982
 #, c++-format
 msgid "Action sent the wrong log level: {}"
-msgstr ""
+msgstr "Радња је послала погрешан ниво дневника: {}"
 
 #: actions.cpp:987 actions.cpp:1794
 #, c++-format
 msgid "Action calls for stop: {}"
-msgstr ""
+msgstr "Радња захтева заустављање: {}"
 
 #: actions.cpp:990 actions.cpp:1801
 #, c++-format
 msgid "Action sent error message: {}"
-msgstr ""
+msgstr "Радња је послала поруку о грешци: {}"
 
 #: actions.cpp:995
 #, c++-format
@@ -103,64 +106,66 @@ msgid ""
 "Syntax error: Action output line must start with \"tmp.\" or \"conf.\" or "
 "\"var.\" or \"stop=\" or \"error=\": {}"
 msgstr ""
+"Синтаксна грешка: излазни ред радње мора почети са „tmp.“, „conf.“, „var.“, „"
+"stop=“ или „error=“: {}"
 
 #: actions.cpp:1020
 msgid "Error reading from action (from pipe)"
-msgstr ""
+msgstr "Грешка при читању из радње (из спојке)"
 
 #: actions.cpp:1038
 #, c++-format
 msgid "Syntax error in json request from action: Missing starting '{{' char"
-msgstr ""
+msgstr "Синтаксна грешка у јсон захтеву из радње: недостаје почетни знак „{{“"
 
 #: actions.cpp:1062
 msgid "Error during processing of a request from action."
-msgstr ""
+msgstr "Грешка током обраде захтева из радње."
 
 #: actions.cpp:1071
 #, c++-format
 msgid "Syntax error in json request from action: {}"
-msgstr ""
+msgstr "Синтаксна грешка у јсон захтеву из радње: {}"
 
 #: actions.cpp:1079
 msgid "Syntax error in json request from action: Incomplete input"
-msgstr ""
+msgstr "Синтаксна грешка у јсон захтеву из радње: Непотпун унос"
 
 #: actions.cpp:1154
 msgid "Cannot write response"
-msgstr ""
+msgstr "Не могу да упишем одговор"
 
 #: actions.cpp:1821
 msgid "Actions plugin: Cannot create pipe"
-msgstr ""
+msgstr "Прикључак за радње: Не могу да направим спојку"
 
 #: actions.cpp:1913
 msgid "Actions plugin: Cannot fork"
-msgstr ""
+msgstr "Прикључак за радње: Не могу да гранам (fork)"
 
 #: actions.cpp:1968
 msgid "Actions plugin: Cannot bind command stdin"
-msgstr ""
+msgstr "Прикључак за радње: Не могу да вежем стандардни улаз (stdin) наредбе"
 
 #: actions.cpp:1970
 msgid "Actions plugin: Cannot bind command stdout"
-msgstr ""
+msgstr "Прикључак за радње: Не могу да вежем стандардни излаз (stdout) наредбе"
 
 #: actions.cpp:1988
 #, c++-format
 msgid "Cannot execute action, command \"{}\" arguments \"{}\""
-msgstr ""
+msgstr "Не могу да извршим радњу, наредба „{}“ аргументи „{}“"
 
 #: actions.cpp:1996
 msgid "Error during preparation child process"
-msgstr ""
+msgstr "Грешка током припреме потпроцеса"
 
 #: actions.cpp:2015
 #, c++-format
 msgid "Exit code: {}"
-msgstr ""
+msgstr "Излазни код: {}"
 
 #: actions.cpp:2019
 #, c++-format
 msgid "Terminated by signal: {}"
-msgstr ""
+msgstr "Прекинуто сигналом: {}"

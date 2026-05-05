@@ -2,7 +2,7 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # Jonáš Loskot <fedoraproject.org@alius.cz>, 2025.
-# Jonáš Loskot <alius@users.noreply.translate.fedoraproject.org>, 2025.
+# Jonáš Loskot <alius@users.noreply.translate.fedoraproject.org>, 2025, 2026.
 # Petr Pisar <ppisar@redhat.com>, 2025.
 # Weblate Translation Memory <noreply-mt-weblate-translation-memory@weblate.org>, 2025.
 msgid ""
@@ -10,9 +10,9 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-07-26 03:48+0000\n"
-"PO-Revision-Date: 2025-07-13 09:45+0000\n"
-"Last-Translator: Weblate Translation Memory <noreply-mt-weblate-translation-"
-"memory@weblate.org>\n"
+"PO-Revision-Date: 2026-04-23 03:58+0000\n"
+"Last-Translator: Jonáš Loskot "
+"<alius@users.noreply.translate.fedoraproject.org>\n"
 "Language-Team: Czech <https://translate.fedoraproject.org/projects/dnf5/"
 "libdnf5-cli/cs/>\n"
 "Language: cs\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Weblate 5.12.2\n"
+"X-Generator: Weblate 5.17\n"
 
 #: argument_parser.cpp:68
 msgid "Misconfigured alias \"{}\": cannot convert \"{}\" to a number"
@@ -230,7 +230,7 @@ msgstr " (přesný)"
 
 #: output/search.cpp:90
 msgid "No matches found."
-msgstr "Žádná shoda nenalezena."
+msgstr "Nenalezena žádná shoda."
 
 #: output/search.cpp:101
 msgid "Matched fields: "

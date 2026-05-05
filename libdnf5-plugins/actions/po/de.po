@@ -5,13 +5,14 @@
 # Fabio D <fabio1977@arcor.de>, 2024.
 # Mario Blättermann <mario.blaettermann@gmail.com>, 2025, 2026.
 # Ettore Atalan <atalanttore@googlemail.com>, 2025.
+# Moritz Baumann <codemonkey@landkeks.de>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-07-26 03:48+0000\n"
-"PO-Revision-Date: 2026-02-13 11:58+0000\n"
-"Last-Translator: Mario Blättermann <mario.blaettermann@gmail.com>\n"
+"PO-Revision-Date: 2026-04-29 07:59+0000\n"
+"Last-Translator: Moritz Baumann <codemonkey@landkeks.de>\n"
 "Language-Team: German <https://translate.fedoraproject.org/projects/dnf5/"
 "libdnf5-plugin-actions/de/>\n"
 "Language: de\n"
@@ -19,7 +20,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.15.2\n"
+"X-Generator: Weblate 5.17\n"
 
 #: actions.cpp:237
 msgid "File \"{}\" on line {}: {}"
@@ -39,7 +40,7 @@ msgstr "Unbekannte Option „{}“"
 
 #: actions.cpp:711
 msgid "Unknown hook \"{}\""
-msgstr "Unbekannte Hook „{}“"
+msgstr "Unbekannter Hook „{}“"
 
 #: actions.cpp:720
 msgid ""

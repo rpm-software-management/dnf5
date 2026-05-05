@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-07-26 03:48+0000\n"
-"PO-Revision-Date: 2026-04-22 02:28+0000\n"
+"PO-Revision-Date: 2026-04-23 03:58+0000\n"
 "Last-Translator: \"Марко Костић (Marko Kostić)\" <marko.m.kostic@gmail.com>\n"
 "Language-Team: Serbian <https://translate.fedoraproject.org/projects/dnf5/"
 "dnf5-plugin-config-manager/sr/>\n"
@@ -22,41 +22,41 @@ msgstr ""
 #: addrepo.cpp:136
 #, c++-format
 msgid "from-repofile: \"{}\" file does not exist"
-msgstr ""
+msgstr "from-repofile: датотека „{}“ не постоји"
 
 #: addrepo.cpp:139
 #, c++-format
 msgid "from-repofile: {}"
-msgstr ""
+msgstr "from-repofile: {}"
 
 #: addrepo.cpp:169 setopt.cpp:83 setvar.cpp:49
 #, c++-format
 msgid "{}: Badly formatted argument value \"{}\""
-msgstr "{}: Лоше обликована вредност аргумента „{}“"
+msgstr "{}: лоше обликована вредност аргумента „{}“"
 
 #: addrepo.cpp:179
 #, c++-format
 msgid "Cannot set repository option \"{}={}\": {}"
-msgstr ""
+msgstr "Није могуће поставити опцију ризнице „{}={}“: {}"
 
 #: addrepo.cpp:187 setopt.cpp:138
 #, c++-format
 msgid "Sets the \"{}\" option again with a different value: \"{}\" != \"{}\""
-msgstr ""
+msgstr "Поново поставља опцију „{}“ са другом вредношћу: „{}“ != „{}“"
 
 #: addrepo.cpp:253
 msgid "Missing path to repository configuration directory"
-msgstr ""
+msgstr "Недостаје путања до директоријума подешавања ризнице"
 
 #: addrepo.cpp:303
 #, c++-format
 msgid "Failed to copy repository configuration file \"{}\": {}"
-msgstr ""
+msgstr "Није успело копирање датотеке подешавања ризнице „{}“: {}"
 
 #: addrepo.cpp:314
 #, c++-format
 msgid "Failed to download repository configuration file \"{}\": {}"
-msgstr ""
+msgstr "Није успело преузимање датотеке подешавања ризнице „{}“: {}"
 
 #: addrepo.cpp:342
 #, c++-format
@@ -64,22 +64,26 @@ msgid ""
 "Error in added repository configuration file. Cannot set repository option "
 "\"{}={}\": {}"
 msgstr ""
+"Грешка у додатој датотеци подешавања ризнице. Није могуће поставити опцију "
+"ризнице „{}={}“: {}"
 
 #: addrepo.cpp:376
 #, c++-format
 msgid "Bad baseurl: {}={}"
-msgstr ""
+msgstr "Лоша основна адреса (baseurl): {}={}"
 
 #: addrepo.cpp:384
 msgid ""
 "One of --from-repofile=<URL>, --set=baseurl=<URL>, --set=mirrorlist=<URL>, --"
 "set=metalink=<URL> must be set to a non-empty URL"
 msgstr ""
+"Једно од --from-repofile=<URL>, --set=baseurl=<URL>, --set=mirrorlist=<URL>"
+", --set=metalink=<URL> мора бити постављено на непразну адресу"
 
 #: addrepo.cpp:429
 #, c++-format
 msgid "Failed to save repository configuration file \"{}\": {}"
-msgstr ""
+msgstr "Није успело чување датотеке подешавања ризнице „{}“: {}"
 
 #: addrepo.cpp:451
 #, c++-format
@@ -87,6 +91,8 @@ msgid ""
 "File \"{}\" already exists and configures repositories with IDs \"{}\". Add "
 "\"--add-or-replace\" or \"--overwrite\"."
 msgstr ""
+"Датотека „{}“ већ постоји и подешава ризнице са ИД-овима „{}“. Додајте „--"
+"add-or-replace“ или „--overwrite“."
 
 #: addrepo.cpp:454
 #, c++-format
@@ -94,38 +100,40 @@ msgid ""
 "File \"{}\" already exists and configures repositories with IDs \"{}\". Add "
 "\"--overwrite\" to overwrite."
 msgstr ""
+"Датотека „{}“ већ постоји и подешава ризнице са ИД-овима „{}“. Додајте „--"
+"overwrite“ за преписивање."
 
 #: addrepo.cpp:474 addrepo.cpp:500
 #, c++-format
 msgid "A repository with id \"{}\" already configured in file: {}"
-msgstr ""
+msgstr "Ризница са ид-ом „{}“ је већ подешена у датотеци: {}"
 
 #: addrepo.cpp:486 setopt.cpp:263
 #, c++-format
 msgid "Cannot read repositories from directory \"{}\": {}"
-msgstr ""
+msgstr "Није могуће читање ризница из директоријума „{}“: {}"
 
 #: config-manager.cpp:43
 msgid "Manage configuration"
-msgstr ""
+msgstr "Управљање подешавањима"
 
 #: setopt.cpp:91 unsetopt.cpp:72
 #, c++-format
 msgid ""
 "{}: Badly formatted argument value: Last key character cannot be '.': {}"
 msgstr ""
-"{}: Лоше обликована вредност аргумента: Последњи знак кључа не може бити "
+"{}: лоше обликована вредност аргумента: последњи знак кључа не може бити "
 "„.“: {}"
 
 #: setopt.cpp:100 unsetopt.cpp:81
 #, c++-format
 msgid "{}: Empty repository id is not allowed: {}"
-msgstr ""
+msgstr "{}: празан ид ризнице није дозвољен: {}"
 
 #: setopt.cpp:109
 #, c++-format
 msgid "Cannot set repository option \"{}\": {}"
-msgstr ""
+msgstr "Није могуће поставити опцију ризнице „{}“: {}"
 
 #: setopt.cpp:116 setopt.cpp:179
 #, c++-format
@@ -133,35 +141,36 @@ msgid ""
 "Sets the \"{}\" option of the repository \"{}\" again with a different "
 "value: \"{}\" != \"{}\""
 msgstr ""
+"Поново поставља опцију „{}“ ризнице „{}“ са другом вредношћу: „{}“ != „{}“"
 
 #: setopt.cpp:130
 #, c++-format
 msgid "Cannot set option: \"{}\": {}"
-msgstr ""
+msgstr "Није могуће поставити опцију: „{}“: {}"
 
 #: setopt.cpp:170
 #, c++-format
 msgid "No matching repository to modify: {}"
-msgstr ""
+msgstr "Нема одговарајуће ризнице за измену: {}"
 
 #: setvar.cpp:60
 #, c++-format
 msgid "Cannot set \"{}\": Variable \"{}\" is read-only"
-msgstr ""
+msgstr "Није могуће поставити „{}“: Променљива „{}“ је само за читање"
 
 #: setvar.cpp:68
 #, c++-format
 msgid "Sets the \"{}\" variable again with a different value: \"{}\" != \"{}\""
-msgstr ""
+msgstr "Поново поставља променљиву „{}“ са другом вредношћу: „{}“ != „{}“"
 
 #: setvar.cpp:97 unsetvar.cpp:63
 msgid "Missing path to vars directory"
-msgstr ""
+msgstr "Недостаје путања до директоријума променљивих"
 
 #: setvar.cpp:110
 #, c++-format
 msgid "Cannot write variable to file \"{}\": {}"
-msgstr ""
+msgstr "Није могуће уписати променљиву у датотеку „{}“: {}"
 
 #: shared.hpp:58
 #, c++-format
@@ -169,11 +178,13 @@ msgid ""
 "The path \"{}\" exists, but it is not a directory or a symlink to a "
 "directory."
 msgstr ""
+"Путања „{}“ постоји, али није директоријум нити симболичка веза до "
+"директоријума."
 
 #: shared.hpp:63
 #, c++-format
 msgid "The path \"{}\" exists, but it is a symlink to a non-existent object."
-msgstr ""
+msgstr "Путања „{}“ постоји, али је симболичка веза до непостојећег објекта."
 
 #: shared.hpp:69
 #, c++-format
@@ -181,21 +192,24 @@ msgid ""
 "Directory \"{}\" does not exist. Add \"--create-missing-dir\" to create "
 "missing directories."
 msgstr ""
+"Директоријум „{}“ не постоји. Додајте „--create-missing-dir“ за прављење "
+"директоријума који недостају."
 
 #: shared.hpp:80
 #, c++-format
 msgid "Variable name can contain only ASCII letters, numbers and '_': {}"
 msgstr ""
+"Назив променљиве може садржати само АСКИ слова, бројеве и доњу црту „_“: {}"
 
 #: unsetopt.cpp:93
 #, c++-format
 msgid "config-manager: Request to remove unsupported repository option: {}"
-msgstr ""
+msgstr "config-manager: захтев за уклањање неподржане опције ризнице: {}"
 
 #: unsetopt.cpp:105
 #, c++-format
 msgid "config-manager: Request to remove unsupported main option: {}"
-msgstr ""
+msgstr "config-manager: захтев за уклањање неподржане главне опције: {}"
 
 #: unsetopt.cpp:140
 #, c++-format
@@ -203,12 +217,16 @@ msgid ""
 "config-manager: Request to remove main option but it is not present in the "
 "config file: {}"
 msgstr ""
+"config-manager: захтев за уклањање главне опције, али она није присутна у "
+"датотеци подешавања: {}"
 
 #: unsetopt.cpp:152
 #, c++-format
 msgid ""
 "config-manager: Request to remove main option but config file not found: {}"
 msgstr ""
+"config-manager: захтев за уклањање главне опције, али датотека подешавања "
+"није пронађена: {}"
 
 #: unsetopt.cpp:186
 #, c++-format
@@ -216,6 +234,8 @@ msgid ""
 "config-manager: Request to remove repository option but repoid is not "
 "present in the overrides: {}"
 msgstr ""
+"config-manager: захтев за уклањање опције ризнице, али ид ризнице није "
+"присутан у преписивањима: {}"
 
 #: unsetopt.cpp:194
 #, c++-format
@@ -223,6 +243,8 @@ msgid ""
 "config-manager: Request to remove repository option but it is not present in "
 "the overrides: {}.{}"
 msgstr ""
+"config-manager: захтев за уклањање опције ризнице, али она није присутна у "
+"преписивањима: {}.{}"
 
 #: unsetopt.cpp:214
 #, c++-format
@@ -230,6 +252,8 @@ msgid ""
 "config-manager: Request to remove repository option but file with overrides "
 "not found: {}"
 msgstr ""
+"config-manager: захтев за уклањање опције ризнице, али датотека са "
+"преписивањима није пронађена: {}"
 
 #: unsetvar.cpp:69
 #, c++-format
@@ -237,6 +261,8 @@ msgid ""
 "config-manager: Request to remove variable but vars directory was not found: "
 "{}"
 msgstr ""
+"config-manager: захтев за уклањање променљиве, али директоријум променљивих "
+"није пронађен: {}"
 
 #: unsetvar.cpp:82
 #, c++-format
@@ -244,8 +270,10 @@ msgid ""
 "config-manager: Request to remove variable but it is not present in the vars "
 "directory: {}"
 msgstr ""
+"config-manager: захтев за уклањање променљиве, али она није присутна у "
+"директоријуму променљивих: {}"
 
 #: unsetvar.cpp:88
 #, c++-format
 msgid "Cannot remove variable file \"{}\": {}"
-msgstr ""
+msgstr "Није могуће уклонити датотеку променљиве „{}“: {}"

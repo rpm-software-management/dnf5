@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-07-26 03:48+0000\n"
-"PO-Revision-Date: 2026-03-31 19:58+0000\n"
+"PO-Revision-Date: 2026-05-04 17:59+0000\n"
 "Last-Translator: Igor Gorbounov <igor.gorbounov@gmail.com>\n"
 "Language-Team: Russian <https://translate.fedoraproject.org/projects/dnf5/"
 "libdnf5-plugin-actions/ru/>\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 5.16.2\n"
+"X-Generator: Weblate 5.17.1\n"
 
 #: actions.cpp:237
 msgid "File \"{}\" on line {}: {}"
@@ -86,77 +86,77 @@ msgstr ""
 
 #: actions.cpp:987 actions.cpp:1794
 msgid "Action calls for stop: {}"
-msgstr ""
+msgstr "Действие требует остановки: {}"
 
 #: actions.cpp:990 actions.cpp:1801
 msgid "Action sent error message: {}"
-msgstr ""
+msgstr "Действием было отправлено сообщение об ошибке: {}"
 
 #: actions.cpp:995
 msgid ""
 "Syntax error: Action output line must start with \"tmp.\" or \"conf.\" or "
 "\"var.\" or \"stop=\" or \"error=\": {}"
 msgstr ""
+"Синтаксическая ошибка: строка вывода действия должна начинаться с \"tmp.\" "
+"или \"conf.\" или \"var.\" или \"stop=\" или \"error=\": {}"
 
 #: actions.cpp:1020
 msgid "Error reading from action (from pipe)"
-msgstr ""
+msgstr "Ошибка при чтении из действия (из канала)"
 
 #: actions.cpp:1038
 msgid "Syntax error in json request from action: Missing starting '{{' char"
 msgstr ""
+"Синтаксическая ошибка в JSON-запросе от действия: отсутствует начальный "
+"символ '{{'"
 
 #: actions.cpp:1062
 msgid "Error during processing of a request from action."
-msgstr ""
+msgstr "Ошибка при обработке запроса от действия."
 
 #: actions.cpp:1071
 msgid "Syntax error in json request from action: {}"
-msgstr ""
+msgstr "Синтаксическая ошибка в JSON-запросе от действия: {}"
 
 #: actions.cpp:1079
 msgid "Syntax error in json request from action: Incomplete input"
-msgstr ""
+msgstr "Синтаксическая ошибка в JSON-запросе от действия: неполный ввод"
 
 #: actions.cpp:1154
-#, fuzzy
-#| msgid "Cannot create pipe: {}"
 msgid "Cannot write response"
-msgstr "Невозможно создать канал: {}"
+msgstr "Невозможно записать ответ"
 
 #: actions.cpp:1821
-#, fuzzy
-#| msgid "Cannot create pipe: {}"
 msgid "Actions plugin: Cannot create pipe"
-msgstr "Невозможно создать канал: {}"
+msgstr "Плагин actions: невозможно создать канал"
 
 #: actions.cpp:1913
 msgid "Actions plugin: Cannot fork"
-msgstr ""
+msgstr "Плагин actions: ветвление невозможно"
 
 #: actions.cpp:1968
 msgid "Actions plugin: Cannot bind command stdin"
-msgstr ""
+msgstr "Плагин actons: не удается привязать команду стандартного ввода"
 
 #: actions.cpp:1970
 msgid "Actions plugin: Cannot bind command stdout"
-msgstr ""
+msgstr "Плагин ations: не удается привязать команду стандартного вывода"
 
 #: actions.cpp:1988
 msgid "Cannot execute action, command \"{}\" arguments \"{}\""
-msgstr ""
+msgstr "Не удается выполнить действие, аргументы «{}» команды «{}»"
 
 #: actions.cpp:1996
 msgid "Error during preparation child process"
-msgstr ""
+msgstr "Ошибка во время подготовки дочернего процесса"
 
 #: actions.cpp:2015
 msgid "Exit code: {}"
-msgstr ""
+msgstr "Код выхода: {}"
 
 #: actions.cpp:2019
 msgid "Terminated by signal: {}"
-msgstr ""
+msgstr "Завершено сигналом: {}"
 
 #~ msgid "Error in file \"{}\" on line {}: Unknown option \"{}\""
 #~ msgstr "Ошибка в файле \"{}\" в строке {}: Неизвестный параметр \"{}\""

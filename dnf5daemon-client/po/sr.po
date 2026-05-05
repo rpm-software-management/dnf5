@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-07-26 03:48+0000\n"
-"PO-Revision-Date: 2026-04-22 02:28+0000\n"
+"PO-Revision-Date: 2026-04-23 03:58+0000\n"
 "Last-Translator: \"Марко Костић (Marko Kostić)\" <marko.m.kostic@gmail.com>\n"
 "Language-Team: Serbian <https://translate.fedoraproject.org/projects/dnf5/"
 "dnf5daemon-client/sr/>\n"
@@ -148,7 +148,7 @@ msgstr "ЦВЕ_ИД,..."
 #: commands/clean/clean.cpp:88
 #, c++-format
 msgid "Error cleaning the cache: {}"
-msgstr ""
+msgstr "Грешка при чишћењу кеша: {}"
 
 #: commands/distro-sync/distro-sync.cpp:48
 msgid ""
@@ -158,7 +158,7 @@ msgstr ""
 
 #: commands/group/group.cpp:41
 msgid "Manage comps groups"
-msgstr ""
+msgstr "Управљајте групама компоненти"
 
 #: commands/group/group_list.hpp:37
 msgid "Show only available groups."
@@ -186,27 +186,29 @@ msgstr "Управљај ризницама"
 
 #: commands/repoquery/repoquery.cpp:95
 msgid "search for packages matching various criteria"
-msgstr ""
+msgstr "тражи пакете који одговарају различитим критеријумима"
 
 #: commands/repoquery/repoquery.cpp:159
 #, c++-format
 msgid "Error parsing JSON object \"{}\": {}"
-msgstr ""
+msgstr "Грешка при рашчлањивању ЈСОН објекта „{}“: {}"
 
 #: exception.cpp:28
 msgid ""
 "This command has to be run with superuser privileges (under the root user on "
 "most systems)."
 msgstr ""
+"Ова наредба мора бити покренута са администраторским овлашћењима (као "
+"коренски корисник на већини система)."
 
 #: main.cpp:158
 #, c++-format
 msgid ""
 "{}: Badly formatted argument value: Last key character cannot be '.': {}"
 msgstr ""
-"{}: Лоше обликована вредност аргумента: Последњи знак кључа не може бити "
+"{}: лоше обликована вредност аргумента: последњи знак кључа не може бити "
 "„.“: {}"
 
 #: main.cpp:258 main.cpp:308
 msgid ". Add \"--help\" for more information about the arguments."
-msgstr ""
+msgstr ". Додајте „--help“ за више информација о аргументима."

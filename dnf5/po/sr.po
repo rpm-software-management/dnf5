@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-07-26 03:48+0000\n"
-"PO-Revision-Date: 2026-04-22 02:28+0000\n"
+"PO-Revision-Date: 2026-04-23 03:58+0000\n"
 "Last-Translator: \"Марко Костић (Marko Kostić)\" <marko.m.kostic@gmail.com>\n"
 "Language-Team: Serbian <https://translate.fedoraproject.org/projects/dnf5/"
 "dnf5/sr/>\n"
@@ -1457,14 +1457,14 @@ msgstr ""
 #: main.cpp:249 main.cpp:288
 #, c++-format
 msgid "{}: Badly formatted argument value \"{}\""
-msgstr "{}: Лоше обликована вредност аргумента „{}“"
+msgstr "{}: лоше обликована вредност аргумента „{}“"
 
 #: main.cpp:256
 #, c++-format
 msgid ""
 "{}: Badly formatted argument value: Last key character cannot be '.': {}"
 msgstr ""
-"{}: Лоше обликована вредност аргумента: Последњи знак кључа не може бити "
+"{}: лоше обликована вредност аргумента: последњи знак кључа не може бити "
 "„.“: {}"
 
 #: main.cpp:269
