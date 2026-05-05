@@ -622,6 +622,11 @@ bool Context::Impl::cmd_requires_privileges() const {
         return false;
     }
 
+    // when storing a transaction, system should not be modified
+    if (!get_transaction_store_path().empty()) {
+        return false;
+    }
+
     // otherwise, transactional cmds with store option defined are expected to modify the system
     auto it_store = std::find_if(
         all_cmd_args.begin(), all_cmd_args.end(), [](auto arg) { return arg->get_long_name() == "store"; });
