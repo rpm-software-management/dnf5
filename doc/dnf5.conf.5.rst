@@ -672,6 +672,32 @@ repository configuration file should aside from repo ID consists of baseurl, met
 
     Default: ``False``.
 
+.. _usr_drift_protected_paths_options-label:
+
+``usr_drift_protected_paths``
+    :ref:`list <list-label>`
+
+    List of paths that are likely to cause problems when their contents drift
+    with respect to ``/usr``, e.g. ``/etc/pam.d/*``. If a transient transaction
+    would modify these paths, DNF5 aborts the operation and prints an error.
+    Supports globs. A list of paths can be protected by creating a ``.conf``
+    file in ``/etc/dnf/usr-drift-protected-paths.d/`` containing one path (or
+    glob pattern) per line.
+
+    When using ``persistence=transient`` on bootc systems, a transient overlay
+    is created on ``/usr``, and any changes DNF5 makes to ``/usr`` will be
+    discarded on reboot. However, other paths such as ``/etc`` and ``/var`` are
+    (often) not backed by a transient overlay, so changes to them will persist
+    across reboots. Usually, this "filesystem drift" is fine, but it can cause
+    problems in certain situations. For example, a configuration file in
+    ``/etc`` that's shared by multiple packages might reference a ``.so`` file
+    under ``/usr/lib64`` that no longer exists.
+
+    If any paths are protected by this option, DNF5 will download filelist
+    metadata from repositories before resolving transient transactions.
+
+    Default: ``glob:/etc/dnf/usr-drift-protected-paths.d/*.conf``.
+
 .. _varsdir_options-label:
 
 ``varsdir``

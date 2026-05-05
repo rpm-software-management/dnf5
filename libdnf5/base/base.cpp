@@ -280,6 +280,13 @@ void Base::setup() {
         protected_option.set(protected_option.get_priority(), resolved_protected_packages);
     }
 
+    // Resolve usr_drift_protected_paths globs from installroot
+    {
+        auto & usr_drift_option = p_impl->config.get_usr_drift_protected_paths_option();
+        auto resolved_usr_drift = resolve_path_globs(usr_drift_option.get_value_string(), installroot_path);
+        usr_drift_option.set(usr_drift_option.get_priority(), resolved_usr_drift);
+    }
+
     load_plugins();
     p_impl->plugins.init();
 

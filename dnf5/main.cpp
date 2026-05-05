@@ -61,6 +61,7 @@
 
 #include <fcntl.h>
 #include <fmt/format.h>
+#include <fnmatch.h>
 #include <libdnf5-cli/argument_parser.hpp>
 #include <libdnf5-cli/exception.hpp>
 #include <libdnf5-cli/exit-codes.hpp>
@@ -93,6 +94,7 @@
 #include <cstring>
 #include <filesystem>
 #include <iostream>
+#include <map>
 #include <utility>
 
 constexpr const char * DNF5_LOGGER_FILENAME = "dnf5.log";
@@ -1655,6 +1657,39 @@ int main(int argc, char * argv[]) try {
                                     cmd_line));
                             }
                         }
+                    }
+                }
+
+                // Check whether the transaction modifies usr_drift_protected_paths
+                const auto & usr_drift_protected_paths =
+                    base.get_config().get_usr_drift_protected_paths_option().get_value();
+                if (!usr_drift_protected_paths.empty()) {
+                    std::map<std::string, std::vector<std::string>> transaction_protected_paths;
+                    for (const auto & tspkg : context.get_transaction()->get_transaction_packages()) {
+                        const auto & pkg = tspkg.get_package();
+                        for (const auto & pkg_file_path : pkg.get_files()) {
+                            for (const auto & protected_pattern : usr_drift_protected_paths) {
+                                if (fnmatch(protected_pattern.c_str(), pkg_file_path.c_str(), 0) == 0) {
+                                    transaction_protected_paths[pkg.get_nevra()].push_back(pkg_file_path);
+                                }
+                            }
+                        }
+                    }
+                    if (!transaction_protected_paths.empty()) {
+                        context.print_error(
+                            _("This transaction would modify the following paths, possibly introducing "
+                              "inconsistencies when the transient overlay on /usr is discarded. See the "
+                              "usr_drift_protected_paths configuration option for more information."));
+                        for (const auto & [nevra, protected_paths] : transaction_protected_paths) {
+                            context.print_error(nevra);
+                            for (const auto & protected_path : protected_paths) {
+                                context.print_error(std::string("  ") + protected_path);
+                            }
+                        }
+                        throw libdnf5::cli::CommandExitError(
+                            1,
+                            M_("Operation aborted. Pass --setopt=usr_drift_protected_paths= to disable this "
+                               "check and proceed anyway."));
                     }
                 }
 
