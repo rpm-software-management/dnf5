@@ -238,6 +238,9 @@ class ConfigMain::Impl {
     OptionBool skip_system_repo_lock{false};
     OptionEnum persistence{"auto", {"auto", "persist", "transient"}};
 
+    OptionStringAppendList usr_drift_protected_paths{
+        std::vector<std::string>{"glob:/etc/dnf/usr-drift-protected-paths.d/*.conf"}};
+
     // Repo main config
 
     OptionNumber<std::uint32_t> retries{10};
@@ -418,6 +421,7 @@ ConfigMain::Impl::Impl(Config & owner) : owner(owner) {
     owner.opt_binds().add("build_cache", build_cache);
     owner.opt_binds().add("skip_system_repo_lock", skip_system_repo_lock);
     owner.opt_binds().add("persistence", persistence);
+    owner.opt_binds().add("usr_drift_protected_paths", usr_drift_protected_paths);
 
     // Repo main config
 
@@ -1084,6 +1088,13 @@ const OptionEnum & ConfigMain::get_persistence_option() const {
     return p_impl->persistence;
 }
 
+OptionStringAppendList & ConfigMain::get_usr_drift_protected_paths_option() {
+    return p_impl->usr_drift_protected_paths;
+}
+const OptionStringAppendList & ConfigMain::get_usr_drift_protected_paths_option() const {
+    return p_impl->usr_drift_protected_paths;
+}
+
 // Repo main config
 OptionNumber<std::uint32_t> & ConfigMain::get_retries_option() {
     return p_impl->retries;
@@ -1519,6 +1530,7 @@ void ConfigMain::Impl::load_from_config(const ConfigMain::Impl & other) {
     load_option(build_cache, other.build_cache);
     load_option(skip_system_repo_lock, other.skip_system_repo_lock);
     load_option(persistence, other.persistence);
+    load_option(usr_drift_protected_paths, other.usr_drift_protected_paths);
 
     // Repo main config
     load_option(retries, other.retries);

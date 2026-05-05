@@ -240,6 +240,12 @@ void Context::Impl::update_repo_metadata_from_advisory_options(
 }
 
 void Context::Impl::load_repos(bool load_system, bool load_available) {
+    if (persistence == libdnf5::base::TransactionPersistence::TRANSIENT &&
+        !base.get_config().get_usr_drift_protected_paths_option().get_value().empty()) {
+        base.get_config().get_optional_metadata_types_option().add_item(
+            libdnf5::Option::Priority::RUNTIME, libdnf5::METADATA_TYPE_FILELISTS);
+    }
+
     if (load_available) {
         libdnf5::repo::RepoQuery repos(base);
         repos.filter_enabled(true);
