@@ -1,3 +1,22 @@
+# 5.4.2.1
+
+- Update translations from weblate
+- Move system-repo.lock to /var/lib/dnf/system-repo.lock
+- dnfdaemon: Document interactive option in D-Bus API
+- dnfdaemon: Add repo_key_imported informational signal
+- dnfdaemon: Avoid timeout on repo key import
+- dnfdaemon: Pass interactive parameter to repo key import callback
+- refactor(download): preallocate memory in `DownloadCommand::configure`
+- Fix list --installed-from-repo to imply --installed
+- Fix typos in docs, comments, and user-facing strings
+- dnf5.8.rst: s/sytem/system
+- Suggest allow_vendor_change=true when solver blocks vendor update
+- Shell completion: use space for all options
+- doc: Annotate a fix for CVE-2026-3836
+- refactor: pass by const reference
+- Fix data loss caused by POLLHUP race in poll loop
+- test: Use POSIX octal escapes in test_binary_data
+
 # 5.4.2.0
 
 - Update translations from weblate
