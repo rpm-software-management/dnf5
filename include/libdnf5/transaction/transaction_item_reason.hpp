@@ -41,6 +41,7 @@ enum class TransactionItemReason : int {
 
 
 LIBDNF_API std::string transaction_item_reason_to_string(TransactionItemReason reason);
+LIBDNF_API std::string transaction_item_reason_to_translated_string(TransactionItemReason reason);
 LIBDNF_API TransactionItemReason transaction_item_reason_from_string(const std::string & reason);
 
 

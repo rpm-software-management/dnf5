@@ -50,6 +50,7 @@ enum class TransactionItemAction : int {
 
 
 LIBDNF_API std::string transaction_item_action_to_string(TransactionItemAction action);
+LIBDNF_API std::string transaction_item_action_to_translated_string(TransactionItemAction action);
 LIBDNF_API TransactionItemAction transaction_item_action_from_string(const std::string & action);
 
 LIBDNF_API std::string transaction_item_action_to_letter(TransactionItemAction action);
