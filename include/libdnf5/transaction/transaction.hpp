@@ -60,6 +60,7 @@ class TransactionHistory;
 enum class TransactionState : int { STARTED = 1, OK = 2, ERROR = 3 };
 
 LIBDNF_API std::string transaction_state_to_string(TransactionState state);
+LIBDNF_API std::string transaction_state_to_translated_string(TransactionState state);
 LIBDNF_API TransactionState transaction_state_from_string(const std::string & state);
 
 

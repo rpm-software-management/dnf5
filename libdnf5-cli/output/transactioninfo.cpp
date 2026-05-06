@@ -27,6 +27,7 @@
 
 #include <fmt/format.h>
 #include <json-c/json.h>
+#include <libdnf5/utils/bgettext/bgettext-lib.h>
 #include <pwd.h>
 
 #include <sstream>
@@ -69,17 +70,20 @@ void print_transaction_item_table(std::vector<Item> items, const char * title) {
     scols_cell_set_data(scols_table_get_title(item_list.get()), title);
 
     // The two spaces indent the table the same way as child lines in KeyValueTable
-    scols_table_new_column(item_list.get(), "  Action", 0, 0);
-    scols_table_new_column(item_list.get(), "Package", 0, 0);
-    scols_table_new_column(item_list.get(), "Reason", 0, 0);
-    scols_table_new_column(item_list.get(), "Repository", 0, 0);
+    scols_table_new_column(item_list.get(), (std::string{"  "} + _("Action")).c_str(), 0, 0);
+    scols_table_new_column(item_list.get(), _("Package"), 0, 0);
+    scols_table_new_column(item_list.get(), _("Reason"), 0, 0);
+    scols_table_new_column(item_list.get(), _("Repository"), 0, 0);
 
     for (auto & pkg : items) {
         struct libscols_line * ln = scols_table_new_line(item_list.get(), NULL);
         scols_line_set_data(
-            ln, 0, ("  " + libdnf5::transaction::transaction_item_action_to_string(pkg.get_action())).c_str());
+            ln,
+            0,
+            ("  " + libdnf5::transaction::transaction_item_action_to_translated_string(pkg.get_action())).c_str());
         scols_line_set_data(ln, 1, pkg.to_string().c_str());
-        scols_line_set_data(ln, 2, libdnf5::transaction::transaction_item_reason_to_string(pkg.get_reason()).c_str());
+        scols_line_set_data(
+            ln, 2, libdnf5::transaction::transaction_item_reason_to_translated_string(pkg.get_reason()).c_str());
         scols_line_set_data(ln, 3, pkg.get_repoid().c_str());
     }
 
@@ -91,22 +95,22 @@ void print_transaction_item_table(std::vector<Item> items, const char * title) {
 
 void print_transaction_info(libdnf5::transaction::Transaction & transaction) {
     KeyValueTable info;
-    info.add_line("Transaction ID", transaction.get_id(), "bold");
-    info.add_line("Begin time", libdnf5::utils::string::format_epoch(transaction.get_dt_start()));
-    info.add_line("Begin rpmdb", transaction.get_rpmdb_version_begin());
-    info.add_line("End time", libdnf5::utils::string::format_epoch(transaction.get_dt_end()));
-    info.add_line("End rpmdb", transaction.get_rpmdb_version_end());
+    info.add_line(_("Transaction ID"), transaction.get_id(), "bold");
+    info.add_line(_("Begin time"), libdnf5::utils::string::format_epoch(transaction.get_dt_start()));
+    info.add_line(_("Begin rpmdb"), transaction.get_rpmdb_version_begin());
+    info.add_line(_("End time"), libdnf5::utils::string::format_epoch(transaction.get_dt_end()));
+    info.add_line(_("End rpmdb"), transaction.get_rpmdb_version_end());
 
-    info.add_line("User", generate_user_info_str(transaction.get_user_id()));
-    info.add_line("Status", libdnf5::transaction::transaction_state_to_string(transaction.get_state()));
-    info.add_line("Releasever", transaction.get_releasever());
-    info.add_line("Description", transaction.get_description());
-    info.add_line("Comment", transaction.get_comment());
+    info.add_line(_("User"), generate_user_info_str(transaction.get_user_id()));
+    info.add_line(_("Status"), libdnf5::transaction::transaction_state_to_translated_string(transaction.get_state()));
+    info.add_line(_("Releasever"), transaction.get_releasever());
+    info.add_line(_("Description"), transaction.get_description());
+    info.add_line(_("Comment"), transaction.get_comment());
 
     info.print();
-    print_transaction_item_table(transaction.get_packages(), "Packages altered:");
-    print_transaction_item_table(transaction.get_comps_groups(), "Groups altered:");
-    print_transaction_item_table(transaction.get_comps_environments(), "Environments altered:");
+    print_transaction_item_table(transaction.get_packages(), _("Packages altered:"));
+    print_transaction_item_table(transaction.get_comps_groups(), _("Groups altered:"));
+    print_transaction_item_table(transaction.get_comps_environments(), _("Environments altered:"));
 }
 
 // [NOTE] When editing JSON output format, do not forget to update the docs at doc/commands/history.8.rst

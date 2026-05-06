@@ -21,6 +21,8 @@
 
 #include "libdnf5/utils/bgettext/bgettext-mark-domain.h"
 
+#include <libdnf5/utils/bgettext/bgettext-lib.h>
+
 
 namespace libdnf5::transaction {
 
@@ -48,6 +50,25 @@ std::string transaction_item_reason_to_string(TransactionItemReason reason) {
     return "";
 }
 
+std::string transaction_item_reason_to_translated_string(TransactionItemReason reason) {
+    switch (reason) {
+        case TransactionItemReason::NONE:
+            return _("None");
+        case TransactionItemReason::DEPENDENCY:
+            return _("Dependency");
+        case TransactionItemReason::USER:
+            return _("User");
+        case TransactionItemReason::CLEAN:
+            return _("Clean");
+        case TransactionItemReason::WEAK_DEPENDENCY:
+            return _("Weak Dependency");
+        case TransactionItemReason::GROUP:
+            return _("Group");
+        case TransactionItemReason::EXTERNAL_USER:
+            return _("External User");
+    }
+    return "";
+}
 
 TransactionItemReason transaction_item_reason_from_string(const std::string & reason) {
     if (reason == "None") {
