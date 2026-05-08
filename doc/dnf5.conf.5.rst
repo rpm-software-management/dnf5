@@ -1459,8 +1459,8 @@ Override files support globs in the repository ID in order to support bulk modif
 
 The repository overrides are processed following this order:
 
-1. Files from ``/usr/share/dnf5/repos.override.d/`` and ``/etc/dnf5/repos.override.d/`` are loaded in an alphabetically
-   sorted list. In case files have the same name, the file from ``/etc/dnf5/repos.override.d/`` is used.
+1. Files from ``/usr/share/dnf5/repos.override.d/`` and ``/etc/dnf/repos.override.d/`` are loaded in an alphabetically
+   sorted list. In case files have the same name, the file from ``/etc/dnf/repos.override.d/`` is used.
    This implies the list has only unique filenames. This also implies that the repository configuration files can be
    simply masked by creating a file with the same name in the ``/etc`` override directory.
 
