@@ -74,6 +74,7 @@ enum class RepoAttribute {
     size,
     pkgs,
     available_pkgs,  // number of not excluded packages
+    unique_nevras,
     mirrors,
 };
 
@@ -86,6 +87,7 @@ std::vector<RepoAttribute> metadata_required_attributes{
     RepoAttribute::size,
     RepoAttribute::pkgs,
     RepoAttribute::available_pkgs,
+    RepoAttribute::unique_nevras,
     RepoAttribute::mirrors};
 
 // map string package attribute name to actual attribute
@@ -122,6 +124,7 @@ const static std::map<std::string, RepoAttribute> repo_attributes{
     {"size", RepoAttribute::size},
     {"pkgs", RepoAttribute::pkgs},
     {"available_pkgs", RepoAttribute::available_pkgs},
+    {"unique_nevras", RepoAttribute::unique_nevras},
     {"mirrors", RepoAttribute::mirrors},
 };
 
@@ -244,6 +247,15 @@ dnfdaemon::KeyValueMap repo_to_map(
                 libdnf5::rpm::PackageQuery query(base);
                 query.filter_repo_id({libdnf_repo->get_id()});
                 dbus_repo.emplace(attr, query.size());
+            } break;
+            case RepoAttribute::unique_nevras: {
+                libdnf5::rpm::PackageQuery query(base, libdnf5::rpm::PackageQuery::ExcludeFlags::IGNORE_EXCLUDES);
+                query.filter_repo_id({libdnf_repo->get_id()});
+                std::unordered_set<std::string> unique_nevras;
+                for (const auto & pkg : query) {
+                    unique_nevras.insert(pkg.get_full_nevra());
+                }
+                dbus_repo.emplace(attr, unique_nevras.size());
             } break;
             case RepoAttribute::mirrors:
                 dbus_repo.emplace(attr, libdnf_repo->get_mirrors());
