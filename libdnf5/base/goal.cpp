@@ -147,7 +147,11 @@ public:
     Impl(const BaseWeakPtr & base);
     ~Impl();
 
-    void add_rpm_ids(GoalAction action, const rpm::Package & rpm_package, const GoalJobSettings & settings);
+    void add_rpm_ids(
+        GoalAction action,
+        const rpm::Package & rpm_package,
+        const GoalJobSettings & settings,
+        const std::string & user_spec = {});
     void add_rpm_ids(GoalAction action, const rpm::PackageSet & package_set, const GoalJobSettings & settings);
 
     GoalProblem add_specs_to_goal(base::Transaction & transaction);
@@ -245,8 +249,8 @@ private:
         std::optional<std::string>,
         GoalJobSettings>>
         rpm_reason_change_specs;
-    /// <libdnf5::GoalAction, rpm Ids, libdnf5::GoalJobSettings settings>
-    std::vector<std::tuple<GoalAction, libdnf5::solv::IdQueue, GoalJobSettings>> rpm_ids;
+    /// <libdnf5::GoalAction, rpm Ids, libdnf5::GoalJobSettings settings, user-facing spec>
+    std::vector<std::tuple<GoalAction, libdnf5::solv::IdQueue, GoalJobSettings, std::string>> rpm_ids;
     /// <libdnf5::GoalAction, std::string filepath, libdnf5::GoalJobSettings settings>
     std::vector<std::tuple<GoalAction, std::string, GoalJobSettings>> rpm_filepaths;
 
@@ -493,12 +497,16 @@ void Goal::Impl::add_spec(GoalAction action, const std::string & spec, const Goa
     }
 }
 
-void Goal::Impl::add_rpm_ids(GoalAction action, const rpm::Package & rpm_package, const GoalJobSettings & settings) {
+void Goal::Impl::add_rpm_ids(
+    GoalAction action,
+    const rpm::Package & rpm_package,
+    const GoalJobSettings & settings,
+    const std::string & user_spec) {
     libdnf_assert_same_base(base, rpm_package.get_base());
 
     libdnf5::solv::IdQueue ids;
     ids.push_back(rpm_package.get_id().id);
-    rpm_ids.push_back(std::make_tuple(action, std::move(ids), settings));
+    rpm_ids.push_back(std::make_tuple(action, std::move(ids), settings, user_spec));
 }
 
 void Goal::Impl::add_rpm_ids(GoalAction action, const rpm::PackageSet & package_set, const GoalJobSettings & settings) {
@@ -508,7 +516,7 @@ void Goal::Impl::add_rpm_ids(GoalAction action, const rpm::PackageSet & package_
     for (auto package_id : *package_set.p_impl) {
         ids.push_back(package_id);
     }
-    rpm_ids.push_back(std::make_tuple(action, std::move(ids), settings));
+    rpm_ids.push_back(std::make_tuple(action, std::move(ids), settings, std::string{}));
 }
 
 // @replaces part of libdnf/sack/query.cpp:method:filterAdvisory called with HY_EQG and HY_UPGRADE
@@ -2134,7 +2142,10 @@ void Goal::Impl::add_rpms_to_goal(base::Transaction & transaction) {
 
     rpm::PackageQuery installed(base, rpm::PackageQuery::ExcludeFlags::IGNORE_EXCLUDES);
     installed.filter_installed();
-    for (auto [action, ids, settings] : rpm_ids) {
+    for (auto [action, ids, settings, user_spec] : rpm_ids) {
+        auto get_user_spec = [&user_spec, &pool](int id) -> std::string {
+            return user_spec.empty() ? pool.get_nevra(id) : user_spec;
+        };
         switch (action) {
             case GoalAction::INSTALL: {
                 bool skip_broken = settings.resolve_skip_broken(cfg_main);
@@ -2194,7 +2205,7 @@ void Goal::Impl::add_rpms_to_goal(base::Transaction & transaction) {
                             GoalProblem::NOT_INSTALLED,
                             settings,
                             libdnf5::transaction::TransactionItemType::PACKAGE,
-                            {pool.get_nevra(id)},
+                            get_user_spec(id),
                             {},
                             log_level);
                     } else {
@@ -2226,7 +2237,7 @@ void Goal::Impl::add_rpms_to_goal(base::Transaction & transaction) {
                             GoalProblem::NOT_INSTALLED,
                             settings,
                             libdnf5::transaction::TransactionItemType::PACKAGE,
-                            {pool.get_nevra(id)},
+                            get_user_spec(id),
                             {},
                             libdnf5::Logger::Level::WARNING);
                         continue;
@@ -2242,7 +2253,7 @@ void Goal::Impl::add_rpms_to_goal(base::Transaction & transaction) {
                                 GoalProblem::NOT_INSTALLED_FOR_ARCHITECTURE,
                                 settings,
                                 libdnf5::transaction::TransactionItemType::PACKAGE,
-                                {pool.get_nevra(id)},
+                                get_user_spec(id),
                                 {},
                                 libdnf5::Logger::Level::WARNING);
                             continue;
@@ -2256,7 +2267,7 @@ void Goal::Impl::add_rpms_to_goal(base::Transaction & transaction) {
                             GoalProblem::ALREADY_INSTALLED,
                             settings,
                             libdnf5::transaction::TransactionItemType::PACKAGE,
-                            {pool.get_nevra(id)},
+                            get_user_spec(id),
                             {pool.get_name(id) + ("." + arch)},
                             libdnf5::Logger::Level::WARNING);
                         // include installed packages with higher or equal version into transaction to prevent downgrade
@@ -2284,7 +2295,7 @@ void Goal::Impl::add_rpms_to_goal(base::Transaction & transaction) {
                             GoalProblem::NOT_INSTALLED,
                             settings,
                             libdnf5::transaction::TransactionItemType::PACKAGE,
-                            {pool.get_nevra(id)},
+                            get_user_spec(id),
                             {},
                             log_level);
                         continue;
@@ -2297,7 +2308,7 @@ void Goal::Impl::add_rpms_to_goal(base::Transaction & transaction) {
                             GoalProblem::NOT_INSTALLED_FOR_ARCHITECTURE,
                             settings,
                             libdnf5::transaction::TransactionItemType::PACKAGE,
-                            {pool.get_nevra(id)},
+                            get_user_spec(id),
                             {},
                             log_level);
                         continue;
@@ -2313,7 +2324,7 @@ void Goal::Impl::add_rpms_to_goal(base::Transaction & transaction) {
                             GoalProblem::INSTALLED_LOWEST_VERSION,
                             settings,
                             libdnf5::transaction::TransactionItemType::PACKAGE,
-                            {pool.get_nevra(id)},
+                            get_user_spec(id),
                             {name_arch},
                             log_level);
                         continue;
@@ -3324,7 +3335,7 @@ void Goal::Impl::add_paths_to_goal() {
                     continue;
                 }
             }
-            add_rpm_ids(action, pkg->second, settings);
+            add_rpm_ids(action, pkg->second, settings, path);
         }
     }
 
