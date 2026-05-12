@@ -115,6 +115,9 @@ void ReposyncCommand::set_argument_parser() {
     download_metadata_option = std::make_unique<libdnf5::cli::session::BoolOption>(
         *this, "download-metadata", '\0', "Download all repository metadata", false);
 
+    min_buildtime_option = std::make_unique<libdnf5::cli::session::DateOption>(
+        *this, "min-buildtime", 0, "Download only packages with buildtime newer or equal to YYYY-MM-DD", "YYYY-MM-DD");
+
     auto * destdir_arg = parser.add_new_named_arg("destdir");
     destdir_arg->set_long_name("destdir");
     destdir_arg->set_description("Root path under which the downloaded repositories are stored");
@@ -234,6 +237,10 @@ ReposyncCommand::download_list_type ReposyncCommand::get_packages_list(const lib
 
     if (newest_option->get_value()) {
         limit_to_latest(query);
+    }
+
+    if (min_buildtime_option->get_arg()->get_parse_count() >= 1) {
+        query.filter_recent(min_buildtime_option->get_value());
     }
 
     if (!arch_option.empty()) {

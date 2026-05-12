@@ -52,6 +52,7 @@ private:
     std::unique_ptr<libdnf5::cli::session::BoolOption> urls_option{nullptr};
     std::unique_ptr<libdnf5::cli::session::BoolOption> gpgcheck_option{nullptr};
     std::unique_ptr<libdnf5::cli::session::BoolOption> download_metadata_option{nullptr};
+    std::unique_ptr<libdnf5::cli::session::DateOption> min_buildtime_option{nullptr};
     std::unordered_set<std::string> arch_option;
     libdnf5::OptionString * safe_write_path_option{nullptr};
     libdnf5::OptionString * metadata_path_option{nullptr};

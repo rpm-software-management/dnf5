@@ -72,6 +72,10 @@ Options
     Specifies the root path where downloaded metadata files are stored. If not
     specified, it defaults to the value of ``--destdir``.
 
+``--min-buildtime <YYYY-MM-DD>``
+    Download only packages with buildtime newer or equal to YYYY-MM-DD.
+    Note that this option may result in partially synchronized repositories and the missing packages can cause dependency issues.
+
 ``--newest-only, -n``
     Download only the latest package versions from each repository.
 
