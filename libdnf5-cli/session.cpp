@@ -21,6 +21,7 @@
 #include <libdnf5-cli/session.hpp>
 #include <libdnf5/utils/bgettext/bgettext-mark-domain.h>
 
+#include <sstream>
 
 namespace libdnf5::cli::session {
 
@@ -225,6 +226,52 @@ libdnf5::cli::ArgumentParser::NamedArg * BoolOption::get_arg() {
     return arg;
 }
 
+DateOption::DateOption(
+    libdnf5::cli::session::Command & command,
+    const std::string & long_name,
+    char short_name,
+    const std::string & desc,
+    const std::string & help) {
+    auto & parser = command.get_session().get_argument_parser();
+    arg = parser.add_new_named_arg(long_name);
+
+    if (!long_name.empty()) {
+        arg->set_long_name(long_name);
+    }
+
+    if (short_name) {
+        arg->set_short_name(short_name);
+    }
+
+    arg->set_description(desc);
+    arg->set_arg_value_help(help);
+    arg->set_has_value(true);
+    conf = dynamic_cast<libdnf5::OptionNumber<std::int64_t> *>(
+        parser.add_init_value(std::unique_ptr<libdnf5::OptionNumber<std::int64_t>>(
+            new libdnf5::OptionNumber<int64_t>(0, [](const std::string & value) {
+                struct tm time_m = {};
+                std::istringstream ss(value);
+                ss >> std::get_time(&time_m, "%Y-%m-%d");
+                if (ss.fail()) {
+                    throw libdnf5::cli::ArgumentParserError(
+                        M_("Invalid date passed: \"{}\". Dates in \"YYYY-MM-DD\" format are expected"), value);
+                }
+                return static_cast<int64_t>(mktime(&time_m));
+            }))));
+    arg->link_value(conf);
+
+    command.get_argument_parser_command()->register_named_arg(arg);
+}
+
+DateOption::~DateOption() = default;
+
+int64_t DateOption::get_value() const {
+    return conf->get_value();
+}
+
+libdnf5::cli::ArgumentParser::NamedArg * DateOption::get_arg() {
+    return arg;
+}
 
 AppendStringListOption::AppendStringListOption(
     libdnf5::cli::session::Command & command,

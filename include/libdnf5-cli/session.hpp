@@ -207,6 +207,34 @@ protected:
 };
 
 
+/// DateOption is a wrapper around NamedArg and OptionNumber<std::int64_t>
+/// which allows specifying a date in YYYY-MM-DD format.
+/// If the date fails to parse it throws libdnf5::cli::ArgumentParserError.
+class LIBDNF_CLI_API DateOption : public Option {
+public:
+    explicit DateOption(
+        libdnf5::cli::session::Command & command,
+        const std::string & long_name,
+        char short_name,
+        const std::string & desc,
+        const std::string & help);
+
+    ~DateOption();
+
+    /// @return Parsed value.
+    /// @since 5.4.3.0
+    int64_t get_value() const;
+
+    /// @return Option argument.
+    /// @since 5.4.3.0
+    libdnf5::cli::ArgumentParser::NamedArg * get_arg();
+
+protected:
+    libdnf5::OptionNumber<std::int64_t> * conf{nullptr};
+    libdnf5::cli::ArgumentParser::NamedArg * arg{nullptr};
+};
+
+
 /// AppendStringListOption is a wrapper around NamedArg and OptionStringList
 /// which allows specifying the argument multiple times and merging their values.
 /// E.g. --whatrequires=tree --whatrequires=plant -> option contains: "tree, plant"

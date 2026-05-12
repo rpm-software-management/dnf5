@@ -30,7 +30,6 @@
 #include <ctime>
 #include <iomanip>
 #include <iostream>
-#include <sstream>
 
 namespace dnf5 {
 
@@ -49,30 +48,14 @@ void ChangelogCommand::set_argument_parser() {
     auto & cmd = *get_argument_parser_command();
     cmd.set_description("Show package changelogs");
 
-    since_option = dynamic_cast<libdnf5::OptionNumber<std::int64_t> *>(
-        parser.add_init_value(std::unique_ptr<libdnf5::OptionNumber<std::int64_t>>(
-            new libdnf5::OptionNumber<int64_t>(0, [](const std::string & value) {
-                struct tm time_m = {};
-                std::istringstream ss(value);
-                ss >> std::get_time(&time_m, "%Y-%m-%d");
-                if (ss.fail()) {
-                    throw libdnf5::cli::ArgumentParserError(
-                        M_("Invalid date passed: \"{}\". Dates in \"YYYY-MM-DD\" format are expected"), value);
-                }
-                return static_cast<int64_t>(mktime(&time_m));
-            }))));
-
     count_option = dynamic_cast<libdnf5::OptionNumber<std::int32_t> *>(
         parser.add_init_value(std::unique_ptr<libdnf5::OptionNumber<std::int32_t>>(new libdnf5::OptionNumber<int>(0))));
 
     upgrades_option = dynamic_cast<libdnf5::OptionBool *>(
         parser.add_init_value(std::unique_ptr<libdnf5::OptionBool>(new libdnf5::OptionBool(false))));
 
-    auto since = parser.add_new_named_arg("since");
-    since->set_long_name("since");
-    since->set_description("Show changelog entries since date in the YYYY-MM-DD format");
-    since->set_has_value(true);
-    since->link_value(since_option);
+    since_option = std::make_unique<libdnf5::cli::session::DateOption>(
+        *this, "since", 0, "Show changelog entries since date in the YYYY-MM-DD format", "YYYY-MM-DD");
 
     auto count = parser.add_new_named_arg("count");
     count->set_long_name("count");
@@ -96,11 +79,10 @@ void ChangelogCommand::set_argument_parser() {
     keys->set_description("List of package-spec-NI to show changelogs for");
     keys->set_complete_hook_func([&ctx](const char * arg) { return ctx.match_specs(arg, false, true, false, false); });
 
-    since->add_conflict_argument(*count);
-    since->add_conflict_argument(*upgrades);
+    since_option->get_arg()->add_conflict_argument(*count);
+    since_option->get_arg()->add_conflict_argument(*upgrades);
     count->add_conflict_argument(*upgrades);
 
-    cmd.register_named_arg(since);
     cmd.register_named_arg(count);
     cmd.register_named_arg(upgrades);
     cmd.register_positional_arg(keys);

@@ -39,7 +39,7 @@ public:
 
 private:
     libdnf5::OptionNumber<std::int32_t> * count_option{nullptr};
-    libdnf5::OptionNumber<std::int64_t> * since_option{nullptr};
+    std::unique_ptr<libdnf5::cli::session::DateOption> since_option{nullptr};
     libdnf5::OptionBool * upgrades_option{nullptr};
     std::vector<std::unique_ptr<libdnf5::Option>> * pkgs_spec_to_show_options{nullptr};
 };
