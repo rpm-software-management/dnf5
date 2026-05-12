@@ -324,6 +324,27 @@ void BaseGoalTest::test_upgrade_not_downgrade_from_cmdline() {
     CPPUNIT_ASSERT_EQUAL(libdnf5::GoalUsedSetting::UNUSED, first_event.get_job_settings()->get_used_skip_unavailable());
 }
 
+void BaseGoalTest::test_upgrade_not_installed_from_cmdline() {
+    // Tests the upgrade using a local RPM file path when the package is not installed.
+    // The resolve log should contain the original file path, not the resolved NEVRA.
+    // (https://bugzilla.redhat.com/show_bug.cgi?id=2362262)
+    std::string rpm_path = PROJECT_BINARY_DIR "/test/data/repos-rpm/rpm-repo1/one-2-1.noarch.rpm";
+
+    libdnf5::Goal goal(base);
+    goal.add_upgrade(rpm_path);
+
+    auto transaction = goal.resolve();
+
+    CPPUNIT_ASSERT(transaction.get_transaction_packages().empty());
+
+    auto & log = transaction.get_resolve_logs();
+    CPPUNIT_ASSERT_EQUAL((size_t)1, log.size());
+    auto & first_event = *log.begin();
+    CPPUNIT_ASSERT_EQUAL(libdnf5::GoalAction::UPGRADE, first_event.get_action());
+    CPPUNIT_ASSERT_EQUAL(libdnf5::GoalProblem::NOT_INSTALLED, first_event.get_problem());
+    CPPUNIT_ASSERT_EQUAL(rpm_path, *first_event.get_spec());
+}
+
 void BaseGoalTest::test_upgrade_not_available() {
     base.get_config().get_best_option().set(true);
     base.get_config().get_clean_requirements_on_remove_option().set(true);

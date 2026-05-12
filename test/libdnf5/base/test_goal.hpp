@@ -45,6 +45,7 @@ class BaseGoalTest : public LibdnfPrivateTestCase {
     CPPUNIT_TEST(test_upgrade);
     CPPUNIT_TEST(test_upgrade_from_cmdline);
     CPPUNIT_TEST(test_upgrade_not_downgrade_from_cmdline);
+    CPPUNIT_TEST(test_upgrade_not_installed_from_cmdline);
     CPPUNIT_TEST(test_upgrade_not_available);
     CPPUNIT_TEST(test_upgrade_all);
     CPPUNIT_TEST(test_upgrade_user);
@@ -77,6 +78,7 @@ public:
     void test_upgrade();
     void test_upgrade_from_cmdline();
     void test_upgrade_not_downgrade_from_cmdline();
+    void test_upgrade_not_installed_from_cmdline();
     void test_upgrade_not_available();
     void test_upgrade_all();
     void test_upgrade_user();
