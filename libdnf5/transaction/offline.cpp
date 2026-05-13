@@ -19,6 +19,7 @@
 
 #include "libdnf5/common/exception.hpp"
 
+#include <libdnf5/base/base.hpp>
 #include <libdnf5/transaction/offline.hpp>
 #include <libdnf5/utils/bgettext/bgettext-mark-domain.h>
 #include <libdnf5/utils/fs/file.hpp>
@@ -213,6 +214,12 @@ void OfflineTransactionState::write() {
     file.write(toml::format(toml::value{toml::table{{STATE_HEADER, p_impl->data.p_impl->data}}}));
 #endif
     file.close();
+}
+
+OfflineTransactionState OfflineTransactionState::from_base(const Base & base) {
+    return OfflineTransactionState(
+        base.get_config().get_installroot_option().get_value() / DEFAULT_DATADIR.relative_path() /
+        TRANSACTION_STATE_FILENAME);
 }
 
 }  // namespace libdnf5::offline
