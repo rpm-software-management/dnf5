@@ -26,6 +26,10 @@
 #include <filesystem>
 #include <memory>
 
+namespace libdnf5 {
+class Base;
+}
+
 namespace libdnf5::offline {
 
 // Unique identifiers used to mark and identify system-upgrade boots in
@@ -119,6 +123,12 @@ public:
     /// Constructs a new OfflineTransactionState instance based on the state file location.
     /// @param path Path to the state file (default location is /usr/lib/sysimage/libdnf5/offline/offline-transaction-state.toml).
     OfflineTransactionState(std::filesystem::path path);
+
+    /// Creates a new OfflineTransactionState deriving the state file path
+    /// from the Base installroot configuration.
+    /// @param base The Base instance to derive the state file path from.
+    /// @return A new OfflineTransactionState instance.
+    static OfflineTransactionState from_base(const libdnf5::Base & base);
 
     OfflineTransactionState(const OfflineTransactionState & src);
     OfflineTransactionState & operator=(const OfflineTransactionState & src);

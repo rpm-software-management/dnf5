@@ -347,8 +347,7 @@ void Context::Impl::store_offline(libdnf5::base::Transaction & transaction) {
     const auto & packages_location = offline_destdir / "packages";
     const auto & comps_location = offline_destdir / "comps";
 
-    const std::filesystem::path state_path{offline_datadir / libdnf5::offline::TRANSACTION_STATE_FILENAME};
-    libdnf5::offline::OfflineTransactionState state{state_path};
+    auto state = libdnf5::offline::OfflineTransactionState::from_base(base);
 
     auto & offline_data = state.get_data();
     offline_data.set_status(libdnf5::offline::STATUS_DOWNLOAD_INCOMPLETE);
@@ -459,8 +458,7 @@ void Context::Impl::download_and_run(libdnf5::base::Transaction & transaction) {
         const auto & offline_destdir = installroot / libdnf5::offline::DEFAULT_DESTDIR.relative_path();
         std::filesystem::create_directories(offline_datadir);
         std::filesystem::create_directories(offline_destdir);
-        const std::filesystem::path state_path{offline_datadir / libdnf5::offline::TRANSACTION_STATE_FILENAME};
-        libdnf5::offline::OfflineTransactionState state{state_path};
+        auto state = libdnf5::offline::OfflineTransactionState::from_base(base);
 
         // Check whether there is another pending offline transaction present
         auto & offline_data = state.get_data();

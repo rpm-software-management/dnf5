@@ -358,8 +358,7 @@ void Session::store_transaction_offline(bool downloadonly) {
     const auto & offline_datadir = installroot / libdnf5::offline::DEFAULT_DATADIR.relative_path();
     const auto & offline_destdir = installroot / libdnf5::offline::DEFAULT_DESTDIR.relative_path();
     std::filesystem::create_directories(offline_datadir);
-    const std::filesystem::path state_path{offline_datadir / libdnf5::offline::TRANSACTION_STATE_FILENAME};
-    libdnf5::offline::OfflineTransactionState state{state_path};
+    auto state = libdnf5::offline::OfflineTransactionState::from_base(*base);
     auto & state_data = state.get_data();
     state_data.set_status(libdnf5::offline::STATUS_DOWNLOAD_INCOMPLETE);
     state.write();
