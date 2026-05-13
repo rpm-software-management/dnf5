@@ -41,6 +41,7 @@ enum class PackageAttribute {
     install_size,
     download_size,
     buildtime,
+    install_time,
     sourcerpm,
     summary,
     url,
