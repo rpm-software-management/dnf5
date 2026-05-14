@@ -40,6 +40,7 @@ extern "C" {
 #include <fnmatch.h>
 
 #include <filesystem>
+#include <utility>
 
 namespace libdnf5::rpm {
 
@@ -2931,12 +2932,11 @@ std::vector<std::vector<Package>> PackageQuery::filter_leaves_groups() {
 
 void PackageQuery::filter_recent(const time_t timestamp) {
     auto & pool = get_rpm_pool(p_impl->base);
-    const unsigned long long time_long = static_cast<unsigned long long>(timestamp);
 
     for (const auto candidate_id : *p_impl) {
         auto solvable = pool.id2solvable(candidate_id);
         auto buildtime = solvable_lookup_num(solvable, SOLVABLE_BUILDTIME, 0);
-        if (buildtime < time_long) {
+        if (std::cmp_less(buildtime, timestamp)) {
             p_impl->remove_unsafe(candidate_id);
         }
     }
