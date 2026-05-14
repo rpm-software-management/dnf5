@@ -53,6 +53,10 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
         For removed packages, only the name, arch, and evr of the removed
         version are provided.
 
+        All packages in the output include a "transaction_time" attribute
+        (uint64, unix timestamp) indicating when the transaction that caused
+        the change was completed.
+
         Following options and filters are supported:
 
             - upgraded_packages: boolean, default "true"

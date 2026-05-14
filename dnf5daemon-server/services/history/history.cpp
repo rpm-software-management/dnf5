@@ -160,6 +160,32 @@ sdbus::MethodReply History::recent_changes(sdbus::MethodCall & call) {
         installed_na.emplace(pkg.get_full_nevra(), pkg);
     }
 
+    using Action = libdnf5::transaction::TransactionItemAction;
+
+    // for installonly packages use their full NEVRA as the key, NA otherwise
+    auto get_pkg_key = [&installonly_names](const libdnf5::transaction::Package & pkg) -> std::string {
+        if (installonly_names.contains(pkg.get_name())) {
+            return pkg.to_string();
+        }
+        return pkg.get_name() + "." + pkg.get_arch();
+    };
+
+    // first pass: find the latest transaction end time for each package
+    std::unordered_map<std::string, uint64_t> latest_trans_time;
+    for (auto & transaction : transactions) {
+        if (transaction.get_state() != libdnf5::transaction::TransactionState::OK) {
+            continue;
+        }
+        for (const auto & pkg : transaction.get_packages()) {
+            const auto action = pkg.get_action();
+            if (action != Action::INSTALL && action != Action::REMOVE && action != Action::REPLACED) {
+                continue;
+            }
+            auto dt_end = transaction.get_dt_end();
+            latest_trans_time[get_pkg_key(pkg)] = dt_end >= 0 ? static_cast<uint64_t>(dt_end) : 0;
+        }
+    }
+
     std::unordered_set<std::string> seen_pkg{};
 
     dnfdaemon::KeyValueMapList out_installed;
@@ -167,7 +193,6 @@ sdbus::MethodReply History::recent_changes(sdbus::MethodCall & call) {
     dnfdaemon::KeyValueMapList out_downgraded;
     // pair of (old, new)
     std::vector<std::pair<libdnf5::transaction::Package, libdnf5::rpm::Package>> upgrades;
-    using Action = libdnf5::transaction::TransactionItemAction;
     libdnf5::rpm::PackageSet upgrades_installed{base};
     std::vector<libdnf5::rpm::Nevra> upgrades_original;
     for (auto & transaction : transactions) {
@@ -184,13 +209,7 @@ sdbus::MethodReply History::recent_changes(sdbus::MethodCall & call) {
                 continue;
             }
 
-            if (installonly_names.contains(pkg.get_name())) {
-                // for installonly packages use their full NEVRA as the key
-                pkg_key = pkg.to_string();
-            } else {
-                // NA otherwise
-                pkg_key = pkg.get_name() + "." + pkg.get_arch();
-            }
+            pkg_key = get_pkg_key(pkg);
             auto added = seen_pkg.insert(pkg_key);
             if (!added.second) {
                 // only interested in the first occurrence of given key
@@ -201,7 +220,9 @@ sdbus::MethodReply History::recent_changes(sdbus::MethodCall & call) {
             if (action == Action::INSTALL) {
                 // check if the package is still installed
                 if (installed_requested && installed_pkg != installed_na.end()) {
-                    out_installed.push_back(package_to_map(installed_pkg->second, pkg_attrs));
+                    auto installed_map = package_to_map(installed_pkg->second, pkg_attrs);
+                    installed_map.emplace("transaction_time", latest_trans_time[pkg_key]);
+                    out_installed.push_back(std::move(installed_map));
                 }
             } else {
                 // package was REMOVEd or REPLACED
@@ -226,12 +247,15 @@ sdbus::MethodReply History::recent_changes(sdbus::MethodCall & call) {
                         if (downgraded_requested) {
                             auto replace_pkg = package_to_map(installed_pkg->second, pkg_attrs);
                             replace_pkg.emplace("original_evr", get_evr(pkg));
+                            replace_pkg.emplace("transaction_time", latest_trans_time[pkg_key]);
                             out_downgraded.push_back(std::move(replace_pkg));
                         }
                     }
                 } else {
                     if (removed_requested) {
-                        out_removed.push_back(history_package_to_map(pkg));
+                        auto removed_map = history_package_to_map(pkg);
+                        removed_map.emplace("transaction_time", latest_trans_time[pkg_key]);
+                        out_removed.push_back(std::move(removed_map));
                     }
                 }
             }
@@ -271,6 +295,7 @@ sdbus::MethodReply History::recent_changes(sdbus::MethodCall & call) {
         for (const auto & [old_pkg, new_pkg] : upgrades) {
             auto replace_pkg = package_to_map(new_pkg, pkg_attrs);
             replace_pkg.emplace("original_evr", get_evr(old_pkg));
+            replace_pkg.emplace("transaction_time", latest_trans_time[new_pkg.get_na()]);
             if (include_advisory) {
                 auto advisories = advisories_by_name.find(new_pkg.get_name());
                 if (advisories != advisories_by_name.end()) {
