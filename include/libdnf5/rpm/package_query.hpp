@@ -818,6 +818,34 @@ public:
     void filter_location(
         const std::vector<std::string> & patterns, libdnf5::sack::QueryCmp cmp_type = libdnf5::sack::QueryCmp::EQ);
 
+    /// Filter packages by their `checksum` type and value.
+    ///
+    /// @param pattern          A string the filter is matched against.
+    /// @param checksum_type    The checksum type to match (e.g., SHA256, SHA512).
+    ///                         If Checksum::Type::UNKNOWN is passed, match any checksum type.
+    /// @param cmp_type         A comparison (match) operator, defaults to `QueryCmp::EQ`.
+    ///                         Supported values: `EQ`, `NEQ`.
+    /// @since 5.4.4.0
+    void filter_checksum(
+        const std::string & pattern,
+        Checksum::Type checksum_type,
+        libdnf5::sack::QueryCmp cmp_type = libdnf5::sack::QueryCmp::EQ) {
+        filter_checksum(std::vector<std::string>{pattern}, checksum_type, cmp_type);
+    };
+
+    /// Filter packages by their `checksum` type and value.
+    ///
+    /// @param patterns         A vector of strings the filter is matched against.
+    /// @param checksum_type    The checksum type to match (e.g., SHA256, SHA512).
+    ///                         If Checksum::Type::UNKNOWN is passed, match any checksum type.
+    /// @param cmp_type         A comparison (match) operator, defaults to `QueryCmp::EQ`.
+    ///                         Supported values: `EQ`, `NEQ`.
+    /// @since 5.4.4.0
+    void filter_checksum(
+        const std::vector<std::string> & patterns,
+        Checksum::Type checksum_type,
+        libdnf5::sack::QueryCmp cmp_type = libdnf5::sack::QueryCmp::EQ);
+
     /// Filter packages by `id` of the Repo they belong to.
     ///
     /// @param pattern          A string the filter is matched against.

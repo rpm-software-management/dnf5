@@ -19,6 +19,9 @@
 
 #include "libdnf5/rpm/checksum.hpp"
 
+#include "libdnf5/common/exception.hpp"
+#include "libdnf5/utils/bgettext/bgettext-mark-domain.h"
+
 extern "C" {
 #include <solv/chksum.h>
 }
@@ -75,6 +78,27 @@ Checksum::Type Checksum::get_type() const noexcept {
             return Type::UNKNOWN;
     }
 }
+
+
+int Checksum::checksum_type_to_libsolv(Checksum::Type type) {
+    switch (type) {
+        case Checksum::Type::MD5:
+            return REPOKEY_TYPE_MD5;
+        case Checksum::Type::SHA1:
+            return REPOKEY_TYPE_SHA1;
+        case Checksum::Type::SHA224:
+            return REPOKEY_TYPE_SHA224;
+        case Checksum::Type::SHA256:
+            return REPOKEY_TYPE_SHA256;
+        case Checksum::Type::SHA384:
+            return REPOKEY_TYPE_SHA384;
+        case Checksum::Type::SHA512:
+            return REPOKEY_TYPE_SHA512;
+        default:
+            throw libdnf5::RuntimeError(M_("Unknown checksum type"));
+    }
+}
+
 
 const std::string & Checksum::get_checksum() const noexcept {
     return p_impl->checksum;

@@ -23,6 +23,7 @@
 #include "../shared/private_accessor.hpp"
 #include "../shared/utils.hpp"
 
+#include <libdnf5/rpm/checksum.hpp>
 #include <libdnf5/rpm/package_query.hpp>
 #include <libdnf5/rpm/package_set.hpp>
 
@@ -741,6 +742,58 @@ void RpmPackageQueryTest::test_filter_advisories() {
         query.filter_advisories(adv_query, libdnf5::sack::QueryCmp::EQ);
         std::vector<Package> expected = {};
         CPPUNIT_ASSERT_EQUAL(expected, to_vector(query));
+    }
+}
+
+void RpmPackageQueryTest::test_filter_checksum() {
+    add_repo_repomd("repomd-repo1");
+
+    {
+        // Test QueryCmp::EQ with existing checksum
+        PackageQuery query(base);
+        // The checksum of pkg-1.2-3.x86_64 from repomd-repo1
+        query.filter_checksum(
+            "ec57b154a186fdc1f71976fc0fde97d51c744bc88d222828b4cfa42e3b1f855b", libdnf5::rpm::Checksum::Type::SHA256);
+        std::vector<Package> expected = {get_pkg("pkg-0:1.2-3.x86_64")};
+        CPPUNIT_ASSERT_EQUAL(expected, to_vector(query));
+    }
+
+    {
+        // Test QueryCmp::NEQ with existing checksum
+        PackageQuery query(base);
+        // The checksum of pkg-1.2-3.x86_64 from repomd-repo1
+        query.filter_checksum(
+            "ec57b154a186fdc1f71976fc0fde97d51c744bc88d222828b4cfa42e3b1f855b",
+            libdnf5::rpm::Checksum::Type::SHA256,
+            libdnf5::sack::QueryCmp::NEQ);
+        // Should contain all packages except for pkg-1.2-3.x86_64
+        std::vector<Package> expected = {get_pkg("pkg-libs-1:1.3-4.x86_64"), get_pkg("unresolvable-1:2-3.noarch")};
+        CPPUNIT_ASSERT_EQUAL(expected, to_vector(query));
+    }
+
+    {
+        // Test QueryCmp::EQ with nonexistent checksum
+        PackageQuery query(base);
+        query.filter_checksum(
+            "0000000000000000000000000000000000000000000000000000000000000000", libdnf5::rpm::Checksum::Type::SHA256);
+        CPPUNIT_ASSERT_EQUAL((size_t)0, query.size());
+    }
+
+    {
+        // Test QueryCmp::EQ with unknown checksum
+        PackageQuery query(base);
+        query.filter_checksum(
+            "ec57b154a186fdc1f71976fc0fde97d51c744bc88d222828b4cfa42e3b1f855b", libdnf5::rpm::Checksum::Type::UNKNOWN);
+        std::vector<Package> expected = {get_pkg("pkg-0:1.2-3.x86_64")};
+        CPPUNIT_ASSERT_EQUAL(expected, to_vector(query));
+    }
+
+    {
+        // Test QueryCmp::EQ with checksum of different type
+        PackageQuery query(base);
+        query.filter_checksum(
+            "ec57b154a186fdc1f71976fc0fde97d51c744bc88d222828b4cfa42e3b1f855b", libdnf5::rpm::Checksum::Type::SHA512);
+        CPPUNIT_ASSERT_EQUAL((size_t)0, query.size());
     }
 }
 
