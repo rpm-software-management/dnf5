@@ -21,6 +21,7 @@
 #include <libdnf5-cli/session.hpp>
 #include <libdnf5/utils/bgettext/bgettext-mark-domain.h>
 
+#include <chrono>
 #include <sstream>
 
 namespace libdnf5::cli::session {
@@ -249,14 +250,14 @@ DateOption::DateOption(
     conf = dynamic_cast<libdnf5::OptionNumber<std::int64_t> *>(
         parser.add_init_value(std::unique_ptr<libdnf5::OptionNumber<std::int64_t>>(
             new libdnf5::OptionNumber<int64_t>(0, [](const std::string & value) {
-                struct tm time_m = {};
                 std::istringstream ss(value);
-                ss >> std::get_time(&time_m, "%Y-%m-%d");
+                std::chrono::sys_seconds tp;
+                ss >> std::chrono::parse("%F", tp);
                 if (ss.fail()) {
                     throw libdnf5::cli::ArgumentParserError(
                         M_("Invalid date passed: \"{}\". Dates in \"YYYY-MM-DD\" format are expected"), value);
                 }
-                return static_cast<int64_t>(mktime(&time_m));
+                return tp.time_since_epoch().count();
             }))));
     arg->link_value(conf);
 

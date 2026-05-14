@@ -73,7 +73,7 @@ Options
     specified, it defaults to the value of ``--destdir``.
 
 ``--min-buildtime <YYYY-MM-DD>``
-    Download only packages with buildtime newer or equal to YYYY-MM-DD.
+    Download only packages with buildtime newer or equal to ``YYYY-MM-DD 00:00:00 UTC``.
     Note that this option may result in partially synchronized repositories and the missing packages can cause dependency issues.
 
 ``--newest-only, -n``

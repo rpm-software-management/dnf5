@@ -39,9 +39,8 @@ Show package changelogs.
 Options
 =======
 
-``--since=DATE``
-    | Show only changelog entries since ``DATE``.
-    | `YYYY-MM-DD` date format is expected.
+``--since=<YYYY-MM-DD>``
+    | Show only changelog entries since ``YYYY-MM-DD 00:00:00 UTC``.
 
 ``--count=VALUE``
     | Limit the number of changelog entries shown per package to ``VALUE``.
