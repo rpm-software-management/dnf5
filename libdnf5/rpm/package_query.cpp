@@ -28,6 +28,7 @@
 #include "libdnf5/advisory/advisory_query.hpp"
 #include "libdnf5/base/base.hpp"
 #include "libdnf5/common/exception.hpp"
+#include "libdnf5/rpm/checksum.hpp"
 #include "libdnf5/utils/patterns.hpp"
 
 extern "C" {
@@ -1605,6 +1606,52 @@ void PackageQuery::filter_location(const std::vector<std::string> & patterns, li
                     const char * location = solvable_get_location(solvable, NULL);
                     if (location && strcmp(c_pattern, location) == 0) {
                         filter_result.add_unsafe(candidate_id);
+                    }
+                }
+            }
+        } break;
+        default:
+            libdnf_throw_assert_unsupported_query_cmp_type(cmp_type);
+    }
+
+    // Apply filter results to query
+    if (cmp_not) {
+        *p_impl -= filter_result;
+    } else {
+        *p_impl &= filter_result;
+    }
+}
+
+void PackageQuery::filter_checksum(
+    const std::vector<std::string> & patterns, Checksum::Type checksum_type, libdnf5::sack::QueryCmp cmp_type) {
+    bool cmp_not = (cmp_type & libdnf5::sack::QueryCmp::NOT) == libdnf5::sack::QueryCmp::NOT;
+    if (cmp_not) {
+        // Removal of NOT CmpType makes following comparisons easier and effective
+        cmp_type = cmp_type - libdnf5::sack::QueryCmp::NOT;
+    }
+
+    auto & pool = get_rpm_pool(p_impl->base);
+    libdnf5::solv::SolvMap filter_result(pool.get_nsolvables());
+    int expected_libsolv_type = 0;
+    if (checksum_type != Checksum::Type::UNKNOWN) {
+        expected_libsolv_type = Checksum::checksum_type_to_libsolv(checksum_type);
+    }
+
+    // The repo internalization is needed before calling the `solvable_lookup_checksum` function.
+    p_impl->base->get_repo_sack()->internalize_repos();
+
+    switch (cmp_type) {
+        case libdnf5::sack::QueryCmp::EQ: {
+            for (Id candidate_id : *p_impl) {
+                Solvable * solvable = pool.id2solvable(candidate_id);
+                int type;
+                const char * checksum = solvable_lookup_checksum(solvable, SOLVABLE_CHECKSUM, &type);
+                if (checksum && (expected_libsolv_type == 0 || type == expected_libsolv_type)) {
+                    for (const auto & pattern : patterns) {
+                        if (strcasecmp(pattern.c_str(), checksum) == 0) {
+                            filter_result.add_unsafe(candidate_id);
+                            break;
+                        }
                     }
                 }
             }

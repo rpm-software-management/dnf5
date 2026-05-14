@@ -49,9 +49,13 @@ public:
 
 private:
     friend class Package;
+    friend class PackageQuery;
 
     /// Require checksum in hex and libsolv checksum type
     LIBDNF_LOCAL Checksum(const char * checksum, int libsolv_type);
+
+    /// Return libsolv checksum type
+    LIBDNF_LOCAL static int checksum_type_to_libsolv(Checksum::Type type);
 
     class LIBDNF_LOCAL Impl;
     ImplPtr<Impl> p_impl;

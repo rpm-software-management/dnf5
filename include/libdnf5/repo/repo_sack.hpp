@@ -30,6 +30,10 @@
 #include "libdnf5/logger/logger.hpp"
 
 
+namespace libdnf5::rpm {
+class PackageQuery;
+}  // namespace libdnf5::rpm
+
 namespace libdnf5::repo {
 
 class RepoSack;
@@ -156,6 +160,7 @@ public:
 private:
     friend class libdnf5::Base;
     friend class RepoQuery;
+    friend class rpm::PackageQuery;
     friend class rpm::PackageSack;
     friend class libdnf5::Goal;
 
