@@ -524,12 +524,12 @@ repository configuration file should aside from repo ID consists of baseurl, met
 
     They are protected via Obsoletes as well as user/plugin removals.
 
+    An entry prefixed with ``glob:``, such as ``glob:/path/to/dir/*.conf``,
+    expands to all matching files and reads one package per line from each.
+
     Default: ``dnf5,glob:/etc/dnf/protected.d/*.conf``.
 
     .. NOTE::
-       Any packages which should be protected can do so by including a file in ``/etc/dnf/protected.d``
-       with their  package name in it.
-
        DNF5 will protect also the package corresponding to the running version of the kernel. See also
        :ref:`protect_running_kernel <protect_running_kernel_options-label>` option.
 
@@ -680,9 +680,6 @@ repository configuration file should aside from repo ID consists of baseurl, met
     List of paths that are likely to cause problems when their contents drift
     with respect to ``/usr``, e.g. ``/etc/pam.d/*``. If a transient transaction
     would modify these paths, DNF5 aborts the operation and prints an error.
-    Supports globs. A list of paths can be protected by creating a ``.conf``
-    file in ``/etc/dnf/usr-drift-protected-paths.d/`` containing one path (or
-    glob pattern) per line.
 
     When using ``persistence=transient`` on bootc systems, a transient overlay
     is created on ``/usr``, and any changes DNF5 makes to ``/usr`` will be
@@ -695,6 +692,11 @@ repository configuration file should aside from repo ID consists of baseurl, met
 
     If any paths are protected by this option, DNF5 will download filelist
     metadata from repositories before resolving transient transactions.
+
+    An entry prefixed with ``glob:``, such as ``glob:/path/to/dir/*.conf``,
+    expands to all matching files and reads one path per line from each. Both
+    the glob pattern in the option list entry and the individual paths listed
+    within the files (e.g. ``/etc/pam.d/*``) may contain globs.
 
     Default: ``glob:/etc/dnf/usr-drift-protected-paths.d/*.conf``.
 
