@@ -17,6 +17,9 @@ class OfflineTransactionStateTest : public BaseTestCase {
     CPPUNIT_TEST(test_is_pending_download_incomplete);
     CPPUNIT_TEST(test_is_pending_download_complete);
     CPPUNIT_TEST(test_invalidate);
+    CPPUNIT_TEST(test_rpmdb_cookie_roundtrip);
+    CPPUNIT_TEST(test_check_rpmdb_cookie_empty);
+    CPPUNIT_TEST(test_check_rpmdb_cookie_mismatch);
     CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -25,6 +28,9 @@ public:
     void test_is_pending_download_incomplete();
     void test_is_pending_download_complete();
     void test_invalidate();
+    void test_rpmdb_cookie_roundtrip();
+    void test_check_rpmdb_cookie_empty();
+    void test_check_rpmdb_cookie_mismatch();
 };
 
 #endif  // LIBDNF5_TEST_TRANSACTION_TEST_OFFLINE_HPP

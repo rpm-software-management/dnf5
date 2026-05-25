@@ -262,6 +262,14 @@ sdbus::MethodReply Offline::get_status(sdbus::MethodCall & call) {
 
     std::string state_error;
     auto state = read_transaction_state(state_error);
+    bool is_valid = false;
+    if (state && state->is_pending()) {
+        try {
+            is_valid = state->check_rpmdb_cookie(*session.get_base());
+        } catch (const std::exception & ex) {
+            session.get_base()->get_logger()->warning("Failed to check offline transaction validity: {}", ex.what());
+        }
+    }
     if (state) {
         const auto & state_data = state->get_data();
         transaction_state["status"] = sdbus::Variant(state_data.get_status());
@@ -275,7 +283,7 @@ sdbus::MethodReply Offline::get_status(sdbus::MethodCall & call) {
     }
 
     auto reply = call.createReply();
-    reply << (offline_transaction_scheduled() == Scheduled::SCHEDULED);
+    reply << (is_valid && offline_transaction_scheduled() == Scheduled::SCHEDULED);
     reply << transaction_state;
     return reply;
 }

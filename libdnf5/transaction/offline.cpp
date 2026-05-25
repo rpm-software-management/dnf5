@@ -17,6 +17,8 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
+#include "rpm/transaction.hpp"
+
 #include "libdnf5/common/exception.hpp"
 
 #include <libdnf5/base/base.hpp>
@@ -26,7 +28,7 @@
 #include <toml.hpp>
 
 
-const int STATE_VERSION = 1;
+const int STATE_VERSION = 2;
 const std::string STATE_HEADER{"offline-transaction-state"};
 
 
@@ -40,6 +42,7 @@ struct OfflineTransactionStateTomlData {
     std::string cmd_line;
     bool poweroff_after = false;
     std::string module_platform_id;
+    std::string rpmdb_cookie;
 };
 
 TOML11_DEFINE_CONVERSION_NON_INTRUSIVE(
@@ -52,7 +55,9 @@ TOML11_DEFINE_CONVERSION_NON_INTRUSIVE(
     verb,
     cmd_line,
     poweroff_after,
-    module_platform_id)
+    module_platform_id,
+    rpmdb_cookie)
+
 
 namespace libdnf5::offline {
 
@@ -146,6 +151,14 @@ void OfflineTransactionStateData::set_module_platform_id(const std::string & mod
 const std::string & OfflineTransactionStateData::get_module_platform_id() const {
     return p_impl->data.module_platform_id;
 }
+
+void OfflineTransactionStateData::set_rpmdb_cookie(const std::string & rpmdb_cookie) {
+    p_impl->data.rpmdb_cookie = rpmdb_cookie;
+}
+std::string OfflineTransactionStateData::get_rpmdb_cookie() const {
+    return p_impl->data.rpmdb_cookie;
+}
+
 
 class OfflineTransactionState::Impl {
     friend OfflineTransactionState;
@@ -242,6 +255,20 @@ void OfflineTransactionState::invalidate() {
     if (!ec_target && !ec_datadir && canonical_target == canonical_datadir) {
         std::filesystem::remove(MAGIC_SYMLINK, ec);
     }
+}
+
+void OfflineTransactionState::capture_rpmdb_cookie(Base & base) {
+    rpm::Transaction rpm_ts(base);
+    p_impl->data.set_rpmdb_cookie(rpm_ts.get_db_cookie());
+}
+
+bool OfflineTransactionState::check_rpmdb_cookie(Base & base) const {
+    const auto & stored_cookie = p_impl->data.get_rpmdb_cookie();
+    if (stored_cookie.empty()) {
+        return true;
+    }
+    rpm::Transaction rpm_ts(base);
+    return rpm_ts.get_db_cookie() == stored_cookie;
 }
 
 }  // namespace libdnf5::offline
