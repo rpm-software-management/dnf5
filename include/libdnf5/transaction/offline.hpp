@@ -144,6 +144,14 @@ public:
     /// Returns path to the state file.
     std::filesystem::path get_path() const;
 
+    /// Returns true if a pending offline transaction exists — the state file
+    /// was read successfully and the status is not download-incomplete.
+    bool is_pending() const;
+
+    /// Remove the /system-update magic symlink (if it points to the state
+    /// file's directory) to prevent booting into offline transaction mode.
+    void invalidate();
+
 private:
     class LIBDNF_LOCAL Impl;
     /// Read offline transaction state data from the file

@@ -147,7 +147,6 @@ const std::string & OfflineTransactionStateData::get_module_platform_id() const 
     return p_impl->data.module_platform_id;
 }
 
-
 class OfflineTransactionState::Impl {
     friend OfflineTransactionState;
     std::exception_ptr read_exception;
@@ -220,6 +219,29 @@ OfflineTransactionState OfflineTransactionState::from_base(const Base & base) {
     return OfflineTransactionState(
         base.get_config().get_installroot_option().get_value() / DEFAULT_DATADIR.relative_path() /
         TRANSACTION_STATE_FILENAME);
+}
+
+bool OfflineTransactionState::is_pending() const {
+    if (p_impl->read_exception) {
+        return false;
+    }
+    const auto & status = p_impl->data.get_status();
+    return status == STATUS_DOWNLOAD_COMPLETE || status == STATUS_READY;
+}
+
+void OfflineTransactionState::invalidate() {
+    const auto datadir = p_impl->path.parent_path();
+    std::error_code ec;
+    auto target = std::filesystem::read_symlink(MAGIC_SYMLINK, ec);
+    if (ec) {
+        return;
+    }
+    std::error_code ec_target, ec_datadir;
+    auto canonical_target = std::filesystem::weakly_canonical(target, ec_target);
+    auto canonical_datadir = std::filesystem::weakly_canonical(datadir, ec_datadir);
+    if (!ec_target && !ec_datadir && canonical_target == canonical_datadir) {
+        std::filesystem::remove(MAGIC_SYMLINK, ec);
+    }
 }
 
 }  // namespace libdnf5::offline
