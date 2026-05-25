@@ -1013,7 +1013,12 @@ Transaction::TransactionRunResult Transaction::Impl::_run(
     rpm_transaction.set_flags(rpm_transaction_flags);
 
     // fill and check the rpm transaction
-    rpm_transaction.fill(*transaction);
+    try {
+        rpm_transaction.fill(*transaction);
+    } catch (const rpm::TransactionError & e) {
+        transaction_problems.emplace_back(e.what());
+        return TransactionRunResult::ERROR_CHECK;
+    }
     if (!rpm_transaction.check()) {
         for (auto it : rpm_transaction.get_problems()) {
             transaction_problems.emplace_back(it.to_string());
