@@ -202,7 +202,57 @@ void Transaction::fill(const base::Transaction & transaction) {
                 break;
         }
     }
-    libdnf_assert(implicit_ts_elements.empty(), "The rpm transaction contains more elements than requested");
+    if (!implicit_ts_elements.empty()) {
+        // Workaround for https://github.com/rpm-software-management/rpm/issues/2837
+        //
+        // For UPGRADE/DOWNGRADE actions, rpmtsAddInstallElement is called with
+        // upgrade=1. In this mode librpm's addSelfErasures() erases all
+        // installed packages with the same name. For packages containing ELF
+        // binaries (HEADERCOLOR != 0), skipColor() prevents cross-arch erasure.
+        // But for packages with no ELF content (HEADERCOLOR == 0, e.g. -devel
+        // subpackages with only header files), skipColor() cannot distinguish
+        // architectures and erases all versions/arches — including those the
+        // solver did not plan to replace.
+        //
+        // This happens when the rpmdb contains duplicate versions across
+        // architectures (e.g. after an interrupted transaction). We tolerate
+        // implicit TR_REMOVED elements whose name matches an UPGRADE/DOWNGRADE
+        // in the transaction and allow them to proceed — this means the
+        // duplicate packages will be unexpectedly removed from the system.
+        // Anything else is unexpected.
+        std::set<std::string> upgraded_names;
+        for (const auto & tspkg : transaction_items) {
+            auto action = tspkg.get_action();
+            if (action == libdnf5::transaction::TransactionItemAction::UPGRADE ||
+                action == libdnf5::transaction::TransactionItemAction::DOWNGRADE) {
+                upgraded_names.insert(tspkg.get_package().get_name());
+            }
+        }
+
+        auto & logger = *base->get_logger();
+        for (auto it = implicit_ts_elements.begin(); it != implicit_ts_elements.end();) {
+            auto & [rpmdb_id, te] = *it;
+            auto nevra = fmt::format(
+                "{}-{}:{}-{}.{}", rpmteN(te), rpmteE(te) ? rpmteE(te) : "0", rpmteV(te), rpmteR(te), rpmteA(te));
+            if (rpmteType(te) == TR_REMOVED && upgraded_names.contains(rpmteN(te))) {
+                logger.warning(
+                    "Package {} (rpmdb id {}) will be removed by rpm even though it was not "
+                    "planned by the solver. This is caused by duplicate package versions in the rpmdb.",
+                    nevra,
+                    rpmdb_id);
+                rpmteSetUserdata(te, nullptr);
+                it = implicit_ts_elements.erase(it);
+            } else {
+                logger.error(
+                    "The rpm transaction contains an unexpected implicit element: {} type {} (rpmdb id {})",
+                    nevra,
+                    static_cast<int>(rpmteType(te)),
+                    rpmdb_id);
+                ++it;
+            }
+        }
+        libdnf_assert(implicit_ts_elements.empty(), "The rpm transaction contains more elements than requested");
+    }
 
     // generate ordering for the rpm transaction
     if (rpmtsOrder(ts)) {
@@ -582,23 +632,20 @@ void * Transaction::ts_callback(
             }
             break;
         case RPMCALLBACK_UNINST_PROGRESS:
-            libdnf_assert_transaction_item_set();
-            if (callbacks) {
+            if (item && callbacks) {
                 callbacks->uninstall_progress(*item, amount, total);
             }
             break;
         case RPMCALLBACK_UNINST_START:
-            libdnf_assert_transaction_item_set();
             logger.info(
                 "RPM callback uninstall start \"{}\" total {}",
                 to_full_nevra_string(trans_element_to_nevra(trans_element)),
                 total);
-            if (callbacks) {
+            if (item && callbacks) {
                 callbacks->uninstall_start(*item, total);
             }
             break;
         case RPMCALLBACK_UNINST_STOP:
-            libdnf_assert_transaction_item_set();
             if (callbacks_holder.base_transaction) {
                 callbacks_holder.base_transaction->set_rpm_messages(transaction.extract_rpm_messages());
             }
@@ -607,26 +654,24 @@ void * Transaction::ts_callback(
                 to_full_nevra_string(trans_element_to_nevra(trans_element)),
                 amount,
                 total);
-            if (callbacks) {
+            if (item && callbacks) {
                 callbacks->uninstall_stop(*item, amount, total);
             }
             break;
         case RPMCALLBACK_UNPACK_ERROR:
-            libdnf_assert_transaction_item_set();
             if (callbacks_holder.base_transaction) {
                 callbacks_holder.base_transaction->set_rpm_messages(transaction.extract_rpm_messages());
             }
             logger.error(
                 "RPM callback unpack error \"{}\"", to_full_nevra_string(trans_element_to_nevra(trans_element)));
-            if (callbacks) {
+            if (item && callbacks) {
                 callbacks->unpack_error(*item);
             }
             break;
         case RPMCALLBACK_CPIO_ERROR:
             // Not found usage in librpm.
-            libdnf_assert_transaction_item_set();
             logger.error("RPM callback CPIO error \"{}\"", to_full_nevra_string(trans_element_to_nevra(trans_element)));
-            if (callbacks) {
+            if (item && callbacks) {
                 callbacks->cpio_error(*item);
             }
             break;
@@ -705,8 +750,7 @@ void * Transaction::ts_callback(
             }
             break;
         case RPMCALLBACK_ELEM_PROGRESS:
-            libdnf_assert_transaction_item_set();
-            if (callbacks) {
+            if (item && callbacks) {
                 callbacks->elem_progress(*item, amount, total);
             }
             break;
