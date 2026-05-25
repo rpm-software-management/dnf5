@@ -108,6 +108,10 @@ public:
     void set_module_platform_id(const std::string & module_platform_id);
     const std::string & get_module_platform_id() const;
 
+    /// Set the rpmdb cookie captured at offline transaction preparation time.
+    void set_rpmdb_cookie(const std::string & rpmdb_cookie);
+    std::string get_rpmdb_cookie() const;
+
 private:
     class LIBDNF_LOCAL Impl;
     std::unique_ptr<Impl> p_impl;
@@ -151,6 +155,14 @@ public:
     /// Remove the /system-update magic symlink (if it points to the state
     /// file's directory) to prevent booting into offline transaction mode.
     void invalidate();
+
+    /// Capture the current rpmdb cookie and store it in the state data.
+    /// The cookie is persisted when write() is called.
+    void capture_rpmdb_cookie(libdnf5::Base & base);
+
+    /// Returns true if the stored rpmdb cookie matches the current rpmdb,
+    /// or if no cookie was stored (backward compatibility).
+    bool check_rpmdb_cookie(libdnf5::Base & base) const;
 
 private:
     class LIBDNF_LOCAL Impl;

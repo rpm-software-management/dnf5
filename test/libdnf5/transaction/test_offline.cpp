@@ -85,3 +85,41 @@ void OfflineTransactionStateTest::test_invalidate() {
     CPPUNIT_ASSERT_EQUAL(STATUS_DOWNLOAD_COMPLETE, state2.get_data().get_status());
     CPPUNIT_ASSERT(state2.is_pending());
 }
+
+
+void OfflineTransactionStateTest::test_rpmdb_cookie_roundtrip() {
+    auto state = OfflineTransactionState::from_base(base);
+    state.capture_rpmdb_cookie(base);
+
+    auto & data = state.get_data();
+    CPPUNIT_ASSERT(!data.get_rpmdb_cookie().empty());
+
+    data.set_status(STATUS_DOWNLOAD_COMPLETE);
+    auto dir = state.get_path().parent_path();
+    std::filesystem::create_directories(dir);
+    state.write();
+
+    OfflineTransactionState state2(state.get_path());
+    CPPUNIT_ASSERT_EQUAL(data.get_rpmdb_cookie(), state2.get_data().get_rpmdb_cookie());
+    CPPUNIT_ASSERT(state2.check_rpmdb_cookie(base));
+}
+
+
+void OfflineTransactionStateTest::test_check_rpmdb_cookie_empty() {
+    auto state = OfflineTransactionState::from_base(base);
+    CPPUNIT_ASSERT(state.check_rpmdb_cookie(base));
+}
+
+
+void OfflineTransactionStateTest::test_check_rpmdb_cookie_mismatch() {
+    auto state = OfflineTransactionState::from_base(base);
+    auto & data = state.get_data();
+    data.set_rpmdb_cookie("bogus_cookie_value");
+    data.set_status(STATUS_DOWNLOAD_COMPLETE);
+    auto dir = state.get_path().parent_path();
+    std::filesystem::create_directories(dir);
+    state.write();
+
+    OfflineTransactionState state2(state.get_path());
+    CPPUNIT_ASSERT(!state2.check_rpmdb_cookie(base));
+}

@@ -419,6 +419,7 @@ void Session::store_transaction_offline(bool downloadonly) {
         }
         state_data.set_status(libdnf5::offline::STATUS_READY);
     }
+    state.capture_rpmdb_cookie(*base);
     state.write();
 }
 
