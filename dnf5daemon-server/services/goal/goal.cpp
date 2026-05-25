@@ -28,6 +28,7 @@
 #include "utils.hpp"
 
 #include <fmt/format.h>
+#include <libdnf5/transaction/offline.hpp>
 #include <libdnf5/transaction/transaction_item.hpp>
 #include <libdnf5/transaction/transaction_item_action.hpp>
 #include <sdbus-c++/sdbus-c++.h>
@@ -424,6 +425,14 @@ sdbus::MethodReply Goal::do_transaction(sdbus::MethodCall & call) {
                         static_cast<std::underlying_type_t<libdnf5::base::Transaction::TransactionRunResult>>(
                             rpm_result)));
             }
+
+            auto * base = session.get_base();
+            auto state = libdnf5::offline::OfflineTransactionState::from_base(*base);
+            if (state.is_pending()) {
+                state.invalidate();
+                base->get_logger()->info("Pending offline transaction has been invalidated.");
+            }
+
             // TODO(mblaha): clean up downloaded packages after successful transaction
         }
     }

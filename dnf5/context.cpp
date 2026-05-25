@@ -384,6 +384,7 @@ void Context::Impl::store_offline(libdnf5::base::Transaction & transaction) {
         offline_data.set_module_platform_id(base.get_config().get_module_platform_id_option().get_value());
     }
 
+    state.capture_rpmdb_cookie(base);
     state.write();
 }
 
@@ -461,10 +462,9 @@ void Context::Impl::download_and_run(libdnf5::base::Transaction & transaction) {
         auto state = libdnf5::offline::OfflineTransactionState::from_base(base);
 
         // Check whether there is another pending offline transaction present
-        auto & offline_data = state.get_data();
-        if (offline_data.get_status() != libdnf5::offline::STATUS_DOWNLOAD_INCOMPLETE) {
+        if (state.is_pending()) {
             print_error(_("There is already an offline transaction queued, initiated by the following command:"));
-            print_error(fmt::format("\t{}", offline_data.get_cmd_line()));
+            print_error(fmt::format("\t{}", state.get_data().get_cmd_line()));
             print_error(_("Continuing will cancel the old offline transaction and replace it with this one."));
             if (!libdnf5::cli::utils::userconfirm::userconfirm(base.get_config())) {
                 throw libdnf5::cli::AbortedByUserError();
@@ -532,6 +532,17 @@ void Context::Impl::download_and_run(libdnf5::base::Transaction & transaction) {
     for (auto const & entry : transaction.get_gpg_signature_problems()) {
         print_error(entry);
     }
+
+    auto state = libdnf5::offline::OfflineTransactionState::from_base(base);
+    if (state.is_pending()) {
+        auto cmd_line = state.get_data().get_cmd_line();
+        state.invalidate();
+        print_error(_("Warning: Pending offline transaction has been invalidated."));
+        if (!cmd_line.empty()) {
+            print_error(libdnf5::utils::sformat(_("To reschedule, run: {}"), cmd_line));
+        }
+    }
+
     // TODO(mblaha): print a summary of successful transaction
 }
 

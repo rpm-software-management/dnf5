@@ -79,6 +79,7 @@
 #include <libdnf5/repo/repo_cache.hpp>
 #include <libdnf5/rpm/arch.hpp>
 #include <libdnf5/rpm/package_query.hpp>
+#include <libdnf5/transaction/offline.hpp>
 #include <libdnf5/utils/bgettext/bgettext-mark-domain.h>
 #include <libdnf5/utils/bootc.hpp>
 #include <libdnf5/utils/locker.hpp>
@@ -1583,6 +1584,20 @@ int main(int argc, char * argv[]) try {
                             context.print_error(_(
                                 "Test mode enabled: Only package downloads, OpenPGP key installations and transaction "
                                 "checks will be performed."));
+                        }
+                    }
+                    if (!context.get_should_store_offline()) {
+                        auto offline_state = libdnf5::offline::OfflineTransactionState::from_base(base);
+                        if (offline_state.is_pending()) {
+                            auto cmd_line = offline_state.get_data().get_cmd_line();
+                            if (cmd_line.empty()) {
+                                context.print_error(_("Warning: A pending offline transaction will be invalidated."));
+                            } else {
+                                context.print_error(libdnf5::utils::sformat(
+                                    _("Warning: A pending offline transaction initiated by the following command "
+                                      "will be invalidated: {}"),
+                                    cmd_line));
+                            }
                         }
                     }
                 }
