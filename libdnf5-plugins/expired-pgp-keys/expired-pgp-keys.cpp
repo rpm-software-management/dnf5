@@ -111,13 +111,12 @@ public:
 
         ret += '\n';
         ret += libdnf5::utils::format(
-            locale, translate, M_("As a result, installing packages signed with this key will fail."), 1);
-        ret += '\n';
-        ret += libdnf5::utils::format(
-            locale, translate, M_("It is recommended to remove the expired key to allow importing"), 1);
-        ret += '\n';
-        ret += libdnf5::utils::format(
-            locale, translate, M_("an updated key. This might leave already installed packages unverifiable."), 1);
+            locale,
+            translate,
+            M_("As a result, installing packages signed with this key will fail.\n"
+               "It is recommended to remove the expired key to allow importing\n"
+               "an updated key. This might leave already installed packages unverifiable."),
+            1);
         ret += "\n\n";
         ret += libdnf5::utils::format(locale, translate, M_("The system will now proceed with removing the key."), 1);
 
