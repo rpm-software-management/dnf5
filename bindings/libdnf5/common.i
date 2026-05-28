@@ -1,9 +1,9 @@
 #if defined(SWIGPYTHON)
-%module(package="libdnf5") common
+%module(package="libdnf5", directors="1") common
 #elif defined(SWIGPERL)
-%module "libdnf5::common"
+%module(directors="1") "libdnf5::common"
 #elif defined(SWIGRUBY)
-%module "libdnf5::common"
+%module(directors="1") "libdnf5::common"
 #endif
 
 %include <cstring.i>
@@ -42,7 +42,9 @@
 // Set default exception handler
 %catches(libdnf5::UserAssertionError, std::runtime_error, std::out_of_range);
 
+%feature("director") Message;
 %include "libdnf5/common/message.hpp"
+%template(VectorMessagePtr) std::vector<libdnf5::Message *>;
 
 %include "libdnf5/common/weak_ptr.hpp"
 #if defined(SWIGPYTHON)
@@ -97,7 +99,6 @@ namespace std {
   %typemap(out) std::unique_ptr<Type> %{
     $result = SWIG_NewPointerObj(new $1_ltype(std::move($1)), $&1_descriptor, SWIG_POINTER_OWN);
   %}
-
 %enddef
 
 #if defined(SWIGPYTHON)

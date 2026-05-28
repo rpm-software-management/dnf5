@@ -1,4 +1,9 @@
 %{
+    // Message/EmptyMessage are director classes defined in common.i.
+    // SWIG generates upcast functions for these types in every module that %imports common.i,
+    // so the header must be present in all modules via this shared file.
+    #include "libdnf5/common/message.hpp"
+
     // Undefine macros polluting the global namespace and conflicting
     // with C++ definitions.
     //
