@@ -301,3 +301,34 @@ void InteractionCallbacksTest::test_progress() {
     int r = base2->progress(42, libdnf5::base::InteractionCallbacks::ProgressState::UPDATE, nullptr, 1, 1);
     CPPUNIT_ASSERT_EQUAL(42, r);
 }
+
+
+void InteractionCallbacksTest::test_abort_return_value() {
+    CPPUNIT_ASSERT_EQUAL(int32_t(-4), libdnf5::base::ANSWER_ABORT);
+
+    // Callbacks that return ANSWER_ABORT
+    class AbortCallbacks : public libdnf5::base::InteractionCallbacks {
+    public:
+        int32_t confirm(const libdnf5::Message &, bool) override { return libdnf5::base::ANSWER_ABORT; }
+        int32_t choice(const libdnf5::Message &, const std::vector<libdnf5::Message *> &, int32_t) override {
+            return libdnf5::base::ANSWER_ABORT;
+        }
+        int32_t input_text(
+            std::string &, const libdnf5::Message &, const char *, libdnf5::base::TextValidator *) override {
+            return libdnf5::base::ANSWER_ABORT;
+        }
+    };
+
+    auto base = get_preconfigured_base();
+    base->set_interaction_callbacks(std::make_unique<AbortCallbacks>());
+
+    TestMessage msg("Test");
+    CPPUNIT_ASSERT_EQUAL(libdnf5::base::ANSWER_ABORT, base->confirm(msg, true));
+
+    TestMessage opt("Option A");
+    std::vector<libdnf5::Message *> choices = {&opt};
+    CPPUNIT_ASSERT_EQUAL(libdnf5::base::ANSWER_ABORT, base->choice(msg, choices, 0));
+
+    std::string text;
+    CPPUNIT_ASSERT_EQUAL(libdnf5::base::ANSWER_ABORT, base->input_text(text, msg, nullptr, nullptr));
+}

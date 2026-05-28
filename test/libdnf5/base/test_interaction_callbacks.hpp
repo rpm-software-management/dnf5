@@ -20,6 +20,7 @@ class InteractionCallbacksTest : public TestCaseFixture {
     CPPUNIT_TEST(test_input_text_with_validator);
     CPPUNIT_TEST(test_input_text_with_default_text);
     CPPUNIT_TEST(test_progress);
+    CPPUNIT_TEST(test_abort_return_value);
     CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -31,6 +32,7 @@ public:
     void test_input_text_with_validator();
     void test_input_text_with_default_text();
     void test_progress();
+    void test_abort_return_value();
 };
 
 

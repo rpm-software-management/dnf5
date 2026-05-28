@@ -85,6 +85,13 @@ private:
 };
 
 
+class ExpiredPgpKeysStopRequest final : public libdnf5::Error, public libdnf5::plugin::StopRequest {
+public:
+    using Error::Error;
+    const char * get_name() const noexcept override { return "ExpiredPgpKeysStopRequest"; }
+};
+
+
 class KeyExpiryInfoMessage final : public libdnf5::Message {
 public:
     KeyExpiryInfoMessage(const libdnf5::rpm::KeyInfo & key_info, int64_t expiration_timestamp)
@@ -244,6 +251,7 @@ void ExpiredPgpKeys::process_expired_pgp_keys(const libdnf5::base::Transaction &
     }
     Header h;
     rpmdbMatchIterator mi = rpmtsInitIterator(ts, RPMDBI_NAME, "gpg-pubkey", 0);
+    bool aborted = false;
 #ifndef HAVE_RPM6
     std::vector<libdnf5::rpm::KeyInfo> keys_to_remove;
 #endif
@@ -284,6 +292,10 @@ void ExpiredPgpKeys::process_expired_pgp_keys(const libdnf5::base::Transaction &
                 // User declined removing this key.
                 continue;
             }
+            if (answer == libdnf5::base::ANSWER_ABORT) {
+                aborted = true;
+                break;
+            }
             // ANSWER_YES or ANSWER_DEFAULT (default_answer=true means proceed)
 #ifdef HAVE_RPM6
             if (rpm6_remove_key(ts, key_tfile.get_path())) {
@@ -304,7 +316,7 @@ void ExpiredPgpKeys::process_expired_pgp_keys(const libdnf5::base::Transaction &
     }
 
 #ifndef HAVE_RPM6
-    if (!keys_to_remove.empty()) {
+    if (!aborted && !keys_to_remove.empty()) {
         if (rpmtsRun(ts, nullptr, RPMPROB_FILTER_NONE)) {
             for (auto & key_info : keys_to_remove) {
                 logger.error("Expired PGP Keys Plugin: Failed to remove the 0x{} key.", key_info.get_short_key_id());
@@ -320,6 +332,11 @@ void ExpiredPgpKeys::process_expired_pgp_keys(const libdnf5::base::Transaction &
 
     rpmdbFreeIterator(mi);
     rpmtsFree(ts);
+
+    if (aborted) {
+        throw ExpiredPgpKeysStopRequest(M_(
+            "The application requested to abort the operation when asked whether to remove the expired OpenPGP key."));
+    }
 }
 
 

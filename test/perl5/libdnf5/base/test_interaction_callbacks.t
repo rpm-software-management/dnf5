@@ -52,6 +52,19 @@ use BaseTestCase;
     }
 }
 
+# InteractionCallbacks that returns ANSWER_ABORT from input_text
+{
+    package AbortInputCallbacks;
+    use base qw(libdnf5::base::InteractionCallbacks);
+
+    sub new {
+        my $class = shift;
+        return bless($class->SUPER::new(@_), $class);
+    }
+
+    sub input_text { return $libdnf5::base::ANSWER_ABORT; }
+}
+
 # Custom InteractionCallbacks implementation
 {
     package TestInteractionCallbacks;
@@ -246,6 +259,17 @@ subtest 'progress' => sub {
     $base->progress($handle, $END_OK, undef, 10, 10);
     is($callbacks->{progress_count}, 3, "Progress count is 3");
     is($callbacks->{last_progress_state}, $END_OK, "State is END_OK");
+};
+
+subtest 'abort_return_value' => sub {
+    is($libdnf5::base::ANSWER_ABORT, -4, "ABORT constant has value -4");
+
+    # Test that a script override can return ANSWER_ABORT as a bare integer
+    my $base = libdnf5::base::Base->new();
+    my $cb = AbortInputCallbacks->new();
+    $base->set_interaction_callbacks(libdnf5::base::InteractionCallbacksUniquePtr->new($cb));
+    my ($result, $text) = $base->input_text(TestMessage->new("msg"), undef, undef);
+    is($result, $libdnf5::base::ANSWER_ABORT, "Script override returning ANSWER_ABORT works");
 };
 
 done_testing();

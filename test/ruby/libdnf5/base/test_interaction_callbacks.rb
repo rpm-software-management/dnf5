@@ -233,4 +233,20 @@ class TestInteractionCallbacks < BaseTestCase
         assert_equal(ic::ProgressState_END_OK,
             callbacks.instance_variable_get(:@last_progress_state))
     end
+
+    def test_abort_return_value()
+        assert_equal(-4, Libdnf5::Base::ANSWER_ABORT)
+
+        # Test that a script override can return ANSWER_ABORT as a bare integer
+        abort_cb = Class.new(Libdnf5::Base::InteractionCallbacks) do
+            def input_text(msg, default_text, validator)
+                Libdnf5::Base::ANSWER_ABORT
+            end
+        end.new()
+
+        base = Libdnf5::Base::Base.new()
+        base.set_interaction_callbacks(Libdnf5::Base::InteractionCallbacksUniquePtr.new(abort_cb))
+        result, text = base.input_text(TestMessage.new("msg"), nil, nil)
+        assert_equal(Libdnf5::Base::ANSWER_ABORT, result)
+    end
 end
