@@ -263,10 +263,20 @@ inline GoalPrivate::~GoalPrivate() {
 
 inline GoalPrivate & GoalPrivate::operator=(const GoalPrivate & src) {
     if (this != &src) {
+        // Copy inputs
         base = src.base;
         staging = src.staging;
         installonly = src.installonly;
         installonly_limit = src.installonly_limit;
+
+        // Reset resolve-time artifacts
+        transaction_group_reason.reset();
+        transaction_user_installed.reset();
+
+        // Copy inputs (pointers)
+        exclude_from_weak.reset(src.exclude_from_weak ? new libdnf5::solv::SolvMap(*src.exclude_from_weak) : nullptr);
+
+        // Reset solver state
         if (libsolv_solver.is_initialized()) {
             libsolv_solver.reset();
         }
@@ -274,15 +284,27 @@ inline GoalPrivate & GoalPrivate::operator=(const GoalPrivate & src) {
             transaction_free(libsolv_transaction);
             libsolv_transaction = nullptr;
         }
+
+        // Copy inputs (pointers)
         protected_packages.reset(
             src.protected_packages ? new libdnf5::solv::SolvMap(*src.protected_packages) : nullptr);
         removal_of_protected.reset();
         protected_running_kernel = src.protected_running_kernel;
+        user_installed_packages.reset(
+            src.user_installed_packages ? new libdnf5::solv::IdQueue(*src.user_installed_packages) : nullptr);
+
+        // Copy inputs (flags)
         allow_downgrade = src.allow_downgrade;
         allow_erasing = src.allow_erasing;
         allow_vendor_change = src.allow_vendor_change;
         install_weak_deps = src.install_weak_deps;
         run_in_strict_mode = src.run_in_strict_mode;
+
+        // Reset resolve-time state
+        clean_deps_present = false;
+        groups.clear();
+        environments.clear();
+        reason_changes.clear();
     }
     return *this;
 }

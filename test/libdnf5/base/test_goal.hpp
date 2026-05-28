@@ -37,6 +37,7 @@ class BaseGoalTest : public LibdnfPrivateTestCase {
     CPPUNIT_TEST(test_install_installed_pkg);
     CPPUNIT_TEST(test_install_or_reinstall);
     CPPUNIT_TEST(test_install_from_cmdline);
+    CPPUNIT_TEST(test_install_from_cmdline_multiple_resolves);
     CPPUNIT_TEST(test_reinstall);
     CPPUNIT_TEST(test_reinstall_from_cmdline);
     CPPUNIT_TEST(test_reinstall_user);
@@ -70,6 +71,7 @@ public:
     void test_install_installed_pkg();
     void test_install_or_reinstall();
     void test_install_from_cmdline();
+    void test_install_from_cmdline_multiple_resolves();
     void test_reinstall();
     void test_reinstall_from_cmdline();
     void test_reinstall_user();

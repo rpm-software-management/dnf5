@@ -93,6 +93,21 @@ void BaseGoalTest::test_install_from_cmdline() {
     CPPUNIT_ASSERT_EQUAL(expected, transaction.get_transaction_packages());
 }
 
+void BaseGoalTest::test_install_from_cmdline_multiple_resolves() {
+    // Tests that resolving a cmdline package install multiple times does not
+    // crash with "Id is out of bitmap range" due to stale bitmap in operator=.
+    add_repo_rpm("rpm-repo1");
+
+    libdnf5::Goal goal(base);
+
+    for (int i = 0; i < 16; ++i) {
+        auto cmdline_pkg = add_cmdline_pkg("repos-rpm/rpm-repo1/one-1-1.noarch.rpm");
+        goal.add_rpm_install(cmdline_pkg);
+        CPPUNIT_ASSERT_NO_THROW_MESSAGE("Resolve failed on iteration " + std::to_string(i), goal.resolve());
+        goal.reset();
+    }
+}
+
 void BaseGoalTest::test_install_multilib_all() {
     add_repo_solv("solv-multilib");
     base.get_config().get_multilib_policy_option().set("all");

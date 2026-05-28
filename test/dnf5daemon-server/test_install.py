@@ -161,3 +161,18 @@ class InstallTest(support.InstallrootCase):
         )
 
         self.iface_goal.do_transaction(dbus.Dictionary({}, signature='sv'))
+
+    def test_install_file_multiple_resolves(self):
+        '''
+        Test that resolving a file install multiple times in the same session
+        does not crash with "Id is out of bitmap range".
+        '''
+        rpm_path = self.path_to_repo_rpm("rpm-repo1", "one-1-1.noarch.rpm")
+
+        for i in range(16):
+            self.iface_goal.reset(dbus.Dictionary({}, signature='sv'))
+            self.iface_rpm.install([rpm_path], dbus.Dictionary({}, signature='sv'))
+            resolved, result = self.iface_goal.resolve(
+                dbus.Dictionary({}, signature='sv'))
+            self.assertEqual(result, 0,
+                             f"Resolve failed on iteration {i}")
