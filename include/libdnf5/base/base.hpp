@@ -21,6 +21,7 @@
 #define LIBDNF5_BASE_BASE_HPP
 
 #include "libdnf5/base/base_weak.hpp"
+#include "libdnf5/base/interaction_callbacks.hpp"
 #include "libdnf5/common/exception.hpp"
 #include "libdnf5/common/impl_ptr.hpp"
 #include "libdnf5/common/weak_ptr.hpp"
@@ -67,6 +68,11 @@ public:
 
     void set_download_callbacks(std::unique_ptr<repo::DownloadCallbacks> && download_callbacks);
     repo::DownloadCallbacks * get_download_callbacks();
+
+    /// Sets the interaction callbacks instance used for user interaction by plugins.
+    /// Replaces any previously set instance. Ownership is transferred to the Base instance.
+    /// @param interaction_callbacks The interaction callbacks instance to set. Passing nullptr clears the callbacks.
+    void set_interaction_callbacks(std::unique_ptr<base::InteractionCallbacks> && interaction_callbacks);
 
     /// Sets the pointer to the locked instance "Base" to "this" instance. Blocks if the pointer is already set.
     /// Pointer to a locked "Base" instance can be obtained using "get_locked_base()".
@@ -171,6 +177,61 @@ public:
         const std::string & plugin_name,
         libdnf5::ConfigParser && plugin_config,
         libdnf5::plugin::IPlugin & iplugin_instance);
+
+    /// Sends a message to the user via the registered interaction callbacks.
+    /// If no interaction callbacks are registered, a default instance is created.
+    /// @param level The message level (ERROR, WARNING, NOTICE, INFO)
+    /// @param message The message to display
+    void message(base::InteractionCallbacks::MessageLevel level, const libdnf5::Message & message);
+
+    /// Asks the user to confirm an action via the registered interaction callbacks.
+    /// If no interaction callbacks are registered, a default instance is created.
+    /// @param message The confirmation message describing the action
+    /// @param default_answer The answer preferred by the caller, used when neither `assumeyes`
+    ///        nor `assumeno` configuration option is active
+    /// @return `ANSWER_YES` (-1) to confirm, `ANSWER_NO` (-2) to deny, `ANSWER_DEFAULT` (-3) to use caller default,
+    int32_t confirm(const libdnf5::Message & message, bool default_answer);
+
+    /// Asks the user to select an option via the registered interaction callbacks.
+    /// If no interaction callbacks are registered, a default instance is created.
+    /// @param message The message describing the choice
+    /// @param options Vector of pointers to available option messages (for translation support)
+    /// @param default_option Index of the option preferred by the caller (0-based)
+    /// @return Index of the selected choice (0-based), or `ANSWER_DEFAULT` (-3) to use caller default
+    int32_t choice(
+        const libdnf5::Message & message, const std::vector<libdnf5::Message *> & options, int32_t default_option);
+
+    /// Asks the user for text input via the registered interaction callbacks.
+    /// If no interaction callbacks are registered, a default instance is created.
+    /// @param out_text Output parameter - filled with user input when returning `ANSWER_YES` or `ANSWER_NO`
+    /// @param message The message describing what input is needed
+    /// @param default_text Optional pre-filled text offered to the user, or nullptr (default is undefined text).
+    /// @param validator Optional validator to check if input is valid. If nullptr, any input is accepted.
+    /// @return `ANSWER_YES` (-1) if a string was entered (out_text filled; may be empty/zero-length),
+    ///         `ANSWER_NO` (-2) if no string was returned (out_text unchanged; analogous to NULL char*),
+    ///         `ANSWER_DEFAULT` (-3) if the caller should use default_text (out_text unchanged),
+    ///         `ANSWER_ABORT` (-4) to abort the operation (out_text unchanged)
+    int32_t input_text(
+        std::string & out_text,
+        const libdnf5::Message & message,
+        const char * default_text,
+        base::TextValidatorCallback * validator);
+
+    /// Reports progress via the registered interaction callbacks.
+    /// If no interaction callbacks are registered, a default instance is created.
+    /// @param handle  Ignored for NEW; identifies the progress for other states
+    /// @param state   The progress state
+    /// @param msg     Optional description of current activity, or nullptr
+    /// @param count   Number of completed items
+    /// @param total   Total number of items
+    /// @return For NEW: handle of the new progress entry (>= 0).
+    ///         For other states: >= 0 to continue, < 0 to request cancellation.
+    int progress(
+        int handle,
+        base::InteractionCallbacks::ProgressState state,
+        const libdnf5::Message * msg,
+        int64_t count,
+        int64_t total);
 
 private:
     friend class libdnf5::InternalBaseUser;
