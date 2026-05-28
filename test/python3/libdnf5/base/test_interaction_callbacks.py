@@ -251,3 +251,17 @@ class TestInteractionCallbacksClass(unittest.TestCase):
         self.assertEqual(
             ProgressState.ProgressState_END_OK, callbacks.last_progress_state
         )
+
+    def test_abort_return_value(self):
+        self.assertEqual(-4, libdnf5.base.ANSWER_ABORT)
+
+        # Test that a script override can return ANSWER_ABORT as a bare integer
+        class AbortInputCallbacks(libdnf5.base.InteractionCallbacks):
+            def input_text(self, msg, default_text, validator):
+                return libdnf5.base.ANSWER_ABORT
+
+        base = libdnf5.base.Base()
+        cb = AbortInputCallbacks()
+        base.set_interaction_callbacks(libdnf5.base.InteractionCallbacksUniquePtr(cb))
+        result, text = base.input_text(TestMessage("msg"), None, None)
+        self.assertEqual(libdnf5.base.ANSWER_ABORT, result)

@@ -27,6 +27,7 @@ namespace libdnf5::base {
 constexpr int32_t ANSWER_YES = -1;      ///< User confirmed / a string entered
 constexpr int32_t ANSWER_NO = -2;       ///< User denied / undefined string
 constexpr int32_t ANSWER_DEFAULT = -3;  ///< Use the caller-supplied default
+constexpr int32_t ANSWER_ABORT = -4;    ///< Abort the operation (user request or I/O error)
 #ifdef SWIG
 #undef constexpr
 #endif
@@ -65,14 +66,16 @@ protected:
     /// @param message The confirmation message describing the action
     /// @param default_answer The answer preferred by the caller, used when neither `assumeyes`
     ///        nor `assumeno` configuration option is active
-    /// @return `ANSWER_YES` (-1) to confirm, `ANSWER_NO` (-2) to deny, `ANSWER_DEFAULT` (-3) to use caller default
+    /// @return `ANSWER_YES` (-1) to confirm, `ANSWER_NO` (-2) to deny, `ANSWER_DEFAULT` (-3) to use caller default,
+    ///         `ANSWER_ABORT` (-4) to abort the operation
     virtual int32_t confirm(const libdnf5::Message & msg, bool default_answer);
 
     /// Override to ask the user to select an option. Called via Base::choice().
     /// @param msg The message describing the choice
     /// @param options Vector of pointers to available option messages (for translation support)
     /// @param default_option Index of the option preferred by the caller (0-based)
-    /// @return Index of the selected choice (0-based), or `ANSWER_DEFAULT` (-3) to use caller default
+    /// @return Index of the selected choice (0-based), `ANSWER_DEFAULT` (-3) to use caller default,
+    ///         or `ANSWER_ABORT` (-4) to abort the operation
     virtual int32_t choice(
         const libdnf5::Message & msg, const std::vector<libdnf5::Message *> & options, int32_t default_option);
 

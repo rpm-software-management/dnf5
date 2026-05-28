@@ -190,6 +190,7 @@ public:
     /// @param default_answer The answer preferred by the caller, used when neither `assumeyes`
     ///        nor `assumeno` configuration option is active
     /// @return `ANSWER_YES` (-1) to confirm, `ANSWER_NO` (-2) to deny, `ANSWER_DEFAULT` (-3) to use caller default,
+    ///         `ANSWER_ABORT` (-4) to abort the operation
     int32_t confirm(const libdnf5::Message & message, bool default_answer);
 
     /// Asks the user to select an option via the registered interaction callbacks.
@@ -197,7 +198,8 @@ public:
     /// @param message The message describing the choice
     /// @param options Vector of pointers to available option messages (for translation support)
     /// @param default_option Index of the option preferred by the caller (0-based)
-    /// @return Index of the selected choice (0-based), or `ANSWER_DEFAULT` (-3) to use caller default
+    /// @return Index of the selected choice (0-based), `ANSWER_DEFAULT` (-3) to use caller default,
+    ///         or `ANSWER_ABORT` (-4) to abort the operation
     int32_t choice(
         const libdnf5::Message & message, const std::vector<libdnf5::Message *> & options, int32_t default_option);
 
