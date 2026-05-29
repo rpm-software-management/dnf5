@@ -2333,6 +2333,9 @@ void PackageQuery::filter_latest_unresolved_advisories(
     libdnf5::sack::QueryCmp cmp_type) {
     auto adv_pkgs = advisory_query.get_advisory_packages_sorted_by_name_arch_evr();
     std::vector<libdnf5::advisory::AdvisoryPackage> latest_unresolved_adv_pkgs;
+    libdnf5::solv::RpmPool & pool = get_rpm_pool(get_base());
+
+    auto highest_name_arch_evr = adv_pkgs.end();
     for (std::vector<libdnf5::advisory::AdvisoryPackage>::iterator i = adv_pkgs.begin(); i != adv_pkgs.end(); ++i) {
         // Filter out already resolved advisories
         if (i->p_impl->is_resolved_in(installed)) {
@@ -2340,11 +2343,28 @@ void PackageQuery::filter_latest_unresolved_advisories(
         }
 
         // Include only the advisory package with the most recent EVR
-        auto next_adv_pkg = std::next(i);
-        if (next_adv_pkg == adv_pkgs.end() || i->get_name() != next_adv_pkg->get_name() ||
-            i->get_arch() != next_adv_pkg->get_arch()) {
-            latest_unresolved_adv_pkgs.push_back(*i);
+        {
+            if (highest_name_arch_evr == adv_pkgs.end()) {
+                highest_name_arch_evr = i;
+                continue;
+            }
+
+            const auto & best = *highest_name_arch_evr->p_impl;
+            const auto & current = *i->p_impl;
+            if (current.get_name_id() != best.get_name_id() || current.get_arch_id() != best.get_arch_id()) {
+                latest_unresolved_adv_pkgs.push_back(*highest_name_arch_evr);
+                highest_name_arch_evr = i;
+                continue;
+            }
+
+            if (pool.evrcmp(current.get_evr_id(), best.get_evr_id(), EVRCMP_COMPARE) > 0) {
+                highest_name_arch_evr = i;
+            }
         }
+    }
+
+    if (highest_name_arch_evr != adv_pkgs.end()) {
+        latest_unresolved_adv_pkgs.push_back(*highest_name_arch_evr);
     }
 
     PQImpl::filter_sorted_advisory_pkgs(*this, latest_unresolved_adv_pkgs, cmp_type);
