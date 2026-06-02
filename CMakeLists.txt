@@ -8,6 +8,7 @@ cmake_policy(VERSION ${CMAKE_VERSION})
 
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 set(SYSTEMD_DIR "/usr/lib/systemd/system")
+set(TMPFILES_DIR "/usr/lib/tmpfiles.d")
 
 message("Building ${PROJECT_NAME} version ${PROJECT_VERSION}")
 
