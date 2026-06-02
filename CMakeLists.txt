@@ -7,8 +7,8 @@ project(dnf5 LANGUAGES CXX C VERSION ${VERSION_PRIME}.${VERSION_MAJOR}.${VERSION
 cmake_policy(VERSION ${CMAKE_VERSION})
 
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
-set(SYSTEMD_DIR "/usr/lib/systemd/system")
-set(TMPFILES_DIR "/usr/lib/tmpfiles.d")
+set(SYSTEMD_DIR "/usr/lib/systemd/system" CACHE PATH "Directory for systemd unit files")
+set(TMPFILES_DIR "/usr/lib/tmpfiles.d" CACHE PATH "Directory for systemd tmpfiles.d files")
 
 message("Building ${PROJECT_NAME} version ${PROJECT_VERSION}")
 
