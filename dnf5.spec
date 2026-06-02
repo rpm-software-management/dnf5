@@ -147,7 +147,6 @@ BuildRequires:  bash-completion
 BuildRequires:  cmake >= 3.21
 BuildRequires:  doxygen
 BuildRequires:  gettext
-BuildRequires:  pkgconfig(check)
 BuildRequires:  pkgconfig(fmt)
 BuildRequires:  pkgconfig(json-c)
 BuildRequires:  pkgconfig(libcrypto)
