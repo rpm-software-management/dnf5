@@ -1030,6 +1030,8 @@ DNF5 plugin for working with RPM package manifest files.
     -DWITH_COMPS=%{?with_comps:ON}%{!?with_comps:OFF} \
     -DWITH_MODULEMD=%{?with_modulemd:ON}%{!?with_modulemd:OFF} \
     -DWITH_SYSTEMD=%{?with_systemd:ON}%{!?with_systemd:OFF} \
+    -DSYSTEMD_DIR=%{_unitdir} \
+    -DTMPFILES_DIR=%{_tmpfilesdir} \
     \
     -DWITH_HTML=%{?with_html:ON}%{!?with_html:OFF} \
     -DWITH_MAN=%{?with_man:ON}%{!?with_man:OFF} \
