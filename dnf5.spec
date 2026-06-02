@@ -489,6 +489,7 @@ Package management library.
 %verify(not md5 size mtime) %attr(0644, root, root) %ghost %{_prefix}/lib/sysimage/libdnf5/transaction_history.sqlite{,-shm,-wal}
 %license lgpl-2.1.txt
 %ghost %attr(0755, root, root) %dir %{_var}/cache/libdnf5
+%{_tmpfilesdir}/libdnf5.conf
 %attr(0755, root, root) %dir %{_sharedstatedir}/dnf
 %verify(not md5 size mtime) %attr(0644, root, root) %{_sharedstatedir}/dnf/system-repo.lock
 
