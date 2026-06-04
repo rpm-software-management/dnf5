@@ -161,6 +161,22 @@ time_t NeedsRestartingCommand::get_kernel_boot_time(Context & ctx) {
     return btime;
 }
 
+// Memoized sdbus::createSystemBusConnection
+sdbus::IConnection & NeedsRestartingCommand::get_system_bus_connection() {
+    if (system_bus_connection_exception) {
+        std::rethrow_exception(system_bus_connection_exception);
+    }
+    if (system_bus_connection == nullptr) {
+        try {
+            system_bus_connection = sdbus::createSystemBusConnection();
+        } catch (...) {
+            system_bus_connection_exception = std::current_exception();
+            std::rethrow_exception(system_bus_connection_exception);
+        }
+    }
+    return *system_bus_connection;
+}
+
 time_t NeedsRestartingCommand::get_boot_time(Context & ctx) {
     // We have three sources from which to derive the boot time. These values
     // vary depending on containerization, existing of a Real Time Clock, etc:
@@ -187,9 +203,7 @@ time_t NeedsRestartingCommand::get_boot_time(Context & ctx) {
     // First, ask systemd for the boot time. If systemd is available, this is
     // the best option.
     try {
-        std::unique_ptr<sdbus::IConnection> connection;
-        connection = sdbus::createSystemBusConnection();
-        auto proxy = sdbus::createProxy(SYSTEMD_DESTINATION_NAME, SYSTEMD_OBJECT_PATH);
+        auto proxy = sdbus::createProxy(get_system_bus_connection(), SYSTEMD_DESTINATION_NAME, SYSTEMD_OBJECT_PATH);
 
         const auto systemd_boot_time_us =
             uint64_t{proxy->getProperty("UnitsLoadStartTimestamp").onInterface(SYSTEMD_MANAGER_INTERFACE)};
@@ -362,15 +376,15 @@ void NeedsRestartingCommand::system_needs_restarting(Context & ctx) {
 
 std::vector<NeedsRestartingCommand::SystemdService> NeedsRestartingCommand::get_systemd_services(
     [[maybe_unused]] Context & ctx) {
-    std::unique_ptr<sdbus::IConnection> connection;
-    try {
-        connection = sdbus::createSystemBusConnection();
-    } catch (const sdbus::Error & ex) {
-        const std::string error_message{ex.what()};
-        throw libdnf5::cli::CommandExitError(1, M_("Couldn't connect to D-Bus: {}"), error_message);
-    }
+    auto & connection = [&]() -> sdbus::IConnection & {
+        try {
+            return get_system_bus_connection();
+        } catch (const sdbus::Error & ex) {
+            throw libdnf5::cli::CommandExitError(1, M_("Couldn't connect to D-Bus: {}"), std::string{ex.what()});
+        }
+    }();
 
-    auto systemd_proxy = sdbus::createProxy(SYSTEMD_DESTINATION_NAME, SYSTEMD_OBJECT_PATH);
+    auto systemd_proxy = sdbus::createProxy(connection, SYSTEMD_DESTINATION_NAME, SYSTEMD_OBJECT_PATH);
 
     std::vector<sdbus::Struct<
         std::string,
@@ -399,7 +413,7 @@ std::vector<NeedsRestartingCommand::SystemdService> NeedsRestartingCommand::get_
         }
 
         const auto unit_object_path = std::get<6>(unit);
-        auto unit_proxy = sdbus::createProxy(SYSTEMD_DESTINATION_NAME, unit_object_path);
+        auto unit_proxy = sdbus::createProxy(connection, SYSTEMD_DESTINATION_NAME, unit_object_path);
 
         // Only consider active (running) services
         std::string active_state =
@@ -494,11 +508,12 @@ void NeedsRestartingCommand::processes_need_restarting(Context & ctx, bool exclu
     std::unordered_set<std::string> service_pids;
     if (exclude_services) {
         try {
-            std::unique_ptr<sdbus::IConnection> connection = sdbus::createSystemBusConnection();
             const auto services = get_systemd_services(ctx);
 
+            auto & connection = get_system_bus_connection();
+
             for (const auto & service : services) {
-                auto unit_proxy = sdbus::createProxy(SYSTEMD_DESTINATION_NAME, service.object_path);
+                auto unit_proxy = sdbus::createProxy(connection, SYSTEMD_DESTINATION_NAME, service.object_path);
 
                 // Get the main PID of the service
                 try {
