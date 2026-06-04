@@ -66,6 +66,7 @@ struct SearchResults {
     SearchOptions options;                    ///< Search options that were used.
     std::vector<std::string> patterns;        ///< List of patterns to be matched, given by the user.
     std::vector<SearchResult> group_results;  ///< List of results groups.
+    SearchPackages installed_packages;        ///< List of matches that are also installed
 };
 
 /// @brief Write the search results to the standard output.

@@ -137,6 +137,8 @@ void SearchProcessor::update_priorities(const libdnf5::rpm::PackageSet & package
 
 SearchResults SearchProcessor::get_results() {
     libdnf5::rpm::PackageSet all_matches(base);
+    // libdnf5::rpm::PackageSet installed_matches(base);
+    SearchPackages installed_matches;
 
     for (auto it = patterns.begin(); it != patterns.end(); ++it) {
         libdnf5::rpm::PackageSet pattern_matches(base);
@@ -153,6 +155,15 @@ SearchResults SearchProcessor::get_results() {
                 pattern_matches |= get_description_matches(*it);
                 pattern_matches |= get_url_matches(*it);
             }
+        }
+
+        // Add any installed packages to the installed list.
+        // This is necessary mostly when we are not using the "--all"
+        // option and want to display installed status.
+        for(auto const & package : pattern_matches) {
+          if (package.is_installed()) {
+            installed_matches.packages.insert(package);
+          }
         }
 
         // For the first pattern we are always adding to the empty list.
@@ -181,6 +192,8 @@ SearchResults SearchProcessor::get_results() {
         results.group_results.push_back(
             {.matched_keys = get_matched_keys(priority), .matched_packages = std::move(packages)});
     }
+    results.installed_packages = std::move(installed_matches);
+
     results.options = {
         .search_all = search_all,
         .show_duplicates = showdupes,
