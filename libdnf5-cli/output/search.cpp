@@ -107,6 +107,17 @@ void print_search_results(const SearchResults & results) {
             } else {
                 std::cout << highlight(package.get_name()) << "." << package.get_arch();
             }
+            if (package.is_installed()){
+                std::cout << " [installed]";
+            } else if (!results.options.show_duplicates) {
+                for (auto const & specific_package : results.installed_packages.packages) {
+                    if (specific_package.get_name() == package.get_name()
+                        && specific_package.is_installed()) {
+                        std::cout << " [outdated]";
+                        break;
+                    }
+                }
+            }
             std::cout << "\t" << highlight(package.get_summary()) << std::endl;
         }
     }
