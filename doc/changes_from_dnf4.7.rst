@@ -112,6 +112,15 @@ Newly introduced options
 ``--dump-main-config``
   * Along with related ``--dump-repo-config=REPO_ID``, these are new options to print configuration values on the standard output.
 
+``--from-repo``
+  * Packages (or their provides) explicitly specified on the command line will only be looked up in the specified repositories. These repositories are automatically enabled.
+  * Dependencies of the specified packages can be resolved from any enabled repository.
+  * Applicable to ``install``, ``upgrade``, ``distro-sync``, ``reinstall``, ``downgrade``, ``download``, ``swap``, ``do``, and related commands.
+
+``--installed-from-repo``
+  * Filters installed packages by the ID of the repository they were installed from.
+  * Applicable to ``remove``, ``upgrade``, ``distro-sync``, ``reinstall``, ``downgrade``, ``list``, ``info``, ``repoquery``, and related commands.
+
 ``--offline``
   * Store the transaction to be performed offline.
   * Applicable to all relevant transactional commands.
@@ -276,6 +285,161 @@ Changes to individual commands
 
 ``repoclosure``
   * Dropped ``--pkg`` option. Positional arguments can now be used to specify packages to check closure for.
+
+``repository-packages``
+  * Dropped. The functionality is covered by existing commands combined with the ``--repo``, ``--disable-repo`` global options and the new ``--from-repo`` and ``--installed-from-repo`` options.
+
+  * Subcommand equivalents (replace ``<REPO_ID>`` with the actual repository ID):
+
+    * Before: ``dnf repository-packages <REPO_ID> check-update [<package-spec>...]``
+
+      Now: ``dnf5 --repo=<REPO_ID> check-upgrade [<package-spec>...]``
+
+    * Before: ``dnf repository-packages <REPO_ID> info [--all] [<package-spec>...]``
+
+      The behavior is not fully replicated in DNF5. Two commands produce a similar result:
+      ``dnf5 info --installed-from-repo=<REPO_ID> [<package-spec>...]`` lists installed packages from ``<REPO_ID>``.
+      Then ``dnf5 --repo=<REPO_ID> info --available [<package-spec>...]`` lists packages available in ``<REPO_ID>``.
+
+      Note: In DNF4, ``--available`` excluded already installed packages. In DNF5, installed packages are included but color-coded to indicate they are available for reinstall.
+
+    * Before: ``dnf repository-packages <REPO_ID> info --available [<package-spec>...]``
+
+      Now: ``dnf5 --repo=<REPO_ID> info --available [<package-spec>...]``
+
+      Note: In DNF4, ``--available`` excluded already installed packages. In DNF5, installed packages are included but color-coded to indicate they are available for reinstall.
+
+    * Before: ``dnf repository-packages <REPO_ID> info --extras [<package-spec>...]``
+
+      Now: ``dnf5 repoquery --info --installed-from-repo=<REPO_ID> --extras [<package-spec>...]``
+
+      Note: DNF5 ``info`` does not support combining ``--installed-from-repo`` with ``--extras``; ``repoquery --info`` is used instead.
+
+    * Before: ``dnf repository-packages <REPO_ID> info --installed [<package-spec>...]``
+
+      Now: ``dnf5 info --installed-from-repo=<REPO_ID> [<package-spec>...]``
+
+    * Before: ``dnf repository-packages <REPO_ID> info --obsoletes [<package-spec>...]``
+
+      Now: ``dnf5 --repo=<REPO_ID> info --obsoletes [<package-spec>...]``
+
+    * Before: ``dnf repository-packages <REPO_ID> info --recent [<package-spec>...]``
+
+      Now: ``dnf5 --repo=<REPO_ID> info --recent [<package-spec>...]``
+
+    * Before: ``dnf repository-packages <REPO_ID> info --upgrades [<package-spec>...]``
+
+      Now: ``dnf5 --repo=<REPO_ID> info --upgrades [<package-spec>...]``
+
+    * Before: ``dnf repository-packages <REPO_ID> install``
+
+      Now: ``dnf5 install --from-repo=<REPO_ID> '*'``
+
+    * Before: ``dnf repository-packages <REPO_ID> install <package-spec>...``
+
+      Now: ``dnf5 install --from-repo=<REPO_ID> <package-spec>...``
+
+    * Before: ``dnf repository-packages <REPO_ID> list [--all] [<package-spec>...]``
+
+      The behavior is not fully replicated in DNF5. Two commands produce a similar result:
+      ``dnf5 list --installed-from-repo=<REPO_ID> [<package-spec>...]`` lists installed packages from ``<REPO_ID>``.
+      Then ``dnf5 --repo=<REPO_ID> list --available [<package-spec>...]`` lists packages available in ``<REPO_ID>``.
+
+      Note: In DNF4, ``--available`` excluded already installed packages. In DNF5, installed packages are included but color-coded to indicate they are available for reinstall.
+
+    * Before: ``dnf repository-packages <REPO_ID> list --available [<package-spec>...]``
+
+      Now: ``dnf5 --repo=<REPO_ID> list --available [<package-spec>...]``
+
+      Note: In DNF4, ``--available`` excluded already installed packages. In DNF5, installed packages are included but color-coded to indicate they are available for reinstall.
+
+    * Before: ``dnf repository-packages <REPO_ID> list --extras [<package-spec>...]``
+
+      Now: ``dnf5 repoquery --installed-from-repo=<REPO_ID> --extras [<package-spec>...]``
+
+      Note: DNF5 ``list`` does not support combining ``--installed-from-repo`` with ``--extras``; ``repoquery`` is used instead.
+
+    * Before: ``dnf repository-packages <REPO_ID> list --installed [<package-spec>...]``
+
+      Now: ``dnf5 list --installed-from-repo=<REPO_ID> [<package-spec>...]``
+
+    * Before: ``dnf repository-packages <REPO_ID> list --obsoletes [<package-spec>...]``
+
+      Now: ``dnf5 --repo=<REPO_ID> list --obsoletes [<package-spec>...]``
+
+    * Before: ``dnf repository-packages <REPO_ID> list --recent [<package-spec>...]``
+
+      Now: ``dnf5 --repo=<REPO_ID> list --recent [<package-spec>...]``
+
+    * Before: ``dnf repository-packages <REPO_ID> list --upgrades [<package-spec>...]``
+
+      Now: ``dnf5 --repo=<REPO_ID> list --upgrades [<package-spec>...]``
+
+    * Before: ``dnf repository-packages <REPO_ID> move-to``
+
+      Now: ``dnf5 reinstall --from-repo=<REPO_ID> '*'``
+
+    * Before: ``dnf repository-packages <REPO_ID> move-to <package-spec>...``
+
+      Now: ``dnf5 reinstall --from-repo=<REPO_ID> <package-spec>...``
+
+    * Before: ``dnf repository-packages <REPO_ID> reinstall``
+
+      There is no direct DNF5 equivalent. Try ``dnf5 reinstall --installed-from-repo=<REPO_ID> --from-repo=<REPO_ID> '*'`` first.
+      If that fails, fall back to ``dnf5 reinstall --from-repo=<REPO_ID> '*'``.
+
+    * Before: ``dnf repository-packages <REPO_ID> reinstall <package-spec>...``
+
+      There is no direct DNF5 equivalent. Try ``dnf5 reinstall --installed-from-repo=<REPO_ID> --from-repo=<REPO_ID> <package-spec>...`` first.
+      If that fails, fall back to ``dnf5 reinstall --from-repo=<REPO_ID> <package-spec>...``.
+
+    * Before: ``dnf repository-packages <REPO_ID> reinstall-old``
+
+      Now: ``dnf5 reinstall --installed-from-repo=<REPO_ID> --from-repo=<REPO_ID> '*'``
+
+    * Before: ``dnf repository-packages <REPO_ID> reinstall-old <package-spec>...``
+
+      Now: ``dnf5 reinstall --installed-from-repo=<REPO_ID> --from-repo=<REPO_ID> <package-spec>...``
+
+    * Before: ``dnf repository-packages <REPO_ID> remove``
+
+      Now: ``dnf5 remove --installed-from-repo=<REPO_ID> '*'``
+
+    * Before: ``dnf repository-packages <REPO_ID> remove <package-spec>...``
+
+      Now: ``dnf5 remove --installed-from-repo=<REPO_ID> <package-spec>...``
+
+    * Before: ``dnf repository-packages <REPO_ID> remove-or-distro-sync``
+
+      There is no direct DNF5 equivalent. Two commands can be used to achieve the same result:
+      ``dnf5 --disable-repo=<REPO_ID> distro-sync --installed-from-repo=<REPO_ID>`` synchronizes packages installed from ``<REPO_ID>`` using another enabled repository.
+      Then ``dnf5 remove --installed-from-repo=<REPO_ID> '*'`` removes the packages that were not found in another enabled repository and thus are still installed from ``<REPO_ID>``.
+
+    * Before: ``dnf repository-packages <REPO_ID> remove-or-distro-sync <package-spec>...``
+
+      There is no direct DNF5 equivalent. Two commands can be used to achieve the same result:
+      ``dnf5 --disable-repo=<REPO_ID> distro-sync --installed-from-repo=<REPO_ID> <package-spec>...`` synchronizes packages installed from ``<REPO_ID>`` using another enabled repository.
+      Then ``dnf5 remove --installed-from-repo=<REPO_ID> <package-spec>...`` removes the packages that were not found in another enabled repository and thus are still installed from ``<REPO_ID>``.
+
+    * Before: ``dnf repository-packages <REPO_ID> remove-or-reinstall``
+
+      There is no direct DNF5 equivalent. Two commands can be used to achieve the same result:
+      ``dnf5 --disable-repo=<REPO_ID> reinstall --installed-from-repo=<REPO_ID> --skip-unavailable '*'`` reinstalls packages installed from ``<REPO_ID>`` using another enabled repository.
+      Then ``dnf5 remove --installed-from-repo=<REPO_ID> '*'`` removes the packages that were not found in another enabled repository and thus are still installed from ``<REPO_ID>``.
+
+    * Before: ``dnf repository-packages <REPO_ID> remove-or-reinstall <package-spec>...``
+
+      There is no direct DNF5 equivalent. Two commands can be used to achieve the same result:
+      ``dnf5 --disable-repo=<REPO_ID> reinstall --installed-from-repo=<REPO_ID> --skip-unavailable <package-spec>...`` reinstalls packages installed from ``<REPO_ID>`` using another enabled repository.
+      Then ``dnf5 remove --installed-from-repo=<REPO_ID> <package-spec>...`` removes the packages that were not found in another enabled repository and thus are still installed from ``<REPO_ID>``.
+
+    * Before: ``dnf repository-packages <REPO_ID> upgrade`` (``upgrade-to`` is an alias)
+
+      Now: ``dnf5 upgrade --from-repo=<REPO_ID> '*'``
+
+    * Before: ``dnf repository-packages <REPO_ID> upgrade <package-spec>...``
+
+      Now: ``dnf5 upgrade --from-repo=<REPO_ID> <package-spec>...``
 
 ``reposync``
   * Dropped ``--downloadcomps`` option. Consider using ``--download-metadata`` option which downloads all available repository metadata, not only comps groups.
