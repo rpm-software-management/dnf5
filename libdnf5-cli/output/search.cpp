@@ -112,6 +112,7 @@ void print_search_results(const SearchResults & results) {
             } else if (!results.options.show_duplicates) {
                 for (auto const & specific_package : results.installed_packages.packages) {
                     if (specific_package.get_name() == package.get_name()
+                        && specific_package.get_arch() == package.get_arch()
                         && specific_package.is_installed()) {
                         std::cout << " [outdated]";
                         break;

@@ -138,7 +138,6 @@ void SearchProcessor::update_priorities(const libdnf5::rpm::PackageSet & package
 SearchResults SearchProcessor::get_results() {
     libdnf5::rpm::PackageSet all_matches(base);
     // libdnf5::rpm::PackageSet installed_matches(base);
-    SearchPackages installed_matches;
 
     for (auto it = patterns.begin(); it != patterns.end(); ++it) {
         libdnf5::rpm::PackageSet pattern_matches(base);
@@ -157,15 +156,6 @@ SearchResults SearchProcessor::get_results() {
             }
         }
 
-        // Add any installed packages to the installed list.
-        // This is necessary mostly when we are not using the "--all"
-        // option and want to display installed status.
-        for(auto const & package : pattern_matches) {
-          if (package.is_installed()) {
-            installed_matches.packages.insert(package);
-          }
-        }
-
         // For the first pattern we are always adding to the empty list.
         // If we are using the "--all" option, we want any matches in the result.
         // Otherwise we use an intersection (AND) with all previous results.
@@ -173,6 +163,30 @@ SearchResults SearchProcessor::get_results() {
             all_matches.update(std::move(pattern_matches));
         } else {
             all_matches.intersection(std::move(pattern_matches));
+        }
+    }
+
+    // Find installed versions of all matched packages.
+    SearchPackages installed_matches;
+    if (search_all) {
+        // Just filter existing matches
+        for (auto const & package : all_matches) {
+            if(package.is_installed()) {
+                installed_matches.packages.insert(package);
+            }
+        }
+    } else {
+        // Find matching packages
+        for (auto const & package : all_matches) {
+          libdnf5::rpm::PackageQuery query(base);
+            query.filter_installed();
+            query.filter_name(package.get_name());
+            query.filter_arch(package.get_arch());
+            // This should only be one package, but insert all matches
+            // just in case.
+            for(auto const & package : query) {
+                installed_matches.packages.insert(std::move(package));
+            }
         }
     }
 
