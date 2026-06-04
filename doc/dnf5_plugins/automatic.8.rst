@@ -109,9 +109,9 @@ Setting the mode of operation of the program.
 .. _upgrade_type_automatic-label:
 
 ``upgrade_type``
-    either one of ``default``, ``security``, default: ``default``
+    either one of ``default``, ``security``, ``distro-sync``, default: ``default``
 
-    What kind of upgrades to look at. ``default`` signals looking for all available updates, ``security`` only those with an issued security advisory.
+    What kind of upgrades to look at. ``default`` signals looking for all available updates, ``security`` only those with an issued security advisory, ``distro-sync`` synchronizes packages to the latest available versions in the enabled repositories (similar to ``dnf5 distro-sync``).
 
 ``reboot``
     either one of ``never``, ``when-changed``, ``when-needed``, default: ``never``

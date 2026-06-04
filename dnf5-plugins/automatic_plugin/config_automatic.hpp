@@ -39,7 +39,7 @@ public:
     ConfigAutomaticCommands();
     ~ConfigAutomaticCommands() = default;
 
-    libdnf5::OptionEnum upgrade_type{"default", {"default", "security"}};
+    libdnf5::OptionEnum upgrade_type{"default", {"default", "security", "distro-sync"}};
     libdnf5::OptionNumber<std::uint32_t> random_sleep{0};
     libdnf5::OptionNumber<std::int32_t> network_online_timeout{60};
     libdnf5::OptionBool download_updates{true};
