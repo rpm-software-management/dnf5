@@ -110,10 +110,15 @@ void print_search_results(const SearchResults & results) {
             if (package.is_installed()){
                 std::cout << " [installed]";
             } else if (!results.options.show_duplicates) {
-                for (auto const & specific_package : results.installed_packages.packages) {
-                    if (specific_package.get_name() == package.get_name()
-                        && specific_package.get_arch() == package.get_arch()
-                        && specific_package.is_installed()) {
+                // Note that any deduplicated package will be the newest version,
+                // so any valid package must be below `upper_bound`.
+                auto const & installed = results.installed_packages.packages;
+                for(auto it = ++std::reverse_iterator(installed.upper_bound(package));
+                    // stop if we reach a package with a different name
+                    it != installed.rend() && (*it).get_name() == package.get_name();
+                    ++it) {
+                    // ensure we have the same arch package
+                    if ((*it).get_arch() == package.get_arch()) {
                         std::cout << " [outdated]";
                         break;
                     }
