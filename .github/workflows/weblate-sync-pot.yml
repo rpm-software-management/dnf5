@@ -16,7 +16,7 @@ jobs:
       options: --user root
     timeout-minutes: 10
     steps:
-      - uses: actions/create-github-app-token@v1
+      - uses: actions/create-github-app-token@v3
         id: app-token
         with:
           app-id: ${{ vars.RSM_CI_APP_ID }}
@@ -25,7 +25,7 @@ jobs:
           repositories: "rpm-software-management/dnf5-l10n"
 
       - name: Clone source repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           path: src
           fetch-depth: 1
@@ -37,7 +37,7 @@ jobs:
           cmake --build build --target gettext-potfiles
 
       - name: Clone weblate repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           path: l10n
           repository: ${{ github.repository }}-l10n
