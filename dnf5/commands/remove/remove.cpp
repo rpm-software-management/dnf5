@@ -65,6 +65,17 @@ void RemoveCommand::set_argument_parser() {
     oldinstallonly_opt->link_value(oldinstallonly);
     cmd.register_named_arg(oldinstallonly_opt);
 
+    duplicates = dynamic_cast<libdnf5::OptionBool *>(
+        parser.add_init_value(std::unique_ptr<libdnf5::OptionBool>(new libdnf5::OptionBool(false))));
+    auto duplicates_opt = parser.add_new_named_arg("duplicates");
+    duplicates_opt->set_long_name("duplicates");
+    duplicates_opt->set_description("Remove older versions of duplicate packages and reinstall the newest version");
+    duplicates_opt->set_const_value("true");
+    duplicates_opt->link_value(duplicates);
+    cmd.register_named_arg(duplicates_opt);
+
+    oldinstallonly_opt->add_conflict_argument(*duplicates_opt);
+
     oldinstallonly_limit = dynamic_cast<libdnf5::OptionNumber<std::int32_t> *>(parser.add_init_value(
         std::unique_ptr<libdnf5::OptionNumber<std::int32_t>>(new libdnf5::OptionNumber<std::int32_t>(0))));
     auto limit_opt = parser.add_new_named_arg("limit");
@@ -75,6 +86,8 @@ void RemoveCommand::set_argument_parser() {
         "Limit the number of installonly package versions to keep (must be >=1, used with --oldinstallonly)");
     limit_opt->link_value(oldinstallonly_limit);
     cmd.register_named_arg(limit_opt);
+
+    limit_opt->add_conflict_argument(*duplicates_opt);
 
     auto keys = parser.add_new_positional_arg("specs", ArgumentParser::PositionalArg::UNLIMITED, nullptr, nullptr);
     keys->set_description("List of <package-spec-NF>|@<group-spec>|@<environment-spec> to remove");
@@ -95,7 +108,8 @@ void RemoveCommand::set_argument_parser() {
 void RemoveCommand::configure() {
     auto & context = get_context();
     context.set_load_system_repo(true);
-    context.set_load_available_repos(Context::LoadAvailableRepos::NONE);
+    context.set_load_available_repos(
+        duplicates->get_value() ? Context::LoadAvailableRepos::ENABLED : Context::LoadAvailableRepos::NONE);
 }
 
 void RemoveCommand::run() {
@@ -173,6 +187,46 @@ void RemoveCommand::run() {
                     }
                     goal->add_rpm_remove(packages[i]);
                 }
+            }
+        }
+    } else if (duplicates->get_value()) {
+        auto & base = ctx.get_base();
+
+        libdnf5::rpm::PackageQuery duplicate_query(base);
+        duplicate_query.filter_installed();
+
+        libdnf5::rpm::PackageQuery installonly_query(base);
+        installonly_query.filter_installonly();
+        duplicate_query -= installonly_query;
+
+        if (!pkg_specs.empty()) {
+            libdnf5::rpm::PackageQuery filtered(base, libdnf5::sack::ExcludeFlags::APPLY_EXCLUDES, true);
+            for (const auto & spec : pkg_specs) {
+                libdnf5::rpm::PackageQuery spec_query(duplicate_query);
+                spec_query.filter_name({spec}, libdnf5::sack::QueryCmp::GLOB);
+                filtered |= spec_query;
+            }
+            duplicate_query = filtered;
+        }
+
+        duplicate_query.filter_duplicates();
+
+        std::map<std::string, std::vector<libdnf5::rpm::Package>> packages_by_na;
+        for (const auto & pkg : duplicate_query) {
+            packages_by_na[pkg.get_na()].push_back(pkg);
+        }
+
+        for (auto & [na, packages] : packages_by_na) {
+            std::sort(packages.begin(), packages.end(), [](const auto & a, const auto & b) {
+                return libdnf5::rpm::cmp_nevra(b, a);
+            });
+
+            libdnf5::GoalJobSettings settings;
+            settings.set_skip_unavailable(libdnf5::GoalSetting::SET_TRUE);
+            goal->add_rpm_reinstall(packages[0].get_full_nevra(), settings);
+
+            for (size_t i = 1; i < packages.size(); ++i) {
+                goal->add_rpm_remove(packages[i]);
             }
         }
     } else {

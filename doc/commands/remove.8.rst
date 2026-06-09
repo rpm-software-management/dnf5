@@ -31,6 +31,8 @@ Synopsis
 
 ``dnf5 remove --oldinstallonly [--limit=<LIMIT>] [<package-spec-NF>...]``
 
+``dnf5 remove --duplicates [<package-spec-NF>...]``
+
 
 Description
 ===========
@@ -45,6 +47,13 @@ When the ``--oldinstallonly`` option is used, the command removes old installonl
 (e.g. kernels) that exceed the configured ``installonly_limit``. The currently running kernel
 is never removed. If package specs are provided, only matching installonly packages are
 considered for removal.
+
+When the ``--duplicates`` option is used, the command removes older versions of duplicate
+packages. Duplicate packages are packages with the same name and architecture but different
+version installed on the system. Installonly packages (such as kernels) are excluded since
+they are expected to have multiple versions installed. To ensure the integrity of the system,
+the newest version of each duplicate is reinstalled. If package specs are provided, only
+matching packages are considered.
 
 
 Options
@@ -64,6 +73,11 @@ Options
     | Override the ``installonly_limit`` configuration value. Must be greater than or equal to 1
       to keep at least the newest installed version. Can only be used with ``--oldinstallonly``.
 
+``--duplicates``
+    | Remove older versions of duplicate packages and reinstall the newest version.
+    | Installonly packages are automatically excluded.
+    | Cannot be used together with ``--oldinstallonly``.
+
 .. include:: ../_shared/options/transaction.rst
 
 
@@ -81,6 +95,12 @@ Examples
 
 ``dnf5 remove --oldinstallonly --limit=2``
     | Remove old installonly packages, keeping only the 2 newest versions of each.
+
+``dnf5 remove --duplicates``
+    | Remove all older duplicate packages and reinstall the newest versions.
+
+``dnf5 remove --duplicates glibc``
+    | Remove older duplicate versions of ``glibc`` and reinstall the newest.
 
 
 See Also
