@@ -25,11 +25,13 @@
 #include <libdnf5/base/transaction_package.hpp>
 #include <libdnf5/utils/bgettext/bgettext-lib.h>
 #include <libdnf5/utils/format.hpp>
+#include <sdbus-c++/sdbus-c++.h>
 
 #include <cstdio>
 #include <fstream>
 #include <iomanip>
 #include <iostream>
+#include <map>
 
 namespace dnf5 {
 
@@ -218,6 +220,17 @@ void EmitterEmail::notify() {
             curl_slist_free_all(recipients);
             curl_easy_cleanup(curl);
         }
+    }
+}
+
+void EmitterDBus::notify() {
+    try {
+        auto conn = sdbus::createSystemBusConnection(sdbus::ServiceName{"org.rpm.dnf.v0.Automatic"});
+        auto obj = sdbus::createObject(*conn, sdbus::ObjectPath{"/org/rpm/dnf/v0/Automatic"});
+        std::map<std::string, sdbus::Variant> result{{"success", sdbus::Variant{success}}};
+        obj->emitSignal("UpdateResult").onInterface("org.rpm.dnf.v0.Automatic").withArguments(result);
+    } catch (const sdbus::Error & e) {
+        std::cerr << "dnf5-automatic: D-Bus error: " << e.what() << std::endl;
     }
 }
 
