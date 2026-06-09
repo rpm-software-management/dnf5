@@ -960,6 +960,7 @@ automatically and regularly from systemd timers, cron jobs or similar.
 %ghost %attr(0644, root, root) %{_sysconfdir}/motd.d/dnf5-automatic
 %{_libdir}/dnf5/plugins/automatic_cmd_plugin.so
 %{_datadir}/dnf5/dnf5-plugins/automatic.conf
+%{_datadir}/dbus-1/system.d/org.rpm.dnf.v0.Automatic.conf
 %ghost %attr(0644, root, root) %config(noreplace) %{_sysconfdir}/dnf/automatic.conf
 %ghost %attr(0644, root, root) %config(noreplace) %{_sysconfdir}/dnf/dnf5-plugins/automatic.conf
 %if %{with man}

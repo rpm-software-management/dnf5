@@ -109,6 +109,15 @@ public:
     void notify() override;
 };
 
+/// Send the results as a D-Bus signal on the system bus
+class EmitterDBus : public Emitter {
+public:
+    using Emitter::Emitter;
+    EmitterDBus() = delete;
+
+    void notify() override;
+};
+
 }  // namespace dnf5
 
 

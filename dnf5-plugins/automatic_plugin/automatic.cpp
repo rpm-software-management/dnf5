@@ -471,6 +471,8 @@ void AutomaticCommand::run() {
                 emitter = std::make_unique<EmitterCommandEmail>(config_automatic, transaction, output_stream, success);
             } else if (emitter_name == "email") {
                 emitter = std::make_unique<EmitterEmail>(config_automatic, transaction, output_stream, success);
+            } else if (emitter_name == "dbus") {
+                emitter = std::make_unique<EmitterDBus>(config_automatic, transaction, output_stream, success);
             } else {
                 auto & logger = *base.get_logger();
                 logger.warning(_("Unknown report emitter for dnf5 automatic: \"{}\"."), emitter_name);
