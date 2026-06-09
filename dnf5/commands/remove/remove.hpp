@@ -42,6 +42,7 @@ private:
     std::vector<std::string> installed_from_repos;
     libdnf5::OptionBool * oldinstallonly{nullptr};
     libdnf5::OptionNumber<std::int32_t> * oldinstallonly_limit{nullptr};
+    libdnf5::OptionBool * duplicates{nullptr};
     bool running_kernel_skipped{false};
     std::string running_kernel_nevra;
 };
