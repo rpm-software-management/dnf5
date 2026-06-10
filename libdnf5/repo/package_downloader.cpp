@@ -70,6 +70,7 @@ public:
     void * user_data;
     void * user_cb_data{nullptr};
     bool need_call_end_callback{false};
+    bool transfer_failed{false};
 };
 
 static int end_callback(void * data, LrTransferStatus status, const char * msg) {
@@ -77,6 +78,9 @@ static int end_callback(void * data, LrTransferStatus status, const char * msg) 
 
     auto * package_target = static_cast<PackageTarget *>(data);
     auto cb_status = static_cast<DownloadCallbacks::TransferStatus>(status);
+    if (cb_status == DownloadCallbacks::TransferStatus::ERROR) {
+        package_target->transfer_failed = true;
+    }
     if (auto * download_callbacks = package_target->package.get_base()->get_download_callbacks()) {
         libdnf_assert(package_target->need_call_end_callback == true, "unexpected end_callback call");
         package_target->need_call_end_callback = false;
@@ -138,6 +142,11 @@ void PackageDownloader::add(const libdnf5::rpm::Package & package, const std::st
 
 
 void PackageDownloader::download() try {
+    // Reset failure state from any previous download() call so retries
+    // (repeated download() calls) report fresh per-package results.
+    for (auto & target : p_impl->targets) {
+        target.transfer_failed = false;
+    }
     if (p_impl->targets.empty()) {
         return;
     }
@@ -229,6 +238,9 @@ void PackageDownloader::download() try {
         if (!same_file) {
             std::filesystem::copy(source, destination, std::filesystem::copy_options::overwrite_existing, ec);
         }
+        if (ec) {
+            local_pkg_target->transfer_failed = true;
+        }
         if (auto * download_callbacks = local_pkg_target->package.get_base()->get_download_callbacks()) {
             std::string msg;
             DownloadCallbacks::TransferStatus status;
@@ -287,6 +299,16 @@ void PackageDownloader::download() try {
     throw;
 } catch (const std::runtime_error & e) {
     libdnf5::throw_with_nested(PackageDownloadError(M_("Failed to download packages")));
+}
+
+std::vector<libdnf5::rpm::Package> PackageDownloader::get_failed_packages() const {
+    std::vector<libdnf5::rpm::Package> failed;
+    for (const auto & target : p_impl->targets) {
+        if (target.transfer_failed) {
+            failed.push_back(target.package);
+        }
+    }
+    return failed;
 }
 
 void PackageDownloader::set_fail_fast(bool value) {
