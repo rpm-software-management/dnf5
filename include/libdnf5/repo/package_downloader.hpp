@@ -28,6 +28,7 @@
 
 #include <memory>
 #include <optional>
+#include <vector>
 
 namespace libdnf5::repo {
 
@@ -50,6 +51,10 @@ public:
 
     /// Download the previously added packages.
     void download();
+
+    /// Packages that failed to download in the last download() call (e.g. checksum/size mismatch).
+    /// Meaningful when fail_fast is false; empty if all succeeded.
+    std::vector<libdnf5::rpm::Package> get_failed_packages() const;
 
     /// Configure whether to fail the whole download on a first error or keep downloading.
     /// @param value If true, download will fail on the first error, otherwise it continues.
