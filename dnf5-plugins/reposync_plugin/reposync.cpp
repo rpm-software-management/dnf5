@@ -279,10 +279,14 @@ void ReposyncCommand::download_packages(const ReposyncCommand::download_list_typ
         downloader.add(pkg, pth.parent_path());
     }
     downloader.download();
-    // TODO(mblaha): Return exit code 1 if any of packages was not downloaded.
-    // In case of fail_fast set to false, the download() method does
-    // not throw an exception if particular package could not be downloaded.
-    // See https://github.com/rpm-software-management/dnf5/issues/1926 for details
+    const auto failed_packages = downloader.get_failed_packages();
+    if (!failed_packages.empty()) {
+        for (const auto & pkg : failed_packages) {
+            std::cerr << libdnf5::utils::sformat(_("Failed to download package: {}"), pkg.get_full_nevra())
+                      << std::endl;
+        }
+        throw libdnf5::cli::CommandExitError(1, M_("Failed to download one or more packages"));
+    }
 }
 
 void ReposyncCommand::delete_old_local_packages(
