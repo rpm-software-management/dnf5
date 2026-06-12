@@ -298,7 +298,7 @@ std::string SolverProblems::to_string() const {
 
     int index = 2;
     for (auto iter = std::next(p_impl->problems.begin()); iter != p_impl->problems.end(); ++iter) {
-        output.append("\n ");
+        output.append("\n");
         output.append(utils::sformat(problem_prefix, index));
         output.append(string_join(*iter, "\n  - "));
         ++index;
