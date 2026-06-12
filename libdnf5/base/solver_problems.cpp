@@ -71,6 +71,9 @@ static const std::map<ProblemRules, BgettextMessage> PKG_PROBLEMS_DICT = {
     {ProblemRules::RULE_PKG_REMOVAL_OF_PROTECTED,
      M_("The operation would result in removing"
         " the following protected packages: {}")},
+    {ProblemRules::RULE_PKG_BROKEN_DEPS_OF_PROTECTED,
+     M_("The operation would result in broken dependencies"
+        " for the following protected packages: {}")},
     {ProblemRules::RULE_PKG_REMOVAL_OF_RUNNING_KERNEL,
      M_("The operation would result in removing"
         " of running kernel: {}")},
@@ -274,6 +277,7 @@ std::string SolverProblems::problem_to_string(const std::pair<ProblemRules, std:
             return raw.second[0];
         case ProblemRules::RULE_PKG_REMOVAL_OF_PROTECTED:
         case ProblemRules::RULE_PKG_REMOVAL_OF_RUNNING_KERNEL:
+        case ProblemRules::RULE_PKG_BROKEN_DEPS_OF_PROTECTED:
             auto elements = utils::string::join(raw.second, ", ");
             return utils::sformat(TM_(PKG_PROBLEMS_DICT.at(raw.first), 1), elements);
     }
@@ -418,6 +422,7 @@ std::vector<std::vector<std::pair<libdnf5::ProblemRules, std::vector<std::string
                 case ProblemRules::RULE_UNKNOWN:
                 case ProblemRules::RULE_PKG_REMOVAL_OF_PROTECTED:
                 case ProblemRules::RULE_PKG_REMOVAL_OF_RUNNING_KERNEL:
+                case ProblemRules::RULE_PKG_BROKEN_DEPS_OF_PROTECTED:
                     libdnf_throw_assertion("Unexpected rpm problem rule in module solver problems");
             }
             if (is_unique(problem_output, tmp_rule, elements)) {
