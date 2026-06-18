@@ -81,6 +81,15 @@ public:
     /// @brief Get the path being locked
     const std::filesystem::path & get_path() const noexcept;
 
+    /// @brief Check whether this Locker instance holds a lock.
+    /// @return True if this instance holds a lock, otherwise false.
+    bool holds_lock() const noexcept;
+
+    /// @brief Get the type of lock held by this Locker instance.
+    /// @return The lock type held by this instance.
+    /// @throws libdnf5::RuntimeError if this instance does not hold a lock
+    LockAccess held_lock_access() const;
+
 private:
     class LIBDNF_LOCAL Impl;
     ImplPtr<Impl> p_impl;
