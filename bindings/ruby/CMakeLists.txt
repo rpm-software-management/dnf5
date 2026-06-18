@@ -9,6 +9,18 @@ message("Building bindings for ruby")
 find_package(Ruby REQUIRED)
 include_directories(${Ruby_INCLUDE_DIRS})
 
+# Upstream CMake cannot detect Ruby_VENDORARCH_DIR
+# <http://public.kitware.com/Bug/view.php?id=12965>,
+# <https://gitlab.kitware.com/cmake/cmake/-/work_items/27888>.
+# Some distributors patch CMake for it
+# <https://bugzilla.redhat.com/show_bug.cgi?id=822796>.
+if ("${Ruby_VENDORARCH_DIR}" STREQUAL "")
+    execute_process(
+        COMMAND "${Ruby_EXECUTABLE}" -r rbconfig -e "print RbConfig::CONFIG['vendorarchdir']"
+        OUTPUT_VARIABLE Ruby_VENDORARCH_DIR)
+endif()
+message(STATUS "Ruby files will be installed to ${Ruby_VENDORARCH_DIR}")
+
 # The clang build is failing due to a deprecation warning, reported to swig:
 # https://github.com/swig/swig/issues/3170
 # Temporarily disable the warning to have a working clang build.
