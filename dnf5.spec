@@ -95,7 +95,13 @@ Provides:       dnf5-command(versionlock)
 
 %bcond_without acl
 %bcond_without comps
+
+%if 0%{?rhel} >= 11
+%bcond_with modulemd
+%else
 %bcond_without modulemd
+%endif
+
 %bcond_without systemd
 
 %bcond_with    html
