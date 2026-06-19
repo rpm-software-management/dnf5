@@ -49,6 +49,8 @@ class BaseTestCase(unittest.TestCase):
 
         self.base.setup()
 
+        self.base.lock_system_repo(libdnf5.utils.LockAccess_WRITE, libdnf5.utils.LockBlocking_BLOCKING)
+
         self.repo_sack = self.base.get_repo_sack()
         self.package_sack = self.base.get_rpm_package_sack()
 
