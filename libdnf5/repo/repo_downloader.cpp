@@ -563,6 +563,22 @@ LibrepoHandle RepoDownloader::init_remote_handle(Repo & repo, const char * destd
         source = Source::MIRRORLIST;
     }
     if (source != Source::NONE) {
+        if (source == Source::METALINK) {
+            auto & metalink_exclude_domain = config.get_main_config().get_metalink_exclude_domain_option().get_value();
+            if (!metalink_exclude_domain.empty()) {
+                std::vector<const char *> c_metalink_exclude_domain(metalink_exclude_domain.size() + 1, nullptr);
+                str_vector_to_char_array(metalink_exclude_domain, c_metalink_exclude_domain.data());
+                h.set_opt(LRO_METALINK_EXCLUDE_DOMAIN, c_metalink_exclude_domain.data());
+            }
+
+            auto & metalink_exclude_location =
+                config.get_main_config().get_metalink_exclude_location_option().get_value();
+            if (!metalink_exclude_location.empty()) {
+                std::vector<const char *> c_metalink_exclude_location(metalink_exclude_location.size() + 1, nullptr);
+                str_vector_to_char_array(metalink_exclude_location, c_metalink_exclude_location.data());
+                h.set_opt(LRO_METALINK_EXCLUDE_LOCATION, c_metalink_exclude_location.data());
+            }
+        }
         if (mirror_setup) {
             if (source == Source::METALINK) {
                 h.set_opt(LRO_METALINKURL, tmp.c_str());
@@ -761,12 +777,6 @@ void RepoDownloader::add_countme_flag(DownloadData & download_data, LibrepoHandl
     // Bail out if not counting or not running as root (since the persistdir is
     // only root-writable)
     if (!config.get_countme_option().get_value() || getuid() != 0)
-        return;
-
-    // Bail out if not a remote handle
-    long local;
-    handle.get_info(LRI_LOCAL, &local);
-    if (local)
         return;
 
     // Bail out if no metalink or mirrorlist is defined
