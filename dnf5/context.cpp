@@ -578,10 +578,19 @@ bool Context::Impl::cmd_requires_privileges() const {
         return false;
     }
 
-    // first a hard-coded list of commands that always need to be run with elevated privileges
+    // first handle hard-coded commands that always need to be run with elevated privileges
     auto main_arg_cmd = cmd->get_parent_command() != owner.get_root_command() ? arg_cmd->get_parent() : arg_cmd;
-    std::vector<std::string> privileged_cmds = {"automatic", "offline", "system-upgrade", "replay"};
-    if (std::find(privileged_cmds.begin(), privileged_cmds.end(), main_arg_cmd->get_id()) != privileged_cmds.end()) {
+    if (main_arg_cmd->get_id() == "module") {
+        static constexpr std::array<const char *, 3> privileged_module_cmds = {"enable", "disable", "reset"};
+        if (std::find(privileged_module_cmds.begin(), privileged_module_cmds.end(), arg_cmd->get_id()) !=
+            privileged_module_cmds.end()) {
+            return true;
+        }
+    }
+    static constexpr std::array<const char *, 4> privileged_main_cmds = {
+        "automatic", "offline", "system-upgrade", "replay"};
+    if (std::find(privileged_main_cmds.begin(), privileged_main_cmds.end(), main_arg_cmd->get_id()) !=
+        privileged_main_cmds.end()) {
         return true;
     }
 
