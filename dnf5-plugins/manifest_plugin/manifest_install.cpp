@@ -1,6 +1,7 @@
 // Copyright Contributors to the DNF5 project.
 // SPDX-License-Identifier: LGPL-2.1-or-later
 
+#include "dnf5/shared_options.hpp"
 #include "manifest.hpp"
 
 #include <libdnf5/rpm/package_query.hpp>
@@ -21,6 +22,8 @@ void ManifestInstallCommand::set_argument_parser() {
 
     auto & cmd = *get_argument_parser_command();
     cmd.set_description(_("Install all packages specified in the manifest file"));
+
+    create_store_option(*this);
 }
 
 void ManifestInstallCommand::pre_configure() {
