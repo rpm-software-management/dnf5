@@ -115,6 +115,7 @@ public:
 
     /// The pre_add_cmdline_packages hook.
     /// It is called at the beginning of the `RepoSack::add_cmdline_packages` method.
+    ///
     /// @param paths Vector of paths (local files or URLs) to package files to be inserted into cmdline repo.
     virtual void pre_add_cmdline_packages(const std::vector<std::string> & paths);
 
@@ -124,11 +125,13 @@ public:
 
     /// The pre_transaction hook.
     /// It is called just before the actual transaction starts.
+    ///
     /// @param transaction Contains the transaction that will be started.
     virtual void pre_transaction(const libdnf5::base::Transaction & transaction);
 
     /// The post_transaction hook.
     /// It is called after transactions.
+    ///
     /// @param transaction Contains the completed transaction.
     virtual void post_transaction(const libdnf5::base::Transaction & transaction);
 
@@ -150,6 +153,7 @@ public:
 
     /// The goal resolved hook.
     /// It is called right after the goal is resolved.
+    ///
     /// @param transaction Contains the transaction that was resolved.
     virtual void goal_resolved(const libdnf5::base::Transaction & transaction);
 };
