@@ -20,10 +20,15 @@
 import libdnf5
 
 
-class Plugin(libdnf5.plugin.IPlugin):
+# Inherit from IPlugin2_1 to get all hooks including `goal_resolved`.
+# You can use IPlugin instead, if `goal_resolved` is not needed.
+# See https://dnf5.readthedocs.io/en/latest/api/python/libdnf5_plugin.html
+class Plugin(libdnf5.plugin.IPlugin2_1):
     def __init__(self, data):
         super(Plugin, self).__init__(data)
         self.base = self.get_base()
+
+    # --- IPlugin: required metadata methods ---
 
     @staticmethod
     def get_api_version():
@@ -42,6 +47,8 @@ class Plugin(libdnf5.plugin.IPlugin):
                       'author_email': 'jrohel@redhat.com',
                       'description': 'Libdnf5 plugin written in Python. Implements all available hooks.'}
         return attributes.get(name, None)
+
+    # --- IPlugin: optional hooks ---
 
     def init(self):
         logger = self.base.get_logger()
@@ -88,3 +95,11 @@ class Plugin(libdnf5.plugin.IPlugin):
 
     def finish(self):
         pass
+
+    # --- IPlugin2_1: additional hooks (requires API version 2.1) ---
+
+    def goal_resolved(self, transaction):
+        logger = self.base.get_logger()
+        logger.info(self.get_name() + ' - goal_resolved: ' +
+                    str(transaction.get_transaction_packages_count()) +
+                    ' packages in transaction')
