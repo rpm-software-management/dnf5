@@ -40,18 +40,51 @@ class Plugin(libdnf5.plugin.IPlugin):
     def get_attribute(self, name):
         attributes = {'author_name': 'Jaroslav Rohel',
                       'author_email': 'jrohel@redhat.com',
-                      'description': 'Libdnf5 plugin written in Python. Processes the LOAD_CONFIG_FROM_FILE hook '
-                                     'and writes the current value of the "skip_if_unavailable" option to the log.'}
+                      'description': 'Libdnf5 plugin written in Python. Implements all available hooks.'}
         return attributes.get(name, None)
+
+    def init(self):
+        logger = self.base.get_logger()
+        logger.info(self.get_name() + ' - init')
+
+    def pre_base_setup(self):
+        logger = self.base.get_logger()
+        logger.info(self.get_name() + ' - pre_base_setup')
+
+    def post_base_setup(self):
+        logger = self.base.get_logger()
+        logger.info(self.get_name() + ' - post_base_setup')
 
     def repos_configured(self):
         logger = self.base.get_logger()
         config = self.base.get_config()
-        logger.info(self.get_name() + ' - skip_if_unavailable = ' +
+        logger.info(self.get_name() + ' - repos_configured, skip_if_unavailable = ' +
                     str(config.skip_if_unavailable))
-        print(self.get_name() + ' - skip_if_unavailable = ' +
-              str(config.skip_if_unavailable))
-        return True
+
+    def repos_loaded(self):
+        logger = self.base.get_logger()
+        logger.info(self.get_name() + ' - repos_loaded')
+
+    def pre_add_cmdline_packages(self, paths):
+        logger = self.base.get_logger()
+        logger.info(self.get_name() + ' - pre_add_cmdline_packages: ' +
+                    str(paths))
+
+    def post_add_cmdline_packages(self):
+        logger = self.base.get_logger()
+        logger.info(self.get_name() + ' - post_add_cmdline_packages')
+
+    def pre_transaction(self, transaction):
+        logger = self.base.get_logger()
+        logger.info(self.get_name() + ' - pre_transaction: ' +
+                    str(transaction.get_transaction_packages_count()) +
+                    ' packages in transaction')
+
+    def post_transaction(self, transaction):
+        logger = self.base.get_logger()
+        logger.info(self.get_name() + ' - post_transaction: ' +
+                    str(transaction.get_transaction_packages_count()) +
+                    ' packages in transaction')
 
     def finish(self):
         pass
