@@ -1237,6 +1237,16 @@ std::vector<std::string> Context::match_specs(
         settings.set_with_provides(false);
         settings.set_with_filenames(false);
         settings.set_with_binaries(false);
+        // Patterns starting with '-' are not valid RPM package names.
+        // Without this, resolve_pkg_spec would parse '-' as a NEVRA
+        // name-version delimiter, causing '-v*' to match packages by
+        // version starting with 'v' instead of name. Safe to disable
+        // NEVRA because match_specs is only called from completion hooks
+        // the '-' prefixed arg only reaches here after "--" (the argument
+        // separator that stops named-arg/option parsing).
+        if (!pattern.empty() && pattern[0] == '-') {
+            settings.set_with_nevra(false);
+        }
         matched_pkgs_query.resolve_pkg_spec(pattern + '*', settings, true);
 
         for (const auto & package : matched_pkgs_query) {

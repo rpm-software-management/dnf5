@@ -353,6 +353,12 @@ Following options are applicable in the general context for any ``dnf5`` command
     | Exclude packages specified in ``PACKAGE-SPEC-N`` arguments from the transaction.
     | This is a list option.
 
+Special Arguments
+=================
+
+``--``
+    | Stop parsing command line options. All remaining arguments will be treated as positional arguments.
+
 
 Metadata Synchronization
 ========================
