@@ -224,7 +224,8 @@ public:
 
         /// Parses input.
         /// Returns number of consumed arguments from the input.
-        LIBDNF_CLI_LOCAL int parse(const char * option, int argc, const char * const argv[]);
+        LIBDNF_CLI_LOCAL int parse(
+            const char * option, int argc, const char * const argv[], bool stop_at_named_args = true);
 
         int nvals;  // Number of values required by this positional argument on the command line
         libdnf5::Option * init_value;
@@ -445,7 +446,10 @@ public:
         // Prints a completed argument `arg` or a table with suggestions and help to complete
         // if there is more than one solution.
         LIBDNF_CLI_LOCAL void print_complete(
-            const char * arg, std::vector<ArgumentParser::NamedArg *> named_args, size_t used_positional_arguments);
+            const char * arg,
+            std::vector<ArgumentParser::NamedArg *> named_args,
+            size_t used_positional_arguments,
+            bool stop_at_named_args = true);
 
         Command * parent{nullptr};
         std::string commands_help_header = "Commands:";

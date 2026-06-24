@@ -205,6 +205,11 @@ void ArgumentParserTest::test_argument_parser() {
     CPPUNIT_ASSERT_EQUAL(keys_options, keys->get_linked_values());
     CPPUNIT_ASSERT_EQUAL(0, info->get_parse_count());
 
+    auto * repoquery_subcommand = arg_parser.add_new_command("subcommand");
+    repoquery->register_command(repoquery_subcommand);
+    auto * repoquery_alias = arg_parser.add_new_command_alias("rq", *repoquery);
+    test->register_command(repoquery_alias);
+
     {
         constexpr const char * argv[]{"test", "repoquery", "--installed", "--info"};
         arg_parser.parse(std::size(argv), argv);
@@ -234,6 +239,64 @@ void ArgumentParserTest::test_argument_parser() {
             std::string("abc"), dynamic_cast<const libdnf5::OptionString *>(options[0].get())->get_value());
         CPPUNIT_ASSERT_EQUAL(
             std::string("def"), dynamic_cast<const libdnf5::OptionString *>(options[1].get())->get_value());
+    }
+
+    {
+        // "--" terminates option parsing and all following values are treated as positional arguments.
+        keys->get_linked_values()->clear();
+        arg_parser.reset_parse_count();
+        constexpr const char * argv[]{"test", "repoquery", "--", "--info", "abc"};
+        arg_parser.parse(std::size(argv), argv);
+
+        const auto & options = *keys->get_linked_values();
+        CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), options.size());
+        CPPUNIT_ASSERT_EQUAL(
+            std::string("--info"), dynamic_cast<const libdnf5::OptionString *>(options[0].get())->get_value());
+        CPPUNIT_ASSERT_EQUAL(
+            std::string("abc"), dynamic_cast<const libdnf5::OptionString *>(options[1].get())->get_value());
+    }
+
+    {
+        // Multiple "--" after the first one are treated as positional arguments.
+        keys->get_linked_values()->clear();
+        arg_parser.reset_parse_count();
+        constexpr const char * argv[]{"test", "repoquery", "--", "--", "abc"};
+        arg_parser.parse(std::size(argv), argv);
+
+        const auto & options = *keys->get_linked_values();
+        CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), options.size());
+        CPPUNIT_ASSERT_EQUAL(
+            std::string("--"), dynamic_cast<const libdnf5::OptionString *>(options[0].get())->get_value());
+        CPPUNIT_ASSERT_EQUAL(
+            std::string("abc"), dynamic_cast<const libdnf5::OptionString *>(options[1].get())->get_value());
+    }
+
+    {
+        // A value matching a subcommand name after "--" is treated as a positional argument.
+        keys->get_linked_values()->clear();
+        arg_parser.reset_parse_count();
+        constexpr const char * argv[]{"test", "repoquery", "--", "subcommand"};
+        arg_parser.parse(std::size(argv), argv);
+
+        const auto & options = *keys->get_linked_values();
+        CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), options.size());
+        CPPUNIT_ASSERT_EQUAL(
+            std::string("subcommand"), dynamic_cast<const libdnf5::OptionString *>(options[0].get())->get_value());
+        CPPUNIT_ASSERT_EQUAL(repoquery, arg_parser.get_selected_command());
+    }
+
+    {
+        // Command aliases treat a matching subcommand name after "--" as positional too.
+        keys->get_linked_values()->clear();
+        arg_parser.reset_parse_count();
+        constexpr const char * argv[]{"test", "rq", "--", "subcommand"};
+        arg_parser.parse(std::size(argv), argv);
+
+        const auto & options = *keys->get_linked_values();
+        CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), options.size());
+        CPPUNIT_ASSERT_EQUAL(
+            std::string("subcommand"), dynamic_cast<const libdnf5::OptionString *>(options[0].get())->get_value());
+        CPPUNIT_ASSERT_EQUAL(static_cast<ArgParser::Command *>(repoquery_alias), arg_parser.get_selected_command());
     }
 
     {
