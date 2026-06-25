@@ -515,24 +515,16 @@ void Repo::enable_disable_repos(const std::vector<std::string> & ids, const bool
                 libdnf5::utils::string::join(missing_ids_vector, ","));
     }
 
-    std::vector<std::string> changed_config_files;
-    for (auto & repoid : ids) {
-        auto repoinfo = cfg.find_repo(repoid);
-        if (repoinfo->repoconfig->get_enabled_option().get_value() != enable) {
-            auto parser = cfg.find_parser(repoinfo->file_path);
-            if (parser) {
-                parser->set_value(repoid, "enabled", enable ? "1" : "0");
-                changed_config_files.push_back(repoinfo->file_path);
-            }
-        }
+    auto base = session.get_base();
+    std::map<std::string, std::map<std::string, std::string>> overrides;
+    for (const auto & repoid : ids) {
+        overrides[repoid] = {{"enabled", enable ? "1" : "0"}};
     }
-    for (auto & config_file : changed_config_files) {
-        try {
-            cfg.find_parser(config_file)->write(config_file, false);
-        } catch (std::exception & e) {
-            throw sdbus::Error(
-                dnfdaemon::ERROR_REPOCONF, std::string("Unable to write configuration file: ") + e.what());
-        }
+
+    try {
+        base->get_repo_sack()->override_repos_configuration(overrides);
+    } catch (const std::exception & e) {
+        throw sdbus::Error(dnfdaemon::ERROR_REPOCONF, std::string("Unable to write override file: ") + e.what());
     }
 }
 

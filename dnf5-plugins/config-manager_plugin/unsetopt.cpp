@@ -118,7 +118,6 @@ void ConfigManagerUnsetOptCommand::set_argument_parser() {
 
 void ConfigManagerUnsetOptCommand::configure() {
     auto & ctx = get_context();
-    const auto & config = ctx.get_base().get_config();
 
     // Remove options from main configuration file.
     if (!main_opts_to_remove.empty()) {
@@ -154,35 +153,35 @@ void ConfigManagerUnsetOptCommand::configure() {
         }
     }
 
-    // Remove options from repositories overrides configuration file, remove empty sections.
+    // Remove options from repositories overrides configuration file.
     if (!in_repos_opts_to_remove.empty()) {
-        const auto & repos_override_file_path = get_config_manager_repos_override_file_path(config);
+        auto & base = ctx.get_base();
+        const auto repos_override_file_path = base.get_repo_sack()->get_user_repos_override_file_path();
         if (std::filesystem::exists(repos_override_file_path)) {
             ConfigParser parser;
-            bool changed = false;
-            std::map<std::string, std::set<std::string>> used_repos_opts;
-
             parser.read(repos_override_file_path);
 
-            std::vector<std::string> empty_config_sections;
+            std::map<std::string, std::set<std::string>> keys_to_remove;
+            std::map<std::string, std::set<std::string>> used_repos_opts;
+
             for (const auto & [repo_id, setopts] : parser.get_data()) {
                 for (const auto & [in_repoid, keys] : in_repos_opts_to_remove) {
                     if (sack::match_string(repo_id, sack::QueryCmp::GLOB, in_repoid)) {
-                        auto & used_repoid_opts = used_repos_opts[in_repoid];
-                        changed |= remove_from_config(parser, repo_id, keys, used_repoid_opts);
+                        for (const auto & key : keys) {
+                            keys_to_remove[repo_id].insert(key);
+                            if (setopts.find(key) != setopts.end()) {
+                                used_repos_opts[in_repoid].insert(key);
+                            }
+                        }
                     }
-                }
-                if (setopts.empty()) {
-                    empty_config_sections.emplace_back(repo_id);
                 }
             }
 
-            // Generate warning for unused repoids and options
             for (const auto & [in_repoid, keys] : in_repos_opts_to_remove) {
                 if (const auto used_repoid_opts = used_repos_opts.find(in_repoid);
                     used_repoid_opts == used_repos_opts.end()) {
                     write_warning(
-                        *ctx.get_base().get_logger(),
+                        *base.get_logger(),
                         M_("config-manager: Request to remove repository option but repoid is not present "
                            "in the overrides: {}"),
                         in_repoid);
@@ -190,7 +189,7 @@ void ConfigManagerUnsetOptCommand::configure() {
                     for (const auto & key : keys) {
                         if (!used_repoid_opts->second.contains(key))
                             write_warning(
-                                *ctx.get_base().get_logger(),
+                                *base.get_logger(),
                                 M_("config-manager: Request to remove repository option but it is not present "
                                    "in the overrides: {}.{}"),
                                 in_repoid,
@@ -199,18 +198,12 @@ void ConfigManagerUnsetOptCommand::configure() {
                 }
             }
 
-            // Clean config - remove empty sections.
-            for (const auto & section : empty_config_sections) {
-                parser.remove_section(section);
-                changed = true;
-            }
-
-            if (changed) {
-                parser.write(repos_override_file_path, false);
+            if (!keys_to_remove.empty()) {
+                base.get_repo_sack()->override_repos_configuration({}, keys_to_remove);
             }
         } else {
             write_warning(
-                *ctx.get_base().get_logger(),
+                *base.get_logger(),
                 M_("config-manager: Request to remove repository option but file with overrides not found: {}"),
                 repos_override_file_path.string());
         }
