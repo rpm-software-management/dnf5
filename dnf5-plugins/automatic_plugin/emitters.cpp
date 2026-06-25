@@ -23,6 +23,7 @@
 
 #include <curl/curl.h>
 #include <libdnf5/base/transaction_package.hpp>
+#include <libdnf5/sdbus_compat.hpp>
 #include <libdnf5/utils/bgettext/bgettext-lib.h>
 #include <libdnf5/utils/format.hpp>
 #include <sdbus-c++/sdbus-c++.h>
@@ -225,7 +226,7 @@ void EmitterEmail::notify() {
 
 void EmitterDBus::notify() {
     try {
-        auto conn = sdbus::createSystemBusConnection(sdbus::ServiceName{"org.rpm.dnf.v0.Automatic"});
+        auto conn = sdbus::createSystemBusConnection(SDBUS_SERVICE_NAME_TYPE{"org.rpm.dnf.v0.Automatic"});
         auto obj = sdbus::createObject(*conn, sdbus::ObjectPath{"/org/rpm/dnf/v0/Automatic"});
         std::map<std::string, sdbus::Variant> result{{"success", sdbus::Variant{success}}};
         obj->emitSignal("UpdateResult").onInterface("org.rpm.dnf.v0.Automatic").withArguments(result);
