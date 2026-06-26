@@ -5,6 +5,12 @@
 
 %bcond dnf5_obsoletes_dnf %[0%{?fedora} > 40 || 0%{?rhel} > 10]
 
+%if 0%{?rhel} >= 11
+%bcond_with modulemd
+%else
+%bcond_without modulemd
+%endif
+
 Name:           dnf5
 Version:        %{project_version_prime}.%{project_version_major}.%{project_version_minor}.%{project_version_micro}
 Release:        1%{?dist}
@@ -58,7 +64,9 @@ Provides:       dnf5-command(leaves)
 Provides:       dnf5-command(list)
 Provides:       dnf5-command(makecache)
 Provides:       dnf5-command(mark)
+%if %{with modulemd}
 Provides:       dnf5-command(module)
+%endif
 Provides:       dnf5-command(offline)
 Provides:       dnf5-command(provides)
 Provides:       dnf5-command(reinstall)
@@ -96,12 +104,6 @@ Provides:       dnf5-command(versionlock)
 %bcond_without acl
 %bcond_without comps
 
-%if 0%{?rhel} >= 11
-%bcond_with modulemd
-%else
-%bcond_without modulemd
-%endif
-
 %bcond_without systemd
 
 %bcond_with    html
@@ -136,7 +138,9 @@ Provides:       dnf5-command(versionlock)
 
 # ========== versions of dependencies ==========
 
+%if %{with modulemd}
 %global libmodulemd_version 2.5.0
+%endif
 %global librepo_version 1.20.0
 %global libsolv_version 0.7.36
 %global sqlite_version 3.35.0
@@ -271,7 +275,7 @@ BuildRequires:  python3-devel
 %description
 DNF5 is a command-line package manager that automates the process of installing,
 upgrading, configuring, and removing computer programs in a consistent manner.
-It supports RPM packages, modulemd modules, and comps groups & environments.
+It supports RPM packages%{?with_modulemd:, modulemd modules,} and comps groups & environments.
 
 %post
 %if %{with dnf5_obsoletes_dnf}
@@ -348,7 +352,9 @@ It supports RPM packages, modulemd modules, and comps groups & environments.
 %{_mandir}/man8/dnf5-list.8.*
 %{_mandir}/man8/dnf5-makecache.8.*
 %{_mandir}/man8/dnf5-mark.8.*
+%if %{with modulemd}
 %{_mandir}/man8/dnf5-module.8.*
+%endif
 %{_mandir}/man8/dnf5-offline.8.*
 %{_mandir}/man8/dnf5-provides.8.*
 %{_mandir}/man8/dnf5-reinstall.8.*
@@ -367,7 +373,9 @@ It supports RPM packages, modulemd modules, and comps groups & environments.
 %{_mandir}/man7/dnf5-filtering.7.*
 %{_mandir}/man7/dnf5-forcearch.7.*
 %{_mandir}/man7/dnf5-installroot.7.*
+%if %{with modulemd}
 %{_mandir}/man7/dnf5-modularity.7.*
+%endif
 %{_mandir}/man7/dnf5-specs.7.*
 %{_mandir}/man7/dnf5-system-state.7.*
 %{_mandir}/man7/dnf5-changes-from-dnf4.7.*
@@ -398,7 +406,9 @@ It supports RPM packages, modulemd modules, and comps groups & environments.
 %{_mandir}/man8/dnf-list.8.*
 %{_mandir}/man8/dnf-makecache.8.*
 %{_mandir}/man8/dnf-mark.8.*
+%if %{with modulemd}
 %{_mandir}/man8/dnf-module.8.*
+%endif
 %{_mandir}/man8/dnf-offline.8.*
 %{_mandir}/man8/dnf-provides.8.*
 %{_mandir}/man8/dnf-reinstall.8.*
@@ -417,7 +427,9 @@ It supports RPM packages, modulemd modules, and comps groups & environments.
 %{_mandir}/man7/dnf-filtering.7.*
 %{_mandir}/man7/dnf-forcearch.7.*
 %{_mandir}/man7/dnf-installroot.7.*
+%if %{with modulemd}
 %{_mandir}/man7/dnf-modularity.7.*
+%endif
 %{_mandir}/man7/dnf-specs.7.*
 %{_mandir}/man7/dnf-system-state.7.*
 %{_mandir}/man7/dnf-changes-from-dnf4.7.*
@@ -443,7 +455,6 @@ It supports RPM packages, modulemd modules, and comps groups & environments.
 %package -n libdnf5
 Summary:        Package management library
 License:        LGPL-2.1-or-later
-#Requires:       libmodulemd{?_isa} >= {libmodulemd_version}
 Requires:       libsolv%{?_isa} >= %{libsolv_version}
 Requires:       librepo%{?_isa} >= %{librepo_version}
 %if 0%{?fedora} >= 43 || 0%{?rhel} >= 11
@@ -484,7 +495,9 @@ Package management library.
 %attr(0755, root, root) %ghost %dir %{_prefix}/lib/sysimage/libdnf5/comps_groups/groups
 %verify(not md5 size mtime) %attr(0644, root, root) %ghost %{_prefix}/lib/sysimage/libdnf5/environments.toml
 %verify(not md5 size mtime) %attr(0644, root, root) %ghost %{_prefix}/lib/sysimage/libdnf5/groups.toml
+%if %{with modulemd}
 %verify(not md5 size mtime) %attr(0644, root, root) %ghost %{_prefix}/lib/sysimage/libdnf5/modules.toml
+%endif
 %verify(not md5 size mtime) %attr(0644, root, root) %ghost %{_prefix}/lib/sysimage/libdnf5/nevras.toml
 %attr(0755, root, root) %ghost %dir %{_prefix}/lib/sysimage/libdnf5/offline
 %verify(not md5 size mtime) %attr(0644, root, root) %ghost %{_prefix}/lib/sysimage/libdnf5/offline/offline-transaction-state.toml
@@ -1093,7 +1106,11 @@ ln -s dnf-makecache.timer %{buildroot}%{_unitdir}/dnf5-makecache.timer
 # own dirs and files that dnf5 creates on runtime
 mkdir -p %{buildroot}%{_prefix}/lib/sysimage/libdnf5
 for file in \
-    environments.toml groups.toml modules.toml nevras.toml packages.toml \
+    environments.toml groups.toml \
+%if %{with modulemd}
+    modules.toml \
+%endif
+    nevras.toml packages.toml \
     system.toml \
     transaction_history.sqlite transaction_history.sqlite-shm \
     transaction_history.sqlite-wal
