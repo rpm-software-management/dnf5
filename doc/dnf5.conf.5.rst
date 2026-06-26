@@ -920,10 +920,12 @@ configuration.
 ``bandwidth``
     :ref:`storage size <storage_size-label>`
 
-    Total bandwidth available for downloading.
-    Meaningful when used with the :ref:`throttle option <throttle_options-label>`.
+    Total bandwidth available for downloading, in bytes per second. Used for
+    both metadata and package downloads. This value is only used when the
+    :ref:`throttle option <throttle_options-label>` is set as a percentage.
+    When ``throttle`` is set as an absolute value, ``bandwidth`` is ignored.
 
-    Default: ``0``.
+    Default: ``0`` (no limit).
 
 .. _build_cache_options-label:
 
@@ -1303,8 +1305,13 @@ configuration.
 ``throttle``
     :ref:`storage size <storage_size-label>`
 
-    Limits the downloading speed. It might be an absolute value or a percentage, relative to the value of the
-    :ref:`bandwidth option <bandwidth_options-label>` option. ``0`` means no throttling.
+    Limits the downloading speed, in bytes per second. Applied to both metadata
+    and package downloads. It can be an absolute value (e.g. ``5M`` for
+    5 MiB/s) or a percentage (e.g. ``60%``). When given as a percentage, the
+    actual speed limit is calculated relative to the
+    :ref:`bandwidth option <bandwidth_options-label>` value. ``0`` means no throttling.
+    The resulting speed limit must not be lower than
+    :ref:`minrate <minrate_options-label>`.
 
     Default: ``0``.
 
@@ -1388,7 +1395,7 @@ Types of Options
 .. _storage_size-label:
 
 ``storage size``
-    String representing storage sizes formed by an integer and a unit.
+    String representing storage sizes in bytes formed by an integer and a unit.
 
     Valid units are ``k``, ``M``, ``G``.
 
