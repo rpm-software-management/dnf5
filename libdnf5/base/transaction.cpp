@@ -967,8 +967,7 @@ Transaction::TransactionRunResult Transaction::Impl::_run(
     info.set_description(description);
     info.set_comment(comment);
     info.set_pid(getpid());
-    info.set_start_time(
-        std::chrono::duration_cast<std::chrono::seconds>(std::chrono::system_clock::now().time_since_epoch()).count());
+    info.set_start_time(std::chrono::system_clock::to_time_t(std::chrono::system_clock::now()));
 
     // acquire the lock
     std::filesystem::path lock_file_path = config.get_installroot_option().get_value();
