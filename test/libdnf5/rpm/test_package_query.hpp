@@ -49,6 +49,7 @@ class RpmPackageQueryTest : public BaseTestCase {
     CPPUNIT_TEST(test_filter_provides);
     CPPUNIT_TEST(test_filter_requires);
     CPPUNIT_TEST(test_filter_advisories);
+    CPPUNIT_TEST(test_filter_checksum);
     CPPUNIT_TEST(test_filter_chain);
     CPPUNIT_TEST(test_resolve_pkg_spec);
     CPPUNIT_TEST(test_update);
@@ -84,6 +85,7 @@ public:
     void test_filter_priority();
     void test_filter_requires();
     void test_filter_advisories();
+    void test_filter_checksum();
     void test_filter_chain();
     void test_resolve_pkg_spec();
     void test_update();
