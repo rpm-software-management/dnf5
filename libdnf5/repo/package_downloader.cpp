@@ -21,6 +21,7 @@
 
 #include "repo_downloader.hpp"
 #include "temp_files_memory.hpp"
+#include "utils/fs/utils.hpp"
 #include "utils/url.hpp"
 
 #include "libdnf5/base/base.hpp"
@@ -221,13 +222,14 @@ void PackageDownloader::download() try {
     }
 
     for (auto * local_pkg_target : local_targets) {
-        // Copy local packages to their destination directories
+        // Copy local packages to their destination directories, reflinking when
+        // the filesystem supports copy-on-write.
         std::filesystem::path source = local_pkg_target->package.get_package_path();
         std::filesystem::path destination = local_pkg_target->destination / source.filename();
         std::error_code ec;
         const bool same_file = std::filesystem::equivalent(source, destination, ec);
         if (!same_file) {
-            std::filesystem::copy(source, destination, std::filesystem::copy_options::overwrite_existing, ec);
+            utils::fs::reflink_or_copy(source, destination, ec);
         }
         if (auto * download_callbacks = local_pkg_target->package.get_base()->get_download_callbacks()) {
             std::string msg;
