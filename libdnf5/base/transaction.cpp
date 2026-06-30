@@ -944,6 +944,20 @@ Transaction::TransactionRunResult Transaction::Impl::_run(
     const std::optional<uint32_t> user_id,
     const std::string & comment,
     const bool test_only) {
+    auto & config = base->get_config();
+
+    if (!config.get_skip_system_repo_lock_option().get_value()) {
+        const auto & system_repo_lock = base->get_system_repo_lock();
+        libdnf_user_assert(
+            system_repo_lock && system_repo_lock->holds_lock(),
+            "To perform a transaction ensure system repo is locked using Base::lock_system_repo, see also "
+            "skip_system_repo_lock configuration option.");
+        libdnf_user_assert(
+            system_repo_lock->held_lock_access() == libdnf5::utils::LockAccess::WRITE,
+            "To perform a transaction ensure system repo is locked for writing using Base::lock_system_repo, see also "
+            "skip_system_repo_lock configuration option.");
+    }
+
     concurrent_transaction.reset();
 
     // do not allow running a transaction multiple times
@@ -960,7 +974,6 @@ Transaction::TransactionRunResult Transaction::Impl::_run(
         return TransactionRunResult::ERROR_GPG_CHECK;
     }
 
-    auto & config = base->get_config();
 
     // prepare transaction info
     ActiveTransactionInfo info;
