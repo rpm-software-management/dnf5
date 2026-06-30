@@ -20,11 +20,16 @@
 #include "utils.hpp"
 
 #include <fcntl.h>
+#include <sys/ioctl.h>
 #include <sys/stat.h>
 #include <unistd.h>
+#ifdef __linux__
+#include <linux/fs.h>  // FICLONE
+#endif
 
 #include <algorithm>
 #include <cstring>
+#include <system_error>
 
 namespace libdnf5::utils::fs {
 
@@ -83,6 +88,50 @@ void move_recursive(const std::filesystem::path & src, const std::filesystem::pa
         std::filesystem::copy(src, dest, std::filesystem::copy_options::recursive);
         std::filesystem::remove_all(src);
     }
+}
+
+#ifdef FICLONE
+namespace {
+
+// Copy-on-write clone of the regular file `src` onto `dest`, returning true on
+// success. On failure `dest` is left empty (if newly created) or untouched, which
+// the caller's fallback copy overwrites either way.
+bool try_reflink(const stdfs::path & src, const stdfs::path & dest) {
+    int src_fd = ::open(src.c_str(), O_RDONLY | O_CLOEXEC);
+    if (src_fd == -1) {
+        return false;
+    }
+    bool cloned = false;
+    struct stat st;
+    if (::fstat(src_fd, &st) == 0 && S_ISREG(st.st_mode)) {
+        const mode_t mode = st.st_mode & 07777;
+        int dest_fd = ::open(dest.c_str(), O_WRONLY | O_CREAT | O_CLOEXEC, mode);
+        if (dest_fd != -1) {
+            if (::ioctl(dest_fd, FICLONE, src_fd) == 0) {
+                // open()'s mode is subject to umask and ignored if dest existed;
+                // set the source's perms exactly to match copy_file.
+                cloned = ::fchmod(dest_fd, mode) == 0;
+            }
+            ::close(dest_fd);
+        }
+    }
+    ::close(src_fd);
+    return cloned;
+}
+
+}  // namespace
+#endif
+
+void reflink_or_copy(const stdfs::path & src, const stdfs::path & dest, std::error_code & ec) noexcept {
+    ec.clear();
+#ifdef FICLONE
+    // Fast path: a copy-on-write clone, observably identical to the copy below.
+    if (try_reflink(src, dest)) {
+        return;
+    }
+#endif
+    // Fallback when cloning is unsupported (cross-device, non-CoW fs, old kernel).
+    stdfs::copy(src, dest, stdfs::copy_options::overwrite_existing, ec);
 }
 
 [[nodiscard]] std::vector<std::filesystem::path> create_sorted_file_list(
