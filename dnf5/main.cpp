@@ -55,6 +55,7 @@
 #include "context_impl.hpp"
 #include "dnf5/context.hpp"
 #include "download_callbacks.hpp"
+#include "interaction_callbacks.hpp"
 #include "plugins.hpp"
 #include "signal_handlers.hpp"
 
@@ -1408,6 +1409,8 @@ int main(int argc, char * argv[]) try {
                 return static_cast<int>(libdnf5::cli::ExitCode::SUCCESS);
             }
         }
+
+        base.set_interaction_callbacks(std::make_unique<dnf5::InteractionCallbacks>(context));
 
         auto download_callbacks_uptr = std::make_unique<dnf5::DownloadCallbacks>();
         auto * download_callbacks = download_callbacks_uptr.get();

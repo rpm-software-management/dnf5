@@ -105,6 +105,7 @@ private:
     transaction::TransactionHistory transaction_history;
     Vars vars;
     std::unique_ptr<repo::DownloadCallbacks> download_callbacks;
+    std::unique_ptr<base::InteractionCallbacks> interaction_callbacks;
     std::optional<libdnf5::utils::Locker> system_repo_lock;
 
     /// map of plugin names (global patterns) that we want to enable (true) or disable (false)
