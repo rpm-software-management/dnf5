@@ -154,6 +154,31 @@ void BaseGoalTest::test_reinstall() {
     CPPUNIT_ASSERT_EQUAL(expected, transaction.get_transaction_packages());
 }
 
+void BaseGoalTest::test_reinstall_installed_package() {
+    // Tests reinstallation when passing an installed Package object.
+    // The solver must receive the available solvable id, not the installed one.
+    add_repo_rpm("rpm-repo1");
+    auto installed_pkg = add_system_pkg("repos-rpm/rpm-repo1/one-1-1.noarch.rpm", TransactionItemReason::DEPENDENCY);
+
+    libdnf5::Goal goal(base);
+    goal.add_rpm_reinstall(installed_pkg);
+
+    auto transaction = goal.resolve();
+
+    std::vector<libdnf5::base::TransactionPackage> expected = {
+        libdnf5::base::TransactionPackage(
+            get_pkg("one-0:1-1.noarch"),
+            TransactionItemAction::REINSTALL,
+            TransactionItemReason::DEPENDENCY,
+            TransactionItemState::STARTED),
+        libdnf5::base::TransactionPackage(
+            get_pkg("one-0:1-1.noarch", true),
+            TransactionItemAction::REPLACED,
+            TransactionItemReason::DEPENDENCY,
+            TransactionItemState::STARTED)};
+    CPPUNIT_ASSERT_EQUAL(expected, transaction.get_transaction_packages());
+}
+
 void BaseGoalTest::test_reinstall_from_cmdline() {
     // Tests the reinstallation using a cmdline package when a package with the same NEVRA is in available repo
     add_repo_rpm("rpm-repo1");
