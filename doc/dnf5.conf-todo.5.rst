@@ -136,6 +136,7 @@ This section does not track any deprecated option. For such options see :ref:`De
 
 ``releasever``
 
+@IF WITH_MODULEMD@
 .. _module_obsoletes_options-label:
 
 ``module_obsoletes``
@@ -144,6 +145,7 @@ This section does not track any deprecated option. For such options see :ref:`De
     If enabled, DNF5 tries to apply modular obsoletes when possible.
 
     Default: ``False``.
+@ENDIF@
 
 .. _rpmverbosity_options-label:
 
@@ -220,9 +222,11 @@ This section does not track any deprecated option. For such options see :ref:`De
 Repo Options
 ============
 
+@IF WITH_MODULEMD@
 .. _module_hotfixes_repo_options-label:
 
 ``module_hotfixes``
+@ENDIF@
 
 
 Repo Variables

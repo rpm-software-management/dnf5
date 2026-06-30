@@ -175,6 +175,7 @@ The group and environment commands accept both ``<group-spec>`` and ``<environme
 prefer only their corresponding type in case both groups and environments match the given argument.
 Other commands that accept both types affect both groups and environments.
 
+@IF WITH_MODULEMD@
 Modules
 =======
 
@@ -196,6 +197,7 @@ Since `NEVRA` matching form is insufficient for modules, they are uniquely ident
 
 In case stream is not specified, the enabled or the default stream is used, in this order.
 In case profile is not specified, the system default profile or the 'default' profile is used.
+@ENDIF@
 
 .. _transaction_spec-label:
 

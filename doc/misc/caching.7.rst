@@ -18,8 +18,8 @@
     You should have received a copy of the GNU General Public License
     along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
-..
-    TODO(jkolarik): Add link to modularity in "What are the metadata types" when the page exists
+..@IF WITH_MODULEMD@
+    TODO(jkolarik): Add link to modularity in "What are the metadata types" when the page exists@ENDIF@
     TODO(jkolarik): Add link to dnf5.conf options when the page exists
 
 
@@ -97,8 +97,8 @@ Some metadata is mandatory and always considered. The main repository metadata f
 contains information about specific metadata type files related to a repository, such as checksums,
 file sizes, and their locations in the metadata hierarchy. Another mandatory file is the ``primary``
 metadata file, providing detailed information about available packages, including package names,
-versions, dependencies, etc. If DNF5 is compiled with modularity support, ``modules`` metadata is
-also downloaded and processed.
+versions, dependencies, etc.@IF WITH_MODULEMD@ ``modules`` metadata is also downloaded and
+processed.@ENDIF@
 
 Other metadata types are optional and can be loaded into DNF5 in the following ways:
 

@@ -260,8 +260,10 @@ Changes to individual commands
   * New ``weak`` subcommand to mark a package as a weak dependency.
   * Now when any argument doesn't match an installed package, DNF5 fails. The behavior can be modified by the ``--skip-unavailable`` option.
 
+@IF WITH_MODULEMD@
 ``module``
   * Dropped ``--all`` option since this behavior is the default one.
+@ENDIF@
 
 ``needs-restarting``
   * Command no longer scans for open files to determine outdated files still in use. The default behavior now aligns with DNF 4's ``--reboothint``, suggesting a system reboot depending on updated packages since the last boot.

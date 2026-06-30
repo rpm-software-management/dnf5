@@ -2,6 +2,13 @@
 # "processed" binary directory. The output files are recorded in RST_OUTPUTS
 # variable.
 file(GLOB_RECURSE RST_SOURCES LIST_DIRECTORIES false RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} *.rst)
+if (NOT WITH_MODULEMD)
+    list(REMOVE_ITEM RST_SOURCES
+        "api/c++/libdnf5_module.rst"
+        "commands/module.8.rst"
+        "misc/modularity.7.rst"
+    )
+endif()
 set(PROCESSED_DIR "${CMAKE_CURRENT_BINARY_DIR}/processed")
 file(MAKE_DIRECTORY ${PROCESSED_DIR})
 foreach(RST_SOURCE IN LISTS RST_SOURCES)
@@ -10,6 +17,7 @@ foreach(RST_SOURCE IN LISTS RST_SOURCES)
     add_custom_command(
         OUTPUT ${PROCESSED_DIR}/${RST_SOURCE}
         COMMAND ${Python3_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/atp.py
+            --define "WITH_MODULEMD=${WITH_MODULEMD}"
             ${CMAKE_CURRENT_SOURCE_DIR}/${RST_SOURCE} ${PROCESSED_DIR}/${RST_SOURCE}
         COMMENT "Preprocessing ${RST_SOURCE}"
         DEPENDS ${RST_SOURCE} ${CMAKE_CURRENT_SOURCE_DIR}/atp.py

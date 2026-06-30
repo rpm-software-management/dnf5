@@ -1,7 +1,7 @@
 Changes in loading repositories
 ===============================
 
-The repositories are loaded in order to have information about installed and available packages, comps, modules and excludes.
+The repositories are loaded in order to have information about installed and available packages, comps,@IF WITH_MODULEMD@ modules,@ENDIF@ and excludes.
 
 In DNF5, the repositories must be loaded only after the ``libdnf5::base::Base::setup()`` call and they cannot be loaded repeatedly. If a new set of repositories is needed, a new Base object should be created.
 

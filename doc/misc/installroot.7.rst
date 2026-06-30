@@ -58,10 +58,12 @@ the installroot, otherwise the $releasever value is taken from the rpmdb within 
 is used, the releasever will be detected from the host (/) system. The new installroot path at the
 time of creation does not contain the repository, releasever and dnf.conf files.
 
+@IF WITH_MODULEMD@
 On a modular system you may also want to use the ``--setopt=module_platform_id=<module_platform_name:stream>``
 command-line option when creating the installroot, otherwise the ``module_platform_id`` value will be
 taken from the ``/etc/os-release`` file within the installroot (and thus it will be empty at the time of
 creation, the modular dependency could be unsatisfied and modules content could be excluded).
+@ENDIF@
 
 
 Examples
