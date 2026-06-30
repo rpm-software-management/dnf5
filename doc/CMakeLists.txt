@@ -7,6 +7,7 @@ foreach(RST_SOURCE IN LISTS RST_SOURCES)
     add_custom_command(
         OUTPUT ${PROCESSED_DIR}/${RST_SOURCE}
         COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/atp.py
+            --define "WITH_MODULEMD=${WITH_MODULEMD}"
             ${CMAKE_CURRENT_SOURCE_DIR}/${RST_SOURCE} ${PROCESSED_DIR}/${RST_SOURCE}
         COMMENT "Preprocessing ${RST_SOURCE}"
         DEPENDS ${RST_SOURCE} ${CMAKE_CURRENT_SOURCE_DIR}/atp.py
