@@ -15,7 +15,9 @@ C++
     libdnf5_cli_utils_units
     libdnf5_cli_utils_userconfirm
     libdnf5_comps
+    @IF WITH_MODULEMD@
     libdnf5_module
+    @ENDIF@
     libdnf5_offline
     libdnf5_plugin
     libdnf5_repo

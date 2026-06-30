@@ -63,6 +63,7 @@ Additionally, the versionlock functionality is implemented using excludes filter
 For details see :manpage:`dnf5-versionlock(8)`, :ref:`Versionlock command <versionlock_command_ref-label>`.
 
 
+@IF WITH_MODULEMD@
 Modular filtering
 =================
 
@@ -76,3 +77,4 @@ Disabling of modular filtering is not recommended, because it could cause the sy
 ..
     # TODO(mblaha) - `dnf5 module provides` command is not implemented yet
     # To discover the module which contains an excluded package use ``dnf5 module provides``.
+@ENDIF@

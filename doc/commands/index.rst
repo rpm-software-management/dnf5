@@ -25,7 +25,9 @@ DNF5 Commands
     list.8
     makecache.8
     mark.8
+    @IF WITH_MODULEMD@
     module.8
+    @ENDIF@
     offline.8
     provides.8
     reinstall.8

@@ -451,7 +451,7 @@ repository configuration file should aside from repo ID consists of baseurl, met
 
     List of the following: ``comps``, ``filelists``, ``other``, ``presto``, ``updateinfo``, ``all``
 
-    Specifies the types of metadata to load in addition to the essential ``primary`` and ``modules`` metadata, which are always loaded. Note that individual DNF commands may extend this list at runtime.
+    Specifies the types of metadata to load in addition to the essential ``primary``@IF WITH_MODULEMD@ and ``modules``@ENDIF@ metadata, which are always loaded. Note that individual DNF commands may extend this list at runtime.
 
     Note: The list includes only metadata types recognized by DNF. However, a repository's metadata may include various other types (e.g., AppStream or metadata stored as databases instead of XML files). The special value ``all`` represents all metadata types present in the repository, including those unknown to DNF.
 

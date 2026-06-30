@@ -102,8 +102,10 @@ For more details see the separate man page for the specific command, f.e. ``man 
 :ref:`mark <mark_command_ref-label>`
     | Change the reason of an installed package.
 
+@IF WITH_MODULEMD@
 :ref:`module <module_command_ref-label>`
     | Manage modules.
+@ENDIF@
 
 :ref:`offline <offline_command_ref-label>`
     | Manage offline transactions.
@@ -477,8 +479,8 @@ Commands:
     | :manpage:`dnf5-leaves(8)`, :ref:`Leaves command <leaves_command_ref-label>`
     | :manpage:`dnf5-list(8)`, :ref:`List command <list_command_ref-label>`
     | :manpage:`dnf5-makecache(8)`, :ref:`Makecache command <makecache_command_ref-label>`
-    | :manpage:`dnf5-mark(8)`, :ref:`Mark command <mark_command_ref-label>`
-    | :manpage:`dnf5-module(8)`, :ref:`Module command <module_command_ref-label>`
+    | :manpage:`dnf5-mark(8)`, :ref:`Mark command <mark_command_ref-label>`@IF WITH_MODULEMD@
+    | :manpage:`dnf5-module(8)`, :ref:`Module command <module_command_ref-label>`@ENDIF@
     | :manpage:`dnf5-offline(8)`, :ref:`Offline command <offline_command_ref-label>`
     | :manpage:`dnf5-provides(8)`, :ref:`Provides command <provides_command_ref-label>`
     | :manpage:`dnf5-reinstall(8)`, :ref:`Reinstall command <reinstall_command_ref-label>`
@@ -518,8 +520,8 @@ Miscellaneous:
     | :manpage:`dnf5-comps(7)`, :ref:`Comps groups and environments <comps_misc_ref-label>`
     | :manpage:`dnf5-filtering(7)`, :ref:`Packages filtering, <filtering_misc_ref-label>`
     | :manpage:`dnf5-forcearch(7)`, :ref:`Forcearch parameter <forcearch_misc_ref-label>`
-    | :manpage:`dnf5-installroot(7)`, :ref:`Installroot parameter <installroot_misc_ref-label>`
-    | :manpage:`dnf5-modularity(7)`, :ref:`Modularity overview, <modularity_misc_ref-label>`
+    | :manpage:`dnf5-installroot(7)`, :ref:`Installroot parameter <installroot_misc_ref-label>`@IF WITH_MODULEMD@
+    | :manpage:`dnf5-modularity(7)`, :ref:`Modularity overview, <modularity_misc_ref-label>`@ENDIF@
     | :manpage:`dnf5-specs(7)`, :ref:`Patterns specification <specs_misc_ref-label>`
     | :manpage:`dnf5-system-state(7)`, :ref:`System state <systemstate_misc_ref-label>`
 

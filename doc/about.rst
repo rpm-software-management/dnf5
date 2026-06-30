@@ -3,7 +3,7 @@ About
 =====
 
 DNF5 is a command-line package manager that automates the process of installing, upgrading, configuring, and removing computer programs in a consistent manner.
-It supports RPM packages, modulemd modules, and comps groups & environments.
+It supports RPM packages@IF WITH_MODULEMD@, modulemd modules,@ENDIF@ and comps groups & environments.
 
 As part of the DNF5 stack, libdnf5 is the package management library.
 It was originally written to support the `DNF <https://github.com/rpm-software-management/dnf/>`_,
@@ -20,8 +20,8 @@ DNF5 supports working with the following artifacts:
  * RPM packages
  * Comps groups
  * Comps environments
- * Advisories (updateinfo, errata)
- * Modules (modulemd)
+ * Advisories (updateinfo, errata)@IF WITH_MODULEMD@
+ * Modules (modulemd)@ENDIF@
 
 DNF5 is written in C++ and it can interface with several programming languages:
 
