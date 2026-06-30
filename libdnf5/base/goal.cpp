@@ -2194,12 +2194,12 @@ void Goal::Impl::add_rpms_to_goal(base::Transaction & transaction) {
                 bool skip_broken = settings.resolve_skip_broken(cfg_main);
                 bool best = settings.resolve_best(cfg_main);
                 bool clean_requirements_on_remove = settings.resolve_clean_requirements_on_remove();
-                solv::IdQueue ids_nevra_installed;
+                solv::IdQueue ids_available;
                 for (auto id : ids) {
-                    rpm::PackageQuery query(installed);
-                    query.filter_nevra(pool.get_nevra(id));
-                    if (query.empty()) {
-                        // Report when package with the same NEVRA is not installed
+                    auto nevra = pool.get_nevra(id);
+                    rpm::PackageQuery query_installed(installed);
+                    query_installed.filter_nevra(nevra);
+                    if (query_installed.empty()) {
                         transaction.p_impl->add_resolve_log(
                             action,
                             GoalProblem::NOT_INSTALLED,
@@ -2208,12 +2208,31 @@ void Goal::Impl::add_rpms_to_goal(base::Transaction & transaction) {
                             get_user_spec(id),
                             {},
                             log_level);
-                    } else {
-                        // Only installed packages can be reinstalled
-                        ids_nevra_installed.push_back(id);
+                        continue;
+                    }
+                    if (!pool.is_installed(id)) {
+                        ids_available.push_back(id);
+                        continue;
+                    }
+                    rpm::PackageQuery query_available(base);
+                    query_available.filter_available();
+                    query_available.filter_nevra(nevra);
+                    if (query_available.empty()) {
+                        transaction.p_impl->add_resolve_log(
+                            action,
+                            GoalProblem::NOT_AVAILABLE,
+                            settings,
+                            libdnf5::transaction::TransactionItemType::PACKAGE,
+                            get_user_spec(id),
+                            {},
+                            log_level);
+                        continue;
+                    }
+                    for (auto available_id : *query_available.p_impl) {
+                        ids_available.push_back(available_id);
                     }
                 }
-                rpm_goal.add_install(ids_nevra_installed, skip_broken, best, clean_requirements_on_remove);
+                rpm_goal.add_install(ids_available, skip_broken, best, clean_requirements_on_remove);
             } break;
             case GoalAction::UPGRADE: {
                 bool best = settings.resolve_best(cfg_main);
