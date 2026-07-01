@@ -281,12 +281,16 @@ public:
         return vendor_change_manager.get_incoming_vendor_bypassed_solvables();
     }
 
+    void clear_rejected_vendor_changes() { rejected_vendor_changes.clear(); }
+    const std::vector<std::pair<Id, Id>> & get_rejected_vendor_changes() const { return rejected_vendor_changes; }
+
 private:
     friend class VendorChangeManager;
 
     static int callback_policy_illegal_vendorchange(::Pool * libsolv_pool, Solvable * installed, Solvable * new_solv);
 
     VendorChangeManager vendor_change_manager;
+    std::vector<std::pair<Id, Id>> rejected_vendor_changes;
 };
 
 

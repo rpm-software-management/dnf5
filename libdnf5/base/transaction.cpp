@@ -58,6 +58,7 @@
 #include <filesystem>
 #include <iostream>
 #include <ranges>
+#include <set>
 #include <sstream>
 #include <string_view>
 #include <thread>
@@ -415,6 +416,10 @@ std::vector<libdnf5::rpm::Package> Transaction::get_conflicting_packages() const
     return p_impl->conflicting_packages;
 }
 
+std::vector<std::pair<libdnf5::rpm::Package, std::string>> Transaction::get_vendor_change_skipped_packages() const {
+    return p_impl->vendor_change_skipped_packages;
+}
+
 std::string Transaction::transaction_result_to_string(const TransactionRunResult result) {
     switch (result) {
         case TransactionRunResult::SUCCESS:
@@ -700,6 +705,48 @@ void Transaction::Impl::set_transaction(
             add_resolve_log(GoalProblem::SOLVER_PROBLEM_STRICT_RESOLVEMENT, solver_problems);
         }
     }
+
+    // Detect packages skipped due to vendor change restriction using
+    // rejected vendor changes collected by the pool callback during solving.
+    if (!solved_goal.get_allow_vendor_change()) {
+        auto & pool = get_rpm_pool(base);
+        const auto & rejected = pool.get_rejected_vendor_changes();
+        if (!rejected.empty()) {
+            // Collect candidate IDs already in the transaction to filter
+            // out speculative solver queries that found a same-vendor path.
+            std::set<Id> transaction_ids;
+            if (solved_goal.get_transaction()) {
+                for (auto id : solved_goal.list_upgrades()) {
+                    transaction_ids.insert(id);
+                }
+                for (auto id : solved_goal.list_downgrades()) {
+                    transaction_ids.insert(id);
+                }
+                for (auto id : solved_goal.list_reinstalls()) {
+                    transaction_ids.insert(id);
+                }
+                for (auto id : solved_goal.list_installs()) {
+                    transaction_ids.insert(id);
+                }
+            }
+
+            // Deduplicate by installed package ID — the solver may query
+            // multiple candidates for the same installed package.
+            std::set<Id> seen_installed;
+            for (const auto & [installed_id, candidate_id] : rejected) {
+                if (transaction_ids.contains(candidate_id)) {
+                    continue;
+                }
+                if (!seen_installed.insert(installed_id).second) {
+                    continue;
+                }
+                rpm::Package installed_pkg(base, rpm::PackageId(installed_id));
+                rpm::Package candidate(base, rpm::PackageId(candidate_id));
+                vendor_change_skipped_packages.emplace_back(std::move(candidate), installed_pkg.get_vendor());
+            }
+        }
+    }
+
     this->problems = problems;
 
     if ((problems & GoalProblem::MODULE_SOLVER_ERROR) != GoalProblem::NO_PROBLEM ||

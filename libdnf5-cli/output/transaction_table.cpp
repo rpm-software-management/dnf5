@@ -265,6 +265,7 @@ private:
     std::optional<libdnf5::transaction::TransactionItemAction> current_action;
     std::optional<libdnf5::transaction::TransactionItemReason> current_reason;
     bool table_empty{true};
+    bool has_vendor_change_skipped{false};
 };
 
 TransactionTable::Impl::Impl(ITransaction & transaction) {
@@ -496,8 +497,6 @@ TransactionTable::Impl::Impl(ITransaction & transaction) {
     for (const auto & [skipped_packages, header] : skipped) {
         std::optional<std::reference_wrapper<TransactionTableSection>> section;
         for (const auto & pkg : skipped_packages) {
-            // Packages for which another package with the same NEVRA is already part
-            // of the transaction are skipped.
             if (tspkgs_nevra.contains(pkg->get_full_nevra())) {
                 continue;
             }
@@ -519,6 +518,39 @@ TransactionTable::Impl::Impl(ITransaction & transaction) {
             section.value().get().set_last_line(ln);
         }
     }
+
+    {
+        auto vendor_change = transaction.get_vendor_change_skipped_packages();
+        std::optional<std::reference_wrapper<TransactionTableSection>> section;
+        for (const auto & [pkg, installed_vendor] : vendor_change) {
+            if (tspkgs_nevra.contains(pkg->get_full_nevra())) {
+                continue;
+            }
+            table_empty = false;
+            has_vendor_change_skipped = true;
+            struct libscols_line * ln = scols_table_new_line(*tb, header_ln);
+            scols_line_set_data(ln, COL_NAME, (" " + pkg->get_name()).c_str());
+            scols_line_set_data(ln, COL_ARCH, pkg->get_arch().c_str());
+            scols_line_set_data(ln, COL_EVR, pkg->get_evr().c_str());
+            scols_line_set_data(ln, COL_REPO, pkg->get_repo_id().c_str());
+            auto tspkg_size = static_cast<int64_t>(pkg->get_install_size());
+            scols_line_set_data(ln, COL_SIZE, libdnf5::cli::utils::units::format_size_aligned(tspkg_size).c_str());
+            scols_cell_set_color(scols_line_get_cell(ln, COL_NAME), SKIPPED_COLOR);
+            ts_summary.add_skip();
+
+            struct libscols_line * ln_vendor = scols_table_new_line(*tb, ln);
+            auto from_vendor = installed_vendor.empty() ? std::string(_("(none)")) : installed_vendor;
+            auto to_vendor = pkg->get_vendor().empty() ? std::string(_("(none)")) : pkg->get_vendor();
+            std::string vendor_info = libdnf5::utils::sformat("{} -> {}", from_vendor, to_vendor);
+            scols_line_set_data(ln_vendor, COL_NAME, ("   " + vendor_info).c_str());
+
+            if (!section) {
+                sections.emplace_back(_("Skipping packages due to vendor change restriction:"), ln);
+                section = sections.back();
+            }
+            section.value().get().set_last_line(ln_vendor);
+        }
+    }
 }
 
 void TransactionTable::Impl::print_table() {
@@ -534,6 +566,10 @@ void TransactionTable::Impl::print_table() {
             std::fputc('\n', fd);
         }
         scols_table_print_range(*tb, section.get_first_line(), section.get_last_line());
+    }
+    if (has_vendor_change_skipped) {
+        std::fputc('\n', fd);
+        std::fputs(_("Use '--setopt=allow_vendor_change=true' to include vendor-changed packages."), fd);
     }
     std::fputc('\n', fd);
     // add empty line after the transaction table

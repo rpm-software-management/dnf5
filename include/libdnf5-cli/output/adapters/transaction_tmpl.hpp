@@ -161,6 +161,16 @@ public:
         return ret;
     }
 
+    std::vector<std::pair<std::unique_ptr<IPackage>, std::string>> get_vendor_change_skipped_packages() const override {
+        std::vector<std::pair<std::unique_ptr<IPackage>, std::string>> ret;
+        const auto & skipped = transaction->get_vendor_change_skipped_packages();
+        ret.reserve(skipped.size());
+        for (const auto & [pkg, installed_vendor] : skipped) {
+            ret.emplace_back(std::unique_ptr<IPackage>(new PackageAdapter(pkg)), installed_vendor);
+        }
+        return ret;
+    }
+
     std::vector<std::unique_ptr<ITransactionGroup>> get_transaction_groups() const override {
         std::vector<std::unique_ptr<ITransactionGroup>> ret;
         const auto & trans_groups = transaction->get_transaction_groups();

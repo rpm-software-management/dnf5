@@ -35,8 +35,13 @@ namespace libdnf5::solv {
 // Check if an illegal vendor change occurs when an installed solvable is replaced by a new solvable.
 // Returns 1 if the vendor change is illegal, otherwise returns 0.
 int RpmPool::callback_policy_illegal_vendorchange(::Pool * libsolv_pool, Solvable * installed, Solvable * new_solv) {
-    auto & vendor_change_manager = reinterpret_cast<RpmPool *>(libsolv_pool->appdata)->vendor_change_manager;
-    return vendor_change_manager.is_vendor_change_allowed(*installed, *new_solv) ? 0 : 1;
+    auto * rpm_pool = reinterpret_cast<RpmPool *>(libsolv_pool->appdata);
+    if (rpm_pool->vendor_change_manager.is_vendor_change_allowed(*installed, *new_solv)) {
+        return 0;
+    }
+    rpm_pool->rejected_vendor_changes.emplace_back(
+        pool_solvable2id(libsolv_pool, installed), pool_solvable2id(libsolv_pool, new_solv));
+    return 1;
 }
 
 
