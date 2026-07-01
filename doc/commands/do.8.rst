@@ -43,7 +43,7 @@ Another difference is that the ``do`` command allows for the explicit specificat
 in the transaction: ``package``, ``group``, or ``auto``. For the ``group`` type, it is possible to specify whether
 a group ID or a group name is used. By default, the ``auto`` type is active. In this mode, the ``do`` command
 behaves like other commands, inferring the object's type from its specification. For example, if a specification starts
-with the ``@`` character, it is treated as a group ID or a module.
+with the ``@@`` character, it is treated as a group ID or a module.
 
 Individual actions and object types are specified by options and are combinable.
 

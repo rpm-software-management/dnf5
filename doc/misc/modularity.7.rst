@@ -117,7 +117,7 @@ This keeps package filtering working correctly.
 The copies are made any time a transaction is resolved and started.
 That includes RPM transactions as well as any ``dnf5 module <enable|disable|reset>`` operations.
 
-When the fail-safe data is used, DNF5 show such modules as part of @modulefailsafe repository.
+When the fail-safe data is used, DNF5 show such modules as part of @@modulefailsafe repository.
 
 
 Orphaned modular packages
