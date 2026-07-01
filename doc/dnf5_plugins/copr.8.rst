@@ -73,12 +73,12 @@ Arguments
     or the shortcut (e.g. `fedora`).
     If HUB is not specified, the default one, or `--hub <ARG>`, is used.
 
-    OWNER is either a username, or a @groupname.
+    OWNER is either a username, or a @@groupname.
 
     PROJECT can be a simple project name, or a "project directory" containing colons,
     e.g. `project:custom:123`.
 
-    Example: `fedora/@footeam/coolproject`.
+    Example: `fedora/@@footeam/coolproject`.
 
 ``<chroot>``
     Chroot specified in the NAME-RELEASE-ARCH format, e.g. `fedora-rawhide-ppc64le`.

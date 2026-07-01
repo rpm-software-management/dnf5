@@ -27,7 +27,7 @@
 Synopsis
 ========
 
-``dnf5 install [options] <package-spec-NPFB>|@<group-spec>|@<environment-spec>...``
+``dnf5 install [options] <package-spec-NPFB>|@@<group-spec>|@@<environment-spec>...``
 
 
 Description

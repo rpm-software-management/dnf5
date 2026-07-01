@@ -27,7 +27,7 @@
 Synopsis
 ========
 
-``dnf5 remove [options] <package-spec-NF>|@<group-spec>|@<environment-spec>...``
+``dnf5 remove [options] <package-spec-NF>|@@<group-spec>|@@<environment-spec>...``
 
 ``dnf5 remove --oldinstallonly [--limit=<LIMIT>] [<package-spec-NF>...]``
 
