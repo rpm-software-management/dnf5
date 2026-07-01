@@ -1,3 +1,22 @@
+# Collect RST files, preprocess them with ./atp.py and save the output into
+# "processed" binary directory. The output files are recorded in RST_OUTPUTS
+# variable.
+file(GLOB_RECURSE RST_SOURCES LIST_DIRECTORIES false RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} *.rst)
+set(PROCESSED_DIR "${CMAKE_CURRENT_BINARY_DIR}/processed")
+foreach(RST_SOURCE IN LISTS RST_SOURCES)
+    add_custom_command(
+        OUTPUT ${PROCESSED_DIR}/${RST_SOURCE}
+        COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/atp.py
+            --define "WITH_MODULEMD=${WITH_MODULEMD}"
+            ${CMAKE_CURRENT_SOURCE_DIR}/${RST_SOURCE} ${PROCESSED_DIR}/${RST_SOURCE}
+        COMMENT "Preprocessing ${RST_SOURCE}"
+        DEPENDS ${RST_SOURCE} ${CMAKE_CURRENT_SOURCE_DIR}/atp.py
+        VERBATIM
+    )
+    list(APPEND RST_OUTPUTS ${PROCESSED_DIR}/${RST_SOURCE})
+endforeach()
+
+
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/Doxyfile.in ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile)
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/conf.py.in ${CMAKE_CURRENT_BINARY_DIR}/conf.py)
 
@@ -17,9 +36,10 @@ add_custom_target(doxygen
 if(WITH_HTML)
     add_custom_target(doc-html
         sphinx-build -c ${CMAKE_CURRENT_BINARY_DIR} -b html
-        ${CMAKE_CURRENT_SOURCE_DIR}
+        ${PROCESSED_DIR}
         ${CMAKE_CURRENT_BINARY_DIR}/html
         COMMENT "Building html documentation"
+        DEPENDS ${RST_OUTPUTS}
     )
     add_dependencies(doc doc-html)
     add_dependencies(doc-html doxygen)
@@ -31,9 +51,10 @@ endif()
 if(WITH_MAN)
     add_custom_target(doc-man
         sphinx-build -c ${CMAKE_CURRENT_BINARY_DIR} -b man
-        ${CMAKE_CURRENT_SOURCE_DIR}
+        ${PROCESSED_DIR}
         ${CMAKE_CURRENT_BINARY_DIR}/man
         COMMENT "Building man documentation"
+        DEPENDS ${RST_OUTPUTS}
     )
     add_dependencies(doc doc-man)
 
