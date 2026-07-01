@@ -470,6 +470,10 @@ void Transaction::set_comment(const std::string & comment) {
     this->comment = comment;
 }
 
+void Transaction::set_persistence(libdnf5::base::TransactionPersistence persistence) {
+    this->persistence = persistence;
+}
+
 bool Transaction::check_gpg_signatures() {
     return p_impl->check_gpg_signatures();
 }

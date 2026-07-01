@@ -89,6 +89,12 @@ public:
     /// Stores pointer to user comment.
     void set_comment(const char * comment) noexcept;
 
+    /// Gets transaction persistence.
+    libdnf5::base::TransactionPersistence get_persistence() const noexcept;
+
+    /// Stores transaction persistence.
+    void set_persistence(libdnf5::base::TransactionPersistence persistence) noexcept;
+
     /// Get command line used to run the dnf5 command
     std::string get_cmdline();
 

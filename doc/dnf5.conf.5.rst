@@ -466,6 +466,24 @@ repository configuration file should aside from repo ID consists of baseurl, met
 
     Default: ``/var/lib/dnf``.
 
+.. _persistence_options-label:
+
+``persistence``
+    :ref:`string <string-label>`
+
+    Whether changes should persist across system reboots.
+    Passing ``--transient`` (see :ref:`transient option <transient_option-label>`) will override this setting to ``transient``.
+    Valid values are:
+
+    * ``auto``: Changes will persist across reboots, unless the target is a running bootc system
+      and the system is already in an unlocked state (i.e. ``/usr`` is writable).
+    * ``transient``: Changes will be lost on the next reboot. Only applicable on bootc systems.
+      Beware that changes to ``/etc`` and ``/var`` will persist, depending on the configuration
+      of your bootc system. See also https://bootc.dev/bootc//man/bootc-usr-overlay.8.html.
+    * ``persist``: Changes will persist across reboots.
+
+    Default: ``auto``.
+
 .. _pluginconfpath_options-label:
 
 ``pluginconfpath``
@@ -506,12 +524,12 @@ repository configuration file should aside from repo ID consists of baseurl, met
 
     They are protected via Obsoletes as well as user/plugin removals.
 
+    An entry prefixed with ``glob:``, such as ``glob:/path/to/dir/*.conf``,
+    expands to all matching files and reads one package per line from each.
+
     Default: ``dnf5,glob:/etc/dnf/protected.d/*.conf``.
 
     .. NOTE::
-       Any packages which should be protected can do so by including a file in ``/etc/dnf/protected.d``
-       with their  package name in it.
-
        DNF5 will protect also the package corresponding to the running version of the kernel. See also
        :ref:`protect_running_kernel <protect_running_kernel_options-label>` option.
 
@@ -653,6 +671,34 @@ repository configuration file should aside from repo ID consists of baseurl, met
     :ref:`See <installroot_misc_ref-label>` :manpage:`dnf5-installroot(7)` for more info.
 
     Default: ``False``.
+
+.. _usr_drift_protected_paths_options-label:
+
+``usr_drift_protected_paths``
+    :ref:`list <list-label>`
+
+    List of paths that are likely to cause problems when their contents drift
+    with respect to ``/usr``, e.g. ``/etc/pam.d/*``. If a transient transaction
+    would modify these paths, DNF5 aborts the operation and prints an error.
+
+    When using ``persistence=transient`` on bootc systems, a transient overlay
+    is created on ``/usr``, and any changes DNF5 makes to ``/usr`` will be
+    discarded on reboot. However, other paths such as ``/etc`` and ``/var`` are
+    (often) not backed by a transient overlay, so changes to them will persist
+    across reboots. Usually, this "filesystem drift" is fine, but it can cause
+    problems in certain situations. For example, a configuration file in
+    ``/etc`` that's shared by multiple packages might reference a ``.so`` file
+    under ``/usr/lib64`` that no longer exists.
+
+    If any paths are protected by this option, DNF5 will download filelist
+    metadata from repositories before resolving transient transactions.
+
+    An entry prefixed with ``glob:``, such as ``glob:/path/to/dir/*.conf``,
+    expands to all matching files and reads one path per line from each. Both
+    the glob pattern in the option list entry and the individual paths listed
+    within the files (e.g. ``/etc/pam.d/*``) may contain globs.
+
+    Default: ``glob:/etc/dnf/usr-drift-protected-paths.d/*.conf``.
 
 .. _varsdir_options-label:
 

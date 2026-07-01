@@ -36,6 +36,7 @@ void GroupRemoveCommand::set_argument_parser() {
     group_specs = std::make_unique<CompsSpecArguments>(*this, ArgumentParser::PositionalArg::AT_LEAST_ONE);
     create_offline_option(*this);
     create_store_option(*this);
+    create_transient_option(*this);
 }
 
 void GroupRemoveCommand::configure() {

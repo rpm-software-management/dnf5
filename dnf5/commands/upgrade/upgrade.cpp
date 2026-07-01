@@ -85,6 +85,7 @@ void UpgradeCommand::set_argument_parser() {
     advisory_enhancement = std::make_unique<EnhancementOption>(*this);
     advisory_newpackage = std::make_unique<NewpackageOption>(*this);
     create_store_option(*this);
+    create_transient_option(*this);
 }
 
 void UpgradeCommand::configure() {

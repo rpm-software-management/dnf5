@@ -21,6 +21,8 @@
 
 #include "libdnf5/utils/bgettext/bgettext-mark-domain.h"
 
+#include <libdnf5/utils/bgettext/bgettext-lib.h>
+
 
 namespace libdnf5::transaction {
 
@@ -56,6 +58,33 @@ std::string transaction_item_action_to_string(TransactionItemAction action) {
     return "";
 }
 
+std::string transaction_item_action_to_translated_string(TransactionItemAction action) {
+    switch (action) {
+        case TransactionItemAction::INSTALL:
+            return _("Install");
+        case TransactionItemAction::UPGRADE:
+            return _("Upgrade");
+        case TransactionItemAction::DOWNGRADE:
+            return _("Downgrade");
+        case TransactionItemAction::REINSTALL:
+            return _("Reinstall");
+        case TransactionItemAction::REMOVE:
+            return _("Remove");
+        case TransactionItemAction::REPLACED:
+            return _("Replaced");
+        case TransactionItemAction::REASON_CHANGE:
+            return _("Reason Change");
+        case TransactionItemAction::ENABLE:
+            return _("Enable");
+        case TransactionItemAction::DISABLE:
+            return _("Disable");
+        case TransactionItemAction::RESET:
+            return _("Reset");
+        case TransactionItemAction::SWITCH:
+            return _("Switch");
+    }
+    return "";
+}
 
 TransactionItemAction transaction_item_action_from_string(const std::string & action) {
     if (action == "Install") {

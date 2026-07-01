@@ -38,6 +38,7 @@ void AutoremoveCommand::set_argument_parser() {
         _("Remove all unneeded packages originally installed as dependencies."));
     create_offline_option(*this);
     create_store_option(*this);
+    create_transient_option(*this);
 }
 
 void AutoremoveCommand::configure() {

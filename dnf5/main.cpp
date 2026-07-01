@@ -57,9 +57,11 @@
 #include "download_callbacks.hpp"
 #include "plugins.hpp"
 #include "signal_handlers.hpp"
+#include "utils/auth.hpp"
 
 #include <fcntl.h>
 #include <fmt/format.h>
+#include <fnmatch.h>
 #include <libdnf5-cli/argument_parser.hpp>
 #include <libdnf5-cli/exception.hpp>
 #include <libdnf5-cli/exit-codes.hpp>
@@ -92,6 +94,7 @@
 #include <cstring>
 #include <filesystem>
 #include <iostream>
+#include <map>
 #include <utility>
 
 constexpr const char * DNF5_LOGGER_FILENAME = "dnf5.log";
@@ -1521,27 +1524,82 @@ int main(int argc, char * argv[]) try {
                 dump_repository_configuration(context, repo_id_list);
             }
 
-            if (context.p_impl->cmd_requires_privileges()) {
-                const auto & installroot = base.get_config().get_installroot_option().get_value();
+            // std::nullopt == Unknown whether system is bootc
+            std::optional<bool> is_bootc_system;
 
-                if (installroot == "/" && !libdnf5::utils::bootc::is_writable()) {
-                    if (libdnf5::utils::bootc::is_bootc_system()) {
-                        throw libdnf5::cli::ReadOnlySystemError(
-                            M_("Error: this bootc system is configured to be read-only. For more information, run "
-                               "`bootc --help`."));
+            const bool cmd_requires_privileges = context.p_impl->cmd_requires_privileges();
+            if (cmd_requires_privileges) {
+                const auto & insufficient_privileges_error = libdnf5::cli::InsufficientPrivilegesError(
+                    M_("The requested operation requires superuser privileges. Please log in as a user with elevated "
+                       "rights, or use the \"--assumeno\" or \"--downloadonly\" options to run the command without "
+                       "modifying the system state."));
+
+                // If the installroot is /, we care whether the system is bootc.
+                const auto & installroot = base.get_config().get_installroot_option().get_value();
+                if (installroot == "/") {
+                    if (libdnf5::utils::bootc::is_writable()) {
+                        // If the system is writable, we shouldn't error if
+                        // `bootc status` could not be determined.
+                        if (libdnf5::utils::am_i_root()) {
+                            try {
+                                is_bootc_system = libdnf5::utils::bootc::is_bootc_system();
+                            } catch (const libdnf5::RuntimeError & e) {
+                                context.print_info(libdnf5::utils::sformat(_("Warning: {}"), e.what()));
+                            }
+                        }
+                    } else {
+                        // /usr is not writable. We should try harder to
+                        // ascertain `bootc status` to avoid showing a bootc
+                        // user the generic error for read-only /usr.
+                        if (!libdnf5::utils::am_i_root()) {
+                            throw insufficient_privileges_error;
+                        }
+                        is_bootc_system = libdnf5::utils::bootc::is_bootc_system();
+                        if (!*is_bootc_system) {
+                            throw libdnf5::cli::ReadOnlySystemError(
+                                M_("Error: /usr is configured to be read-only. You may be running an image-based or "
+                                   "immutable operating system. For more information, refer to your "
+                                   "distribution's documentation."));
+                        }
                     }
-                    throw libdnf5::cli::ReadOnlySystemError(
-                        M_("Error: /usr is configured to be read-only. You may be running an image-based or immutable "
-                           "operating system. For more information, refer to your "
-                           "distribution's documentation."));
                 }
 
                 if (!user_has_privileges(context)) {
-                    throw libdnf5::cli::InsufficientPrivilegesError(M_(
-                        "The requested operation requires superuser privileges. Please log in as a user with elevated "
-                        "rights, or use the \"--assumeno\" or \"--downloadonly\" options to run the command without "
-                        "modifying the system state."));
+                    throw insufficient_privileges_error;
                 }
+            }
+
+            const bool is_bootc_transaction = cmd_requires_privileges && is_bootc_system.value_or(false);
+            bool bootc_system_needs_unlock = false;
+            const auto & persistence = base.get_config().get_persistence_option().get_value();
+            if (is_bootc_transaction) {
+                if (persistence == "persist") {
+                    throw libdnf5::cli::CommandExitError(
+                        1,
+                        M_("Error: persistent transactions aren't supported on bootc systems. Pass --transient to "
+                           "perform "
+                           "this operation in a transient overlay which will reset when the system reboots."));
+                }
+
+                if (!libdnf5::utils::bootc::is_writable()) {
+                    bootc_system_needs_unlock = true;
+                    if (persistence == "auto") {
+                        throw libdnf5::cli::CommandExitError(
+                            1,
+                            M_("Error: this bootc system is configured to be read-only. Pass --transient to "
+                               "perform this operation in a transient overlay which will reset when "
+                               "the system reboots."));
+                    }
+                }
+                context.set_persistence(libdnf5::base::TransactionPersistence::TRANSIENT);
+
+            } else {
+                // Not a bootc transaction.
+                if (persistence == "transient") {
+                    throw libdnf5::cli::CommandExitError(
+                        1, M_("Error: transient transactions are only supported on bootc systems."));
+                }
+                context.set_persistence(libdnf5::base::TransactionPersistence::PERSIST);
             }
 
             const auto load_available = context.get_load_available_repos() != dnf5::Context::LoadAvailableRepos::NONE;
@@ -1602,8 +1660,54 @@ int main(int argc, char * argv[]) try {
                     }
                 }
 
+                // Check whether the transaction modifies usr_drift_protected_paths
+                const auto & usr_drift_protected_paths =
+                    base.get_config().get_usr_drift_protected_paths_option().get_value();
+                if (!usr_drift_protected_paths.empty()) {
+                    std::map<std::string, std::vector<std::string>> transaction_protected_paths;
+                    for (const auto & tspkg : context.get_transaction()->get_transaction_packages()) {
+                        const auto & pkg = tspkg.get_package();
+                        for (const auto & pkg_file_path : pkg.get_files()) {
+                            for (const auto & protected_pattern : usr_drift_protected_paths) {
+                                if (fnmatch(protected_pattern.c_str(), pkg_file_path.c_str(), 0) == 0) {
+                                    transaction_protected_paths[pkg.get_nevra()].push_back(pkg_file_path);
+                                }
+                            }
+                        }
+                    }
+                    if (!transaction_protected_paths.empty()) {
+                        context.print_error(
+                            _("This transaction would modify the following paths, possibly introducing "
+                              "inconsistencies when the transient overlay on /usr is discarded. See the "
+                              "usr_drift_protected_paths configuration option for more information."));
+                        for (const auto & [nevra, protected_paths] : transaction_protected_paths) {
+                            context.print_error(nevra);
+                            for (const auto & protected_path : protected_paths) {
+                                context.print_error(std::string("  ") + protected_path);
+                            }
+                        }
+                        throw libdnf5::cli::CommandExitError(
+                            1,
+                            M_("Operation aborted. Pass --setopt=usr_drift_protected_paths= to disable this "
+                               "check and proceed anyway."));
+                    }
+                }
+
+                if (bootc_system_needs_unlock && !libdnf5::utils::bootc::has_read_only_usr_overlay()) {
+                    // Only tell the user about the transient overlay if
+                    // it's not already in place
+                    context.print_error(
+                        _("A transient overlay will be created on /usr that will be discarded on reboot. "
+                          "Keep in mind that changes to /etc and /var will still persist, and packages "
+                          "commonly modify these directories."));
+                }
+
                 if (!libdnf5::cli::utils::userconfirm::userconfirm(context.get_base().get_config())) {
                     throw libdnf5::cli::AbortedByUserError();
+                }
+
+                if (bootc_system_needs_unlock) {
+                    libdnf5::utils::bootc::make_usr_writable();
                 }
 
                 context.download_and_run(*context.get_transaction());

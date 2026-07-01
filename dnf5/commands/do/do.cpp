@@ -176,6 +176,7 @@ void DoCommand::set_argument_parser() {
     create_downloadonly_option(*this);
     create_offline_option(*this);
     create_store_option(*this);
+    create_transient_option(*this);
 }
 
 void DoCommand::configure() {

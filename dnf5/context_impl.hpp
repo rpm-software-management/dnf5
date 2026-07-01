@@ -39,6 +39,12 @@ public:
 
     void set_comment(const char * comment) noexcept { this->comment = comment; }
 
+    libdnf5::base::TransactionPersistence get_persistence() const noexcept { return persistence; }
+
+    void set_persistence(libdnf5::base::TransactionPersistence persistence) noexcept {
+        this->persistence = persistence;
+    }
+
     std::string get_cmdline() { return cmdline; }
 
     void set_cmdline(std::string & cmdline) { this->cmdline = cmdline; }
@@ -143,6 +149,8 @@ private:
 
     /// Points to user comment.
     const char * comment{nullptr};
+
+    libdnf5::base::TransactionPersistence persistence = libdnf5::base::TransactionPersistence::UNKNOWN;
 
     bool should_store_offline = false;
     bool json_output = false;

@@ -27,6 +27,7 @@
 #include "libdnf5/transaction/transaction_history.hpp"
 
 #include <json-c/json.h>
+#include <libdnf5/utils/bgettext/bgettext-lib.h>
 #include <libsmartcols/libsmartcols.h>
 
 
@@ -49,11 +50,11 @@ void print_transaction_list(std::vector<libdnf5::transaction::Transaction> & ts_
         scols_table_set_termforce(table.get(), SCOLS_TERMFORCE_ALWAYS);
     }
 
-    scols_table_new_column(table.get(), "ID", 0, SCOLS_FL_RIGHT);
-    scols_table_new_column(table.get(), "Command line", 0.7, SCOLS_FL_TRUNC);
-    scols_table_new_column(table.get(), "Date and time", 0, 0);
-    scols_table_new_column(table.get(), "Action(s)", 0, 0);
-    scols_table_new_column(table.get(), "Altered", 0, SCOLS_FL_RIGHT);
+    scols_table_new_column(table.get(), _("ID"), 0, SCOLS_FL_RIGHT);
+    scols_table_new_column(table.get(), _("Command line"), 0.7, SCOLS_FL_TRUNC);
+    scols_table_new_column(table.get(), _("Date and time"), 0, 0);
+    scols_table_new_column(table.get(), _("Action(s)"), 0, 0);
+    scols_table_new_column(table.get(), _("Altered"), 0, SCOLS_FL_RIGHT);
 
     if (libdnf5::cli::tty::is_coloring_enabled()) {
         scols_table_enable_colors(table.get(), 1);

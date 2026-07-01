@@ -240,6 +240,12 @@ void Context::Impl::update_repo_metadata_from_advisory_options(
 }
 
 void Context::Impl::load_repos(bool load_system, bool load_available) {
+    if (persistence == libdnf5::base::TransactionPersistence::TRANSIENT &&
+        !base.get_config().get_usr_drift_protected_paths_option().get_value().empty()) {
+        base.get_config().get_optional_metadata_types_option().add_item(
+            libdnf5::Option::Priority::RUNTIME, libdnf5::METADATA_TYPE_FILELISTS);
+    }
+
     if (load_available) {
         libdnf5::repo::RepoQuery repos(base);
         repos.filter_enabled(true);
@@ -508,6 +514,8 @@ void Context::Impl::download_and_run(libdnf5::base::Transaction & transaction) {
         transaction.set_comment(comment);
     }
 
+    transaction.set_persistence(persistence);
+
     auto result = transaction.run();
     if (result != libdnf5::base::Transaction::TransactionRunResult::SUCCESS) {
         print_error(libdnf5::utils::sformat(
@@ -614,6 +622,11 @@ bool Context::Impl::cmd_requires_privileges() const {
         return false;
     }
 
+    // when storing a transaction, system should not be modified
+    if (!get_transaction_store_path().empty()) {
+        return false;
+    }
+
     // otherwise, transactional cmds with store option defined are expected to modify the system
     auto it_store = std::find_if(
         all_cmd_args.begin(), all_cmd_args.end(), [](auto arg) { return arg->get_long_name() == "store"; });
@@ -662,6 +675,14 @@ const char * Context::get_comment() const noexcept {
 
 void Context::set_comment(const char * comment) noexcept {
     p_impl->set_comment(comment);
+}
+
+libdnf5::base::TransactionPersistence Context::get_persistence() const noexcept {
+    return p_impl->get_persistence();
+}
+
+void Context::set_persistence(libdnf5::base::TransactionPersistence persistence) noexcept {
+    p_impl->set_persistence(persistence);
 }
 
 std::string Context::get_cmdline() {

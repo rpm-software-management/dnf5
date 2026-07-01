@@ -230,6 +230,10 @@ public:
     const OptionBool & get_build_cache_option() const;
     OptionBool & get_skip_system_repo_lock_option();
     const OptionBool & get_skip_system_repo_lock_option() const;
+    OptionEnum & get_persistence_option();
+    const OptionEnum & get_persistence_option() const;
+    OptionStringAppendList & get_usr_drift_protected_paths_option();
+    const OptionStringAppendList & get_usr_drift_protected_paths_option() const;
 
     // Repo main config
     /// @deprecated The option does nothing

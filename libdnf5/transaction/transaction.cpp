@@ -34,6 +34,8 @@
 #include "libdnf5/transaction/transaction_item.hpp"
 #include "libdnf5/utils/bgettext/bgettext-mark-domain.h"
 
+#include <libdnf5/utils/bgettext/bgettext-lib.h>
+
 namespace libdnf5::transaction {
 
 class Transaction::Impl {
@@ -79,6 +81,17 @@ std::string transaction_state_to_string(TransactionState state) {
     return "";
 }
 
+std::string transaction_state_to_translated_string(TransactionState state) {
+    switch (state) {
+        case TransactionState::STARTED:
+            return _("Started");
+        case TransactionState::OK:
+            return _("Ok");
+        case TransactionState::ERROR:
+            return _("Error");
+    }
+    return "";
+}
 
 TransactionState transaction_state_from_string(const std::string & state) {
     if (state == "Started") {

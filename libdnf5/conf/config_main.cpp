@@ -236,6 +236,10 @@ class ConfigMain::Impl {
     OptionBool protect_running_kernel{true};
     OptionBool build_cache{true};
     OptionBool skip_system_repo_lock{false};
+    OptionEnum persistence{"auto", {"auto", "persist", "transient"}};
+
+    OptionStringAppendList usr_drift_protected_paths{
+        std::vector<std::string>{"glob:/etc/dnf/usr-drift-protected-paths.d/*.conf"}};
 
     // Repo main config
 
@@ -416,6 +420,8 @@ ConfigMain::Impl::Impl(Config & owner) : owner(owner) {
     owner.opt_binds().add("protect_running_kernel", protect_running_kernel);
     owner.opt_binds().add("build_cache", build_cache);
     owner.opt_binds().add("skip_system_repo_lock", skip_system_repo_lock);
+    owner.opt_binds().add("persistence", persistence);
+    owner.opt_binds().add("usr_drift_protected_paths", usr_drift_protected_paths);
 
     // Repo main config
 
@@ -1075,6 +1081,20 @@ const OptionBool & ConfigMain::get_skip_system_repo_lock_option() const {
     return p_impl->skip_system_repo_lock;
 }
 
+OptionEnum & ConfigMain::get_persistence_option() {
+    return p_impl->persistence;
+}
+const OptionEnum & ConfigMain::get_persistence_option() const {
+    return p_impl->persistence;
+}
+
+OptionStringAppendList & ConfigMain::get_usr_drift_protected_paths_option() {
+    return p_impl->usr_drift_protected_paths;
+}
+const OptionStringAppendList & ConfigMain::get_usr_drift_protected_paths_option() const {
+    return p_impl->usr_drift_protected_paths;
+}
+
 // Repo main config
 OptionNumber<std::uint32_t> & ConfigMain::get_retries_option() {
     return p_impl->retries;
@@ -1509,6 +1529,8 @@ void ConfigMain::Impl::load_from_config(const ConfigMain::Impl & other) {
     load_option(protect_running_kernel, other.protect_running_kernel);
     load_option(build_cache, other.build_cache);
     load_option(skip_system_repo_lock, other.skip_system_repo_lock);
+    load_option(persistence, other.persistence);
+    load_option(usr_drift_protected_paths, other.usr_drift_protected_paths);
 
     // Repo main config
     load_option(retries, other.retries);
