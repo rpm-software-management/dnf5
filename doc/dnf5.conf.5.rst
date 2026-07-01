@@ -287,7 +287,7 @@ repository configuration file should aside from repo ID consists of baseurl, met
     List of the following: ``optional``, ``default``, ``mandatory`` or ``conditional``.
 
     Tells DNF5 which type of packages in groups will be installed when 'group install <group-spec>'
-    or 'install @<group-spec>' is called.
+    or 'install @@<group-spec>' is called.
 
     Default: ``default, mandatory, conditional``.
 
@@ -733,7 +733,7 @@ repository configuration file should aside from repo ID consists of baseurl, met
 ``color_update_local``
     :ref:`color <color-label>`
 
-    Color of local packages that are installed from the @commandline repository.
+    Color of local packages that are installed from the @@commandline repository.
     This option is used during displaying transactions.
 
     Default: ``dim,green``.
