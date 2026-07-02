@@ -12,7 +12,7 @@
 
 #include <vector>
 
-const std::string DEFAULT_INPUT_FILENAME{"rpms.in.yaml"};
+const std::string DEFAULT_INPUT_FILENAME{"packages.input.yaml"};
 const std::string DEFAULT_MANIFEST_FILENAME{"packages.manifest.yaml"};
 const std::string MODULE_FILENAME{"modules_dump.modulemd.yaml"};
 const std::string MODULAR_DATA_SEPARATOR{"..."};
