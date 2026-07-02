@@ -59,6 +59,13 @@ LIBDNF_CLI_API void print_resolve_logs(const ITransaction & transaction, std::os
 
 LIBDNF_CLI_API bool print_transaction_table(ITransaction & transaction);
 
+/// Print the "Skipping N package(s) due to vendor change restriction" section.
+/// @param vendor_pairs  Each entry is {installed_vendor, candidate_vendor} for
+///                      one skipped package; the function groups by transition.
+/// @param stream        Output stream; defaults to stdout.
+LIBDNF_CLI_API void print_vendor_change_skipped(
+    const std::vector<std::pair<std::string, std::string>> & vendor_pairs, std::FILE * stream = stdout);
+
 }  // namespace libdnf5::cli::output
 
 #endif  // LIBDNF5_CLI_OUTPUT_TRANSACTION_TABLE_HPP

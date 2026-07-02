@@ -1080,6 +1080,22 @@ static bool has_named_arg(libdnf5::cli::ArgumentParser::Command * command, std::
     return false;
 }
 
+static void print_vendor_change_skipped(dnf5::Context & context) {
+    if (context.get_transaction() == nullptr) {
+        return;
+    }
+    const auto & skipped = context.get_transaction()->get_vendor_change_skipped_packages();
+    if (skipped.empty()) {
+        return;
+    }
+    std::vector<std::pair<std::string, std::string>> pairs;
+    pairs.reserve(skipped.size());
+    for (const auto & [pkg, installed_vendor] : skipped) {
+        pairs.emplace_back(installed_vendor, pkg.get_vendor());
+    }
+    libdnf5::cli::output::print_vendor_change_skipped(pairs);
+}
+
 static void print_resolve_hints(dnf5::Context & context) {
     auto & conf = context.get_base().get_config();
     std::vector<std::string> hints;
@@ -1123,11 +1139,15 @@ static void print_resolve_hints(dnf5::Context & context) {
         }
     }
 
+    // vendor_change is set from RULE_UPDATE solver errors (e.g. a reinstall whose only
+    // available copy is from a different vendor). Hoisted here so it can be combined
+    // with has_vendor_change_skipped below, which fires even without a SOLVER_ERROR.
+    bool vendor_change = false;
+
     if ((transaction_problems & libdnf5::GoalProblem::SOLVER_ERROR) == libdnf5::GoalProblem::SOLVER_ERROR) {
         bool conflict = false;
         bool broken_file_dep = false;
         bool best = false;
-        bool vendor_change = false;
         // walk through all solver problem to detect a conflict, missing file dependency and best
         for (const auto & resolve_log : context.get_transaction()->get_resolve_logs()) {
             if (resolve_log.get_problem() == libdnf5::GoalProblem::SOLVER_ERROR) {
@@ -1175,11 +1195,6 @@ static void print_resolve_hints(dnf5::Context & context) {
             }
         }
 
-        if (!conf.get_allow_vendor_change_option().get_value() && vendor_change) {
-            const std::string_view arg{"--allow-vendor-change"};
-            hints.emplace_back(libdnf5::utils::sformat(_("{} to allow changing package vendors"), arg));
-        }
-
         if (broken_file_dep) {
             const std::string_view arg{"--setopt=optional_metadata_types=filelists"};
             auto optional_metadata = conf.get_optional_metadata_types_option().get_value();
@@ -1195,6 +1210,19 @@ static void print_resolve_hints(dnf5::Context & context) {
                 hints.emplace_back(libdnf5::utils::sformat(_("{} to skip uninstallable packages"), arg));
             }
         }
+    }
+
+    // Two sources trigger this hint:
+    // - vendor_change: a RULE_UPDATE solver error (e.g. reinstall where only a different-vendor
+    //   copy is available). Requires SOLVER_ERROR, set above.
+    // - has_vendor_change_skipped: upgrades/downgrades silently dropped by the solver because
+    //   the only candidate would require a vendor change. The solver succeeds without them so
+    //   there is no SOLVER_ERROR; checking only inside that block would miss this case.
+    bool has_vendor_change_skipped =
+        context.get_transaction() && !context.get_transaction()->get_vendor_change_skipped_packages().empty();
+    if (!conf.get_allow_vendor_change_option().get_value() && (vendor_change || has_vendor_change_skipped)) {
+        const std::string_view arg{"--allow-vendor-change"};
+        hints.emplace_back(libdnf5::utils::sformat(_("{} to allow changing package vendors"), arg));
     }
 
     if (hints.size() > 0) {
@@ -1635,8 +1663,13 @@ int main(int argc, char * argv[]) try {
                 download_callbacks->set_show_total_bar_limit(0);
 
                 libdnf5::cli::output::TransactionAdapter cli_output_transaction(*context.get_transaction());
-                if (!libdnf5::cli::output::print_transaction_table(
-                        static_cast<libdnf5::cli::output::ITransaction &>(cli_output_transaction))) {
+                auto transaction_table_printed = libdnf5::cli::output::print_transaction_table(
+                    static_cast<libdnf5::cli::output::ITransaction &>(cli_output_transaction));
+
+                print_vendor_change_skipped(context);
+                print_resolve_hints(context);
+
+                if (!transaction_table_printed) {
                     return static_cast<int>(libdnf5::cli::ExitCode::SUCCESS);
                 }
 
@@ -1737,6 +1770,7 @@ int main(int argc, char * argv[]) try {
                          "of the host system, pass --use-host-config.")
                     << std::endl;
             } else {
+                print_vendor_change_skipped(context);
                 if (context.get_transaction() != nullptr) {
                     // download command can throw GoalResolveError without context.transaction being set
                     print_resolve_hints(context);

@@ -35,6 +35,7 @@
 #include <libsmartcols/libsmartcols.h>
 
 #include <algorithm>
+#include <map>
 #include <optional>
 #include <unordered_set>
 
@@ -758,6 +759,32 @@ void print_resolve_logs(const ITransaction & transaction, std::ostream & stream)
     }
 }
 
+
+void print_vendor_change_skipped(
+    const std::vector<std::pair<std::string, std::string>> & vendor_pairs, std::FILE * stream) {
+    if (vendor_pairs.empty()) {
+        return;
+    }
+    auto is_empty_vendor = [](const std::string & v) { return v.empty() || v == "<NULL>"; };
+    std::map<std::string, unsigned int> summaries;
+    for (const auto & [installed_vendor, candidate_vendor] : vendor_pairs) {
+        auto from = is_empty_vendor(installed_vendor) ? std::string(_("(none)")) : installed_vendor;
+        auto to = is_empty_vendor(candidate_vendor) ? std::string(_("(none)")) : candidate_vendor;
+        ++summaries[libdnf5::utils::sformat("\"{}\" -> \"{}\"", from, to)];
+    }
+    for (const auto & [transition, count] : summaries) {
+        std::fputs(
+            libdnf5::utils::sformat(
+                P_("Skipping {0} package due to vendor change restriction: {1}.",
+                   "Skipping {0} packages due to vendor change restriction: {1}.",
+                   count),
+                count,
+                transition)
+                .c_str(),
+            stream);
+        std::fputc('\n', stream);
+    }
+}
 
 bool print_transaction_table(ITransaction & transaction) {
     // even correctly resolved transaction can contain some warnings / hints / infos
