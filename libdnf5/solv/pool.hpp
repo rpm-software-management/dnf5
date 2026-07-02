@@ -28,6 +28,8 @@
 
 #include <climits>
 #include <memory>
+#include <string>
+#include <unordered_map>
 
 extern "C" {
 #include <solv/dataiterator.h>
@@ -281,12 +283,22 @@ public:
         return vendor_change_manager.get_incoming_vendor_bypassed_solvables();
     }
 
+    /// Clear the denied-vendor-change record before each solver run.
+    void clear_blocked_vendor_changes() { blocked_vendor_changes.clear(); }
+
+    /// Return the map of incoming solvable IDs that were denied a vendor change
+    /// during the last solve, paired with the installed (outgoing) vendor string.
+    [[nodiscard]] const std::unordered_map<Id, std::string> & get_blocked_vendor_changes() const noexcept {
+        return blocked_vendor_changes;
+    }
+
 private:
     friend class VendorChangeManager;
 
     static int callback_policy_illegal_vendorchange(::Pool * libsolv_pool, Solvable * installed, Solvable * new_solv);
 
     VendorChangeManager vendor_change_manager;
+    std::unordered_map<Id, std::string> blocked_vendor_changes;
 };
 
 
