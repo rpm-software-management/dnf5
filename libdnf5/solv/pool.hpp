@@ -281,6 +281,9 @@ public:
         return vendor_change_manager.get_incoming_vendor_bypassed_solvables();
     }
 
+    void reset_vendor_changes_blocked() { vendor_change_manager.reset_vendor_changes_blocked(); }
+    bool get_vendor_changes_blocked() const { return vendor_change_manager.get_vendor_changes_blocked(); }
+
 private:
     friend class VendorChangeManager;
 

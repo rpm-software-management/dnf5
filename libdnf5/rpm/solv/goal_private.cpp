@@ -424,6 +424,10 @@ libdnf5::GoalProblem GoalPrivate::resolve() {
     libsolv_solver.set_flag(SOLVER_FLAG_ALLOW_VENDORCHANGE, vendor_change);
     libsolv_solver.set_flag(SOLVER_FLAG_DUP_ALLOW_VENDORCHANGE, vendor_change);
 
+    if (!allow_vendor_change) {
+        pool.reset_vendor_changes_blocked();
+    }
+
 #if defined(LIBSOLV_FLAG_FOCUSNEW)
     // Ensure the solver tries to install the latest versions of dependencies, even if it results in a bigger transaction
     // Available since libsolv-0.7.30

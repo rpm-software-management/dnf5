@@ -139,6 +139,7 @@ bool VendorChangeManager::is_vendor_change_allowed(Solvable & outgoing, Solvable
     if (outgoing_vendor_mask.empty()) {
         // The outgoing vendor is not involved in any valid policy change.
         // Therefore, any change is illegal.
+        vendor_changes_blocked = true;
         return false;
     }
 
@@ -171,6 +172,7 @@ bool VendorChangeManager::is_vendor_change_allowed(Solvable & outgoing, Solvable
         }
     }
 
+    vendor_changes_blocked = true;
     return false;  // Illegal vendor change
 }
 

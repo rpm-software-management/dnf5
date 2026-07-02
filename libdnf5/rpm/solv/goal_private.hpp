@@ -151,6 +151,7 @@ public:
     void set_allow_downgrade(bool value) { allow_downgrade = value; }
     void set_allow_erasing(bool value) { allow_erasing = value; }
     void set_allow_vendor_change(bool value) { allow_vendor_change = value; }
+    bool get_allow_vendor_change() const { return allow_vendor_change; }
     void set_install_weak_deps(bool value) { install_weak_deps = value; }
     /// Remove SOLVER_WEAK and add SOLVER_BEST to all jobs to allow report skipped packages and best candidates
     /// with broken dependencies

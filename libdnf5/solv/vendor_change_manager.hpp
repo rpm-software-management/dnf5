@@ -65,6 +65,9 @@ public:
     /// @return true if the transition is permitted by the policies
     [[nodiscard]] bool is_vendor_change_allowed(Solvable & outgoing, Solvable & incoming);
 
+    void reset_vendor_changes_blocked() { vendor_changes_blocked = false; }
+    bool get_vendor_changes_blocked() const { return vendor_changes_blocked; }
+
     /// Check if a solvable is in the list of incoming solvables that bypass vendor check.
     /// @param solvable_id The solvable ID to check
     /// @return true if the solvable bypasses vendor check, false otherwise
@@ -96,6 +99,7 @@ private:
     std::vector<VendorChangePolicy> vendor_policies_def;
     std::vector<VendorChangeMasks> vendor_masks;
     SolvMap incoming_vendor_bypassed_solvables{0};
+    bool vendor_changes_blocked{false};
 
     /// Retrieve or cache masks for a specific vendor
     /// @param vendor The vendor ID
