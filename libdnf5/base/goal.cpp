@@ -3600,6 +3600,7 @@ base::Transaction Goal::resolve() {
 
     auto & pool = get_rpm_pool(p_impl->base);
     pool.get_incoming_vendor_bypassed_solvables() = p_impl->incoming_vendor_bypassed_solvables;
+    pool.clear_blocked_vendor_changes();
 
     ret |= p_impl->rpm_goal.resolve();
 
