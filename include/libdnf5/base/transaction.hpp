@@ -100,6 +100,9 @@ public:
     /// @return list of packages skipped due to conflicts
     std::vector<libdnf5::rpm::Package> get_conflicting_packages() const;
 
+    /// @return list of packages skipped due to vendor change restriction, paired with installed vendor string
+    const std::vector<std::pair<libdnf5::rpm::Package, std::string>> & get_vendor_change_skipped_packages() const;
+
     /// @return `true` if the transaction is empty.
     bool empty() const;
 

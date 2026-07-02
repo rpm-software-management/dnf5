@@ -133,6 +133,7 @@ private:
     std::vector<std::vector<std::pair<libdnf5::ProblemRules, std::vector<std::string>>>> solver_problems{};
     std::vector<libdnf5::rpm::Package> broken_dependency_packages;
     std::vector<libdnf5::rpm::Package> conflicting_packages;
+    std::vector<std::pair<libdnf5::rpm::Package, std::string>> vendor_change_skipped_packages;
 
     // history db transaction id
     int64_t history_db_id = 0;
