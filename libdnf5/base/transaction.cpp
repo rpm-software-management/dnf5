@@ -60,7 +60,7 @@
 
 #include <filesystem>
 #include <iostream>
-#include <ranges>
+#include <set>
 #include <sstream>
 #include <string_view>
 #include <thread>
@@ -221,7 +221,10 @@ Transaction::Impl::Impl(Transaction & transaction, const Impl & src)
 #endif
       resolve_logs(src.resolve_logs),
       transaction_problems(src.transaction_problems),
-      signature_problems(src.signature_problems) {
+      signature_problems(src.signature_problems),
+      broken_dependency_packages(src.broken_dependency_packages),
+      conflicting_packages(src.conflicting_packages),
+      vendor_change_skipped_packages(src.vendor_change_skipped_packages) {
 }
 
 Transaction::Impl & Transaction::Impl::operator=(const Impl & other) {
@@ -239,6 +242,9 @@ Transaction::Impl & Transaction::Impl::operator=(const Impl & other) {
     resolve_logs = other.resolve_logs;
     transaction_problems = other.transaction_problems;
     signature_problems = other.signature_problems;
+    broken_dependency_packages = other.broken_dependency_packages;
+    conflicting_packages = other.conflicting_packages;
+    vendor_change_skipped_packages = other.vendor_change_skipped_packages;
     return *this;
 }
 
@@ -416,6 +422,11 @@ std::vector<libdnf5::rpm::Package> Transaction::get_broken_dependency_packages()
 
 std::vector<libdnf5::rpm::Package> Transaction::get_conflicting_packages() const {
     return p_impl->conflicting_packages;
+}
+
+const std::vector<std::pair<libdnf5::rpm::Package, std::string>> & Transaction::get_vendor_change_skipped_packages()
+    const {
+    return p_impl->vendor_change_skipped_packages;
 }
 
 std::string Transaction::transaction_result_to_string(const TransactionRunResult result) {
@@ -694,6 +705,11 @@ void Transaction::Impl::set_transaction(
 #endif
     GoalProblem problems) {
     process_solver_problems(solved_goal);
+
+    // Snapshot blocked_vendor_changes from the first solve before the strict-mode
+    // re-solve below can add entries from its own vendor-change denials.
+    const auto blocked_vendor_changes = get_rpm_pool(base).get_blocked_vendor_changes();
+
     if (!solver_problems.empty()) {
         add_resolve_log(GoalProblem::SOLVER_ERROR, solver_problems);
     } else {
@@ -707,6 +723,60 @@ void Transaction::Impl::set_transaction(
             add_resolve_log(GoalProblem::SOLVER_PROBLEM_STRICT_RESOLVEMENT, solver_problems);
         }
     }
+
+    // Third solve: detect packages skipped due to vendor change restriction.
+    // Only run when vendor change is disallowed and the solver actually
+    // rejected at least one vendor change during the first solve.
+    if (!base->get_config().get_allow_vendor_change_option().get_value() && !blocked_vendor_changes.empty()) {
+        rpm::solv::GoalPrivate vendor_goal(solved_goal);
+        vendor_goal.set_allow_vendor_change(true);
+        const auto vendor_problems = vendor_goal.resolve();
+        if ((vendor_problems & GoalProblem::SOLVER_ERROR) != GoalProblem::SOLVER_ERROR &&
+            vendor_goal.get_transaction()) {
+            auto & pool = get_rpm_pool(base);
+            std::set<std::string> original_nevras;
+            if (solved_goal.get_transaction()) {
+                for (auto id : solved_goal.list_upgrades()) {
+                    original_nevras.emplace(pool.get_nevra(id));
+                }
+                for (auto id : solved_goal.list_downgrades()) {
+                    original_nevras.emplace(pool.get_nevra(id));
+                }
+                for (auto id : solved_goal.list_reinstalls()) {
+                    original_nevras.emplace(pool.get_nevra(id));
+                }
+                for (auto id : solved_goal.list_installs()) {
+                    original_nevras.emplace(pool.get_nevra(id));
+                }
+            }
+
+            // A candidate was skipped due to vendor change restriction when:
+            //   1. vendor_goal (vendor change allowed) would include it, and
+            //   2. the first solve excluded it, and
+            //   3. the first solve's vendor-change callback denied the transition.
+            // blocked_vendor_changes maps incoming solvable IDs to the installed
+            // vendor string for every transition the callback denied, covering all
+            // categories — upgrades, downgrades, reinstalls, installs-via-obsolete,
+            // and installonly packages.
+            auto check = [&](libdnf5::solv::IdQueue && ids) {
+                for (auto id : ids) {
+                    if (original_nevras.contains(pool.get_nevra(id))) {
+                        continue;
+                    }
+                    auto it = blocked_vendor_changes.find(id);
+                    if (it != blocked_vendor_changes.end()) {
+                        vendor_change_skipped_packages.emplace_back(rpm::Package(base, rpm::PackageId(id)), it->second);
+                    }
+                }
+            };
+
+            check(vendor_goal.list_upgrades());
+            check(vendor_goal.list_downgrades());
+            check(vendor_goal.list_reinstalls());
+            check(vendor_goal.list_installs());
+        }
+    }
+
     this->problems = problems;
 
     if ((problems & GoalProblem::MODULE_SOLVER_ERROR) != GoalProblem::NO_PROBLEM ||
