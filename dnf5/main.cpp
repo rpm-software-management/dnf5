@@ -1610,6 +1610,12 @@ int main(int argc, char * argv[]) try {
             }
         } catch (libdnf5::cli::GoalResolveError & ex) {
             std::cerr << ex.what() << std::endl;
+            if (context.get_transaction() != nullptr) {
+                libdnf5::cli::output::TransactionAdapter cli_output_transaction(*context.get_transaction());
+                libdnf5::cli::output::TransactionTable table(
+                    static_cast<libdnf5::cli::output::ITransaction &>(cli_output_transaction));
+                table.print_table();
+            }
             if (!any_repos_from_system_configuration && base.get_config().get_installroot_option().get_value() != "/" &&
                 !base.get_config().get_use_host_config_option().get_value()) {
                 std::cerr
