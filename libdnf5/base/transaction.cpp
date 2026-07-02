@@ -58,6 +58,7 @@
 #include <filesystem>
 #include <iostream>
 #include <ranges>
+#include <set>
 #include <sstream>
 #include <string_view>
 #include <thread>
@@ -415,6 +416,10 @@ std::vector<libdnf5::rpm::Package> Transaction::get_conflicting_packages() const
     return p_impl->conflicting_packages;
 }
 
+std::vector<std::pair<libdnf5::rpm::Package, std::string>> Transaction::get_vendor_change_skipped_packages() const {
+    return p_impl->vendor_change_skipped_packages;
+}
+
 std::string Transaction::transaction_result_to_string(const TransactionRunResult result) {
     switch (result) {
         case TransactionRunResult::SUCCESS:
@@ -700,6 +705,60 @@ void Transaction::Impl::set_transaction(
             add_resolve_log(GoalProblem::SOLVER_PROBLEM_STRICT_RESOLVEMENT, solver_problems);
         }
     }
+
+    // Third solve: detect packages skipped due to vendor change restriction.
+    // Only run when vendor change is disallowed and the solver actually
+    // rejected at least one vendor change during the first solve.
+    if (!solved_goal.get_allow_vendor_change() && get_rpm_pool(base).get_vendor_changes_blocked()) {
+        rpm::solv::GoalPrivate vendor_goal(solved_goal);
+        vendor_goal.set_allow_vendor_change(true);
+        if (vendor_goal.resolve() != GoalProblem::SOLVER_ERROR && vendor_goal.get_transaction()) {
+            std::set<Id> original_ids;
+            if (solved_goal.get_transaction()) {
+                for (auto id : solved_goal.list_upgrades()) {
+                    original_ids.insert(id);
+                }
+                for (auto id : solved_goal.list_downgrades()) {
+                    original_ids.insert(id);
+                }
+                for (auto id : solved_goal.list_reinstalls()) {
+                    original_ids.insert(id);
+                }
+                for (auto id : solved_goal.list_installs()) {
+                    original_ids.insert(id);
+                }
+            }
+
+            rpm::PackageQuery installed_query(base, rpm::PackageQuery::ExcludeFlags::IGNORE_EXCLUDES);
+            installed_query.filter_installed();
+
+            auto check_vendor_diff = [&](libdnf5::solv::IdQueue && ids) {
+                for (auto id : ids) {
+                    if (original_ids.contains(id)) {
+                        continue;
+                    }
+                    rpm::Package candidate(base, rpm::PackageId(id));
+                    rpm::PackageQuery installed_na(installed_query);
+                    installed_na.filter_name({candidate.get_name()});
+                    installed_na.filter_arch({candidate.get_arch()});
+                    for (const auto & installed_pkg : installed_na) {
+                        if (installed_pkg.get_vendor() != candidate.get_vendor()) {
+                            auto installed_vendor = installed_pkg.get_vendor();
+                            vendor_change_skipped_packages.emplace_back(
+                                std::move(candidate), std::move(installed_vendor));
+                            break;
+                        }
+                    }
+                }
+            };
+
+            check_vendor_diff(vendor_goal.list_upgrades());
+            check_vendor_diff(vendor_goal.list_downgrades());
+            check_vendor_diff(vendor_goal.list_reinstalls());
+            check_vendor_diff(vendor_goal.list_installs());
+        }
+    }
+
     this->problems = problems;
 
     if ((problems & GoalProblem::MODULE_SOLVER_ERROR) != GoalProblem::NO_PROBLEM ||

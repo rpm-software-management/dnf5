@@ -49,6 +49,7 @@ public:
 
     std::vector<DbusPackageWrapper> get_conflicting_packages() const { return conflicting_packages; }
     std::vector<DbusPackageWrapper> get_broken_dependency_packages() const { return broken_dependency_packages; }
+    std::vector<std::pair<DbusPackageWrapper, std::string>> get_vendor_change_skipped_packages() const { return {}; }
 
 private:
     std::vector<DbusTransactionPackageWrapper> transaction_packages;

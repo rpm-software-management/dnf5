@@ -265,6 +265,7 @@ private:
     std::optional<libdnf5::transaction::TransactionItemAction> current_action;
     std::optional<libdnf5::transaction::TransactionItemReason> current_reason;
     bool table_empty{true};
+    std::vector<std::pair<std::string, unsigned int>> vendor_change_summaries;
 };
 
 TransactionTable::Impl::Impl(ITransaction & transaction) {
@@ -496,8 +497,6 @@ TransactionTable::Impl::Impl(ITransaction & transaction) {
     for (const auto & [skipped_packages, header] : skipped) {
         std::optional<std::reference_wrapper<TransactionTableSection>> section;
         for (const auto & pkg : skipped_packages) {
-            // Packages for which another package with the same NEVRA is already part
-            // of the transaction are skipped.
             if (tspkgs_nevra.contains(pkg->get_full_nevra())) {
                 continue;
             }
@@ -519,10 +518,33 @@ TransactionTable::Impl::Impl(ITransaction & transaction) {
             section.value().get().set_last_line(ln);
         }
     }
+
+    {
+        auto vendor_change = transaction.get_vendor_change_skipped_packages();
+        for (const auto & [pkg, installed_vendor] : vendor_change) {
+            if (tspkgs_nevra.contains(pkg->get_full_nevra())) {
+                continue;
+            }
+            auto is_empty_vendor = [](const std::string & v) { return v.empty() || v == "<NULL>"; };
+            auto from_vendor = is_empty_vendor(installed_vendor) ? std::string(_("None")) : installed_vendor;
+            auto candidate_vendor = pkg->get_vendor();
+            auto to_vendor = is_empty_vendor(candidate_vendor) ? std::string(_("None")) : candidate_vendor;
+            std::string key = libdnf5::utils::sformat("\"{}\" -> \"{}\"", from_vendor, to_vendor);
+            auto it =
+                std::find_if(vendor_change_summaries.begin(), vendor_change_summaries.end(), [&](const auto & entry) {
+                    return entry.first == key;
+                });
+            if (it != vendor_change_summaries.end()) {
+                it->second++;
+            } else {
+                vendor_change_summaries.emplace_back(std::move(key), 1);
+            }
+        }
+    }
 }
 
 void TransactionTable::Impl::print_table() {
-    if (table_empty) {
+    if (table_empty && vendor_change_summaries.empty()) {
         return;
     }
     auto fd = scols_table_get_stream(*tb);
@@ -534,6 +556,25 @@ void TransactionTable::Impl::print_table() {
             std::fputc('\n', fd);
         }
         scols_table_print_range(*tb, section.get_first_line(), section.get_last_line());
+    }
+    if (!vendor_change_summaries.empty()) {
+        if (!table_empty) {
+            std::fputc('\n', fd);
+        }
+        for (const auto & [vendor_transition, count] : vendor_change_summaries) {
+            std::fputs(
+                libdnf5::utils::sformat(
+                    P_("Skipping {0} package due to vendor change restriction: {1}.",
+                       "Skipping {0} packages due to vendor change restriction: {1}.",
+                       count),
+                    count,
+                    vendor_transition)
+                    .c_str(),
+                fd);
+            std::fputc('\n', fd);
+        }
+        std::fputs(_("Use '--setopt=allow_vendor_change=true' to include vendor-changed packages."), fd);
+        std::fputc('\n', fd);
     }
     std::fputc('\n', fd);
     // add empty line after the transaction table

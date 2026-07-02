@@ -85,6 +85,8 @@ public:
     virtual std::vector<std::unique_ptr<ITransactionPackage>> get_transaction_packages() const = 0;
     virtual std::vector<std::unique_ptr<IPackage>> get_conflicting_packages() const = 0;
     virtual std::vector<std::unique_ptr<IPackage>> get_broken_dependency_packages() const = 0;
+    virtual std::vector<std::pair<std::unique_ptr<IPackage>, std::string>> get_vendor_change_skipped_packages()
+        const = 0;
     virtual std::vector<std::unique_ptr<ITransactionGroup>> get_transaction_groups() const = 0;
     virtual std::vector<std::unique_ptr<ITransactionModule>> get_transaction_modules() const = 0;
     virtual std::vector<std::unique_ptr<ITransactionEnvironment>> get_transaction_environments() const = 0;
