@@ -112,9 +112,10 @@ The change proposal: `MajorUpgradeOfMicrodnf
 Fedora Linux 39
 ---------------
 
-Discontinue modularity support in dnf5.  The Module Build Service was
+Discontinue modularity development in dnf5.  The Module Build Service was
 planned for shut down after Fedora Linux 38 reached EOL, so this
-release removed modularity support from the dnf5 stack.
+Fedora release removed a modular content from its repositories and
+the dnf5 team stopped developing modularity support in the dnf5 stack.
 
 The change proposal: `RetireModularity
 <https://fedoraproject.org/wiki/Changes/RetireModularity>`_
