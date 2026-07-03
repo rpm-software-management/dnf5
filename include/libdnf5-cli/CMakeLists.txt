@@ -16,6 +16,9 @@ if (NOT WITH_MODULEMD)
     list(REMOVE_ITEM LIBDNF5_CLI_HEADERS ${LIBDNF5_CLI_HEADERS_MODULES})
 endif()
 
+# Gather to-be-installed header files for a documentation.
+list(APPEND DOCUMENTED_HEADERS ${LIBDNF5_CLI_HEADERS})
+set(DOCUMENTED_HEADERS ${DOCUMENTED_HEADERS} PARENT_SCOPE)
 
 # preserve relative paths of the header files
 foreach(abspath ${LIBDNF5_CLI_HEADERS})
