@@ -26,6 +26,7 @@
 #include "utils/url.hpp"
 
 #include "libdnf5/utils/fs/file.hpp"
+#include "libdnf5/utils/fs/utils.hpp"
 
 #include <fmt/format.h>
 #include <libdnf5-cli/progressbar/multi_progress_bar.hpp>
@@ -420,7 +421,7 @@ static void prepopulate_offline_cache(
         auto dest_path = packages_dir / cached_path.filename();
         std::error_code ec;
         if (!std::filesystem::exists(dest_path, ec)) {
-            std::filesystem::copy_file(cached_path, dest_path, ec);
+            libdnf5::utils::fs::reflink_or_copy(cached_path, dest_path, ec);
         }
     }
 }
