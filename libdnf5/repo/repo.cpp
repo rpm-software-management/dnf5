@@ -30,6 +30,7 @@ constexpr const char * REPOID_CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmno
 #include "libdnf5/common/exception.hpp"
 #include "libdnf5/conf/const.hpp"
 #include "libdnf5/utils/bgettext/bgettext-mark-domain.h"
+#include "libdnf5/utils/fs/utils.hpp"
 
 extern "C" {
 #include <solv/repo_rpmdb.h>
@@ -544,6 +545,27 @@ void Repo::internalize() {
 }
 
 
+namespace {
+
+// Reflink-or-copy every entry from a flat cache directory into `dest_dir`.
+// Regular files are reflinked when possible; other entry types fall back to std::filesystem::copy.
+void reflink_or_copy_cache(
+    const std::filesystem::path & src_dir, const std::filesystem::path & dest_dir, std::error_code & ec) {
+    for (const auto & entry : std::filesystem::directory_iterator(src_dir, ec)) {
+        auto dest = dest_dir / entry.path().filename();
+        if (entry.is_regular_file()) {
+            utils::fs::reflink_or_copy(entry.path(), dest, ec);
+        } else {
+            std::filesystem::copy(entry.path(), dest, ec);
+        }
+        if (ec) {
+            return;
+        }
+    }
+}
+
+}  // namespace
+
 bool Repo::clone_root_metadata() {
     auto & logger = *p_impl->base->get_logger();
 
@@ -585,38 +607,40 @@ bool Repo::clone_root_metadata() {
     auto repodata_cachedir = std::filesystem::path(repo_cachedir) / CACHE_METADATA_DIR;
     auto root_repodata_metalink = std::filesystem::path(root_repo_cachedir) / CACHE_METALINK_FILE;
     auto root_repodata_mirrorlist = std::filesystem::path(root_repo_cachedir) / CACHE_MIRRORLIST_FILE;
-    try {
-        std::filesystem::create_directories(repodata_cachedir);
-        std::filesystem::copy(root_repodata_cachedir, repodata_cachedir);
-        if (std::filesystem::exists(root_repodata_metalink)) {
-            std::filesystem::copy(root_repodata_metalink, repo_cachedir);
-        }
-        if (std::filesystem::exists(root_repodata_mirrorlist)) {
-            std::filesystem::copy(root_repodata_mirrorlist, repo_cachedir);
-        }
-    } catch (const std::filesystem::filesystem_error & e) {
+    std::filesystem::create_directories(repodata_cachedir, ec);
+    if (!ec) {
+        reflink_or_copy_cache(root_repodata_cachedir, repodata_cachedir, ec);
+    }
+    if (!ec && std::filesystem::exists(root_repodata_metalink, ec)) {
+        utils::fs::reflink_or_copy(root_repodata_metalink, repo_cachedir / root_repodata_metalink.filename(), ec);
+    }
+    if (!ec && std::filesystem::exists(root_repodata_mirrorlist, ec)) {
+        utils::fs::reflink_or_copy(root_repodata_mirrorlist, repo_cachedir / root_repodata_mirrorlist.filename(), ec);
+    }
+    if (ec) {
         logger.debug(
             "Error when cloning root repodata from \"{}\" to \"{}\" : \"{}\"",
             root_repodata_cachedir.c_str(),
             repodata_cachedir.c_str(),
-            e.what());
+            ec.message());
         repo_cache.remove_metadata();
         return false;
     }
 
     auto root_solv_cachedir = std::filesystem::path(root_repo_cachedir) / CACHE_SOLV_FILES_DIR;
     auto solv_cachedir = std::filesystem::path(repo_cachedir) / CACHE_SOLV_FILES_DIR;
-    try {
-        if (std::filesystem::exists(root_solv_cachedir)) {
-            std::filesystem::create_directories(solv_cachedir);
-            std::filesystem::copy(root_solv_cachedir, solv_cachedir);
+    if (std::filesystem::exists(root_solv_cachedir, ec)) {
+        std::filesystem::create_directories(solv_cachedir, ec);
+        if (!ec) {
+            reflink_or_copy_cache(root_solv_cachedir, solv_cachedir, ec);
         }
-    } catch (const std::filesystem::filesystem_error & e) {
+    }
+    if (ec) {
         logger.debug(
             "Error when cloning root solv data from \"{}\" to \"{}\" : \"{}\"",
             root_solv_cachedir.c_str(),
             solv_cachedir.c_str(),
-            e.what());
+            ec.message());
         repo_cache.remove_solv_files();
     }
 
