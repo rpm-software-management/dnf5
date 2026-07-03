@@ -11,6 +11,7 @@
 #include <libdnf5/plugin/iplugin.hpp>
 #include <libdnf5/repo/repo.hpp>
 #include <libdnf5/repo/repo_query.hpp>
+#include <libdnf5/utils/fs/utils.hpp>
 #include <sys/wait.h>
 
 
@@ -104,20 +105,32 @@ public:
                 if (pkg.get_repo_id() == LOCAL_REPO_NAME_GPGCHECK || pkg.get_repo_id() == LOCAL_REPO_NAME_NOGPGCHECK) {
                     continue;
                 }
+                auto src = std::filesystem::path(pkg.get_package_path());
+                std::error_code ec;
                 if (pkg.is_pkg_gpgcheck_enabled()) {
                     if (!need_rebuild_gpgcheck) {
-                        std::filesystem::create_directories(repodir);
+                        std::filesystem::create_directories(repodir, ec);
                     }
-                    std::filesystem::copy(
-                        pkg.get_package_path(), repodir, std::filesystem::copy_options::overwrite_existing);
-                    need_rebuild_gpgcheck = true;
+                    if (!ec) {
+                        libdnf5::utils::fs::reflink_or_copy(src, repodir / src.filename(), ec);
+                    }
+                    if (!ec) {
+                        need_rebuild_gpgcheck = true;
+                    }
                 } else {
                     if (!need_rebuild_nogpgcheck) {
-                        std::filesystem::create_directories(repodir_nogpgcheck);
+                        std::filesystem::create_directories(repodir_nogpgcheck, ec);
                     }
-                    std::filesystem::copy(
-                        pkg.get_package_path(), repodir_nogpgcheck, std::filesystem::copy_options::overwrite_existing);
-                    need_rebuild_nogpgcheck = true;
+                    if (!ec) {
+                        libdnf5::utils::fs::reflink_or_copy(src, repodir_nogpgcheck / src.filename(), ec);
+                    }
+                    if (!ec) {
+                        need_rebuild_nogpgcheck = true;
+                    }
+                }
+                if (ec) {
+                    auto & logger = *get_base().get_logger();
+                    logger.warning("local plugin: failed to copy {}: {}", src.string(), ec.message());
                 }
             }
         }
