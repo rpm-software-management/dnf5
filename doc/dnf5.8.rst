@@ -183,6 +183,11 @@ Following options are applicable in the general context for any ``dnf5`` command
 ``--assumeno``
     | Automatically answer no for all questions.
 
+.. _allow_vendor_change_option_ref-label:
+
+``--allow-vendor-change``
+    | Allow automatic package replacements from different vendors for RPM upgrades or downgrades.
+
 .. _best_option_ref-label:
 
 ``--best``
@@ -259,6 +264,13 @@ Following options are applicable in the general context for any ``dnf5`` command
     | Setup installroot path.
     | Absolute path is required.
     | :ref:`See <installroot_misc_ref-label>` :manpage:`dnf5-installroot(7)` for more info.
+
+.. _no_allow_vendor_change_option_ref-label:
+
+``--no-allow-vendor-change``
+    | Do not allow automatic package replacements from different vendors for RPM upgrades or downgrades.
+    | The behavior of this option can be fine-tuned with vendor change policy configuration.
+    | :ref:`See <vendorpolicy_conf-label>` :manpage:`dnf5.conf-vendorpolicy(5)` for more info.
 
 .. _no_best_option_ref-label:
 
@@ -511,6 +523,7 @@ Library Plugins:
 
 Configuration:
     | :manpage:`dnf5.conf(5)`, :ref:`DNF5 Configuration Reference <dnf5_conf-label>`
+    | :manpage:`dnf5.conf-vendorpolicy(5)`, :ref:`DNF5 Vendor Change Policy File Reference <vendorpolicy_conf-label>`
 
 Miscellaneous:
     | :manpage:`dnf5-aliases(7)`, :ref:`Aliases for command line arguments <aliases_misc_ref-label>`

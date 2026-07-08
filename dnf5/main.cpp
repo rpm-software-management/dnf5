@@ -335,6 +335,22 @@ void RootCommand::set_argument_parser() {
 
     no_best->add_conflict_argument(*best);
 
+    auto allow_vendor_change = parser.add_new_named_arg("allow-vendor-change");
+    allow_vendor_change->set_long_name("allow-vendor-change");
+    allow_vendor_change->set_description(_("allow automatic package replacements from different vendors"));
+    allow_vendor_change->set_const_value("true");
+    allow_vendor_change->link_value(&config.get_allow_vendor_change_option());
+    global_options_group->register_argument(allow_vendor_change);
+
+    auto no_allow_vendor_change = parser.add_new_named_arg("no-allow-vendor-change");
+    no_allow_vendor_change->set_long_name("no-allow-vendor-change");
+    no_allow_vendor_change->set_description(_("do not allow automatic package replacements from different vendors"));
+    no_allow_vendor_change->set_const_value("false");
+    no_allow_vendor_change->link_value(&config.get_allow_vendor_change_option());
+    global_options_group->register_argument(no_allow_vendor_change);
+
+    no_allow_vendor_change->add_conflict_argument(*allow_vendor_change);
+
     {
         auto no_docs = parser.add_new_named_arg("no-docs");
         no_docs->set_long_name("no-docs");
@@ -1160,7 +1176,7 @@ static void print_resolve_hints(dnf5::Context & context) {
         }
 
         if (!conf.get_allow_vendor_change_option().get_value() && vendor_change) {
-            const std::string_view arg{"--setopt=allow_vendor_change=true"};
+            const std::string_view arg{"--allow-vendor-change"};
             hints.emplace_back(libdnf5::utils::sformat(_("{} to allow changing package vendors"), arg));
         }
 
