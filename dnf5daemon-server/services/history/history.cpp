@@ -171,18 +171,24 @@ sdbus::MethodReply History::recent_changes(sdbus::MethodCall & call) {
     };
 
     // first pass: find the latest transaction end time for each package
+    // and collect NAs of UPGRADE/DOWNGRADE entries (keyed by name) so that
+    // REPLACED entries can find their replacement when the arch changed
     std::unordered_map<std::string, uint64_t> latest_trans_time;
+    std::unordered_map<std::string, std::string> upgraded_na;
     for (auto & transaction : transactions) {
         if (transaction.get_state() != libdnf5::transaction::TransactionState::OK) {
             continue;
         }
         for (const auto & pkg : transaction.get_packages()) {
             const auto action = pkg.get_action();
-            if (action != Action::INSTALL && action != Action::REMOVE && action != Action::REPLACED) {
+            auto key = get_pkg_key(pkg);
+            if (action == Action::UPGRADE || action == Action::DOWNGRADE) {
+                upgraded_na[pkg.get_name()] = key;
+            } else if (action != Action::INSTALL && action != Action::REMOVE && action != Action::REPLACED) {
                 continue;
             }
             auto dt_end = transaction.get_dt_end();
-            latest_trans_time[get_pkg_key(pkg)] = dt_end >= 0 ? static_cast<uint64_t>(dt_end) : 0;
+            latest_trans_time[key] = dt_end >= 0 ? static_cast<uint64_t>(dt_end) : 0;
         }
     }
 
@@ -227,8 +233,19 @@ sdbus::MethodReply History::recent_changes(sdbus::MethodCall & call) {
             } else {
                 // package was REMOVEd or REPLACED
                 // check the current installed version of the package
+                if (installed_pkg == installed_na.end() && action == Action::REPLACED) {
+                    // NA lookup failed, try to find the replacement via
+                    // the paired UPGRADE/DOWNGRADE record
+                    auto upgrade_it = upgraded_na.find(pkg.get_name());
+                    if (upgrade_it != upgraded_na.end()) {
+                        installed_pkg = installed_na.find(upgrade_it->second);
+                        if (installed_pkg != installed_na.end()) {
+                            seen_pkg.insert(upgrade_it->second);
+                        }
+                    }
+                }
                 if (installed_pkg != installed_na.end()) {
-                    if (libdnf5::rpm::cmp_nevra(pkg, installed_na.at(pkg_key))) {
+                    if (libdnf5::rpm::cmp_nevra(pkg, installed_pkg->second)) {
                         if (upgraded_requested) {
                             upgrades_installed.add(installed_pkg->second);
                             upgrades.emplace_back(pkg, installed_pkg->second);
@@ -243,11 +260,12 @@ sdbus::MethodReply History::recent_changes(sdbus::MethodCall & call) {
                                 upgrades_original.emplace_back(std::move(nevra));
                             }
                         }
-                    } else if (libdnf5::rpm::cmp_nevra(installed_na.at(pkg_key), pkg)) {
+                    } else if (libdnf5::rpm::cmp_nevra(installed_pkg->second, pkg)) {
                         if (downgraded_requested) {
                             auto replace_pkg = package_to_map(installed_pkg->second, pkg_attrs);
                             replace_pkg.emplace("original_evr", get_evr(pkg));
-                            replace_pkg.emplace("transaction_time", latest_trans_time[pkg_key]);
+                            replace_pkg.emplace("original_arch", pkg.get_arch());
+                            replace_pkg.emplace("transaction_time", latest_trans_time[installed_pkg->first]);
                             out_downgraded.push_back(std::move(replace_pkg));
                         }
                     }
@@ -295,6 +313,7 @@ sdbus::MethodReply History::recent_changes(sdbus::MethodCall & call) {
         for (const auto & [old_pkg, new_pkg] : upgrades) {
             auto replace_pkg = package_to_map(new_pkg, pkg_attrs);
             replace_pkg.emplace("original_evr", get_evr(old_pkg));
+            replace_pkg.emplace("original_arch", old_pkg.get_arch());
             replace_pkg.emplace("transaction_time", latest_trans_time[new_pkg.get_na()]);
             if (include_advisory) {
                 auto advisories = advisories_by_name.find(new_pkg.get_name());

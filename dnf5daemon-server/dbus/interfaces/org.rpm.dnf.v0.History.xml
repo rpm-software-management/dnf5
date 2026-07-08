@@ -32,8 +32,11 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
         @options: an array of key/value pairs
         @changeset: a dictionary {"<type_of_change>":[<package>,<package>,...]}
 
-        Get a list of packages that have been recently changed. The
-        "type_of_change" key in the output dictionary can be one of the
+        Get a list of packages that have been recently changed. The result
+        represents the difference between the currently installed package set
+        and the set at a given point in time.
+
+        The "type_of_change" key in the output dictionary can be one of the
         following: "installed", "removed", "upgraded", or "downgraded". The
         packages in the output are represented as dictionaries containing the
         requested set of attributes for the changed packages.
@@ -41,8 +44,9 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
         For installed, upgraded, and downgraded packages, the currently
         installed version is returned.
 
-        For upgraded and downgraded packages, the "original_evr" attribute
-        is also included, containing the package EVR before the change.
+        For upgraded and downgraded packages, the "original_evr" and
+        "original_arch" attributes are also included, containing the
+        package EVR and architecture before the change.
 
         If requested, upgraded packages may also include an "advisories" list
         field, indicating the name of the updates that contain the upgraded
