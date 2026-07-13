@@ -1,0 +1,11 @@
+# Documentation of available options:
+# https://docs.qodo.ai/install-and-configure/configuration-overview/configuration-and-command-reference
+
+[review_agent]
+comments_location_policy = "inline"
+
+[review_agent_ux]
+use_images_and_animations = false
+
+[qodo_describe_agent]
+publish_mode = "comment"
