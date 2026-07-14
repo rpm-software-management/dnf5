@@ -46,10 +46,12 @@ public:
         return nullptr;
     }
 
-    int end([[maybe_unused]] void * user_cb_data, [[maybe_unused]] TransferStatus status, const char * error_message)
-        override {
+    int end([[maybe_unused]] void * user_cb_data, TransferStatus status, const char * error_message) override {
         ++end_cnt;
         end_error_message = libdnf5::utils::string::c_to_str(error_message);
+        if (status == TransferStatus::ERROR) {
+            end_error_messages.push_back(end_error_message);
+        }
         return 0;
     }
 
@@ -84,6 +86,7 @@ public:
 
     int end_cnt = 0;
     std::string end_error_message;
+    std::vector<std::string> end_error_messages;
 
     int progress_cnt = 0;
     int fastest_mirror_cnt = 0;
@@ -94,9 +97,10 @@ class RepoCallbacks : public libdnf5::repo::RepoCallbacks {
 public:
     bool repokey_import([[maybe_unused]] const libdnf5::rpm::KeyInfo & key_info) override {
         ++repokey_import_cnt;
-        return true;
+        return accept_key_import;
     }
 
+    bool accept_key_import{true};
     int repokey_import_cnt = 0;
 };
 
@@ -205,4 +209,73 @@ void RepoTest::test_load_repos_load_available_system() {
     CPPUNIT_ASSERT_GREATEREQUAL(2, dl_callbacks_ptr->progress_cnt);
     CPPUNIT_ASSERT_EQUAL(0, dl_callbacks_ptr->fastest_mirror_cnt);
     CPPUNIT_ASSERT_EQUAL(0, dl_callbacks_ptr->handle_mirror_failure_cnt);
+}
+
+void RepoTest::test_load_repo_gpgcheck_no_keyring_error() {
+    std::string repoid("repomd-repo1-gpg");
+    std::filesystem::path repo_path = PROJECT_SOURCE_DIR "/test/data/repos-repomd";
+    repo_path /= repoid;
+    auto repo = repo_sack->create_repo(repoid);
+    repo->get_config().get_baseurl_option().set("file://" + repo_path.string());
+    repo->get_config().get_repo_gpgcheck_option().set(true);
+    repo->get_config().get_gpgkey_option().set(
+        std::vector<std::string>{"file://" + std::string(PROJECT_SOURCE_DIR) + "/test/data/keys/repo-gpg-key.pub"});
+
+    auto dl_callbacks = std::make_unique<DownloadCallbacks>();
+    auto dl_callbacks_ptr = dl_callbacks.get();
+    base.set_download_callbacks(std::move(dl_callbacks));
+
+    auto callbacks = std::make_unique<RepoCallbacks>();
+    auto cbs = callbacks.get();
+    repo->set_callbacks(std::move(callbacks));
+
+    repo_sack->load_repos(libdnf5::repo::Repo::Type::AVAILABLE);
+
+    // The key should have been imported
+    CPPUNIT_ASSERT_EQUAL(1, cbs->repokey_import_cnt);
+
+    // No "Signing key not found" error should be shown in download callbacks
+    for (const auto & msg : dl_callbacks_ptr->end_error_messages) {
+        CPPUNIT_ASSERT_MESSAGE(
+            "Download callback should not report 'Signing key not found' error: " + msg,
+            msg.find("Signing key not found") == std::string::npos);
+    }
+}
+
+void RepoTest::test_load_repo_gpgcheck_refused_key_shows_error() {
+    std::string repoid("repomd-repo1-gpg");
+    std::filesystem::path repo_path = PROJECT_SOURCE_DIR "/test/data/repos-repomd";
+    repo_path /= repoid;
+    auto repo = repo_sack->create_repo(repoid);
+    repo->get_config().get_baseurl_option().set("file://" + repo_path.string());
+    repo->get_config().get_repo_gpgcheck_option().set(true);
+    repo->get_config().get_gpgkey_option().set(
+        std::vector<std::string>{"file://" + std::string(PROJECT_SOURCE_DIR) + "/test/data/keys/repo-gpg-key.pub"});
+    repo->get_config().get_skip_if_unavailable_option().set(true);
+
+    auto dl_callbacks = std::make_unique<DownloadCallbacks>();
+    auto dl_callbacks_ptr = dl_callbacks.get();
+    base.set_download_callbacks(std::move(dl_callbacks));
+
+    auto callbacks = std::make_unique<RepoCallbacks>();
+    auto cbs = callbacks.get();
+    cbs->accept_key_import = false;
+    repo->set_callbacks(std::move(callbacks));
+
+    repo_sack->load_repos(libdnf5::repo::Repo::Type::AVAILABLE);
+
+    // Key import was offered but refused
+    CPPUNIT_ASSERT_EQUAL(1, cbs->repokey_import_cnt);
+
+    // "Signing key not found" error should be shown exactly once (second pass only)
+    int signing_key_error_cnt = 0;
+    for (const auto & msg : dl_callbacks_ptr->end_error_messages) {
+        if (msg.find("Signing key not found") != std::string::npos) {
+            ++signing_key_error_cnt;
+        }
+    }
+    CPPUNIT_ASSERT_EQUAL_MESSAGE(
+        "Download callback should report 'Signing key not found' error exactly once (second pass only)",
+        1,
+        signing_key_error_cnt);
 }

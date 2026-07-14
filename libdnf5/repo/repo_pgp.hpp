@@ -40,6 +40,12 @@ public:
     Key(const LrGpgKey * key, const LrGpgSubkey * subkey, const std::string & url, const std::string & path);
 };
 
+// Check whether an error message from librepo indicates a missing signing
+// key (resolvable by importing the repo's gpgkey).  String-based because
+// librepo currently uses LRE_BADGPG for all GPG errors; replace with a
+// return-code check when librepo gains a distinct code for missing keys.
+bool is_signing_key_not_found_error(const char * msg);
+
 /// Wraps OpenPGP in a higher-level interface.
 /// @exception RepoPgpError (public) Thrown on any OpenPGP-related error.
 class RepoPgp {

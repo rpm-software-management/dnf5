@@ -25,8 +25,13 @@
 #include "libdnf5/utils/fs/temp.hpp"
 
 #include <memory>
+#include <string_view>
 
 namespace libdnf5::repo {
+
+bool is_signing_key_not_found_error(const char * msg) {
+    return msg && std::string_view(msg).ends_with("Signing key not found");
+}
 
 Key::Key(const LrGpgKey * key, const LrGpgSubkey * subkey, const std::string & url, const std::string & path)
     : KeyInfo(
