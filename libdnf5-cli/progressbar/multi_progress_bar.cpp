@@ -110,11 +110,6 @@ void MultiProgressBar::set_total_num_of_bars(std::size_t value) noexcept {
     auto num_of_bars = static_cast<int>(value);
     if (num_of_bars != p_impl->total.get_total()) {
         p_impl->total.set_total(num_of_bars);
-
-        // update total (in [num/total]) in all bars to do
-        for (auto & i : p_impl->bars_todo) {
-            i->set_total(p_impl->total.get_total());
-        }
     }
 }
 
