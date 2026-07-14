@@ -292,6 +292,19 @@ sdbus::MethodReply Goal::resolve(sdbus::MethodCall & call) {
                 trans_item_attrs,
                 package_to_map(pkg, pkg_attrs));
         }
+        std::vector<std::string> vendor_pkg_attrs = pkg_attrs;
+        vendor_pkg_attrs.emplace_back("vendor");
+        for (const auto & [pkg, installed_vendor] : transaction.get_vendor_change_skipped_packages()) {
+            dnfdaemon::KeyValueMap trans_item_attrs{};
+            trans_item_attrs.emplace("reason_skipped", "vendor_change");
+            trans_item_attrs.emplace("installed_vendor", installed_vendor);
+            dbus_transaction.emplace_back(
+                dbus_transaction_item_type_to_string(dnfdaemon::DbusTransactionItemType::SKIPPED),
+                "",
+                "",
+                trans_item_attrs,
+                package_to_map(pkg, vendor_pkg_attrs));
+        }
     }
 
     auto reply = call.createReply();
