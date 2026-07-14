@@ -34,6 +34,8 @@ class RepoTest : public BaseTestCase {
     CPPUNIT_TEST(test_load_repos_invalid_type);
     CPPUNIT_TEST(test_load_repos_load_available);
     CPPUNIT_TEST(test_load_repos_load_available_system);
+    CPPUNIT_TEST(test_load_repo_gpgcheck_no_keyring_error);
+    CPPUNIT_TEST(test_load_repo_gpgcheck_refused_key_shows_error);
     CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -44,6 +46,8 @@ public:
     void test_load_repos_invalid_type();
     void test_load_repos_load_available();
     void test_load_repos_load_available_system();
+    void test_load_repo_gpgcheck_no_keyring_error();
+    void test_load_repo_gpgcheck_refused_key_shows_error();
 };
 
 #endif

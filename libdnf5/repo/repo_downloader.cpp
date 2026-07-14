@@ -19,6 +19,7 @@
 
 #include "repo_downloader.hpp"
 
+#include "repo_pgp.hpp"
 #include "utils/fs/utils.hpp"
 #include "utils/string.hpp"
 
@@ -83,6 +84,11 @@ int RepoDownloader::end_cb_full_download(void * data, LrTransferStatus status, c
         }
     }
     if (auto * download_callbacks = download_callback_data->repo->get_base()->get_download_callbacks()) {
+        if (cb_status == DownloadCallbacks::TransferStatus::ERROR && download_callback_data->suppress_keyring_errors &&
+            is_signing_key_not_found_error(msg)) {
+            return download_callbacks->end(
+                download_callback_data->user_cb_data, DownloadCallbacks::TransferStatus::SUCCESSFUL, nullptr);
+        }
         return download_callbacks->end(download_callback_data->user_cb_data, cb_status, msg);
     }
     return 0;
@@ -125,6 +131,10 @@ int RepoDownloader::end_cb_sync_check(void * data, LrTransferStatus status, cons
         }
     }
     if (auto * download_callbacks = cbd->repo->get_base()->get_download_callbacks()) {
+        if (cb_status == DownloadCallbacks::TransferStatus::ERROR && cbd->suppress_keyring_errors &&
+            is_signing_key_not_found_error(msg)) {
+            return download_callbacks->end(cbd->user_cb_data, DownloadCallbacks::TransferStatus::SUCCESSFUL, nullptr);
+        }
         return download_callbacks->end(cbd->user_cb_data, cb_status, msg);
     }
     return 0;
@@ -221,6 +231,7 @@ void RepoDownloader::add(
     cbd.repo = repo.get_weak_ptr();
     cbd.destination = destdir;
     cbd.load_repo = load_repo;
+    cbd.suppress_keyring_errors = suppress_keyring_errors;
     std::filesystem::create_directories(cbd.destination);
     cbd.temp_download_target = libdnf5::utils::fs::TempDir{cbd.destination, "tmpdir"};
 

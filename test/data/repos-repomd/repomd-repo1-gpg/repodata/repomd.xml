@@ -1,0 +1,11 @@
+<repomd xmlns="http://linux.duke.edu/metadata/repo">
+  <revision>1550000000</revision>
+  <data type="primary">
+    <checksum type="sha256">56cb6eeb023954ecf09727f06bed53954d219254eeec952cab86e75937d2b64b</checksum>
+    <open-checksum type="sha256">56cb6eeb023954ecf09727f06bed53954d219254eeec952cab86e75937d2b64b</open-checksum>
+    <location href="repodata/primary.xml" />
+    <timestamp>1597222003</timestamp>
+    <size>3268</size>
+    <open-size>3268</open-size>
+  </data>
+</repomd>

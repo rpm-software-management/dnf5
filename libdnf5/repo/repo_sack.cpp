@@ -333,8 +333,7 @@ bool RepoSack::Impl::handle_repo_exception(const Repo * repo, std::exception_ptr
     } catch (const RepoDownloadError & rd_err) {
         exception = rd_err;
         if (report_key_err) {
-            std::string msg = rd_err.what();
-            if (msg.ends_with("Signing key not found")) {
+            if (is_signing_key_not_found_error(rd_err.what())) {
                 return true;
             }
         }
@@ -644,6 +643,7 @@ void RepoSack::Impl::update_and_load_repos(libdnf5::repo::RepoQuery & repos, boo
         }
 
         RepoDownloader repo_downloader{};
+        repo_downloader.set_suppress_keyring_errors(import_keys);
         for (const auto & repo : repos_for_processing) {
             repo_downloader.add(*repo, repo->get_config().get_cachedir(), load_downloaded_repo);
         }

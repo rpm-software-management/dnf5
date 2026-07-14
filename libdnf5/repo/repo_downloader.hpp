@@ -80,6 +80,8 @@ public:
     // Download the previously added repos.
     std::unordered_map<Repo *, std::vector<std::string>> download();
 
+    void set_suppress_keyring_errors(bool suppress) { suppress_keyring_errors = suppress; }
+
 private:
     struct CallbackData {
         std::function<repo_loading_func> load_repo;
@@ -92,6 +94,7 @@ private:
         RepoWeakPtr repo;
         std::unique_ptr<LrMetadataTarget> lr_target;
         bool is_in_sync;
+        bool suppress_keyring_errors{false};
     };
 
     static LibrepoHandle init_local_handle(const DownloadData & download_data);
@@ -110,6 +113,7 @@ private:
     static int mirror_failure_cb(void * data, const char * msg, const char * url, const char * metadata);
 
     std::vector<CallbackData> callback_data;
+    bool suppress_keyring_errors{false};
 };
 
 }  // namespace libdnf5::repo
