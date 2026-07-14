@@ -100,11 +100,6 @@ void MultiProgressBar::add_bar(std::unique_ptr<ProgressBar> && bar) {
     if (p_impl->total.get_total() < registered_bars_count) {
         p_impl->total.set_total(registered_bars_count);
     }
-
-    // update total (in [num/total]) in all bars to do
-    for (auto & i : p_impl->bars_todo) {
-        i->set_total(p_impl->total.get_total());
-    }
 }
 
 
@@ -132,6 +127,7 @@ std::size_t MultiProgressBar::get_total_num_of_bars() const noexcept {
 std::ostream & operator<<(std::ostream & stream, MultiProgressBar & mbar) {
     const bool is_interactive{tty::is_interactive()};
     auto terminal_width = static_cast<std::size_t>(tty::get_width());
+    auto total_num_of_bars = mbar.p_impl->total.get_total();
 
     // We'll buffer the output text to a single string and print it all at once.
     // This is to avoid multiple writes to the terminal, which can cause flickering.
@@ -166,6 +162,7 @@ std::ostream & operator<<(std::ostream & stream, MultiProgressBar & mbar) {
         }
         bar->set_number(numbers.back());
         numbers.pop_back();
+        bar->set_total(total_num_of_bars);
         text_buffer << *bar;
         text_buffer << std::endl;
         mbar.p_impl->bars_done.push_back(bar);
@@ -192,6 +189,7 @@ std::ostream & operator<<(std::ostream & stream, MultiProgressBar & mbar) {
         if (mbar.p_impl->line_printed) {
             text_buffer << std::endl;
         }
+        bar->set_total(total_num_of_bars);
         text_buffer << *bar;
         mbar.p_impl->line_printed = true;
         mbar.p_impl->num_of_lines_to_clear++;
