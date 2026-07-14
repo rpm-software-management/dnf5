@@ -48,6 +48,29 @@ public:
     std::size_t num_of_lines_to_clear{0};
 };
 
+
+namespace {
+
+using BarNumberType = decltype(std::declval<ProgressBar>().get_number());
+
+/// Safely casts any numeric value to BarNumberType, clamping it within bounds.
+BarNumberType cast_to_bar_number(auto value) {
+    // Check if the input value exceeds the maximum limit of the target type
+    if (std::cmp_greater(value, std::numeric_limits<BarNumberType>::max())) {
+        return std::numeric_limits<BarNumberType>::max();
+    }
+
+    // Check if the input value is below the minimum limit of the target type
+    if (std::cmp_less(value, std::numeric_limits<BarNumberType>::min())) {
+        return std::numeric_limits<BarNumberType>::min();
+    }
+
+    return static_cast<BarNumberType>(value);
+}
+
+}  // namespace
+
+
 MultiProgressBar::Impl::Impl() : total(0, _("Total")) {
     total.set_auto_finish(false);
     total.start();
@@ -84,11 +107,8 @@ void MultiProgressBar::set_total_bar_number_widget_visible(bool value) noexcept 
 }
 
 void MultiProgressBar::add_bar(std::unique_ptr<ProgressBar> && bar) {
-    // set bar number, clamp to max on overflow
-    using NumberType = decltype(bar->get_number());
-    NumberType next_number = std::cmp_less(p_impl->bars_all.size() + 1, std::numeric_limits<NumberType>::max())
-                                 ? static_cast<NumberType>(p_impl->bars_all.size() + 1)
-                                 : std::numeric_limits<NumberType>::max();
+    // set bar number, clamp to bounds on overflow
+    auto next_number = cast_to_bar_number(p_impl->bars_all.size() + 1);
     bar->set_number(next_number);
 
     // register bar to MultiProgressBar
@@ -107,7 +127,7 @@ void MultiProgressBar::set_total_num_of_bars(std::size_t value) noexcept {
     if (value < p_impl->bars_all.size()) {
         value = p_impl->bars_all.size();
     }
-    auto num_of_bars = static_cast<int>(value);
+    auto num_of_bars = cast_to_bar_number(value);
     if (num_of_bars != p_impl->total.get_total()) {
         p_impl->total.set_total(num_of_bars);
     }
@@ -143,11 +163,8 @@ std::ostream & operator<<(std::ostream & stream, MultiProgressBar & mbar) {
     mbar.p_impl->num_of_lines_to_clear = 0;
     mbar.p_impl->line_printed = false;
 
-    // initialize bar number counter to bars_done.size(), clamp to max on overflow
-    using NumberType = decltype(mbar.get_total_bar().get_number());
-    NumberType number = std::cmp_less(mbar.p_impl->bars_done.size(), std::numeric_limits<NumberType>::max())
-                            ? static_cast<NumberType>(mbar.p_impl->bars_done.size())
-                            : std::numeric_limits<NumberType>::max();
+    // initialize bar number counter to bars_done.size(), clamp to bounds on overflow
+    auto number = cast_to_bar_number(mbar.p_impl->bars_done.size());
 
     // print completed bars first and move them from bars_todo to bars_done
     for (auto it = mbar.p_impl->bars_todo.begin(); it != mbar.p_impl->bars_todo.end();) {
@@ -223,7 +240,7 @@ std::ostream & operator<<(std::ostream & stream, MultiProgressBar & mbar) {
 
         // print Total progress bar
         auto & mbar_total = mbar.get_total_bar();
-        mbar_total.set_number(static_cast<int>(mbar.p_impl->bars_done.size()));
+        mbar_total.set_number(cast_to_bar_number(mbar.p_impl->bars_done.size()));
 
         mbar_total.set_total_ticks(total_ticks);
         mbar_total.set_ticks(ticks);
