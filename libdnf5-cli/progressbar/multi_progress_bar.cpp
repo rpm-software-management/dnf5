@@ -143,11 +143,11 @@ std::ostream & operator<<(std::ostream & stream, MultiProgressBar & mbar) {
     mbar.p_impl->num_of_lines_to_clear = 0;
     mbar.p_impl->line_printed = false;
 
-    // store numbers of bars in progress
-    std::vector<int32_t> numbers;
-    for (auto * bar : mbar.p_impl->bars_todo) {
-        numbers.insert(numbers.begin(), bar->get_number());
-    }
+    // initialize bar number counter to bars_done.size(), clamp to max on overflow
+    using NumberType = decltype(mbar.get_total_bar().get_number());
+    NumberType number = std::cmp_less(mbar.p_impl->bars_done.size(), std::numeric_limits<NumberType>::max())
+                            ? static_cast<NumberType>(mbar.p_impl->bars_done.size())
+                            : std::numeric_limits<NumberType>::max();
 
     // print completed bars first and remove them from the list
     for (std::size_t i = 0; i < mbar.p_impl->bars_todo.size(); i++) {
@@ -155,8 +155,10 @@ std::ostream & operator<<(std::ostream & stream, MultiProgressBar & mbar) {
         if (!bar->is_finished()) {
             continue;
         }
-        bar->set_number(numbers.back());
-        numbers.pop_back();
+        if (number < std::numeric_limits<decltype(number)>::max()) {
+            ++number;
+        }
+        bar->set_number(number);
         bar->set_total(total_num_of_bars);
         text_buffer << *bar;
         text_buffer << std::endl;
@@ -168,8 +170,10 @@ std::ostream & operator<<(std::ostream & stream, MultiProgressBar & mbar) {
 
     // then print incomplete
     for (auto & bar : mbar.p_impl->bars_todo) {
-        bar->set_number(numbers.back());
-        numbers.pop_back();
+        if (number < std::numeric_limits<decltype(number)>::max()) {
+            ++number;
+        }
+        bar->set_number(number);
 
         // skip printing bars that haven't started yet
         if (bar->get_state() != libdnf5::cli::progressbar::ProgressBarState::STARTED) {
