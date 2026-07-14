@@ -44,8 +44,12 @@ DbusGoalWrapper::DbusGoalWrapper(const std::vector<dnfdaemon::DbusTransactionIte
             transaction_modules.push_back(DbusTransactionModuleWrapper(ti));
         } else if (object_type == "Skipped") {
             auto trans_item_attrs = std::get<3>(ti);
-            if (key_value_map_get<std::string>(trans_item_attrs, "reason_skipped", "conflict") == "conflict") {
+            auto reason = key_value_map_get<std::string>(trans_item_attrs, "reason_skipped", "conflict");
+            if (reason == "conflict") {
                 conflicting_packages.emplace_back(std::get<4>(ti));
+            } else if (reason == "vendor_change") {
+                auto installed_vendor = key_value_map_get<std::string>(trans_item_attrs, "installed_vendor", "");
+                vendor_change_skipped_packages.emplace_back(std::get<4>(ti), std::move(installed_vendor));
             } else {
                 broken_dependency_packages.emplace_back(std::get<4>(ti));
             }

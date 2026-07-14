@@ -69,7 +69,19 @@ void TransactionCommand::run_transaction(bool offline) {
 
     // print the transaction to the user and ask for confirmation
     libdnf5::cli::output::TransactionAdapter cli_output_transaction(dbus_goal_wrapper);
-    if (!libdnf5::cli::output::print_transaction_table(cli_output_transaction)) {
+    const bool table_printed = libdnf5::cli::output::print_transaction_table(cli_output_transaction);
+
+    const auto & skipped = dbus_goal_wrapper.get_vendor_change_skipped_packages();
+    if (!skipped.empty()) {
+        std::vector<std::pair<std::string, std::string>> pairs;
+        pairs.reserve(skipped.size());
+        for (const auto & [pkg, installed_vendor] : skipped) {
+            pairs.emplace_back(installed_vendor, pkg.get_vendor());
+        }
+        libdnf5::cli::output::print_vendor_change_skipped(pairs);
+    }
+
+    if (!table_printed) {
         return;
     }
 
