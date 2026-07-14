@@ -28,6 +28,8 @@
 
 #include <algorithm>
 #include <iomanip>
+#include <limits>
+#include <utility>
 
 
 namespace libdnf5::cli::progressbar {
@@ -82,21 +84,19 @@ void MultiProgressBar::set_total_bar_number_widget_visible(bool value) noexcept 
 }
 
 void MultiProgressBar::add_bar(std::unique_ptr<ProgressBar> && bar) {
+    // set bar number, clamp to max on overflow
+    using NumberType = decltype(bar->get_number());
+    NumberType next_number = std::cmp_less(p_impl->bars_all.size() + 1, std::numeric_limits<NumberType>::max())
+                                 ? static_cast<NumberType>(p_impl->bars_all.size() + 1)
+                                 : std::numeric_limits<NumberType>::max();
+    bar->set_number(next_number);
+
+    // register bar to MultiProgressBar
     p_impl->bars_todo.push_back(bar.get());
-
-    // if the number is not set, automatically find and set the next available
-    if (bar->get_number() == 0) {
-        int number = 0;
-        for (auto i : p_impl->bars_todo) {
-            number = std::max(number, i->get_number());
-        }
-        bar->set_number(number + 1);
-    }
-
     p_impl->bars_all.push_back(std::move(bar));
 
     // update total (in [num/total]) in total progress bar
-    auto registered_bars_count = static_cast<int32_t>(p_impl->bars_all.size());
+    auto registered_bars_count = next_number;
     if (p_impl->total.get_total() < registered_bars_count) {
         p_impl->total.set_total(registered_bars_count);
     }
