@@ -149,12 +149,15 @@ std::ostream & operator<<(std::ostream & stream, MultiProgressBar & mbar) {
                             ? static_cast<NumberType>(mbar.p_impl->bars_done.size())
                             : std::numeric_limits<NumberType>::max();
 
-    // print completed bars first and remove them from the list
-    for (std::size_t i = 0; i < mbar.p_impl->bars_todo.size(); i++) {
-        auto * bar = mbar.p_impl->bars_todo[i];
+    // print completed bars first and move them from bars_todo to bars_done
+    for (auto it = mbar.p_impl->bars_todo.begin(); it != mbar.p_impl->bars_todo.end();) {
+        auto * const bar = *it;
+
         if (!bar->is_finished()) {
+            ++it;
             continue;
         }
+
         if (number < std::numeric_limits<decltype(number)>::max()) {
             ++number;
         }
@@ -163,9 +166,7 @@ std::ostream & operator<<(std::ostream & stream, MultiProgressBar & mbar) {
         text_buffer << *bar;
         text_buffer << std::endl;
         mbar.p_impl->bars_done.push_back(bar);
-        // TODO(dmach): use iterator
-        mbar.p_impl->bars_todo.erase(mbar.p_impl->bars_todo.begin() + static_cast<int>(i));
-        i--;
+        it = mbar.p_impl->bars_todo.erase(it);
     }
 
     // then print incomplete
