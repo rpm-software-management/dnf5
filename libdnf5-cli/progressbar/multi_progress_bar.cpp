@@ -199,12 +199,10 @@ std::ostream & operator<<(std::ostream & stream, MultiProgressBar & mbar) {
     }
 
     // then print the "total" progress bar
-    int32_t total_numbers = 0;
     int64_t ticks = 0;
     int64_t total_ticks = 0;
 
     for (auto & bar : mbar.p_impl->bars_done) {
-        total_numbers = std::max(total_numbers, bar->get_total());
         // completed bars can be unfinished
         // add only processed ticks to both values
         total_ticks += bar->get_ticks();
@@ -212,11 +210,9 @@ std::ostream & operator<<(std::ostream & stream, MultiProgressBar & mbar) {
     }
 
     for (auto & bar : mbar.p_impl->bars_todo) {
-        total_numbers = std::max(total_numbers, bar->get_total());
         total_ticks += bar->get_total_ticks();
         ticks += bar->get_ticks();
     }
-
 
     if ((mbar.p_impl->bars_all.size() >= mbar.p_impl->total_bar_visible_limit) &&
         (is_interactive || mbar.p_impl->bars_todo.empty())) {
