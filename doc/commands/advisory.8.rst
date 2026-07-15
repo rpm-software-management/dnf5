@@ -55,7 +55,7 @@ Subcommands
 
 ``info``
     | Print detailed information about advisories.
-    | For each matching advisory, displays: Name, Title, Severity, Type, Status, Vendor, Issued date, Description, Message, Rights, References (with Title, Id, Type, and URL), and affected packages/modules organized by collection.
+    | For each matching advisory, displays: Name, Title, Severity, Type, Status, Vendor, Issued date, Description, Message, Rights, References (with Title, Id, Type, and URL), and affected packages@IF WITH_MODULEMD@/modules @ENDIF@organized by collection.
 
 ``summary``
     | Print a summary count of advisories by type and severity.
@@ -180,10 +180,10 @@ Each advisory object contains the following fields:
   - ``Type`` (string) - Reference type (cve, bugzilla, etc.).
   - ``Url`` (string) - Reference URL.
 
-- ``collections`` (object) - Package and module collections affected by the advisory:
+- ``collections`` (object) - Package @IF WITH_MODULEMD@and module @ENDIF@collections affected by the advisory:
 
-  - ``packages`` (array) - List of affected package NEVRAs (only present if packages exist).
-  - ``modules`` (array) - List of affected module NSVCAs (only present if modules exist).
+  - ``packages`` (array) - List of affected package NEVRAs (only present if packages exist).@IF WITH_MODULEMD@
+  - ``modules`` (array) - List of affected module NSVCAs (only present if modules exist).@ENDIF@
 
 For empty results:
 

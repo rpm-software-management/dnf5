@@ -31,6 +31,7 @@
 class AdvisoryAdvisoryModuleTest : public BaseTestCase {
     CPPUNIT_TEST_SUITE(AdvisoryAdvisoryModuleTest);
 
+#ifdef WITH_MODULEMD
     CPPUNIT_TEST(test_get_name);
     CPPUNIT_TEST(test_get_stream);
     CPPUNIT_TEST(test_get_version);
@@ -40,12 +41,14 @@ class AdvisoryAdvisoryModuleTest : public BaseTestCase {
     CPPUNIT_TEST(test_get_advisory_id);
     CPPUNIT_TEST(test_get_advisory);
     CPPUNIT_TEST(test_get_advisory_collection);
+#endif
 
     CPPUNIT_TEST_SUITE_END();
 
 public:
     void setUp() override;
 
+#ifdef WITH_MODULEMD
     void test_get_name();
     void test_get_stream();
     void test_get_version();
@@ -55,6 +58,7 @@ public:
     void test_get_advisory_id();
     void test_get_advisory();
     void test_get_advisory_collection();
+#endif
 
 private:
     std::vector<libdnf5::advisory::AdvisoryModule> modules;

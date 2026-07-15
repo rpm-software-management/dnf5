@@ -28,6 +28,7 @@ import libdnf5
 
 PROJECT_BINARY_DIR = os.environ["PROJECT_BINARY_DIR"]
 PROJECT_SOURCE_DIR = os.environ["PROJECT_SOURCE_DIR"]
+WITH_MODULEMD = os.environ["WITH_MODULEMD"] == "ON"
 
 
 class BaseTestCase(unittest.TestCase):

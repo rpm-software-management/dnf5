@@ -128,20 +128,24 @@ class TestAdvisory(base_test_case.BaseTestCase):
 
     def test_advisory_modules(self):
         collection = self.advisory.get_collections()[0]
-        adv_modules = collection.get_modules()
-        self.assertEqual(len(adv_modules), 2)
-        adv_module = adv_modules[0]
+        if base_test_case.WITH_MODULEMD:
+            adv_modules = collection.get_modules()
+            self.assertEqual(len(adv_modules), 2)
+            adv_module = adv_modules[0]
 
-        self.assertEqual(adv_module.get_advisory_id(), self.advisory.get_id())
-        self.assertEqual(adv_module.get_advisory(), self.advisory)
-        # We can't compare the collections directly because adv_module constructs
-        # a new instance of the same collection
-        self.assertEqual(adv_module.get_advisory_collection(
-        ).get_advisory_id(), self.advisory.get_id())
+            self.assertEqual(adv_module.get_advisory_id(), self.advisory.get_id())
+            self.assertEqual(adv_module.get_advisory(), self.advisory)
+            # We can't compare the collections directly because adv_module constructs
+            # a new instance of the same collection
+            self.assertEqual(adv_module.get_advisory_collection(
+            ).get_advisory_id(), self.advisory.get_id())
 
-        self.assertEqual(adv_module.get_name(), "perl-DBI")
-        self.assertEqual(adv_module.get_stream(), "master")
-        self.assertEqual(adv_module.get_version(), "2")
-        self.assertEqual(adv_module.get_context(), "2a")
-        self.assertEqual(adv_module.get_arch(), "x86_64")
-        self.assertEqual(adv_module.get_nsvca(), "perl-DBI:master:2:2a:x86_64")
+            self.assertEqual(adv_module.get_name(), "perl-DBI")
+            self.assertEqual(adv_module.get_stream(), "master")
+            self.assertEqual(adv_module.get_version(), "2")
+            self.assertEqual(adv_module.get_context(), "2a")
+            self.assertEqual(adv_module.get_arch(), "x86_64")
+            self.assertEqual(adv_module.get_nsvca(), "perl-DBI:master:2:2a:x86_64")
+        else:
+            with self.assertRaises(libdnf5.exception.RuntimeError):
+                collection.get_modules()
