@@ -19,6 +19,10 @@
 
 
 #include "libdnf5/advisory/advisory_collection.hpp"
+#ifndef WITH_MODULEMD
+#include "libdnf5/common/exception.hpp"
+#include "libdnf5/utils/bgettext/bgettext-mark-domain.h"
+#endif
 
 #include "advisory/advisory_module_private.hpp"
 #include "advisory/advisory_package_private.hpp"
@@ -84,7 +88,11 @@ std::vector<AdvisoryPackage> AdvisoryCollection::get_packages() {
 
 std::vector<AdvisoryModule> AdvisoryCollection::get_modules() {
     std::vector<AdvisoryModule> output;
+#ifdef WITH_MODULEMD
     p_impl->get_modules(output);
+#else
+    throw RuntimeError(M_("This libdnf5 does not support modularity"));
+#endif
     return output;
 }
 
@@ -131,6 +139,7 @@ void AdvisoryCollection::get_packages(std::vector<AdvisoryPackage> & output, boo
     dataiterator_free(&di);
 }
 
+#ifdef WITH_MODULEMD
 void AdvisoryCollection::Impl::get_modules(std::vector<AdvisoryModule> & output) {
     Dataiterator di;
     auto & pool = get_rpm_pool(base);
@@ -159,6 +168,7 @@ void AdvisoryCollection::Impl::get_modules(std::vector<AdvisoryModule> & output)
     }
     dataiterator_free(&di);
 }
+#endif
 
 AdvisoryId AdvisoryCollection::get_advisory_id() const {
     return p_impl->advisory;

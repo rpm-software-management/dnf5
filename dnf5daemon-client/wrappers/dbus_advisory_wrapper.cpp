@@ -45,10 +45,12 @@ DbusAdvisoryCollectionWrapper::DbusAdvisoryCollectionWrapper(
     for (const auto & pkg : raw_packages) {
         packages.emplace_back(pkg, advisory);
     }
+#ifdef WITH_MODULEMD
     auto raw_modules = key_value_map_get<KeyValueMapList>(rawdata, "modules", {});
     for (const auto & mdl : raw_modules) {
         modules.emplace_back(mdl, advisory);
     }
+#endif
 }
 
 

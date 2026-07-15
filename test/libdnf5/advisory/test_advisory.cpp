@@ -91,10 +91,12 @@ void AdvisoryAdvisoryTest::test_get_collections() {
     CPPUNIT_ASSERT_EQUAL(std::string("pkg"), pkgs[0].get_name());
     CPPUNIT_ASSERT_EQUAL(std::string("filesystem"), pkgs[1].get_name());
 
+#if WITH_MODULEMD
     std::vector<libdnf5::advisory::AdvisoryModule> mods = c.get_modules();
     CPPUNIT_ASSERT_EQUAL((size_t)2, mods.size());
     CPPUNIT_ASSERT_EQUAL(std::string("perl-DBI"), mods[0].get_name());
     CPPUNIT_ASSERT_EQUAL(std::string("ethereum"), mods[1].get_name());
+#endif
 
     libdnf5::advisory::AdvisoryQuery adv_query(base);
     adv_query.filter_name("DNF-2020-1");
@@ -109,10 +111,12 @@ void AdvisoryAdvisoryTest::test_get_collections() {
     CPPUNIT_ASSERT_EQUAL(std::string("wget"), pkgs[0].get_name());
     CPPUNIT_ASSERT_EQUAL(std::string("yum"), pkgs[1].get_name());
 
+#if WITH_MODULEMD
     mods.clear();
     mods = c1.get_modules();
     CPPUNIT_ASSERT_EQUAL((size_t)1, mods.size());
     CPPUNIT_ASSERT_EQUAL(std::string("perl-DBI"), mods[0].get_name());
+#endif
 
     libdnf5::advisory::AdvisoryCollection c2 = colls[1];
     pkgs.clear();
@@ -120,8 +124,10 @@ void AdvisoryAdvisoryTest::test_get_collections() {
     CPPUNIT_ASSERT_EQUAL((size_t)1, pkgs.size());
     CPPUNIT_ASSERT_EQUAL(std::string("bitcoin"), pkgs[0].get_name());
 
+#if WITH_MODULEMD
     mods.clear();
     mods = c2.get_modules();
     CPPUNIT_ASSERT_EQUAL((size_t)1, mods.size());
     CPPUNIT_ASSERT_EQUAL(std::string("perl"), mods[0].get_name());
+#endif
 }

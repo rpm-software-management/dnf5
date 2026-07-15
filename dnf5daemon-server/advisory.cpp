@@ -95,6 +95,7 @@ KeyValueMapList collections_to_list(
             packages.emplace_back(std::move(package));
         }
 
+#ifdef WITH_MODULEMD
         KeyValueMapList modules;
         auto libdnf_modules = col.get_modules();
         for (const auto & mdl : libdnf_modules) {
@@ -107,10 +108,13 @@ KeyValueMapList collections_to_list(
             col_module["nsvca"] = sdbus::Variant(mdl.get_nsvca());
             modules.emplace_back(std::move(col_module));
         }
+#endif
 
         KeyValueMap collection;
         collection["packages"] = sdbus::Variant(std::move(packages));
+#ifdef WITH_MODULEMD
         collection["modules"] = sdbus::Variant(std::move(modules));
+#endif
         collections.emplace_back(std::move(collection));
     }
     return collections;

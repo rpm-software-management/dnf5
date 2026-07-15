@@ -37,9 +37,14 @@ void AdvisoryAdvisoryModuleTest::setUp() {
     advisories.filter_name("DNF-2019-1");
     libdnf5::advisory::Advisory advisory = *advisories.begin();
     std::vector<libdnf5::advisory::AdvisoryCollection> collections = advisory.get_collections();
+#ifdef WITH_MODULEMD
     modules = collections[0].get_modules();
+#else
+    CPPUNIT_ASSERT_THROW(collections[0].get_modules(), libdnf5::RuntimeError);
+#endif
 }
 
+#ifdef WITH_MODULEMD
 void AdvisoryAdvisoryModuleTest::test_get_name() {
     // Tests get_name method
     CPPUNIT_ASSERT_EQUAL(std::string("perl-DBI"), std::string(modules[0].get_name()));
@@ -84,3 +89,4 @@ void AdvisoryAdvisoryModuleTest::test_get_advisory_collection() {
     size_t target_size = 2;
     CPPUNIT_ASSERT_EQUAL(target_size, out_mods.size());
 }
+#endif

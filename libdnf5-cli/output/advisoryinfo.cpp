@@ -70,6 +70,7 @@ void AdvisoryInfo::Impl::add_advisory(IAdvisory & advisory) {
     for (auto & collection : advisory.get_collections()) {
         auto group_collection = add_line("Collection", "");
 
+#ifdef WITH_MODULEMD
         // Modules
         auto modules = collection->get_modules();
         if (!modules.empty()) {
@@ -81,6 +82,7 @@ void AdvisoryInfo::Impl::add_advisory(IAdvisory & advisory) {
                 module_iter++;
             }
         }
+#endif
 
         // Packages
         auto packages = collection->get_packages();
@@ -126,6 +128,7 @@ void AdvisoryInfoJSON::Impl::add_advisory(IAdvisory & advisory) {
     // Collections
     json_object * json_collections = json_object_new_object();
     for (auto & collection : advisory.get_collections()) {
+#ifdef WITH_MODULEMD
         // Modules
         auto modules = collection->get_modules();
         if (!modules.empty()) {
@@ -135,6 +138,7 @@ void AdvisoryInfoJSON::Impl::add_advisory(IAdvisory & advisory) {
             }
             json_object_object_add(json_collections, "modules", json_modules);
         }
+#endif
 
         // Packages
         auto packages = collection->get_packages();
