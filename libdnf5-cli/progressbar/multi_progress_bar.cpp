@@ -195,7 +195,6 @@ std::ostream & operator<<(std::ostream & stream, MultiProgressBar & mbar) {
 
         // skip printing bars that haven't started yet
         if (bar->get_state() != libdnf5::cli::progressbar::ProgressBarState::STARTED) {
-            bar->update();
             continue;
         }
 
