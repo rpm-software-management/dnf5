@@ -295,7 +295,8 @@ public:
 private:
     friend class VendorChangeManager;
 
-    static int callback_policy_illegal_vendorchange(::Pool * libsolv_pool, Solvable * installed, Solvable * new_solv);
+    static int callback_policy_illegal_vendorchange(
+        ::Pool * libsolv_pool, Solvable * installed, Solvable * new_solv) noexcept;
 
     VendorChangeManager vendor_change_manager;
     std::unordered_map<Id, std::string> blocked_vendor_changes;
