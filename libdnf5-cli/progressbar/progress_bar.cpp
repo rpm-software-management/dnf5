@@ -67,7 +67,6 @@ public:
     bool auto_finish = true;
 
     std::chrono::time_point<std::chrono::system_clock> begin = std::chrono::system_clock::from_time_t(0);
-    std::chrono::time_point<std::chrono::system_clock> end = std::chrono::system_clock::from_time_t(0);
 
     // current (average) speed over the last second
     std::chrono::time_point<std::chrono::system_clock> current_speed_window_start = std::chrono::system_clock::now();
@@ -253,7 +252,6 @@ void ProgressBar::reset() {
     p_impl->average_speed = 0;
     p_impl->auto_finish = true;
     p_impl->begin = std::chrono::system_clock::from_time_t(0);
-    p_impl->end = std::chrono::system_clock::from_time_t(0);
     p_impl->current_speed_window_start = std::chrono::system_clock::now();
     p_impl->current_speed = 0;
     p_impl->current_speed_window_ticks = 0;
@@ -352,7 +350,6 @@ void ProgressBar::update() {
             // avoid calling set_state() because it triggers update() and ends up in an endless recursion
             p_impl->state = ProgressBarState::SUCCESS;
         }
-        p_impl->end = now;
         p_impl->percent_done = 100;
         p_impl->remaining_seconds = 0;
     }
