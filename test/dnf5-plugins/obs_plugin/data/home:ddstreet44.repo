@@ -1,0 +1,7 @@
+[home_ddstreet44]
+name=home:ddstreet44 (Fedora_39)
+type=rpm-md
+baseurl=https://nonstandard.ddstreet.org/download/home:/ddstreet44/Fedora_39/
+gpgcheck=1
+gpgkey=https://nonstandard.ddstreet.org/download/home:/ddstreet44/Fedora_39/repodata/repomd.xml.key
+enabled=1
