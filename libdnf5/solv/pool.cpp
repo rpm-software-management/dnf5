@@ -34,14 +34,22 @@ namespace libdnf5::solv {
 
 // Check if an illegal vendor change occurs when an installed solvable is replaced by a new solvable.
 // Returns 1 if the vendor change is illegal, otherwise returns 0.
-int RpmPool::callback_policy_illegal_vendorchange(::Pool * libsolv_pool, Solvable * installed, Solvable * new_solv) {
+// noexcept: this is a C callback registered with libsolv; exceptions must not propagate into C code.
+// is_vendor_change_allowed() is intentionally outside the catch: a bug there should terminate via
+// noexcept rather than be silently swallowed. Recording the denial is best-effort only.
+int RpmPool::callback_policy_illegal_vendorchange(
+    ::Pool * libsolv_pool, Solvable * installed, Solvable * new_solv) noexcept {
     auto & rpmpool = *reinterpret_cast<RpmPool *>(libsolv_pool->appdata);
     if (rpmpool.vendor_change_manager.is_vendor_change_allowed(*installed, *new_solv)) {
         return 0;
     }
-    Id outgoing_vendor = installed->vendor ? installed->vendor : ID_EMPTY;
-    rpmpool.blocked_vendor_changes.insert_or_assign(
-        pool_solvable2id(libsolv_pool, new_solv), std::string(pool_id2str(libsolv_pool, outgoing_vendor)));
+    try {
+        Id outgoing_vendor = installed->vendor ? installed->vendor : ID_EMPTY;
+        rpmpool.blocked_vendor_changes.insert_or_assign(
+            pool_solvable2id(libsolv_pool, new_solv), std::string(pool_id2str(libsolv_pool, outgoing_vendor)));
+    } catch (...) {
+        // Recording is best-effort; allocation failures must not escape into C code.
+    }
     return 1;
 }
 
