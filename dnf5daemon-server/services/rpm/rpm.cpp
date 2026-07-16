@@ -25,8 +25,11 @@
 #include "libdnf5/comps/environment/query.hpp"
 #include "libdnf5/comps/group/query.hpp"
 
+#include <libdnf5/base/goal.hpp>
+#include <libdnf5/base/transaction_package.hpp>
 #include <libdnf5/rpm/package_query.hpp>
 #include <libdnf5/rpm/package_set.hpp>
+#include <libdnf5/transaction/transaction_item_action.hpp>
 #include <sdbus-c++/sdbus-c++.h>
 
 #include <iostream>
@@ -411,10 +414,8 @@ libdnf5::rpm::PackageQuery Rpm::filter_packages(const dnfdaemon::KeyValueMap & o
 
     std::string scope = dnfdaemon::key_value_map_get<std::string>(options, "scope", "all");
     // start with all packages
-    libdnf5::sack::ExcludeFlags flags = libdnf5::sack::ExcludeFlags::APPLY_EXCLUDES;
-    if (scope != "upgrades" && scope != "upgradable") {
-        flags = flags | libdnf5::sack::ExcludeFlags::IGNORE_VERSIONLOCK;
-    }
+    libdnf5::sack::ExcludeFlags flags =
+        libdnf5::sack::ExcludeFlags::APPLY_EXCLUDES | libdnf5::sack::ExcludeFlags::IGNORE_VERSIONLOCK;
     libdnf5::rpm::PackageQuery query(*base, flags);
 
     // toplevel filtering - the scope
@@ -424,10 +425,28 @@ libdnf5::rpm::PackageQuery Rpm::filter_packages(const dnfdaemon::KeyValueMap & o
         query.filter_installed();
     } else if (scope == "available") {
         query.filter_available();
-    } else if (scope == "upgrades") {
-        query.filter_upgrades();
-    } else if (scope == "upgradable") {
-        query.filter_upgradable();
+    } else if (scope == "upgrades" || scope == "upgradable") {
+        // Resolve an actual upgrade transaction to correctly account for
+        // repo priorities, excludes, versionlock, obsoletes, vendor changes,
+        // dependency constraints, and uninstallable packages.
+        libdnf5::Goal goal(*base);
+        goal.add_rpm_upgrade();
+        auto transaction = goal.resolve();
+
+        libdnf5::rpm::PackageQuery resolved(*base, libdnf5::sack::ExcludeFlags::APPLY_EXCLUDES, true);
+        for (const auto & tspkg : transaction.get_transaction_packages()) {
+            // Use is_inbound + replaces check instead of just UPGRADE action
+            // to also include packages that purely obsolete an installed package
+            // (these get INSTALL action since they are new to the system).
+            if (scope == "upgrades" && libdnf5::transaction::transaction_item_action_is_inbound(tspkg.get_action()) &&
+                !tspkg.get_replaces().empty()) {
+                resolved.add(tspkg.get_package());
+            } else if (
+                scope == "upgradable" && tspkg.get_action() == libdnf5::base::TransactionPackage::Action::REPLACED) {
+                resolved.add(tspkg.get_package());
+            }
+        }
+        query = resolved;
     } else if (scope == "all") {
         // the query already contains all packages
     } else {
