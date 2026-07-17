@@ -61,7 +61,9 @@ static const std::unordered_set<std::string> ALLOWED_MAIN_CONF_OVERRIDES = {
     "installonlypkgs",
     "install_weak_deps",
     "keepcache",
+#ifdef WITH_MODULEMD
     "module_obsoletes",
+#endif
     "module_platform_id",
     "module_stream_switch",
     "multilib_policy",

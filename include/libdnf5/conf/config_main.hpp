@@ -218,7 +218,9 @@ public:
     const OptionString & get_module_platform_id_option() const;
     OptionBool & get_module_stream_switch_option();
     const OptionBool & get_module_stream_switch_option() const;
+    // Unused if built without modularity support
     OptionBool & get_module_obsoletes_option();
+    // Unused if built without modularity support
     const OptionBool & get_module_obsoletes_option() const;
     OptionString & get_user_agent_option();
     const OptionString & get_user_agent_option() const;
