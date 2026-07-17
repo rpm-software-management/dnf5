@@ -667,7 +667,7 @@ void ProgressbarInteractiveTest::test_multi_progress_bars_with_already_downloade
         "\\[1/3\\] test                    100% | ????? ??B\\/s |   0.0   B | ???????\n"
         ">>> Already Downloaded\n"
         "----------------------------------------------------------------------\n"
-        "\\[1/3\\] Total                   ???% | ????? ??B\\/s |  -2.0   B | ???????";
+        "\\[1/3\\] Total                   ???% | ????? ??B\\/s |   0.0   B | ???????";
 
     ASSERT_MATCHES(expected, perform_control_sequences(oss.str()));
 
@@ -685,7 +685,7 @@ void ProgressbarInteractiveTest::test_multi_progress_bars_with_already_downloade
         "\\[2/3\\] test                    100% | ????? ??B\\/s |   0.0   B | ???????\n"
         ">>> Already Downloaded\n"
         "----------------------------------------------------------------------\n"
-        "\\[2/3\\] Total                   ???% | ????? ??B\\/s |  -1.0   B | ???????";
+        "\\[2/3\\] Total                   ???% | ????? ??B\\/s |   0.0   B | ???????";
     ASSERT_MATCHES(expected, perform_control_sequences(oss.str()));
 
     // In progress download
