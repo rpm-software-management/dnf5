@@ -47,6 +47,9 @@ public:
     // Whether the last line was printed without a new line ending (such as an in progress bar)
     bool line_printed{false};
     std::size_t num_of_lines_to_clear{0};
+
+    // Reused across operator<< calls to retain allocated capacity between renders
+    std::ostringstream text_buffer;
 };
 
 
@@ -147,9 +150,7 @@ std::ostream & operator<<(std::ostream & stream, MultiProgressBar & mbar) {
 
     // We'll buffer the output text to a single string and print it all at once.
     // This is to avoid multiple writes to the terminal, which can cause flickering.
-    static std::ostringstream text_buffer;
-    text_buffer.str("");
-    text_buffer.clear();
+    std::ostringstream & text_buffer = mbar.p_impl->text_buffer;
 
     if (is_interactive && mbar.p_impl->num_of_lines_to_clear > 0) {
         if (mbar.p_impl->num_of_lines_to_clear > 1) {
@@ -263,6 +264,9 @@ std::ostream & operator<<(std::ostream & stream, MultiProgressBar & mbar) {
     }
 
     stream << text_buffer.str();  // Single syscall to output all commands
+
+    text_buffer.str("");
+    text_buffer.clear();
 
     return stream;
 }
