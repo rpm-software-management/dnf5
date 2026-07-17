@@ -231,7 +231,11 @@ ReposyncCommand::download_list_type ReposyncCommand::get_packages_list(const lib
     // a separator is enforced.
     safe_write_path /= "";
 
+#ifdef WITH_MODULEMD
     libdnf5::rpm::PackageQuery query(ctx.get_base(), libdnf5::sack::ExcludeFlags::IGNORE_MODULAR_EXCLUDES);
+#else
+    libdnf5::rpm::PackageQuery query(ctx.get_base());
+#endif
     query.filter_available();
     query.filter_repo_id(repo.get_id());
 
