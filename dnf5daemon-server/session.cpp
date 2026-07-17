@@ -64,8 +64,8 @@ static const std::unordered_set<std::string> ALLOWED_MAIN_CONF_OVERRIDES = {
 #ifdef WITH_MODULEMD
     "module_obsoletes",
     "module_platform_id",
-#endif
     "module_stream_switch",
+#endif
     "multilib_policy",
     "obsoletes",
     "optional_metadata_types",

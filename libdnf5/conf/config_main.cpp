@@ -228,7 +228,7 @@ class ConfigMain::Impl {
     OptionBool downloadonly{false};  // runtime only option
     OptionBool ignorearch{false};
     OptionString module_platform_id{nullptr, ".+:.+", false};  // unused if modularity support is disabled
-    OptionBool module_stream_switch{false};
+    OptionBool module_stream_switch{false};                    // unused if modularity support is disabled
     OptionBool module_obsoletes{false};                        // unused if modularity support is disabled
 
     OptionString user_agent{get_user_agent()};
@@ -414,9 +414,7 @@ ConfigMain::Impl::Impl(Config & owner) : owner(owner) {
     owner.opt_binds().add("ignorearch", ignorearch);
 #ifdef WITH_MODULEMD
     owner.opt_binds().add("module_platform_id", module_platform_id);
-#endif
     owner.opt_binds().add("module_stream_switch", module_stream_switch);
-#ifdef WITH_MODULEMD
     owner.opt_binds().add("module_obsoletes", module_obsoletes);
 #endif
     owner.opt_binds().add("user_agent", user_agent);
@@ -1527,9 +1525,7 @@ void ConfigMain::Impl::load_from_config(const ConfigMain::Impl & other) {
     load_option(ignorearch, other.ignorearch);
 #ifdef WITH_MODULEMD
     load_option(module_platform_id, other.module_platform_id);
-#endif
     load_option(module_stream_switch, other.module_stream_switch);
-#ifdef WITH_MODULEMD
     load_option(module_obsoletes, other.module_obsoletes);
 #endif
     load_option(user_agent, other.user_agent);
