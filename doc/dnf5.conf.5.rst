@@ -407,7 +407,6 @@ repository configuration file should aside from repo ID consists of baseurl, met
     It is necessary to perform a system upgrade and switch to a new platform.
 
     Default: empty.
-@ENDIF@
 
 .. _module_stream_switch_options-label:
 
@@ -417,6 +416,7 @@ repository configuration file should aside from repo ID consists of baseurl, met
     If enabled, allows switching enabled streams of a module.
 
     Default: ``False``.
+@ENDIF@
 
 .. _multilib_policy_options-label:
 
