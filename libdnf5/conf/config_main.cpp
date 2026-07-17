@@ -227,7 +227,7 @@ class ConfigMain::Impl {
     OptionString comment{nullptr};
     OptionBool downloadonly{false};  // runtime only option
     OptionBool ignorearch{false};
-    OptionString module_platform_id{nullptr, ".+:.+", false};
+    OptionString module_platform_id{nullptr, ".+:.+", false};  // unused if modularity support is disabled
     OptionBool module_stream_switch{false};
     OptionBool module_obsoletes{false};                        // unused if modularity support is disabled
 
@@ -412,7 +412,9 @@ ConfigMain::Impl::Impl(Config & owner) : owner(owner) {
     owner.opt_binds().add("destdir", destdir);
     owner.opt_binds().add("comment", comment);
     owner.opt_binds().add("ignorearch", ignorearch);
+#ifdef WITH_MODULEMD
     owner.opt_binds().add("module_platform_id", module_platform_id);
+#endif
     owner.opt_binds().add("module_stream_switch", module_stream_switch);
 #ifdef WITH_MODULEMD
     owner.opt_binds().add("module_obsoletes", module_obsoletes);
@@ -1523,7 +1525,9 @@ void ConfigMain::Impl::load_from_config(const ConfigMain::Impl & other) {
     load_option(comment, other.comment);
     load_option(downloadonly, other.downloadonly);
     load_option(ignorearch, other.ignorearch);
+#ifdef WITH_MODULEMD
     load_option(module_platform_id, other.module_platform_id);
+#endif
     load_option(module_stream_switch, other.module_stream_switch);
 #ifdef WITH_MODULEMD
     load_option(module_obsoletes, other.module_obsoletes);

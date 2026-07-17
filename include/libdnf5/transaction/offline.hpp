@@ -105,6 +105,7 @@ public:
     bool get_poweroff_after() const;
 
     /// Set module_platform_id for the offline transaction.
+    /// Unused if built without modularity support.
     void set_module_platform_id(const std::string & module_platform_id);
     const std::string & get_module_platform_id() const;
 

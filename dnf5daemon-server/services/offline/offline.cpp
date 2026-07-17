@@ -279,7 +279,9 @@ sdbus::MethodReply Offline::get_status(sdbus::MethodCall & call) {
         transaction_state["verb"] = sdbus::Variant(state_data.get_verb());
         transaction_state["cmd_line"] = sdbus::Variant(state_data.get_cmd_line());
         transaction_state["poweroff_after"] = sdbus::Variant(state_data.get_poweroff_after());
+#ifdef WITH_MODULEMD
         transaction_state["module_platform_id"] = sdbus::Variant(state_data.get_module_platform_id());
+#endif
     }
 
     auto reply = call.createReply();

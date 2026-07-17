@@ -55,7 +55,9 @@ TOML11_DEFINE_CONVERSION_NON_INTRUSIVE(
     verb,
     cmd_line,
     poweroff_after,
+#ifdef WITH_MODULEMD
     module_platform_id,
+#endif
     rpmdb_cookie)
 
 
@@ -145,8 +147,10 @@ bool OfflineTransactionStateData::get_poweroff_after() const {
     return p_impl->data.poweroff_after;
 }
 
-void OfflineTransactionStateData::set_module_platform_id(const std::string & module_platform_id) {
+void OfflineTransactionStateData::set_module_platform_id([[maybe_unused]] const std::string & module_platform_id) {
+#ifdef WITH_MODULEMD
     p_impl->data.module_platform_id = module_platform_id;
+#endif
 }
 const std::string & OfflineTransactionStateData::get_module_platform_id() const {
     return p_impl->data.module_platform_id;

@@ -397,6 +397,7 @@ repository configuration file should aside from repo ID consists of baseurl, met
 
     Default: ``1M``.
 
+@IF WITH_MODULEMD@
 .. _module_platform_id_options-label:
 
 ``module_platform_id``
@@ -406,6 +407,7 @@ repository configuration file should aside from repo ID consists of baseurl, met
     It is necessary to perform a system upgrade and switch to a new platform.
 
     Default: empty.
+@ENDIF@
 
 .. _module_stream_switch_options-label:
 

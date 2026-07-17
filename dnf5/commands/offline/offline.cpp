@@ -474,10 +474,12 @@ void OfflineExecuteCommand::configure() {
     ctx.get_base().get_config().get_system_cachedir_option().set(cachedir);
     ctx.get_base().get_config().get_cachedir_option().set(cachedir);
 
+#ifdef WITH_MODULEMD
     auto module_platform_id = state->get_data().get_module_platform_id();
     if (!module_platform_id.empty()) {
         ctx.get_base().get_config().get_module_platform_id_option().set(module_platform_id);
     }
+#endif
 }
 
 void OfflineExecuteCommand::run() {
