@@ -218,22 +218,21 @@ std::ostream & operator<<(std::ostream & stream, MultiProgressBar & mbar) {
     }
 
     // then print the "total" progress bar
-    // completed bars can be unfinished
-    // add only processed ticks to both values
-    int64_t ticks = mbar.p_impl->done_ticks;
-    int64_t total_ticks = ticks;
-
-    for (auto & bar : mbar.p_impl->bars_todo) {
-        if (const auto bar_total_ticks = bar->get_total_ticks(); bar_total_ticks > 0) {
-            total_ticks += bar_total_ticks;
-        }
-        if (const auto bar_ticks = bar->get_ticks(); bar_ticks > 0) {
-            ticks += bar_ticks;
-        }
-    }
-
     if ((mbar.p_impl->bars_all.size() >= mbar.p_impl->total_bar_visible_limit) &&
         (is_interactive || mbar.p_impl->bars_todo.empty())) {
+        // compute ticks and total_ticks for total progress bar
+        // done bars can be unfinished -> add only processed ticks to both values
+        int64_t ticks = mbar.p_impl->done_ticks;
+        int64_t total_ticks = ticks;
+        for (auto & bar : mbar.p_impl->bars_todo) {
+            if (const auto bar_total_ticks = bar->get_total_ticks(); bar_total_ticks > 0) {
+                total_ticks += bar_total_ticks;
+            }
+            if (const auto bar_ticks = bar->get_ticks(); bar_ticks > 0) {
+                ticks += bar_ticks;
+            }
+        }
+
         if (mbar.p_impl->line_printed) {
             text_buffer << std::endl;
         }
