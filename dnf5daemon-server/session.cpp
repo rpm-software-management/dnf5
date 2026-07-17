@@ -63,8 +63,8 @@ static const std::unordered_set<std::string> ALLOWED_MAIN_CONF_OVERRIDES = {
     "keepcache",
 #ifdef WITH_MODULEMD
     "module_obsoletes",
-#endif
     "module_platform_id",
+#endif
     "module_stream_switch",
     "multilib_policy",
     "obsoletes",
@@ -407,10 +407,12 @@ void Session::store_transaction_offline(bool downloadonly) {
     }
     state_data.set_target_releasever(base->get_vars()->get_value("releasever"));
 
+#ifdef WITH_MODULEMD
     const auto module_platform_id = base->get_config().get_module_platform_id_option();
     if (!module_platform_id.empty()) {
         state_data.set_module_platform_id(module_platform_id.get_value());
     }
+#endif
 
     // create the magic symlink /system-update -> datadir
     if (downloadonly) {

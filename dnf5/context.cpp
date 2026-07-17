@@ -387,9 +387,11 @@ void Context::Impl::store_offline(libdnf5::base::Transaction & transaction) {
     }
     offline_data.set_target_releasever(base.get_vars()->get_value("releasever"));
 
+#ifdef WITH_MODULEMD
     if (!base.get_config().get_module_platform_id_option().empty()) {
         offline_data.set_module_platform_id(base.get_config().get_module_platform_id_option().get_value());
     }
+#endif
 
     state.capture_rpmdb_cookie(base);
     state.write();
