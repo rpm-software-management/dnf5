@@ -492,7 +492,7 @@ The ``trans_packages`` domain can only be used in ``goal_resolved``, ``pre_trans
    * ``IN`` - packages coming to the system (downgrade, install, reinstall, upgrade)
    * ``OUT`` - packages going out of the system (upgraded, downgraded, reinstalled, removed, replaced/obsoleted)
 
-* ``<param_name>`` - one of ``IGNORE_EXCLUDES``, ``IGNORE_MODULAR_EXCLUDES``, ``IGNORE_REGULAR_EXCLUDES``, ``IGNORE_REGULAR_CONFIG_EXCLUDES``, ``IGNORE_REGULAR_USER_EXCLUDES``
+* ``<param_name>`` - one of ``IGNORE_EXCLUDES``@IF WITH_MODULEMD@, ``IGNORE_MODULAR_EXCLUDES``@ENDIF@, ``IGNORE_REGULAR_EXCLUDES``, ``IGNORE_REGULAR_CONFIG_EXCLUDES``, ``IGNORE_REGULAR_USER_EXCLUDES``
 * ``<filter_name>`` - name of package attribute to filter; the array can contain multiple attributes
 
   General attributes

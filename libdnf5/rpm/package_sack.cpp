@@ -327,6 +327,7 @@ void PackageSack::Impl::clear_user_includes() {
     considered_uptodate = false;
 }
 
+#ifdef WITH_MODULEMD
 const PackageSet PackageSack::Impl::get_module_excludes() {
     if (module_excludes) {
         return PackageSet(base, *module_excludes);
@@ -360,6 +361,7 @@ void PackageSack::Impl::clear_module_excludes() {
     module_excludes.reset();
     considered_uptodate = false;
 }
+#endif
 
 VersionlockConfig PackageSack::Impl::get_versionlock_config() const {
     const auto & config = base->get_config();
@@ -412,7 +414,9 @@ std::optional<libdnf5::solv::SolvMap> PackageSack::Impl::compute_considered_map(
         (static_cast<bool>(flags & libdnf5::sack::ExcludeFlags::IGNORE_REGULAR_USER_EXCLUDES) ||
          (!user_excludes && !user_includes)) &&
         (static_cast<bool>(flags & libdnf5::sack::ExcludeFlags::USE_DISABLED_REPOSITORIES) || !repo_excludes) &&
+#ifdef WITH_MODULEMD
         (static_cast<bool>(flags & libdnf5::sack::ExcludeFlags::IGNORE_MODULAR_EXCLUDES) || !module_excludes) &&
+#endif
         (static_cast<bool>(flags & libdnf5::sack::ExcludeFlags::IGNORE_VERSIONLOCK) || !versionlock_excludes)) {
         return {};
     }
@@ -425,9 +429,11 @@ std::optional<libdnf5::solv::SolvMap> PackageSack::Impl::compute_considered_map(
     //              (config_includes + user_includes + all_from_repos_not_using_includes)
     considered.set_all();
 
+#ifdef WITH_MODULEMD
     if (!static_cast<bool>(flags & libdnf5::sack::ExcludeFlags::IGNORE_MODULAR_EXCLUDES) && module_excludes) {
         considered -= *module_excludes;
     }
+#endif
 
     if (!static_cast<bool>(flags & libdnf5::sack::ExcludeFlags::USE_DISABLED_REPOSITORIES) && repo_excludes) {
         considered -= *repo_excludes;

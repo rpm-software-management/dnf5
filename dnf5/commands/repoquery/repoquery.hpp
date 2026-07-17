@@ -74,7 +74,9 @@ private:
     std::unique_ptr<libdnf5::cli::session::BoolOption> recent{nullptr};
     std::unique_ptr<libdnf5::cli::session::BoolOption> installonly{nullptr};
     std::unique_ptr<libdnf5::cli::session::BoolOption> srpm{nullptr};
+#ifdef WITH_MODULEMD
     std::unique_ptr<libdnf5::cli::session::BoolOption> disable_modular_filtering{nullptr};
+#endif
     std::unique_ptr<libdnf5::cli::session::BoolOption> changelogs{nullptr};
     std::unique_ptr<libdnf5::cli::session::BoolOption> recursive{nullptr};
 

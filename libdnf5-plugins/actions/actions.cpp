@@ -1405,7 +1405,11 @@ void Actions::process_json_command(const CommandToRun & command, struct json_obj
                         if (param_key == "IGNORE_EXCLUDES") {
                             query_flags = query_flags | libdnf5::sack::ExcludeFlags::IGNORE_EXCLUDES;
                         } else if (param_key == "IGNORE_MODULAR_EXCLUDES") {
+#ifdef WITH_MODULEMD
                             query_flags = query_flags | libdnf5::sack::ExcludeFlags::IGNORE_MODULAR_EXCLUDES;
+#else
+                            // accept but ignore this parameter to preserve compatibility
+#endif
                         } else if (param_key == "IGNORE_REGULAR_EXCLUDES") {
                             query_flags = query_flags | libdnf5::sack::ExcludeFlags::IGNORE_REGULAR_EXCLUDES;
                         } else if (param_key == "IGNORE_REGULAR_CONFIG_EXCLUDES") {

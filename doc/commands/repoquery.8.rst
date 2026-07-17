@@ -60,8 +60,10 @@ Options
 
 .. include:: ../_shared/options/cves.rst
 
+@IF WITH_MODULEMD@
 ``--disable-modular-filtering``
     | Include packages of inactive module streams.
+@ENDIF@
 
 ``--duplicates``
     | Limit to installed duplicate packages (i.e. more package versions for  the  same  name and architecture).

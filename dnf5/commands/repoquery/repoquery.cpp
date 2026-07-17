@@ -331,8 +331,10 @@ void RepoqueryCommand::set_argument_parser() {
         '\0',
         "After filtering is finished use packages' corresponding source RPMs for output (enables source repositories).",
         false);
+#ifdef WITH_MODULEMD
     disable_modular_filtering = std::make_unique<libdnf5::cli::session::BoolOption>(
         *this, "disable-modular-filtering", '\0', "Include packages of inactive module streams.", false);
+#endif
 
     // Allowed values for --providers-of options (these package attributes return ReldepLists)
     std::vector<std::string> pkg_attrs_options{
@@ -559,9 +561,13 @@ static libdnf5::rpm::PackageSet resolve_nevras_to_packges(
 void RepoqueryCommand::run() {
     auto & ctx = get_context();
 
+#if WITH_MODULEMD
     libdnf5::sack::ExcludeFlags flags = disable_modular_filtering->get_value()
                                             ? libdnf5::sack::ExcludeFlags::IGNORE_MODULAR_EXCLUDES
                                             : libdnf5::sack::ExcludeFlags::APPLY_EXCLUDES;
+#else
+    libdnf5::sack::ExcludeFlags flags = libdnf5::sack::ExcludeFlags::APPLY_EXCLUDES;
+#endif
     if (!upgrades->get_value()) {
         flags = flags | libdnf5::sack::ExcludeFlags::IGNORE_VERSIONLOCK;
     }

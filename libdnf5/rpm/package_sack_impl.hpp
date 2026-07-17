@@ -106,11 +106,13 @@ public:
     void set_user_includes(const PackageSet & includes);
     void clear_user_includes();
 
+#ifdef WITH_MODULEMD
     const PackageSet get_module_excludes();
     void add_module_excludes(const PackageSet & excludes);
     void remove_module_excludes(const PackageSet & excludes);
     void set_module_excludes(const PackageSet & excludes);
     void clear_module_excludes();
+#endif
 
     VersionlockConfig get_versionlock_config() const;
     const PackageSet get_versionlock_excludes();
@@ -145,7 +147,9 @@ private:
     // TODO(jrohel): Recompute when state of repository is changed enabled/disabled or added solvable to disabled repo
     std::unique_ptr<libdnf5::solv::SolvMap> repo_excludes;
 
+#ifdef WITH_MODULEMD
     std::unique_ptr<libdnf5::solv::SolvMap> module_excludes;  // packages excluded by modularity
+#endif
 
     // packages excluded by versionlock feature
     std::unique_ptr<libdnf5::solv::SolvMap> versionlock_excludes;  // packages excluded by versionlock
