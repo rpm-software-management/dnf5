@@ -41,7 +41,7 @@ public:
     std::size_t total_bar_visible_limit{0};
     std::vector<std::unique_ptr<ProgressBar>> bars_all;
     std::vector<ProgressBar *> bars_todo;
-    std::vector<ProgressBar *> bars_done;
+    std::size_t bars_done_count{0};
     DownloadProgressBar total;
     int64_t done_ticks{0};
     // Whether the last line was printed without a new line ending (such as an in progress bar)
@@ -164,10 +164,10 @@ std::ostream & operator<<(std::ostream & stream, MultiProgressBar & mbar) {
     mbar.p_impl->num_of_lines_to_clear = 0;
     mbar.p_impl->line_printed = false;
 
-    // initialize bar number counter to bars_done.size(), clamp to bounds on overflow
-    auto number = cast_to_bar_number(mbar.p_impl->bars_done.size());
+    // initialize bar number counter to bars_done_count, clamp to bounds on overflow
+    auto number = cast_to_bar_number(mbar.p_impl->bars_done_count);
 
-    // print completed bars first and move them from bars_todo to bars_done
+    // print completed bars first and remove them from bars_todo
     for (auto it = mbar.p_impl->bars_todo.begin(); it != mbar.p_impl->bars_todo.end();) {
         auto * const bar = *it;
 
@@ -187,7 +187,7 @@ std::ostream & operator<<(std::ostream & stream, MultiProgressBar & mbar) {
         if (const auto bar_ticks = bar->get_ticks(); bar_ticks > 0) {
             mbar.p_impl->done_ticks += bar_ticks;
         }
-        mbar.p_impl->bars_done.push_back(bar);
+        ++mbar.p_impl->bars_done_count;
         it = mbar.p_impl->bars_todo.erase(it);
     }
 
@@ -243,7 +243,7 @@ std::ostream & operator<<(std::ostream & stream, MultiProgressBar & mbar) {
 
         // print Total progress bar
         auto & mbar_total = mbar.get_total_bar();
-        mbar_total.set_number(cast_to_bar_number(mbar.p_impl->bars_done.size()));
+        mbar_total.set_number(cast_to_bar_number(mbar.p_impl->bars_done_count));
 
         mbar_total.set_total_ticks(total_ticks);
         mbar_total.set_ticks(ticks);
