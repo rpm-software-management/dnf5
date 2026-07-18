@@ -29,6 +29,7 @@
 #include <algorithm>
 #include <iomanip>
 #include <limits>
+#include <set>
 #include <utility>
 
 
@@ -36,13 +37,17 @@ namespace libdnf5::cli::progressbar {
 
 class MultiProgressBar::Impl {
 public:
-    Impl();
+    Impl(PrintMode print_mode);
+
+    const PrintMode print_mode;
 
     std::size_t total_bar_visible_limit{0};
     std::vector<std::unique_ptr<ProgressBar>> bars_all;
     std::vector<ProgressBar *> bars_todo;
     std::size_t bars_done_count{0};
     DownloadProgressBar total;
+    std::set<ProgressBar *> bars_newly_active;
+
     int64_t done_ticks{0};
     // Whether the last line was printed without a new line ending (such as an in progress bar)
     bool line_printed{false};
@@ -75,23 +80,33 @@ BarNumberType cast_to_bar_number(auto value) {
 }  // namespace
 
 
-MultiProgressBar::Impl::Impl() : total(0, _("Total")) {
+MultiProgressBar::Impl::Impl(PrintMode print_mode) : print_mode(print_mode), total(0, _("Total")) {
     total.set_auto_finish(false);
     total.start();
 }
 
 
-MultiProgressBar::MultiProgressBar() : p_impl(new Impl()) {
+MultiProgressBar::MultiProgressBar(PrintMode print_mode) : p_impl(new Impl(print_mode)) {
     if (tty::is_interactive()) {
         std::cerr << tty::cursor_hide;
     }
 }
+
+
+MultiProgressBar::MultiProgressBar() : MultiProgressBar(PrintMode::ALL_BARS) {}
+
 
 MultiProgressBar::~MultiProgressBar() {
     if (tty::is_interactive()) {
         std::cerr << tty::cursor_show;
     }
 }
+
+
+MultiProgressBar::PrintMode MultiProgressBar::get_print_mode() const noexcept {
+    return p_impl->print_mode;
+}
+
 
 void MultiProgressBar::print() {
     std::cerr << *this;
@@ -116,7 +131,9 @@ void MultiProgressBar::add_bar(std::unique_ptr<ProgressBar> && bar) {
     bar->set_number(next_number);
 
     // register bar to MultiProgressBar
-    p_impl->bars_todo.push_back(bar.get());
+    if (p_impl->print_mode == PrintMode::ALL_BARS) {
+        p_impl->bars_todo.push_back(bar.get());
+    }
     p_impl->bars_all.push_back(std::move(bar));
 
     // update total (in [num/total]) in total progress bar
@@ -126,6 +143,11 @@ void MultiProgressBar::add_bar(std::unique_ptr<ProgressBar> && bar) {
     }
 }
 
+void MultiProgressBar::mark_bar_active(ProgressBar * bar) {
+    if (p_impl->print_mode == PrintMode::ACTIVE_BARS_ONLY) {
+        p_impl->bars_newly_active.insert(bar);
+    }
+}
 
 void MultiProgressBar::set_total_num_of_bars(std::size_t value) noexcept {
     if (value < p_impl->bars_all.size()) {
@@ -169,7 +191,15 @@ std::ostream & operator<<(std::ostream & stream, MultiProgressBar & mbar) {
     auto number = cast_to_bar_number(mbar.p_impl->bars_done_count);
 
     // print completed bars first and remove them from bars_todo
-    for (auto it = mbar.p_impl->bars_todo.begin(); it != mbar.p_impl->bars_todo.end();) {
+    for (auto it = mbar.p_impl->bars_todo.begin();
+         it != mbar.p_impl->bars_todo.end() || !mbar.p_impl->bars_newly_active.empty();) {
+        if (it != mbar.p_impl->bars_todo.end()) {
+            mbar.p_impl->bars_newly_active.erase(*it);
+        } else {
+            auto newly_active_it = mbar.p_impl->bars_newly_active.begin();
+            it = mbar.p_impl->bars_todo.insert(it, *newly_active_it);
+            mbar.p_impl->bars_newly_active.erase(newly_active_it);
+        }
         auto * const bar = *it;
 
         if (!bar->is_finished()) {
@@ -220,7 +250,7 @@ std::ostream & operator<<(std::ostream & stream, MultiProgressBar & mbar) {
 
     // then print the "total" progress bar
     if ((mbar.p_impl->bars_all.size() >= mbar.p_impl->total_bar_visible_limit) &&
-        (is_interactive || mbar.p_impl->bars_todo.empty())) {
+        (is_interactive || mbar.p_impl->bars_all.size() == mbar.p_impl->bars_done_count)) {
         // compute ticks and total_ticks for total progress bar
         // done bars can be unfinished -> add only processed ticks to both values
         int64_t ticks = mbar.p_impl->done_ticks;
@@ -248,7 +278,7 @@ std::ostream & operator<<(std::ostream & stream, MultiProgressBar & mbar) {
         mbar_total.set_total_ticks(total_ticks);
         mbar_total.set_ticks(ticks);
 
-        if (mbar.p_impl->bars_todo.empty()) {
+        if (mbar.p_impl->bars_all.size() == mbar.p_impl->bars_done_count) {
             // all bars have finished, set the "Total" bar as finished too according to their states
             mbar_total.set_state(ProgressBarState::SUCCESS);
         }

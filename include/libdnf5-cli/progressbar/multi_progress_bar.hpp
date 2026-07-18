@@ -41,7 +41,18 @@ class LIBDNF_CLI_API MultiProgressBar {
 public:
     static constexpr std::size_t NEVER_VISIBLE_LIMIT = static_cast<std::size_t>(-1);
 
+    /// Controls which unfinished bars are rendered on each print.
+    enum class PrintMode {
+        ALL_BARS,         ///< All unfinished bars are rendered on every print.
+        ACTIVE_BARS_ONLY  ///< Only bars marked via mark_bar_active() are rendered.
+    };
+
+    /// Constructs a MultiProgressBar with the given print mode.
+    explicit MultiProgressBar(PrintMode print_mode);
+
+    /// Constructs a MultiProgressBar with PrintMode::ALL_BARS.
     explicit MultiProgressBar();
+
     ~MultiProgressBar();
 
     MultiProgressBar(const MultiProgressBar & src) = delete;
@@ -50,7 +61,17 @@ public:
     MultiProgressBar(MultiProgressBar && src) noexcept = delete;
     MultiProgressBar & operator=(MultiProgressBar && src) noexcept = delete;
 
+    PrintMode get_print_mode() const noexcept;
+
     void add_bar(std::unique_ptr<ProgressBar> && bar);
+
+    /// Marks a bar as active for rendering in the next print.
+    /// In modes other than PrintMode::ACTIVE_BARS_ONLY this is a no-op.
+    /// Can be called multiple times on the same bar without side effects.
+    /// Must not be called on a bar that has already been rendered in a finished
+    /// state; doing so would cause it to be counted again as a finished bar
+    /// in the next render.
+    void mark_bar_active(ProgressBar * bar);
 
     // In interactive mode MultiProgressBar doesn't print a newline after unfinished progressbars.
     // Finished progressbars always end with a newline.
