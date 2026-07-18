@@ -35,7 +35,8 @@ void DownloadCallbacks::set_show_total_bar_limit(std::size_t limit) {
 void * DownloadCallbacks::add_new_download(
     [[maybe_unused]] void * user_data, const char * description, double total_to_download) {
     if (!multi_progress_bar) {
-        multi_progress_bar = std::make_unique<libdnf5::cli::progressbar::MultiProgressBar>();
+        multi_progress_bar = std::make_unique<libdnf5::cli::progressbar::MultiProgressBar>(
+            libdnf5::cli::progressbar::MultiProgressBar::PrintMode::ACTIVE_BARS_ONLY);
         multi_progress_bar->set_total_bar_visible_limit(show_total_bar_limit);
     }
     auto progress_bar = std::make_unique<libdnf5::cli::progressbar::DownloadProgressBar>(
@@ -49,6 +50,10 @@ void * DownloadCallbacks::add_new_download(
 
 int DownloadCallbacks::progress(void * user_cb_data, double total_to_download, double downloaded) {
     auto * progress_bar = reinterpret_cast<libdnf5::cli::progressbar::DownloadProgressBar *>(user_cb_data);
+    // Also ensures mark_bar_active() is not called on a finished bar.
+    if (progress_bar->is_finished()) {
+        return ReturnCode::OK;
+    }
     auto total = static_cast<int64_t>(total_to_download);
     if (total > 0) {
         progress_bar->set_total_ticks(total);
@@ -57,6 +62,7 @@ int DownloadCallbacks::progress(void * user_cb_data, double total_to_download, d
         progress_bar->start();
     }
     progress_bar->set_ticks(static_cast<int64_t>(downloaded));
+    multi_progress_bar->mark_bar_active(progress_bar);
     if (is_time_to_print()) {
         print();
     }
@@ -65,6 +71,10 @@ int DownloadCallbacks::progress(void * user_cb_data, double total_to_download, d
 
 int DownloadCallbacks::end(void * user_cb_data, TransferStatus status, const char * msg) {
     auto * progress_bar = reinterpret_cast<libdnf5::cli::progressbar::DownloadProgressBar *>(user_cb_data);
+    // Also ensures mark_bar_active() is not called on a finished bar.
+    if (progress_bar->is_finished()) {
+        return ReturnCode::OK;
+    }
     switch (status) {
         case TransferStatus::SUCCESSFUL:
             // Correction of the total data size for the download.
@@ -86,17 +96,23 @@ int DownloadCallbacks::end(void * user_cb_data, TransferStatus status, const cha
             progress_bar->set_state(libdnf5::cli::progressbar::ProgressBarState::ERROR);
             break;
     }
+    multi_progress_bar->mark_bar_active(progress_bar);
     print();
     return ReturnCode::OK;
 }
 
 int DownloadCallbacks::mirror_failure(void * user_cb_data, const char * msg, const char * url, const char * metadata) {
     auto * progress_bar = reinterpret_cast<libdnf5::cli::progressbar::DownloadProgressBar *>(user_cb_data);
+    // Also ensures mark_bar_active() is not called on a finished bar.
+    if (progress_bar->is_finished()) {
+        return ReturnCode::OK;
+    }
     std::string message = std::string(msg) + " - " + url;
     if (metadata) {
         message = message + " - " + metadata;
     }
     progress_bar->add_message(libdnf5::cli::progressbar::MessageType::ERROR, message);
+    multi_progress_bar->mark_bar_active(progress_bar);
     print();
     return ReturnCode::OK;
 }
