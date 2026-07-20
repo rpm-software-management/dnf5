@@ -125,7 +125,8 @@ void DownloadCB::add_new_download(sdbus::Signal & signal) {
         signal >> description;
         signal >> total_to_download;
         if (!multi_progress_bar) {
-            multi_progress_bar = std::make_unique<libdnf5::cli::progressbar::MultiProgressBar>();
+            multi_progress_bar = std::make_unique<libdnf5::cli::progressbar::MultiProgressBar>(
+                libdnf5::cli::progressbar::MultiProgressBar::PrintMode::ACTIVE_BARS_ONLY);
             multi_progress_bar->set_total_bar_visible_limit(show_total_bar_limit);
         }
         auto progress_bar = std::make_unique<libdnf5::cli::progressbar::DownloadProgressBar>(
@@ -142,7 +143,8 @@ void DownloadCB::end(sdbus::Signal & signal) {
         std::string download_id;
         signal >> download_id;
         auto progress_bar = find_progress_bar(download_id);
-        if (progress_bar == nullptr) {
+        // Also ensures mark_bar_active() is not called on a finished bar.
+        if (progress_bar == nullptr || progress_bar->is_finished()) {
             return;
         }
 
@@ -169,6 +171,7 @@ void DownloadCB::end(sdbus::Signal & signal) {
                 progress_bar->set_state(libdnf5::cli::progressbar::ProgressBarState::ERROR);
                 break;
         }
+        multi_progress_bar->mark_bar_active(progress_bar);
         print();
     }
 }
@@ -178,7 +181,8 @@ void DownloadCB::progress(sdbus::Signal & signal) {
         std::string download_id;
         signal >> download_id;
         auto progress_bar = find_progress_bar(download_id);
-        if (progress_bar == nullptr) {
+        // Also ensures mark_bar_active() is not called on a finished bar.
+        if (progress_bar == nullptr || progress_bar->is_finished()) {
             return;
         }
         int64_t total_to_download;
@@ -192,6 +196,7 @@ void DownloadCB::progress(sdbus::Signal & signal) {
             progress_bar->start();
         }
         progress_bar->set_ticks(downloaded);
+        multi_progress_bar->mark_bar_active(progress_bar);
         print();
     }
 }
@@ -201,7 +206,8 @@ void DownloadCB::mirror_failure(sdbus::Signal & signal) {
         std::string download_id;
         signal >> download_id;
         auto progress_bar = find_progress_bar(download_id);
-        if (progress_bar == nullptr) {
+        // Also ensures mark_bar_active() is not called on a finished bar.
+        if (progress_bar == nullptr || progress_bar->is_finished()) {
             return;
         }
         std::string msg;
@@ -216,6 +222,7 @@ void DownloadCB::mirror_failure(sdbus::Signal & signal) {
             message += " - " + metadata;
         }
         progress_bar->add_message(libdnf5::cli::progressbar::MessageType::ERROR, message);
+        multi_progress_bar->mark_bar_active(progress_bar);
         print();
     }
 }
