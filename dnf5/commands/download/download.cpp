@@ -21,6 +21,7 @@
 
 #include "dnf5/shared_options.hpp"
 
+#include <dnf5/download_callbacks.hpp>
 #include <libdnf5/conf/option_string.hpp>
 #include <libdnf5/repo/package_downloader.hpp>
 #include <libdnf5/rpm/arch.hpp>
@@ -416,6 +417,10 @@ void DownloadCommand::run() {
         std::cout << "Downloading Packages:" << std::endl;
     }
     downloader.download();
+    // Flush progress bars before any other output
+    if (auto * cb = dynamic_cast<DownloadCallbacks *>(ctx.get_base().get_download_callbacks())) {
+        cb->reset_progress_bar();
+    }
 }
 
 

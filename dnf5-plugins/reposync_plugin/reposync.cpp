@@ -19,6 +19,7 @@
 
 #include "reposync.hpp"
 
+#include <dnf5/download_callbacks.hpp>
 #include <libdnf5-cli/exception.hpp>
 #include <libdnf5/common/sack/exclude_flags.hpp>
 #include <libdnf5/conf/const.hpp>
@@ -279,6 +280,10 @@ void ReposyncCommand::download_packages(const ReposyncCommand::download_list_typ
         downloader.add(pkg, pth.parent_path());
     }
     downloader.download();
+    // Flush progress bars before any other output
+    if (auto * cb = dynamic_cast<dnf5::DownloadCallbacks *>(get_context().get_base().get_download_callbacks())) {
+        cb->reset_progress_bar();
+    }
     const auto failed_packages = downloader.get_failed_packages();
     if (!failed_packages.empty()) {
         for (const auto & pkg : failed_packages) {

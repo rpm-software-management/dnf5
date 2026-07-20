@@ -3,6 +3,7 @@
 
 #include "manifest.hpp"
 
+#include <dnf5/download_callbacks.hpp>
 #include <dnf5/shared_options.hpp>
 #include <libdnf5/repo/package_downloader.hpp>
 #include <libdnf5/rpm/package_query.hpp>
@@ -125,6 +126,10 @@ void ManifestDownloadCommand::download_packages(
         }
     }
     downloader.download();
+    // Flush progress bars before any other output
+    if (auto * cb = dynamic_cast<dnf5::DownloadCallbacks *>(get_context().get_base().get_download_callbacks())) {
+        cb->reset_progress_bar();
+    }
 }
 
 void ManifestDownloadCommand::run() {
