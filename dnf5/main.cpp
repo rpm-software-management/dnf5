@@ -54,11 +54,11 @@
 #include "commands/versionlock/versionlock.hpp"
 #include "context_impl.hpp"
 #include "dnf5/context.hpp"
-#include "download_callbacks.hpp"
 #include "plugins.hpp"
 #include "signal_handlers.hpp"
 #include "utils/auth.hpp"
 
+#include <dnf5/download_callbacks.hpp>
 #include <fcntl.h>
 #include <fmt/format.h>
 #include <fnmatch.h>

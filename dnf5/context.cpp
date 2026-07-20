@@ -20,7 +20,6 @@
 #include "dnf5/context.hpp"
 
 #include "context_impl.hpp"
-#include "download_callbacks.hpp"
 #include "plugins.hpp"
 #include "utils/string.hpp"
 #include "utils/url.hpp"
@@ -28,6 +27,7 @@
 #include "libdnf5/utils/fs/file.hpp"
 #include "libdnf5/utils/fs/utils.hpp"
 
+#include <dnf5/download_callbacks.hpp>
 #include <fmt/format.h>
 #include <libdnf5-cli/progressbar/multi_progress_bar.hpp>
 #include <libdnf5-cli/tty.hpp>
