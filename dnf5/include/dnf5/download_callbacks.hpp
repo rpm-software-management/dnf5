@@ -49,7 +49,6 @@ private:
 
     std::unique_ptr<libdnf5::cli::progressbar::MultiProgressBar> multi_progress_bar;
     std::chrono::time_point<std::chrono::steady_clock> prev_print_time{std::chrono::steady_clock::now()};
-    bool printed{false};
 
     bool number_widget_visible{false};
     std::size_t show_total_bar_limit{0};

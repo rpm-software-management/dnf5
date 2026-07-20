@@ -109,7 +109,6 @@ void DownloadCallbacks::reset_progress_bar() {
         print();
     }
     multi_progress_bar.reset();
-    printed = false;
 }
 
 bool DownloadCallbacks::is_time_to_print() {
@@ -126,7 +125,6 @@ bool DownloadCallbacks::is_time_to_print() {
 
 void DownloadCallbacks::print() {
     multi_progress_bar->print();
-    printed = true;
 }
 
 }  // namespace dnf5
