@@ -86,7 +86,9 @@ int DownloadCallbacks::end(void * user_cb_data, TransferStatus status, const cha
             progress_bar->set_state(libdnf5::cli::progressbar::ProgressBarState::ERROR);
             break;
     }
-    print();
+    if (is_time_to_print()) {
+        print();
+    }
     return ReturnCode::OK;
 }
 
@@ -102,10 +104,12 @@ int DownloadCallbacks::mirror_failure(void * user_cb_data, const char * msg, con
 }
 
 void DownloadCallbacks::reset_progress_bar() {
-    multi_progress_bar.reset();
-    if (printed) {
-        printed = false;
+    // Render any completions deferred by rate-limiting in end()
+    if (multi_progress_bar) {
+        print();
     }
+    multi_progress_bar.reset();
+    printed = false;
 }
 
 bool DownloadCallbacks::is_time_to_print() {
