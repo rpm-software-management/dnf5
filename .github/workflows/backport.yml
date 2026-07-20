@@ -10,7 +10,7 @@ permissions: {}
 jobs:
   backport:
     name: Backport pull request
-    if: github.repository_owner == 'rpm-software-management' && github.event.pull_request.merged == true && (github.event_name != 'labeled' || startsWith('backport', github.event.label.name))
+    if: github.repository_owner == 'rpm-software-management' && github.event.pull_request.merged == true && (github.event.action != 'labeled' || startsWith(github.event.label.name, 'backport'))
     runs-on: ubuntu-latest
     steps:
       # Use a GitHub App to create the PR so that CI gets triggered
