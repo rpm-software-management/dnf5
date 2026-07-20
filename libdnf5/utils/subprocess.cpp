@@ -3,6 +3,7 @@
 
 #include "utils/subprocess.hpp"
 
+#include "utils/on_scope_exit.hpp"
 #include "utils/string.hpp"
 
 #include <fcntl.h>
@@ -66,27 +67,6 @@ private:
     }
 
     int fds[2];
-};
-
-/// The class template OnScopeExit is a general-purpose scope guard
-/// intended to call its exit function when a scope is exited.
-template <typename TExitFunction>
-    requires requires(TExitFunction f) {
-        { f() } noexcept;
-    }
-class OnScopeExit {
-public:
-    OnScopeExit(TExitFunction && function) noexcept : exit_function{std::move(function)} {}
-
-    ~OnScopeExit() noexcept { exit_function(); }
-
-    OnScopeExit(const OnScopeExit &) = delete;
-    OnScopeExit(OnScopeExit &&) = delete;
-    OnScopeExit & operator=(const OnScopeExit &) = delete;
-    OnScopeExit & operator=(OnScopeExit &&) = delete;
-
-private:
-    TExitFunction exit_function;
 };
 
 }  // namespace
