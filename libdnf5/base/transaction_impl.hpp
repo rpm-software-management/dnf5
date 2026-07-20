@@ -38,6 +38,7 @@
 
 #include <solv/transaction.h>
 
+#include <condition_variable>
 #include <mutex>
 
 
@@ -98,6 +99,7 @@ public:
     std::string get_last_script_output();
     void clear_last_script_output();
     void append_last_script_output(std::string_view output);
+    void flush_last_script_output();
     void process_scriptlets_output(int fd);
 
     /// Getter/setter for RPM log messages
@@ -140,6 +142,10 @@ private:
 
     std::string last_script_output{};
     std::mutex last_script_output_mutex;
+
+    int scriptlet_read_end_pipe_fd{-1};
+    std::mutex scriptlet_pipe_sync_mutex;
+    std::condition_variable scriptlet_pipe_sync_cv;
 
     std::vector<std::string> rpm_messages;
 

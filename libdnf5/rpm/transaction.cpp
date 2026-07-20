@@ -704,6 +704,7 @@ void * Transaction::ts_callback(
             // total is return code - if (error && !RPMSCRIPT_FLAG_CRITICAL) return_code = RPMRC_NOTFOUND
             if (callbacks_holder.base_transaction) {
                 callbacks_holder.base_transaction->set_rpm_messages(transaction.extract_rpm_messages());
+                callbacks_holder.base_transaction->flush_last_script_output();
             }
             auto script_type = rpm_tag_to_script_type(static_cast<rpmTag_e>(amount));
             auto nevra = trans_element_to_nevra(trans_element);

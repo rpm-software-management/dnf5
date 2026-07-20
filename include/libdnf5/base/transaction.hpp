@@ -229,6 +229,9 @@ private:
     /// Clear the recorded last scriptlet output
     LIBDNF_LOCAL void clear_last_script_output();
 
+    /// Wait until pending scriptlet output has been read from the pipe
+    LIBDNF_LOCAL void flush_last_script_output();
+
     /// Store captured RPM log messages
     LIBDNF_LOCAL void set_rpm_messages(std::vector<std::string> && rpm_messages);
 };

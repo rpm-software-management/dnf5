@@ -35,6 +35,7 @@
 #include "transaction_impl.hpp"
 #include "transaction_module_impl.hpp"
 #include "transaction_package_impl.hpp"
+#include "utils/on_scope_exit.hpp"
 #include "utils/string.hpp"
 
 #include "libdnf5/base/active_transaction_info.hpp"
@@ -53,6 +54,8 @@
 
 #include <fcntl.h>
 #include <fmt/format.h>
+#include <poll.h>
+#include <sys/ioctl.h>
 #include <unistd.h>
 
 #include <filesystem>
@@ -899,35 +902,84 @@ TransactionPackage Transaction::Impl::make_transaction_package(
 
 // Reads the output of scriptlets from the file descriptor and processes them.
 void Transaction::Impl::process_scriptlets_output(int fd) {
+    utils::OnScopeExit close_fd([this, fd]() noexcept {
+        std::unique_lock<std::mutex> lock(scriptlet_pipe_sync_mutex);
+        scriptlet_read_end_pipe_fd = -1;
+        scriptlet_pipe_sync_cv.notify_all();
+        close(fd);
+    });
     auto logger = base->get_logger().get();
+    // Set the pipe fd as not blocking so that we can later read all current pipe content without blocking
+    if (fcntl(fd, F_SETFL, O_NONBLOCK) == -1) {
+        logger->error("Transaction::Run: Cannot set scriptlet output pipe as non-blocking: {}", std::strerror(errno));
+        return;
+    }
+    struct pollfd pfd{fd, POLLIN, 0};
     try {
         char buf[512];
-        do {
-            auto len = read(fd, buf, sizeof(buf));
-            if (len > 0) {
-                std::string_view str(buf, static_cast<size_t>(len));
-                append_last_script_output(str);
-                std::string_view::size_type start = 0;
-                do {
-                    auto end = str.find('\n', start);
-                    logger->info("[scriptlet] {}", str.substr(start, end - start));
-                    if (end == std::string_view::npos) {
-                        break;
-                    }
-                    start = end + 1;
-                } while (start < str.size());
-            } else {
-                if (len == -1) {
-                    logger->error("Transaction::Run: Cannot read scriptlet output from pipe: {}", std::strerror(errno));
-                }
-                break;
+        while (true) {
+            const int poll_result = poll(&pfd, 1, -1);
+            if (poll_result == -1 && errno != EINTR) {
+                throw SystemError(errno, M_("poll failed during scriptlets pipe processing"));
             }
-        } while (true);
+            if (pfd.revents & (POLLHUP | POLLIN)) {
+                std::unique_lock<std::mutex> lock(scriptlet_pipe_sync_mutex);
+
+                bool got_data = false;
+                ssize_t bytes_read = 0;
+                while ((bytes_read = read(fd, buf, sizeof(buf))) > 0) {
+                    got_data = true;
+                    std::string_view str(buf, static_cast<size_t>(bytes_read));
+                    append_last_script_output(str);
+                    std::string_view::size_type start = 0;
+                    do {
+                        auto end = str.find('\n', start);
+                        logger->info("[scriptlet] {}", str.substr(start, end - start));
+                        if (end == std::string_view::npos) {
+                            break;
+                        }
+                        start = end + 1;
+                    } while (start < str.size());
+                }
+
+                if (bytes_read < 0 && errno != EAGAIN && errno != EINTR) {
+                    throw SystemError(errno, M_("failed to read scriptlet output from pipe"));
+                }
+                if (got_data) {
+                    scriptlet_pipe_sync_cv.notify_all();
+                }
+
+                // EOF - pipe is closed
+                if (bytes_read == 0) {
+                    return;
+                }
+            }
+            if (pfd.revents & (POLLHUP | POLLERR)) {
+                return;
+            }
+        }
     } catch (const std::exception & ex) {
         // The thread must not throw exceptions.
         logger->error("Transaction::Run: Exception while processing scriptlet output: {}", ex.what());
     }
-    close(fd);
+}
+
+void Transaction::Impl::flush_last_script_output() {
+    std::unique_lock<std::mutex> lock(scriptlet_pipe_sync_mutex);
+    while (true) {
+        if (scriptlet_read_end_pipe_fd == -1) {
+            break;
+        }
+        int bytes = 0;
+        if (ioctl(scriptlet_read_end_pipe_fd, FIONREAD, &bytes) == -1) {
+            // If we fail to read number of bytes don't wait since the reader thread likely has problems as well.
+            break;
+        }
+        if (bytes == 0) {
+            break;
+        }
+        scriptlet_pipe_sync_cv.wait(lock);
+    }
 }
 
 Transaction::TransactionRunResult Transaction::Impl::test() {
@@ -1135,6 +1187,8 @@ Transaction::TransactionRunResult Transaction::Impl::_run(
         logger->error("Transaction::Run: Cannot create pipe: {}", std::strerror(errno));
         return TransactionRunResult::ERROR_RPM_RUN;
     }
+
+    scriptlet_read_end_pipe_fd = pipe_out_from_scriptlets[0];
 
     // This thread processes the output of RPM scriptlets.
     std::thread thread_processes_scriptlets_output(
@@ -1689,6 +1743,10 @@ std::string Transaction::get_last_script_output() {
 
 void Transaction::clear_last_script_output() {
     p_impl->clear_last_script_output();
+}
+
+void Transaction::flush_last_script_output() {
+    p_impl->flush_last_script_output();
 }
 
 std::vector<std::string> Transaction::get_rpm_messages() {
