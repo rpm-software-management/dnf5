@@ -1,0 +1,120 @@
+---
+document: modulemd
+version: 2
+data:
+  name: ingredience
+  stream: chicken
+  version: 2
+  arch: x86_64
+  summary: Dependency testing module
+  description: Made up module for dependency testing
+  license:
+    module:
+    - MIT
+  profiles:
+    default:
+      rpms: ["chicken"]
+  components:
+    rpms:
+      egg: {rationale: 'rationale for chicken'}
+  artifacts:
+    rpms: ["chicken-0:2.0-1.x86_64"]
+...
+---
+document: modulemd
+version: 2
+data:
+  name: ingredience
+  stream: egg
+  version: 2
+  arch: x86_64
+  summary: Dependency testing module
+  description: Made up module for dependency testing
+  license:
+    module:
+    - MIT
+  profiles:
+    default:
+      rpms: ["egg"]
+  components:
+    rpms:
+      egg: {rationale: 'rationale for egg'}
+  artifacts:
+    rpms: ["egg-0:2.0-1.x86_64"]
+...
+---
+document: modulemd
+version: 2
+data:
+  name: ingredience
+  stream: orange
+  version: 2
+  arch: x86_64
+  summary: Dependency testing module
+  description: Made up module for dependency testing
+  license:
+    module:
+    - MIT
+  profiles:
+    default:
+      rpms: ["orange"]
+  components:
+    rpms:
+      egg: {rationale: 'rationale for orange'}
+  artifacts:
+    rpms: ["orange-0:2.0-1.x86_64"]
+...
+---
+document: modulemd
+version: 2
+data:
+  name: ingredience
+  stream: strawberry
+  version: 2
+  arch: x86_64
+  summary: Dependency testing module
+  description: Made up module for dependency testing
+  license:
+    module:
+    - MIT
+  profiles:
+    default:
+      rpms: ["strawberry"]
+  components:
+    rpms:
+      egg: {rationale: 'rationale for strawberry'}
+  artifacts:
+    rpms: ["strawberry-0:2.0-1.x86_64"]
+...
+---
+document: modulemd
+version: 2
+data:
+  name: cookbook
+  stream: 1
+  version: 2
+  arch: x86_64
+  summary: Module for testing module update independently on installed profiles
+  description: Contains profiles that depend on non-modular packages and packages from different modules
+  license:
+    module:
+    - MIT
+  profiles:
+    ham-and-eggs:
+      rpms: ["ham", "egg", "spatula"]
+    orange-juice:
+      rpms: ["orange", "blender"]
+    axe-soup:
+      rpms: ["axe"]
+  artifacts:
+    rpms: ["spatula-0:2.0-1.x86_64", "blender-0:2.0-1.x86_64", "whisk-0:2.0-1.x86_64"]
+...
+---
+document: modulemd-defaults
+version: 1
+data:
+    module: ingredience
+    stream: orange
+    profiles:
+        default: [default]
+...

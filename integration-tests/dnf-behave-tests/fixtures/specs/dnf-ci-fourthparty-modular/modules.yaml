@@ -1,0 +1,74 @@
+---
+document: modulemd
+version: 2
+data:
+  name: fake-nodejs
+  stream: 8
+  version: 20181216123422
+  context: 7f892346
+  arch: x86_64
+  summary: Javascript runtime
+  description: >-
+    Exactly as nodejs:8 from Fedora, but under different module name
+  license:
+    module:
+    - MIT
+    content:
+    - MIT and ASL 2.0 and ISC and BSD
+  xmd:
+    mbs:
+      mse: TRUE
+      scmurl: https://src.fedoraproject.org/modules/nodejs.git?#bc228d9478ac1b4387f55b6dc0b6dce38db7a7b9
+      commit: bc228d9478ac1b4387f55b6dc0b6dce38db7a7b9
+      buildrequires:
+        platform:
+          ref: f29
+          stream: f29
+          context: 00000000
+          version: 5
+          filtered_rpms: []
+      rpms:
+        nodejs:
+          ref: 0d185d83353950699b7016d89a66d3916e0168b0
+  dependencies:
+  - buildrequires:
+      platform: [f29]
+    requires:
+      platform: [f29]
+  references:
+    community: http://nodejs.org
+    documentation: http://nodejs.org/en/docs
+    tracker: https://github.com/nodejs/node/issues
+  profiles:
+    default:
+      rpms:
+      - nodejs
+      - npm
+    development:
+      rpms:
+      - nodejs
+      - nodejs-devel
+      - npm
+    minimal:
+      rpms:
+      - nodejs
+  api:
+    rpms:
+    - nodejs
+    - nodejs-devel
+    - npm
+  components:
+    rpms:
+      nodejs:
+        rationale: Javascript runtime and npm package manager.
+        repository: git://pkgs.fedoraproject.org/rpms/nodejs
+        cache: http://pkgs.fedoraproject.org/repo/pkgs/nodejs
+        ref: 8
+        buildorder: 10
+  artifacts:
+    rpms:
+    - nodejs-1:8.11.4-1.module_2030+42747d40.x86_64
+    - nodejs-devel-1:8.11.4-1.module_2030+42747d40.x86_64
+    - nodejs-docs-1:8.11.4-1.module_2030+42747d40.noarch
+    - npm-1:8.14.0-1.module_2030+42747d41.x86_64
+...

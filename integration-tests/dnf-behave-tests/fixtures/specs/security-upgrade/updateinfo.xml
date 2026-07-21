@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<updates>
+    <update from="dnf-testing@redhat.com" status="stable" type="security" version="1">
+        <id>DNF-2019-1</id>
+        <title>json-c security fix</title>
+        <release>Fedora 29</release>
+        <issue date="2019-02-22 15:30:01" />
+        <references />
+        <description>testing advisory</description>
+        <pkglist>
+            <collection short="F29">
+                <name>Fedora 29</name>
+                <package name="json-c" version="1" release="1" epoch="0" arch="x86_64" src="https://the.url/the.package.rpm">
+                    <filename>json-c-1-1.x86_64.rpm</filename>
+                </package>
+                <package name="json-c" version="1" release="1" epoch="0" arch="i686" src="https://the.url/the.package.rpm">
+                    <filename>json-c-1-1.i686.rpm</filename>
+                </package>
+            </collection>
+        </pkglist>
+    </update>
+    <update from="dnf-testing@redhat.com" status="stable" type="security" version="1">
+        <id>DNF-2019-1</id>
+        <title>bind-libs-lite security fix</title>
+        <release>Fedora 29</release>
+        <issue date="2019-02-22 15:30:01" />
+        <references />
+        <description>testing advisory</description>
+        <pkglist>
+            <collection short="F29">
+                <name>Fedora 29</name>
+                <package name="bind-libs-lite" version="2" release="2" epoch="0" arch="x86_64" src="https://the.url/the.package.rpm">
+                    <filename>bind-libs-lite-2-2.x86_64.rpm</filename>
+                </package>
+            </collection>
+        </pkglist>
+    </update>
+    <update from="dnf-testing@redhat.com" status="stable" type="security" version="1">
+        <id>DNF-2019-3</id>
+        <title>kexec-tools security fix</title>
+        <release>Fedora 29</release>
+        <issue date="2019-04-22 15:30:01" />
+        <references />
+        <description>testing advisory</description>
+        <pkglist>
+            <collection short="F29">
+                <name>Fedora 29</name>
+                <package name="kexec-tools" version="2" release="2" epoch="0" arch="x86_64" src="https://the.url/the.package.rpm">
+                    <filename>kexec-tools-2-2.x86_64.rpm</filename>
+                </package>
+            </collection>
+        </pkglist>
+    </update>
+    <update from="dnf-testing@redhat.com" status="stable" type="security" version="1">
+        <id>DNF-2019-4</id>
+        <title>obsoleter security fix</title>
+        <release>Fedora 29</release>
+        <issue date="2019-02-22 15:30:01" />
+        <references />
+        <description>testing advisories during upgrade with obsoleteing pkg</description>
+        <pkglist>
+            <collection short="F29">
+                <name>Fedora 29</name>
+                <package name="B" version="2" release="2" epoch="0" arch="x86_64" src="https://the.url/the.package.rpm">
+                    <filename>B-2-2.x86_64.rpm</filename>
+                </package>
+            </collection>
+        </pkglist>
+    </update>
+    <update from="dnf-testing@redhat.com" status="stable" type="security" version="1">
+        <id>DNF-D-2022-9</id>
+        <title>obsoleter with one version exactly matching advisory security fix</title>
+        <release>Fedora 29</release>
+        <issue date="2019-02-22 15:30:01" />
+        <references />
+        <description>testing advisories during upgrade with obsoleteing pkg</description>
+        <pkglist>
+            <collection short="F29">
+                <name>Fedora 29</name>
+                <package name="D" version="1" release="1" epoch="0" arch="x86_64" src="https://the.url/the.package.rpm">
+                    <filename>D-1-1.x86_64.rpm</filename>
+                </package>
+            </collection>
+        </pkglist>
+    </update>
+    <update from="dnf-testing@redhat.com" status="stable" type="security" version="1">
+        <id>DNF-2019-4</id>
+        <title>obsoleter with one version exactly matching advisory security fix</title>
+        <release>Fedora 29</release>
+        <issue date="2019-02-22 15:30:01" />
+        <references />
+        <description>testing advisories during upgrade with obsoleteing pkg</description>
+        <pkglist>
+            <collection short="F29">
+                <name>Fedora 29</name>
+                <package name="F" version="1" release="1" epoch="0" arch="x86_64" src="https://the.url/the.package.rpm">
+                    <filename>F-1-1.x86_64.rpm</filename>
+                </package>
+            </collection>
+        </pkglist>
+    </update>
+    <update from="dnf-testing@redhat.com" status="stable" type="security" version="1">
+        <id>DNF-2019-4</id>
+        <title>upgrade package of different arch, from noarch</title>
+        <release>Fedora 29</release>
+        <issue date="2019-02-22 15:30:01" />
+        <references />
+        <description>testing advisories during upgrade with pkg that changes arch, it has to change from noarch</description>
+        <pkglist>
+            <collection short="F29">
+                <name>Fedora 29</name>
+                <package name="change-arch-noarch" version="2" release="2" epoch="0" arch="x86_64" src="https://the.url/the.package.rpm">
+                    <filename>change-arch-noarch-2-2.x86_64.rpm</filename>
+                </package>
+            </collection>
+        </pkglist>
+    </update>
+    <update from="dnf-testing@redhat.com" status="stable" type="security" version="1">
+        <id>DNF-2019-4</id>
+        <title>upgrade package of different arch, to noarch</title>
+        <release>Fedora 29</release>
+        <issue date="2019-02-22 15:30:01" />
+        <references />
+        <description>testing advisories during upgrade with pkg that changes arch, it has to change to noarch</description>
+        <pkglist>
+            <collection short="F29">
+                <name>Fedora 29</name>
+                <package name="change-arch-noarch-reversed" version="2" release="2" epoch="0" arch="noarch" src="https://the.url/the.package.rpm">
+                    <filename>change-arch-noarch-reversed-2-2.noarch.rpm</filename>
+                </package>
+            </collection>
+        </pkglist>
+    </update>
+    <update from="dnf-testing@redhat.com" status="stable" type="security" version="1">
+        <id>DNF-2019-4</id>
+        <title>upgrade package of different arch, from i686, deosn't work</title>
+        <release>Fedora 29</release>
+        <issue date="2019-02-22 15:30:01" />
+        <references />
+        <description>testing advisories during upgrade with pkg that changes arch, it is not allowed when arch is not noarch</description>
+        <pkglist>
+            <collection short="F29">
+                <name>Fedora 29</name>
+                <package name="change-arch" version="2" release="2" epoch="0" arch="x86_64" src="https://the.url/the.package.rpm">
+                    <filename>change-arch-2-2.x86_64.rpm</filename>
+                </package>
+            </collection>
+        </pkglist>
+    </update>
+    <update from="dnf-testing@redhat.com" status="stable" type="security" version="1">
+        <id>DNF-2019-4</id>
+        <title>upgrade package of different arch, to i686, doesn't work</title>
+        <release>Fedora 29</release>
+        <issue date="2019-02-22 15:30:01" />
+        <references />
+        <description>testing advisories during upgrade with pkg that changes arch, it is not allowed when arch is not noarch</description>
+        <pkglist>
+            <collection short="F29">
+                <name>Fedora 29</name>
+                <package name="change-arch-reversed" version="2" release="2" epoch="0" arch="i686" src="https://the.url/the.package.rpm">
+                    <filename>change-arch-reversed-2-2.i686.rpm</filename>
+                </package>
+            </collection>
+        </pkglist>
+    </update>
+</updates>

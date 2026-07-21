@@ -1,0 +1,8 @@
+This folder contains minimal german translation of libdnf5 messages and is used for
+testing the bug https://bugzilla.redhat.com/show_bug.cgi?id=2024527
+The test is in dnf/upgrade-cached.feature and relies on "Already downloaded" being
+translated to german.
+
+Contains translations for:
+"Dependencies resolved."
+"Already downloaded"

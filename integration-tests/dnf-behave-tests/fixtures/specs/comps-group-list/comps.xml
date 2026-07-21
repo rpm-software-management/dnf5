@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE comps PUBLIC "-//Red Hat, Inc.//DTD Comps info//EN" "comps.dtd">
+<comps>
+  <group>
+   <id>test-group</id>
+   <name>Test Group</name>
+   <description>Test Group description.</description>
+   <display_order>4</display_order>
+   <packagelist>
+     <packagereq type="mandatory">test-package</packagereq>
+   </packagelist>
+  </group>
+
+  <group>
+   <id>no-name-group</id>
+   <name></name>
+   <description></description>
+   <packagelist>
+     <packagereq type="mandatory">test-package</packagereq>
+   </packagelist>
+  </group>
+
+  <group>
+   <id>hidden-group</id>
+   <name>Hidden group</name>
+   <description></description>
+   <display_order>3</display_order>
+   <uservisible>false</uservisible>
+   <packagelist>
+     <packagereq type="mandatory">test-package</packagereq>
+   </packagelist>
+  </group>
+
+  <group>
+   <id>empty-group</id>
+   <name>Empty group</name>
+   <description></description>
+   <display_order>16</display_order>
+   <packagelist>
+   </packagelist>
+  </group>
+
+  <environment>
+    <id>test-environment</id>
+    <name>Test Environment</name>
+    <description>Test Environment description.</description>
+    <display_order>4</display_order>
+    <grouplist>
+      <groupid>test-group</groupid>
+    </grouplist>
+  </environment>
+
+  <environment>
+    <id>no-name-environment</id>
+    <name></name>
+    <description></description>
+    <grouplist>
+      <groupid>test-group</groupid>
+    </grouplist>
+  </environment>
+
+  <environment>
+    <id>empty-environment</id>
+    <name>Empty Environment</name>
+    <description></description>
+    <display_order>16</display_order>
+    <grouplist>
+    </grouplist>
+  </environment>
+</comps>

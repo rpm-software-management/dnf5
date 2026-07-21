@@ -1,0 +1,8 @@
+summary: Run Behave Test Suite - DNF5DAEMON
+tag: dnf5daemon
+execute:
+    how: tmt
+    script: |
+        /var/tmp/dnf5/integration-tests/container-test run \
+        --tags dnf5daemon \
+        --command dnf5daemon-client

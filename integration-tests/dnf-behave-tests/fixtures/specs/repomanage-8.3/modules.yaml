@@ -1,0 +1,98 @@
+---
+document: modulemd
+version: 2
+data:
+  name: python36
+  stream: 3.6
+  version: 2
+  context: 24f1489c
+  arch: x86_64
+  summary: Python programming language, version 3.6
+  description: >-
+    This module gives users access to the internal Python 3.6 in RHEL8.
+  license:
+    module:
+    - MIT
+    content:
+    - Python
+  dependencies:
+  - buildrequires:
+      mongodb: [3.6]
+      platform: [f29]
+    requires:
+      platform: [f29]
+  references:
+    community: https://www.python.org/
+    documentation: https://docs.python.org/3.6/
+  profiles:
+    build:
+      rpms:
+      - python36
+    common:
+      rpms:
+      - python36
+  api:
+    rpms:
+    - python36
+  components:
+    rpms:
+      python36:
+        rationale: Contains the symlink to the platform-python interpreter. Also contains
+          python36-rpm-macros needed to build the remaining packages.
+        ref: stream-3.6-rhel-8.3.0
+        buildorder: 10
+        arches: [aarch64, i686, ppc64le, s390x, x86_64]
+  artifacts:
+    rpms:
+    - python36-0:3.6.8-2.module+el8.1.0+3334+5cb623d7.src
+    - python36-0:3.6.8-2.module+el8.1.0+3334+5cb623d7.x86_64
+...
+---
+document: modulemd
+version: 2
+data:
+  name: python36
+  stream: 3.6
+  version: 1
+  context: 44f1449c
+  arch: x86_64
+  summary: Python programming language, version 3.6
+  description: >-
+    This module gives users access to the internal Python 3.6 in RHEL8.
+  license:
+    module:
+    - MIT
+    content:
+    - Python
+  dependencies:
+  - buildrequires:
+      mongodb: [3.6]
+      platform: [f29]
+    requires:
+      platform: [f29]
+  references:
+    community: https://www.python.org/
+    documentation: https://docs.python.org/3.6/
+  profiles:
+    build:
+      rpms:
+      - python36
+    common:
+      rpms:
+      - python36
+  api:
+    rpms:
+    - python36
+  components:
+    rpms:
+      python36:
+        rationale: Contains the symlink to the platform-python interpreter. Also contains
+          python36-rpm-macros needed to build the remaining packages.
+        ref: stream-3.6-rhel-8.3.0
+        buildorder: 10
+        arches: [aarch64, i686, ppc64le, s390x, x86_64]
+  artifacts:
+    rpms:
+    - python36-0:4.4.4-4.module+el8.1.0+4444+44444444.src
+    - python36-0:4.4.4-4.module+el8.1.0+4444+44444444.x86_64
+...

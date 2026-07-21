@@ -1,0 +1,1 @@
+--define '_invalid_encoding_terminates_build 0'

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<updates>
+  <update from="secresponseteam@foo.bar" status="final" type="enhancement" version="3">
+    <id>FEDORA-2018-318f184112</id>
+    <title>flac enhacements</title>
+    <issued date="2019-01-19 00:00:00"/>
+    <updated date="2019-01-19 00:00:00"/>
+    <severity>Moderate</severity>
+    <summary>summary_1</summary>
+    <description>Enhance some stuff</description>
+    <pkglist>
+      <collection short="named collection">
+        <name>Bar component</name>
+        <package name="flac" version="1.4.0" release="1.fc29" epoch="0" arch="x86_64" src="flac-0:1.4.0-1.fc29.x86_64.rpm">
+          <filename>flac-0:1.4.0-1.fc29.x86_64.rpm</filename>
+          <reboot_suggested/>
+        </package>
+      </collection>
+    </pkglist>
+  </update>
+  <update from="secresponseteam@foo.bar" status="final" type="security" version="4">
+    <id>FEDORA-2018-318f184113</id>
+    <title>CQRlib security fix</title>
+    <issued date="2019-01-20 00:00:00"/>
+    <updated date="2019-01-20 00:00:00"/>
+    <severity>Moderate</severity>
+    <summary>summary_of_CQRlib_security_fix</summary>
+    <description>Secure some stuff</description>
+    <pkglist>
+      <collection short="named collection">
+        <name>Baz component</name>
+        <package name="CQRlib" version="1.1.2" release="16.fc29" epoch="0" arch="x86_64" src="CQRlib-0:1.1.2-16.fc29.x86_64.rpm">
+          <filename>CQRlib-0:1.1.2-16.fc29.x86_64.rpm</filename>
+          <reboot_suggested/>
+        </package>
+      </collection>
+    </pkglist>
+  </update>
+</updates>
