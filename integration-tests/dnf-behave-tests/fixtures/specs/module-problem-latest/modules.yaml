@@ -1,0 +1,39 @@
+---
+  document: modulemd
+  version: 2
+  data:
+    name: berries
+    stream: main
+    version: 1
+    context: 6c81f848
+    static_context: true
+    arch: x86_64
+    summary: Test module
+    description: Test module
+    license:
+      module: [MIT]
+    profiles:
+      minimal:
+        rpms: []
+...
+---
+  document: modulemd
+  version: 2
+  data:
+    name: berries
+    stream: main
+    version: 5
+    context: 6c81f848
+    static_context: true
+    arch: x86_64
+    summary: Test module
+    description: Test module
+    license:
+      module: [MIT]
+    profiles:
+      minimal:
+        rpms: []
+    dependencies:
+    - requires:
+        gooseberry: [5.5]
+...

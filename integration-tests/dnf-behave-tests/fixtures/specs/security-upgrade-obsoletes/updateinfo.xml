@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<updates>
+    <update from="dnf-testing@redhat.com" status="stable" type="security" version="1">
+        <id>DNF-2019-4</id>
+        <title>obsolete package of different arch, from noarch</title>
+        <release>Fedora 29</release>
+        <issue date="2019-02-22 15:30:01" />
+        <references />
+        <description>testing advisories during upgrade with x86_64 pkg that obsoletes noarch pkg</description>
+        <pkglist>
+            <collection short="F29">
+                <name>Fedora 29</name>
+                <package name="obsoleter-change-arch-noarch" version="1" release="1" epoch="0" arch="x86_64" src="https://the.url/the.package.rpm">
+                    <filename>obsoleter-change-arch-noarch-1-1.x86_64.rpm</filename>
+                </package>
+            </collection>
+        </pkglist>
+    </update>
+    <update from="dnf-testing@redhat.com" status="stable" type="security" version="1">
+        <id>DNF-2019-4</id>
+        <title>obsolete package of different arch, to noarch</title>
+        <release>Fedora 29</release>
+        <issue date="2019-02-22 15:30:01" />
+        <references />
+        <description>testing advisories during upgrade with noarch pkg that obsoletes x86_64 pkg</description>
+        <pkglist>
+            <collection short="F29">
+                <name>Fedora 29</name>
+                <package name="obsoleter-change-arch-noarch-reversed" version="1" release="1" epoch="0" arch="noarch" src="https://the.url/the.package.rpm">
+                    <filename>obsoleter-change-arch-noarch-reversed-1-1.noarch.rpm</filename>
+                </package>
+            </collection>
+        </pkglist>
+    </update>
+    <update from="dnf-testing@redhat.com" status="stable" type="security" version="1">
+        <id>DNF-2019-4</id>
+        <title>obsolete package of different arch, from i686, doens't work</title>
+        <release>Fedora 29</release>
+        <issue date="2019-02-22 15:30:01" />
+        <references />
+        <description>testing advisories during upgrade with x86_64 pkg that obsoletes i686 pkg</description>
+        <pkglist>
+            <collection short="F29">
+                <name>Fedora 29</name>
+                <package name="obsoleter-change-arch" version="1" release="1" epoch="0" arch="x86_64" src="https://the.url/the.package.rpm">
+                    <filename>obsoleter-change-arch-1-1.x86_64.rpm</filename>
+                </package>
+            </collection>
+        </pkglist>
+    </update>
+    <update from="dnf-testing@redhat.com" status="stable" type="security" version="1">
+        <id>DNF-2019-4</id>
+        <title>obsolete package of different arch, to i686, doesn't work</title>
+        <release>Fedora 29</release>
+        <issue date="2019-02-22 15:30:01" />
+        <references />
+        <description>testing advisories during upgrade with i686 pkg that obsoletes x86_64 pkg</description>
+        <pkglist>
+            <collection short="F29">
+                <name>Fedora 29</name>
+                <package name="obsoleter-change-arch-reversed" version="1" release="1" epoch="0" arch="i686" src="https://the.url/the.package.rpm">
+                    <filename>obsoleter-change-arch-reversed-1-1.i686.rpm</filename>
+                </package>
+            </collection>
+        </pkglist>
+    </update>
+</updates>

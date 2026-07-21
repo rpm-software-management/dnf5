@@ -1,0 +1,19 @@
+# dnf repograph probably doesn't play nice with modular pkgs
+
+repos=$(ls ./fixtures/repos)
+repos=$(echo $repos | sed "s/\ /\ --repo\ /g")
+
+# prepend --repo for the first repo, which does not have a space to substitute
+repos=$(echo "--repo $repos")
+
+options=" -y --setopt=reposdir=./fixtures/repos.d --releasever=29 --setopt=module_platform_id=platform:f29"
+
+DNF0=$(pwd)/fixtures dnf $options repograph $repos > out.dot
+
+# remove possible leftover dnf output
+sed -i '/digraph/,$!d' out.dot
+
+# remove glibc-langpac-* there is to many of them and they make the graph unreadable
+sed -i '/glibc-langpack/,+5d' out.dot
+
+dot -Tsvg out.dot -o graph.svg

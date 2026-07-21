@@ -1,0 +1,10 @@
+contentOrigin:
+  repos:
+    - repoid: dnf-ci-fedora
+      baseurl: file://$FIXTURES_DIR/repos/dnf-ci-fedora
+packages:
+  - wget
+reinstallPackages:
+  - flac
+arches:
+  - x86_64

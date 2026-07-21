@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<updates>
+    <update from="dnf-testing@redhat.com" status="stable" type="security" version="1">
+        <id>DNF-TEST-2023-1</id>
+        <title>Test fix</title>
+        <release>Fedora 38</release>
+        <issue date="2023-03-01 10:00:01" />
+        <references />
+        <description>Testing advisory</description>
+        <pkglist>
+            <collection short="F38">
+                <name>Fedora 38</name>
+                <package name="test" version="1.0" release="1" epoch="0" arch="noarch" src="https://the.url/the.package.rpm">
+                    <filename>test-1.0-1.noarch.rpm</filename>
+                </package>
+            </collection>
+        </pkglist>
+    </update>
+</updates>

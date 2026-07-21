@@ -1,0 +1,21 @@
+---
+document: modulemd
+version: 2
+data:
+  name: ingredience
+  stream: egg
+  version: 2
+  arch: x86_64
+  summary: Dependency testing module
+  description: Made up module for dependency testing, with different content
+  license:
+    module:
+    - MIT
+  profiles:
+    default:
+      rpms: ["egg"]
+  components:
+    rpms:
+      egg: {rationale: 'There is never a rationale for an egg'}
+  artifacts:
+    rpms: ["egg-0:2.0-1.x86_64"]

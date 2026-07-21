@@ -1,0 +1,30 @@
+#!/bin/bash
+#
+# the script modifies the test suite files so it can be run on different architectures
+# Usage:
+#  $ ./arch-switch
+#  $ ./container-test build
+#  $ ./container-test run
+
+set -xe
+
+PRIMARYARCH=`arch`
+
+if [ "$PRIMARYARCH" == "x86_64" ]; then
+  echo "No architecture changes needed for x86_64"
+  exit 0
+fi
+
+# these secondary archs are mostly useless as packages built won't be installable anyway
+# we need to skip test scenarios based on secondary architectures
+[ "$PRIMARYARCH" == "ppc64le" ] && SECONDARYARCH=ppc
+[ "$PRIMARYARCH" == "s390x" ] && SECONDARYARCH=s390
+[ "$PRIMARYARCH" == "aarch64" ] && SECONDARYARCH=aarch
+
+echo "Using $PRIMARYARCH, $SECONDARYARCH"
+
+# substitution in testing files
+sed -i "s/x86_64/$PRIMARYARCH/g" $( grep -l -R x86_64 fixtures dnf )
+sed -i "s/i686/$SECONDARYARCH/g" $( grep -l -R i686 fixtures dnf )
+
+echo "Done."
