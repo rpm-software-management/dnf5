@@ -1,0 +1,18 @@
+summary:
+    Check libdnf5 and libdnf5-cli rpm files with rpminspect for ABI compatibility
+discover:
+    how: shell
+    tests:
+      - name: Use rpminspect to compare ABI with last nightly build of libdnf5 and libdnf5-cli
+        test: rpminspect-fedora -t BAD -T abidiff /var/share/test-artifacts/nightly/libdnf5-5*.rpm /var/share/test-artifacts/libdnf5-5*.rpm; rpminspect-fedora -t BAD -T abidiff /var/share/test-artifacts/nightly/libdnf5-cli-5*.rpm /var/share/test-artifacts/libdnf5-cli-5*.rpm
+prepare:
+  - name: packages
+    how: install
+    package:
+    - rpminspect
+    - rpminspect-data-fedora
+  - name: get-current-builds
+    how: shell
+    script: dnf copr enable rpmsoftwaremanagement/dnf-nightly fedora-rawhide-x86_64 -y && dnf download libdnf5 libdnf5-cli --repo copr:copr.fedorainfracloud.org:rpmsoftwaremanagement:dnf-nightly --destdir=/var/share/test-artifacts/nightly
+execute:
+    how: tmt

@@ -1,0 +1,1 @@
+../dnf-ci-fedora-updates/CQRlib-1.1.2-16.fc29.spec

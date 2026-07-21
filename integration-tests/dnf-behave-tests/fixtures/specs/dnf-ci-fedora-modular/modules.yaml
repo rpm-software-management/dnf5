@@ -1,0 +1,740 @@
+---
+document: modulemd
+version: 2
+data:
+  name: nodejs
+  stream: 5
+  version: 20150811143428
+  context: 6c81f848
+  arch: x86_64
+  summary: >-
+    Javascript runtime module with quite a long
+
+    summary that contains an empty line.
+  description: >-
+    Node.js is a platform built on Chrome''s JavaScript runtime for easily building
+    fast, scalable network applications. Node.js uses an event-driven, non-blocking
+    I/O model that makes it lightweight and efficient, perfect for data-intensive
+    real-time applications that run across distributed devices.
+  license:
+    module:
+    - MIT
+    content:
+    - MIT and ASL 2.0 and ISC and BSD
+  dependencies:
+  - buildrequires:
+      platform: [f29]
+    requires:
+      platform: [f29]
+  references:
+    community: http://nodejs.org
+    documentation: http://nodejs.org/en/docs
+    tracker: https://github.com/nodejs/node/issues
+  profiles:
+    default:
+      rpms:
+      - nodejs
+      - npm
+    development:
+      rpms:
+      - nodejs
+      - nodejs-devel
+      - npm
+    minimal:
+      rpms:
+      - nodejs
+  api:
+    rpms:
+    - nodejs
+    - nodejs-devel
+    - npm
+  components:
+    rpms:
+      nodejs:
+        rationale: Javascript runtime and npm package manager.
+        repository: git://pkgs.fedoraproject.org/rpms/nodejs
+        cache: http://pkgs.fedoraproject.org/repo/pkgs/nodejs
+        ref: 5
+        buildorder: 10
+  artifacts:
+    rpms:
+    - nodejs-1:5.3.1-1.module_2011+41787af0.x86_64
+    - nodejs-1:5.3.1-1.module_2011+41787af0.src
+    - nodejs-devel-1:5.3.1-1.module_2011+41787af0.x86_64
+    - nodejs-docs-1:5.3.1-1.module_2011+41787af0.noarch
+    - npm-1:5.3.1-1.module_2011+41787af0.x86_64
+...
+---
+document: modulemd
+version: 2
+data:
+  name: nodejs
+  stream: 8
+  version: 20180801080000
+  context: 6c81f848
+  arch: x86_64
+  summary: Javascript runtime
+  description: >-
+    Node.js is a platform built on Chrome''s JavaScript runtime for easily building
+    fast, scalable network applications. Node.js uses an event-driven, non-blocking
+    I/O model that makes it lightweight and efficient, perfect for data-intensive
+    real-time applications that run across distributed devices.
+  license:
+    module:
+    - MIT
+    content:
+    - MIT and ASL 2.0 and ISC and BSD
+  dependencies:
+  - buildrequires:
+      platform: [f29]
+    requires:
+      platform: [f29]
+  references:
+    community: http://nodejs.org
+    documentation: http://nodejs.org/en/docs
+    tracker: https://github.com/nodejs/node/issues
+  profiles:
+    default:
+      rpms:
+      - nodejs
+      - npm
+    development:
+      rpms:
+      - nodejs
+      - nodejs-devel
+      - npm
+    minimal:
+      rpms:
+      - nodejs
+  api:
+    rpms:
+    - nodejs
+    - nodejs-devel
+    - npm
+  components:
+    rpms:
+      nodejs:
+        rationale: Javascript runtime and npm package manager.
+        repository: git://pkgs.fedoraproject.org/rpms/nodejs
+        cache: http://pkgs.fedoraproject.org/repo/pkgs/nodejs
+        ref: 8
+        buildorder: 10
+  artifacts:
+    rpms:
+    - nodejs-1:8.11.4-1.module_2030+42747d40.x86_64
+    - nodejs-1:8.11.4-1.module_2030+42747d40.src
+    - nodejs-devel-1:8.11.4-1.module_2030+42747d40.x86_64
+    - nodejs-docs-1:8.11.4-1.module_2030+42747d40.noarch
+    - npm-1:8.11.4-1.module_2030+42747d40.x86_64
+...
+---
+document: modulemd
+version: 2
+data:
+  name: nodejs
+  stream: 10
+  version: 20180920144631
+  context: 6c81f848
+  arch: x86_64
+  summary: Javascript runtime
+  description: >-
+    Node.js is a platform built on Chrome''s JavaScript runtime for easily building
+    fast, scalable network applications. Node.js uses an event-driven, non-blocking
+    I/O model that makes it lightweight and efficient, perfect for data-intensive
+    real-time applications that run across distributed devices.
+  license:
+    module:
+    - MIT
+    content:
+    - MIT
+    - MIT and ASL 2.0 and ISC and BSD
+    - MIT and BSD and ISC
+  dependencies:
+  - buildrequires:
+      platform: [f29]
+    requires:
+      platform: [f29]
+  references:
+    community: http://nodejs.org
+    documentation: http://nodejs.org/en/docs
+    tracker: https://github.com/nodejs/node/issues
+  profiles:
+    default:
+      rpms:
+      - nodejs
+      - npm
+    development:
+      rpms:
+      - nodejs
+      - nodejs-devel
+      - npm
+    minimal:
+      rpms:
+      - nodejs
+  api:
+    rpms:
+    - nodejs
+    - nodejs-devel
+    - npm
+  components:
+    rpms:
+      libuv:
+        rationale: Platform abstraction layer for Node.js
+        repository: git+https://src.fedoraproject.org/rpms/libuv
+        cache: https://src.fedoraproject.org/repo/pkgs/libuv
+        ref: 1
+      nghttp2:
+        rationale: Needed for HTTP2 support
+        repository: git+https://src.fedoraproject.org/rpms/nghttp2
+        cache: https://src.fedoraproject.org/repo/pkgs/nghttp2
+        ref: master
+      nodejs:
+        rationale: Javascript runtime and npm package manager.
+        repository: git+https://src.fedoraproject.org/rpms/nodejs
+        cache: https://src.fedoraproject.org/repo/pkgs/nodejs
+        ref: 10
+        buildorder: 10
+  artifacts:
+    rpms:
+    - nodejs-1:10.11.0-1.module_2200+adbac02b.x86_64
+    - nodejs-1:10.11.0-1.module_2200+adbac02b.src
+    - nodejs-devel-1:10.11.0-1.module_2200+adbac02b.x86_64
+    - nodejs-docs-1:10.11.0-1.module_2200+adbac02b.noarch
+    - npm-1:10.11.0-1.module_2200+adbac02b.x86_64
+...
+---
+document: modulemd
+version: 2
+data:
+  name: nodejs
+  stream: 11
+  version: 20180920144611
+  context: 6c81f848
+  arch: x86_64
+  summary: Javascript runtime
+  description: >-
+    Node.js is a platform built on Chrome''s JavaScript runtime for easily building
+    fast, scalable network applications. Node.js uses an event-driven, non-blocking
+    I/O model that makes it lightweight and efficient, perfect for data-intensive
+    real-time applications that run across distributed devices.
+  license:
+    module:
+    - MIT
+    content:
+    - MIT
+    - MIT and ASL 2.0 and ISC and BSD
+    - MIT and BSD and ISC
+  dependencies:
+  - buildrequires:
+      platform: [f29]
+    requires:
+      platform: [f29]
+      postgresql: [9.6]
+  references:
+    community: http://nodejs.org
+    documentation: http://nodejs.org/en/docs
+    tracker: https://github.com/nodejs/node/issues
+  profiles:
+    default:
+      rpms:
+      - nodejs
+      - npm
+    development:
+      rpms:
+      - nodejs
+      - nodejs-devel
+      - npm
+    minimal:
+      rpms:
+      - nodejs
+  api:
+    rpms:
+    - nodejs
+    - nodejs-devel
+    - npm
+  components:
+    rpms:
+      libuv:
+        rationale: Platform abstraction layer for Node.js
+        repository: git+https://src.fedoraproject.org/rpms/libuv
+        cache: https://src.fedoraproject.org/repo/pkgs/libuv
+        ref: 1
+      nghttp2:
+        rationale: Needed for HTTP2 support
+        repository: git+https://src.fedoraproject.org/rpms/nghttp2
+        cache: https://src.fedoraproject.org/repo/pkgs/nghttp2
+        ref: master
+      nodejs:
+        rationale: Javascript runtime and npm package manager.
+        repository: git+https://src.fedoraproject.org/rpms/nodejs
+        cache: https://src.fedoraproject.org/repo/pkgs/nodejs
+        ref: 10
+        buildorder: 10
+  artifacts:
+    rpms:
+    - nodejs-1:11.0.0-1.module_2311+8d497411.x86_64
+    - nodejs-1:11.0.0-1.module_2311+8d497411.src
+    - nodejs-devel-1:11.0.0-1.module_2311+8d497411.x86_64
+    - nodejs-docs-1:11.0.0-1.module_2311+8d497411.noarch
+    - npm-1:11.0.0-1.module_2311+8d497411.x86_64
+...
+---
+document: modulemd
+version: 2
+data:
+  name: postgresql
+  stream: 9.6
+  version: 20180816142114
+  context: 6c81f848
+  arch: x86_64
+  summary: PostgreSQL module
+  description: >-
+    PostgreSQL is an advanced Object-Relational database management system (DBMS).
+    The PostgreSQL server can be found in the postgresql-server sub-package.
+  license:
+    module:
+    - MIT
+    content:
+    - PostgreSQL
+  xmd:
+    mbs:
+      mse: TRUE
+      scmurl: https://src.fedoraproject.org/modules/postgresql.git?#8765a18f16976cfe6122319e337c27e9ec40206a
+      commit: 8765a18f16976cfe6122319e337c27e9ec40206a
+      buildrequires:
+        platform:
+          ref: f29
+          stream: f29
+          context: 00000000
+          version: 5
+          filtered_rpms: []
+      rpms:
+        postgresql:
+          ref: 3f21ecc4af44639c7cb40244f5db7a48936e3452
+  dependencies:
+  - buildrequires:
+      platform: [f29]
+    requires:
+      platform: [f29]
+  references:
+    community: https://docs.pagure.org/modularity/
+    documentation: https://www.postgresql.org/docs/
+    tracker: https://github.com/modularity-modules/postgresql
+  profiles:
+    client:
+      rpms:
+      - postgresql
+    default:
+      rpms:
+      - postgresql-server
+    server:
+      rpms:
+      - postgresql-server
+  api:
+    rpms:
+    - postgresql
+    - postgresql-server
+  buildopts:
+    rpms:
+      macros: |
+        %runselftest 0
+  components:
+    rpms:
+      postgresql:
+        rationale: main server component
+        repository: git://pkgs.fedoraproject.org/rpms/postgresql
+        cache: http://pkgs.fedoraproject.org/repo/pkgs/postgresql
+        ref: 3f21ecc4
+  artifacts:
+    rpms:
+    - postgresql-0:9.6.8-1.module_1710+b535a823.x86_64
+    - postgresql-0:9.6.8-1.module_1710+b535a823.src
+    - postgresql-libs-0:9.6.8-1.module_1710+b535a823.x86_64
+    - postgresql-server-0:9.6.8-1.module_1710+b535a823.x86_64
+    - postgresql-test-0:9.6.8-1.module_1710+b535a823.x86_64
+...
+---
+document: modulemd
+version: 2
+data:
+  name: meson
+  stream: master
+  version: 20180816151613
+  context: 06d0a27d
+  arch: x86_64
+  summary: The Meson Build system
+  description: >-
+    Meson is an open source build system meant to be both extremely fast, and, even
+    more importantly, as user friendly as possible.
+
+    The main design point of Meson is that every moment a developer spends writing
+    or debugging build definitions is a second wasted. So is every second spent waiting
+    for the build system to actually start compiling code.
+  license:
+    module:
+    - MIT
+    content:
+    - ASL 2.0
+  xmd:
+    mbs:
+      mse: TRUE
+      scmurl: https://src.fedoraproject.org/modules/meson.git?#9826d0b55a3e90793ffee9e34aa17dd740b282e4
+      commit: 9826d0b55a3e90793ffee9e34aa17dd740b282e4
+      buildrequires:
+        platform:
+          ref: f29
+          stream: f29
+          context: 00000000
+          version: 5
+          filtered_rpms: []
+      rpms:
+        meson:
+          ref: d715e30e897f9fca5716dcb7b0a8a07ca3496d17
+  dependencies:
+  - buildrequires:
+      platform: [f29]
+    requires:
+      ninja: []
+      platform: [f29]
+  references:
+    community: https://mesonbuild.com/
+    documentation: https://mesonbuild.com/
+    tracker: https://github.com/mesonbuild/meson/issues
+  profiles:
+    default:
+      rpms:
+      - meson
+  api:
+    rpms:
+    - meson
+  components:
+    rpms:
+      meson:
+        rationale: Main component.
+        repository: git://pkgs.fedoraproject.org/rpms/meson
+        cache: http://pkgs.fedoraproject.org/repo/pkgs/meson
+        ref: master
+  artifacts:
+    rpms:
+    - meson-0:0.47.1-5.module_1993+7c0a4d1e.noarch
+    - meson-0:0.47.1-5.module_1993+7c0a4d1e.src
+    - meson-doc-0:0.47.1-5.module_1993+7c0a4d1e.noarch
+    - meson-doc-0:0.47.1-5.module_1993+7c0a4d1e.src
+...
+---
+document: modulemd
+version: 2
+data:
+  name: ninja
+  stream: master
+  version: 20180816141421
+  context: 6c81f848
+  arch: x86_64
+  summary: Small build system with a focus on speed
+  description: >-
+    This module includes Ninja build system. Ninja is a small build system with a
+    focus on speed. It differs from other build systems in two major respects: it
+    is designed to have its input files generated by a higher-level build system,
+    and it is designed to run builds as fast as possible.
+  license:
+    module:
+    - MIT
+    content:
+    - ASL 2.0
+  xmd:
+    mbs:
+      mse: TRUE
+      scmurl: https://src.fedoraproject.org/modules/ninja.git?#6e64d7e4ddf96330ba0ecb2af6ff177342fb6554
+      commit: 6e64d7e4ddf96330ba0ecb2af6ff177342fb6554
+      buildrequires:
+        platform:
+          ref: f29
+          stream: f29
+          context: 00000000
+          version: 5
+          filtered_rpms: []
+      rpms:
+        ninja-build:
+          ref: e1503714b8eaa880edb8fa1643273c7363a7e42a
+  dependencies:
+  - buildrequires:
+      platform: [f29]
+    requires:
+      platform: [f29]
+  references:
+    community: https://ninja-build.org/
+    documentation: https://ninja-build.org/manual.html
+    tracker: https://github.com/ninja-build/ninja/issues
+  profiles:
+    default:
+      rpms:
+      - ninja-build
+  api:
+    rpms:
+    - ninja-build
+  components:
+    rpms:
+      ninja-build:
+        rationale: Main component.
+        repository: git://pkgs.fedoraproject.org/rpms/ninja-build
+        cache: http://pkgs.fedoraproject.org/repo/pkgs/ninja-build
+        ref: master
+  artifacts:
+    rpms:
+    - ninja-build-0:1.8.2-4.module_1991+4e5efe2f.x86_64
+    - ninja-build-debuginfo-0:1.8.2-4.module_1991+4e5efe2f.x86_64
+    - ninja-build-debugsource-0:1.8.2-4.module_1991+4e5efe2f.x86_64
+    - ninja-build-0:1.8.2-4.module_1991+4e5efe2f.src
+...
+---
+document: modulemd
+version: 2
+data:
+  name: ninja
+  stream: development
+  version: 20180816141421
+  context: 6c81f848
+  arch: x86_64
+  summary: Small build system with a focus on speed
+  description: >-
+    This module includes Ninja build system. Ninja is a small build system with a
+    focus on speed. It differs from other build systems in two major respects: it
+    is designed to have its input files generated by a higher-level build system,
+    and it is designed to run builds as fast as possible.
+  license:
+    module:
+    - MIT
+    content:
+    - ASL 2.0
+  dependencies:
+  - buildrequires:
+      platform: [f29]
+    requires:
+      platform: [f29]
+  references:
+    community: https://ninja-build.org/
+    documentation: https://ninja-build.org/manual.html
+    tracker: https://github.com/ninja-build/ninja/issues
+  profiles:
+    default:
+      rpms:
+      - ninja-build
+  api:
+    rpms:
+    - ninja-build
+  components:
+    rpms:
+      ninja-build:
+        rationale: Main component.
+        repository: git://pkgs.fedoraproject.org/rpms/ninja-build
+        cache: http://pkgs.fedoraproject.org/repo/pkgs/ninja-build
+        ref: master
+  artifacts:
+    rpms:
+    - ninja-build-0:1.9.2-1.module_1991+4e5efe2f.x86_64
+...
+---
+document: modulemd
+version: 2
+data:
+  name: ninja
+  stream: legacy
+  version: 20180816141421
+  context: 6c81f848
+  arch: x86_64
+  summary: Small build system with a focus on speed
+  description: >-
+    This module includes Ninja build system. Ninja is a small build system with a
+    focus on speed. It differs from other build systems in two major respects: it
+    is designed to have its input files generated by a higher-level build system,
+    and it is designed to run builds as fast as possible.
+  license:
+    module:
+    - MIT
+    content:
+    - ASL 2.0
+  dependencies:
+  - buildrequires:
+      platform: [f29]
+    requires:
+      platform: [f29]
+  references:
+    community: https://ninja-build.org/
+    documentation: https://ninja-build.org/manual.html
+    tracker: https://github.com/ninja-build/ninja/issues
+  profiles:
+    default:
+      rpms:
+      - ninja-build
+  api:
+    rpms:
+    - ninja-build
+  components:
+    rpms:
+      ninja-build:
+        rationale: Main component.
+        repository: git://pkgs.fedoraproject.org/rpms/ninja-build
+        cache: http://pkgs.fedoraproject.org/repo/pkgs/ninja-build
+        ref: master
+  artifacts:
+    rpms:
+    - ninja-build-0:1.5.2-1.module_1991+4e5efe2f.x86_64
+    - ninja-build-0:1.5.2-1.module_1991+4e5efe2f.src
+...
+---
+document: modulemd
+version: 2
+data:
+  name: dwm
+  stream: 6.0
+  version: 20180813144159
+  context: 6c81f848
+  arch: x86_64
+  summary: Dynamic window manager for X
+  description: >-
+      dwm is a dynamic window manager for X.  It manages windows in tiled, monocle,
+      and floating layouts.  All of the layouts can be applied dynamically, optimizing
+      the environment for the application in use and the task performed.
+  license:
+    module:
+    - MIT
+    content:
+    - MIT
+  dependencies:
+  - buildrequires:
+      platform: [f29]
+    requires:
+      platform: [f29]
+  references:
+    community: https://suckless.org/
+    documentation: https://dwm.suckless.org/
+  profiles:
+    default:
+      description: The minimal, distribution-compiled dwm binary.
+      rpms:
+      - dwm
+  components:
+    rpms:
+      dwm:
+        rationale: The main component of this module.
+        repository: git://pkgs.fedoraproject.org/rpms/dwm
+        cache: http://pkgs.fedoraproject.org/repo/pkgs/dwm
+        ref: 6.0
+  artifacts:
+    rpms:
+    - dwm-0:6.0-1.module_1997+c375c79c.x86_64
+    - dwm-0:6.0-1.module_1997+c375c79c.src
+...
+---
+document: modulemd
+version: 2
+data:
+  name: postgresql
+  stream: 6
+  version: 20190329142114
+  context: 6c81f848
+  arch: x86_64
+  summary: PostgreSQL module
+  description: >-
+    PostgreSQL is an advanced Object-Relational database management system (DBMS).
+    The PostgreSQL server can be found in the postgresql-server sub-package.
+  license:
+    module:
+    - MIT
+    content:
+    - PostgreSQL
+  xmd:
+    mbs:
+      mse: TRUE
+      scmurl: https://src.fedoraproject.org/modules/postgresql.git?#8765a18f16976cfe6122319e337c27e9ec40206a
+      commit: 8765a18f16976cfe6122319e337c27e9ec40206a
+      buildrequires:
+        platform:
+          ref: f29
+          stream: f29
+          context: 00000000
+          version: 5
+          filtered_rpms: []
+      rpms:
+        postgresql:
+          ref: 3f21ecc4af44639c7cb40244f5db7a48936e3452
+  dependencies:
+  - buildrequires:
+      platform: [f29]
+    requires:
+      platform: [f29]
+  references:
+    community: https://docs.pagure.org/modularity/
+    documentation: https://www.postgresql.org/docs/
+    tracker: https://github.com/modularity-modules/postgresql
+  profiles:
+    client:
+      rpms:
+      - postgresql
+    default:
+      rpms:
+      - postgresql-server
+    server:
+      rpms:
+      - postgresql-server
+  api:
+    rpms:
+    - postgresql
+    - postgresql-server
+  buildopts:
+    rpms:
+      macros: |
+        %runselftest 0
+  components:
+    rpms:
+      postgresql:
+        rationale: main server component
+        repository: git://pkgs.fedoraproject.org/rpms/postgresql
+        cache: http://pkgs.fedoraproject.org/repo/pkgs/postgresql
+        ref: 3f21ecc4
+  artifacts:
+    rpms:
+    - postgresql-0:6.1-1.module_2514+aa9aadc5.x86_64
+    - postgresql-0:6.1-1.module_2514+aa9aadc5.src
+    - postgresql-libs-0:6.1-1.module_2514+aa9aadc5.x86_64
+    - postgresql-server-0:6.1-1.module_2514+aa9aadc5.x86_64
+    - postgresql-test-0:6.1-1.module_2514+aa9aadc5.x86_64
+...
+---
+document: modulemd-defaults
+version: 1
+data:
+    module: nodejs
+    stream: 8
+    profiles:
+        8: [default]
+        10: [default]
+...
+---
+document: modulemd-defaults
+version: 1
+data:
+    module: postgresql
+    stream: 9.6
+    profiles:
+      9.6: [default]
+...
+---
+document: modulemd-defaults
+version: 1
+data:
+    module: meson
+    stream: master
+    profiles:
+      master: [default]
+...
+---
+document: modulemd-defaults
+version: 1
+data:
+    module: ninja
+    stream: master
+    profiles:
+      master: [default]
+      development: [default]
+...

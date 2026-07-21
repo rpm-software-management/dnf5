@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE comps PUBLIC "-//Red Hat, Inc.//DTD Comps info//EN" "comps.dtd">
+<comps>
+  <group>
+   <id>test-group</id>
+   <name>Test Group</name>
+   <description>Test Group description updated.</description>
+  </group>
+
+  <environment>
+    <id>no-name-env</id>
+    <name></name>
+    <description></description>
+    <grouplist>
+      <groupid>no-name-group</groupid>
+    </grouplist>
+    <optionlist>
+    </optionlist>
+  </environment>
+
+</comps>

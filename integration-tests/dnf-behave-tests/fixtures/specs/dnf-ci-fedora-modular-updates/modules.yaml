@@ -1,0 +1,607 @@
+---
+document: modulemd
+version: 2
+data:
+  name: nodejs
+  stream: 8
+  version: 20181216123422
+  context: 7f892346
+  arch: x86_64
+  summary: Javascript runtime
+  description: >-
+    Node.js is a platform built on Chrome''s JavaScript runtime for easily building
+    fast, scalable network applications. Node.js uses an event-driven, non-blocking
+    I/O model that makes it lightweight and efficient, perfect for data-intensive
+    real-time applications that run across distributed devices.
+  license:
+    module:
+    - MIT
+    content:
+    - MIT and ASL 2.0 and ISC and BSD
+  xmd:
+    mbs:
+      mse: TRUE
+      scmurl: https://src.fedoraproject.org/modules/nodejs.git?#bc228d9478ac1b4387f55b6dc0b6dce38db7a7b9
+      commit: bc228d9478ac1b4387f55b6dc0b6dce38db7a7b9
+      buildrequires:
+        platform:
+          ref: f29
+          stream: f29
+          context: 00000000
+          version: 5
+          filtered_rpms: []
+      rpms:
+        nodejs:
+          ref: 0d185d83353950699b7016d89a66d3916e0168b0
+  dependencies:
+  - buildrequires:
+      platform: [f29]
+    requires:
+      platform: [f29]
+  references:
+    community: http://nodejs.org
+    documentation: http://nodejs.org/en/docs
+    tracker: https://github.com/nodejs/node/issues
+  profiles:
+    default:
+      rpms:
+      - nodejs
+      - npm
+    development:
+      rpms:
+      - nodejs
+      - nodejs-devel
+      - npm
+    minimal:
+      rpms:
+      - nodejs
+  api:
+    rpms:
+    - nodejs
+    - nodejs-devel
+    - npm
+  components:
+    rpms:
+      nodejs:
+        rationale: Javascript runtime and npm package manager.
+        repository: git://pkgs.fedoraproject.org/rpms/nodejs
+        cache: http://pkgs.fedoraproject.org/repo/pkgs/nodejs
+        ref: 8
+        buildorder: 10
+  artifacts:
+    rpms:
+    - nodejs-1:8.11.4-1.module_2030+42747d40.x86_64
+    - nodejs-1:8.11.4-1.module_2030+42747d40.src
+    - nodejs-devel-1:8.11.4-1.module_2030+42747d40.x86_64
+    - nodejs-docs-1:8.11.4-1.module_2030+42747d40.noarch
+    - npm-1:8.14.0-1.module_2030+42747d41.x86_64
+...
+---
+document: modulemd
+version: 2
+data:
+  name: nodejs
+  stream: 11
+  version: 20181102165620
+  context: 6c81f848
+  arch: x86_64
+  summary: Javascript runtime
+  description: >-
+    Node.js is a platform built on Chrome''s JavaScript runtime for easily building
+    fast, scalable network applications. Node.js uses an event-driven, non-blocking
+    I/O model that makes it lightweight and efficient, perfect for data-intensive
+    real-time applications that run across distributed devices.
+  license:
+    module:
+    - MIT
+    content:
+    - MIT
+    - MIT and ASL 2.0 and ISC and BSD
+    - MIT and BSD and ISC
+  xmd:
+    mbs:
+      mse: TRUE
+      scmurl: https://src.fedoraproject.org/modules/nodejs.git?#e5473a364ae5974d031500e5c0188944c32a10f4
+      commit: e5473a364ae5974d031500e5c0188944c32a10f4
+      buildrequires:
+        platform:
+          ref: f29
+          stream: f29
+          context: 00000000
+          version: 5
+          filtered_rpms: []
+      rpms:
+        nodejs:
+          ref: 01611e2acd156d4004d04922e4f39c6b482902d6
+        nghttp2:
+          ref: 54e2c4375502dc21ef4ac60ee571658a22f55c29
+        libuv:
+          ref: fb955db1107c02298b4f7e453ae211b3c0673cda
+  dependencies:
+  - buildrequires:
+      platform: [f29]
+    requires:
+      platform: [f29]
+      postgresql: [9.6]
+  references:
+    community: http://nodejs.org
+    documentation: http://nodejs.org/en/docs
+    tracker: https://github.com/nodejs/node/issues
+  profiles:
+    default:
+      rpms:
+      - nodejs
+      - npm
+    development:
+      rpms:
+      - nodejs
+      - nodejs-devel
+      - npm
+    minimal:
+      rpms:
+      - nodejs
+  api:
+    rpms:
+    - nodejs
+    - nodejs-devel
+    - npm
+  components:
+    rpms:
+      libuv:
+        rationale: Platform abstraction layer for Node.js
+        repository: git+https://src.fedoraproject.org/rpms/libuv
+        cache: https://src.fedoraproject.org/repo/pkgs/libuv
+        ref: 1
+      nghttp2:
+        rationale: Needed for HTTP2 support
+        repository: git+https://src.fedoraproject.org/rpms/nghttp2
+        cache: https://src.fedoraproject.org/repo/pkgs/nghttp2
+        ref: master
+      nodejs:
+        rationale: Javascript runtime and npm package manager.
+        repository: git+https://src.fedoraproject.org/rpms/nodejs
+        cache: https://src.fedoraproject.org/repo/pkgs/nodejs
+        ref: 11
+        buildorder: 10
+  artifacts:
+    rpms:
+    - libnghttp2-0:1.34.0-1.module_2365+652bf990.x86_64
+    - libnghttp2-devel-0:1.34.0-1.module_2365+652bf990.x86_64
+    - libuv-1:1.23.2-1.module_2365+652bf990.x86_64
+    - libuv-devel-1:1.23.2-1.module_2365+652bf990.x86_64
+    - libuv-static-1:1.23.2-1.module_2365+652bf990.x86_64
+    - nghttp2-0:1.34.0-1.module_2365+652bf990.x86_64
+    - nodejs-1:11.1.0-1.module_2379+8d497405.x86_64
+    - nodejs-1:11.1.0-1.module_2379+8d497405.src
+    - nodejs-devel-1:11.1.0-1.module_2379+8d497405.x86_64
+    - nodejs-docs-1:11.1.0-1.module_2379+8d497405.noarch
+    - npm-1:11.1.0-1.module_2379+8d497405.x86_64
+...
+---
+document: modulemd
+version: 2
+data:
+  name: nodejs
+  stream: 10
+  version: 20190102201818
+  context: 6c81f848
+  arch: x86_64
+  summary: Javascript runtime
+  description: >-
+    Node.js is a platform built on Chrome''s JavaScript runtime for easily building
+    fast, scalable network applications. Node.js uses an event-driven, non-blocking
+    I/O model that makes it lightweight and efficient, perfect for data-intensive
+    real-time applications that run across distributed devices.
+  license:
+    module:
+    - MIT
+    content:
+    - MIT
+    - MIT and ASL 2.0 and ISC and BSD
+    - MIT and BSD and ISC
+  xmd:
+    mbs:
+      mse: TRUE
+      scmurl: https://src.fedoraproject.org/modules/nodejs.git?#7ca951f82b3db0f4f0a05a43eb37824bf6dc3137
+      commit: 7ca951f82b3db0f4f0a05a43eb37824bf6dc3137
+      buildrequires:
+        platform:
+          ref: f29
+          stream: f29
+          context: 00000000
+          version: 5
+          filtered_rpms: []
+      rpms:
+        nodejs:
+          ref: 233eace07d8f98572b543a73c02f6d84af283552
+        nghttp2:
+          ref: baf6cfe8eaaad8f1e16c4ba9ed8fcaa36a8cb02e
+        http-parser:
+          ref: 5d37695b412543c99ab07dc49c7ebf1951806c81
+        libuv:
+          ref: fb955db1107c02298b4f7e453ae211b3c0673cda
+  dependencies:
+  - buildrequires:
+      platform: [f29]
+    requires:
+      platform: [f29]
+  references:
+    community: http://nodejs.org
+    documentation: http://nodejs.org/en/docs
+    tracker: https://github.com/nodejs/node/issues
+  profiles:
+    default:
+      rpms:
+      - nodejs
+      - nodejs-devel
+    development:
+      rpms:
+      - nodejs
+      - nodejs-devel
+    minimal:
+      rpms:
+      - nodejs
+  api:
+    rpms:
+    - nodejs
+    - nodejs-devel
+  components:
+    rpms:
+      http-parser:
+        rationale: Needed for parsing HTTP requests
+        repository: git+https://src.fedoraproject.org/rpms/http-parser
+        cache: https://src.fedoraproject.org/repo/pkgs/http-parser
+        ref: master
+      libuv:
+        rationale: Platform abstraction layer for Node.js
+        repository: git+https://src.fedoraproject.org/rpms/libuv
+        cache: https://src.fedoraproject.org/repo/pkgs/libuv
+        ref: 1
+      nghttp2:
+        rationale: Needed for HTTP2 support
+        repository: git+https://src.fedoraproject.org/rpms/nghttp2
+        cache: https://src.fedoraproject.org/repo/pkgs/nghttp2
+        ref: master
+      nodejs:
+        rationale: Javascript runtime and npm package manager.
+        repository: git+https://src.fedoraproject.org/rpms/nodejs
+        cache: https://src.fedoraproject.org/repo/pkgs/nodejs
+        ref: 10
+        buildorder: 10
+      nodejs-devel:
+        rationale: Javascript runtime and npm package manager.
+        repository: git+https://src.fedoraproject.org/rpms/nodejs
+        cache: https://src.fedoraproject.org/repo/pkgs/nodejs-devel
+        ref: 10
+        buildorder: 10
+  artifacts:
+    rpms:
+    - http-parser-0:2.9.0-1.module_2672+97d6a5e9.src
+    - http-parser-0:2.9.0-1.module_2672+97d6a5e9.x86_64
+    - http-parser-devel-0:2.9.0-1.module_2672+97d6a5e9.x86_64
+    - libnghttp2-0:1.35.1-1.module_2672+97d6a5e9.x86_64
+    - libnghttp2-devel-0:1.35.1-1.module_2672+97d6a5e9.x86_64
+    - libuv-1:1.23.2-1.module_2302+4c6ccf2f.x86_64
+    - libuv-devel-1:1.23.2-1.module_2302+4c6ccf2f.x86_64
+    - libuv-static-1:1.23.2-1.module_2302+4c6ccf2f.x86_64
+    - nghttp2-0:1.35.1-1.module_2672+97d6a5e9.x86_64
+    - nodejs-1:10.14.1-1.module_2533+7361f245.x86_64
+    - nodejs-1:10.14.1-1.module_2533+7361f245.src
+    - nodejs-devel-1:10.14.1-1.module_2533+7361f245.x86_64
+    - nodejs-docs-1:10.14.1-1.module_2533+7361f245.noarch
+    - npm-1:10.14.1-1.module_2533+7361f245.x86_64
+...
+---
+document: modulemd
+version: 2
+data:
+  name: nodejs
+  stream: 12
+  version: 20181102165620
+  context: 6c81f848
+  arch: x86_64
+  summary: Javascript runtime
+  description: >-
+    Node.js is a platform built on Chrome''s JavaScript runtime for easily building
+    fast, scalable network applications. Node.js uses an event-driven, non-blocking
+    I/O model that makes it lightweight and efficient, perfect for data-intensive
+    real-time applications that run across distributed devices.
+  license:
+    module:
+    - MIT
+    content:
+    - MIT
+    - MIT and ASL 2.0 and ISC and BSD
+    - MIT and BSD and ISC
+  xmd:
+    mbs:
+      mse: TRUE
+      scmurl: https://src.fedoraproject.org/modules/nodejs.git?#e5473a364ae5974d031500e5c0188944c32a10f4
+      commit: e5473a364ae5974d031500e5c0188944c32a10f4
+      buildrequires:
+        platform:
+          ref: f29
+          stream: f29
+          context: 00000000
+          version: 5
+          filtered_rpms: []
+      rpms:
+        nodejs:
+          ref: 01611e2acd156d4004d04922e4f39c6b482902d6
+        nghttp2:
+          ref: 54e2c4375502dc21ef4ac60ee571658a22f55c29
+        libuv:
+          ref: fb955db1107c02298b4f7e453ae211b3c0673cda
+  dependencies:
+  - buildrequires:
+      platform: [f29]
+    requires:
+      platform: [f29]
+      postgresql: []
+  references:
+    community: http://nodejs.org
+    documentation: http://nodejs.org/en/docs
+    tracker: https://github.com/nodejs/node/issues
+  profiles:
+    default:
+      rpms:
+      - nodejs
+      - npm
+    development:
+      rpms:
+      - nodejs
+      - nodejs-devel
+      - npm
+    minimal:
+      rpms:
+      - nodejs
+  api:
+    rpms:
+    - nodejs
+    - nodejs-devel
+    - npm
+  components:
+    rpms:
+      libuv:
+        rationale: Platform abstraction layer for Node.js
+        repository: git+https://src.fedoraproject.org/rpms/libuv
+        cache: https://src.fedoraproject.org/repo/pkgs/libuv
+        ref: 1
+      nghttp2:
+        rationale: Needed for HTTP2 support
+        repository: git+https://src.fedoraproject.org/rpms/nghttp2
+        cache: https://src.fedoraproject.org/repo/pkgs/nghttp2
+        ref: master
+      nodejs:
+        rationale: Javascript runtime and npm package manager.
+        repository: git+https://src.fedoraproject.org/rpms/nodejs
+        cache: https://src.fedoraproject.org/repo/pkgs/nodejs
+        ref: 11
+        buildorder: 10
+  artifacts:
+    rpms:
+    - libnghttp2-0:1.34.0-1.module_2365+652bf990.x86_64
+    - libnghttp2-devel-0:1.34.0-1.module_2365+652bf990.x86_64
+    - libuv-1:1.23.2-1.module_2365+652bf990.x86_64
+    - libuv-devel-1:1.23.2-1.module_2365+652bf990.x86_64
+    - libuv-static-1:1.23.2-1.module_2365+652bf990.x86_64
+    - nghttp2-0:1.34.0-1.module_2365+652bf990.x86_64
+    - nodejs-1:12.1.0-1.module_2379+8d497405.src
+    - nodejs-1:12.1.0-1.module_2379+8d497405.x86_64
+    - nodejs-devel-1:12.1.0-1.module_2379+8d497405.x86_64
+    - nodejs-docs-1:12.1.0-1.module_2379+8d497405.noarch
+    - npm-1:12.1.0-1.module_2379+8d497405.x86_64
+...
+---
+document: modulemd
+version: 2
+data:
+  name: postgresql
+  stream: 9.6
+  version: 20190109151606
+  context: 6c81f848
+  arch: x86_64
+  summary: PostgreSQL module
+  description: >-
+    PostgreSQL is an advanced Object-Relational database management system (DBMS).
+    The PostgreSQL server can be found in the postgresql-server sub-package.
+  license:
+    module:
+    - MIT
+    content:
+    - PostgreSQL
+  xmd:
+    mbs:
+      mse: TRUE
+      scmurl: https://src.fedoraproject.org/modules/postgresql.git?#924f00807b863eca744a83771525cd6e7c656b8b
+      commit: 924f00807b863eca744a83771525cd6e7c656b8b
+      buildrequires:
+        platform:
+          ref: f29
+          stream: f29
+          context: 00000000
+          version: 5
+          filtered_rpms: []
+      rpms:
+        postgresql:
+          ref: 24e855e4b453ef44eaf100dac452b2a1376afb28
+  dependencies:
+  - buildrequires:
+      platform: [f29]
+    requires:
+      platform: [f29]
+  references:
+    community: https://docs.pagure.org/modularity/
+    documentation: https://www.postgresql.org/docs/
+    tracker: https://github.com/modularity-modules/postgresql
+  profiles:
+    client:
+      rpms:
+      - postgresql
+    default:
+      rpms:
+      - postgresql-server
+    server:
+      rpms:
+      - postgresql-server
+  api:
+    rpms:
+    - postgresql
+    - postgresql-server
+  components:
+    rpms:
+      postgresql:
+        rationale: main server/client components
+        repository: git+https://src.fedoraproject.org/rpms/postgresql
+        cache: https://src.fedoraproject.org/repo/pkgs/postgresql
+        ref: stream-postgresql-9.6
+  artifacts:
+    rpms:
+    - postgresql-0:9.6.11-1.module_2689+ea8f147f.x86_64
+    - postgresql-0:9.6.11-1.module_2689+ea8f147f.src
+    - postgresql-libs-0:9.6.11-1.module_2689+ea8f147f.x86_64
+    - postgresql-server-0:9.6.11-1.module_2689+ea8f147f.x86_64
+    - postgresql-test-0:9.6.11-1.module_2689+ea8f147f.x86_64
+...
+---
+document: modulemd
+version: 2
+data:
+  name: postgresql
+  stream: 11
+  version: 20181212114126
+  context: 6c81f848
+  arch: x86_64
+  summary: PostgreSQL module
+  description: >-
+    PostgreSQL is an advanced Object-Relational database management system (DBMS).
+    The PostgreSQL server can be found in the postgresql-server sub-package.
+  license:
+    module:
+    - MIT
+    content:
+    - PostgreSQL
+  xmd:
+    mbs:
+      mse: TRUE
+      scmurl: https://src.fedoraproject.org/modules/postgresql.git?#9c361aefb01937abc50fa25c9a75b12cc7bfd32b
+      commit: 9c361aefb01937abc50fa25c9a75b12cc7bfd32b
+      buildrequires:
+        platform:
+          ref: f29
+          stream: f29
+          context: 00000000
+          version: 5
+          filtered_rpms: []
+      rpms:
+        postgresql:
+          ref: 8283334649db9584ff03bc36738c3d6fbc2a9344
+  dependencies:
+  - buildrequires:
+      platform: [f29]
+    requires:
+      platform: [f29]
+  references:
+    community: https://docs.pagure.org/modularity/
+    documentation: https://www.postgresql.org/docs/
+    tracker: https://github.com/modularity-modules/postgresql
+  profiles:
+    client:
+      rpms:
+      - postgresql
+    default:
+      rpms:
+      - postgresql-server
+    server:
+      rpms:
+      - postgresql-server
+  api:
+    rpms:
+    - postgresql
+    - postgresql-server
+  components:
+    rpms:
+      postgresql:
+        rationale: main server/client components
+        repository: git+https://src.fedoraproject.org/rpms/postgresql
+        cache: https://src.fedoraproject.org/repo/pkgs/postgresql
+        ref: stream-postgresql-11
+  artifacts:
+    rpms:
+    - postgresql-0:11.1-2.module_2597+e45c4cc9.src
+    - postgresql-0:11.1-2.module_2597+e45c4cc9.x86_64
+    - postgresql-libs-0:11.1-2.module_2597+e45c4cc9.x86_64
+    - postgresql-server-0:11.1-2.module_2597+e45c4cc9.x86_64
+    - postgresql-test-0:11.1-2.module_2597+e45c4cc9.x86_64
+...
+---
+document: modulemd
+version: 2
+data:
+  name: postgresql
+  stream: 10
+  version: 20181211125304
+  context: 6c81f848
+  arch: x86_64
+  summary: PostgreSQL module
+  description: >-
+    PostgreSQL is an advanced Object-Relational database management system (DBMS).
+    The PostgreSQL server can be found in the postgresql-server sub-package.
+  license:
+    module:
+    - MIT
+    content:
+    - PostgreSQL
+  xmd:
+    mbs:
+      mse: TRUE
+      scmurl: https://src.fedoraproject.org/modules/postgresql.git?#22b1233cfa39ec932092dcdcdeef5596bec2ca8c
+      commit: 22b1233cfa39ec932092dcdcdeef5596bec2ca8c
+      buildrequires:
+        platform:
+          ref: f29
+          stream: f29
+          context: 00000000
+          version: 5
+          filtered_rpms: []
+      rpms:
+        postgresql:
+          ref: 08324caf5fc9b08c5b9e61a69cc610380aa2a4fc
+  dependencies:
+  - buildrequires:
+      platform: [f29]
+    requires:
+      platform: [f29]
+  references:
+    community: https://docs.pagure.org/modularity/
+    documentation: https://www.postgresql.org/docs/
+    tracker: https://github.com/modularity-modules/postgresql
+  profiles:
+    client:
+      rpms:
+      - postgresql
+    default:
+      rpms:
+      - postgresql-server
+    server:
+      rpms:
+      - postgresql-server
+  api:
+    rpms:
+    - postgresql
+    - postgresql-server
+  components:
+    rpms:
+      postgresql:
+        rationale: main server/client components
+        repository: git+https://src.fedoraproject.org/rpms/postgresql
+        cache: https://src.fedoraproject.org/repo/pkgs/postgresql
+        ref: stream-postgresql-10
+  artifacts:
+    rpms:
+    - postgresql-0:10.6-1.module_2594+0c9aadc5.x86_64
+    - postgresql-0:10.6-1.module_2594+0c9aadc5.src
+    - postgresql-libs-0:10.6-1.module_2594+0c9aadc5.x86_64
+    - postgresql-server-0:10.6-1.module_2594+0c9aadc5.x86_64
+    - postgresql-test-0:10.6-1.module_2594+0c9aadc5.x86_64
+...

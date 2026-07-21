@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE comps PUBLIC "-//Red Hat, Inc.//DTD Comps info//EN" "comps.dtd">
+<comps>
+  <group>
+   <id>test-group</id>
+   <name>Test Group</name>
+   <display_order>2</display_order>
+   <description>Test Group description.</description>
+    <packagelist>
+      <packagereq type="mandatory">test-package</packagereq>
+    </packagelist>
+  </group>
+
+  <group>
+   <id>no-name-group</id>
+   <name></name>
+   <description></description>
+   <display_order>1</display_order>
+    <packagelist>
+      <packagereq type="mandatory">test-package</packagereq>
+    </packagelist>
+  </group>
+
+  <environment>
+    <id>no-name-env</id>
+    <name></name>
+    <description></description>
+    <display_order>2</display_order>
+    <grouplist>
+      <groupid>test-group</groupid>
+    </grouplist>
+    <optionlist>
+    </optionlist>
+  </environment>
+
+  <environment>
+    <id>env-with-a-nonexistent-group</id>
+    <name>Env with a nonexistent group</name>
+    <description></description>
+    <display_order>1</display_order>
+    <grouplist>
+      <groupid>test-group</groupid>
+      <groupid>nonexistent-group</groupid>
+      <groupid>no-name-group</groupid>
+    </grouplist>
+    <optionlist>
+    </optionlist>
+  </environment>
+</comps>

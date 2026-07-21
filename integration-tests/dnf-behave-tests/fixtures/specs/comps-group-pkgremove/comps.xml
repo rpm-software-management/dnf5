@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE comps PUBLIC "-//Red Hat, Inc.//DTD Comps info//EN" "comps.dtd">
+<comps>
+  <group>
+   <id>group-one</id>
+   <name>Test Group One</name>
+   <description>Test Group One description.</description>
+    <packagelist>
+      <packagereq type="mandatory">self-dependent-package</packagereq>
+    </packagelist>
+  </group>
+  <group>
+   <id>group-two</id>
+   <name>Test Group Two</name>
+   <description>Test Group Two description.</description>
+    <packagelist>
+      <packagereq type="mandatory">test-package</packagereq>
+    </packagelist>
+  </group>
+  <group>
+   <id>group-three</id>
+   <name>Test Group Three</name>
+   <description>Test Group Three description.</description>
+    <packagelist>
+      <packagereq type="mandatory">test-package-dep</packagereq>
+    </packagelist>
+  </group>
+  <group>
+   <id>group-four</id>
+   <name>Test Group Four</name>
+   <description>Test Group Four description.</description>
+    <packagelist>
+      <packagereq type="mandatory">test-package-dep-dep</packagereq>
+    </packagelist>
+  </group>
+</comps>

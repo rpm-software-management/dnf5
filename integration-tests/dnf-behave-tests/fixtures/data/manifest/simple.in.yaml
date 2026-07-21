@@ -1,0 +1,10 @@
+contentOrigin:
+  repos:
+    - repoid: dnf-ci-fedora
+      baseurl: file://$FIXTURES_DIR/repos/dnf-ci-fedora
+packages:
+  - dwm
+  - npm
+  - wget
+arches:
+  - x86_64

@@ -1,0 +1,39 @@
+---
+document: modulemd
+version: 2
+data:
+  components:
+    rpms:
+      dwm:
+        rationale: The main component of this module.
+        repository: git://pkgs.fedoraproject.org/rpms/dwm
+        cache: http://pkgs.fedoraproject.org/repo/pkgs/dwm
+        ref: 6.0
+  artifacts:
+    rpms:
+    - dwm-0:6.0-1.module_1997+c375c79c.x86_64
+  description: >-
+      dwm is a dynamic window manager for X.  It manages windows in tiled, monocle,
+      and floating layouts.  All of the layouts can be applied dynamically, optimizing
+      the environment for the application in use and the task performed.
+  license:
+    module:
+    - MIT
+    content:
+    - MIT
+  name: dwm
+  profiles:
+    default:
+      description: The minimal, distribution-compiled dwm binary.
+      rpms:
+      - dwm
+  stream: 6.0
+  dependencies:
+    - requires:
+        pseudoplatform: [6.0]
+  summary: Dynamic window manager for X
+  arch: x86_64
+  version: 20180813144159
+  references:
+    community: https://suckless.org/
+    documentation: https://dwm.suckless.org/

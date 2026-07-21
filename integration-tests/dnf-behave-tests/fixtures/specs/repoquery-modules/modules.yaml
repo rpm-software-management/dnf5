@@ -1,0 +1,79 @@
+---
+document: modulemd
+version: 2
+data:
+  name: nodejs
+  stream: 5
+  version: 20150811143428
+  context: 6c81f848
+  arch: x86_64
+  summary: Javascript runtime
+  description: >-
+    Description for nodejs.
+  license:
+    module:
+    - MIT
+    content:
+    - MIT and ASL 2.0 and ISC and BSD
+  dependencies:
+  - buildrequires:
+      platform: [f29]
+    requires:
+      platform: [f29]
+  profiles:
+    default:
+      rpms:
+      - nodejs
+  components:
+    rpms:
+      nodejs:
+        rationale: Javascript runtime and npm package manager.
+        ref: 5
+  artifacts:
+    rpms:
+    - nodejs-1:5.3.1-1.module_2011+41787af0.x86_64
+...
+---
+document: modulemd
+version: 2
+data:
+  name: nodejs
+  stream: 8
+  version: 20180801080000
+  context: 6c81f848
+  arch: x86_64
+  summary: Javascript runtime
+  description: >-
+    Description for nodejs.
+  license:
+    module:
+    - MIT
+    content:
+    - MIT and ASL 2.0 and ISC and BSD
+  dependencies:
+  - buildrequires:
+      platform: [f29]
+    requires:
+      platform: [f29]
+  profiles:
+    default:
+      rpms:
+      - nodejs
+  components:
+    rpms:
+      nodejs:
+        rationale: Javascript runtime and npm package manager.
+        ref: 8
+  artifacts:
+    rpms:
+    - nodejs-1:8.11.4-1.module_2030+42747d40.x86_64
+...
+---
+document: modulemd-defaults
+version: 1
+data:
+    module: nodejs
+    stream: 8
+    profiles:
+        8: [default]
+...

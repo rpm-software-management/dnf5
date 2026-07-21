@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<updates>
+    <update from="dnf-testing@redhat.com" status="stable" type="security" version="1">
+        <id>DNF-2019-1</id>
+        <title>json-c security fix</title>
+        <release>Fedora 29</release>
+        <issue date="2019-02-22 15:30:01" />
+        <references />
+        <description>testing advisory</description>
+        <pkglist>
+            <collection short="F29">
+                <name>Fedora 29</name>
+                <package name="json-c" version="1" release="1" epoch="0" arch="x86_64" src="https://the.url/the.package.rpm">
+                    <filename>json-c-1-1.x86_64.rpm</filename>
+                </package>
+                <package name="json-c" version="1" release="1" epoch="0" arch="noarch" src="https://the.url/the.package.rpm">
+                    <filename>json-c-1-1.noarch.rpm</filename>
+                </package>
+            </collection>
+        </pkglist>
+    </update>
+    <update from="dnf-testing@redhat.com" status="stable" type="security" version="1">
+        <id>DNF-2019-1</id>
+        <title>bind-libs-lite security fix</title>
+        <release>Fedora 29</release>
+        <issue date="2019-02-22 15:30:01" />
+        <references />
+        <description>testing advisory</description>
+        <pkglist>
+            <collection short="F29">
+                <name>Fedora 29</name>
+                <package name="bind-libs-lite" version="2" release="2" epoch="0" arch="x86_64" src="https://the.url/the.package.rpm">
+                    <filename>bind-libs-lite-2-2.x86_64.rpm</filename>
+                </package>
+            </collection>
+        </pkglist>
+    </update>
+</updates>
