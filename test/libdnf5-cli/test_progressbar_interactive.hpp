@@ -32,12 +32,15 @@ class ProgressbarInteractiveTest : public CppUnit::TestCase {
     CPPUNIT_TEST(test_download_progress_bar_with_messages);
     CPPUNIT_TEST(test_download_progress_bar_with_long_messages);
     CPPUNIT_TEST(test_multi_progress_bar_with_total_finished);
+    CPPUNIT_TEST(test_multi_progress_bar_with_total_finished_print_active_only);
     CPPUNIT_TEST(test_multi_progress_bar_with_messages_with_total);
     CPPUNIT_TEST(test_multi_progress_bars_with_messages_with_total);
+    CPPUNIT_TEST(test_multi_progress_bars_with_messages_with_total_print_active_only);
     CPPUNIT_TEST(test_multi_progress_bar_with_messages);
     CPPUNIT_TEST(test_multi_progress_bar_with_short_messages);
     CPPUNIT_TEST(test_multi_progress_bars_with_messages);
     CPPUNIT_TEST(test_multi_progress_bars_with_already_downloaded);
+    CPPUNIT_TEST(test_multi_progress_bars_with_already_downloaded_print_active_only);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -50,12 +53,15 @@ public:
     void test_download_progress_bar_with_messages();
     void test_download_progress_bar_with_long_messages();
     void test_multi_progress_bar_with_total_finished();
+    void test_multi_progress_bar_with_total_finished_print_active_only();
     void test_multi_progress_bar_with_messages_with_total();
     void test_multi_progress_bars_with_messages_with_total();
+    void test_multi_progress_bars_with_messages_with_total_print_active_only();
     void test_multi_progress_bar_with_messages();
     void test_multi_progress_bar_with_short_messages();
     void test_multi_progress_bars_with_messages();
     void test_multi_progress_bars_with_already_downloaded();
+    void test_multi_progress_bars_with_already_downloaded_print_active_only();
 };
 
 

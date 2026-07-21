@@ -30,7 +30,9 @@ class ProgressbarTest : public CppUnit::TestCase {
     CPPUNIT_TEST(test_progress_bar_multi_byte_character);
     CPPUNIT_TEST(test_download_progress_bar);
     CPPUNIT_TEST(test_multi_progress_bar);
+    CPPUNIT_TEST(test_multi_progress_bar_print_active_only);
     CPPUNIT_TEST(test_multi_progress_bar_unfinished);
+    CPPUNIT_TEST(test_multi_progress_bar_unfinished_print_active_only);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -41,7 +43,9 @@ public:
     void test_progress_bar_multi_byte_character();
     void test_download_progress_bar();
     void test_multi_progress_bar();
+    void test_multi_progress_bar_print_active_only();
     void test_multi_progress_bar_unfinished();
+    void test_multi_progress_bar_unfinished_print_active_only();
 };
 
 

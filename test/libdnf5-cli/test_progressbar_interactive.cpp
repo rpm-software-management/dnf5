@@ -347,6 +347,42 @@ void ProgressbarInteractiveTest::test_multi_progress_bar_with_total_finished() {
     ASSERT_MATCHES(expected, perform_control_sequences(oss.str()));
 }
 
+void ProgressbarInteractiveTest::test_multi_progress_bar_with_total_finished_print_active_only() {
+    // In interactive mode finished multi progressbar ends with a new line.
+
+    libdnf5::cli::progressbar::MultiProgressBar multi_progress_bar{
+        libdnf5::cli::progressbar::MultiProgressBar::PrintMode::ACTIVE_BARS_ONLY};
+
+    auto download_progress_bar1 = std::make_unique<libdnf5::cli::progressbar::DownloadProgressBar>(10, "test1");
+    auto * const download_progress_bar1_raw = download_progress_bar1.get();
+    download_progress_bar1->set_ticks(10);
+    download_progress_bar1->set_state(libdnf5::cli::progressbar::ProgressBarState::SUCCESS);
+    multi_progress_bar.add_bar(std::move(download_progress_bar1));
+
+    auto download_progress_bar2 = std::make_unique<libdnf5::cli::progressbar::DownloadProgressBar>(10, "test2");
+    auto * const download_progress_bar2_raw = download_progress_bar2.get();
+    download_progress_bar2->set_ticks(10);
+    download_progress_bar2->set_state(libdnf5::cli::progressbar::ProgressBarState::SUCCESS);
+    multi_progress_bar.add_bar(std::move(download_progress_bar2));
+
+    // Mark progressbars as active
+    // Can be called multiple times on the same bar without side effects
+    multi_progress_bar.mark_bar_active(download_progress_bar1_raw);
+    multi_progress_bar.mark_bar_active(download_progress_bar2_raw);
+    multi_progress_bar.mark_bar_active(download_progress_bar1_raw);
+
+    std::ostringstream oss;
+    oss << multi_progress_bar;
+
+    Pattern expected =
+        "\\[1/2\\] test1                   100% | ????? ??B\\/s |  10.0   B |  ??????\n"
+        "\\[2/2\\] test2                   100% | ????? ??B\\/s |  10.0   B |  ??????\n"
+        "----------------------------------------------------------------------\n"
+        "\\[2/2\\] Total                   100% | ????? ??B\\/s |  20.0   B |  ??????\n";
+
+    ASSERT_MATCHES(expected, perform_control_sequences(oss.str()));
+}
+
 void ProgressbarInteractiveTest::test_multi_progress_bar_with_messages_with_total() {
     // In interactive mode not finished progressbar with messages doesn't end with a new line.
     // However finished progressbar does end with a new line.
@@ -472,6 +508,74 @@ void ProgressbarInteractiveTest::test_multi_progress_bars_with_messages_with_tot
     download_progress_bar2_raw->add_message(libdnf5::cli::progressbar::MessageType::INFO, "test message1");
     oss << multi_progress_bar;
     download_progress_bar2_raw->pop_message();
+    oss << multi_progress_bar;
+
+    ASSERT_MATCHES(expected, perform_control_sequences(oss.str()));
+}
+
+void ProgressbarInteractiveTest::test_multi_progress_bars_with_messages_with_total_print_active_only() {
+    // ACTIVE_BARS_ONLY variant of test_multi_progress_bars_with_messages_with_total
+
+    auto download_progress_bar1 = std::make_unique<libdnf5::cli::progressbar::DownloadProgressBar>(10, "test1");
+    download_progress_bar1->set_ticks(10);
+    download_progress_bar1->set_state(libdnf5::cli::progressbar::ProgressBarState::SUCCESS);
+
+    auto download_progress_bar2 = std::make_unique<libdnf5::cli::progressbar::DownloadProgressBar>(10, "test2");
+    download_progress_bar2->set_auto_finish(false);
+    download_progress_bar2->start();
+
+    libdnf5::cli::progressbar::MultiProgressBar multi_progress_bar{
+        libdnf5::cli::progressbar::MultiProgressBar::PrintMode::ACTIVE_BARS_ONLY};
+    auto * const download_progress_bar1_raw = download_progress_bar1.get();
+    multi_progress_bar.add_bar(std::move(download_progress_bar1));
+    auto * const download_progress_bar2_raw = download_progress_bar2.get();
+    multi_progress_bar.add_bar(std::move(download_progress_bar2));
+
+    download_progress_bar2_raw->set_ticks(4);
+    download_progress_bar2_raw->set_state(libdnf5::cli::progressbar::ProgressBarState::STARTED);
+    download_progress_bar2_raw->add_message(libdnf5::cli::progressbar::MessageType::INFO, "test message1");
+    download_progress_bar2_raw->add_message(libdnf5::cli::progressbar::MessageType::INFO, "test message2");
+    download_progress_bar2_raw->add_message(libdnf5::cli::progressbar::MessageType::INFO, "test もで 諤奯ゞ");
+
+    multi_progress_bar.mark_bar_active(download_progress_bar1_raw);
+    multi_progress_bar.mark_bar_active(download_progress_bar2_raw);
+
+    std::ostringstream oss;
+    oss << multi_progress_bar;
+    Pattern expected =
+        "\\[1/2\\] test1                   100% | ????? ??B\\/s |  10.0   B | ???????\n"
+        "\\[2/2\\] test2                    40% | ????? ??B\\/s |   4.0   B | ???????\n"
+        ">>> test message1\n"
+        ">>> test message2\n"
+        ">>> test もで 諤奯ゞ\n"
+        "----------------------------------------------------------------------\n"
+        "\\[1/2\\] Total                    70% | ????? ??B\\/s |  14.0   B | ???????";
+
+    ASSERT_MATCHES(expected, perform_control_sequences(oss.str()));
+
+    download_progress_bar2_raw->pop_message();
+    download_progress_bar2_raw->pop_message();
+    download_progress_bar2_raw->pop_message();
+
+    multi_progress_bar.mark_bar_active(download_progress_bar2_raw);  // No need to call bar is already active
+
+    oss << multi_progress_bar;
+    expected =
+        "\\[1/2\\] test1                   100% | ????? ??B\\/s |  10.0   B | ???????\n"
+        "\\[2/2\\] test2                    40% | ????? ??B\\/s |   4.0   B | ???????\n"
+        "----------------------------------------------------------------------\n"
+        "\\[1/2\\] Total                    70% | ????? ??B\\/s |  14.0   B | ???????\n"
+        "\n"
+        "\n";
+    ASSERT_MATCHES(expected, perform_control_sequences(oss.str()));
+
+    // new iteration
+    download_progress_bar2_raw->add_message(libdnf5::cli::progressbar::MessageType::INFO, "test message1");
+    // multi_progress_bar.mark_bar_active(download_progress_bar2_raw);  // No need to call bar is already active
+    oss << multi_progress_bar;
+
+    download_progress_bar2_raw->pop_message();
+    // multi_progress_bar.mark_bar_active(download_progress_bar2_raw);  // No need to call bar is already active
     oss << multi_progress_bar;
 
     ASSERT_MATCHES(expected, perform_control_sequences(oss.str()));
@@ -691,6 +795,73 @@ void ProgressbarInteractiveTest::test_multi_progress_bars_with_already_downloade
     // In progress download
     download_progress_bar3_raw->set_ticks(4);
     download_progress_bar3_raw->set_state(libdnf5::cli::progressbar::ProgressBarState::STARTED);
+
+    oss << multi_progress_bar;
+    expected =
+        "\\[1/3\\] test                    100% | ????? ??B\\/s |   0.0   B | ???????\n"
+        ">>> Already Downloaded\n"
+        "\\[2/3\\] test                    100% | ????? ??B\\/s |   0.0   B | ???????\n"
+        ">>> Already Downloaded\n"
+        "\\[3/3\\] test                     40% | ????? ??B\\/s |   4.0   B | ???????\n"
+        "----------------------------------------------------------------------\n"
+        "\\[2/3\\] Total                    40% | ????? ??B\\/s |   4.0   B | ???????";
+    ASSERT_MATCHES(expected, perform_control_sequences(oss.str()));
+}
+
+void ProgressbarInteractiveTest::test_multi_progress_bars_with_already_downloaded_print_active_only() {
+    auto download_progress_bar1 = std::make_unique<libdnf5::cli::progressbar::DownloadProgressBar>(10, "test");
+    auto download_progress_bar2 = std::make_unique<libdnf5::cli::progressbar::DownloadProgressBar>(10, "test");
+    auto download_progress_bar3 = std::make_unique<libdnf5::cli::progressbar::DownloadProgressBar>(10, "test");
+    auto * const download_progress_bar1_raw = download_progress_bar1.get();
+    auto * const download_progress_bar2_raw = download_progress_bar2.get();
+    auto * const download_progress_bar3_raw = download_progress_bar3.get();
+
+    libdnf5::cli::progressbar::MultiProgressBar multi_progress_bar{
+        libdnf5::cli::progressbar::MultiProgressBar::PrintMode::ACTIVE_BARS_ONLY};
+    multi_progress_bar.add_bar(std::move(download_progress_bar1));
+    multi_progress_bar.add_bar(std::move(download_progress_bar2));
+    multi_progress_bar.add_bar(std::move(download_progress_bar3));
+
+    // First download progress bar represents already downloaded package
+    download_progress_bar1_raw->set_ticks(0);
+    download_progress_bar1_raw->set_total_ticks(0);
+    download_progress_bar1_raw->add_message(libdnf5::cli::progressbar::MessageType::SUCCESS, "Already Downloaded");
+    download_progress_bar1_raw->start();
+    download_progress_bar1_raw->set_state(libdnf5::cli::progressbar::ProgressBarState::SUCCESS);
+    multi_progress_bar.mark_bar_active(download_progress_bar1_raw);
+
+    std::ostringstream oss;
+    oss << multi_progress_bar;
+    Pattern expected =
+        "\\[1/3\\] test                    100% | ????? ??B\\/s |   0.0   B | ???????\n"
+        ">>> Already Downloaded\n"
+        "----------------------------------------------------------------------\n"
+        "\\[1/3\\] Total                   ???% | ????? ??B\\/s |   0.0   B | ???????";
+
+    ASSERT_MATCHES(expected, perform_control_sequences(oss.str()));
+
+    // Add another already downloaded package
+    download_progress_bar2_raw->set_ticks(0);
+    download_progress_bar2_raw->set_total_ticks(0);
+    download_progress_bar2_raw->add_message(libdnf5::cli::progressbar::MessageType::SUCCESS, "Already Downloaded");
+    download_progress_bar2_raw->start();
+    download_progress_bar2_raw->set_state(libdnf5::cli::progressbar::ProgressBarState::SUCCESS);
+    multi_progress_bar.mark_bar_active(download_progress_bar2_raw);
+
+    oss << multi_progress_bar;
+    expected =
+        "\\[1/3\\] test                    100% | ????? ??B\\/s |   0.0   B | ???????\n"
+        ">>> Already Downloaded\n"
+        "\\[2/3\\] test                    100% | ????? ??B\\/s |   0.0   B | ???????\n"
+        ">>> Already Downloaded\n"
+        "----------------------------------------------------------------------\n"
+        "\\[2/3\\] Total                   ???% | ????? ??B\\/s |   0.0   B | ???????";
+    ASSERT_MATCHES(expected, perform_control_sequences(oss.str()));
+
+    // In progress download
+    download_progress_bar3_raw->set_ticks(4);
+    download_progress_bar3_raw->set_state(libdnf5::cli::progressbar::ProgressBarState::STARTED);
+    multi_progress_bar.mark_bar_active(download_progress_bar3_raw);
 
     oss << multi_progress_bar;
     expected =
