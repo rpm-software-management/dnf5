@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE comps PUBLIC "-//Red Hat, Inc.//DTD Comps info//EN" "comps.dtd">
+<comps>
+  <group>
+   <id>dnf-ci-group-rollback-testgroup1</id>
+   <default>false</default>
+   <uservisible>true</uservisible>
+   <display_order>1024</display_order>
+   <name>DNF-CI-RollbackTestGroup1</name>
+   <description>Test group for DNF CI group rollback testing</description>
+    <packagelist>
+      <packagereq type="mandatory">TestGroup1PackageA</packagereq>
+      <packagereq type="mandatory">TestGroup1PackageB</packagereq>
+      <packagereq type="mandatory">TestGroup1PackageC</packagereq>
+    </packagelist>
+  </group>
+</comps>

@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<updates>
+    <update from="updates@fedoraproject.org" status="stable" type="security" version="2.0">
+        <id>FEDORA-2019-f4eb34cf4c</id>
+        <title>labirinto-1.56.2-1.fc30</title>
+        <issued date="2019-05-12 01:21:43"/>
+        <updated date="2019-05-11 07:26:31"/>
+        <rights>Copyright (C) 2020 Red Hat, Inc. and others.</rights>
+        <release>Fedora 30</release>
+        <severity>Moderate</severity>
+        <summary>labirinto-1.56.2-1.fc30</summary>
+        <description>GNOME 3.32.2</description>
+        <references>
+          <reference href="https://bugzilla.redhat.com/show_bug.cgi?id=1696529" id="1696529" type="bugzilla" title="[abrt] epiphany: ephy_suggestion_get_unescaped_title(): epiphany-search-provider killed by SIGABRT"/>
+        </references>
+        <pkglist>
+            <collection short="F30">
+                <name>Fedora 30</name>
+                <package name="labirinto" version="1.56.2" release="1.fc30" epoch="0" arch="i686" src="https://download.fedoraproject.org/pub/fedora/linux/updates/30/i386/g/labirinto-1.56.2-1.fc30.i686.rpm">
+                  <filename>labirinto-1.56.2-1.fc30.i686.rpm</filename>
+                </package>
+                <package name="labirinto" version="1.56.2" release="1.fc30" epoch="0" arch="x86_64" src="https://download.fedoraproject.org/pub/fedora/linux/updates/30/x86_64/g/labirinto-1.56.2-1.fc30.x86_64.rpm">
+                  <filename>labirinto-1.56.2-1.fc30.x86_64.rpm</filename>
+                </package>
+                <package name="labirinto" version="1.56.2" release="1.fc30" epoch="0" arch="src" src="https://download.fedoraproject.org/pub/fedora/linux/updates/30/SRPMS/g/labirinto-1.56.2-1.fc30.src.rpm">
+                  <filename>labirinto-1.56.2-1.fc30.src.rpm</filename>
+                </package>
+            </collection>
+        </pkglist>
+    </update>
+
+    <update from="updates@fedoraproject.org" status="stable" type="security" version="2.0">
+        <id>FEDORA-2019-57b5902ed1</id>
+        <title>labirinto-1.56.2-6.fc30 mozjs60-60.9.0-2.fc30 polkit-0.116-2.fc30</title>
+        <issued date="2019-09-15 01:34:29"/>
+        <updated date="2019-09-08 11:57:09"/>
+        <rights>Copyright (C) 2020 Red Hat, Inc. and others.</rights>
+        <release>Fedora 30</release>
+        <severity>Critical</severity>
+        <summary>labirinto-1.56.2-6.fc30 bugfix update</summary>
+        <description>mozjs60 60.9.0, including various security, stability and regression fixes from Firefox 60.9.0 ESR. For details, see https://www.mozilla.org/en-US/firefox/60.9.0/releasenotes/</description>
+        <references/>
+        <pkglist>
+            <collection short="F30">
+                <name>Fedora 30</name>
+                <package name="labirinto" version="1.56.2" release="6.fc30" epoch="0" arch="i686" src="https://download.fedoraproject.org/pub/fedora/linux/updates/30/i386/g/labirinto-1.56.2-6.fc30.i686.rpm">
+                    <filename>labirinto-1.56.2-6.fc30.i686.rpm</filename>
+                </package>
+                <package name="labirinto" version="1.56.2" release="6.fc30" epoch="0" arch="src" src="https://download.fedoraproject.org/pub/fedora/linux/updates/30/SRPMS/g/labirinto-1.56.2-6.fc30.src.rpm">
+                    <filename>labirinto-1.56.2-6.fc30.src.rpm</filename>
+                </package>
+                <package name="labirinto" version="1.56.2" release="6.fc30" epoch="0" arch="x86_64" src="https://download.fedoraproject.org/pub/fedora/linux/updates/30/x86_64/g/labirinto-1.56.2-6.fc30.x86_64.rpm">
+                    <filename>labirinto-1.56.2-6.fc30.x86_64.rpm</filename>
+                </package>
+            </collection>
+        </pkglist>
+    </update>
+
+    <update from="updates@fedoraproject.org" status="stable" type="custom_type" version="2.0">
+        <id>FEDORA-2022-2222222222</id>
+        <title>labirinto-1.56.2-6.fc30 mozjs60-60.9.0-2.fc30 polkit-0.116-2.fc30</title>
+        <issued date="2019-09-15 01:34:29"/>
+        <updated date="2019-09-08 11:57:09"/>
+        <rights>Copyright (C) 2020 Red Hat, Inc. and others.</rights>
+        <release>Fedora 30</release>
+        <severity>custom_severity</severity>
+        <summary>labirinto-1.56.2-6.fc30 custom_type_severity update</summary>
+        <description>advisory with custom type and seveirity</description>
+        <references/>
+        <pkglist>
+            <collection short="F30">
+                <name>Fedora 30</name>
+                <package name="labirinto" version="1.56.2" release="6.fc30" epoch="0" arch="i686" src="https://download.fedoraproject.org/pub/fedora/linux/updates/30/i386/g/labirinto-1.56.2-6.fc30.i686.rpm">
+                    <filename>labirinto-1.56.2-6.fc30.i686.rpm</filename>
+                </package>
+                <package name="labirinto" version="1.56.2" release="6.fc30" epoch="0" arch="src" src="https://download.fedoraproject.org/pub/fedora/linux/updates/30/SRPMS/g/labirinto-1.56.2-6.fc30.src.rpm">
+                    <filename>labirinto-1.56.2-6.fc30.src.rpm</filename>
+                </package>
+                <package name="labirinto" version="1.56.2" release="6.fc30" epoch="0" arch="x86_64" src="https://download.fedoraproject.org/pub/fedora/linux/updates/30/x86_64/g/labirinto-1.56.2-6.fc30.x86_64.rpm">
+                    <filename>labirinto-1.56.2-6.fc30.x86_64.rpm</filename>
+                </package>
+            </collection>
+        </pkglist>
+    </update>
+
+    <update from="updates@fedoraproject.org" status="stable" type="security" version="2.0">
+        <id>FEDORA-2022-2222222223</id>
+        <title>labirinto-1.56.2-6.fc30 mozjs60-60.9.0-2.fc30 polkit-0.116-2.fc30</title>
+        <issued date="2019-09-15 01:34:29"/>
+        <updated date="2019-09-08 11:57:09"/>
+        <rights>Copyright (C) 2020 Red Hat, Inc. and others.</rights>
+        <release>Fedora 30</release>
+        <severity>custom_severity</severity>
+        <summary>labirinto-1.56.2-6.fc30 custom_severity update</summary>
+        <description>advisory with custom seveirity</description>
+        <references/>
+        <pkglist>
+            <collection short="F30">
+                <name>Fedora 30</name>
+                <package name="labirinto" version="1.56.2" release="6.fc30" epoch="0" arch="i686" src="https://download.fedoraproject.org/pub/fedora/linux/updates/30/i386/g/labirinto-1.56.2-6.fc30.i686.rpm">
+                    <filename>labirinto-1.56.2-6.fc30.i686.rpm</filename>
+                </package>
+                <package name="labirinto" version="1.56.2" release="6.fc30" epoch="0" arch="src" src="https://download.fedoraproject.org/pub/fedora/linux/updates/30/SRPMS/g/labirinto-1.56.2-6.fc30.src.rpm">
+                    <filename>labirinto-1.56.2-6.fc30.src.rpm</filename>
+                </package>
+                <package name="labirinto" version="1.56.2" release="6.fc30" epoch="0" arch="x86_64" src="https://download.fedoraproject.org/pub/fedora/linux/updates/30/x86_64/g/labirinto-1.56.2-6.fc30.x86_64.rpm">
+                    <filename>labirinto-1.56.2-6.fc30.x86_64.rpm</filename>
+                </package>
+            </collection>
+        </pkglist>
+    </update>
+
+    <update from="updates@fedoraproject.org" status="stable" type="custom_type" version="2.0">
+        <id>FEDORA-2022-2222222224</id>
+        <title>labirinto-1.56.2-6.fc30 mozjs60-60.9.0-2.fc30 polkit-0.116-2.fc30</title>
+        <issued date="2019-09-15 01:34:29"/>
+        <updated date="2019-09-08 11:57:09"/>
+        <rights>Copyright (C) 2020 Red Hat, Inc. and others.</rights>
+        <release>Fedora 30</release>
+        <severity>Critical</severity>
+        <summary>labirinto-1.56.2-6.fc30 custom_type update</summary>
+        <description>advisory with custom type</description>
+        <references/>
+        <pkglist>
+            <collection short="F30">
+                <name>Fedora 30</name>
+                <package name="labirinto" version="1.56.2" release="6.fc30" epoch="0" arch="i686" src="https://download.fedoraproject.org/pub/fedora/linux/updates/30/i386/g/labirinto-1.56.2-6.fc30.i686.rpm">
+                    <filename>labirinto-1.56.2-6.fc30.i686.rpm</filename>
+                </package>
+                <package name="labirinto" version="1.56.2" release="6.fc30" epoch="0" arch="src" src="https://download.fedoraproject.org/pub/fedora/linux/updates/30/SRPMS/g/labirinto-1.56.2-6.fc30.src.rpm">
+                    <filename>labirinto-1.56.2-6.fc30.src.rpm</filename>
+                </package>
+                <package name="labirinto" version="1.56.2" release="6.fc30" epoch="0" arch="x86_64" src="https://download.fedoraproject.org/pub/fedora/linux/updates/30/x86_64/g/labirinto-1.56.2-6.fc30.x86_64.rpm">
+                    <filename>labirinto-1.56.2-6.fc30.x86_64.rpm</filename>
+                </package>
+            </collection>
+        </pkglist>
+    </update>
+</updates>

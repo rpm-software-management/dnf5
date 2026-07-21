@@ -88,7 +88,7 @@ To report an issue in the translated messages:
 Developing DNF5 by building and testing the code
 ------------------------------------------------
 
-For details about building and testing DNF5, see the [Development environment setup](CONTRIBUTING.md#setting-up-a-development-environment) section.
+For details about building, testing, and running the integration tests, see [CONTRIBUTING.md](CONTRIBUTING.md#running-tests).
 
 Translating
 -----------

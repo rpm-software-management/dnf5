@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE comps PUBLIC "-//Red Hat, Inc.//DTD Comps info//EN" "comps.dtd">
+<comps>
+  <group>
+    <id>group-a</id>
+    <name>Group A</name>
+    <description>Group A description</description>
+    <pkagelist>
+      <packagereq type="default">gnomo</packagereq>
+    </packagelist>
+  </group>
+</comps>
