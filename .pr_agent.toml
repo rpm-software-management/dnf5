@@ -1,0 +1,16 @@
+# Documentation of available options:
+# https://docs.qodo.ai/install-and-configure/configuration-overview/configuration-and-command-reference
+
+[review_agent]
+
+# Controls where findings are posted in the pull request.
+# summary – all findings appear in a single summary comment
+# inline – findings are posted directly on relevant lines of code
+# both – a summary comment is posted and findings are also added inline (default)
+comments_location_policy = "inline"
+
+# Controls where the PR summary is posted.
+# comment – posts the summary as a persistent comment (default)
+# pr_description – updates the PR body with User Description and AI Description headings
+# dynamic – posts a comment if the author already wrote a PR description, otherwise updates the PR body
+publish_mode = "comment"
