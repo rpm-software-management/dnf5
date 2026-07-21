@@ -8,6 +8,7 @@ _dnf5() {
         [[ -z "$line" ]] && continue
         word="${line%%[[:space:]]*}"
         [[ -z "$word" ]] && continue
+        word="${word//:/\\:}"
         if [[ "$line" =~ '\((.+)\)$' ]]; then
             entry="${word}:${match[1]}"
         else
