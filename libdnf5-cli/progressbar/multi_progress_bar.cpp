@@ -29,7 +29,7 @@
 #include <algorithm>
 #include <iomanip>
 #include <limits>
-#include <set>
+#include <map>
 #include <utility>
 
 
@@ -46,7 +46,8 @@ public:
     std::vector<ProgressBar *> bars_todo;
     std::size_t bars_done_count{0};
     DownloadProgressBar total;
-    std::set<ProgressBar *> bars_newly_active;
+    std::map<ProgressBar *, std::size_t> bars_newly_active;
+    std::map<std::size_t, ProgressBar *> bars_newly_active_by_index;
 
     int64_t done_ticks{0};
     // Whether the last line was printed without a new line ending (such as an in progress bar)
@@ -145,7 +146,11 @@ void MultiProgressBar::add_bar(std::unique_ptr<ProgressBar> && bar) {
 
 void MultiProgressBar::mark_bar_active(ProgressBar * bar) {
     if (p_impl->print_mode == PrintMode::ACTIVE_BARS_ONLY) {
-        p_impl->bars_newly_active.insert(bar);
+        const auto newly_active_bars_count = p_impl->bars_newly_active.size();
+        auto [it, inserted] = p_impl->bars_newly_active.emplace(bar, newly_active_bars_count);
+        if (inserted) {
+            p_impl->bars_newly_active_by_index.emplace(newly_active_bars_count, bar);
+        }
     }
 }
 
@@ -194,11 +199,18 @@ std::ostream & operator<<(std::ostream & stream, MultiProgressBar & mbar) {
     for (auto it = mbar.p_impl->bars_todo.begin();
          it != mbar.p_impl->bars_todo.end() || !mbar.p_impl->bars_newly_active.empty();) {
         if (it != mbar.p_impl->bars_todo.end()) {
-            mbar.p_impl->bars_newly_active.erase(*it);
+            if (auto newly_active_it = mbar.p_impl->bars_newly_active.find(*it);
+                newly_active_it != mbar.p_impl->bars_newly_active.end()) {
+                mbar.p_impl->bars_newly_active_by_index.erase(newly_active_it->second);
+                mbar.p_impl->bars_newly_active.erase(newly_active_it);
+            }
         } else {
-            auto newly_active_it = mbar.p_impl->bars_newly_active.begin();
-            it = mbar.p_impl->bars_todo.insert(it, *newly_active_it);
-            mbar.p_impl->bars_newly_active.erase(newly_active_it);
+            // std::map is ordered by key, so begin() returns the bar with the lowest index,
+            // preserving the order of bars activation.
+            auto newly_active_by_index_it = mbar.p_impl->bars_newly_active_by_index.begin();
+            it = mbar.p_impl->bars_todo.insert(it, newly_active_by_index_it->second);
+            mbar.p_impl->bars_newly_active.erase(newly_active_by_index_it->second);
+            mbar.p_impl->bars_newly_active_by_index.erase(newly_active_by_index_it);
         }
         auto * const bar = *it;
 
