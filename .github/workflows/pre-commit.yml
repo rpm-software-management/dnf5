@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     container: ghcr.io/rpm-software-management/dnf-ci-host
     steps:
-    - uses: actions/checkout@v6
+    - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
     - name: Install pre-commit
       run: pip install pre-commit
     - name: State to use Workspace Dir
