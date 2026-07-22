@@ -272,4 +272,148 @@ std::ostream & operator<<(std::ostream & stream, MultiProgressBar & mbar) {
 }
 
 
+int64_t MultiProgressBar::bar_get_ticks(ProgressBar & bar) const noexcept {
+    return bar.get_ticks();
+}
+
+
+void MultiProgressBar::bar_set_ticks(ProgressBar & bar, int64_t value) {
+    if (bar.is_finished()) {
+        return;
+    }
+    bar.set_ticks(value);
+}
+
+
+void MultiProgressBar::bar_add_ticks(ProgressBar & bar, int64_t value) {
+    bar_set_ticks(bar, bar.get_ticks() + value);
+}
+
+
+int64_t MultiProgressBar::bar_get_total_ticks(ProgressBar & bar) const noexcept {
+    return bar.get_total_ticks();
+}
+
+
+void MultiProgressBar::bar_set_total_ticks(ProgressBar & bar, int64_t value) {
+    if (bar.is_finished()) {
+        return;
+    }
+    bar.set_total_ticks(value);
+}
+
+
+int32_t MultiProgressBar::bar_get_number(ProgressBar & bar) const noexcept {
+    return bar.get_number();
+}
+
+
+void MultiProgressBar::bar_start(ProgressBar & bar) {
+    if (bar.is_finished()) {
+        return;
+    }
+    bar.start();
+}
+
+
+ProgressBarState MultiProgressBar::bar_get_state(ProgressBar & bar) const noexcept {
+    return bar.get_state();
+}
+
+
+bool MultiProgressBar::bar_is_finished(ProgressBar & bar) const noexcept {
+    return bar.is_finished();
+}
+
+
+bool MultiProgressBar::bar_is_failed(ProgressBar & bar) const noexcept {
+    return bar.is_failed();
+}
+
+
+void MultiProgressBar::bar_set_state(ProgressBar & bar, ProgressBarState value) {
+    if (bar.is_finished() || value == ProgressBarState::READY) {
+        return;
+    }
+    bar.set_state(value);
+}
+
+
+std::string MultiProgressBar::bar_get_description(ProgressBar & bar) const noexcept {
+    return bar.get_description();
+}
+
+
+void MultiProgressBar::bar_set_description(ProgressBar & bar, const std::string & value) {
+    if (bar.is_finished()) {
+        return;
+    }
+    bar.set_description(value);
+}
+
+
+void MultiProgressBar::bar_add_message(ProgressBar & bar, MessageType type, const std::string & message) {
+    if (bar.is_finished()) {
+        return;
+    }
+    bar.add_message(type, message);
+}
+
+
+void MultiProgressBar::bar_pop_message(ProgressBar & bar) {
+    if (bar.is_finished()) {
+        return;
+    }
+    bar.pop_message();
+}
+
+
+const std::vector<ProgressBar::Message> & MultiProgressBar::bar_get_messages(ProgressBar & bar) const noexcept {
+    return bar.get_messages();
+}
+
+
+const std::string & MultiProgressBar::bar_get_message_prefix(ProgressBar & bar) const noexcept {
+    return bar.get_message_prefix();
+}
+
+
+bool MultiProgressBar::bar_get_auto_finish(ProgressBar & bar) const noexcept {
+    return bar.get_auto_finish();
+}
+
+
+void MultiProgressBar::bar_set_auto_finish(ProgressBar & bar, bool value) {
+    if (bar.is_finished()) {
+        return;
+    }
+    bar.set_auto_finish(value);
+}
+
+
+int32_t MultiProgressBar::bar_get_percent_done(ProgressBar & bar) const noexcept {
+    return bar.get_percent_done();
+}
+
+
+int64_t MultiProgressBar::bar_get_current_speed(ProgressBar & bar) const noexcept {
+    return bar.get_current_speed();
+}
+
+
+int64_t MultiProgressBar::bar_get_average_speed(ProgressBar & bar) const noexcept {
+    return bar.get_average_speed();
+}
+
+
+int64_t MultiProgressBar::bar_get_elapsed_seconds(ProgressBar & bar) const noexcept {
+    return bar.get_elapsed_seconds();
+}
+
+
+int64_t MultiProgressBar::bar_get_remaining_seconds(ProgressBar & bar) const noexcept {
+    return bar.get_remaining_seconds();
+}
+
+
 }  // namespace libdnf5::cli::progressbar
