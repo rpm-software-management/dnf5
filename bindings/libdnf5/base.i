@@ -23,6 +23,7 @@
 %import "repo.i"
 %import "rpm.i"
 %import "transaction.i"
+%import "utils.i"
 
 %{
     #include "bindings/libdnf5/exception.hpp"
