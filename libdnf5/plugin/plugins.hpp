@@ -111,6 +111,7 @@ public:
 
     void pre_transaction(const libdnf5::base::Transaction & transaction);
 
+    /// Call post_transaction of all allowed plugins in reverse order.
     void post_transaction(const libdnf5::base::Transaction & transaction);
 
     /// Call finish of all allowed plugins in reverse order.

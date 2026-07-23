@@ -279,9 +279,9 @@ void Plugins::pre_transaction(const libdnf5::base::Transaction & transaction) {
 }
 
 void Plugins::post_transaction(const libdnf5::base::Transaction & transaction) {
-    for (auto & plugin : plugins) {
-        if (plugin->get_enabled()) {
-            plugin->post_transaction(transaction);
+    for (auto plugin = plugins.rbegin(), stop = plugins.rend(); plugin != stop; ++plugin) {
+        if ((*plugin)->get_enabled()) {
+            (*plugin)->post_transaction(transaction);
         }
     }
 }
