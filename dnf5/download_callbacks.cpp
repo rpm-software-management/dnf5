@@ -35,7 +35,8 @@ void DownloadCallbacks::set_show_total_bar_limit(std::size_t limit) {
 void * DownloadCallbacks::add_new_download(
     [[maybe_unused]] void * user_data, const char * description, double total_to_download) {
     if (!multi_progress_bar) {
-        multi_progress_bar = std::make_unique<libdnf5::cli::progressbar::MultiProgressBar>();
+        multi_progress_bar = std::make_unique<libdnf5::cli::progressbar::MultiProgressBar>(
+            libdnf5::cli::progressbar::MultiProgressBar::TrackingMode::ON_CHANGE);
         multi_progress_bar->set_total_bar_visible_limit(show_total_bar_limit);
     }
     auto progress_bar = std::make_unique<libdnf5::cli::progressbar::DownloadProgressBar>(
