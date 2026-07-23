@@ -125,7 +125,8 @@ void DownloadCB::add_new_download(sdbus::Signal & signal) {
         signal >> description;
         signal >> total_to_download;
         if (!multi_progress_bar) {
-            multi_progress_bar = std::make_unique<libdnf5::cli::progressbar::MultiProgressBar>();
+            multi_progress_bar = std::make_unique<libdnf5::cli::progressbar::MultiProgressBar>(
+                libdnf5::cli::progressbar::MultiProgressBar::TrackingMode::ON_CHANGE);
             multi_progress_bar->set_total_bar_visible_limit(show_total_bar_limit);
         }
         auto progress_bar = std::make_unique<libdnf5::cli::progressbar::DownloadProgressBar>(
@@ -259,7 +260,9 @@ void DownloadCB::key_import(sdbus::Signal & signal) {
     }
 }
 
-TransactionCB::TransactionCB(Context & context, sdbus::IConnection & connection) : DbusCallback(context, connection) {}
+TransactionCB::TransactionCB(Context & context, sdbus::IConnection & connection)
+    : DbusCallback(context, connection),
+      multi_progress_bar(libdnf5::cli::progressbar::MultiProgressBar::TrackingMode::ON_CHANGE) {}
 
 
 void TransactionCB::register_signals() {

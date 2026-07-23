@@ -868,7 +868,9 @@ void Command::goal_resolved() {
 }
 
 
-RpmTransCB::RpmTransCB(Context & context) : context(context) {
+RpmTransCB::RpmTransCB(Context & context)
+    : multi_progress_bar(libdnf5::cli::progressbar::MultiProgressBar::TrackingMode::ON_CHANGE),
+      context(context) {
     multi_progress_bar.set_total_bar_visible_limit(libdnf5::cli::progressbar::MultiProgressBar::NEVER_VISIBLE_LIMIT);
 }
 
