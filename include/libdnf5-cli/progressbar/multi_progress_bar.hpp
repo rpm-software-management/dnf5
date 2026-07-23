@@ -41,7 +41,19 @@ class LIBDNF_CLI_API MultiProgressBar {
 public:
     static constexpr std::size_t NEVER_VISIBLE_LIMIT = static_cast<std::size_t>(-1);
 
+    /// Controls when bar state changes are processed for rendering.
+    enum class TrackingMode {
+        ON_RENDER,  ///< All bars are scanned on every render to detect state changes.
+        ON_CHANGE   ///< State changes are tracked incrementally via bar_*() wrapper methods.
+                    ///< Much faster when many bars are registered but only a few are active.
+    };
+
+    /// Constructs a MultiProgressBar with the given tracking mode.
+    explicit MultiProgressBar(TrackingMode tracking_mode);
+
+    /// Constructs a MultiProgressBar with TrackingMode::ON_RENDER.
     explicit MultiProgressBar();
+
     ~MultiProgressBar();
 
     MultiProgressBar(const MultiProgressBar & src) = delete;
@@ -49,6 +61,9 @@ public:
 
     MultiProgressBar(MultiProgressBar && src) noexcept = delete;
     MultiProgressBar & operator=(MultiProgressBar && src) noexcept = delete;
+
+    /// Returns the tracking mode set at construction.
+    TrackingMode get_tracking_mode() const noexcept;
 
     void add_bar(std::unique_ptr<ProgressBar> && bar);
 
