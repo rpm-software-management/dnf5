@@ -873,8 +873,9 @@ RpmTransCB::RpmTransCB(Context & context) : context(context) {
 }
 
 RpmTransCB::~RpmTransCB() {
-    if (active_progress_bar && active_progress_bar->get_state() != libdnf5::cli::progressbar::ProgressBarState::ERROR) {
-        active_progress_bar->set_state(libdnf5::cli::progressbar::ProgressBarState::SUCCESS);
+    if (active_progress_bar &&
+        multi_progress_bar.bar_get_state(*active_progress_bar) != libdnf5::cli::progressbar::ProgressBarState::ERROR) {
+        multi_progress_bar.bar_set_state(*active_progress_bar, libdnf5::cli::progressbar::ProgressBarState::SUCCESS);
     }
     if (active_progress_bar) {
         multi_progress_bar.print();
@@ -889,7 +890,8 @@ int RpmTransCB::rpm_messages_to_progress(const libdnf5::cli::progressbar::Messag
     auto transaction = context.get_transaction();
     int retval = 0;
     for (const auto & msg : transaction->get_rpm_messages()) {
-        active_progress_bar->add_message(message_type, libdnf5::utils::sformat("[RPM] {}", msg));
+        multi_progress_bar.bar_add_message(
+            *active_progress_bar, message_type, libdnf5::utils::sformat("[RPM] {}", msg));
         ++retval;
     }
     return retval;
@@ -897,7 +899,7 @@ int RpmTransCB::rpm_messages_to_progress(const libdnf5::cli::progressbar::Messag
 
 void RpmTransCB::install_progress(
     [[maybe_unused]] const libdnf5::base::TransactionPackage & item, uint64_t amount, [[maybe_unused]] uint64_t total) {
-    active_progress_bar->set_ticks(static_cast<int64_t>(amount));
+    multi_progress_bar.bar_set_ticks(*active_progress_bar, static_cast<int64_t>(amount));
     if (is_time_to_print()) {
         multi_progress_bar.print();
     }
@@ -946,7 +948,7 @@ void RpmTransCB::install_stop(
 }
 
 void RpmTransCB::transaction_progress(uint64_t amount, [[maybe_unused]] uint64_t total) {
-    active_progress_bar->set_ticks(static_cast<int64_t>(amount));
+    multi_progress_bar.bar_set_ticks(*active_progress_bar, static_cast<int64_t>(amount));
     if (is_time_to_print()) {
         multi_progress_bar.print();
     }
@@ -957,13 +959,13 @@ void RpmTransCB::transaction_start(uint64_t total) {
 }
 
 void RpmTransCB::transaction_stop([[maybe_unused]] uint64_t total) {
-    active_progress_bar->set_ticks(static_cast<int64_t>(total));
+    multi_progress_bar.bar_set_ticks(*active_progress_bar, static_cast<int64_t>(total));
     multi_progress_bar.print();
 }
 
 void RpmTransCB::uninstall_progress(
     [[maybe_unused]] const libdnf5::base::TransactionPackage & item, uint64_t amount, [[maybe_unused]] uint64_t total) {
-    active_progress_bar->set_ticks(static_cast<int64_t>(amount));
+    multi_progress_bar.bar_set_ticks(*active_progress_bar, static_cast<int64_t>(amount));
     if (is_time_to_print()) {
         multi_progress_bar.print();
     }
@@ -992,18 +994,20 @@ void RpmTransCB::uninstall_stop(
 
 void RpmTransCB::unpack_error(const libdnf5::base::TransactionPackage & item) {
     rpm_messages_to_progress(libdnf5::cli::progressbar::MessageType::ERROR);
-    active_progress_bar->add_message(
+    multi_progress_bar.bar_add_message(
+        *active_progress_bar,
         libdnf5::cli::progressbar::MessageType::ERROR,
         libdnf5::utils::sformat(_("Unpack error: {}"), item.get_package().get_full_nevra()));
-    active_progress_bar->set_state(libdnf5::cli::progressbar::ProgressBarState::ERROR);
+    multi_progress_bar.bar_set_state(*active_progress_bar, libdnf5::cli::progressbar::ProgressBarState::ERROR);
     multi_progress_bar.print();
 }
 
 void RpmTransCB::cpio_error(const libdnf5::base::TransactionPackage & item) {
-    active_progress_bar->add_message(
+    multi_progress_bar.bar_add_message(
+        *active_progress_bar,
         libdnf5::cli::progressbar::MessageType::ERROR,
         libdnf5::utils::sformat(_("Cpio error: {}"), item.get_package().get_full_nevra()));
-    active_progress_bar->set_state(libdnf5::cli::progressbar::ProgressBarState::ERROR);
+    multi_progress_bar.bar_set_state(*active_progress_bar, libdnf5::cli::progressbar::ProgressBarState::ERROR);
     multi_progress_bar.print();
 }
 
@@ -1012,9 +1016,9 @@ int RpmTransCB::script_output_to_progress(const libdnf5::cli::progressbar::Messa
     auto output = transaction->get_last_script_output();
     int retval = 0;
     if (!output.empty()) {
-        active_progress_bar->add_message(message_type, _("Scriptlet output:"));
+        multi_progress_bar.bar_add_message(*active_progress_bar, message_type, _("Scriptlet output:"));
         for (auto & line : libdnf5::utils::string::split(output, "\n")) {
-            active_progress_bar->add_message(message_type, line);
+            multi_progress_bar.bar_add_message(*active_progress_bar, message_type, line);
             ++retval;
         }
     }
@@ -1037,7 +1041,8 @@ void RpmTransCB::script_start(
         multi_progress_bar.set_total_num_of_bars(multi_progress_bar.get_total_num_of_bars() + 1);
         new_progress_bar(static_cast<int64_t>(-1), _("Running scriptlets"));
     }
-    active_progress_bar->add_message(
+    multi_progress_bar.bar_add_message(
+        *active_progress_bar,
         libdnf5::cli::progressbar::MessageType::INFO,
         libdnf5::utils::sformat(
             _("Running {} scriptlet: {}"), script_type_to_string(type), to_full_nevra_string(nevra)));
@@ -1052,13 +1057,15 @@ void RpmTransCB::script_stop(
     libdnf5::cli::progressbar::MessageType message_type = libdnf5::cli::progressbar::MessageType::WARNING;
     switch (return_code) {
         case RPMRC_OK:
-            active_progress_bar->add_message(
+            multi_progress_bar.bar_add_message(
+                *active_progress_bar,
                 libdnf5::cli::progressbar::MessageType::INFO,
                 libdnf5::utils::sformat(
                     _("Finished {} scriptlet: {}"), script_type_to_string(type), to_full_nevra_string(nevra)));
             break;
         case RPMRC_NOTFOUND:
-            active_progress_bar->add_message(
+            multi_progress_bar.bar_add_message(
+                *active_progress_bar,
                 libdnf5::cli::progressbar::MessageType::WARNING,
                 libdnf5::utils::sformat(
                     _("Non-critical error in {} scriptlet: {}"),
@@ -1067,7 +1074,8 @@ void RpmTransCB::script_stop(
             break;
         default:
             message_type = libdnf5::cli::progressbar::MessageType::ERROR;
-            active_progress_bar->add_message(
+            multi_progress_bar.bar_add_message(
+                *active_progress_bar,
                 libdnf5::cli::progressbar::MessageType::ERROR,
                 libdnf5::utils::sformat(
                     _("Error in {} scriptlet: {}"), script_type_to_string(type), to_full_nevra_string(nevra)));
@@ -1079,8 +1087,8 @@ void RpmTransCB::script_stop(
         // remove the script start/stop messages in case the script
         // finished successfully and no rpm log message or scriptlet
         // output was printed.
-        active_progress_bar->pop_message();
-        active_progress_bar->pop_message();
+        multi_progress_bar.bar_pop_message(*active_progress_bar);
+        multi_progress_bar.bar_pop_message(*active_progress_bar);
     }
     multi_progress_bar.print();
 }
@@ -1093,7 +1101,7 @@ void RpmTransCB::elem_progress(
 }
 
 void RpmTransCB::verify_progress(uint64_t amount, [[maybe_unused]] uint64_t total) {
-    active_progress_bar->set_ticks(static_cast<int64_t>(amount));
+    multi_progress_bar.bar_set_ticks(*active_progress_bar, static_cast<int64_t>(amount));
     if (is_time_to_print()) {
         multi_progress_bar.print();
     }
@@ -1109,20 +1117,21 @@ void RpmTransCB::verify_start([[maybe_unused]] uint64_t total) {
 }
 
 void RpmTransCB::verify_stop([[maybe_unused]] uint64_t total) {
-    active_progress_bar->set_ticks(static_cast<int64_t>(total));
+    multi_progress_bar.bar_set_ticks(*active_progress_bar, static_cast<int64_t>(total));
     multi_progress_bar.print();
 }
 
 void RpmTransCB::new_progress_bar(int64_t total, const std::string & descr) {
-    if (active_progress_bar && active_progress_bar->get_state() != libdnf5::cli::progressbar::ProgressBarState::ERROR) {
-        active_progress_bar->set_state(libdnf5::cli::progressbar::ProgressBarState::SUCCESS);
+    if (active_progress_bar &&
+        multi_progress_bar.bar_get_state(*active_progress_bar) != libdnf5::cli::progressbar::ProgressBarState::ERROR) {
+        multi_progress_bar.bar_set_state(*active_progress_bar, libdnf5::cli::progressbar::ProgressBarState::SUCCESS);
     }
     auto progress_bar =
         std::make_unique<libdnf5::cli::progressbar::DownloadProgressBar>(static_cast<int64_t>(total), descr);
-    progress_bar->set_auto_finish(false);
-    progress_bar->start();
     active_progress_bar = progress_bar.get();
     multi_progress_bar.add_bar(std::move(progress_bar));
+    multi_progress_bar.bar_set_auto_finish(*active_progress_bar, false);
+    multi_progress_bar.bar_start(*active_progress_bar);
 }
 
 bool RpmTransCB::is_time_to_print() {
