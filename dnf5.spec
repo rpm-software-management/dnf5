@@ -101,6 +101,12 @@ Provides:       dnf5-command(versionlock)
 %bcond_without plugin_local
 %endif
 
+%if %{with systemd}
+%bcond_without plugin_systemd_inhibit
+%else
+%bcond_with plugin_systemd_inhibit
+%endif
+
 %bcond_without acl
 %bcond_without comps
 
@@ -461,6 +467,7 @@ Requires:       librepo%{?_isa} >= %{librepo_version}
 Requires:       rpm-libs%{?_isa} >= 5.99.90
 %endif
 Requires:       sqlite-libs%{?_isa} >= %{sqlite_version}
+Recommends:     (libdnf5-plugin-systemd-inhibit if systemd)
 %if %{with dnf5_obsoletes_dnf}
 Conflicts:      dnf-data < 4.20.0
 %endif
@@ -826,6 +833,25 @@ Libdnf5 plugin that automatically copies all downloaded packages to a repository
 %endif
 %endif
 
+# ========== libdnf5-plugin-systemd-inhibit ==========
+
+%if %{with plugin_systemd_inhibit}
+%package -n libdnf5-plugin-systemd-inhibit
+Summary:        Libdnf5 plugin that prevents system shutdown during a package transaction
+License:        LGPL-2.1-or-later
+Requires:       libdnf5%{?_isa} = %{version}-%{release}
+BuildRequires:  pkgconfig(sdbus-c++) >= 0.8.1
+
+%description -n libdnf5-plugin-systemd-inhibit
+Libdnf5 plugin that acquires a systemd inhibitor lock during a package
+transaction to prevent system shutdown or reboot while packages are being
+installed, removed, or updated.
+
+%files -n libdnf5-plugin-systemd-inhibit
+%{_libdir}/libdnf5/plugins/systemd-inhibit.*
+%config %{_sysconfdir}/dnf/libdnf5-plugins/00-systemd-inhibit.conf
+%endif
+
 
 # ========== dnf5daemon-client ==========
 
@@ -1045,6 +1071,7 @@ DNF5 plugin for working with RPM package manifest files.
     -DWITH_PLUGIN_LOCAL=%{?with_plugin_local:ON}%{!?with_plugin_local:OFF} \
     -DWITH_PLUGIN_RHSM=%{?with_plugin_rhsm:ON}%{!?with_plugin_rhsm:OFF} \
     -DWITH_PLUGIN_MANIFEST=%{?with_plugin_manifest:ON}%{!?with_plugin_manifest:OFF} \
+    -DWITH_PLUGIN_SYSTEMD_INHIBIT=%{?with_plugin_systemd_inhibit:ON}%{!?with_plugin_systemd_inhibit:OFF} \
     -DWITH_PYTHON_PLUGINS_LOADER=%{?with_python_plugins_loader:ON}%{!?with_python_plugins_loader:OFF} \
     \
     -DWITH_ACL=%{?with_acl:ON}%{!?with_acl:OFF} \

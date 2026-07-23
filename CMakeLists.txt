@@ -27,6 +27,7 @@ option(WITH_PLUGIN_RHSM "Build a libdnf5 rhsm (Red Hat Subscription Manager) plu
 option(WITH_PLUGIN_MANIFEST "Build manifest plugin" ON)
 option(WITH_PYTHON_PLUGINS_LOADER "Build a special dnf5 plugin that loads Python plugins. Requires WITH_PYTHON3=ON." ON)
 option(WITH_PLUGIN_LOCAL "Build a libdnf5 local plugin" ON)
+option(WITH_PLUGIN_SYSTEMD_INHIBIT "Build a libdnf5 systemd inhibitor lock plugin" ON)
 
 # build options - features
 option(WITH_ACL "Build with POSIX access control list support" ON)
