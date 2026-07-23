@@ -194,15 +194,15 @@ std::ostream & operator<<(std::ostream & stream, MultiProgressBar & mbar) {
 
     // then print incomplete
     for (auto & bar : mbar.p_impl->bars_todo) {
+        // skip bars that haven't started yet
+        if (bar->get_state() != libdnf5::cli::progressbar::ProgressBarState::STARTED) {
+            continue;
+        }
+
         if (number < std::numeric_limits<decltype(number)>::max()) {
             ++number;
         }
         bar->set_number(number);
-
-        // skip printing bars that haven't started yet
-        if (bar->get_state() != libdnf5::cli::progressbar::ProgressBarState::STARTED) {
-            continue;
-        }
 
         if (!is_interactive) {
             bar->update();
