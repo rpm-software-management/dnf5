@@ -7,6 +7,11 @@ if (NOT WITH_MODULEMD)
     list(REMOVE_ITEM LIBDNF5_SOURCES ${LIBDNF5_SOURCES_MODULES})
 endif()
 
+# exclude the systemd inhibitor source if WITH_SYSTEMD not defined
+if (NOT WITH_SYSTEMD)
+    list(REMOVE_ITEM LIBDNF5_SOURCES "${CMAKE_CURRENT_SOURCE_DIR}/utils/systemd_inhibit.cpp")
+endif()
+
 # gather all pkg-config requires and write them to a .pc file later
 list(APPEND LIBDNF5_PC_REQUIRES)
 list(APPEND LIBDNF5_PC_REQUIRES_PRIVATE)
@@ -126,6 +131,14 @@ pkg_check_modules(SQLite3 REQUIRED sqlite3>=3.35.0)
 list(APPEND LIBDNF5_PC_REQUIRES "${SQLite3_MODULE_NAME}")
 target_link_libraries(libdnf5 PRIVATE ${SQLite3_LIBRARIES})
 target_link_libraries(libdnf5_iface INTERFACE ${SQLite3_LIBRARIES})
+
+if(WITH_SYSTEMD)
+    # libsystemd is loaded at runtime via dlopen (see utils/systemd_inhibit.cpp),
+    # so only its headers are needed here - no link-time dependency is added.
+    pkg_check_modules(LIBSYSTEMD REQUIRED libsystemd)
+    target_include_directories(libdnf5_obj PRIVATE ${LIBSYSTEMD_INCLUDE_DIRS})
+    target_compile_definitions(libdnf5_obj PRIVATE WITH_SYSTEMD)
+endif()
 
 
 # sort the pkg-config requires and concatenate them into a string

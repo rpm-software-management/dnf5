@@ -37,6 +37,9 @@
 #include "transaction_package_impl.hpp"
 #include "utils/on_scope_exit.hpp"
 #include "utils/string.hpp"
+#ifdef WITH_SYSTEMD
+#include "utils/systemd_inhibit.hpp"
+#endif
 
 #include "libdnf5/base/active_transaction_info.hpp"
 #include "libdnf5/base/base.hpp"
@@ -1099,6 +1102,16 @@ Transaction::TransactionRunResult Transaction::Impl::_run(
     if (test_only || rpm_transaction_flags & RPMTRANS_FLAG_TEST) {
         return TransactionRunResult::SUCCESS;
     }
+
+#ifdef WITH_SYSTEMD
+    int inhibit_fd = libdnf5::utils::acquire_systemd_inhibitor_lock(*logger);
+    libdnf5::utils::OnScopeExit release_inhibitor_lock([inhibit_fd, logger]() noexcept {
+        if (inhibit_fd >= 0) {
+            close(inhibit_fd);
+            logger->debug("Released systemd inhibitor lock");
+        }
+    });
+#endif
 
     auto & plugins = base->p_impl->get_plugins();
     plugins.pre_transaction(*transaction);
