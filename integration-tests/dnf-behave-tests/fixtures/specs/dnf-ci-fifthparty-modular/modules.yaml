@@ -1,0 +1,57 @@
+document: modulemd
+version: 2
+data:
+  name: jedi
+  stream: 1
+  version: 1
+  arch: x86_64
+  summary: Module for testing profile removal when non-modular package requires one of its packages
+  description: Provides two packages of which one would be required by non-modular package
+  license:
+    module:
+    - MIT
+  profiles:
+    duo:
+      rpms: ["luke", "obi-wan"]
+    trio:
+      rpms: ["luke", "obi-wan", "yoda"]
+  artifacts:
+    rpms: ["luke-0:1.0-1.x86_64", "obi-wan-0:1.0-1.x86_64", "yoda-0:1.0-1.x86_64"]
+...
+---
+document: modulemd-defaults
+version: 1
+data:
+    module: jedi
+    stream: 1
+    profiles:
+        default: [duo]
+...
+---
+document: modulemd
+version: 2
+data:
+  name: empire
+  stream: 1
+  version: 1
+  arch: x86_64
+  summary: Testing module
+  description: Testing module
+  license:
+    module:
+    - MIT
+  profiles:
+    duo:
+      rpms: ["luke"]
+  artifacts:
+    rpms: ["luke-0:1.0-1.x86_64"]
+...
+---
+document: modulemd-defaults
+version: 1
+data:
+    module: empire
+    stream: 1
+    profiles:
+        default: [duo]
+...

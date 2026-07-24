@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<updates>
+    <update from="dnf-testing@redhat.com" status="stable" type="security" version="1">
+        <id>DNF-B-i686-2022-9</id>
+        <title>multiarch security fix</title>
+        <release>Fedora 29</release>
+        <issue date="2019-02-22 15:30:01" />
+        <references />
+        <description>testing advisories during upgrade with multiarch pkgs</description>
+        <pkglist>
+            <collection short="F29">
+                <name>Fedora 29</name>
+                <package name="B" version="2" release="2" epoch="0" arch="i686" src="https://the.url/the.package.rpm">
+                    <filename>B-2-2.i686.rpm</filename>
+                </package>
+            </collection>
+        </pkglist>
+    </update>
+    <update from="dnf-testing@redhat.com" status="stable" type="security" version="1">
+        <id>DNF-B-i686-2022-9</id>
+        <title>multiarch security fix</title>
+        <release>Fedora 29</release>
+        <issue date="2019-02-22 15:30:01" />
+        <references />
+        <description>testing advisories during upgrade with multiarch pkgs</description>
+        <pkglist>
+            <collection short="F29">
+                <name>Fedora 29</name>
+                <package name="B" version="2" release="2" epoch="0" arch="x86_64" src="https://the.url/the.package.rpm">
+                    <filename>B-2-2.rpm</filename>
+                </package>
+            </collection>
+        </pkglist>
+    </update>
+</updates>

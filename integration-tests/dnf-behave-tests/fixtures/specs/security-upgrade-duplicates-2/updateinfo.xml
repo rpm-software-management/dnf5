@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<updates>
+  <update from="secresponseteam@foo.bar" type="security" version="3">
+    <id>id</id>
+    <title>title</title>
+    <issued date="2019-01-17 00:00:00"/>
+    <updated date="2019-01-17 00:00:00"/>
+    <severity>Moderate</severity>
+    <summary>summary_1</summary>
+    <description>stuff</description>
+    <pkglist>
+      <collection short="named collection">
+        <name>Bar component</name>
+        <package name="D" version="2" release="2" epoch="0" arch="x86_64" src="D-0:2-2.x86_64.rpm">
+          <filename>D-0:2-2.x86_64.rpm</filename>
+          <reboot_suggested/>
+        </package>
+      </collection>
+    </pkglist>
+  </update>
+  <update from="secresponseteam@foo.bar" type="security" version="3">
+    <id>id</id>
+    <title>title</title>
+    <issued date="2019-01-17 00:00:00"/>
+    <updated date="2019-01-17 00:00:00"/>
+    <severity>Moderate</severity>
+    <summary>summary_1</summary>
+    <description>stuff</description>
+    <pkglist>
+      <collection short="named collection">
+        <name>Bar component</name>
+        <package name="not-present-packageE" version="2" release="2" epoch="0" arch="x86_64" src="not-present-packageE-0:2-2.x86_64.rpm">
+          <filename>not-present-packageE-0:2-2.x86_64.rpm</filename>
+          <reboot_suggested/>
+        </package>
+      </collection>
+      <collection short="named collection">
+        <name>Bar component</name>
+        <package name="not-present-packageF" version="2" release="2" epoch="0" arch="x86_64" src="not-present-packageF-0:2-2.x86_64.rpm">
+          <filename>not-present-packageF-0:2-2.x86_64.rpm</filename>
+          <reboot_suggested/>
+        </package>
+      </collection>
+    </pkglist>
+  </update>
+  <update from="secresponseteam@foo.bar" type="security" version="3">
+    <id>custom_id</id>
+    <title>custom_title</title>
+    <issued date="1990-02-07 00:22:00"/>
+    <updated date="2022-12-17 00:00:00"/>
+    <severity>Moderate</severity>
+    <summary>custom summary</summary>
+    <description>custom description</description>
+    <pkglist>
+      <collection short="custom collection">
+        <name>custom component</name>
+        <package name="E" version="2" release="2" epoch="0" arch="x86_64" src="E-0:2-2.x86_64.rpm">
+          <filename>E-0:2-2.x86_64.rpm</filename>
+          <reboot_suggested/>
+        </package>
+      </collection>
+    </pkglist>
+  </update>
+  <update from="secresponseteam@foo.bar" type="security" version="3">
+    <id>custom_id_F</id>
+    <title>custom_title_F</title>
+    <issued date="2002-12-17 00:00:00"/>
+    <updated date="2019-08-19 22:00:00"/>
+    <severity>Moderate</severity>
+    <summary>different custom summary F</summary>
+    <description>custom description</description>
+    <pkglist>
+      <collection short="custom collection">
+        <name>custom component F</name>
+        <package name="F" version="2" release="2" epoch="0" arch="x86_64" src="F-0:2-2.x86_64.rpm">
+          <filename>F-0:2-2.x86_64.rpm</filename>
+          <reboot_suggested/>
+        </package>
+      </collection>
+    </pkglist>
+  </update>
+</updates>

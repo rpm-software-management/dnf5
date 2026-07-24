@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<updates>
+    <update from="dnf-testing@redhat.com" status="stable" type="bugfix" version="1">
+        <id>DNF-2019-1</id>
+        <title>bugfix_A-1.0-1</title>
+        <release>Fedora 29</release>
+        <issue date="2019-02-22 15:30:01" />
+        <references />
+        <description>testing advisory</description>
+        <pkglist>
+            <collection short="F29">
+                <name>Fedora 29</name>
+                <package name="bugfix_A" version="1.0" release="1" epoch="0" arch="x86_64" src="https://the.url/the.package.rpm">
+                    <filename>bugfix_A-1.0-1.x86_64.rpm</filename>
+                </package>
+            </collection>
+        </pkglist>
+    </update>
+    <update from="dnf-testing@redhat.com" status="stable" type="bugfix" version="1">
+        <id>DNF-2019-1</id>
+        <title>bugfix_B-1.0-2</title>
+        <release>Fedora 29</release>
+        <issue date="2019-02-22 15:30:01" />
+        <references />
+        <description>testing advisory</description>
+        <pkglist>
+            <collection short="F29">
+                <name>Fedora 29</name>
+                <package name="bugfix_B" version="1.0" release="2" epoch="0" arch="x86_64" src="https://the.url/the.package.rpm">
+                    <filename>bugfix_B-1.0-2.x86_64.rpm</filename>
+                </package>
+            </collection>
+        </pkglist>
+    </update>
+    <update from="dnf-testing@redhat.com" status="stable" type="bugfix" version="1">
+        <id>DNF-2019-1</id>
+        <title>bugfix_C-1.0-2</title>
+        <release>Fedora 29</release>
+        <issue date="2019-02-22 15:30:01" />
+        <references />
+        <description>testing advisory</description>
+        <pkglist>
+            <collection short="F29">
+                <name>Fedora 29</name>
+                <package name="bugfix_C" version="1.0" release="2" epoch="0" arch="x86_64" src="https://the.url/the.package.rpm">
+                    <filename>bugfix_C-1.0-2.x86_64.rpm</filename>
+                </package>
+            </collection>
+        </pkglist>
+    </update>
+    <update from="dnf-testing@redhat.com" status="stable" type="bugfix" version="1">
+        <id>DNF-2019-2</id>
+        <title>bugfix_C-1.0-3</title>
+        <release>Fedora 29</release>
+        <issue date="2019-02-22 15:30:01" />
+        <references />
+        <description>testing advisory</description>
+        <pkglist>
+            <collection short="F29">
+                <name>Fedora 29</name>
+                <package name="bugfix_C" version="1.0" release="3" epoch="0" arch="x86_64" src="https://the.url/the.package.rpm">
+                    <filename>bugfix_C-1.0-3.x86_64.rpm</filename>
+                </package>
+            </collection>
+        </pkglist>
+    </update>
+    <update from="dnf-testing@redhat.com" status="stable" type="security" version="1">
+        <id>DNF-2019-3</id>
+        <title>bugfix_C-1.0-4</title>
+        <release>Fedora 29</release>
+        <issue date="2019-02-22 15:30:01" />
+        <references />
+        <description>testing advisory</description>
+        <pkglist>
+            <collection short="F29">
+                <name>Fedora 29</name>
+                <package name="bugfix_C" version="1.0" release="4" epoch="0" arch="x86_64" src="https://the.url/the.package.rpm">
+                    <filename>bugfix_C-1.0-4.x86_64.rpm</filename>
+                </package>
+            </collection>
+        </pkglist>
+    </update>
+
+    <update from="dnf-testing@redhat.com" status="stable" type="security" severity="low" version="1">
+        <id>DNF-2019-1</id>
+        <title>security_A-1.0-2</title>
+        <severity>Low</severity>
+        <release>Fedora 29</release>
+        <issue date="2019-02-22 15:30:01" />
+        <references>
+            <reference href="https://bugzilla.redhat.com/show_bug.cgi?id=123" id="123" type="bugzilla" title="Bugzilla reference 123"/>
+        </references>
+        <description>testing advisory</description>
+        <pkglist>
+            <collection short="F29">
+                <name>Fedora 29</name>
+                <package name="security_A" version="1.0" release="2" epoch="0" arch="x86_64" src="https://the.url/the.package.rpm">
+                    <filename>security_A-1.0-2.x86_64.rpm</filename>
+                </package>
+            </collection>
+        </pkglist>
+    </update>
+    <update from="dnf-testing@redhat.com" status="stable" type="security" severity="moderate" version="1">
+        <id>DNF-2019-2</id>
+        <title>security_A-1.0-3</title>
+        <severity>Moderate</severity>
+        <release>Fedora 29</release>
+        <issue date="2019-02-22 15:30:01" />
+        <references>
+            <reference href="https://bugzilla.redhat.com/show_bug.cgi?id=234" id="234" type="bugzilla" title="Bugzilla reference 234"/>
+        </references>
+        <description>testing advisory</description>
+        <pkglist>
+            <collection short="F29">
+                <name>Fedora 29</name>
+                <package name="security_A" version="1.0" release="3" epoch="0" arch="x86_64" src="https://the.url/the.package.rpm">
+                    <filename>security_A-1.0-3.x86_64.rpm</filename>
+                </package>
+            </collection>
+        </pkglist>
+    </update>
+    <update from="dnf-testing@redhat.com" status="stable" type="enhancement" version="1">
+        <id>DNF-2019-3</id>
+        <title>security_A-1.0-4 security_B-1.0-2</title>
+        <release>Fedora 29</release>
+        <issue date="2019-02-22 15:30:01" />
+        <references>
+            <reference href="https://bugzilla.redhat.com/show_bug.cgi?id=345" id="345" type="bugzilla" title="Bugzilla reference 345"/>
+        </references>
+        <description>testing advisory</description>
+        <pkglist>
+            <collection short="F29">
+                <name>Fedora 29</name>
+                <package name="security_A" version="1.0" release="4" epoch="0" arch="x86_64" src="https://the.url/the.package.rpm">
+                    <filename>security_A-1.0-4.x86_64.rpm</filename>
+                </package>
+                <package name="security_B" version="1.0" release="2" epoch="0" arch="x86_64" src="https://the.url/the.package.rpm">
+                    <filename>security_B-1.0-2.x86_64.rpm</filename>
+                </package>
+            </collection>
+        </pkglist>
+    </update>
+
+    <update from="dnf-testing@redhat.com" status="stable" type="bugfix" version="1">
+        <id>DNF-BUGFIX-001</id>
+        <title>advisory_A-1.0-2</title>
+        <release>Fedora 29</release>
+        <issue date="2019-02-22 15:30:01" />
+        <references>
+            <reference href="https://bugzilla.redhat.com/show_bug.cgi" id="BZ111" type="bugzilla" title="Bugzilla reference"/>
+        </references>
+        <description>testing advisory</description>
+        <pkglist>
+            <collection short="F29">
+                <name>Fedora 29</name>
+                <package name="advisory_A" version="1.0" release="2" epoch="0" arch="x86_64" src="https://the.url/the.package.rpm">
+                    <filename>advisory_A-1.0-2.x86_64.rpm</filename>
+                </package>
+            </collection>
+        </pkglist>
+    </update>
+    <update from="dnf-testing@redhat.com" status="stable" type="security" severity="Moderate" version="1">
+        <id>DNF-SECURITY-002</id>
+        <title>advisory_B-1.0-2</title>
+        <severity>Moderate</severity>
+        <release>Fedora 29</release>
+        <issue date="2019-02-22 15:30:01" />
+        <references>
+            <reference href="https://bugzilla.redhat.com/show_bug.cgi" id="BZ222" type="bugzilla" title="Bugzilla reference"/>
+            <reference href="https://bugzilla.redhat.com/show_bug.cgi" id="CVE-001" type="cve" title="Bugzilla reference"/>
+        </references>
+        <description>testing advisory</description>
+        <pkglist>
+            <collection short="F29">
+                <name>Fedora 29</name>
+                <package name="advisory_B" version="1.0" release="2" epoch="0" arch="x86_64" src="https://the.url/the.package.rpm">
+                    <filename>advisory_B-1.0-2.x86_64.rpm</filename>
+                </package>
+            </collection>
+        </pkglist>
+    </update>
+    <update from="dnf-testing@redhat.com" status="stable" type="bugfix" version="1">
+        <id>DNF-BUGFIX-003</id>
+        <title>advisory_A-1.0-3, advisory_B-1.0-3</title>
+        <release>Fedora 29</release>
+        <issue date="2019-02-22 15:30:01" />
+        <references>
+            <reference href="https://bugzilla.redhat.com/show_bug.cgi" id="BZ333" type="bugzilla" title="Bugzilla reference"/>
+        </references>
+        <description>testing advisory</description>
+        <pkglist>
+            <collection short="F29">
+                <name>Fedora 29</name>
+                <package name="advisory_A" version="1.0" release="3" epoch="0" arch="x86_64" src="https://the.url/the.package.rpm">
+                    <filename>advisory_A-1.0-3.x86_64.rpm</filename>
+                </package>
+                <package name="advisory_B" version="1.0" release="3" epoch="0" arch="x86_64" src="https://the.url/the.package.rpm">
+                    <filename>advisory_B-1.0-3.x86_64.rpm</filename>
+                </package>
+            </collection>
+        </pkglist>
+    </update>
+    <update from="dnf-testing@redhat.com" status="stable" type="security" severity="Critical" version="1">
+        <id>DNF-SECURITY-004</id>
+        <title>advisory_B-1.0-4</title>
+        <severity>Critical</severity>
+        <release>Fedora 29</release>
+        <issue date="2019-02-22 15:30:01" />
+        <references>
+            <reference href="https://bugzilla.redhat.com/show_bug.cgi" id="BZ4444" type="bugzilla" title="Bugzilla reference"/>
+            <reference href="https://bugzilla.redhat.com/show_bug.cgi" id="CVE-002" type="cve" title="Bugzilla reference"/>
+        </references>
+        <description>testing advisory</description>
+        <pkglist>
+            <collection short="F29">
+                <name>Fedora 29</name>
+                <package name="advisory_B" version="1.0" release="4" epoch="0" arch="x86_64" src="https://the.url/the.package.rpm">
+                    <filename>advisory_B-1.0-4.x86_64.rpm</filename>
+                </package>
+            </collection>
+        </pkglist>
+    </update>
+    <update from="dnf-testing@redhat.com" status="stable" type="enhancement" version="1">
+        <id>DNF-ENHANCEMENT-005</id>
+        <title>advisory_A-1.0-4</title>
+        <release>Fedora 29</release>
+        <issue date="2019-02-22 15:30:01" />
+        <references />
+        <description>testing advisory</description>
+        <pkglist>
+            <collection short="F29">
+                <name>Fedora 29</name>
+                <package name="advisory_A" version="1.0" release="4" epoch="0" arch="x86_64" src="https://the.url/the.package.rpm">
+                    <filename>advisory_A-1.0-4.x86_64.rpm</filename>
+                </package>
+            </collection>
+        </pkglist>
+    </update>
+</updates>

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE comps PUBLIC "-//Red Hat, Inc.//DTD Comps info//EN" "comps.dtd">
+<comps>
+  <group>
+   <id>AB-group</id>
+   <default>false</default>
+   <uservisible>true</uservisible>
+   <display_order>1024</display_order>
+   <name>AB-group</name>
+   <description>Testgroup for DNF CI testing</description>
+    <packagelist>
+      <packagereq type="mandatory">B-mandatory</packagereq>
+    </packagelist>
+  </group>
+
+  <group>
+    <id>same-id</id>
+    <name>Same id group</name>
+    <display_order>1</display_order>
+    <description></description>
+    <packagelist>
+      <packagereq type="mandatory">D-mandatory</packagereq>
+    </packagelist>
+  </group>
+
+  <environment>
+    <id>same-id</id>
+    <name>Same id env</name>
+    <description></description>
+    <display_order>1</display_order>
+    <grouplist>
+      <groupid>AB-group</groupid>
+    </grouplist>
+    <optionlist>
+    </optionlist>
+  </environment>
+</comps>

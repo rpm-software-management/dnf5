@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE comps PUBLIC "-//Red Hat, Inc.//DTD Comps info//EN" "comps.dtd">
+<comps>
+
+  <group>
+   <id>dnf-ci-testgroup</id>
+   <default>false</default>
+   <uservisible>true</uservisible>
+   <display_order>1024</display_order>
+   <name>DNF-CI-Testgroup</name>
+   <description>Testgroup for DNF CI testing</description>
+    <packagelist>
+      <packagereq type="mandatory">filesystem</packagereq>
+      <packagereq type="mandatory">libzstd</packagereq>
+      <packagereq type="default">lame</packagereq>
+      <packagereq type="optional">flac</packagereq>
+      <packagereq type="conditional" requires="filesystem-content">wget</packagereq>
+    </packagelist>
+  </group>
+</comps>

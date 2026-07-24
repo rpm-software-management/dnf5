@@ -1,0 +1,10 @@
+contentOrigin:
+  repos:
+    - repoid: dnf-ci-fedora-modular
+      baseurl: file://$FIXTURES_DIR/repos/dnf-ci-fedora-modular
+packages:
+  - nodejs
+moduleEnable:
+  - nodejs:10
+arches:
+  - x86_64

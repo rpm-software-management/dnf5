@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE comps PUBLIC "-//Red Hat, Inc.//DTD Comps info//EN" "comps.dtd">
+<comps>
+  <group>
+   <id>beverages</id>
+   <default>false</default>
+   <uservisible>true</uservisible>
+   <display_order>1024</display_order>
+   <name>Beverages</name>
+   <description>This group serves for testing purposes</description>
+    <packagelist>
+      <packagereq type="mandatory">tea</packagereq>
+      <packagereq type="default">water_still</packagereq>
+      <packagereq type="optional">water_carbonated</packagereq>
+      <packagereq type="conditional" requires="milk">chockolate</packagereq>
+    </packagelist>
+  </group>
+</comps>

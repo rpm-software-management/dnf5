@@ -1,0 +1,44 @@
+---
+document: modulemd
+version: 2
+data:
+  name: python36
+  stream: 3.6
+  version: 10
+  context: 982725ab
+  arch: x86_64
+  summary: Python programming language, version 3.6
+  description: >-
+    This module gives users access to the internal Python 3.6 in RHEL8.
+  license:
+    module:
+    - MIT
+    content:
+    - Python
+  dependencies:
+  - buildrequires:
+      mongodb: [3.6]
+      platform: [f29]
+    requires:
+      platform: [f29]
+  references:
+    community: https://www.python.org/
+    documentation: https://docs.python.org/3.6/
+  profiles:
+    build:
+      rpms:
+      - python36
+    common:
+      rpms:
+        - python36
+  api:
+    rpms:
+    - python36
+  components:
+    rpms:
+      python36:
+        rationale: Contains the symlink to the platform-python interpreter. Also contains
+          python36-rpm-macros needed to build the remaining packages.
+        ref: stream-3.6-rhel-8.5.0
+        buildorder: 10
+        arches: [aarch64, i686, ppc64le, s390x, x86_64]

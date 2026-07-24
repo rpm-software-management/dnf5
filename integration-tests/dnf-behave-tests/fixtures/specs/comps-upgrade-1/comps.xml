@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE comps PUBLIC "-//Red Hat, Inc.//DTD Comps info//EN" "comps.dtd">
+<comps>
+
+  <group>
+   <id>a-group</id>
+   <default>false</default>
+   <uservisible>true</uservisible>
+   <display_order>1024</display_order>
+   <name>A-group - repo#1</name>
+   <description>Testgroup for DNF CI testing - repo#1</description>
+    <packagelist>
+      <packagereq type="mandatory">A-mandatory</packagereq>
+      <packagereq type="default">A-default</packagereq>
+      <packagereq type="optional">A-optional</packagereq>
+      <packagereq type="conditional" requires="dummy">A-conditional-true</packagereq>
+      <packagereq type="conditional" requires="nonexistent">A-conditional-false</packagereq>
+    </packagelist>
+  </group>
+
+  <group>
+    <id>C-group</id>
+    <default>false</default>
+    <uservisible>true</uservisible>
+    <display_order>1024</display_order>
+    <name>C-group</name>
+    <description>Testgroup for DNF CI testing</description>
+    <packagelist>
+      <packagereq type="mandatory">C-mandatory</packagereq>
+    </packagelist>
+  </group>
+
+  <group>
+   <id>AB-group</id>
+   <default>false</default>
+   <uservisible>true</uservisible>
+   <display_order>1024</display_order>
+   <name>AB-group</name>
+   <description>Testgroup for DNF CI testing</description>
+    <packagelist>
+      <packagereq type="mandatory">A-mandatory</packagereq>
+      <packagereq type="default">A-default</packagereq>
+      <packagereq type="optional">A-optional</packagereq>
+      <packagereq type="conditional" requires="dummy">A-conditional-true</packagereq>
+      <packagereq type="conditional" requires="nonexistent">A-conditional-false</packagereq>
+    </packagelist>
+  </group>
+
+  <environment>
+   <id>AB-environment</id>
+   <default>false</default>
+   <uservisible>true</uservisible>
+   <display_order>1024</display_order>
+   <name>AB-environment</name>
+   <description>Testenvironment for DNF CI testing</description>
+    <grouplist>
+      <groupid>a-group</groupid>
+    </grouplist>
+  </environment>
+
+  <environment>
+    <id>AC-environment</id>
+    <default>false</default>
+    <uservisible>true</uservisible>
+    <display_order>1024</display_order>
+    <name>AC-environment</name>
+    <description>Testenvironment for DNF CI testing</description>
+    <grouplist>
+      <groupid>a-group</groupid>
+      <groupid>C-group</groupid>
+    </grouplist>
+  </environment>
+
+  <group>
+   <id>empty-group</id>
+   <default>false</default>
+   <uservisible>true</uservisible>
+   <display_order>1024</display_order>
+   <name>empty-group</name>
+   <description>Testgroup for DNF CI testing</description>
+    <packagelist>
+    </packagelist>
+  </group>
+
+  <group>
+    <id>change-package-type</id>
+    <default>false</default>
+    <uservisible>true</uservisible>
+    <display_order>1024</display_order>
+    <name>change-package-type</name>
+    <description>Testgroup for DNF CI testing</description>
+    <packagelist>
+      <packagereq type="mandatory">A-mandatory</packagereq>
+      <packagereq type="default">B-mandatory</packagereq>
+      <packagereq type="optional">C-mandatory</packagereq>
+      <packagereq type="conditional" requires="A-mandatory">dummy</packagereq>
+    </packagelist>
+  </group>
+
+  <environment>
+   <id>empty-environment</id>
+   <default>false</default>
+   <uservisible>true</uservisible>
+   <display_order>1024</display_order>
+   <name>empty-environment</name>
+   <description>Testgroup for DNF CI testing</description>
+    <grouplist>
+    </grouplist>
+  </environment>
+
+  <environment>
+   <id>optional-environment</id>
+   <default>false</default>
+   <uservisible>true</uservisible>
+   <display_order>1024</display_order>
+   <name>optional-environment</name>
+   <description>Testenvironment for DNF CI testing</description>
+    <optionlist>
+      <groupid>a-group</groupid>
+    </optionlist>
+  </environment>
+
+  <environment>
+    <id>ABC-environment</id>
+    <default>false</default>
+    <uservisible>true</uservisible>
+    <display_order>1024</display_order>
+    <name>ABC-environment</name>
+    <description>Testenvironment for DNF CI testing</description>
+    <grouplist>
+      <groupid>a-group</groupid>
+    </grouplist>
+    <optionlist>
+      <groupid>C-group</groupid>
+    </optionlist>
+  </environment>
+
+</comps>

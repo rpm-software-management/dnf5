@@ -90,6 +90,105 @@ Developing DNF5 by building and testing the code
 
 For details about building and testing DNF5, see the [Development environment setup](CONTRIBUTING.md#setting-up-a-development-environment) section.
 
+
+Running Tests
+-------------
+
+### Unit Tests
+
+Build the project and run the C++ unit tests:
+```
+make test-unit
+```
+
+To run a specific subset of unit tests:
+```
+make test-unit CTEST_ARGS="-R libdnf5"
+```
+
+### Integration Tests
+
+The integration test suite is based on [behave](https://behave.readthedocs.io/)
+(BDD framework using Gherkin `.feature` files) and runs inside containers for
+sandboxing.
+
+The test suite is located in [`integration-tests/dnf-behave-tests/`](integration-tests/dnf-behave-tests/).
+For documentation of the test suite structure, steps and conventions, see
+[`integration-tests/dnf-behave-tests/README.md`](integration-tests/dnf-behave-tests/README.md).
+
+To build RPMs from your local source, build the test container, and run the
+dnf5 integration tests:
+```
+make test-integration ARGS="--tags dnf5 --command dnf5"
+```
+
+To run a single feature file:
+```
+make test-integration ARGS="--command dnf5 config.feature"
+```
+
+To run dnf5daemon integration tests:
+```
+make test-integration ARGS="--tags dnf5daemon --command dnf5daemon-client"
+```
+
+To skip destructive tests:
+```
+make test-integration ARGS="--no-destructive --command dnf5"
+```
+
+To reserve a shell session inside the container on test failure (useful for debugging):
+```
+make test-integration ARGS="-R --command dnf5"
+```
+
+If the container is already built, you can skip the RPM build and container
+build steps and just re-run the tests:
+```
+make test-integration-run ARGS="--command dnf5"
+```
+
+For development, you can also run the `container-test` script directly:
+```
+./integration-tests/container-test --help
+./integration-tests/container-test run --help
+```
+
+#### Building the Container Image
+
+The container image is based on Fedora and installs the latest DNF stack from
+the dnf-nightly Copr repository. Any RPMs found in `integration-tests/rpms/`
+are installed on top, which is how local changes are tested.
+
+To build the image on a different base:
+```
+./integration-tests/container-test build --base quay.io/centos/centos:stream10
+```
+
+To build without the nightly Copr (distro packages only):
+```
+./integration-tests/container-test build --type distro
+```
+
+Additional CA certificates can be placed in `integration-tests/ca-trust/` and
+extra repo files in `integration-tests/repos.d/`.
+
+#### Running Tests Directly (Without Containers)
+
+First build the test data:
+```
+cd integration-tests/dnf-behave-tests
+fixtures/specs/build.sh
+```
+
+Then run behave directly (requires root for most tests):
+```
+sudo behave -Ddnf_command=dnf5 dnf
+sudo behave -Ddnf_command=dnf5 dnf/config.feature
+sudo behave -Ddnf_command=dnf5 -n "Test scenario name" dnf/config.feature
+sudo behave -Ddnf_command=dnf5 -Ddestructive=yes dnf/cache.feature
+```
+
 Translating
 -----------
 

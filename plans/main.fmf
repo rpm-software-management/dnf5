@@ -1,0 +1,32 @@
+summary: Prepare DNF5 Integration Tests
+
+tag: integration
+
+prepare:
+    - name: Install packages to build fedora container
+      how: install
+      package: [git, podman]
+
+    - name: Download latest dnf5 from PR
+      how: shell
+      script:
+        - git clone https://github.com/rpm-software-management/dnf5 /var/tmp/dnf5
+
+    - name: Checkout PR branch if packit call is from dnf5
+      how: shell
+      script: |
+        if [ "$PACKIT_UPSTREAM_NAME" == "dnf5" ]; then
+          git -C /var/tmp/dnf5 remote add pull-request $PACKIT_SOURCE_URL
+          git -C /var/tmp/dnf5 fetch pull-request
+          git -C /var/tmp/dnf5 checkout --track pull-request/$PACKIT_SOURCE_BRANCH
+          git -C /var/tmp/dnf5 rebase $PACKIT_TARGET_BRANCH
+        fi
+
+    - name: Build testing container
+      how: shell
+      script: |
+        /var/tmp/dnf5/integration-tests/container-test build \
+        --base $( if test "$@distro" == "fedora-eln"; then echo "quay.io/fedora/eln:latest"; \
+                  else echo "$@distro" | tr '-' ':'; fi ) \
+        --container-arg="--env=COPR=$PACKIT_COPR_PROJECT" \
+        --container-arg="--env=COPR_RPMS=$PACKIT_COPR_RPMS"

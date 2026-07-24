@@ -1,0 +1,58 @@
+---
+document: modulemd-obsoletes
+version: 1
+data:
+    modified: 2020-06-01T00:00Z
+    module: nodejs
+    stream: 5
+    message: "obsoleting general obsoletes"
+    obsoleted_by:
+      module: dwm
+      stream: 6.0
+...
+---
+document: modulemd-obsoletes
+version: 1
+data:
+    modified: 2020-06-01T00:00Z
+    module: nodejs
+    stream: 8
+    reset: true
+    context: 6c81f848
+    message: "immediate obsoletes with reset"
+...
+---
+document: modulemd-obsoletes
+version: 1
+data:
+    modified: 2020-06-01T00:00Z
+    module: postgresql
+    stream: 6
+    message: "immediate general obsoletes newer than obsoletes with reset for postgresql"
+...
+---
+document: modulemd-obsoletes
+version: 1
+data:
+    modified: 2020-06-01T00:00Z
+    module: nodejs
+    eol_date: 2990-01-01T00:00Z
+    stream: 11
+    message: "newer eol in far future doesn't affect currently active obsoletes"
+    obsoleted_by:
+      module: dwm
+      stream: 6.0
+...
+---
+document: modulemd-obsoletes
+version: 1
+data:
+    modified: 2020-06-01T00:00Z
+    module: postgresql
+    stream: 9.6
+    eol_date: 2009-01-01T00:00Z
+    message: "obsoletes with obsoleted_by and eol_date is the past"
+    obsoleted_by:
+      module: dwm
+      stream: 6.0
+...

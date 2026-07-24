@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<updates>
+  <update from="secresponseteam@foo.bar" status="final" type="enhancement" version="3">
+    <id>FEDORA-2019-0329090518</id>
+    <title>glibc bug fix</title>
+    <issued date="2019-03-29 00:00:00"/>
+    <updated date="2019-03-29 00:00:00"/>
+    <severity>none</severity>
+    <summary>summary_1</summary>
+    <description>Enhance some stuff</description>
+    <references>
+        <reference href="https://foobar/foobarupdate_2" id="2222" type="bugzilla" title="222"/>
+        <reference href="https://foobar/foobarupdate_2" id="2222" type="cve" title="CVE-2999"/>
+    </references>
+    <pkglist>
+      <collection short="named collection">
+        <name>Foo component</name>
+        <module name="perl-DBI" stream="master" version="2" context="iiiiiiiii" arch="x86_64"/>
+        <package name="test-perl-DBI" version="1" release="2.module_el8+6745+9879ate3" epoch="0" arch="x86_64" src="http://www.foo.org">
+          <filename>perl-DBI-1-2.module_el8+6745+9879ate3.spec</filename>
+          <reboot_suggested/>
+        </package>
+      </collection>
+      <collection short="named collection">
+        <name>Foo component</name>
+        <module name="perl-DBI" stream="master" version="2" context="hhhhhhhhhh" arch="x86_64"/>
+        <package name="test-perl-DBI" version="1" release="2.module_el8+6587+9879afr5" epoch="0" arch="x86_64" src="http://www.foo.org">
+          <filename>perl-DBI-1-2.module_el8+6587+9879afr5.spec</filename>
+          <reboot_suggested/>
+        </package>
+      </collection>
+    </pkglist>
+  </update>
+</updates>

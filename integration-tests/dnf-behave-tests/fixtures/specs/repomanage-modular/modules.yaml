@@ -1,0 +1,70 @@
+---
+document: modulemd
+version: 2
+data:
+  name: pki-deps
+  stream: 10.6
+  version: 8040020201130152515
+  context: 9f9e2e7e
+  arch: x86_64
+  summary: PKI Dependencies module for PKI 10.6 or later
+  description: >-
+    A module to contain dependencies for PKI version 10.6 or later.
+  license:
+    module:
+    - MIT
+    content:
+    - MIT and ASL 2.0 and ISC and BSD
+  dependencies:
+  - buildrequires:
+      platform: [f29]
+    requires:
+      platform: [f29]
+  components:
+    rpms:
+      xsom:
+        rationale: XML Schema Object Model (XSOM) Requires relaxngcc.
+        ref: stream-rhel-8.0.0-rhel-8.4.0
+        buildorder: 3
+        arches: [aarch64, i686, ppc64le, s390x, x86_64]
+  artifacts:
+    rpms:
+    - xsom-0:0-19.20110809svn.module+el8.1.0+3366+6dfb954c.noarch
+    - xsom-0:0-19.20110809svn.module+el8.1.0+3366+6dfb954c.src
+...
+---
+document: modulemd
+version: 2
+data:
+  name: pki-deps
+  stream: 10.6
+  version: 8030020200527165326
+  context: 30b713e6
+  arch: x86_64
+  summary: PKI Dependencies module for PKI 10.6 or later
+  description: >-
+    A module to contain dependencies for PKI version 10.6 or later.
+  license:
+    module:
+    - MIT
+    content:
+    - MIT and ASL 2.0 and ISC and BSD
+  dependencies:
+  - buildrequires:
+      platform: [f29]
+    requires:
+      platform: [f29]
+  components:
+    rpms:
+      xsom:
+        rationale: XML Schema Object Model (XSOM) Requires relaxngcc.
+        ref: stream-rhel-8.0.0-rhel-8.4.0
+        buildorder: 3
+        arches: [aarch64, i686, ppc64le, s390x, x86_64]
+  artifacts:
+    rpms:
+    - xsom-0:0-19.20110809svn.module+el8.1.0+3366+6dfb954c.noarch
+    - xsom-0:0-19.20110809svn.module+el8.1.0+3366+6dfb954c.src
+    - meson-0:0.47.1-5.module_1993+7c0a4d1e.noarch
+    - meson-0:0.47.1-5.module_1993+7c0a4d1e.src
+...

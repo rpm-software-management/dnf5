@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE comps PUBLIC "-//Red Hat, Inc.//DTD Comps info//EN" "comps.dtd">
+<comps>
+
+  <group>
+   <id>dnf-ci-testgroup</id>
+   <default>false</default>
+   <uservisible>true</uservisible>
+   <display_order>1024</display_order>
+   <name>DNF-CI-Testgroup</name>
+   <description>Testgroup for DNF CI testing</description>
+    <packagelist>
+      <packagereq type="mandatory">filesystem</packagereq>
+      <packagereq type="default">lame</packagereq>
+      <packagereq type="optional">flac</packagereq>
+      <packagereq type="conditional" requires="filesystem-content">wget</packagereq>
+    </packagelist>
+  </group>
+
+  <group>
+   <id>cqrlib-non-devel</id>
+   <default>false</default>
+   <uservisible>true</uservisible>
+   <display_order>1021</display_order>
+   <name>CQRlib-non-devel</name>
+   <description>Testgroup for DNF CI swap testing</description>
+    <packagelist>
+      <packagereq type="mandatory">CQRlib</packagereq>
+      <packagereq type="default">CQRlib-extension</packagereq>
+    </packagelist>
+  </group>
+
+  <group>
+   <id>superripper-and-deps</id>
+   <default>false</default>
+   <uservisible>true</uservisible>
+   <display_order>1029</display_order>
+   <name>SuperRipper-and-deps</name>
+   <description>Testgroup for DNF CI swap testing</description>
+    <packagelist>
+      <packagereq type="mandatory">SuperRipper</packagereq>
+      <packagereq type="default">SuperRipper-extension</packagereq>
+      <packagereq type="default">flac</packagereq>
+      <packagereq type="default">wget</packagereq>
+      <packagereq type="default">abcde</packagereq>
+      <packagereq type="default">FlacBetterEncoder</packagereq>
+    </packagelist>
+  </group>
+</comps>

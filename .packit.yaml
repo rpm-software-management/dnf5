@@ -91,47 +91,12 @@ jobs:
     targets:
       - fedora-all
       - fedora-eln
-    fmf_url: https://github.com/rpm-software-management/ci-dnf-stack.git
-    fmf_ref: &CI_DNF_STACK_REF main
     tmt_plan: "^/plans/integration/behave-dnf5$"
     packages: [dnf5]
     tf_extra_params:
       environments:
         - artifacts:
             - type: repository-file
-              # We use the rawhide repo file for all fedora releases, the url doesn't change and it is not rawhide specific (it contains "fedora-$releasever-$basearch")
-              id: https://copr.fedorainfracloud.org/coprs/rpmsoftwaremanagement/dnf-nightly/repo/fedora-rawhide/rpmsoftwaremanagement-dnf-nightly-fedora-rawhide.repo
-  - job: tests
-    trigger: pull_request
-    identifier: "createrepo_c-tests"
-    targets:
-      - fedora-all
-      - fedora-eln
-    fmf_url: https://github.com/rpm-software-management/ci-dnf-stack.git
-    fmf_ref: *CI_DNF_STACK_REF
-    tmt_plan: "^/plans/integration/behave-createrepo_c$"
-    packages: [dnf5]
-    tf_extra_params:
-      environments:
-        - artifacts:
-            - type: repository-file
-              # We use the rawhide repo file for all fedora releases, the url doesn't change and it is not rawhide specific (it contains "fedora-$releasever-$basearch")
-              id: https://copr.fedorainfracloud.org/coprs/rpmsoftwaremanagement/dnf-nightly/repo/fedora-rawhide/rpmsoftwaremanagement-dnf-nightly-fedora-rawhide.repo
-  - job: tests
-    trigger: pull_request
-    identifier: "dnf-tests"
-    manual_trigger: true
-    targets:
-      - fedora-all
-    fmf_url: https://github.com/rpm-software-management/ci-dnf-stack.git
-    fmf_ref: *CI_DNF_STACK_REF
-    tmt_plan: "^/plans/integration/behave-dnf$"
-    packages: [dnf5]
-    tf_extra_params:
-      environments:
-        - artifacts:
-            - type: repository-file
-              # We use the rawhide repo file for all fedora releases, the url doesn't change and it is not rawhide specific (it contains "fedora-$releasever-$basearch")
               id: https://copr.fedorainfracloud.org/coprs/rpmsoftwaremanagement/dnf-nightly/repo/fedora-rawhide/rpmsoftwaremanagement-dnf-nightly-fedora-rawhide.repo
   - job: tests
     trigger: pull_request
@@ -139,28 +104,22 @@ jobs:
     targets:
       - fedora-all
       - fedora-eln
-    fmf_url: https://github.com/rpm-software-management/ci-dnf-stack.git
-    fmf_ref: *CI_DNF_STACK_REF
     tmt_plan: "^/plans/integration/behave-dnf5daemon$"
     packages: [dnf5]
     tf_extra_params:
       environments:
         - artifacts:
             - type: repository-file
-              # We use the rawhide repo file for all fedora releases, the url doesn't change and it is not rawhide specific (it contains "fedora-$releasever-$basearch")
               id: https://copr.fedorainfracloud.org/coprs/rpmsoftwaremanagement/dnf-nightly/repo/fedora-rawhide/rpmsoftwaremanagement-dnf-nightly-fedora-rawhide.repo
   - job: tests
     trigger: pull_request
     identifier: "ABI-check"
     targets:
       - fedora-rawhide-x86_64
-    fmf_url: https://github.com/rpm-software-management/ci-dnf-stack.git
-    fmf_ref: main
     tmt_plan: "^/plans/integration/abi-libdnf5$"
     packages: [dnf5]
     tf_extra_params:
       environments:
         - artifacts:
             - type: repository-file
-              # We use the rawhide repo file for all fedora releases, the url doesn't change and it is not rawhide specific (it contains "fedora-$releasever-$basearch")
               id: https://copr.fedorainfracloud.org/coprs/rpmsoftwaremanagement/dnf-nightly/repo/fedora-rawhide/rpmsoftwaremanagement-dnf-nightly-fedora-rawhide.repo

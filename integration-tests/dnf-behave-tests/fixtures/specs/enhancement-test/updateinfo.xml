@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<updates>
+    <update from="secresponseteam@foo.bar" status="final" type="enhancement" version="3">
+        <id>FEDORA-2999:002-03</id>
+        <title>flac enhacements</title>
+        <issued date="2019-01-17 00:00:00"/>
+        <updated date="2019-01-17 00:00:00"/>
+        <severity>Moderate</severity>
+        <summary>summary_1</summary>
+        <description>Enhance some stuff</description>
+        <references>
+            <reference href="https://foobar/foobarupdate_1" id="1" type="self" title="update_1"/>
+        </references>
+        <pkglist>
+        <collection short="named collection">
+            <name>Bar component</name>
+            <package name="flac" version="1.3.3" release="3.fc29" epoch="0" arch="x86_64" src="flac-0:1.3.3-3.fc29.x86_64.rpm">
+            <filename>flac-0:1.3.3-3.fc29.x86_64.rpm</filename>
+            <reboot_suggested/>
+            </package>
+        </collection>
+        </pkglist>
+  </update>
+</updates>

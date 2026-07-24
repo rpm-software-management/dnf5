@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE comps PUBLIC "-//Red Hat, Inc.//DTD Comps info//EN" "comps.dtd">
+<comps>
+
+  <group>
+   <id>A-group</id>
+   <default>false</default>
+   <uservisible>true</uservisible>
+   <display_order>1024</display_order>
+   <name>A-group</name>
+   <description>Testgroup for DNF CI testing</description>
+    <packagelist>
+      <packagereq type="mandatory">A-mandatory</packagereq>
+      <packagereq type="default">A-default</packagereq>
+      <packagereq type="optional">A-optional</packagereq>
+    </packagelist>
+  </group>
+
+  <group>
+   <id>B-group</id>
+   <default>false</default>
+   <uservisible>true</uservisible>
+   <display_order>1024</display_order>
+   <name>B-group</name>
+   <description>Testgroup for DNF CI testing</description>
+    <packagelist>
+      <packagereq type="mandatory">B-mandatory</packagereq>
+      <packagereq type="default">B-default</packagereq>
+      <packagereq type="optional">B-optional</packagereq>
+    </packagelist>
+  </group>
+
+  <group>
+   <id>AB-group</id>
+   <default>false</default>
+   <uservisible>true</uservisible>
+   <display_order>1024</display_order>
+   <name>AB-group</name>
+   <description>Testgroup for DNF CI testing</description>
+    <packagelist>
+      <packagereq type="mandatory">B-mandatory</packagereq>
+      <packagereq type="default">B-default</packagereq>
+      <packagereq type="optional">B-optional</packagereq>
+    </packagelist>
+  </group>
+
+  <environment>
+   <id>A-environment</id>
+   <default>false</default>
+   <uservisible>true</uservisible>
+   <display_order>1024</display_order>
+   <name>A-environment</name>
+   <description>Testenvironment for DNF CI testing</description>
+    <grouplist>
+      <groupid>A-group</groupid>
+    </grouplist>
+  </environment>
+
+  <environment>
+   <id>AB-environment</id>
+   <default>false</default>
+   <uservisible>true</uservisible>
+   <display_order>1024</display_order>
+   <name>AB-environment</name>
+   <description>Testenvironment for DNF CI testing</description>
+    <grouplist>
+      <groupid>B-group</groupid>
+    </grouplist>
+  </environment>
+
+  <group>
+   <id>empty-group</id>
+   <default>false</default>
+   <uservisible>true</uservisible>
+   <display_order>1024</display_order>
+   <name>empty-group</name>
+   <description>Testgroup for DNF CI testing</description>
+    <packagelist>
+    </packagelist>
+  </group>
+
+  <environment>
+   <id>empty-environment</id>
+   <default>false</default>
+   <uservisible>true</uservisible>
+   <display_order>1024</display_order>
+   <name>empty-environment</name>
+   <description>Testgroup for DNF CI testing</description>
+    <grouplist>
+    </grouplist>
+  </environment>
+
+  <group>
+   <id>C-group</id>
+   <default>false</default>
+   <uservisible>true</uservisible>
+   <display_order>1024</display_order>
+   <name>C-group</name>
+   <description>Testgroup for DNF CI testing</description>
+    <packagelist>
+    </packagelist>
+  </group>
+
+  <group>
+   <id>D-group</id>
+   <default>false</default>
+   <uservisible>true</uservisible>
+   <display_order>1024</display_order>
+   <name>D-group</name>
+   <description>Testgroup for DNF CI testing</description>
+    <packagelist>
+      <packagereq type="mandatory">A-mandatory</packagereq>
+      <packagereq type="default">A-default</packagereq>
+      <packagereq type="optional">A-optional</packagereq>
+    </packagelist>
+  </group>
+
+  <environment>
+   <id>C-environment</id>
+   <default>false</default>
+   <uservisible>true</uservisible>
+   <display_order>1024</display_order>
+   <name>C-environment</name>
+   <description>Testenvironment for DNF CI testing</description>
+    <grouplist>
+    </grouplist>
+  </environment>
+
+  <environment>
+   <id>D-environment</id>
+   <default>false</default>
+   <uservisible>true</uservisible>
+   <display_order>1024</display_order>
+   <name>D-environment</name>
+   <description>Testenvironment for DNF CI testing</description>
+    <grouplist>
+      <groupid>A-group</groupid>
+    </grouplist>
+  </environment>
+
+</comps>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE comps PUBLIC "-//Red Hat, Inc.//DTD Comps info//EN" "comps.dtd">
+<comps>
+  <group>
+    <id>group-a</id>
+    <name>Group A</name>
+    <default>false</default>
+    <uservisible>true</uservisible>
+    <packagelist>
+      <packagereq type="default">gnomo</packagereq>
+    </packagelist>
+  </group>
+  <group>
+    <id>group-common</id>
+    <name>Common Group A</name>
+    <default>false</default>
+    <uservisible>true</uservisible>
+    <packagelist>
+      <packagereq type="default">gnomo</packagereq>
+      <packagereq type="default">pazzo</packagereq>
+    </packagelist>
+  </group>
+</comps>

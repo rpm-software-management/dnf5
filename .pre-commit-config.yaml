@@ -9,7 +9,7 @@ repos:
        test/libdnf5/iniparser/test_iniparser.cpp
   - id: end-of-file-fixer
   - id: check-xml
-    exclude: \.tito/tito\.props
+    exclude: \.tito/tito\.props|comps_syntax_error\.xml
   - id: check-added-large-files
   - id: check-merge-conflict
 - repo: https://github.com/pre-commit/mirrors-clang-format
