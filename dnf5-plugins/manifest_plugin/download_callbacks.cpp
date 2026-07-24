@@ -35,7 +35,8 @@ void DownloadCallbacks::set_show_total_bar_limit(std::size_t limit) {
 void * DownloadCallbacks::add_new_download(
     [[maybe_unused]] void * user_data, const char * description, double total_to_download) {
     if (!multi_progress_bar) {
-        multi_progress_bar = std::make_unique<libdnf5::cli::progressbar::MultiProgressBar>();
+        multi_progress_bar = std::make_unique<libdnf5::cli::progressbar::MultiProgressBar>(
+            libdnf5::cli::progressbar::MultiProgressBar::TrackingMode::ON_CHANGE);
         multi_progress_bar->set_total_bar_visible_limit(show_total_bar_limit);
     }
     auto progress_bar = std::make_unique<libdnf5::cli::progressbar::DownloadProgressBar>(
@@ -48,15 +49,15 @@ void * DownloadCallbacks::add_new_download(
 }
 
 int DownloadCallbacks::progress(void * user_cb_data, double total_to_download, double downloaded) {
-    auto * progress_bar = reinterpret_cast<libdnf5::cli::progressbar::DownloadProgressBar *>(user_cb_data);
+    auto & progress_bar = *reinterpret_cast<libdnf5::cli::progressbar::DownloadProgressBar *>(user_cb_data);
     auto total = static_cast<int64_t>(total_to_download);
     if (total > 0) {
-        progress_bar->set_total_ticks(total);
+        multi_progress_bar->bar_set_total_ticks(progress_bar, total);
     }
-    if (progress_bar->get_state() == libdnf5::cli::progressbar::ProgressBarState::READY) {
-        progress_bar->start();
+    if (multi_progress_bar->bar_get_state(progress_bar) == libdnf5::cli::progressbar::ProgressBarState::READY) {
+        multi_progress_bar->bar_start(progress_bar);
     }
-    progress_bar->set_ticks(static_cast<int64_t>(downloaded));
+    multi_progress_bar->bar_set_ticks(progress_bar, static_cast<int64_t>(downloaded));
     if (is_time_to_print()) {
         print();
     }
@@ -64,26 +65,26 @@ int DownloadCallbacks::progress(void * user_cb_data, double total_to_download, d
 }
 
 int DownloadCallbacks::end(void * user_cb_data, TransferStatus status, const char * msg) {
-    auto * progress_bar = reinterpret_cast<libdnf5::cli::progressbar::DownloadProgressBar *>(user_cb_data);
+    auto & progress_bar = *reinterpret_cast<libdnf5::cli::progressbar::DownloadProgressBar *>(user_cb_data);
     switch (status) {
         case TransferStatus::SUCCESSFUL:
             // Correction of the total data size for the download.
             // Sometimes Librepo returns a larger data size for download than the actual file size.
-            progress_bar->set_total_ticks(progress_bar->get_ticks());
+            multi_progress_bar->bar_set_total_ticks(progress_bar, multi_progress_bar->bar_get_ticks(progress_bar));
 
-            progress_bar->set_state(libdnf5::cli::progressbar::ProgressBarState::SUCCESS);
+            multi_progress_bar->bar_set_state(progress_bar, libdnf5::cli::progressbar::ProgressBarState::SUCCESS);
             break;
         case TransferStatus::ALREADYEXISTS:
             // skipping the download -> downloading 0 bytes
-            progress_bar->set_ticks(0);
-            progress_bar->set_total_ticks(0);
-            progress_bar->add_message(libdnf5::cli::progressbar::MessageType::SUCCESS, msg);
-            progress_bar->start();
-            progress_bar->set_state(libdnf5::cli::progressbar::ProgressBarState::SUCCESS);
+            multi_progress_bar->bar_set_ticks(progress_bar, 0);
+            multi_progress_bar->bar_set_total_ticks(progress_bar, 0);
+            multi_progress_bar->bar_add_message(progress_bar, libdnf5::cli::progressbar::MessageType::SUCCESS, msg);
+            multi_progress_bar->bar_start(progress_bar);
+            multi_progress_bar->bar_set_state(progress_bar, libdnf5::cli::progressbar::ProgressBarState::SUCCESS);
             break;
         case TransferStatus::ERROR:
-            progress_bar->add_message(libdnf5::cli::progressbar::MessageType::ERROR, msg);
-            progress_bar->set_state(libdnf5::cli::progressbar::ProgressBarState::ERROR);
+            multi_progress_bar->bar_add_message(progress_bar, libdnf5::cli::progressbar::MessageType::ERROR, msg);
+            multi_progress_bar->bar_set_state(progress_bar, libdnf5::cli::progressbar::ProgressBarState::ERROR);
             break;
     }
     print();
@@ -91,12 +92,12 @@ int DownloadCallbacks::end(void * user_cb_data, TransferStatus status, const cha
 }
 
 int DownloadCallbacks::mirror_failure(void * user_cb_data, const char * msg, const char * url, const char * metadata) {
-    auto * progress_bar = reinterpret_cast<libdnf5::cli::progressbar::DownloadProgressBar *>(user_cb_data);
+    auto & progress_bar = *reinterpret_cast<libdnf5::cli::progressbar::DownloadProgressBar *>(user_cb_data);
     std::string message = std::string(msg) + " - " + url;
     if (metadata) {
         message = message + " - " + metadata;
     }
-    progress_bar->add_message(libdnf5::cli::progressbar::MessageType::ERROR, message);
+    multi_progress_bar->bar_add_message(progress_bar, libdnf5::cli::progressbar::MessageType::ERROR, message);
     print();
     return ReturnCode::OK;
 }
