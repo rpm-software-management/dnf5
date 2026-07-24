@@ -109,24 +109,18 @@ void ManifestDownloadCommand::download_packages(
     libdnf5::repo::PackageDownloader downloader{*base};
     downloader.force_keep_packages(true);
 
-    for (auto & manifest_pkg : manifest.get_packages().get(arch, srpm_option->get_value())) {
-        libdnf5::rpm::PackageQuery query{*base};
-        query.filter_repo_id(manifest_pkg.get_repo_id());
-        const auto & nevra = nevra_manifest_to_dnf(manifest_pkg.get_nevra());
-        query.filter_nevra(nevra);
-        if (query.empty()) {
-            throw libdnf5::cli::CommandExitError(1, M_("No package {} available."), to_nevra_string(nevra));
+    const auto result = get_packages_from_manifest(*base, manifest, srpm_option->get_value());
+    const auto & packages = result.first;
+    const auto & errors = result.second;
+
+    if (!errors.empty()) {
+        for (const auto & error : errors) {
+            ctx.print_error(error);
         }
-        const auto & checksum = manifest_pkg.get_checksum();
-        const auto & checksum_digest = checksum.get_digest();
-        if (!checksum_digest.empty()) {
-            query.filter_checksum(checksum_digest, checksum_method_manifest_to_dnf(checksum.get_method()));
-            if (query.empty()) {
-                throw libdnf5::cli::CommandExitError(
-                    1, M_("No package {} with checksum {} available."), to_nevra_string(nevra), checksum_digest);
-            }
-        }
-        const auto & pkg = *query.begin();
+        throw libdnf5::cli::CommandExitError(1, M_("Some packages from the manifest were not found."));
+    }
+
+    for (const auto & pkg : packages) {
         const auto & pkg_arch = pkg.get_arch();
         // If split per arch, download noarch/src packages into separate subdirectories.
         if (per_arch_option->get_value()) {
