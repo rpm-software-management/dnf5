@@ -26,6 +26,7 @@
 #include "module/module_db.hpp"
 #include "module/module_sack_impl.hpp"
 #endif
+#include "../plugin/systemd_inhibitor_private.hpp"
 #include "../repo/repo_sack_private.hpp"
 #include "repo/temp_files_memory.hpp"
 #include "rpm/package_set_impl.hpp"
@@ -1169,6 +1170,12 @@ Transaction::TransactionRunResult Transaction::Impl::_run(
     if (test_only || rpm_transaction_flags & RPMTRANS_FLAG_TEST) {
         return TransactionRunResult::SUCCESS;
     }
+
+    // Guarantee any systemd inhibitor lock registered by a plugin's pre_transaction()
+    // is released when this run finishes, regardless of which plugins are installed
+    // or enabled - see libdnf5::plugin::register_systemd_inhibitor_fd().
+    libdnf5::utils::OnScopeExit release_systemd_inhibitor_fd(
+        [this]() noexcept { plugin::close_systemd_inhibitor_fd(*transaction); });
 
     auto & plugins = base->p_impl->get_plugins();
     plugins.pre_transaction(*transaction);
