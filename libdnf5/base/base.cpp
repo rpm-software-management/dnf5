@@ -409,6 +409,13 @@ repo::DownloadCallbacks * Base::get_download_callbacks() {
     return p_impl->download_callbacks.get();
 }
 
+void Base::set_interaction_callbacks(std::unique_ptr<base::InteractionCallbacks> && interaction_callbacks) {
+    this->p_impl->interaction_callbacks = std::move(interaction_callbacks);
+    if (this->p_impl->interaction_callbacks) {
+        this->p_impl->interaction_callbacks->register_base(*this);
+    }
+}
+
 libdnf5::system::State & Base::Impl::get_system_state() {
     if (system_state) {
         return *system_state;
@@ -473,6 +480,59 @@ void Base::Impl::unlock_system_repo() {
 
 const libdnf5::utils::Locker * Base::Impl::get_system_repo_lock() const noexcept {
     return system_repo_lock ? std::to_address(system_repo_lock) : nullptr;
+}
+
+void Base::message(base::InteractionCallbacks::MessageLevel level, const libdnf5::Message & message) {
+    if (!p_impl->interaction_callbacks) {
+        set_interaction_callbacks(std::make_unique<base::InteractionCallbacks>());
+    }
+    p_impl->interaction_callbacks->message(level, message);
+}
+
+int32_t Base::confirm(const libdnf5::Message & message, bool default_answer) {
+    if (!p_impl->interaction_callbacks) {
+        set_interaction_callbacks(std::make_unique<base::InteractionCallbacks>());
+    }
+    return p_impl->interaction_callbacks->confirm(message, default_answer);
+}
+
+int32_t Base::choice(
+    const libdnf5::Message & message, const std::vector<libdnf5::Message *> & options, int32_t default_option) {
+    if (options.empty()) {
+        return base::ANSWER_DEFAULT;
+    }
+    if (default_option < 0 || static_cast<size_t>(default_option) >= options.size()) {
+        default_option = base::ANSWER_DEFAULT;
+    }
+    if (!p_impl->interaction_callbacks) {
+        set_interaction_callbacks(std::make_unique<base::InteractionCallbacks>());
+    }
+    return p_impl->interaction_callbacks->choice(message, options, default_option);
+}
+
+int32_t Base::input_text(
+    std::string & out_text,
+    const libdnf5::Message & message,
+    const char * default_text,
+    base::TextValidatorCallback * validator) {
+    if (!p_impl->interaction_callbacks) {
+        set_interaction_callbacks(std::make_unique<base::InteractionCallbacks>());
+    }
+    base::TextValidator text_validator(validator);
+    return p_impl->interaction_callbacks->input_text(
+        out_text, message, default_text, validator ? &text_validator : nullptr);
+}
+
+int Base::progress(
+    int handle,
+    base::InteractionCallbacks::ProgressState state,
+    const libdnf5::Message * msg,
+    int64_t count,
+    int64_t total) {
+    if (!p_impl->interaction_callbacks) {
+        set_interaction_callbacks(std::make_unique<base::InteractionCallbacks>());
+    }
+    return p_impl->interaction_callbacks->progress(handle, state, msg, count, total);
 }
 
 }  // namespace libdnf5
