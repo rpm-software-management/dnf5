@@ -148,6 +148,44 @@ void load_host_repos(dnf5::Context & ctx, libdnf5::Base & base) {
     repo_sack->create_repos_from_paths(repos_from_path, libdnf5::Option::Priority::COMMANDLINE);
 }
 
+std::pair<libdnf5::rpm::PackageSet, std::vector<std::string>> get_packages_from_manifest(
+    libdnf5::Base & base, libpkgmanifest::manifest::Manifest & manifest, bool with_srpm) {
+    const auto & arch = base.get_vars()->get_value("arch");
+    libdnf5::rpm::PackageSet packages(base);
+    std::vector<std::string> errors;
+    for (auto & manifest_pkg : manifest.get_packages().get(arch, with_srpm)) {
+        libdnf5::rpm::PackageQuery query{base};
+        query.filter_repo_id(manifest_pkg.get_repo_id());
+        const auto & nevra = nevra_manifest_to_dnf(manifest_pkg.get_nevra());
+        query.filter_nevra(nevra);
+        if (query.empty()) {
+            errors.push_back(libdnf5::utils::sformat(_("No package {} available."), to_nevra_string(nevra)));
+            continue;
+        }
+        const auto & checksum = manifest_pkg.get_checksum();
+        const auto & checksum_digest = checksum.get_digest();
+        if (!checksum_digest.empty()) {
+            libdnf5::rpm::Checksum::Type checksum_type;
+            try {
+                checksum_type = checksum_method_manifest_to_dnf(checksum.get_method());
+            } catch (const libdnf5::RuntimeError & ex) {
+                errors.push_back(libdnf5::utils::sformat(
+                    _("Package {} has checksum with unsupported method: {}"), to_nevra_string(nevra), ex.what()));
+                continue;
+            }
+            query.filter_checksum(checksum_digest, checksum_type);
+            if (query.empty()) {
+                errors.push_back(libdnf5::utils::sformat(
+                    _("No package {} with checksum {} available."), to_nevra_string(nevra), checksum_digest));
+                continue;
+            }
+        }
+        packages.add(*query.begin());
+    }
+
+    return {packages, errors};
+}
+
 class KeyImportRepoCB : public libdnf5::repo::RepoCallbacks2_1 {
 public:
     explicit KeyImportRepoCB(libdnf5::ConfigMain & config) : config(&config) {}

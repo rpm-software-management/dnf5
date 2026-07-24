@@ -29,6 +29,9 @@ void set_repo_callbacks(libdnf5::Base & base);
 
 void load_host_repos(dnf5::Context & ctx, libdnf5::Base & base);
 
+std::pair<libdnf5::rpm::PackageSet, std::vector<std::string>> get_packages_from_manifest(
+    libdnf5::Base & base, libpkgmanifest::manifest::Manifest & manifest, bool with_srpm = false);
+
 namespace dnf5 {
 
 class ManifestCommand : public Command {
