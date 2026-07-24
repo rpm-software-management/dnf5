@@ -300,6 +300,16 @@ repository configuration file should aside from repo ID consists of baseurl, met
 
     Default: ``False``.
 
+.. _inhibit_shutdown_options-label:
+
+``inhibit_shutdown``
+    :ref:`boolean <boolean-label>`
+
+    If enabled, DNF5 will hold a systemd inhibitor lock to prevent the system from
+    shutting down or rebooting while a package transaction is in progress.
+
+    Default: ``True``.
+
 .. _installonlypkgs_options-label:
 
 ``installonlypkgs``

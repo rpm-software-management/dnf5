@@ -1104,7 +1104,10 @@ Transaction::TransactionRunResult Transaction::Impl::_run(
     }
 
 #ifdef WITH_SYSTEMD
-    int inhibit_fd = libdnf5::utils::acquire_systemd_inhibitor_lock(*logger);
+    int inhibit_fd = -1;
+    if (config.get_inhibit_shutdown_option().get_value()) {
+        inhibit_fd = libdnf5::utils::acquire_systemd_inhibitor_lock(*logger);
+    }
     libdnf5::utils::OnScopeExit release_inhibitor_lock([inhibit_fd, logger]() noexcept {
         if (inhibit_fd >= 0) {
             close(inhibit_fd);

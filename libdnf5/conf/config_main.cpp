@@ -236,6 +236,7 @@ class ConfigMain::Impl {
     OptionBool protect_running_kernel{true};
     OptionBool build_cache{true};
     OptionBool skip_system_repo_lock{false};
+    OptionBool inhibit_shutdown{true};
     OptionEnum persistence{"auto", {"auto", "persist", "transient"}};
 
     OptionStringAppendList usr_drift_protected_paths{
@@ -420,6 +421,7 @@ ConfigMain::Impl::Impl(Config & owner) : owner(owner) {
     owner.opt_binds().add("protect_running_kernel", protect_running_kernel);
     owner.opt_binds().add("build_cache", build_cache);
     owner.opt_binds().add("skip_system_repo_lock", skip_system_repo_lock);
+    owner.opt_binds().add("inhibit_shutdown", inhibit_shutdown);
     owner.opt_binds().add("persistence", persistence);
     owner.opt_binds().add("usr_drift_protected_paths", usr_drift_protected_paths);
 
@@ -1080,6 +1082,12 @@ OptionBool & ConfigMain::get_skip_system_repo_lock_option() {
 const OptionBool & ConfigMain::get_skip_system_repo_lock_option() const {
     return p_impl->skip_system_repo_lock;
 }
+OptionBool & ConfigMain::get_inhibit_shutdown_option() {
+    return p_impl->inhibit_shutdown;
+}
+const OptionBool & ConfigMain::get_inhibit_shutdown_option() const {
+    return p_impl->inhibit_shutdown;
+}
 
 OptionEnum & ConfigMain::get_persistence_option() {
     return p_impl->persistence;
@@ -1529,6 +1537,7 @@ void ConfigMain::Impl::load_from_config(const ConfigMain::Impl & other) {
     load_option(protect_running_kernel, other.protect_running_kernel);
     load_option(build_cache, other.build_cache);
     load_option(skip_system_repo_lock, other.skip_system_repo_lock);
+    load_option(inhibit_shutdown, other.inhibit_shutdown);
     load_option(persistence, other.persistence);
     load_option(usr_drift_protected_paths, other.usr_drift_protected_paths);
 
