@@ -57,12 +57,19 @@ void ManifestInstallCommand::run() {
     auto & ctx = get_context();
     auto & base = ctx.get_base();
 
-    auto * goal = ctx.get_goal();
-    const auto & arch = base.get_vars()->get_value("arch");
-    for (auto & manifest_pkg : manifest.get_packages().get(arch)) {
-        libdnf5::GoalJobSettings settings;
-        settings.set_to_repo_ids({manifest_pkg.get_repo_id()});
-        goal->add_install(manifest_pkg.get_nevra().to_string(), settings);
+    const auto result = get_packages_from_manifest(base, manifest);
+    const auto & packages = result.first;
+    const auto & errors = result.second;
+
+    if (!errors.empty()) {
+        for (const auto & error : errors) {
+            ctx.print_error(error);
+        }
+        throw libdnf5::cli::CommandExitError(1, M_("Some packages from the manifest were not found."));
+    }
+
+    for (const auto & pkg : packages) {
+        ctx.get_goal()->add_rpm_install(pkg);
     }
 }
 
