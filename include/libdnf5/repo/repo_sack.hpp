@@ -29,6 +29,11 @@
 #include "libdnf5/defs.h"
 #include "libdnf5/logger/logger.hpp"
 
+#include <filesystem>
+#include <map>
+#include <set>
+#include <string>
+
 
 namespace libdnf5::rpm {
 class PackageQuery;
@@ -84,6 +89,21 @@ public:
     /// Calls `create_repos_from_config_file()`, `create_repos_from_reposdir()`,
     /// and loads repository configuration overrides.
     void create_repos_from_system_configuration();
+
+    /// Modify repository configuration overrides in the standard override file.
+    /// Sets and/or removes option overrides for the given repositories.
+    /// Creates the override directory and file if they don't exist.
+    /// Removes sections that become empty after key removal.
+    /// Overrides are applied before removals.
+    /// @param overrides Map of repo_id -> (option_name -> option_value) to set
+    /// @param removals Map of repo_id -> set of option names to remove
+    void override_repos_configuration(
+        const std::map<std::string, std::map<std::string, std::string>> & overrides,
+        const std::map<std::string, std::set<std::string>> & removals = {});
+
+    /// Returns the path to the repository configuration override file,
+    /// taking installroot into account.
+    std::filesystem::path get_user_repos_override_file_path() const;
 
     /// Creates a new repository from a libsolv testcase file.
     /// @param id The new repo id
