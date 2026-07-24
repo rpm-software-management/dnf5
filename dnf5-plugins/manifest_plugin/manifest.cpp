@@ -54,6 +54,28 @@ libpkgmanifest::manifest::ChecksumMethod checksum_method_rpm_to_manifest(libdnf5
     }
 }
 
+libdnf5::rpm::Checksum::Type checksum_method_manifest_to_dnf(libpkgmanifest::manifest::ChecksumMethod method) {
+    switch (method) {
+        case libpkgmanifest::manifest::ChecksumMethod::SHA1:
+            return libdnf5::rpm::Checksum::Type::SHA1;
+        case libpkgmanifest::manifest::ChecksumMethod::SHA224:
+            return libdnf5::rpm::Checksum::Type::SHA224;
+        case libpkgmanifest::manifest::ChecksumMethod::SHA256:
+            return libdnf5::rpm::Checksum::Type::SHA256;
+        case libpkgmanifest::manifest::ChecksumMethod::SHA384:
+            return libdnf5::rpm::Checksum::Type::SHA384;
+        case libpkgmanifest::manifest::ChecksumMethod::SHA512:
+            return libdnf5::rpm::Checksum::Type::SHA512;
+        case libpkgmanifest::manifest::ChecksumMethod::MD5:
+            return libdnf5::rpm::Checksum::Type::MD5;
+        case libpkgmanifest::manifest::ChecksumMethod::CRC32:
+        case libpkgmanifest::manifest::ChecksumMethod::CRC64:
+            throw libdnf5::RuntimeError(M_("Manifest checksum method (CRC) is not supported for RPM package lookup"));
+        default:
+            throw libdnf5::RuntimeError(M_("Unsupported manifest checksum method for RPM package lookup"));
+    }
+}
+
 std::string get_pkg_location(libdnf5::Base & base, const libdnf5::rpm::Package & dnf_pkg) {
     std::optional<std::string> system_repo_id;
     if (base.get_repo_sack()->has_system_repo()) {
