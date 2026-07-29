@@ -24,7 +24,7 @@
 
 #include "libdnf5-cli/progressbar/progress_bar.hpp"
 
-#include <iomanip>
+#include <string>
 
 
 namespace libdnf5::cli::progressbar {
@@ -34,7 +34,7 @@ std::size_t DescriptionWidget::get_total_width() const noexcept {
     if (width > 0) {
         return width + get_delimiter_before().size();
     }
-    return get_bar()->get_description().size() + get_delimiter_before().size();
+    return get_bar()->get_description_width() + get_delimiter_before().size();
 }
 
 
@@ -47,12 +47,14 @@ std::string DescriptionWidget::to_string() const {
     if (!get_visible()) {
         return "";
     }
-    std::ostringstream ss;
-    ss << get_delimiter_before();
-    ss << std::left;
-    ss << std::setw(static_cast<int>(get_total_width() - get_delimiter_before().size()));
-    ss << get_bar()->get_description();
-    return ss.str();
+    std::string output = get_delimiter_before() + get_bar()->get_description();
+    // Pad the text with spaces to fill the designed width.
+    auto text_width = get_delimiter_before().size() + get_bar()->get_description_width();
+    auto designed_width = get_total_width();
+    if (text_width < designed_width) {
+        output.append(std::string(designed_width - text_width, ' '));
+    }
+    return output;
 }
 
 
