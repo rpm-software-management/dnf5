@@ -23,7 +23,6 @@
 #include "libdnf5-cli/tty.hpp"
 
 #include <algorithm>
-#include <iomanip>
 
 
 namespace libdnf5::cli::progressbar {
@@ -204,11 +203,7 @@ void DownloadProgressBar::to_stream(std::ostream & stream) {
     }
 
     for (Widget * widget : widgets) {
-        stream << std::left;
-        // if string is shorter, fill the widget's space with spaces
-        stream << std::setw(static_cast<int>(widget->get_total_width()));
-        // print only the part of the string that fits the widget width
-        stream << widget->to_string().substr(0, widget->get_total_width());
+        stream << widget->to_spanned_string();
     }
 
     if (color_used) {

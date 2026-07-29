@@ -40,7 +40,13 @@ public:
     void set_bar(ProgressBar * value) { bar = value; }
 
     virtual std::size_t get_total_width() const noexcept = 0;
+    // Return a textual representation of the widget, right-padded to the
+    // total width. The representation can overflow the total width if the
+    // underlying progressbar element is longer.
     virtual std::string to_string() const = 0;
+    // Like to_string() but always occupying total width columns (overlong
+    // string will be clamped, shorter string right-padded with spaces).
+    std::string to_spanned_string() const;
 
     const std::string & get_delimiter_before() const noexcept { return delimiter_before; }
     void set_delimiter_before(const std::string & value) { delimiter_before = value; }
