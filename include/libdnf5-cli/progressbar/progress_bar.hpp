@@ -91,6 +91,8 @@ public:
     // description
     std::string get_description() const noexcept;
     void set_description(const std::string & value);
+    // How many columns the description occupies.
+    std::size_t get_description_width() const noexcept;
 
     // messages
     void add_message(MessageType type, const std::string & message);

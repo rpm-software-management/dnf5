@@ -18,10 +18,17 @@
 // along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 
+// For wcwidth()
+#ifndef _XOPEN_SOURCE
+#define _XOPEN_SOURCE
+#endif
+
 #include "libdnf5-cli/progressbar/progress_bar.hpp"
 
-#include <optional>
+#include <wchar.h>
 
+#include <cwchar>
+#include <optional>
 
 namespace libdnf5::cli::progressbar {
 
@@ -33,8 +40,12 @@ public:
         std::size_t padding;
     };
 
+    void update_description_width() noexcept;
+
     explicit Impl(int64_t total_ticks) : total_ticks{total_ticks} {}
-    Impl(int64_t total_ticks, const std::string & description) : total_ticks{total_ticks}, description{description} {}
+    Impl(int64_t total_ticks, const std::string & description) : total_ticks{total_ticks}, description{description} {
+        update_description_width();
+    }
 
     const MessageMetrics & get_message_metrics(
         std::size_t terminal_width, std::string_view message, std::size_t message_index) noexcept;
@@ -49,6 +60,7 @@ public:
 
     // description
     std::string description;
+    std::size_t description_width = 0;
 
     // messages
     std::vector<ProgressBar::Message> messages;
@@ -119,6 +131,27 @@ const ProgressBar::Impl::MessageMetrics & ProgressBar::Impl::get_message_metrics
     return messages_metrics_cache.at(message_index).value();
 }
 
+void ProgressBar::Impl::update_description_width() noexcept {
+    description_width = 0;
+    std::mbstate_t mbstate = std::mbstate_t();
+    const char * start = description.data();
+    std::size_t size = description.size();
+
+    while (size > 0) {
+        wchar_t wc;
+        auto bytes_consumed = std::mbrtowc(&wc, start, size, &mbstate);
+        if (bytes_consumed == 0 || bytes_consumed >= SIZE_MAX - 1) {
+            // TODO: Trim the description on first invalid multi-byte character?
+            break;
+        }
+        auto wc_width = wcwidth(wc);
+        if (wc_width >= 0) {  // Ignore -1 for non-printable characters.
+            description_width += static_cast<std::size_t>(wc_width);
+        }
+        start += bytes_consumed;
+        size -= bytes_consumed;
+    }
+}
 
 ProgressBar::~ProgressBar() = default;
 
@@ -178,8 +211,13 @@ std::string ProgressBar::get_description() const noexcept {
     return p_impl->description;
 }
 
+std::size_t ProgressBar::get_description_width() const noexcept {
+    return p_impl->description_width;
+}
+
 void ProgressBar::set_description(const std::string & value) {
     p_impl->description = value;
+    p_impl->update_description_width();
 }
 
 void ProgressBar::add_message(MessageType type, const std::string & message) {
@@ -244,6 +282,7 @@ void ProgressBar::reset() {
     p_impl->number = 0;
     p_impl->total = 0;
     p_impl->description = "";
+    p_impl->description_width = 0;
     p_impl->messages.clear();
     p_impl->state = ProgressBarState::READY;
     p_impl->percent_done = -1;
