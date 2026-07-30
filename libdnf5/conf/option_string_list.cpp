@@ -36,20 +36,54 @@ public:
         : icase(false),
           default_value(default_value),
           value(default_value),
-          value_append({{Option::Priority::DEFAULT, {std::move(default_value), false}}}) {};
+          value_append({{Option::Priority::DEFAULT, {std::move(default_value), false}}}) {}
+
     Impl(T && default_value, std::string && regex, bool icase)
         : regex(std::move(regex)),
           icase(icase),
           default_value(default_value),
           value(default_value),
-          value_append({{Option::Priority::DEFAULT, {std::move(default_value), false}}}) {};
+          value_append({{Option::Priority::DEFAULT, {std::move(default_value), false}}}) {
+        init_regex_matcher();
+        test(default_value);
+    }
+
     Impl(T && default_value, std::string && regex, bool icase, std::string && delimiters)
         : regex(std::move(regex)),
           icase(icase),
           delimiters(std::move(delimiters)),
           default_value(default_value),
           value(default_value),
-          value_append({{Option::Priority::DEFAULT, {std::move(default_value), false}}}) {};
+          value_append({{Option::Priority::DEFAULT, {std::move(default_value), false}}}) {
+        init_regex_matcher();
+        test(this->default_value);
+    }
+
+    Impl(const std::string & default_value) : icase(false) {
+        this->default_value = from_string(default_value);
+        value = this->default_value;
+        value_append.emplace(Option::Priority::DEFAULT, AppendEntry{this->default_value, false});
+    }
+
+    Impl(const std::string & default_value, std::string regex, bool icase) : regex(std::move(regex)), icase(icase) {
+        this->default_value = from_string(default_value);
+        value = this->default_value;
+        init_regex_matcher();
+        test(this->default_value);
+        value_append.emplace(Option::Priority::DEFAULT, AppendEntry{this->default_value, false});
+    }
+
+    void test(const ValueType & value) const;
+
+    void test_item(const std::string & item) const;
+
+    T from_string(std::string value) const;
+
+    /// Returns the default delimiters
+    static const char * get_default_delimiters() noexcept;
+
+    /// Return delimiters of this OptionStringList
+    const char * get_delimiters() const noexcept;
 
     // For append options, the method stores the value in the `value_append` multimap
     // and recalculates `this->value`. If `empty_remove_existing` is true, an empty value
@@ -66,6 +100,9 @@ private:
         bool remove_existing;
     };
 
+    void init_regex_matcher();
+    void test_item_worker(const std::string & item) const;
+
     std::optional<std::regex> regex_matcher;
     std::string regex;
     bool icase;
@@ -80,119 +117,31 @@ private:
     std::multimap<Priority, AppendEntry> value_append;
 };
 
-template <typename T, bool IsAppend>
-void OptionStringContainer<T, IsAppend>::Impl::set_value(
-    Priority priority, const ValueType & value, bool empty_remove_existing) {
-    if (IsAppend) {
-        // if empty_remove_existing == true then empty value or first empty item clears
-        // remove existing items from the result
-        const bool remove_existing = empty_remove_existing && (value.empty() || value.begin()->empty());
-        value_append.insert({priority, {value, remove_existing}});
-
-        // Determine the final value of the append option by processing change attempts
-        // in priority order (guaranteed by the multimap) and appending items to the list.
-        // If `remove_existing` is true, all previously collected values in the result
-        // are cleared before inserting new items and empty items are skipped.
-        ValueType retval{};
-        for (const auto & [priority, append_entry] : value_append) {
-            if (append_entry.remove_existing) {
-                retval.clear();
-            }
-            for (const auto & item : append_entry.items) {
-                if (!append_entry.remove_existing || !item.empty()) {
-                    retval.insert(retval.end(), item);
-                }
-            }
-        }
-        this->value = retval;
-    } else {
-        this->value = value;
-    }
-}
-
 
 template <typename T, bool IsAppend>
-OptionStringContainer<T, IsAppend>::OptionStringContainer(ValueType default_value)
-    : Option(Priority::DEFAULT),
-      p_impl(new Impl(std::move(default_value))) {}
-
-template <typename T, bool IsAppend>
-OptionStringContainer<T, IsAppend>::OptionStringContainer(ValueType default_value, std::string regex, bool icase)
-    : Option(Priority::DEFAULT),
-      p_impl(new Impl(std::move(default_value), std::move(regex), icase)) {
-    init_regex_matcher();
-    test(default_value);
-}
-
-template <typename T, bool IsAppend>
-OptionStringContainer<T, IsAppend>::OptionStringContainer(const std::string & default_value)
-    : Option(Priority::DEFAULT),
-      p_impl(new Impl({})) {
-    p_impl->default_value = from_string(default_value);
-    p_impl->set_value(Priority::DEFAULT, p_impl->default_value, false);
-}
-
-template <typename T, bool IsAppend>
-OptionStringContainer<T, IsAppend>::OptionStringContainer(
-    const std::string & default_value, std::string regex, bool icase)
-    : Option(Priority::DEFAULT),
-      p_impl(new Impl({}, std::move(regex), icase)) {
-    init_regex_matcher();
-    p_impl->default_value = from_string(default_value);
-    test(p_impl->default_value);
-    p_impl->set_value(Priority::DEFAULT, p_impl->default_value, false);
-}
-
-template <typename T, bool IsAppend>
-OptionStringContainer<T, IsAppend>::OptionStringContainer(
-    ValueType default_value, std::string regex, bool icase, std::string delimiters)
-    : Option(Priority::DEFAULT),
-      p_impl(new Impl(std::move(default_value), std::move(regex), icase, std::move(delimiters))) {
-    init_regex_matcher();
-    test(p_impl->default_value);
-}
-
-template <typename T, bool IsAppend>
-OptionStringContainer<T, IsAppend>::OptionStringContainer(const OptionStringContainer & src) = default;
-
-template <typename T, bool IsAppend>
-OptionStringContainer<T, IsAppend>::~OptionStringContainer() = default;
-
-template <typename T, bool IsAppend>
-void OptionStringContainer<T, IsAppend>::init_regex_matcher() {
-    if (p_impl->regex.empty()) {
-        return;
-    }
-
-    auto flags = std::regex::ECMAScript | std::regex::nosubs;
-    if (p_impl->icase) {
-        flags |= std::regex::icase;
-    }
-    p_impl->regex_matcher = std::regex(p_impl->regex, flags);
-}
-
-template <typename T, bool IsAppend>
-void OptionStringContainer<T, IsAppend>::test_item_worker(const std::string & item) const {
-    if (!std::regex_match(item, *p_impl->regex_matcher)) {
+void OptionStringContainer<T, IsAppend>::Impl::test_item_worker(const std::string & item) const {
+    if (!std::regex_match(item, *regex_matcher)) {
         throw OptionValueNotAllowedError(
             M_("Input item value \"{}\" not allowed, allowed values for this option are defined by regular expression "
                "\"{}\""),
             item,
-            p_impl->regex);
+            regex);
     }
 }
 
+
 template <typename T, bool IsAppend>
-void OptionStringContainer<T, IsAppend>::test_item(const std::string & item) const {
-    if (p_impl->regex.empty()) {
+void OptionStringContainer<T, IsAppend>::Impl::test_item(const std::string & item) const {
+    if (regex.empty()) {
         return;
     }
     test_item_worker(item);
 }
 
+
 template <typename T, bool IsAppend>
-void OptionStringContainer<T, IsAppend>::test(const ValueType & value) const {
-    if (p_impl->regex.empty()) {
+void OptionStringContainer<T, IsAppend>::Impl::test(const ValueType & value) const {
+    if (regex.empty()) {
         return;
     }
     for (const auto & val : value) {
@@ -200,8 +149,9 @@ void OptionStringContainer<T, IsAppend>::test(const ValueType & value) const {
     }
 }
 
+
 template <typename T, bool IsAppend>
-T OptionStringContainer<T, IsAppend>::from_string(std::string value) const {
+T OptionStringContainer<T, IsAppend>::Impl::from_string(std::string value) const {
     ValueType ret;  // Container to hold the resulting parsed items
 
     const std::string_view delimiters{get_delimiters()};
@@ -266,11 +216,117 @@ T OptionStringContainer<T, IsAppend>::from_string(std::string value) const {
     return ret;
 }
 
+
+template <typename T, bool IsAppend>
+inline const char * OptionStringContainer<T, IsAppend>::Impl::get_default_delimiters() noexcept {
+    return ", \n";
+}
+
+
+template <typename T, bool IsAppend>
+inline const char * OptionStringContainer<T, IsAppend>::Impl::get_delimiters() const noexcept {
+    return delimiters ? delimiters->c_str() : get_default_delimiters();
+}
+
+
+template <typename T, bool IsAppend>
+void OptionStringContainer<T, IsAppend>::Impl::set_value(
+    Priority priority, const ValueType & value, bool empty_remove_existing) {
+    if constexpr (IsAppend) {
+        // if empty_remove_existing == true then empty value or first empty item clears
+        // remove existing items from the result
+        const bool remove_existing = empty_remove_existing && (value.empty() || value.begin()->empty());
+        value_append.insert({priority, {value, remove_existing}});
+
+        // Determine the final value of the append option by processing change attempts
+        // in priority order (guaranteed by the multimap) and appending items to the list.
+        // If `remove_existing` is true, all previously collected values in the result
+        // are cleared before inserting new items and empty items are skipped.
+        ValueType retval{};
+        for (const auto & [priority, append_entry] : value_append) {
+            if (append_entry.remove_existing) {
+                retval.clear();
+            }
+            for (const auto & item : append_entry.items) {
+                if (!append_entry.remove_existing || !item.empty()) {
+                    retval.insert(retval.end(), item);
+                }
+            }
+        }
+        this->value = retval;
+    } else {
+        this->value = value;
+    }
+}
+
+
+template <typename T, bool IsAppend>
+void OptionStringContainer<T, IsAppend>::Impl::init_regex_matcher() {
+    if (regex.empty()) {
+        return;
+    }
+
+    auto flags = std::regex::ECMAScript | std::regex::nosubs;
+    if (icase) {
+        flags |= std::regex::icase;
+    }
+    regex_matcher = std::regex(regex, flags);
+}
+
+
+template <typename T, bool IsAppend>
+OptionStringContainer<T, IsAppend>::OptionStringContainer(ValueType default_value)
+    : Option(Priority::DEFAULT),
+      p_impl(new Impl(std::move(default_value))) {}
+
+template <typename T, bool IsAppend>
+OptionStringContainer<T, IsAppend>::OptionStringContainer(ValueType default_value, std::string regex, bool icase)
+    : Option(Priority::DEFAULT),
+      p_impl(new Impl(std::move(default_value), std::move(regex), icase)) {}
+
+template <typename T, bool IsAppend>
+OptionStringContainer<T, IsAppend>::OptionStringContainer(const std::string & default_value)
+    : Option(Priority::DEFAULT),
+      p_impl(new Impl(default_value)) {}
+
+template <typename T, bool IsAppend>
+OptionStringContainer<T, IsAppend>::OptionStringContainer(
+    const std::string & default_value, std::string regex, bool icase)
+    : Option(Priority::DEFAULT),
+      p_impl(new Impl(default_value, std::move(regex), icase)) {}
+
+template <typename T, bool IsAppend>
+OptionStringContainer<T, IsAppend>::OptionStringContainer(
+    ValueType default_value, std::string regex, bool icase, std::string delimiters)
+    : Option(Priority::DEFAULT),
+      p_impl(new Impl(std::move(default_value), std::move(regex), icase, std::move(delimiters))) {}
+
+template <typename T, bool IsAppend>
+OptionStringContainer<T, IsAppend>::OptionStringContainer(const OptionStringContainer & src) = default;
+
+template <typename T, bool IsAppend>
+OptionStringContainer<T, IsAppend>::~OptionStringContainer() = default;
+
+template <typename T, bool IsAppend>
+void OptionStringContainer<T, IsAppend>::test_item(const std::string & item) const {
+    p_impl->test_item(item);
+}
+
+template <typename T, bool IsAppend>
+void OptionStringContainer<T, IsAppend>::test(const ValueType & value) const {
+    p_impl->test(value);
+}
+
+template <typename T, bool IsAppend>
+T OptionStringContainer<T, IsAppend>::from_string(std::string value) const {
+    return p_impl->from_string(value);
+}
+
 template <typename T, bool IsAppend>
 void OptionStringContainer<T, IsAppend>::set(Priority priority, const ValueType & value) {
     assert_not_locked();
 
-    if (IsAppend) {
+    if constexpr (IsAppend) {
         test(value);
         p_impl->set_value(priority, value, true);
         if (priority >= get_priority()) {
@@ -305,7 +361,7 @@ void OptionStringContainer<T, IsAppend>::add(Priority priority, const ValueType 
     assert_not_locked();
 
     test(items);
-    if (IsAppend) {
+    if constexpr (IsAppend) {
         p_impl->set_value(priority, items, false);
         if (priority >= get_priority()) {
             set_priority(priority);
@@ -379,12 +435,12 @@ inline std::string OptionStringContainer<T, IsAppend>::get_value_string() const 
 
 template <typename T, bool IsAppend>
 inline const char * OptionStringContainer<T, IsAppend>::get_default_delimiters() noexcept {
-    return ", \n";
+    return Impl::get_default_delimiters();
 }
 
 template <typename T, bool IsAppend>
 inline const char * OptionStringContainer<T, IsAppend>::get_delimiters() const noexcept {
-    return p_impl->delimiters ? p_impl->delimiters->c_str() : get_default_delimiters();
+    return p_impl->get_delimiters();
 }
 
 

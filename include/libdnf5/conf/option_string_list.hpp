@@ -128,9 +128,6 @@ protected:
     void test_item(const std::string & item) const;
 
 private:
-    LIBDNF_LOCAL void init_regex_matcher();
-    LIBDNF_LOCAL void test_item_worker(const std::string & item) const;
-
     class LIBDNF_LOCAL Impl;
     ImplPtr<Impl> p_impl;
 };
