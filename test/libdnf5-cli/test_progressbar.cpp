@@ -24,9 +24,12 @@
 
 #include <libdnf5-cli/progressbar/download_progress_bar.hpp>
 #include <libdnf5-cli/progressbar/multi_progress_bar.hpp>
+#include <libdnf5-cli/progressbar/progress_bar.hpp>
 
 #include <clocale>
 #include <cstring>
+#include <memory>
+#include <sstream>
 
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ProgressbarTest);
@@ -57,6 +60,40 @@ void ProgressbarTest::test_message_multi_byte_character() {
     auto num_lines = progress_bar->calculate_messages_terminal_lines(106);
     std::size_t expected = strcmp(setlocale(LC_ALL, NULL), "C") == 0 ? 1U : 2U;
     CPPUNIT_ASSERT_EQUAL(expected, num_lines);
+}
+
+void ProgressbarTest::test_description_multi_byte_character() {
+    auto short_bar = std::make_unique<libdnf5::cli::progressbar::DownloadProgressBar>(10, "短い");
+    short_bar->set_ticks(10);
+    short_bar->set_state(libdnf5::cli::progressbar::ProgressBarState::SUCCESS);
+    auto overlong_bar =
+        std::make_unique<libdnf5::cli::progressbar::DownloadProgressBar>(10, "パッケージ ファイルを検証");
+    overlong_bar->set_ticks(10);
+    overlong_bar->set_state(libdnf5::cli::progressbar::ProgressBarState::SUCCESS);
+
+    libdnf5::cli::progressbar::MultiProgressBar multi_progress_bar;
+    multi_progress_bar.add_bar(std::move(short_bar));
+    multi_progress_bar.add_bar(std::move(overlong_bar));
+    std::ostringstream oss;
+    oss << multi_progress_bar;
+
+    // Anything after a non-ASCII character in C locale is invalid, hence discarded.
+    Pattern ascii_expected =
+        "\\[1/2\\]                         100% | ????? ??B/s |  10.0   B | ???????\n"
+        "\\[2/2\\]                         100% | ????? ??B/s |  10.0   B | ???????\n"
+        "----------------------------------------------------------------------\n"
+        "\\[2/2\\] Total                   100% | ????? ??B/s |  20.0   B | ???????\n";
+    // First description shorter than the widget is properly padded and the
+    // column delimeters are properly aligned.
+    // Second description longer than the widget is properly truncated.
+    Pattern utf8_expected =
+        "\\[1/2\\] 短い                    100% | ????? ??B/s |  10.0   B | ???????\n"
+        "\\[2/2\\] パッケージ ファイルを検 100% | ????? ??B/s |  10.0   B | ???????\n"
+        "----------------------------------------------------------------------\n"
+        "\\[2/2\\] Total                   100% | ????? ??B/s |  20.0   B | ???????\n";
+
+    Pattern expected = (strcmp(setlocale(LC_ALL, NULL), "C") == 0) ? ascii_expected : utf8_expected;
+    ASSERT_MATCHES(expected, oss.str());
 }
 
 void ProgressbarTest::test_download_progress_bar() {
