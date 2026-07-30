@@ -46,7 +46,7 @@ void ProgressbarTest::tearDown() {
     unsetenv("FORCE_COLUMNS");
 }
 
-void ProgressbarTest::test_progress_bar_multi_byte_character() {
+void ProgressbarTest::test_message_multi_byte_character() {
     auto progress_bar = std::make_unique<libdnf5::cli::progressbar::DownloadProgressBar>(10, "test");
     progress_bar->set_ticks(4);
     progress_bar->set_state(libdnf5::cli::progressbar::ProgressBarState::STARTED);
