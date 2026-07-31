@@ -39,7 +39,14 @@ std::size_t DescriptionWidget::get_total_width() const noexcept {
 
 
 void DescriptionWidget::set_total_width(std::size_t value) {
-    set_width(value - get_delimiter_before().size());
+    auto delimiter_before_size = get_delimiter_before().size();
+    if (value < delimiter_before_size + 1) {
+        // Clamp total width from bottom because 0 "width" has special meaning
+        // (see get_total_width()) and to prevent from an integer underflow.
+        set_width(1);
+    } else {
+        set_width(value - delimiter_before_size);
+    }
 }
 
 
