@@ -4,6 +4,7 @@ CTEST_ARGS ?=
 NPROC ?= $(shell nproc)
 RPMS_DIR = integration-tests/rpms
 SRPM_DIR = integration-tests/.srpm
+STAMPS_DIR = integration-tests/.stamps
 VERSION = $(shell rpmspec -q --queryformat '%{VERSION}\n' dnf5.spec | head -n1)
 MOCK_CONFIG ?= fedora-rawhide-x86_64
 CONTAINER_TEST = ./integration-tests/container-test
@@ -18,11 +19,11 @@ help:
 	@echo "  make test               - Alias for test-unit"
 	@echo ""
 	@echo "Integration tests:"
-	@echo "  make test-integration        - Build local RPMs, container, and run dnf5 tests"
-	@echo "  make test-integration-build  - Build local RPMs and the test container"
+	@echo "  make test-integration        - Build RPMs (if needed), container (if needed), and run tests"
+	@echo "  make test-integration-build  - Build RPMs and the test container (with change detection)"
 	@echo "  make test-integration-run    - Run tests (container must be built)"
-	@echo "  make rpms                    - Build RPMs from local source (rpmbuild)"
-	@echo "  make rpms-mock               - Build RPMs using Mock (more reproducible)"
+	@echo "  make rpms                    - Build RPMs from local source (rpmbuild, no change detection)"
+	@echo "  make rpms-mock               - Build RPMs using Mock (no change detection)"
 	@echo "  make srpm                    - Build SRPM from local source"
 	@echo ""
 	@echo "  All integration targets pass extra args to container-test via ARGS=, e.g.:"
@@ -31,7 +32,7 @@ help:
 	@echo "    make test-integration-run ARGS='-r --command dnf5 install.feature'"
 	@echo ""
 	@echo "Other:"
-	@echo "  make clean              - Remove build directory and local RPMs"
+	@echo "  make clean              - Remove build directory, local RPMs, and stamps"
 	@echo ""
 	@echo "Variables:"
 	@echo "  BUILD_DIR=build         - Build directory (default: build)"
@@ -86,16 +87,37 @@ rpms-mock: srpm
 		$(RPMS_DIR)/root.log $(RPMS_DIR)/build.log $(RPMS_DIR)/state.log \
 		$(RPMS_DIR)/hw_info.log $(RPMS_DIR)/available_pkgs
 
-test-integration-build: rpms
-	$(CONTAINER_TEST) build
+test-integration-build:
+	@mkdir -p $(STAMPS_DIR)
+	@commit=$$(git rev-parse HEAD); \
+	if [ ! -f $(STAMPS_DIR)/rpms-$$commit ]; then \
+		echo "==> RPMs out of date (commit $$commit), rebuilding with mock..."; \
+		$(MAKE) rpms-mock; \
+		rm -f $(STAMPS_DIR)/rpms-*; \
+		touch $(STAMPS_DIR)/rpms-$$commit; \
+	else \
+		echo "==> RPMs up to date for commit $$commit, skipping rebuild."; \
+	fi
+	@tree=$$(git rev-parse HEAD:integration-tests); \
+	rpms_stamp=$$(ls $(STAMPS_DIR)/rpms-* 2>/dev/null | head -1 | xargs basename 2>/dev/null); \
+	stamp="$$tree-$$rpms_stamp"; \
+	if [ ! -f $(STAMPS_DIR)/container-$$stamp ]; then \
+		echo "==> Container out of date, rebuilding..."; \
+		$(CONTAINER_TEST) build; \
+		rm -f $(STAMPS_DIR)/container-*; \
+		touch $(STAMPS_DIR)/container-$$stamp; \
+	else \
+		echo "==> Container up to date, skipping rebuild."; \
+	fi
 
 test-integration-run:
-	$(CONTAINER_TEST) run $(ARGS)
+	$(CONTAINER_TEST) run -d $(ARGS)
 
 test-integration: test-integration-build
-	$(CONTAINER_TEST) run $(ARGS)
+	$(CONTAINER_TEST) run -d $(ARGS)
 
 clean:
 	rm -rf $(BUILD_DIR)
 	rm -f $(RPMS_DIR)/*.rpm
 	rm -rf $(SRPM_DIR)
+	rm -rf $(STAMPS_DIR)
