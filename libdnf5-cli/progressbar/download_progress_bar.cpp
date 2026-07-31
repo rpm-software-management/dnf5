@@ -166,9 +166,17 @@ void DownloadProgressBar::to_stream(std::ostream & stream) {
 
     // if bar doesn't fit terminal width, reduce description width
     if (bar_width > terminal_width) {
-        p_impl->description_widget.set_total_width(
-            p_impl->description_widget.get_total_width() + terminal_width - bar_width);
-        bar_width = get_bar_width(widgets);
+        auto description_width = p_impl->description_widget.get_total_width();
+        auto overflow = bar_width - terminal_width;
+        // but only if the reduction would left something from the description,
+        // to prevent an integer overflow.
+        if (description_width > overflow) {
+            p_impl->description_widget.set_total_width(description_width - overflow);
+            bar_width = get_bar_width(widgets);
+        } else {
+            // As much as reduced, the bar cannot fit into the terminal.
+            // Just leave it as it is.
+        }
     }
     // or stretch the description width if hiding widgets reclaimed space
     // XXX: This makes the bar span over the terminal width even if no
