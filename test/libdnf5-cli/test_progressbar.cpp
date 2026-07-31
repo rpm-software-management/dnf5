@@ -96,6 +96,28 @@ void ProgressbarTest::test_description_multi_byte_character() {
     ASSERT_MATCHES(expected, oss.str());
 }
 
+void ProgressbarTest::test_narrow_terminal() {
+    // If the terminal is too narrow, formatting a progressbar is difficult.
+
+    setenv("FORCE_COLUMNS", "10", 1);
+    auto download_progress_bar1 = std::make_unique<libdnf5::cli::progressbar::DownloadProgressBar>(10, "test1");
+    download_progress_bar1->set_ticks(10);
+    download_progress_bar1->set_state(libdnf5::cli::progressbar::ProgressBarState::SUCCESS);
+
+    auto download_progress_bar2 = std::make_unique<libdnf5::cli::progressbar::DownloadProgressBar>(10, "test2");
+    download_progress_bar2->set_ticks(10);
+    download_progress_bar2->set_state(libdnf5::cli::progressbar::ProgressBarState::SUCCESS);
+
+    libdnf5::cli::progressbar::MultiProgressBar multi_progress_bar;
+    multi_progress_bar.add_bar(std::move(download_progress_bar1));
+    multi_progress_bar.add_bar(std::move(download_progress_bar2));
+    std::ostringstream oss;
+    oss << multi_progress_bar;
+
+    // The exact output is undefined, but it should not crash.
+    CPPUNIT_ASSERT(1);
+}
+
 void ProgressbarTest::test_download_progress_bar() {
     // In non interactive mode download progress bar is printed only when finished.
 
