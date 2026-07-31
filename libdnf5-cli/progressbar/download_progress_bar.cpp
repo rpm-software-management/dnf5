@@ -143,10 +143,10 @@ void DownloadProgressBar::to_stream(std::ostream & stream) {
     }
 
     std::size_t terminal_width = static_cast<std::size_t>(tty::get_width());
-
-    // if bar doesn't fit terminal width, hide progress widget
     std::size_t bar_width = get_bar_width(widgets);
-    if (bar_width > terminal_width) {
+
+    // if bar is finished or doesn't fit terminal width, hide the progress widget
+    if (get_state() != ProgressBarState::STARTED || bar_width > terminal_width) {
         widgets.erase(std::remove(widgets.begin(), widgets.end(), &p_impl->progress_widget), widgets.end());
         bar_width = get_bar_width(widgets);
     }
@@ -164,20 +164,17 @@ void DownloadProgressBar::to_stream(std::ostream & stream) {
         bar_width = get_bar_width(widgets);
     }
 
-    // if bar is finished, hide the progress widget
-    if (get_state() != ProgressBarState::STARTED) {
-        widgets.erase(std::remove(widgets.begin(), widgets.end(), &p_impl->progress_widget), widgets.end());
-        bar_width = get_bar_width(widgets);
-    }
-
     // if bar doesn't fit terminal width, reduce description width
     if (bar_width > terminal_width) {
         p_impl->description_widget.set_total_width(
             p_impl->description_widget.get_total_width() + terminal_width - bar_width);
         bar_width = get_bar_width(widgets);
     }
-
-    if (bar_width < terminal_width) {
+    // or stretch the description width if hiding widgets reclaimed space
+    // XXX: This makes the bar span over the terminal width even if no
+    // description needs so much space. Some pople might find it wasteful and
+    // ugly.
+    else if (bar_width < terminal_width) {
         p_impl->description_widget.set_total_width(
             p_impl->description_widget.get_total_width() + terminal_width - bar_width);
         bar_width = get_bar_width(widgets);
