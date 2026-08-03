@@ -36,7 +36,9 @@ int get_width() {
     char * columns = std::getenv("FORCE_COLUMNS");
     if (columns != nullptr) {
         try {
-            return std::stoi(columns);
+            auto value = std::stoi(columns);
+            if (value > 0)
+                return value;
         } catch (std::invalid_argument & ex) {
         } catch (std::out_of_range & ex) {
         }
@@ -44,7 +46,8 @@ int get_width() {
 
     struct winsize size;
     if (ioctl(STDOUT_FILENO, TIOCGWINSZ, &size) == 0) {
-        return size.ws_col;
+        if (size.ws_col > 0)
+            return size.ws_col;
     }
 
     return 80;
