@@ -39,7 +39,7 @@ void ProgressbarTest::setUp() {
     // MultiProgressBar behaves differently depending on interactivity
     setenv("DNF5_FORCE_INTERACTIVE", "0", 1);
     // Force columns to 70 to make output independent of where it is run
-    setenv("FORCE_COLUMNS", "70", 1);
+    setenv("DNF5_FORCE_COLUMNS", "70", 1);
     // Wide characters do not work at all until we set locales in the code
     // Different locale variants are parameterized in ctest
     setlocale(LC_ALL, "");
@@ -47,7 +47,7 @@ void ProgressbarTest::setUp() {
 
 void ProgressbarTest::tearDown() {
     unsetenv("DNF5_FORCE_INTERACTIVE");
-    unsetenv("FORCE_COLUMNS");
+    unsetenv("DNF5_FORCE_COLUMNS");
 }
 
 void ProgressbarTest::test_message_multi_byte_character() {
@@ -102,7 +102,7 @@ void ProgressbarTest::test_narrow_terminal() {
     std::vector<const char *> columns = {"10", "0", "-1"};
 
     for (auto value : columns) {
-        setenv("FORCE_COLUMNS", value, 1);
+        setenv("DNF5_FORCE_COLUMNS", value, 1);
         auto download_progress_bar1 = std::make_unique<libdnf5::cli::progressbar::DownloadProgressBar>(10, "test1");
         download_progress_bar1->set_ticks(10);
         download_progress_bar1->set_state(libdnf5::cli::progressbar::ProgressBarState::SUCCESS);

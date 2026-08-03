@@ -443,6 +443,12 @@ Files
 Environment
 ===========
 
+``DNF5_FORCE_COLUMNS``
+    Override a terminal width used for rendering progress bars and other
+    tabular data.  The value should be a positive integer.  If it is unset or
+    invalid, the width will be detected from a terminal device connected to
+    the standard output.  If the detection fails, 80 columns will be assumed.
+
 ``DNF5_FORCE_INTERACTIVE``
     Override interactivity of the connected standard input/output. Set to `0` to pretend
     that the input/output is not connected to an interactive terminal and DNF5

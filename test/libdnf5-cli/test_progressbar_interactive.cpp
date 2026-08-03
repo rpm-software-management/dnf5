@@ -150,7 +150,7 @@ void ProgressbarInteractiveTest::setUp() {
     // MultiProgressBar behaves differently depending on interactivity
     setenv("DNF5_FORCE_INTERACTIVE", "1", 1);
     // Force columns to 70 to make output independent of where it is run
-    setenv("FORCE_COLUMNS", "70", 1);
+    setenv("DNF5_FORCE_COLUMNS", "70", 1);
     // Wide characters do not work at all until we set locales in the code
     // Different locale variants are parameterized in ctest
     setlocale(LC_ALL, "");
@@ -158,7 +158,7 @@ void ProgressbarInteractiveTest::setUp() {
 
 void ProgressbarInteractiveTest::tearDown() {
     unsetenv("DNF5_FORCE_INTERACTIVE");
-    unsetenv("FORCE_COLUMNS");
+    unsetenv("DNF5_FORCE_COLUMNS");
 }
 
 void ProgressbarInteractiveTest::test_perform_control_sequences() {
