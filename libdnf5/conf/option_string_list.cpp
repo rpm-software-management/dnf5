@@ -321,13 +321,8 @@ void OptionStringContainer<T, IsAppend>::add(Priority priority, const std::strin
 
 template <typename T, bool IsAppend>
 void OptionStringContainer<T, IsAppend>::add_item(Priority priority, const std::string & item) {
-    assert_not_locked();
-
-    test_item(item);
-    p_impl->value.insert(p_impl->value.end(), item);
-    if (get_priority() < priority) {
-        set_priority(priority);
-    }
+    T items{item};
+    add(priority, items);
 }
 
 template <typename T, bool IsAppend>
