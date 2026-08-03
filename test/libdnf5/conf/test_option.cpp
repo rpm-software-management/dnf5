@@ -603,6 +603,22 @@ void OptionTest::test_options_string_append_list() {
     // values are evaluated ordered by the priority
     option.set(Option::Priority::MAINCONFIG, "Pkg4");
     CPPUNIT_ASSERT_EQUAL((std::vector<std::string>{"Pkg1", "Pkg2", "Pkg4", "Pkg3"}), option.get_value());
+    // values are evaluated ordered by the priority
+    option.add(Option::Priority::MAINCONFIG, "Pkg5");
+    CPPUNIT_ASSERT_EQUAL((std::vector<std::string>{"Pkg1", "Pkg2", "Pkg4", "Pkg5", "Pkg3"}), option.get_value());
+    // value added by add is preserved after set
+    option.set(Option::Priority::MAINCONFIG, "Pkg6");
+    CPPUNIT_ASSERT_EQUAL(
+        (std::vector<std::string>{"Pkg1", "Pkg2", "Pkg4", "Pkg5", "Pkg6", "Pkg3"}), option.get_value());
+    // values are evaluated ordered by the priority
+    option.add_item(Option::Priority::MAINCONFIG, "Pkg7");
+    CPPUNIT_ASSERT_EQUAL(
+        (std::vector<std::string>{"Pkg1", "Pkg2", "Pkg4", "Pkg5", "Pkg6", "Pkg7", "Pkg3"}), option.get_value());
+    // value added by add_item is preserved after set
+    option.set(Option::Priority::MAINCONFIG, "Pkg8");
+    CPPUNIT_ASSERT_EQUAL(
+        (std::vector<std::string>{"Pkg1", "Pkg2", "Pkg4", "Pkg5", "Pkg6", "Pkg7", "Pkg8", "Pkg3"}), option.get_value());
+
     // I can clear the option using an empty first item (values with higher priority
     // are also appended)
     option.set(Option::Priority::MAINCONFIG, ",Pkg5");
