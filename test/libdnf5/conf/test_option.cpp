@@ -619,13 +619,22 @@ void OptionTest::test_options_string_append_list() {
     CPPUNIT_ASSERT_EQUAL(
         (std::vector<std::string>{"Pkg1", "Pkg2", "Pkg4", "Pkg5", "Pkg6", "Pkg7", "Pkg8", "Pkg3"}), option.get_value());
 
-    // I can clear the option using an empty first item (values with higher priority
+    // I can clear the option using `set` with an empty first item (values with higher priority
     // are also appended)
     option.set(Option::Priority::MAINCONFIG, ",Pkg5");
     CPPUNIT_ASSERT_EQUAL((std::vector<std::string>{"Pkg5", "Pkg3"}), option.get_value());
     // empty item on other than first place is skipped and does not clear the value
     option.set(Option::Priority::COMMANDLINE, "Pkg6, ,Pkg7");
     CPPUNIT_ASSERT_EQUAL((std::vector<std::string>{"Pkg5", "Pkg3", "Pkg6", "Pkg7"}), option.get_value());
+    // `add` never clear existing items.
+    option.add(Option::Priority::COMMANDLINE, "");
+    CPPUNIT_ASSERT_EQUAL((std::vector<std::string>{"Pkg5", "Pkg3", "Pkg6", "Pkg7"}), option.get_value());
+    // `add` never clear existing items. Empty value is added.
+    option.add(Option::Priority::COMMANDLINE, ",");
+    CPPUNIT_ASSERT_EQUAL((std::vector<std::string>{"Pkg5", "Pkg3", "Pkg6", "Pkg7", ""}), option.get_value());
+    // `add_item` never clear existing items. Empty value is added.
+    option.add_item(Option::Priority::COMMANDLINE, "");
+    CPPUNIT_ASSERT_EQUAL((std::vector<std::string>{"Pkg5", "Pkg3", "Pkg6", "Pkg7", "", ""}), option.get_value());
     // I can clear the option an using empty value
     option.set(Option::Priority::COMMANDLINE, "");
     CPPUNIT_ASSERT_EQUAL((std::vector<std::string>{}), option.get_value());
