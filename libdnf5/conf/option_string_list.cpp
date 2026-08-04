@@ -36,28 +36,35 @@ public:
         : icase(false),
           default_value(default_value),
           value(default_value),
-          value_append({{Option::Priority::DEFAULT, std::move(default_value)}}) {};
+          value_append({{Option::Priority::DEFAULT, {std::move(default_value), false}}}) {};
     Impl(T && default_value, std::string && regex, bool icase)
         : regex(std::move(regex)),
           icase(icase),
           default_value(default_value),
           value(default_value),
-          value_append({{Option::Priority::DEFAULT, std::move(default_value)}}) {};
+          value_append({{Option::Priority::DEFAULT, {std::move(default_value), false}}}) {};
     Impl(T && default_value, std::string && regex, bool icase, std::string && delimiters)
         : regex(std::move(regex)),
           icase(icase),
           delimiters(std::move(delimiters)),
           default_value(default_value),
           value(default_value),
-          value_append({{Option::Priority::DEFAULT, std::move(default_value)}}) {};
+          value_append({{Option::Priority::DEFAULT, {std::move(default_value), false}}}) {};
 
-    // For append options the method stores the value to value_append multimap and
-    // then recalculates this->value.
-    // For plain container it directly stores the value to this->value.
-    void set_value(Priority priority, const ValueType & value);
+    // For append options, the method stores the value in the `value_append` multimap
+    // and recalculates `this->value`. If `empty_remove_existing` is true, an empty value
+    // (or a first empty item) signals to clear all existing items from the final value
+    // before adding new ones.
+    // For plain containers, it directly assigns the value to `this->value`.
+    void set_value(Priority priority, const ValueType & value, bool empty_remove_existing);
 
 private:
     friend OptionStringContainer;
+
+    struct AppendEntry {
+        ValueType items;
+        bool remove_existing;
+    };
 
     std::optional<std::regex> regex_matcher;
     std::string regex;
@@ -70,35 +77,31 @@ private:
     // The items in the multimap are kept sorted according to the key (here,
     // Priority), ensuring correct behavior of resetting the value using an
     // empty item.
-    std::multimap<Priority, ValueType> value_append;
+    std::multimap<Priority, AppendEntry> value_append;
 };
 
 template <typename T, bool IsAppend>
-void OptionStringContainer<T, IsAppend>::Impl::set_value(Priority priority, const ValueType & value) {
+void OptionStringContainer<T, IsAppend>::Impl::set_value(
+    Priority priority, const ValueType & value, bool empty_remove_existing) {
     if (IsAppend) {
-        value_append.insert({priority, value});
+        // if empty_remove_existing == true then empty value or first empty item clears
+        // remove existing items from the result
+        const bool remove_existing = empty_remove_existing && (value.empty() || value.begin()->empty());
+        value_append.insert({priority, {value, remove_existing}});
 
-        // Compute the actual value of the append option by traversing all
-        // change attempts in priority order (ensured by multimap) and either
-        // adding the items to the end of the list or clearing the list.
+        // Determine the final value of the append option by processing change attempts
+        // in priority order (guaranteed by the multimap) and appending items to the list.
+        // If `remove_existing` is true, all previously collected values in the result
+        // are cleared before inserting new items and empty items are skipped.
         ValueType retval{};
-        for (const auto & [priority, values] : value_append) {
-            if (values.empty()) {
-                // setting to empty value clears the result
+        for (const auto & [priority, append_entry] : value_append) {
+            if (append_entry.remove_existing) {
                 retval.clear();
-                continue;
             }
-            bool first = true;
-            for (const auto & item : values) {
-                if (item.empty()) {
-                    // if the first item in the list is empty, clear the result
-                    if (first) {
-                        retval.clear();
-                    }
-                } else {
+            for (const auto & item : append_entry.items) {
+                if (!append_entry.remove_existing || !item.empty()) {
                     retval.insert(retval.end(), item);
                 }
-                first = false;
             }
         }
         this->value = retval;
@@ -126,7 +129,7 @@ OptionStringContainer<T, IsAppend>::OptionStringContainer(const std::string & de
     : Option(Priority::DEFAULT),
       p_impl(new Impl({})) {
     p_impl->default_value = from_string(default_value);
-    p_impl->set_value(Priority::DEFAULT, p_impl->default_value);
+    p_impl->set_value(Priority::DEFAULT, p_impl->default_value, false);
 }
 
 template <typename T, bool IsAppend>
@@ -137,7 +140,7 @@ OptionStringContainer<T, IsAppend>::OptionStringContainer(
     init_regex_matcher();
     p_impl->default_value = from_string(default_value);
     test(p_impl->default_value);
-    p_impl->set_value(Priority::DEFAULT, p_impl->default_value);
+    p_impl->set_value(Priority::DEFAULT, p_impl->default_value, false);
 }
 
 template <typename T, bool IsAppend>
@@ -268,12 +271,15 @@ void OptionStringContainer<T, IsAppend>::set(Priority priority, const ValueType 
     assert_not_locked();
 
     if (IsAppend) {
-        // for append options set is the same as add
-        add(priority, value);
+        test(value);
+        p_impl->set_value(priority, value, true);
+        if (priority >= get_priority()) {
+            set_priority(priority);
+        }
     } else {
         if (priority >= get_priority()) {
             test(value);
-            p_impl->set_value(priority, value);
+            p_impl->set_value(priority, value, true);
             set_priority(priority);
         }
     }
@@ -300,7 +306,7 @@ void OptionStringContainer<T, IsAppend>::add(Priority priority, const ValueType 
 
     test(items);
     if (IsAppend) {
-        p_impl->set_value(priority, items);
+        p_impl->set_value(priority, items, false);
         if (priority >= get_priority()) {
             set_priority(priority);
         }
