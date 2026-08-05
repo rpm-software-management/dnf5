@@ -40,6 +40,7 @@
 #ifdef WITH_MODULEMD
 #include "commands/module/module.hpp"
 #endif
+#include "commands/no_matches.hpp"
 #include "commands/offline/offline.hpp"
 #include "commands/provides/provides.hpp"
 #include "commands/reinstall/reinstall.hpp"
@@ -1468,10 +1469,6 @@ int main(int argc, char * argv[]) try {
 
         auto command = context.get_selected_command();
 
-        // Gets set to true when any repository is created from configuration or a
-        // .repo file
-        bool any_repos_from_system_configuration = false;
-
         try {
             command->pre_configure();
 
@@ -1542,7 +1539,6 @@ int main(int argc, char * argv[]) try {
 
             if (context.get_create_repos()) {
                 repo_sack->create_repos_from_system_configuration();
-                any_repos_from_system_configuration = repo_sack->size() > 0;
 
                 auto vars = base.get_vars();
                 for (auto & id_path_pair : context.get_repos_from_path()) {
@@ -1766,13 +1762,7 @@ int main(int argc, char * argv[]) try {
             }
         } catch (libdnf5::cli::GoalResolveError & ex) {
             std::cerr << ex.what() << std::endl;
-            if (!any_repos_from_system_configuration && base.get_config().get_installroot_option().get_value() != "/" &&
-                !base.get_config().get_use_host_config_option().get_value()) {
-                std::cerr
-                    << _("No repositories were loaded from the installroot. To use the configuration and repositories "
-                         "of the host system, pass --use-host-config.")
-                    << std::endl;
-            } else {
+            if (!report_no_repos(context)) {
                 print_vendor_change_skipped(context);
                 if (context.get_transaction() != nullptr) {
                     // download command can throw GoalResolveError without context.transaction being set
