@@ -19,6 +19,8 @@
 
 #include "group_list.hpp"
 
+#include "../no_matches.hpp"
+
 #include <libdnf5-cli/output/adapters/comps.hpp>
 #include <libdnf5-cli/output/grouplist.hpp>
 #include <libdnf5/comps/group/group.hpp>
@@ -52,24 +54,38 @@ void GroupListCommand::configure() {
 void GroupListCommand::run() {
     auto & ctx = get_context();
 
-    libdnf5::comps::GroupQuery query(ctx.get_base());
+    libdnf5::comps::GroupQuery base_query(ctx.get_base());
     auto group_specs_str = group_specs->get_value();
+    std::set<std::string> unmatched_specs;
+
+    if (installed->get_value()) {
+        base_query.filter_installed(true);
+    } else if (available->get_value()) {
+        base_query.filter_installed(false);
+    }
+
+    libdnf5::comps::GroupQuery query(base_query);
 
     // Filter by patterns if given
     if (group_specs_str.size() > 0) {
-        libdnf5::comps::GroupQuery query_names(query);
-        query_names.filter_name(group_specs_str, libdnf5::sack::QueryCmp::IGLOB);
-        query.filter_groupid(group_specs_str, libdnf5::sack::QueryCmp::IGLOB);
-        query |= query_names;
+        query = libdnf5::comps::GroupQuery(ctx.get_base(), true);
+        for (const auto & spec : group_specs_str) {
+            auto spec_query = base_query;
+            auto spec_query_names = base_query;
+            spec_query.filter_groupid(spec, libdnf5::sack::QueryCmp::IGLOB);
+            spec_query_names.filter_name(spec, libdnf5::sack::QueryCmp::IGLOB);
+            spec_query |= spec_query_names;
+            if (spec_query.empty()) {
+                unmatched_specs.insert(spec);
+            } else {
+                query |= spec_query;
+            }
+        }
     } else if (not hidden->get_value()) {
         // Filter uservisible only if patterns are not given
         query.filter_uservisible(true);
     }
-    if (installed->get_value()) {
-        query.filter_installed(true);
-    } else if (available->get_value()) {
-        query.filter_installed(false);
-    } else {
+    if (!installed->get_value() && !available->get_value()) {
         // to remove duplicities in the output remove from query all available
         // groups with the same groupid as any of the installed groups.
         libdnf5::comps::GroupQuery query_installed(query);
@@ -88,6 +104,17 @@ void GroupListCommand::run() {
     }
 
     print(query);
+
+    std::string_view no_candidates_message;
+    if (installed->get_value()) {
+        no_candidates_message = _("No matches found: no groups are installed.");
+    } else if (available->get_value()) {
+        no_candidates_message = _("No matches found: no groups are available.");
+    } else {
+        no_candidates_message = _("No matches found: no groups exist.");
+    }
+    bool no_repos = !installed->get_value() && no_repos_enabled(ctx);
+    report_no_matches(ctx, unmatched_specs, query.empty(), no_repos, base_query.empty(), no_candidates_message);
 }
 
 void GroupListCommand::print(const libdnf5::comps::GroupQuery & query) {
