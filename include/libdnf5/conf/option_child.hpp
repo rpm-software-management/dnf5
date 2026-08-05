@@ -49,8 +49,16 @@ public:
     // @replaces libdnf:conf/OptionChild.hpp:method:OptionChild<T>.set(Priority priority, bool value)
     void set(Priority priority, const typename ParentOptionType::ValueType & value);
 
+    /// Sets new value and priority (source). Records source if value is stored.
+    void set(Priority priority, const typename ParentOptionType::ValueType & value, std::string source);
+
     /// Sets new value and runtime priority.
     void set(const typename ParentOptionType::ValueType & value);
+
+    /// Sets new value and runtime priority. Records source if value is stored.
+    void set(const typename ParentOptionType::ValueType & value, std::string source);
+
+    using Option::set;
 
     /// Sets new value and priority (source).
     /// The value and priority are stored only if the new priority is equal to or higher than the stored priority.
@@ -112,6 +120,8 @@ public:
     /// Sets new value and runtime priority.
     void set(const std::string & value) override;
 
+    using Option::set;
+
     /// Gets the stored value. If no value is stored, value from the parent is returned.
     // @replaces libdnf:conf/OptionChild.hpp:method:OptionChild<std::string>.getValue()
     const std::string & get_value() const;
@@ -149,18 +159,31 @@ inline Option::Priority OptionChild<ParentOptionType, Enable>::get_priority() co
 template <class ParentOptionType, class Enable>
 inline void OptionChild<ParentOptionType, Enable>::set(
     Priority priority, const typename ParentOptionType::ValueType & value) {
+    set(priority, value, take_pending_source());
+}
+
+template <class ParentOptionType, class Enable>
+inline void OptionChild<ParentOptionType, Enable>::set(
+    Priority priority, const typename ParentOptionType::ValueType & value, std::string source) {
     assert_not_locked();
 
     if (priority >= Option::get_priority()) {
         parent->test(value);
-        set_priority(priority);
         this->value = value;
+        set_priority(priority);
+        set_source(std::move(source));
     }
 }
 
 template <class ParentOptionType, class Enable>
 inline void OptionChild<ParentOptionType, Enable>::set(const typename ParentOptionType::ValueType & value) {
-    set(Priority::RUNTIME, value);
+    set(Priority::RUNTIME, value, take_pending_source());
+}
+
+template <class ParentOptionType, class Enable>
+inline void OptionChild<ParentOptionType, Enable>::set(
+    const typename ParentOptionType::ValueType & value, std::string source) {
+    set(Priority::RUNTIME, value, std::move(source));
 }
 
 template <class ParentOptionType, class Enable>
@@ -231,6 +254,7 @@ inline void OptionChild<
         parent->test(val);
         set_priority(priority);
         this->value = val;
+        set_source(take_pending_source());
     }
 }
 

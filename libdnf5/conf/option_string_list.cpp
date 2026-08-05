@@ -32,45 +32,39 @@ namespace libdnf5 {
 template <typename T, bool IsAppend>
 class OptionStringContainer<T, IsAppend>::Impl {
 public:
-    Impl(T && default_value)
-        : icase(false),
-          default_value(default_value),
-          value(default_value),
-          value_append({{Option::Priority::DEFAULT, {std::move(default_value), false}}}) {}
+    Impl(T && default_value) : icase(false), default_value(std::move(default_value)) {
+        add_items(Priority::DEFAULT, this->default_value, false, "");
+    }
 
     Impl(T && default_value, std::string && regex, bool icase)
         : regex(std::move(regex)),
           icase(icase),
-          default_value(default_value),
-          value(default_value),
-          value_append({{Option::Priority::DEFAULT, {std::move(default_value), false}}}) {
+          default_value(std::move(default_value)) {
         init_regex_matcher();
-        test(default_value);
+        test(this->default_value);
+        add_items(Priority::DEFAULT, this->default_value, false, "");
     }
 
     Impl(T && default_value, std::string && regex, bool icase, std::string && delimiters)
         : regex(std::move(regex)),
           icase(icase),
           delimiters(std::move(delimiters)),
-          default_value(default_value),
-          value(default_value),
-          value_append({{Option::Priority::DEFAULT, {std::move(default_value), false}}}) {
+          default_value(std::move(default_value)) {
         init_regex_matcher();
         test(this->default_value);
+        add_items(Priority::DEFAULT, this->default_value, false, "");
     }
 
     Impl(const std::string & default_value) : icase(false) {
         this->default_value = from_string(default_value);
-        value = this->default_value;
-        value_append.emplace(Option::Priority::DEFAULT, AppendEntry{this->default_value, false});
+        add_items(Priority::DEFAULT, this->default_value, false, "");
     }
 
     Impl(const std::string & default_value, std::string regex, bool icase) : regex(std::move(regex)), icase(icase) {
         this->default_value = from_string(default_value);
-        value = this->default_value;
         init_regex_matcher();
         test(this->default_value);
-        value_append.emplace(Option::Priority::DEFAULT, AppendEntry{this->default_value, false});
+        add_items(Priority::DEFAULT, this->default_value, false, "");
     }
 
     void test(const ValueType & value) const;
@@ -85,12 +79,9 @@ public:
     /// Return delimiters of this OptionStringList
     const char * get_delimiters() const noexcept;
 
-    // For append options, the method stores the value in the `value_append` multimap
-    // and recalculates `this->value`. If `empty_remove_existing` is true, an empty value
-    // (or a first empty item) signals to clear all existing items from the final value
-    // before adding new ones.
-    // For plain containers, it directly assigns the value to `this->value`.
-    void set_value(Priority priority, const ValueType & value, bool empty_remove_existing);
+    void add_items(Priority priority, const ValueType & items, bool empty_remove_existing, std::string source);
+
+    std::vector<ItemInfo<std::string_view>> get_items_info() const;
 
 private:
     friend OptionStringContainer;
@@ -98,6 +89,7 @@ private:
     struct AppendEntry {
         ValueType items;
         bool remove_existing;
+        std::string source;
     };
 
     void init_regex_matcher();
@@ -110,11 +102,22 @@ private:
     ValueType default_value;
     ValueType value;
 
-    // For append options all set attempts are remembered in this multimap.
-    // The items in the multimap are kept sorted according to the key (here,
-    // Priority), ensuring correct behavior of resetting the value using an
-    // empty item.
+    // For append options all user-set attempts are remembered in this multimap.
+    // Each entry stores the value along with the source that set it
+    // ("" = set without source, non-empty = set with named source).
+    // The items are kept sorted by priority, and the final value is computed
+    // these entries in priority order.
     std::multimap<Priority, AppendEntry> value_append;
+
+    struct ItemOrigin {
+        Priority priority;
+        const std::string * source;
+    };
+    using InternalItemsInfo = std::conditional_t<
+        std::is_same_v<T, std::vector<std::string>>,
+        std::vector<ItemOrigin>,
+        std::map<std::string_view, ItemOrigin>>;
+    InternalItemsInfo internal_items_info;
 };
 
 
@@ -230,33 +233,65 @@ inline const char * OptionStringContainer<T, IsAppend>::Impl::get_delimiters() c
 
 
 template <typename T, bool IsAppend>
-void OptionStringContainer<T, IsAppend>::Impl::set_value(
-    Priority priority, const ValueType & value, bool empty_remove_existing) {
+void OptionStringContainer<T, IsAppend>::Impl::add_items(
+    Priority priority, const ValueType & items, bool empty_remove_existing, std::string source) {
     if constexpr (IsAppend) {
         // if empty_remove_existing == true then empty value or first empty item clears
         // remove existing items from the result
-        const bool remove_existing = empty_remove_existing && (value.empty() || value.begin()->empty());
-        value_append.insert({priority, {value, remove_existing}});
+        const bool remove_existing = empty_remove_existing && (items.empty() || items.begin()->empty());
+        value_append.insert({priority, {items, remove_existing, std::move(source)}});
 
-        // Determine the final value of the append option by processing change attempts
-        // in priority order (guaranteed by the multimap) and appending items to the list.
-        // If `remove_existing` is true, all previously collected values in the result
-        // are cleared before inserting new items and empty items are skipped.
-        ValueType retval{};
-        for (const auto & [priority, append_entry] : value_append) {
-            if (append_entry.remove_existing) {
-                retval.clear();
+        // Recompute from value_append
+        value.clear();
+        internal_items_info.clear();
+        for (const auto & [prio, entry] : value_append) {
+            if (entry.remove_existing) {
+                value.clear();
+                internal_items_info.clear();
             }
-            for (const auto & item : append_entry.items) {
-                if (!append_entry.remove_existing || !item.empty()) {
-                    retval.insert(retval.end(), item);
+            for (const auto & item : entry.items) {
+                if (!entry.remove_existing || !item.empty()) {
+                    value.insert(value.end(), item);
+                    if constexpr (std::is_same_v<T, std::vector<std::string>>) {
+                        internal_items_info.emplace_back(prio, &entry.source);
+                    } else {
+                        internal_items_info.insert_or_assign(
+                            internal_items_info.end(), item, ItemOrigin{prio, &entry.source});
+                    }
                 }
             }
         }
-        this->value = retval;
     } else {
-        this->value = value;
+        // In non-append container value_append is needed to store items source
+        const auto it = value_append.insert({priority, {items, false, std::move(source)}});
+
+        const std::string * const src = &it->second.source;
+        for (const auto & item : it->second.items) {
+            value.insert(value.end(), item);
+            if constexpr (std::is_same_v<T, std::vector<std::string>>) {
+                internal_items_info.emplace_back(priority, src);
+            } else {
+                internal_items_info.insert_or_assign(internal_items_info.end(), item, ItemOrigin{priority, src});
+            }
+        }
     }
+}
+
+
+template <typename T, bool IsAppend>
+std::vector<Option::ItemInfo<std::string_view>> OptionStringContainer<T, IsAppend>::Impl::get_items_info() const {
+    std::vector<Option::ItemInfo<std::string_view>> items_info;
+    items_info.reserve(value.size());
+    if constexpr (std::is_same_v<T, std::vector<std::string>>) {
+        for (std::size_t idx = 0; idx < value.size(); ++idx) {
+            items_info.emplace_back(internal_items_info[idx].priority, value[idx], *internal_items_info[idx].source);
+        }
+    } else {
+        for (const auto & [val, origin] : internal_items_info) {
+            items_info.emplace_back(origin.priority, val, *origin.source);
+        }
+    }
+    return items_info;
 }
 
 
@@ -322,28 +357,44 @@ T OptionStringContainer<T, IsAppend>::from_string(std::string value) const {
     return p_impl->from_string(value);
 }
 
+
 template <typename T, bool IsAppend>
 void OptionStringContainer<T, IsAppend>::set(Priority priority, const ValueType & value) {
+    set(priority, value, take_pending_source());
+}
+
+template <typename T, bool IsAppend>
+void OptionStringContainer<T, IsAppend>::set(Priority priority, const ValueType & value, std::string source) {
     assert_not_locked();
 
     if constexpr (IsAppend) {
         test(value);
-        p_impl->set_value(priority, value, true);
+        p_impl->add_items(priority, value, true, source);
         if (priority >= get_priority()) {
             set_priority(priority);
+            set_source(std::move(source));
         }
     } else {
         if (priority >= get_priority()) {
             test(value);
-            p_impl->set_value(priority, value, true);
+            p_impl->internal_items_info.clear();
+            p_impl->value_append.clear();
+            p_impl->value.clear();
+            p_impl->add_items(priority, value, false, source);
             set_priority(priority);
+            set_source(std::move(source));
         }
     }
 }
 
 template <typename T, bool IsAppend>
 void OptionStringContainer<T, IsAppend>::set(const ValueType & value) {
-    set(Priority::RUNTIME, value);
+    set(Priority::RUNTIME, value, take_pending_source());
+}
+
+template <typename T, bool IsAppend>
+void OptionStringContainer<T, IsAppend>::set(const ValueType & value, std::string source) {
+    set(Priority::RUNTIME, value, std::move(source));
 }
 
 template <typename T, bool IsAppend>
@@ -358,20 +409,25 @@ void OptionStringContainer<T, IsAppend>::set(const std::string & value) {
 
 template <typename T, bool IsAppend>
 void OptionStringContainer<T, IsAppend>::add(Priority priority, const ValueType & items) {
+    add(priority, items, take_pending_source());
+}
+
+template <typename T, bool IsAppend>
+void OptionStringContainer<T, IsAppend>::add(Priority priority, const ValueType & items, std::string source) {
     assert_not_locked();
 
     test(items);
     if constexpr (IsAppend) {
-        p_impl->set_value(priority, items, false);
+        p_impl->add_items(priority, items, false, source);
         if (priority >= get_priority()) {
             set_priority(priority);
+            set_source(std::move(source));
         }
     } else {
         if (priority >= get_priority()) {
-            for (const auto & item : items) {
-                p_impl->value.insert(p_impl->value.end(), item);
-            }
+            p_impl->add_items(priority, items, false, source);
             set_priority(priority);
+            set_source(std::move(source));
         }
     }
 }
@@ -382,9 +438,20 @@ void OptionStringContainer<T, IsAppend>::add(Priority priority, const std::strin
 }
 
 template <typename T, bool IsAppend>
+void OptionStringContainer<T, IsAppend>::add(Priority priority, const std::string & value, std::string source) {
+    add(priority, from_string(value), std::move(source));
+}
+
+template <typename T, bool IsAppend>
 void OptionStringContainer<T, IsAppend>::add_item(Priority priority, const std::string & item) {
     T items{item};
     add(priority, items);
+}
+
+template <typename T, bool IsAppend>
+void OptionStringContainer<T, IsAppend>::add_item(Priority priority, const std::string & item, std::string source) {
+    T items{item};
+    add(priority, items, source);
 }
 
 template <typename T, bool IsAppend>
@@ -441,6 +508,12 @@ inline const char * OptionStringContainer<T, IsAppend>::get_default_delimiters()
 template <typename T, bool IsAppend>
 inline const char * OptionStringContainer<T, IsAppend>::get_delimiters() const noexcept {
     return p_impl->get_delimiters();
+}
+
+
+template <typename T, bool IsAppend>
+std::vector<Option::ItemInfo<std::string_view>> OptionStringContainer<T, IsAppend>::get_items_info() const {
+    return p_impl->get_items_info();
 }
 
 

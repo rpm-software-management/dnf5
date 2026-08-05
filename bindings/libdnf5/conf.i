@@ -56,6 +56,7 @@ wrap_unique_ptr(StringUniquePtr, std::string);
 %ignore libdnf5::OptionValueNotAllowedError;
 %ignore libdnf5::OptionValueNotSetError;
 %include "libdnf5/conf/option.hpp"
+
 %include "libdnf5/conf/option_bool.hpp"
 %include "libdnf5/conf/option_enum.hpp"
 
@@ -73,6 +74,8 @@ wrap_unique_ptr(StringUniquePtr, std::string);
 %template(OptionStringList) libdnf5::OptionStringContainer<std::vector<std::string>, false>;
 %template(OptionStringAppendSet) libdnf5::OptionStringContainer<std::set<std::string>, true>;
 %template(OptionStringAppendList) libdnf5::OptionStringContainer<std::vector<std::string>, true>;
+%template(OptionItemInfoValueStringView) libdnf5::Option::ItemInfo<std::string_view>;
+%template(VectorOptionItemInfoValueStringView) std::vector<libdnf5::Option::ItemInfo<std::string_view>>;
 
 %ignore libdnf5::OptionPathNotFoundError;
 %include "libdnf5/conf/option_path.hpp"

@@ -19,6 +19,10 @@
 
 #include "libdnf5/conf/option.hpp"
 
+#include "utils/on_scope_exit.hpp"
+
+#include <vector>
+
 namespace libdnf5 {
 
 class Option::Impl {
@@ -31,6 +35,8 @@ private:
     Priority priority;
     bool locked{false};
     std::string lock_comment;
+    std::string source;
+    std::string pending_source;
 };
 
 Option::Option(Priority priority) : p_impl(new Impl(priority)) {}
@@ -68,6 +74,40 @@ void Option::assert_not_locked() const {
 
 const std::string & Option::get_lock_comment() const noexcept {
     return p_impl->lock_comment;
+}
+
+void Option::set(Priority priority, const std::string & value, std::string source) {
+    set_pending_source(std::move(source));
+    libdnf5::utils::OnScopeExit clear{[this]() noexcept { clear_pending_source(); }};
+    set(priority, value);
+}
+
+void Option::set(const std::string & value, std::string source) {
+    set_pending_source(std::move(source));
+    libdnf5::utils::OnScopeExit clear{[this]() noexcept { clear_pending_source(); }};
+    set(value);
+}
+
+void Option::set_source(std::string source) {
+    p_impl->source = std::move(source);
+}
+
+void Option::set_pending_source(std::string source) {
+    p_impl->pending_source = std::move(source);
+}
+
+void Option::clear_pending_source() noexcept {
+    p_impl->pending_source.clear();
+}
+
+std::string Option::take_pending_source() noexcept {
+    std::string src = std::move(p_impl->pending_source);
+    p_impl->pending_source.clear();
+    return src;
+}
+
+const std::string & Option::get_source() const noexcept {
+    return p_impl->source;
 }
 
 }  // namespace libdnf5
