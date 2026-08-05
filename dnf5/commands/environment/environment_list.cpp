@@ -19,6 +19,8 @@
 
 #include "environment_list.hpp"
 
+#include "../no_matches.hpp"
+
 #include <libdnf5-cli/output/adapters/comps.hpp>
 #include <libdnf5-cli/output/environmentlist.hpp>
 #include <libdnf5/comps/environment/environment.hpp>
@@ -50,21 +52,34 @@ void EnvironmentListCommand::configure() {
 void EnvironmentListCommand::run() {
     auto & ctx = get_context();
 
-    libdnf5::comps::EnvironmentQuery query(ctx.get_base());
+    libdnf5::comps::EnvironmentQuery base_query(ctx.get_base());
     auto environment_specs_str = environment_specs->get_value();
+    std::set<std::string> unmatched_specs;
+
+    if (installed->get_value()) {
+        base_query.filter_installed(true);
+    }
+    if (available->get_value()) {
+        base_query.filter_installed(false);
+    }
+
+    libdnf5::comps::EnvironmentQuery query(base_query);
 
     // Filter by patterns if given
     if (environment_specs_str.size() > 0) {
-        libdnf5::comps::EnvironmentQuery query_names(query);
-        query_names.filter_name(environment_specs_str, libdnf5::sack::QueryCmp::IGLOB);
-        query.filter_environmentid(environment_specs_str, libdnf5::sack::QueryCmp::IGLOB);
-        query |= query_names;
-    }
-    if (installed->get_value()) {
-        query.filter_installed(true);
-    }
-    if (available->get_value()) {
-        query.filter_installed(false);
+        query = libdnf5::comps::EnvironmentQuery(ctx.get_base(), true);
+        for (const auto & spec : environment_specs_str) {
+            auto spec_query = base_query;
+            auto spec_query_names = base_query;
+            spec_query.filter_environmentid(std::vector<std::string>{spec}, libdnf5::sack::QueryCmp::IGLOB);
+            spec_query_names.filter_name(std::vector<std::string>{spec}, libdnf5::sack::QueryCmp::IGLOB);
+            spec_query |= spec_query_names;
+            if (spec_query.empty()) {
+                unmatched_specs.insert(spec);
+            } else {
+                query |= spec_query;
+            }
+        }
     }
 
     std::vector<libdnf5::comps::Environment> environments(query.list().begin(), query.list().end());
@@ -78,6 +93,17 @@ void EnvironmentListCommand::run() {
         cli_envs.emplace_back(new libdnf5::cli::output::EnvironmentAdapter(env));
     }
     libdnf5::cli::output::print_environmentlist_table(cli_envs);
+
+    std::string_view no_candidates_message;
+    if (installed->get_value()) {
+        no_candidates_message = _("No matches found: no environments are installed.");
+    } else if (available->get_value()) {
+        no_candidates_message = _("No matches found: no environments are available.");
+    } else {
+        no_candidates_message = _("No matches found: no environments exist.");
+    }
+    bool no_repos = !installed->get_value() && no_repos_enabled(ctx);
+    report_no_matches(ctx, unmatched_specs, environments.empty(), no_repos, base_query.empty(), no_candidates_message);
 }
 
 }  // namespace dnf5

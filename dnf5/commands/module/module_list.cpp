@@ -19,12 +19,11 @@
 
 #include "module_list.hpp"
 
+#include "../no_matches.hpp"
+
 #include <libdnf5-cli/output/adapters/module.hpp>
 #include <libdnf5-cli/output/modulelist.hpp>
 #include <libdnf5/module/module_query.hpp>
-#include <libdnf5/utils/bgettext/bgettext-lib.h>
-
-#include <iostream>
 
 namespace dnf5 {
 
@@ -46,7 +45,17 @@ void ModuleListCommand::configure() {
 }
 
 void ModuleListCommand::run() {
-    libdnf5::module::ModuleQuery query(get_context().get_base(), true);
+    auto & ctx = get_context();
+
+    libdnf5::module::ModuleQuery base_query(ctx.get_base(), false);
+    if (enabled->get_value()) {
+        base_query.filter_enabled();
+    } else if (disabled->get_value()) {
+        base_query.filter_disabled();
+    }
+    bool no_candidate_modules = base_query.empty();
+
+    libdnf5::module::ModuleQuery query(ctx.get_base(), true);
     auto module_specs_str = module_specs->get_value();
     std::set<std::string> unmatched_module_spec;
 
@@ -54,7 +63,7 @@ void ModuleListCommand::run() {
         for (const auto & module_spec : module_specs_str) {
             bool module_spec_matched = false;
             for (const auto & nsvcap : libdnf5::module::Nsvcap::parse(module_spec)) {
-                libdnf5::module::ModuleQuery nsvcap_query(get_context().get_base(), false);
+                auto nsvcap_query = base_query;
                 nsvcap_query.filter_nsvca(nsvcap, libdnf5::sack::QueryCmp::GLOB);
                 if (!nsvcap_query.empty()) {
                     query |= nsvcap_query;
@@ -66,13 +75,7 @@ void ModuleListCommand::run() {
             }
         }
     } else {
-        query = libdnf5::module::ModuleQuery(get_context().get_base(), false);
-    }
-
-    if (enabled->get_value()) {
-        query.filter_enabled();
-    } else if (disabled->get_value()) {
-        query.filter_disabled();
+        query = base_query;
     }
 
     print(query);
@@ -80,11 +83,16 @@ void ModuleListCommand::run() {
         print_hint();
     }
 
-    if (!unmatched_module_spec.empty()) {
-        for (auto const & module_spec : unmatched_module_spec) {
-            std::cerr << libdnf5::utils::sformat(_("No matches found for \"{}\"."), module_spec) << std::endl;
-        }
+    std::string_view no_candidates_message;
+    if (enabled->get_value()) {
+        no_candidates_message = _("No matches found: no module streams are enabled.");
+    } else if (disabled->get_value()) {
+        no_candidates_message = _("No matches found: no module streams are disabled.");
+    } else {
+        no_candidates_message = _("No matches found: no module streams exist.");
     }
+    report_no_matches(
+        ctx, unmatched_module_spec, query.empty(), no_repos_enabled(ctx), no_candidate_modules, no_candidates_message);
 }
 
 void ModuleListCommand::print(const libdnf5::module::ModuleQuery & query) {

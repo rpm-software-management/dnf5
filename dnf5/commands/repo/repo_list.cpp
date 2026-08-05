@@ -19,9 +19,12 @@
 
 #include "repo_list.hpp"
 
+#include "../no_matches.hpp"
+
 #include <dnf5/shared_options.hpp>
 #include <libdnf5-cli/output/adapters/repo.hpp>
 #include <libdnf5-cli/output/repolist.hpp>
+#include <libdnf5/utils/bgettext/bgettext-lib.h>
 
 namespace dnf5 {
 
@@ -47,34 +50,44 @@ void RepoListCommand::set_argument_parser() {
 void RepoListCommand::run() {
     auto & ctx = get_context();
 
-    libdnf5::repo::RepoQuery query(ctx.get_base());
+    libdnf5::repo::RepoQuery base_query(ctx.get_base());
     if (all->get_value()) {
         // don't filter anything
     } else if (disabled->get_value()) {
         // show only disabled repos
-        query.filter_enabled(false);
+        base_query.filter_enabled(false);
     } else {
         // show only enabled repos
-        query.filter_enabled(true);
+        base_query.filter_enabled(true);
     }
+    base_query.filter_type(libdnf5::repo::Repo::Type::AVAILABLE);
 
     auto repo_specs_str = repo_specs->get_value();
+    std::set<std::string> unmatched_specs;
+    libdnf5::repo::RepoQuery query(base_query);
     if (repo_specs_str.size() > 0) {
-        auto query_names = query;
-        // filter by repo Name
-        query_names.filter_name(repo_specs_str, libdnf5::sack::QueryCmp::IGLOB);
-        // filter by repo ID
-        query.filter_id(repo_specs_str, libdnf5::sack::QueryCmp::IGLOB);
-        // union the results
-        query |= query_names;
+        query.clear();
+        for (const auto & spec : repo_specs_str) {
+            auto spec_query = base_query;
+            auto spec_query_names = base_query;
+            spec_query.filter_id(std::vector<std::string>{spec}, libdnf5::sack::QueryCmp::IGLOB);
+            spec_query_names.filter_name(std::vector<std::string>{spec}, libdnf5::sack::QueryCmp::IGLOB);
+            spec_query |= spec_query_names;
+            if (spec_query.empty()) {
+                unmatched_specs.insert(spec);
+            } else {
+                query |= spec_query;
+            }
+        }
     }
-
-    query.filter_type(libdnf5::repo::Repo::Type::AVAILABLE);
 
     // display status because we're printing mix of enabled and disabled repos
     bool with_status = all->get_value();
 
     print(query, with_status);
+
+    bool no_repos = !all->get_value() && !disabled->get_value() && no_repos_enabled(ctx);
+    report_no_matches(ctx, unmatched_specs, query.empty(), no_repos, base_query.empty());
 }
 
 void RepoListCommand::print(const libdnf5::repo::RepoQuery & query, bool with_status) {

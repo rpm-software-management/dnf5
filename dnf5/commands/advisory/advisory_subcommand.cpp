@@ -19,6 +19,7 @@
 
 #include "advisory_subcommand.hpp"
 
+#include "../no_matches.hpp"
 #include "dnf5/context.hpp"
 
 #include <libdnf5-cli/output/advisorysummary.hpp>
@@ -82,17 +83,28 @@ void AdvisorySubCommand::run() {
     auto & ctx = get_context();
 
     ErrorHandling error_mode = determine_error_mode(ctx, false);
-    auto advisories_opt = advisory_query_from_cli_input(
-        ctx.get_base(),
-        advisory_specs->get_value(),
-        advisory_security->get_value(),
-        advisory_bugfix->get_value(),
-        advisory_enhancement->get_value(),
-        advisory_newpackage->get_value(),
-        advisory_severity->get_value(),
-        advisory_bz->get_value(),
-        advisory_cve->get_value(),
-        error_mode);
+
+    std::optional<libdnf5::advisory::AdvisoryQuery> advisories_opt;
+    if (no_repos_enabled(ctx)) {
+        // Without any enabled repositories no advisory data can be loaded, so
+        // the filtering is guaranteed to return no advisories, only
+        // producing misleading "no advisory found matching ..." messages.
+        if (error_mode != ErrorHandling::SILENT) {
+            report_no_repos(ctx, _("No matches found: no repositories are enabled."));
+        }
+    } else {
+        advisories_opt = advisory_query_from_cli_input(
+            ctx.get_base(),
+            advisory_specs->get_value(),
+            advisory_security->get_value(),
+            advisory_bugfix->get_value(),
+            advisory_enhancement->get_value(),
+            advisory_newpackage->get_value(),
+            advisory_severity->get_value(),
+            advisory_bz->get_value(),
+            advisory_cve->get_value(),
+            error_mode);
+    }
 
     auto advisories = advisories_opt.value_or(libdnf5::advisory::AdvisoryQuery(ctx.get_base()));
 
