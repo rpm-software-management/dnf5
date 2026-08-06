@@ -3,6 +3,8 @@
 
 #include "repos.hpp"
 
+#include <libdnf5/repo/repo_config_override.hpp>
+
 #include <map>
 
 namespace dnf5 {
@@ -41,7 +43,7 @@ void RepoCommand::set_argument_parser() {
 
 void RepoCommand::configure() {
     auto & ctx = get_context();
-    const auto & config = ctx.get_base().get_config();
+    auto & base = ctx.get_base();
 
     auto repo_ids = load_existing_repo_ids(ctx);
 
@@ -56,29 +58,15 @@ void RepoCommand::configure() {
         repos_to_adjust.merge(filtered_repo_ids);
     }
 
-    // Write out the override config for enabling/disabling
-    ConfigParser parser;
+    repo::RepoConfigOverride repo_config_override(base);
+    auto override_dir = repo_config_override.get_override_file_path().parent_path();
+    resolve_missing_dir(override_dir, create_missing_dirs);
 
-    resolve_missing_dir(get_repos_config_override_dir_path(config), create_missing_dirs);
-
-    auto repos_override_file_path = get_config_manager_repos_override_file_path(config);
-
-    const bool exists = std::filesystem::exists(repos_override_file_path);
-    if (exists) {
-        parser.read(repos_override_file_path);
-    }
-
-    parser.get_header() = CFG_MANAGER_REPOS_OVERRIDE_CFG_HEADER;
-
-    std::map<std::string, std::string> opts{{"enabled", enabled_value}};
+    std::map<std::string, std::map<std::string, std::string>> overrides;
     for (auto && repo_id : repos_to_adjust) {
-        modify_config(parser, repo_id, opts);
+        overrides[repo_id] = {{"enabled", enabled_value}};
     }
-
-    parser.write(repos_override_file_path, false);
-    if (!exists) {
-        set_file_permissions(repos_override_file_path);
-    }
+    repo_config_override.save(overrides);
 }
 
 }  // namespace dnf5
