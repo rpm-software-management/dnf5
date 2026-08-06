@@ -35,6 +35,7 @@
     #include "libdnf5/repo/repo.hpp"
     #include "libdnf5/repo/repo_cache.hpp"
     #include "libdnf5/repo/repo_callbacks.hpp"
+    #include "libdnf5/repo/repo_config_override.hpp"
     #include "libdnf5/repo/repo_query.hpp"
     #include "libdnf5/repo/repo_sack.hpp"
 %}
@@ -161,6 +162,8 @@ wrap_unique_ptr(RepoCallbacksUniquePtr, libdnf5::repo::RepoCallbacks);
 #endif
 %include "libdnf5/repo/repo_sack.hpp"
 %template(RepoSackWeakPtr) libdnf5::WeakPtr<libdnf5::repo::RepoSack, false>;
+
+%include "libdnf5/repo/repo_config_override.hpp"
 
 add_iterator(SetRepoWeakPtr)
 

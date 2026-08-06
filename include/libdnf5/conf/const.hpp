@@ -42,6 +42,8 @@ const std::vector<std::string> PLUGINS_CONF_DIRS{"/etc/dnf/libdnf5-plugins", "/u
 const std::vector<std::string> REPOSITORY_CONF_DIRS{
     "/etc/yum.repos.d", "/etc/distro.repos.d", "/usr/share/dnf5/repos.d"};
 constexpr const char * REPOS_OVERRIDE_DIR = "/etc/dnf/repos.override.d";
+// Filename inherited from config-manager plugin which originally owned this file.
+constexpr const char * USER_REPOS_OVERRIDE_FILENAME = "99-config_manager.repo";
 
 constexpr const char * TRANSACTION_LOCK_FILEPATH = "/run/dnf/rpmtransaction.lock";
 constexpr const char * SYSTEM_REPO_LOCK_FILENAME = "system-repo.lock";
