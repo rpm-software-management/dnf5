@@ -22,6 +22,7 @@
 #include "shared.hpp"
 
 #include <libdnf5/conf/const.hpp>
+#include <libdnf5/repo/repo_config_override.hpp>
 #include <libdnf5/utils/bgettext/bgettext-mark-domain.h>
 
 #include <filesystem>
@@ -178,27 +179,10 @@ void ConfigManagerSetOptCommand::configure() {
 
     // Write new and modify existing options in the repositories overrides configuration file.
     if (!matching_repos_setopts.empty()) {
-        ConfigParser parser;
-
-        resolve_missing_dir(get_repos_config_override_dir_path(config), create_missing_dirs);
-
-        auto repos_override_file_path = get_config_manager_repos_override_file_path(config);
-
-        const bool exists = std::filesystem::exists(repos_override_file_path);
-        if (exists) {
-            parser.read(repos_override_file_path);
-        }
-
-        parser.get_header() = CFG_MANAGER_REPOS_OVERRIDE_CFG_HEADER;
-
-        for (const auto & [repo_id, repo_opts] : matching_repos_setopts) {
-            modify_config(parser, repo_id, repo_opts);
-        }
-
-        parser.write(repos_override_file_path, false);
-        if (!exists) {
-            set_file_permissions(repos_override_file_path);
-        }
+        libdnf5::repo::RepoConfigOverride repo_config_override(ctx.get_base());
+        auto override_dir = repo_config_override.get_override_file_path().parent_path();
+        resolve_missing_dir(override_dir, create_missing_dirs);
+        repo_config_override.save(matching_repos_setopts);
     }
 }
 
