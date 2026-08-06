@@ -71,6 +71,12 @@ class LIBDNF_API RepoIdAlreadyExistsError : public RepoError {
     const char * get_name() const noexcept override { return "RepoIdAlreadyExistsError"; }
 };
 
+
+class LIBDNF_API RepoConfigOverrideError : public RepoError {
+    using RepoError::RepoError;
+    const char * get_name() const noexcept override { return "RepoConfigOverrideError"; }
+};
+
 }  // namespace libdnf5::repo
 
 #endif
