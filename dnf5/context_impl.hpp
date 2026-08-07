@@ -128,6 +128,12 @@ public:
         return libdnf_plugins_enablement;
     }
 
+    std::vector<std::string> & get_cmdline_vendor_policies() { return cmdline_vendor_policies; }
+    const std::vector<std::string> & get_cmdline_vendor_policies() const { return cmdline_vendor_policies; }
+
+    void set_clear_vendor_policies(bool value) { clear_vendor_policies = value; }
+    bool get_clear_vendor_policies() const { return clear_vendor_policies; }
+
     void set_show_version(bool enable) { this->show_version = enable; }
     bool get_show_version() const { return this->show_version; }
 
@@ -144,6 +150,12 @@ private:
 
     /// list of lists of libdnf plugin names (global patterns) that we want to enable (true) or disable (false)
     std::vector<std::pair<std::vector<std::string>, bool>> libdnf_plugins_enablement;
+
+    /// vendor policy strings from --add-vendor-policy CLI arguments
+    std::vector<std::string> cmdline_vendor_policies;
+
+    /// when true, clear all vendor policies before applying CLI ones
+    bool clear_vendor_policies{false};
 
     std::string cmdline;
 
