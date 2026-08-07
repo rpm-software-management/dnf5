@@ -1260,8 +1260,8 @@ static void print_resolve_hints(dnf5::Context & context) {
     bool has_vendor_change_skipped =
         context.get_transaction() && !context.get_transaction()->get_vendor_change_skipped_packages().empty();
     if (!conf.get_allow_vendor_change_option().get_value() && (vendor_change || has_vendor_change_skipped)) {
-        const std::string_view arg{"--allow-vendor-change"};
-        hints.emplace_back(libdnf5::utils::sformat(_("{} to allow changing package vendors"), arg));
+        hints.emplace_back(libdnf5::utils::sformat(_("{} to add specific vendor change rules"), "--add-vendor-policy"));
+        hints.emplace_back(libdnf5::utils::sformat(_("{} to allow all vendor changes"), "--allow-vendor-change"));
     }
 
     if (hints.size() > 0) {
