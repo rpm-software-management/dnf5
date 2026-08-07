@@ -36,6 +36,7 @@ DNF5 Commands
     repo.8
     repoquery.8
     search.8
+    status.8
     swap.8
     system-upgrade.8
     upgrade.8

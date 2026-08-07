@@ -131,6 +131,9 @@ For more details see the separate man page for the specific command, f.e. ``man 
 :ref:`search <search_command_ref-label>`
     | Search for packages using keywords.
 
+:ref:`status <status_command_ref-label>`
+    | Display summary statistics about installed and available packages, groups and repositories.
+
 :ref:`swap <swap_command_ref-label>`
     | Remove software and install another in the single transaction.
 
@@ -506,6 +509,7 @@ Commands:
     | :manpage:`dnf5-repo(8)`, :ref:`Repo command <repo_command_ref-label>`
     | :manpage:`dnf5-repoquery(8)`, :ref:`Repoquery command <repoquery_command_ref-label>`
     | :manpage:`dnf5-search(8)`, :ref:`Search command <search_command_ref-label>`
+    | :manpage:`dnf5-status(8)`, :ref:`Status command <status_command_ref-label>`
     | :manpage:`dnf5-swap(8)`, :ref:`Swap command <swap_command_ref-label>`
     | :manpage:`dnf5-system-upgrade(8)`, :ref:`System-Upgrade command <system-upgrade_command_ref-label>`
     | :manpage:`dnf5-upgrade(8)`, :ref:`Upgrade command <upgrade_command_ref-label>`

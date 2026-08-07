@@ -209,6 +209,7 @@ Scenario: Install remove group
         """
         ID +Name +Installed
         beverages +Beverages +yes
+        Groups: 1 \(1 installed, 0 available\)
         """
    When I execute dnf with args "install water_carbonated"
    Then the exit code is 0

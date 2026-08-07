@@ -67,6 +67,7 @@ Scenario: group list --available with no groups available
        <REPOSYNC>
        ID                   Name Installed
        test-group                      yes
+       Groups: 1 (1 installed, 0 available)
        """
   When I execute dnf with args "group list --available"
   Then the exit code is 0

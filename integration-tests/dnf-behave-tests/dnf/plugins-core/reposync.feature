@@ -93,6 +93,7 @@ Scenario: Reposync with --download-metadata option
    """
    ID                   Name             Installed
    dnf-ci-testgroup     DNF-CI-Testgroup        no
+   Groups: 1 (0 installed, 1 available)
    """
 
 

@@ -23,7 +23,7 @@ Scenario: All user visible groups are listed by default (installed group is not 
        """
        <REPOSYNC>
        """
-   And stdout is
+   And stdout contains lines
        """
        ID                   Name        Installed
        test-group           Test Group        yes
@@ -38,7 +38,7 @@ Scenario: I can list also hidden groups
        """
        <REPOSYNC>
        """
-   And stdout is
+   And stdout contains lines
        """
        ID                   Name         Installed
        hidden-group         Hidden group        no
@@ -54,7 +54,7 @@ Scenario: I can filter listed groups by their ids (hidden groups are included)
        """
        <REPOSYNC>
        """
-   And stdout is
+   And stdout contains lines
        """
        ID                   Name         Installed
        hidden-group         Hidden group        no
@@ -67,7 +67,7 @@ Scenario: I can filter listed groups by their names (hidden groups are included)
        """
        <REPOSYNC>
        """
-   And stdout is
+   And stdout contains lines
        """
        ID                   Name         Installed
        hidden-group         Hidden group        no
@@ -82,7 +82,7 @@ Scenario: I can list only installed groups
        """
        <REPOSYNC>
        """
-   And stdout is
+   And stdout contains lines
        """
        ID                   Name       Installed
        test-group           Test Group       yes
@@ -95,7 +95,7 @@ Scenario: I can list only available groups
        """
        <REPOSYNC>
        """
-   And stdout is
+   And stdout contains lines
        """
        ID                   Name        Installed
        test-group           Test Group         no
@@ -110,7 +110,7 @@ Scenario: I can list only groups containing a package
        """
        <REPOSYNC>
        """
-   And stdout is
+   And stdout contains lines
        """
        ID                   Name       Installed
        test-group           Test Group       yes
