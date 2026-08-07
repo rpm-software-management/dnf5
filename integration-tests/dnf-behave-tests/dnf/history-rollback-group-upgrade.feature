@@ -22,6 +22,7 @@ Background:
         """
         ID                               Name                      Installed
         dnf-ci-group-rollback-testgroup1 DNF-CI-RollbackTestGroup1       yes
+        Groups: 1 (1 installed, 0 available)
         """
   Given I use repository "dnf-ci-group-rollback-2"
     And I successfully execute dnf with args "group upgrade dnf-ci-group-rollback-testgroup1"
@@ -59,6 +60,7 @@ Scenario: Rollback a group upgrade transaction
         """
         ID                               Name                      Installed
         dnf-ci-group-rollback-testgroup1 DNF-CI-RollbackTestGroup1       yes
+        Groups: 1 (1 installed, 0 available)
         """
 
 
@@ -101,6 +103,7 @@ Scenario: Rollback a rollbacked group upgrade transaction
         """
         ID                               Name                      Installed
         dnf-ci-group-rollback-testgroup1 DNF-CI-RollbackTestGroup1       yes
+        Groups: 1 (1 installed, 0 available)
         """
 
 
@@ -159,6 +162,7 @@ Scenario: Rollback multiple group upgrade transactions
         """
         ID                               Name                      Installed
         dnf-ci-group-rollback-testgroup1 DNF-CI-RollbackTestGroup1       yes
+        Groups: 1 (1 installed, 0 available)
         """
 
 
@@ -226,4 +230,5 @@ Scenario: Excluded package is remembered until next group install when rolling b
         """
         ID                               Name                      Installed
         dnf-ci-group-rollback-testgroup1 DNF-CI-RollbackTestGroup1       yes
+        Groups: 1 (1 installed, 0 available)
         """

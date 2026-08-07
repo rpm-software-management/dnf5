@@ -294,7 +294,7 @@ Scenario: Group list
        """
        <REPOSYNC>
        """
-   And stdout is
+   And stdout contains lines
        """
        ID                   Name                 Installed
        cqrlib-non-devel     CQRlib-non-devel            no
@@ -313,7 +313,7 @@ Scenario: Group list with arg
        """
        <REPOSYNC>
        """
-   And stdout is
+   And stdout contains lines
        """
        ID                   Name             Installed
        dnf-ci-testgroup     DNF-CI-Testgroup        no
@@ -334,6 +334,7 @@ Scenario: List an environment with empty name
        ID                   Name       Installed
        no-name-group                          no
        test-group           Test Group        no
+       Groups: 2 (0 installed, 2 available)
        """
 
 
@@ -371,7 +372,7 @@ Scenario: List and info a group with missing packagelist
         """
         <REPOSYNC>
         """
-    And stdout is
+    And stdout contains lines
         """
         ID                   Name       Installed
         test-group           Test Group        no
@@ -567,6 +568,7 @@ Scenario: 'dnf group list -C' works for unprivileged user even when decompressed
        cqrlib-non-devel     CQRlib-non-devel            no
        dnf-ci-testgroup     DNF-CI-Testgroup            no
        superripper-and-deps SuperRipper-and-deps        no
+       Groups: 3 (0 installed, 3 available)
        """
 
 
@@ -581,7 +583,7 @@ Scenario: dnf5 group list: empty output when run for the second time
        """
        <REPOSYNC>
        """
-   And stdout is
+   And stdout contains lines
        """
        ID                   Name         Installed
        test-group-1         Test Group 1        no
@@ -593,7 +595,7 @@ Scenario: dnf5 group list: empty output when run for the second time
        """
        <REPOSYNC>
        """
-   And stdout is
+   And stdout contains lines
        """
        ID                   Name         Installed
        test-group-1         Test Group 1        no

@@ -141,6 +141,7 @@ man_pages = [
     ('commands/repo.8', 'dnf5-repo', 'Repo Command', AUTHORS, 8),
     ('commands/repoquery.8', 'dnf5-repoquery', 'Repoquery Command', AUTHORS, 8),
     ('commands/search.8', 'dnf5-search', 'Search Command', AUTHORS, 8),
+    ('commands/status.8', 'dnf5-status', 'Status Command', AUTHORS, 8),
     ('commands/swap.8', 'dnf5-swap', 'Swap Command', AUTHORS, 8),
     ('commands/system-upgrade.8', 'dnf5-system-upgrade', 'System-Upgrade Command', AUTHORS, 8),
     ('commands/upgrade.8', 'dnf5-upgrade', 'Upgrade Command', AUTHORS, 8),
