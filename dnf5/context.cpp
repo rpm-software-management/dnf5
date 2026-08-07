@@ -34,6 +34,7 @@
 #include <libdnf5-cli/utils/userconfirm.hpp>
 #include <libdnf5/base/base.hpp>
 #include <libdnf5/base/goal.hpp>
+#include <libdnf5/base/vendor_change_manager.hpp>
 #include <libdnf5/common/proc.hpp>
 #include <libdnf5/conf/const.hpp>
 #include <libdnf5/rpm/package_query.hpp>
@@ -853,6 +854,37 @@ std::vector<std::pair<std::vector<std::string>, bool>> & Context::get_libdnf_plu
 
 const std::vector<std::pair<std::vector<std::string>, bool>> & Context::get_libdnf_plugins_enablement() const {
     return p_impl->get_libdnf_plugins_enablement();
+}
+
+std::vector<std::string> & Context::get_cmdline_vendor_policies() {
+    return p_impl->get_cmdline_vendor_policies();
+}
+
+const std::vector<std::string> & Context::get_cmdline_vendor_policies() const {
+    return p_impl->get_cmdline_vendor_policies();
+}
+
+void Context::set_clear_vendor_policies(bool value) {
+    p_impl->set_clear_vendor_policies(value);
+}
+
+bool Context::get_clear_vendor_policies() const {
+    return p_impl->get_clear_vendor_policies();
+}
+
+void Context::apply_cmdline_vendor_policies() {
+    const bool do_clear = p_impl->get_clear_vendor_policies();
+    const auto & policies = p_impl->get_cmdline_vendor_policies();
+    if (!do_clear && policies.empty()) {
+        return;
+    }
+    auto vcm = p_impl->get_base().get_vendor_change_manager();
+    if (do_clear) {
+        vcm->clear_policies();
+    }
+    for (const auto & policy_str : policies) {
+        vcm->add_policy_from_compact(policy_str, "text:COMMAND LINE");
+    }
 }
 
 

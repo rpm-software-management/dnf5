@@ -353,6 +353,44 @@ void RootCommand::set_argument_parser() {
     no_allow_vendor_change->add_conflict_argument(*allow_vendor_change);
 
     {
+        auto add_vendor_policy = parser.add_new_named_arg("add-vendor-policy");
+        add_vendor_policy->set_long_name("add-vendor-policy");
+        add_vendor_policy->set_has_value(true);
+        add_vendor_policy->set_arg_value_help("POLICY");
+        add_vendor_policy->set_description(libdnf5::utils::sformat(
+            _("Add a vendor change policy for this run. "
+              "Can be specified multiple times. "
+              "Format: '{}'."),
+            R"(direction:eop"value",...@direction:e[filters],...)"));
+        add_vendor_policy->set_parse_hook_func([&ctx](
+                                                   [[maybe_unused]] ArgumentParser::NamedArg * arg,
+                                                   [[maybe_unused]] const char * option,
+                                                   const char * value) {
+            ctx.get_cmdline_vendor_policies().emplace_back(value);
+            return true;
+        });
+        add_vendor_policy->add_conflict_argument(*allow_vendor_change);
+        global_options_group->register_argument(add_vendor_policy);
+    }
+
+    {
+        auto clear_vendor_policies = parser.add_new_named_arg("clear-vendor-policies");
+        clear_vendor_policies->set_long_name("clear-vendor-policies");
+        clear_vendor_policies->set_description(
+            _("Remove all vendor change policies loaded from configuration files. "
+              "Can be combined with --add-vendor-policy to replace them."));
+        clear_vendor_policies->set_parse_hook_func([&ctx](
+                                                       [[maybe_unused]] ArgumentParser::NamedArg * arg,
+                                                       [[maybe_unused]] const char * option,
+                                                       [[maybe_unused]] const char * value) {
+            ctx.set_clear_vendor_policies(true);
+            return true;
+        });
+        clear_vendor_policies->add_conflict_argument(*allow_vendor_change);
+        global_options_group->register_argument(clear_vendor_policies);
+    }
+
+    {
         auto no_docs = parser.add_new_named_arg("no-docs");
         no_docs->set_long_name("no-docs");
         no_docs->set_description(
@@ -1557,6 +1595,8 @@ int main(int argc, char * argv[]) try {
 
                 context.apply_repository_setopts();
             }
+
+            context.apply_cmdline_vendor_policies();
 
             // Run selected command
             command->configure();
