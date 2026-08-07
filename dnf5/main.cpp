@@ -48,6 +48,7 @@
 #include "commands/repo/repo.hpp"
 #include "commands/repoquery/repoquery.hpp"
 #include "commands/search/search.hpp"
+#include "commands/status/status.hpp"
 #include "commands/swap/swap.hpp"
 #include "commands/system-upgrade/system-upgrade.hpp"
 #include "commands/upgrade/upgrade.hpp"
@@ -765,6 +766,7 @@ static void add_commands(Context & context) {
     context.add_and_initialize_command(std::make_unique<InfoCommand>(context));
     context.add_and_initialize_command(std::make_unique<CheckUpgradeCommand>(context));
     context.add_and_initialize_command(std::make_unique<CheckCommand>(context));
+    context.add_and_initialize_command(std::make_unique<StatusCommand>(context));
 
     context.add_and_initialize_command(std::make_unique<GroupCommand>(context));
     context.add_and_initialize_command(std::make_unique<EnvironmentCommand>(context));
