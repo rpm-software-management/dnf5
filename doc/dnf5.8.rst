@@ -280,6 +280,20 @@ Following options are applicable in the general context for any ``dnf5`` command
     | The behavior of this option can be fine-tuned with vendor change policy configuration.
     | :ref:`See <vendorpolicy_conf-label>` :manpage:`dnf5.conf-vendorpolicy(5)` for more info.
 
+.. _with_vendor_policy_option_ref-label:
+
+``--with-vendor-policy=POLICY``
+    | Add a vendor change policy for this run using the compact format.
+    | Can be specified multiple times. Each value defines one policy.
+    | :ref:`See <vendorpolicy_compact_format-label>` :manpage:`dnf5.conf-vendorpolicy-v1_1(5)` for format details.
+
+.. _clear_vendor_policies_option_ref-label:
+
+``--clear-vendor-policies``
+    | Temporarily remove all vendor change policies for the purpose of the current ``DNF5`` command.
+    | Can be combined with ``--with-vendor-policy`` to replace existing policies with custom ones.
+    | Cannot be combined with ``--allow-vendor-change``.
+
 .. _no_best_option_ref-label:
 
 ``--no-best``
