@@ -23,6 +23,7 @@
 #include "group_install.hpp"
 #include "group_list.hpp"
 #include "group_remove.hpp"
+#include "group_summary.hpp"
 #include "group_upgrade.hpp"
 
 #include <dnf5/shared_options.hpp>
@@ -45,6 +46,7 @@ void GroupCommand::register_subcommands() {
     auto * query_commands_group = get_context().get_argument_parser().add_new_group("group_query_commands");
     query_commands_group->set_header("Query Commands:");
     get_argument_parser_command()->register_group(query_commands_group);
+    register_subcommand(std::make_unique<GroupSummaryCommand>(get_context()), query_commands_group);
     register_subcommand(std::make_unique<GroupListCommand>(get_context()), query_commands_group);
     register_subcommand(std::make_unique<GroupInfoCommand>(get_context()), query_commands_group);
     // software management commands

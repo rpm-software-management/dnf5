@@ -27,7 +27,7 @@
 Synopsis
 ========
 
-``dnf5 group {list|info} [options] [<group-spec>...]``
+``dnf5 group {summary|list|info} [options] [<group-spec>...]``
 
 ``dnf5 group {install|remove|upgrade} [options] <group-spec|environment-spec>...``
 
@@ -47,6 +47,13 @@ environments match, only groups are affected.
 
 Subcommands
 ===========
+
+``summary``
+    Display summary statistics including counts of installed and available
+    groups and environments, package counts, total installed size, number of
+    enabled repositories, and the time of the last transaction.
+    With a spec, limit the group and environment counts to matching entries.
+    The command accepts the same options as the ``list`` subcommand.
 
 ``list``
     List all matching groups, either among installed or available groups. If
@@ -96,8 +103,8 @@ Subcommands
 
     In case both groups and environments match, only groups are affected.
 
-Options for ``list`` and ``info``
-=================================
+Options for ``summary``, ``list`` and ``info``
+===============================================
 
 ``--available``
     | Show only available groups. Those which are not installed, but known to ``DNF5``.

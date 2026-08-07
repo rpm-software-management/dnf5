@@ -25,6 +25,8 @@
 #include <libdnf5/comps/group/query.hpp>
 #include <libdnf5/conf/const.hpp>
 
+#include <iostream>
+
 namespace dnf5 {
 
 using namespace libdnf5::cli;
@@ -100,6 +102,15 @@ void GroupListCommand::print(const libdnf5::comps::GroupQuery & query) {
         items.emplace_back(new libdnf5::cli::output::GroupAdapter(obj));
     }
     libdnf5::cli::output::print_grouplist_table(items);
+
+    std::size_t installed_count = 0;
+    for (const auto & item : items) {
+        if (item->get_installed()) {
+            ++installed_count;
+        }
+    }
+    std::cout << "Groups: " << items.size() << " (Installed " << installed_count << ", Available "
+              << items.size() - installed_count << ")" << std::endl;
 }
 
 }  // namespace dnf5
