@@ -185,6 +185,12 @@ Following options are applicable in the general context for any ``dnf5`` command
 ``--assumeno``
     | Automatically answer no for all questions.
 
+``--add-vendor-policy=POLICY``
+    | Add a vendor change policy for this run using the compact format.
+    | Can be specified multiple times. Each value defines one policy.
+    | Cannot be combined with ``--allow-vendor-change``.
+    | :ref:`See <vendorpolicy_compact_format-label>` :manpage:`dnf5.conf-vendorpolicy-v1_1(5)` for format details.
+
 .. _allow_vendor_change_option_ref-label:
 
 ``--allow-vendor-change``
@@ -268,6 +274,11 @@ Following options are applicable in the general context for any ``dnf5`` command
     | :ref:`See <installroot_misc_ref-label>` :manpage:`dnf5-installroot(7)` for more info.
 
 .. _no_allow_vendor_change_option_ref-label:
+
+``--clear-vendor-policies``
+    | Remove all vendor change policies loaded from configuration files.
+    | Can be combined with ``--add-vendor-policy`` to replace file-based policies with custom ones.
+    | Cannot be combined with ``--allow-vendor-change``.
 
 ``--no-allow-vendor-change``
     | Do not allow automatic package replacements from different vendors for RPM upgrades or downgrades.

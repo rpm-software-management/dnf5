@@ -60,6 +60,19 @@ If a file with the same name exists in both directories, the file from ``/etc/dn
 is used. This implies that the distribution configuration file can be simply overridden
 by creating a file with the same name in the ``/etc/dnf/vendors.d/`` directory.
 
+Command-Line Policies
+=====================
+
+Vendor change policies can also be specified directly on the command line using
+the ``--add-vendor-policy`` option with a compact syntax. This is useful for
+adding policies for a single run without creating configuration files.
+
+The ``--clear-vendor-policies`` option can be used to remove all policies
+loaded from configuration files, optionally replacing them with command-line policies.
+
+For the compact format syntax and examples, see
+:ref:`Compact Format <vendorpolicy_compact_format-label>` in the v1.1 reference.
+
 See Also
 ========
 
