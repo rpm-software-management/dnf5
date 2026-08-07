@@ -66,6 +66,10 @@ public:
 
     void apply_repository_setopts();
 
+    /// Apply vendor change policies specified via --vendor-policy CLI arguments.
+    /// Must be called after base.setup().
+    void apply_cmdline_vendor_policies();
+
     /// Update required metadata types according to the provided `pkg_specs`.
     /// If a `pkg_spec` is a file pattern, the file lists need to be loaded.
     void update_repo_metadata_from_specs(const std::vector<std::string> & pkg_specs);
@@ -183,6 +187,12 @@ public:
 
     std::vector<std::pair<std::vector<std::string>, bool>> & get_libdnf_plugins_enablement();
     const std::vector<std::pair<std::vector<std::string>, bool>> & get_libdnf_plugins_enablement() const;
+
+    std::vector<std::string> & get_cmdline_vendor_policies();
+    const std::vector<std::string> & get_cmdline_vendor_policies() const;
+
+    void set_clear_vendor_policies(bool value);
+    bool get_clear_vendor_policies() const;
 
     /// Set to true to print version information
     void set_show_version(bool enable);
