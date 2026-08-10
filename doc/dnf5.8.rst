@@ -35,7 +35,7 @@
 Synopsis
 ========
 
-``dnf5 <command> [options] [<args>...]``
+``dnf5 [general options] <command> [command-specific options] [<args>...]``
 
 
 Description
@@ -175,10 +175,13 @@ These are available after installing the ``dnf5-plugins`` package.
     | Synchronize packages and metadata of a remote DNF repository to a local directory.
 
 
-Options
+General Options
 =======
 
-Following options are applicable in the general context for any ``dnf5`` command:
+Following options are applicable in the general context for any ``dnf5`` command.
+These general options can be placed either before or after the command name on the command line.
+Command-specific options (such as ``--downloadonly`` or ``--skip-broken``) are only accepted after the command name.
+See the individual command's man page for a list of its specific options.
 
 .. _assumeno_option_ref-label:
 
