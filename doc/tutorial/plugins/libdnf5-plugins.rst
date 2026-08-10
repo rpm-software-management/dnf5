@@ -23,6 +23,14 @@ The second is before the start of the transaction.
     :language: c++
     :linenos:
 
+The plugin API uses interface versioning (``IPlugin``, ``IPlugin2_1``,
+``IPlugin2_2``, ...) to add new hooks while maintaining backward
+compatibility: a plugin inherits from the interface version that provides
+the hooks it needs, and older plugins remain compatible since hooks from
+newer interfaces are simply not called for them. See the
+:ref:`libdnf5::plugin <libdnf5 plugin api>` API reference for the full
+list of hooks each interface version provides.
+
 Each plugin is structured in its own directory within the ``libdnf5-plugins``
 folder. Review other plugins, such as ``actions``, to understand the expected
 structure:

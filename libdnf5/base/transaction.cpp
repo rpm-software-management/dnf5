@@ -1171,6 +1171,9 @@ Transaction::TransactionRunResult Transaction::Impl::_run(
     }
 
     auto & plugins = base->p_impl->get_plugins();
+
+    libdnf5::utils::OnScopeExit run_post_transaction_cleanup(
+        [&]() noexcept { plugins.post_transaction_cleanup(*transaction); });
     plugins.pre_transaction(*transaction);
 
     // start history db transaction

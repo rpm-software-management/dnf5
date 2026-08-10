@@ -158,6 +158,30 @@ public:
     virtual void goal_resolved(const libdnf5::base::Transaction & transaction);
 };
 
+/// @brief Extended plugin interface with cleanup hooks introduced in version 2.2 of the plugin API.
+///
+/// Cleanup hooks are guaranteed to run regardless of whether the operation
+/// succeeded or failed.
+/// They are intended for releasing resources acquired in the pre hook.
+/// Each cleanup hook must only touch the plugin's own local state.
+class LIBDNF_PLUGIN_API IPlugin2_2 : public IPlugin2_1 {
+public:
+    explicit IPlugin2_2(IPluginData & data);
+    ~IPlugin2_2();
+
+    /// Cleanup hook guaranteed to run after Base::setup() completes (successfully or not).
+    virtual void post_base_setup_cleanup() noexcept;
+
+    /// Cleanup hook guaranteed to run after RepoSack::add_cmdline_packages() completes
+    /// (successfully or not).
+    virtual void post_add_cmdline_packages_cleanup() noexcept;
+
+    /// Cleanup hook guaranteed to run after the transaction run finishes (successfully or not).
+    ///
+    /// @param transaction The same transaction object passed to pre_transaction()/post_transaction().
+    virtual void post_transaction_cleanup(const libdnf5::base::Transaction & transaction) noexcept;
+};
+
 }  // namespace libdnf5::plugin
 
 

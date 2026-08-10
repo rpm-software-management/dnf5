@@ -66,6 +66,9 @@ public:
     void goal_resolved(const libdnf5::base::Transaction & transaction);
     void pre_transaction(const libdnf5::base::Transaction & transaction);
     void post_transaction(const libdnf5::base::Transaction & transaction);
+    void post_base_setup_cleanup() noexcept;
+    void post_add_cmdline_packages_cleanup() noexcept;
+    void post_transaction_cleanup(const libdnf5::base::Transaction & transaction) noexcept;
     void finish() noexcept;
 
 protected:
@@ -112,6 +115,12 @@ public:
     void pre_transaction(const libdnf5::base::Transaction & transaction);
 
     void post_transaction(const libdnf5::base::Transaction & transaction);
+
+    void post_base_setup_cleanup() noexcept;
+
+    void post_add_cmdline_packages_cleanup() noexcept;
+
+    void post_transaction_cleanup(const libdnf5::base::Transaction & transaction) noexcept;
 
     /// Call finish of all allowed plugins in reverse order.
     void finish() noexcept;
@@ -210,6 +219,30 @@ inline void Plugin::pre_transaction(const libdnf5::base::Transaction & transacti
 inline void Plugin::post_transaction(const libdnf5::base::Transaction & transaction) {
     if (iplugin_instance) {
         iplugin_instance->post_transaction(transaction);
+    }
+}
+
+inline void Plugin::post_base_setup_cleanup() noexcept {
+    if (iplugin_instance) {
+        if (auto * p = dynamic_cast<IPlugin2_2 *>(iplugin_instance)) {
+            p->post_base_setup_cleanup();
+        }
+    }
+}
+
+inline void Plugin::post_add_cmdline_packages_cleanup() noexcept {
+    if (iplugin_instance) {
+        if (auto * p = dynamic_cast<IPlugin2_2 *>(iplugin_instance)) {
+            p->post_add_cmdline_packages_cleanup();
+        }
+    }
+}
+
+inline void Plugin::post_transaction_cleanup(const libdnf5::base::Transaction & transaction) noexcept {
+    if (iplugin_instance) {
+        if (auto * p = dynamic_cast<IPlugin2_2 *>(iplugin_instance)) {
+            p->post_transaction_cleanup(transaction);
+        }
     }
 }
 

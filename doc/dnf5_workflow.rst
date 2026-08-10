@@ -27,6 +27,7 @@ Typical DNF5 workflow consists of:
     #. lock installroot
     #. load Vars and lock varsdir
     #. libdnf5 plugin ``post_base_setup`` hook
+    #. libdnf5 plugin ``post_base_setup_cleanup`` hook (guaranteed even on error)
 #. create repo sack
 #. create repos from system configuration
     * perform Vars substitution on repository id and all values (See :ref:`Repo Variables <repo_variables-label>` for details.)
@@ -51,6 +52,7 @@ Typical DNF5 workflow consists of:
     #. libdnf5 plugin ``pre_add_cmdline_packages`` hook
     #. add commandline packages
     #. libdnf5 plugin ``post_add_cmdline_packages`` hook
+    #. libdnf5 plugin ``post_add_cmdline_packages_cleanup`` hook (guaranteed even on error)
     #. resolve goal (resolve dependencies)
     #. libdnf5 plugin ``goal_resolved`` hook
     #. run command specific ``goal_resolved`` step
@@ -67,6 +69,7 @@ Typical DNF5 workflow consists of:
     #. update system_state (See :manpage:`dnf5-system-state(7)`, :ref:`System state <systemstate_misc_ref-label>` for details.)
     #. finish database transaction
     #. libdnf5 plugin ``post_transaction`` hook
+    #. libdnf5 plugin ``post_transaction_cleanup`` hook (guaranteed even on error)
     #. unlock transaction ``libdnf5::utils::Locker``
 #. libdnf5 plugin ``finish`` hook
 #. dnf5 plugin ``finish`` hook

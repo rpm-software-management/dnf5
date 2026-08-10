@@ -1,3 +1,5 @@
+.. _libdnf5 plugin api:
+
 libdnf5::plugin
 ===============
 

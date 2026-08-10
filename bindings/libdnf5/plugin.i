@@ -42,6 +42,7 @@
 %ignore libdnf_plugin_get_last_exception;
 %feature("director") IPlugin;
 %feature("director") IPlugin2_1;
+%feature("director") IPlugin2_2;
 %include "libdnf5/plugin/iplugin.hpp"
 
 %include "libdnf5/plugin/plugin_info.hpp"

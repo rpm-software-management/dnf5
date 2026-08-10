@@ -10,17 +10,17 @@ namespace {
 
 constexpr const char * PLUGIN_NAME{"libdnf5_template_plugin"};
 constexpr plugin::Version PLUGIN_VERSION{.major = 1, .minor = 1, .micro = 0};
-constexpr PluginAPIVersion REQUIRED_PLUGIN_API_VERSION{.major = 2, .minor = 0};
+constexpr PluginAPIVersion REQUIRED_PLUGIN_API_VERSION{.major = 2, .minor = 2};
 
 constexpr const char * attrs[]{"author.name", "author.email", "description", nullptr};
 constexpr const char * attrs_value[]{"Fatima Freedom", "dummy@email.com", "Plugin description."};
 
-class TemplatePlugin final : public plugin::IPlugin2_1 {
+class TemplatePlugin final : public plugin::IPlugin2_2 {
 public:
     /// Implement custom constructor for the new plugin.
     /// This is not necessary when you only need Base object for your implementation.
     /// Optional to override.
-    TemplatePlugin(libdnf5::plugin::IPluginData & data, libdnf5::ConfigParser &) : IPlugin2_1(data) {}
+    TemplatePlugin(libdnf5::plugin::IPluginData & data, libdnf5::ConfigParser &) : IPlugin2_2(data) {}
 
     /// Fill in the API version of your plugin.
     /// This is used to check if the provided plugin API version is compatible with the library's plugin API version.

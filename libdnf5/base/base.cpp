@@ -34,6 +34,7 @@
 #include "solv/pool.hpp"
 #include "utils/dnf4convert/dnf4convert.hpp"
 #include "utils/fs/utils.hpp"
+#include "utils/on_scope_exit.hpp"
 
 #include "libdnf5/comps/comps_sack.hpp"
 #include "libdnf5/conf/config_parser.hpp"
@@ -290,6 +291,8 @@ void Base::setup() {
     load_plugins();
     p_impl->plugins.init();
 
+    libdnf5::utils::OnScopeExit run_post_base_setup_cleanup(
+        [this]() noexcept { p_impl->plugins.post_base_setup_cleanup(); });
     p_impl->plugins.pre_base_setup();
 
     pool.reset(new libdnf5::solv::RpmPool);

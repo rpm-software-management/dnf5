@@ -20,10 +20,11 @@
 import libdnf5
 
 
-# Inherit from IPlugin2_1 to get all hooks including `goal_resolved`.
-# You can use IPlugin instead, if `goal_resolved` is not needed.
+# Inherit from IPlugin2_2 to get all hooks including `goal_resolved` and the
+# cleanup hooks. You can use IPlugin or IPlugin2_1 instead, if the hooks they
+# don't provide are not needed.
 # See https://dnf5.readthedocs.io/en/latest/api/python/libdnf5_plugin.html
-class Plugin(libdnf5.plugin.IPlugin2_1):
+class Plugin(libdnf5.plugin.IPlugin2_2):
     def __init__(self, data):
         super(Plugin, self).__init__(data)
         self.base = self.get_base()
@@ -32,7 +33,7 @@ class Plugin(libdnf5.plugin.IPlugin2_1):
 
     @staticmethod
     def get_api_version():
-        return libdnf5.PluginAPIVersion(2, 1)
+        return libdnf5.PluginAPIVersion(2, 2)
 
     @staticmethod
     def get_name():
@@ -101,5 +102,24 @@ class Plugin(libdnf5.plugin.IPlugin2_1):
     def goal_resolved(self, transaction):
         logger = self.base.get_logger()
         logger.info(self.get_name() + ' - goal_resolved: ' +
+                    str(transaction.get_transaction_packages_count()) +
+                    ' packages in transaction')
+
+    # --- IPlugin2_2: cleanup hooks (requires API version 2.2) ---
+    # Guaranteed to run even if an error occurs between the pre_* and post_*
+    # hooks. Use them to release resources acquired in the corresponding
+    # pre_* hook.
+
+    def post_base_setup_cleanup(self):
+        logger = self.base.get_logger()
+        logger.info(self.get_name() + ' - post_base_setup_cleanup')
+
+    def post_add_cmdline_packages_cleanup(self):
+        logger = self.base.get_logger()
+        logger.info(self.get_name() + ' - post_add_cmdline_packages_cleanup')
+
+    def post_transaction_cleanup(self, transaction):
+        logger = self.base.get_logger()
+        logger.info(self.get_name() + ' - post_transaction_cleanup: ' +
                     str(transaction.get_transaction_packages_count()) +
                     ' packages in transaction')
