@@ -286,6 +286,30 @@ void Plugins::post_transaction(const libdnf5::base::Transaction & transaction) {
     }
 }
 
+void Plugins::post_base_setup_cleanup() noexcept {
+    for (auto & plugin : plugins) {
+        if (plugin->get_enabled()) {
+            plugin->post_base_setup_cleanup();
+        }
+    }
+}
+
+void Plugins::post_add_cmdline_packages_cleanup() noexcept {
+    for (auto & plugin : plugins) {
+        if (plugin->get_enabled()) {
+            plugin->post_add_cmdline_packages_cleanup();
+        }
+    }
+}
+
+void Plugins::post_transaction_cleanup(const libdnf5::base::Transaction & transaction) noexcept {
+    for (auto & plugin : plugins) {
+        if (plugin->get_enabled()) {
+            plugin->post_transaction_cleanup(transaction);
+        }
+    }
+}
+
 void Plugins::finish() noexcept {
     for (auto plugin = plugins.rbegin(), stop = plugins.rend(); plugin != stop; ++plugin) {
         if ((*plugin)->get_enabled()) {

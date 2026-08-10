@@ -77,4 +77,14 @@ IPlugin2_1::~IPlugin2_1() = default;
 
 void IPlugin2_1::goal_resolved([[maybe_unused]] const libdnf5::base::Transaction & transaction) {}
 
+IPlugin2_2::IPlugin2_2(IPluginData & data) : IPlugin2_1(data) {}
+
+IPlugin2_2::~IPlugin2_2() = default;
+
+void IPlugin2_2::post_base_setup_cleanup() noexcept {}
+
+void IPlugin2_2::post_add_cmdline_packages_cleanup() noexcept {}
+
+void IPlugin2_2::post_transaction_cleanup([[maybe_unused]] const libdnf5::base::Transaction & transaction) noexcept {}
+
 }  // namespace libdnf5::plugin
