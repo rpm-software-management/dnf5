@@ -825,7 +825,7 @@ public:
     ///                         If Checksum::Type::UNKNOWN is passed, match any checksum type.
     /// @param cmp_type         A comparison (match) operator, defaults to `QueryCmp::EQ`.
     ///                         Supported values: `EQ`, `NEQ`.
-    /// @since 5.4.4.0
+    /// @since 5.4.3.0
     void filter_checksum(
         const std::string & pattern,
         Checksum::Type checksum_type,
@@ -840,7 +840,7 @@ public:
     ///                         If Checksum::Type::UNKNOWN is passed, match any checksum type.
     /// @param cmp_type         A comparison (match) operator, defaults to `QueryCmp::EQ`.
     ///                         Supported values: `EQ`, `NEQ`.
-    /// @since 5.4.4.0
+    /// @since 5.4.3.0
     void filter_checksum(
         const std::vector<std::string> & patterns,
         Checksum::Type checksum_type,
