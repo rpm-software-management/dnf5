@@ -1,3 +1,55 @@
+# 5.4.3.0
+
+- Update translations from weblate
+- Port bootc functionality from DNF4
+- Add --[no-]allow-vendor-change option
+- Warn when upgrades are silently skipped due to vendor change restriction
+- Add remove --duplicates option to remove older duplicate packages
+- Introduce gpgcheck_policy to control gpgcheck
+- Add RepoSack API for repo config overrides
+- libdnf5-cli: Stop option parsing after "--"
+- Show protected package info when removing its dependency
+- Invalidate offline transaction after successful online transaction
+- Add distro-sync support to dnf-automatic
+- Add tmpfiles config to create system repo lockfile
+- manifest: Split downloaded packages by basearch with --per-arch option
+- manifest: Download packages by checksum
+- manifest install, module subcommands: require privileges
+- reposync: add `--min-buildtime <YYYY-MM-DD>` option
+- reposync: exit non-zero when a package fails to download
+- Distinguish between execute_transaction and execute_trusted_transaction polkit actions
+- repo: Deprecate protected_packages config option
+- feat(daemon): add History.list method
+- dnfdaemon: Include transaction_time in History.recent_changes() response
+- dnfdaemon: Add install_time package attribute
+- Disable modularity when built without modulemd
+- Reflink local packages into the cache when supported
+- More copy->reflink replacements across the code base
+- Improve performance of rendering of progress bars
+- Add e2k to ARCH_MAP
+- Add missing hooks to example python libdnf5 plugin
+- Fix aligning unicode descriptions in a progressbar
+- Fix scriptlets processing race condition
+- Suppress transient "Signing key not found" error from progress bar
+- fix: Goal::add_rpm_reinstall(Package) passes available solvable id to solver
+- Report duplicate rpmdb packages instead of crashing
+- filter_latest_unresolved_advisories: fix missing results due to id order
+- conf: Fix OptionStringContainer::add_item and clarify set()/add() semantics for append options
+- dnf5daemon: fix recent_changes upgrade reporting
+- automatic: Fix sdbus-cpp v1.x compatibility
+- Fix GoalPrivate::operator= not resetting resolve-time members
+- transaction: cast epoch seconds to time_t
+- Update system state when installing a package already installed via rpm
+- Preserve original filepath in resolve log messages
+- zsh-completion: Escape colons in completion candidates
+- copr: update detection of ELN
+- doc: document repository-packages command removal and DNF5 alternatives
+- doc: Clarify bandwidth/throttle options usage
+- doc: Clarify behavior of `glob:/path/to/*.conf`
+- doc: Correct the history of modularity
+- doc: Fix typo /etc/dnf5 -> /etc/dnf
+- Copr documentation moved to docs.copr.fedorainfracloud.org
+
 # 5.4.2.1
 
 - Update translations from weblate
