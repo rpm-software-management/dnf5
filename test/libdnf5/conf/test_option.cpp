@@ -36,6 +36,24 @@ CPPUNIT_TEST_SUITE_REGISTRATION(OptionTest);
 
 using namespace libdnf5;
 
+namespace {
+
+using ItemInfo = Option::ItemInfo<std::string_view>;
+
+}
+
+#define MAKE_ITEMINFO(priority, value, source) \
+    ItemInfo {                                 \
+        priority, value, source                \
+    }
+
+#define ASSERT_ITEMINFO_EQUAL(expected, actual)                                                           \
+    do {                                                                                                  \
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Item 'priority' mismatch", (expected).priority, (actual).priority); \
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Item 'value' mismatch", (expected).value, (actual).value);          \
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Item 'source' mismatch", (expected).source, (actual).source);       \
+    } while (0)
+
 static const std::vector<std::string> DEFAULT_TRUE_VALUES{"1", "yes", "true", "on"};
 static const std::vector<std::string> DEFAULT_FALSE_VALUES{"0", "no", "false", "off"};
 
@@ -77,16 +95,24 @@ void OptionTest::test_options_bool() {
     CPPUNIT_ASSERT_EQUAL(false, option.get_default_value());
     CPPUNIT_ASSERT_EQUAL(false, option.get_value());
     CPPUNIT_ASSERT_EQUAL(Option::Priority::DEFAULT, option.get_priority());
+    CPPUNIT_ASSERT_EQUAL(std::string(), option.get_source());
 
     common_test_option_bool(option, DEFAULT_TRUE_VALUES, DEFAULT_FALSE_VALUES);
 
-    option.set(Option::Priority::COMMANDLINE, std::string("TrUe"));
+    option.set(Option::Priority::COMMANDLINE, std::string("TrUe"), "cmdline");
     CPPUNIT_ASSERT_EQUAL(false, option.get_default_value());
     CPPUNIT_ASSERT_EQUAL(true, option.get_value());
+    CPPUNIT_ASSERT_EQUAL(std::string("cmdline"), option.get_source());
 
-    option.set(Option::Priority::RUNTIME, std::string("FalSe"));
+    // Lower priority does not change value or source
+    option.set(Option::Priority::MAINCONFIG, false, "mainconfig");
+    CPPUNIT_ASSERT_EQUAL(true, option.get_value());
+    CPPUNIT_ASSERT_EQUAL(std::string("cmdline"), option.get_source());
+
+    option.set(Option::Priority::RUNTIME, std::string("FalSe"), "runtime_src");
     CPPUNIT_ASSERT_EQUAL(false, option.get_value());
     CPPUNIT_ASSERT_EQUAL(Option::Priority::RUNTIME, option.get_priority());
+    CPPUNIT_ASSERT_EQUAL(std::string("runtime_src"), option.get_source());
 
     CPPUNIT_ASSERT_THROW(option.set(Option::Priority::RUNTIME, std::string("invalid")), OptionInvalidValueError);
 
@@ -119,40 +145,6 @@ void OptionTest::test_options_bool() {
 }
 
 
-void OptionTest::test_options_child() {
-    OptionBool oparent(true);
-    OptionChild<OptionBool> ochild(oparent);
-    CPPUNIT_ASSERT_EQUAL(true, ochild.get_default_value());
-    CPPUNIT_ASSERT_EQUAL(true, ochild.get_value());
-    CPPUNIT_ASSERT_EQUAL(Option::Priority::DEFAULT, ochild.get_priority());
-
-    oparent.set(Option::Priority::RUNTIME, false);
-    CPPUNIT_ASSERT_EQUAL(true, ochild.get_default_value());
-    CPPUNIT_ASSERT_EQUAL(false, ochild.get_value());
-    CPPUNIT_ASSERT_EQUAL(Option::Priority::RUNTIME, ochild.get_priority());
-
-    ochild.set(Option::Priority::COMMANDLINE, false);
-    CPPUNIT_ASSERT_EQUAL(true, ochild.get_default_value());
-    CPPUNIT_ASSERT_EQUAL(false, ochild.get_value());
-    CPPUNIT_ASSERT_EQUAL(Option::Priority::COMMANDLINE, ochild.get_priority());
-
-    ochild.set(Option::Priority::MAINCONFIG, true);
-    CPPUNIT_ASSERT_EQUAL(false, ochild.get_value());
-    CPPUNIT_ASSERT_EQUAL(Option::Priority::COMMANDLINE, ochild.get_priority());
-
-    ochild.set(Option::Priority::COMMANDLINE, true);
-    CPPUNIT_ASSERT_EQUAL(true, ochild.get_value());
-    CPPUNIT_ASSERT_EQUAL(Option::Priority::COMMANDLINE, ochild.get_priority());
-
-    CPPUNIT_ASSERT_THROW(ochild.set(Option::Priority::COMMANDLINE, std::string("invalid")), OptionInvalidValueError);
-
-    ochild.set(Option::Priority::RUNTIME, true);
-    ochild.lock("ochild_bool locked by test_option_child");
-    CPPUNIT_ASSERT_THROW(ochild.set(Option::Priority::RUNTIME, true), UserAssertionError);
-    CPPUNIT_ASSERT_THROW(ochild.set(Option::Priority::RUNTIME, false), UserAssertionError);
-    CPPUNIT_ASSERT_THROW(ochild.set(Option::Priority::RUNTIME, std::string("true")), UserAssertionError);
-}
-
 void OptionTest::test_options_enum() {
     const std::vector<std::string> ENUM_VALS{"aa", "bb", "cc", "dd", "ee"};
 
@@ -160,13 +152,20 @@ void OptionTest::test_options_enum() {
     CPPUNIT_ASSERT_EQUAL(std::string("bb"), option.get_default_value());
     CPPUNIT_ASSERT_EQUAL(std::string("bb"), option.get_value());
     CPPUNIT_ASSERT_EQUAL(Option::Priority::DEFAULT, option.get_priority());
+    CPPUNIT_ASSERT_EQUAL(std::string(), option.get_source());
 
     for (auto & val : ENUM_VALS) {
         option.set(Option::Priority::COMMANDLINE, val);
         CPPUNIT_ASSERT_EQUAL(val, option.get_value());
     }
 
+    option.set(Option::Priority::RUNTIME, "cc", "enum_src");
+    CPPUNIT_ASSERT_EQUAL(std::string("cc"), option.get_value());
+    CPPUNIT_ASSERT_EQUAL(std::string("enum_src"), option.get_source());
+
     CPPUNIT_ASSERT_THROW(option.set(Option::Priority::RUNTIME, "not_allowed"), OptionValueNotAllowedError);
+    // Source unchanged after failed set
+    CPPUNIT_ASSERT_EQUAL(std::string("enum_src"), option.get_source());
 
     option.set(Option::Priority::RUNTIME, "aa");
     option.lock("option locked by test_option_enum");
@@ -184,6 +183,16 @@ void OptionTest::test_options_number() {
     CPPUNIT_ASSERT_EQUAL(DEFAULT, option.get_default_value());
     CPPUNIT_ASSERT_EQUAL(DEFAULT, option.get_value());
     CPPUNIT_ASSERT_EQUAL(Option::Priority::DEFAULT, option.get_priority());
+    CPPUNIT_ASSERT_EQUAL(std::string(), option.get_source());
+
+    option.set(Option::Priority::COMMANDLINE, NumberType{5}, "number_src");
+    CPPUNIT_ASSERT_EQUAL(NumberType{5}, option.get_value());
+    CPPUNIT_ASSERT_EQUAL(std::string("number_src"), option.get_source());
+
+    // Lower priority does not change value or source
+    option.set(Option::Priority::MAINCONFIG, NumberType{3}, "lower_src");
+    CPPUNIT_ASSERT_EQUAL(NumberType{5}, option.get_value());
+    CPPUNIT_ASSERT_EQUAL(std::string("number_src"), option.get_source());
 
     for (auto val = MIN; val <= MAX; ++val) {
         option.set(Option::Priority::COMMANDLINE, val);
@@ -208,12 +217,16 @@ void OptionTest::test_options_path() {
     CPPUNIT_ASSERT_EQUAL(DEFAULT, option.get_default_value());
     CPPUNIT_ASSERT_EQUAL(DEFAULT, option.get_value());
     CPPUNIT_ASSERT_EQUAL(Option::Priority::DEFAULT, option.get_priority());
+    CPPUNIT_ASSERT_EQUAL(std::string(), option.get_source());
 
-    option.set(Option::Priority::RUNTIME, "/path2");
+    option.set(Option::Priority::RUNTIME, "/path2", "path_src");
     CPPUNIT_ASSERT_EQUAL(std::string("/path2"), option.get_value());
     CPPUNIT_ASSERT_EQUAL(Option::Priority::RUNTIME, option.get_priority());
+    CPPUNIT_ASSERT_EQUAL(std::string("path_src"), option.get_source());
 
     CPPUNIT_ASSERT_THROW(option.set(Option::Priority::RUNTIME, "not_absolute"), OptionValueNotAllowedError);
+    // Source unchanged after failed set
+    CPPUNIT_ASSERT_EQUAL(std::string("path_src"), option.get_source());
 
     option.lock("option locked by test_option_path");
     CPPUNIT_ASSERT_THROW(option.set(Option::Priority::RUNTIME, "/path2"), UserAssertionError);
@@ -231,6 +244,7 @@ void OptionTest::test_options_seconds() {
     CPPUNIT_ASSERT_EQUAL(DEFAULT, option.get_default_value());
     CPPUNIT_ASSERT_EQUAL(DEFAULT, option.get_value());
     CPPUNIT_ASSERT_EQUAL(Option::Priority::DEFAULT, option.get_priority());
+    CPPUNIT_ASSERT_EQUAL(std::string(), option.get_source());
 
     for (auto val = MIN; val <= MAX; ++val) {
         option.set(Option::Priority::COMMANDLINE, val);
@@ -284,13 +298,17 @@ void OptionTest::test_options_string() {
         CPPUNIT_ASSERT_EQUAL(DEFAULT, option.get_default_value());
         CPPUNIT_ASSERT_EQUAL(DEFAULT, option.get_value());
         CPPUNIT_ASSERT_EQUAL(Option::Priority::DEFAULT, option.get_priority());
+        CPPUNIT_ASSERT_EQUAL(std::string(), option.get_source());
 
-        option.set(Option::Priority::COMMANDLINE, "donut");
+        option.set(Option::Priority::COMMANDLINE, "donut", "string_src");
         CPPUNIT_ASSERT_EQUAL(DEFAULT, option.get_default_value());
         CPPUNIT_ASSERT_EQUAL(std::string("donut"), option.get_value());
+        CPPUNIT_ASSERT_EQUAL(std::string("string_src"), option.get_source());
 
         // The test is case sensitive (icase = false) - uppercase 'T' is not allowed.
         CPPUNIT_ASSERT_THROW(option.set(Option::Priority::RUNTIME, "donuT"), OptionValueNotAllowedError);
+        // Source unchanged after failed set
+        CPPUNIT_ASSERT_EQUAL(std::string("string_src"), option.get_source());
 
         CPPUNIT_ASSERT_THROW(option.set(Option::Priority::RUNTIME, "drain"), OptionValueNotAllowedError);
 
@@ -333,24 +351,29 @@ void OptionTest::test_options_string_list() {
         CPPUNIT_ASSERT_EQUAL(DEFAULT, option.get_default_value());
         CPPUNIT_ASSERT_EQUAL(DEFAULT, option.get_value());
         CPPUNIT_ASSERT_EQUAL(Option::Priority::DEFAULT, option.get_priority());
+        CPPUNIT_ASSERT_EQUAL(std::string(), option.get_source());
 
-        option.set(Option::Priority::RUNTIME, std::vector<std::string>{"donutX", "cakeX"});
+        option.set(Option::Priority::RUNTIME, std::vector<std::string>{"donutX", "cakeX"}, "list_src");
         CPPUNIT_ASSERT_EQUAL(DEFAULT, option.get_default_value());
         CPPUNIT_ASSERT_EQUAL((std::vector<std::string>{"donutX", "cakeX"}), option.get_value());
         CPPUNIT_ASSERT_EQUAL(Option::Priority::RUNTIME, option.get_priority());
+        CPPUNIT_ASSERT_EQUAL(std::string("list_src"), option.get_source());
 
         // The test is case sensitive (icase = false) - lowercase 'x' is not allowed.
         CPPUNIT_ASSERT_THROW(
             option.set(Option::Priority::RUNTIME, std::vector<std::string>{"donutX", "cakex"}),
             OptionValueNotAllowedError);
+        // Source unchanged after failed set
+        CPPUNIT_ASSERT_EQUAL(std::string("list_src"), option.get_source());
 
         CPPUNIT_ASSERT_THROW(
             option.set(Option::Priority::RUNTIME, std::vector<std::string>{"donutX", "drain"}),
             OptionValueNotAllowedError);
 
-        option.set(Option::Priority::RUNTIME, "dfirstX, dsecondX");
+        option.set(Option::Priority::RUNTIME, "dfirstX, dsecondX", "string_list_src");
         CPPUNIT_ASSERT_EQUAL(DEFAULT, option.get_default_value());
         CPPUNIT_ASSERT_EQUAL((std::vector<std::string>{"dfirstX", "dsecondX"}), option.get_value());
+        CPPUNIT_ASSERT_EQUAL(std::string("string_list_src"), option.get_source());
 
         // The test is case sensitive (icase = false) - uppercase 'D' and lowercase 'x' is not allowed.
         CPPUNIT_ASSERT_THROW(option.set(Option::Priority::RUNTIME, "Dfirstx, DsecondX"), OptionValueNotAllowedError);
@@ -561,9 +584,11 @@ void OptionTest::test_options_string_set() {
     const OptionStringSet::ValueType initial{"x", "y", "z"};
     OptionStringSet option(initial);
     CPPUNIT_ASSERT(initial == option.get_value());
+    CPPUNIT_ASSERT_EQUAL(std::string(), option.get_source());
 
-    option.set(Option::Priority::RUNTIME, "a, b, c");
+    option.set(Option::Priority::RUNTIME, "a, b, c", "set_src");
     CPPUNIT_ASSERT((OptionStringSet::ValueType{"a", "b", "c"}) == option.get_value());
+    CPPUNIT_ASSERT_EQUAL(std::string("set_src"), option.get_source());
 
     option.set(Option::Priority::RUNTIME, "a, b, a, a");
     CPPUNIT_ASSERT((OptionStringSet::ValueType{"a", "b"}) == option.get_value());
@@ -574,12 +599,14 @@ void OptionTest::test_options_list_add() {
     CPPUNIT_ASSERT((OptionStringSet::ValueType{"1", "2", "3"}) == option.get_value());
 
     OptionStringSet::ValueType another_set{"4", "5", "6"};
-    option.add(libdnf5::Option::Priority::RUNTIME, another_set);
+    option.add(libdnf5::Option::Priority::RUNTIME, another_set, "add_src");
     CPPUNIT_ASSERT((OptionStringSet::ValueType{"1", "2", "3", "4", "5", "6"}) == option.get_value());
+    CPPUNIT_ASSERT_EQUAL(std::string("add_src"), option.get_source());
 
     OptionStringSet::ValueType set_with_existing_values{"7", "5", "4"};
-    option.add(libdnf5::Option::Priority::RUNTIME, set_with_existing_values);
+    option.add(libdnf5::Option::Priority::RUNTIME, set_with_existing_values, "add_src2");
     CPPUNIT_ASSERT((OptionStringSet::ValueType{"1", "2", "3", "4", "5", "6", "7"}) == option.get_value());
+    CPPUNIT_ASSERT_EQUAL(std::string("add_src2"), option.get_source());
 }
 
 void OptionTest::test_options_list_add_item() {
@@ -597,12 +624,16 @@ void OptionTest::test_options_list_add_item() {
 void OptionTest::test_options_string_append_list() {
     OptionStringAppendList option("Pkg1, Pkg2");
     CPPUNIT_ASSERT_EQUAL((std::vector<std::string>{"Pkg1", "Pkg2"}), option.get_value());
+    CPPUNIT_ASSERT_EQUAL(std::string(), option.get_source());
     // setting a new value will append to current value
-    option.set(Option::Priority::COMMANDLINE, "Pkg3");
+    option.set(Option::Priority::COMMANDLINE, "Pkg3", "cmdline_src");
     CPPUNIT_ASSERT_EQUAL((std::vector<std::string>{"Pkg1", "Pkg2", "Pkg3"}), option.get_value());
+    CPPUNIT_ASSERT_EQUAL(std::string("cmdline_src"), option.get_source());
     // values are evaluated ordered by the priority
-    option.set(Option::Priority::MAINCONFIG, "Pkg4");
+    option.set(Option::Priority::MAINCONFIG, "Pkg4", "mainconfig_src");
     CPPUNIT_ASSERT_EQUAL((std::vector<std::string>{"Pkg1", "Pkg2", "Pkg4", "Pkg3"}), option.get_value());
+    // COMMANDLINE has higher priority, source stays from COMMANDLINE
+    CPPUNIT_ASSERT_EQUAL(std::string("cmdline_src"), option.get_source());
     // values are evaluated ordered by the priority
     option.add(Option::Priority::MAINCONFIG, "Pkg5");
     CPPUNIT_ASSERT_EQUAL((std::vector<std::string>{"Pkg1", "Pkg2", "Pkg4", "Pkg5", "Pkg3"}), option.get_value());
@@ -624,8 +655,9 @@ void OptionTest::test_options_string_append_list() {
     option.set(Option::Priority::MAINCONFIG, ",Pkg5");
     CPPUNIT_ASSERT_EQUAL((std::vector<std::string>{"Pkg5", "Pkg3"}), option.get_value());
     // empty item on other than first place is skipped and does not clear the value
-    option.set(Option::Priority::COMMANDLINE, "Pkg6, ,Pkg7");
+    option.set(Option::Priority::COMMANDLINE, "Pkg6, ,Pkg7", "cmdline_src2");
     CPPUNIT_ASSERT_EQUAL((std::vector<std::string>{"Pkg5", "Pkg3", "Pkg6", "Pkg7"}), option.get_value());
+    CPPUNIT_ASSERT_EQUAL(std::string("cmdline_src2"), option.get_source());
     // `add` never clear existing items.
     option.add(Option::Priority::COMMANDLINE, "");
     CPPUNIT_ASSERT_EQUAL((std::vector<std::string>{"Pkg5", "Pkg3", "Pkg6", "Pkg7"}), option.get_value());
@@ -636,6 +668,304 @@ void OptionTest::test_options_string_append_list() {
     option.add_item(Option::Priority::COMMANDLINE, "");
     CPPUNIT_ASSERT_EQUAL((std::vector<std::string>{"Pkg5", "Pkg3", "Pkg6", "Pkg7", "", ""}), option.get_value());
     // I can clear the option an using empty value
-    option.set(Option::Priority::COMMANDLINE, "");
+    option.set(Option::Priority::COMMANDLINE, "", "clear_src");
     CPPUNIT_ASSERT_EQUAL((std::vector<std::string>{}), option.get_value());
+    CPPUNIT_ASSERT_EQUAL(std::string("clear_src"), option.get_source());
+}
+
+void OptionTest::test_options_string_list_items_info() {
+    OptionStringList option(std::vector<std::string>{"d1", "d2"});
+
+    // Default value items have DEFAULT priority and empty source
+    auto items = option.get_items_info();
+    CPPUNIT_ASSERT_EQUAL(std::size_t{2}, items.size());
+    ASSERT_ITEMINFO_EQUAL(MAKE_ITEMINFO(Option::Priority::DEFAULT, "d1", ""), items[0]);
+    ASSERT_ITEMINFO_EQUAL(MAKE_ITEMINFO(Option::Priority::DEFAULT, "d2", ""), items[1]);
+
+    // set() replaces all items
+    option.set(Option::Priority::RUNTIME, std::vector<std::string>{"a", "b", "c"}, "file1.conf");
+    items = option.get_items_info();
+    CPPUNIT_ASSERT_EQUAL(std::size_t{3}, items.size());
+    ASSERT_ITEMINFO_EQUAL(MAKE_ITEMINFO(Option::Priority::RUNTIME, "a", "file1.conf"), items[0]);
+    ASSERT_ITEMINFO_EQUAL(MAKE_ITEMINFO(Option::Priority::RUNTIME, "b", "file1.conf"), items[1]);
+    ASSERT_ITEMINFO_EQUAL(MAKE_ITEMINFO(Option::Priority::RUNTIME, "c", "file1.conf"), items[2]);
+
+    // set() with higher priority replaces all items
+    option.set(Option::Priority::RUNTIME, std::vector<std::string>{"x"}, "file2.conf");
+    items = option.get_items_info();
+    CPPUNIT_ASSERT_EQUAL(std::size_t{1}, items.size());
+    ASSERT_ITEMINFO_EQUAL(MAKE_ITEMINFO(Option::Priority::RUNTIME, "x", "file2.conf"), items[0]);
+
+    // set() with lower priority is ignored
+    option.set(Option::Priority::MAINCONFIG, std::vector<std::string>{"y"}, "ignored.conf");
+    items = option.get_items_info();
+    CPPUNIT_ASSERT_EQUAL(std::size_t{1}, items.size());
+    ASSERT_ITEMINFO_EQUAL(MAKE_ITEMINFO(Option::Priority::RUNTIME, "x", "file2.conf"), items[0]);
+
+    // set() via string parsing
+    option.set(Option::Priority::RUNTIME, "p, q", "cmdline");
+    items = option.get_items_info();
+    CPPUNIT_ASSERT_EQUAL(std::size_t{2}, items.size());
+    ASSERT_ITEMINFO_EQUAL(MAKE_ITEMINFO(Option::Priority::RUNTIME, "p", "cmdline"), items[0]);
+    ASSERT_ITEMINFO_EQUAL(MAKE_ITEMINFO(Option::Priority::RUNTIME, "q", "cmdline"), items[1]);
+
+    // add() adds items to non-append list
+    option.add(Option::Priority::RUNTIME, std::vector<std::string>{"r"}, "added.conf");
+    items = option.get_items_info();
+    CPPUNIT_ASSERT_EQUAL(std::size_t{3}, items.size());
+    ASSERT_ITEMINFO_EQUAL(MAKE_ITEMINFO(Option::Priority::RUNTIME, "p", "cmdline"), items[0]);
+    ASSERT_ITEMINFO_EQUAL(MAKE_ITEMINFO(Option::Priority::RUNTIME, "q", "cmdline"), items[1]);
+    ASSERT_ITEMINFO_EQUAL(MAKE_ITEMINFO(Option::Priority::RUNTIME, "r", "added.conf"), items[2]);
+}
+
+void OptionTest::test_options_string_set_items_info() {
+    OptionStringSet option(OptionStringSet::ValueType{"d1", "d2"});
+
+    // Default value items have DEFAULT priority and empty source
+    auto items = option.get_items_info();
+    CPPUNIT_ASSERT_EQUAL(std::size_t{2}, items.size());
+    ASSERT_ITEMINFO_EQUAL(MAKE_ITEMINFO(Option::Priority::DEFAULT, "d1", ""), items[0]);
+    ASSERT_ITEMINFO_EQUAL(MAKE_ITEMINFO(Option::Priority::DEFAULT, "d2", ""), items[1]);
+
+    // set() replaces all items
+    option.set(Option::Priority::RUNTIME, "c, a, b", "file.conf");
+    items = option.get_items_info();
+    CPPUNIT_ASSERT_EQUAL(std::size_t{3}, items.size());
+    ASSERT_ITEMINFO_EQUAL(MAKE_ITEMINFO(Option::Priority::RUNTIME, "a", "file.conf"), items[0]);
+    ASSERT_ITEMINFO_EQUAL(MAKE_ITEMINFO(Option::Priority::RUNTIME, "b", "file.conf"), items[1]);
+    ASSERT_ITEMINFO_EQUAL(MAKE_ITEMINFO(Option::Priority::RUNTIME, "c", "file.conf"), items[2]);
+
+    // add() adds items from different source
+    option.add(Option::Priority::RUNTIME, OptionStringSet::ValueType{"d", "e"}, "added.conf");
+    items = option.get_items_info();
+    CPPUNIT_ASSERT_EQUAL(std::size_t{5}, items.size());
+    ASSERT_ITEMINFO_EQUAL(MAKE_ITEMINFO(Option::Priority::RUNTIME, "a", "file.conf"), items[0]);
+    ASSERT_ITEMINFO_EQUAL(MAKE_ITEMINFO(Option::Priority::RUNTIME, "b", "file.conf"), items[1]);
+    ASSERT_ITEMINFO_EQUAL(MAKE_ITEMINFO(Option::Priority::RUNTIME, "c", "file.conf"), items[2]);
+    ASSERT_ITEMINFO_EQUAL(MAKE_ITEMINFO(Option::Priority::RUNTIME, "d", "added.conf"), items[3]);
+    ASSERT_ITEMINFO_EQUAL(MAKE_ITEMINFO(Option::Priority::RUNTIME, "e", "added.conf"), items[4]);
+
+    // add_item() adds a single item
+    option.add_item(Option::Priority::RUNTIME, "f");
+    items = option.get_items_info();
+    CPPUNIT_ASSERT_EQUAL(std::size_t{6}, items.size());
+    ASSERT_ITEMINFO_EQUAL(MAKE_ITEMINFO(Option::Priority::RUNTIME, "f", ""), items[5]);
+
+    // Adding a duplicate item to set - the set keeps only unique values,
+    // the first inserted info for the key is preserved
+    option.add(Option::Priority::RUNTIME, OptionStringSet::ValueType{"a", "g"}, "dup.conf");
+    items = option.get_items_info();
+    CPPUNIT_ASSERT_EQUAL(std::size_t{7}, items.size());
+    // "a" already exists, but souce info is actualized
+    ASSERT_ITEMINFO_EQUAL(MAKE_ITEMINFO(Option::Priority::RUNTIME, "a", "dup.conf"), items[0]);
+    // "g" is new
+    ASSERT_ITEMINFO_EQUAL(MAKE_ITEMINFO(Option::Priority::RUNTIME, "g", "dup.conf"), items[6]);
+}
+
+void OptionTest::test_options_string_append_list_items_info() {
+    OptionStringAppendList option("Pkg1, Pkg2");
+
+    // Default value items
+    auto items = option.get_items_info();
+    CPPUNIT_ASSERT_EQUAL(std::size_t{2}, items.size());
+    ASSERT_ITEMINFO_EQUAL(MAKE_ITEMINFO(Option::Priority::DEFAULT, "Pkg1", ""), items[0]);
+    ASSERT_ITEMINFO_EQUAL(MAKE_ITEMINFO(Option::Priority::DEFAULT, "Pkg2", ""), items[1]);
+
+    // set() appends (with empty_remove_existing semantics)
+    option.set(Option::Priority::COMMANDLINE, "Pkg3", "cmdline");
+    items = option.get_items_info();
+    CPPUNIT_ASSERT_EQUAL(std::size_t{3}, items.size());
+    ASSERT_ITEMINFO_EQUAL(MAKE_ITEMINFO(Option::Priority::DEFAULT, "Pkg1", ""), items[0]);
+    ASSERT_ITEMINFO_EQUAL(MAKE_ITEMINFO(Option::Priority::DEFAULT, "Pkg2", ""), items[1]);
+    ASSERT_ITEMINFO_EQUAL(MAKE_ITEMINFO(Option::Priority::COMMANDLINE, "Pkg3", "cmdline"), items[2]);
+
+    // set() with lower priority - items are ordered by priority
+    option.set(Option::Priority::MAINCONFIG, "Pkg4", "mainconfig");
+    items = option.get_items_info();
+    CPPUNIT_ASSERT_EQUAL(std::size_t{4}, items.size());
+    ASSERT_ITEMINFO_EQUAL(MAKE_ITEMINFO(Option::Priority::DEFAULT, "Pkg1", ""), items[0]);
+    ASSERT_ITEMINFO_EQUAL(MAKE_ITEMINFO(Option::Priority::DEFAULT, "Pkg2", ""), items[1]);
+    ASSERT_ITEMINFO_EQUAL(MAKE_ITEMINFO(Option::Priority::MAINCONFIG, "Pkg4", "mainconfig"), items[2]);
+    ASSERT_ITEMINFO_EQUAL(MAKE_ITEMINFO(Option::Priority::COMMANDLINE, "Pkg3", "cmdline"), items[3]);
+
+    // add() appends without clear semantics
+    option.add(Option::Priority::MAINCONFIG, "Pkg5", "add_src");
+    items = option.get_items_info();
+    CPPUNIT_ASSERT_EQUAL(std::size_t{5}, items.size());
+    ASSERT_ITEMINFO_EQUAL(MAKE_ITEMINFO(Option::Priority::DEFAULT, "Pkg1", ""), items[0]);
+    ASSERT_ITEMINFO_EQUAL(MAKE_ITEMINFO(Option::Priority::DEFAULT, "Pkg2", ""), items[1]);
+    ASSERT_ITEMINFO_EQUAL(MAKE_ITEMINFO(Option::Priority::MAINCONFIG, "Pkg4", "mainconfig"), items[2]);
+    ASSERT_ITEMINFO_EQUAL(MAKE_ITEMINFO(Option::Priority::MAINCONFIG, "Pkg5", "add_src"), items[3]);
+    ASSERT_ITEMINFO_EQUAL(MAKE_ITEMINFO(Option::Priority::COMMANDLINE, "Pkg3", "cmdline"), items[4]);
+
+    // set() with empty first item clears items with same or lower priority
+    option.set(Option::Priority::MAINCONFIG, ",Pkg6", "clear_src");
+    items = option.get_items_info();
+    CPPUNIT_ASSERT_EQUAL(std::size_t{2}, items.size());
+    ASSERT_ITEMINFO_EQUAL(MAKE_ITEMINFO(Option::Priority::MAINCONFIG, "Pkg6", "clear_src"), items[0]);
+    ASSERT_ITEMINFO_EQUAL(MAKE_ITEMINFO(Option::Priority::COMMANDLINE, "Pkg3", "cmdline"), items[1]);
+
+    // set() with empty value clears all
+    option.set(Option::Priority::COMMANDLINE, "");
+    items = option.get_items_info();
+    CPPUNIT_ASSERT_EQUAL(std::size_t{0}, items.size());
+
+    // Multiple sources from different priorities
+    option.set(Option::Priority::RUNTIME, "D, E", "runtime");
+    option.set(Option::Priority::MAINCONFIG, "A, B", "mainconfig");
+    option.set(Option::Priority::COMMANDLINE, "C", "cmdline");
+    items = option.get_items_info();
+    CPPUNIT_ASSERT_EQUAL(std::size_t{3}, items.size());
+    ASSERT_ITEMINFO_EQUAL(MAKE_ITEMINFO(Option::Priority::COMMANDLINE, "C", "cmdline"), items[0]);
+    ASSERT_ITEMINFO_EQUAL(MAKE_ITEMINFO(Option::Priority::RUNTIME, "D", "runtime"), items[1]);
+    ASSERT_ITEMINFO_EQUAL(MAKE_ITEMINFO(Option::Priority::RUNTIME, "E", "runtime"), items[2]);
+
+    // add_item() adds single item
+    option.add_item(Option::Priority::COMMANDLINE, "F");
+    items = option.get_items_info();
+    CPPUNIT_ASSERT_EQUAL(std::size_t{4}, items.size());
+    ASSERT_ITEMINFO_EQUAL((ItemInfo{Option::Priority::COMMANDLINE, "C", "cmdline"}), items[0]);
+    ASSERT_ITEMINFO_EQUAL((ItemInfo{Option::Priority::COMMANDLINE, "F", ""}), items[1]);
+    ASSERT_ITEMINFO_EQUAL(MAKE_ITEMINFO(Option::Priority::RUNTIME, "D", "runtime"), items[2]);
+    ASSERT_ITEMINFO_EQUAL(MAKE_ITEMINFO(Option::Priority::RUNTIME, "E", "runtime"), items[3]);
+
+    // add_item() adds empty item
+    option.add_item(Option::Priority::COMMANDLINE, "", "cmdline_empty");
+    items = option.get_items_info();
+    CPPUNIT_ASSERT_EQUAL(std::size_t{5}, items.size());
+    ASSERT_ITEMINFO_EQUAL((ItemInfo{Option::Priority::COMMANDLINE, "C", "cmdline"}), items[0]);
+    ASSERT_ITEMINFO_EQUAL((ItemInfo{Option::Priority::COMMANDLINE, "F", ""}), items[1]);
+    ASSERT_ITEMINFO_EQUAL((ItemInfo{Option::Priority::COMMANDLINE, "", "cmdline_empty"}), items[2]);
+    ASSERT_ITEMINFO_EQUAL(MAKE_ITEMINFO(Option::Priority::RUNTIME, "D", "runtime"), items[3]);
+    ASSERT_ITEMINFO_EQUAL(MAKE_ITEMINFO(Option::Priority::RUNTIME, "E", "runtime"), items[4]);
+}
+
+void OptionTest::test_options_string_append_set_items_info() {
+    OptionStringAppendSet option(OptionStringAppendSet::ValueType{"d1", "d2"});
+
+    // Default value items
+    auto items = option.get_items_info();
+    CPPUNIT_ASSERT_EQUAL(std::size_t{2}, items.size());
+    ASSERT_ITEMINFO_EQUAL(MAKE_ITEMINFO(Option::Priority::DEFAULT, "d1", ""), items[0]);
+    ASSERT_ITEMINFO_EQUAL(MAKE_ITEMINFO(Option::Priority::DEFAULT, "d2", ""), items[1]);
+
+    // set() appends items from different sources
+    option.set(Option::Priority::MAINCONFIG, OptionStringAppendSet::ValueType{"a", "b"}, "main.conf");
+    items = option.get_items_info();
+    CPPUNIT_ASSERT_EQUAL(std::size_t{4}, items.size());
+    ASSERT_ITEMINFO_EQUAL(MAKE_ITEMINFO(Option::Priority::MAINCONFIG, "a", "main.conf"), items[0]);
+    ASSERT_ITEMINFO_EQUAL(MAKE_ITEMINFO(Option::Priority::MAINCONFIG, "b", "main.conf"), items[1]);
+    ASSERT_ITEMINFO_EQUAL(MAKE_ITEMINFO(Option::Priority::DEFAULT, "d1", ""), items[2]);
+    ASSERT_ITEMINFO_EQUAL(MAKE_ITEMINFO(Option::Priority::DEFAULT, "d2", ""), items[3]);
+
+    // add() from higher priority
+    option.add(Option::Priority::COMMANDLINE, OptionStringAppendSet::ValueType{"c"}, "cmdline");
+    items = option.get_items_info();
+    CPPUNIT_ASSERT_EQUAL(std::size_t{5}, items.size());
+    ASSERT_ITEMINFO_EQUAL(MAKE_ITEMINFO(Option::Priority::MAINCONFIG, "a", "main.conf"), items[0]);
+    ASSERT_ITEMINFO_EQUAL(MAKE_ITEMINFO(Option::Priority::MAINCONFIG, "b", "main.conf"), items[1]);
+    ASSERT_ITEMINFO_EQUAL(MAKE_ITEMINFO(Option::Priority::COMMANDLINE, "c", "cmdline"), items[2]);
+    ASSERT_ITEMINFO_EQUAL(MAKE_ITEMINFO(Option::Priority::DEFAULT, "d1", ""), items[3]);
+    ASSERT_ITEMINFO_EQUAL(MAKE_ITEMINFO(Option::Priority::DEFAULT, "d2", ""), items[4]);
+
+    // set() with empty value clears previous items, higher priority items are kept
+    option.set(Option::Priority::MAINCONFIG, OptionStringAppendSet::ValueType{});
+    items = option.get_items_info();
+    CPPUNIT_ASSERT_EQUAL(std::size_t{1}, items.size());
+    ASSERT_ITEMINFO_EQUAL(MAKE_ITEMINFO(Option::Priority::COMMANDLINE, "c", "cmdline"), items[0]);
+
+    // Test duplicate handling in append set - set keeps unique values,
+    // the last inserted info with hignest priority is preserved
+    OptionStringAppendSet option2(OptionStringAppendSet::ValueType{"x"});
+    option2.add(Option::Priority::COMMANDLINE, OptionStringAppendSet::ValueType{"y", "z"}, "src2");
+    option2.add(Option::Priority::COMMANDLINE, OptionStringAppendSet::ValueType{"y"}, "src3");
+    option2.set(Option::Priority::MAINCONFIG, OptionStringAppendSet::ValueType{"x", "y"}, "src1");
+    // "x" from MAINCONFIG wins over "x" from DEFAULT (higher priority)
+    // "y" from COMMANDLINE wins over "y" from MAINCONFIG (higher priority)
+    items = option2.get_items_info();
+    CPPUNIT_ASSERT_EQUAL(std::size_t{3}, items.size());
+    ASSERT_ITEMINFO_EQUAL(MAKE_ITEMINFO(Option::Priority::MAINCONFIG, "x", "src1"), items[0]);
+    ASSERT_ITEMINFO_EQUAL(MAKE_ITEMINFO(Option::Priority::COMMANDLINE, "y", "src3"), items[1]);
+    ASSERT_ITEMINFO_EQUAL(MAKE_ITEMINFO(Option::Priority::COMMANDLINE, "z", "src2"), items[2]);
+}
+
+
+void OptionTest::test_options_child() {
+    OptionBool oparent(true);
+    OptionChild<OptionBool> ochild(oparent);
+    CPPUNIT_ASSERT_EQUAL(true, ochild.get_default_value());
+    CPPUNIT_ASSERT_EQUAL(true, ochild.get_value());
+    CPPUNIT_ASSERT_EQUAL(Option::Priority::DEFAULT, ochild.get_priority());
+    CPPUNIT_ASSERT_EQUAL(std::string(), ochild.get_source());
+
+    oparent.set(Option::Priority::RUNTIME, false, "parent_src");
+    CPPUNIT_ASSERT_EQUAL(true, ochild.get_default_value());
+    CPPUNIT_ASSERT_EQUAL(false, ochild.get_value());
+    CPPUNIT_ASSERT_EQUAL(Option::Priority::RUNTIME, ochild.get_priority());
+    CPPUNIT_ASSERT_EQUAL(std::string("parent_src"), ochild.get_source());
+
+    ochild.set(Option::Priority::COMMANDLINE, false, "child_src");
+    CPPUNIT_ASSERT_EQUAL(true, ochild.get_default_value());
+    CPPUNIT_ASSERT_EQUAL(false, ochild.get_value());
+    CPPUNIT_ASSERT_EQUAL(Option::Priority::COMMANDLINE, ochild.get_priority());
+    CPPUNIT_ASSERT_EQUAL(std::string("child_src"), ochild.get_source());
+
+    // Lower priority does not change value or source
+    ochild.set(Option::Priority::MAINCONFIG, true, "lower_src");
+    CPPUNIT_ASSERT_EQUAL(false, ochild.get_value());
+    CPPUNIT_ASSERT_EQUAL(Option::Priority::COMMANDLINE, ochild.get_priority());
+    CPPUNIT_ASSERT_EQUAL(std::string("child_src"), ochild.get_source());
+
+    ochild.set(Option::Priority::COMMANDLINE, true);
+    CPPUNIT_ASSERT_EQUAL(true, ochild.get_value());
+    CPPUNIT_ASSERT_EQUAL(Option::Priority::COMMANDLINE, ochild.get_priority());
+
+    CPPUNIT_ASSERT_THROW(ochild.set(Option::Priority::COMMANDLINE, std::string("invalid")), OptionInvalidValueError);
+
+    ochild.set(Option::Priority::RUNTIME, true);
+    ochild.lock("ochild_bool locked by test_option_child");
+    CPPUNIT_ASSERT_THROW(ochild.set(Option::Priority::RUNTIME, true), UserAssertionError);
+    CPPUNIT_ASSERT_THROW(ochild.set(Option::Priority::RUNTIME, false), UserAssertionError);
+    CPPUNIT_ASSERT_THROW(ochild.set(Option::Priority::RUNTIME, std::string("true")), UserAssertionError);
+}
+
+void OptionTest::test_options_child_string_list() {
+    OptionStringList oparent(std::vector<std::string>{"p1", "p2"});
+    OptionChild<OptionStringList> ochild(oparent);
+
+    // Child without own value inherits from parent
+    CPPUNIT_ASSERT_EQUAL((std::vector<std::string>{"p1", "p2"}), ochild.get_value());
+    CPPUNIT_ASSERT_EQUAL(Option::Priority::DEFAULT, ochild.get_priority());
+    CPPUNIT_ASSERT_EQUAL(std::string(), ochild.get_source());
+
+    // Parent set with source - child inherits value, priority, and source
+    oparent.set(Option::Priority::RUNTIME, std::vector<std::string>{"a", "b", "c"}, "parent.conf");
+    CPPUNIT_ASSERT_EQUAL((std::vector<std::string>{"a", "b", "c"}), ochild.get_value());
+    CPPUNIT_ASSERT_EQUAL(Option::Priority::RUNTIME, ochild.get_priority());
+    CPPUNIT_ASSERT_EQUAL(std::string("parent.conf"), ochild.get_source());
+
+    // Child set with own value and source
+    ochild.set(Option::Priority::COMMANDLINE, std::vector<std::string>{"x", "y"}, "child.conf");
+    CPPUNIT_ASSERT_EQUAL((std::vector<std::string>{"x", "y"}), ochild.get_value());
+    CPPUNIT_ASSERT_EQUAL(Option::Priority::COMMANDLINE, ochild.get_priority());
+    CPPUNIT_ASSERT_EQUAL(std::string("child.conf"), ochild.get_source());
+    // Parent unchanged
+    CPPUNIT_ASSERT_EQUAL((std::vector<std::string>{"a", "b", "c"}), oparent.get_value());
+    CPPUNIT_ASSERT_EQUAL(std::string("parent.conf"), oparent.get_source());
+
+    // Lower priority does not change child value or source
+    ochild.set(Option::Priority::MAINCONFIG, std::vector<std::string>{"z"}, "lower.conf");
+    CPPUNIT_ASSERT_EQUAL((std::vector<std::string>{"x", "y"}), ochild.get_value());
+    CPPUNIT_ASSERT_EQUAL(std::string("child.conf"), ochild.get_source());
+
+    // Child set via string parsing
+    ochild.set(Option::Priority::RUNTIME, "m, n", "parsed.conf");
+    CPPUNIT_ASSERT_EQUAL((std::vector<std::string>{"m", "n"}), ochild.get_value());
+    CPPUNIT_ASSERT_EQUAL(Option::Priority::RUNTIME, ochild.get_priority());
+    CPPUNIT_ASSERT_EQUAL(std::string("parsed.conf"), ochild.get_source());
+
+    // Locking child
+    ochild.lock("ochild_string_list locked");
+    CPPUNIT_ASSERT_THROW(ochild.set(Option::Priority::RUNTIME, std::vector<std::string>{"fail"}), UserAssertionError);
+    CPPUNIT_ASSERT_THROW(ochild.set(Option::Priority::RUNTIME, "fail"), UserAssertionError);
 }
