@@ -2,13 +2,14 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # Arif Budiman <arifpedia@gmail.com>, 2025.
+# Ega Natha <ega8642@gmail.com>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-07-26 03:48+0000\n"
-"PO-Revision-Date: 2025-10-27 00:54+0000\n"
-"Last-Translator: Arif Budiman <arifpedia@gmail.com>\n"
+"PO-Revision-Date: 2026-06-06 10:01+0000\n"
+"Last-Translator: Ega Natha <ega8642@gmail.com>\n"
 "Language-Team: Indonesian <https://translate.fedoraproject.org/projects/dnf5/"
 "libdnf5/id/>\n"
 "Language: id\n"
@@ -16,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.13.3\n"
+"X-Generator: Weblate 2026.6.1\n"
 
 #: advisory/advisory.cpp:81
 #, c++-format
@@ -52,11 +53,11 @@ msgstr "Instalasi berdasarkan grup"
 
 #: base/goal_elements.cpp:358
 msgid "Upgrade"
-msgstr "Peningkatan"
+msgstr "Tingkatkan"
 
 #: base/goal_elements.cpp:360
 msgid "Upgrade all"
-msgstr "Perbarui semua"
+msgstr "Tingkatkan semua"
 
 #: base/goal_elements.cpp:362
 msgid "Upgrade minimal"
@@ -140,7 +141,7 @@ msgstr "Pengabaian alasan"
 
 #: base/goal_elements.cpp:402
 msgid "Revert comps upgrade"
-msgstr "Kembalikan pembaruan comps"
+msgstr "Kembalikan peningkatan comps"
 
 #: base/goal_elements.cpp:404
 msgid "Install debug RPMs"
@@ -332,7 +333,7 @@ msgid ""
 "{0} upgrade cannot be reverted, however associated package actions will be. "
 "({1} id: '{2}') ."
 msgstr ""
-"{0} Pembaruan tidak dapat dibatalkan, namun tindakan paket yang terkait "
+"{0} Peningkatan tidak dapat dibatalkan, namun tindakan paket yang terkait "
 "dapat dibatalkan. ({1} id: '{2}') ."
 
 #: base/log_event.cpp:273
@@ -995,12 +996,12 @@ msgstr "Gagal memproses metadata modul: {}"
 #: module/module_metadata.cpp:140
 #, c++-format
 msgid "Failed to upgrade defaults: {}"
-msgstr "Gagal memperbarui pengaturan default: {}"
+msgstr "Gagal meningkatkan pengaturan default: {}"
 
 #: module/module_metadata.cpp:144
 #, c++-format
 msgid "Failed to upgrade streams: {}"
-msgstr "Gagal memperbarui aliran: {}"
+msgstr "Gagal meningkatkan aliran: {}"
 
 #: module/module_sack.cpp:93
 #, c++-format

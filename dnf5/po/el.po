@@ -4,13 +4,15 @@
 # Languages add-on <noreply-addon-languages@weblate.org>, 2026.
 # Jim Spentzos <jimspentzos2000@gmail.com>, 2026.
 # Efstathios Iosifidis <eiosifidis@yandex.com>, 2026.
+# Weblate Translation Memory <noreply-mt-weblate-translation-memory@weblate.org>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-07-26 03:48+0000\n"
-"PO-Revision-Date: 2026-02-26 00:48+0000\n"
-"Last-Translator: Efstathios Iosifidis <eiosifidis@yandex.com>\n"
+"PO-Revision-Date: 2026-06-23 16:18+0000\n"
+"Last-Translator: Weblate Translation Memory <noreply-mt-weblate-translation-"
+"memory@weblate.org>\n"
 "Language-Team: Greek <https://translate.fedoraproject.org/projects/dnf5/dnf5/"
 "el/>\n"
 "Language: el\n"
@@ -18,7 +20,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.16\n"
+"X-Generator: Weblate 2026.6.1\n"
 
 #: cmdline_aliases.cpp:84 context.cpp:301 main.cpp:1357
 msgid ", "
@@ -643,7 +645,7 @@ msgstr "Λειτουργία μόνο σε ομάδες, δεν αλλάζουν
 
 #: commands/history/arguments.hpp:37
 msgid "Transaction ID"
-msgstr "ID Συναλλαγής"
+msgstr "Αναγνωριστικό συναλλαγής"
 
 #: commands/history/arguments.hpp:44
 msgid "Reverse the order of transactions."
@@ -1099,6 +1101,7 @@ msgstr ""
 #: commands/system-upgrade/system-upgrade.cpp:101
 msgid "Need a --releasever greater than the current system version."
 msgstr ""
+"Απαιτείται --releasever μεταγενέστερη από την τρέχουσα έκδοση του συστήματος."
 
 #: commands/system-upgrade/system-upgrade.cpp:150
 msgid "Store a distro-sync transaction to be performed offline"
@@ -1206,7 +1209,7 @@ msgstr "Εισαγωγή κλειδιού OpenPGP 0x{}:\n"
 #: context.cpp:75 context.cpp:100
 #, c++-format
 msgid " UserID     : \"{}\"\n"
-msgstr ""
+msgstr " Αναγνωριστικό χρήστη     : «{}»\n"
 
 #: context.cpp:78
 #, c++-format
@@ -1214,6 +1217,8 @@ msgid ""
 " Fingerprint: {}\n"
 " From       : {}\n"
 msgstr ""
+" Αποτύπωμα: {}\n"
+" Από       : {}\n"
 
 #: context.cpp:87
 msgid "The key was successfully imported."
@@ -1227,12 +1232,12 @@ msgstr "Το ακόλουθο κλειδί OpenPGP (0x{}) πρόκειται ν�
 #: context.cpp:98
 #, c++-format
 msgid " Reason     : {}\n"
-msgstr ""
+msgstr " Λόγος     : {}\n"
 
 #: context.cpp:102
 #, c++-format
 msgid " Fingerprint: {}\n"
-msgstr " Αποτύπωμα  : {}\n"
+msgstr " Αποτύπωμα: {}\n"
 
 #: context.cpp:104
 msgid "As a result, installing packages signed with this key will fail."
@@ -1300,7 +1305,7 @@ msgstr "Η συναλλαγή απέτυχε: {}"
 #: context.cpp:380 context.cpp:528
 #, c++-format
 msgid "  - {}"
-msgstr ""
+msgstr "  - {}"
 
 #: context.cpp:447
 #, c++-format
@@ -1725,17 +1730,17 @@ msgstr ""
 #: main.cpp:782
 #, c++-format
 msgid "  name: {}"
-msgstr ""
+msgstr "  όνομα: {}"
 
 #: main.cpp:785
 #, c++-format
 msgid "  version: {}.{}.{}"
-msgstr ""
+msgstr "  έκδοση: {}.{}.{}"
 
 #: main.cpp:787
 #, c++-format
 msgid "  API version: {}.{}"
-msgstr ""
+msgstr "  Έκδοση API: {}.{}"
 
 #: main.cpp:825
 #, c++-format

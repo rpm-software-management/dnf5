@@ -1,0 +1,446 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# Bone NI <bounkirdni@gmail.com>, 2026.
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-07-26 03:48+0000\n"
+"PO-Revision-Date: 2026-05-07 16:09+0000\n"
+"Last-Translator: Bone NI <bounkirdni@gmail.com>\n"
+"Language-Team: Lao <https://translate.fedoraproject.org/projects/dnf5/"
+"libdnf5-cli/lo/>\n"
+"Language: lo\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Weblate 5.17.1\n"
+
+#: argument_parser.cpp:68
+#, c++-format
+msgid "Misconfigured alias \"{}\": cannot convert \"{}\" to a number"
+msgstr "ຊື່ຫຍໍ້ \"{}\" ຖືກກຳນົດຄ່າຜິດພາດ: ບໍ່ສາມາດແປງ \"{}\" ເປັນຕົວເລກໄດ້"
+
+#: argument_parser.cpp:76
+#, c++-format
+msgid "Misconfigured alias \"{}\": index \"{}\" out of range"
+msgstr "ຊື່ຫຍໍ້ \"{}\" ຖືກກຳນົດຄ່າຜິດພາດ: ດັດຊະນີ \"{}\" ຢູ່ນອກຂອບເຂດ"
+
+#: argument_parser.cpp:98
+#, c++-format
+msgid "\"{}\" not allowed together with named argument \"{}\""
+msgstr "\"{}\" ບໍ່ໄດ້ຮັບອະນຸຍາດໃຫ້ໃຊ້ຮ່ວມກັບພາຣາມິເຕີທີ່ມີຊື່ \"{}\""
+
+#: argument_parser.cpp:100
+#, c++-format
+msgid "\"{}\" not allowed in command \"{}\""
+msgstr "\"{}\" ບໍ່ໄດ້ຮັບອະນຸຍາດໃຫ້ໃຊ້ໃນຄຳສັ່ງ \"{}\""
+
+#: argument_parser.cpp:102
+#, c++-format
+msgid "\"{}\" not allowed together with positional argument \"{}\""
+msgstr "\"{}\" ບໍ່ໄດ້ຮັບອະນຸຍາດໃຫ້ໃຊ້ຮ່ວມກັບພາຣາມິເຕີຕາມຕຳແໜ່ງ \"{}\""
+
+#: argument_parser.cpp:147
+#, c++-format
+msgid "Argument id \"{}\" already registered in group \"{}\""
+msgstr "ໄອດີຂອງພາຣາມິເຕີ \"{}\" ໄດ້ຖືກລົງທະບຽນໃນກຸ່ມ \"{}\" ແລ້ວ"
+
+#: argument_parser.cpp:274
+#, c++-format
+msgid "Invalid character '.' in argument id \"{}\""
+msgstr "ຕົວອັກສອນ '.' ບໍ່ຖືກຕ້ອງໃນໄອດີ ຂອງພາຣາມິເຕີ \"{}\""
+
+#: argument_parser.cpp:382 argument_parser.cpp:387
+#, c++-format
+msgid "Too few values for positional argument \"{}\""
+msgstr "ຄ່າໜ້ອຍເກີນໄປສຳລັບພາຣາມິເຕີຕາມຕຳແໜ່ງ \"{}\""
+
+#: argument_parser.cpp:548
+#, c++-format
+msgid "Missing value for named argument \"--{}\""
+msgstr "ຄ່າຫາຍໄປສຳລັບພາຣາມິເຕີທີ່ມີຊື່ \"--{}\""
+
+#: argument_parser.cpp:556
+#, c++-format
+msgid "Unexpected value for named argument \"--{}\""
+msgstr "ພົບຄ່າທີ່ບໍ່ຄາດຄິດສຳລັບພາຣາມິເຕີທີ່ມີຊື່ \"--{}\""
+
+#: argument_parser.cpp:598
+#, c++-format
+msgid "Missing value for named argument \"-{}\""
+msgstr "ຄ່າຫາຍໄປສຳລັບພາຣາມິເຕີທີ່ມີຊື່ \"-{}\""
+
+#. print usage
+#: argument_parser.cpp:694
+msgid "Usage:"
+msgstr "ວິທີໃຊ້:"
+
+#: argument_parser.cpp:702
+msgid "Description:"
+msgstr "ຄຳອະທິບາຍ:"
+
+#: argument_parser.cpp:979
+#, c++-format
+msgid "Command id \"{}\" already registered for command \"{}\""
+msgstr "ໄອດີຂອງຄຳສັ່ງ \"{}\" ໄດ້ຖືກລົງທະບຽນສຳລັບຄຳສັ່ງ \"{}\" ແລ້ວ"
+
+#: argument_parser.cpp:990
+#, c++-format
+msgid "Named argument id \"{}\" already registered for command \"{}\""
+msgstr "ໄອດີຂອງພາຣາມິເຕີທີ່ມີຊື່ \"{}\" ໄດ້ຖືກລົງທະບຽນສຳລັບຄຳສັ່ງ \"{}\" ແລ້ວ"
+
+#: argument_parser.cpp:1000
+#, c++-format
+msgid "Positional argument id \"{}\" already registered for command \"{}\""
+msgstr "ໄອດີຂອງພາຣາມິເຕີຕາມຕຳແໜ່ງ \"{}\" ໄດ້ຖືກລົງທະບຽນສຳລັບຄຳສັ່ງ \"{}\" ແລ້ວ"
+
+#: argument_parser.cpp:1010
+#, c++-format
+msgid "Group id \"{}\" already registered for command \"{}\""
+msgstr "ໄອດີຂອງກຸ່ມ \"{}\" ໄດ້ຖືກລົງທະບຽນສຳລັບຄຳສັ່ງ \"{}\" ແລ້ວ"
+
+#: argument_parser.cpp:1037
+#, c++-format
+msgid "Command id \"{}\" does not contain subcommand with id \"{}\""
+msgstr "ໄອດີຂອງຄຳສັ່ງ \"{}\" ບໍ່ມີຄຳສັ່ງຍ່ອຍທີ່ມີໄອດີ \"{}\""
+
+#: argument_parser.cpp:1045
+#, c++-format
+msgid "Command id \"{}\" does not contain named argument with id \"{}\""
+msgstr "ໄອດີຂອງຄຳສັ່ງ \"{}\" ບໍ່ມີພາຣາມິເຕີທີ່ມີຊື່ທີ່ມີ ໄອດີ \"{}\""
+
+#: argument_parser.cpp:1053
+#, c++-format
+msgid "Command id \"{}\" does not contain positional argument with id \"{}\""
+msgstr "ໄອດີຂອງຄຳສັ່ງ \"{}\" ບໍ່ມີພາຣາມິເຕີຕາມຕຳແໜ່ງທີ່ມີ ໄອດີ \"{}\""
+
+#: argument_parser.cpp:1060
+#, c++-format
+msgid "Command id \"{}\" does not contain group with id \"{}\""
+msgstr "ໄອດີຂອງຄຳສັ່ງ \"{}\" ບໍ່ມີກຸ່ມທີ່ມີໄອດີ \"{}\""
+
+#: argument_parser.cpp:1177 argument_parser.cpp:1388
+#, c++-format
+msgid "Unknown argument \"{}\" for command \"{}\""
+msgstr "ບໍ່ຮູ້ຈັກພາຣາມິເຕີ \"{}\" ສຳລັບຄຳສັ່ງ \"{}\""
+
+#: argument_parser.cpp:1192 argument_parser.cpp:1403
+#, c++-format
+msgid "Missing positional argument \"{}\" for command \"{}\""
+msgstr "ພາຣາມິເຕີຕາມຕຳແໜ່ງ \"{}\" ຫາຍໄປສຳລັບຄຳສັ່ງ \"{}\""
+
+#: argument_parser.cpp:1274
+#, c++-format
+msgid "Missing value for command alias \"{}\""
+msgstr "ຄ່າຫາຍໄປສຳລັບຊື່ຫຍໍ້ຂອງຄຳສັ່ງ \"{}\""
+
+#: argument_parser.cpp:1610
+#, c++-format
+msgid "Named argument with path id \"{}\" not found"
+msgstr "ບໍ່ພົບພາຣາມິເຕີທີ່ມີຊື່ດ້ວຍ ເສັ້ນທາງໄອດີ\"{}\""
+
+#: argument_parser.cpp:1620
+#, c++-format
+msgid "Positional argument with path id \"{}\" not found"
+msgstr "ບໍ່ພົບພາຣາມິເຕີຕາມຕຳແໜ່ງດ້ວຍ ເສັ້ນທາງໄອດີ\"{}\""
+
+#: exception.cpp:30
+msgid "Operation aborted by the user."
+msgstr "ການດຳເນີນການຖືກຍົກເລີກໂດຍຜູ້ໃຊ້."
+
+#: exception.cpp:33
+msgid "Failed to resolve the transaction"
+msgstr "ບໍ່ສາມາດແກ້ໄຂບັນຫາການດຳເນີນການໄດ້"
+
+#: output/moduleinfo.cpp:36
+msgid "Hint: [d]efault, [e]nabled, [x]disabled, [i]nstalled, [a]ctive"
+msgstr ""
+"ຄຳແນະນຳ: [d]ຄ່າເລີ່ມຕົ້ນ, [e]ເປີດໃຊ້, [x]ປິດໃຊ້, [i]ຕິດຕັ້ງແລ້ວ, [a]ເຮັດວຽກຢູ່"
+
+#: output/modulelist.cpp:39
+msgid "Hint: [d]efault, [e]nabled, [x]disabled, [i]nstalled"
+msgstr "ຄຳແນະນຳ: [d]ຄ່າເລີ່ມຕົ້ນ, [e]ເປີດໃຊ້, [x]ປິດໃຊ້, [i]ຕິດຕັ້ງແລ້ວ"
+
+#. Note for translators: This is a right-aligned column separator in
+#. a package properties table as in "Name    : bash".
+#: output/packageinfo.cpp:57
+msgid " : "
+msgstr " : "
+
+#. Add package
+#: output/packageinfo.cpp:63
+msgid "Name"
+msgstr "ຊື່"
+
+#: output/packageinfo.cpp:68
+msgid "Epoch"
+msgstr "Epoch"
+
+#: output/packageinfo.cpp:69 output/transaction_table.cpp:289
+msgid "Version"
+msgstr "ເວີຊັນ"
+
+#: output/packageinfo.cpp:70
+msgid "Release"
+msgstr "ລຸ້ນປ່ອຍ"
+
+#: output/packageinfo.cpp:71
+msgid "Architecture"
+msgstr "ສະຖາປັດຕະຍະກຳ"
+
+#: output/packageinfo.cpp:75
+msgid "Obsoletes"
+msgstr "ສິ່ງທີ່ຖືກຍົກເລີກ"
+
+#: output/packageinfo.cpp:85
+msgid "Download size"
+msgstr "ຂະໜາດດາວໂຫຼດ"
+
+#: output/packageinfo.cpp:89
+msgid "Installed size"
+msgstr "ຂະໜາດຕິດຕັ້ງ"
+
+#: output/packageinfo.cpp:91
+msgid "Source"
+msgstr "ແຫຼ່ງທີ່ມາ"
+
+#: output/packageinfo.cpp:94
+msgid "From repository"
+msgstr "ຈາກຄັງເກັບ"
+
+#: output/packageinfo.cpp:96 output/transaction_table.cpp:295
+msgid "Repository"
+msgstr "ຄັງເກັບ"
+
+#: output/packageinfo.cpp:98
+msgid "Summary"
+msgstr "ສະຫຼຸບຫຍໍ້"
+
+#: output/packageinfo.cpp:99
+msgid "URL"
+msgstr "URL"
+
+#: output/packageinfo.cpp:100
+msgid "License"
+msgstr "ໃບອະນຸຍາດ"
+
+#: output/packageinfo.cpp:104
+msgid "Description"
+msgstr "ຄຳອະທິບາຍ"
+
+#: output/packageinfo.cpp:109
+msgid "Vendor"
+msgstr "ຜູ້ຈຳໜ່າຍ"
+
+#: output/search.cpp:45
+msgid " (exact)"
+msgstr " (ກົງກັນທຸກຢ່າງ)"
+
+#: output/search.cpp:90
+msgid "No matches found."
+msgstr "ບໍ່ພົບຂໍ້ມູນທີ່ກົງກັນ."
+
+#: output/search.cpp:101
+msgid "Matched fields: "
+msgstr "ຟີວທີ່ກົງກັນ: "
+
+#: output/transaction_table.cpp:127
+msgid "Transaction Summary:\n"
+msgstr "ສະຫຼຸບການດຳເນີນການ:\n"
+
+#. Keep the replaceble number aligned across all messages.
+#: output/transaction_table.cpp:132
+#, c++-format
+msgid " Installing:      {:4} package\n"
+msgid_plural " Installing:      {:4} packages\n"
+msgstr[0] " ກຳລັງຕິດຕັ້ງ:      {:4} ແພັກເກັດ\n"
+
+#. Keep the replaceble number aligned across all messages.
+#: output/transaction_table.cpp:141
+#, c++-format
+msgid " Reinstalling:    {:4} package\n"
+msgid_plural " Reinstalling:    {:4} packages\n"
+msgstr[0] " ກຳລັງຕິດຕັ້ງຄືນໃໝ່:    {:4} ແພັກເກັດ\n"
+
+#. Keep the replaceble number aligned across all messages.
+#: output/transaction_table.cpp:150
+#, c++-format
+msgid " Upgrading:       {:4} package\n"
+msgid_plural " Upgrading:       {:4} packages\n"
+msgstr[0] " ກຳລັງອັບເກຣດ:       {:4} ແພັກເກັດ\n"
+
+#. Keep the replaceble number aligned across all messages.
+#: output/transaction_table.cpp:159
+#, c++-format
+msgid " Replacing:       {:4} package\n"
+msgid_plural " Replacing:       {:4} packages\n"
+msgstr[0] " ກຳລັງປ່ຽນແທນ:       {:4} ແພັກເກັດ\n"
+
+#. Keep the replaceble number aligned across all messages.
+#: output/transaction_table.cpp:168
+#, c++-format
+msgid " Removing:        {:4} package\n"
+msgid_plural " Removing:        {:4} packages\n"
+msgstr[0] " ກຳລັງຖອນການຕິດຕັ້ງ:        {:4} ແພັກເກັດ\n"
+
+#. Keep the replaceble number aligned across all messages.
+#: output/transaction_table.cpp:177
+#, c++-format
+msgid " Downgrading:     {:4} package\n"
+msgid_plural " Downgrading:     {:4} packages\n"
+msgstr[0] " ກຳລັງດາວເກຣດ:     {:4} ແພັກເກັດ\n"
+
+#. Keep the replaceble number aligned across all messages.
+#: output/transaction_table.cpp:186
+#, c++-format
+msgid " Changing reason: {:4} package\n"
+msgid_plural " Changing reason: {:4} packages\n"
+msgstr[0] " ກຳລັງປ່ຽນເຫດຜົນ: {:4} ແພັກເກັດ\n"
+
+#. Keep the replaceble number aligned across all messages.
+#: output/transaction_table.cpp:195
+#, c++-format
+msgid " Skipping:        {:4} package\n"
+msgid_plural " Skipping:        {:4} packages\n"
+msgstr[0] " ກຳລັງຂ້າມ:        {:4} ແພັກເກັດ\n"
+
+#: output/transaction_table.cpp:277
+msgid "Package"
+msgstr "ແພັກເກັດ"
+
+#: output/transaction_table.cpp:283
+msgid "Arch"
+msgstr "ສະຖາປັດຕະຍະກຳ"
+
+#: output/transaction_table.cpp:301
+msgid "Size"
+msgstr "ຂະໜາດ"
+
+#: output/transaction_table.cpp:357 output/transaction_table.cpp:451
+#, c++-format
+msgid "{} -> {}"
+msgstr "{} -> {}"
+
+#: output/transaction_table.cpp:373
+#, c++-format
+msgid "replacing {}"
+msgstr "ປ່ຽນແທນ {}"
+
+#: output/transaction_table.cpp:409 output/transaction_table.cpp:426
+msgid " <name-unset>"
+msgstr " <ບໍ່ໄດ້ກຳນົດຊື່>"
+
+#: output/transaction_table.cpp:457
+msgid "replacing "
+msgstr "ປ່ຽນແທນ "
+
+#: output/transaction_table.cpp:470
+msgid "Skipping packages with conflicts:"
+msgstr "ກຳລັງຂ້າມແພັກເກັດທີ່ມີຂໍ້ຂັດແຍ່ງ:"
+
+#: output/transaction_table.cpp:472
+msgid "Skipping packages with broken dependencies:"
+msgstr "ກຳລັງຂ້າມແພັກເກັດທີ່ສິ່ງຈຳເປັນບໍ່ຄົບຖ້ວນ:"
+
+#: output/transaction_table.cpp:533
+msgid "Installing dependencies:"
+msgstr "ກຳລັງຕິດຕັ້ງສິ່ງທີ່ຈຳເປັນ:"
+
+#: output/transaction_table.cpp:535
+msgid "Installing weak dependencies:"
+msgstr "ກຳລັງຕິດຕັ້ງສິ່ງທີ່ຈຳເປັນແບບບໍ່ບັງຄັບ:"
+
+#: output/transaction_table.cpp:537
+msgid "Installing group/module packages:"
+msgstr "ກຳລັງຕິດຕັ້ງແພັກເກັດ ກຸ່ມ/ໂມດູນ:"
+
+#: output/transaction_table.cpp:539
+msgid "Installing:"
+msgstr "ກຳລັງຕິດຕັ້ງ:"
+
+#: output/transaction_table.cpp:543
+msgid "Upgrading:"
+msgstr "ກຳລັງອັບເກຣດ:"
+
+#: output/transaction_table.cpp:546
+msgid "Downgrading:"
+msgstr "ກຳລັງດາວເກຣດ:"
+
+#: output/transaction_table.cpp:549
+msgid "Reinstalling:"
+msgstr "ກຳລັງຕິດຕັ້ງຄືນໃໝ່:"
+
+#: output/transaction_table.cpp:553
+msgid "Removing dependent packages:"
+msgstr "ກຳລັງຖອນການຕິດຕັ້ງແພັກເກັດທີ່ກ່ຽວຂ້ອງ:"
+
+#: output/transaction_table.cpp:555
+msgid "Removing unused dependencies:"
+msgstr "ກຳລັງຖອນການຕິດຕັ້ງສິ່ງທີ່ຈຳເປັນທີ່ບໍ່ໄດ້ໃຊ້:"
+
+#: output/transaction_table.cpp:557
+msgid "Removing:"
+msgstr "ກຳລັງຖອນການຕິດຕັ້ງ:"
+
+#: output/transaction_table.cpp:561
+msgid "Changing reason:"
+msgstr "ກຳລັງປ່ຽນເຫດຜົນ:"
+
+#: output/transaction_table.cpp:593
+msgid "Installing groups dependencies:"
+msgstr "ກຳລັງຕິດຕັ້ງສິ່ງທີ່ຈຳເປັນຂອງກຸ່ມ:"
+
+#: output/transaction_table.cpp:595
+msgid "Installing groups:"
+msgstr "ກຳລັງຕິດຕັ້ງກຸ່ມ:"
+
+#: output/transaction_table.cpp:599
+msgid "Removing groups:"
+msgstr "ກຳລັງຖອນການຕິດຕັ້ງກຸ່ມ:"
+
+#: output/transaction_table.cpp:602
+msgid "Upgrading groups:"
+msgstr "ກຳລັງອັບເກຣດກຸ່ມ:"
+
+#: output/transaction_table.cpp:629
+msgid "Installing environmental groups:"
+msgstr "ກຳລັງຕິດຕັ້ງກຸ່ມສະພາບແວດລ້ອມ:"
+
+#: output/transaction_table.cpp:632
+msgid "Removing environmental groups:"
+msgstr "ກຳລັງຖອນການຕິດຕັ້ງກຸ່ມສະພາບແວດລ້ອມ:"
+
+#: output/transaction_table.cpp:635
+msgid "Upgrading environmental groups:"
+msgstr "ກຳລັງອັບເກຣດກຸ່ມສະພາບແວດລ້ອມ:"
+
+#: output/transaction_table.cpp:662
+msgid "Enabling module streams:"
+msgstr "ກຳລັງເປີດໃຊ້ Module Streams:"
+
+#: output/transaction_table.cpp:665
+msgid "Disabling modules:"
+msgstr "ກຳລັງປິດໃຊ້ໂມດູນ:"
+
+#: output/transaction_table.cpp:668
+msgid "Resetting modules:"
+msgstr "ກຳລັງຄືນຄ່າໂມດູນ:"
+
+#: output/transaction_table.cpp:671
+msgid "Switching module streams:"
+msgstr "ກຳລັງປ່ຽນ Module Streams:"
+
+#: output/transaction_table.cpp:745
+msgid "Nothing to do."
+msgstr "ບໍ່ມີຫຍັງຕ້ອງເຮັດ."
+
+#: progressbar/multi_progress_bar.cpp:36
+msgid "Total"
+msgstr "ທັງໝົດ"
+
+#: session.cpp:149
+msgid "Missing command"
+msgstr "ຄຳສັ່ງຫາຍໄປ"

@@ -1,0 +1,41 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# Bone NI <bounkirdni@gmail.com>, 2026.
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-07-26 03:48+0000\n"
+"PO-Revision-Date: 2026-05-07 16:09+0000\n"
+"Last-Translator: Bone NI <bounkirdni@gmail.com>\n"
+"Language-Team: Lao <https://translate.fedoraproject.org/projects/dnf5/dnf5-"
+"plugin-repoclosure/lo/>\n"
+"Language: lo\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Weblate 5.17.1\n"
+
+#: repoclosure.cpp:46
+msgid "Print list of unresolved dependencies for repositories"
+msgstr "ສະແດງລາຍຊື່ສິ່ງທີ່ຈຳເປັນຕ້ອງໃຊ້ທີ່ຍັງບໍ່ທັນໄດ້ຮັບການແກ້ໄຂສຳລັບຄັງເກັບ"
+
+#: repoclosure.cpp:155
+#, c++-format
+msgid "No match for argument \"{}\"."
+msgstr "ບໍ່ພົບສິ່ງທີ່ກົງກັນສຳລັບອາກິວເມນ \"{}\"."
+
+#: repoclosure.cpp:161
+msgid "Failed to resolve package specifications."
+msgstr "ບໍ່ສາມາດແກ້ໄຂຂໍ້ກຳນົດຂອງແພັກເກັດໄດ້."
+
+#: repoclosure.cpp:220
+#, c++-format
+msgid ""
+"Error: Repoclosure ended with unresolved dependencies ({}) across {} "
+"packages."
+msgstr ""
+"ຂໍ້ຜິດພາດ: Repoclosure ສິ້ນສຸດລົງດ້ວຍສິ່ງທີ່ຈຳເປັນຕ້ອງໃຊ້ທີ່ຍັງບໍ່ທັນໄດ້ຮັບການແກ້ໄຂ ({}) ໃນ {} ແພັກເກັ"
+"ດ."

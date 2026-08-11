@@ -2,7 +2,7 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # ButterflyOfFire <butterflyoffire@protonmail.com>, 2024.
-# ButterflyOfFire <butterflyoffire@users.noreply.translate.fedoraproject.org>, 2024, 2025.
+# ButterflyOfFire <butterflyoffire@users.noreply.translate.fedoraproject.org>, 2024, 2025, 2026.
 # Massii Aqvayli <massiin@proton.me>, 2026.
 # Weblate Translation Memory <noreply-mt-weblate-translation-memory@weblate.org>, 2026.
 msgid ""
@@ -10,8 +10,9 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-07-26 03:48+0000\n"
-"PO-Revision-Date: 2026-03-05 02:22+0000\n"
-"Last-Translator: Massii Aqvayli <massiin@proton.me>\n"
+"PO-Revision-Date: 2026-06-30 19:18+0000\n"
+"Last-Translator: ButterflyOfFire "
+"<butterflyoffire@users.noreply.translate.fedoraproject.org>\n"
 "Language-Team: Kabyle <https://translate.fedoraproject.org/projects/dnf5/"
 "libdnf5-cli/kab/>\n"
 "Language: kab\n"
@@ -19,7 +20,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.16.1\n"
+"X-Generator: Weblate 2026.6.1\n"
 
 #: argument_parser.cpp:68
 msgid "Misconfigured alias \"{}\": cannot convert \"{}\" to a number"
@@ -255,8 +256,8 @@ msgstr[1] " Aleqqem n:       {:4} n ikemmusen\n"
 #: output/transaction_table.cpp:159
 msgid " Replacing:       {:4} package\n"
 msgid_plural " Replacing:       {:4} packages\n"
-msgstr[0] " Asmelsi:       {:4} ukemmus\n"
-msgstr[1] " Asmelsi:       {:4} n ikemmusen\n"
+msgstr[0] " Asemselsi:       {:4} n ukemmus\n"
+msgstr[1] " Asemselsi:       {:4} n yikemmusen\n"
 
 #. Keep the replaceble number aligned across all messages.
 #: output/transaction_table.cpp:168
@@ -304,7 +305,7 @@ msgstr "{} -> {}"
 
 #: output/transaction_table.cpp:373
 msgid "replacing {}"
-msgstr "asmelsi n {}"
+msgstr "asemselsi n {}"
 
 #: output/transaction_table.cpp:409 output/transaction_table.cpp:426
 msgid " <name-unset>"
@@ -312,7 +313,7 @@ msgstr ""
 
 #: output/transaction_table.cpp:457
 msgid "replacing "
-msgstr "asmelsi n "
+msgstr "asemselsi n "
 
 #: output/transaction_table.cpp:470
 msgid "Skipping packages with conflicts:"

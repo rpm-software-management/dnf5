@@ -1,0 +1,1861 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# Bone NI <bounkirdni@gmail.com>, 2026.
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-07-26 03:48+0000\n"
+"PO-Revision-Date: 2026-05-07 16:10+0000\n"
+"Last-Translator: Bone NI <bounkirdni@gmail.com>\n"
+"Language-Team: Lao <https://translate.fedoraproject.org/projects/dnf5/"
+"libdnf5/lo/>\n"
+"Language: lo\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Weblate 5.17.1\n"
+
+#: advisory/advisory.cpp:81
+#, c++-format
+msgid ""
+"Bad libsolv id for advisory \"{}\", solvable name \"{}\" doesn't have "
+"advisory prefix \"{}\""
+msgstr ""
+"libsolv id ບໍ່ຖືກຕ້ອງສຳລັບການແຈ້ງການ \"{}\", ຊື່ solvable \"{}\" ບໍ່ມີ ຄຳນຳໜ້າການແຈ້ງການ "
+"\"{}\""
+
+#: base/goal.cpp:482
+#, c++-format
+msgid "Unsupported argument for REMOVE action: {}"
+msgstr "ບໍ່ຮອງຮັບຄ່າທີ່ລະບຸສຳລັບການຖອນອອກ (REMOVE): {}"
+
+#. TODO(lukash) throw a proper exception
+#: base/goal.cpp:1652
+#, c++-format
+msgid "Incorrect configuration value for multilib_policy: {}"
+msgstr "ຄ່າການກຳນົດຄ່າບໍ່ຖືກຕ້ອງສຳລັບ multilib_policy: {}"
+
+#: base/goal_elements.cpp:352
+msgid "Install"
+msgstr "ຕິດຕັ້ງ"
+
+#: base/goal_elements.cpp:354
+msgid "Install via provide"
+msgstr "ຕິດຕັ້ງຜ່ານ provide"
+
+#: base/goal_elements.cpp:356
+msgid "Install by group"
+msgstr "ຕິດຕັ້ງຕາມກຸ່ມ"
+
+#: base/goal_elements.cpp:358
+msgid "Upgrade"
+msgstr "ອັບເກຣດ"
+
+#: base/goal_elements.cpp:360
+msgid "Upgrade all"
+msgstr "ອັບເກຣດທັງໝົດ"
+
+#: base/goal_elements.cpp:362
+msgid "Upgrade minimal"
+msgstr "ອັບເກຣດແບບໜ້ອຍສຸດ"
+
+#: base/goal_elements.cpp:364
+msgid "Upgrade all minimal"
+msgstr "ອັບເກຣດທັງໝົດແບບໜ້ອຍສຸດ"
+
+#: base/goal_elements.cpp:366
+msgid "Downgrade"
+msgstr "ຫຼຸດລຸ້ນ"
+
+#: base/goal_elements.cpp:368
+msgid "Reinstall"
+msgstr "ຕິດຕັ້ງຄືນໃໝ່"
+
+#: base/goal_elements.cpp:370
+msgid "Install or reinstall"
+msgstr "ຕິດຕັ້ງ ຫຼື ຕິດຕັ້ງຄືນໃໝ່"
+
+#: base/goal_elements.cpp:372
+msgid "Remove"
+msgstr "ຖອນອອກ"
+
+#: base/goal_elements.cpp:374
+msgid "Distrosync"
+msgstr "ຊິ້ງລຸ້ນລະບົບ"
+
+#: base/goal_elements.cpp:376
+msgid "Distrosync all"
+msgstr "ຊິ້ງລຸ້ນລະບົບທັງໝົດ"
+
+#: base/goal_elements.cpp:378
+msgid "Reason Change"
+msgstr "ປ່ຽນແປງເຫດຜົນ"
+
+#: base/goal_elements.cpp:380
+msgid "Resolve"
+msgstr "ແກ້ໄຂ"
+
+#: base/goal_elements.cpp:382
+msgid "Enable"
+msgstr "ເປີດໃຊ້"
+
+#: base/goal_elements.cpp:384
+msgid "Disable"
+msgstr "ປິດໃຊ້"
+
+#: base/goal_elements.cpp:386
+msgid "Reset"
+msgstr "ຕັ້ງຄ່າໃໝ່"
+
+#: base/goal_elements.cpp:388
+msgid "Parse serialized transaction"
+msgstr "ວິເຄາະລາຍການປ່ຽນແປງແບບ serialized"
+
+#: base/goal_elements.cpp:390
+msgid "Install action"
+msgstr "ການດຳເນີນການຕິດຕັ້ງ"
+
+#: base/goal_elements.cpp:392
+msgid "Remove action"
+msgstr "ການດຳເນີນການຖອນອອກ"
+
+#: base/goal_elements.cpp:394
+msgid "Upgrade action"
+msgstr "ການດຳເນີນການອັບເກຣດ"
+
+#: base/goal_elements.cpp:396
+msgid "Reinstall action"
+msgstr "ການດຳເນີນການຕິດຕັ້ງຄືນໃໝ່"
+
+#: base/goal_elements.cpp:398
+msgid "Reason change action"
+msgstr "ການດຳເນີນການປ່ຽນເຫດຜົນ"
+
+#: base/goal_elements.cpp:400
+msgid "Reason override"
+msgstr "ຂຽນທັບເຫດຜົນ"
+
+#: base/goal_elements.cpp:402
+msgid "Revert comps upgrade"
+msgstr "ຍ້ອນຄືນການອັບເກຣດ comps"
+
+#: base/goal_elements.cpp:404
+msgid "Install debug RPMs"
+msgstr "ຕິດຕັ້ງ debug RPMs"
+
+#: base/goal_elements.cpp:406
+msgid "Transaction merge"
+msgstr "ຮວມລາຍການປ່ຽນແປງ"
+
+#: base/log_event.cpp:141
+#, c++-format
+msgid "No packages to remove for argument: {}"
+msgstr "ບໍ່ມີແພັກເກດທີ່ຈະຖອນອອກສຳລັບຄ່າທີ່ລະບຸ: {}"
+
+#: base/log_event.cpp:143
+#, c++-format
+msgid "No groups to remove for argument: {}"
+msgstr "ບໍ່ມີກຸ່ມທີ່ຈະຖອນອອກສຳລັບຄ່າທີ່ລະບຸ: {}"
+
+#: base/log_event.cpp:146
+#, c++-format
+msgid "No environmental groups to remove for argument: {}"
+msgstr "ບໍ່ມີກຸ່ມສະພາບແວດລ້ອມທີ່ຈະຖອນອອກສຳລັບຄ່າທີ່ລະບຸ: {}"
+
+#: base/log_event.cpp:148
+#, c++-format
+msgid "No modules to remove for argument: {}"
+msgstr "ບໍ່ມີໂມດູນທີ່ຈະຖອນອອກສຳລັບຄ່າທີ່ລະບຸ: {}"
+
+#: base/log_event.cpp:152
+#, c++-format
+msgid "No match for group from environment: {}"
+msgstr "ບໍ່ພົບກຸ່ມທີ່ກົງກັນຈາກສະພາບແວດລ້ອມ: {}"
+
+#: base/log_event.cpp:154
+#, c++-format
+msgid "No match for group package: {}"
+msgstr "ບໍ່ພົບແພັກເກດກຸ່ມທີ່ກົງກັນ: {}"
+
+#: base/log_event.cpp:158
+#, c++-format
+msgid "Cannot perform {0}, no match for: {1}."
+msgstr "ບໍ່ສາມາດດຳເນີນການ {0}, ບໍ່ມີສິ່ງທີ່ກົງກັບ: {1}."
+
+#: base/log_event.cpp:160
+#, c++-format
+msgid "No match for argument: {}"
+msgstr "ບໍ່ພົບສິ່ງທີ່ກົງກັບຄ່າທີ່ລະບຸ: {}"
+
+#: base/log_event.cpp:163
+#, c++-format
+msgid "No match for argument '{0}' in selected advisories"
+msgstr "ບໍ່ພົບສິ່ງທີ່ກົງກັບຄ່າທີ່ລະບຸ '{0}' ໃນການແຈ້ງການທີ່ເລືອກ"
+
+#: base/log_event.cpp:165
+msgid "No match in selected advisories"
+msgstr "ບໍ່ພົບສິ່ງທີ່ກົງກັນໃນການແຈ້ງການທີ່ເລືອກ"
+
+#: base/log_event.cpp:169
+#, c++-format
+msgid "No match for argument '{0}' in repositories '{1}'"
+msgstr "ບໍ່ພົບສິ່ງທີ່ກົງກັບຄ່າທີ່ລະບຸ '{0}' ໃນຄັງເກັບແພັກເກດ '{1}'"
+
+#: base/log_event.cpp:175
+#, c++-format
+msgid "Cannot perform {0} for {1} '{2}' because it is not installed."
+msgstr "ບໍ່ສາມາດດຳເນີນການ {0} ສຳລັບ {1} '{2}' ຍ້ອນວ່າບໍ່ໄດ້ຕິດຕັ້ງໄວ້."
+
+#: base/log_event.cpp:180
+#, c++-format
+msgid "Packages for argument '{}' available, but not installed."
+msgstr "ມີແພັກເກດສຳລັບຄ່າທີ່ລະບຸ '{}' ແຕ່ບໍ່ໄດ້ຕິດຕັ້ງ."
+
+#: base/log_event.cpp:184
+#, c++-format
+msgid ""
+"Packages for argument '{}' available, but installed for a different "
+"architecture."
+msgstr "ມີແພັກເກດສຳລັບຄ່າທີ່ລະບຸ '{}' ແຕ່ຖືກຕິດຕັ້ງໄວ້ສຳລັບສະຖາປັດຕະຍະກຳອື່ນ."
+
+#: base/log_event.cpp:188
+#, c++-format
+msgid "Cannot perform {0} because '{1}' matches only source packages."
+msgstr ""
+"ບໍ່ສາມາດດຳເນີນການ {0} ຍ້ອນວ່າ '{1}' ກົງກັບສະເພາະແພັກເກດຊອດໂຄ້ດ (source packages)."
+
+#: base/log_event.cpp:192
+#, c++-format
+msgid "Argument '{}' matches only source packages."
+msgstr "ຄ່າທີ່ລະບຸ '{}' ກົງກັບສະເພາະແພັກເກດຊອດໂຄ້ດ."
+
+#: base/log_event.cpp:196
+#, c++-format
+msgid "Cannot perform {0} because '{1}' matches only excluded packages."
+msgstr "ບໍ່ສາມາດດຳເນີນການ {0} ຍ້ອນວ່າ '{1}' ກົງກັບສະເພາະແພັກເກດທີ່ຖືກຍົກເວັ້ນ."
+
+#: base/log_event.cpp:200
+#, c++-format
+msgid "Argument '{}' matches only excluded packages."
+msgstr "ຄ່າທີ່ລະບຸ '{}' ກົງກັບສະເພາະແພັກເກດທີ່ຖືກຍົກເວັ້ນ."
+
+#: base/log_event.cpp:204
+#, c++-format
+msgid ""
+"Cannot perform {0} because '{1}' matches only packages excluded by "
+"versionlock."
+msgstr ""
+"ບໍ່ສາມາດດຳເນີນການ {0} ຍ້ອນວ່າ '{1}' ກົງກັບແພັກເກດທີ່ຖືກຍົກເວັ້ນໂດຍ versionlock."
+
+#: base/log_event.cpp:208
+#, c++-format
+msgid "Argument '{}' matches only packages excluded by versionlock."
+msgstr "ຄ່າທີ່ລະບຸ '{}' ກົງກັບສະເພາະແພັກເກດທີ່ຖືກຍົກເວັ້ນໂດຍ versionlock."
+
+#: base/log_event.cpp:213
+#, c++-format
+msgid "  * Maybe you meant: {}"
+msgstr "  * ບາງທີເຈົ້າອາດໝາຍເຖິງ: {}"
+
+#: base/log_event.cpp:216
+#, c++-format
+msgid "There are following alternatives for '{0}': {1}"
+msgstr "ມີທາງເລືອກຕໍ່ໄປນີ້ສຳລັບ '{0}': {1}"
+
+#: base/log_event.cpp:223
+#, c++-format
+msgid ""
+"The lowest available version of the \"{}\" package is already installed, "
+"cannot downgrade it."
+msgstr ""
+"ແພັກເກດ \"{}\" ລຸ້ນຕ່ຳສຸດທີ່ມີຢູ່ໄດ້ຖືກຕິດຕັ້ງໄວ້ແລ້ວ, ບໍ່ສາມາດຫຼຸດລຸ້ນໄດ້."
+
+#: base/log_event.cpp:229
+#, c++-format
+msgid ""
+"Installed packages for argument '{0}' are not available in repositories in "
+"the same version, available versions: {1}, cannot reinstall."
+msgstr ""
+"ແພັກເກດທີ່ຕິດຕັ້ງໄວ້ສຳລັບຄ່າທີ່ລະບຸ '{0}' ບໍ່ມີຢູ່ໃນຄັງເກັບແພັກເກດໃນລຸ້ນດຽວກັນ, ລຸ້ນທີ່ມີຢູ່ຄື: {1}, ບໍ່ສາມາດຕິ"
+"ດຕັ້ງຄືນໃໝ່ໄດ້."
+
+#: base/log_event.cpp:235
+#, c++-format
+msgid ""
+"Cannot perform {0} because '{1}' is installed in a different version: '{2}'."
+msgstr "ບໍ່ສາມາດດຳເນີນການ {0} ຍ້ອນວ່າ '{1}' ຖືກຕິດຕັ້ງໄວ້ໃນລຸ້ນອື່ນ: '{2}'."
+
+#: base/log_event.cpp:241
+#, c++-format
+msgid ""
+"Packages for argument '{}' installed and available, but in a different "
+"version."
+msgstr "ແພັກເກດສຳລັບຄ່າທີ່ລະບຸ '{}' ຕິດຕັ້ງໄວ້ແລ້ວ ແລະ ມີຢູ່ ແຕ່ເປັນລຸ້ນອື່ນ."
+
+#: base/log_event.cpp:243
+#, c++-format
+msgid "Packages for argument '{}' installed, but not available."
+msgstr "ແພັກເກດສຳລັບຄ່າທີ່ລະບຸ '{}' ຕິດຕັ້ງໄວ້ແລ້ວ ແຕ່ບໍ່ມີໃຫ້ໃຊ້ງານ."
+
+#: base/log_event.cpp:252
+#, c++-format
+msgid "Package \"{}\" is already installed with reason \"{}\"."
+msgstr "ແພັກເກດ \"{}\" ຖືກຕິດຕັ້ງໄວ້ແລ້ວດ້ວຍເຫດຜົນ \"{}\"."
+
+#: base/log_event.cpp:254
+#, c++-format
+msgid "Package \"{}\" is already installed."
+msgstr "ແພັກເກດ \"{}\" ຖືກຕິດຕັ້ງໄວ້ແລ້ວ."
+
+#: base/log_event.cpp:263
+#, c++-format
+msgid "Debug data written to \"{}\""
+msgstr "ຂໍ້ມູນ Debug ຖືກຂຽນລົງໃນ \"{}\""
+
+#: base/log_event.cpp:267
+#, c++-format
+msgid ""
+"{0} upgrade cannot be reverted, however associated package actions will be. "
+"({1} id: '{2}') ."
+msgstr ""
+"ການອັບເກຣດ {0} ບໍ່ສາມາດຍ້ອນຄືນໄດ້, ແຕ່ການດຳເນີນການແພັກເກດທີ່ກ່ຽວຂ້ອງຈະຖືກຍ້ອນຄືນ. ({1} id: '"
+"{2}') ."
+
+#: base/log_event.cpp:273
+#, c++-format
+msgid "{} action for argument \"{}\" is not supported."
+msgstr "ການດຳເນີນການ {} ສຳລັບຄ່າທີ່ລະບຸ \"{}\" ບໍ່ໄດ້ຮັບການຮອງຮັບ."
+
+#. Format a leading line of the error message.
+#: base/log_event.cpp:282
+#, c++-format
+msgid "Unable to resolve argument '{}':"
+msgstr "ບໍ່ສາມາດແກ້ໄຂຄ່າທີ່ລະບຸ '{}':"
+
+#: base/log_event.cpp:286
+#, c++-format
+msgid ""
+"\n"
+"  - Argument '{}' matches {} stream ('{}') of module '{}', but the stream is "
+"not enabled or default."
+msgid_plural ""
+"\n"
+"  - Argument '{}' matches {} streams ('{}') of module '{}', but none of the "
+"streams are enabled or default."
+msgstr[0] ""
+"\n"
+"  - ຄ່າທີ່ລະບຸ '{}' ກົງກັບ {} ສະຕຣີມ ('{}') ຂອງໂມດູນ '{}', ແຕ່ບໍ່ມີສະຕຣີມໃດທີ່ເປີດໃຊ້ງານ ຫຼື ເປັນ"
+"ຄ່າເລີ່ມຕົ້ນ."
+
+#: base/log_event.cpp:293
+msgid "', '"
+msgstr "', '"
+
+#: base/log_event.cpp:302
+msgid "Modular dependency problems:\n"
+msgstr "ບັນຫາຄວາມຂຶ້ນຕໍ່ກັນຂອງໂມດູນ (Modular dependency):\n"
+
+#: base/log_event.cpp:309
+msgid "Modular dependency problems with the latest modules:\n"
+msgstr "ບັນຫາຄວາມຂຶ້ນຕໍ່ກັນຂອງໂມດູນກັບໂມດູນລຸ້ນຫຼ້າສຸດ:\n"
+
+#: base/log_event.cpp:316
+msgid "Modular dependency problems with the defaults:\n"
+msgstr "ບັນຫາຄວາມຂຶ້ນຕໍ່ກັນຂອງໂມດູນກັບຄ່າເລີ່ມຕົ້ນ:\n"
+
+#: base/log_event.cpp:331
+#, c++-format
+msgid ""
+"The operation would result in switching of module '{0}' stream '{1}' to "
+"stream '{2}'\n"
+msgstr ""
+"ການດຳເນີນການນີ້ຈະເຮັດໃຫ້ມີການປ່ຽນໂມດູນ '{0}' ຈາກສະຕຣີມ '{1}' ໄປເປັນ '{2}'\n"
+
+#: base/log_event.cpp:336
+msgid ""
+"Error: It is not possible to switch enabled streams of a module unless "
+"explicitly enabled via configuration option module_stream_switch."
+msgstr ""
+"ຂໍ້ຜິດພາດ: ບໍ່ສາມາດສະຫຼັບສະຕຣີມທີ່ເປີດໃຊ້ງານຂອງໂມດູນໄດ້ ນອກຈາກຈະເປີດໃຊ້ງານຜ່ານຕົວເລືອກ "
+"module_stream_switch ໃນການກຳນົດຄ່າ."
+
+#: base/log_event.cpp:341
+#, c++-format
+msgid ""
+"Extra package '{0}' (with action '{1}') which is not present in the stored "
+"transaction was pulled into the transaction.\n"
+msgstr ""
+"ແພັກເກດເສີມ '{0}' (ດ້ວຍການດຳເນີນການ '{1}') ເຊິ່ງບໍ່ມີຢູ່ໃນລາຍການປ່ຽນແປງທີ່ບັນທຶກໄວ້ ໄດ້ຖືກດຶງເຂົ້າມ"
+"າໃນລາຍການປ່ຽນແປງນີ້.\n"
+
+#: base/log_event.cpp:347
+#, c++-format
+msgid "Cannot parse file: '{0}': {1}.\n"
+msgstr "ບໍ່ສາມາດວິເຄາະໄຟລ໌: '{0}': {1}.\n"
+
+#: base/log_event.cpp:354
+#, c++-format
+msgid ""
+"Could not find debuginfo package for the following packages resolved from "
+"the argument '{0}': {1}"
+msgstr "ບໍ່ພົບແພັກເກດ debuginfo ສຳລັບແພັກເກດຕໍ່ໄປນີ້ທີ່ແກ້ໄຂມາຈາກຄ່າ '{0}': {1}"
+
+#: base/log_event.cpp:357 base/log_event.cpp:368
+msgctxt "String for joining NEVRAs - e.g. `foo-4-4.noarch, bar-5-5.noarch`"
+msgid ", "
+msgstr ", "
+
+#: base/log_event.cpp:364
+#, c++-format
+msgid ""
+"Could not find debugsource package for the following packages resolved from "
+"the argument '{0}': {1}"
+msgstr ""
+"ບໍ່ພົບແພັກເກດ debugsource ສຳລັບແພັກເກດຕໍ່ໄປນີ້ທີ່ແກ້ໄຂມາຈາກຄ່າ '{0}': {1}"
+
+#: base/log_event.cpp:371
+#, c++-format
+msgid "Transaction merge error: '{0}'"
+msgstr "ຂໍ້ຜິດພາດໃນການຮວມລາຍການປ່ຽນແປງ: '{0}'"
+
+#: base/solver_problems.cpp:41
+#, c++-format
+msgid "{} does not belong to a distupgrade repository"
+msgstr "{} ບໍ່ໄດ້ຂຶ້ນກັບຄັງເກັບແພັກເກດສຳລັບ distupgrade"
+
+#: base/solver_problems.cpp:42
+#, c++-format
+msgid "{0} from {1} has inferior architecture"
+msgstr "{0} ຈາກ {1} ມີສະຖາປັດຕະຍະກຳທີ່ຕ່ຳກວ່າ"
+
+#: base/solver_problems.cpp:43
+msgid "problem with installed package"
+msgstr "ມີບັນຫາກັບແພັກເກດທີ່ຕິດຕັ້ງໄວ້"
+
+#: base/solver_problems.cpp:44 base/solver_problems.cpp:80
+msgid "conflicting requests"
+msgstr "ຄຳຮ້ອງຂໍຂັດແຍ້ງກັນ"
+
+#: base/solver_problems.cpp:45 base/solver_problems.cpp:81
+msgid "unsupported request"
+msgstr "ຄຳຮ້ອງຂໍບໍ່ໄດ້ຮັບການຮອງຮັບ"
+
+#: base/solver_problems.cpp:46 base/solver_problems.cpp:82
+#, c++-format
+msgid "nothing provides requested {}"
+msgstr "ບໍ່ມີສິ່ງໃດສະໜອງ {} ທີ່ຮ້ອງຂໍ"
+
+#: base/solver_problems.cpp:47
+#, c++-format
+msgid "package {} does not exist"
+msgstr "ແພັກເກດ {} ບໍ່ມີຢູ່"
+
+#: base/solver_problems.cpp:48 base/solver_problems.cpp:84
+#, c++-format
+msgid "{} is provided by the system"
+msgstr "{} ຖືກສະໜອງໂດຍລະບົບ"
+
+#: base/solver_problems.cpp:49 base/solver_problems.cpp:85
+msgid "some dependency problem"
+msgstr "ບັນຫາຄວາມຂຶ້ນຕໍ່ກັນບາງຢ່າງ"
+
+#: base/solver_problems.cpp:50
+#, c++-format
+msgid "cannot install the best update candidate for package {}"
+msgstr "ບໍ່ສາມາດຕິດຕັ້ງແພັກເກດທີ່ເໝາະສົມທີ່ສຸດສຳລັບການອັບເດດ {}"
+
+#: base/solver_problems.cpp:51 base/solver_problems.cpp:87
+msgid "cannot install the best candidate for the job"
+msgstr "ບໍ່ສາມາດຕິດຕັ້ງແພັກເກດທີ່ເໝາະສົມທີ່ສຸດສຳລັບວຽກນີ້"
+
+#: base/solver_problems.cpp:52
+#, c++-format
+msgid "package {0} from {1} is filtered out by modular filtering"
+msgstr "ແພັກເກດ {0} ຈາກ {1} ຖືກຄັດອອກໂດຍການຕອງແບບໂມດູນ"
+
+#: base/solver_problems.cpp:53
+#, c++-format
+msgid "package {0} from {1} does not have a compatible architecture"
+msgstr "ແພັກເກດ {0} ຈາກ {1} ມີສະຖາປັດຕະຍະກຳທີ່ບໍ່ເຂົ້າກັນ"
+
+#: base/solver_problems.cpp:54
+#, c++-format
+msgid "package {0} from {1} is not installable"
+msgstr "ແພັກເກດ {0} ຈາກ {1} ບໍ່ສາມາດຕິດຕັ້ງໄດ້"
+
+#: base/solver_problems.cpp:55
+#, c++-format
+msgid "package {0} from {1} is filtered out by exclude filtering"
+msgstr "ແພັກເກດ {0} ຈາກ {1} ຖືກຄັດອອກໂດຍການຕອງແບບຍົກເວັ້ນ"
+
+#: base/solver_problems.cpp:56
+#, c++-format
+msgid "nothing provides {0} needed by {1} from {2}"
+msgstr "ບໍ່ມີສິ່ງໃດສະໜອງ {0} ທີ່ຕ້ອງການໂດຍ {1} ຈາກ {2}"
+
+#: base/solver_problems.cpp:57
+#, c++-format
+msgid "cannot install both {0} from {1} and {2} from {3}"
+msgstr "ບໍ່ສາມາດຕິດຕັ້ງທັງ {0} ຈາກ {1} ແລະ {2} ຈາກ {3} ພ້ອມກັນໄດ້"
+
+#: base/solver_problems.cpp:58
+#, c++-format
+msgid "package {0} from {1} conflicts with {2} provided by {3} from {4}"
+msgstr "ແພັກເກດ {0} ຈາກ {1} ຂັດແຍ້ງກັບ {2} ທີ່ສະໜອງໂດຍ {3} ຈາກ {4}"
+
+#: base/solver_problems.cpp:60
+#, c++-format
+msgid "installed package {0} conflicts with {1} provided by {2} from {3}"
+msgstr "ແພັກເກດ {0} ທີ່ຕິດຕັ້ງໄວ້ຂັດແຍ້ງກັບ {1} ທີ່ສະໜອງໂດຍ {2} ຈາກ {3}"
+
+#: base/solver_problems.cpp:61
+#, c++-format
+msgid "package {0} from {1} obsoletes {2} provided by {3} from {4}"
+msgstr ""
+"ແພັກເກດ {0} ຈາກ {1} ເຂົ້າມາແທນທີ່ (obsoletes) {2} ທີ່ສະໜອງໂດຍ {3} ຈາກ {4}"
+
+#: base/solver_problems.cpp:62
+#, c++-format
+msgid "installed package {0} obsoletes {1} provided by {2} from {3}"
+msgstr "ແພັກເກດ {0} ທີ່ຕິດຕັ້ງໄວ້ເຂົ້າມາແທນທີ່ {1} ທີ່ສະໜອງໂດຍ {2} ຈາກ {3}"
+
+#: base/solver_problems.cpp:64
+#, c++-format
+msgid "package {0} from {1} implicitly obsoletes {2} provided by {3} from {4}"
+msgstr "ແພັກເກດ {0} ຈາກ {1} ແທນທີ່ {2} ໂດຍທາງອ້ອມ ເຊິ່ງສະໜອງໂດຍ {3} ຈາກ {4}"
+
+#: base/solver_problems.cpp:66
+#, c++-format
+msgid ""
+"package {1} from {2} requires {0}, but none of the providers can be installed"
+msgstr "ແພັກເກດ {1} ຈາກ {2} ຕ້ອງການ {0}, ແຕ່ບໍ່ສາມາດຕິດຕັ້ງຕົວສະໜອງໃດໆໄດ້"
+
+#: base/solver_problems.cpp:68
+#, c++-format
+msgid ""
+"installed package {1} requires {0}, but none of the providers can be "
+"installed"
+msgstr "ແພັກເກດ {1} ທີ່ຕິດຕັ້ງໄວ້ຕ້ອງການ {0}, ແຕ່ບໍ່ສາມາດຕິດຕັ້ງຕົວສະໜອງໃດໆໄດ້"
+
+#: base/solver_problems.cpp:69
+#, c++-format
+msgid "package {0} from {1} conflicts with {2} provided by itself"
+msgstr "ແພັກເກດ {0} ຈາກ {1} ຂັດແຍ້ງກັບ {2} ທີ່ສະໜອງໂດຍຕົວມັນເອງ"
+
+#: base/solver_problems.cpp:70
+#, c++-format
+msgid "both package {0} from {1} and {3} from {4} obsolete {2}"
+msgstr "ທັງແພັກເກດ {0} ຈາກ {1} ແລະ {3} ຈາກ {4} ຕ່າງກໍແທນທີ່ {2}"
+
+#: base/solver_problems.cpp:72
+#, c++-format
+msgid ""
+"The operation would result in removing the following protected packages: {}"
+msgstr "ການດຳເນີນການນີ້ຈະສົ່ງຜົນໃຫ້ມີການຖອນແພັກເກດທີ່ຖືກປ້ອງກັນຕໍ່ໄປນີ້: {}"
+
+#: base/solver_problems.cpp:75
+#, c++-format
+msgid "The operation would result in removing of running kernel: {}"
+msgstr ""
+"ການດຳເນີນການນີ້ຈະສົ່ງຜົນໃຫ້ມີການຖອນເຄີນໍ (kernel) ທີ່ກຳລັງເຮັດວຽກຢູ່: {}"
+
+#: base/solver_problems.cpp:77
+#, c++-format
+msgid "module {} does not belong to a distupgrade repository"
+msgstr "ໂມດູນ {} ບໍ່ໄດ້ຂຶ້ນກັບຄັງເກັບແພັກເກດສຳລັບ distupgrade"
+
+#: base/solver_problems.cpp:78
+#, c++-format
+msgid "module {} has inferior architecture"
+msgstr "ໂມດູນ {} ມີສະຖາປັດຕະຍະກຳທີ່ຕ່ຳກວ່າ"
+
+#: base/solver_problems.cpp:79
+#, c++-format
+msgid "problem with installed module {}"
+msgstr "ມີບັນຫາກັບໂມດູນ {} ທີ່ຕິດຕັ້ງໄວ້"
+
+#: base/solver_problems.cpp:83
+#, c++-format
+msgid "module {} does not exist"
+msgstr "ໂມດູນ {} ບໍ່ມີຢູ່"
+
+#: base/solver_problems.cpp:86
+#, c++-format
+msgid "cannot install the best update candidate for module {}"
+msgstr "ບໍ່ສາມາດຕິດຕັ້ງໂມດູນທີ່ເໝາະສົມທີ່ສຸດສຳລັບການອັບເດດ {}"
+
+#: base/solver_problems.cpp:88 base/solver_problems.cpp:91
+#, c++-format
+msgid "module {} is disabled"
+msgstr "ໂມດູນ {} ຖືກປິດໃຊ້ງານ"
+
+#: base/solver_problems.cpp:89
+#, c++-format
+msgid "module {} does not have a compatible architecture"
+msgstr "ໂມດູນ {} ມີສະຖາປັດຕະຍະກຳທີ່ບໍ່ເຂົ້າກັນ"
+
+#: base/solver_problems.cpp:90
+#, c++-format
+msgid "module {} is not installable"
+msgstr "ໂມດູນ {} ບໍ່ສາມາດຕິດຕັ້ງໄດ້"
+
+#: base/solver_problems.cpp:92
+#, c++-format
+msgid "nothing provides {0} needed by module {1}"
+msgstr "ບໍ່ມີສິ່ງໃດສະໜອງ {0} ທີ່ຕ້ອງການໂດຍໂມດູນ {1}"
+
+#: base/solver_problems.cpp:93
+#, c++-format
+msgid "cannot install both modules {0} and {1}"
+msgstr "ບໍ່ສາມາດຕິດຕັ້ງທັງໂມດູນ {0} ແລະ {1} ພ້ອມກັນໄດ້"
+
+#: base/solver_problems.cpp:94
+#, c++-format
+msgid "module {0} conflicts with {1} provided by {2}"
+msgstr "ໂມດູນ {0} ຂັດແຍ້ງກັບ {1} ທີ່ສະໜອງໂດຍ {2}"
+
+#: base/solver_problems.cpp:95
+#, c++-format
+msgid "module {0} obsoletes {1} provided by {2}"
+msgstr "ໂມດູນ {0} ແທນທີ່ {1} ທີ່ສະໜອງໂດຍ {2}"
+
+#: base/solver_problems.cpp:96
+#, c++-format
+msgid "installed module {0} obsoletes {1} provided by {2}"
+msgstr "ໂມດູນ {0} ທີ່ຕິດຕັ້ງໄວ້ແທນທີ່ {1} ທີ່ສະໜອງໂດຍ {2}"
+
+#: base/solver_problems.cpp:97
+#, c++-format
+msgid "module {0} implicitly obsoletes {1} provided by {2}"
+msgstr "ໂມດູນ {0} ແທນທີ່ {1} ໂດຍທາງອ້ອມ ເຊິ່ງສະໜອງໂດຍ {2}"
+
+#: base/solver_problems.cpp:98
+#, c++-format
+msgid "module {1} requires {0}, but none of the providers can be installed"
+msgstr "ໂມດູນ {1} ຕ້ອງການ {0}, ແຕ່ບໍ່ສາມາດຕິດຕັ້ງຕົວສະໜອງໃດໆໄດ້"
+
+#: base/solver_problems.cpp:99
+#, c++-format
+msgid "module {1} conflicts with {0} provided by itself"
+msgstr "ໂມດູນ {1} ຂັດແຍ້ງກັບ {0} ທີ່ສະໜອງໂດຍຕົວມັນເອງ"
+
+#: base/solver_problems.cpp:100
+#, c++-format
+msgid "both module {0} and {2} obsolete {1}"
+msgstr "ທັງໂມດູນ {0} ແລະ {2} ຕ່າງກໍແທນທີ່ {1}"
+
+#: base/solver_problems.cpp:290
+msgid "Problem: "
+msgstr "ບັນຫາ: "
+
+#: base/solver_problems.cpp:294
+#, c++-format
+msgid "Problem {}: "
+msgstr "ບັນຫາ {}: "
+
+#: base/transaction.cpp:80
+msgid "This transaction has been already run before."
+msgstr "ລາຍການປ່ຽນແປງນີ້ໄດ້ຖືກດຳເນີນການໄປແລ້ວກ່ອນໜ້ານີ້."
+
+#: base/transaction.cpp:81
+msgid "Cannot run transaction with resolving problems."
+msgstr "ບໍ່ສາມາດດຳເນີນການລາຍການປ່ຽນແປງໃນຂະນະທີ່ມີບັນຫາການແກ້ໄຂຄວາມຂຶ້ນຕໍ່ກັນ."
+
+#: base/transaction.cpp:82
+msgid "Rpm transaction check failed."
+msgstr "ການກວດສອບລາຍການປ່ຽນແປງ RPM ຫຼົ້ມເຫຼວ."
+
+#: base/transaction.cpp:84
+msgid ""
+"Failed to obtain rpm transaction lock. Another transaction is in progress."
+msgstr "ບໍ່ສາມາດລັອກລາຍການປ່ຽນແປງ RPM ໄດ້. ມີລາຍການອື່ນກຳລັງດຳເນີນການຢູ່."
+
+#: base/transaction.cpp:85
+msgid "Rpm transaction failed."
+msgstr "ລາຍການປ່ຽນແປງ RPM ຫຼົ້ມເຫຼວ."
+
+#: base/transaction.cpp:86
+msgid "Signature verification failed."
+msgstr "ການກວດສອບລາຍເຊັນ (Signature) ຫຼົ້ມເຫຼວ."
+
+#: base/transaction.cpp:90
+msgid "The repository does not have any OpenPGP keys configured."
+msgstr "ຄັງເກັບແພັກເກດບໍ່ໄດ້ກຳນົດຄ່າຄີ OpenPGP ໃດໆໄວ້."
+
+#: base/transaction.cpp:91
+msgid "Public key is not installed."
+msgstr "ບໍ່ໄດ້ຕິດຕັ້ງຄີສາທາລະນະ (Public key)."
+
+#: base/transaction.cpp:92
+msgid "Canceled by the user."
+msgstr "ຖືກຍົກເລີກໂດຍຜູ້ໃຊ້."
+
+#: base/transaction.cpp:93
+msgid "Public key import failed."
+msgstr "ການນຳເຂົ້າຄີສາທາລະນະຫຼົ້ມເຫຼວ."
+
+#: base/transaction.cpp:980
+#, c++-format
+msgid "Invalid tsflag: {}"
+msgstr "tsflag ບໍ່ຖືກຕ້ອງ: {}"
+
+#: base/transaction.cpp:1314
+#, c++-format
+msgid "Public key \"{}\" is already present, not importing."
+msgstr "ຄີສາທາລະນະ \"{}\" ມີຢູ່ແລ້ວ, ຈະບໍ່ນຳເຂົ້າໃໝ່."
+
+#: base/transaction.cpp:1335
+#, c++-format
+msgid "An error occurred importing key \"{}\": {}"
+msgstr "ເກີດຂໍ້ຜິດພາດໃນການນຳເຂົ້າຄີ \"{}\": {}"
+
+#: base/transaction.cpp:1369
+#, c++-format
+msgid "OpenPGP check for package \"{}\" ({}) from repo \"{}\" has failed: "
+msgstr ""
+"ການກວດສອບ OpenPGP ສຳລັບແພັກເກດ \"{}\" ({}) ຈາກຄັງເກັບ \"{}\" ຫຼົ້ມເຫຼວ: "
+
+#: base/transaction.cpp:1397
+msgid "Import of the key didn't help, wrong key?"
+msgstr "ການນຳເຂົ້າຄີບໍ່ໄດ້ຊ່ວຍຫຍັງ, ຄີບໍ່ຖືກຕ້ອງບໍ?"
+
+#: base/transaction.cpp:1416
+msgctxt "It is a joining character for repositories IDs"
+msgid ", "
+msgstr ", "
+
+#: base/transaction.cpp:1419
+#, c++-format
+msgid "Warning: skipped OpenPGP checks for {0} package from repository: {1}"
+msgid_plural ""
+"Warning: skipped OpenPGP checks for {0} packages from repository: {1}"
+msgstr[0] "ຄຳເຕືອນ: ຂ້າມການກວດສອບ OpenPGP ສຳລັບ {0} ແພັກເກດ ຈາກຄັງເກັບ: {1}"
+
+#: base/transaction.cpp:1422
+#, c++-format
+msgid "Warning: skipped OpenPGP checks for {0} package from repositories: {1}"
+msgid_plural ""
+"Warning: skipped OpenPGP checks for {0} packages from repositories: {1}"
+msgstr[0] "ຄຳເຕືອນ: ຂ້າມການກວດສອບ OpenPGP ສຳລັບ {0} ແພັກເກດ ຈາກຄັງເກັບ: {1}"
+
+#: common/exception.cpp:78
+msgid "System error"
+msgstr "ຂໍ້ຜິດພາດຂອງລະບົບ"
+
+#: common/exception.cpp:199
+msgid "General RuntimeError exception"
+msgstr "ຂໍ້ຍົກເວັ້ນ RuntimeError ທົ່ວໄປ"
+
+#: common/sack/query.cpp:27
+msgid "Query must contain exactly one object."
+msgstr "ການສອບຖາມ (Query) ຕ້ອງມີແຕ່ໜຶ່ງວັດຖຸເທົ່ານັ້ນ."
+
+#: common/xdg.cpp:43
+msgid "get_user_home_dir(): Cannot determine the user's home directory"
+msgstr ""
+"get_user_home_dir(): ບໍ່ສາມາດລະບຸໂຟນເດີຫຼັກ (home directory) ຂອງຜູ້ໃຊ້ໄດ້"
+
+#: common/xdg.cpp:98
+msgid "get_user_runtime_dir(): Cannot determine the user's runtime directory"
+msgstr "get_user_runtime_dir(): ບໍ່ສາມາດລະບຸ runtime directory ຂອງຜູ້ໃຊ້ໄດ້"
+
+#: comps/environment/environment.cpp:325
+msgid "failed to save xml document for comps"
+msgstr "ບໍ່ສາມາດບັນທຶກເອກະສານ xml ສຳລັບ comps"
+
+#: comps/group/group.cpp:373
+#, c++-format
+msgid "Failed to save xml document for group \"{}\" to file \"{}\": {}"
+msgstr "ບໍ່ສາມາດບັນທຶກເອກະສານ xml ສຳລັບກຸ່ມ \"{}\" ລົງໃນໄຟລ໌ \"{}\": {}"
+
+#: comps/group/package.cpp:118 comps/group/package.cpp:121
+#, c++-format
+msgid "Invalid package type: {}"
+msgstr "ປະເພດແພັກເກດບໍ່ຖືກຕ້ອງ: {}"
+
+#: conf/config_main.cpp:57
+msgid "Input is empty. Must contain a value."
+msgstr "ຄ່າທີ່ປ້ອນຫວ່າງເປົ່າ. ຕ້ອງມີຄ່າໃດໜຶ່ງ."
+
+#: conf/config_main.cpp:63
+#, c++-format
+msgid "Input value '{}' must not be negative"
+msgstr "ຄ່າທີ່ປ້ອນ '{}' ຕ້ອງບໍ່ເປັນຄ່າລົບ"
+
+#: conf/config_main.cpp:68
+#, c++-format
+msgid "Could not convert '{}' to bytes"
+msgstr "ບໍ່ສາມາດແປງ '{}' ເປັນໄບຕ໌ (bytes)"
+
+#: conf/config_main.cpp:84
+#, c++-format
+msgid "Unknown unit '{}'"
+msgstr "ບໍ່ຮູ້ຈັກຫົວໜ່ວຍ '{}'"
+
+#: conf/config_main.cpp:281
+#, c++-format
+msgid "The throttle value {} is outside the allowed range {} ... {}"
+msgstr "ຄ່າ throttle {} ຢູ່ນອກຊ່ວງທີ່ອະນຸຍາດ {} ... {}"
+
+#: conf/config_parser.cpp:54
+#, c++-format
+msgid "Section \"{}\" not found"
+msgstr "ບໍ່ພົບພາກສ່ວນ (Section) \"{}\""
+
+#: conf/config_parser.cpp:59
+#, c++-format
+msgid "Section \"{}\" does not contain option \"{}\""
+msgstr "ພາກສ່ວນ \"{}\" ບໍ່ມີຕົວເລືອກ \"{}\""
+
+#: conf/config_parser.cpp:96
+#, c++-format
+msgid "Configuration file \"{}\" not found"
+msgstr "ບໍ່ພົບໄຟລ໌ກຳນົດຄ່າ \"{}\""
+
+#: conf/config_parser.cpp:99
+#, c++-format
+msgid "Unable to access configuration file \"{}\""
+msgstr "ບໍ່ສາມາດເຂົ້າເຖິງໄຟລ໌ກຳນົດຄ່າ \"{}\""
+
+#: conf/config_parser.cpp:102
+#, c++-format
+msgid "Error in configuration file \"{}\""
+msgstr "ເກີດຂໍ້ຜິດພາດໃນໄຟລ໌ກຳນົດຄ່າ \"{}\""
+
+#: conf/option_binds.cpp:29
+#, c++-format
+msgid "Option \"{}\" not found"
+msgstr "ບໍ່ພົບຕົວເລືອກ \"{}\""
+
+#: conf/option_binds.cpp:32
+#, c++-format
+msgid "Option \"{}\" already exists"
+msgstr "ຕົວເລືອກ \"{}\" ມີຢູ່ແລ້ວ"
+
+#: conf/option_bool.cpp:82
+#, c++-format
+msgid "Invalid boolean value \"{}\""
+msgstr "ຄ່າບູລີນ (boolean) ບໍ່ຖືກຕ້ອງ \"{}\""
+
+#: conf/option_enum.cpp:68
+#, c++-format
+msgid "Enum option value \"{}\" not allowed"
+msgstr "ຄ່າຕົວເລືອກ Enum \"{}\" ບໍ່ໄດ້ຮັບອະນຸຍາດ"
+
+#: conf/option_number.cpp:99
+#, c++-format
+msgid "Input value {} is outside the allowed range {} ... {}"
+msgstr "ຄ່າທີ່ປ້ອນ {} ຢູ່ນອກຊ່ວງທີ່ອະນຸຍາດ {} ... {}"
+
+#: conf/option_number.cpp:112
+#, c++-format
+msgid "Invalid number option value \"{}\""
+msgstr "ຄ່າຕົວເລືອກຕົວເລກບໍ່ຖືກຕ້ອງ \"{}\""
+
+#: conf/option_path.cpp:93
+#, c++-format
+msgid "Only absolute paths allowed, relative path \"{}\" detected"
+msgstr ""
+"ອະນຸຍາດສະເພາະຕຳແໜ່ງໄຟລ໌ແບບເຕັມ (absolute path), ກວດພົບຕຳແໜ່ງແບບທຽບຖານ \"{}\""
+
+#: conf/option_path.cpp:98
+#, c++-format
+msgid "Path \"{}\" does not exist"
+msgstr "ຕຳແໜ່ງ \"{}\" ບໍ່ມີຢູ່"
+
+#: conf/option_seconds.cpp:38
+msgid "Empty time option value"
+msgstr "ຄ່າຕົວເລືອກເວລາຫວ່າງເປົ່າ"
+
+#: conf/option_seconds.cpp:50
+#, c++-format
+msgid "Invalid time option value \"{}\", number or \"never\" expected"
+msgstr "ຄ່າຕົວເລືອກເວລາບໍ່ຖືກຕ້ອງ \"{}\", ຕ້ອງການຕົວເລກ ຫຼື \"never\""
+
+#: conf/option_seconds.cpp:54
+#, c++-format
+msgid ""
+"Invalid time option value \"{}\", negative values except \"-1\" not allowed"
+msgstr "ຄ່າຕົວເລືອກເວລາບໍ່ຖືກຕ້ອງ \"{}\", ບໍ່ອະນຸຍາດຄ່າລົບ ຍົກເວັ້ນ \"-1\""
+
+#: conf/option_seconds.cpp:59
+#, c++-format
+msgid "Unknown time format \"{}\""
+msgstr "ບໍ່ຮູ້ຈັກຮູບແບບເວລາ \"{}\""
+
+#: conf/option_seconds.cpp:78
+#, c++-format
+msgid "Unknown time unit '{}'"
+msgstr "ບໍ່ຮູ້ຈັກຫົວໜ່ວຍເວລາ '{}'"
+
+#: conf/option_string.cpp:89
+#, c++-format
+msgid ""
+"Input value \"{}\" not allowed, allowed values for this option are defined "
+"by regular expression \"{}\""
+msgstr ""
+"ຄ່າທີ່ປ້ອນ \"{}\" ບໍ່ໄດ້ຮັບອະນຸຍາດ, ຄ່າທີ່ອະນຸຍາດຖືກກຳນົດໂດຍ regular expression \"{}\""
+
+#. TODO(jrohel): We don't know the option name at this time. Add a text name to the options
+#. or extend exception (add name) in upper layer.
+#: conf/option_string.cpp:114
+msgid "Option value is not set"
+msgstr "ຍັງບໍ່ໄດ້ກຳນົດຄ່າຕົວເລືອກ"
+
+#: conf/option_string_list.cpp:175
+#, c++-format
+msgid ""
+"Input item value \"{}\" not allowed, allowed values for this option are "
+"defined by regular expression \"{}\""
+msgstr ""
+"ຄ່າລາຍການທີ່ປ້ອນ \"{}\" ບໍ່ໄດ້ຮັບອະນຸຍາດ, ຄ່າທີ່ອະນຸຍາດຖືກກຳນົດໂດຍ regular expression \"{}\""
+
+#: conf/vars.cpp:313 conf/vars.cpp:353
+#, c++-format
+msgid "Variable \"{}\" is read-only"
+msgstr "ຕົວປ່ຽນ \"{}\" ສາມາດອ່ານໄດ້ຢ່າງດຽວ"
+
+#: logger/rotating_file_logger.cpp:65
+msgid "Cannot open log file"
+msgstr "ບໍ່ສາມາດເປີດໄຟລ໌ບັນທຶກ (log file)"
+
+#: module/module_db.cpp:76 module/module_db.cpp:85 module/module_sack.cpp:767
+#, c++-format
+msgid "No such module: {}"
+msgstr "ບໍ່ມີໂມດູນດັ່ງກ່າວ: {}"
+
+#: module/module_db.cpp:268
+#, c++-format
+msgid "Cannot enable multiple streams for module '{}'"
+msgstr "ບໍ່ສາມາດເປີດໃຊ້ຫຼາຍສະຕຣີມພ້ອມກັນສຳລັບໂມດູນ '{}'"
+
+#. TODO(pkratoch) replace with a proper and descriptive exception
+#. TODO(jmracek) else if (removalOfProtected && removalOfProtected->size()) {
+#. throw Goal::Error(_("no solution, cannot remove protected package"),
+#. DNF_ERROR_REMOVAL_OF_PROTECTED_PKG);
+#. }
+#. TODO(lukash) replace with a proper and descriptive exception
+#: module/module_goal_private.cpp:83 rpm/solv/goal_private.cpp:342
+#: rpm/solv/goal_private.cpp:764
+msgid "no solution possible"
+msgstr "ບໍ່ມີທາງແກ້ໄຂທີ່ເປັນໄປໄດ້"
+
+#: module/module_metadata.cpp:102
+#, c++-format
+msgid "Failed to update from string: {}"
+msgstr "ບໍ່ສາມາດອັບເດດຈາກຂໍ້ຄວາມ: {}"
+
+#: module/module_metadata.cpp:129
+#, c++-format
+msgid "Failed to resolve module metadata: {}"
+msgstr "ບໍ່ສາມາດແກ້ໄຂ metadata ຂອງໂມດູນ: {}"
+
+#: module/module_metadata.cpp:140
+#, c++-format
+msgid "Failed to upgrade defaults: {}"
+msgstr "ບໍ່ສາມາດອັບເກຣດຄ່າເລີ່ມຕົ້ນ: {}"
+
+#: module/module_metadata.cpp:144
+#, c++-format
+msgid "Failed to upgrade streams: {}"
+msgstr "ບໍ່ສາມາດອັບເກຣດສະຕຣີມ: {}"
+
+#: module/module_sack.cpp:93
+#, c++-format
+msgid "Failed to load module metadata for repository \"{}\": {}"
+msgstr "ບໍ່ສາມາດໂຫຼດ metadata ຂອງໂມດູນສຳລັບຄັງເກັບ \"{}\": {}"
+
+#: module/module_sack.cpp:594
+msgid "Missing '='"
+msgstr "ຂາດເຄື່ອງໝາຍ '='"
+
+#: module/module_sack.cpp:598 module/module_sack.cpp:606
+msgid "Missing '\"' in the value"
+msgstr "ຂາດເຄື່ອງໝາຍ '\"' ໃນຄ່າ"
+
+#: module/module_sack.cpp:602
+msgid "Missing ':' in the value"
+msgstr "ຂາດເຄື່ອງໝາຍ ':' ໃນຄ່າ"
+
+#: module/module_sack.cpp:911
+#, c++-format
+msgid "Invalid module status: {}"
+msgstr "ສະຖານະໂມດູນບໍ່ຖືກຕ້ອງ: {}"
+
+#: plugin/plugins.cpp:67
+#, c++-format
+msgid ""
+"Unsupported plugin API combination. API version provided by plugin \"{}\" "
+"(\"{}\") is \"{}.{}\". API version in libdnf is \"{}.{}\"."
+msgstr ""
+"ການຮວມ API ຂອງປລັກອິນບໍ່ຮອງຮັບ. ລຸ້ນ API ທີ່ສະໜອງໂດຍປລັກອິນ \"{}\" (\"{}\") ແມ່ນ \"{}.{}"
+"\". ລຸ້ນ API ໃນ libdnf ແມ່ນ \"{}.{}\"."
+
+#: plugin/plugins.cpp:92
+msgid "Failed to create a libdnf plugin instance"
+msgstr "ບໍ່ສາມາດສ້າງ instance ຂອງປລັກອິນ libdnf ໄດ້"
+
+#: plugin/plugins.cpp:146
+#, c++-format
+msgid "Cannot find plugin library \"{}\""
+msgstr "ບໍ່ພົບໄລບຣາຣີປລັກອິນ \"{}\""
+
+#: plugin/plugins.cpp:213
+#, c++-format
+msgid "Invalid option value: enabled={}"
+msgstr "ຄ່າຕົວເລືອກບໍ່ຖືກຕ້ອງ: enabled={}"
+
+#: plugin/plugins.cpp:237
+msgid "Plugins::load_plugins(): config_dir_path cannot be empty"
+msgstr "Plugins::load_plugins(): config_dir_path ຕ້ອງບໍ່ຫວ່າງເປົ່າ"
+
+#: plugin/plugins.cpp:253
+#, c++-format
+msgid "Cannot load libdnf plugin enabled from: {}"
+msgstr "ບໍ່ສາມາດໂຫຼດປລັກອິນ libdnf ທີ່ເປີດໃຊ້ງານຈາກ: {}"
+
+#: repo/config_repo.cpp:581
+msgid "get_unique_id(): Computation of SHA256 failed"
+msgstr "get_unique_id(): ການຄຳນວນ SHA256 ຫຼົ້ມເຫຼວ"
+
+#: repo/file_downloader.cpp:154
+msgid "Cannot download files, cacheonly option is activated."
+msgstr "ບໍ່ສາມາດດາວໂຫຼດໄຟລ໌ໄດ້, ຕົວເລືອກ cacheonly ຖືກເປີດໃຊ້ງານຢູ່."
+
+#: repo/file_downloader.cpp:216
+msgid "Failed to download files"
+msgstr "ດາວໂຫຼດໄຟລ໌ຫຼົ້ມເຫຼວ"
+
+#: repo/librepo.cpp:118
+msgid ""
+"Maximum download speed is lower than minimum, please change configuration of "
+"minrate or throttle"
+msgstr ""
+"ຄວາມໄວໃນການດາວໂຫຼດສູງສຸດຕ່ຳກວ່າຄ່າຕ່ຳສຸດ, ກະລຸນາປ່ຽນການກຳນົດຄ່າ minrate ຫຼື throttle"
+
+#: repo/librepo.cpp:181
+msgid "'proxy_username' is set but not 'proxy_password'"
+msgstr "ມີການກຳນົດ 'proxy_username' ແຕ່ບໍ່ໄດ້ກຳນົດ 'proxy_password'"
+
+#: repo/package_downloader.cpp:154
+#, c++-format
+msgid "Cannot download the \"{0}\" package, cacheonly option is activated."
+msgstr "ບໍ່ສາມາດດາວໂຫຼດແພັກເກດ \"{0}\", ຕົວເລືອກ cacheonly ຖືກເປີດໃຊ້ງານຢູ່."
+
+#: repo/package_downloader.cpp:231
+msgid "Already downloaded"
+msgstr "ດາວໂຫຼດແລ້ວ"
+
+#: repo/package_downloader.cpp:279
+msgid "Failed to download packages"
+msgstr "ດາວໂຫຼດແພັກເກດຫຼົ້ມເຫຼວ"
+
+#: repo/repo.cpp:61
+#, c++-format
+msgid "Failed to load RPM \"{}\": doesn't have the \".rpm\" extension"
+msgstr "ບໍ່ສາມາດໂຫຼດ RPM \"{}\": ບໍ່ມີນາມສະກຸນ \".rpm\""
+
+#: repo/repo.cpp:65
+#, c++-format
+msgid "Failed to access RPM \"{}\": {}"
+msgstr "ບໍ່ສາມາດເຂົ້າເຖິງ RPM \"{}\": {}"
+
+#: repo/repo.cpp:107
+#, c++-format
+msgid "Invalid repository id \"{}\": unexpected character '{}'"
+msgstr "repository id \"{}\" ບໍ່ຖືກຕ້ອງ: ພົບຕົວອັກສອນທີ່ບໍ່ຄາດຄິດ '{}'"
+
+#: repo/repo.cpp:150
+#, c++-format
+msgid "Repository \"{}\" has no source (baseurl, mirrorlist or metalink) set."
+msgstr ""
+"ຄັງເກັບ \"{}\" ບໍ່ມີການກຳນົດແຫຼ່ງຂໍ້ມູນ (baseurl, mirrorlist ຫຼື metalink)."
+
+#: repo/repo.cpp:161
+#, c++-format
+msgid "Repository \"{}\" has unsupported type \"{}\", skipping."
+msgstr "ຄັງເກັບ \"{}\" ມີປະເພດທີ່ບໍ່ຮອງຮັບ \"{}\", ຈະຂ້າມໄປ."
+
+#: repo/repo.cpp:221 repo/repo.cpp:241 repo/repo_sack.cpp:368
+#, c++-format
+msgid "Failed to download metadata ({}: \"{}\") for repository \"{}\": {}"
+msgstr "ບໍ່ສາມາດດາວໂຫຼດ metadata ({}: \"{}\") ສຳລັບຄັງເກັບ \"{}\": {}"
+
+#: repo/repo.cpp:439
+msgid ""
+"Failed to load repository: \"primary\" data not present or in unsupported "
+"format"
+msgstr ""
+"ບໍ່ສາມາດໂຫຼດຄັງເກັບ: ບໍ່ມີຂໍ້ມູນ \"primary\" ຫຼື ຢູ່ໃນຮູບແບບທີ່ບໍ່ຮອງຮັບ"
+
+#: repo/repo.cpp:505
+#, c++-format
+msgid "Failed to load comps \"{}\": doesn't have the \".xml\" extension"
+msgstr "ບໍ່ສາມາດໂຫຼດ comps \"{}\": ບໍ່ມີນາມສະກຸນ \".xml\""
+
+#: repo/repo.cpp:512
+#, c++-format
+msgid "Failed to load xml Comps \"{}\": {}"
+msgstr "ບໍ່ສາມາດໂຫຼດ xml Comps \"{}\": {}"
+
+#: repo/repo.cpp:530
+#, c++-format
+msgid "Failed to load RPM \"{}\": {}"
+msgstr "ບໍ່ສາມາດໂຫຼດ RPM \"{}\": {}"
+
+#: repo/repo_cache.cpp:255
+msgid "Unable to determine id of the repository in the cache."
+msgstr "ບໍ່ສາມາດລະບຸ id ຂອງຄັງເກັບໃນແຄຊ (cache) ໄດ້."
+
+#: repo/repo_cache_private.hpp:59
+msgid "Empty path to the repository cache directory."
+msgstr "ຕຳແໜ່ງໂຟນເດີແຄຊຂອງຄັງເກັບແພັກເກດຫວ່າງເປົ່າ."
+
+#: repo/repo_downloader.cpp:214
+#, c++-format
+msgid "Librepo error: {}"
+msgstr "ຂໍ້ຜິດພາດ Librepo: {}"
+
+#: repo/repo_downloader.cpp:258
+msgid "Failed to set up metadata download"
+msgstr "ບໍ່ສາມາດຕັ້ງຄ່າການດາວໂຫຼດ metadata"
+
+#: repo/repo_downloader.cpp:312 repo/repo_downloader.cpp:362
+msgid "Failed to download metadata"
+msgstr "ດາວໂຫຼດ metadata ຫຼົ້ມເຫຼວ"
+
+#: repo/repo_downloader.cpp:426
+#, c++-format
+msgid "Error checking if metalink \"{}\" is in sync for repository \"{}\""
+msgstr ""
+"ເກີດຂໍ້ຜິດພາດໃນການກວດສອບວ່າ metalink \"{}\" ຊິ້ງກັບຄັງເກັບ \"{}\" ຫຼື ບໍ່"
+
+#: repo/repo_downloader.cpp:446
+#, c++-format
+msgid "Error checking if repomd ({}: \"{}\") is in sync for repository \"{}\""
+msgstr ""
+"ເກີດຂໍ້ຜິດພາດໃນການກວດສອບວ່າ repomd ({}: \"{}\") ຊິ້ງກັບຄັງເກັບ \"{}\" ຫຼື ບໍ່"
+
+#: repo/repo_downloader.cpp:515
+#, c++-format
+msgid "Error loading local metadata for repository \"{}\""
+msgstr "ເກີດຂໍ້ຜິດພາດໃນການໂຫຼດ metadata ພາຍໃນເຄື່ອງສຳລັບຄັງເກັບ \"{}\""
+
+#: repo/repo_downloader.cpp:597
+#, c++-format
+msgid ""
+"No valid source (baseurl, mirrorlist or metalink) found for repository \"{}\""
+msgstr ""
+"ບໍ່ພົບແຫຼ່ງຂໍ້ມູນທີ່ຖືກຕ້ອງ (baseurl, mirrorlist ຫຼື metalink) ສຳລັບຄັງເກັບ \"{}\""
+
+#: repo/repo_pgp.cpp:60
+#, c++-format
+msgid "Failed to import OpenPGP keys into temporary keyring: {}"
+msgstr "ບໍ່ສາມາດນຳເຂົ້າຄີ OpenPGP ລົງໃນ keyring ຊົ່ວຄາວ: {}"
+
+#: repo/repo_pgp.cpp:66 repo/repo_pgp.cpp:93
+#, c++-format
+msgid "Failed to list OpenPGP keys: {}"
+msgstr "ບໍ່ສາມາດສະແດງລາຍຊື່ຄີ OpenPGP: {}"
+
+#: repo/repo_pgp.cpp:141
+#, c++-format
+msgid "Failed to import OpenPGP keys: {}"
+msgstr "ບໍ່ສາມາດນຳເຂົ້າຄີ OpenPGP: {}"
+
+#: repo/repo_sack.cpp:159
+#, c++-format
+msgid ""
+"Failed to create repo \"{}\": Id is present more than once in the "
+"configuration"
+msgstr "ບໍ່ສາມາດສ້າງຄັງເກັບ \"{}\": ພົບ Id ນີ້ຫຼາຍກວ່າໜຶ່ງຄັ້ງໃນການກຳນົດຄ່າ"
+
+#: repo/repo_sack.cpp:631
+#, c++-format
+msgid "Cache-only enabled but no cache for repository \"{}\""
+msgstr "ເປີດໃຊ້ງານ cache-only ແຕ່ບໍ່ພົບແຄຊສຳລັບຄັງເກັບ \"{}\""
+
+#: repo/solv_repo.cpp:267
+#, c++-format
+msgid "Failed to load repomd for repo \"{}\" from \"{}\": {}."
+msgstr "ບໍ່ສາມາດໂຫຼດ repomd ສຳລັບຄັງເກັບ \"{}\" ຈາກ \"{}\": {}."
+
+#: repo/solv_repo.cpp:275
+#, c++-format
+msgid "Failed to load primary for repo \"{}\" from \"{}\": {}."
+msgstr "ບໍ່ສາມາດໂຫຼດ primary ສຳລັບຄັງເກັບ \"{}\" ຈາກ \"{}\": {}."
+
+#: repo/solv_repo.cpp:323
+#, c++-format
+msgid "Unsupported extended repodata type for the system repo: \"{}\"."
+msgstr "ບໍ່ຮອງຮັບປະເພດ extended repodata ສຳລັບຄັງເກັບຂອງລະບົບ: \"{}\"."
+
+#: repo/solv_repo.cpp:395
+#, c++-format
+msgid "Failed to load {} extension for repo \"{}\" from \"{}\": {}"
+msgstr "ບໍ່ສາມາດໂຫຼດສ່ວນຂະຫຍາຍ {} ສຳລັບຄັງເກັບ \"{}\" ຈາກ \"{}\": {}"
+
+#: repo/solv_repo.cpp:431
+#, c++-format
+msgid "Failed to load system repo from root \"{}\": {}"
+msgstr "ບໍ່ສາມາດໂຫຼດຄັງເກັບຂອງລະບົບຈາກ root \"{}\": {}"
+
+#: repo/solv_repo.cpp:532
+#, c++-format
+msgid "Failed to load {} cache for repo \"{}\" from \"{}\": {}"
+msgstr "ບໍ່ສາມາດໂຫຼດແຄຊ {} ສຳລັບຄັງເກັບ \"{}\" ຈາກ \"{}\": {}"
+
+#: repo/solv_repo.cpp:586
+#, c++-format
+msgid "Failed to write primary cache for repo \"{}\" to \"{}\": {}"
+msgstr "ບໍ່ສາມາດຂຽນ primary cache ສຳລັບຄັງເກັບ \"{}\" ລົງໃນ \"{}\": {}"
+
+#: repo/solv_repo.cpp:608
+#, c++-format
+msgid "Failed to re-load primary cache for repo \"{}\" from \"{}\": {}"
+msgstr "ບໍ່ສາມາດໂຫຼດ primary cache ຄືນໃໝ່ສຳລັບຄັງເກັບ \"{}\" ຈາກ \"{}\": {}"
+
+#: repo/solv_repo.cpp:673
+#, c++-format
+msgid "Failed to write {} cache for repo \"{}\" to \"{}\": {}"
+msgstr "ບໍ່ສາມາດຂຽນແຄຊ {} ສຳລັບຄັງເກັບ \"{}\" ລົງໃນ \"{}\": {}"
+
+#: repo/solv_repo.cpp:694
+#, c++-format
+msgid "Failed to re-load {} cache for repo \"{}\" from \"{}\": {}"
+msgstr "ບໍ່ສາມາດໂຫຼດແຄຊ {} ຄືນໃໝ່ສຳລັບຄັງເກັບ \"{}\" ຈາກ \"{}\": {}"
+
+#: repo/temp_files_memory.cpp:52
+#, c++-format
+msgid ""
+"An error occurred when parsing the temporary files memory file at '{}': {}"
+msgstr "ເກີດຂໍ້ຜິດພາດໃນການວິເຄາະໄຟລ໌ໜ່ວຍຄວາມຈຳຂອງໄຟລ໌ຊົ່ວຄາວທີ່ '{}': {}"
+
+#: rpm/nevra.cpp:82
+#, c++-format
+msgid "NEVRA string \"{}\" contains ':' multiple times"
+msgstr "ຂໍ້ຄວາມ NEVRA \"{}\" ມີເຄື່ອງໝາຍ ':' ຫຼາຍກວ່າໜຶ່ງບ່ອນ"
+
+#: rpm/nevra.cpp:86
+#, c++-format
+msgid "Invalid character '{}' in NEVRA string \"{}\""
+msgstr "ພົບຕົວອັກສອນທີ່ບໍ່ຖືກຕ້ອງ '{}' ໃນຂໍ້ຄວາມ NEVRA \"{}\""
+
+#: rpm/package.cpp:81
+msgid "Package with rpmdbid was not found"
+msgstr "ບໍ່ພົບແພັກເກດທີ່ມີ rpmdbid ນີ້"
+
+#: rpm/package.cpp:478
+msgid "<unknown>"
+msgstr "<ບໍ່ຮູ້ຈັກ>"
+
+#: rpm/reldep.cpp:116 rpm/reldep.cpp:123
+msgid "Cannot parse a dependency string"
+msgstr "ບໍ່ສາມາດວິເຄາະຂໍ້ຄວາມຄວາມຂຶ້ນຕໍ່ກັນ (dependency string) ໄດ້"
+
+#: rpm/rpm_signature.cpp:45
+msgid "No corresponding key was found."
+msgstr "ບໍ່ພົບຄີທີ່ກົງກັນ."
+
+#: rpm/rpm_signature.cpp:46
+msgid "The signature is valid, but the key is not trusted."
+msgstr "ລາຍເຊັນຖືກຕ້ອງ, ແຕ່ຄີນີ້ບໍ່ໄດ້ຮັບຄວາມເຊື່ອຖື."
+
+#: rpm/rpm_signature.cpp:47
+msgid "The package is not signed."
+msgstr "ແພັກເກດບໍ່ໄດ້ຖືກເຊັນຊື່."
+
+#: rpm/rpm_signature.cpp:48
+msgid "Problem occurred when opening the package."
+msgstr "ເກີດບັນຫາໃນການເປີດແພັກເກດ."
+
+#: rpm/rpm_signature.cpp:64
+#, c++-format
+msgid "Failed to set rpm transaction rootDir \"{}\"."
+msgstr "ບໍ່ສາມາດຕັ້ງຄ່າ rootDir \"{}\" ສຳລັບລາຍການປ່ຽນແປງ RPM."
+
+#: rpm/rpm_signature.cpp:290
+#, c++-format
+msgid "\"{}\": key is not an armored public key."
+msgstr "\"{}\": ຄີບໍ່ແມ່ນ armored public key."
+
+#: rpm/rpm_signature.cpp:295
+#, c++-format
+msgid "Failed to import public key \"{}\" to rpmdb: {}"
+msgstr "ບໍ່ສາມາດນຳເຂົ້າຄີສາທາລະນະ \"{}\" ລົງໃນ rpmdb: {}"
+
+#. TODO(jrohel): Why? Librpm does not provide this information.
+#: rpm/transaction.cpp:114
+#, c++-format
+msgid "Cannot set root directory \"{}\""
+msgstr "ບໍ່ສາມາດຕັ້ງໂຟນເດີ root \"{}\""
+
+#: rpm/transaction.cpp:125
+#, c-format
+msgid "Error %i opening rpm database"
+msgstr "ເກີດຂໍ້ຜິດພາດ %i ໃນການເປີດຖານຂໍ້ມູນ RPM"
+
+#: rpm/transaction.cpp:134
+msgid "The rpmdbCookie() function did not return cookie of rpm database."
+msgstr "ຟັງຊັນ rpmdbCookie() ບໍ່ໄດ້ສົ່ງຄືນຄຸກກີ້ຂອງຖານຂໍ້ມູນ RPM."
+
+#: rpm/transaction.cpp:199
+msgid "Failed to order the rpm transaction."
+msgstr "ບໍ່ສາມາດຈັດລໍາດັບລາຍການປ່ຽນແປງ RPM ໄດ້."
+
+#: rpm/transaction.cpp:235
+#, c++-format
+msgid ""
+"Failed to set scriptlet output file, cannot duplicate file descriptor: {}"
+msgstr ""
+"ບໍ່ສາມາດຕັ້ງໄຟລ໌ຜົນລັບຂອງ scriptlet ໄດ້, ບໍ່ສາມາດເຮັດສຳເນົາ file descriptor: {}"
+
+#: rpm/transaction.cpp:254
+#, c++-format
+msgid "Failed to set scriptlet output file, cannot open file \"{}\": {}"
+msgstr "ບໍ່ສາມາດຕັ້ງໄຟລ໌ຜົນລັບຂອງ scriptlet ໄດ້, ບໍ່ສາມາດເປີດໄຟລ໌ \"{}\": {}"
+
+#: rpm/transaction.cpp:275
+#, c++-format
+msgid "Failed to read package header, cannot open file \"{}\": {}"
+msgstr ""
+"ບໍ່ສາມາດອ່ານສ່ວນຫົວຂອງແພັກເກດ (package header), ບໍ່ສາມາດເປີດໄຟລ໌ \"{}\": {}"
+
+#: rpm/transaction.cpp:292
+#, c++-format
+msgid "Failed to read package header from file \"{}\""
+msgstr "ບໍ່ສາມາດອ່ານສ່ວນຫົວຂອງແພັກເກດຈາກໄຟລ໌ \"{}\""
+
+#: rpm/transaction.cpp:305
+msgid "Cannot init rpm database iterator"
+msgstr "ບໍ່ສາມາດເລີ່ມຕົ້ນ iterator ຂອງຖານຂໍ້ມູນ RPM"
+
+#: rpm/transaction.cpp:309
+msgid "Package was not found in rpm database"
+msgstr "ບໍ່ພົບແພັກເກດໃນຖານຂໍ້ມູນ RPM"
+
+#. TODO(jrohel): Why? Librpm does not provide this information.
+#: rpm/transaction.cpp:325
+#, c++-format
+msgid "Cannot reinstall package \"{}\""
+msgstr "ບໍ່ສາມາດຕິດຕັ້ງແພັກເກດ \"{}\" ຄືນໃໝ່ໄດ້"
+
+#. TODO(jrohel): Why? Librpm does not provide this information.
+#: rpm/transaction.cpp:343
+#, c++-format
+msgid "Cannot remove package \"{}\""
+msgstr "ບໍ່ສາມາດຖອນແພັກເກດ \"{}\" ອອກໄດ້"
+
+#: rpm/transaction.cpp:362
+#, c++-format
+msgid "Cannot upgrade package \"{}\""
+msgstr "ບໍ່ສາມາດອັບເກຣດແພັກເກດ \"{}\" ໄດ້"
+
+#: rpm/transaction.cpp:366
+#, c++-format
+msgid "Cannot downgrade package \"{}\""
+msgstr "ບໍ່ສາມາດຫຼຸດລຸ້ນແພັກເກດ \"{}\" ໄດ້"
+
+#: rpm/transaction.cpp:370
+#, c++-format
+msgid "Cannot install package \"{}\""
+msgstr "ບໍ່ສາມາດຕິດຕັ້ງແພັກເກດ \"{}\" ໄດ້"
+
+#: rpm/versionlock_config.cpp:284 system/state.cpp:605
+#, c++-format
+msgid "{}"
+msgstr "{}"
+
+#. TODO(lukash) throw proper exception class
+#: solv/pool.cpp:174
+#, c++-format
+msgid "Failed to convert epoch \"{}\" to number"
+msgstr "ບໍ່ສາມາດແປງ epoch \"{}\" ເປັນຕົວເລກ"
+
+#: solv/solver.cpp:79
+#, c++-format
+msgid "Writing debugsolver data into \"{}\" failed: {}"
+msgstr "ການຂຽນຂໍ້ມູນ debugsolver ລົງໃນ \"{}\" ຫຼົ້ມເຫຼວ: {}"
+
+#: system/state.cpp:282 system/state.cpp:291
+#, c++-format
+msgid "Invalid TOML version \"{}\", \"MAJOR.MINOR\" expected"
+msgstr "ລຸ້ນ TOML ບໍ່ຖືກຕ້ອງ \"{}\", ຕ້ອງການຮູບແບບ \"MAJOR.MINOR\""
+
+#: system/state.cpp:299
+#, c++-format
+msgid "{} state for \"{}\" not found."
+msgstr "ບໍ່ພົບສະຖານະ {} ສຳລັບ \"{}\"."
+
+#: system/state.cpp:303
+#, c++-format
+msgid "Loading system state TOML file {} failed (see dnf5-system-state(7)): {}"
+msgstr "ໂຫຼດໄຟລ໌ TOML ສະຖານະລະບົບ {} ຫຼົ້ມເຫຼວ (ເບິ່ງ dnf5-system-state(7)): {}"
+
+#: system/state.cpp:640
+#, c++-format
+msgid "Unsupported TOML version \"{}\", maximum supported version is \"{}\""
+msgstr "ບໍ່ຮອງຮັບ TOML ລຸ້ນ \"{}\", ລຸ້ນສູງສຸດທີ່ຮອງຮັບແມ່ນ \"{}\""
+
+#: transaction/Swdb.cpp:91
+msgid "In progress"
+msgstr "ກຳລັງດຳເນີນການ"
+
+#: transaction/Swdb.cpp:99 transaction/Swdb.cpp:126 transaction/Swdb.cpp:136
+#: transaction/Swdb.cpp:150 transaction/Swdb.cpp:273 transaction/Swdb.cpp:281
+msgid "Not in progress"
+msgstr "ບໍ່ໄດ້ກຳລັງດຳເນີນການ"
+
+#: transaction/Swdb.cpp:158
+msgid "No transaction in progress"
+msgstr "ບໍ່ມີລາຍການປ່ຽນແປງທີ່ກຳລັງດຳເນີນການຢູ່"
+
+#: transaction/Transformer.cpp:647
+msgid "Transformer: can't open history persist dir"
+msgstr "Transformer: ບໍ່ສາມາດເປີດໂຟນເດີເກັບປະຫວັດ (history persist dir)"
+
+#: transaction/Transformer.cpp:660
+msgid "Couldn't find a history database"
+msgstr "ບໍ່ພົບຖານຂໍ້ມູນປະຫວັດການໃຊ້ງານ"
+
+#. TODO(dmach): replace with a better exception class
+#: transaction/db/comps_environment_group.cpp:100
+msgid ""
+"Failed to insert record into table 'comps_environment_group' in history "
+"database"
+msgstr ""
+"ບໍ່ສາມາດເພີ່ມຂໍ້ມູນລົງໃນຕາຕະລາງ 'comps_environment_group' ໃນຖານຂໍ້ມູນປະຫວັດໄດ້"
+
+#: transaction/db/db.cpp:71
+msgid "Unable to get 'version' from table 'config'"
+msgstr "ບໍ່ສາມາດດຶງ 'version' ຈາກຕາຕະລາງ 'config' ໄດ້"
+
+#. TODO(dmach): replace with a better exception class
+#: transaction/db/item.cpp:43
+msgid "Failed to insert record into table 'item' in history database"
+msgstr "ບໍ່ສາມາດເພີ່ມຂໍ້ມູນລົງໃນຕາຕະລາງ 'item' ໃນຖານຂໍ້ມູນປະຫວັດໄດ້"
+
+#: transaction/offline.cpp:195
+msgid "error reading offline state file"
+msgstr "ເກີດຂໍ້ຜິດພາດໃນການອ່ານໄຟລ໌ສະຖານະແບບອອບລາຍ"
+
+#: transaction/offline.cpp:200
+msgid "incompatible version of state data"
+msgstr "ລຸ້ນຂອງຂໍ້ມູນສະຖານະບໍ່ເຂົ້າກັນ"
+
+#: transaction/transaction.cpp:96
+#, c++-format
+msgid "Invalid transaction state: {}"
+msgstr "ສະຖານະລາຍການປ່ຽນແປງບໍ່ຖືກຕ້ອງ: {}"
+
+#: transaction/transaction.cpp:279
+msgid "Transaction has already started!"
+msgstr "ລາຍການປ່ຽນແປງໄດ້ເລີ່ມຕົ້ນໄປແລ້ວ!"
+
+#: transaction/transaction_item_action.cpp:28
+#, c++-format
+msgid "Invalid transaction item action: {}"
+msgstr "ການດຳເນີນການຂອງລາຍການບໍ່ຖືກຕ້ອງ: {}"
+
+#: transaction/transaction_item_reason.cpp:28
+#, c++-format
+msgid "Invalid transaction item reason: {}"
+msgstr "ເຫດຜົນຂອງລາຍການບໍ່ຖືກຕ້ອງ: {}"
+
+#: transaction/transaction_item_state.cpp:28
+#, c++-format
+msgid "Invalid transaction item state: {}"
+msgstr "ສະຖານະຂອງລາຍການບໍ່ຖືກຕ້ອງ: {}"
+
+#: transaction/transaction_item_type.cpp:28
+#, c++-format
+msgid "Invalid transaction item type: {}"
+msgstr "ປະເພດຂອງລາຍການບໍ່ຖືກຕ້ອງ: {}"
+
+#: transaction/transaction_merge.cpp:102
+#, c++-format
+msgid ""
+"Action '{0}' '{1}' cannot be merged after it was '{2}' in preceding "
+"transactions -> setting '{0}'."
+msgstr ""
+"ການດຳເນີນການ '{0}' '{1}' ບໍ່ສາມາດຮວມໄດ້ຫຼັງຈາກທີ່ເປັນ '{2}' ໃນລາຍການກ່ອນໜ້າ -> ຈະກຳນົດເປັ"
+"ນ '{0}'."
+
+#: transaction/transaction_merge.cpp:116
+#, c++-format
+msgid ""
+"Action 'Upgrade' '{0}' cannot be merged because it is not present at that "
+"point -> setting 'Install'."
+msgstr ""
+"ການດຳເນີນການ 'Upgrade' '{0}' ບໍ່ສາມາດຮວມໄດ້ຍ້ອນບໍ່ມີຢູ່ໃນຈຸດນັ້ນ -> ຈະກຳນົດເປັນ 'Install'."
+
+#: transaction/transaction_merge.cpp:174 transaction/transaction_merge.cpp:231
+#, c++-format
+msgid ""
+"Action 'Reinstall' '{0}' cannot be merged because it is not present at that "
+"point -> setting 'Install'."
+msgstr ""
+"ການດຳເນີນການ 'Reinstall' '{0}' ບໍ່ສາມາດຮວມໄດ້ຍ້ອນບໍ່ມີຢູ່ໃນຈຸດນັ້ນ -> ຈະກຳນົດເປັນ 'Install'."
+
+#: transaction/transaction_merge.cpp:194
+#, c++-format
+msgid ""
+"Action '{0}' '{1}' cannot be merged after it was '{2}' in preceding "
+"transaction -> setting '{0}'."
+msgstr ""
+"ການດຳເນີນການ '{0}' '{1}' ບໍ່ສາມາດຮວມໄດ້ຫຼັງຈາກທີ່ເປັນ '{2}' ໃນລາຍການກ່ອນໜ້າ -> ຈະກຳນົດເປັ"
+"ນ '{0}'."
+
+#: transaction/transaction_merge.cpp:215
+#, c++-format
+msgid "Unexpected action encountered: '{0}' during transaction merge."
+msgstr "ພົບການດຳເນີນການທີ່ບໍ່ຄາດຄິດ: '{0}' ໃນລະຫວ່າງການຮວມລາຍການ."
+
+#: transaction/transaction_merge.cpp:224
+#, c++-format
+msgid ""
+"Action '{0}' '{1}' cannot be merged because it is not present at that point "
+"-> skipping it."
+msgstr ""
+"ການດຳເນີນການ '{0}' '{1}' ບໍ່ສາມາດຮວມໄດ້ຍ້ອນບໍ່ມີຢູ່ໃນຈຸດນັ້ນ -> ຈະຂ້າມໄປ."
+
+#: transaction/transaction_merge.cpp:245
+#, c++-format
+msgid ""
+"Action '{0}' '{1}' cannot be merged because it is not present at that point "
+"-> setting 'INSTALL'."
+msgstr ""
+"ການດຳເນີນການ '{0}' '{1}' ບໍ່ສາມາດຮວມໄດ້ຍ້ອນບໍ່ມີຢູ່ໃນຈຸດນັ້ນ -> ຈະກຳນົດເປັນ 'INSTALL'."
+
+#: transaction/transaction_merge.cpp:266
+#, c++-format
+msgid ""
+"Action '{0}' '{1}' cannot be merged because it is not present at that point "
+"(present versions are: {2}) -> skipping it."
+msgstr ""
+"ການດຳເນີນການ '{0}' '{1}' ບໍ່ສາມາດຮວມໄດ້ຍ້ອນບໍ່ມີຢູ່ໃນຈຸດນັ້ນ (ລຸ້ນທີ່ມີຢູ່ຄື: {2}) -> ຈະຂ້າມໄປ."
+
+#: transaction/transaction_merge.cpp:277
+#, c++-format
+msgid ""
+"Action '{0}' '{1}' cannot be merged because it is already present at that "
+"point -> skipping it."
+msgstr ""
+"ການດຳເນີນການ '{0}' '{1}' ບໍ່ສາມາດຮວມໄດ້ຍ້ອນວ່າມີຢູ່ໃນຈຸດນັ້ນແລ້ວ -> ຈະຂ້າມໄປ."
+
+#: transaction/transaction_merge.cpp:294
+#, c++-format
+msgid ""
+"Action '{0}' '{1}' cannot be merged because it is already installed in "
+"version '{2}' -> keeping the action from older transaction with '{1}'."
+msgstr ""
+"ການດຳເນີນການ '{0}' '{1}' ບໍ່ສາມາດຮວມໄດ້ຍ້ອນມີລຸ້ນ '{2}' ຕິດຕັ້ງໄວ້ແລ້ວ -> ຈະຮັກສາການດຳເນີນກາ"
+"ນຈາກລາຍການເກົ່າດ້ວຍ '{1}'."
+
+#: transaction/transaction_merge.cpp:304
+#, c++-format
+msgid "Invalid action encountered: '{0}' during transaction merge."
+msgstr "ພົບການດຳເນີນການທີ່ບໍ່ຖືກຕ້ອງ: '{0}' ໃນລະຫວ່າງການຮວມລາຍການ."
+
+#: transaction/transaction_sr.cpp:49
+msgid "Transaction replay JSON serialized transaction input is empty"
+msgstr "ຂໍ້ມູນລາຍການແບບ JSON serialized ສຳລັບການເຮັດຊ້ຳ (replay) ຫວ່າງເປົ່າ"
+
+#: transaction/transaction_sr.cpp:58
+#, c++-format
+msgid "Error during transaction replay JSON parsing : {}"
+msgstr "ເກີດຂໍ້ຜິດພາດໃນລະຫວ່າງການວິເຄາະ JSON ສຳລັບການເຮັດຊ້ຳລາຍການ: {}"
+
+#: transaction/transaction_sr.cpp:68
+#, c++-format
+msgid "Unexpected version format: \"{}\", supported version is \"{}\""
+msgstr "ຮູບແບບລຸ້ນບໍ່ຖືກຕ້ອງ: \"{}\", ລຸ້ນທີ່ຮອງຮັບແມ່ນ \"{}\""
+
+#: transaction/transaction_sr.cpp:74
+#, c++-format
+msgid "Incompatible major version: \"{}\", supported major version is \"{}\""
+msgstr "Major version ບໍ່ເຂົ້າກັນ: \"{}\", ລຸ້ນທີ່ຮອງຮັບແມ່ນ \"{}\""
+
+#: transaction/transaction_sr.cpp:81
+#, c++-format
+msgid "Invalid minor version: \"{}\", number expected"
+msgstr "Minor version ບໍ່ຖືກຕ້ອງ: \"{}\", ຕ້ອງການຕົວເລກ"
+
+#: transaction/transaction_sr.cpp:84
+msgid "Missing key \"version\""
+msgstr "ຂາດຄີ \"version\""
+
+#: transaction/transaction_sr.cpp:92
+msgid "Unexpected type of \"environments\", array expected"
+msgstr "ປະເພດຂອງ \"environments\" ບໍ່ຖືກຕ້ອງ, ຕ້ອງການແບບ array"
+
+#: transaction/transaction_sr.cpp:105
+msgid "Missing object key \"id\" in an environment"
+msgstr "ຂາດຄີ \"id\" ໃນສະພາບແວດລ້ອມ"
+
+#: transaction/transaction_sr.cpp:110
+msgid "Missing object key \"action\" in an environment"
+msgstr "ຂາດຄີ \"action\" ໃນສະພາບແວດລ້ອມ"
+
+#: transaction/transaction_sr.cpp:129
+msgid "Unexpected type of \"groups\", array expected"
+msgstr "ປະເພດຂອງ \"groups\" ບໍ່ຖືກຕ້ອງ, ຕ້ອງການແບບ array"
+
+#: transaction/transaction_sr.cpp:145
+msgid "Missing object key \"id\" in a group"
+msgstr "ຂາດຄີ \"id\" ໃນກຸ່ມ"
+
+#: transaction/transaction_sr.cpp:150
+msgid "Missing object key \"action\" in a group"
+msgstr "ຂາດຄີ \"action\" ໃນກຸ່ມ"
+
+#: transaction/transaction_sr.cpp:155
+msgid "Missing object key \"reason\" in a group"
+msgstr "ຂາດຄີ \"reason\" ໃນກຸ່ມ"
+
+#: transaction/transaction_sr.cpp:186
+msgid "Unexpected type of \"rpms\", array expected"
+msgstr "ປະເພດຂອງ \"rpms\" ບໍ່ຖືກຕ້ອງ, ຕ້ອງການແບບ array"
+
+#: transaction/transaction_sr.cpp:202
+#, c++-format
+msgid "Cannot parse NEVRA for rpm \"{}\""
+msgstr "ບໍ່ສາມາດວິເຄາະ NEVRA ສຳລັບ rpm \"{}\""
+
+#: transaction/transaction_sr.cpp:210
+msgid "Either \"nevra\" or \"package_path\" object key is required in an rpm"
+msgstr "ຕ້ອງການຄີ \"nevra\" ຫຼື \"package_path\" ໃນ rpm"
+
+#: transaction/transaction_sr.cpp:215
+msgid "Missing object key \"action\" in an rpm"
+msgstr "ຂາດຄີ \"action\" ໃນ rpm"
+
+#: transaction/transaction_sr.cpp:220
+msgid "Missing object key \"reason\" in an rpm"
+msgstr "ຂາດຄີ \"reason\" ໃນ rpm"
+
+#: transaction/transaction_sr.cpp:227
+msgid ""
+"Missing mandatory object key \"group_id\" in an rpm with reason \"Group\" "
+"and action \"Reason Change\""
+msgstr ""
+"ຂາດຄີທີ່ຈຳເປັນ \"group_id\" ໃນ rpm ທີ່ມີເຫດຜົນແມ່ນ \"Group\" ແລະ ການດຳເນີນການແມ່ນ "
+"\"Reason Change\""
+
+#: utils/fs/file.cpp:86
+msgid "cannot open file"
+msgstr "ບໍ່ສາມາດເປີດໄຟລ໌ໄດ້"
+
+#: utils/fs/file.cpp:99
+msgid "cannot open file from fd"
+msgstr "ບໍ່ສາມາດເປີດໄຟລ໌ຈາກ fd ໄດ້"
+
+#: utils/fs/file.cpp:109
+msgid "cannot close file"
+msgstr "ບໍ່ສາມາດປິດໄຟລ໌ໄດ້"
+
+#: utils/fs/file.cpp:139 utils/fs/file.cpp:168
+msgid "error reading file"
+msgstr "ເກີດຂໍ້ຜິດພາດໃນການອ່ານໄຟລ໌"
+
+#: utils/fs/file.cpp:154 utils/fs/file.cpp:180
+msgid "error writing file"
+msgstr "ເກີດຂໍ້ຜິດພາດໃນການຂຽນໄຟລ໌"
+
+#: utils/fs/file.cpp:189
+msgid "error flushing file"
+msgstr "ເກີດຂໍ້ຜິດພາດໃນການ flushing file"
+
+#: utils/fs/file.cpp:198
+msgid "error seeking in file"
+msgstr "ເກີດຂໍ້ຜິດພາດໃນການຄົ້ນຫາ (seeking) ໃນໄຟລ໌"
+
+#: utils/fs/file.cpp:209
+msgid "error retrieving file position"
+msgstr "ເກີດຂໍ້ຜິດພາດໃນການດຶງຕຳແໜ່ງໄຟລ໌"
+
+#: utils/fs/file.cpp:297
+msgid "error reading a line from file"
+msgstr "ເກີດຂໍ້ຜິດພາດໃນການອ່ານແຖວຈາກໄຟລ໌"
+
+#: utils/fs/file.cpp:335
+msgid "error retrieving file descriptor"
+msgstr "ເກີດຂໍ້ຜິດພາດໃນການດຶງ file descriptor"
+
+#: utils/fs/temp.cpp:42
+msgid "cannot create temporary directory"
+msgstr "ບໍ່ສາມາດສ້າງໂຟນເດີຊົ່ວຄາວໄດ້"
+
+#: utils/fs/temp.cpp:89
+msgid "cannot create temporary file"
+msgstr "ບໍ່ສາມາດສ້າງໄຟລ໌ຊົ່ວຄາວໄດ້"
+
+#: utils/fs/temp.cpp:142
+msgid "cannot close temporary file"
+msgstr "ບໍ່ສາມາດປິດໄຟລ໌ຊົ່ວຄາວໄດ້"
+
+#: utils/iniparser.cpp:126
+#, c++-format
+msgid "Missing ']' on line {}"
+msgstr "ຂາດເຄື່ອງໝາຍ ']' ຢູ່ແຖວທີ {}"
+
+#: utils/iniparser.cpp:129
+#, c++-format
+msgid "Empty section name on line {}"
+msgstr "ຊື່ພາກສ່ວນ (section) ຫວ່າງເປົ່າຢູ່ແຖວທີ {}"
+
+#: utils/iniparser.cpp:137
+#, c++-format
+msgid "Text after section on line {}"
+msgstr "ພົບຂໍ້ຄວາມຫຼັງພາກສ່ວນຢູ່ແຖວທີ {}"
+
+#: utils/iniparser.cpp:147
+#, c++-format
+msgid "Missing section header on line {}"
+msgstr "ຂາດສ່ວນຫົວຂອງພາກສ່ວນຢູ່ແຖວທີ {}"
+
+#: utils/iniparser.cpp:152
+#, c++-format
+msgid "Illegal continuation line on line {}"
+msgstr "ແຖວຕໍ່ເນື່ອງບໍ່ຖືກຕ້ອງຢູ່ແຖວທີ {}"
+
+#: utils/iniparser.cpp:159
+#, c++-format
+msgid "Missing option name on line {}"
+msgstr "ຂາດຊື່ຕົວເລືອກຢູ່ແຖວທີ {}"
+
+#: utils/iniparser.cpp:163
+#, c++-format
+msgid "Missing '=' on line {}"
+msgstr "ຂາດເຄື່ອງໝາຍ '=' ຢູ່ແຖວທີ {}"
+
+#. returns localized message, problem with later translation
+#: utils/library.cpp:34
+#, c++-format
+msgid "Cannot load shared library \"{}\": {}"
+msgstr "ບໍ່ສາມາດໂຫຼດ shared library \"{}\": {}"
+
+#: utils/library.cpp:48
+#, c++-format
+msgid "Cannot obtain address of symbol \"{}\": {}"
+msgstr "ບໍ່ສາມາດດຶງທີ່ຢູ່ຂອງສັນຍະລັກ (symbol) \"{}\": {}"
+
+#: utils/locale.cpp:57
+#, c++-format
+msgid "Cannot set the locale \"{}\": {}"
+msgstr "ບໍ່ສາມາດຕັ້ງຄ່າທ້ອງຖິ່ນ (locale) \"{}\": {}"
+
+#: utils/locker.cpp:45
+#, c++-format
+msgid "Failed to open lock file \"{}\""
+msgstr "ບໍ່ສາມາດເປີດໄຟລ໌ລັອກ \"{}\""
+
+#: utils/locker.cpp:60
+#, c++-format
+msgid "Failed to obtain lock \"{}\""
+msgstr "ບໍ່ສາມາດລັອກ \"{}\" ໄດ້"
+
+#: utils/locker.cpp:70
+#, c++-format
+msgid "Failed to close lock file \"{}\""
+msgstr "ບໍ່ສາມາດປິດໄຟລ໌ລັອກ \"{}\""
+
+#: utils/locker.cpp:73
+#, c++-format
+msgid "Failed to delete lock file \"{}\""
+msgstr "ບໍ່ສາມາດລຶບໄຟລ໌ລັອກ \"{}\""
+
+#: utils/sqlite3/sqlite3.cpp:29
+#, c++-format
+msgid "SQL statement compilation failed: \"{}\""
+msgstr "ການຄອມໄພລ໌ (compilation) ຄຳສັ່ງ SQL ຫຼົ້ມເຫຼວ: \"{}\""
+
+#: utils/sqlite3/sqlite3.cpp:31
+#, c++-format
+msgid "Binding integer value to SQL statement failed: \"{}\""
+msgstr "ການເຊື່ອມໂຍງ (Binding) ຄ່າຈຳນວນຖ້ວນກັບຄຳສັ່ງ SQL ຫຼົ້ມເຫຼວ: \"{}\""
+
+#: utils/sqlite3/sqlite3.cpp:33
+#, c++-format
+msgid "Binding integer64 value to SQL statement failed: \"{}\""
+msgstr "ການເຊື່ອມໂຍງຄ່າ integer64 ກັບຄຳສັ່ງ SQL ຫຼົ້ມເຫຼວ: \"{}\""
+
+#: utils/sqlite3/sqlite3.cpp:35
+#, c++-format
+msgid "Binding unsigned integer32 value to SQL statement failed: \"{}\""
+msgstr "ການເຊື່ອມໂຍງຄ່າ unsigned integer32 ກັບຄຳສັ່ງ SQL ຫຼົ້ມເຫຼວ: \"{}\""
+
+#: utils/sqlite3/sqlite3.cpp:37
+#, c++-format
+msgid "Binding double value to SQL statement failed: \"{}\""
+msgstr "ການເຊື່ອມໂຍງຄ່າ double ກັບຄຳສັ່ງ SQL ຫຼົ້ມເຫຼວ: \"{}\""
+
+#: utils/sqlite3/sqlite3.cpp:39
+#, c++-format
+msgid "Binding bool value to SQL statement failed: \"{}\""
+msgstr "ການເຊື່ອມໂຍງຄ່າ bool ກັບຄຳສັ່ງ SQL ຫຼົ້ມເຫຼວ: \"{}\""
+
+#: utils/sqlite3/sqlite3.cpp:40
+#, c++-format
+msgid "Binding text to SQL statement failed: \"{}\""
+msgstr "ການເຊື່ອມໂຍງຂໍ້ຄວາມກັບຄຳສັ່ງ SQL ຫຼົ້ມເຫຼວ: \"{}\""
+
+#: utils/sqlite3/sqlite3.cpp:41
+#, c++-format
+msgid "Binding blob to SQL statement failed: \"{}\""
+msgstr "ການເຊື່ອມໂຍງ blob ກັບຄຳສັ່ງ SQL ຫຼົ້ມເຫຼວ: \"{}\""
+
+#: utils/sqlite3/sqlite3.cpp:42
+#, c++-format
+msgid "SQL statement evaluation failed: \"{}\""
+msgstr "ການປະມວນຜົນຄຳສັ່ງ SQL ຫຼົ້ມເຫຼວ: \"{}\""
+
+#: utils/sqlite3/sqlite3.cpp:44
+msgid "Insufficient memory or result exceed maximum SQLite3 string length"
+msgstr "ໜ່ວຍຄວາມຈຳບໍ່ພຽງພໍ ຫຼື ຜົນລັບຍາວກວ່າທີ່ SQLite3 ຮອງຮັບ"
+
+#: utils/sqlite3/sqlite3.cpp:46
+#, c++-format
+msgid "Column \"{}\" not found"
+msgstr "ບໍ່ພົບຖັນ (Column) \"{}\""
+
+#: utils/sqlite3/sqlite3.cpp:48
+#, c++-format
+msgid "SQL statement execution failed: \"{}\""
+msgstr "ການດຳເນີນຄຳສັ່ງ SQL ຫຼົ້ມເຫຼວ: \"{}\""
+
+#: utils/sqlite3/sqlite3.cpp:68
+#, c++-format
+msgid "Failed to open database \"{}\""
+msgstr "ບໍ່ສາມາດເປີດຖານຂໍ້ມູນ \"{}\""
+
+#: utils/sqlite3/sqlite3.cpp:105
+#, c++-format
+msgid "Failed to close database \"{}\""
+msgstr "ບໍ່ສາມາດປິດຖານຂໍ້ມູນ \"{}\""
+
+#: utils/sqlite3/sqlite3.cpp:117 utils/sqlite3/sqlite3.cpp:143
+#, c++-format
+msgid "Failed to open backup database \"{}\""
+msgstr "ບໍ່ສາມາດເປີດຖານຂໍ້ມູນສຳຮອງ \"{}\""
+
+#: utils/sqlite3/sqlite3.cpp:132
+#, c++-format
+msgid "Failed to backup database \"{}\" into \"{}\""
+msgstr "ບໍ່ສາມາດສຳຮອງຖານຂໍ້ມູນ \"{}\" ລົງໃນ \"{}\" ໄດ້"
+
+#: utils/sqlite3/sqlite3.cpp:158
+#, c++-format
+msgid "Failed to restore database \"{}\""
+msgstr "ບໍ່ສາມາດກູ້ຄືນ (restore) ຖານຂໍ້ມູນ \"{}\" ໄດ້"
+
+#: utils/system.cpp:34
+msgid "failed to read rpm config files"
+msgstr "ບໍ່ສາມາດອ່ານໄຟລ໌ກຳນົດຄ່າຂອງ RPM ໄດ້"
+
+#: utils/system.cpp:52
+msgid "Failed to execute uname()"
+msgstr "ບໍ່ສາມາດດຳເນີນການຄຳສັ່ງ uname() ໄດ້"

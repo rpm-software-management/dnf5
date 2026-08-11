@@ -3,13 +3,14 @@
 # This file is distributed under the same license as the PACKAGE package.
 # Languages add-on <noreply-addon-languages@weblate.org>, 2026.
 # Arif Budiman <arifpedia@gmail.com>, 2026.
+# Ega Natha <ega8642@gmail.com>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-07-26 03:48+0000\n"
-"PO-Revision-Date: 2026-01-24 15:58+0000\n"
-"Last-Translator: Arif Budiman <arifpedia@gmail.com>\n"
+"PO-Revision-Date: 2026-06-06 10:01+0000\n"
+"Last-Translator: Ega Natha <ega8642@gmail.com>\n"
 "Language-Team: Indonesian <https://translate.fedoraproject.org/projects/dnf5/"
 "dnf5daemon-client/id/>\n"
 "Language: id\n"
@@ -17,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.15.2\n"
+"X-Generator: Weblate 2026.6.1\n"
 
 #: commands/advisory/advisory.cpp:35
 msgid "Manage advisories"
@@ -157,8 +158,8 @@ msgstr "Kesalahan saat membersihkan cache: {}"
 msgid ""
 "Upgrade or downgrade installed software to the latest available versions"
 msgstr ""
-"Upgrade atau downgrade perangkat lunak yang terpasang ke versi terbaru yang "
-"tersedia"
+"Tingkatkan atau turunkan perangkat lunak yang terpasang ke versi terbaru "
+"yang tersedia"
 
 #: commands/group/group.cpp:41
 msgid "Manage comps groups"

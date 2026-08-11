@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-07-26 03:48+0000\n"
-"PO-Revision-Date: 2026-05-01 00:59+0000\n"
+"PO-Revision-Date: 2026-06-23 16:18+0000\n"
 "Last-Translator: Jim Spentzos <jimspentzos2000@gmail.com>\n"
 "Language-Team: Greek <https://translate.fedoraproject.org/projects/dnf5/"
 "libdnf5/el/>\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.17.1\n"
+"X-Generator: Weblate 2026.6.1\n"
 
 #: advisory/advisory.cpp:81
 #, c++-format
@@ -712,8 +712,8 @@ msgstr "Ο έλεγχος συναλλαγής RPM απέτυχε."
 msgid ""
 "Failed to obtain rpm transaction lock. Another transaction is in progress."
 msgstr ""
-"Αποτυχία λήψης κλειδώματος συναλλαγής RPM. Μια άλλη συναλλαγή βρίσκεται σε "
-"εξέλιξη."
+"Αποτυχία απόκτησης κλειδώματος για τη συναλλαγή RPM. Μια άλλη συναλλαγή "
+"βρίσκεται σε εξέλιξη."
 
 #: base/transaction.cpp:85
 msgid "Rpm transaction failed."
@@ -825,7 +825,7 @@ msgstr "αποτυχία αποθήκευσης του εγγράφου XML γι
 #, c++-format
 msgid "Failed to save xml document for group \"{}\" to file \"{}\": {}"
 msgstr ""
-"Αποτυχία αποθήκευσης εγγράφου XML για την ομάδα \"{}\" στο αρχείο \"{}\": {}"
+"Αποτυχία αποθήκευσης του εγγράφου XML για την ομάδα «{}» στο αρχείο «{}»: {}"
 
 #: comps/group/package.cpp:118 comps/group/package.cpp:121
 #, c++-format
@@ -1516,7 +1516,7 @@ msgstr ""
 
 #: transaction/db/db.cpp:71
 msgid "Unable to get 'version' from table 'config'"
-msgstr "Αδυναμία λήψης της 'έκδοσης' από τον πίνακα 'config'"
+msgstr "Αδυναμία λήψης του στοιχείου «version» από τον πίνακα «config»"
 
 #. TODO(dmach): replace with a better exception class
 #: transaction/db/item.cpp:43

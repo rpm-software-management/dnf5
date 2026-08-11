@@ -1,7 +1,7 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# Ega Natha <ega8642@gmail.com>, 2025.
+# Ega Natha <ega8642@gmail.com>, 2025, 2026.
 # Weblate Translation Memory <noreply-mt-weblate-translation-memory@weblate.org>, 2025.
 # Arif Budiman <arifpedia@gmail.com>, 2025, 2026.
 msgid ""
@@ -9,8 +9,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-07-26 03:48+0000\n"
-"PO-Revision-Date: 2026-01-24 15:58+0000\n"
-"Last-Translator: Arif Budiman <arifpedia@gmail.com>\n"
+"PO-Revision-Date: 2026-06-06 10:01+0000\n"
+"Last-Translator: Ega Natha <ega8642@gmail.com>\n"
 "Language-Team: Indonesian <https://translate.fedoraproject.org/projects/dnf5/"
 "dnf5/id/>\n"
 "Language: id\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.15.2\n"
+"X-Generator: Weblate 2026.6.1\n"
 
 #: cmdline_aliases.cpp:84 context.cpp:301 main.cpp:1357
 msgid ", "
@@ -378,7 +378,7 @@ msgstr ""
 
 #: commands/check-upgrade/check-upgrade.cpp:47
 msgid "Check for available package upgrades"
-msgstr "Periksa pembaruan paket yang tersedia"
+msgstr "Periksa peningkatan paket yang tersedia"
 
 #: commands/check-upgrade/check-upgrade.cpp:54
 msgid ""
@@ -429,8 +429,8 @@ msgstr "Pasang paket debuginfo."
 msgid ""
 "Upgrade or downgrade installed software to the latest available versions"
 msgstr ""
-"Upgrade atau downgrade perangkat lunak yang terpasang ke versi terbaru yang "
-"tersedia"
+"Tingkatkan atau turunkan perangkat lunak yang terpasang ke versi terbaru "
+"yang tersedia"
 
 #: commands/do/do.cpp:44
 msgid "Do transaction"
@@ -721,7 +721,7 @@ msgstr "Daftar paket yang baru saja ditambahkan ke repositori."
 
 #: commands/list/list.cpp:98
 msgid "List upgrades available for the installed packages."
-msgstr "Daftar paket yang baru saja ditambahkan ke repositori."
+msgstr "Daftar peningkatan yang tersedia untuk paket yang terpasang."
 
 #: commands/list/list.cpp:102
 msgid "List packages which will be removed by the 'dnf autoremove' command."
@@ -737,7 +737,7 @@ msgstr "Paket yang tersedia"
 
 #: commands/list/list.cpp:225
 msgid "Available upgrades"
-msgstr "Pembaruan yang tersedia"
+msgstr "Peningkatan yang tersedia"
 
 #: commands/list/list.cpp:241
 msgid "Obsoleting packages"
@@ -831,7 +831,7 @@ msgstr "{} tidak diinginkan oleh sistem-update.target."
 #: commands/offline/offline.cpp:367
 msgid "The system will now reboot to upgrade to release version {}."
 msgstr ""
-"Sistem akan melakukan reboot untuk melakukan pembaruan ke versi rilis {}."
+"Sistem akan memulai ulang untuk melakukan peningkatan ke versi rilis {}."
 
 #: commands/offline/offline.cpp:371
 msgid ""
@@ -863,7 +863,7 @@ msgstr "Mulai transaksi luring. Ini akan memakan waktu."
 
 #: commands/offline/offline.cpp:471
 msgid "Starting system upgrade. This will take a while."
-msgstr "Mulai proses pembaruan sistem. Proses ini akan memakan waktu."
+msgstr "Memulai proses peningkatan sistem. Proses ini akan memakan waktu."
 
 #: commands/offline/offline.cpp:483
 msgid "Use `dnf5 offline reboot` to begin the transaction."
@@ -1018,11 +1018,11 @@ msgstr ""
 
 #: commands/system-upgrade/system-upgrade.cpp:56
 msgid "Prepare system for upgrade to a new release"
-msgstr "Siapkan sistem untuk pembaruan ke versi baru"
+msgstr "Siapkan sistem untuk peningkatan ke rilis baru"
 
 #: commands/system-upgrade/system-upgrade.cpp:72
 msgid "Download everything needed to upgrade to a new release"
-msgstr "Unduh semua yang diperlukan untuk melakukan pembaruan ke versi baru"
+msgstr "Unduh semua yang diperlukan untuk melakukan peningkatan ke rilis baru"
 
 #: commands/system-upgrade/system-upgrade.cpp:80
 msgid ""
@@ -1042,11 +1042,11 @@ msgstr "Simpan transaksi distro-sync untuk dilakukan secara luring"
 
 #: commands/system-upgrade/system-upgrade.cpp:172
 msgid "Store an upgrade transaction to be performed offline"
-msgstr "Simpan transaksi pembaruan yang akan dilakukan secara luring"
+msgstr "Simpan transaksi peningkatan yang akan dilakukan secara luring"
 
 #: commands/upgrade/upgrade.cpp:43
 msgid "Upgrade software"
-msgstr "Perbarui perangkat lunak"
+msgstr "Tingkatkan perangkat lunak"
 
 #: commands/upgrade/upgrade.cpp:50
 msgid ""
@@ -1055,10 +1055,10 @@ msgid ""
 "limiting advisories is used it upgrades packages only to the lowest versions "
 "that fix advisories that matching selected advisory property"
 msgstr ""
-"Perbarui paket hanya ke versi terendah yang memperbaiki advisori jenis "
+"Tingkatkan paket hanya ke versi terendah yang memperbaiki advisori jenis "
 "bugfix, peningkatan, keamanan, atau paket baru. Jika opsi pembatasan "
-"peringatan digunakan, paket hanya akan diperbarui ke versi terendah yang "
-"memperbaiki peringatan yang sesuai dengan properti peringatan yang dipilih"
+"advisori digunakan, paket hanya akan ditingkatkan ke versi terendah yang "
+"memperbaiki advisori yang sesuai dengan properti advisori yang dipilih"
 
 #. TODO(mblaha): add full command line
 #: commands/versionlock/utils.cpp:35

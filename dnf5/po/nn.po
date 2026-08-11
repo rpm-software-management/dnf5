@@ -2,316 +2,362 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # Adaline Simonian <adalinesimonian@gmail.com>, 2024.
+# Weblate Translation Memory <noreply-mt-weblate-translation-memory@weblate.org>, 2026.
+# Eskil Gerdrup <eskil.gerdrup@outlook.com>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-07-26 03:48+0000\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Automatically generated\n"
-"Language-Team: none\n"
+"PO-Revision-Date: 2026-06-10 15:38+0000\n"
+"Last-Translator: Weblate Translation Memory <noreply-mt-weblate-translation-"
+"memory@weblate.org>\n"
+"Language-Team: Norwegian Nynorsk <https://translate.fedoraproject.org/"
+"projects/dnf5/dnf5/nn/>\n"
 "Language: nn\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 2026.6.1\n"
 
 #: cmdline_aliases.cpp:84 context.cpp:301 main.cpp:1357
 msgid ", "
-msgstr ""
+msgstr ", "
 
 #: cmdline_aliases.cpp:145
 msgid ""
 "Attached named argument \"{}\" not found: {}: Requested in file \"{}\" on "
 "line {}: {}"
 msgstr ""
+"Vedlagt namngitt argument \"{}\" vart ikkje funne: {}: Etterspurt i fila \"{}"
+"\" på linje {}:{}"
 
 #: cmdline_aliases.cpp:159
 msgid ""
 "Unknown attribute \"{}\" of attached named argument for alias \"{}\" in file "
 "\"{}\" on line {}: {}"
 msgstr ""
+"Ukjent attributt \"{}\" for det vedlagte namngitte argument for aliaset \"{}"
+"\" i fila \"{}\" på linje {}:{}"
 
 #: cmdline_aliases.cpp:171
 msgid "Missing attribute \"id_path\" for alias \"{}\" in file \"{}\""
-msgstr ""
+msgstr "Saknar attributt \"id_path\" for aliaset \"{}\" i fila \"{}\""
 
 #: cmdline_aliases.cpp:208
 msgid "Unsupported version \"{}\" in file \"{}\". Supported versions: {}"
-msgstr ""
+msgstr "Ustødd versjon \"{}\" i fila \"{}\". Stødde versjonar: {}"
 
 #: cmdline_aliases.cpp:218
 msgid "Bad value type of attribute \"version\" in file \"{}\" on line {}: {}"
-msgstr ""
+msgstr "Galen verditype til attributt \"version\" i fila \"{}\" på linje {}:{}"
 
 #: cmdline_aliases.cpp:224
 msgid "Missing attribute \"version\" in file \"{}\""
-msgstr ""
+msgstr "Saknar attributt \"version\" i fila \"{}\""
 
 #: cmdline_aliases.cpp:236
 msgid "Unknown key \"{}\" in file \"{}\" on line {}: {}"
-msgstr ""
+msgstr "Ukjend tast \"{}\" i fila \"{}\" på linje {}:{}"
 
 #: cmdline_aliases.cpp:253
 msgid "Empty or bad element id path in file \"{}\" on line {}: {}"
-msgstr ""
+msgstr "Tom eller galen sti til element-id i fila \"{}\" på linje {}:{}"
 
 #: cmdline_aliases.cpp:272
 msgid ""
 "Parent command \"{}\" not found: {}: Requested in file \"{}\" on line {}: {}"
 msgstr ""
+"Overordna kommando \"{}\" vart ikkje funne: {}: Etterspurt i fila \"{}\" på "
+"linja {}:{}"
 
 #: cmdline_aliases.cpp:301
 msgid "Unknown type \"{}\" of element \"{}\" in file \"{}\" on line {}: {}"
-msgstr ""
+msgstr "Ukjent slag \"{}\" til element \"{}\" i fila \"{}\" på linja {}:{}"
 
 #: cmdline_aliases.cpp:312
 msgid "Missing attribute \"type\" for element \"{}\" in file \"{}\""
-msgstr ""
+msgstr "Saknar attributt \"type\" til element \"{}\" i fila \"{}\""
 
 #: cmdline_aliases.cpp:331
 msgid ""
 "Named argument \"{}\" already registered. Requested in file \"{}\" on line "
 "{}: {}"
 msgstr ""
+"Namngitt argument \"{}\" er alt registrert. Etterspurt i fila \"{}\" på "
+"linje {}:{}"
 
 #: cmdline_aliases.cpp:347
 msgid ""
 "Command \"{}\" already registered. Requested in file \"{}\" on line {}: {}"
 msgstr ""
+"Kommando \"{}\" er alt registrert. Etterspurt i fila \"{}\" på linje {}:{}"
 
 #: cmdline_aliases.cpp:375
 msgid "Unknown attribute \"{}\" of group \"{}\" in file \"{}\" on line {}: {}"
-msgstr ""
+msgstr "Ukjent attributt \"{}\" til gruppa \"{}\" i fila \"{}\" på linje {}:{}"
 
 #: cmdline_aliases.cpp:387
 msgid "Missing attribute \"header\" for element \"{}\" in file \"{}\""
-msgstr ""
+msgstr "Saknar attributt \"header\" til element \"{}\" i fila \"{}\""
 
 #: cmdline_aliases.cpp:428 cmdline_aliases.cpp:538
 msgid ""
 "The \"short_name\" attribute of named argument \"{}\" must be one character "
 "long in file \"{}\" on line {}: {}"
 msgstr ""
+"Attributtet \"short_name\" til det namngitte argumentet \"{}\" må vera ein "
+"karakter lang i fila \"{}\" på linje {}:{}"
 
 #: cmdline_aliases.cpp:446
 msgid "Source \"{}\" not found: {}: Requested in file \"{}\" on line {}: {}"
 msgstr ""
+"Kjelda \"{}\" vart ikkje funne: {}: Etterspurt i fila \"{}\" på linje {}:{}"
 
 #: cmdline_aliases.cpp:462 cmdline_aliases.cpp:563 cmdline_aliases.cpp:676
 msgid "Group \"{}\" not found: {}: Requested in file \"{}\" on line {}: {}"
 msgstr ""
+"Gruppe \"{}\" vart ikkje funne: {}: Etterspurt i fila \"{}\" på linje {}: {}"
 
 #: cmdline_aliases.cpp:476 cmdline_aliases.cpp:579
 msgid ""
 "Unknown attribute \"{}\" of named argument \"{}\" in file \"{}\" on line {}: "
 "{}"
 msgstr ""
+"Ukjent attributt \"{}\" til det namngitte argumentet \"{}\" i fila \"{}\" på "
+"linja {}: {}"
 
 #: cmdline_aliases.cpp:489
 msgid "Missing attribute \"source\" for named argument \"{}\" in file \"{}\""
-msgstr ""
+msgstr "Saknar attributt \"source\" til namngitt argument \"{}\" i fila \"{}\""
 
 #: cmdline_aliases.cpp:498 cmdline_aliases.cpp:592
 msgid ""
 "At least one of the attributes \"long_name\" and \"short_name\" must be set "
 "for named argument \"{}\" in file \"{}\""
 msgstr ""
+"Minst eitt av attributta \"long_name\" og \"short_name\" må vera fastsette "
+"for det namngitte argumentet \"{}\" i fila \"{}\""
 
 #: cmdline_aliases.cpp:657
 msgid ""
 "Attached command \"{}\" not found: {}: Requested in file \"{}\" on line {}: "
 "{}"
 msgstr ""
+"Vedlagd kommando \"{}\" vart ikkje funne: {}: Etterspurt i fila \"{}\" på "
+"linja {}: {}"
 
 #: cmdline_aliases.cpp:691
 msgid ""
 "Used config file version \"1.0\" for attribute \"{}\" of command \"{}\" in "
 "file \"{}\" on line {}: {}"
 msgstr ""
+"Nytta config-filversjon \"1.0\" for attributtet \"{}\" i kommandoen \"{}\" i "
+"fila \"{}\" på linja {}: {}"
 
 #: cmdline_aliases.cpp:713
 msgid ""
 "Unknown attribute \"{}\" of required value for alias \"{}\" in file \"{}\" "
 "on line {}: {}"
 msgstr ""
+"Ukjent attributt \"{}\" med påkravde verdiar for aliaset \"{}\" i fila \"{}"
+"\" på linja {}: {}"
 
 #: cmdline_aliases.cpp:726
 msgid ""
 "Missing attribute \"value_help\" of required value for alias \"{}\" in file "
 "\"{}\""
 msgstr ""
+"Saknar attributtet \"value_help\" av påkravde verdiar til aliaset \"{}\" i "
+"fila \"{}\""
 
 #: cmdline_aliases.cpp:740
 msgid ""
 "Unknown attribute \"{}\" of command \"{}\" in file \"{}\" on line {}: {}"
 msgstr ""
+"Ukjent attributt \"{}\" i kommandoen \"{}\" i fila \"{}\" på linja {}: {}"
 
 #: cmdline_aliases.cpp:756
 msgid ""
 "Missing attribute \"attached_command\" for command \"{}\" in file \"{}\""
 msgstr ""
+"Saknar attributtet \"attached_command\" i kommandoen \"{}\" i fila \"{}\""
 
 #: cmdline_aliases.cpp:791
 msgid "Bad value type in file \"{}\" on line {}: {}"
-msgstr ""
+msgstr "Mistak i verditypen i fila \"{}\" på linja {}: {}"
 
 #: cmdline_aliases.cpp:804
 msgid "Syntax error in file \"{}\" on line {}:"
-msgstr ""
+msgstr "Syntaksfeil i fila \"{}\" på linje {}:"
 
 #: commands/advisory/advisory.cpp:36
 msgid "Manage advisories"
-msgstr ""
+msgstr "Handter varsel"
 
 #: commands/advisory/advisory_info.hpp:35
 msgid "Print details about advisories"
-msgstr ""
+msgstr "Skriv ut detaljar om varsel"
 
 #: commands/advisory/advisory_list.hpp:35
 msgid "List advisories"
-msgstr ""
+msgstr "List opp varsel"
 
 #: commands/advisory/advisory_summary.cpp:44
 msgid "All"
-msgstr ""
+msgstr "Alle"
 
 #: commands/advisory/advisory_summary.cpp:48
 msgid "Installed"
-msgstr ""
+msgstr "Installert"
 
 #: commands/advisory/advisory_summary.cpp:52
 msgid "Updates"
-msgstr ""
+msgstr "Oppdateringar"
 
 #: commands/advisory/advisory_summary.cpp:65
 msgid "Available"
-msgstr ""
+msgstr "Tilgjengeleg"
 
 #: commands/advisory/advisory_summary.hpp:33
 msgid "Print summary of advisories"
-msgstr ""
+msgstr "Skriv ut samandrag av varsel"
 
 #: commands/advisory/arguments.hpp:34
 msgid "Show advisories containing any version of installed packages."
-msgstr ""
+msgstr "Syn varsel som inneheld nokon versjon av installerte pakkar."
 
 #: commands/advisory/arguments.hpp:45
 msgid ""
 "Show advisories containing newer versions of installed packages. This is the "
 "default behavior."
 msgstr ""
+"Syn varsel som inneheld nyare versjonar av installerte pakkar. Dette er "
+"vanleg åtferd."
 
 #: commands/advisory/arguments.hpp:57
 msgid ""
 "Show advisories containing equal and older versions of installed packages."
 msgstr ""
+"Syn varsel som inneheld den same eller eldre versjonar av installerte pakkar."
 
 #: commands/advisory/arguments.hpp:69
 msgid ""
 "Show advisories containing newer versions of installed packages for which a "
 "newer version is available."
 msgstr ""
+"Syn varsel som inneheld nyare versjonar av installerte pakkar der det finst "
+"ein nyare versjon tilgjengeleg."
 
 #: commands/advisory/arguments.hpp:82
 msgid ""
 "Show only advisories containing packages with specified names. List option, "
 "supports globs."
 msgstr ""
+"Syn berre pakkar som inneheld visse namn. Listealternativ, stør "
+"mønsteruttrykk."
 
 #: commands/advisory/arguments.hpp:83 commands/history/arguments.hpp:81
 msgid "PACKAGE_NAME,..."
-msgstr ""
+msgstr "PAKKE_NAMN,..."
 
 #: commands/advisory/arguments.hpp:90
 msgid "List of patterns matched against advisory names."
-msgstr ""
+msgstr "Liste av mønster som samsvarar med namna på varsla."
 
 #: commands/advisory/arguments.hpp:100
 msgid "Show only advisories referencing a bugzilla."
-msgstr ""
+msgstr "Syn berre varsel som refererer til ein bugzilla."
 
 #: commands/advisory/arguments.hpp:107
 msgid "Show only advisories referencing a CVE."
-msgstr ""
+msgstr "Syn berre varsel som refererer til ein CVE."
 
 #: commands/advisory_shared.hpp:76
 msgid "No advisory found matching the requested name: \"{}\""
-msgstr ""
+msgstr "Inkje varsel funne som samsvarar til det etterspurte namnet: \"{}\""
 
 #: commands/advisory_shared.hpp:109
 msgid "No advisory found fixing the Bugzilla ID: \"{}\""
-msgstr ""
+msgstr "Fann inkje varsel som løyser Bugzilla ID-en: \"{}\""
 
 #: commands/advisory_shared.hpp:128
 msgid "No advisory found fixing the CVE ID: \"{}\""
-msgstr ""
+msgstr "Fann inkje varsel som løyser CVE ID-en: \"{}\""
 
 #: commands/advisory_shared.hpp:143
 msgid "No advisory found matching the specified filters."
-msgstr ""
+msgstr "Fann inkje varsel som samsvarar fastsette filter."
 
 #: commands/advisory_shared.hpp:158
 msgid ""
 "Include content contained in advisories with specified name. List option."
-msgstr ""
+msgstr "Ta med innhald i varsel med oppgitt namn. Listeval."
 
 #: commands/advisory_shared.hpp:159
 msgid "ADVISORY_NAME,..."
-msgstr ""
+msgstr "VARSEL_NAMN,..."
 
 #: commands/advisory_shared.hpp:166
 msgid "Include content contained in security advisories."
-msgstr ""
+msgstr "Ta med innhald i tryggingsvarsel."
 
 #: commands/advisory_shared.hpp:173
 msgid "Include content contained in bugfix advisories."
-msgstr ""
+msgstr "Ta med innhald i bugfix-varsel."
 
 #: commands/advisory_shared.hpp:180
 msgid "Include content contained in enhancement advisories."
-msgstr ""
+msgstr "Ta med innhald i forbetringsvarsel."
 
 #: commands/advisory_shared.hpp:187
 msgid "Include content contained in newpackage advisories."
-msgstr ""
+msgstr "Ta med innhald i varsel for nye pakkar."
 
 #: commands/advisory_shared.hpp:198
 msgid ""
 "Include content contained in advisories with specified severity. List "
 "option. Can be \"critical\", \"important\", \"moderate\", \"low\", \"none\"."
 msgstr ""
+"Ta med innhald i varsel med oppgitt alvorsgrad. Listeval. Kan vera "
+"\"kritisk\", \"viktig\", \"moderat\", \"låg\", \"ingen\"."
 
 #: commands/advisory_shared.hpp:200
 msgid "ADVISORY_SEVERITY,..."
-msgstr ""
+msgstr "VARSEL_ALVORSGRAD,..."
 
 #: commands/advisory_shared.hpp:212
 msgid ""
 "Include content contained in advisories that fix a Bugzilla ID, Eg. 123123. "
 "List option."
 msgstr ""
+"Ta med innhald i varsel som retter opp ein Bugzilla-ID, t.d. 123123. "
+"Listeval."
 
 #: commands/advisory_shared.hpp:213
 msgid "BUGZILLA_ID,..."
-msgstr ""
+msgstr "BUGZILLA_ID,..."
 
 #: commands/advisory_shared.hpp:223
 msgid ""
 "Include content contained in advisories that fix a CVE (Common "
 "Vulnerabilities and Exposures) ID, Eg. CVE-2201-0123. List option."
 msgstr ""
+"Ta med innhald frå tryggingsvarsel som løyser ein CVE (Common "
+"Vulnerabilities and Exposures) ID, t.d. CVE-2201-0123. Listeval."
 
 #: commands/advisory_shared.hpp:225
 msgid "CVE_ID,..."
-msgstr ""
+msgstr "CVE_ID,…"
 
 #: commands/autoremove/autoremove.cpp:38
 msgid "Remove all unneeded packages originally installed as dependencies."
-msgstr ""
+msgstr "Fjern alle uturvande pakkar som fyrst vart installert som avhengnadar."
 
 #: commands/check-upgrade/check-upgrade.cpp:47
 msgid "Check for available package upgrades"
-msgstr ""
+msgstr "Sjå etter tilgjengelege oppgraderingar til pakkar"
 
 #: commands/check-upgrade/check-upgrade.cpp:54
 msgid ""
@@ -320,195 +366,212 @@ msgid ""
 "advisories is used it reports the lowest versions of packages that fix "
 "advisories matching selected advisory properties"
 msgstr ""
+"Rapporterer dei lægste versjonane av pakkar som løyser tryggingsvarsel av "
+"typen feilretting, forbetring, tryggleik eller ny pakke. Dersom det vert "
+"nytta eit alternativ som avgrensar tryggingsvarsla, rapporterast dei lægste "
+"versjonane av pakkar som løyser tryggingsvarsel som samsvarar med dei valte "
+"eigenskapane for tryggingsvarsla"
 
 #: commands/check/check.cpp:247
 msgid "Check for problems in the packagedb"
-msgstr ""
+msgstr "Sjå etter problem i packagedb"
 
 #: commands/check/check.cpp:335
 msgid "Check discovered {} problem(s) in {} package(s)"
-msgstr ""
+msgstr "Sjå etter oppdaga {} problem i {} pakke(pakkar)"
 
 #: commands/clean/clean.cpp:91
 msgid "List of cache types to clean up. Supported types: {0}"
-msgstr ""
+msgstr "Liste over cache-typar som skal verta rydda opp i. Stødde typar: {0}"
 
 #: commands/clean/clean.cpp:109
 msgid "Unknown cache type \"{0}\". Supported types: {1}"
-msgstr ""
+msgstr "Ukjend cache-type \"{0}\". Stødde typar: {1}"
 
 #: commands/clean/clean.cpp:166
 msgid "Failed to cleanup repository cache in path \"{0}\": {1}"
 msgstr ""
+"Kunne ikkje rydda opp i cache-minnet for pakkebrunnen i stien «{0}»: {1}"
 
 #: commands/clean/clean.cpp:176
 msgid "Cache directory \"{}\" does not exist. Nothing to clean."
-msgstr ""
+msgstr "Cache-katalog \"{}\" finst ikkje. Ingenting å rydde opp i."
 
 #: commands/clean/clean.cpp:181
 msgid "Cannot iterate cache directory \"{}\": {}"
-msgstr ""
+msgstr "Kan ikkje gjennomsøkja cache-katalogen \"{}\": {}"
 
 #: commands/debuginfo-install/debuginfo-install.cpp:45
 msgid "Install debuginfo packages."
-msgstr ""
+msgstr "Installer debuginfo-pakkar."
 
 #: commands/distro-sync/distro-sync.cpp:44
 msgid ""
 "Upgrade or downgrade installed software to the latest available versions"
 msgstr ""
+"Oppgrader eller nedgrader installert programvare til nyaste tilgjengelege "
+"versjonar"
 
 #: commands/do/do.cpp:44
 msgid "Do transaction"
-msgstr ""
+msgstr "Utfør transaksjon"
 
 #: commands/do/do.cpp:49
 msgid "Action to be done on the following items."
-msgstr ""
+msgstr "Tiltak som kan verta sett i verk vedrørande fylgjande punkt."
 
 #: commands/do/do.cpp:63
 msgid "Unsupported action \"{}\""
-msgstr ""
+msgstr "Ustødd tiltak \"{}\""
 
 #: commands/do/do.cpp:73
 msgid "Type of the following items."
-msgstr ""
+msgstr "Type til fylgjande element."
 
 #: commands/do/do.cpp:86
 msgid "Unsupported item type \"{}\""
-msgstr ""
+msgstr "Ustødd elementtype \"{}\""
 
 #: commands/do/do.cpp:99
 msgid "List of items to take action on"
-msgstr ""
+msgstr "Liste over element som skal verta handtert"
 
 #: commands/do/do.cpp:131 commands/do/do.cpp:135
 msgid "Only package downgrade is supported."
-msgstr ""
+msgstr "Berre pakkenedgradering vert stødd."
 
 #: commands/do/do.cpp:142 commands/do/do.cpp:146
 msgid "Only package reinstall is supported."
-msgstr ""
+msgstr "Berre ominstallering av pakkar vert stødd."
 
 #: commands/do/do.cpp:152
 msgid "Action was not defined"
-msgstr ""
+msgstr "Tiltak var ikkje definert"
 
 #: commands/do/do.cpp:230
 msgid "Invalid Environmet/Group specification: {}"
-msgstr ""
+msgstr "Ugild Miljø/Gruppe-spesifikasjonar: {}"
 
 #: commands/do/do.cpp:314
 msgid "Downgrading environments and groups is not supported."
-msgstr ""
+msgstr "Å nedgradera miljø og gruppar vert ikkje stødd."
 
 #: commands/do/do.cpp:330
 msgid "Reinstaling environments and groups is not supported."
-msgstr ""
+msgstr "Å ominstallera miljø og gruppar vert ikkje stødd."
 
 #: commands/downgrade/downgrade.cpp:42
 msgid "Downgrade software"
-msgstr ""
+msgstr "Nedgradera programvare"
 
 #: commands/download/download.cpp:106
 msgid "When running with --url, prints URLs from all available mirrors"
 msgstr ""
+"Når programmet køyrer med --url, vert URLane frå alle tilgjengelege "
+"spegeltenarar synte"
 
 #: commands/download/download.cpp:122
 msgid "Invalid urlprotocol option: {}"
-msgstr ""
+msgstr "Ugildt urlprotocol-val: {}"
 
 #: commands/download/download.cpp:149 main.cpp:627
 msgid "Unsupported architecture \"{0}\". Please choose one from {1}"
-msgstr ""
+msgstr "Ustødd arkitektur \"{0}\". Vel ein frå {1}"
 
 #. TODO(jrohel): Add support for requiring an argument by another argument in ArgumentParser?
 #: commands/download/download.cpp:186
 msgid "Option \"--alldeps\" should be used with \"--resolve\""
-msgstr ""
+msgstr "Valet \"--alldeps\" må verta nytta med \"--resolve\""
 
 #: commands/download/download.cpp:226
 msgid ""
 "No package \"{}\" available; You might want to use --skip-unavailable option."
 msgstr ""
+"Ingen pakke \"{}\" tilgjengeleg; du kan måtte nytta --skip-unavailable-val."
 
 #: commands/environment/arguments.hpp:33
 msgid "Show only available environments."
-msgstr ""
+msgstr "Syn berre tilgjengelege miljø."
 
 #: commands/environment/arguments.hpp:40
 msgid "Show only installed environments."
-msgstr ""
+msgstr "Syn berre installerte miljø."
 
 #: commands/environment/arguments.hpp:47
 msgid "Pattern matching environment IDs."
-msgstr ""
+msgstr "Mønstersamanlikning av miljø-ID-ar."
 
 #: commands/environment/environment.cpp:35
 msgid "Manage comps environments"
-msgstr ""
+msgstr "Handter comps-miljø"
 
 #: commands/from_repo.cpp:35
 msgid ""
 "The following items can be selected only from the specified repositories. "
 "All enabled repositories will still be used to satisfy dependencies."
 msgstr ""
+"Fylgjande element kan berre verta valt frå oppgjevne pakkebrunnar. Alle "
+"aktiverte pakkebrunnar vil fortsatt verta brukt til å oppfylle avhengnadar."
 
 #: commands/from_repo.cpp:38 commands/from_repo.cpp:70
 msgid "REPO_ID,..."
-msgstr ""
+msgstr "REPO_ID,..."
 
 #: commands/from_repo.cpp:53
 msgid "\"--from_repo\" already defined with diferent value"
-msgstr ""
+msgstr "\"--from_repo\" er alt definert med ein annan verdi"
 
 #: commands/from_repo.cpp:68
 msgid ""
 "Filters installed packages by the ID of the repository they were installed "
 "from."
 msgstr ""
+"Filtrerar installerte pakkar etter ID-en til pakkebrunnen dei vart "
+"installert frå."
 
 #: commands/from_repo.cpp:79
 msgid "\"--installed-from_repo\" already defined with diferent value"
-msgstr ""
+msgstr "\"--installed-from_repo\" er alt definert med ein annan verdi"
 
 #: commands/group/arguments.hpp:34
 msgid "Show only available groups."
-msgstr ""
+msgstr "Syn berre tilgjengelege grupper."
 
 #: commands/group/arguments.hpp:41
 msgid "Show also hidden groups."
-msgstr ""
+msgstr "Syn også skylte grupper."
 
 #: commands/group/arguments.hpp:48
 msgid "Show only installed groups."
-msgstr ""
+msgstr "Syn berre installerte grupper."
 
 #: commands/group/arguments.hpp:59
 msgid ""
 "Show only groups containing packages with specified names. List option, "
 "supports globs."
 msgstr ""
+"Syn berre grupper som inneheld pakkar med oppgjevne namn. Listeval, stør "
+"globs."
 
 #: commands/group/arguments.hpp:67
 msgid "Pattern matching group IDS."
-msgstr ""
+msgstr "Gruppe-ID-ar som samsvarar med mønsteret."
 
 #: commands/group/arguments.hpp:76
 msgid "Include optional packages from group."
-msgstr ""
+msgstr "Ta med valfrie pakkar frå gruppe."
 
 #: commands/group/arguments.hpp:83
 msgid "Operate on groups only, no packages are changed."
-msgstr ""
+msgstr "Operer berre på grupper, ingen pakkar vert brigda."
 
 #: commands/history/arguments.hpp:37
 msgid "Transaction ID"
-msgstr ""
+msgstr "Transaksjons-ID"
 
 #: commands/history/arguments.hpp:44
 msgid "Reverse the order of transactions."
-msgstr ""
+msgstr "Vend om rekkefylgja til transaksjonar."
 
 #: commands/history/arguments.hpp:54
 msgid ""
@@ -516,375 +579,415 @@ msgid ""
 "as errors. This can result in an empty transaction because among other "
 "things the option can ignore failing Remove actions."
 msgstr ""
+"Ikkje sjå på avvik mellom installerte og lagra transaksjonspakkar som feil. "
+"Dette kan føra til ein tom transaksjon fordi valet, mellom anna, kan "
+"ignorera mislukka Remove-handlingar."
 
 #: commands/history/arguments.hpp:67
 msgid "Don't consider extra packages pulled into the transaction as errors."
-msgstr ""
+msgstr "Ikkje sjå på tilleggspakkar som er inkludert i transaksjonen som feil."
 
 #: commands/history/arguments.hpp:80
 msgid ""
 "Show only transactions containing packages with specified names. List "
 "option, supports globs."
 msgstr ""
+"Syn berre transaksjonar som inneheld pakkar med oppgjevne namn. Listeval, "
+"stør globs."
 
 #: commands/history/history.cpp:41
 msgid "Manage transaction history"
-msgstr ""
+msgstr "Handter transaksjonshistorikk"
 
 #: commands/history/history_info.cpp:70
 msgid ""
 "No match found, history info defaults to considering only the last "
 "transaction, specify \"1..last\" range to search all transactions."
 msgstr ""
+"Fann ingen treff. Historikkinfo reknar som standard berre med den siste "
+"transaksjonen. Spesifiser området «1..last» for å søkja i alle transaksjonar."
 
 #: commands/history/history_redo.cpp:54
 #: commands/history/history_rollback.cpp:58
 #: commands/history/history_store.cpp:65 commands/history/history_undo.cpp:57
 msgid "No matching transaction ID found, exactly one required."
-msgstr ""
+msgstr "Ingen samsvarande transaksjons-ID funne. Akkurat ein vert kravd."
 
 #: commands/history/history_redo.cpp:58
 #: commands/history/history_rollback.cpp:62
 #: commands/history/history_undo.cpp:61
 msgid "Matched more than one transaction ID, exactly one required."
-msgstr ""
+msgstr "Svara til meir enn éin transaksjons-ID. Akkurat éin vert kravd."
 
 #: commands/history/history_store.cpp:68
 msgid "Multiple transactions selected for storing, only one allowed."
-msgstr ""
+msgstr "Fleire transaksjonar valt til å lagra, berre éin mogleg om gangen."
 
 #: commands/history/history_store.cpp:80
 msgid "File \"{}\" already exists, it will be overwritten.\n"
-msgstr ""
+msgstr "Fila \"{}\" finst alt, ho vil verta overskriven.\n"
 
 #: commands/history/transaction_id.cpp:32
 msgid ""
 "Invalid transaction ID range \"{}\", \"ID\" or \"ID..ID\" expected, where ID "
 "is \"NUMBER\", \"last\" or \"last-NUMBER\"."
 msgstr ""
+"Ugild område for transaksjons-ID «{}». Venta «ID» eller «ID..ID», der ID er «"
+"NUMMER», «last» eller «last-NUMMER»."
 
 #: commands/install/install.cpp:43
 msgid "Install software"
-msgstr ""
+msgstr "Installer programvare"
 
 #: commands/leaves/leaves.cpp:42
 msgid ""
 "List groups of installed packages not required by other installed packages"
 msgstr ""
+"List opp grupper av installerte pakkar som ikkje krevst av andre installerte "
+"pakkar"
 
 #: commands/list/list.cpp:46
 msgid "Lists packages depending on the packages' relation to the system"
-msgstr ""
+msgstr "Listar opp pakkar som avheng av pakkane sin relasjon til systemet"
 
 #: commands/list/list.cpp:50
 msgid "List of package-spec-NI to match (case insensitively)"
 msgstr ""
+"Liste over package-spec-NI som skal samsvara (skil ikkje mellom store og små "
+"bokstavar)"
 
 #: commands/list/list.cpp:62
 msgid "Show all versions of the packages, not only the latest ones."
-msgstr ""
+msgstr "Syn alle versjonar av pakken, ikkje berre dei nyaste."
 
 #: commands/list/list.cpp:70
 msgid "List installed packages."
-msgstr ""
+msgstr "List opp installerte pakkar."
 
 #: commands/list/list.cpp:74
 msgid "List available packages."
-msgstr ""
+msgstr "List opp tilgjengelege pakkar."
 
 #: commands/list/list.cpp:81
 msgid ""
 "List extras, that is packages installed on the system that are not available "
 "in any known repository."
 msgstr ""
+"Syn tillegg («extras»), det vil seia pakkar installerte på systemet som "
+"ikkje er tilgjengelege i nokon kjend pakkebrunn."
 
 #: commands/list/list.cpp:89
 msgid ""
 "List packages installed on the system that are obsoleted by packages in any "
 "known repository."
 msgstr ""
+"Syn pakkar installerte på systemet som er avløyste av pakkar i ein kjend "
+"pakkebrunn."
 
 #: commands/list/list.cpp:94
 msgid "List packages recently added into the repositories."
-msgstr ""
+msgstr "Syn pakkar som nyleg er lagde til i pakkebrunnen."
 
 #: commands/list/list.cpp:98
 msgid "List upgrades available for the installed packages."
-msgstr ""
+msgstr "Syn tilgjengelege oppgraderingar for installerte pakkar."
 
 #: commands/list/list.cpp:102
 msgid "List packages which will be removed by the 'dnf autoremove' command."
-msgstr ""
+msgstr "Syn pakkar som vil verta fjerna av 'dnf autoremove'-kommandoen."
 
 #: commands/list/list.cpp:203 commands/list/list.cpp:208
 msgid "Installed packages"
-msgstr ""
+msgstr "Installerte pakkar"
 
 #: commands/list/list.cpp:204 commands/list/list.cpp:217
 msgid "Available packages"
-msgstr ""
+msgstr "Tilgjengelege pakkar"
 
 #: commands/list/list.cpp:225
 msgid "Available upgrades"
-msgstr ""
+msgstr "Tilgjengelege oppgraderingar"
 
 #: commands/list/list.cpp:241
 msgid "Obsoleting packages"
-msgstr ""
+msgstr "Avløysa pakkar"
 
 #: commands/list/list.cpp:246
 msgid "Autoremove packages"
-msgstr ""
+msgstr "Slett pakkar automatisk"
 
 #: commands/list/list.cpp:250
 msgid "Extra packages"
-msgstr ""
+msgstr "Tilleggspakkar"
 
 #: commands/list/list.cpp:261
 msgid "Recently added packages"
-msgstr ""
+msgstr "Nyleg lagde til pakkar"
 
 #: commands/list/list.cpp:266
 msgid "No matching packages to list"
-msgstr ""
+msgstr "Ingen samsvarande pakkar å lista opp"
 
 #: commands/mark/mark.cpp:38
 msgid "Change the reason of an installed package"
-msgstr ""
+msgstr "Brigda årsaka for ein installert pakke"
 
 #: commands/module/arguments.hpp:36
 msgid "Show enabled modules."
-msgstr ""
+msgstr "Syn aktiverte modular."
 
 #: commands/module/arguments.hpp:43
 msgid "Show disabled modules."
-msgstr ""
+msgstr "Syn deaktiverte modular."
 
 #: commands/module/arguments.hpp:50
 msgid "Pattern matching module NSVCAs."
-msgstr ""
+msgstr "Mønstersamanlikning av modul-NSVCA-ar."
 
 #: commands/module/module.cpp:43
 msgid "Manage modules"
-msgstr ""
+msgstr "Handter modular"
 
 #: commands/module/module_list.cpp:85
 msgid "No matches found for \"{}\"."
-msgstr ""
+msgstr "Ingen treff funne for \"{}\"."
 
 #: commands/offline/offline.cpp:217
 msgid "Manage offline transactions"
-msgstr ""
+msgstr "Handter fråkopla transaksjonar"
 
 #: commands/offline/offline.cpp:249
 msgid ""
 "Error reading state: {}. Rerun the command you used to initiate the offline "
 "transaction, e.g. `dnf5 system-upgrade download [OPTIONS]`."
 msgstr ""
+"Kunne ikkje å lesa tilstand: {}. Køyr på ny kommandoen du brukte for å setja "
+"i gang den fråkopla transaksjonen, t.d. `dnf5 system-upgrade download "
+"[OPTIONS]`."
 
 #: commands/offline/offline.cpp:272
 msgid "Couldn't connect to D-Bus: {}"
-msgstr ""
+msgstr "Kunne ikkje kopla seg til D-Bus: {}"
 
 #: commands/offline/offline.cpp:303
 msgid ""
 "Prepare the system to perform the offline transaction and reboot to start "
 "the transaction."
 msgstr ""
+"Førebu systemet til å utføra fråkopla transaksjon og start systemet på nytt "
+"for å byrja transaksjonen."
 
 #: commands/offline/offline.cpp:310
 msgid "Power off the system after the operation is complete"
-msgstr ""
+msgstr "Slå av systemet etter at handlinga er fullført"
 
 #: commands/offline/offline.cpp:321
 msgid "No offline transaction is stored."
-msgstr ""
+msgstr "Ingen fråkopla transaksjon er lagra."
 
 #: commands/offline/offline.cpp:329
 msgid "System is not ready for offline transaction."
-msgstr ""
+msgstr "Systemet er ikkje budd til fråkopla transaksjon."
 
 #: commands/offline/offline.cpp:332
 msgid "Data directory {} does not exist."
-msgstr ""
+msgstr "Data-katalog {} finst ikkje."
 
 #: commands/offline/offline.cpp:357
 msgid "{} is not wanted by system-update.target."
-msgstr ""
+msgstr "{} er ikkje etterspurd av system-update.target."
 
 #: commands/offline/offline.cpp:367
 msgid "The system will now reboot to upgrade to release version {}."
-msgstr ""
+msgstr "Systemet vil no starte på nytt for å oppgradera til nyaste versjon {}."
 
 #: commands/offline/offline.cpp:371
 msgid ""
 "The system will now reboot to perform the offline transaction initiated by "
 "the following command:"
 msgstr ""
+"Systemet vil no starte på nytt for å utføre den fråkopla transaksjonen som "
+"vart sett i gang av fylgjande kommando:"
 
 #: commands/offline/offline.cpp:402
 msgid ""
 "Internal use only, not intended to be run by the user. Execute the "
 "transaction in the offline environment."
 msgstr ""
+"Berre for internt bruk, ikkje meint å verta køyrt av brukar. Utfør "
+"transaksjonen i det fråkopla miljøet."
 
 #: commands/offline/offline.cpp:436
 msgid "Trigger file does not exist. Exiting."
-msgstr ""
+msgstr "Triggerfila finst ikkje. Avsluttar."
 
 #: commands/offline/offline.cpp:440
 msgid "Another offline transaction tool is running. Exiting."
-msgstr ""
+msgstr "Eit anna verktøy for fråkopla transaksjon vert køyrt. Avsluttar."
 
 #: commands/offline/offline.cpp:467
 msgid "Starting offline transaction. This will take a while."
-msgstr ""
+msgstr "Byrjar fråkopla transaksjon. Dette kan vara ei stund."
 
 #: commands/offline/offline.cpp:471
 msgid "Starting system upgrade. This will take a while."
-msgstr ""
+msgstr "Byrjar systemoppgradering. Dette kan vara ei stund."
 
 #: commands/offline/offline.cpp:483
 msgid "Use `dnf5 offline reboot` to begin the transaction."
-msgstr ""
+msgstr "Bruker `dnf5 offline reboot` for å byrja transaksjonen."
 
 #: commands/offline/offline.cpp:534
 msgid "Transaction failed: "
-msgstr ""
+msgstr "Transaksjonen feila: "
 
 #: commands/offline/offline.cpp:604
 msgid "Error reading journal: {}"
-msgstr ""
+msgstr "Feil ved lesing av logg: {}"
 
 #: commands/offline/offline.cpp:610
 msgid "Add journal match failed: {}"
-msgstr ""
+msgstr "Kunne ikkje å leggja til loggsøk: {}"
 
 #: commands/offline/offline.cpp:638
 msgid "No logs were found."
-msgstr ""
+msgstr "Ingen loggar vart funne."
 
 #: commands/offline/offline.cpp:642
 msgid "The following boots appear to contain offline transaction logs:"
 msgstr ""
+"Fylgjande oppføringar ser ut til å innehalda fråkopla transaksjonsloggar:"
 
 #: commands/offline/offline.cpp:659
 msgid "Cannot find logs with this index."
-msgstr ""
+msgstr "Kan ikkje finne loggar med denne indeksen."
 
 #: commands/offline/offline.cpp:666
 msgid "Unable to match systemd journal entry."
-msgstr ""
+msgstr "Kunne ikkje samsvara med systemd journal entry."
 
 #: commands/offline/offline.cpp:678
 msgid "Show logs from past offline transactions"
-msgstr ""
+msgstr "Syn loggar frå tidlegare fråkopla transaksjonar"
 
 #: commands/offline/offline.cpp:686
 msgid ""
 "Which log to show. Run without any arguments to get a list of available logs."
 msgstr ""
+"Kva for ein logg skal verta syna. Køyr utan nokre argument for å få ei liste "
+"over tilgjengelege loggar."
 
 #: commands/offline/offline.cpp:701
 msgid ""
 "systemd is not supported in this build of DNF 5; the `log` subcommand is "
 "unavailable."
 msgstr ""
+"systemd vert ikkje stødd i denne versjonen til DNF 5; `log`-underkommandoen "
+"er ikkje tilgjengeleg."
 
 #: commands/offline/offline.cpp:706
 msgid "Show status of the current offline transaction"
-msgstr ""
+msgstr "Syn status til noverande fråkopla transaksjon"
 
 #: commands/offline/offline.cpp:722
 msgid "An offline transaction was initiated by the following command:"
-msgstr ""
+msgstr "Ein fråkopla transaksjon vart sett i verk av fylgjande kommando:"
 
 #: commands/offline/offline.cpp:724
 msgid ""
 "Run `dnf5 offline reboot` to reboot and perform the offline transaction."
 msgstr ""
+"Køyr `dnf5 offline reboot` for å starta på ny og utføra den fråkopla "
+"transaksjonen."
 
 #: commands/offline/offline.cpp:726
 msgid ""
 "An offline transaction was started, but it did not finish. Run `dnf5 offline "
 "log` for more information. The command that initiated the transaction was:"
 msgstr ""
+"Ein fråkopla transaksjonen var påbyrja, men ikkje gjennomført. Køyr `dnf5 "
+"offline log` for meir informasjon. Kommandoen som sette i verk transaksjonen "
+"var:"
 
 #: commands/offline/offline.cpp:731
 msgid "Unknown offline transaction status: "
-msgstr ""
+msgstr "Ukjend status til fråkopla transaksjon: "
 
 #: commands/provides/provides.cpp:48
 msgid "Find what package provides the given value"
-msgstr ""
+msgstr "Finn ut kva pakke som tilbyr den gjevne verdien"
 
 #: commands/reinstall/reinstall.cpp:42
 msgid "Reinstall software"
-msgstr ""
+msgstr "Installer programvare på ny"
 
 #: commands/remove/remove.cpp:42
 msgid "Remove (uninstall) software"
-msgstr ""
+msgstr "Slett (avinstaller) programvare"
 
 #: commands/replay/replay.cpp:38
 msgid "Replay a transaction that was previously stored to a directory"
-msgstr ""
+msgstr "Ta opp att ein transaksjon som tidlegare vart lagra i ein katalog"
 
 #: commands/repo/arguments.hpp:35
 msgid "Show all repositories."
-msgstr ""
+msgstr "Syn alle pakkebrunnar."
 
 #: commands/repo/arguments.hpp:42
 msgid "Show enabled repositories (default)."
-msgstr ""
+msgstr "Syn aktiverte pakkebrunnar (standard)."
 
 #: commands/repo/arguments.hpp:49
 msgid "Show disabled repositories."
-msgstr ""
+msgstr "Syn deaktiverte pakkebrunnar."
 
 #: commands/repo/arguments.hpp:56
 msgid "Pattern matching repo IDs."
-msgstr ""
+msgstr "Mønstersamanlikning av pakkebrunn-ID-ar."
 
 #: commands/repo/repo.cpp:38
 msgid "Manage repositories"
-msgstr ""
+msgstr "Handter pakkebrunnar"
 
 #: commands/repoquery/repoquery.cpp:82
 msgid "Search for packages matching various criteria"
-msgstr ""
+msgstr "Søk etter pakkar som oppfyller ulike kriterium"
 
 #: commands/repoquery/repoquery.cpp:525
 msgid ""
 "Option \"--exactdeps\" has to be used either with \"--whatrequires\" or \"--"
 "whatdepends\""
 msgstr ""
+"Valet \"--exactdeps\" må verta nytta med anten \"--whatrequires\" eller \"--"
+"whatdepends\""
 
 #: commands/repoquery/repoquery.cpp:530
 msgid ""
 "Option \"--recursive\" has to be used either with \"--whatrequires\" or \"--"
 "providers-of=requires\""
 msgstr ""
+"Valet \"--recursive\" må verta nytta med anten \"--whatrequires\" eller \"--"
+"providers-of=requires\""
 
 #: commands/search/arguments.hpp:37
 msgid "Search also package description and URL."
-msgstr ""
+msgstr "Søk òg i skildringa og URL til pakken."
 
 #: commands/search/arguments.hpp:45
 msgid "Patterns"
-msgstr ""
+msgstr "Mønster"
 
 #: commands/search/search.cpp:44
 msgid "Search for software matching all specified strings"
-msgstr ""
+msgstr "Søk etter programvare som høver med alle dei oppgjevne strengane"
 
 #: commands/swap/swap.cpp:44
 msgid "Remove software and install another in one transaction"
-msgstr ""
+msgstr "Slett programvare og installer ein annan i ein transaksjon"
 
 #: commands/system-upgrade/system-upgrade.cpp:56
 msgid "Prepare system for upgrade to a new release"
-msgstr ""
+msgstr "Førebu systemet for oppgradering til ei ny utgjeving"
 
 #: commands/system-upgrade/system-upgrade.cpp:72
 msgid "Download everything needed to upgrade to a new release"
@@ -1115,7 +1218,7 @@ msgstr ""
 
 #: context.cpp:845
 msgid "Installing {}"
-msgstr ""
+msgstr "Installerar {}"
 
 #: context.cpp:866
 msgid "Prepare transaction"
@@ -1594,7 +1697,7 @@ msgstr ""
 
 #: main.cpp:1578
 msgid "Complete!"
-msgstr ""
+msgstr "Ferdig!"
 
 #: shared_options.cpp:32
 msgid "Allow removing of installed packages to resolve problems"

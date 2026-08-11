@@ -2,19 +2,24 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # Languages add-on <noreply-addon-languages@weblate.org>, 2026.
+# Weblate Translation Memory <noreply-mt-weblate-translation-memory@weblate.org>, 2026.
+# Priit Jõerüüt <jrtkbfdr@users.noreply.translate.fedoraproject.org>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-07-26 03:48+0000\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Automatically generated\n"
-"Language-Team: none\n"
+"PO-Revision-Date: 2026-06-20 09:12+0000\n"
+"Last-Translator: Priit Jõerüüt "
+"<jrtkbfdr@users.noreply.translate.fedoraproject.org>\n"
+"Language-Team: Estonian <https://translate.fedoraproject.org/projects/dnf5/"
+"libdnf5/et/>\n"
 "Language: et\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 2026.6.1\n"
 
 #: advisory/advisory.cpp:81
 #, c++-format
@@ -36,7 +41,7 @@ msgstr ""
 
 #: base/goal_elements.cpp:352
 msgid "Install"
-msgstr ""
+msgstr "Paigalda"
 
 #: base/goal_elements.cpp:354
 msgid "Install via provide"
@@ -48,15 +53,15 @@ msgstr ""
 
 #: base/goal_elements.cpp:358
 msgid "Upgrade"
-msgstr ""
+msgstr "Uuenda"
 
 #: base/goal_elements.cpp:360
 msgid "Upgrade all"
-msgstr ""
+msgstr "Uuenda kõik"
 
 #: base/goal_elements.cpp:362
 msgid "Upgrade minimal"
-msgstr ""
+msgstr "Uuenda minimaalset vajalik"
 
 #: base/goal_elements.cpp:364
 msgid "Upgrade all minimal"
@@ -64,11 +69,11 @@ msgstr ""
 
 #: base/goal_elements.cpp:366
 msgid "Downgrade"
-msgstr ""
+msgstr "paigalda varasem version"
 
 #: base/goal_elements.cpp:368
 msgid "Reinstall"
-msgstr ""
+msgstr "Paigalda uuesti"
 
 #: base/goal_elements.cpp:370
 msgid "Install or reinstall"
@@ -76,7 +81,7 @@ msgstr ""
 
 #: base/goal_elements.cpp:372
 msgid "Remove"
-msgstr ""
+msgstr "Eemalda"
 
 #: base/goal_elements.cpp:374
 msgid "Distrosync"
@@ -92,19 +97,19 @@ msgstr ""
 
 #: base/goal_elements.cpp:380
 msgid "Resolve"
-msgstr ""
+msgstr "Lahenda"
 
 #: base/goal_elements.cpp:382
 msgid "Enable"
-msgstr ""
+msgstr "Võta kasutusele"
 
 #: base/goal_elements.cpp:384
 msgid "Disable"
-msgstr ""
+msgstr "Eemalda kasutuselt"
 
 #: base/goal_elements.cpp:386
 msgid "Reset"
-msgstr ""
+msgstr "Lähtesta"
 
 #: base/goal_elements.cpp:388
 msgid "Parse serialized transaction"
@@ -388,7 +393,7 @@ msgstr ""
 #: base/log_event.cpp:357 base/log_event.cpp:368
 msgctxt "String for joining NEVRAs - e.g. `foo-4-4.noarch, bar-5-5.noarch`"
 msgid ", "
-msgstr ""
+msgstr ", "
 
 #: base/log_event.cpp:364
 #, c++-format
@@ -432,16 +437,16 @@ msgstr ""
 #: base/solver_problems.cpp:47
 #, c++-format
 msgid "package {} does not exist"
-msgstr ""
+msgstr "{} paketti pole olemas"
 
 #: base/solver_problems.cpp:48 base/solver_problems.cpp:84
 #, c++-format
 msgid "{} is provided by the system"
-msgstr ""
+msgstr "{} on tagatud süsteemi poolt"
 
 #: base/solver_problems.cpp:49 base/solver_problems.cpp:85
 msgid "some dependency problem"
-msgstr ""
+msgstr "mõni sõltuvusprobleem"
 
 #: base/solver_problems.cpp:50
 #, c++-format
@@ -628,12 +633,12 @@ msgstr ""
 
 #: base/solver_problems.cpp:290
 msgid "Problem: "
-msgstr ""
+msgstr "Probleem: "
 
 #: base/solver_problems.cpp:294
 #, c++-format
 msgid "Problem {}: "
-msgstr ""
+msgstr "Probleem {}: "
 
 #: base/transaction.cpp:80
 msgid "This transaction has been already run before."
@@ -670,7 +675,7 @@ msgstr ""
 
 #: base/transaction.cpp:92
 msgid "Canceled by the user."
-msgstr ""
+msgstr "Katkestatud kasutaja poolt."
 
 #: base/transaction.cpp:93
 msgid "Public key import failed."
@@ -684,12 +689,12 @@ msgstr ""
 #: base/transaction.cpp:1314
 #, c++-format
 msgid "Public key \"{}\" is already present, not importing."
-msgstr ""
+msgstr "Avalik võti „{}“ on juba olemas, jätan importimise vahele."
 
 #: base/transaction.cpp:1335
 #, c++-format
 msgid "An error occurred importing key \"{}\": {}"
-msgstr ""
+msgstr "„{}“ võtme importimisel tekkis viga: {}"
 
 #: base/transaction.cpp:1369
 #, c++-format
@@ -703,7 +708,7 @@ msgstr ""
 #: base/transaction.cpp:1416
 msgctxt "It is a joining character for repositories IDs"
 msgid ", "
-msgstr ""
+msgstr ", "
 
 #: base/transaction.cpp:1419
 #, c++-format
@@ -723,7 +728,7 @@ msgstr[1] ""
 
 #: common/exception.cpp:78
 msgid "System error"
-msgstr ""
+msgstr "Süsteemiviga"
 
 #: common/exception.cpp:199
 msgid "General RuntimeError exception"
@@ -842,7 +847,7 @@ msgstr ""
 #: conf/option_path.cpp:98
 #, c++-format
 msgid "Path \"{}\" does not exist"
-msgstr ""
+msgstr "„{}“ asukohta pole olemas"
 
 #: conf/option_seconds.cpp:38
 msgid "Empty time option value"
@@ -946,7 +951,7 @@ msgstr ""
 
 #: module/module_sack.cpp:594
 msgid "Missing '='"
-msgstr ""
+msgstr "Puudu on „=“"
 
 #: module/module_sack.cpp:598 module/module_sack.cpp:606
 msgid "Missing '\"' in the value"
@@ -1001,7 +1006,7 @@ msgstr ""
 
 #: repo/file_downloader.cpp:216
 msgid "Failed to download files"
-msgstr ""
+msgstr "Failide allalaadimine ei õnnestunud"
 
 #: repo/librepo.cpp:118
 msgid ""
@@ -1020,7 +1025,7 @@ msgstr ""
 
 #: repo/package_downloader.cpp:231
 msgid "Already downloaded"
-msgstr ""
+msgstr "On juba allalaaditud"
 
 #: repo/package_downloader.cpp:279
 msgid "Failed to download packages"
@@ -1218,7 +1223,7 @@ msgstr ""
 
 #: rpm/package.cpp:478
 msgid "<unknown>"
-msgstr ""
+msgstr "<tundmatu>"
 
 #: rpm/reldep.cpp:116 rpm/reldep.cpp:123
 msgid "Cannot parse a dependency string"
@@ -1333,7 +1338,7 @@ msgstr ""
 #: rpm/versionlock_config.cpp:284 system/state.cpp:605
 #, c++-format
 msgid "{}"
-msgstr ""
+msgstr "{}"
 
 #. TODO(lukash) throw proper exception class
 #: solv/pool.cpp:174
@@ -1368,7 +1373,7 @@ msgstr ""
 
 #: transaction/Swdb.cpp:91
 msgid "In progress"
-msgstr ""
+msgstr "Töös"
 
 #: transaction/Swdb.cpp:99 transaction/Swdb.cpp:126 transaction/Swdb.cpp:136
 #: transaction/Swdb.cpp:150 transaction/Swdb.cpp:273 transaction/Swdb.cpp:281
@@ -1610,15 +1615,15 @@ msgstr ""
 
 #: utils/fs/file.cpp:139 utils/fs/file.cpp:168
 msgid "error reading file"
-msgstr ""
+msgstr "viga faili lugemisel"
 
 #: utils/fs/file.cpp:154 utils/fs/file.cpp:180
 msgid "error writing file"
-msgstr ""
+msgstr "viga faili kirjutamisel"
 
 #: utils/fs/file.cpp:189
 msgid "error flushing file"
-msgstr ""
+msgstr "viga faili tühjendamisel"
 
 #: utils/fs/file.cpp:198
 msgid "error seeking in file"

@@ -1,7 +1,7 @@
-# Rafael Fontenelle <rafaelff@gnome.org>, 2024, 2025.
+# Rafael Fontenelle <rafaelff@gnome.org>, 2024, 2025, 2026.
 # "Geraldo S. Simião Kutz" <geraldo.simiao.kutz@gmail.com>, 2024.
 # Gabriel Elyas <gabrielelyas@protonmail.com>, 2024.
-# Weblate Translation Memory <noreply-mt-weblate-translation-memory@weblate.org>, 2024.
+# Weblate Translation Memory <noreply-mt-weblate-translation-memory@weblate.org>, 2024, 2026.
 # Fábio Rodrigues Ribeiro <farribeiro@gmail.com>, 2024.
 # Ciro Mota <ciro.mota@gmail.com>, 2025.
 msgid ""
@@ -9,8 +9,9 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-07-26 03:48+0000\n"
-"PO-Revision-Date: 2025-06-11 13:46+0000\n"
-"Last-Translator: Rafael Fontenelle <rafaelff@gnome.org>\n"
+"PO-Revision-Date: 2026-06-23 16:18+0000\n"
+"Last-Translator: Weblate Translation Memory <noreply-mt-weblate-translation-"
+"memory@weblate.org>\n"
 "Language-Team: Portuguese (Brazil) <https://translate.fedoraproject.org/"
 "projects/dnf5/libdnf5-cli/pt_BR/>\n"
 "Language: pt_BR\n"
@@ -18,7 +19,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.11.4\n"
+"X-Generator: Weblate 2026.6.1\n"
 
 #: argument_parser.cpp:68
 msgid "Misconfigured alias \"{}\": cannot convert \"{}\" to a number"
@@ -124,7 +125,7 @@ msgstr "Argumento nomeado com o ID de caminho \"{}\" não encontrado"
 
 #: argument_parser.cpp:1620
 msgid "Positional argument with path id \"{}\" not found"
-msgstr "Argumento posicional com ID de comando \"{}\" não encontrado"
+msgstr "Argumento posicional com ID de caminho \"{}\" não encontrado"
 
 #: exception.cpp:30
 msgid "Operation aborted by the user."
@@ -136,7 +137,7 @@ msgstr "Falha ao resolver a transação"
 
 #: output/moduleinfo.cpp:36
 msgid "Hint: [d]efault, [e]nabled, [x]disabled, [i]nstalled, [a]ctive"
-msgstr "Dica: [d]padrão, [e]ativado, [x]desativado, [i]instalado,[a]ativo"
+msgstr "Dica: [d]padrão, [e]ativado, [x]desativado, [i]instalado, [a]ativo"
 
 #: output/modulelist.cpp:39
 msgid "Hint: [d]efault, [e]nabled, [x]disabled, [i]nstalled"
@@ -155,7 +156,7 @@ msgstr "Nome"
 
 #: output/packageinfo.cpp:68
 msgid "Epoch"
-msgstr "Período"
+msgstr "Época"
 
 #: output/packageinfo.cpp:69 output/transaction_table.cpp:289
 msgid "Version"
@@ -195,7 +196,7 @@ msgstr "Repositório"
 
 #: output/packageinfo.cpp:98
 msgid "Summary"
-msgstr "Sumário"
+msgstr "Resumo"
 
 #: output/packageinfo.cpp:99
 msgid "URL"
@@ -331,7 +332,7 @@ msgstr "Instalando dependências fracas:"
 
 #: output/transaction_table.cpp:537
 msgid "Installing group/module packages:"
-msgstr "Instalação de pacotes de grupos/módulos:"
+msgstr "Instalando pacotes de grupos/módulos:"
 
 #: output/transaction_table.cpp:539
 msgid "Installing:"
@@ -355,7 +356,7 @@ msgstr "Removendo pacotes dependentes:"
 
 #: output/transaction_table.cpp:555
 msgid "Removing unused dependencies:"
-msgstr "Removendo dependências inutilizadas:"
+msgstr "Removendo dependências não utilizadas:"
 
 #: output/transaction_table.cpp:557
 msgid "Removing:"
@@ -383,7 +384,7 @@ msgstr "Atualizando grupos:"
 
 #: output/transaction_table.cpp:629
 msgid "Installing environmental groups:"
-msgstr "Instalação de grupos ambientais:"
+msgstr "Instalando grupos ambientais:"
 
 #: output/transaction_table.cpp:632
 msgid "Removing environmental groups:"
@@ -395,7 +396,7 @@ msgstr "Atualizando grupos ambientais:"
 
 #: output/transaction_table.cpp:662
 msgid "Enabling module streams:"
-msgstr "Ativação de fluxos de módulos:"
+msgstr "Ativando fluxos de módulos:"
 
 #: output/transaction_table.cpp:665
 msgid "Disabling modules:"
@@ -407,7 +408,7 @@ msgstr "Redefinindo módulos:"
 
 #: output/transaction_table.cpp:671
 msgid "Switching module streams:"
-msgstr "Troca de fluxos de módulos:"
+msgstr "Trocando fluxos de módulos:"
 
 #: output/transaction_table.cpp:745
 msgid "Nothing to do."

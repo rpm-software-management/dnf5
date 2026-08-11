@@ -2,13 +2,14 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # Arif Budiman <arifpedia@gmail.com>, 2025, 2026.
+# Ega Natha <ega8642@gmail.com>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-07-26 03:48+0000\n"
-"PO-Revision-Date: 2026-01-24 15:58+0000\n"
-"Last-Translator: Arif Budiman <arifpedia@gmail.com>\n"
+"PO-Revision-Date: 2026-06-06 10:01+0000\n"
+"Last-Translator: Ega Natha <ega8642@gmail.com>\n"
 "Language-Team: Indonesian <https://translate.fedoraproject.org/projects/dnf5/"
 "libdnf5-cli/id/>\n"
 "Language: id\n"
@@ -16,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.15.2\n"
+"X-Generator: Weblate 2026.6.1\n"
 
 #: argument_parser.cpp:68
 #, c++-format
@@ -271,7 +272,7 @@ msgstr[0] " Menginstal ulang: {:4} paket\n"
 #, c++-format
 msgid " Upgrading:       {:4} package\n"
 msgid_plural " Upgrading:       {:4} packages\n"
-msgstr[0] " Meng-upgrade:     {:4} paket\n"
+msgstr[0] " Meningkatkan:     {:4} paket\n"
 
 #. Keep the replaceble number aligned across all messages.
 #: output/transaction_table.cpp:159
@@ -364,7 +365,7 @@ msgstr "Menginstal:"
 
 #: output/transaction_table.cpp:543
 msgid "Upgrading:"
-msgstr "Meng-upgrade:"
+msgstr "Meningkatkan:"
 
 #: output/transaction_table.cpp:546
 msgid "Downgrading:"
@@ -404,7 +405,7 @@ msgstr "Menghapus grup:"
 
 #: output/transaction_table.cpp:602
 msgid "Upgrading groups:"
-msgstr "Meng-upgrade grup:"
+msgstr "Meningkatkan grup:"
 
 #: output/transaction_table.cpp:629
 msgid "Installing environmental groups:"
@@ -416,7 +417,7 @@ msgstr "Menghapus grup lingkungan:"
 
 #: output/transaction_table.cpp:635
 msgid "Upgrading environmental groups:"
-msgstr "Meng-upgrade grup lingkungan:"
+msgstr "Meningkatkan grup lingkungan:"
 
 #: output/transaction_table.cpp:662
 msgid "Enabling module streams:"
