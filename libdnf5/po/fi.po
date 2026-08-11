@@ -1,7 +1,7 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# Ricky Tigg <ricky.tigg@gmail.com>, 2024, 2025.
+# Ricky Tigg <ricky.tigg@gmail.com>, 2024, 2025, 2026.
 # Weblate Translation Memory <noreply-mt-weblate-translation-memory@weblate.org>, 2024, 2025, 2026.
 # Jiri Grönroos <jiri.gronroos@iki.fi>, 2024.
 # Ville-Pekka Vainio <vpvainio@iki.fi>, 2024.
@@ -12,9 +12,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-07-26 03:48+0000\n"
-"PO-Revision-Date: 2026-01-22 08:58+0000\n"
-"Last-Translator: Jouko Tiilikainen "
-"<jti65@users.noreply.translate.fedoraproject.org>\n"
+"PO-Revision-Date: 2026-06-16 12:10+0000\n"
+"Last-Translator: Ricky Tigg <ricky.tigg@gmail.com>\n"
 "Language-Team: Finnish <https://translate.fedoraproject.org/projects/dnf5/"
 "libdnf5/fi/>\n"
 "Language: fi\n"
@@ -22,7 +21,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.15.2\n"
+"X-Generator: Weblate 2026.6.1\n"
 
 #: advisory/advisory.cpp:81
 msgid ""
@@ -324,13 +323,12 @@ msgid_plural ""
 "streams are enabled or default."
 msgstr[0] ""
 "\n"
-"  - Argumentti '{}' vastaa moduulin '{}' {}-virtaa ('{}'), mutta virta ei "
-"ole käytössä tai oletusarvoinen"
+"  - Argumentti '{}' vastaa {} virtaa ('{}') moduulista '{}', mutta virta ei "
+"ole käytössä tai oletusarvoinen."
 msgstr[1] ""
 "\n"
-"  Argumentti ”{argument}” täsmää {stream_count} virtaan (”{streams}”) "
-"moduulille ”{module}”, mutta mitkään virroista eivät ole käytössä tai "
-"oletuksena"
+"  - Argumentti '{}' vastaa {} virtoja ('{}') moduulista '{}', mutta mikään "
+"virroista ei ole käytössä tai oletusarvoinen."
 
 #: base/log_event.cpp:293
 msgid "', '"
@@ -1252,7 +1250,7 @@ msgstr "Paketin otsikon lukeminen tiedostosta \"{}\" epäonnistui"
 
 #: rpm/transaction.cpp:305
 msgid "Cannot init rpm database iterator"
-msgstr "RPM-tietokannan iteraattoria ei voida alustaa"
+msgstr "rpm-tietokannan iteraattoria ei voida alustaa"
 
 #: rpm/transaction.cpp:309
 msgid "Package was not found in rpm database"
@@ -1524,8 +1522,7 @@ msgstr "NEVRA:n jäsentäminen paketille ”{}” epäonnistui"
 
 #: transaction/transaction_sr.cpp:210
 msgid "Either \"nevra\" or \"package_path\" object key is required in an rpm"
-msgstr ""
-"RPM-käskyssä vaaditaan joko \"nevra\"- tai \"package_path\"-objektiavain"
+msgstr "Joko \"nevra\"- tai \"package_path\"-objektiavain vaaditaan rpm:ssa"
 
 #: transaction/transaction_sr.cpp:215
 msgid "Missing object key \"action\" in an rpm"

@@ -3,13 +3,14 @@
 # This file is distributed under the same license as the PACKAGE package.
 # Languages add-on <noreply-addon-languages@weblate.org>, 2026.
 # 耗子 <haozi@loli.email>, 2026.
+# Jean-Baptiste Holcroft <jean-baptiste@holcroft.fr>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-07-26 03:48+0000\n"
-"PO-Revision-Date: 2026-04-06 22:59+0000\n"
-"Last-Translator: 耗子 <haozi@loli.email>\n"
+"PO-Revision-Date: 2026-06-20 09:10+0000\n"
+"Last-Translator: Jean-Baptiste Holcroft <jean-baptiste@holcroft.fr>\n"
 "Language-Team: Chinese (Simplified Han script) <https://"
 "translate.fedoraproject.org/projects/dnf5/dnf5daemon-client/zh_Hans/>\n"
 "Language: zh_Hans\n"
@@ -17,87 +18,87 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.16.2\n"
+"X-Generator: Weblate 2026.6.1\n"
 
 #: commands/advisory/advisory.cpp:35
 msgid "Manage advisories"
-msgstr "管理通告"
+msgstr ""
 
 #: commands/advisory/advisory_info.hpp:34
 msgid "Print details about advisories"
-msgstr "打印通告细节"
+msgstr ""
 
 #: commands/advisory/advisory_list.hpp:34
 msgid "List advisories"
-msgstr "列出通告"
+msgstr ""
 
 #: commands/advisory/arguments.hpp:32
 msgid "Show advisories containing any version of installed packages."
-msgstr "显示包含已安装软件包任意版本的通告。"
+msgstr ""
 
 #: commands/advisory/arguments.hpp:43
 msgid ""
 "Show advisories containing newer versions of installed packages. This is the "
 "default behavior."
-msgstr "显示包含已安装软件包较新版本的通告。这是默认行为。"
+msgstr ""
 
 #: commands/advisory/arguments.hpp:55
 msgid ""
 "Show advisories containing equal and older versions of installed packages."
-msgstr "显示包含已安装软件包的相同及更旧版本的通告。"
+msgstr ""
 
 #: commands/advisory/arguments.hpp:67
 msgid ""
 "Show advisories containing newer versions of installed packages for which a "
 "newer version is available."
-msgstr "显示包含已安装软件包新版本的通告（仅针对有新版本可用的软件包）。"
+msgstr ""
 
 #: commands/advisory/arguments.hpp:80
 msgid ""
 "Show only advisories containing packages with specified names. List option, "
 "supports globs."
-msgstr "仅显示包含指定名称软件包的通告。列表选项，支持通配符。"
+msgstr ""
 
 #: commands/advisory/arguments.hpp:81
 msgid "PACKAGE_NAME,..."
-msgstr "PACKAGE_NAME,..."
+msgstr ""
 
 #: commands/advisory/arguments.hpp:88
 msgid "List of patterns matched against advisory names."
-msgstr "与通告名称匹配的列表。"
+msgstr ""
 
 #: commands/advisory/arguments.hpp:95
 msgid "Show only advisories referencing a bugzilla."
-msgstr "仅显示引用了 Bugzilla 的通告。"
+msgstr ""
 
 #: commands/advisory/arguments.hpp:102
 msgid "Show only advisories referencing a CVE."
-msgstr "仅显示引用了 CVE 的通告。"
+msgstr ""
 
 #: commands/advisory/arguments.hpp:113
 msgid ""
 "Include content contained in advisories with specified name. List option."
-msgstr "包含指定名称的通告中所含的内容。列表选项。"
+msgstr ""
 
 #: commands/advisory/arguments.hpp:114
 msgid "ADVISORY_NAME,..."
-msgstr "ADVISORY_NAME,..."
+msgstr ""
 
 #: commands/advisory/arguments.hpp:121
 msgid "Include content contained in security advisories."
-msgstr "包含安全通告中所载的内容。"
+msgstr ""
 
 #: commands/advisory/arguments.hpp:128
 msgid "Include content contained in bugfix advisories."
-msgstr "包含错误修复通告中的内容。"
+msgstr ""
 
 #: commands/advisory/arguments.hpp:135
 msgid "Include content contained in enhancement advisories."
-msgstr "包含增强建议中包含的内容。"
+msgstr ""
 
 #: commands/advisory/arguments.hpp:142
 msgid "Include content contained in newpackage advisories."
-msgstr "包含新软件包通告中的内容。"
+msgstr ""
 
 #. Note for translators: "critical" etc. quoted words are
 #. literals that should not be translated.
@@ -106,92 +107,88 @@ msgid ""
 "Include content contained in advisories with specified severity. List "
 "option. Can be \"critical\", \"important\", \"moderate\", \"low\", \"none\"."
 msgstr ""
-"包含指定严重级别的通告内容。列表选项。可选值包括：「critical」、「important」"
-"、「moderate」、「low」、「none」。"
 
 #: commands/advisory/arguments.hpp:157
 msgid "ADVISORY_SEVERITY,..."
-msgstr "严重警告,..."
+msgstr ""
 
 #: commands/advisory/arguments.hpp:169
 msgid ""
 "Include content contained in advisories that fix a Bugzilla ID, Eg. 123123. "
 "List option."
-msgstr "包含修复了特定 Bugzilla ID（例如 123123）的通告中所包含的内容。列表选项。"
+msgstr ""
 
 #: commands/advisory/arguments.hpp:170
 msgid "BUGZILLA_ID,..."
-msgstr "BUGZILLA_ID,..."
+msgstr ""
 
 #: commands/advisory/arguments.hpp:180
 msgid ""
 "Include content contained in advisories that fix a CVE (Common "
 "Vulnerabilities and Exposures) ID, Eg. CVE-2201-0123. List option."
 msgstr ""
-"包含修复特定 CVE（通用漏洞披露）ID 的安全通告内容，例如：CVE-2201-0123。列表"
-"选项。"
 
 #: commands/advisory/arguments.hpp:182
 msgid "CVE_ID,..."
-msgstr "CVE_ID,..."
+msgstr ""
 
 #: commands/clean/clean.cpp:88
 #, c++-format
 msgid "Error cleaning the cache: {}"
-msgstr "清除缓存错误：{}"
+msgstr ""
 
 #: commands/distro-sync/distro-sync.cpp:48
 msgid ""
 "Upgrade or downgrade installed software to the latest available versions"
-msgstr "升级或降级已安装的软件至最新可用版本"
+msgstr ""
 
 #: commands/group/group.cpp:41
 msgid "Manage comps groups"
-msgstr "管理 comps 组"
+msgstr ""
 
 #: commands/group/group_list.hpp:37
 msgid "Show only available groups."
-msgstr "仅显示可用的软件包组。"
+msgstr ""
 
 #: commands/group/group_list.hpp:43
 msgid "Show only installed groups."
-msgstr "仅显示已安装的软件组。"
+msgstr ""
 
 #: commands/group/group_list.hpp:49
 msgid "Show also hidden groups."
-msgstr "同时显示已隐藏的软件包组。"
+msgstr ""
 
 #: commands/group/group_list.hpp:59
 msgid ""
 "Show only groups containing packages with specified names. List option, "
 "supports globs."
-msgstr "仅显示包含具有指定名称的软件包组。列表选项，支持通配符。"
+msgstr ""
 
 #: commands/repo/repo.cpp:37
 msgid "Manage repositories"
-msgstr "仓库管理"
+msgstr ""
 
 #: commands/repoquery/repoquery.cpp:95
 msgid "search for packages matching various criteria"
-msgstr "搜索符合条件的软件包"
+msgstr ""
 
 #: commands/repoquery/repoquery.cpp:159
 #, c++-format
 msgid "Error parsing JSON object \"{}\": {}"
-msgstr "解析 JSON 对象错误「{}」：{}"
+msgstr ""
 
 #: exception.cpp:28
 msgid ""
 "This command has to be run with superuser privileges (under the root user on "
 "most systems)."
-msgstr "该命令必须以管理员权限运行 (大多数系统是在 root 用户下)。"
+msgstr ""
 
 #: main.cpp:158
 #, c++-format
 msgid ""
 "{}: Badly formatted argument value: Last key character cannot be '.': {}"
-msgstr "{}：错误的参数值格式：键名的结尾字符不能是「.」：{}"
+msgstr ""
 
 #: main.cpp:258 main.cpp:308
 msgid ". Add \"--help\" for more information about the arguments."
-msgstr "。添加「--help」参数来获取更多参数信息。"
+msgstr ""

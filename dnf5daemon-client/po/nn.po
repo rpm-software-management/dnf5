@@ -2,99 +2,109 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # Languages add-on <noreply-addon-languages@weblate.org>, 2026.
+# Eskil Gerdrup <eskil.gerdrup@outlook.com>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-07-26 03:48+0000\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Automatically generated\n"
-"Language-Team: none\n"
+"PO-Revision-Date: 2026-06-10 15:38+0000\n"
+"Last-Translator: Eskil Gerdrup <eskil.gerdrup@outlook.com>\n"
+"Language-Team: Norwegian Nynorsk <https://translate.fedoraproject.org/"
+"projects/dnf5/dnf5daemon-client/nn/>\n"
 "Language: nn\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 2026.6.1\n"
 
 #: commands/advisory/advisory.cpp:35
 msgid "Manage advisories"
-msgstr ""
+msgstr "Handter varsel"
 
 #: commands/advisory/advisory_info.hpp:34
 msgid "Print details about advisories"
-msgstr ""
+msgstr "Skriv ut detaljar om varsel"
 
 #: commands/advisory/advisory_list.hpp:34
 msgid "List advisories"
-msgstr ""
+msgstr "List opp varsel"
 
 #: commands/advisory/arguments.hpp:32
 msgid "Show advisories containing any version of installed packages."
-msgstr ""
+msgstr "Syn varsel som inneheld nokon versjon av installerte pakkar."
 
 #: commands/advisory/arguments.hpp:43
 msgid ""
 "Show advisories containing newer versions of installed packages. This is the "
 "default behavior."
 msgstr ""
+"Syn varsel som inneheld nyare versjonar av installerte pakkar. Dette er "
+"vanleg åtferd."
 
 #: commands/advisory/arguments.hpp:55
 msgid ""
 "Show advisories containing equal and older versions of installed packages."
 msgstr ""
+"Syn varsel som inneheld den same eller eldre versjonar av installerte pakkar."
 
 #: commands/advisory/arguments.hpp:67
 msgid ""
 "Show advisories containing newer versions of installed packages for which a "
 "newer version is available."
 msgstr ""
+"Syn varsel som inneheld nyare versjonar av installerte pakkar der det finst "
+"ein nyare versjon tilgjengeleg."
 
 #: commands/advisory/arguments.hpp:80
 msgid ""
 "Show only advisories containing packages with specified names. List option, "
 "supports globs."
 msgstr ""
+"Syn berre pakkar som inneheld visse namn. Listealternativ, stør "
+"mønsteruttrykk."
 
 #: commands/advisory/arguments.hpp:81
 msgid "PACKAGE_NAME,..."
-msgstr ""
+msgstr "PAKKE_NAMN,..."
 
 #: commands/advisory/arguments.hpp:88
 msgid "List of patterns matched against advisory names."
-msgstr ""
+msgstr "Liste av mønster som samsvarar med namna på varsla."
 
 #: commands/advisory/arguments.hpp:95
 msgid "Show only advisories referencing a bugzilla."
-msgstr ""
+msgstr "Syn berre varsel som refererer til ein bugzilla."
 
 #: commands/advisory/arguments.hpp:102
 msgid "Show only advisories referencing a CVE."
-msgstr ""
+msgstr "Syn berre varsel som refererer til ein CVE."
 
 #: commands/advisory/arguments.hpp:113
 msgid ""
 "Include content contained in advisories with specified name. List option."
-msgstr ""
+msgstr "Ta med innhald i varsel med oppgitt namn. Listeval."
 
 #: commands/advisory/arguments.hpp:114
 msgid "ADVISORY_NAME,..."
-msgstr ""
+msgstr "VARSEL_NAMN,..."
 
 #: commands/advisory/arguments.hpp:121
 msgid "Include content contained in security advisories."
-msgstr ""
+msgstr "Ta med innhald i tryggingsvarsel."
 
 #: commands/advisory/arguments.hpp:128
 msgid "Include content contained in bugfix advisories."
-msgstr ""
+msgstr "Ta med innhald i bugfix-varsel."
 
 #: commands/advisory/arguments.hpp:135
 msgid "Include content contained in enhancement advisories."
-msgstr ""
+msgstr "Ta med innhald i forbetringsvarsel."
 
 #: commands/advisory/arguments.hpp:142
 msgid "Include content contained in newpackage advisories."
-msgstr ""
+msgstr "Ta med innhald i varsel for nye pakkar."
 
 #. Note for translators: "critical" etc. quoted words are
 #. literals that should not be translated.
@@ -103,30 +113,36 @@ msgid ""
 "Include content contained in advisories with specified severity. List "
 "option. Can be \"critical\", \"important\", \"moderate\", \"low\", \"none\"."
 msgstr ""
+"Ta med innhald i varsel med oppgitt alvorsgrad. Listeval. Kan vera "
+"\"kritisk\", \"viktig\", \"moderat\", \"låg\", \"ingen\"."
 
 #: commands/advisory/arguments.hpp:157
 msgid "ADVISORY_SEVERITY,..."
-msgstr ""
+msgstr "VARSEL_ALVORSGRAD,..."
 
 #: commands/advisory/arguments.hpp:169
 msgid ""
 "Include content contained in advisories that fix a Bugzilla ID, Eg. 123123. "
 "List option."
 msgstr ""
+"Ta med innhald i varsel som retter opp ein Bugzilla-ID, t.d. 123123. "
+"Listeval."
 
 #: commands/advisory/arguments.hpp:170
 msgid "BUGZILLA_ID,..."
-msgstr ""
+msgstr "BUGZILLA_ID,..."
 
 #: commands/advisory/arguments.hpp:180
 msgid ""
 "Include content contained in advisories that fix a CVE (Common "
 "Vulnerabilities and Exposures) ID, Eg. CVE-2201-0123. List option."
 msgstr ""
+"Ta med innhald frå tryggingsvarsel som løyser ein CVE (Common "
+"Vulnerabilities and Exposures) ID, t.d. CVE-2201-0123. Listeval."
 
 #: commands/advisory/arguments.hpp:182
 msgid "CVE_ID,..."
-msgstr ""
+msgstr "CVE_ID,…"
 
 #: commands/clean/clean.cpp:88
 #, c++-format
@@ -137,6 +153,8 @@ msgstr ""
 msgid ""
 "Upgrade or downgrade installed software to the latest available versions"
 msgstr ""
+"Oppgrader eller nedgrader installert programvare til nyaste tilgjengelege "
+"versjonar"
 
 #: commands/group/group.cpp:41
 msgid "Manage comps groups"
@@ -144,25 +162,27 @@ msgstr ""
 
 #: commands/group/group_list.hpp:37
 msgid "Show only available groups."
-msgstr ""
+msgstr "Syn berre tilgjengelege grupper."
 
 #: commands/group/group_list.hpp:43
 msgid "Show only installed groups."
-msgstr ""
+msgstr "Syn berre installerte grupper."
 
 #: commands/group/group_list.hpp:49
 msgid "Show also hidden groups."
-msgstr ""
+msgstr "Syn også skylte grupper."
 
 #: commands/group/group_list.hpp:59
 msgid ""
 "Show only groups containing packages with specified names. List option, "
 "supports globs."
 msgstr ""
+"Syn berre grupper som inneheld pakkar med oppgjevne namn. Listeval, stør "
+"globs."
 
 #: commands/repo/repo.cpp:37
 msgid "Manage repositories"
-msgstr ""
+msgstr "Handter pakkebrunnar"
 
 #: commands/repoquery/repoquery.cpp:95
 msgid "search for packages matching various criteria"

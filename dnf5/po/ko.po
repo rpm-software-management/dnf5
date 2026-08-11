@@ -3,14 +3,14 @@
 # This file is distributed under the same license as the PACKAGE package.
 # Byoungchan Lee <byoungchan.lee@gmx.com>, 2024.
 # Weblate Translation Memory <noreply-mt-weblate-translation-memory@weblate.org>, 2024, 2025.
-# 김인수 <simmon@nplob.com>, 2024, 2025.
+# 김인수 <simmon@nplob.com>, 2024, 2025, 2026.
 # Joungmin Lee <leejm516@gmail.com>, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-07-26 03:48+0000\n"
-"PO-Revision-Date: 2025-07-26 18:41+0000\n"
+"PO-Revision-Date: 2026-06-06 10:01+0000\n"
 "Last-Translator: 김인수 <simmon@nplob.com>\n"
 "Language-Team: Korean <https://translate.fedoraproject.org/projects/dnf5/"
 "dnf5/ko/>\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.12.2\n"
+"X-Generator: Weblate 2026.6.1\n"
 
 #: cmdline_aliases.cpp:84 context.cpp:301 main.cpp:1357
 msgid ", "
@@ -774,7 +774,7 @@ msgstr "{}는 system-update.target에 의해 원하지 않습니다."
 
 #: commands/offline/offline.cpp:367
 msgid "The system will now reboot to upgrade to release version {}."
-msgstr "시스템은 현재 출시 버전으로 향상 하도록 재부팅 합니다 {}."
+msgstr "시스템은 현재 출시 버전 {}로 향상하도록 재시작합니다."
 
 #: commands/offline/offline.cpp:371
 msgid ""

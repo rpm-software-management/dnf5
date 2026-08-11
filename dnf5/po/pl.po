@@ -2,16 +2,17 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # Paweł Marciniak <sunwire+fas@gmail.com>, 2024, 2025, 2026.
-# Weblate Translation Memory <noreply-mt-weblate-translation-memory@weblate.org>, 2024.
+# Weblate Translation Memory <noreply-mt-weblate-translation-memory@weblate.org>, 2024, 2026.
 # Karol Kosek <krkkx@protonmail.com>, 2025.
 # Marcin Juszkiewicz <mjuszkie@redhat.com>, 2025.
+# Nik Nikovsky <zejdzztegomaila@gmail.com>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-07-26 03:48+0000\n"
-"PO-Revision-Date: 2026-02-27 00:58+0000\n"
-"Last-Translator: Paweł Marciniak <sunwire+fas@gmail.com>\n"
+"PO-Revision-Date: 2026-08-07 17:17+0000\n"
+"Last-Translator: Nik Nikovsky <zejdzztegomaila@gmail.com>\n"
 "Language-Team: Polish <https://translate.fedoraproject.org/projects/dnf5/"
 "dnf5/pl/>\n"
 "Language: pl\n"
@@ -20,7 +21,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 5.16.1\n"
+"X-Generator: Weblate 2026.8\n"
 
 #: cmdline_aliases.cpp:84 context.cpp:301 main.cpp:1357
 msgid ", "
@@ -572,7 +573,7 @@ msgstr "Działa tylko na grupach, pakiety nie ulegają zmianie."
 
 #: commands/history/arguments.hpp:37
 msgid "Transaction ID"
-msgstr "ID transakcji"
+msgstr "Identyfikator transakcji"
 
 #: commands/history/arguments.hpp:44
 msgid "Reverse the order of transactions."
@@ -753,7 +754,7 @@ msgstr "Pokaż wyłączone moduły."
 
 #: commands/module/arguments.hpp:50
 msgid "Pattern matching module NSVCAs."
-msgstr "Moduł dopasowania wzorców NSVCA."
+msgstr "Moduł dopasowywania wzorców NSVCA."
 
 #: commands/module/module.cpp:43
 msgid "Manage modules"
@@ -842,7 +843,7 @@ msgstr "Rozpoczęcie transakcji offline. To potrwa chwilę."
 
 #: commands/offline/offline.cpp:471
 msgid "Starting system upgrade. This will take a while."
-msgstr "Rozpoczęcie aktualizacji systemu. To potrwa chwilę."
+msgstr "Rozpoczynanie aktualizacji systemu. Może to chwilę zająć."
 
 #: commands/offline/offline.cpp:483
 msgid "Use `dnf5 offline reboot` to begin the transaction."
@@ -872,7 +873,7 @@ msgstr ""
 
 #: commands/offline/offline.cpp:659
 msgid "Cannot find logs with this index."
-msgstr "Nie można znaleźć dzienników o tym indeksie."
+msgstr "Nie można odnaleźć dzienników za pomocą tego indeksu."
 
 #: commands/offline/offline.cpp:666
 msgid "Unable to match systemd journal entry."
@@ -1249,7 +1250,7 @@ msgstr "Obniżanie wersji {}"
 
 #: context.cpp:826
 msgid "Reinstalling {}"
-msgstr "Ponowna instalacja {}"
+msgstr "Ponowne instalowanie {}"
 
 #: context.cpp:839
 msgid "Unexpected action in TransactionPackage: {}"
@@ -1553,7 +1554,7 @@ msgstr ""
 
 #: main.cpp:587
 msgid "Print variable values to stdout"
-msgstr "Wyświetl wartości zmiennych na standardowe wyjście"
+msgstr "Wyświetl wartości zmienne na standardowe wyjście (stdout)"
 
 #: main.cpp:601
 msgid "Show DNF5 version and exit"
@@ -1652,7 +1653,7 @@ msgstr "======== Zmienne: ========"
 
 #: main.cpp:967
 msgid "New leaves:"
-msgstr "Nowe osamotnione:"
+msgstr "Nowe pozostałości:"
 
 #: main.cpp:969
 msgid " {}"

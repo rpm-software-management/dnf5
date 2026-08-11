@@ -2,19 +2,24 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # H A <contact+fedora@hen.ee>, 2025.
+# Weblate Translation Memory <noreply-mt-weblate-translation-memory@weblate.org>, 2026.
+# Priit Jõerüüt <jrtkbfdr@users.noreply.translate.fedoraproject.org>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-07-26 03:48+0000\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Automatically generated\n"
-"Language-Team: none\n"
+"PO-Revision-Date: 2026-06-20 09:12+0000\n"
+"Last-Translator: Priit Jõerüüt "
+"<jrtkbfdr@users.noreply.translate.fedoraproject.org>\n"
+"Language-Team: Estonian <https://translate.fedoraproject.org/projects/dnf5/"
+"libdnf5-cli/et/>\n"
 "Language: et\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 2026.6.1\n"
 
 #: argument_parser.cpp:68
 msgid "Misconfigured alias \"{}\": cannot convert \"{}\" to a number"
@@ -63,11 +68,11 @@ msgstr ""
 #. print usage
 #: argument_parser.cpp:694
 msgid "Usage:"
-msgstr ""
+msgstr "Kasutus:"
 
 #: argument_parser.cpp:702
 msgid "Description:"
-msgstr ""
+msgstr "Kirjeldus:"
 
 #: argument_parser.cpp:979
 msgid "Command id \"{}\" already registered for command \"{}\""
@@ -141,12 +146,12 @@ msgstr ""
 #. a package properties table as in "Name    : bash".
 #: output/packageinfo.cpp:57
 msgid " : "
-msgstr ""
+msgstr " : "
 
 #. Add package
 #: output/packageinfo.cpp:63
 msgid "Name"
-msgstr ""
+msgstr "Nimi"
 
 #: output/packageinfo.cpp:68
 msgid "Epoch"
@@ -154,7 +159,7 @@ msgstr ""
 
 #: output/packageinfo.cpp:69 output/transaction_table.cpp:289
 msgid "Version"
-msgstr ""
+msgstr "Versioon"
 
 #: output/packageinfo.cpp:70
 msgid "Release"
@@ -162,81 +167,81 @@ msgstr ""
 
 #: output/packageinfo.cpp:71
 msgid "Architecture"
-msgstr ""
+msgstr "Arhitektuur"
 
 #: output/packageinfo.cpp:75
 msgid "Obsoletes"
-msgstr ""
+msgstr "Asendab"
 
 #: output/packageinfo.cpp:85
 msgid "Download size"
-msgstr ""
+msgstr "Allalaadimise maht"
 
 #: output/packageinfo.cpp:89
 msgid "Installed size"
-msgstr ""
+msgstr "Paigaldatud andmemaht"
 
 #: output/packageinfo.cpp:91
 msgid "Source"
-msgstr ""
+msgstr "Allikas"
 
 #: output/packageinfo.cpp:94
 msgid "From repository"
-msgstr ""
+msgstr "Tarkvarahoidlast"
 
 #: output/packageinfo.cpp:96 output/transaction_table.cpp:295
 msgid "Repository"
-msgstr ""
+msgstr "Tarkvarahoidla"
 
 #: output/packageinfo.cpp:98
 msgid "Summary"
-msgstr ""
+msgstr "Kokkuvõte"
 
 #: output/packageinfo.cpp:99
 msgid "URL"
-msgstr ""
+msgstr "Võrguaadress"
 
 #: output/packageinfo.cpp:100
 msgid "License"
-msgstr ""
+msgstr "Litsents"
 
 #: output/packageinfo.cpp:104
 msgid "Description"
-msgstr ""
+msgstr "Kirjeldus"
 
 #: output/packageinfo.cpp:109
 msgid "Vendor"
-msgstr ""
+msgstr "Tarnija"
 
 #: output/search.cpp:45
 msgid " (exact)"
-msgstr ""
+msgstr " (täpne)"
 
 #: output/search.cpp:90
 msgid "No matches found."
-msgstr ""
+msgstr "Vasteid ei leidu."
 
 #: output/search.cpp:101
 msgid "Matched fields: "
-msgstr ""
+msgstr "Vastavad väljad: "
 
 #: output/transaction_table.cpp:127
 msgid "Transaction Summary:\n"
-msgstr ""
+msgstr "Transaktsiooni kokkuvõte:\n"
 
 #. Keep the replaceble number aligned across all messages.
 #: output/transaction_table.cpp:132
 msgid " Installing:      {:4} package\n"
 msgid_plural " Installing:      {:4} packages\n"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] " Paigaldan:      {:4} pakett\n"
+msgstr[1] " Paigaldan:      {:4} paketti\n"
 
 #. Keep the replaceble number aligned across all messages.
 #: output/transaction_table.cpp:141
 msgid " Reinstalling:    {:4} package\n"
 msgid_plural " Reinstalling:    {:4} packages\n"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] " Paigaldan uuesti:      {:4} pakett\n"
+msgstr[1] " Paigaldan uuesti:      {:4} paketti\n"
 
 #. Keep the replaceble number aligned across all messages.
 #: output/transaction_table.cpp:150
@@ -256,8 +261,8 @@ msgstr[1] ""
 #: output/transaction_table.cpp:168
 msgid " Removing:        {:4} package\n"
 msgid_plural " Removing:        {:4} packages\n"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] " Eemaldan:        {:4} pakett\n"
+msgstr[1] " Eemaldan:        {:4} paketti\n"
 
 #. Keep the replaceble number aligned across all messages.
 #: output/transaction_table.cpp:177
@@ -282,15 +287,15 @@ msgstr[1] ""
 
 #: output/transaction_table.cpp:277
 msgid "Package"
-msgstr ""
+msgstr "Pakett"
 
 #: output/transaction_table.cpp:283
 msgid "Arch"
-msgstr ""
+msgstr "Arhitektuur"
 
 #: output/transaction_table.cpp:301
 msgid "Size"
-msgstr ""
+msgstr "Maht"
 
 #: output/transaction_table.cpp:357 output/transaction_table.cpp:451
 msgid "{} -> {}"
@@ -298,7 +303,7 @@ msgstr ""
 
 #: output/transaction_table.cpp:373
 msgid "replacing {}"
-msgstr ""
+msgstr "asendab {}"
 
 #: output/transaction_table.cpp:409 output/transaction_table.cpp:426
 msgid " <name-unset>"
@@ -306,7 +311,7 @@ msgstr ""
 
 #: output/transaction_table.cpp:457
 msgid "replacing "
-msgstr ""
+msgstr "asendab "
 
 #: output/transaction_table.cpp:470
 msgid "Skipping packages with conflicts:"
@@ -318,43 +323,43 @@ msgstr ""
 
 #: output/transaction_table.cpp:533
 msgid "Installing dependencies:"
-msgstr ""
+msgstr "Paigaldan sõltuvusi:"
 
 #: output/transaction_table.cpp:535
 msgid "Installing weak dependencies:"
-msgstr ""
+msgstr "Paigaldan pehmeid sõltuvusi:"
 
 #: output/transaction_table.cpp:537
 msgid "Installing group/module packages:"
-msgstr ""
+msgstr "Paigaldan grupi või mooduli pakette:"
 
 #: output/transaction_table.cpp:539
 msgid "Installing:"
-msgstr ""
+msgstr "Paigaldan:"
 
 #: output/transaction_table.cpp:543
 msgid "Upgrading:"
-msgstr ""
+msgstr "Uuendan:"
 
 #: output/transaction_table.cpp:546
 msgid "Downgrading:"
-msgstr ""
+msgstr "Paigaldan varasemat versiooni:"
 
 #: output/transaction_table.cpp:549
 msgid "Reinstalling:"
-msgstr ""
+msgstr "Paigaldan uuesti:"
 
 #: output/transaction_table.cpp:553
 msgid "Removing dependent packages:"
-msgstr ""
+msgstr "Eemaldan sõltuvaid pakette:"
 
 #: output/transaction_table.cpp:555
 msgid "Removing unused dependencies:"
-msgstr ""
+msgstr "Eemaldan kasutamata sõltuvusi:"
 
 #: output/transaction_table.cpp:557
 msgid "Removing:"
-msgstr ""
+msgstr "Eemaldan:"
 
 #: output/transaction_table.cpp:561
 msgid "Changing reason:"
@@ -362,15 +367,15 @@ msgstr ""
 
 #: output/transaction_table.cpp:593
 msgid "Installing groups dependencies:"
-msgstr ""
+msgstr "Paigaldan grupisõltuvusi:"
 
 #: output/transaction_table.cpp:595
 msgid "Installing groups:"
-msgstr ""
+msgstr "Paigaldan gruppe:"
 
 #: output/transaction_table.cpp:599
 msgid "Removing groups:"
-msgstr ""
+msgstr "Eemaldan gruppe:"
 
 #: output/transaction_table.cpp:602
 msgid "Upgrading groups:"
@@ -378,11 +383,11 @@ msgstr ""
 
 #: output/transaction_table.cpp:629
 msgid "Installing environmental groups:"
-msgstr ""
+msgstr "Paigaldan keskkonnagruppe:"
 
 #: output/transaction_table.cpp:632
 msgid "Removing environmental groups:"
-msgstr ""
+msgstr "Eemaldan keskkonnagruppe:"
 
 #: output/transaction_table.cpp:635
 msgid "Upgrading environmental groups:"
@@ -410,8 +415,8 @@ msgstr ""
 
 #: progressbar/multi_progress_bar.cpp:36
 msgid "Total"
-msgstr ""
+msgstr "Kokku"
 
 #: session.cpp:149
 msgid "Missing command"
-msgstr ""
+msgstr "Puuduv käsk"

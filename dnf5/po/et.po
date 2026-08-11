@@ -2,15 +2,18 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # H A <contact+fedora@hen.ee>, 2025.
-# Henri Aunin <contact+fedora@hen.ee>, 2025.
+# Henri Aunin <contact+fedora@hen.ee>, 2025, 2026.
 # Vahur Schwarze <schwarzevahur@gmail.com>, 2026.
+# Weblate Translation Memory <noreply-mt-weblate-translation-memory@weblate.org>, 2026.
+# Priit Jõerüüt <jrtkbfdr@users.noreply.translate.fedoraproject.org>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-07-26 03:48+0000\n"
-"PO-Revision-Date: 2026-01-05 10:20+0000\n"
-"Last-Translator: Vahur Schwarze <schwarzevahur@gmail.com>\n"
+"PO-Revision-Date: 2026-06-20 09:11+0000\n"
+"Last-Translator: Priit Jõerüüt "
+"<jrtkbfdr@users.noreply.translate.fedoraproject.org>\n"
 "Language-Team: Estonian <https://translate.fedoraproject.org/projects/dnf5/"
 "dnf5/et/>\n"
 "Language: et\n"
@@ -18,7 +21,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.15.1\n"
+"X-Generator: Weblate 2026.6.1\n"
 
 #: cmdline_aliases.cpp:84 context.cpp:301 main.cpp:1357
 msgid ", "
@@ -29,46 +32,45 @@ msgid ""
 "Attached named argument \"{}\" not found: {}: Requested in file \"{}\" on "
 "line {}: {}"
 msgstr ""
-"Lisatud nimetatud argumenti \"{}\" ei leitud {}: nõutud failis \"{}\" real {}"
-": {}"
+"Lisatud nimetatud argumenti „{}“ ei leidunud {}: nõutud „{}“ failis real {}: "
+"{}"
 
 #: cmdline_aliases.cpp:159
 msgid ""
 "Unknown attribute \"{}\" of attached named argument for alias \"{}\" in file "
 "\"{}\" on line {}: {}"
 msgstr ""
-"Lisetatud nimetatud argumendi tundmatu atribuut \"{}\" aliase \"{}\" jaoks "
-"failis \"{}\" real {}: {}"
+"Lisetatud nimetatud argumendi tundmatu „{}“ atribuut „{}“ aliase jaoks „{}“ "
+"failis real {}: {}"
 
 #: cmdline_aliases.cpp:171
 msgid "Missing attribute \"id_path\" for alias \"{}\" in file \"{}\""
-msgstr "Puuduv atribuut \"id_asukoht\" aliase \"{}\" jaoks failis \"{}\""
+msgstr "Puuduv atribuut „id_path“ „{}“ aliase jaoks „{}“ failis"
 
 #: cmdline_aliases.cpp:208
 msgid "Unsupported version \"{}\" in file \"{}\". Supported versions: {}"
-msgstr ""
-"Mittetoetatatav versioon \"{}\" failis \"{}\". Toetatavad versioonid: \"{}\""
+msgstr "Mittetoetatud versioon „{}“ „{}„“ failis. Toetatud versioonid on: „{}“"
 
 #: cmdline_aliases.cpp:218
 msgid "Bad value type of attribute \"version\" in file \"{}\" on line {}: {}"
-msgstr "Halb atribuuti väärtuse tüüp \"versioon\" failis \"{}\" real {}: {}"
+msgstr "Vigane atribuuti väärtuse tüüp „version“ „{}“ failis real {}: {}"
 
 #: cmdline_aliases.cpp:224
 msgid "Missing attribute \"version\" in file \"{}\""
-msgstr "Puuduv atribuut \"versioon\" failis \"{}\""
+msgstr "„{}“ failis puudub „version“ atribuut"
 
 #: cmdline_aliases.cpp:236
 msgid "Unknown key \"{}\" in file \"{}\" on line {}: {}"
-msgstr "Tundmatu võti \"{}\" failis \"{}\" real {}: {}"
+msgstr "Tundmatu „{}“ võti „{}“ failis real {}: {}"
 
 #: cmdline_aliases.cpp:253
 msgid "Empty or bad element id path in file \"{}\" on line {}: {}"
-msgstr "Tühi või vale elementi ID asukoht failis \"{}\" real {}: {}"
+msgstr "Tühi või vale elemendi asukoha tunnus „{}“ failis real {}: {}"
 
 #: cmdline_aliases.cpp:272
 msgid ""
 "Parent command \"{}\" not found: {}: Requested in file \"{}\" on line {}: {}"
-msgstr ""
+msgstr "„{}“ ülemkäsku ei leidunud: {}: Päritud „{}“ failis real {}: {}"
 
 #: cmdline_aliases.cpp:301
 msgid "Unknown type \"{}\" of element \"{}\" in file \"{}\" on line {}: {}"
@@ -199,7 +201,7 @@ msgstr "Saadaval"
 
 #: commands/advisory/advisory_summary.hpp:33
 msgid "Print summary of advisories"
-msgstr ""
+msgstr "Väljasta uuenduste teavistuste kokkuvõte"
 
 #: commands/advisory/arguments.hpp:34
 msgid "Show advisories containing any version of installed packages."
@@ -230,7 +232,7 @@ msgstr ""
 
 #: commands/advisory/arguments.hpp:83 commands/history/arguments.hpp:81
 msgid "PACKAGE_NAME,..."
-msgstr ""
+msgstr "PAKETI_NIMI,..."
 
 #: commands/advisory/arguments.hpp:90
 msgid "List of patterns matched against advisory names."
@@ -303,7 +305,7 @@ msgstr ""
 
 #: commands/advisory_shared.hpp:213
 msgid "BUGZILLA_ID,..."
-msgstr ""
+msgstr "BUGZILLA_TUNNUS,..."
 
 #: commands/advisory_shared.hpp:223
 msgid ""
@@ -313,7 +315,7 @@ msgstr ""
 
 #: commands/advisory_shared.hpp:225
 msgid "CVE_ID,..."
-msgstr ""
+msgstr "CVE_TUNNUS,..."
 
 #: commands/autoremove/autoremove.cpp:38
 msgid "Remove all unneeded packages originally installed as dependencies."
@@ -321,7 +323,7 @@ msgstr ""
 
 #: commands/check-upgrade/check-upgrade.cpp:47
 msgid "Check for available package upgrades"
-msgstr ""
+msgstr "Kontrolli pakettidele leiduvaid uuendusi"
 
 #: commands/check-upgrade/check-upgrade.cpp:54
 msgid ""
@@ -418,7 +420,7 @@ msgstr ""
 
 #: commands/downgrade/downgrade.cpp:42
 msgid "Downgrade software"
-msgstr ""
+msgstr "Paigalda tarkvara varasemad versioonid"
 
 #: commands/download/download.cpp:106
 msgid "When running with --url, prints URLs from all available mirrors"
@@ -466,7 +468,7 @@ msgstr ""
 
 #: commands/from_repo.cpp:38 commands/from_repo.cpp:70
 msgid "REPO_ID,..."
-msgstr ""
+msgstr "TARKVARAHOIDLA_TUNNUS,..."
 
 #: commands/from_repo.cpp:53
 msgid "\"--from_repo\" already defined with diferent value"
@@ -514,7 +516,7 @@ msgstr ""
 
 #: commands/history/arguments.hpp:37
 msgid "Transaction ID"
-msgstr ""
+msgstr "Transaktsiooni tunnus"
 
 #: commands/history/arguments.hpp:44
 msgid "Reverse the order of transactions."
@@ -539,7 +541,7 @@ msgstr ""
 
 #: commands/history/history.cpp:41
 msgid "Manage transaction history"
-msgstr ""
+msgstr "Halda transaktsioonide ajalugu"
 
 #: commands/history/history_info.cpp:70
 msgid ""
@@ -575,7 +577,7 @@ msgstr ""
 
 #: commands/install/install.cpp:43
 msgid "Install software"
-msgstr ""
+msgstr "Paigalda tarkvara"
 
 #: commands/leaves/leaves.cpp:42
 msgid ""
@@ -596,11 +598,11 @@ msgstr ""
 
 #: commands/list/list.cpp:70
 msgid "List installed packages."
-msgstr ""
+msgstr "Näita paigaldatud pakettide loendit."
 
 #: commands/list/list.cpp:74
 msgid "List available packages."
-msgstr ""
+msgstr "Näita saadavalolevate pakettide loendit."
 
 #: commands/list/list.cpp:81
 msgid ""
@@ -628,31 +630,31 @@ msgstr ""
 
 #: commands/list/list.cpp:203 commands/list/list.cpp:208
 msgid "Installed packages"
-msgstr ""
+msgstr "Paigaldatud paketid"
 
 #: commands/list/list.cpp:204 commands/list/list.cpp:217
 msgid "Available packages"
-msgstr ""
+msgstr "Saadavalolevad paketid"
 
 #: commands/list/list.cpp:225
 msgid "Available upgrades"
-msgstr ""
+msgstr "Saadavalolevad uuendused"
 
 #: commands/list/list.cpp:241
 msgid "Obsoleting packages"
-msgstr ""
+msgstr "Aegunuks märgitud paketid"
 
 #: commands/list/list.cpp:246
 msgid "Autoremove packages"
-msgstr ""
+msgstr "Automaatselt eemaldatavad paketid"
 
 #: commands/list/list.cpp:250
 msgid "Extra packages"
-msgstr ""
+msgstr "Täiendavad paketid"
 
 #: commands/list/list.cpp:261
 msgid "Recently added packages"
-msgstr ""
+msgstr "Hiljuti lisatud paketid"
 
 #: commands/list/list.cpp:266
 msgid "No matching packages to list"
@@ -664,11 +666,11 @@ msgstr ""
 
 #: commands/module/arguments.hpp:36
 msgid "Show enabled modules."
-msgstr ""
+msgstr "Näita kasutusel mooduleid."
 
 #: commands/module/arguments.hpp:43
 msgid "Show disabled modules."
-msgstr ""
+msgstr "Näita kasutuselt eemaldatud mooduleid."
 
 #: commands/module/arguments.hpp:50
 msgid "Pattern matching module NSVCAs."
@@ -676,7 +678,7 @@ msgstr ""
 
 #: commands/module/module.cpp:43
 msgid "Manage modules"
-msgstr ""
+msgstr "Halda mooduleid"
 
 #: commands/module/module_list.cpp:85
 msgid "No matches found for \"{}\"."
@@ -694,7 +696,7 @@ msgstr ""
 
 #: commands/offline/offline.cpp:272
 msgid "Couldn't connect to D-Bus: {}"
-msgstr ""
+msgstr "Ühendamine D-Busiga ei õnnestu: {}"
 
 #: commands/offline/offline.cpp:303
 msgid ""
@@ -760,7 +762,7 @@ msgstr ""
 
 #: commands/offline/offline.cpp:534
 msgid "Transaction failed: "
-msgstr ""
+msgstr "Transaktsioon ei õnnestunud: "
 
 #: commands/offline/offline.cpp:604
 msgid "Error reading journal: {}"
@@ -772,7 +774,7 @@ msgstr ""
 
 #: commands/offline/offline.cpp:638
 msgid "No logs were found."
-msgstr ""
+msgstr "Logisid ei leidu."
 
 #: commands/offline/offline.cpp:642
 msgid "The following boots appear to contain offline transaction logs:"
@@ -830,11 +832,11 @@ msgstr ""
 
 #: commands/reinstall/reinstall.cpp:42
 msgid "Reinstall software"
-msgstr ""
+msgstr "Paigalda tarkvara uuesti"
 
 #: commands/remove/remove.cpp:42
 msgid "Remove (uninstall) software"
-msgstr ""
+msgstr "Eemalda tarkvara"
 
 #: commands/replay/replay.cpp:38
 msgid "Replay a transaction that was previously stored to a directory"
@@ -842,7 +844,7 @@ msgstr ""
 
 #: commands/repo/arguments.hpp:35
 msgid "Show all repositories."
-msgstr ""
+msgstr "Näita kõiki rakendustehoidlaid."
 
 #: commands/repo/arguments.hpp:42
 msgid "Show enabled repositories (default)."
@@ -850,7 +852,7 @@ msgstr ""
 
 #: commands/repo/arguments.hpp:49
 msgid "Show disabled repositories."
-msgstr ""
+msgstr "Näita kasutusel eemaldatud tarkvarahoidlaid."
 
 #: commands/repo/arguments.hpp:56
 msgid "Pattern matching repo IDs."
@@ -858,7 +860,7 @@ msgstr ""
 
 #: commands/repo/repo.cpp:38
 msgid "Manage repositories"
-msgstr ""
+msgstr "Halda tarkvarahoidlaid"
 
 #: commands/repoquery/repoquery.cpp:82
 msgid "Search for packages matching various criteria"
@@ -882,7 +884,7 @@ msgstr ""
 
 #: commands/search/arguments.hpp:45
 msgid "Patterns"
-msgstr ""
+msgstr "Mustrid"
 
 #: commands/search/search.cpp:44
 msgid "Search for software matching all specified strings"
@@ -920,7 +922,7 @@ msgstr ""
 
 #: commands/upgrade/upgrade.cpp:43
 msgid "Upgrade software"
-msgstr ""
+msgstr "Uuenda tarkvara"
 
 #: commands/upgrade/upgrade.cpp:50
 msgid ""
@@ -995,21 +997,23 @@ msgstr ""
 
 #: context.cpp:73
 msgid "Importing OpenPGP key 0x{}:\n"
-msgstr ""
+msgstr "Impordin OpenPGP võtit 0x{}:\n"
 
 #: context.cpp:75 context.cpp:100
 msgid " UserID     : \"{}\"\n"
-msgstr ""
+msgstr " Kasutajatunnus     : „{}“\n"
 
 #: context.cpp:78
 msgid ""
 " Fingerprint: {}\n"
 " From       : {}\n"
 msgstr ""
+" Sõrmejälg: {}\n"
+" Allikas       : {}\n"
 
 #: context.cpp:87
 msgid "The key was successfully imported."
-msgstr ""
+msgstr "Võtme importimine õnnestus."
 
 #: context.cpp:96
 msgid "The following OpenPGP key (0x{}) is about to be removed:"
@@ -1017,11 +1021,11 @@ msgstr ""
 
 #: context.cpp:98
 msgid " Reason     : {}\n"
-msgstr ""
+msgstr " Põhjus     : {}\n"
 
 #: context.cpp:102
 msgid " Fingerprint: {}\n"
-msgstr ""
+msgstr " Sõrmejälg: {}\n"
 
 #: context.cpp:104
 msgid "As a result, installing packages signed with this key will fail."
@@ -1029,7 +1033,7 @@ msgstr ""
 
 #: context.cpp:105
 msgid "It is recommended to remove the expired key to allow importing"
-msgstr ""
+msgstr "Importimise toimimiseks soovitame, et eemalda aegunud võti"
 
 #: context.cpp:106
 msgid ""
@@ -1038,7 +1042,7 @@ msgstr ""
 
 #: context.cpp:109
 msgid "The system will now proceed with removing the key."
-msgstr ""
+msgstr "Järgnevalt süsteem eemaldab selle võtme."
 
 #: context.cpp:115
 msgid "Key 0x{} was successfully removed."
@@ -1046,7 +1050,7 @@ msgstr ""
 
 #: context.cpp:295
 msgid "setopt: \"{}.{}\": {}"
-msgstr ""
+msgstr "setopt: \"{}.{}\": {}"
 
 #: context.cpp:305
 msgid ""
@@ -1060,11 +1064,11 @@ msgstr ""
 
 #: context.cpp:355
 msgid "Updating and loading repositories:"
-msgstr ""
+msgstr "Uuendan ja laadin tarkvarahoidlate andmeid:"
 
 #: context.cpp:365
 msgid "Repositories loaded."
-msgstr ""
+msgstr "Tarkvarahoidlad on laaditud."
 
 #: context.cpp:371
 msgid "Testing offline transaction"
@@ -1072,11 +1076,11 @@ msgstr ""
 
 #: context.cpp:375 context.cpp:523
 msgid "Transaction failed: {}"
-msgstr ""
+msgstr "Transaktsioon ei õnnestunud: {}"
 
 #: context.cpp:380 context.cpp:528
 msgid "  - {}"
-msgstr ""
+msgstr "  - {}"
 
 #: context.cpp:447
 msgid ""
@@ -1105,19 +1109,19 @@ msgstr ""
 
 #: context.cpp:502
 msgid "Running transaction"
-msgstr ""
+msgstr "Transaktsioon on töös"
 
 #: context.cpp:820
 msgid "Upgrading {}"
-msgstr ""
+msgstr "Uuendan: {}"
 
 #: context.cpp:823
 msgid "Downgrading {}"
-msgstr ""
+msgstr "Paigaldan varasemat versiooni: {}"
 
 #: context.cpp:826
 msgid "Reinstalling {}"
-msgstr ""
+msgstr "Paigaldan uuesti: {}"
 
 #: context.cpp:839
 msgid "Unexpected action in TransactionPackage: {}"
@@ -1125,15 +1129,15 @@ msgstr ""
 
 #: context.cpp:845
 msgid "Installing {}"
-msgstr ""
+msgstr "Paigaldan: {}"
 
 #: context.cpp:866
 msgid "Prepare transaction"
-msgstr ""
+msgstr "Valmistan transaktsiooni ette"
 
 #: context.cpp:886
 msgid "Removing {}"
-msgstr ""
+msgstr "Eemaldan: {}"
 
 #: context.cpp:889
 msgid "Cleanup {}"
@@ -1141,19 +1145,19 @@ msgstr ""
 
 #: context.cpp:907
 msgid "Unpack error: {}"
-msgstr ""
+msgstr "Viga lahtipakkimisel: {}"
 
 #: context.cpp:915
 msgid "Cpio error: {}"
-msgstr ""
+msgstr "Cpio viga: {}"
 
 #: context.cpp:925
 msgid "Scriptlet output:"
-msgstr ""
+msgstr "Lõigendi väljund:"
 
 #: context.cpp:948
 msgid "Running scriptlets"
-msgstr ""
+msgstr "Käivitan lõigendeid"
 
 #: context.cpp:953
 msgid "Running {} scriptlet: {}"
@@ -1173,7 +1177,7 @@ msgstr ""
 
 #: context.cpp:1018
 msgid "Verify package files"
-msgstr ""
+msgstr "Kontrollin paketi faile"
 
 #: library.cpp:33
 msgid "Cannot load shared library \"{}\": {}"
@@ -1193,19 +1197,19 @@ msgstr ""
 
 #: main.cpp:135
 msgid "Unclassified options:"
-msgstr ""
+msgstr "Klassifitseerimata valikud:"
 
 #: main.cpp:138
 msgid "Global options:"
-msgstr ""
+msgstr "Üldised valikud:"
 
 #: main.cpp:143
 msgid "Print help"
-msgstr ""
+msgstr "Väljasta abiteave"
 
 #: main.cpp:150
 msgid "Configuration file location"
-msgstr ""
+msgstr "Seadistuste fail asukoht"
 
 #: main.cpp:158
 msgid ""
@@ -1266,7 +1270,7 @@ msgstr ""
 
 #: main.cpp:269
 msgid "setopt: \"{0}\": {1}"
-msgstr ""
+msgstr "setopt: \"{0}\": {1}"
 
 #: main.cpp:281
 msgid "set arbitrary variable"
@@ -1274,7 +1278,7 @@ msgstr ""
 
 #: main.cpp:295
 msgid "setvar: {}"
-msgstr ""
+msgstr "setvar: {}"
 
 #: main.cpp:304
 msgid "automatically answer yes for all questions"
@@ -1401,15 +1405,15 @@ msgstr ""
 
 #: main.cpp:653
 msgid "Query Commands:"
-msgstr ""
+msgstr "Päringu käsud:"
 
 #: main.cpp:660
 msgid "Subcommands:"
-msgstr ""
+msgstr "Alamkäsud:"
 
 #: main.cpp:759
 msgid "{} version {}.{}.{}.{}"
-msgstr ""
+msgstr "{} versioon {}.{}.{}.{}"
 
 #: main.cpp:762
 msgid "{} plugin API version {}.{}"
@@ -1431,11 +1435,11 @@ msgstr ""
 
 #: main.cpp:782
 msgid "  name: {}"
-msgstr ""
+msgstr "  nimi: {}"
 
 #: main.cpp:785
 msgid "  version: {}.{}.{}"
-msgstr ""
+msgstr "  versioon: {}.{}.{}"
 
 #: main.cpp:787
 msgid "  API version: {}.{}"
@@ -1445,18 +1449,24 @@ msgstr ""
 msgid ""
 "Total size of inbound packages is {:.0f} {:s}. Need to download {:.0f} {:s}."
 msgstr ""
+"Kasutatavate pakettide kogumaht on {:.0f} {:s}. Allalaadimist vajab {:.0f} "
+"{:s}."
 
 #: main.cpp:842
 msgid ""
 "After this operation, {:.0f} {:s} extra will be used (install {:.0f} {:s}, "
 "remove {:.0f} {:s})."
 msgstr ""
+"Selle tegevuse järel saab olema kasutusel {:.0f} {:s} täiendavat andmeruumi "
+"(paigaldades {:.0f} {:s}, eemaldades {:.0f} {:s})."
 
 #: main.cpp:853
 msgid ""
 "After this operation, {:.0f} {:s} will be freed (install {:.0f} {:s}, remove "
 "{:.0f} {:s})."
 msgstr ""
+"Selle tegevuse järel vabaneb {:.0f} {:s} andmeruumi (paigaldades {:.0f} {:s}"
+", eemaldades {:.0f} {:s})."
 
 #: main.cpp:865
 msgid "======== Main configuration: ========"
@@ -1480,7 +1490,7 @@ msgstr ""
 
 #: main.cpp:969
 msgid " {}"
-msgstr ""
+msgstr " {}"
 
 #: main.cpp:1013
 msgid "{} to skip unavailable packages"
@@ -1543,7 +1553,7 @@ msgstr "{}."
 
 #: main.cpp:1304 main.cpp:1556
 msgid "{}. Add \"--help\" for more information about the arguments."
-msgstr ""
+msgstr "{}. Täiendava teabe jaoks lisa „--help“ argumendina."
 
 #: main.cpp:1313
 msgid ""
@@ -1600,7 +1610,7 @@ msgstr ""
 
 #: main.cpp:1574
 msgid "DNF5 finished"
-msgstr "DNF5 lõpetatud"
+msgstr "DNF5 lõpetas"
 
 #: main.cpp:1578
 msgid "Complete!"

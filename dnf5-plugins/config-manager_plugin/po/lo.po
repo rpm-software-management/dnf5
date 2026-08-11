@@ -1,0 +1,266 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# Bone NI <bounkirdni@gmail.com>, 2026.
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-07-26 03:48+0000\n"
+"PO-Revision-Date: 2026-05-07 16:09+0000\n"
+"Last-Translator: Bone NI <bounkirdni@gmail.com>\n"
+"Language-Team: Lao <https://translate.fedoraproject.org/projects/dnf5/dnf5-"
+"plugin-config-manager/lo/>\n"
+"Language: lo\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Weblate 5.17.1\n"
+
+#: addrepo.cpp:136
+#, c++-format
+msgid "from-repofile: \"{}\" file does not exist"
+msgstr "from-repofile: ໄຟລ໌ \"{}\" ບໍ່ມີຢູ່"
+
+#: addrepo.cpp:139
+#, c++-format
+msgid "from-repofile: {}"
+msgstr "from-repofile: {}"
+
+#: addrepo.cpp:169 setopt.cpp:83 setvar.cpp:49
+#, c++-format
+msgid "{}: Badly formatted argument value \"{}\""
+msgstr "{}: ຮູບແບບຄ່າອາຄິວເມນບໍ່ຖືກຕ້ອງ \"{}\""
+
+#: addrepo.cpp:179
+#, c++-format
+msgid "Cannot set repository option \"{}={}\": {}"
+msgstr "ບໍ່ສາມາດຕັ້ງຕົວເລືອກຄັງເກັບ \"{}={}\": {}"
+
+#: addrepo.cpp:187 setopt.cpp:138
+#, c++-format
+msgid "Sets the \"{}\" option again with a different value: \"{}\" != \"{}\""
+msgstr "ຕັ້ງຄ່າຕົວເລືອກ \"{}\" ຄືນໃໝ່ດ້ວຍຄ່າທີ່ຕ່າງກັນ: \"{}\" != \"{}\""
+
+#: addrepo.cpp:253
+msgid "Missing path to repository configuration directory"
+msgstr "ບໍ່ພົບເສັ້ນທາງໄປຫາໄດເຣັກທໍຣີການຕັ້ງຄ່າຄັງເກັບ"
+
+#: addrepo.cpp:303
+#, c++-format
+msgid "Failed to copy repository configuration file \"{}\": {}"
+msgstr "ຄັດລອກໄຟລ໌ການຕັ້ງຄ່າຄັງເກັບ \"{}\" ບໍ່ສຳເລັດ: {}"
+
+#: addrepo.cpp:314
+#, c++-format
+msgid "Failed to download repository configuration file \"{}\": {}"
+msgstr "ດາວໂຫຼດໄຟລ໌ການຕັ້ງຄ່າຄັງເກັບ \"{}\" ບໍ່ສຳເລັດ: {}"
+
+#: addrepo.cpp:342
+#, c++-format
+msgid ""
+"Error in added repository configuration file. Cannot set repository option "
+"\"{}={}\": {}"
+msgstr ""
+"ເກີດຂໍ້ຜິດພາດໃນໄຟລ໌ການຕັ້ງຄ່າຄັງເກັບທີ່ເພີ່ມເຂົ້າມາ. ບໍ່ສາມາດຕັ້ງຕົວເລືອກຄັງເກັບ \"{}={}\": {}"
+
+#: addrepo.cpp:376
+#, c++-format
+msgid "Bad baseurl: {}={}"
+msgstr "baseurl ບໍ່ຖືກຕ້ອງ: {}={}"
+
+#: addrepo.cpp:384
+msgid ""
+"One of --from-repofile=<URL>, --set=baseurl=<URL>, --set=mirrorlist=<URL>, --"
+"set=metalink=<URL> must be set to a non-empty URL"
+msgstr ""
+"ຕ້ອງກຳນົດໜຶ່ງໃນ --from-repofile=<URL>, --set=baseurl=<URL>, --"
+"set=mirrorlist=<URL>, --set=metalink=<URL> ໃຫ້ເປັນ URL ທີ່ບໍ່ຫວ່າງເປົ່າ"
+
+#: addrepo.cpp:429
+#, c++-format
+msgid "Failed to save repository configuration file \"{}\": {}"
+msgstr "ບັນທຶກໄຟລ໌ການຕັ້ງຄ່າຄັງເກັບ \"{}\" ບໍ່ສຳເລັດ: {}"
+
+#: addrepo.cpp:451
+#, c++-format
+msgid ""
+"File \"{}\" already exists and configures repositories with IDs \"{}\". Add "
+"\"--add-or-replace\" or \"--overwrite\"."
+msgstr ""
+"ໄຟລ໌ \"{}\" ມີຢູ່ແລ້ວ ແລະ ມີການຕັ້ງຄ່າຄັງເກັບທີ່ມີ ID \"{}\". ໃຫ້ເພີ່ມ \"--add-or-replace\" ຫຼື "
+"\"--overwrite\"."
+
+#: addrepo.cpp:454
+#, c++-format
+msgid ""
+"File \"{}\" already exists and configures repositories with IDs \"{}\". Add "
+"\"--overwrite\" to overwrite."
+msgstr ""
+"ໄຟລ໌ \"{}\" ມີຢູ່ແລ້ວ ແລະ ມີການຕັ້ງຄ່າຄັງເກັບທີ່ມີ ID \"{}\". ໃຫ້ເພີ່ມ \"--overwrite\" ເພື່ອຂຽນທັ"
+"ບ."
+
+#: addrepo.cpp:474 addrepo.cpp:500
+#, c++-format
+msgid "A repository with id \"{}\" already configured in file: {}"
+msgstr "ຄັງເກັບທີ່ມີ id \"{}\" ຖືກຕັ້ງຄ່າໄວ້ແລ້ວໃນໄຟລ໌: {}"
+
+#: addrepo.cpp:486 setopt.cpp:263
+#, c++-format
+msgid "Cannot read repositories from directory \"{}\": {}"
+msgstr "ບໍ່ສາມາດອ່ານຄັງເກັບຈາກໄດເຣັກທໍຣີ \"{}\": {}"
+
+#: config-manager.cpp:43
+msgid "Manage configuration"
+msgstr "ຈັດການການຕັ້ງຄ່າ"
+
+#: setopt.cpp:91 unsetopt.cpp:72
+#, c++-format
+msgid ""
+"{}: Badly formatted argument value: Last key character cannot be '.': {}"
+msgstr ""
+"{}: ຮູບແບບຄ່າອາຄິວເມນບໍ່ຖືກຕ້ອງ: ຕົວອັກສອນສຸດທ້າຍຂອງຄີເປັນ '.' ບໍ່ໄດ້: {}"
+
+#: setopt.cpp:100 unsetopt.cpp:81
+#, c++-format
+msgid "{}: Empty repository id is not allowed: {}"
+msgstr "{}: ບໍ່ອະນຸຍາດໃຫ້ id ຂອງຄັງເກັບຫວ່າງເປົ່າ: {}"
+
+#: setopt.cpp:109
+#, c++-format
+msgid "Cannot set repository option \"{}\": {}"
+msgstr "ບໍ່ສາມາດຕັ້ງຕົວເລືອກຄັງເກັບ \"{}\": {}"
+
+#: setopt.cpp:116 setopt.cpp:179
+#, c++-format
+msgid ""
+"Sets the \"{}\" option of the repository \"{}\" again with a different "
+"value: \"{}\" != \"{}\""
+msgstr ""
+"ຕັ້ງຄ່າຕົວເລືອກ \"{}\" ຂອງຄັງເກັບ \"{}\" ຄືນໃໝ່ດ້ວຍຄ່າທີ່ຕ່າງກັນ: \"{}\" != \"{}\""
+
+#: setopt.cpp:130
+#, c++-format
+msgid "Cannot set option: \"{}\": {}"
+msgstr "ບໍ່ສາມາດຕັ້ງຕົວເລືອກ: \"{}\": {}"
+
+#: setopt.cpp:170
+#, c++-format
+msgid "No matching repository to modify: {}"
+msgstr "ບໍ່ພົບຄັງເກັບທີ່ກົງກັນເພື່ອແກ້ໄຂ: {}"
+
+#: setvar.cpp:60
+#, c++-format
+msgid "Cannot set \"{}\": Variable \"{}\" is read-only"
+msgstr "ບໍ່ສາມາດຕັ້ງ \"{}\": ຕົວປ່ຽນ \"{}\" ສາມາດອ່ານໄດ້ຢ່າງດຽວ"
+
+#: setvar.cpp:68
+#, c++-format
+msgid "Sets the \"{}\" variable again with a different value: \"{}\" != \"{}\""
+msgstr "ຕັ້ງຄ່າຕົວປ່ຽນ \"{}\" ຄືນໃໝ່ດ້ວຍຄ່າທີ່ຕ່າງກັນ: \"{}\" != \"{}\""
+
+#: setvar.cpp:97 unsetvar.cpp:63
+msgid "Missing path to vars directory"
+msgstr "ບໍ່ພົບເສັ້ນທາງໄປຫາໄດເຣັກທໍຣີຂອງຕົວປ່ຽນ (vars)"
+
+#: setvar.cpp:110
+#, c++-format
+msgid "Cannot write variable to file \"{}\": {}"
+msgstr "ບໍ່ສາມາດຂຽນຕົວປ່ຽນລົງໃນໄຟລ໌ \"{}\": {}"
+
+#: shared.hpp:58
+#, c++-format
+msgid ""
+"The path \"{}\" exists, but it is not a directory or a symlink to a "
+"directory."
+msgstr ""
+"ເສັ້ນທາງ \"{}\" ມີຢູ່, ແຕ່ມັນບໍ່ແມ່ນໄດເຣັກທໍຣີ ຫຼື ຊິມລິງ (symlink) ທີ່ຊີ້ໄປຫາໄດເຣັກທໍຣີ."
+
+#: shared.hpp:63
+#, c++-format
+msgid "The path \"{}\" exists, but it is a symlink to a non-existent object."
+msgstr ""
+"ເສັ້ນທາງ \"{}\" ມີຢູ່, ແຕ່ມັນແມ່ນຊິມລິງ (symlink) ທີ່ຊີ້ໄປຫາສິ່ງທີ່ບໍ່ມີຢູ່."
+
+#: shared.hpp:69
+#, c++-format
+msgid ""
+"Directory \"{}\" does not exist. Add \"--create-missing-dir\" to create "
+"missing directories."
+msgstr ""
+"ໄດເຣັກທໍຣີ \"{}\" ບໍ່ມີຢູ່. ໃຫ້ເພີ່ມ \"--create-missing-dir\" ເພື່ອສ້າງໄດເຣັກທໍຣີທີ່ຍັງບໍ່ມີ."
+
+#: shared.hpp:80
+#, c++-format
+msgid "Variable name can contain only ASCII letters, numbers and '_': {}"
+msgstr "ຊື່ຕົວປ່ຽນສາມາດມີໄດ້ພຽງແຕ່ຕົວອັກສອນ ASCII, ຕົວເລກ ແລະ '_': {}"
+
+#: unsetopt.cpp:93
+#, c++-format
+msgid "config-manager: Request to remove unsupported repository option: {}"
+msgstr "config-manager: ຄຳຮ້ອງຂໍໃຫ້ລຶບຕົວເລືອກຄັງເກັບທີ່ບໍ່ຮອງຮັບ: {}"
+
+#: unsetopt.cpp:105
+#, c++-format
+msgid "config-manager: Request to remove unsupported main option: {}"
+msgstr "config-manager: ຄຳຮ້ອງຂໍໃຫ້ລຶບຕົວເລືອກຫຼັກທີ່ບໍ່ຮອງຮັບ: {}"
+
+#: unsetopt.cpp:140
+#, c++-format
+msgid ""
+"config-manager: Request to remove main option but it is not present in the "
+"config file: {}"
+msgstr ""
+"config-manager: ຄຳຮ້ອງຂໍໃຫ້ລຶບຕົວເລືອກຫຼັກ ແຕ່ມັນບໍ່ມີຢູ່ໃນໄຟລ໌ການຕັ້ງຄ່າ: {}"
+
+#: unsetopt.cpp:152
+#, c++-format
+msgid ""
+"config-manager: Request to remove main option but config file not found: {}"
+msgstr "config-manager: ຄຳຮ້ອງຂໍໃຫ້ລຶບຕົວເລືອກຫຼັກ ແຕ່ບໍ່ພົບໄຟລ໌ການຕັ້ງຄ່າ: {}"
+
+#: unsetopt.cpp:186
+#, c++-format
+msgid ""
+"config-manager: Request to remove repository option but repoid is not "
+"present in the overrides: {}"
+msgstr ""
+"config-manager: ຄຳຮ້ອງຂໍໃຫ້ລຶບຕົວເລືອກຄັງເກັບ ແຕ່ repoid ບໍ່ມີຢູ່ໃນສ່ວນຂຽນທັບ (overrides): {}"
+
+#: unsetopt.cpp:194
+#, c++-format
+msgid ""
+"config-manager: Request to remove repository option but it is not present in "
+"the overrides: {}.{}"
+msgstr ""
+"config-manager: ຄຳຮ້ອງຂໍໃຫ້ລຶບຕົວເລືອກຄັງເກັບ ແຕ່ມັນບໍ່ມີຢູ່ໃນສ່ວນຂຽນທັບ (overrides): {}.{}"
+
+#: unsetopt.cpp:214
+#, c++-format
+msgid ""
+"config-manager: Request to remove repository option but file with overrides "
+"not found: {}"
+msgstr ""
+"config-manager: ຄຳຮ້ອງຂໍໃຫ້ລຶບຕົວເລືອກຄັງເກັບ ແຕ່ບໍ່ພົບໄຟລ໌ທີ່ມີສ່ວນຂຽນທັບ (overrides): {}"
+
+#: unsetvar.cpp:69
+#, c++-format
+msgid ""
+"config-manager: Request to remove variable but vars directory was not found: "
+"{}"
+msgstr ""
+"config-manager: ຄຳຮ້ອງຂໍໃຫ້ລຶບຕົວປ່ຽນ ແຕ່ບໍ່ພົບໄດເຣັກທໍຣີຂອງຕົວປ່ຽນ (vars): {}"
+
+#: unsetvar.cpp:82
+#, c++-format
+msgid ""
+"config-manager: Request to remove variable but it is not present in the vars "
+"directory: {}"
+msgstr ""
+"config-manager: ຄຳຮ້ອງຂໍໃຫ້ລຶບຕົວປ່ຽນ ແຕ່ມັນບໍ່ມີຢູ່ໃນໄດເຣັກທໍຣີຂອງຕົວປ່ຽນ (vars): {}"
+
+#: unsetvar.cpp:88
+#, c++-format
+msgid "Cannot remove variable file \"{}\": {}"
+msgstr "ບໍ່ສາມາດລຶບໄຟລ໌ຕົວປ່ຽນ \"{}\": {}"
