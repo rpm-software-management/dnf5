@@ -133,6 +133,14 @@ protected:
     /// Called by leaf set() implementations when a value is actually accepted.
     std::string take_pending_source() noexcept;
 
+    /// Sets a pointer to the parent option for source fallback.
+    /// When this option has no value set (priority == EMPTY), get_source() returns parent's source.
+    /// Used by OptionChild to inherit source from the parent option.
+    void set_parent(const Option * parent) noexcept;
+
+    /// Returns a pointer to the parent option, or nullptr if not set.
+    const Option * get_parent() const noexcept;
+
 private:
     class LIBDNF_LOCAL Impl;
     ImplPtr<Impl> p_impl;

@@ -37,6 +37,9 @@ private:
     std::string lock_comment;
     std::string source;
     std::string pending_source;
+
+    // Used by OptionChild to delegate get_source() to parent when no own value is set
+    const Option * parent{nullptr};
 };
 
 Option::Option(Priority priority) : p_impl(new Impl(priority)) {}
@@ -106,8 +109,19 @@ std::string Option::take_pending_source() noexcept {
     return src;
 }
 
+// When this option has no own value (priority == EMPTY) and has a parent,
+// delegate to the parent's source. This allows OptionChild to inherit
+// the source from its parent option without needing a virtual get_source().
 const std::string & Option::get_source() const noexcept {
-    return p_impl->source;
+    return (p_impl->priority == Priority::EMPTY && p_impl->parent) ? p_impl->parent->p_impl->source : p_impl->source;
+}
+
+void Option::set_parent(const Option * parent) noexcept {
+    p_impl->parent = parent;
+}
+
+const Option * Option::get_parent() const noexcept {
+    return p_impl->parent;
 }
 
 }  // namespace libdnf5

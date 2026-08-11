@@ -144,7 +144,9 @@ private:
 };
 
 template <class ParentOptionType, class Enable>
-inline OptionChild<ParentOptionType, Enable>::OptionChild(const ParentOptionType & parent) : parent(&parent) {}
+inline OptionChild<ParentOptionType, Enable>::OptionChild(const ParentOptionType & parent) : parent(&parent) {
+    set_parent(&parent);
+}
 
 template <class ParentOptionType, class Enable>
 inline OptionChild<ParentOptionType, Enable> * OptionChild<ParentOptionType, Enable>::clone() const {
@@ -221,7 +223,9 @@ inline OptionChild<
     ParentOptionType,
     typename std::enable_if<std::is_same<typename ParentOptionType::ValueType, std::string>::value>::type>::
     OptionChild(const ParentOptionType & parent)
-    : parent(&parent) {}
+    : parent(&parent) {
+    set_parent(&parent);
+}
 
 template <class ParentOptionType>
 inline OptionChild<
