@@ -327,9 +327,11 @@ const OptionChild<OptionString> & ConfigRepo::get_password_option() const {
 }
 
 OptionChild<OptionStringAppendList> & ConfigRepo::get_protected_packages_option() {
+    LIBDNF5_DEPRECATED("The option does nothing");
     return p_impl->protected_packages;
 }
 const OptionChild<OptionStringAppendList> & ConfigRepo::get_protected_packages_option() const {
+    LIBDNF5_DEPRECATED("The option does nothing");
     return p_impl->protected_packages;
 }
 
