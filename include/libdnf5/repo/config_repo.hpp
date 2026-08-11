@@ -77,8 +77,11 @@ public:
     const OptionChild<OptionString> & get_username_option() const;
     OptionChild<OptionString> & get_password_option();
     const OptionChild<OptionString> & get_password_option() const;
-    OptionChild<OptionStringAppendList> & get_protected_packages_option();
-    const OptionChild<OptionStringAppendList> & get_protected_packages_option() const;
+    /// @deprecated The option does nothing
+    [[deprecated("The option does nothing")]] OptionChild<OptionStringAppendList> & get_protected_packages_option();
+    /// @deprecated The option does nothing
+    [[deprecated("The option does nothing")]] const OptionChild<OptionStringAppendList> &
+    get_protected_packages_option() const;
     /// @deprecated Use get_pkg_gpgcheck_option()
     [[deprecated("Use get_pkg_gpgcheck_option()")]]
     OptionChild<OptionBool> & get_gpgcheck_option();
