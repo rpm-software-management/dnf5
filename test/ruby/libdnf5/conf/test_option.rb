@@ -224,18 +224,21 @@ class TestOption < BaseTestCase
         assert_equal(true, child.get_value())
         assert_equal(P::Priority_DEFAULT, child.get_priority())
         assert_equal('', child.get_source())
+        assert_equal(false, child.has_own_value())
 
         parent.set(P::Priority_RUNTIME, false, 'parent_src')
         assert_equal(true, child.get_default_value())
         assert_equal(false, child.get_value())
         assert_equal(P::Priority_RUNTIME, child.get_priority())
         assert_equal('parent_src', child.get_source())
+        assert_equal(false, child.has_own_value())
 
         child.set(P::Priority_COMMANDLINE, false, 'child_src')
         assert_equal(true, child.get_default_value())
         assert_equal(false, child.get_value())
         assert_equal(P::Priority_COMMANDLINE, child.get_priority())
         assert_equal('child_src', child.get_source())
+        assert_equal(true, child.has_own_value())
 
         # Lower priority does not change value or source
         child.set(P::Priority_MAINCONFIG, true, 'lower_src')
@@ -268,18 +271,21 @@ class TestOption < BaseTestCase
         assert_equal(['p1', 'p2'], child.get_value())
         assert_equal(P::Priority_DEFAULT, child.get_priority())
         assert_equal('', child.get_source())
+        assert_equal(false, child.has_own_value())
 
         # Parent set with source - child inherits value, priority, and source
         parent.set(P::Priority_RUNTIME, ['a', 'b', 'c'], 'parent.conf')
         assert_equal(['a', 'b', 'c'], child.get_value())
         assert_equal(P::Priority_RUNTIME, child.get_priority())
         assert_equal('parent.conf', child.get_source())
+        assert_equal(false, child.has_own_value())
 
         # Child set with own value and source (using string parsing)
         child.set(P::Priority_COMMANDLINE, 'x, y', 'child.conf')
         assert_equal(['x', 'y'], child.get_value())
         assert_equal(P::Priority_COMMANDLINE, child.get_priority())
         assert_equal('child.conf', child.get_source())
+        assert_equal(true, child.has_own_value())
         # Parent unchanged
         assert_equal(['a', 'b', 'c'], parent.get_value())
         assert_equal('parent.conf', parent.get_source())

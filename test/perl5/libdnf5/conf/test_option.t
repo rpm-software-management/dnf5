@@ -253,18 +253,21 @@ sub to_list {
     ok($child->get_value(), 'child_bool: value');
     is($child->get_priority(), $DEFAULT, 'child_bool: default priority');
     is($child->get_source(), '', 'child_bool: default source is empty');
+    ok(!$child->has_own_value(), 'child_bool: no own value initially');
 
     $parent->set($RUNTIME, 0, 'parent_src');
     ok($child->get_default_value(), 'child_bool: default value unchanged');
     ok(!$child->get_value(), 'child_bool: inherits parent value');
     is($child->get_priority(), $RUNTIME, 'child_bool: inherits parent priority');
     is($child->get_source(), 'parent_src', 'child_bool: inherits parent source');
+    ok(!$child->has_own_value(), 'child_bool: still no own value after parent set');
 
     $child->set($COMMANDLINE, 0, 'child_src');
     ok($child->get_default_value(), 'child_bool: default value unchanged');
     ok(!$child->get_value(), 'child_bool: own value');
     is($child->get_priority(), $COMMANDLINE, 'child_bool: own priority');
     is($child->get_source(), 'child_src', 'child_bool: own source');
+    ok($child->has_own_value(), 'child_bool: has own value after child set');
 
     # Lower priority does not change value or source
     $child->set($MAINCONFIG, 1, 'lower_src');
@@ -298,18 +301,21 @@ sub to_list {
     is_deeply(to_list($child->get_value()), ['p1', 'p2'], 'child_list: inherits parent value');
     is($child->get_priority(), $DEFAULT, 'child_list: inherits parent priority');
     is($child->get_source(), '', 'child_list: default source is empty');
+    ok(!$child->has_own_value(), 'child_list: no own value initially');
 
     # Parent set with source - child inherits value, priority, and source
     $parent->set($RUNTIME, 'a, b, c', 'parent.conf');
     is_deeply(to_list($child->get_value()), ['a', 'b', 'c'], 'child_list: inherits parent value after set');
     is($child->get_priority(), $RUNTIME, 'child_list: inherits parent priority after set');
     is($child->get_source(), 'parent.conf', 'child_list: inherits parent source');
+    ok(!$child->has_own_value(), 'child_list: still no own value after parent set');
 
     # Child set with own value and source (using string parsing)
     $child->set($COMMANDLINE, 'x, y', 'child.conf');
     is_deeply(to_list($child->get_value()), ['x', 'y'], 'child_list: own value');
     is($child->get_priority(), $COMMANDLINE, 'child_list: own priority');
     is($child->get_source(), 'child.conf', 'child_list: own source');
+    ok($child->has_own_value(), 'child_list: has own value after child set');
     # Parent unchanged
     is_deeply(to_list($parent->get_value()), ['a', 'b', 'c'], 'child_list: parent value unchanged');
     is($parent->get_source(), 'parent.conf', 'child_list: parent source unchanged');

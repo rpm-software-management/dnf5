@@ -297,18 +297,21 @@ class TestOption(base_test_case.BaseTestCase):
         self.assertEqual(True, child.get_value())
         self.assertEqual(PRIORITY.Priority_DEFAULT, child.get_priority())
         self.assertEqual('', child.get_source())
+        self.assertEqual(False, child.has_own_value())
 
         parent.set(PRIORITY.Priority_RUNTIME, False, 'parent_src')
         self.assertEqual(True, child.get_default_value())
         self.assertEqual(False, child.get_value())
         self.assertEqual(PRIORITY.Priority_RUNTIME, child.get_priority())
         self.assertEqual('parent_src', child.get_source())
+        self.assertEqual(False, child.has_own_value())
 
         child.set(PRIORITY.Priority_COMMANDLINE, False, 'child_src')
         self.assertEqual(True, child.get_default_value())
         self.assertEqual(False, child.get_value())
         self.assertEqual(PRIORITY.Priority_COMMANDLINE, child.get_priority())
         self.assertEqual('child_src', child.get_source())
+        self.assertEqual(True, child.has_own_value())
 
         # Lower priority does not change value or source
         child.set(PRIORITY.Priority_MAINCONFIG, True, 'lower_src')
@@ -337,18 +340,21 @@ class TestOption(base_test_case.BaseTestCase):
         self.assertEqual(('p1', 'p2'), child.get_value())
         self.assertEqual(PRIORITY.Priority_DEFAULT, child.get_priority())
         self.assertEqual('', child.get_source())
+        self.assertEqual(False, child.has_own_value())
 
         # Parent set with source - child inherits value, priority, and source
         parent.set(PRIORITY.Priority_RUNTIME, ('a', 'b', 'c'), 'parent.conf')
         self.assertEqual(('a', 'b', 'c'), child.get_value())
         self.assertEqual(PRIORITY.Priority_RUNTIME, child.get_priority())
         self.assertEqual('parent.conf', child.get_source())
+        self.assertEqual(False, child.has_own_value())
 
         # Child set with own value and source (using string parsing)
         child.set(PRIORITY.Priority_COMMANDLINE, 'x, y', 'child.conf')
         self.assertEqual(('x', 'y'), child.get_value())
         self.assertEqual(PRIORITY.Priority_COMMANDLINE, child.get_priority())
         self.assertEqual('child.conf', child.get_source())
+        self.assertEqual(True, child.has_own_value())
         # Parent unchanged
         self.assertEqual(('a', 'b', 'c'), parent.get_value())
         self.assertEqual('parent.conf', parent.get_source())

@@ -897,18 +897,21 @@ void OptionTest::test_options_child() {
     CPPUNIT_ASSERT_EQUAL(true, ochild.get_value());
     CPPUNIT_ASSERT_EQUAL(Option::Priority::DEFAULT, ochild.get_priority());
     CPPUNIT_ASSERT_EQUAL(std::string(), ochild.get_source());
+    CPPUNIT_ASSERT_EQUAL(false, ochild.has_own_value());
 
     oparent.set(Option::Priority::RUNTIME, false, "parent_src");
     CPPUNIT_ASSERT_EQUAL(true, ochild.get_default_value());
     CPPUNIT_ASSERT_EQUAL(false, ochild.get_value());
     CPPUNIT_ASSERT_EQUAL(Option::Priority::RUNTIME, ochild.get_priority());
     CPPUNIT_ASSERT_EQUAL(std::string("parent_src"), ochild.get_source());
+    CPPUNIT_ASSERT_EQUAL(false, ochild.has_own_value());
 
     ochild.set(Option::Priority::COMMANDLINE, false, "child_src");
     CPPUNIT_ASSERT_EQUAL(true, ochild.get_default_value());
     CPPUNIT_ASSERT_EQUAL(false, ochild.get_value());
     CPPUNIT_ASSERT_EQUAL(Option::Priority::COMMANDLINE, ochild.get_priority());
     CPPUNIT_ASSERT_EQUAL(std::string("child_src"), ochild.get_source());
+    CPPUNIT_ASSERT_EQUAL(true, ochild.has_own_value());
 
     // Lower priority does not change value or source
     ochild.set(Option::Priority::MAINCONFIG, true, "lower_src");
@@ -937,18 +940,21 @@ void OptionTest::test_options_child_string_list() {
     CPPUNIT_ASSERT_EQUAL((std::vector<std::string>{"p1", "p2"}), ochild.get_value());
     CPPUNIT_ASSERT_EQUAL(Option::Priority::DEFAULT, ochild.get_priority());
     CPPUNIT_ASSERT_EQUAL(std::string(), ochild.get_source());
+    CPPUNIT_ASSERT_EQUAL(false, ochild.has_own_value());
 
     // Parent set with source - child inherits value, priority, and source
     oparent.set(Option::Priority::RUNTIME, std::vector<std::string>{"a", "b", "c"}, "parent.conf");
     CPPUNIT_ASSERT_EQUAL((std::vector<std::string>{"a", "b", "c"}), ochild.get_value());
     CPPUNIT_ASSERT_EQUAL(Option::Priority::RUNTIME, ochild.get_priority());
     CPPUNIT_ASSERT_EQUAL(std::string("parent.conf"), ochild.get_source());
+    CPPUNIT_ASSERT_EQUAL(false, ochild.has_own_value());
 
     // Child set with own value and source
     ochild.set(Option::Priority::COMMANDLINE, std::vector<std::string>{"x", "y"}, "child.conf");
     CPPUNIT_ASSERT_EQUAL((std::vector<std::string>{"x", "y"}), ochild.get_value());
     CPPUNIT_ASSERT_EQUAL(Option::Priority::COMMANDLINE, ochild.get_priority());
     CPPUNIT_ASSERT_EQUAL(std::string("child.conf"), ochild.get_source());
+    CPPUNIT_ASSERT_EQUAL(true, ochild.has_own_value());
     // Parent unchanged
     CPPUNIT_ASSERT_EQUAL((std::vector<std::string>{"a", "b", "c"}), oparent.get_value());
     CPPUNIT_ASSERT_EQUAL(std::string("parent.conf"), oparent.get_source());
