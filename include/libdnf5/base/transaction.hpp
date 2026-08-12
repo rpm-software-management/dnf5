@@ -108,6 +108,10 @@ public:
     /// @return list of packages skipped due to vendor change restriction, paired with installed vendor string
     const std::vector<std::pair<libdnf5::rpm::Package, std::string>> & get_vendor_change_skipped_packages() const;
 
+    /// @return `true` if filelists metadata was automatically downloaded and loaded to retry dependency resolution
+    /// @since 5.4.4
+    bool get_filelists_auto_loaded() const;
+
     /// @return `true` if the transaction is empty.
     bool empty() const;
 

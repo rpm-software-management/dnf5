@@ -244,6 +244,7 @@ Transaction::Impl::Impl(Transaction & transaction, const Impl & src)
       broken_dependency_packages(src.broken_dependency_packages),
       conflicting_packages(src.conflicting_packages),
       vendor_change_skipped_packages(src.vendor_change_skipped_packages),
+      filelists_auto_loaded(src.filelists_auto_loaded),
       rpm_reason_overrides(src.rpm_reason_overrides),
       rpm_replays_nevra_cache(src.rpm_replays_nevra_cache) {
 }
@@ -276,6 +277,7 @@ Transaction::Impl & Transaction::Impl::operator=(const Impl & other) {
     broken_dependency_packages = other.broken_dependency_packages;
     conflicting_packages = other.conflicting_packages;
     vendor_change_skipped_packages = other.vendor_change_skipped_packages;
+    filelists_auto_loaded = other.filelists_auto_loaded;
     rpm_reason_overrides = other.rpm_reason_overrides;
     rpm_replays_nevra_cache = other.rpm_replays_nevra_cache;
     return *this;
@@ -460,6 +462,10 @@ std::vector<libdnf5::rpm::Package> Transaction::get_conflicting_packages() const
 const std::vector<std::pair<libdnf5::rpm::Package, std::string>> & Transaction::get_vendor_change_skipped_packages()
     const {
     return p_impl->vendor_change_skipped_packages;
+}
+
+bool Transaction::get_filelists_auto_loaded() const {
+    return p_impl->filelists_auto_loaded;
 }
 
 std::string Transaction::transaction_result_to_string(const TransactionRunResult result) {
