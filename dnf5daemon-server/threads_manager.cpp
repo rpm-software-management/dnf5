@@ -88,6 +88,12 @@ void ThreadsManager::finish() {
 
 
 locale_t ThreadsManager::set_thread_locale(const std::string & thread_locale, locale_t & new_locale) {
+    // The locale string comes directly from the D-Bus client and is untrusted.
+    // Reject path traversal attempts: a path separator, or a lone "..".
+    if (thread_locale.find('/') != std::string::npos || thread_locale == "..") {
+        throw libdnf5::Error(M_("Invalid locale \"{}\"."), thread_locale);
+    }
+
     auto no_locale = static_cast<locale_t>(0);
     new_locale = newlocale(LC_ALL_MASK, thread_locale.c_str(), no_locale);
     if (new_locale == no_locale) {
