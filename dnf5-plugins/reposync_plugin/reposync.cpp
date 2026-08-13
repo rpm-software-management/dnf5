@@ -244,7 +244,7 @@ ReposyncCommand::download_list_type ReposyncCommand::get_packages_list(const lib
     }
 
     if (min_buildtime_option->get_arg()->get_parse_count() >= 1) {
-        query.filter_recent(min_buildtime_option->get_value());
+        query.filter_recent(static_cast<time_t>(min_buildtime_option->get_value()));
     }
 
     if (!arch_option.empty()) {

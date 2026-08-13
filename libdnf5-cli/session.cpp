@@ -22,7 +22,9 @@
 #include <libdnf5/utils/bgettext/bgettext-mark-domain.h>
 
 #include <chrono>
+#include <limits>
 #include <sstream>
+#include <utility>
 
 namespace libdnf5::cli::session {
 
@@ -257,7 +259,17 @@ DateOption::DateOption(
                     throw libdnf5::cli::ArgumentParserError(
                         M_("Invalid date passed: \"{}\". Dates in \"YYYY-MM-DD\" format are expected"), value);
                 }
-                return tp.time_since_epoch().count();
+                // This option should have used time_t because it is used
+                // elsewhere, e.g. in PackageQuery::filter_recent().
+                // Therefore reject out-of-range values right now instead of
+                // dealing with the overflows throughout the code.
+                auto numeric_value = tp.time_since_epoch().count();
+                if (std::cmp_less(numeric_value, std::numeric_limits<time_t>::lowest()) ||
+                    std::cmp_greater(numeric_value, std::numeric_limits<time_t>::max())) {
+                    throw libdnf5::cli::ArgumentParserError(
+                        M_("\"{}\" date cannot be represented by time_t type on this platform"), value);
+                }
+                return numeric_value;
             }))));
     arg->link_value(conf);
 
