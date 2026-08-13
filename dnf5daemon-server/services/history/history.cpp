@@ -34,7 +34,10 @@
 #include <libdnf5/utils/format.hpp>
 #include <sdbus-c++/sdbus-c++.h>
 
+#include <cstddef>
+#include <limits>
 #include <unordered_map>
+#include <utility>
 
 namespace {
 
@@ -410,8 +413,10 @@ sdbus::MethodReply History::list(sdbus::MethodCall & call) {
     }
 
     // Apply limit
-    if (limit > 0 && transactions.size() > static_cast<size_t>(limit)) {
-        transactions.erase(transactions.begin() + limit, transactions.end());
+    if (limit > 0 && std::cmp_less(limit, std::numeric_limits<size_t>::max()) &&
+        std::cmp_less(limit, std::numeric_limits<ptrdiff_t>::max()) &&
+        transactions.size() > static_cast<size_t>(limit)) {
+        transactions.erase(transactions.begin() + static_cast<ptrdiff_t>(limit), transactions.end());
     }
 
     // Build output
