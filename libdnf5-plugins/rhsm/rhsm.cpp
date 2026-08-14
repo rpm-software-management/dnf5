@@ -24,6 +24,7 @@
 #include <rhsm/rhsm.h>
 #include <unistd.h>
 
+#include <cstring>
 
 using namespace libdnf5;
 

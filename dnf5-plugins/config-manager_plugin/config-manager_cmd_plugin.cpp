@@ -2,6 +2,7 @@
 
 #include <dnf5/iplugin.hpp>
 
+#include <cstring>
 #include <iostream>
 
 using namespace dnf5;

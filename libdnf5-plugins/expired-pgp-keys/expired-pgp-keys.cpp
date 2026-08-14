@@ -34,10 +34,10 @@
 #include <rpm/rpmpgp.h>
 #endif
 #include <rpm/rpmts.h>
-#include <string.h>
 
 #include <chrono>
 #include <cstdio>
+#include <cstring>
 #include <memory>
 #include <string>
 
@@ -227,7 +227,7 @@ void ExpiredPgpKeys::process_expired_pgp_keys(const libdnf5::base::Transaction &
         // (Or use lr_gpg_import_key_from_memory() directly?)
         auto key_tfile = libdnf5::utils::fs::TempFile("key");
         auto & key_ffile = key_tfile.open_as_file("w+");
-        key_ffile.write(raw_key, strlen(raw_key));
+        key_ffile.write(raw_key, std::strlen(raw_key));
         key_ffile.flush();
         free(raw_key);
 

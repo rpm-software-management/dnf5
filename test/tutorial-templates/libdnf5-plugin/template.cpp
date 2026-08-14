@@ -3,6 +3,7 @@
 #include <libdnf5/plugin/iplugin.hpp>
 
 #include <algorithm>
+#include <cstring>
 
 using namespace libdnf5;
 
