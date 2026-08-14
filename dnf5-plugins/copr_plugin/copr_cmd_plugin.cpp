@@ -21,6 +21,8 @@
 
 #include <dnf5/iplugin.hpp>
 
+#include <cstring>
+
 using namespace dnf5;
 
 namespace {

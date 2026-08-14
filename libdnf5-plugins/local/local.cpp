@@ -14,6 +14,7 @@
 #include <libdnf5/utils/fs/utils.hpp>
 #include <sys/wait.h>
 
+#include <cstring>
 
 constexpr const char * LOCAL_REPO_NAME_GPGCHECK{"_dnf_local"};
 constexpr const char * LOCAL_REPO_NAME_NOGPGCHECK{"_dnf_local_nogpgcheck"};
