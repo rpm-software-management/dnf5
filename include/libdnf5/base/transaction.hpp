@@ -66,6 +66,11 @@ public:
     Transaction(Transaction && transaction);
     ~Transaction();
 
+    /// @since 5.4.4
+    Transaction & operator=(const Transaction & transaction);
+    /// @since 5.4.4
+    Transaction & operator=(Transaction && transaction) noexcept;
+
     /// Return basic overview about result of resolving transaction.
     /// To get complete information, use get_resolve_logs().
     libdnf5::GoalProblem get_problems();
