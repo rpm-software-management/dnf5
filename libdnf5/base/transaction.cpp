@@ -193,6 +193,25 @@ Transaction::Transaction(Transaction && transaction) : p_impl(std::move(transact
     p_impl->transaction = this;
 }
 
+Transaction & Transaction::operator=(const Transaction & src) {
+    if (this != &src) {
+        if (p_impl) {
+            *p_impl = *src.p_impl;
+        } else {
+            p_impl = std::make_unique<Impl>(*this, *src.p_impl);
+        }
+    }
+    return *this;
+}
+
+Transaction & Transaction::operator=(Transaction && src) noexcept {
+    if (this != &src) {
+        p_impl = std::move(src.p_impl);
+        p_impl->transaction = this;
+    }
+    return *this;
+}
+
 Transaction::~Transaction() = default;
 
 Transaction::Impl::~Impl() {
@@ -224,12 +243,24 @@ Transaction::Impl::Impl(Transaction & transaction, const Impl & src)
       signature_problems(src.signature_problems),
       broken_dependency_packages(src.broken_dependency_packages),
       conflicting_packages(src.conflicting_packages),
-      vendor_change_skipped_packages(src.vendor_change_skipped_packages) {
+      vendor_change_skipped_packages(src.vendor_change_skipped_packages),
+      rpm_reason_overrides(src.rpm_reason_overrides),
+      rpm_replays_nevra_cache(src.rpm_replays_nevra_cache) {
 }
 
 Transaction::Impl & Transaction::Impl::operator=(const Impl & other) {
+    if (this == &other) {
+        return *this;
+    }
+
+    auto * new_libsolv_transaction =
+        other.libsolv_transaction ? transaction_create_clone(other.libsolv_transaction) : nullptr;
+    if (libsolv_transaction) {
+        transaction_free(libsolv_transaction);
+    }
+    libsolv_transaction = new_libsolv_transaction;
+
     base = other.base;
-    libsolv_transaction = other.libsolv_transaction ? transaction_create_clone(other.libsolv_transaction) : nullptr;
     problems = other.problems;
     rpm_signature = other.rpm_signature;
     packages = other.packages;
@@ -245,6 +276,8 @@ Transaction::Impl & Transaction::Impl::operator=(const Impl & other) {
     broken_dependency_packages = other.broken_dependency_packages;
     conflicting_packages = other.conflicting_packages;
     vendor_change_skipped_packages = other.vendor_change_skipped_packages;
+    rpm_reason_overrides = other.rpm_reason_overrides;
+    rpm_replays_nevra_cache = other.rpm_replays_nevra_cache;
     return *this;
 }
 
