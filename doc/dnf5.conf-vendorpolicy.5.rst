@@ -21,22 +21,25 @@ The configuration files use **TOML format**.
 Supported Versions
 ==================
 
-The vendor change policy configuration format supports two versions:
+The vendor change policy configuration format supports three versions:
 
+- **Version 1.2** - Extends v1.1 with additional negated string comparators. See :ref:`dnf5_vendor_change_policy_v1_1-label`
 - **Version 1.1** - Enhanced version with flexible vendor mapping and package filtering. See :ref:`dnf5_vendor_change_policy_v1_1-label`
 - **Version 1.0** - Basic vendor mapping with strict rules. See :ref:`dnf5_vendor_change_policy_v1_0-label`
 
 Each configuration file must specify its version using the ``version`` field.
 
 .. note::
-   Version 1.1 is the recommended format and is fully backward compatible with version 1.0.
-   All valid 1.0 configurations work with 1.1 by simply changing the version field.
-   Version 1.0 is maintained only for compatibility with existing configurations.
+   Each newer version is fully backward compatible with all previous versions.
+   Version 1.2 only adds new comparators over 1.1, and version 1.1 adds flexible
+   vendor mapping and package filtering over 1.0. All valid configurations work
+   with a newer version by simply changing the version field.
+   Version 1.2 is the recommended format.
 
 For detailed information about each version's syntax and features, please refer to the
 version-specific documentation:
 
-- :ref:`DNF5 Vendor Change Policy File Reference - v1.1 <dnf5_vendor_change_policy_v1_1-label>`
+- :ref:`DNF5 Vendor Change Policy File Reference - v1.1 / v1.2 <dnf5_vendor_change_policy_v1_1-label>`
 - :ref:`DNF5 Vendor Change Policy File Reference - v1.0 <dnf5_vendor_change_policy_v1_0-label>`
 
 Configuration File Locations
@@ -60,6 +63,6 @@ by creating a file with the same name in the ``/etc/dnf/vendors.d/`` directory.
 See Also
 ========
 
-* :manpage:`dnf5.conf-vendorpolicy-v1_1(5)`, :ref:`DNF5 Vendor Change Policy File Reference - v1.1 <dnf5_vendor_change_policy_v1_1-label>`
+* :manpage:`dnf5.conf-vendorpolicy-v1_1(5)`, :ref:`DNF5 Vendor Change Policy File Reference - v1.1 / v1.2 <dnf5_vendor_change_policy_v1_1-label>`
 * :manpage:`dnf5.conf-vendorpolicy-v1_0(5)`, :ref:`DNF5 Vendor Change Policy File Reference - v1.0 <dnf5_vendor_change_policy_v1_0-label>`
 * :manpage:`dnf5.conf(5)`, :ref:`DNF5 Configuration Reference <dnf5_conf-label>`
