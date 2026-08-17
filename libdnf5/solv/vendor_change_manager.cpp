@@ -16,7 +16,6 @@
 #include <array>
 #include <map>
 #include <optional>
-#include <set>
 #include <string_view>
 #include <utility>
 
@@ -25,9 +24,9 @@ namespace libdnf5::solv {
 namespace {
 
 // supported config file version
-constexpr std::array<std::string_view, 2> CONF_FILE_SUPPORTED_VERSIONS = {"1.0", "1.1"};
+constexpr std::array<std::string_view, 3> CONF_FILE_SUPPORTED_VERSIONS = {"1.0", "1.1", "1.2"};
 
-const std::map<std::string_view, sack::QueryCmp> VALID_COMPARATORS = {
+const std::map<std::string_view, sack::QueryCmp> COMPARATORS = {
     {"EXACT", sack::QueryCmp::EXACT},
     {"NOT_EXACT", sack::QueryCmp::NOT_EXACT},
     {"IEXACT", sack::QueryCmp::IEXACT},
@@ -53,41 +52,68 @@ const std::map<std::string_view, sack::QueryCmp> VALID_COMPARATORS = {
     {"LTE", sack::QueryCmp::LTE},
 };
 
-
-const std::set<sack::QueryCmp> string_comparators = {
-    sack::QueryCmp::EXACT,
-    sack::QueryCmp::NOT_EXACT,
-    sack::QueryCmp::IEXACT,
-    sack::QueryCmp::NOT_IEXACT,
-    sack::QueryCmp::CONTAINS,
-    sack::QueryCmp::NOT_CONTAINS,
-    sack::QueryCmp::ICONTAINS,
-    sack::QueryCmp::NOT_ICONTAINS,
-    sack::QueryCmp::STARTSWITH,
-    sack::QueryCmp::ISTARTSWITH,
-    sack::QueryCmp::ENDSWITH,
-    sack::QueryCmp::IENDSWITH,
-    sack::QueryCmp::REGEX,
-    sack::QueryCmp::IREGEX,
-    sack::QueryCmp::GLOB,
-    sack::QueryCmp::NOT_GLOB,
-    sack::QueryCmp::IGLOB,
-    sack::QueryCmp::NOT_IGLOB,
+const std::map<std::string_view, sack::QueryCmp> COMPARATORS_1_2 = {
+    {"NOT_STARTSWITH", sack::QueryCmp::NOT | sack::QueryCmp::STARTSWITH},
+    {"NOT_ISTARTSWITH", sack::QueryCmp::NOT | sack::QueryCmp::ISTARTSWITH},
+    {"NOT_ENDSWITH", sack::QueryCmp::NOT | sack::QueryCmp::ENDSWITH},
+    {"NOT_IENDSWITH", sack::QueryCmp::NOT | sack::QueryCmp::IENDSWITH},
+    {"NOT_REGEX", sack::QueryCmp::NOT | sack::QueryCmp::REGEX},
+    {"NOT_IREGEX", sack::QueryCmp::NOT | sack::QueryCmp::IREGEX},
 };
 
 
-const std::set<sack::QueryCmp> relational_comparators = {
-    sack::QueryCmp::EXACT,
-    sack::QueryCmp::NOT_EXACT,
-    sack::QueryCmp::GT,
-    sack::QueryCmp::GTE,
-    sack::QueryCmp::LT,
-    sack::QueryCmp::LTE,
+class VendorChangePolicyConfigFileError : public Error {
+public:
+    using Error::Error;
+    const char * get_domain_name() const noexcept override { return "libdnf5::solv"; }
+    const char * get_name() const noexcept override { return "VendorChangePolicyConfigFileError"; }
 };
+
+
+bool is_string_comparator(sack::QueryCmp cmp) {
+    auto base = cmp - sack::QueryCmp::NOT - sack::QueryCmp::ICASE;
+    return base == sack::QueryCmp::EXACT || base == sack::QueryCmp::CONTAINS || base == sack::QueryCmp::STARTSWITH ||
+           base == sack::QueryCmp::ENDSWITH || base == sack::QueryCmp::REGEX || base == sack::QueryCmp::GLOB;
+}
+
+
+bool is_relational_comparator(sack::QueryCmp cmp) {
+    return cmp == sack::QueryCmp::EXACT || cmp == sack::QueryCmp::NOT_EXACT || cmp == sack::QueryCmp::GT ||
+           cmp == sack::QueryCmp::GTE || cmp == sack::QueryCmp::LT || cmp == sack::QueryCmp::LTE;
+}
+
+
+sack::QueryCmp string_to_comparator(
+    const std::string & str_comparator,
+    const std::string & cfg_version,
+    const std::filesystem::path & path,
+    std::size_t line_num) {
+    if (const auto it = COMPARATORS.find(str_comparator); it != COMPARATORS.end()) {
+        return it->second;
+    }
+    const auto it_12 = COMPARATORS_1_2.find(str_comparator);
+    if (it_12 == COMPARATORS_1_2.end()) {
+        throw VendorChangePolicyConfigFileError(
+            M_("Unknown 'comparator' \"{}\" in file \"{}\" on line {}"), str_comparator, path.native(), line_num);
+    }
+    if (cfg_version != "1.2") {
+        throw VendorChangePolicyConfigFileError(
+            M_("Configuration file \"{}\" uses version \"{}\" which does not support 'comparator' \"{}\""),
+            path.native(),
+            cfg_version,
+            str_comparator);
+    }
+    return it_12->second;
+}
 
 
 std::string comparator_to_string(sack::QueryCmp comparator) {
-    for (const auto & [text, cmp_value] : VALID_COMPARATORS) {
+    for (const auto & [text, cmp_value] : COMPARATORS) {
+        if (comparator == cmp_value) {
+            return std::string{text};
+        }
+    }
+    for (const auto & [text, cmp_value] : COMPARATORS_1_2) {
         if (comparator == cmp_value) {
             return std::string{text};
         }
@@ -105,14 +131,6 @@ inline auto location_first_line_num(const toml::source_location & location) {
     return location.first_line_number();
 }
 #endif  // #ifdef TOML11_COMPAT
-
-
-class VendorChangePolicyConfigFileError : public Error {
-public:
-    using Error::Error;
-    const char * get_domain_name() const noexcept override { return "libdnf5::solv"; }
-    const char * get_name() const noexcept override { return "VendorChangePolicyConfigFileError"; }
-};
 
 }  // namespace
 
@@ -391,7 +409,7 @@ bool filter_package_cmdline_repo(
 
 
 VendorChangeManager::VendorChangePolicy::PackageDef::Filter read_package_def_filter(
-    const toml::value & filter_table, const std::filesystem::path & path) {
+    const toml::value & filter_table, const std::filesystem::path & path, const std::string & cfg_version) {
     VendorChangeManager::VendorChangePolicy::PackageDef::Filter filter;
     filter.comparator = sack::QueryCmp::EXACT;
 
@@ -432,16 +450,8 @@ VendorChangeManager::VendorChangePolicy::PackageDef::Filter read_package_def_fil
             filter.value = value.as_string();
             value_found = true;
         } else if (key == "comparator") {
-            auto it = VALID_COMPARATORS.find(value.as_string());
-            if (it == VALID_COMPARATORS.end()) {
-                const auto location = value.location();
-                throw VendorChangePolicyConfigFileError(
-                    M_("Unknown 'comparator' \"{}\" in file \"{}\" on line {}"),
-                    value.as_string(),
-                    path.native(),
-                    location_first_line_num(location));
-            }
-            filter.comparator = it->second;
+            const auto line_num = location_first_line_num(value.location());
+            filter.comparator = string_to_comparator(value.as_string(), cfg_version, path, line_num);
         } else {
             const auto location = value.location();
             throw VendorChangePolicyConfigFileError(
@@ -496,7 +506,7 @@ VendorChangeManager::VendorChangePolicy::PackageDef::Filter read_package_def_fil
     } else if (
         filter.filter_func == filter_package_evr || filter.filter_func == filter_package_epoch ||
         filter.filter_func == filter_package_version || filter.filter_func == filter_package_release) {
-        if (!relational_comparators.contains(filter.comparator)) {
+        if (!is_relational_comparator(filter.comparator)) {
             const auto location = filter_table.location();
             throw VendorChangePolicyConfigFileError(
                 M_("Filter \"{}\" in file \"{}\" in table starting on line {} "
@@ -507,7 +517,7 @@ VendorChangeManager::VendorChangePolicy::PackageDef::Filter read_package_def_fil
                 comparator_to_string(filter.comparator));
         }
     } else {
-        if (!string_comparators.contains(filter.comparator)) {
+        if (!is_string_comparator(filter.comparator)) {
             const auto location = filter_table.location();
             throw VendorChangePolicyConfigFileError(
                 M_("Filter \"{}\" in file \"{}\" in table starting on line {} "
@@ -520,7 +530,8 @@ VendorChangeManager::VendorChangePolicy::PackageDef::Filter read_package_def_fil
     }
 
     // Validate regex pattern
-    if (filter.comparator == sack::QueryCmp::REGEX || filter.comparator == sack::QueryCmp::IREGEX) {
+    if (const auto cmp = filter.comparator - sack::QueryCmp::NOT - sack::QueryCmp::ICASE;
+        cmp == sack::QueryCmp::REGEX) {
         try {
             sack::match_string("", filter.comparator, filter.value);
         } catch (const std::exception & ex) {
@@ -631,7 +642,7 @@ void VendorChangeManager::load_vendor_change_policy(const std::filesystem::path 
                     for (const auto & [key, value] : entry.as_table()) {
                         if (key == "filters") {
                             for (const auto & filter_entry : value.as_array()) {
-                                auto filter = read_package_def_filter(filter_entry, path);
+                                auto filter = read_package_def_filter(filter_entry, path, *version);
                                 if (filter.filter_func == filter_package_cmdline_repo &&
                                     group_type == GroupType::OUTGOING_PACKAGES) {
                                     const auto location = filter_entry.location();
@@ -684,17 +695,9 @@ void VendorChangeManager::load_vendor_change_policy(const std::filesystem::path 
                         vendor_def.vendor = value.as_string();
                         is_vendor_set = true;
                     } else if (key == "comparator") {
-                        auto it = VALID_COMPARATORS.find(value.as_string());
-                        if (it == VALID_COMPARATORS.end()) {
-                            const auto location = value.location();
-                            throw VendorChangePolicyConfigFileError(
-                                M_("Unknown comparator \"{}\" in file \"{}\" on line {}"),
-                                value.as_string(),
-                                path.native(),
-                                location_first_line_num(location));
-                        }
-                        auto comparator = it->second;
-                        if (!string_comparators.contains(comparator)) {
+                        const auto line_num = location_first_line_num(value.location());
+                        const auto comparator = string_to_comparator(value.as_string(), *version, path, line_num);
+                        if (!is_string_comparator(comparator)) {
                             const auto location = value.location();
                             throw VendorChangePolicyConfigFileError(
                                 M_("Unsupported comparator \"{}\" for vendor definition in file \"{}\" on line {}"),
@@ -724,7 +727,8 @@ void VendorChangeManager::load_vendor_change_policy(const std::filesystem::path 
                 }
 
                 // Validate regex pattern
-                if (vendor_def.comparator == sack::QueryCmp::REGEX || vendor_def.comparator == sack::QueryCmp::IREGEX) {
+                if (const auto cmp = vendor_def.comparator - sack::QueryCmp::NOT - sack::QueryCmp::ICASE;
+                    cmp == sack::QueryCmp::REGEX) {
                     try {
                         sack::match_string("", vendor_def.comparator, vendor_def.vendor);
                     } catch (const std::exception & ex) {
