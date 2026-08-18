@@ -11,6 +11,7 @@
 #include <filesystem>
 #include <map>
 #include <string>
+#include <string_view>
 #include <vector>
 
 extern "C" {
@@ -21,8 +22,18 @@ namespace libdnf5::solv {
 
 class Pool;
 
+/// Internal vendor change policy engine integrated with the libsolv pool.
+///
+/// Holds the list of vendor change policies, evaluates whether a vendor transition
+/// between two solvables is allowed, and caches per-vendor bitmasks for fast lookups.
+///
+/// Policies are loaded from TOML files or compact strings and stored as
+/// VendorChangePolicy structs. During solver operation, libsolv calls
+/// `is_vendor_change_allowed()` via a callback registered by RpmPool.
 class VendorChangeManager {
 public:
+    /// Represents a single vendor change policy — the runtime equivalent of one
+    /// TOML configuration file or one compact policy string.
     struct VendorChangePolicy {
         struct PackageDef {
             struct Filter;
@@ -56,15 +67,34 @@ public:
         std::vector<PackageDef> outgoing_packages;
         std::vector<PackageDef> incoming_packages;
         std::vector<VendorEntry> vendor_entries;  // Ordered list preserving original group types
+        std::string source;                       // Origin of the policy (file URI or custom label with "text:" prefix)
     };
 
     /// Constructor
     /// @param pool Reference to the solvable pool
     VendorChangeManager(const Pool & pool);
 
-    /// Load one vendor change policy from configuration file
+    /// Load one vendor change policy from a TOML configuration file and add it.
     /// @param path Path to the configuration file
-    void load_vendor_change_policy(const std::filesystem::path & path);
+    void add_policy_from_toml(const std::filesystem::path & path);
+
+    /// Parse a vendor change policy from a compact representation and add it.
+    /// Format: direction:eop"value",...@direction:e[filters],...
+    /// @param policy_str The policy string to parse
+    /// @param source Origin of the policy (file URI or custom label with "text:" prefix)
+    void add_policy_from_compact(std::string_view policy_str, std::string_view source);
+
+    /// Remove all vendor change policies.
+    void clear_policies();
+
+    /// Remove vendor change policies whose source matches the specified glob pattern.
+    /// @param source_pattern A glob pattern to match against policy sources
+    /// @return The number of policies that were removed
+    std::size_t remove_policies_matching_source(const std::string & source_pattern);
+
+    /// Get the number of registered vendor change policies.
+    /// @return The number of policies in vendor_policies_def
+    [[nodiscard]] std::size_t get_policies_count() const noexcept { return vendor_policies_def.size(); }
 
     /// Check if a vendor change is allowed between two solvables
     /// @param outgoing The currently installed solvable
@@ -97,6 +127,8 @@ private:
         SolvMap outgoing_mask{0};
         SolvMap incoming_mask{0};
     };
+
+    void add_policy(VendorChangePolicy && policy);
 
     const Pool & pool;
     std::vector<VendorChangePolicy> vendor_policies_def;

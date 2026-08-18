@@ -56,6 +56,11 @@ using VarsWeakPtr = WeakPtr<Vars, false>;
 
 class InternalBaseUser;
 
+namespace base {
+class VendorChangeManager;
+using VendorChangeManagerWeakPtr = WeakPtr<VendorChangeManager, false>;
+}  // namespace base
+
 /// Instances of :class:`libdnf5::Base` are the central point of functionality supplied by libdnf5.
 /// An application will typically create a single instance of this class which it will keep for the run-time needed to accomplish its packaging tasks.
 /// :class:`.Base` instances are stateful objects owning various data.
@@ -124,6 +129,10 @@ public:
     /// might be problematic, because architecture is already fixed for our solver.
     /// Calling the method for the second time result in throwing an exception
     void setup();
+
+    /// Returns the VendorChangeManager instance.
+    /// Must be called after setup().
+    base::VendorChangeManagerWeakPtr get_vendor_change_manager();
 
     /// Acquire an advisory lock on the installroot's system repository.
     /// The lock will be automatically released when Base goes out of scope, or manually when unlock_system_repo is called.

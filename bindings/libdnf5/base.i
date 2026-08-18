@@ -39,6 +39,7 @@
     #include "libdnf5/base/transaction_package.hpp"
     #include "libdnf5/base/goal.hpp"
     #include "libdnf5/base/goal_elements.hpp"
+    #include "libdnf5/base/vendor_change_manager.hpp"
 %}
 
 // Deletes any previously defined general purpose exception handler
@@ -51,6 +52,7 @@
 
 %template(BaseWeakPtr) libdnf5::WeakPtr<libdnf5::Base, false>;
 %template(VarsWeakPtr) libdnf5::WeakPtr<libdnf5::Vars, false>;
+%template(VendorChangeManagerWeakPtr) libdnf5::WeakPtr<libdnf5::base::VendorChangeManager, false>;
 
 %ignore std::vector<libdnf5::plugin::PluginInfo>::insert;
 %ignore std::vector<libdnf5::plugin::PluginInfo>::pop;
@@ -196,6 +198,7 @@
 wrap_unique_ptr(InteractionCallbacksUniquePtr, libdnf5::base::InteractionCallbacks);
 
 %include "libdnf5/base/base.hpp"
+%include "libdnf5/base/vendor_change_manager.hpp"
 
 %include "libdnf5/base/solver_problems.hpp"
 %include "libdnf5/base/log_event.hpp"
