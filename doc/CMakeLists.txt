@@ -27,6 +27,31 @@ foreach(RST_SOURCE IN LISTS RST_SOURCES)
 endforeach()
 
 
+# Collect source files that ".. literalinclude::" directives may reference
+# (some of them reachable only through the "templates/tests" symlink) and
+# copy them verbatim into PROCESSED_DIR, next to the preprocessed .rst files.
+# Sphinx resolves literalinclude paths relative to PROCESSED_DIR, not
+# CMAKE_CURRENT_SOURCE_DIR, so without this the includes silently fail to
+# render.
+file(GLOB_RECURSE LITERALINCLUDE_SOURCES LIST_DIRECTORIES false FOLLOW_SYMLINKS
+    RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}
+    *.cpp *.hpp *.py *.conf CMakeLists.txt)
+list(REMOVE_ITEM LITERALINCLUDE_SOURCES "CMakeLists.txt" "sphinx/CMakeLists.txt")
+foreach(LITERALINCLUDE_SOURCE IN LISTS LITERALINCLUDE_SOURCES)
+    cmake_path(GET LITERALINCLUDE_SOURCE PARENT_PATH LITERALINCLUDE_DIRECTORY)
+    file(MAKE_DIRECTORY ${PROCESSED_DIR}/${LITERALINCLUDE_DIRECTORY})
+    add_custom_command(
+        OUTPUT ${PROCESSED_DIR}/${LITERALINCLUDE_SOURCE}
+        COMMAND ${CMAKE_COMMAND} -E copy
+            ${CMAKE_CURRENT_SOURCE_DIR}/${LITERALINCLUDE_SOURCE} ${PROCESSED_DIR}/${LITERALINCLUDE_SOURCE}
+        COMMENT "Copying ${LITERALINCLUDE_SOURCE}"
+        DEPENDS ${LITERALINCLUDE_SOURCE}
+        VERBATIM
+    )
+    list(APPEND RST_OUTPUTS ${PROCESSED_DIR}/${LITERALINCLUDE_SOURCE})
+endforeach()
+
+
 LIST(JOIN DOCUMENTED_HEADERS " \\\n" DOCUMENTED_HEADERS_STRING)
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/Doxyfile.in ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile)
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/conf.py.in ${CMAKE_CURRENT_BINARY_DIR}/conf.py)
