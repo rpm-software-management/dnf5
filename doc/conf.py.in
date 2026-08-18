@@ -11,7 +11,6 @@
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #
 import os
-import sphinx
 import sys
 
 try:
@@ -72,11 +71,7 @@ autoapi_generate_api_docs = False
 autoapi_add_toctree_entry = False
 autoapi_add_objects_to_toctree = False
 
-if sphinx.version_info[:3] > (4, 0, 0):
-    tags.add('sphinx4')
-    extensions += ['dbusdoc']
-else:
-    extensions += ['fakedbusdoc']
+extensions += ['dbusdoc']
 
 qapidoc_srctree = os.path.join(libdnf_docdir, '..')
 dbusdoc_srctree = os.path.join(libdnf_docdir, '..')

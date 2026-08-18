@@ -37,136 +37,20 @@ Note: While most of the following methods can be invoked successfully by a regul
 Interfaces
 ==========
 
-.. only:: sphinx4
+..  dbus-doc:: dnf5daemon-server/dbus/interfaces/org.rpm.dnf.v0.SessionManager.xml
 
-   ..  dbus-doc:: dnf5daemon-server/dbus/interfaces/org.rpm.dnf.v0.SessionManager.xml
+..  dbus-doc:: dnf5daemon-server/dbus/interfaces/org.rpm.dnf.v0.Base.xml
 
-.. only:: not sphinx4
+..  dbus-doc:: dnf5daemon-server/dbus/interfaces/org.rpm.dnf.v0.rpm.Repo.xml
 
-   .. warning::
-      Sphinx 4 is required to build D-Bus documentation.
+..  dbus-doc:: dnf5daemon-server/dbus/interfaces/org.rpm.dnf.v0.rpm.Rpm.xml
 
-      This is the content of ``dnf5daemon-server/dbus/interfaces/org.rpm.dnf.v0.SessionManager.xml``:
+..  dbus-doc:: dnf5daemon-server/dbus/interfaces/org.rpm.dnf.v0.Goal.xml
 
-   .. literalinclude:: ../../dnf5daemon-server/dbus/interfaces/org.rpm.dnf.v0.SessionManager.xml
-      :language: xml
+..  dbus-doc:: dnf5daemon-server/dbus/interfaces/org.rpm.dnf.v0.Offline.xml
 
-.. only:: sphinx4
+..  dbus-doc:: dnf5daemon-server/dbus/interfaces/org.rpm.dnf.v0.comps.Group.xml
 
-   ..  dbus-doc:: dnf5daemon-server/dbus/interfaces/org.rpm.dnf.v0.Base.xml
+..  dbus-doc:: dnf5daemon-server/dbus/interfaces/org.rpm.dnf.v0.Advisory.xml
 
-.. only:: not sphinx4
-
-   .. warning::
-      Sphinx 4 is required to build D-Bus documentation.
-
-      This is the content of ``dnf5daemon-server/dbus/interfaces/org.rpm.dnf.v0.Base.xml``:
-
-   .. literalinclude:: ../../dnf5daemon-server/dbus/interfaces/org.rpm.dnf.v0.Base.xml
-      :language: xml
-
-.. only:: sphinx4
-
-   ..  dbus-doc:: dnf5daemon-server/dbus/interfaces/org.rpm.dnf.v0.rpm.Repo.xml
-
-.. only:: not sphinx4
-
-   .. warning::
-      Sphinx 4 is required to build D-Bus documentation.
-
-      This is the content of ``dnf5daemon-server/dbus/interfaces/org.rpm.dnf.v0.rpm.Repo.xml``:
-
-   .. literalinclude:: ../../dnf5daemon-server/dbus/interfaces/org.rpm.dnf.v0.rpm.Repo.xml
-      :language: xml
-
-
-.. only:: sphinx4
-
-   ..  dbus-doc:: dnf5daemon-server/dbus/interfaces/org.rpm.dnf.v0.rpm.Rpm.xml
-
-.. only:: not sphinx4
-
-   .. warning::
-      Sphinx 4 is required to build D-Bus documentation.
-
-      This is the content of ``dnf5daemon-server/dbus/interfaces/org.rpm.dnf.v0.rpm.Rpm.xml``:
-
-   .. literalinclude:: ../../dnf5daemon-server/dbus/interfaces/org.rpm.dnf.v0.rpm.Rpm.xml
-      :language: xml
-
-.. only:: sphinx4
-
-   ..  dbus-doc:: dnf5daemon-server/dbus/interfaces/org.rpm.dnf.v0.Goal.xml
-
-
-.. only:: not sphinx4
-
-   .. warning::
-      Sphinx 4 is required to build D-Bus documentation.
-
-      This is the content of ``dnf5daemon-server/dbus/interfaces/org.rpm.dnf.v0.Goal.xml``:
-
-   .. literalinclude:: ../../dnf5daemon-server/dbus/interfaces/org.rpm.dnf.v0.Goal.xml
-      :language: xml
-
-
-.. only:: sphinx4
-
-   ..  dbus-doc:: dnf5daemon-server/dbus/interfaces/org.rpm.dnf.v0.Offline.xml
-
-
-.. only:: not sphinx4
-
-   .. warning::
-      Sphinx 4 is required to build D-Bus documentation.
-
-      This is the content of ``dnf5daemon-server/dbus/interfaces/org.rpm.dnf.v0.Offline.xml``:
-
-   .. literalinclude:: ../../dnf5daemon-server/dbus/interfaces/org.rpm.dnf.v0.Offline.xml
-      :language: xml
-
-
-
-.. only:: sphinx4
-
-   ..  dbus-doc:: dnf5daemon-server/dbus/interfaces/org.rpm.dnf.v0.comps.Group.xml
-
-.. only:: not sphinx4
-
-   .. warning::
-      Sphinx 4 is required to build D-Bus documentation.
-
-      This is the content of ``dnf5daemon-server/dbus/interfaces/org.rpm.dnf.v0.comps.Group.xml``:
-
-   .. literalinclude:: ../../dnf5daemon-server/dbus/interfaces/org.rpm.dnf.v0.comps.Group.xml
-      :language: xml
-
-
-.. only:: sphinx4
-
-   ..  dbus-doc:: dnf5daemon-server/dbus/interfaces/org.rpm.dnf.v0.Advisory.xml
-
-.. only:: not sphinx4
-
-   .. warning::
-      Sphinx 4 is required to build D-Bus documentation.
-
-      This is the content of ``dnf5daemon-server/dbus/interfaces/org.rpm.dnf.v0.Advisory.xml``:
-
-   .. literalinclude:: ../../dnf5daemon-server/dbus/interfaces/org.rpm.dnf.v0.Advisory.xml
-      :language: xml
-
-
-.. only:: sphinx4
-
-   ..  dbus-doc:: dnf5daemon-server/dbus/interfaces/org.rpm.dnf.v0.History.xml
-
-.. only:: not sphinx4
-
-   .. warning::
-      Sphinx 4 is required to build D-Bus documentation.
-
-      This is the content of ``dnf5daemon-server/dbus/interfaces/org.rpm.dnf.v0.History.xml``:
-
-   .. literalinclude:: ../../dnf5daemon-server/dbus/interfaces/org.rpm.dnf.v0.History.xml
-      :language: xml
+..  dbus-doc:: dnf5daemon-server/dbus/interfaces/org.rpm.dnf.v0.History.xml
