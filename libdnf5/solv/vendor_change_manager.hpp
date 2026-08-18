@@ -41,14 +41,20 @@ public:
 
         struct VendorDef {
             std::string vendor;         // Vendor name or pattern
-            sack::QueryCmp comparator;  //Comparison operator for the vendor name
+            sack::QueryCmp comparator;  // Comparison operator for the vendor name
             bool is_exclusion;          // Whether this vendor is excluded from the policy
+        };
+
+        enum class VendorGroupType { OUTGOING, INCOMING, EQUIVALENT };
+
+        struct VendorEntry {
+            VendorGroupType group_type;
+            VendorDef def;
         };
 
         std::vector<PackageDef> outgoing_packages;
         std::vector<PackageDef> incoming_packages;
-        std::vector<VendorDef> outgoing_vendors;
-        std::vector<VendorDef> incoming_vendors;
+        std::vector<VendorEntry> vendor_entries;  // Ordered list preserving original group types
     };
 
     /// Constructor

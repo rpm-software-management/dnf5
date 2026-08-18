@@ -212,31 +212,43 @@ const VendorChangeManager::VendorChangeMasks & VendorChangeManager::get_vendor_c
     auto vendor_str = pool.id2str(vendor);
     for (unsigned int class_idx = 0; class_idx < vendor_policies_def.size(); ++class_idx) {
         const auto & vendor_class_def = vendor_policies_def[class_idx];
-        if (vendor_class_def.outgoing_vendors.empty()) {
-            // Default to permit-all if no specific outgoing vendors are defined
-            masks.outgoing_mask.add_grow(static_cast<int>(class_idx), EXTRA_CAPACITY);
-        } else {
-            for (const auto & vendor_def : vendor_class_def.outgoing_vendors) {
-                if (sack::match_string(vendor_str, vendor_def.comparator, vendor_def.vendor)) {
-                    if (!vendor_def.is_exclusion) {
+        using VendorGroupType = VendorChangePolicy::VendorGroupType;
+        bool has_outgoing = false;
+        bool has_incoming = false;
+        bool outgoing_resolved = false;
+        bool incoming_resolved = false;
+        for (const auto & entry : vendor_class_def.vendor_entries) {
+            const bool is_outgoing =
+                entry.group_type == VendorGroupType::OUTGOING || entry.group_type == VendorGroupType::EQUIVALENT;
+            const bool is_incoming =
+                entry.group_type == VendorGroupType::INCOMING || entry.group_type == VendorGroupType::EQUIVALENT;
+            has_outgoing |= is_outgoing;
+            has_incoming |= is_incoming;
+            if (sack::match_string(vendor_str, entry.def.comparator, entry.def.vendor)) {
+                if (is_outgoing && !outgoing_resolved) {
+                    outgoing_resolved = true;
+                    if (!entry.def.is_exclusion) {
                         masks.outgoing_mask.add_grow(static_cast<int>(class_idx), EXTRA_CAPACITY);
                     }
-                    break;
                 }
-            }
-        }
-        if (vendor_class_def.incoming_vendors.empty()) {
-            // Default to permit-all if no specific incoming vendors are defined
-            masks.incoming_mask.add_grow(static_cast<int>(class_idx), EXTRA_CAPACITY);
-        } else {
-            for (const auto & vendor_def : vendor_class_def.incoming_vendors) {
-                if (sack::match_string(vendor_str, vendor_def.comparator, vendor_def.vendor)) {
-                    if (!vendor_def.is_exclusion) {
+                if (is_incoming && !incoming_resolved) {
+                    incoming_resolved = true;
+                    if (!entry.def.is_exclusion) {
                         masks.incoming_mask.add_grow(static_cast<int>(class_idx), EXTRA_CAPACITY);
                     }
-                    break;
                 }
             }
+            if (outgoing_resolved && incoming_resolved) {
+                break;
+            }
+        }
+        if (!has_outgoing) {
+            // Default to permit if no specific outgoing vendors are defined
+            masks.outgoing_mask.add_grow(static_cast<int>(class_idx), EXTRA_CAPACITY);
+        }
+        if (!has_incoming) {
+            // Default to permit if no specific incoming vendors are defined
+            masks.incoming_mask.add_grow(static_cast<int>(class_idx), EXTRA_CAPACITY);
         }
     }
 
@@ -742,19 +754,22 @@ void VendorChangeManager::load_vendor_change_policy(const std::filesystem::path 
                     }
                 }
 
+                using VendorGroupType = VendorChangePolicy::VendorGroupType;
+                VendorGroupType vgt;
                 switch (group_type) {
                     case GroupType::OUTGOING_VENDORS:
-                        policy.outgoing_vendors.push_back(std::move(vendor_def));
+                        vgt = VendorGroupType::OUTGOING;
                         break;
                     case GroupType::INCOMING_VENDORS:
-                        policy.incoming_vendors.push_back(std::move(vendor_def));
+                        vgt = VendorGroupType::INCOMING;
                         break;
                     case GroupType::EQUIVALENT_VENDORS:
-                        policy.outgoing_vendors.push_back(vendor_def);
-                        policy.incoming_vendors.push_back(std::move(vendor_def));
+                        vgt = VendorGroupType::EQUIVALENT;
                         break;
-                    default:;
+                    default:
+                        libdnf_throw_assertion("Invalid vendor change policy direction");
                 }
+                policy.vendor_entries.emplace_back(vgt, std::move(vendor_def));
             }
         }
     } catch (const toml::type_error & ex) {
@@ -769,24 +784,33 @@ void VendorChangeManager::load_vendor_change_policy(const std::filesystem::path 
             M_("An error occurred when parsing file \"{}\": {}"), path.native(), std::string(ex.what()));
     }
 
-    if (policy.outgoing_packages.empty() && policy.incoming_packages.empty() && policy.outgoing_vendors.empty() &&
-        policy.incoming_vendors.empty()) {
+    if (policy.outgoing_packages.empty() && policy.incoming_packages.empty() && policy.vendor_entries.empty()) {
         // All lists are empty, so there is nothing to add
         return;
     }
 
-    if (is_config_version_1_0 && policy.outgoing_vendors.empty()) {
-        throw VendorChangePolicyConfigFileError(
-            M_("Configuration file \"{}\" uses version \"1.0\" which does not support"
-               " 'incoming_vendors' without 'outgoing_vendors'"),
-            path.native());
-    }
-
-    if (is_config_version_1_0 && policy.incoming_vendors.empty()) {
-        throw VendorChangePolicyConfigFileError(
-            M_("Configuration file \"{}\" uses version \"1.0\" which does not support"
-               " 'outgoing_vendors' without 'incoming_vendors'"),
-            path.native());
+    if (is_config_version_1_0) {
+        using VendorGroupType = VendorChangePolicy::VendorGroupType;
+        bool has_outgoing = false;
+        bool has_incoming = false;
+        for (const auto & entry : policy.vendor_entries) {
+            has_outgoing |=
+                entry.group_type == VendorGroupType::OUTGOING || entry.group_type == VendorGroupType::EQUIVALENT;
+            has_incoming |=
+                entry.group_type == VendorGroupType::INCOMING || entry.group_type == VendorGroupType::EQUIVALENT;
+        }
+        if (!has_outgoing) {
+            throw VendorChangePolicyConfigFileError(
+                M_("Configuration file \"{}\" uses version \"1.0\" which does not support"
+                   " 'incoming_vendors' without 'outgoing_vendors'"),
+                path.native());
+        }
+        if (!has_incoming) {
+            throw VendorChangePolicyConfigFileError(
+                M_("Configuration file \"{}\" uses version \"1.0\" which does not support"
+                   " 'outgoing_vendors' without 'incoming_vendors'"),
+                path.native());
+        }
     }
 
     vendor_policies_def.push_back(std::move(policy));
