@@ -25,6 +25,7 @@
 #include "system/state.hpp"
 
 #include "libdnf5/base/base.hpp"
+#include "libdnf5/base/vendor_change_manager.hpp"
 #include "libdnf5/utils/locker.hpp"
 #ifdef WITH_MODULEMD
 #include "libdnf5/module/module_sack.hpp"
@@ -107,6 +108,7 @@ private:
     std::unique_ptr<repo::DownloadCallbacks> download_callbacks;
     std::unique_ptr<base::InteractionCallbacks> interaction_callbacks;
     std::optional<libdnf5::utils::Locker> system_repo_lock;
+    std::unique_ptr<base::VendorChangeManager> vendor_change_manager;
 
     /// map of plugin names (global patterns) that we want to enable (true) or disable (false)
     PreserveOrderMap<std::string, bool> plugins_enablement;

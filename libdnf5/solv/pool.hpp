@@ -275,10 +275,6 @@ public:
     }
     ~RpmPool() { pool_set_custom_vendorcheck(pool, nullptr); }
 
-    void load_vendor_change_policy(const std::filesystem::path & policy_file) {
-        vendor_change_manager.load_vendor_change_policy(policy_file);
-    }
-
     [[nodiscard]] SolvMap & get_incoming_vendor_bypassed_solvables() noexcept {
         return vendor_change_manager.get_incoming_vendor_bypassed_solvables();
     }
@@ -291,6 +287,8 @@ public:
     [[nodiscard]] const std::unordered_map<Id, std::string> & get_blocked_vendor_changes() const noexcept {
         return blocked_vendor_changes;
     }
+
+    [[nodiscard]] VendorChangeManager & get_vendor_change_manager() noexcept { return vendor_change_manager; }
 
 private:
     friend class VendorChangeManager;
