@@ -20,6 +20,8 @@
 #include "copr.hpp"
 #include "copr_repo.hpp"
 
+#include <libdnf5/repo/repo_query.hpp>
+
 #include <iostream>
 
 namespace dnf5 {
@@ -64,7 +66,8 @@ void CoprListCommand::set_argument_parser() {
 
 
 void CoprListCommand::run() {
-    auto & base = get_context().get_base();
+    auto & ctx = get_context();
+    auto & base = ctx.get_base();
     std::unique_ptr<dnf5::CoprConfig> config = std::make_unique<dnf5::CoprConfig>(base);
     // empty string if no --hub is specified
     auto hostname = copr_cmd()->hub();
@@ -73,6 +76,17 @@ void CoprListCommand::run() {
         hostname = config->get_hub_hostname(hostname);
     auto list = RepoListCB(hostname);
     installed_copr_repositories(base, list.list);
+
+    auto & conf = base.get_config();
+    if (conf.get_installroot_option().get_value() != "/" && !conf.get_use_host_config_option().get_value()) {
+        libdnf5::repo::RepoQuery all_repos(base);
+        all_repos.filter_type(libdnf5::repo::Repo::Type::AVAILABLE);
+        if (all_repos.empty()) {
+            ctx.print_info(
+                _("No repositories were loaded from the installroot. To use the configuration and "
+                  "repositories of the host system, pass --use-host-config."));
+        }
+    }
 }
 
 }  // namespace dnf5
