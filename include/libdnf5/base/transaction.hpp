@@ -227,7 +227,6 @@ private:
     std::optional<uint32_t> user_id;
     std::string comment;
     std::string description;
-    libdnf5::base::TransactionPersistence persistence = libdnf5::base::TransactionPersistence::UNKNOWN;
 
     /// Clear the recorded last scriptlet output
     LIBDNF_LOCAL void clear_last_script_output();
