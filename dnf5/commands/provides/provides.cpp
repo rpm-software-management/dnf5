@@ -18,6 +18,8 @@
 // along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "provides.hpp"
 
+#include "../no_matches.hpp"
+
 #include "libdnf5/common/sack/query_cmp.hpp"
 #include "libdnf5/conf/option_string.hpp"
 
@@ -116,29 +118,24 @@ void ProvidesCommand::run() {
         libdnf5::rpm::PackageQuery full_package_query(ctx.get_base(), libdnf5::sack::ExcludeFlags::IGNORE_VERSIONLOCK);
         // get the matched query first and the type of match (no_match, provides, file, binary) second
         auto matched = filter_spec(spec, full_package_query);
-        for (auto package : matched.first) {
-            if (matched.second != libdnf5::cli::output::ProvidesMatchedBy::NO_MATCH) {
+        if (matched.second == libdnf5::cli::output::ProvidesMatchedBy::NO_MATCH) {
+            unmatched_specs.insert(spec);
+        } else {
+            for (auto package : matched.first) {
                 libdnf5::cli::output::PackageAdapter cli_package(package);
                 libdnf5::cli::output::print_provides_table(cli_package, spec.c_str(), matched.second);
                 any_match = true;
-            } else {
-                unmatched_specs.insert(spec);
             }
         }
     }
-    if (!unmatched_specs.empty() && any_match) {
-        for (auto const & spec : unmatched_specs) {
-            std::cerr << "No matches found for " << spec << "." << std::endl;
+    bool no_repos = no_repos_enabled(ctx);
+    report_no_matches(ctx, unmatched_specs, !any_match, no_repos, false);
+    if (!unmatched_specs.empty()) {
+        if (!no_repos) {
+            ctx.print_info(
+                _("If searching for a file, try specifying the full "
+                  "path or using a wildcard prefix (\"*/\") at the beginning."));
         }
-        std::cerr << "If searching for a file, try specifying the full "
-                     "path or using a wildcard prefix (\"*/\") at the beginning."
-                  << std::endl;
-        throw libdnf5::cli::SilentCommandExitError(1);
-    }
-    if (!any_match) {
-        std::cerr << "No matches found. If searching for a file, try specifying the full "
-                     "path or using a wildcard prefix (\"*/\") at the beginning."
-                  << std::endl;
         throw libdnf5::cli::SilentCommandExitError(1);
     }
 }
