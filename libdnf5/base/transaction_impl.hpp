@@ -32,6 +32,7 @@
 #include "libdnf5/base/transaction_group.hpp"
 #include "libdnf5/base/transaction_module.hpp"
 #include "libdnf5/base/transaction_package.hpp"
+#include "libdnf5/base/transaction_persistence.hpp"
 #include "libdnf5/module/module_sack.hpp"
 #include "libdnf5/rpm/package.hpp"
 #include "libdnf5/rpm/rpm_signature.hpp"
@@ -137,6 +138,8 @@ private:
 
     // history db transaction id
     int64_t history_db_id = 0;
+
+    libdnf5::base::TransactionPersistence persistence = libdnf5::base::TransactionPersistence::UNKNOWN;
 
     // whether also the command line repo packages should be downloaded to the destination
     bool download_local_pkgs{false};
