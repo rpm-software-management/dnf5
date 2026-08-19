@@ -46,7 +46,7 @@ public:
     /// Load one vendor change policy from a TOML configuration file.
     /// The file must conform to the vendor change policy format.
     /// @param path Path to the TOML configuration file.
-    /// @throws Error if the file cannot be parsed or contains invalid values.
+    /// @throws VendorChangeManagerError if the file cannot be parsed or contains invalid values.
     void load_policy_from_toml(const std::filesystem::path & path);
 
     /// Load a vendor change policy from a compact string representation.
@@ -63,7 +63,7 @@ public:
     /// @param policy_str The compact policy string to parse.
     /// @param source Origin of the policy (file URI or custom label with ``text:`` prefix,
     ///               e.g., ``"text:COMMAND LINE"``). Stored for diagnostics and logging.
-    /// @throws Error if the string cannot be parsed.
+    /// @throws VendorChangeManagerError if the string cannot be parsed.
     void load_policy_from_compact(std::string_view policy_str, std::string_view source);
 
     /// Unload all vendor change policies from memory.
