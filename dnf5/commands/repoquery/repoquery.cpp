@@ -19,6 +19,8 @@
 
 #include "repoquery.hpp"
 
+#include "../no_matches.hpp"
+
 #include "libdnf5-cli/output/adapters/package_tmpl.hpp"
 
 #include <dnf5/shared_options.hpp>
@@ -870,7 +872,10 @@ void RepoqueryCommand::run() {
 
     if (querytags_option->get_value()) {
         libdnf5::cli::output::print_available_pkg_attrs(stdout);
-    } else if (changelogs->get_value()) {
+        return;
+    }
+
+    if (changelogs->get_value()) {
         libdnf5::cli::output::print_changelogs(result_query, {libdnf5::cli::output::ChangelogFilterType::NONE, 0});
     } else if (info_option->get_value()) {
         // sort the packages according to NEVRA
@@ -888,6 +893,14 @@ void RepoqueryCommand::run() {
         libdnf5::cli::output::print_pkg_attr_uniq_sorted(stdout, result_query, pkg_attr_option->get_value());
     } else {
         libdnf5::cli::output::print_pkg_set_with_format(stdout, result_query, query_format_option->get_value());
+    }
+
+    // for repoquery we intentionally do not track unmatched specs or report on
+    // an empty package result on its own -- only the "no repositories" case,
+    // which is unrelated to packages, is reported here.
+    if (result_query.empty() && ctx.get_load_available_repos() != Context::LoadAvailableRepos::NONE &&
+        no_repos_enabled(ctx)) {
+        report_no_repos(ctx, _("No matches found: no repositories are enabled."));
     }
 }
 
