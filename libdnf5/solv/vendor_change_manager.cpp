@@ -7,7 +7,7 @@
 #include "utils/fs/utils.hpp"
 #include "utils/string.hpp"
 
-#include "libdnf5/common/exception.hpp"
+#include "libdnf5/base/vendor_change_manager_errors.hpp"
 #include "libdnf5/common/sack/match_string.hpp"
 #include "libdnf5/utils/bgettext/bgettext-mark-domain.h"
 
@@ -212,9 +212,9 @@ VendorChangeManager::VendorChangePolicy::PackageDef::FilterFunction resolve_pack
 }
 
 
-class VendorChangePolicyTomlFormatError : public Error {
+class VendorChangePolicyTomlFormatError : public base::VendorChangeManagerError {
 public:
-    using Error::Error;
+    using VendorChangeManagerError::VendorChangeManagerError;
     const char * get_domain_name() const noexcept override { return "libdnf5::solv"; }
     const char * get_name() const noexcept override { return "VendorChangePolicyTomlFormatError"; }
 };
@@ -704,9 +704,9 @@ VendorChangeManager::VendorChangePolicy::PackageDef::Filter VendorChangePolicyTo
 }
 
 
-class VendorChangePolicyCompactFormatError : public Error {
+class VendorChangePolicyCompactFormatError : public base::VendorChangeManagerError {
 public:
-    using Error::Error;
+    using VendorChangeManagerError::VendorChangeManagerError;
     const char * get_domain_name() const noexcept override { return "libdnf5::solv"; }
     const char * get_name() const noexcept override { return "VendorChangePolicyCompactFormatError"; }
 };
@@ -740,7 +740,7 @@ private:
 
     char advance() {
         if (at_end()) {
-            error("Unexpected end of input");
+            throw_error(Error(M_("Unexpected end of input")));
         }
         return input[pos++];
     }
@@ -756,14 +756,21 @@ private:
     void expect(char c) {
         skip_white_spaces();
         if (!match(c)) {
-            auto found = at_end() ? std::string("end of input") : std::string("'") + peek() + "'";
-            error("Expected '" + std::string(1, c) + "' but found " + found);
+            if (at_end()) {
+                throw_error(Error(M_("Expected '{}' but found end of input"), c));
+            } else {
+                throw_error(Error(M_("Expected '{}' but found '{}'"), c, peek()));
+            }
         }
     }
 
-    [[noreturn]] void error(const std::string & detail) const {
-        throw VendorChangePolicyCompactFormatError(
-            M_("Error parsing at position {}: {}"), static_cast<int>(pos), detail);
+    [[noreturn]] void throw_error(const Error & err) const {
+        try {
+            throw err;
+        } catch (...) {
+            libdnf5::throw_with_nested(VendorChangePolicyCompactFormatError(
+                M_("Compact vendor change policy parse error at position {}"), pos));
+        }
     }
 
     std::string parse_quoted_string();
@@ -793,7 +800,7 @@ VendorChangeManager::VendorChangePolicy VendorChangePolicyCompactFormat::parse()
 
     skip_white_spaces();
     if (at_end()) {
-        error("Empty vendor policy string");
+        throw_error(Error(M_("Empty vendor policy string")));
     }
 
     if (peek() != '@') {
@@ -810,7 +817,7 @@ VendorChangeManager::VendorChangePolicy VendorChangePolicyCompactFormat::parse()
     if (match('@')) {
         skip_white_spaces();
         if (at_end()) {
-            error("Expected package filter after '@'");
+            throw_error(Error(M_("Expected package filter after '@'")));
         }
         parse_package_entry(policy);
         skip_white_spaces();
@@ -823,11 +830,11 @@ VendorChangeManager::VendorChangePolicy VendorChangePolicyCompactFormat::parse()
     }
 
     if (!at_end()) {
-        error("Unexpected character '" + std::string(1, peek()) + "'");
+        throw_error(Error(M_("Unexpected character '{}'"), peek()));
     }
 
     if (policy.vendor_entries.empty() && policy.outgoing_packages.empty() && policy.incoming_packages.empty()) {
-        error("Empty policy: no vendor definitions or package filters specified");
+        throw_error(Error(M_("Empty policy: no vendor definitions or package filters specified")));
     }
 
     return policy;
@@ -836,7 +843,7 @@ VendorChangeManager::VendorChangePolicy VendorChangePolicyCompactFormat::parse()
 
 std::string VendorChangePolicyCompactFormat::parse_quoted_string() {
     if (peek() != '"') {
-        error("Expected quoted string starting with '\"'");
+        throw_error(Error(M_("Expected quoted string starting with '\"'")));
     }
     ++pos;
     std::string result;
@@ -844,20 +851,20 @@ std::string VendorChangePolicyCompactFormat::parse_quoted_string() {
         if (peek() == '\\') {
             ++pos;
             if (at_end()) {
-                error("Unterminated escape sequence");
+                throw_error(Error(M_("Unterminated escape sequence")));
             }
             char c = input[pos++];
             if (c == '"' || c == '\\') {
                 result += c;
             } else {
-                error("Invalid escape sequence '\\" + std::string(1, c) + "'. Only '\\\"' and '\\\\' are supported");
+                throw_error(Error(M_("Invalid escape sequence '\\{}'. Only '\\\"' and '\\\\' are supported"), c));
             }
         } else {
             result += input[pos++];
         }
     }
     if (at_end()) {
-        error("Unterminated quoted string");
+        throw_error(Error(M_("Unterminated quoted string")));
     }
     ++pos;
     return result;
@@ -877,7 +884,7 @@ VendorChangePolicyCompactFormat::VendorGroupType VendorChangePolicyCompactFormat
         pos += 2;
         return VendorGroupType::INCOMING;
     }
-    error("Expected direction prefix 'in', 'out', or 'eq'");
+    throw_error(Error(M_("Expected direction prefix 'in', 'out', or 'eq'")));
 }
 
 
@@ -940,9 +947,9 @@ sack::QueryCmp VendorChangePolicyCompactFormat::parse_comparator() {
     }
 
     if (err || (!is_string_comparator(result) && !is_relational_comparator(result))) {
-        error(
-            "Expected comparison operator: relational (<, <=, >, >=) or string (=, ^, $, *, =*, =~; optionally "
-            "prefixed with ! and/or i");
+        throw_error(Error(
+            M_("Expected comparison operator: relational (<, <=, >, >=) or string (=, ^, $, *, =*, =~; optionally "
+               "prefixed with ! and/or i")));
     }
 
     return result;
@@ -967,16 +974,16 @@ void VendorChangePolicyCompactFormat::parse_vendor_entry(VendorChangeManager::Ve
     std::string vendor = parse_quoted_string();
 
     if (!is_string_comparator(comparator)) {
-        error(
-            "Vendor definition does not support relational comparators. "
-            "Use string comparators: =, ^, $, *, =*, =~");
+        throw_error(
+            Error(M_("Vendor definition does not support relational comparators. "
+                     "Use string comparators: =, ^, $, *, =*, =~")));
     }
 
     if (const auto cmp = comparator - sack::QueryCmp::NOT - sack::QueryCmp::ICASE; cmp == sack::QueryCmp::REGEX) {
         try {
             sack::match_string("", comparator, vendor);
         } catch (const std::exception & ex) {
-            error("Invalid regex vendor pattern '" + vendor + "': " + ex.what());
+            throw_error(Error(M_("Invalid regex vendor pattern '{}': {}"), vendor, std::string(ex.what())));
         }
     }
 
@@ -994,7 +1001,7 @@ VendorChangePolicyCompactFormat::FilterFunction VendorChangePolicyCompactFormat:
     if (auto result = resolve_package_filter_func(field_name)) {
         return result;
     }
-    error("Unknown filter field name '" + field_name + "'");
+    throw_error(Error(M_("Unknown filter field name '{}'"), field_name));
 }
 
 
@@ -1004,7 +1011,7 @@ std::string VendorChangePolicyCompactFormat::parse_field_name() {
         ++pos;
     }
     if (pos == start) {
-        error("Expected filter field name");
+        throw_error(Error(M_("Expected filter field name")));
     }
     return std::string(input.substr(start, pos - start));
 }
@@ -1027,14 +1034,14 @@ VendorChangeManager::VendorChangePolicy::PackageDef::Filter VendorChangePolicyCo
         try {
             std::stoul(filter.value);
         } catch (...) {
-            error("Invalid epoch value \"" + filter.value + "\"");
+            throw_error(Error(M_("Invalid epoch value \"{}\""), filter.value));
         }
     } else if (filter.filter_func == filter_package_cmdline_repo) {
         if (filter.comparator != sack::QueryCmp::EXACT) {
-            error("Filter 'cmdline_repo' only supports the '=' (EXACT) comparator");
+            throw_error(Error(M_("Filter 'cmdline_repo' only supports the '=' (EXACT) comparator")));
         }
         if (dir == VendorGroupType::OUTGOING) {
-            error("Filter 'cmdline_repo' is only allowed in incoming packages ('in:')");
+            throw_error(Error(M_("Filter 'cmdline_repo' is only allowed in incoming packages ('in:')")));
         }
 
         // Optimization: bool value is stored in a string (empty string == false).
@@ -1044,15 +1051,16 @@ VendorChangeManager::VendorChangePolicy::PackageDef::Filter VendorChangePolicyCo
         } else if (filter.value == "0" || filter.value == "false") {
             std::string{}.swap(filter.value);  // store empty string
         } else {
-            error("Invalid value '" + filter.value + "' for 'cmdline_repo' filter. Use 'true', '1', 'false', or '0'");
+            throw_error(Error(
+                M_("Invalid value '{}' for 'cmdline_repo' filter. Use 'true', '1', 'false', or '0'"), filter.value));
         }
     } else if (is_relational_package_filter_func(filter.filter_func)) {
         if (!is_relational_comparator(filter.comparator)) {
-            error("Filter '" + field_name + "' only supports relational comparators: =, !=, >, >=, <, <=");
+            throw_error(Error(M_("Filter '{}' only supports relational comparators: =, !=, >, >=, <, <="), field_name));
         }
     } else {
         if (!is_string_comparator(filter.comparator)) {
-            error("Filter '" + field_name + "' only supports string comparators: =, ^, $, *, =*, =~");
+            throw_error(Error(M_("Filter '{}' only supports string comparators: =, ^, $, *, =*, =~"), field_name));
         }
     }
 
@@ -1061,7 +1069,7 @@ VendorChangeManager::VendorChangePolicy::PackageDef::Filter VendorChangePolicyCo
         try {
             sack::match_string("", filter.comparator, filter.value);
         } catch (const std::exception & ex) {
-            error("Invalid regex '" + filter.value + "': " + ex.what());
+            throw_error(Error(M_("Invalid regex '{}': {}"), filter.value, std::string(ex.what())));
         }
     }
 
@@ -1072,7 +1080,7 @@ VendorChangeManager::VendorChangePolicy::PackageDef::Filter VendorChangePolicyCo
 void VendorChangePolicyCompactFormat::parse_package_entry(VendorChangeManager::VendorChangePolicy & policy) {
     const auto dir = parse_direction();
     if (dir == VendorGroupType::EQUIVALENT) {
-        error("Package filters do not support 'eq' direction. Use 'in' or 'out'");
+        throw_error(Error(M_("Package filters do not support 'eq' direction. Use 'in' or 'out'")));
     }
 
     expect(':');
