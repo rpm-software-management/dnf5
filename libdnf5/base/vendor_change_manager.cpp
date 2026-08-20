@@ -35,6 +35,14 @@ public:
 
     void load_policies();
 
+    std::size_t get_loaded_policies_count() const noexcept { return vcm.get_policies_count(); }
+
+    const std::string & get_loaded_policy_source(std::size_t index) const { return vcm.get_policy_source(index); }
+
+    std::string get_loaded_policy_as_toml(std::size_t index) const { return vcm.get_policy_as_toml(index); }
+
+    std::string get_loaded_policy_as_compact(std::size_t index) const { return vcm.get_policy_as_compact(index); }
+
     WeakPtrGuard<VendorChangeManager, false> guard;
 
 private:
@@ -91,6 +99,36 @@ std::size_t VendorChangeManager::unload_policies() {
 
 std::size_t VendorChangeManager::unload_policies_matching_source(const std::string & source_pattern) {
     return p_impl->unload_policies_matching_source(source_pattern);
+}
+
+
+std::size_t VendorChangeManager::get_loaded_policies_count() const noexcept {
+    return p_impl->get_loaded_policies_count();
+}
+
+
+const std::string & VendorChangeManager::get_loaded_policy_source(std::size_t index) const {
+    return p_impl->get_loaded_policy_source(index);
+}
+
+
+std::string VendorChangeManager::get_loaded_policy_as_toml(std::size_t index) const {
+    return p_impl->get_loaded_policy_as_toml(index);
+}
+
+
+std::string VendorChangeManager::get_loaded_policy_as_compact(std::size_t index) const {
+    return p_impl->get_loaded_policy_as_compact(index);
+}
+
+
+std::string VendorChangeManager::convert_policy_toml_to_compact(const std::filesystem::path & path) {
+    return solv::VendorChangeManager::convert_policy_toml_to_compact(path);
+}
+
+
+std::string VendorChangeManager::convert_policy_compact_to_toml(std::string_view compact_str, std::string_view source) {
+    return solv::VendorChangeManager::convert_policy_compact_to_toml(compact_str, source);
 }
 
 

@@ -77,6 +77,41 @@ public:
     /// @throws VendorChangeManagerError if the pattern is invalid.
     std::size_t unload_policies_matching_source(const std::string & source_pattern);
 
+    /// Get the number of loaded vendor change policies.
+    /// @return The number of currently loaded policies.
+    [[nodiscard]] std::size_t get_loaded_policies_count() const noexcept;
+
+    /// Get the source (origin) of a loaded vendor change policy.
+    /// @param index The index of the loaded policy (0-based).
+    /// @return The source string (file URI or custom label with ``text:`` prefix).
+    /// @throws VendorChangeManagerError if index is out of bounds.
+    [[nodiscard]] const std::string & get_loaded_policy_source(std::size_t index) const;
+
+    /// Get a loaded vendor change policy as a TOML string.
+    /// @param index The index of the loaded policy (0-based).
+    /// @return The policy formatted as a TOML string.
+    /// @throws VendorChangeManagerError if index is out of bounds.
+    [[nodiscard]] std::string get_loaded_policy_as_toml(std::size_t index) const;
+
+    /// Get a loaded vendor change policy as a compact format string.
+    /// @param index The index of the loaded policy (0-based).
+    /// @return The policy formatted as a compact string.
+    /// @throws VendorChangeManagerError if index is out of bounds.
+    [[nodiscard]] std::string get_loaded_policy_as_compact(std::size_t index) const;
+
+    /// Convert a vendor change policy from TOML file to compact format.
+    /// @param path Path to the TOML configuration file.
+    /// @return The policy formatted as a compact string.
+    /// @throws VendorChangeManagerError if parsing fails.
+    static std::string convert_policy_toml_to_compact(const std::filesystem::path & path);
+
+    /// Convert a vendor change policy from compact format to TOML format.
+    /// @param compact_str The policy in compact format.
+    /// @param source Origin of the policy (for error messages).
+    /// @return The policy formatted as a TOML string.
+    /// @throws VendorChangeManagerError if parsing fails.
+    static std::string convert_policy_compact_to_toml(std::string_view compact_str, std::string_view source);
+
 private:
     friend class libdnf5::Base;
     explicit VendorChangeManager(Base & base);

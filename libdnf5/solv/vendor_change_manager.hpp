@@ -96,6 +96,37 @@ public:
     /// @return The number of policies in vendor_policies_def
     [[nodiscard]] std::size_t get_policies_count() const noexcept { return vendor_policies_def.size(); }
 
+    /// Get the source (origin) of a vendor change policy.
+    /// @param index The index of the policy in vendor_policies_def
+    /// @return The source string (file URI or custom label with "text:" prefix)
+    /// @throws base::VendorChangeManagerError if index is out of bounds
+    [[nodiscard]] const std::string & get_policy_source(std::size_t index) const;
+
+    /// Get a vendor change policy as a TOML string.
+    /// @param index The index of the policy in vendor_policies_def
+    /// @return The policy formatted as a TOML string
+    /// @throws base::VendorChangeManagerError if index is out of bounds
+    [[nodiscard]] std::string get_policy_as_toml(std::size_t index) const;
+
+    /// Get a vendor change policy as a compact format string.
+    /// @param index The index of the policy in vendor_policies_def
+    /// @return The policy formatted as a compact string
+    /// @throws base::VendorChangeManagerError if index is out of bounds
+    [[nodiscard]] std::string get_policy_as_compact(std::size_t index) const;
+
+    /// Convert a vendor change policy from TOML file to compact format.
+    /// @param path Path to the TOML configuration file
+    /// @return The policy formatted as a compact string
+    /// @throws base::VendorChangeManagerError if parsing fails
+    static std::string convert_policy_toml_to_compact(const std::filesystem::path & path);
+
+    /// Convert a vendor change policy from compact format to TOML format.
+    /// @param compact_str The policy in compact format
+    /// @param source Origin of the policy (for error messages)
+    /// @return The policy formatted as a TOML string
+    /// @throws base::VendorChangeManagerError if parsing fails
+    static std::string convert_policy_compact_to_toml(std::string_view compact_str, std::string_view source);
+
     /// Check if a vendor change is allowed between two solvables
     /// @param outgoing The currently installed solvable
     /// @param incoming The candidate solvable for replacement
