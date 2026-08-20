@@ -266,7 +266,7 @@ This example shows the minimal required configuration, allowing a change from
 
 .. code-block:: toml
 
-    version = '1.1'
+    version = '1.2'
 
     [[outgoing_vendors]]
     vendor = 'VendorA'
@@ -282,7 +282,7 @@ but not the reverse. Missing ``outgoing_vendors`` means any vendor is allowed.
 
 .. code-block:: toml
 
-    version = '1.1'
+    version = '1.2'
 
     [[incoming_vendors]]
     vendor = 'My Trusted Vendor'
@@ -295,7 +295,7 @@ in both directions.
 
 .. code-block:: toml
 
-    version = '1.1'
+    version = '1.2'
 
     # All following vendors are mutually equivalent
     [[equivalent_vendors]]
@@ -317,7 +317,7 @@ for openSUSE Build Service.
 
 .. code-block:: toml
 
-    version = '1.1'
+    version = '1.2'
 
     # All following vendors are mutually equivalent except excluded ones
     [[equivalent_vendors]]
@@ -342,7 +342,7 @@ equivalent, and both can change to "Third Vendor".
 
 .. code-block:: toml
 
-    version = '1.1'
+    version = '1.2'
 
     [[equivalent_vendors]]
     vendor = 'First Vendor'
@@ -361,7 +361,7 @@ from any vendor, bypassing vendor restrictions.
 
 .. code-block:: toml
 
-    version = '1.1'
+    version = '1.2'
 
     [[incoming_packages]]
     filters = [
@@ -376,7 +376,7 @@ from any vendor, except for packages whose names start with "mypackage".
 
 .. code-block:: toml
 
-    version = '1.1'
+    version = '1.2'
 
     [[incoming_packages]]
     filters = [
@@ -398,7 +398,7 @@ version is greater than or equal to "2.0".
 
 .. code-block:: toml
 
-    version = '1.1'
+    version = '1.2'
 
     [[incoming_packages]]
     filters = [
