@@ -19,10 +19,11 @@
 
 #include "list.hpp"
 
+#include "../no_matches.hpp"
+
 #include <dnf5/shared_options.hpp>
 #include <libdnf5-cli/output/package_list_sections.hpp>
 #include <libdnf5/rpm/package_query.hpp>
-#include <libdnf5/utils/bgettext/bgettext-mark-domain.h>
 
 namespace dnf5 {
 
@@ -156,6 +157,7 @@ void ListCommand::run() {
     libdnf5::rpm::PackageQuery base_query(ctx.get_base(), libdnf5::sack::ExcludeFlags::IGNORE_VERSIONLOCK);
 
     // pre-select by patterns
+    std::set<std::string> unmatched_specs;
     if (!pkg_specs.empty()) {
         base_query = libdnf5::rpm::PackageQuery(ctx.get_base(), libdnf5::sack::ExcludeFlags::APPLY_EXCLUDES, true);
         libdnf5::ResolveSpecSettings settings;
@@ -167,7 +169,11 @@ void ListCommand::run() {
         for (const auto & spec : pkg_specs) {
             libdnf5::rpm::PackageQuery pkg_query(full_package_query);
             pkg_query.resolve_pkg_spec(spec, settings, true);
-            base_query |= pkg_query;
+            if (pkg_query.empty()) {
+                unmatched_specs.insert(spec);
+            } else {
+                base_query |= pkg_query;
+            }
         }
     }
 
@@ -272,8 +278,12 @@ void ListCommand::run() {
         return;
     }
 
+    bool needs_repos =
+        pkg_narrow != PkgNarrow::INSTALLED && pkg_narrow != PkgNarrow::AUTOREMOVE && installed_from_repos.empty();
+    bool no_repos = needs_repos && no_repos_enabled(ctx);
+    report_no_matches(ctx, unmatched_specs, !package_matched, no_repos, false);
     if (!package_matched && !pkg_specs.empty()) {
-        throw libdnf5::cli::CommandExitError(1, M_("No matching packages to list"));
+        throw libdnf5::cli::SilentCommandExitError(1);
     } else {
         sections->print(colorizer);
     }
