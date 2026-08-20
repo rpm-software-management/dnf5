@@ -69,6 +69,10 @@ public:
 
     bool get_dump_variables() const { return dump_variables; }
 
+    void set_dump_vendor_policies(bool enable) { this->dump_vendor_policies = enable; }
+
+    bool get_dump_vendor_policies() const { return dump_vendor_policies; }
+
     void set_show_new_leaves(bool show_new_leaves) { this->show_new_leaves = show_new_leaves; }
 
     bool get_show_new_leaves() const { return show_new_leaves; }
@@ -181,6 +185,7 @@ private:
     bool dump_main_config{false};
     std::vector<std::string> dump_repo_config_id_list;
     bool dump_variables{false};
+    bool dump_vendor_policies{false};
     bool show_new_leaves{false};
     std::string get_cmd_line();
 

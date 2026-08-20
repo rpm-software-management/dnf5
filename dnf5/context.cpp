@@ -733,6 +733,14 @@ bool Context::get_dump_variables() const {
     return p_impl->get_dump_variables();
 }
 
+void Context::set_dump_vendor_policies(bool enable) {
+    p_impl->set_dump_vendor_policies(enable);
+}
+
+bool Context::get_dump_vendor_policies() const {
+    return p_impl->get_dump_vendor_policies();
+}
+
 void Context::set_show_new_leaves(bool show_new_leaves) {
     p_impl->set_show_new_leaves(show_new_leaves);
 }
