@@ -75,6 +75,7 @@
 #include <libdnf5-cli/utils/units.hpp>
 #include <libdnf5-cli/utils/userconfirm.hpp>
 #include <libdnf5/base/base.hpp>
+#include <libdnf5/base/vendor_change_manager.hpp>
 #include <libdnf5/common/xdg.hpp>
 #include <libdnf5/conf/const.hpp>
 #include <libdnf5/logger/factory.hpp>
@@ -700,6 +701,20 @@ void RootCommand::set_argument_parser() {
     }
 
     {
+        auto dump_vendor_policies = parser.add_new_named_arg("dump-vendor-policies");
+        dump_vendor_policies->set_long_name("dump-vendor-policies");
+        dump_vendor_policies->set_description(_("Print loaded vendor change policies to stdout"));
+        dump_vendor_policies->set_parse_hook_func([&ctx](
+                                                      [[maybe_unused]] ArgumentParser::NamedArg * arg,
+                                                      [[maybe_unused]] const char * option,
+                                                      [[maybe_unused]] const char * value) {
+            ctx.set_dump_vendor_policies(true);
+            return true;
+        });
+        global_options_group->register_argument(dump_vendor_policies);
+    }
+
+    {
         auto version = parser.add_new_named_arg("version");
         version->set_long_name("version");
         version->set_description(_("Show DNF5 version and exit"));
@@ -789,6 +804,7 @@ void RootCommand::pre_configure() {
     if (arg_parser.get_named_arg("dump-variables", false).get_parse_count() > 0 ||
         arg_parser.get_named_arg("dump-main-config", false).get_parse_count() > 0 ||
         arg_parser.get_named_arg("dump-repo-config", false).get_parse_count() > 0 ||
+        arg_parser.get_named_arg("dump-vendor-policies", false).get_parse_count() > 0 ||
         arg_parser.get_named_arg("version", false).get_parse_count() > 0) {
         return;
     }
@@ -1066,6 +1082,22 @@ static void dump_variables(Context & context) {
     for (const auto & var : context.get_base().get_vars()->get_variables()) {
         const auto & val = var.second;
         context.print_output(fmt::format("{} = {}", var.first, val.value));
+    }
+}
+
+static void dump_vendor_policies(Context & context) {
+    context.print_output(_("======== Vendor Change Policies: ========"));
+    auto vcm = context.get_base().get_vendor_change_manager();
+    const auto count = vcm->get_loaded_policies_count();
+    for (std::size_t i = 0; i < count; ++i) {
+        context.print_output(libdnf5::utils::sformat(_("Policy #{}: source: {}"), i, vcm->get_loaded_policy_source(i)));
+        context.print_output("  " + vcm->get_loaded_policy_as_compact(i));
+    }
+    auto & config = context.get_base().get_config();
+    if (config.get_allow_vendor_change_option().get_value()) {
+        context.print_output(
+            _("allow_vendor_change is enabled. "
+              "Packages can be replaced by any vendor, and vendor change policies will be ignored."));
     }
 }
 
@@ -1623,6 +1655,10 @@ int main(int argc, char * argv[]) try {
 
             if (const auto & repo_id_list = context.get_dump_repo_config_id_list(); !repo_id_list.empty()) {
                 dump_repository_configuration(context, repo_id_list);
+            }
+
+            if (context.get_dump_vendor_policies()) {
+                dump_vendor_policies(context);
             }
 
             // std::nullopt == Unknown whether system is bootc
