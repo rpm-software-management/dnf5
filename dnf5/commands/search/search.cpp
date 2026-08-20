@@ -20,6 +20,7 @@
 
 #include "search.hpp"
 
+#include "../no_matches.hpp"
 #include "search_processor.hpp"
 
 #include "libdnf5/utils/bgettext/bgettext-mark-domain.h"
@@ -79,15 +80,17 @@ void SearchCommand::configure() {
 }
 
 void SearchCommand::run() {
-    auto & base = get_context().get_base();
+    auto & ctx = get_context();
     SearchProcessor processor(
-        base,
+        ctx.get_base(),
         patterns->get_value(),
         all->get_value(),
         show_duplicates->get_value(),
         search_name->get_value(),
         search_summary->get_value());
-    libdnf5::cli::output::print_search_results(processor.get_results());
+    auto results = processor.get_results();
+    libdnf5::cli::output::print_search_results(results);
+    report_no_matches(ctx, {}, results.group_results.empty(), no_repos_enabled(ctx), false);
 }
 
 

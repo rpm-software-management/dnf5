@@ -87,7 +87,6 @@ std::string construct_highlight_regex_format() {
 
 void print_search_results(const SearchResults & results) {
     if (results.group_results.empty()) {
-        std::cout << _("No matches found.") << std::endl;
         return;
     }
 
