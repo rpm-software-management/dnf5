@@ -81,6 +81,12 @@ private:
     friend class libdnf5::Base;
     explicit VendorChangeManager(Base & base);
 
+    /// Load vendor change policies from configuration directories.
+    /// Typically called by :func:`Base::setup()` to load policies from
+    /// ``/etc/dnf/vendors.d/`` and ``/usr/share/dnf5/vendors.d/``.
+    /// The directories are determined from Base configuration.
+    LIBDNF_LOCAL void load_policies();
+
     class LIBDNF_LOCAL Impl;
     ImplPtr<Impl> p_impl;
 };

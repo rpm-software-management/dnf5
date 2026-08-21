@@ -4,14 +4,18 @@
 #include "libdnf5/base/vendor_change_manager.hpp"
 
 #include "base_impl.hpp"
+#include "conf/config.h"
 #include "solv/pool.hpp"
 #include "solv/vendor_change_manager.hpp"
+#include "utils/fs/utils.hpp"
+
+#include "libdnf5/conf/const.hpp"
 
 namespace libdnf5::base {
 
 class VendorChangeManager::Impl {
 public:
-    explicit Impl(solv::RpmPool & pool) : vcm(pool.get_vendor_change_manager()) {}
+    explicit Impl(Base & base) : base{base}, vcm{get_rpm_pool(base.get_weak_ptr()).get_vendor_change_manager()} {}
 
     void load_policy_from_toml(const std::filesystem::path & path) { vcm.add_policy_from_toml(path); }
 
@@ -29,24 +33,51 @@ public:
         return vcm.remove_policies_matching_source(source_pattern);
     }
 
+    void load_policies();
+
     WeakPtrGuard<VendorChangeManager, false> guard;
 
 private:
+    Base & base;
     solv::VendorChangeManager & vcm;
 };
 
 
-VendorChangeManager::VendorChangeManager(Base & base) : p_impl(new Impl(get_rpm_pool(base.get_weak_ptr()))) {}
+void VendorChangeManager::Impl::load_policies() {
+    namespace fs = std::filesystem;
+
+    fs::path vendor_conf_dir_path{VENDOR_CONF_DIR};
+    fs::path distribution_vendor_conf_dir_path{LIBDNF5_DISTRIBUTION_VENDOR_CONF_DIR};
+    const bool use_installroot_config{!base.get_config().get_use_host_config_option().get_value()};
+    if (use_installroot_config) {
+        fs::path installroot_path{base.get_config().get_installroot_option().get_value()};
+        vendor_conf_dir_path = installroot_path / vendor_conf_dir_path.relative_path();
+        distribution_vendor_conf_dir_path = installroot_path / distribution_vendor_conf_dir_path.relative_path();
+    }
+
+    const auto paths =
+        utils::fs::create_sorted_file_list({vendor_conf_dir_path, distribution_vendor_conf_dir_path}, ".conf");
+    for (const auto & path : paths) {
+        vcm.add_policy_from_toml(path);
+    }
+}
+
+
+VendorChangeManager::VendorChangeManager(Base & base) : p_impl{new Impl(base)} {}
+
 
 VendorChangeManager::~VendorChangeManager() = default;
+
 
 VendorChangeManagerWeakPtr VendorChangeManager::get_weak_ptr() {
     return {this, &p_impl->guard};
 }
 
+
 void VendorChangeManager::load_policy_from_toml(const std::filesystem::path & path) {
     p_impl->load_policy_from_toml(path);
 }
+
 
 void VendorChangeManager::load_policy_from_compact(std::string_view policy_str, std::string_view source) {
     p_impl->load_policy_from_compact(policy_str, source);
@@ -60,6 +91,11 @@ std::size_t VendorChangeManager::unload_policies() {
 
 std::size_t VendorChangeManager::unload_policies_matching_source(const std::string & source_pattern) {
     return p_impl->unload_policies_matching_source(source_pattern);
+}
+
+
+void VendorChangeManager::load_policies() {
+    p_impl->load_policies();
 }
 
 }  // namespace libdnf5::base
