@@ -47,7 +47,7 @@ Required Fields
    but it will not define any rules and will not affect vendor manager behavior.
 
 Vendor Mapping Definition
---------------------------
+-------------------------
 
 The following vendor lists can be used to define vendor mappings.
 All lists are optional and can be freely combined. All conditions are evaluated together.
@@ -255,6 +255,127 @@ Each entry in ``[[outgoing_packages]]`` or ``[[incoming_packages]]`` can contain
 
     Default: ``false``
 
+.. _vendorpolicy_compact_format-label:
+
+Compact Format
+==============
+
+Vendor change policies can also be specified using a compact string representation.
+This is useful for the ``--add-vendor-policy`` command-line option or the
+``VendorChangeManager::add_policy_from_compact()`` API method.
+
+Each compact string defines one policy (equivalent to one TOML configuration file).
+
+Syntax
+------
+
+A compact policy string has two sections separated by ``@``::
+
+    direction:eop"value",...@direction:e[filters],...
+
+Both sections are optional, but at least one must be present.
+
+**Vendor entries** (before ``@``) are comma-separated, each with a direction prefix::
+
+    direction:eop"value"
+
+- ``direction`` is ``in``, ``out``, or ``eq`` (incoming / outgoing / equivalent vendors)
+- ``e`` after ``:`` is optional and sets ``exclude = true``
+- ``op`` is a comparator operator (see below), omit for default ``EXACT``
+
+**Package filter entries** (after ``@``) are comma-separated, each enclosed in
+literal ``[...]``::
+
+    direction:e[field op "value",...]
+
+- ``direction`` is ``in`` or ``out`` (incoming / outgoing packages)
+- ``e`` before ``[`` is optional and sets ``exclude = true``
+- Multiple filters inside ``[...]`` are separated by ``,`` and combined with AND logic
+
+Operators
+~~~~~~~~~
+
+The operator syntax is ``!iOP`` where ``!`` negates and ``i`` makes it case-insensitive.
+Both ``!`` and ``i`` are optional. They must appear in this order and without spaces
+between them or the operator symbol.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 10 25 25
+
+   * - Operator
+     - TOML comparator
+     - With ``i`` prefix
+   * - ``=``
+     - ``EXACT``
+     - ``IEXACT``
+   * - ``^``
+     - ``STARTSWITH``
+     - ``ISTARTSWITH``
+   * - ``$``
+     - ``ENDSWITH``
+     - ``IENDSWITH``
+   * - ``*``
+     - ``CONTAINS``
+     - ``ICONTAINS``
+   * - ``=*``
+     - ``GLOB``
+     - ``IGLOB``
+   * - ``=~``
+     - ``REGEX``
+     - ``IREGEX``
+   * - ``>``
+     - ``GT``
+     -
+   * - ``>=``
+     - ``GTE``
+     -
+   * - ``<``
+     - ``LT``
+     -
+   * - ``<=``
+     - ``LTE``
+     -
+
+The ``!`` prefix adds negation (e.g., ``!=`` -> ``NOT_EXACT``, ``!i*`` -> ``NOT_ICONTAINS``).
+The ``!`` and ``i`` prefixes can only be used with string operators (``=``, ``^``, ``$``,
+``*``, ``=*``, ``=~``), not with relational operators (``>``, ``>=``, ``<``, ``<=``).
+Negation of relational operators is unnecessary -- use the complementary operator instead
+(e.g., ``<=`` instead of ``!>``).
+
+A bare quoted value without an operator (e.g., ``in:"Vendor"``) defaults to ``EXACT``.
+
+Values are enclosed in double quotes (``"..."``). A literal ``"`` inside a value
+is written as ``\"``, and a literal ``\`` as ``\\``.
+
+Whitespace
+~~~~~~~~~~
+
+Whitespace (spaces, tabs, newlines) is allowed at the following positions:
+
+- At the beginning and end of the string
+- Before and after ``,`` between entries
+- Before and after ``@``
+- Before and after ``:`` in ``direction:``
+- Between ``:`` (or ``e``) and the operator or value in vendor entries
+- Between the operator and the quoted value
+- Before and after ``[`` and ``]`` in package filter entries
+- Between filter components inside ``[...]`` (field name, operator, value)
+- Before and after ``,`` between filters inside ``[...]``
+
+Whitespace is **not** allowed inside the operator itself. The ``!``, ``i`` prefix
+and operator symbol must be written without spaces (e.g., ``!i^`` not ``! i ^``).
+Similarly, two-character operators ``=*``, ``=~``, ``>=``, ``<=`` must not contain
+spaces.
+
+Whitespace inside quoted values ``"..."`` is preserved literally.
+
+This means the following are all equivalent::
+
+    eq:!i^"Fedora"
+    eq : !i^ "Fedora"
+    eq :  !i^  "Fedora"
+
 Examples
 ========
 
@@ -263,6 +384,8 @@ Example 1: Allow change from "VendorA" to "VendorB"
 
 This example shows the minimal required configuration, allowing a change from
 "VendorA" to "VendorB", but not the reverse.
+
+TOML:
 
 .. code-block:: toml
 
@@ -274,11 +397,17 @@ This example shows the minimal required configuration, allowing a change from
     [[incoming_vendors]]
     vendor = 'VendorB'
 
+Compact::
+
+    out:"VendorA",in:"VendorB"
+
 Example 2: Allow change from any vendor to "My Trusted Vendor"
 --------------------------------------------------------------
 
 This example shows allowing a change from any vendor to "My Trusted Vendor",
 but not the reverse. Missing ``outgoing_vendors`` means any vendor is allowed.
+
+TOML:
 
 .. code-block:: toml
 
@@ -287,11 +416,17 @@ but not the reverse. Missing ``outgoing_vendors`` means any vendor is allowed.
     [[incoming_vendors]]
     vendor = 'My Trusted Vendor'
 
+Compact::
+
+    in:"My Trusted Vendor"
+
 Example 3: Equivalent vendors
 -----------------------------
 
 This example shows vendors that are mutually equivalent, allowing changes
 in both directions.
+
+TOML:
 
 .. code-block:: toml
 
@@ -309,11 +444,17 @@ in both directions.
     vendor = 'CentOS'
     comparator = 'ISTARTSWITH'
 
+Compact::
+
+    eq:"Fedora Project",eq:i^"Red Hat",eq:i^"CentOS"
+
 Example 4: Equivalent vendors with an exclusion
 -----------------------------------------------
 
 This example shows a vendor policy for SUSE-related vendors with an exclusion
 for openSUSE Build Service.
+
+TOML:
 
 .. code-block:: toml
 
@@ -333,12 +474,18 @@ for openSUSE Build Service.
     vendor = 'openSUSE'
     comparator = 'ISTARTSWITH'
 
+Compact::
+
+    eq:ei^"openSUSE Build Service",eq:i^"SUSE",eq:i^"openSUSE"
+
 Example 5: Combining equivalent vendors with incoming vendors
 -------------------------------------------------------------
 
 This example demonstrates combining ``equivalent_vendors`` with ``incoming_vendors``,
 a feature introduced in version ``"1.1"``. "First Vendor" and "Second Vendor" are mutually
 equivalent, and both can change to "Third Vendor".
+
+TOML:
 
 .. code-block:: toml
 
@@ -353,11 +500,17 @@ equivalent, and both can change to "Third Vendor".
     [[incoming_vendors]]
     vendor = 'Third Vendor'
 
+Compact::
+
+    eq:"First Vendor",eq:"Second Vendor",in:"Third Vendor"
+
 Example 6: Allow command-line packages from any vendor
 ------------------------------------------------------
 
 This example allows installing packages from the command-line repository
 from any vendor, bypassing vendor restrictions.
+
+TOML:
 
 .. code-block:: toml
 
@@ -368,11 +521,17 @@ from any vendor, bypassing vendor restrictions.
       { filter = 'cmdline_repo', value = 'true' }
     ]
 
+Compact::
+
+    @in:[cmdline_repo="true"]
+
 Example 7: Command-line packages with exclusion
 -----------------------------------------------
 
 This example allows installing packages from the command-line repository
 from any vendor, except for packages whose names start with "mypackage".
+
+TOML:
 
 .. code-block:: toml
 
@@ -389,12 +548,18 @@ from any vendor, except for packages whose names start with "mypackage".
       { filter = 'cmdline_repo', value = 'true' }
     ]
 
+Compact::
+
+    @in:e[name ^"mypackage"],in:[cmdline_repo="true"]
+
 Example 8: Allow change from any vendor to specific one with package filtering
 ------------------------------------------------------------------------------
 
 This example allows a change from any vendor to "My Vendor", but
 only for incoming packages whose source package name is "mypackage" and
 version is greater than or equal to "2.0".
+
+TOML:
 
 .. code-block:: toml
 
@@ -408,6 +573,10 @@ version is greater than or equal to "2.0".
 
     [[incoming_vendors]]
     vendor = 'My Vendor'
+
+Compact::
+
+    in:"My Vendor"@in:[source_name="mypackage",version>="2.0"]
 
 See Also
 ========

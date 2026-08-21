@@ -1,0 +1,84 @@
+// Copyright Contributors to the DNF5 project.
+// SPDX-License-Identifier: LGPL-2.1-or-later
+
+#ifndef LIBDNF5_BASE_VENDOR_CHANGE_MANAGER_HPP
+#define LIBDNF5_BASE_VENDOR_CHANGE_MANAGER_HPP
+
+#include "libdnf5/common/impl_ptr.hpp"
+#include "libdnf5/common/weak_ptr.hpp"
+#include "libdnf5/defs.h"
+
+#include <filesystem>
+#include <memory>
+#include <string>
+#include <string_view>
+
+namespace libdnf5 {
+
+class Base;
+
+namespace base {
+
+class VendorChangeManager;
+using VendorChangeManagerWeakPtr = WeakPtr<VendorChangeManager, false>;
+
+/// Manages vendor change policies that control which package vendor transitions are allowed.
+///
+/// Policies can be loaded from TOML configuration files (typically found in
+/// ``/etc/dnf/vendors.d/`` and ``/usr/share/dnf5/vendors.d/``) or from a compact
+/// string representation suitable for command-line use.
+///
+/// Policies loaded from configuration files during :func:`Base::setup()` are applied
+/// automatically. Additional policies can be added at runtime via this class.
+///
+/// An instance is obtained from :func:`Base::get_vendor_change_manager()` after
+/// :func:`Base::setup()` has been called.
+class LIBDNF_API VendorChangeManager {
+public:
+    ~VendorChangeManager();
+
+    VendorChangeManager(const VendorChangeManager &) = delete;
+    VendorChangeManager & operator=(const VendorChangeManager &) = delete;
+
+    /// @return A weak pointer to this VendorChangeManager instance.
+    VendorChangeManagerWeakPtr get_weak_ptr();
+
+    /// Load one vendor change policy from a TOML configuration file and add it.
+    /// The file must conform to the vendor change policy format (version 1.0 or 1.1).
+    /// @param path Path to the TOML configuration file.
+    /// @throws Error if the file cannot be parsed or contains invalid values.
+    void add_policy_from_toml(const std::filesystem::path & path);
+
+    /// Parse a vendor change policy from a compact string representation and add it.
+    ///
+    /// The compact format is: ``direction:eop"value",...@direction:e[filters],...``
+    ///
+    /// Both sections (before and after ``@``) are optional, but at least one must be present.
+    /// Vendor entries use direction prefixes ``in:``, ``out:``, or ``eq:`` followed by
+    /// an optional ``e`` (exclude) flag and an operator with a quoted value.
+    /// Package filter entries are enclosed in literal ``[...]`` after the ``@`` separator.
+    ///
+    /// Example: ``eq:i^"Fedora",in:"Third Vendor"@in:[version>="2.0"]``
+    ///
+    /// @param policy_str The compact policy string to parse.
+    /// @param source Origin of the policy (file URI or custom label with ``text:`` prefix,
+    ///               e.g., ``"text:COMMAND LINE"``). Stored for diagnostics and logging.
+    /// @throws Error if the string cannot be parsed.
+    void add_policy_from_compact(std::string_view policy_str, std::string_view source);
+
+    /// Remove all loaded vendor change policies, including those loaded from
+    /// configuration files during :func:`Base::setup()`.
+    void clear_policies();
+
+private:
+    friend class libdnf5::Base;
+    explicit VendorChangeManager(Base & base);
+
+    class LIBDNF_LOCAL Impl;
+    ImplPtr<Impl> p_impl;
+};
+
+}  // namespace base
+}  // namespace libdnf5
+
+#endif  // LIBDNF5_BASE_VENDOR_CHANGE_MANAGER_HPP
