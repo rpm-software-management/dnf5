@@ -22,7 +22,10 @@
 #include "libdnf5/utils/fs/file.hpp"
 #include "libdnf5/utils/fs/temp.hpp"
 
+#include <libdnf5/base/base.hpp>
+#include <libdnf5/conf/config_main.hpp>
 #include <libdnf5/conf/config_parser.hpp>
+#include <libdnf5/logger/memory_buffer_logger.hpp>
 
 #include <string_view>
 #include <vector>
@@ -380,4 +383,36 @@ void ConfigParserTest::test_read_modify_write() {
 
     CPPUNIT_ASSERT_EQUAL(modified_crazy_ini_content.size(), output_content.size());
     CPPUNIT_ASSERT_EQUAL(modified_crazy_ini_content, std::string_view{output_content});
+}
+
+void ConfigParserTest::test_metalink_exclude_options() {
+    constexpr std::string_view ini_content =
+        "[main]\n"
+        "metalink_exclude_domain=^mirror1\\\\.example\\\\.com$\n"
+        "metalink_exclude_location=^XX$\n";
+
+    libdnf5::utils::fs::TempDir temp_dir("libdnf_test_config_parser");
+    std::filesystem::path ini_path = temp_dir.get_path() / "input.ini";
+    libdnf5::utils::fs::File(ini_path, "w").write(ini_content);
+
+    libdnf5::ConfigParser parser;
+    parser.read(ini_path);
+
+    libdnf5::Base base;
+    libdnf5::ConfigMain & config = base.get_config();
+    libdnf5::Vars vars(base);
+    libdnf5::MemoryBufferLogger logger(100);
+    config.load_from_parser(parser, "main", vars, logger);
+
+    auto & domain_option = config.get_metalink_exclude_domain_option();
+    auto & location_option = config.get_metalink_exclude_location_option();
+
+    auto & domain_values = domain_option.get_value();
+    auto & location_values = location_option.get_value();
+
+    CPPUNIT_ASSERT_EQUAL(size_t(1), domain_values.size());
+    CPPUNIT_ASSERT_EQUAL(std::string("^mirror1\\.example\\.com$"), domain_values[0]);
+
+    CPPUNIT_ASSERT_EQUAL(size_t(1), location_values.size());
+    CPPUNIT_ASSERT_EQUAL(std::string("^XX$"), location_values[0]);
 }
