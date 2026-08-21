@@ -135,6 +135,7 @@ private:
     std::vector<libdnf5::rpm::Package> broken_dependency_packages;
     std::vector<libdnf5::rpm::Package> conflicting_packages;
     std::vector<std::pair<libdnf5::rpm::Package, std::string>> vendor_change_skipped_packages;
+    bool filelists_auto_loaded{false};
 
     // history db transaction id
     int64_t history_db_id = 0;
