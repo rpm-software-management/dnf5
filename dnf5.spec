@@ -3,12 +3,76 @@
 %global project_version_minor 3
 %global project_version_micro 0
 
-%bcond dnf5_obsoletes_dnf %[0%{?fedora} > 40 || 0%{?rhel} > 10]
+# ========== build options ==========
 
+# Toolchain
+%bcond_with    clang
+%bcond_with    sanitizers
+
+# Core features
+%bcond dnf5_obsoletes_dnf %[0%{?fedora} > 40 || 0%{?rhel} > 10]
+%bcond_without acl
+%bcond_without comps
 %if 0%{?rhel} >= 11
-%bcond_with modulemd
+%bcond_with    modulemd
 %else
 %bcond_without modulemd
+%endif
+%bcond_without systemd
+# Disable SOLVER_FLAG_FOCUS_NEW only for RHEL
+%if 0%{?rhel} && 0%{?rhel} < 11
+%bcond_with    focus_new
+%else
+%bcond_without focus_new
+%endif
+
+# Main components
+%bcond_without dnf5
+%bcond_without dnf5daemon_client
+%bcond_without dnf5daemon_server
+%bcond_without libdnf_cli
+
+# Plugins
+%bcond_without dnf5_plugins
+%bcond_without plugin_actions
+%bcond_without plugin_appstream
+%bcond_without plugin_expired_pgp_keys
+%if 0%{?rhel} >= 10
+%bcond_with    plugin_local
+%else
+%bcond_without plugin_local
+%endif
+%bcond_without plugin_manifest
+%bcond_without plugin_rhsm
+%if %{with systemd}
+%bcond_without plugin_systemd_inhibit
+%else
+%bcond_with    plugin_systemd_inhibit
+%endif
+%bcond_without python_plugins_loader
+
+# Documentation
+%bcond_with    html
+%if 0%{?rhel} == 8
+%bcond_with    man
+%else
+%bcond_without man
+%endif
+
+# Language bindings
+# TODO Go bindings fail to build, disable for now
+%bcond_with    go
+%bcond_without perl5
+%bcond_without python3
+%bcond_without ruby
+
+# Testing
+%bcond_without tests
+%bcond_with    performance_tests
+%bcond_with    dnf5daemon_tests
+
+%if %{with clang}
+%global toolchain clang
 %endif
 
 Name:           dnf5
@@ -80,67 +144,6 @@ Provides:       dnf5-command(system-upgrade)
 Provides:       dnf5-command(upgrade)
 Provides:       dnf5-command(versionlock)
 
-
-# ========== build options ==========
-
-%bcond_without dnf5daemon_client
-%bcond_without dnf5daemon_server
-%bcond_without libdnf_cli
-%bcond_without dnf5
-%bcond_without dnf5_plugins
-%bcond_without plugin_actions
-%bcond_without plugin_appstream
-%bcond_without plugin_expired_pgp_keys
-%bcond_without plugin_rhsm
-%bcond_without plugin_manifest
-%bcond_without python_plugins_loader
-
-%if 0%{?rhel} >= 10
-%bcond_with plugin_local
-%else
-%bcond_without plugin_local
-%endif
-
-%if %{with systemd}
-%bcond_without plugin_systemd_inhibit
-%else
-%bcond_with plugin_systemd_inhibit
-%endif
-
-%bcond_without acl
-%bcond_without comps
-
-%bcond_without systemd
-
-%bcond_with    html
-%if 0%{?rhel} == 8
-%bcond_with    man
-%else
-%bcond_without man
-%endif
-
-# TODO Go bindings fail to build, disable for now
-%bcond_with    go
-%bcond_without perl5
-%bcond_without python3
-%bcond_without ruby
-
-%bcond_with    clang
-%bcond_with    sanitizers
-%bcond_without tests
-%bcond_with    performance_tests
-%bcond_with    dnf5daemon_tests
-
-# Disable SOLVER_FLAG_FOCUS_NEW only for RHEL
-%if 0%{?rhel} && 0%{?rhel} < 11
-%bcond_with    focus_new
-%else
-%bcond_without focus_new
-%endif
-
-%if %{with clang}
-    %global toolchain clang
-%endif
 
 # ========== versions of dependencies ==========
 
