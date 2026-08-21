@@ -177,8 +177,9 @@ Replace `THE-LICENSE-IDENTIFIER` with either `GPL-2.0-or-later` or `LGPL-2.1-or-
 When you submit your pull request or push new commits to it, our automated
 systems will run some checks on your new code. We require that your pull request
 passes these checks. However, note that there are more criteria that your pull request must pass before we can
-accept and merge it. We recommend that you ensure the following locally
-before you submit your code:
+accept and merge it. For details on what reviewers check, see the
+[PR Review Guidelines](REVIEW.md). We recommend that you
+ensure the following locally before you submit your code:
 
 * Code must build.
 
