@@ -18,6 +18,8 @@
 // along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "provides.hpp"
 
+#include "../no_matches.hpp"
+
 #include "libdnf5/common/sack/query_cmp.hpp"
 #include "libdnf5/conf/option_string.hpp"
 
@@ -126,19 +128,14 @@ void ProvidesCommand::run() {
             }
         }
     }
-    if (!unmatched_specs.empty() && any_match) {
-        for (auto const & spec : unmatched_specs) {
-            std::cerr << "No matches found for " << spec << "." << std::endl;
+    bool no_repos = no_repos_enabled(ctx);
+    report_no_matches(ctx, unmatched_specs, !any_match, no_repos, false);
+    if (!any_match || !unmatched_specs.empty()) {
+        if (any_match || !no_repos) {
+            ctx.print_info(
+                _("If searching for a file, try specifying the full "
+                  "path or using a wildcard prefix (\"*/\") at the beginning."));
         }
-        std::cerr << "If searching for a file, try specifying the full "
-                     "path or using a wildcard prefix (\"*/\") at the beginning."
-                  << std::endl;
-        throw libdnf5::cli::SilentCommandExitError(1);
-    }
-    if (!any_match) {
-        std::cerr << "No matches found. If searching for a file, try specifying the full "
-                     "path or using a wildcard prefix (\"*/\") at the beginning."
-                  << std::endl;
         throw libdnf5::cli::SilentCommandExitError(1);
     }
 }
