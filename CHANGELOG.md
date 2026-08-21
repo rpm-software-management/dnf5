@@ -1,3 +1,30 @@
+# 5.4.4.0
+
+- dnf5daemon-server: Validate locale strings
+- Add systemd inhibitor lock plugin
+- Add IPlugin2_2 plugin interface with cleanup hooks
+- doc: Drop Sphinx <4 compatibility workarounds
+- doc: Copy literalinclude sources into the processed dir
+- doc: use version '1.2' in vendor change policy examples
+- doc: Document vendor change policy config file version 1.2
+- vendor policy: Add cfg file version 1.2 with additional comparators
+- Remove libdnf5::base::Transaction::persistence to restore ABI
+- interaction_callbacks: add ABORT return value
+- expired-pgp-keys: merge related sentences into one translatable string
+- expired-pgp-keys: switch to InteractionCallbacks API
+- dnf5: implement InteractionCallbacks
+- tests: add unit tests for InteractionCallbacks
+- libdnf5: InteractionCallbacks SWIG interface
+- base: add set_interaction_callbacks and facade methods to Base
+- libdnf5: add InteractionCallbacks
+- libdnf5: add TextValidatorCallback and TextValidator
+- libdnf5-cli userconfirm: implementation to .cpp, default_yes overload
+- reposync: Prevent a --min-buildtime overflow on 32-bit platforms
+- Fix integer overflow on 32-bit platforms in D-Bus history limit
+- backport workflow: Fix conditional logic
+- backport workflow: allow-unsafe-pr-checkout: true
+- Rename FORCE_COLUMNS environment variable to DNF5_FORCE_COLUMNS
+
 # 5.4.3.0
 
 - Update translations from weblate
