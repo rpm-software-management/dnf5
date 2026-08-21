@@ -24,6 +24,7 @@
 #include <libdnf5/repo/repo.hpp>
 #include <libdnf5/repo/repo_query.hpp>
 
+#include <cstring>
 #include <iostream>
 
 using namespace libdnf5;
