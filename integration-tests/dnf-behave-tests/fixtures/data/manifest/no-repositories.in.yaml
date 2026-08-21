@@ -1,0 +1,8 @@
+contentOrigin:
+  repos:
+packages:
+  - dwm
+  - npm
+  - wget
+arches:
+  - x86_64

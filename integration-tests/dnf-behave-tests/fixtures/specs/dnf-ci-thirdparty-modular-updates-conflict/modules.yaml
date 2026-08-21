@@ -1,0 +1,75 @@
+---
+document: modulemd
+version: 2
+data:
+  name: ingredience
+  stream: chicken
+  version: 2
+  arch: x86_64
+  summary: Dependency testing module
+  description: Made up module for dependency testing
+  license:
+    module:
+    - MIT
+  profiles:
+    default:
+      rpms: ["chicken"]
+  components:
+    rpms:
+      egg: {rationale: 'rationale for chicken'}
+  artifacts:
+    rpms: ["chicken-0:2.0-1.x86_64"]
+...
+---
+document: modulemd
+version: 2
+data:
+  name: ingredience
+  stream: egg
+  version: 2
+  arch: x86_64
+  summary: Dependency testing module
+  description: Made up module for dependency testing
+  license:
+    module:
+    - MIT
+  profiles:
+    default:
+      rpms: ["egg"]
+  components:
+    rpms:
+      egg: {rationale: 'rationale for egg'}
+  artifacts:
+    rpms: ["egg-0:2.0-1.x86_64"]
+...
+---
+document: modulemd
+version: 2
+data:
+  name: ingredience
+  stream: orange
+  version: 2
+  arch: x86_64
+  summary: Dependency testing module
+  description: Made up module for dependency testing
+  license:
+    module:
+    - MIT
+  profiles:
+    default:
+      rpms: ["orange"]
+  components:
+    rpms:
+      egg: {rationale: 'rationale for orange'}
+  artifacts:
+    rpms: ["orange-0:2.0-1.x86_64"]
+...
+---
+document: modulemd-defaults
+version: 1
+data:
+    module: ingredience
+    stream: chicken
+    profiles:
+        default: [default]
+...

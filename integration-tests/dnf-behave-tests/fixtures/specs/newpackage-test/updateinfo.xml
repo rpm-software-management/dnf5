@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<updates>
+    <update from="dnf-testing@redhat.com" status="stable" type="newpackage" version="1">
+        <id>DNF-NEWPACKAGE-001</id>
+        <title>newpackage_A advisory</title>
+        <release>Fedora 29</release>
+        <issue date="2019-01-01 10:00:00" />
+        <references />
+        <description>testing advisory</description>
+        <pkglist>
+            <collection short="F29">
+                <name>Fedora 29</name>
+                <package name="newpackage_A" version="1" release="1" epoch="0" arch="x86_64" src="https://the.url/the.package.rpm">
+                    <filename>newpackage_A-1-1.x86_64.rpm</filename>
+                </package>
+                <package name="somepackage" version="1.1" release="1" epoch="0" arch="x86_64" src="https://the.url/the.package.rpm">
+                    <filename>somepackage-1.1-1.x86_64.rpm</filename>
+                </package>
+            </collection>
+        </pkglist>
+    </update>
+</updates>

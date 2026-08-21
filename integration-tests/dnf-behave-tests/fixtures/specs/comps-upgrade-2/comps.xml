@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE comps PUBLIC "-//Red Hat, Inc.//DTD Comps info//EN" "comps.dtd">
+<comps>
+
+  <group>
+   <id>a-group</id>
+   <default>false</default>
+   <uservisible>true</uservisible>
+   <display_order>1024</display_order>
+   <name>A-group - repo#2</name>
+   <description>Testgroup for DNF CI testing - repo#2</description>
+    <packagelist>
+      <packagereq type="mandatory">A-mandatory</packagereq>
+      <packagereq type="default">A-default</packagereq>
+      <packagereq type="optional">A-optional</packagereq>
+      <packagereq type="conditional" requires="dummy">A-conditional-true</packagereq>
+      <packagereq type="conditional" requires="nonexistent">A-conditional-false</packagereq>
+    </packagelist>
+  </group>
+
+  <group>
+   <id>B-group</id>
+   <default>false</default>
+   <uservisible>true</uservisible>
+   <display_order>1024</display_order>
+   <name>B-group</name>
+   <description>Testgroup for DNF CI testing</description>
+    <packagelist>
+      <packagereq type="mandatory">B-mandatory</packagereq>
+      <packagereq type="default">B-default</packagereq>
+      <packagereq type="optional">B-optional</packagereq>
+      <packagereq type="conditional" requires="dummy">B-conditional-true</packagereq>
+      <packagereq type="conditional" requires="nonexistent">B-conditional-false</packagereq>
+    </packagelist>
+  </group>
+
+  <group>
+   <id>AB-group</id>
+   <default>false</default>
+   <uservisible>true</uservisible>
+   <display_order>1024</display_order>
+   <name>AB-group</name>
+   <description>Testgroup for DNF CI testing</description>
+    <packagelist>
+      <packagereq type="mandatory">B-mandatory</packagereq>
+      <packagereq type="default">B-default</packagereq>
+      <packagereq type="optional">B-optional</packagereq>
+      <packagereq type="conditional" requires="dummy">B-conditional-true</packagereq>
+      <packagereq type="conditional" requires="nonexistent">B-conditional-false</packagereq>
+    </packagelist>
+  </group>
+
+  <group>
+    <id>change-package-type</id>
+    <default>false</default>
+    <uservisible>true</uservisible>
+    <display_order>1024</display_order>
+    <name>change-package-type</name>
+    <description>Testgroup for DNF CI testing</description>
+    <packagelist>
+      <packagereq type="mandatory">dummy</packagereq>
+      <packagereq type="default">A-mandatory</packagereq>
+      <packagereq type="optional">B-mandatory</packagereq>
+      <packagereq type="conditional" requires="A-mandatory">C-mandatory</packagereq>
+    </packagelist>
+  </group>
+
+  <environment>
+   <id>AB-environment</id>
+   <default>false</default>
+   <uservisible>true</uservisible>
+   <display_order>1024</display_order>
+   <name>AB-environment</name>
+   <description>Testenvironment for DNF CI testing</description>
+    <grouplist>
+      <groupid>B-group</groupid>
+    </grouplist>
+  </environment>
+
+  <environment>
+    <id>ABC-environment</id>
+    <default>false</default>
+    <uservisible>true</uservisible>
+    <display_order>1024</display_order>
+    <name>ABC-environment</name>
+    <description>Testenvironment for DNF CI testing</description>
+    <grouplist>
+      <groupid>B-group</groupid>
+    </grouplist>
+    <optionlist>
+      <groupid>AB-group</groupid>
+    </optionlist>
+  </environment>
+
+</comps>

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<updates>
+<update from="dnf-testing@fedoraproject.org" status="stable" type="unspecified" version="2.0">
+    <id>DUMMY-2</id>
+    <title>fragola-2-1</title>
+    <issued date="2025-05-26 16:59:43"/>
+    <release>Fedora 41</release>
+    <summary>fragola-2-1 unspecified update</summary>
+    <description>Update to latest upstream release fragola-2</description>
+    <references/>
+    <pkglist>
+      <collection short="F41">
+        <name>Fedora 41</name>
+        <package name="fragola" version="2" release="1" epoch="0" arch="noarch" src="https://the.url/the.package.rpm">
+            <filename>fragola-2-1.noarch.rpm</filename>
+        </package>
+      </collection>
+    </pkglist>
+</update>
+<update from="updates@fedoraproject.org" status="stable" type="unspecified" version="2.0">
+    <id>DUMMY-3</id>
+    <title>fragola-3-1</title>
+    <issued date="2025-05-26 16:59:43"/>
+    <release>Fedora 41</release>
+    <summary>fragola-3-1 unspecified update</summary>
+    <description>Update to latest upstream release fragola-3</description>
+    <references/>
+    <pkglist>
+      <collection short="F41">
+        <name>Fedora 41</name>
+        <package name="fragola" version="3" release="1" epoch="0" arch="noarch" src="https://the.url/the.package.rpm">
+            <filename>fragola-3-1.noarch.rpm</filename>
+        </package>
+      </collection>
+    </pkglist>
+</update>
+<update from="updates@fedoraproject.org" status="stable" type="unspecified" version="2.0">
+    <id>DUMMY-4</id>
+    <title>fragola-4-1</title>
+    <issued date="2025-05-26 16:59:43"/>
+    <release>Fedora 41</release>
+    <summary>fragola-4-1 unspecified update</summary>
+    <description>Update to latest upstream release fragola-4</description>
+    <references/>
+    <pkglist>
+      <collection short="F41">
+        <name>Fedora 41</name>
+        <package name="fragola" version="4" release="1" epoch="0" arch="noarch" src="https://the.url/the.package.rpm">
+            <filename>fragola-4-1.noarch.rpm</filename>
+        </package>
+      </collection>
+    </pkglist>
+</update>
+</updates>

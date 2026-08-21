@@ -1,0 +1,102 @@
+---
+document: modulemd
+version: 2
+data:
+  name: badlatest
+  stream: stream
+  version: 2018
+  context: aaaaaaaa
+  arch: x86_64
+  summary: The latest rpm NEVRA is not in the latest module version
+  description: >-
+    This should not happen.
+  license:
+    module:
+    - MIT
+    content:
+    - MIT and ASL 2.0 and ISC and BSD
+  dependencies:
+  - buildrequires:
+      platform: [f29]
+    requires:
+      platform: [f29]
+  profiles:
+    default:
+      rpms:
+      - labirinto
+  artifacts:
+    rpms:
+    - labirinto-0:1.0-9.module.x86_64
+    - labirinto-0:1.0-9.module.src
+...
+---
+document: modulemd
+version: 2
+data:
+  name: badlatest
+  stream: stream
+  version: 2019
+  context: aaaaaaaa
+  arch: x86_64
+  summary: The latest rpm NEVRA is not in the latest module version
+  description: >-
+    This should not happen.
+  license:
+    module:
+    - MIT
+    content:
+    - MIT and ASL 2.0 and ISC and BSD
+  dependencies:
+  - buildrequires:
+      platform: [f29]
+    requires:
+      platform: [f29]
+  profiles:
+    default:
+      rpms:
+      - labirinto
+  artifacts:
+    rpms:
+    - labirinto-0:1.0-1.module.x86_64
+    - labirinto-0:1.0-1.module.src
+...
+---
+document: modulemd
+version: 2
+data:
+  name: badlatest
+  stream: stream
+  version: 2020
+  context: aaaaaaaa
+  arch: x86_64
+  summary: The latest rpm NEVRA is not in the latest module version
+  description: >-
+    This should not happen.
+  license:
+    module:
+    - MIT
+    content:
+    - MIT and ASL 2.0 and ISC and BSD
+  dependencies:
+  - buildrequires:
+      platform: [f29]
+    requires:
+      platform: [f29]
+  profiles:
+    default:
+      rpms:
+      - labirinto
+  artifacts:
+    rpms:
+    - labirinto-0:1.0-2.module.x86_64
+    - labirinto-0:1.0-2.module.src
+...
+---
+document: modulemd-defaults
+version: 1
+data:
+    module: badlatest
+    stream: stream
+    profiles:
+        stream: [default]
+...

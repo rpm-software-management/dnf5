@@ -1,0 +1,66 @@
+---
+document: modulemd-obsoletes
+version: 1
+data:
+    modified: 2020-05-01T00:00Z
+    module: nodejs
+    context: 6c81f848
+    stream: 5
+    message: "obsoleting obsoletes"
+    obsoleted_by:
+      module: nodejs
+      stream: 10
+...
+---
+document: modulemd-obsoletes
+version: 1
+data:
+    modified: 2020-05-01T00:00Z
+    module: nodejs
+    stream: 8
+    context: 6c81f848
+    message: "immediate obsoletes"
+...
+---
+document: modulemd-obsoletes
+version: 1
+data:
+    modified: 2020-05-01T00:00Z
+    module: nodejs
+    context: 6c81f848
+    eol_date: 2990-01-01T00:00Z
+    stream: 10
+    message: "eol is in far far future"
+...
+---
+document: modulemd-obsoletes
+version: 1
+data:
+    modified: 2020-05-01T00:00Z
+    module: nodejs
+    stream: 11
+    message: "obsoletes without context affects all nodejs 11 contexts"
+...
+---
+document: modulemd-obsoletes
+version: 1
+data:
+    modified: 2020-05-01T00:00Z
+    module: postgresql
+    stream: 6
+    reset: true
+    context: 6c81f848
+    message: "obsoletes with reset"
+...
+---
+document: modulemd-obsoletes
+version: 1
+data:
+    modified: 2020-05-01T00:00Z
+    module: meson
+    stream: master
+    message: "chain of obsoletes"
+    obsoleted_by:
+      module: nodejs
+      stream: 5
+...

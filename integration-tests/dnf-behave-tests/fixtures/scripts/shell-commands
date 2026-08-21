@@ -1,0 +1,3 @@
+repo enable dnf-ci-fedora
+install flac
+run

@@ -1,0 +1,169 @@
+---
+  data:
+    description: Testing module without artifacts depending only on ursine fedora packages
+    license:
+      module: [MIT]
+    name: DnfCiModuleNoArtifacts
+    profiles:
+      default:
+        rpms: [wget, solveigs-song]
+    stream: master
+    summary: Testing module without artifacts
+    version: 1
+  document: modulemd
+  version: 2
+...
+---
+  data:
+    description: Testing module without defaults defined
+    license:
+      module: [MIT]
+    name: DnfCiModuleNoDefaults
+    profiles:
+      default:
+        rpms:
+        - arabian-dance
+    stream: stable
+    summary: Testing module without defaults
+    version: 1
+    artifacts:
+      rpms:
+      - arabian-dance-0:1.0-1.module.x86_64
+      - wget-0:1.18.5-5.module.x86_64
+  document: modulemd
+  version: 2
+...
+---
+  data:
+    description: Testing module without defaults defined
+    license:
+      module: [MIT]
+    name: DnfCiModuleNoDefaults
+    profiles:
+      default:
+        rpms:
+        - arabian-dance
+    stream: development
+    summary: Testing module without defaults
+    version: 1
+    artifacts:
+      rpms:
+      - arabian-dance-0:1.0-1.module.x86_64
+      - wget-0:1.20.5-5.module.x86_64
+  document: modulemd
+  version: 2
+...
+---
+  data:
+    description: Testing module with package dependency on other modular package
+    license:
+      module: [MIT]
+    name: DnfCiModulePackageDep
+    profiles:
+      default:
+        rpms:
+        - morning-mood
+    stream: packagedep
+    summary: Testing module without defaults
+    version: 1
+    artifacts:
+      rpms:
+      - morning-mood-0:1.0-1.module.x86_64
+  document: modulemd
+  version: 2
+...
+---
+  data:
+    description: Testing module with package dependency on other modular package
+    license:
+      module: [MIT]
+    name: DnfCiModulePackageDep
+    profiles:
+      default:
+        rpms:
+        - morning-mood
+    stream: moduledep
+    summary: Testing module without defaults
+    version: 1
+    dependencies:
+      - requires:
+          nodejs: []
+    artifacts:
+      rpms:
+      - morning-mood-0:1.0-1.module.x86_64
+  document: modulemd
+  version: 2
+...
+---
+  data:
+    description: Testing module with empty default profile defined
+    license:
+      module: [MIT]
+    name: DnfCiModuleEmptyDefault
+    profiles:
+      default:
+        rpms: []
+      server:
+        rpms: []
+    stream: stable
+    summary: Testing module with empty defaults
+    version: 1
+    artifacts:
+      rpms: []
+  document: modulemd
+  version: 2
+...
+---
+  data:
+    description: Testing module with populated default profile defined
+    license:
+      module: [MIT]
+    name: DnfCiModulePopulatedDefault
+    profiles:
+      default:
+        rpms: []
+      server:
+        rpms:
+        - peer-gynt
+    stream: stable
+    summary: Testing module with populated defaults
+    version: 1
+    artifacts:
+      rpms:
+      - peer-gynt-0:1.0-1.module.x86_64
+  document: modulemd
+  version: 2
+...
+---
+  data:
+    description: Testing module without profiles
+    license:
+      module: [MIT]
+    name: DnfCiModuleNoProfiles
+    stream: master
+    summary: Testing module without profiles
+    version: 1
+    artifacts:
+      rpms:
+      - peer-gynt-0:1.0-1.module.x86_64
+  document: modulemd
+  version: 2
+...
+---
+  document: modulemd-defaults
+  version: 1
+  data:
+    module: DnfCiModuleEmptyDefault
+    stream: stable
+    profiles:
+      stable: [server]
+...
+---
+  document: modulemd-defaults
+  version: 1
+  data:
+    module: DnfCiModulePopulatedDefault
+    stream: stable
+    profiles:
+      stable: [server]
+...

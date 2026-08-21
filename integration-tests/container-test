@@ -1,0 +1,440 @@
+#!/usr/bin/env python3
+
+import argparse
+import os
+import re
+import subprocess
+import sys
+
+PROGPATH = os.path.abspath(os.path.dirname(sys.argv[0]))
+
+# add behave tests root to python path so the `consts` module can be imported
+sys.path.append(os.path.join(PROGPATH, 'dnf-behave-tests'))
+
+import consts  # noqa: E402
+DESTRUCTIVE_TAGS = set(consts.DESTRUCTIVE_TAGS)
+DNF5DAEMON_TAGS = set(consts.DNF5DAEMON_TAGS)
+
+
+def command_line_parser():
+    '''
+    Initialize and return command line arguments parser.
+    '''
+    # general options
+    parser = argparse.ArgumentParser(
+        description="Functional tests for DNF",
+        epilog="To get help on specific command use \"%(prog)s <command> --help\"")
+    parser.add_argument(
+        "-s", "--suite", default="dnf",
+        help="Test suite to run (directory with *.feature files)")
+    parser.add_argument(
+        "-c", "--container", metavar="IMAGE",
+        default='dnf-bot/dnf-testing:latest',
+        help="Specified Image ID or name if do not want to run the last built image")
+    parser.add_argument(
+        "-d", "--devel", action="store_true", default=False,
+        help="Share local feature/ with docker")
+    parser.add_argument(
+        "--docker", action="store_true", default=False,
+        help="Force using docker instead of default podman")
+    parser.add_argument(
+        "-v", "--verbose", action="store_true", default=False,
+        help="Increase verbosity")
+
+    subparsers = parser.add_subparsers(
+        dest="command", help="List of available commands:")
+
+    # build command
+    build_parser = subparsers.add_parser(
+        'build', help="Build a container with functional tests")
+    build_parser.add_argument(
+        "-f", "--file", metavar="FILE", dest="docker_file",
+        default="Dockerfile.integration-tests", help="Path to Dockerfile to use")
+    build_parser.add_argument(
+        "--usecache", action="store_true", default=False,
+        help="Use cache when building the image")
+    build_parser.add_argument(
+        "--type", metavar="<type>",
+        help='Build type for the image, e.g. "nightly" or "distro". Needs to be supported by the Dockerfile.')
+    build_parser.add_argument(
+        "--base", metavar="<base>",
+        help='Base image to override the FROM clause in the Dockerfile.')
+    build_parser.add_argument(
+        "--container-arg", metavar="<container-arg>", dest="container_args", action="append",
+        help='Additional argument for the docker/podman build command. Can be specified multiple times.')
+
+    # run command
+    run_parser = subparsers.add_parser(
+        'run',
+        help="Run the tests, the set of tests can be optionally specified.")
+    run_parser.add_argument(
+        "-r", "--reserve", action="store_true", default=False,
+        help="Keep bash shell session open after every single test executed")
+    run_parser.add_argument(
+        "-R", "--reserveonfail", action="store_true", default=False,
+        help="Keep bash shell session open upon test failure")
+    run_parser.add_argument(
+        "-t", "--tags", action="append", metavar="TAG", default=[],
+        help="Pass specific tag to the behave command when running tests")
+    run_parser.add_argument(
+        "--noxfail", action="store_true", default=False,
+        help="Skip tests marked as @xfail (same as --tags ~@xfail) (deprecated, skipping @xfail is now default)")
+    run_parser.add_argument(
+        "--command", metavar="COMMAND", dest="dnf_command",
+        help="DNF command to be used in tests")
+    run_parser.add_argument(
+        "--junit-directory", default=None,
+        help="Directory to save junit reports to")
+    run_parser.add_argument(
+        "--enable-network", action="store_true", default=False,
+        help="Enable networking inside the container")
+    run_parser.add_argument(
+        "--no-destructive", action="store_true", default=False,
+        help="Disable running destructive tests (which are run by default through this script)")
+    run_parser.add_argument(
+        "--container-arg", metavar="<container-arg>", dest="container_args", action="append",
+        help='Additional argument for the docker/podman run command. Can be specified multiple times.')
+    run_parser.add_argument(
+        "featurefiles", metavar="<feature>", nargs="*",
+        help="List of feature files to run")
+
+    # list command
+    list_parser = subparsers.add_parser(
+        'list', help="List available functional tests")
+
+    # shell command
+    shell_parser = subparsers.add_parser(
+        'shell', help="Run a bash shell session within the container")
+
+    return parser
+
+
+def error(msg):
+    print('Error: ' + msg, file=sys.stderr)
+    sys.exit(1)
+
+
+def execute(command):
+    '''
+    Execute the `command` in a new process, wait for process to finish and
+    return (exit code, [captured sdout lines], [captured stderr lines])
+    '''
+    # print('Running: ', ' '.join(command), file=sys.stderr)
+    process = subprocess.Popen(
+        command, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    out_encoding = sys.stdout.encoding or 'utf-8'
+    stdout, stderr = process.communicate()
+    return process.returncode, \
+        stdout.decode(out_encoding).split('\n'), \
+        stderr.decode(out_encoding).split('\n')
+
+
+class BehaveRunner(object):
+
+    def __init__(self):
+        self.command_line_parser = command_line_parser()
+        self.command_line_args = self.command_line_parser.parse_args()
+        self._docker_bin = None
+        self._volumes = None
+
+    def __call__(self):
+        command = getattr(self, 'command_%s' % self.command_line_args.command, None)
+        if command == None:
+            self.command_line_parser.print_help()
+            error("No command specified")
+        if not command:
+            error("Command '{}' is not implemented.".format(
+                self.command_line_args.command))
+        # print(self.command_line_args)
+        command()
+
+    @property
+    def param_reserve(self):
+        if self.command_line_args.reserve:
+            return ['-r']
+        elif self.command_line_args.reserveonfail:
+            return ['-R']
+        else:
+            return []
+
+    @property
+    def param_tty(self):
+        retval = []
+        if self.param_reserve:
+            retval.append('-it')
+        return retval
+
+    @property
+    def param_cache(self):
+        retval = []
+        if not self.command_line_args.usecache:
+            retval.append('--no-cache')
+        return retval
+
+    @property
+    def docker_bin(self):
+        '''
+        Autodetection whether podman (default) or docker is gonna be used
+        '''
+        if self._docker_bin is None:
+            docker_available = not execute(["bash", "-c", "command -v docker"])[0]
+            podman_available = not execute(["bash", "-c", "command -v podman"])[0]
+            if self.command_line_args.docker:
+                if not docker_available:
+                    error("Docker is not installed.")
+                self._docker_bin = ['sudo', 'docker']
+            else:
+                if podman_available:
+                    self._docker_bin = ['podman']
+                elif docker_available:
+                    self._docker_bin = ['sudo', 'docker']
+                else:
+                    error("Neither podman nor docker is installed.")
+        return self._docker_bin
+
+    @property
+    def volumes(self):
+        if self._volumes is None:
+            self._volumes = []
+            if self.command_line_args.devel:
+                self._volumes.extend(['--volume', '{}:{}:Z'.format(
+                    os.path.join(PROGPATH, 'dnf-behave-tests',
+                                 self.command_line_args.suite),
+                    os.path.join('/opt/ci/dnf-behave-tests', self.command_line_args.suite))])
+            if hasattr(self.command_line_args, 'junit_directory') \
+                    and self.command_line_args.junit_directory:
+                self._volumes.extend(['--volume', '{}:/junit:z'.format(
+                    self.command_line_args.junit_directory)])
+        return self._volumes
+
+    @property
+    def capabilities(self):
+        return ['--cap-add', 'CAP_SYS_CHROOT']
+
+    @property
+    def tags(self):
+        if hasattr(self.command_line_args, 'tags'):
+            tags = self.command_line_args.tags
+        else:
+            tags = []
+        if hasattr(self.command_line_args, 'noxfail') and self.command_line_args.noxfail:
+            tags.append('~xfail')
+        # For a transition period ignore "@dnf5" tag passed on the commandline.
+        # We run dnf5 by default.
+        # TODO(amatej): This could be removed later
+        if "dnf5" in tags:
+            tags.remove("dnf5")
+        return tags
+
+    def parse_behave_dry_run(self, output):
+        '''
+        Parsing of the `behave --dry-run` output.
+        Returns list of (feature, [scenarios]) tuples where feature is
+        tuple (feature file name, set(feature tags)) and scenario is
+        tuple (scenario name, set( scenario tags))
+        '''
+        re_feature = re.compile(r'^ *Feature:.*# +(?P<file>.*):.*$')
+        re_scenario = re.compile(r'^ *Scenario(?: Outline)?: +(?P<name>.*)# +(?P<file>.*):.*$')
+        re_tag = re.compile(r'^ *(?P<tags>@.*)')
+        tests = []
+        feature = None
+        scenarios = []
+        tags = set()
+        for line in output:
+            # tags
+            match = re_tag.match(line)
+            if match:
+                tags.update([t.strip()
+                             for t in match.group('tags').split('@')
+                             if t])
+                continue
+
+            # Feature
+            match = re_feature.match(line)
+            if match:
+                if feature:
+                    tests.append((feature, scenarios))
+                feature = (match.group('file'), tags)
+                scenarios = []
+                tags = set()
+                continue
+
+            # Scenario
+            match = re_scenario.match(line)
+            if match:
+                scenarios.append((match.group('name').strip(), tags))
+                tags = set()
+                continue
+
+        if feature:
+            tests.append((feature, scenarios))
+
+        return tests
+
+    def dry_run(self):
+        command = self.docker_bin + ['run', '--rm']
+        command += self.volumes
+        command += [self.command_line_args.container, 'behave', '--dry-run', '--no-skipped']
+        if getattr(self.command_line_args, 'featurefiles', []):
+            command += [os.path.join(self.command_line_args.suite, a) for a in self.command_line_args.featurefiles]
+        else:
+            command += [self.command_line_args.suite]
+        for tag in self.tags:
+            command += ['--tags', tag]
+        returncode, stdout, stderr = execute(command)
+        if returncode > 0:
+            msg = 'Command "{}" failed with {}'.format(' '.join(command), returncode)
+            stdout = [l for l in stdout if l]
+            stderr = [l for l in stderr if l]
+            if stdout:
+                msg += '\n'.join(['', 'stdout:'] + stdout).rstrip()
+            if stderr:
+                msg += '\n'.join(['', 'stderr:'] + stderr).rstrip()
+            error(msg)
+        return self.parse_behave_dry_run(stdout)
+
+    def command_list(self):
+        '''
+        List all features available in the container.
+        '''
+        def remove_prefix(text, prefix):
+            if text.startswith(prefix):
+                return text[len(prefix):]
+            return text
+
+        for (feature, scenarios) in self.dry_run():
+            print(remove_prefix(feature[0], self.command_line_args.suite + "/"))
+
+    def command_shell(self):
+        '''
+        Run shell inside the container.
+        '''
+        command = self.docker_bin + ['run', '-it', '--rm']
+        command += self.volumes
+        command += self.capabilities
+        command += [self.command_line_args.container, 'bash']
+        subprocess.call(command)
+
+    def command_run(self):
+        '''
+        Run specified tests in the container.
+        '''
+        do_destructive = not self.command_line_args.no_destructive
+
+        def process_feature(feature, scenarios):
+            '''
+            Processes scenarios in a feature file and splits them according to
+            the destructive tags. Each destructive scenario is yielded
+            separately. If there are non-destructive scenarios, a single pair
+            (feature_name, None) is returned to run them in bulk.
+
+            feature: tuple (feature file name, set(feature tags))
+            scenarios: list of tuples [(scenario name, set(scenario tags))]
+            yields (feature_name, scenario_name)
+            '''
+            feature_name, feature_tags = feature
+            nondestructive_tests = False
+
+            # if destructive tests are enabled (default), run each one separately
+            #
+            # NOTE: dnf5daemon tests are destructive but are considered so only if
+            # tag dnf5daemon is used, otherwise the tag and the destructive behavior
+            # should be ignored.
+            for scenario_name, scenario_tags in scenarios:
+                # If dnf5daemon tag is present, ignore the destructive behavior and
+                # run each feature file in one container
+                if "dnf5daemon" in self.tags:
+                    nondestructive_tests = True
+                elif feature_tags.union(scenario_tags).intersection(DESTRUCTIVE_TAGS):
+                    if do_destructive:
+                        yield (feature_name, scenario_name)
+                else:
+                    nondestructive_tests = True
+
+            if nondestructive_tests:
+                yield (feature_name, None)
+
+        def param_junit(feature_name, i):
+            return ['--junit-directory="/junit/{}_{}"'.format(feature_name, i)]
+
+        command = self.docker_bin + ['run', '--rm'] + self.param_tty + self.volumes + self.capabilities
+
+        if self.command_line_args.container_args:
+            command += self.command_line_args.container_args
+
+        if not self.command_line_args.enable_network:
+            command += ['--net', 'none']
+
+        command += [self.command_line_args.container, './container-test-wrapper']
+        command += self.param_reserve
+
+        command += ['--', '--no-skipped', '--junit']
+
+        for tag in self.tags:
+            command += ['--tags', tag]
+
+        if self.command_line_args.dnf_command:
+            command.extend(['-D dnf_command={}'.format(self.command_line_args.dnf_command)])
+
+        if do_destructive:
+            command.extend(['-D destructive=yes'])
+
+        failed = set()
+        for feature, scenarios in self.dry_run():
+            i = 1
+            for feature_name, scenario_name in process_feature(feature, scenarios):
+                if scenario_name is not None:
+                    run_args = ['-n', '^{} *$'.format(re.escape(scenario_name))] + param_junit(feature_name, i)
+                    i += 1
+                else:
+                    run_args = param_junit(feature_name, 0)
+                    # if -t dnf5daemon: skip @destructive and @dnf5daemon
+                    if ("dnf5daemon" in self.tags) and (not do_destructive):
+                        for tag in DESTRUCTIVE_TAGS.union(DNF5DAEMON_TAGS):
+                            run_args.extend(['--tags', '~{}'.format(tag)])
+                    # if not -t dnf5daemon: skip @destructive tags and run @dnf5daemon
+                    if "dnf5daemon" not in self.tags:
+                        for tag in DESTRUCTIVE_TAGS:
+                            run_args.extend(['--tags', '~{}'.format(tag)])
+
+                run_args.append(feature_name)
+
+                if self.command_line_args.verbose:
+                    print("Running command:", ' '.join(command + run_args), '\n')
+
+                returncode = subprocess.call(command + run_args)
+                if returncode > 0:
+                    failed.add(feature[0])
+
+        if failed:
+            error('\n'.join(['Failed test(s):'] + sorted(failed)))
+
+    def command_build(self):
+        '''
+        Build container for testing
+        '''
+        command = self.docker_bin + ['build', '--force-rm']
+        command += self.param_cache
+
+        if self.command_line_args.type is not None:
+            command += ['--build-arg', 'TYPE={}'.format(self.command_line_args.type)]
+
+        if self.command_line_args.base is not None:
+            command += ['--build-arg', 'BASE={}'.format(self.command_line_args.base)]
+
+        command += ['-t', self.command_line_args.container]
+        command += ['-f', self.command_line_args.docker_file, PROGPATH]
+
+        if self.command_line_args.container_args:
+            command += self.command_line_args.container_args
+
+        if self.command_line_args.verbose:
+            print("Running command:", command, '\n')
+
+        returncode = subprocess.call(command)
+        if returncode > 0:
+            error('Failed to build the container.')
+
+
+if __name__ == '__main__':
+    BehaveRunner()()

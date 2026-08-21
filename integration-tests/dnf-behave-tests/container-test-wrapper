@@ -1,0 +1,30 @@
+#!/bin/bash
+set -euo pipefail
+
+RESERVE=0
+DEFINES=""
+
+while [[ $# -gt 0 ]]; do
+    case "$1" in
+        -r|-R) RESERVE="$1"; shift;;
+        --) shift; break 2;;
+        *) break 2;;
+    esac
+done
+
+if [ "$RESERVE" == "-r" ]; then
+    # preserve all temporary directories
+    DEFINES="-D preserve=1"
+elif [ "$RESERVE" == "-R" ]; then
+    # preserve temporary directories of failing tests
+    DEFINES="-D preserve=f"
+fi
+
+TEST_EXIT=0
+behave $DEFINES "$@" || TEST_EXIT=$?
+
+if [ "$RESERVE" == "-r" ] || [ "$RESERVE" == "-R" -a $TEST_EXIT -ne 0 ]; then
+    bash || :
+fi
+
+exit $TEST_EXIT

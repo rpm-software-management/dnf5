@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE comps PUBLIC "-//Red Hat, Inc.//DTD Comps info//EN" "comps.dtd">
+<comps>
+  <group>
+   <id>obsoleter-obsoleted</id>
+   <default>false</default>
+   <uservisible>true</uservisible>
+   <display_order>1024</display_order>
+   <name>Obsoleter and obsoleted</name>
+   <description>Contains both obsoleter and obsoleted package</description>
+    <packagelist>
+      <packagereq type="mandatory">PackageC</packagereq>
+      <packagereq type="mandatory">PackageD</packagereq>
+    </packagelist>
+  </group>
+</comps>
