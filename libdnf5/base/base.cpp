@@ -305,21 +305,8 @@ void Base::setup() {
     vars->load(vars_installroot, config.get_varsdir_option().get_value());
 
     // Load vendor change policies
-    fs::path vendor_conf_dir_path{VENDOR_CONF_DIR};
-    fs::path distribution_vendor_conf_dir_path{LIBDNF5_DISTRIBUTION_VENDOR_CONF_DIR};
-    const bool use_installroot_config{!p_impl->config.get_use_host_config_option().get_value()};
-    if (use_installroot_config) {
-        fs::path installroot_path{p_impl->config.get_installroot_option().get_value()};
-        vendor_conf_dir_path = installroot_path / vendor_conf_dir_path.relative_path();
-        distribution_vendor_conf_dir_path = installroot_path / distribution_vendor_conf_dir_path.relative_path();
-    }
-
     p_impl->vendor_change_manager = std::unique_ptr<base::VendorChangeManager>(new base::VendorChangeManager(*this));
-    const auto paths =
-        utils::fs::create_sorted_file_list({vendor_conf_dir_path, distribution_vendor_conf_dir_path}, ".conf");
-    for (const auto & path : paths) {
-        p_impl->vendor_change_manager->load_policy_from_toml(path);
-    }
+    p_impl->vendor_change_manager->load_policies();
 
     config.get_varsdir_option().lock("Locked by Base::setup()");
     pool_setdisttype(**pool, DISTTYPE_RPM);
