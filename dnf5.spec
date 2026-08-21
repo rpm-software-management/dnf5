@@ -369,6 +369,7 @@ It supports RPM packages%{?with_modulemd:, modulemd modules,} and comps groups &
 %{_mandir}/man8/dnf5-repo.8.*
 %{_mandir}/man8/dnf5-repoquery.8.*
 %{_mandir}/man8/dnf5-search.8.*
+%{_mandir}/man8/dnf5-status.8.*
 %{_mandir}/man8/dnf5-swap.8.*
 %{_mandir}/man8/dnf5-system-upgrade.8.*
 %{_mandir}/man8/dnf5-upgrade.8.*
@@ -423,6 +424,7 @@ It supports RPM packages%{?with_modulemd:, modulemd modules,} and comps groups &
 %{_mandir}/man8/dnf-repo.8.*
 %{_mandir}/man8/dnf-repoquery.8.*
 %{_mandir}/man8/dnf-search.8.*
+%{_mandir}/man8/dnf-status.8.*
 %{_mandir}/man8/dnf-swap.8.*
 %{_mandir}/man8/dnf-system-upgrade.8.*
 %{_mandir}/man8/dnf-upgrade.8.*

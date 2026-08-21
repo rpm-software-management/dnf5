@@ -24,6 +24,10 @@
 #include <libdnf5/comps/group/group.hpp>
 #include <libdnf5/comps/group/query.hpp>
 #include <libdnf5/conf/const.hpp>
+#include <libdnf5/utils/bgettext/bgettext-lib.h>
+#include <libdnf5/utils/format.hpp>
+
+#include <iostream>
 
 namespace dnf5 {
 
@@ -100,6 +104,22 @@ void GroupListCommand::print(const libdnf5::comps::GroupQuery & query) {
         items.emplace_back(new libdnf5::cli::output::GroupAdapter(obj));
     }
     libdnf5::cli::output::print_grouplist_table(items);
+
+    std::size_t installed_count = 0;
+    for (const auto & item : items) {
+        if (item->get_installed()) {
+            ++installed_count;
+        }
+    }
+    const auto available_count = items.size() - installed_count;
+    std::cout << libdnf5::utils::sformat(
+                     _("Groups: {0} ({1} {2}, {3} {4})"),
+                     items.size(),
+                     installed_count,
+                     P_("installed", "installed", installed_count),
+                     available_count,
+                     P_("available", "available", available_count))
+              << std::endl;
 }
 
 }  // namespace dnf5
