@@ -154,7 +154,7 @@ jobs:
     identifier: "ABI-check"
     targets:
       - fedora-rawhide-x86_64
-    fmf_url: https://github.com/rpm-software-management/ci-dnf-stack.git
+    fmf_url: https://github.com/kontura/ci-dnf-stack.git
     fmf_ref: main
     tmt_plan: "^/plans/integration/abi-libdnf5$"
     packages: [dnf5]
