@@ -485,7 +485,7 @@ void Transaction::set_comment(const std::string & comment) {
 }
 
 void Transaction::set_persistence(libdnf5::base::TransactionPersistence persistence) {
-    p_impl->persistence = persistence;
+    this->persistence = persistence;
 }
 
 bool Transaction::check_gpg_signatures() {
