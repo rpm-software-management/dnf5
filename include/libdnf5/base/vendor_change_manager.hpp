@@ -12,6 +12,7 @@
 #include <memory>
 #include <string>
 #include <string_view>
+#include <vector>
 
 namespace libdnf5 {
 
@@ -131,6 +132,89 @@ public:
     /// @return The policy formatted as a TOML string.
     /// @throws VendorChangeManagerError if parsing fails.
     static std::string convert_policy_compact_to_toml(std::string_view compact_str, std::string_view source);
+
+    /// Save a vendor change policy from TOML format to a configuration file
+    /// in the vendor directory (``/etc/dnf/vendors.d/`` or installroot equivalent).
+    /// The TOML content is validated by parsing before saving.
+    /// @param toml_content The policy in TOML format.
+    /// @param source Origin of the policy (for error messages and validation).
+    /// @param base_filename Base filename without extension or path (e.g., ``"my-policy"``).
+    ///                      Must not contain path components. The ``.conf`` extension is added automatically.
+    /// @throws VendorChangeManagerError if validation or file write fails,
+    ///                                  or if base_filename contains path components.
+    void save_policy_from_toml(
+        std::string_view toml_content, std::string_view source, const std::filesystem::path & base_filename);
+
+    /// Save a vendor change policy from a TOML file to a configuration file
+    /// in the vendor directory (``/etc/dnf/vendors.d/`` or installroot equivalent).
+    /// The TOML file content is validated by parsing before saving.
+    /// @param path Path to the TOML file containing the policy.
+    /// @param base_filename Base filename without extension or path (e.g., ``"my-policy"``).
+    ///                      Must not contain path components. The ``.conf`` extension is added automatically.
+    /// @throws VendorChangeManagerError if file read, validation, or write fails,
+    ///                                  or if base_filename contains path components.
+    void save_policy_from_toml(const std::filesystem::path & path, const std::filesystem::path & base_filename);
+
+    /// Save a vendor change policy from compact format to a configuration file
+    /// in the vendor directory (``/etc/dnf/vendors.d/`` or installroot equivalent).
+    /// The policy is converted from compact format to TOML before saving.
+    /// @param policy_str The policy in compact format.
+    /// @param source Origin of the policy (for error messages).
+    /// @param base_filename Base filename without extension or path (e.g., ``"my-policy"``).
+    ///                      Must not contain path components. The ``.conf`` extension is added automatically.
+    /// @throws VendorChangeManagerError if conversion or file write fails,
+    ///                                  or if base_filename contains path components.
+    void save_policy_from_compact(
+        std::string_view policy_str, std::string_view source, const std::filesystem::path & base_filename);
+
+    /// Remove a vendor change policy configuration file.
+    /// Removes the file from the vendor configuration directory (``/etc/dnf/vendors.d/`` or installroot equivalent).
+    /// @param base_filename Base filename without extension or path (e.g., ``"my-policy"``).
+    ///                      Must not contain path components. The ``.conf`` extension is added automatically.
+    /// @throws VendorChangeManagerError if base_filename contains path components or file removal fails.
+    void remove_policy_file(const std::filesystem::path & base_filename);
+
+    /// Get a list of all vendor change policy configuration files.
+    /// Returns paths to all ``.conf`` files from both vendor configuration directories
+    /// (``/etc/dnf/vendors.d/`` and ``/usr/share/dnf5/vendors.d/`` or their installroot equivalents).
+    /// The list is sorted in the same order as policies are loaded.
+    /// @return Vector of paths to policy configuration files.
+    [[nodiscard]] std::vector<std::filesystem::path> get_policy_files() const;
+
+    /// Extract base filename from a policy file path.
+    /// Returns the filename without directory path and without the ``.conf`` extension.
+    /// This is useful for converting paths returned by :func:`get_policy_files()` to the format
+    /// expected by :func:`remove_policy_file()` and :func:`save_policy_from_compact()`.
+    /// @param path Path to a policy file (e.g., ``"/etc/dnf/vendors.d/my-policy.conf"``).
+    ///             Must have ``.conf`` extension.
+    /// @return Base filename without extension (e.g., ``"my-policy"``).
+    /// @throws VendorChangeManagerError if path does not have ``.conf`` extension.
+    [[nodiscard]] static std::filesystem::path extract_policy_base_filename(const std::filesystem::path & path);
+
+    /// Check if a policy file is manageable (can be removed or modified).
+    /// Returns ``true`` if the file is in the writable vendor configuration directory
+    /// (``/etc/dnf/vendors.d/`` or installroot equivalent). Files in the distribution
+    /// directory (``/usr/share/dnf5/vendors.d/``) are system-provided and not manageable.
+    /// @param path Path to a policy file.
+    /// @return ``true`` if the file can be managed (removed/modified), ``false`` otherwise.
+    [[nodiscard]] bool is_policy_file_manageable(const std::filesystem::path & path) const;
+
+    /// Get the path to the policy file that is masked by the given file.
+    /// A file in the vendor configuration directory (``/etc/dnf/vendors.d/``) masks
+    /// a file with the same name in the distribution directory (``/usr/share/dnf5/vendors.d/``).
+    /// @param path Path to a policy file in the vendor configuration directory.
+    /// @return Path to the masked file if the masked file exists,
+    ///         empty path otherwise (if the masked file does not exist or path is invalid).
+    [[nodiscard]] std::filesystem::path get_masked_policy_file(const std::filesystem::path & path) const;
+
+    /// Find an existing policy file by base filename.
+    /// Searches for a policy file with the given base filename, preferring the vendor
+    /// configuration directory (``/etc/dnf/vendors.d/``) over the distribution directory
+    /// (``/usr/share/dnf5/vendors.d/``).
+    /// @param base_filename Base filename without extension or path (e.g., ``"my-policy"``).
+    /// @return Path to the existing policy file (vendor or distribution),
+    ///         empty path if no such file exists.
+    [[nodiscard]] std::filesystem::path find_policy_file(const std::filesystem::path & base_filename) const;
 
 private:
     friend class libdnf5::Base;
