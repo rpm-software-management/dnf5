@@ -106,7 +106,7 @@ Examples
 ``dnf5 download kernel --debuginfo``
     | Download the ``kernel`` debuginfo rpm.
 
-``dnf5 download maven-compiler-plugin --resolve --download-sort=size --reverse``
+``dnf5 download maven-compiler-plugin --resolve --download-sort=size --download-reverse``
     | Download the ``maven-compiler-plugin`` package with its dependencies, largest package first.
 
 See Also

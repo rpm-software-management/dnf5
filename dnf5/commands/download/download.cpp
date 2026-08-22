@@ -212,8 +212,6 @@ void DownloadCommand::configure() {
         context.set_load_system_repo(false);
     }
 
-    check_download_order_options(*this);
-
     if (srpm_option->get_value()) {
         context.get_base().get_repo_sack()->enable_source_repos();
     }
@@ -424,6 +422,8 @@ void DownloadCommand::run() {
     if (config.get_download_sort_option().get_value() == "size") {
         libdnf5::rpm::sort_packages_by_download_size(
             sorted_packages, config.get_download_sort_reverse_option().get_value());
+    } else if (config.get_download_sort_reverse_option().get_value()) {
+        std::reverse(sorted_packages.begin(), sorted_packages.end());
     }
 
     for (auto & pkg : sorted_packages) {

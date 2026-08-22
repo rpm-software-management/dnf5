@@ -61,14 +61,10 @@ DNF_API void create_destdir_option(dnf5::Command & command);
 /// The values are stored in the `downloadonly` configuration option
 DNF_API void create_downloadonly_option(dnf5::Command & command);
 
-/// Create the `--download-sort` and `--reverse` options for a command provided as an argument.
+/// Create the `--download-sort` and `--download-reverse` options for a command provided as an argument.
 /// The values are stored in the `download_sort` and `download_sort_reverse` configuration options.
+/// `--download-reverse` can be used on its own, reversing the natural download order.
 DNF_API void create_download_order_options(dnf5::Command & command);
-
-/// Throws `libdnf5::cli::ArgumentParserMissingDependentArgumentError` if `--reverse` was used without
-/// `--download-sort` for the command provided as an argument. To be called from the command's `configure()`,
-/// after argument parsing has completed.
-DNF_API void check_download_order_options(dnf5::Command & command);
 
 /// Create the `--store` option for a command provided as an argument.
 /// The value is stored in Context::transaction_store_path.

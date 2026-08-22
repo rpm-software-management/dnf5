@@ -59,6 +59,7 @@
 #include <sys/ioctl.h>
 #include <unistd.h>
 
+#include <algorithm>
 #include <filesystem>
 #include <iostream>
 #include <set>
@@ -462,6 +463,8 @@ void Transaction::download() {
     if (config.get_download_sort_option().get_value() == "size") {
         libdnf5::rpm::sort_packages_by_download_size(
             packages_to_download, config.get_download_sort_reverse_option().get_value());
+    } else if (config.get_download_sort_reverse_option().get_value()) {
+        std::reverse(packages_to_download.begin(), packages_to_download.end());
     }
 
     for (auto & pkg : packages_to_download) {

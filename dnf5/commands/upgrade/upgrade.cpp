@@ -91,7 +91,6 @@ void UpgradeCommand::set_argument_parser() {
 
 void UpgradeCommand::configure() {
     auto & context = get_context();
-    check_download_order_options(*this);
     context.update_repo_metadata_from_specs(pkg_specs);
     context.set_load_system_repo(true);
     context.update_repo_metadata_from_advisory_options(
