@@ -18,13 +18,12 @@
 // along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 
-#ifndef TEST_LIBDNF5_CLI_UTILS_PACKAGE_DOWNLOAD_ORDER_HPP
-#define TEST_LIBDNF5_CLI_UTILS_PACKAGE_DOWNLOAD_ORDER_HPP
+#ifndef TEST_LIBDNF5_RPM_PACKAGE_DOWNLOAD_ORDER_HPP
+#define TEST_LIBDNF5_RPM_PACKAGE_DOWNLOAD_ORDER_HPP
 
 
-#include "../../shared/base_test_case.hpp"
+#include "../shared/base_test_case.hpp"
 
-#include <cppunit/TestCase.h>
 #include <cppunit/extensions/HelperMacros.h>
 
 
@@ -46,4 +45,4 @@ public:
 };
 
 
-#endif  // TEST_LIBDNF5_CLI_UTILS_PACKAGE_DOWNLOAD_ORDER_HPP
+#endif  // TEST_LIBDNF5_RPM_PACKAGE_DOWNLOAD_ORDER_HPP

@@ -16,25 +16,22 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
+#include "libdnf5/rpm/package_download_order.hpp"
 
-#ifndef LIBDNF5_CLI_UTILS_PACKAGE_DOWNLOAD_ORDER_HPP
-#define LIBDNF5_CLI_UTILS_PACKAGE_DOWNLOAD_ORDER_HPP
+#include <algorithm>
 
-#include "libdnf5-cli/defs.h"
+namespace libdnf5::rpm {
 
-#include <libdnf5/rpm/package.hpp>
+void sort_packages_by_download_size(std::vector<libdnf5::rpm::Package> & packages, bool reverse) {
+    if (reverse) {
+        std::stable_sort(packages.begin(), packages.end(), [](const auto & lhs, const auto & rhs) {
+            return lhs.get_download_size() > rhs.get_download_size();
+        });
+    } else {
+        std::stable_sort(packages.begin(), packages.end(), [](const auto & lhs, const auto & rhs) {
+            return lhs.get_download_size() < rhs.get_download_size();
+        });
+    }
+}
 
-#include <vector>
-
-
-namespace libdnf5::cli::utils {
-
-/// Sorts `packages` in place by their download size (`Package::get_download_size()`).
-/// Packages of equal size keep their relative order.
-/// @param reverse If true, sorts from largest to smallest; otherwise from smallest to largest.
-LIBDNF_CLI_API void sort_packages_by_download_size(std::vector<libdnf5::rpm::Package> & packages, bool reverse);
-
-}  // namespace libdnf5::cli::utils
-
-
-#endif  // LIBDNF5_CLI_UTILS_PACKAGE_DOWNLOAD_ORDER_HPP
+}  // namespace libdnf5::rpm

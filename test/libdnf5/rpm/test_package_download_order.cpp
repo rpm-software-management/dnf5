@@ -19,7 +19,7 @@
 
 #include "test_package_download_order.hpp"
 
-#include <libdnf5-cli/utils/package_download_order.hpp>
+#include <libdnf5/rpm/package_download_order.hpp>
 
 #include <vector>
 
@@ -38,7 +38,7 @@ void PackageDownloadOrderTest::test_sort_ascending() {
     std::vector<libdnf5::rpm::Package> packages{
         get_pkg("alpha-1-1.noarch"), get_pkg("beta-1-1.noarch"), get_pkg("gamma-1-1.noarch")};
 
-    libdnf5::cli::utils::sort_packages_by_download_size(packages, false);
+    libdnf5::rpm::sort_packages_by_download_size(packages, false);
 
     CPPUNIT_ASSERT_EQUAL(std::string("beta"), packages[0].get_name());
     CPPUNIT_ASSERT_EQUAL(std::string("gamma"), packages[1].get_name());
@@ -50,7 +50,7 @@ void PackageDownloadOrderTest::test_sort_descending() {
     std::vector<libdnf5::rpm::Package> packages{
         get_pkg("alpha-1-1.noarch"), get_pkg("beta-1-1.noarch"), get_pkg("gamma-1-1.noarch")};
 
-    libdnf5::cli::utils::sort_packages_by_download_size(packages, true);
+    libdnf5::rpm::sort_packages_by_download_size(packages, true);
 
     CPPUNIT_ASSERT_EQUAL(std::string("alpha"), packages[0].get_name());
     CPPUNIT_ASSERT_EQUAL(std::string("gamma"), packages[1].get_name());
@@ -61,7 +61,7 @@ void PackageDownloadOrderTest::test_sort_descending() {
 void PackageDownloadOrderTest::test_sort_empty() {
     std::vector<libdnf5::rpm::Package> packages;
 
-    libdnf5::cli::utils::sort_packages_by_download_size(packages, false);
+    libdnf5::rpm::sort_packages_by_download_size(packages, false);
 
     CPPUNIT_ASSERT(packages.empty());
 }

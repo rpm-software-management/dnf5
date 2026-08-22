@@ -72,6 +72,7 @@ void UpgradeCommand::set_argument_parser() {
     create_from_vendor_option(*this, from_vendors, true);
     create_destdir_option(*this);
     create_downloadonly_option(*this);
+    create_download_order_options(*this);
     auto & destdir = parser.get_named_arg("upgrade.destdir", false);
     destdir.set_description(destdir.get_description() + " Automatically sets the --downloadonly option.");
     create_offline_option(*this);
@@ -90,6 +91,7 @@ void UpgradeCommand::set_argument_parser() {
 
 void UpgradeCommand::configure() {
     auto & context = get_context();
+    check_download_order_options(*this);
     context.update_repo_metadata_from_specs(pkg_specs);
     context.set_load_system_repo(true);
     context.update_repo_metadata_from_advisory_options(

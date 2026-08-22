@@ -103,6 +103,33 @@ void create_downloadonly_option(dnf5::Command & command) {
     command.get_argument_parser_command()->register_named_arg(downloadonly);
 }
 
+void create_download_order_options(dnf5::Command & command) {
+    auto & parser = command.get_context().get_argument_parser();
+
+    auto sort = parser.add_new_named_arg("sort");
+    sort->set_long_name("sort");
+    sort->set_description("Sort the packages to download by the given key");
+    sort->set_has_value(true);
+    sort->set_arg_value_help("size");
+    sort->link_value(&command.get_context().get_base().get_config().get_download_sort_option());
+    command.get_argument_parser_command()->register_named_arg(sort);
+
+    auto reverse = parser.add_new_named_arg("reverse");
+    reverse->set_long_name("reverse");
+    reverse->set_description("To be used together with \"--sort\". Reverses the sort order.");
+    reverse->set_const_value("true");
+    reverse->link_value(&command.get_context().get_base().get_config().get_download_sort_reverse_option());
+    command.get_argument_parser_command()->register_named_arg(reverse);
+}
+
+void check_download_order_options(dnf5::Command & command) {
+    auto & config = command.get_context().get_base().get_config();
+    if (config.get_download_sort_reverse_option().get_value() && config.get_download_sort_option().get_value() == "none") {
+        throw libdnf5::cli::ArgumentParserMissingDependentArgumentError(
+            M_("Option \"--reverse\" should be used with \"--sort\""));
+    }
+}
+
 void create_offline_option(dnf5::Command & command) {
     auto & ctx = command.get_context();
     auto & parser = command.get_context().get_argument_parser();

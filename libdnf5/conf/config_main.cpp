@@ -225,7 +225,9 @@ class ConfigMain::Impl {
     OptionBool upgrade_group_objects_upgrade{true};  // :api
     OptionPath destdir{nullptr};
     OptionString comment{nullptr};
-    OptionBool downloadonly{false};  // runtime only option
+    OptionBool downloadonly{false};                             // runtime only option
+    OptionEnum download_sort{"none", {"none", "size"}};         // runtime only option
+    OptionBool download_sort_reverse{false};                    // runtime only option
     OptionBool ignorearch{false};
     OptionString module_platform_id{nullptr, ".+:.+", false};  // unused if modularity support is disabled
     OptionBool module_stream_switch{false};                    // unused if modularity support is disabled
@@ -1018,6 +1020,20 @@ const OptionBool & ConfigMain::get_downloadonly_option() const {
     return p_impl->downloadonly;
 }
 
+OptionEnum & ConfigMain::get_download_sort_option() {
+    return p_impl->download_sort;
+}
+const OptionEnum & ConfigMain::get_download_sort_option() const {
+    return p_impl->download_sort;
+}
+
+OptionBool & ConfigMain::get_download_sort_reverse_option() {
+    return p_impl->download_sort_reverse;
+}
+const OptionBool & ConfigMain::get_download_sort_reverse_option() const {
+    return p_impl->download_sort_reverse;
+}
+
 OptionBool & ConfigMain::get_ignorearch_option() {
     return p_impl->ignorearch;
 }
@@ -1522,6 +1538,8 @@ void ConfigMain::Impl::load_from_config(const ConfigMain::Impl & other) {
     load_option(destdir, other.destdir);
     load_option(comment, other.comment);
     load_option(downloadonly, other.downloadonly);
+    load_option(download_sort, other.download_sort);
+    load_option(download_sort_reverse, other.download_sort_reverse);
     load_option(ignorearch, other.ignorearch);
 #ifdef WITH_MODULEMD
     load_option(module_platform_id, other.module_platform_id);
