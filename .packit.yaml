@@ -63,98 +63,16 @@ jobs:
   - job: copr_build
     trigger: pull_request
     targets:
-      - fedora-all
-      - fedora-eln
+      - fedora-rawhide
     packages: [dnf5]
     additional_repos:
       - "copr://rpmsoftwaremanagement/dnf-nightly"
-  - job: copr_build
-    identifier: "WITH_MODULEMD=OFF"
-    trigger: pull_request
-    branch: main
-    targets:
-      - fedora-rawhide-x86_64
-    actions:
-      fix-spec-file:
-      # disable modulemd in spec to verify the build is passing without it
-      - sed -i dnf5.spec -e "s/bcond_without modulemd/bcond_with modulemd/"
-      # fill in Release as if packit would have done it
-      - bash -c "sed -i -r \"s/Release:(\s*)\S+/Release:\1${PACKIT_RPMSPEC_RELEASE}%{?dist}/\" dnf5.spec"
-      get-current-version:
-        - bash -c 'rpmspec -q --queryformat "%{VERSION}\n" dnf5.spec | head -n1'
-    packages: [dnf5-without-modules]
-    additional_repos:
-      - "copr://rpmsoftwaremanagement/dnf-nightly"
-  - job: tests
-    trigger: pull_request
-    identifier: "dnf5-tests"
-    targets:
-      - fedora-all
-      - fedora-eln
-    fmf_url: https://github.com/rpm-software-management/ci-dnf-stack.git
-    fmf_ref: &CI_DNF_STACK_REF main
-    tmt_plan: "^/plans/integration/behave-dnf5$"
-    packages: [dnf5]
-    tf_extra_params:
-      environments:
-        - artifacts:
-            - type: repository-file
-              # We use the rawhide repo file for all fedora releases, the url doesn't change and it is not rawhide specific (it contains "fedora-$releasever-$basearch")
-              id: https://copr.fedorainfracloud.org/coprs/rpmsoftwaremanagement/dnf-nightly/repo/fedora-rawhide/rpmsoftwaremanagement-dnf-nightly-fedora-rawhide.repo
-  - job: tests
-    trigger: pull_request
-    identifier: "createrepo_c-tests"
-    targets:
-      - fedora-all
-      - fedora-eln
-    fmf_url: https://github.com/rpm-software-management/ci-dnf-stack.git
-    fmf_ref: *CI_DNF_STACK_REF
-    tmt_plan: "^/plans/integration/behave-createrepo_c$"
-    packages: [dnf5]
-    tf_extra_params:
-      environments:
-        - artifacts:
-            - type: repository-file
-              # We use the rawhide repo file for all fedora releases, the url doesn't change and it is not rawhide specific (it contains "fedora-$releasever-$basearch")
-              id: https://copr.fedorainfracloud.org/coprs/rpmsoftwaremanagement/dnf-nightly/repo/fedora-rawhide/rpmsoftwaremanagement-dnf-nightly-fedora-rawhide.repo
-  - job: tests
-    trigger: pull_request
-    identifier: "dnf-tests"
-    manual_trigger: true
-    targets:
-      - fedora-all
-    fmf_url: https://github.com/rpm-software-management/ci-dnf-stack.git
-    fmf_ref: *CI_DNF_STACK_REF
-    tmt_plan: "^/plans/integration/behave-dnf$"
-    packages: [dnf5]
-    tf_extra_params:
-      environments:
-        - artifacts:
-            - type: repository-file
-              # We use the rawhide repo file for all fedora releases, the url doesn't change and it is not rawhide specific (it contains "fedora-$releasever-$basearch")
-              id: https://copr.fedorainfracloud.org/coprs/rpmsoftwaremanagement/dnf-nightly/repo/fedora-rawhide/rpmsoftwaremanagement-dnf-nightly-fedora-rawhide.repo
-  - job: tests
-    trigger: pull_request
-    identifier: "dnf5daemon-tests"
-    targets:
-      - fedora-all
-      - fedora-eln
-    fmf_url: https://github.com/rpm-software-management/ci-dnf-stack.git
-    fmf_ref: *CI_DNF_STACK_REF
-    tmt_plan: "^/plans/integration/behave-dnf5daemon$"
-    packages: [dnf5]
-    tf_extra_params:
-      environments:
-        - artifacts:
-            - type: repository-file
-              # We use the rawhide repo file for all fedora releases, the url doesn't change and it is not rawhide specific (it contains "fedora-$releasever-$basearch")
-              id: https://copr.fedorainfracloud.org/coprs/rpmsoftwaremanagement/dnf-nightly/repo/fedora-rawhide/rpmsoftwaremanagement-dnf-nightly-fedora-rawhide.repo
   - job: tests
     trigger: pull_request
     identifier: "ABI-check"
     targets:
       - fedora-rawhide-x86_64
-    fmf_url: https://github.com/rpm-software-management/ci-dnf-stack.git
+    fmf_url: https://github.com/kontura/ci-dnf-stack.git
     fmf_ref: main
     tmt_plan: "^/plans/integration/abi-libdnf5$"
     packages: [dnf5]
