@@ -51,6 +51,10 @@ private:
     libdnf5::OptionBool * srpm_option{nullptr};
     libdnf5::OptionBool * debuginfo_option{nullptr};
     libdnf5::OptionBool * debugsource_option{nullptr};
+    libdnf5::OptionBool * reverse_option{nullptr};
+
+    std::set<std::string> sort_valid_options;
+    std::string sort_option;
 
     std::vector<std::string> from_repos;
     std::vector<std::string> from_vendors;

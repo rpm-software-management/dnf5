@@ -21,6 +21,7 @@
 
 #include "dnf5/shared_options.hpp"
 
+#include <libdnf5-cli/utils/package_download_order.hpp>
 #include <libdnf5/conf/option_string.hpp>
 #include <libdnf5/repo/package_downloader.hpp>
 #include <libdnf5/rpm/arch.hpp>
@@ -32,6 +33,7 @@
 #include <algorithm>
 #include <iostream>
 #include <map>
+#include <vector>
 
 
 namespace dnf5 {
@@ -112,6 +114,31 @@ void DownloadCommand::set_argument_parser() {
     debugsource->set_const_value("true");
     debugsource->link_value(debugsource_option);
 
+    sort_valid_options = {"size"};
+    auto sort = parser.add_new_named_arg("sort");
+    sort->set_long_name("sort");
+    sort->set_description("Sort the packages to download by the given key");
+    sort->set_has_value(true);
+    sort->set_arg_value_help("size");
+    sort->set_parse_hook_func(
+        [this](
+            [[maybe_unused]] ArgumentParser::NamedArg * arg, [[maybe_unused]] const char * option, const char * value) {
+            if (sort_valid_options.find(value) == sort_valid_options.end()) {
+                throw libdnf5::cli::ArgumentParserInvalidValueError(M_("Invalid sort option: {}"), std::string(value));
+            }
+            sort_option = value;
+            return true;
+        });
+
+    reverse_option = dynamic_cast<libdnf5::OptionBool *>(
+        parser.add_init_value(std::unique_ptr<libdnf5::OptionBool>(new libdnf5::OptionBool(false))));
+
+    auto reverse = parser.add_new_named_arg("reverse");
+    reverse->set_long_name("reverse");
+    reverse->set_description("To be used together with \"--sort\". Reverses the sort order.");
+    reverse->set_const_value("true");
+    reverse->link_value(reverse_option);
+
     auto url = parser.add_new_named_arg("url");
     url->set_long_name("url");
     url->set_description("Print a URL where the rpms can be downloaded instead of downloading");
@@ -185,6 +212,8 @@ void DownloadCommand::set_argument_parser() {
     cmd.register_named_arg(url);
     cmd.register_named_arg(urlprotocol);
     cmd.register_named_arg(allmirrors);
+    cmd.register_named_arg(sort);
+    cmd.register_named_arg(reverse);
     cmd.register_positional_arg(keys);
 }
 
@@ -207,6 +236,11 @@ void DownloadCommand::configure() {
             M_("Option \"--alldeps\" should be used with \"--resolve\""));
     } else {
         context.set_load_system_repo(false);
+    }
+
+    if (reverse_option->get_value() && sort_option.empty()) {
+        throw libdnf5::cli::ArgumentParserMissingDependentArgumentError(
+            M_("Option \"--reverse\" should be used with \"--sort\""));
     }
 
     if (srpm_option->get_value()) {
@@ -408,8 +442,20 @@ void DownloadCommand::run() {
     // for download command, we don't want to mark the packages for removal
     downloader.force_keep_packages(true);
 
-    for (auto & [nevra, pkg] : packages_to_download) {
-        downloader.add(pkg);
+    if (sort_option == "size") {
+        std::vector<libdnf5::rpm::Package> sorted_packages;
+        sorted_packages.reserve(packages_to_download.size());
+        for (auto & [nevra, pkg] : packages_to_download) {
+            sorted_packages.push_back(pkg);
+        }
+        libdnf5::cli::utils::sort_packages_by_download_size(sorted_packages, reverse_option->get_value());
+        for (auto & pkg : sorted_packages) {
+            downloader.add(pkg);
+        }
+    } else {
+        for (auto & [nevra, pkg] : packages_to_download) {
+            downloader.add(pkg);
+        }
     }
 
     if (!ctx.get_quiet()) {

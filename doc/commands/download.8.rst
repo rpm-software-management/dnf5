@@ -77,6 +77,12 @@ Options
 ``--allmirrors``
     | To be used together with ``--url``. It prints out space-separated URLs from all available mirrors for each package.
 
+``--sort=size``
+    | Sort the packages to download by their download size, smallest first.
+
+``--reverse``
+    | To be used together with ``--sort``. Reverses the sort order, e.g. ``--sort=size --reverse`` downloads the largest packages first.
+
 
 Examples
 ========
@@ -104,6 +110,9 @@ Examples
 
 ``dnf5 download kernel --debuginfo``
     | Download the ``kernel`` debuginfo rpm.
+
+``dnf5 download maven-compiler-plugin --resolve --sort=size --reverse``
+    | Download the ``maven-compiler-plugin`` package with its dependencies, largest package first.
 
 See Also
 ========
