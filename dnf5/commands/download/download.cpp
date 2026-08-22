@@ -413,22 +413,21 @@ void DownloadCommand::run() {
     // for download command, we don't want to mark the packages for removal
     downloader.force_keep_packages(true);
 
+    // Packages are collected in NEVRA order (the default); optionally re-sorted below.
+    std::vector<libdnf5::rpm::Package> sorted_packages;
+    sorted_packages.reserve(packages_to_download.size());
+    for (auto & [nevra, pkg] : packages_to_download) {
+        sorted_packages.push_back(pkg);
+    }
+
     auto & config = ctx.get_base().get_config();
     if (config.get_download_sort_option().get_value() == "size") {
-        std::vector<libdnf5::rpm::Package> sorted_packages;
-        sorted_packages.reserve(packages_to_download.size());
-        for (auto & [nevra, pkg] : packages_to_download) {
-            sorted_packages.push_back(pkg);
-        }
         libdnf5::rpm::sort_packages_by_download_size(
             sorted_packages, config.get_download_sort_reverse_option().get_value());
-        for (auto & pkg : sorted_packages) {
-            downloader.add(pkg);
-        }
-    } else {
-        for (auto & [nevra, pkg] : packages_to_download) {
-            downloader.add(pkg);
-        }
+    }
+
+    for (auto & pkg : sorted_packages) {
+        downloader.add(pkg);
     }
 
     if (!ctx.get_quiet()) {
