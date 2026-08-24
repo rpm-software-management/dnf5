@@ -29,6 +29,7 @@
 #include <libdnf5/rpm/package.hpp>
 #include <libdnf5/rpm/package_query.hpp>
 #include <libdnf5/sdbus_compat.hpp>
+#include <libdnf5/utils/bgettext/bgettext-lib.h>
 #include <libdnf5/utils/bgettext/bgettext-mark-domain.h>
 #include <unistd.h>
 #include <utils/string.hpp>
@@ -405,22 +406,22 @@ std::vector<NeedsRestartingCommand::SystemdService> NeedsRestartingCommand::get_
     for (const auto & unit : units) {
         // See ListUnits here:
         // https://www.freedesktop.org/wiki/Software/systemd/dbus/
-        const auto unit_name = std::get<0>(unit);
+        const auto & unit_name = std::get<0>(unit);
 
         // Only consider service units. Skip timers, targets, etc.
         if (!libdnf5::utils::string::ends_with(unit_name, ".service")) {
             continue;
         }
 
-        const auto unit_object_path = std::get<6>(unit);
-        auto unit_proxy = sdbus::createProxy(connection, SYSTEMD_DESTINATION_NAME, unit_object_path);
-
-        // Only consider active (running) services
-        std::string active_state =
-            unit_proxy->getProperty("ActiveState").onInterface(SYSTEMD_UNIT_INTERFACE).get<std::string>();
-        if (active_state != "active") {
+        // Only consider services with running processes.
+        const auto & active_state = std::get<3>(unit);
+        const auto & sub_state = std::get<4>(unit);
+        if (active_state != "active" || sub_state != "running") {
             continue;
         }
+
+        const auto & unit_object_path = std::get<6>(unit);
+        auto unit_proxy = sdbus::createProxy(connection, SYSTEMD_DESTINATION_NAME, unit_object_path);
 
         // FragmentPath is the path to the unit file that defines the service
         std::string fragment_path =
@@ -448,7 +449,16 @@ void NeedsRestartingCommand::services_need_restarting(Context & ctx) {
     libdnf5::rpm::PackageQuery installed{ctx.get_base()};
     installed.filter_installed();
 
+    libdnf5::rpm::PackageQuery reboot_suggested{ctx.get_base()};
+    reboot_suggested.filter_installed();
+    reboot_suggested.filter_reboot_suggested();
+    std::unordered_set<std::string> reboot_suggested_names;
+    for (const auto & pkg : reboot_suggested) {
+        reboot_suggested_names.insert(pkg.get_name());
+    }
+
     std::vector<std::string> service_names;
+    std::vector<std::string> reboot_service_names;
     for (const auto & package : installed) {
         for (const auto & file : package.get_files()) {
             const auto & service_pair = unit_file_to_service.find(file);
@@ -465,7 +475,11 @@ void NeedsRestartingCommand::services_need_restarting(Context & ctx) {
                     // of that service
                     const uint64_t install_timestamp_us = 1000L * 1000L * dep.get_install_time();
                     if (install_timestamp_us > service.start_timestamp_us) {
-                        service_names.emplace_back(service.name);
+                        if (reboot_suggested_names.count(package.get_name()) > 0) {
+                            reboot_service_names.emplace_back(service.name);
+                        } else {
+                            service_names.emplace_back(service.name);
+                        }
                         break;
                     }
                 }
@@ -475,6 +489,14 @@ void NeedsRestartingCommand::services_need_restarting(Context & ctx) {
     }
 
     std::sort(service_names.begin(), service_names.end());
+    std::sort(reboot_service_names.begin(), reboot_service_names.end());
+
+    if (!reboot_service_names.empty()) {
+        std::cerr << _("Warning: The following services should not be restarted but require a reboot:") << std::endl;
+        for (const auto & service_name : reboot_service_names) {
+            std::cerr << "  " << service_name << std::endl;
+        }
+    }
 
     if (ctx.get_json_output_requested()) {
         print_services_json(service_names);
