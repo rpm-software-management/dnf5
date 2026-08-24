@@ -48,7 +48,7 @@ Options
     | Used with the ``-p, --processes`` option and will filter out any processes that are handled by systemd services.
 
 ``-s, --services``
-    | List systemd services that need restarting. If the package that provides the service, or any of its dependencies, have been updated since the service started, then restarting the service will be recommended. Note that this approach is quite aggressive to recommend a restart when one may not be strictly necessary.
+    | List systemd services that need restarting. If the package that provides the service, or any of its dependencies, have been updated since the service started, then restarting the service will be recommended. Note that this approach is quite aggressive to recommend a restart when one may not be strictly necessary. Services defined by core packages whose update requires a reboot (the same set the reboot hint checks) are not recommended for restart; they are listed on standard error with a warning instead.
 
 ``-r, --reboothint``
     | Has no effect, kept for compatibility with DNF 4. "dnf4 needs-restarting -r" provides the same functionality as "dnf5 needs-restarting".
