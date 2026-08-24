@@ -9,6 +9,7 @@
 #include "libdnf5/common/sack/query_cmp.hpp"
 
 #include <filesystem>
+#include <map>
 #include <string>
 #include <vector>
 
@@ -87,14 +88,13 @@ public:
 
 private:
     struct VendorChangeMasks {
-        Id vendor;
         SolvMap outgoing_mask{0};
         SolvMap incoming_mask{0};
     };
 
     const Pool & pool;
     std::vector<VendorChangePolicy> vendor_policies_def;
-    std::vector<VendorChangeMasks> vendor_masks;
+    std::map<Id, VendorChangeMasks> vendor_masks;
     SolvMap incoming_vendor_bypassed_solvables{0};
 
     /// Retrieve or cache masks for a specific vendor

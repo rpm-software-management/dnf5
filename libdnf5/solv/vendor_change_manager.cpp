@@ -195,20 +195,19 @@ bool VendorChangeManager::is_vendor_change_allowed(Solvable & outgoing, Solvable
 
 const VendorChangeManager::VendorChangeMasks & VendorChangeManager::get_vendor_change_masks(Id vendor) {
     constexpr int EXTRA_CAPACITY = 7;
-    static const VendorChangeMasks empty_masks{.vendor = 0};
-    VendorChangeMasks masks;
+    static const VendorChangeMasks empty_masks;
 
     if (vendor == 0 || vendor_policies_def.empty()) {
         return empty_masks;
     }
 
-    for (const auto & vendor_to_classes : vendor_masks) {
-        if (vendor_to_classes.vendor == vendor) {
-            return vendor_to_classes;
-        }
+    // Check if masks for this vendor are already cached
+    if (auto it = vendor_masks.find(vendor); it != vendor_masks.end()) {
+        return it->second;
     }
 
-    masks.vendor = vendor;
+    // Create new masks for this vendor
+    VendorChangeMasks masks;
     auto vendor_str = pool.id2str(vendor);
     for (unsigned int class_idx = 0; class_idx < vendor_policies_def.size(); ++class_idx) {
         const auto & vendor_class_def = vendor_policies_def[class_idx];
@@ -240,7 +239,8 @@ const VendorChangeManager::VendorChangeMasks & VendorChangeManager::get_vendor_c
         }
     }
 
-    return vendor_masks.emplace_back(masks);
+    // Insert into map and return reference to the inserted value
+    return vendor_masks.emplace(vendor, std::move(masks)).first->second;
 }
 
 
