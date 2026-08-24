@@ -73,7 +73,7 @@ jobs:
     targets:
       - fedora-rawhide-x86_64
     fmf_url: https://github.com/kontura/ci-dnf-stack.git
-    fmf_ref: main
+    fmf_ref: abi-fix
     tmt_plan: "^/plans/integration/abi-libdnf5$"
     packages: [dnf5]
     tf_extra_params:
