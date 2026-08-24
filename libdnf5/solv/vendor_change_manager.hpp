@@ -74,6 +74,11 @@ public:
     /// @param pool Reference to the solvable pool
     VendorChangeManager(const Pool & pool);
 
+    /// Parse a vendor change policy from TOML content and add it.
+    /// @param toml_content The TOML content to parse
+    /// @param source Origin of the policy (file URI or custom label with "text:" prefix)
+    void add_policy_from_toml(std::string_view toml_content, std::string_view source);
+
     /// Load one vendor change policy from a TOML configuration file and add it.
     /// @param path Path to the configuration file
     void add_policy_from_toml(const std::filesystem::path & path);
@@ -118,6 +123,13 @@ public:
     /// @return The policy formatted as a compact string
     /// @throws base::VendorChangeManagerError if index is out of bounds
     [[nodiscard]] std::string get_policy_as_compact(std::size_t index) const;
+
+    /// Convert a vendor change policy from TOML content to compact format.
+    /// @param toml_content The TOML content to parse
+    /// @param source Origin of the policy (for error messages)
+    /// @return The policy formatted as a compact string
+    /// @throws base::VendorChangeManagerError if parsing fails
+    static std::string convert_policy_toml_to_compact(std::string_view toml_content, std::string_view source);
 
     /// Convert a vendor change policy from TOML file to compact format.
     /// @param path Path to the TOML configuration file
@@ -181,6 +193,11 @@ private:
     /// @param solvable The solvable to evaluate
     /// @return true if the solvable matches the criteria and is not excluded
     bool matches_package_defs(const std::vector<VendorChangePolicy::PackageDef> & pkgs_def, const Solvable & solvable);
+
+    /// Convert path to source string
+    /// @param path Path to convert
+    /// @return Source string (file URI)
+    static std::string path_to_source(const std::filesystem::path & path);
 };
 
 }  // namespace libdnf5::solv
