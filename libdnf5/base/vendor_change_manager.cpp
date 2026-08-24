@@ -17,6 +17,10 @@ class VendorChangeManager::Impl {
 public:
     explicit Impl(Base & base) : base{base}, vcm{get_rpm_pool(base.get_weak_ptr()).get_vendor_change_manager()} {}
 
+    void load_policy_from_toml(std::string_view toml_content, std::string_view source) {
+        vcm.add_policy_from_toml(toml_content, source);
+    }
+
     void load_policy_from_toml(const std::filesystem::path & path) { vcm.add_policy_from_toml(path); }
 
     void load_policy_from_compact(std::string_view policy_str, std::string_view source) {
@@ -84,6 +88,11 @@ VendorChangeManagerWeakPtr VendorChangeManager::get_weak_ptr() {
 }
 
 
+void VendorChangeManager::load_policy_from_toml(std::string_view toml_content, std::string_view source) {
+    p_impl->load_policy_from_toml(toml_content, source);
+}
+
+
 void VendorChangeManager::load_policy_from_toml(const std::filesystem::path & path) {
     p_impl->load_policy_from_toml(path);
 }
@@ -126,6 +135,12 @@ std::string VendorChangeManager::get_loaded_policy_as_toml(std::size_t index) co
 
 std::string VendorChangeManager::get_loaded_policy_as_compact(std::size_t index) const {
     return p_impl->get_loaded_policy_as_compact(index);
+}
+
+
+std::string VendorChangeManager::convert_policy_toml_to_compact(
+    std::string_view toml_content, std::string_view source) {
+    return solv::VendorChangeManager::convert_policy_toml_to_compact(toml_content, source);
 }
 
 

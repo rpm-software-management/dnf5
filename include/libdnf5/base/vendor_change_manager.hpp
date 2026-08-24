@@ -43,6 +43,14 @@ public:
     /// @return A weak pointer to this VendorChangeManager instance.
     VendorChangeManagerWeakPtr get_weak_ptr();
 
+    /// Load a vendor change policy from TOML content.
+    /// The content must conform to the vendor change policy format.
+    /// @param toml_content The TOML content to parse.
+    /// @param source Origin of the policy (file URI or custom label with ``text:`` prefix,
+    ///               e.g., ``"text:COMMAND LINE"``). Stored for diagnostics and logging.
+    /// @throws VendorChangeManagerError if the content cannot be parsed or contains invalid values.
+    void load_policy_from_toml(std::string_view toml_content, std::string_view source);
+
     /// Load one vendor change policy from a TOML configuration file.
     /// The file must conform to the vendor change policy format.
     /// @param path Path to the TOML configuration file.
@@ -103,6 +111,13 @@ public:
     /// @return The policy formatted as a compact string.
     /// @throws VendorChangeManagerError if index is out of bounds.
     [[nodiscard]] std::string get_loaded_policy_as_compact(std::size_t index) const;
+
+    /// Convert a vendor change policy from TOML content to compact format.
+    /// @param toml_content The TOML content to parse.
+    /// @param source Origin of the policy (for error messages).
+    /// @return The policy formatted as a compact string.
+    /// @throws VendorChangeManagerError if parsing fails.
+    static std::string convert_policy_toml_to_compact(std::string_view toml_content, std::string_view source);
 
     /// Convert a vendor change policy from TOML file to compact format.
     /// @param path Path to the TOML configuration file.
