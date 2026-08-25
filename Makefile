@@ -7,6 +7,7 @@ SRPM_DIR = integration-tests/.srpm
 STAMPS_DIR = integration-tests/.stamps
 VERSION = $(shell rpmspec -q --queryformat '%{VERSION}\n' dnf5.spec | head -n1)
 MOCK_CONFIG ?= fedora-rawhide-x86_64
+CI_BASE_IMAGE ?= registry.fedoraproject.org/fedora:rawhide
 CONTAINER_TEST = ./integration-tests/container-test
 
 .PHONY: build test test-unit test-integration test-integration-build \
@@ -105,7 +106,7 @@ test-integration-build:
 	stamp="$$tree-$$rpms_stamp"; \
 	if [ ! -f $(STAMPS_DIR)/container-$$stamp ]; then \
 		echo "==> Container out of date, rebuilding..."; \
-		$(CONTAINER_TEST) build; \
+		$(CONTAINER_TEST) build --base=$(CI_BASE_IMAGE); \
 		rm -f $(STAMPS_DIR)/container-*; \
 		touch $(STAMPS_DIR)/container-$$stamp; \
 	else \
