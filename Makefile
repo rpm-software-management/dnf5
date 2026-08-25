@@ -6,7 +6,7 @@ RPMS_DIR = integration-tests/rpms
 SRPM_DIR = integration-tests/.srpm
 STAMPS_DIR = integration-tests/.stamps
 VERSION = $(shell rpmspec -q --queryformat '%{VERSION}\n' dnf5.spec | head -n1)
-MOCK_CONFIG ?= fedora-43-x86_64
+MOCK_CONFIG ?= fedora-rawhide-x86_64
 CONTAINER_TEST = ./integration-tests/container-test
 
 .PHONY: build test test-unit test-integration test-integration-build \
