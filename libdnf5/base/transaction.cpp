@@ -1082,6 +1082,11 @@ Transaction::TransactionRunResult Transaction::Impl::_run(
         return TransactionRunResult::ERROR_RESOLVE;
     }
 
+    // nothing to do, no reason to continue
+    if (transaction->empty()) {
+        return TransactionRunResult::SUCCESS;
+    }
+
     if (!check_gpg_signatures()) {
         return TransactionRunResult::ERROR_GPG_CHECK;
     }
