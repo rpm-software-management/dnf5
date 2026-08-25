@@ -31,8 +31,10 @@ RUN set -x && \
     dnf -y install systemd --allowerasing; \
     dnf -y install dnf5 dnf5-plugins; \
     dnf5 -y copr enable rpmsoftwaremanagement/test-utils; \
-    dnf5 -y copr enable rpmsoftwaremanagement/dnf-nightly; \
-    dnf5 -y distro-sync --from-repo copr:copr.fedorainfracloud.org:rpmsoftwaremanagement:dnf-nightly '*'
+    if [ "$TYPE" == "nightly" ]; then \
+        dnf5 -y copr enable rpmsoftwaremanagement/dnf-nightly; \
+        dnf5 --setopt=allow_vendor_change=true -y distro-sync --from-repo copr:copr.fedorainfracloud.org:rpmsoftwaremanagement:dnf-nightly '*'; \
+    fi
 
 RUN set -x && \
     if [ -n "$COPR" ] && [ -n "$COPR_RPMS" ]; then \
