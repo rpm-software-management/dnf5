@@ -51,7 +51,7 @@ test-unit: build
 test: test-unit
 
 check-clean-tree:
-	@if [ -n "$$(git status --porcelain)" ]; then \
+	@if [ -n "$$(git status --untracked-files=no --porcelain)" ]; then \
 		echo "Error: Working directory is not clean. Commit or stash your changes first."; \
 		echo "       git archive does not include uncommitted changes."; \
 		git status --short; \
