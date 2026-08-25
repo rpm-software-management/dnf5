@@ -89,7 +89,8 @@ rpms-mock: srpm
 
 test-integration-build:
 	@mkdir -p $(STAMPS_DIR)
-	@commit=$$(git rev-parse HEAD); \
+	@set -e; \
+	commit=$$(git rev-parse HEAD); \
 	if [ ! -f $(STAMPS_DIR)/rpms-$$commit ]; then \
 		echo "==> RPMs out of date (commit $$commit), rebuilding with mock..."; \
 		$(MAKE) rpms-mock; \
@@ -98,7 +99,8 @@ test-integration-build:
 	else \
 		echo "==> RPMs up to date for commit $$commit, skipping rebuild."; \
 	fi
-	@tree=$$(git rev-parse HEAD:integration-tests); \
+	@set -e; \
+	tree=$$(git rev-parse HEAD:integration-tests); \
 	rpms_stamp=$$(ls $(STAMPS_DIR)/rpms-* 2>/dev/null | head -1 | xargs basename 2>/dev/null); \
 	stamp="$$tree-$$rpms_stamp"; \
 	if [ ! -f $(STAMPS_DIR)/container-$$stamp ]; then \
