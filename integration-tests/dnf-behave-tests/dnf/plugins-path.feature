@@ -7,7 +7,7 @@ Given I do not disable plugins
 
 
 Scenario: Redirect pluginpath and pluginconfpath
-Given I successfully execute dnf with args "repo list"
+Given I successfully execute dnf with args "repoquery --installed"
   And file "/var/log/dnf5.log" contains lines
       """
       .* Loaded libdnf plugin ".*" .*
@@ -15,7 +15,7 @@ Given I successfully execute dnf with args "repo list"
   And I configure dnf with
       | key        | value                                  |
       | pluginpath | {context.dnf.installroot}/test/plugins |
- When I execute dnf with args "repo list"
+ When I execute dnf with args "repoquery --installed"
  Then the exit code is 1
   And stdout is empty
   And stderr matches line by line
@@ -28,7 +28,7 @@ Given I delete file "/var/log/dnf5.log"
   And I configure dnf with
       | key            | value                                  |
       | pluginconfpath | {context.dnf.installroot}/test/plugins |
- When I execute dnf with args "repo list"
+ When I execute dnf with args "repoquery --installed"
  Then the exit code is 0
   And stdout is empty
   And stderr is empty
@@ -39,7 +39,7 @@ Given I delete file "/var/log/dnf5.log"
 
 
 Scenario: Test default pluginsconfpath
-Given I successfully execute dnf with args "repo list"
+Given I successfully execute dnf with args "repoquery --installed"
   And file "/var/log/dnf5.log" contains lines
       """
       .* Loaded libdnf plugin "actions" .*
@@ -51,7 +51,7 @@ Given I successfully execute dnf with args "repo list"
       enabled = 0
       """
  # pluginconfpath is not related to installroot, so actions are not disabled
- When I execute dnf with args "repo list"
+ When I execute dnf with args "repoquery --installed"
  Then the exit code is 0
   And stdout is empty
   And stderr is empty
@@ -62,7 +62,7 @@ Given I successfully execute dnf with args "repo list"
 
 
 Scenario: Redirect pluginsconfpath in dnf.conf
-Given I successfully execute dnf with args "repo list"
+Given I successfully execute dnf with args "repoquery --installed"
   And file "/var/log/dnf5.log" contains lines
       """
       .* Loaded libdnf plugin "actions" .*
@@ -78,7 +78,7 @@ Given I successfully execute dnf with args "repo list"
   # Remove the previous log which contains successfully loaded plugin actions msg
   And I delete file "/var/log/dnf5.log"
  # pluginconfpath is now set in installroot, so versionlock is disabled
- When I execute dnf with args "repo list"
+ When I execute dnf with args "repoquery --installed"
  Then the exit code is 0
   And stdout is empty
   And stderr is empty

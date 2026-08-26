@@ -39,7 +39,8 @@ Scenario: dnf provides nonexistentprovide
     And stderr is
        """
        <REPOSYNC>
-       No matches found. If searching for a file, try specifying the full path or using a wildcard prefix ("*/") at the beginning.
+       No matches found.
+       If searching for a file, try specifying the full path or using a wildcard prefix ("*/") at the beginning.
        """
 
 Scenario: test order of provides "dnf provides webclient A B C"
@@ -50,9 +51,9 @@ Scenario: test order of provides "dnf provides webclient A B C"
     And stderr is
         """
         <REPOSYNC>
-        No matches found for A.
-        No matches found for B.
-        No matches found for C.
+        No matches found for "A".
+        No matches found for "B".
+        No matches found for "C".
         If searching for a file, try specifying the full path or using a wildcard prefix ("*/") at the beginning.
         """
 
@@ -64,9 +65,9 @@ Scenario: test order of provides "dnf provides A webclient B C"
     And stderr is
         """
         <REPOSYNC>
-        No matches found for A.
-        No matches found for B.
-        No matches found for C.
+        No matches found for "A".
+        No matches found for "B".
+        No matches found for "C".
         If searching for a file, try specifying the full path or using a wildcard prefix ("*/") at the beginning.
         """
 
@@ -78,9 +79,9 @@ Scenario: test order of provides "dnf provides A B C webclient"
     And stderr is
         """
         <REPOSYNC>
-        No matches found for A.
-        No matches found for B.
-        No matches found for C.
+        No matches found for "A".
+        No matches found for "B".
+        No matches found for "C".
         If searching for a file, try specifying the full path or using a wildcard prefix ("*/") at the beginning.
         """
 

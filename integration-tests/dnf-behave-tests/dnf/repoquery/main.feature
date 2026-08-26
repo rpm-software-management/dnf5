@@ -257,9 +257,11 @@ Given I successfully execute dnf with args "install bottom-a1"
       """
 
 Scenario: repoquery -C (with cache, but disabled repository)
+Given I use repository "dnf-ci-fedora"
 Given I successfully execute dnf with args "makecache"
 Given I drop repository "repoquery-main"
- When I execute dnf with args "repoquery --available -C"
+ # query a package only in the dropped repo to verify its cache is not used
+ When I execute dnf with args "repoquery --available -C top-a"
  Then the exit code is 0
   And stderr is
       """

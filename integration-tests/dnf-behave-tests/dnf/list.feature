@@ -11,7 +11,7 @@ Scenario: dnf list nonexistentpkg
   And stderr is
       """
       <REPOSYNC>
-      No matching packages to list
+      No matches found.
       """
 
 
@@ -225,6 +225,7 @@ Scenario: dnf list installed setup basesystem (when basesystem is not installed)
  Then stderr is
       """
       <REPOSYNC>
+      No matches found for "basesystem".
       """
   And stdout matches line by line
       """
@@ -341,7 +342,7 @@ Given I use repository "dnf-ci-fedora-updates"
   And stderr is
       """
       <REPOSYNC>
-      No matching packages to list
+      No matches found.
       """
   And stdout is empty
 
@@ -372,7 +373,7 @@ Scenario: dnf list obsoletes setup (when setup is not obsoleted)
   And stderr is
       """
       <REPOSYNC>
-      No matching packages to list
+      No matches found.
       """
 
 

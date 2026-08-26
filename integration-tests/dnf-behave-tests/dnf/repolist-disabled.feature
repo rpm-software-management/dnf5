@@ -10,12 +10,14 @@ Scenario: Repolist without arguments
    When I execute dnf with args "repolist"
    Then the exit code is 0
     And stdout is empty
+    And stderr contains "No matches found: no repositories are enabled."
 
 
 Scenario: Repo list with "--enabled"
    When I execute dnf with args "repo list --enabled"
    Then the exit code is 0
     And stdout is empty
+    And stderr contains "No matches found: no repositories are enabled."
 
 
 Scenario: Repo list with "--disabled"
