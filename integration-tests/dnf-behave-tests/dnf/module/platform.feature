@@ -45,7 +45,7 @@ Scenario: I can't list info for the pseudo-module
   And stderr is
       """
       <REPOSYNC>
-      No matches found for "pseudoplatform".
+      No matches found.
       """
 
 

@@ -255,7 +255,7 @@ Scenario: Get info for an enabled stream, module name and stream specified
     And stderr is
         """
         <REPOSYNC>
-        No matches found for "non-existing-module".
+        No matches found.
         """
 
 

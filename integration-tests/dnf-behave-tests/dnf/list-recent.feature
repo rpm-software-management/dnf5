@@ -51,5 +51,5 @@ Scenario: dnf list package that is not recently added
     And stderr is
         """
         <REPOSYNC>
-        No matching packages to list
+        No matches found.
         """
