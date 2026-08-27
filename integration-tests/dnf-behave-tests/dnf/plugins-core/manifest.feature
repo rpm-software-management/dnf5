@@ -640,7 +640,7 @@ Scenario: Download multiarch packages from per-arch manifests
         | {context.dnf.tempdir}/packages.manifest.ppc64/waldo-1.0-1.noarch.rpm        | file://{context.dnf.fixturesdir}/repos/manifest-multiarch/noarch/waldo-1.0-1.noarch.rpm         |
 
 
-Scenario: Download packages from the manifest when a checksum is incorrect
+Scenario: Download packages from the manifest when a checksum is incorrect or package is unavailable
   Given I create and substitute file "/{context.dnf.tempdir}/packages.manifest.yaml" with
     """
     document: rpm-package-manifest
@@ -657,10 +657,17 @@ Scenario: Download packages from the manifest when a checksum is incorrect
             checksum: sha256:1111111111111111111111111111111111111111111111111111111111111111
             size: 1
             evr: 2.4.0-1.fc29
+          - name: non-existent
+            repo_id: dnf-ci-fedora
+            location: x86_64/non-existent-1.0-1.fc29.x86_64.rpm
+            checksum: sha256:1111111111111111111111111111111111111111111111111111111111111111
+            size: 1
+            evr: 1.0-1.fc29
     """
    When I execute dnf with args "manifest download"
    Then the exit code is 1
     And stderr contains "No package http-parser-2.4.0-1.fc29.x86_64 with checksum 1111111111111111111111111111111111111111111111111111111111111111 available."
+    And stderr contains "No package non-existent-1.0-1.fc29.x86_64 available."
 
 
 Scenario: Install packages from the manifest
@@ -674,7 +681,7 @@ Scenario: Install packages from the manifest
         | install       | wget-0:1.19.5-5.fc29.x86_64       |
 
 
-Scenario: Install packages from the manifest when a checksum is incorrect
+Scenario: Install packages from the manifest when a checksum is incorrect or package is unavailable
   Given I create and substitute file "/{context.dnf.tempdir}/packages.manifest.yaml" with
     """
     document: rpm-package-manifest
@@ -691,7 +698,14 @@ Scenario: Install packages from the manifest when a checksum is incorrect
             checksum: sha256:1111111111111111111111111111111111111111111111111111111111111111
             size: 1
             evr: 2.4.0-1.fc29
+          - name: non-existent
+            repo_id: dnf-ci-fedora
+            location: x86_64/non-existent-1.0-1.fc29.x86_64.rpm
+            checksum: sha256:1111111111111111111111111111111111111111111111111111111111111111
+            size: 1
+            evr: 1.0-1.fc29
     """
    When I execute dnf with args "manifest install"
    Then the exit code is 1
     And stderr contains "No package http-parser-2.4.0-1.fc29.x86_64 with checksum 1111111111111111111111111111111111111111111111111111111111111111 available."
+    And stderr contains "No package non-existent-1.0-1.fc29.x86_64 available."
