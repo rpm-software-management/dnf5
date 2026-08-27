@@ -20,6 +20,8 @@
 
 #include "test_case_fixture.hpp"
 
+#include "test_config.h"
+
 #include <stdlib.h>
 
 #include <map>
@@ -90,4 +92,8 @@ std::unique_ptr<libdnf5::Base> TestCaseFixture::get_preconfigured_base() {
     base->get_config().get_plugins_option().set(false);
 
     return base;
+}
+
+std::filesystem::path TestCaseFixture::get_install_prefix() {
+    return TEST_INSTALL_PREFIX;
 }
