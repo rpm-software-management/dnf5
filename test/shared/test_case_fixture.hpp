@@ -26,6 +26,8 @@
 #include <cppunit/TestCase.h>
 #include <libdnf5/base/base.hpp>
 
+#include <filesystem>
+
 
 class TestCaseFixture : public CppUnit::TestCase {
 public:
@@ -33,6 +35,8 @@ public:
     void tearDown() override;
 
     std::unique_ptr<libdnf5::Base> get_preconfigured_base();
+
+    static std::filesystem::path get_install_prefix();
 
     // Only gets created if get_preconfigured_base() is called
     std::unique_ptr<libdnf5::utils::fs::TempDir> temp_dir;

@@ -1,0 +1,9 @@
+// Copyright Contributors to the DNF5 project.
+// SPDX-License-Identifier: GPL-2.0-or-later
+
+#ifndef TEST_CONFIG_H
+#define TEST_CONFIG_H
+
+#define TEST_INSTALL_PREFIX "@CMAKE_INSTALL_PREFIX@"
+
+#endif  // TEST_CONFIG_H
