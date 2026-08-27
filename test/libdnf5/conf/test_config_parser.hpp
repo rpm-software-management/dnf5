@@ -38,6 +38,7 @@ class ConfigParserTest : public CppUnit::TestCase {
     CPPUNIT_TEST(test_read_write_with_comments_header);
     CPPUNIT_TEST(test_read_write_crazy);
     CPPUNIT_TEST(test_read_modify_write);
+    CPPUNIT_TEST(test_metalink_exclude_options);
 #endif
 
     CPPUNIT_TEST_SUITE_END();
@@ -56,6 +57,7 @@ public:
     void test_read_write_with_comments_header();
     void test_read_write_crazy();
     void test_read_modify_write();
+    void test_metalink_exclude_options();
 };
 
 #endif
