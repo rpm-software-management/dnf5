@@ -670,6 +670,23 @@ Scenario: Download packages from the manifest when a checksum is incorrect or pa
     And stderr contains "No package non-existent-1.0-1.fc29.x86_64 available."
 
 
+@force_installroot
+Scenario: Download packages from the manifest created from system
+  Given I successfully execute dnf with args "manifest new"
+    And I successfully execute dnf with args "remove basesystem glibc flac"
+   When I execute dnf with args "manifest download"
+   Then the exit code is 0
+    And file sha256 checksums are following
+        | Path                                                                               | sha256                                                                                                 |
+        | {context.dnf.tempdir}/packages.manifest/basesystem-11-6.fc29.noarch.rpm            | file://{context.dnf.fixturesdir}/repos/dnf-ci-fedora/noarch/basesystem-11-6.fc29.noarch.rpm            |
+        | {context.dnf.tempdir}/packages.manifest/filesystem-3.9-2.fc29.x86_64.rpm           | file://{context.dnf.fixturesdir}/repos/dnf-ci-fedora/x86_64/filesystem-3.9-2.fc29.x86_64.rpm           |
+        | {context.dnf.tempdir}/packages.manifest/flac-1.3.2-8.fc29.x86_64.rpm               | file://{context.dnf.fixturesdir}/repos/dnf-ci-fedora/x86_64/flac-1.3.2-8.fc29.x86_64.rpm               |
+        | {context.dnf.tempdir}/packages.manifest/glibc-2.28-9.fc29.x86_64.rpm               | file://{context.dnf.fixturesdir}/repos/dnf-ci-fedora/x86_64/glibc-2.28-9.fc29.x86_64.rpm               |
+        | {context.dnf.tempdir}/packages.manifest/glibc-all-langpacks-2.28-9.fc29.x86_64.rpm | file://{context.dnf.fixturesdir}/repos/dnf-ci-fedora/x86_64/glibc-all-langpacks-2.28-9.fc29.x86_64.rpm |
+        | {context.dnf.tempdir}/packages.manifest/glibc-all-langpacks-2.28-9.fc29.x86_64.rpm | file://{context.dnf.fixturesdir}/repos/dnf-ci-fedora/x86_64/glibc-all-langpacks-2.28-9.fc29.x86_64.rpm |
+        | {context.dnf.tempdir}/packages.manifest/setup-2.12.1-1.fc29.noarch.rpm             | file://{context.dnf.fixturesdir}/repos/dnf-ci-fedora/noarch/setup-2.12.1-1.fc29.noarch.rpm             |
+
+
 Scenario: Install packages from the manifest
   Given I successfully execute dnf with args "manifest new abcde http-parser"
    When I execute dnf with args "manifest install"
@@ -709,3 +726,20 @@ Scenario: Install packages from the manifest when a checksum is incorrect or pac
    Then the exit code is 1
     And stderr contains "No package http-parser-2.4.0-1.fc29.x86_64 with checksum 1111111111111111111111111111111111111111111111111111111111111111 available."
     And stderr contains "No package non-existent-1.0-1.fc29.x86_64 available."
+
+
+@force_installroot
+Scenario: Install packages from the manifest created from system
+  Given I successfully execute dnf with args "manifest new"
+    And I successfully execute dnf with args "remove basesystem glibc flac"
+   When I execute dnf with args "manifest install"
+   Then the exit code is 0
+    And Transaction is following
+        | Action        | Package                                  |
+        | install       | basesystem-0:11-6.fc29.noarch            |
+        | install       | filesystem-0:3.9-2.fc29.x86_64           |
+        | install       | flac-0:1.3.2-8.fc29.x86_64               |
+        | install       | glibc-0:2.28-9.fc29.x86_64               |
+        | install       | glibc-all-langpacks-0:2.28-9.fc29.x86_64 |
+        | install       | glibc-common-0:2.28-9.fc29.x86_64        |
+        | install       | setup-0:2.12.1-1.fc29.noarch             |
