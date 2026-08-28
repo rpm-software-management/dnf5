@@ -173,14 +173,17 @@ std::pair<std::string, size_t> Vars::substitute_expression(std::string_view text
         }
 
         if (res[pos] == '\\') {
-            // Escape the next character (if there is one)
+            // Escape the next character only if it is special ($ or } in subexpressions)
             if (pos + 1 >= res.length()) {
                 break;
             }
-            res.erase(pos, 1);
-            total_scanned += 2;
-            pos += 1;
-            continue;
+            char next = res[pos + 1];
+            if (next == '$' || (next == '}' && depth > 0)) {
+                res.erase(pos, 1);
+                total_scanned += 2;
+                pos += 1;
+                continue;
+            }
         }
         if (res[pos] == '$') {
             // variable expression starts after the $ and includes the braces
