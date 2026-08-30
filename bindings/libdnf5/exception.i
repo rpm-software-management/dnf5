@@ -76,6 +76,10 @@
 %rename(BaseTransactionError) libdnf5::base::TransactionError;
 %include "libdnf5/base/transaction_errors.hpp"
 
+%ignore libdnf5::base::VendorChangeManagerError::VendorChangeManagerError;
+%rename(BaseVendorChangeManagerError) libdnf5::base::VendorChangeManagerError;
+%include "libdnf5/base/vendor_change_manager_errors.hpp"
+
 %ignore libdnf5::comps::InvalidPackageType::InvalidPackageType;
 %rename(CompsInvalidPackageType) libdnf5::comps::InvalidPackageType;
 %include "libdnf5/comps/group/package_errors.hpp"
@@ -265,6 +269,7 @@
 
 %template(BaseActiveTransactionInfoParseErrorNested) libdnf5::NestedException<libdnf5::base::ActiveTransactionInfoParseError>;
 %template(BaseTransactionErrorNested) libdnf5::NestedException<libdnf5::base::TransactionError>;
+%template(BaseVendorChangeManagerErrorNested) libdnf5::NestedException<libdnf5::base::VendorChangeManagerError>;
 
 %template(CompsInvalidPackageTypeNested) libdnf5::NestedException<libdnf5::comps::InvalidPackageType>;
 

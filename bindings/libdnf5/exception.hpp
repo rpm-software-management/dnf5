@@ -3,6 +3,7 @@
 
 #include "libdnf5/base/active_transaction_info_errors.hpp"
 #include "libdnf5/base/transaction_errors.hpp"
+#include "libdnf5/base/vendor_change_manager_errors.hpp"
 #include "libdnf5/common/exception.hpp"
 #include "libdnf5/comps/group/package_errors.hpp"
 #include "libdnf5/conf/config_parser_errors.hpp"
@@ -66,6 +67,7 @@ static void create_swig_exception(const std::exception & e) {
     do {
         swig_if_exception(e, libdnf5::base::ActiveTransactionInfoParseError);
         swig_if_exception(e, libdnf5::base::TransactionError);
+        swig_if_exception(e, libdnf5::base::VendorChangeManagerError);
 
         swig_if_exception(e, libdnf5::comps::InvalidPackageType);
 
