@@ -24,6 +24,7 @@
 #include "libdnf5/utils/bgettext/bgettext-mark-common.h"
 #include "libdnf5/utils/format.hpp"
 
+#include <fmt/args.h>
 #include <fmt/format.h>
 
 #include <filesystem>
@@ -139,6 +140,65 @@ concept AllowedErrorArgTypes =
     std::is_same_v<const void *, T> || std::is_same_v<void *, T>;
 
 
+/// Concept for string-like types (const char*, std::string_view, const char[N])
+/// excluding types already covered by AllowedErrorArgTypes (e.g. std::string).
+template <typename T>
+concept StringLikeErrorArgTypes = std::is_convertible_v<T, std::string_view> && (!AllowedErrorArgTypes<T>);
+
+
+/// A wrapper for named format arguments used in exception formatting.
+///
+/// This class safely stores named arguments for deferred formatting of exception messages.
+/// It prevents dangling references and use-after-free errors by capturing argument values
+/// in a lambda closure.
+///
+/// For string-like types (const char*, std::string_view, const char[N]), the value is
+/// converted to std::string and stored by value. For other allowed types (integers,
+/// booleans, pointers), the value is captured directly.
+///
+/// Example usage:
+/// @code
+/// throw VendorChangeManagerError(
+///     M_("Cannot load policy from {path}: {reason}"),
+///     NamedErrorArg("path", policy_path.string()),
+///     NamedErrorArg("reason", "Invalid TOML syntax")
+/// );
+/// @endcode
+///
+/// @see Error::Error(BgettextMessage, NamedErrorArg, RestArgs...)
+class LIBDNF_API NamedErrorArg {
+public:
+    /// Constructor for types allowed by AllowedErrorArgTypes (e.g., integers, booleans, pointers).
+    template <AllowedErrorArgTypes T>
+    NamedErrorArg(std::string name, T val)
+        :  // Captures 'val' by value to ensure memory safety for deferred formatting.
+          store_fn([name = std::move(name), val](fmt::dynamic_format_arg_store<fmt::format_context> & store) {
+              store.push_back(fmt::arg(name.c_str(), val));
+          }) {}
+
+    /// Constructor for all string-like types not covered by AllowedErrorArgTypes.
+    /// Converts the input into an owned std::string inside the closure to prevent dangling references/use-after-free.
+    template <StringLikeErrorArgTypes T>
+    NamedErrorArg(std::string name, T val)
+        :  // Convert 'val' to std::string and store a copy in the lambda closure
+          store_fn([name = std::move(name),
+                    str_val = std::string(val)](fmt::dynamic_format_arg_store<fmt::format_context> & store) {
+              store.push_back(fmt::arg(name.c_str(), str_val));
+          }) {}
+
+    /// Binds the stored named argument into the given format argument store.
+    void bind_to_store(fmt::dynamic_format_arg_store<fmt::format_context> & store) const { store_fn(store); }
+
+private:
+    std::function<void(fmt::dynamic_format_arg_store<fmt::format_context> &)> store_fn;
+};
+
+
+/// Concept ensuring that all types in a variadic parameter pack are strictly ErrorArg.
+template <typename... T>
+concept AllNamedErrorArgs = (std::is_same_v<T, NamedErrorArg> && ...);
+
+
 /// Base class for libdnf exceptions. Virtual methods `get_name()` and
 /// `get_domain_name()` should always return the exception's class name and its
 /// namespace (including enclosing class names in case the exception is nested in
@@ -155,6 +215,26 @@ public:
           format(format),
           // stores the format args in the lambda's closure
           formatter([args...](const char * format) { return libdnf5::utils::sformat(format, args...); }) {}
+
+    /// A constructor that supports formatting the error message with NamedErrorArg arguments.
+    /// Requires AT LEAST ONE named argument (FirstArg) to avoid ambiguity with
+    /// the zero-argument original constructor.
+    ///
+    /// @param format The format string for the message.
+    /// @param first_arg The first named format argument.
+    /// @param rest_args Additional named format arguments.
+    template <AllNamedErrorArgs... RestArgs>
+    explicit Error(BgettextMessage format, NamedErrorArg first_arg, RestArgs... rest_args)
+        : std::runtime_error(b_gettextmsg_get_id(format)),
+          format(format),
+          // Stores copies of NamedErrorArg objects inside the lambda closure for lifetime safety
+          formatter([first_arg, rest_args...](const char * format) {
+              fmt::dynamic_format_arg_store<fmt::format_context> store;
+              // Binds each ErrorArg value directly into the format store
+              first_arg.bind_to_store(store);
+              (rest_args.bind_to_store(store), ...);
+              return fmt::vformat(format, store);
+          }) {}
 
     Error(const Error & e) noexcept;
     Error & operator=(const Error & e) noexcept;
