@@ -6,7 +6,7 @@ endif()
 message("Building bindings")
 
 
-find_package(SWIG REQUIRED)
+find_package(SWIG 4.3 REQUIRED)
 include(UseSWIG)
 
 

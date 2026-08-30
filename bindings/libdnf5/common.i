@@ -15,6 +15,7 @@
 %include <std_set.i>
 #endif
 %include <std_string.i>
+%include <std_string_view.i>
 %include <std_vector.i>
 
 %include "shared.i"

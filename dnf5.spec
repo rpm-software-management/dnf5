@@ -153,7 +153,7 @@ Provides:       dnf5-command(versionlock)
 %global librepo_version 1.20.0
 %global libsolv_version 0.7.36
 %global sqlite_version 3.35.0
-%global swig_version 4
+%global swig_version 4.3
 
 
 # ========== build requires ==========
