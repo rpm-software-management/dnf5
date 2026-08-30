@@ -58,6 +58,7 @@
 %ignore libdnf_user_assert;
 
 %ignore libdnf5::SourceLocation;
+%ignore libdnf5::NamedErrorArg;
 %ignore libdnf5::Error::Error;
 %ignore libdnf5::AssertionError::AssertionError;
 %ignore libdnf5::UserAssertionError::UserAssertionError;
