@@ -1030,6 +1030,34 @@ automatically and regularly from systemd timers, cron jobs or similar.
 %exclude %{_bindir}/dnf-automatic
 %endif
 
+%post plugin-automatic
+%if %{with dnf5_obsoletes_dnf}
+%systemd_post dnf-automatic.timer
+%systemd_post dnf-automatic-install.timer
+%else
+%systemd_post dnf5-automatic.timer
+%systemd_post dnf5-automatic-install.timer
+%endif
+
+%preun plugin-automatic
+%if %{with dnf5_obsoletes_dnf}
+%systemd_preun dnf-automatic.timer
+%systemd_preun dnf-automatic-install.timer
+%else
+%systemd_preun dnf5-automatic.timer
+%systemd_preun dnf5-automatic-install.timer
+%endif
+
+%postun plugin-automatic
+%if %{with dnf5_obsoletes_dnf}
+%systemd_postun_with_restart dnf-automatic.timer
+%systemd_postun_with_restart dnf-automatic-install.timer
+%else
+%systemd_postun_with_restart dnf5-automatic.timer
+%systemd_postun_with_restart dnf5-automatic-install.timer
+%endif
+
+
 # ========== dnf5-manifest plugin ==========
 
 %if %{with plugin_manifest}
