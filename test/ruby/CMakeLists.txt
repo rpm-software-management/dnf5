@@ -5,6 +5,8 @@ endif()
 
 find_package(Ruby REQUIRED)
 
+# Generate test config file with CMAKE_INSTALL_PREFIX
+configure_file(test_config.rb.in test_config.rb @ONLY)
 
 macro(add_ruby_test)
     set(target "test_ruby_${ARGV0}_${ARGV1}")

@@ -15,6 +15,8 @@ foreach(MODULE "strict" "Test::More" "Test::Exception" "warnings" "FindBin")
     endif()
 endforeach()
 
+# Generate test config file with CMAKE_INSTALL_PREFIX
+configure_file(TestConfig.pm.in TestConfig.pm @ONLY)
 
 macro(add_perl_test)
     set(target "test_perl5_${ARGV0}_${ARGV1}")
