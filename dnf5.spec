@@ -1020,6 +1020,10 @@ automatically and regularly from systemd timers, cron jobs or similar.
 %{_unitdir}/dnf5-automatic.timer
 %{_unitdir}/dnf-automatic.service
 %{_unitdir}/dnf-automatic.timer
+%{_unitdir}/dnf5-automatic-install.service
+%{_unitdir}/dnf5-automatic-install.timer
+%{_unitdir}/dnf-automatic-install.service
+%{_unitdir}/dnf-automatic-install.timer
 %if %{with dnf5_obsoletes_dnf}
 %{_bindir}/dnf-automatic
 %else
