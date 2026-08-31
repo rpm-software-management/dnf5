@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<updates>
+  <update from="secresponseteam@foo.bar" status="final" type="bugfix" version="3">
+    <id>FEDORA-2026-10-06</id>
+    <title>kernel bug fix</title>
+    <issued date="2026-06-10 00:00:00"/>
+    <updated date="2026-06-10 00:00:00"/>
+    <severity>Moderate</severity>
+    <summary>summary_1</summary>
+    <description>Kernel advisory</description>
+    <pkglist>
+      <collection short="named collection">
+        <name>Bar component</name>
+        <package name="kernel" version="4.19.15" release="302.fc29" epoch="0" arch="x86_64" src="kernel-0:4.19.15-302.fc29.x86_64.rpm">
+          <filename>kernel-0:4.19.15-302.fc29.x86_64.rpm</filename>
+          <reboot_suggested/>
+        </package>
+      </collection>
+    </pkglist>
+  </update>
+</updates>

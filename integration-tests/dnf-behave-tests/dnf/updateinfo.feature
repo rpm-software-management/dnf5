@@ -715,3 +715,40 @@ Given I successfully execute dnf with args "install kernel flac glibc"
       Name               Type        Severity                  Package              Issued
       FEDORA-2999:002-02 enhancement Moderate flac-1.3.3-8.fc29.x86_64 2019-01-17 00:00:00
       """
+
+
+# https://github.com/rpm-software-management/dnf5/issues/2754
+Scenario: package is upgraded if it has both resolved and unresolved advisories
+  Given I use repository "z-kernel"
+    And I successfully execute dnf with args "install kernel-4.19.15-301.fc29"
+    And I use repository "dnf-ci-fedora-updates"
+   # advisory shows bugfix upgrade available
+   When I execute dnf with args "advisory list --bugfix"
+   Then the exit code is 0
+    And stderr is
+        """
+        <REPOSYNC>
+        """
+    And stdout is
+        """
+        Name              Type   Severity                        Package              Issued
+        FEDORA-2026-10-06 bugfix Moderate kernel-4.19.15-302.fc29.x86_64 2026-06-10 00:00:00
+        """
+  # Clean all solv files because libsolv loads ids differently when using them
+  Given I successfully execute dnf with args "clean all"
+  # To reproduce this several conditions are required:
+  # > an unresolved advisory for kernel kernel-4.19.15-302.fc29, correctly listed
+  #   by the previous $ advisory list --bugfix command, present in the z-kernel repository
+  # > resolved advisory of the same type for kernel-4.19.15-300.fc29, present in dnf-ci-fedora-updates
+  # > the evr string of the higher 4.19.15-302.fc29 has to have lower libsolv id than 4.19.15-300.fc29
+  #   - when no solv files are present libsolv assigns string ids roughly in the following
+  #     order: hard-coded libsolv KNOWNIDs, installed repository strings, other repositories
+  #     strings as added by the client (libdnf)
+  #   - dnf5 sorts repositories alphabetically and for local repositories loads them
+  #     in reverse order (z-kernel is first)
+   When I execute dnf with args "upgrade kernel --bugfix"
+   Then Transaction is following
+        | Action        | Package                                  |
+        | install       | kernel-0:4.19.15-302.fc29.x86_64         |
+        | install-dep   | kernel-core-0:4.19.15-302.fc29.x86_64    |
+        | install-dep   | kernel-modules-0:4.19.15-302.fc29.x86_64 |
