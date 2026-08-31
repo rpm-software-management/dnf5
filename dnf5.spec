@@ -260,6 +260,7 @@ BuildRequires:  swig >= %{swig_version}
 BuildRequires:  perl-devel
 BuildRequires:  perl-generators
 %if %{with tests}
+BuildRequires:  perl(lib)
 BuildRequires:  perl(strict)
 BuildRequires:  perl(Test::More)
 BuildRequires:  perl(Test::Exception)
