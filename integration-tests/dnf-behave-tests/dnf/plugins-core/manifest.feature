@@ -93,9 +93,9 @@ Scenario: Generate new manifest using specs and system repo
     """
 
 
-Scenario: Generate new manifest using prototype input file
-  Given I copy file "{context.dnf.fixturesdir}/data/manifest/simple.in.yaml" to "/{context.dnf.tempdir}/rpms.in.yaml"
-    And I execute "sed -i 's|$FIXTURES_DIR|{context.dnf.fixturesdir}|' rpms.in.yaml"
+Scenario: Generate new manifest using input file
+  Given I copy file "{context.dnf.fixturesdir}/data/manifest/simple.input.yaml" to "/{context.dnf.tempdir}/packages.input.yaml"
+    And I execute "sed -i 's|$FIXTURES_DIR|{context.dnf.fixturesdir}|' packages.input.yaml"
    When I execute dnf with args "manifest resolve"
    Then the exit code is 0
     And file "/{context.dnf.tempdir}/packages.manifest.yaml" matches line by line
@@ -172,9 +172,9 @@ Scenario: Generate new manifest using prototype input file
     """
 
 
-Scenario: Generate new manifest using prototype input file and host repositories
-  Given I copy file "{context.dnf.fixturesdir}/data/manifest/no-repositories.in.yaml" to "/{context.dnf.tempdir}/rpms.in.yaml"
-    And I execute "sed -i 's|$FIXTURES_DIR|{context.dnf.fixturesdir}|' rpms.in.yaml"
+Scenario: Generate new manifest using input file and host repositories
+  Given I copy file "{context.dnf.fixturesdir}/data/manifest/no-repositories.input.yaml" to "/{context.dnf.tempdir}/packages.input.yaml"
+    And I execute "sed -i 's|$FIXTURES_DIR|{context.dnf.fixturesdir}|' packages.input.yaml"
    When I execute dnf with args "manifest resolve --use-host-repos"
    Then the exit code is 0
     And file "/{context.dnf.tempdir}/packages.manifest.yaml" matches line by line
@@ -251,9 +251,9 @@ Scenario: Generate new manifest using prototype input file and host repositories
     """
 
 
-Scenario: Generate new manifest using prototype input file and system repo
-  Given I copy file "{context.dnf.fixturesdir}/data/manifest/simple.in.yaml" to "/{context.dnf.tempdir}/rpms.in.yaml"
-    And I execute "sed -i 's|$FIXTURES_DIR|{context.dnf.fixturesdir}|' rpms.in.yaml"
+Scenario: Generate new manifest using input file and system repo
+  Given I copy file "{context.dnf.fixturesdir}/data/manifest/simple.input.yaml" to "/{context.dnf.tempdir}/packages.input.yaml"
+    And I execute "sed -i 's|$FIXTURES_DIR|{context.dnf.fixturesdir}|' packages.input.yaml"
    When I execute dnf with args "manifest resolve --use-system"
    Then the exit code is 0
     And file "/{context.dnf.tempdir}/packages.manifest.yaml" matches line by line
@@ -293,11 +293,91 @@ Scenario: Generate new manifest using prototype input file and system repo
     """
 
 
+Scenario: Generate new manifest using deprecated prototype input file
+  Given I copy file "{context.dnf.fixturesdir}/data/manifest/simple.in.yaml" to "/{context.dnf.tempdir}/packages.input.yaml"
+    And I execute "sed -i 's|$FIXTURES_DIR|{context.dnf.fixturesdir}|' packages.input.yaml"
+   When I execute dnf with args "manifest resolve"
+   Then the exit code is 0
+    And stderr contains "Warning: the rpm-lockfile-prototype input file format is deprecated."
+    And file "/{context.dnf.tempdir}/packages.manifest.yaml" matches line by line
+    """
+    document: rpm-package-manifest
+    version: *
+    data:
+      repositories:
+        - id: dnf-ci-fedora
+          baseurl: *
+      packages:
+        noarch:
+          - name: basesystem
+            repo_id: dnf-ci-fedora
+            location: noarch/basesystem-11-6.fc29.noarch.rpm
+            checksum: sha256:*
+            size: *
+            evr: 11-6.fc29
+          - name: setup
+            repo_id: dnf-ci-fedora
+            location: noarch/setup-2.12.1-1.fc29.noarch.rpm
+            checksum: sha256:*
+            size: *
+            evr: 2.12.1-1.fc29
+        x86_64:
+          - name: dwm
+            repo_id: dnf-ci-fedora
+            location: x86_64/dwm-6.1-1.x86_64.rpm
+            checksum: sha256:*
+            size: *
+            evr: 6.1-1
+          - name: filesystem
+            repo_id: dnf-ci-fedora
+            location: x86_64/filesystem-3.9-2.fc29.x86_64.rpm
+            checksum: sha256:*
+            size: *
+            evr: 3.9-2.fc29
+          - name: glibc
+            repo_id: dnf-ci-fedora
+            location: x86_64/glibc-2.28-9.fc29.x86_64.rpm
+            checksum: sha256:*
+            size: *
+            evr: 2.28-9.fc29
+          - name: glibc-all-langpacks
+            repo_id: dnf-ci-fedora
+            location: x86_64/glibc-all-langpacks-2.28-9.fc29.x86_64.rpm
+            checksum: sha256:*
+            size: *
+            evr: 2.28-9.fc29
+          - name: glibc-common
+            repo_id: dnf-ci-fedora
+            location: x86_64/glibc-common-2.28-9.fc29.x86_64.rpm
+            checksum: sha256:*
+            size: *
+            evr: 2.28-9.fc29
+          - name: nodejs
+            repo_id: dnf-ci-fedora
+            location: x86_64/nodejs-5.12.1-1.fc29.x86_64.rpm
+            checksum: sha256:*
+            size: *
+            evr: 1:5.12.1-1.fc29
+          - name: npm
+            repo_id: dnf-ci-fedora
+            location: x86_64/npm-5.12.1-1.fc29.x86_64.rpm
+            checksum: sha256:*
+            size: *
+            evr: 1:5.12.1-1.fc29
+          - name: wget
+            repo_id: dnf-ci-fedora
+            location: x86_64/wget-1.19.5-5.fc29.x86_64.rpm
+            checksum: sha256:*
+            size: *
+            evr: 1.19.5-5.fc29
+    """
+
+
 # This use case involves loading the system repository with the flac package installed.
 # The flac package is also specified in the input file, but as a package for reinstallation, so it should be resolved in the manifest.
-Scenario: Generate new manifest with packages for reinstallation using prototype input file and system repo
-  Given I copy file "{context.dnf.fixturesdir}/data/manifest/reinstall.in.yaml" to "/{context.dnf.tempdir}/rpms.in.yaml"
-    And I execute "sed -i 's|$FIXTURES_DIR|{context.dnf.fixturesdir}|' rpms.in.yaml"
+Scenario: Generate new manifest with packages for reinstallation using input file and system repo
+  Given I copy file "{context.dnf.fixturesdir}/data/manifest/reinstall.input.yaml" to "/{context.dnf.tempdir}/packages.input.yaml"
+    And I execute "sed -i 's|$FIXTURES_DIR|{context.dnf.fixturesdir}|' packages.input.yaml"
    When I execute dnf with args "manifest resolve --use-system"
    Then the exit code is 0
     And file "/{context.dnf.tempdir}/packages.manifest.yaml" matches line by line
@@ -328,11 +408,11 @@ Scenario: Generate new manifest with packages for reinstallation using prototype
 # Try to install the dnf-ci-conflict package which conflicts with dnf-ci-kernel
 # Also excluding the dnf-ci-obsolete which is a obsoleter of dnf-ci-kernel
 # This ^ is only possible when --allow-erasing is passed
-Scenario: Generate new manifest using prototype input file, system repo and allow erasing
+Scenario: Generate new manifest using input file, system repo and allow erasing
   Given I use repository "protect-running-kernel"
     And I successfully execute dnf with args "install dnf-ci-kernel-1.0"
-    And I copy file "{context.dnf.fixturesdir}/data/manifest/allowerasing.in.yaml" to "/{context.dnf.tempdir}/rpms.in.yaml"
-    And I execute "sed -i 's|$FIXTURES_DIR|{context.dnf.fixturesdir}|' rpms.in.yaml"
+    And I copy file "{context.dnf.fixturesdir}/data/manifest/allowerasing.input.yaml" to "/{context.dnf.tempdir}/packages.input.yaml"
+    And I execute "sed -i 's|$FIXTURES_DIR|{context.dnf.fixturesdir}|' packages.input.yaml"
    When I execute dnf with args "manifest resolve --use-system --exclude dnf-ci-obsolete"
    Then the exit code is 0
     And file "/{context.dnf.tempdir}/packages.manifest.yaml" matches line by line
@@ -355,10 +435,10 @@ Scenario: Generate new manifest using prototype input file, system repo and allo
 
 # The dnf5 manifest plugin does not yet support modularity
 @xfail
-Scenario: Generate new manifest using prototype input file with a modular package from the enabled stream
+Scenario: Generate new manifest using input file with a modular package from the enabled stream
   Given I use repository "dnf-ci-fedora-modular"
-    And I copy file "{context.dnf.fixturesdir}/data/manifest/moduleenable.in.yaml" to "/{context.dnf.tempdir}/rpms.in.yaml"
-    And I execute "sed -i 's|$FIXTURES_DIR|{context.dnf.fixturesdir}|' rpms.in.yaml"
+    And I copy file "{context.dnf.fixturesdir}/data/manifest/moduleenable.input.yaml" to "/{context.dnf.tempdir}/packages.input.yaml"
+    And I execute "sed -i 's|$FIXTURES_DIR|{context.dnf.fixturesdir}|' packages.input.yaml"
    When I execute dnf with args "manifest resolve --use-system"
    Then the exit code is 0
     And file "/{context.dnf.tempdir}/packages.manifest.yaml" contains lines
