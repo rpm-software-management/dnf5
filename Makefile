@@ -16,6 +16,8 @@ MOCK_CONFIG ?= fedora-rawhide-x86_64
 CI_BASE_IMAGE ?= registry.fedoraproject.org/fedora:rawhide
 CONTAINER_TEST = ./integration-tests/container-test
 
+.DEFAULT_GOAL = build
+
 .ONESHELL:
 
 FORCE:
