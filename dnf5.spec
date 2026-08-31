@@ -727,7 +727,7 @@ Libdnf5 plugin that allows to run actions (external executables) on hooks.
 
 %files -n libdnf5-plugin-actions -f libdnf5-plugin-actions.lang
 %{_libdir}/libdnf5/plugins/actions.*
-%config %{_sysconfdir}/dnf/libdnf5-plugins/actions.conf
+%config(noreplace) %{_sysconfdir}/dnf/libdnf5-plugins/actions.conf
 %dir %{_sysconfdir}/dnf/libdnf5-plugins/actions.d
 %if %{with man}
 %{_mandir}/man8/libdnf5-actions.8.*
@@ -749,7 +749,7 @@ Libdnf5 plugin that installs repository's AppStream data, for repositories which
 
 %files -n libdnf5-plugin-appstream
 %{_libdir}/libdnf5/plugins/appstream.so
-%config %{_sysconfdir}/dnf/libdnf5-plugins/appstream.conf
+%config(noreplace) %{_sysconfdir}/dnf/libdnf5-plugins/appstream.conf
 
 %endif
 
@@ -770,7 +770,7 @@ Libdnf5 plugin for detecting and removing expired PGP keys.
 
 %files -n libdnf5-plugin-expired-pgp-keys -f libdnf5-plugin-expired-pgp-keys.lang
 %{_libdir}/libdnf5/plugins/expired-pgp-keys.*
-%config %{_sysconfdir}/dnf/libdnf5-plugins/expired-pgp-keys.conf
+%config(noreplace) %{_sysconfdir}/dnf/libdnf5-plugins/expired-pgp-keys.conf
 %if %{with man}
 %{_mandir}/man8/libdnf5-expired-pgp-keys.8.*
 %endif
@@ -792,7 +792,7 @@ to the subscription levels.
 
 %files -n libdnf5-plugin-rhsm -f libdnf5-plugin-rhsm.lang
 %{_libdir}/libdnf5/plugins/rhsm.*
-%config %{_sysconfdir}/dnf/libdnf5-plugins/rhsm.conf
+%config(noreplace) %{_sysconfdir}/dnf/libdnf5-plugins/rhsm.conf
 %endif
 
 
@@ -810,7 +810,7 @@ Libdnf5 plugin that allows loading Python plugins.
 
 %files -n python3-libdnf5-python-plugins-loader
 %{_libdir}/libdnf5/plugins/python_plugins_loader.*
-%config %{_sysconfdir}/dnf/libdnf5-plugins/python_plugins_loader.conf
+%config(noreplace) %{_sysconfdir}/dnf/libdnf5-plugins/python_plugins_loader.conf
 %dir %{_sysconfdir}/dnf/libdnf5-plugins/python_plugins_loader.d
 %dir %{python3_sitelib}/libdnf_plugins/
 %doc %{python3_sitelib}/libdnf_plugins/README
@@ -830,7 +830,7 @@ Libdnf5 plugin that automatically copies all downloaded packages to a repository
 
 %files -n libdnf5-plugin-local
 %{_libdir}/libdnf5/plugins/local.*
-%config %{_sysconfdir}/dnf/libdnf5-plugins/local.conf
+%config(noreplace) %{_sysconfdir}/dnf/libdnf5-plugins/local.conf
 %if %{with man}
 %{_mandir}/man8/libdnf5-local.8.*
 %endif
@@ -852,7 +852,7 @@ installed, removed, or updated.
 
 %files -n libdnf5-plugin-systemd-inhibit
 %{_libdir}/libdnf5/plugins/systemd-inhibit.*
-%config %{_sysconfdir}/dnf/libdnf5-plugins/00-systemd-inhibit.conf
+%config(noreplace) %{_sysconfdir}/dnf/libdnf5-plugins/00-systemd-inhibit.conf
 %endif
 
 
