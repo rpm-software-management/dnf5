@@ -6,7 +6,7 @@ Background: Enable repository
     # Some of the rpm scriptlet outputs can be quite long and since they are
     # truncated: https://github.com/rpm-software-management/dnf5/issues/1829
     # we need to force the width to see it in full.
-    And I set environment variable "FORCE_COLUMNS" to "400"
+    And I set environment variable "DNF5_FORCE_COLUMNS" to "400"
 
 
 # Disable on older fedoras and rhels because they don't contain rpm-6.0.91
