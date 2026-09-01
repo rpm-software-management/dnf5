@@ -80,7 +80,7 @@ $(SOURCE_TARBALL_PATH): FORCE
 		git status --short --untracked-files=no
 		exit 1
 	fi
-	git archive --mtime="1970-01-01T00:00:00" --format=tar --prefix="$(SOURCE_TARBALL_PREFIX)/" HEAD | gzip -n > "$@.tmp"
+	git archive --mtime="1970-01-01T00:00:00+00:00" --format=tar --prefix="$(SOURCE_TARBALL_PREFIX)/" HEAD | gzip -n > "$@.tmp"
 	cmp -s "$@.tmp" "$@" || mv "$@.tmp" "$@"
 	rm -f "$@.tmp"
 
