@@ -37,6 +37,7 @@ Scenario: Repo info without arguments
           Verify packages    : true
         Repodata info        :
           Available packages : 289
+          Unique NEVRAs      : 289
           Total packages     : 289
           Size               : 2\.[0-9] MiB
           Revision           : 1550000000
@@ -58,6 +59,7 @@ Scenario: Repo info without arguments
           Verify packages    : true
         Repodata info        :
           Available packages : 6
+          Unique NEVRAs      : 6
           Total packages     : 6
           Size               : [0-9][0-9](\.[0-9])? KiB
           Revision           : 1550000000
@@ -90,6 +92,7 @@ Scenario: Repo info without arguments and option --all
           Verify packages    : true
         Repodata info        :
           Available packages : 289
+          Unique NEVRAs      : 289
           Total packages     : 289
           Size               : 2\.[0-9] MiB
           Revision           : 1550000000
@@ -141,6 +144,7 @@ Scenario: Repo info without arguments and option --all
           Verify packages    : true
         Repodata info        :
           Available packages : 6
+          Unique NEVRAs      : 6
           Total packages     : 6
           Size               : [0-9][0-9](\.[0-9])? KiB
           Revision           : 1550000000
@@ -174,6 +178,7 @@ Scenario: Repoinfo without arguments but with excludes
           Verify packages    : true
         Repodata info        :
           Available packages : 0
+          Unique NEVRAs      : 289
           Total packages     : 289
           Size               : 2\.[0-9] MiB
           Revision           : 1550000000
@@ -195,8 +200,52 @@ Scenario: Repoinfo without arguments but with excludes
           Verify packages    : true
         Repodata info        :
           Available packages : 0
+          Unique NEVRAs      : 6
           Total packages     : 6
           Size               : [0-9][0-9](\.[0-9])? KiB
           Revision           : 1550000000
+          Updated            : .*
+        """
+
+
+Scenario: Repo info with repo with duplicate packages
+Given I create directory "/duplicates"
+  And I create directory "/duplicates/a"
+  And I create directory "/duplicates/b"
+  And I copy file "{context.dnf.fixturesdir}/repos/simple-base/x86_64/labirinto-1.0-1.fc29.x86_64.rpm" to "/duplicates/a/labirinto-1.0-1.fc29.x86_64.rpm"
+  And I copy file "{context.dnf.fixturesdir}/repos/simple-base/x86_64/labirinto-1.0-1.fc29.x86_64.rpm" to "/duplicates/b/labirinto-1.0-1.fc29.x86_64.rpm"
+  And I execute "createrepo_c {context.dnf.installroot}/duplicates"
+  And I configure a new repository "testrepo" with
+      | key        | value                                |
+      | baseurl    | {context.dnf.installroot}/duplicates |
+   When I execute dnf with args "repo info testrepo"
+   Then the exit code is 0
+    And stderr is
+        """
+        <REPOSYNC>
+        """
+    And stdout matches line by line
+        """
+        <REPOSYNC>
+        Repo ID              : testrepo
+        Name                 : testrepo test repository
+        Status               : enabled
+        Priority             : 99
+        Cost                 : 1000
+        Type                 : available
+        Metadata expire      : .*
+        Skip if unavailable  : false
+        Config file          : .*/etc/yum.repos.d/testrepo.repo
+        URLs                 :
+          Base URL           : .*/duplicates
+        OpenPGP              :
+          Verify repodata    : false
+          Verify packages    : true
+        Repodata info        :
+          Available packages : 2
+          Unique NEVRAs      : 1
+          Total packages     : 2
+          Size               : 1[0-9]\.[0-9] KiB
+          Revision           : .*
           Updated            : .*
         """
