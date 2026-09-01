@@ -55,7 +55,7 @@ Examples
 ``dnf5 changelog --since=2023-04-01``
     | Display changelog entries since April 1, 2023 for all packages.
 
-``dnf5 changelog --count=5 bash``
+``dnf5 changelog --count=3 bash``
     | Display the 3 latest changelogs for the ``bash`` package.
 
 
