@@ -5,7 +5,7 @@ Background: Force column width
 # Some of the curl errors can be quite long and since they are
 # truncated: https://github.com/rpm-software-management/dnf5/issues/1829
 # we need to force the width to see them in full.
-Given I set environment variable "FORCE_COLUMNS" to "500"
+Given I set environment variable "DNF5_FORCE_COLUMNS" to "500"
 
 
 @bz1763663

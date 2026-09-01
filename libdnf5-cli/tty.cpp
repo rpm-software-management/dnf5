@@ -34,11 +34,6 @@ int get_width() {
     // Use a custom "DNF5_FORCE_COLUMNS" variable for testing purposes.
     // "COLUMNS" is overwritten in a sub-shell and that makes testing more difficult
     char * columns = std::getenv("DNF5_FORCE_COLUMNS");
-    if (!columns) {
-        // TODO: Remove this private, obsolete variable once CI tests migrate
-        // to DNF5_FORCE_COLUMNS variable.
-        columns = std::getenv("FORCE_COLUMNS");
-    }
     if (columns != nullptr) {
         try {
             auto value = std::stoi(columns);
