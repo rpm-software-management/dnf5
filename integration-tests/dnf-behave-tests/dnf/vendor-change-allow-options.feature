@@ -12,8 +12,10 @@ Scenario: --allow-vendor-change-to allows switching to specific vendor
   # wrench has update from Vendor A to Vendor B. Only the change TO Vendor B is allowed.
   Given I successfully execute dnf with args "install wrench"
     And I use repository "vendor-hints-updates"
-   When I execute dnf with args "--allow-vendor-change-to='Vendor B' upgrade"
+   When I execute dnf with args "--dump-vendor-policies --allow-vendor-change-to='Vendor B' upgrade"
    Then the exit code is 0
+    And stdout contains "======== Vendor Change Policies: ========"
+    And stdout contains "Policy #0: source: text:COMMAND LINE\n  in:=\*\"Vendor B\""
     And Transaction is following
         | Action  | Package             |
         | upgrade | wrench-2.0-1.noarch |
@@ -47,8 +49,10 @@ Scenario: --allow-vendor-change-from allows switching from specific vendor
     And I successfully execute dnf with args "install wrench-2.0"
     And I drop repository "vendor-hints-updates"
     And I use repository "vendor-hints"
-   When I execute dnf with args "--allow-vendor-change-from='Vendor B' downgrade '*'"
+   When I execute dnf with args "--dump-vendor-policies --allow-vendor-change-from='Vendor B' downgrade '*'"
    Then the exit code is 0
+    And stdout contains "======== Vendor Change Policies: ========"
+    And stdout contains "Policy #0: source: text:COMMAND LINE\n  out:=\*\"Vendor B\""
     And Transaction is following
         | Action    | Package             |
         | downgrade | wrench-1.0-1.noarch |
@@ -70,8 +74,10 @@ Scenario: --allow-vendor-change-for-pkgs allows vendor change for specific packa
   # wrench and nail both have vendor changes. Only wrench is explicitly allowed.
   Given I successfully execute dnf with args "install wrench nail"
     And I use repository "vendor-hints-updates"
-   When I execute dnf with args "--allow-vendor-change-for-pkgs=wrench upgrade"
+   When I execute dnf with args "--dump-vendor-policies --allow-vendor-change-for-pkgs=wrench upgrade"
    Then the exit code is 0
+    And stdout contains "======== Vendor Change Policies: ========"
+    And stdout contains "Policy #0: source: text:COMMAND LINE\n  @in:\[name=\*\"wrench\"\],out:\[name=\*\"wrench\"\]"
     And Transaction is following
         | Action  | Package             |
         | upgrade | wrench-2.0-1.noarch |
@@ -82,8 +88,10 @@ Scenario: --allow-vendor-change-for-pkgs supports comma-separated list
   # Both wrench and nail are allowed via comma-separated list.
   Given I successfully execute dnf with args "install wrench nail"
     And I use repository "vendor-hints-updates"
-   When I execute dnf with args "--allow-vendor-change-for-pkgs='wrench,nail' upgrade"
+   When I execute dnf with args "--dump-vendor-policies --allow-vendor-change-for-pkgs='wrench,nail' upgrade"
    Then the exit code is 0
+    And stdout contains "======== Vendor Change Policies: ========"
+    And stdout contains "Policy #0: source: text:COMMAND LINE\n  @in:\[name=\*\"wrench\"\],in:\[name=\*\"nail\"\],out:\[name=\*\"wrench\"\],out:\[name=\*\"nail\"\]"
     And Transaction is following
         | Action  | Package             |
         | upgrade | wrench-2.0-1.noarch |
@@ -119,8 +127,11 @@ Scenario: Combining --allow-vendor-change-to and --allow-vendor-change-from
   # Allows change from Vendor A to Vendor B by specifying both directions.
   Given I successfully execute dnf with args "install wrench"
     And I use repository "vendor-hints-updates"
-   When I execute dnf with args "--allow-vendor-change-from='Vendor A' --allow-vendor-change-to='Vendor B' upgrade"
+   When I execute dnf with args "--dump-vendor-policies --allow-vendor-change-from='Vendor A' --allow-vendor-change-to='Vendor B' upgrade"
    Then the exit code is 0
+    And stdout contains "======== Vendor Change Policies: ========"
+    And stdout contains "Policy #0: source: text:COMMAND LINE\n  out:=\*\"Vendor A\""
+    And stdout contains "Policy #1: source: text:COMMAND LINE\n  in:=\*\"Vendor B\""
     And Transaction is following
         | Action  | Package             |
         | upgrade | wrench-2.0-1.noarch |
@@ -130,8 +141,11 @@ Scenario: Multiple --allow-vendor-change-to options accumulate
   # Multiple vendor patterns are accumulated.
   Given I successfully execute dnf with args "install wrench nail"
     And I use repository "vendor-hints-updates"
-   When I execute dnf with args "--allow-vendor-change-to='Vendor B' --allow-vendor-change-to='Vendor C' upgrade"
+   When I execute dnf with args "--dump-vendor-policies --allow-vendor-change-to='Vendor B' --allow-vendor-change-to='Vendor C' upgrade"
    Then the exit code is 0
+    And stdout contains "======== Vendor Change Policies: ========"
+    And stdout contains "Policy #0: source: text:COMMAND LINE\n  in:=\*\"Vendor B\""
+    And stdout contains "Policy #1: source: text:COMMAND LINE\n  in:=\*\"Vendor C\""
     And Transaction is following
         | Action  | Package             |
         | upgrade | wrench-2.0-1.noarch |
