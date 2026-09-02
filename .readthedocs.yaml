@@ -1,11 +1,11 @@
 version: 2
 
 build:
-  os: ubuntu-24.04
+  os: "ubuntu-lts-latest"
   apt_packages:
     - swig
   tools:
-    python: "3.11"
+    python: latest
   jobs:
     pre_build:
       - python doc/rtd_build.py
