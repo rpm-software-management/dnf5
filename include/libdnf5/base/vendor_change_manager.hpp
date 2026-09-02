@@ -70,6 +70,11 @@ public:
     /// @return The number of policies that were unloaded.
     std::size_t unload_policies();
 
+    /// Unload a vendor change policy at the specified index.
+    /// @param index The index of the policy to unload (0-based).
+    /// @throws VendorChangeManagerError if index is out of bounds.
+    void unload_policy(std::size_t index);
+
     /// Unload vendor change policies whose source matches the specified pattern.
     /// The pattern may contain glob wildcards.
     /// @param source_pattern A glob pattern to match against policy sources.

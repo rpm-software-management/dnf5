@@ -29,6 +29,8 @@ public:
         return count;
     }
 
+    void unload_policy(std::size_t index) { vcm.remove_policy(index); }
+
     std::size_t unload_policies_matching_source(const std::string & source_pattern) {
         return vcm.remove_policies_matching_source(source_pattern);
     }
@@ -94,6 +96,11 @@ void VendorChangeManager::load_policy_from_compact(std::string_view policy_str, 
 
 std::size_t VendorChangeManager::unload_policies() {
     return p_impl->unload_policies();
+}
+
+
+void VendorChangeManager::unload_policy(std::size_t index) {
+    p_impl->unload_policy(index);
 }
 
 

@@ -87,6 +87,11 @@ public:
     /// Remove all vendor change policies.
     void clear_policies();
 
+    /// Remove a vendor change policy at the specified index.
+    /// @param index The index of the policy to remove (0-based)
+    /// @throws base::VendorChangeManagerError if index is out of bounds
+    void remove_policy(std::size_t index);
+
     /// Remove vendor change policies whose source matches the specified glob pattern.
     /// @param source_pattern A glob pattern to match against policy sources
     /// @return The number of policies that were removed
