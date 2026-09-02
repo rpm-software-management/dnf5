@@ -1393,6 +1393,21 @@ void VendorChangeManager::clear_policies() {
 }
 
 
+void VendorChangeManager::remove_policy(std::size_t index) {
+    if (index >= vendor_policies_def.size()) {
+        throw base::VendorChangeManagerError(
+            M_("{func}(): Policy index {idx} is out of range"),
+            NamedErrorArg("func", __func__),
+            NamedErrorArg("idx", index));
+    }
+    vendor_policies_def.erase(
+        vendor_policies_def.begin() + static_cast<std::vector<VendorChangePolicy>::difference_type>(index));
+
+    // Clear cached vendor masks
+    vendor_masks.clear();
+}
+
+
 std::size_t VendorChangeManager::remove_policies_matching_source(const std::string & source_pattern) {
     std::size_t removed_count = 0;
 
