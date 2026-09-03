@@ -389,6 +389,25 @@ void RootCommand::set_argument_parser() {
     }
 
     {
+        auto disable_vendor_policy_source = parser.add_new_named_arg("disable-vendor-policy-source");
+        disable_vendor_policy_source->set_long_name("disable-vendor-policy-source");
+        disable_vendor_policy_source->set_has_value(true);
+        disable_vendor_policy_source->set_arg_value_help("SOURCE");
+        disable_vendor_policy_source->set_description(
+            _("Disable vendor change policies whose source matches the specified pattern. "
+              "Supports globs, can be specified multiple times."));
+        disable_vendor_policy_source->set_parse_hook_func([&ctx](
+                                                              [[maybe_unused]] ArgumentParser::NamedArg * arg,
+                                                              [[maybe_unused]] const char * option,
+                                                              const char * value) {
+            ctx.add_disable_vendor_policy_source(value);
+            return true;
+        });
+        disable_vendor_policy_source->add_conflict_argument(*allow_vendor_change);
+        global_options_group->register_argument(disable_vendor_policy_source);
+    }
+
+    {
         auto no_docs = parser.add_new_named_arg("no-docs");
         no_docs->set_long_name("no-docs");
         no_docs->set_description(
