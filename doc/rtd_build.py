@@ -27,9 +27,7 @@ def generate_bindings_from_dir(in_dir, out_dir):
         SOURCE_DIR, "common"), "-I/usr/include/python3.11", "-I" + SOURCE_DIR]
 
     for in_file in os.listdir(in_dir):
-        # exclude shared.i which is not a standalone interface file
-        # it is included in other files.
-        if in_file.endswith(".i") and in_file != "shared.i":
+        if in_file.endswith(".i"):
             print("Generating bindings for: " + in_file)
             subprocess.run(["/usr/bin/swig"] + swig_options + ["-interface", "_" + in_file[:-2]
                                                                ] + swig_includes + [os.path.join(in_dir, in_file)], cwd=DIR, check=True)
