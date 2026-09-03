@@ -10,7 +10,7 @@
 %include <stdint.i>
 %include <std_common.i>
 
-%include "shared.i"
+%include "shared.swg"
 
 %import "conf.i"
 
