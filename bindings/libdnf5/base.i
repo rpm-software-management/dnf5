@@ -11,7 +11,7 @@
 %include <std_pair.i>
 %include <std_vector.i>
 
-%include "shared.i"
+%include "shared.swg"
 
 
 %import "advisory.i"

@@ -9,7 +9,7 @@
 %include <std_string.i>
 %include <std_vector.i>
 
-%include "shared.i"
+%include "shared.swg"
 
 %import "common.i"
 %import "exception.i"

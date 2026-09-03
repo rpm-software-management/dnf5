@@ -18,7 +18,7 @@
 %include <std_string_view.i>
 %include <std_vector.i>
 
-%include "shared.i"
+%include "shared.swg"
 
 %import "exception.i"
 
@@ -60,7 +60,7 @@
 %ignore std::vector::vector(unsigned int);
 %ignore std::vector::resize;
 
-%include "my_filesystem.i"
+%include "my_filesystem.swg"
 
 %template(VectorString) std::vector<std::string>;
 %template(VectorFilesystemPath) std::vector<std::filesystem::path>;

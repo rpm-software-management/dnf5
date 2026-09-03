@@ -10,7 +10,7 @@
 %include <cstring.i>
 %include <std_string.i>
 
-%include "shared.i"
+%include "shared.swg"
 
 %{
     #include "bindings/libdnf5/exception.hpp"
