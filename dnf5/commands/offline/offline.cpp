@@ -291,12 +291,39 @@ void reboot(bool poweroff = false) {
         throw libdnf5::cli::CommandExitError(1, M_("Couldn't connect to D-Bus: {}"), error_message);
     }
     if (connection != nullptr) {
+        auto proxy = sdbus::createProxy(*connection, LOGIND_DESTINATION_NAME, LOGIND_OBJECT_PATH);
+
+        // Busy-wait for other processes blocking the shutdown to release their locks.
+        // Otherwise, the Reboot() call will fail with a D-Bus error if an active
+        // block lock is held (e.g., by akmods building kernel modules).
+        using InhibitorTuple = sdbus::Struct<std::string, std::string, std::string, std::string, uint32_t, uint32_t>;
+        const auto timeout = std::chrono::minutes(5);
+        const auto start_time = std::chrono::steady_clock::now();
+        const uint32_t my_pid = static_cast<uint32_t>(::getpid());
+        while (true) {
+            bool is_blocked = false;
+            try {
+                std::vector<InhibitorTuple> inhibitors;
+                proxy->callMethod("ListInhibitors").onInterface(LOGIND_MANAGER_INTERFACE).storeResultsTo(inhibitors);
+                for (const auto & [what, who, why, mode, uid, pid] : inhibitors) {
+                    if (mode == "block" && what.find("shutdown") != std::string::npos && pid != my_pid) {
+                        is_blocked = true;
+                        break;
+                    }
+                }
+            } catch (const sdbus::Error &) {
+                // On D-Bus error treat as not blocked
+            }
+            if (!is_blocked || (std::chrono::steady_clock::now() - start_time > timeout)) {
+                break;
+            }
+            std::this_thread::sleep_for(std::chrono::seconds(1));
+        }
+
         // Ignore SIGTERM/SIGINT so systemd's teardown signals cannot invoke our
         // _exit(1) signal handlers
         std::signal(SIGTERM, SIG_IGN);
         std::signal(SIGINT, SIG_IGN);
-
-        auto proxy = sdbus::createProxy(*connection, LOGIND_DESTINATION_NAME, LOGIND_OBJECT_PATH);
 
         // Try to acquire inhibit delay lock to prevent systemd from starting
         // the shutdown process while our destructors execute.
