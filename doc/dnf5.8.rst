@@ -294,6 +294,15 @@ Following options are applicable in the general context for any ``dnf5`` command
     | Can be combined with ``--with-vendor-policy`` to replace existing policies with custom ones.
     | Cannot be combined with ``--allow-vendor-change``.
 
+.. _disable_vendor_policy_source_option_ref-label:
+
+``--disable-vendor-policy-source=SOURCE``
+    | Temporarily remove vendor change policies whose source matches the specified pattern for the purpose of the current ``DNF5`` command.
+    | This option can be specified multiple times.
+    | Accepted values are source strings, or a glob of source strings.
+    | Cannot be combined with ``--allow-vendor-change``.
+    | Example: ``--disable-vendor-policy-source="*/test.conf"``
+
 .. _no_best_option_ref-label:
 
 ``--no-best``
