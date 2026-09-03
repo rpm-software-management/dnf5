@@ -3,3 +3,9 @@ __pycache__
 *.log
 *.tar.gz
 libdnf5/conf/config.h
+integration-tests/dnf-behave-tests/fixtures/certificates/testcerts
+integration-tests/dnf-behave-tests/fixtures/gpgkeys/*/.gnupg
+integration-tests/dnf-behave-tests/fixtures/gpgkeys/keys
+integration-tests/dnf-behave-tests/fixtures/repos
+integration-tests/dnf-behave-tests/fixtures/rpm2spec/*/
+integration-tests/dnf-behave-tests/fixtures/specs/*/*.spec.sha256
