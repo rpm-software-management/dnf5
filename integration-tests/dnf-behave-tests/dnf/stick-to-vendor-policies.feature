@@ -81,7 +81,7 @@ Scenario: Upgrade with vendor policy - allow change from First Vendor to Second 
    And stdout contains "Vendor *: Second Vendor"
 
 
-Scenario: Upgrade with vendor policy - allow change from First Vendor to Second and Third Vendor (Third has newer version)
+Scenario: Upgrade with vendor policy - allow change from First Vendor to Second (--add-vendor-policy) and Third Vendor (Third has newer version)
   Given I create file "/etc/dnf/vendors.d/test-policy.conf" with
       """
       version = '1.0'
@@ -127,6 +127,108 @@ Scenario: Upgrade with vendor policy - allow change from First Vendor to Second 
   Given I successfully execute rpm with args "-qi vendor"
    Then the exit code is 0
    And stdout contains "Vendor *: Second Vendor"
+
+
+Scenario: Upgrade with vendor policy - allow change from First Vendor to Second Vendor and Third (in two config files, Third has newer version)
+  Given I create file "/etc/dnf/vendors.d/allow-first-to-thirh.conf" with
+      """
+      version = '1.0'
+
+      [[outgoing_vendors]]
+      vendor = 'First Vendor'
+
+      [[incoming_vendors]]
+      vendor = 'Third Vendor'
+      """
+  Given I create file "/etc/dnf/vendors.d/allow-first-to-second.conf" with
+      """
+      version = '1.0'
+
+      [[outgoing_vendors]]
+      vendor = 'First Vendor'
+
+      [[incoming_vendors]]
+      vendor = 'Second Vendor'
+      """
+  Given I use repository "dnf-ci-vendor-1-updates"
+  Given I use repository "dnf-ci-vendor-2-updates"
+  Given I use repository "dnf-ci-vendor-3-updates"
+   When I execute dnf with args "upgrade vendor"
+   Then the exit code is 0
+   And Transaction is following
+       | Action  | Package             |
+       | upgrade | vendor-1.3-1.x86_64 |
+  Given I successfully execute rpm with args "-qi vendor"
+   Then the exit code is 0
+   And stdout contains "Vendor *: Third Vendor"
+
+
+Scenario: Upgrade with vendor policy - allow change from First Vendor to Second Vendor (policy to Third is removed using --remove-vendor-policy-source)
+  Given I create file "/etc/dnf/vendors.d/allow-first-to-thirh.conf" with
+      """
+      version = '1.0'
+
+      [[outgoing_vendors]]
+      vendor = 'First Vendor'
+
+      [[incoming_vendors]]
+      vendor = 'Third Vendor'
+      """
+  Given I create file "/etc/dnf/vendors.d/allow-first-to-second.conf" with
+      """
+      version = '1.0'
+
+      [[outgoing_vendors]]
+      vendor = 'First Vendor'
+
+      [[incoming_vendors]]
+      vendor = 'Second Vendor'
+      """
+  Given I use repository "dnf-ci-vendor-1-updates"
+  Given I use repository "dnf-ci-vendor-2-updates"
+  Given I use repository "dnf-ci-vendor-3-updates"
+   When I execute dnf with args "--remove-vendor-policy-source='*/allow-first-to-thirh.conf'  upgrade vendor"
+   Then the exit code is 0
+   And Transaction is following
+       | Action  | Package             |
+       | upgrade | vendor-1.2-1.x86_64 |
+  Given I successfully execute rpm with args "-qi vendor"
+   Then the exit code is 0
+   And stdout contains "Vendor *: Second Vendor"
+
+
+Scenario: Upgrade with vendor policy - allow change from First Vendor to Third Vendor (policy to Second is removed using --remove-vendor-policy-source)
+  Given I create file "/etc/dnf/vendors.d/allow-first-to-thirh.conf" with
+      """
+      version = '1.0'
+
+      [[outgoing_vendors]]
+      vendor = 'First Vendor'
+
+      [[incoming_vendors]]
+      vendor = 'Third Vendor'
+      """
+  Given I create file "/etc/dnf/vendors.d/allow-first-to-second.conf" with
+      """
+      version = '1.0'
+
+      [[outgoing_vendors]]
+      vendor = 'First Vendor'
+
+      [[incoming_vendors]]
+      vendor = 'Second Vendor'
+      """
+  Given I use repository "dnf-ci-vendor-1-updates"
+  Given I use repository "dnf-ci-vendor-2-updates"
+  Given I use repository "dnf-ci-vendor-3-updates"
+   When I execute dnf with args "--remove-vendor-policy-source='*/*second*'  upgrade vendor"
+   Then the exit code is 0
+   And Transaction is following
+       | Action  | Package             |
+       | upgrade | vendor-1.3-1.x86_64 |
+  Given I successfully execute rpm with args "-qi vendor"
+   Then the exit code is 0
+   And stdout contains "Vendor *: Third Vendor"
 
 
 Scenario: Upgrade with vendor policy - allow change from First Vendor to Second Vendor (conf file in /usr)
