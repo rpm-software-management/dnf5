@@ -134,6 +134,12 @@ public:
     void set_clear_vendor_policies(bool value) { clear_vendor_policies = value; }
     bool get_clear_vendor_policies() const { return clear_vendor_policies; }
 
+    void add_disable_vendor_policy_source(const std::string & source_pattern) {
+        disable_vendor_policy_sources.push_back(source_pattern);
+    }
+    std::vector<std::string> & get_disable_vendor_policy_sources() { return disable_vendor_policy_sources; }
+    const std::vector<std::string> & get_disable_vendor_policy_sources() const { return disable_vendor_policy_sources; }
+
     void set_show_version(bool enable) { this->show_version = enable; }
     bool get_show_version() const { return this->show_version; }
 
@@ -156,6 +162,9 @@ private:
 
     /// when true, clear all vendor policies before applying CLI ones
     bool clear_vendor_policies{false};
+
+    /// source patterns from --disable-vendor-policy-source CLI arguments
+    std::vector<std::string> disable_vendor_policy_sources;
 
     std::string cmdline;
 
