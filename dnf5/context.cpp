@@ -872,15 +872,31 @@ bool Context::get_clear_vendor_policies() const {
     return p_impl->get_clear_vendor_policies();
 }
 
+void Context::add_remove_vendor_policy_source(const std::string & source_pattern) {
+    p_impl->add_remove_vendor_policy_source(source_pattern);
+}
+
+std::vector<std::string> & Context::get_remove_vendor_policy_sources() {
+    return p_impl->get_remove_vendor_policy_sources();
+}
+
+const std::vector<std::string> & Context::get_remove_vendor_policy_sources() const {
+    return p_impl->get_remove_vendor_policy_sources();
+}
+
 void Context::apply_cmdline_vendor_policies() {
     const bool do_clear = p_impl->get_clear_vendor_policies();
+    const auto & remove_sources = p_impl->get_remove_vendor_policy_sources();
     const auto & policies = p_impl->get_cmdline_vendor_policies();
-    if (!do_clear && policies.empty()) {
+    if (!do_clear && remove_sources.empty() && policies.empty()) {
         return;
     }
     auto vcm = p_impl->get_base().get_vendor_change_manager();
     if (do_clear) {
         vcm->unload_policies();
+    }
+    for (const auto & source_pattern : remove_sources) {
+        vcm->unload_policies_matching_source(source_pattern);
     }
     for (const auto & policy_str : policies) {
         vcm->load_policy_from_compact(policy_str, "text:COMMAND LINE");

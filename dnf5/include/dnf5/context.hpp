@@ -194,6 +194,10 @@ public:
     void set_clear_vendor_policies(bool value);
     bool get_clear_vendor_policies() const;
 
+    void add_remove_vendor_policy_source(const std::string & source_pattern);
+    std::vector<std::string> & get_remove_vendor_policy_sources();
+    const std::vector<std::string> & get_remove_vendor_policy_sources() const;
+
     /// Set to true to print version information
     void set_show_version(bool enable);
     bool get_show_version() const;
