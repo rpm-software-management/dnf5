@@ -326,6 +326,7 @@ private:
     friend class PackageDownloader;
     friend class RepoDownloader;
     friend class solv::Pool;
+    friend class base::Transaction;
 
     /// Loads the repository objects into sacks.
     ///
@@ -350,6 +351,7 @@ private:
 
     LIBDNF_LOCAL void load_available_repo();
     LIBDNF_LOCAL void load_system_repo();
+    LIBDNF_LOCAL bool is_system_repo_up_to_date();
 
     LIBDNF_LOCAL void internalize();
 

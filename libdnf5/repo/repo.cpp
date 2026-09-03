@@ -17,6 +17,8 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
+#include "rpm/transaction.hpp"
+
 #include "libdnf5/repo/repo_errors.hpp"
 constexpr const char * REPOID_CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_.:";
 
@@ -499,6 +501,19 @@ void Repo::load_available_repo() {
 void Repo::load_system_repo() {
     p_impl->solv_repo->load_system_repo();
     p_impl->solv_repo->load_system_repo_ext(RepodataType::COMPS);
+}
+
+
+bool Repo::is_system_repo_up_to_date() {
+    libdnf_user_assert(
+        get_type() == Type::SYSTEM, "Checking if the system was modified is supported only on system repo");
+
+    rpm::Transaction rpm_ts(p_impl->base);
+    if (p_impl->solv_repo->rpm_db_cookie == rpm_ts.get_db_cookie()) {
+        return true;
+    } else {
+        return false;
+    }
 }
 
 void Repo::add_xml_comps(const std::string & path) {

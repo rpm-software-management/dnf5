@@ -22,6 +22,7 @@
 #include "base/base_impl.hpp"
 #include "repo_cache_private.hpp"
 #include "repo_downloader.hpp"
+#include "rpm/transaction.hpp"
 #include "solv/pool.hpp"
 
 #include "libdnf5/base/base.hpp"
@@ -444,6 +445,9 @@ void SolvRepo::load_system_repo(const std::string & rootdir) {
     main_solvables_end = pool->nsolvables;
     main_repodata_start = repodata_start;
     main_repodata_end = repo->nrepodata;
+
+    rpm::Transaction rpm_ts(base);
+    rpm_db_cookie = rpm_ts.get_db_cookie();
 }
 
 

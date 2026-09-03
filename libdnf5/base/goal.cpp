@@ -29,6 +29,7 @@
 #include "rpm/package_sack_impl.hpp"
 #include "rpm/package_set_impl.hpp"
 #include "rpm/solv/goal_private.hpp"
+#include "rpm/transaction.hpp"
 #include "solv/id_queue.hpp"
 #include "solv/pool.hpp"
 #include "solver_problems_internal.hpp"
