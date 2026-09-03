@@ -1,1 +1,7 @@
 build/
+dnf-behave-tests/fixtures/certificates/testcerts
+dnf-behave-tests/fixtures/gpgkeys/*/.gnupg
+dnf-behave-tests/fixtures/gpgkeys/keys
+dnf-behave-tests/fixtures/repos
+dnf-behave-tests/fixtures/rpm2spec/*/
+dnf-behave-tests/fixtures/specs/*/*.spec.sha256
