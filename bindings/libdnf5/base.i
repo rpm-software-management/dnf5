@@ -26,7 +26,7 @@
 %import "transaction.i"
 
 %{
-    #include "bindings/libdnf5/exception.hpp"
+    #include "bindings/libdnf5/exception.swg"
 
     #include "libdnf5/logger/memory_buffer_logger.hpp"
     #include "libdnf5/base/base.hpp"

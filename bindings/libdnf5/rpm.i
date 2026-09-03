@@ -25,7 +25,7 @@
 %import "transaction.i"
 
 %{
-    #include "bindings/libdnf5/exception.hpp"
+    #include "bindings/libdnf5/exception.swg"
 
     #include "libdnf5/rpm/arch.hpp"
     #include "libdnf5/rpm/checksum.hpp"

@@ -15,7 +15,7 @@
 %import "exception.i"
 
 %{
-    #include "bindings/libdnf5/exception.hpp"
+    #include "bindings/libdnf5/exception.swg"
 
     // enums
     #include "libdnf5/transaction/transaction_item_action.hpp"

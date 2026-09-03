@@ -17,7 +17,7 @@ typedef int64_t time_t;
 typedef int32_t pid_t;
 
 %{
-    #include "bindings/libdnf5/exception.hpp"
+    #include "bindings/libdnf5/exception.swg"
 
     #include "libdnf5/common/weak_ptr.hpp"
     #include "libdnf5/logger/log_router.hpp"

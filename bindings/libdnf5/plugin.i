@@ -15,7 +15,7 @@
 %import "conf.i"
 
 %{
-    #include "bindings/libdnf5/exception.hpp"
+    #include "bindings/libdnf5/exception.swg"
 
     #include "libdnf5/plugin/iplugin.hpp"
     #include "libdnf5/plugin/plugin_info.hpp"

@@ -21,7 +21,7 @@
 %feature("flatnested");
 
 %{
-    #include "bindings/libdnf5/exception.hpp"
+    #include "bindings/libdnf5/exception.swg"
 
     #include "libdnf5/conf/const.hpp"
     #include "libdnf5/conf/option_child.hpp"

@@ -31,7 +31,7 @@
 }
 
 %{
-    #include "bindings/libdnf5/exception.hpp"
+    #include "bindings/libdnf5/exception.swg"
 
     #include "libdnf5/common/message.hpp"
     #include "libdnf5/common/weak_ptr.hpp"

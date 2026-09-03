@@ -13,7 +13,7 @@
 %include "shared.swg"
 
 %{
-    #include "bindings/libdnf5/exception.hpp"
+    #include "bindings/libdnf5/exception.swg"
     #include "libdnf5/base/active_transaction_info_errors.hpp"
 %}
 
@@ -48,7 +48,7 @@
 
 %ignore NonLibdnf5Exception::NonLibdnf5Exception;
 %ignore create_swig_exception;
-%include "bindings/libdnf5/exception.hpp"
+%include "bindings/libdnf5/exception.swg"
 
 // Ignore macros
 %ignore LIBDNF_LOCATION;
