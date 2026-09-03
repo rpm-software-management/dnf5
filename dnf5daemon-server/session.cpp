@@ -380,9 +380,7 @@ void Session::store_transaction_offline(bool downloadonly) {
     if (result != libdnf5::base::Transaction::TransactionRunResult::SUCCESS) {
         throw sdbus::Error(
             dnfdaemon::ERROR_TRANSACTION,
-            fmt::format(
-                "offline rpm transaction test failed with code {}.",
-                static_cast<std::underlying_type_t<libdnf5::base::Transaction::TransactionRunResult>>(result)));
+            fmt::format("Transaction failed: {}.", libdnf5::base::Transaction::transaction_result_to_string(result)));
     }
 
     // Serialize the transaction
