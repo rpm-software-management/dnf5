@@ -389,6 +389,25 @@ void RootCommand::set_argument_parser() {
     }
 
     {
+        auto remove_vendor_policy_source = parser.add_new_named_arg("remove-vendor-policy-source");
+        remove_vendor_policy_source->set_long_name("remove-vendor-policy-source");
+        remove_vendor_policy_source->set_has_value(true);
+        remove_vendor_policy_source->set_arg_value_help("SOURCE");
+        remove_vendor_policy_source->set_description(
+            _("Remove vendor change policies whose source matches the specified pattern. "
+              "Supports globs, can be specified multiple times."));
+        remove_vendor_policy_source->set_parse_hook_func([&ctx](
+                                                             [[maybe_unused]] ArgumentParser::NamedArg * arg,
+                                                             [[maybe_unused]] const char * option,
+                                                             const char * value) {
+            ctx.add_remove_vendor_policy_source(value);
+            return true;
+        });
+        remove_vendor_policy_source->add_conflict_argument(*allow_vendor_change);
+        global_options_group->register_argument(remove_vendor_policy_source);
+    }
+
+    {
         auto no_docs = parser.add_new_named_arg("no-docs");
         no_docs->set_long_name("no-docs");
         no_docs->set_description(
