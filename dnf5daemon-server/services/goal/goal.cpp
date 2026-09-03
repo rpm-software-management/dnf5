@@ -28,6 +28,7 @@
 #include "utils.hpp"
 
 #include <fmt/format.h>
+#include <libdnf5/base/transaction.hpp>
 #include <libdnf5/transaction/offline.hpp>
 #include <libdnf5/transaction/transaction_item.hpp>
 #include <libdnf5/transaction/transaction_item_action.hpp>
@@ -435,9 +436,8 @@ sdbus::MethodReply Goal::do_transaction(sdbus::MethodCall & call) {
                     throw sdbus::Error(
                         dnfdaemon::ERROR_TRANSACTION,
                         fmt::format(
-                            "rpm transaction failed with code {}.",
-                            static_cast<std::underlying_type_t<libdnf5::base::Transaction::TransactionRunResult>>(
-                                rpm_result)));
+                            "Transaction failed: {}.",
+                            libdnf5::base::Transaction::transaction_result_to_string(rpm_result)));
                 }
 
                 auto * base = session.get_base();
