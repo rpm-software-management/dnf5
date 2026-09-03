@@ -42,6 +42,7 @@
 #include <systemd/sd-journal.h>
 #endif
 
+#include <csignal>
 #include <cstdlib>
 #include <exception>
 #include <iostream>
@@ -290,7 +291,29 @@ void reboot(bool poweroff = false) {
         throw libdnf5::cli::CommandExitError(1, M_("Couldn't connect to D-Bus: {}"), error_message);
     }
     if (connection != nullptr) {
+        // Ignore SIGTERM/SIGINT so systemd's teardown signals cannot invoke our
+        // _exit(1) signal handlers
+        std::signal(SIGTERM, SIG_IGN);
+        std::signal(SIGINT, SIG_IGN);
+
         auto proxy = sdbus::createProxy(*connection, LOGIND_DESTINATION_NAME, LOGIND_OBJECT_PATH);
+
+        // Try to acquire inhibit delay lock to prevent systemd from starting
+        // the shutdown process while our destructors execute.
+        try {
+            sdbus::UnixFd fd;
+            proxy->callMethod("Inhibit")
+                .onInterface(LOGIND_MANAGER_INTERFACE)
+                .withArguments("shutdown", "dnf5", "Finalizing offline transaction", "delay")
+                .storeResultsTo(fd);
+            // Transfer ownership of the raw file descriptor out of sdbus::UnixFd
+            // so sdbus::UnixFd's destructor won't close it.
+            // The kernel will automatically close leaked_fd when the process terminates.
+            [[maybe_unused]] int leaked_fd = fd.release();
+        } catch (const sdbus::Error &) {
+        }
+
+        // Fire reboot/poweroff request.
         if (poweroff) {
             proxy->callMethod("PowerOff").onInterface(LOGIND_MANAGER_INTERFACE).withArguments(true);
         } else {
