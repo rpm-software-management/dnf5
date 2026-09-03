@@ -60,6 +60,27 @@ static std::string dbus_transaction_item_type_to_string(dnfdaemon::DbusTransacti
     return "";
 }
 
+/// The class template OnScopeExit is a general-purpose scope guard
+/// intended to call its exit function when a scope is exited.
+template <typename TExitFunction>
+    requires requires(TExitFunction f) {
+        { f() } noexcept;
+    }
+class OnScopeExit {
+public:
+    OnScopeExit(TExitFunction && function) noexcept : exit_function{std::move(function)} {}
+
+    ~OnScopeExit() noexcept { exit_function(); }
+
+    OnScopeExit(const OnScopeExit &) = delete;
+    OnScopeExit(OnScopeExit &&) = delete;
+    OnScopeExit & operator=(const OnScopeExit &) = delete;
+    OnScopeExit & operator=(OnScopeExit &&) = delete;
+
+private:
+    TExitFunction exit_function;
+};
+
 void Goal::dbus_register() {
     auto dbus_object = session.get_dbus_object();
 #ifdef SDBUS_CPP_VERSION_2
@@ -403,6 +424,12 @@ sdbus::MethodReply Goal::do_transaction(sdbus::MethodCall & call) {
                                  interactive)) {
             throw std::runtime_error("Not authorized");
         }
+        auto * base = session.get_base();
+        if (!base->lock_system_repo(libdnf5::utils::LockAccess::WRITE, libdnf5::utils::LockBlocking::NON_BLOCKING)) {
+            //TODO(mblaha): use specialized exception class
+            throw std::runtime_error("Cannot acquire system repository lock (another process is accessing it.");
+        }
+        OnScopeExit unlock([base]() noexcept { base->unlock_system_repo(); });
 
         auto & transaction_mutex = session.get_transaction_mutex();
         if (!transaction_mutex.try_lock()) {
@@ -440,7 +467,6 @@ sdbus::MethodReply Goal::do_transaction(sdbus::MethodCall & call) {
                             libdnf5::base::Transaction::transaction_result_to_string(rpm_result)));
                 }
 
-                auto * base = session.get_base();
                 auto state = libdnf5::offline::OfflineTransactionState::from_base(*base);
                 if (state.is_pending()) {
                     state.invalidate();
