@@ -70,6 +70,9 @@ This is useful for adding policies for a single run without creating configurati
 The :ref:`--clear-vendor-policies <clear_vendor_policies_option_ref-label>` option
 can be used to remove all policies, optionally replacing them with command-line policies.
 
+The :ref:`--remove-vendor-policy-source <remove_vendor_policy_source_option_ref-label>` option
+can be used to remove policies from specific sources.
+
 For the compact format syntax and examples, see
 :ref:`Compact Format <vendorpolicy_compact_format-label>` in the v1.1 reference.
 
