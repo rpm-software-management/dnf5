@@ -39,7 +39,9 @@ For working with RPM package manifest files using the `libpkgmanifest <https://g
     resolved and pinned in the manifest file.
 
     If a list of packages is not given, all installed packages on the system
-    will be pinned in the manifest file.
+    will be pinned in the manifest file. In this case, package checksums may
+    not be available which will make checksum verification impossible for
+    download and instalation.
 
 ``resolve``
     Create a manifest file from a provided input file.
