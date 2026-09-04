@@ -748,7 +748,8 @@ Requires:       libdnf5%{?_isa} = %{version}-%{release}
 BuildRequires:  pkgconfig(appstream) >= 0.16
 
 %description -n libdnf5-plugin-appstream
-Libdnf5 plugin that installs repository's AppStream data, for repositories which provide them.
+Libdnf5 plugin that installs repository's AppStream data, for repositories
+which provide them.
 
 %files -n libdnf5-plugin-appstream
 %{_libdir}/libdnf5/plugins/appstream.so
@@ -823,13 +824,14 @@ Libdnf5 plugin that allows loading Python plugins.
 
 %if %{with plugin_local}
 %package -n libdnf5-plugin-local
-Summary:        Libdnf5 plugin that automatically copies all downloaded packages to a local repository
+Summary:        Libdnf5 plugin that copies all downloaded packages to a local repository
 License:        LGPL-2.1-or-later
 Requires:       libdnf5%{?_isa} = %{version}-%{release}
 Requires:       createrepo_c
 
 %description -n libdnf5-plugin-local
-Libdnf5 plugin that automatically copies all downloaded packages to a repository on the local filesystem and generates repo metadata.
+Libdnf5 plugin that automatically copies all downloaded packages to
+a repository on the local filesystem and generates repo metadata.
 
 %files -n libdnf5-plugin-local
 %{_libdir}/libdnf5/plugins/local.*
