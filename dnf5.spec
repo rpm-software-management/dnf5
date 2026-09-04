@@ -1025,11 +1025,43 @@ automatically and regularly from systemd timers, cron jobs or similar.
 %{_unitdir}/dnf5-automatic.timer
 %{_unitdir}/dnf-automatic.service
 %{_unitdir}/dnf-automatic.timer
+%{_unitdir}/dnf5-automatic-install.service
+%{_unitdir}/dnf5-automatic-install.timer
+%{_unitdir}/dnf-automatic-install.service
+%{_unitdir}/dnf-automatic-install.timer
 %if %{with dnf5_obsoletes_dnf}
 %{_bindir}/dnf-automatic
 %else
 %exclude %{_bindir}/dnf-automatic
 %endif
+
+%post plugin-automatic
+%if %{with dnf5_obsoletes_dnf}
+%systemd_post dnf-automatic.timer
+%systemd_post dnf-automatic-install.timer
+%else
+%systemd_post dnf5-automatic.timer
+%systemd_post dnf5-automatic-install.timer
+%endif
+
+%preun plugin-automatic
+%if %{with dnf5_obsoletes_dnf}
+%systemd_preun dnf-automatic.timer
+%systemd_preun dnf-automatic-install.timer
+%else
+%systemd_preun dnf5-automatic.timer
+%systemd_preun dnf5-automatic-install.timer
+%endif
+
+%postun plugin-automatic
+%if %{with dnf5_obsoletes_dnf}
+%systemd_postun_with_restart dnf-automatic.timer
+%systemd_postun_with_restart dnf-automatic-install.timer
+%else
+%systemd_postun_with_restart dnf5-automatic.timer
+%systemd_postun_with_restart dnf5-automatic-install.timer
+%endif
+
 
 # ========== dnf5-manifest plugin ==========
 
