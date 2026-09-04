@@ -110,39 +110,39 @@ Obsoletes:      yum < 5
 Conflicts:      python3-dnf-plugins-core < 4.7.0
 %endif
 
-Provides:       dnf5-command(advisory)
-Provides:       dnf5-command(autoremove)
-Provides:       dnf5-command(check)
-Provides:       dnf5-command(check-upgrade)
-Provides:       dnf5-command(clean)
-Provides:       dnf5-command(debuginfo-install)
-Provides:       dnf5-command(distro-sync)
-Provides:       dnf5-command(downgrade)
-Provides:       dnf5-command(download)
-Provides:       dnf5-command(environment)
-Provides:       dnf5-command(group)
-Provides:       dnf5-command(history)
-Provides:       dnf5-command(info)
-Provides:       dnf5-command(install)
-Provides:       dnf5-command(leaves)
-Provides:       dnf5-command(list)
-Provides:       dnf5-command(makecache)
-Provides:       dnf5-command(mark)
+Provides:       dnf5-command(advisory) = %{version}-%{release}
+Provides:       dnf5-command(autoremove) = %{version}-%{release}
+Provides:       dnf5-command(check) = %{version}-%{release}
+Provides:       dnf5-command(check-upgrade) = %{version}-%{release}
+Provides:       dnf5-command(clean) = %{version}-%{release}
+Provides:       dnf5-command(debuginfo-install) = %{version}-%{release}
+Provides:       dnf5-command(distro-sync) = %{version}-%{release}
+Provides:       dnf5-command(downgrade) = %{version}-%{release}
+Provides:       dnf5-command(download) = %{version}-%{release}
+Provides:       dnf5-command(environment) = %{version}-%{release}
+Provides:       dnf5-command(group) = %{version}-%{release}
+Provides:       dnf5-command(history) = %{version}-%{release}
+Provides:       dnf5-command(info) = %{version}-%{release}
+Provides:       dnf5-command(install) = %{version}-%{release}
+Provides:       dnf5-command(leaves) = %{version}-%{release}
+Provides:       dnf5-command(list) = %{version}-%{release}
+Provides:       dnf5-command(makecache) = %{version}-%{release}
+Provides:       dnf5-command(mark) = %{version}-%{release}
 %if %{with modulemd}
-Provides:       dnf5-command(module)
+Provides:       dnf5-command(module) = %{version}-%{release}
 %endif
-Provides:       dnf5-command(offline)
-Provides:       dnf5-command(provides)
-Provides:       dnf5-command(reinstall)
-Provides:       dnf5-command(replay)
-Provides:       dnf5-command(remove)
-Provides:       dnf5-command(repo)
-Provides:       dnf5-command(repoquery)
-Provides:       dnf5-command(search)
-Provides:       dnf5-command(swap)
-Provides:       dnf5-command(system-upgrade)
-Provides:       dnf5-command(upgrade)
-Provides:       dnf5-command(versionlock)
+Provides:       dnf5-command(offline) = %{version}-%{release}
+Provides:       dnf5-command(provides) = %{version}-%{release}
+Provides:       dnf5-command(reinstall) = %{version}-%{release}
+Provides:       dnf5-command(replay) = %{version}-%{release}
+Provides:       dnf5-command(remove) = %{version}-%{release}
+Provides:       dnf5-command(repo) = %{version}-%{release}
+Provides:       dnf5-command(repoquery) = %{version}-%{release}
+Provides:       dnf5-command(search) = %{version}-%{release}
+Provides:       dnf5-command(swap) = %{version}-%{release}
+Provides:       dnf5-command(system-upgrade) = %{version}-%{release}
+Provides:       dnf5-command(upgrade) = %{version}-%{release}
+Provides:       dnf5-command(versionlock) = %{version}-%{release}
 
 
 # ========== versions of dependencies ==========
@@ -952,14 +952,14 @@ Requires:       dnf5%{?_isa} = %{version}-%{release}
 Requires:       libcurl%{?_isa} >= 7.62.0
 Requires:       libdnf5%{?_isa} = %{version}-%{release}
 Requires:       libdnf5-cli%{?_isa} = %{version}-%{release}
-Provides:       dnf5-command(builddep)
-Provides:       dnf5-command(changelog)
-Provides:       dnf5-command(config-manager)
-Provides:       dnf5-command(copr)
-Provides:       dnf5-command(needs-restarting)
-Provides:       dnf5-command(repoclosure)
-Provides:       dnf5-command(reposync)
-Provides:       dnf5-command(repomanage)
+Provides:       dnf5-command(builddep) = %{version}-%{release}
+Provides:       dnf5-command(changelog) = %{version}-%{release}
+Provides:       dnf5-command(config-manager) = %{version}-%{release}
+Provides:       dnf5-command(copr) = %{version}-%{release}
+Provides:       dnf5-command(needs-restarting) = %{version}-%{release}
+Provides:       dnf5-command(repoclosure) = %{version}-%{release}
+Provides:       dnf5-command(reposync) = %{version}-%{release}
+Provides:       dnf5-command(repomanage) = %{version}-%{release}
 
 %description -n dnf5-plugins
 Core DNF5 plugins that enhance dnf5 with builddep, changelog, config-manager,
@@ -997,7 +997,7 @@ Requires:       dnf5%{?_isa} = %{version}-%{release}
 Requires:       libdnf5%{?_isa} = %{version}-%{release}
 Requires:       libdnf5-cli%{?_isa} = %{version}-%{release}
 Recommends:     libcurl-full%{?_isa}
-Provides:       dnf5-command(automatic)
+Provides:       dnf5-command(automatic) = %{version}-%{release}
 %if %{with dnf5_obsoletes_dnf}
 Provides:       dnf-automatic = %{version}-%{release}
 Obsoletes:      dnf-automatic < 5
@@ -1038,7 +1038,7 @@ License:        LGPL-2.1-or-later
 Requires:       dnf5%{?_isa} = %{version}-%{release}
 Requires:       libdnf5%{?_isa} = %{version}-%{release}
 Requires:       libdnf5-cli%{?_isa} = %{version}-%{release}
-Provides:       dnf5-command(manifest)
+Provides:       dnf5-command(manifest) = %{version}-%{release}
 
 %description plugin-manifest
 DNF5 plugin for working with RPM package manifest files.
