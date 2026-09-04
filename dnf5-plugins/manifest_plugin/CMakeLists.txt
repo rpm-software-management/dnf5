@@ -6,7 +6,7 @@ add_library(manifest_cmd_plugin MODULE ${MANIFEST_SOURCES})
 
 set_target_properties(manifest_cmd_plugin PROPERTIES PREFIX "")
 
-pkg_check_modules(LIBPKGMANIFEST REQUIRED libpkgmanifest)
+pkg_check_modules(LIBPKGMANIFEST REQUIRED libpkgmanifest>=0.5.10)
 target_link_directories(manifest_cmd_plugin PRIVATE ${LIBPKGMANIFEST_LIBRARY_DIRS})
 target_link_libraries(manifest_cmd_plugin PRIVATE pkgmanifest)
 

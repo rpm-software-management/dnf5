@@ -422,13 +422,15 @@ void ManifestSubcommand::add_pkgs_to_manifest(
         }
 
         auto dnf_checksum = dnf_pkg.get_checksum();
-        if (is_from_system_repo && dnf_checksum.get_checksum().empty()) {
-            dnf_checksum = dnf_pkg.get_hdr_checksum();
-        }
+        if (!dnf_checksum.get_checksum().empty()) {
+            manifest_pkg.get_checksum().set_method(checksum_method_rpm_to_manifest(dnf_checksum));
+            manifest_pkg.get_checksum().set_digest(dnf_checksum.get_checksum());
 
-        const auto & manifest_checksum_method = checksum_method_rpm_to_manifest(dnf_checksum);
-        manifest_pkg.get_checksum().set_method(manifest_checksum_method);
-        manifest_pkg.get_checksum().set_digest(dnf_checksum.get_checksum());
+        } else if (is_from_system_repo) {
+            auto dnf_hdr_checksum = dnf_pkg.get_hdr_checksum();
+            manifest_pkg.get_hdr_checksum().set_method(checksum_method_rpm_to_manifest(dnf_hdr_checksum));
+            manifest_pkg.get_hdr_checksum().set_digest(dnf_hdr_checksum.get_checksum());
+        }
 
         if (multiarch) {
             manifest.get_packages().add(manifest_pkg, arch);

@@ -147,6 +147,7 @@ Provides:       dnf5-command(versionlock)
 
 # ========== versions of dependencies ==========
 
+%global libpkgmanifest_version 0.5.10
 %if %{with modulemd}
 %global libmodulemd_version 2.5.0
 %endif
@@ -228,7 +229,7 @@ BuildRequires:  pkgconfig(smartcols)
 %if %{with dnf5_plugins}
 BuildRequires:  libcurl-devel >= 7.62.0
 %if %{with plugin_manifest}
-BuildRequires:  pkgconfig(libpkgmanifest)
+BuildRequires:  pkgconfig(libpkgmanifest) >= %{libpkgmanifest_version}
 %endif
 %endif
 
@@ -1038,6 +1039,7 @@ License:        LGPL-2.1-or-later
 Requires:       dnf5%{?_isa} = %{version}-%{release}
 Requires:       libdnf5%{?_isa} = %{version}-%{release}
 Requires:       libdnf5-cli%{?_isa} = %{version}-%{release}
+Requires:       libpkgmanifest%{?_isa} >= %{libpkgmanifest_version}
 Provides:       dnf5-command(manifest)
 
 %description plugin-manifest
