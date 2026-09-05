@@ -355,6 +355,59 @@ void RootCommand::set_argument_parser() {
     no_allow_vendor_change->add_conflict_argument(*allow_vendor_change);
 
     {
+        auto add_vendor_policy = parser.add_new_named_arg("add-vendor-policy");
+        add_vendor_policy->set_long_name("add-vendor-policy");
+        add_vendor_policy->set_has_value(true);
+        add_vendor_policy->set_arg_value_help("POLICY");
+        add_vendor_policy->set_description(
+            _("Add a vendor change policy for this run. Can be specified multiple times."));
+        add_vendor_policy->set_parse_hook_func([&ctx](
+                                                   [[maybe_unused]] ArgumentParser::NamedArg * arg,
+                                                   [[maybe_unused]] const char * option,
+                                                   const char * value) {
+            ctx.get_cmdline_vendor_policies().emplace_back(value);
+            return true;
+        });
+        global_options_group->register_argument(add_vendor_policy);
+    }
+
+    {
+        auto clear_vendor_policies = parser.add_new_named_arg("clear-vendor-policies");
+        clear_vendor_policies->set_long_name("clear-vendor-policies");
+        clear_vendor_policies->set_description(libdnf5::utils::sformat(
+            _("Remove all vendor change policies. Can be combined with {} to replace them."),
+            "--add-vendor-policy=POLICY"));
+        clear_vendor_policies->set_parse_hook_func([&ctx](
+                                                       [[maybe_unused]] ArgumentParser::NamedArg * arg,
+                                                       [[maybe_unused]] const char * option,
+                                                       [[maybe_unused]] const char * value) {
+            ctx.set_clear_vendor_policies(true);
+            return true;
+        });
+        clear_vendor_policies->add_conflict_argument(*allow_vendor_change);
+        global_options_group->register_argument(clear_vendor_policies);
+    }
+
+    {
+        auto remove_vendor_policy_source = parser.add_new_named_arg("remove-vendor-policy-source");
+        remove_vendor_policy_source->set_long_name("remove-vendor-policy-source");
+        remove_vendor_policy_source->set_has_value(true);
+        remove_vendor_policy_source->set_arg_value_help("SOURCE");
+        remove_vendor_policy_source->set_description(
+            _("Remove vendor change policies whose source matches the specified pattern. "
+              "Supports globs, can be specified multiple times."));
+        remove_vendor_policy_source->set_parse_hook_func([&ctx](
+                                                             [[maybe_unused]] ArgumentParser::NamedArg * arg,
+                                                             [[maybe_unused]] const char * option,
+                                                             const char * value) {
+            ctx.add_remove_vendor_policy_source(value);
+            return true;
+        });
+        remove_vendor_policy_source->add_conflict_argument(*allow_vendor_change);
+        global_options_group->register_argument(remove_vendor_policy_source);
+    }
+
+    {
         auto no_docs = parser.add_new_named_arg("no-docs");
         no_docs->set_long_name("no-docs");
         no_docs->set_description(
@@ -1225,8 +1278,9 @@ static void print_resolve_hints(dnf5::Context & context) {
     bool has_vendor_change_skipped =
         context.get_transaction() && !context.get_transaction()->get_vendor_change_skipped_packages().empty();
     if (!conf.get_allow_vendor_change_option().get_value() && (vendor_change || has_vendor_change_skipped)) {
-        const std::string_view arg{"--allow-vendor-change"};
-        hints.emplace_back(libdnf5::utils::sformat(_("{} to allow changing package vendors"), arg));
+        hints.emplace_back(
+            libdnf5::utils::sformat(_("{} to add specific vendor change rules"), "--add-vendor-policy=POLICY"));
+        hints.emplace_back(libdnf5::utils::sformat(_("{} to allow all vendor changes"), "--allow-vendor-change"));
     }
 
     if (hints.size() > 0) {
@@ -1555,6 +1609,8 @@ int main(int argc, char * argv[]) try {
 
                 context.apply_repository_setopts();
             }
+
+            context.apply_cmdline_vendor_policies();
 
             // Run selected command
             command->configure();
