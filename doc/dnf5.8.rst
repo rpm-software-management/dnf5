@@ -188,6 +188,13 @@ Following options are applicable in the general context for any ``dnf5`` command
 ``--assumeno``
     | Automatically answer no for all questions.
 
+.. _add_vendor_policy_option_ref-label:
+
+``--add-vendor-policy=POLICY``
+    | Add a vendor change policy for this run using the compact format.
+    | Can be specified multiple times. Each value defines one policy.
+    | :ref:`See <vendorpolicy_compact_format-label>` :manpage:`dnf5.conf-vendorpolicy-v1_1(5)` for format details.
+
 .. _allow_vendor_change_option_ref-label:
 
 ``--allow-vendor-change``
@@ -246,6 +253,11 @@ Following options are applicable in the general context for any ``dnf5`` command
 ``--dump-variables``
     | Print variable values to stdout.
 
+``--dump-vendor-policies``
+    | Print loaded vendor change policies to stdout.
+    | For each policy, its index (numbered from 0), source, and compact format representation are displayed.
+    | Additionally, if ``allow_vendor_change`` is enabled, displays a message indicating that packages can be replaced by any vendor and policies are ignored.
+
 ``--enable-plugin=PLUGIN_NAME,...``
     | Enable specified libdnf5 library plugins for the purpose of the current ``DNF5`` command.
     | This is a list option which can be specified multiple times.
@@ -276,6 +288,22 @@ Following options are applicable in the general context for any ``dnf5`` command
     | Do not allow automatic package replacements from different vendors for RPM upgrades or downgrades.
     | The behavior of this option can be fine-tuned with vendor change policy configuration.
     | :ref:`See <vendorpolicy_conf-label>` :manpage:`dnf5.conf-vendorpolicy(5)` for more info.
+
+.. _clear_vendor_policies_option_ref-label:
+
+``--clear-vendor-policies``
+    | Temporarily remove all vendor change policies for the purpose of the current ``DNF5`` command.
+    | Can be combined with ``--add-vendor-policy`` to replace existing policies with custom ones.
+    | Cannot be combined with ``--allow-vendor-change``.
+
+.. _remove_vendor_policy_source_option_ref-label:
+
+``--remove-vendor-policy-source=SOURCE``
+    | Temporarily remove vendor change policies whose source matches the specified pattern for the purpose of the current ``DNF5`` command.
+    | This option can be specified multiple times.
+    | Accepted values are source strings, or a glob of source strings.
+    | Cannot be combined with ``--allow-vendor-change``.
+    | Example: ``--remove-vendor-policy-source="*/test.conf"``
 
 .. _no_best_option_ref-label:
 

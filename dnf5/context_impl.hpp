@@ -69,6 +69,10 @@ public:
 
     bool get_dump_variables() const { return dump_variables; }
 
+    void set_dump_vendor_policies(bool enable) { this->dump_vendor_policies = enable; }
+
+    bool get_dump_vendor_policies() const { return dump_vendor_policies; }
+
     void set_show_new_leaves(bool show_new_leaves) { this->show_new_leaves = show_new_leaves; }
 
     bool get_show_new_leaves() const { return show_new_leaves; }
@@ -128,6 +132,18 @@ public:
         return libdnf_plugins_enablement;
     }
 
+    std::vector<std::string> & get_cmdline_vendor_policies() { return cmdline_vendor_policies; }
+    const std::vector<std::string> & get_cmdline_vendor_policies() const { return cmdline_vendor_policies; }
+
+    void set_clear_vendor_policies(bool value) { clear_vendor_policies = value; }
+    bool get_clear_vendor_policies() const { return clear_vendor_policies; }
+
+    void add_remove_vendor_policy_source(const std::string & source_pattern) {
+        remove_vendor_policy_sources.push_back(source_pattern);
+    }
+    std::vector<std::string> & get_remove_vendor_policy_sources() { return remove_vendor_policy_sources; }
+    const std::vector<std::string> & get_remove_vendor_policy_sources() const { return remove_vendor_policy_sources; }
+
     void set_show_version(bool enable) { this->show_version = enable; }
     bool get_show_version() const { return this->show_version; }
 
@@ -145,6 +161,15 @@ private:
     /// list of lists of libdnf plugin names (global patterns) that we want to enable (true) or disable (false)
     std::vector<std::pair<std::vector<std::string>, bool>> libdnf_plugins_enablement;
 
+    /// vendor policy strings from --add-vendor-policy CLI arguments
+    std::vector<std::string> cmdline_vendor_policies;
+
+    /// when true, clear all vendor policies before applying CLI ones
+    bool clear_vendor_policies{false};
+
+    /// source patterns from --remove-vendor-policy-source CLI arguments
+    std::vector<std::string> remove_vendor_policy_sources;
+
     std::string cmdline;
 
     /// Points to user comment.
@@ -160,6 +185,7 @@ private:
     bool dump_main_config{false};
     std::vector<std::string> dump_repo_config_id_list;
     bool dump_variables{false};
+    bool dump_vendor_policies{false};
     bool show_new_leaves{false};
     std::string get_cmd_line();
 

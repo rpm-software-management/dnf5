@@ -63,5 +63,6 @@ Scenario: Downgrade is unable to resolve transaction
          - conflicting requests
        You can try to add to command line:
          --skip-broken to skip uninstallable packages
-         --allow-vendor-change to allow changing package vendors
+         --add-vendor-policy=POLICY to add specific vendor change rules
+         --allow-vendor-change to allow all vendor changes
        """
