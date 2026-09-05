@@ -21,6 +21,27 @@ Options that cannot be applied to all commands or may be applicable but have no 
 Examples: ``--best``, ``--no-best`` are only relevant to several transaction commands.
 
 
+Option placement
+^^^^^^^^^^^^^^^^
+In DNF4, all options could typically be placed either before or after the command name on the command line.
+In DNF5, there is a distinction between general options and command-specific options:
+
+  * **General options** (such as ``--disable-repo``, ``--enable-repo``, ``--setopt``, ``--repo``) apply globally and can be placed either before or after the command name.
+  * **Command-specific options** (such as ``--downloadonly``, ``--skip-broken``, ``--allowerasing``) are only accepted after the command name.
+
+For example, both of the following are valid because ``--disable-repo`` is a general option::
+
+    dnf5 --disable-repo=updates install netcat
+    dnf5 install --disable-repo=updates netcat
+
+However, ``--downloadonly`` is a command-specific option for the ``install`` command, so only the first form works::
+
+    dnf5 install --downloadonly netcat
+    dnf5 --downloadonly install netcat  # error: unknown argument
+
+See the :ref:`main man page <command_ref-label>` for the list of general options and individual command man pages for their specific options.
+
+
 Options renaming
 ^^^^^^^^^^^^^^^^
 Renaming boolean options to the following formats:
