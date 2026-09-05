@@ -30,6 +30,7 @@ constexpr const char * REPOID_CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmno
 #include "libdnf5/common/exception.hpp"
 #include "libdnf5/conf/const.hpp"
 #include "libdnf5/utils/bgettext/bgettext-mark-domain.h"
+#include "libdnf5/utils/format.hpp"
 #include "libdnf5/utils/fs/utils.hpp"
 
 extern "C" {
@@ -231,8 +232,12 @@ bool Repo::is_in_sync() {
 
 
 void Repo::download_metadata(const std::string & destdir) {
+    download_metadata(destdir, {});
+}
+
+void Repo::download_metadata(const std::string & destdir, const std::string & description) {
     RepoDownloader repo_downloader{};
-    repo_downloader.add(*this, destdir, NULL);
+    repo_downloader.add(*this, destdir, NULL, description);
     // If there is an error there should be only the one map key (this repo) in the returned
     // unordered map but iterate through all keys to be safe.
     for (auto & [repo, errs] : repo_downloader.download()) {
@@ -246,6 +251,38 @@ void Repo::download_metadata(const std::string & destdir) {
                 libdnf5::utils::string::join(errs, ", "));
         }
     }
+}
+
+bool Repo::load_filelists_metadata() {
+    // Assumes the caller (Goal::try_auto_load_filelists()) has already added filelists to the
+    // optional_metadata_types option.
+    auto optional_metadata = p_impl->config.get_main_config().get_optional_metadata_types_option().get_value();
+    const bool all_metadata = optional_metadata.contains(libdnf5::METADATA_TYPE_ALL);
+    if (!all_metadata && !optional_metadata.contains(libdnf5::METADATA_TYPE_FILELISTS)) {
+        return false;
+    }
+
+    if (p_impl->downloader->get_metadata_path(libdnf5::METADATA_TYPE_FILELISTS).empty()) {
+        if (p_impl->sync_strategy == SyncStrategy::ONLY_CACHE) {
+            return false;
+        }
+        auto display_name = get_name();
+        if (display_name.empty()) {
+            display_name = get_id();
+        }
+        download_metadata(get_cachedir(), utils::sformat("Filelists for {}", display_name));
+        // Re-scan the (now updated) local cache to refresh metadata_paths.
+        read_metadata_cache();
+        if (p_impl->downloader->get_metadata_path(libdnf5::METADATA_TYPE_FILELISTS).empty()) {
+            // The repository genuinely doesn't offer filelists metadata.
+            return false;
+        }
+    }
+
+    p_impl->solv_repo->load_repo_ext(RepodataType::FILELISTS, *p_impl->downloader.get());
+    p_impl->solv_repo->set_needs_internalizing();
+    p_impl->base->get_rpm_package_sack()->p_impl->invalidate_provides();
+    return true;
 }
 
 void Repo::load() {

@@ -243,6 +243,21 @@ repository configuration file should aside from repo ID consists of baseurl, met
 
     Default: ``[]``.
 
+.. _filelists_auto_load_options-label:
+
+``filelists_auto_load``
+    :ref:`boolean <boolean-label>`
+
+    Whether to automatically download and load ``filelists`` metadata (see
+    :ref:`optional_metadata_types <optional_metadata_types_options-label>`, not loaded by
+    default) and retry dependency resolution when it looks like an unresolved file-based
+    dependency (e.g. ``Requires: /usr/lib/foo``) might be the cause. Set to ``False`` to
+    disable this automatic retry (e.g. on a bandwidth-constrained connection, since
+    filelists metadata can be large) and keep the previous behavior of failing or hinting
+    at ``--setopt=optional_metadata_types=filelists`` instead.
+
+    Default: ``True``.
+
 .. _gpgcheck_options-label:
 
 ``gpgcheck``
