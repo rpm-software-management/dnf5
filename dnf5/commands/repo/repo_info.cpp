@@ -29,11 +29,13 @@ namespace dnf5 {
 
 class RepoInfoWrapper : public libdnf5::cli::output::IRepoInfo {
 public:
-    RepoInfoWrapper(libdnf5::repo::Repo & repo, uint64_t size, uint64_t pkgs, uint64_t available_pkgs)
+    RepoInfoWrapper(
+        libdnf5::repo::Repo & repo, uint64_t size, uint64_t pkgs, uint64_t available_pkgs, uint64_t unique_nevras)
         : repo(&repo),
           size(size),
           pkgs(pkgs),
-          available_pkgs(available_pkgs) {}
+          available_pkgs(available_pkgs),
+          unique_nevras(unique_nevras) {}
 
     std::string get_id() const override { return repo->get_id(); }
     std::string get_name() const override { return repo->get_name(); }
@@ -85,6 +87,7 @@ public:
     uint64_t get_size() const override { return size; }
     uint64_t get_pkgs() const override { return pkgs; }
     uint64_t get_available_pkgs() const override { return available_pkgs; }
+    uint64_t get_unique_nevras() const override { return unique_nevras; }
     std::vector<std::string> get_mirrors() const override { return repo->get_mirrors(); }
 
 private:
@@ -92,6 +95,7 @@ private:
     uint64_t size;
     uint64_t pkgs;
     uint64_t available_pkgs;
+    uint64_t unique_nevras;
 };
 
 void RepoInfoCommand::configure() {
@@ -115,13 +119,16 @@ void RepoInfoCommand::print(const libdnf5::repo::RepoQuery & query, [[maybe_unus
         libdnf5::rpm::PackageQuery available_pkgs(get_context().get_base());
         available_pkgs.filter_repo_id({repo->get_id()});
 
+        std::unordered_set<std::string> unique_nevras;
         uint64_t repo_size = 0;
         for (const auto & pkg : pkgs) {
+            unique_nevras.insert(pkg.get_full_nevra());
             repo_size += pkg.get_download_size();
         }
 
-        repo_wrappers.emplace_back(
-            std::make_unique<RepoInfoWrapper>(*repo, repo_size, pkgs.size(), available_pkgs.size()));
+
+        repo_wrappers.emplace_back(std::make_unique<RepoInfoWrapper>(
+            *repo, repo_size, pkgs.size(), available_pkgs.size(), unique_nevras.size()));
     }
 
     auto & context = get_context();

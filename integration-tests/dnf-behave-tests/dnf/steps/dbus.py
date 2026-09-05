@@ -22,6 +22,24 @@ IFACE_HISTORY = '{{}}.History'.format(DNFDAEMON_BUS_NAME)
 IFACE_ADVISORY = '{{}}.Advisory'.format(DNFDAEMON_BUS_NAME)
 IFACE_GROUP = '{{}}.comps.Group'.format(DNFDAEMON_BUS_NAME)
 
+def dbus_to_python(data):
+    # Covers types from https://dbus.freedesktop.org/doc/dbus-python/dbus.types.html (not all)
+    if isinstance(data, dbus.Dictionary):
+        return {{dbus_to_python(k): dbus_to_python(v) for k, v in data.items()}}
+    elif isinstance(data, dbus.Array):
+        return [dbus_to_python(i) for i in data]
+    elif isinstance(data, (dbus.String, dbus.ObjectPath, dbus.Signature)):
+        return str(data)
+    elif isinstance(data, (dbus.Int16, dbus.Int32, dbus.Int64, dbus.UInt16, dbus.UInt32, dbus.UInt64)):
+        return int(data)
+    elif isinstance(data, dbus.Byte):
+        return int(data)
+    elif isinstance(data, dbus.Boolean):
+        return bool(data)
+    elif isinstance(data, dbus.Double):
+        return float(data)
+
+    return data
 
 bus = dbus.SystemBus()
 iface_session = dbus.Interface(
@@ -74,25 +92,6 @@ def print_recent_history(dbus_output):
         print("{{}}: {{}}".format(key, len(pkgs)))
         print_recent_history_pkgs(pkgs)
 
-def dbus_to_python(data):
-    # Covers types from https://dbus.freedesktop.org/doc/dbus-python/dbus.types.html (not all)
-    if isinstance(data, dbus.Dictionary):
-        return {{dbus_to_python(k): dbus_to_python(v) for k, v in data.items()}}
-    elif isinstance(data, dbus.Array):
-        return [dbus_to_python(i) for i in data]
-    elif isinstance(data, (dbus.String, dbus.ObjectPath, dbus.Signature)):
-        return str(data)
-    elif isinstance(data, (dbus.Int16, dbus.Int32, dbus.Int64, dbus.UInt16, dbus.UInt32, dbus.UInt64)):
-        return int(data)
-    elif isinstance(data, dbus.Byte):
-        return int(data)
-    elif isinstance(data, dbus.Boolean):
-        return bool(data)
-    elif isinstance(data, dbus.Double):
-        return float(data)
-
-    return data
-
 iface_history = dbus.Interface(
     bus.get_object(DNFDAEMON_BUS_NAME, session),
     dbus_interface=IFACE_HISTORY)
@@ -113,3 +112,17 @@ iface_group = dbus.Interface(
     dbus_interface=IFACE_GROUP)
 """
     execute_python_script(context, DBUS_SESSION_SETUP + group_helpers + context.text)
+
+
+@behave.step("I execute python libdnf5 dbus api script with repo interface")
+def execute_python_libdnf5_dbus_api_script_with_repo_interface(context):
+    """
+    Execute snippet of python script using libdnf5 dbus api that is
+    appended to prepared D-Bus session.
+    """
+    repo_helpers = """
+iface_repo = dbus.Interface(
+    bus.get_object(DNFDAEMON_BUS_NAME, session),
+    dbus_interface=IFACE_REPO)
+"""
+    execute_python_script(context, DBUS_SESSION_SETUP + repo_helpers + context.text)
