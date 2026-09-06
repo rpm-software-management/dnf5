@@ -286,6 +286,9 @@ public:
     const OptionBool & get_pkg_gpgcheck_option() const;
     OptionBool & get_repo_gpgcheck_option();
     const OptionBool & get_repo_gpgcheck_option() const;
+    /// Auto-import applies only to keys from local (file://) gpgkey URLs.
+    OptionBool & get_repo_gpgcheck_auto_import_keys_option();
+    const OptionBool & get_repo_gpgcheck_auto_import_keys_option() const;
     OptionEnum & get_gpgcheck_policy_option();
     const OptionEnum & get_gpgcheck_policy_option() const;
     /// @deprecated Use ConfigRepo::get_enabled_option()

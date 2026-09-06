@@ -92,6 +92,9 @@ public:
     const OptionChild<OptionBool> & get_pkg_gpgcheck_option() const;
     OptionChild<OptionBool> & get_repo_gpgcheck_option();
     const OptionChild<OptionBool> & get_repo_gpgcheck_option() const;
+    /// Auto-import applies only to keys from local (file://) gpgkey URLs.
+    OptionChild<OptionBool> & get_repo_gpgcheck_auto_import_keys_option();
+    const OptionChild<OptionBool> & get_repo_gpgcheck_auto_import_keys_option() const;
     OptionChild<OptionBool> & get_enablegroups_option();
     const OptionChild<OptionBool> & get_enablegroups_option() const;
     /// @deprecated The option does nothing

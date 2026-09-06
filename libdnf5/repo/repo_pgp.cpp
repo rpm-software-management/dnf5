@@ -122,6 +122,15 @@ void RepoPgp::import_key(int fd, const std::string & url) {
 
     auto key_infos = rawkey2infos(fd, url);
 
+    // With repo_gpgcheck_auto_import_keys enabled, keys from local (file://)
+    // gpgkey URLs are imported without a confirmation. Remote keys still go
+    // through the callback so the fingerprint can be verified before the key
+    // is trusted. assumeno takes precedence: the callback shows the key
+    // details and declines the import as usual.
+    const bool auto_import = config.get_repo_gpgcheck_auto_import_keys_option().get_value() &&
+                             !config.get_main_config().get_assumeno_option().get_value();
+    const bool key_is_local = url.starts_with("file://");
+
     auto known_keys = load_keys_ids_from_keyring();
     for (auto & key_info : key_infos) {
         if (std::find(known_keys.begin(), known_keys.end(), key_info.get_key_id()) != known_keys.end()) {
@@ -130,8 +139,23 @@ void RepoPgp::import_key(int fd, const std::string & url) {
             continue;
         }
 
-        if (callbacks && !callbacks->repokey_import(key_info)) {
-            continue;
+        if (auto_import && key_is_local) {
+            logger.info(
+                "Automatically importing OpenPGP key 0x{} (fingerprint {}) from {} for repository {}.",
+                key_info.get_key_id(),
+                key_info.get_fingerprint(),
+                key_info.get_url(),
+                config.get_id());
+        } else if (callbacks) {
+            if (auto_import && !key_is_local) {
+                logger.info(
+                    "repo_gpgcheck_auto_import_keys ignored for key from {}: only local (file://) gpgkey URLs are "
+                    "auto-imported.",
+                    url);
+            }
+            if (!callbacks->repokey_import(key_info)) {
+                continue;
+            }
         }
 
         auto keyring_dir = get_keyring_dir();
