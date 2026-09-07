@@ -21,7 +21,6 @@
 
 #include "shared.hpp"
 
-#include <curl/curl.h>
 #include <fmt/format.h>
 #include <libdnf5/repo/file_downloader.hpp>
 #include <libdnf5/utils/bgettext/bgettext-mark-domain.h>
@@ -35,26 +34,6 @@ namespace dnf5 {
 using namespace libdnf5;
 
 namespace {
-
-// Extracts a specific part of the URL from a URL string.
-// Returns an empty string if the URL is not valid/supported or the required part is not present.
-std::string get_url_part(const std::string & url, CURLUPart what_part) {
-    std::string ret;
-    CURLUcode rc;
-    CURLU * c_url = curl_url();
-    rc = curl_url_set(c_url, CURLUPART_URL, url.c_str(), 0);
-    if (!rc) {
-        char * part;
-        rc = curl_url_get(c_url, what_part, &part, 0);
-        if (!rc) {
-            ret = part;
-            curl_free(part);
-        }
-    }
-    curl_url_cleanup(c_url);
-    return ret;
-}
-
 
 // Converts all letters consider illegal in repository id to their "_XX" versions (XX - hex code).
 std::string escape(const std::string & text) {
