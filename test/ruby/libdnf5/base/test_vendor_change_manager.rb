@@ -312,16 +312,16 @@ class TestVendorChangeManager < Test::Unit::TestCase
         assert_equal(distr_allow_fedora, files[1])
 
         # Test save_policy_from_compact
-        vcm.save_policy_from_compact(POLICY_COMPACT_TEST_2, "test:code", "allow_fedora")
+        vcm.save_policy_from_compact(POLICY_COMPACT_TEST_2, "test:code", "allow_fedora", false)
         assert_equal(POLICY_TOML_TEST_2, File.read(allow_fedora))
 
         # fail - file already exists
         assert_raise do
-            vcm.save_policy_from_compact(POLICY_COMPACT_TEST_2, "test:code", "allow_fedora")
+            vcm.save_policy_from_compact(POLICY_COMPACT_TEST_2, "test:code", "allow_fedora", false)
         end
 
         # Test save_policy_from_toml with TOML content string
-        vcm.save_policy_from_toml(POLICY_TOML_TEST_1, "test:code", "test1")
+        vcm.save_policy_from_toml(POLICY_TOML_TEST_1, "test:code", "test1", false)
         assert_equal(POLICY_TOML_TEST_1, File.read(test1))
 
         # Test save_policy_from_toml with TOML file
@@ -329,7 +329,7 @@ class TestVendorChangeManager < Test::Unit::TestCase
         path = File.join(installroot, "tmp", "toml_test1.conf")
         File.write(path, POLICY_TOML_TEST_1)
 
-        vcm.save_policy_from_toml(path, "from_toml_file")
+        vcm.save_policy_from_toml(path, "from_toml_file", false)
         from_toml_file = File.join(@system_vendor_cfg_dir, "from_toml_file.conf")
         assert_equal(POLICY_TOML_TEST_1, File.read(from_toml_file))
 

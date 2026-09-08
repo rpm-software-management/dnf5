@@ -360,16 +360,16 @@ sub read_file {
     is($files[1], $distr_allow_fedora, "File 1 is distr_allow_fedora");
 
     # Test save_policy_from_compact
-    $vcm->save_policy_from_compact($POLICY_COMPACT_TEST_2, "test:code", "allow_fedora");
+    $vcm->save_policy_from_compact($POLICY_COMPACT_TEST_2, "test:code", "allow_fedora", 0);
     is(read_file($allow_fedora), $POLICY_TOML_TEST_2, "save_policy_from_compact wrote correct content");
 
     # fail - file already exists
     throws_ok {
-        $vcm->save_policy_from_compact($POLICY_COMPACT_TEST_2, "test:code", "allow_fedora");
+        $vcm->save_policy_from_compact($POLICY_COMPACT_TEST_2, "test:code", "allow_fedora", 0);
     } qr//, "save_policy_from_compact throws on existing file";
 
     # Test save_policy_from_toml with TOML content string
-    $vcm->save_policy_from_toml($POLICY_TOML_TEST_1, "test:code", "test1");
+    $vcm->save_policy_from_toml($POLICY_TOML_TEST_1, "test:code", "test1", 0);
     is(read_file($test1), $POLICY_TOML_TEST_1, "save_policy_from_toml(content) wrote correct content");
 
     # Test save_policy_from_toml with TOML file
@@ -378,7 +378,7 @@ sub read_file {
     my $path = "$installroot/tmp/toml_test1.conf";
     write_file($path, $POLICY_TOML_TEST_1);
 
-    $vcm->save_policy_from_toml($path, "from_toml_file");
+    $vcm->save_policy_from_toml($path, "from_toml_file", 0);
     my $from_toml_file = "$system_vendor_cfg_dir/from_toml_file.conf";
     is(read_file($from_toml_file), $POLICY_TOML_TEST_1, "save_policy_from_toml(path) wrote correct content");
 
