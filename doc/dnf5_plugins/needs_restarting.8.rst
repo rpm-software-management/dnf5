@@ -33,7 +33,7 @@ Synopsis
 Description
 ===========
 
-The ``needs-restarting`` command determines whether the system should be rebooted to fully apply changes from package installations and upgrades. Without any options, ``dnf5 needs-restarting`` will report whether any important packages were installed or upgraded since boot. This set of important packages includes the kernel, systemd, each package listed here: https://access.redhat.com/solutions/27943, and any package marked with a ``reboot_suggested`` advisory.
+The ``needs-restarting`` command determines whether the system should be rebooted to fully apply changes from package installations and upgrades. Without any options, ``dnf5 needs-restarting`` will report whether any important packages were installed or upgraded since boot. This set of important packages includes the kernel, systemd, each package listed here: https://access.redhat.com/solutions/27943, any package marked with a ``reboot_suggested`` advisory, and any package configured in the ``suggest-reboot.d`` directories described below.
 
 The ``needs-restarting`` command will exit with code 1 if a reboot is recommended, or, when invoked with ``--services``, if any systemd service needs restarting. If no action is recommended, ``needs-restarting`` will exit with code 0.
 
@@ -55,6 +55,32 @@ Options
 
 ``--json``
     | Request JSON output format for machine-readable results.
+
+Configuration
+=============
+
+The set of packages whose installation or upgrade suggests a reboot is provided by ``libdnf5`` and is shared with every consumer of that information, not just this command. It is read from ``*.conf`` drop-in files in the following directories:
+
+``/etc/dnf/suggest-reboot.d/``
+    | Local administrator configuration.
+
+``/usr/share/dnf5/suggest-reboot.d/``
+    | Defaults shipped by packages. ``libdnf5`` installs ``default.conf`` here, covering the kernel, ``systemd`` and other core packages.
+
+Files with different names are merged. A file in the local directory overrides a file with the same name in the packaged defaults directory, so an administrator can replace ``default.conf`` wholesale by creating ``/etc/dnf/suggest-reboot.d/default.conf``.
+
+Only files with the ``.conf`` extension are read. Each file contains one package name per line. Leading and trailing whitespace is ignored, and empty lines and lines beginning with ``#`` are treated as comments. Package names that are not installed are ignored, so a single file may list packages that are not present on the system.
+
+For example, to also suggest a reboot after the NVIDIA driver is updated, create ``/etc/dnf/suggest-reboot.d/nvidia.conf`` containing::
+
+    # Reboot after the out-of-tree driver is rebuilt
+    nvidia-driver
+    kmod-nvidia-open-dkms
+
+The configured packages are honoured both by the default reboot hint and by ``--services``, where services provided by such packages are reported as requiring a reboot rather than a restart.
+
+.. note::
+    The DNF 4 ``needs-restarting`` plugin read this configuration from ``/etc/dnf/plugins/needs-restarting.d/``. That location is not used by DNF 5; move any existing files to ``/etc/dnf/suggest-reboot.d/``.
 
 JSON Output
 ===========

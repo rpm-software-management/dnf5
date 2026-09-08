@@ -32,6 +32,8 @@ class RpmPackageQueryTest : public BaseTestCase {
 
 #ifndef WITH_PERFORMANCE_TESTS
     CPPUNIT_TEST(test_size);
+    CPPUNIT_TEST(test_filter_reboot_suggested_from_config);
+    CPPUNIT_TEST(test_filter_reboot_suggested_local_overrides_vendor);
     CPPUNIT_TEST(test_filter_latest_evr);
     CPPUNIT_TEST(test_filter_latest_evr_ignore_arch);
     CPPUNIT_TEST(test_filter_earliest_evr);
@@ -68,6 +70,8 @@ public:
     void setUp() override;
 
     void test_size();
+    void test_filter_reboot_suggested_from_config();
+    void test_filter_reboot_suggested_local_overrides_vendor();
     void test_filter_latest_evr();
     void test_filter_latest_evr_ignore_arch();
     void test_filter_earliest_evr();

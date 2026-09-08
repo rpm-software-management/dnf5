@@ -165,4 +165,11 @@ install(DIRECTORY DESTINATION "${CMAKE_INSTALL_PREFIX}/share/dnf5/libdnf.plugins
 # Creates an empty directory for user-defined vendor change policies configuration files
 install(DIRECTORY DESTINATION "${CMAKE_INSTALL_FULL_SYSCONFDIR}/dnf/vendors.d")
 
+# Installs the distribution-supplied list of packages whose update suggests a reboot
+install(FILES "suggest-reboot-default.conf" RENAME "default.conf"
+        DESTINATION "${CMAKE_INSTALL_PREFIX}/share/dnf5/suggest-reboot.d")
+
+# Creates an empty directory for user-defined packages whose update suggests a reboot
+install(DIRECTORY DESTINATION "${CMAKE_INSTALL_FULL_SYSCONFDIR}/dnf/suggest-reboot.d")
+
 add_subdirectory(po)
