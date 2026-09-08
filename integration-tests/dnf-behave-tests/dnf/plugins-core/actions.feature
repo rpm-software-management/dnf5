@@ -231,7 +231,7 @@ Scenario: Reason change is in transaction
     And file "/actions.log" contains lines
     """
     E installonlyA-0:1.0-1.x86_64 repo @System
-    \? installonlyA-0:2.0-1.x86_64 repo @System
+    C installonlyA-0:2.0-1.x86_64 repo @System
     I installonlyA-0:2.2-1.x86_64 repo installonly
     """
 
