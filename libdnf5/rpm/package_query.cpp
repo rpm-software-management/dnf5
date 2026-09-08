@@ -24,10 +24,13 @@
 #include "package_set_impl.hpp"
 #include "solv/solver.hpp"
 #include "utils/convert.hpp"
+#include "utils/fs/utils.hpp"
+#include "utils/string.hpp"
 
 #include "libdnf5/advisory/advisory_query.hpp"
 #include "libdnf5/base/base.hpp"
 #include "libdnf5/common/exception.hpp"
+#include "libdnf5/conf/const.hpp"
 #include "libdnf5/rpm/checksum.hpp"
 #include "libdnf5/utils/patterns.hpp"
 
@@ -41,6 +44,8 @@ extern "C" {
 #include <fnmatch.h>
 
 #include <filesystem>
+#include <fstream>
+#include <set>
 #include <utility>
 
 namespace libdnf5::rpm {
@@ -3123,12 +3128,54 @@ static const std::unordered_set<std::string> CORE_PACKAGE_NAMES = {
     "dbus-daemon",
 };
 
+/// Load the names of packages whose installation or upgrade suggests a system reboot.
+///
+/// Starts from the built-in `CORE_PACKAGE_NAMES` and adds the names read from `*.conf` drop-in
+/// files in `SUGGEST_REBOOT_CONF_DIRS`, one name per line. Leading and trailing whitespace is
+/// stripped; empty lines and lines starting with `#` are ignored. A file overrides a same-named
+/// file from a lower-precedence directory; files with different names are merged. Drop-in files
+/// can only add to the built-in list, never remove from it.
+static std::set<std::string> load_suggest_reboot_package_names(const libdnf5::BaseWeakPtr & base) {
+    auto & config = base->get_config();
+    auto & logger = *base->get_logger();
+
+    const bool use_host_config{config.get_use_host_config_option().get_value()};
+    const std::filesystem::path installroot{config.get_installroot_option().get_value()};
+
+    std::vector<std::filesystem::path> conf_dirs;
+    conf_dirs.reserve(SUGGEST_REBOOT_CONF_DIRS.size());
+    for (const auto & dir : SUGGEST_REBOOT_CONF_DIRS) {
+        const std::filesystem::path conf_dir{dir};
+        conf_dirs.push_back(use_host_config ? conf_dir : installroot / conf_dir.relative_path());
+    }
+
+    std::set<std::string> names{CORE_PACKAGE_NAMES.begin(), CORE_PACKAGE_NAMES.end()};
+    for (const auto & conf_file : utils::fs::create_sorted_file_list(conf_dirs, ".conf")) {
+        std::ifstream stream{conf_file};
+        if (!stream.is_open()) {
+            logger.warning("Unable to read suggest-reboot configuration file \"{}\".", conf_file.string());
+            continue;
+        }
+        std::string line;
+        while (std::getline(stream, line)) {
+            utils::string::trim(line);
+            if (line.empty() || line[0] == '#') {
+                continue;
+            }
+            names.insert(line);
+        }
+    }
+
+    return names;
+}
+
 void PackageQuery::filter_reboot_suggested() {
     auto & pool = get_rpm_pool(p_impl->base);
     libdnf5::solv::SolvMap core_packages{pool.get_nsolvables()};
 
+    const auto core_package_names = load_suggest_reboot_package_names(p_impl->base);
     for (const auto & pkg : *this) {
-        if (CORE_PACKAGE_NAMES.contains(pkg.get_name())) {
+        if (core_package_names.contains(pkg.get_name())) {
             core_packages.add_unsafe(pkg.get_id().id);
         }
     }

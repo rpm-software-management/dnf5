@@ -498,6 +498,8 @@ Package management library.
 %dir %{_datadir}/dnf5/vendors.d
 %dir %{_datadir}/dnf5/libdnf.plugins.conf.d
 %dir %{_sysconfdir}/dnf/vendors.d
+%dir %{_sysconfdir}/dnf/suggest-reboot.d
+%dir %{_datadir}/dnf5/suggest-reboot.d
 %dir %{_libdir}/libdnf5
 %{_libdir}/libdnf5.so.2*
 %dir %{_prefix}/lib/sysimage/libdnf5
