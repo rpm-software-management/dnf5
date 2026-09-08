@@ -67,7 +67,7 @@ public:
         const std::filesystem::path & base_filename,
         bool allow_replace);
 
-    void remove_policy_file(const std::filesystem::path & base_filename);
+    std::filesystem::path remove_policy_file(const std::filesystem::path & base_filename);
 
     std::vector<std::filesystem::path> get_policy_files() const;
 
@@ -133,7 +133,7 @@ std::filesystem::path VendorChangeManager::Impl::save_policy_from_compact(
 }
 
 
-void VendorChangeManager::Impl::remove_policy_file(const std::filesystem::path & base_filename) {
+std::filesystem::path VendorChangeManager::Impl::remove_policy_file(const std::filesystem::path & base_filename) {
     namespace fs = std::filesystem;
 
     fs::path file_path = get_vendor_conf_dir_path() / make_policy_filename(base_filename);
@@ -153,6 +153,8 @@ void VendorChangeManager::Impl::remove_policy_file(const std::filesystem::path &
                 NamedErrorArg("path", file_path.string()));
         }
     }
+
+    return file_path;
 }
 
 
@@ -419,8 +421,8 @@ std::filesystem::path VendorChangeManager::save_policy_from_compact(
 }
 
 
-void VendorChangeManager::remove_policy_file(const std::filesystem::path & base_filename) {
-    p_impl->remove_policy_file(base_filename);
+std::filesystem::path VendorChangeManager::remove_policy_file(const std::filesystem::path & base_filename) {
+    return p_impl->remove_policy_file(base_filename);
 }
 
 

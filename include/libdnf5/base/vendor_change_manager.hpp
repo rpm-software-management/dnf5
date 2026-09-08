@@ -190,8 +190,9 @@ public:
     /// Removes the file from the vendor configuration directory (``/etc/dnf/vendors.d/`` or installroot equivalent).
     /// @param base_filename Base filename without extension or path (e.g., ``"my-policy"``).
     ///                      Must not contain path components. The ``.conf`` extension is added automatically.
+    /// @return Path to the removed policy file.
     /// @throws VendorChangeManagerError if base_filename contains path components or file removal fails.
-    void remove_policy_file(const std::filesystem::path & base_filename);
+    std::filesystem::path remove_policy_file(const std::filesystem::path & base_filename);
 
     /// Get a list of all vendor change policy configuration files.
     /// Returns paths to all ``.conf`` files from both vendor configuration directories
