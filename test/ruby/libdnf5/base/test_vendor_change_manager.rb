@@ -303,8 +303,10 @@ class TestVendorChangeManager < Test::Unit::TestCase
         assert_raise(Libdnf5::Exception::BaseVendorChangeManagerError) do
             vcm.remove_policy_file(distr_allow_cmdline)
         end
-        vcm.remove_policy_file("allow_fedora")
-        vcm.remove_policy_file("test1")
+        removed_path = vcm.remove_policy_file("allow_fedora")
+        assert_equal(allow_fedora, removed_path)
+        removed_path = vcm.remove_policy_file("test1")
+        assert_equal(test1, removed_path)
 
         files = vcm.get_policy_files()
         assert_equal(2, files.size())

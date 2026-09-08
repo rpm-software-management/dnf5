@@ -304,8 +304,10 @@ class TestVendorChangeManager(unittest.TestCase):
         # Test remove_policy_file
         with self.assertRaises(libdnf5.exception.BaseVendorChangeManagerError):
             vcm.remove_policy_file(distr_allow_cmdline)
-        vcm.remove_policy_file("allow_fedora")
-        vcm.remove_policy_file("test1")
+        removed_path = vcm.remove_policy_file("allow_fedora")
+        self.assertEqual(removed_path, allow_fedora)
+        removed_path = vcm.remove_policy_file("test1")
+        self.assertEqual(removed_path, test1)
 
         files = vcm.get_policy_files()
         self.assertEqual(len(files), 2)
