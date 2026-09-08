@@ -313,18 +313,28 @@ class TestVendorChangeManager(unittest.TestCase):
         self.assertEqual(files[1], distr_allow_fedora)
 
         # Test save_policy_from_compact
-        vcm.save_policy_from_compact(POLICY_COMPACT_TEST_2, "test:code", "allow_fedora", False)
+        saved_path = vcm.save_policy_from_compact(POLICY_COMPACT_TEST_2, "test:code", "allow_fedora", False)
+        self.assertEqual(saved_path, allow_fedora)
         with open(allow_fedora, 'r') as f:
             self.assertEqual(f.read(), POLICY_TOML_TEST_2)
 
-        # fail - file already exists
+        # fail - file already exists when allow_replace=False
         with self.assertRaises(libdnf5.exception.BaseVendorChangeManagerError):
             vcm.save_policy_from_compact(POLICY_COMPACT_TEST_2, "test:code", "allow_fedora", False)
+        # succeed - file can be replaced when allow_replace=True
+        saved_path = vcm.save_policy_from_compact(POLICY_COMPACT_TEST_1, "test:code", "allow_fedora", True)
+        self.assertEqual(saved_path, allow_fedora)
+        with open(allow_fedora, 'r') as f:
+            self.assertEqual(f.read(), POLICY_TOML_TEST_1)
 
         # Test save_policy_from_toml with TOML content string
-        vcm.save_policy_from_toml(POLICY_TOML_TEST_1, "test:code", "test1", False)
+        saved_path = vcm.save_policy_from_toml(POLICY_TOML_TEST_1, "test:code", "test1", False)
+        self.assertEqual(saved_path, test1)
         with open(test1, 'r') as f:
             self.assertEqual(f.read(), POLICY_TOML_TEST_1)
+        # Test overwrite with allow_replace=True
+        saved_path = vcm.save_policy_from_toml(POLICY_TOML_TEST_1, "test:code", "test1", True)
+        self.assertEqual(saved_path, test1)
 
         # Test save_policy_from_toml with TOML file
         installroot = self.base.get_config().installroot
@@ -332,10 +342,18 @@ class TestVendorChangeManager(unittest.TestCase):
         with open(path, 'w') as f:
             f.write(POLICY_TOML_TEST_1)
 
-        vcm.save_policy_from_toml(path, "from_toml_file", False)
+        # It must work with allow_replace=True even if the target file does not exist.
+        saved_path = vcm.save_policy_from_toml(path, "from_toml_file", True)
         from_toml_file = os.path.join(self.system_vendor_cfg_dir, "from_toml_file.conf")
+        self.assertEqual(saved_path, from_toml_file)
         with open(from_toml_file, 'r') as f:
             self.assertEqual(f.read(), POLICY_TOML_TEST_1)
+        # fail - file already exists when allow_replace=False
+        with self.assertRaises(libdnf5.exception.BaseVendorChangeManagerError):
+            vcm.save_policy_from_toml(path, "from_toml_file", False)
+        # Test replace with allow_replace=True
+        saved_path = vcm.save_policy_from_toml(path, "from_toml_file", True)
+        self.assertEqual(saved_path, from_toml_file)
 
         files = vcm.get_policy_files()
         self.assertEqual(len(files), 4)

@@ -312,26 +312,44 @@ class TestVendorChangeManager < Test::Unit::TestCase
         assert_equal(distr_allow_fedora, files[1])
 
         # Test save_policy_from_compact
-        vcm.save_policy_from_compact(POLICY_COMPACT_TEST_2, "test:code", "allow_fedora", false)
+        saved_path = vcm.save_policy_from_compact(POLICY_COMPACT_TEST_2, "test:code", "allow_fedora", false)
+        assert_equal(allow_fedora, saved_path)
         assert_equal(POLICY_TOML_TEST_2, File.read(allow_fedora))
 
-        # fail - file already exists
+        # fail - file already exists when allow_replace=false
         assert_raise do
             vcm.save_policy_from_compact(POLICY_COMPACT_TEST_2, "test:code", "allow_fedora", false)
         end
+        # succeed - file can be replaced when allow_replace=true
+        saved_path = vcm.save_policy_from_compact(POLICY_COMPACT_TEST_1, "test:code", "allow_fedora", true)
+        assert_equal(allow_fedora, saved_path)
+        assert_equal(POLICY_TOML_TEST_1, File.read(allow_fedora))
 
         # Test save_policy_from_toml with TOML content string
-        vcm.save_policy_from_toml(POLICY_TOML_TEST_1, "test:code", "test1", false)
+        saved_path = vcm.save_policy_from_toml(POLICY_TOML_TEST_1, "test:code", "test1", false)
+        assert_equal(test1, saved_path)
         assert_equal(POLICY_TOML_TEST_1, File.read(test1))
+        # Test overwrite with allow_replace=true
+        saved_path = vcm.save_policy_from_toml(POLICY_TOML_TEST_1, "test:code", "test1", true)
+        assert_equal(test1, saved_path)
 
         # Test save_policy_from_toml with TOML file
         installroot = @base.get_config().get_installroot_option().get_value()
         path = File.join(installroot, "tmp", "toml_test1.conf")
         File.write(path, POLICY_TOML_TEST_1)
 
-        vcm.save_policy_from_toml(path, "from_toml_file", false)
+        # It must work with allow_replace=true even if the target file does not exist.
+        saved_path = vcm.save_policy_from_toml(path, "from_toml_file", true)
         from_toml_file = File.join(@system_vendor_cfg_dir, "from_toml_file.conf")
+        assert_equal(from_toml_file, saved_path)
         assert_equal(POLICY_TOML_TEST_1, File.read(from_toml_file))
+        # fail - file already exists when allow_replace=false
+        assert_raise do
+            vcm.save_policy_from_toml(path, "from_toml_file", false)
+        end
+        # Test replace with allow_replace=true
+        saved_path = vcm.save_policy_from_toml(path, "from_toml_file", true)
+        assert_equal(from_toml_file, saved_path)
 
         files = vcm.get_policy_files()
         assert_equal(4, files.size())

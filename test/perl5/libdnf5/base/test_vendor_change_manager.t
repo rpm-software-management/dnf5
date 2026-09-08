@@ -360,17 +360,26 @@ sub read_file {
     is($files[1], $distr_allow_fedora, "File 1 is distr_allow_fedora");
 
     # Test save_policy_from_compact
-    $vcm->save_policy_from_compact($POLICY_COMPACT_TEST_2, "test:code", "allow_fedora", 0);
+    my $saved_path = $vcm->save_policy_from_compact($POLICY_COMPACT_TEST_2, "test:code", "allow_fedora", 0);
+    is($saved_path, $allow_fedora, "save_policy_from_compact returned correct path");
     is(read_file($allow_fedora), $POLICY_TOML_TEST_2, "save_policy_from_compact wrote correct content");
 
-    # fail - file already exists
+    # fail - file already exists when allow_replace=0
     throws_ok {
         $vcm->save_policy_from_compact($POLICY_COMPACT_TEST_2, "test:code", "allow_fedora", 0);
     } qr//, "save_policy_from_compact throws on existing file";
+    # succeed - file can be replaced when allow_replace=1
+    $saved_path = $vcm->save_policy_from_compact($POLICY_COMPACT_TEST_1, "test:code", "allow_fedora", 1);
+    is($saved_path, $allow_fedora, "save_policy_from_compact with replace returned correct path");
+    is(read_file($allow_fedora), $POLICY_TOML_TEST_1, "save_policy_from_compact with replace wrote correct content");
 
     # Test save_policy_from_toml with TOML content string
-    $vcm->save_policy_from_toml($POLICY_TOML_TEST_1, "test:code", "test1", 0);
+    $saved_path = $vcm->save_policy_from_toml($POLICY_TOML_TEST_1, "test:code", "test1", 0);
+    is($saved_path, $test1, "save_policy_from_toml(content) returned correct path");
     is(read_file($test1), $POLICY_TOML_TEST_1, "save_policy_from_toml(content) wrote correct content");
+    # Test overwrite with allow_replace=1
+    $saved_path = $vcm->save_policy_from_toml($POLICY_TOML_TEST_1, "test:code", "test1", 1);
+    is($saved_path, $test1, "save_policy_from_toml(content) with overwrite returned correct path");
 
     # Test save_policy_from_toml with TOML file
     my $installroot = $base->get_config()->get_installroot_option()->get_value();
@@ -378,9 +387,18 @@ sub read_file {
     my $path = "$installroot/tmp/toml_test1.conf";
     write_file($path, $POLICY_TOML_TEST_1);
 
-    $vcm->save_policy_from_toml($path, "from_toml_file", 0);
+    # It must work with allow_replace=1 even if the target file does not exist.
+    $saved_path = $vcm->save_policy_from_toml($path, "from_toml_file", 1);
     my $from_toml_file = "$system_vendor_cfg_dir/from_toml_file.conf";
+    is($saved_path, $from_toml_file, "save_policy_from_toml(path) returned correct path");
     is(read_file($from_toml_file), $POLICY_TOML_TEST_1, "save_policy_from_toml(path) wrote correct content");
+    # fail - file already exists when allow_replace=0
+    throws_ok {
+        $vcm->save_policy_from_toml($path, "from_toml_file", 0);
+    } qr//, "save_policy_from_toml throws on existing file";
+    # Test replace with allow_replace=1
+    $saved_path = $vcm->save_policy_from_toml($path, "from_toml_file", 1);
+    is($saved_path, $from_toml_file, "save_policy_from_toml(path) with replace returned correct path");
 
     $files = $vcm->get_policy_files();
     @files = @$files;
