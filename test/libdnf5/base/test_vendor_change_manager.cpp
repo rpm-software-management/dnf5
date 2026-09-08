@@ -364,15 +364,15 @@ void VendorChangeManagerTest::test_work_with_files() {
     CPPUNIT_ASSERT_EQUAL(distr_allow_fedora, files[1]);
 
     // Test save configuration file from string in compact format
-    vcm->save_policy_from_compact(POLICY_COMPACT_TEST_2, "test:code", "allow_fedora");
+    vcm->save_policy_from_compact(POLICY_COMPACT_TEST_2, "test:code", "allow_fedora", false);
     CPPUNIT_ASSERT_EQUAL(POLICY_TOML_TEST_2, libdnf5::utils::fs::File(allow_fedora, "rb").read());
     // fail - file already exists
     CPPUNIT_ASSERT_THROW(
-        vcm->save_policy_from_compact(POLICY_COMPACT_TEST_2, "test:code", "allow_fedora"),
+        vcm->save_policy_from_compact(POLICY_COMPACT_TEST_2, "test:code", "allow_fedora", false),
         libdnf5::base::VendorChangeManagerError);
 
     // Test save configuration file from string in TOML format
-    vcm->save_policy_from_toml(POLICY_TOML_TEST_1, "test:code", "test1");
+    vcm->save_policy_from_toml(POLICY_TOML_TEST_1, "test:code", "test1", false);
     CPPUNIT_ASSERT_EQUAL(POLICY_TOML_TEST_1, libdnf5::utils::fs::File(test1, "rb").read());
 
     // Test save configuration file from TOML file
@@ -381,7 +381,7 @@ void VendorChangeManagerTest::test_work_with_files() {
     {
         libdnf5::utils::fs::File(path, "w").write(POLICY_TOML_TEST_1);
     }
-    vcm->save_policy_from_toml(path, "from_toml_file");
+    vcm->save_policy_from_toml(path, "from_toml_file", false);
     CPPUNIT_ASSERT_EQUAL(
         POLICY_TOML_TEST_1, libdnf5::utils::fs::File(system_vendor_cfg_dir / "from_toml_file.conf", "rb").read());
 

@@ -52,13 +52,20 @@ public:
 
     std::string get_loaded_policy_as_compact(std::size_t index) const { return vcm.get_policy_as_compact(index); }
 
-    void save_policy_from_toml(
-        std::string_view toml_content, std::string_view source, const std::filesystem::path & base_filename);
+    std::filesystem::path save_policy_from_toml(
+        std::string_view toml_content,
+        std::string_view source,
+        const std::filesystem::path & base_filename,
+        bool allow_replace);
 
-    void save_policy_from_toml(const std::filesystem::path & path, const std::filesystem::path & base_filename);
+    std::filesystem::path save_policy_from_toml(
+        const std::filesystem::path & path, const std::filesystem::path & base_filename, bool allow_replace);
 
-    void save_policy_from_compact(
-        std::string_view policy_str, std::string_view source, const std::filesystem::path & base_filename);
+    std::filesystem::path save_policy_from_compact(
+        std::string_view policy_str,
+        std::string_view source,
+        const std::filesystem::path & base_filename,
+        bool allow_replace);
 
     void remove_policy_file(const std::filesystem::path & base_filename);
 
@@ -73,8 +80,11 @@ public:
     WeakPtrGuard<VendorChangeManager, false> guard;
 
 private:
-    void save_policy_file(
-        std::string_view toml_content, const std::filesystem::path & base_filename, const char * caller_name);
+    std::filesystem::path save_policy_file(
+        std::string_view toml_content,
+        const std::filesystem::path & base_filename,
+        bool allow_replace,
+        const char * caller_name);
 
     std::filesystem::path get_vendor_conf_dir_path() const;
     std::filesystem::path get_distribution_vendor_conf_dir_path() const;
@@ -92,28 +102,34 @@ void VendorChangeManager::Impl::load_policies() {
 }
 
 
-void VendorChangeManager::Impl::save_policy_from_toml(
-    std::string_view toml_content, std::string_view source, const std::filesystem::path & base_filename) {
+std::filesystem::path VendorChangeManager::Impl::save_policy_from_toml(
+    std::string_view toml_content,
+    std::string_view source,
+    const std::filesystem::path & base_filename,
+    bool allow_replace) {
     // Validate TOML by parsing it
     solv::VendorChangeManager::convert_policy_toml_to_compact(toml_content, source);
-    save_policy_file(toml_content, base_filename, __func__);
+    return save_policy_file(toml_content, base_filename, allow_replace, __func__);
 }
 
 
-void VendorChangeManager::Impl::save_policy_from_toml(
-    const std::filesystem::path & path, const std::filesystem::path & base_filename) {
+std::filesystem::path VendorChangeManager::Impl::save_policy_from_toml(
+    const std::filesystem::path & path, const std::filesystem::path & base_filename, bool allow_replace) {
     // Read TOML content from file
     const std::string toml_content = utils::fs::File(path, "rb").read();
     // Validate TOML by parsing it
     solv::VendorChangeManager::convert_policy_toml_to_compact(toml_content, "file://" + path.string());
-    save_policy_file(toml_content, base_filename, __func__);
+    return save_policy_file(toml_content, base_filename, allow_replace, __func__);
 }
 
 
-void VendorChangeManager::Impl::save_policy_from_compact(
-    std::string_view policy_str, std::string_view source, const std::filesystem::path & base_filename) {
+std::filesystem::path VendorChangeManager::Impl::save_policy_from_compact(
+    std::string_view policy_str,
+    std::string_view source,
+    const std::filesystem::path & base_filename,
+    bool allow_replace) {
     const auto toml_content = solv::VendorChangeManager::convert_policy_compact_to_toml(policy_str, source);
-    save_policy_file(toml_content, base_filename, __func__);
+    return save_policy_file(toml_content, base_filename, allow_replace, __func__);
 }
 
 
@@ -203,13 +219,29 @@ std::filesystem::path VendorChangeManager::Impl::find_policy_file(const std::fil
 }
 
 
-void VendorChangeManager::Impl::save_policy_file(
-    std::string_view toml_content, const std::filesystem::path & base_filename, const char * caller_name) {
+std::filesystem::path VendorChangeManager::Impl::save_policy_file(
+    std::string_view toml_content,
+    const std::filesystem::path & base_filename,
+    bool allow_replace,
+    const char * caller_name) {
     namespace fs = std::filesystem;
 
     fs::path file_path = get_vendor_conf_dir_path() / make_policy_filename(base_filename);
 
-    // Use "wx" mode to fail if file already exists
+    // If allow_replace=true, remove existing file first to avoid following symlinks
+    if (allow_replace) {
+        try {
+            // Returns true if removed, false if didn't exist - both are OK
+            fs::remove(file_path);
+        } catch (...) {
+            libdnf5::throw_with_nested(VendorChangeManagerError(
+                M_("{func}(): Cannot remove existing policy file: {path}"),
+                NamedErrorArg("func", caller_name),
+                NamedErrorArg("path", file_path.string())));
+        }
+    }
+
+    // Always use "wxb" mode to fail if file exists
     utils::fs::File file;
     try {
         file.open(file_path, "wxb");
@@ -236,6 +268,8 @@ void VendorChangeManager::Impl::save_policy_file(
             NamedErrorArg("func", caller_name),
             NamedErrorArg("path", file_path.string())));
     }
+
+    return file_path;
 }
 
 
@@ -361,21 +395,27 @@ std::string VendorChangeManager::convert_policy_compact_to_toml(std::string_view
 }
 
 
-void VendorChangeManager::save_policy_from_toml(
-    std::string_view toml_content, std::string_view source, const std::filesystem::path & base_filename) {
-    p_impl->save_policy_from_toml(toml_content, source, base_filename);
+std::filesystem::path VendorChangeManager::save_policy_from_toml(
+    std::string_view toml_content,
+    std::string_view source,
+    const std::filesystem::path & base_filename,
+    bool allow_replace) {
+    return p_impl->save_policy_from_toml(toml_content, source, base_filename, allow_replace);
 }
 
 
-void VendorChangeManager::save_policy_from_toml(
-    const std::filesystem::path & path, const std::filesystem::path & base_filename) {
-    p_impl->save_policy_from_toml(path, base_filename);
+std::filesystem::path VendorChangeManager::save_policy_from_toml(
+    const std::filesystem::path & path, const std::filesystem::path & base_filename, bool allow_replace) {
+    return p_impl->save_policy_from_toml(path, base_filename, allow_replace);
 }
 
 
-void VendorChangeManager::save_policy_from_compact(
-    std::string_view policy_str, std::string_view source, const std::filesystem::path & base_filename) {
-    p_impl->save_policy_from_compact(policy_str, source, base_filename);
+std::filesystem::path VendorChangeManager::save_policy_from_compact(
+    std::string_view policy_str,
+    std::string_view source,
+    const std::filesystem::path & base_filename,
+    bool allow_replace) {
+    return p_impl->save_policy_from_compact(policy_str, source, base_filename, allow_replace);
 }
 
 

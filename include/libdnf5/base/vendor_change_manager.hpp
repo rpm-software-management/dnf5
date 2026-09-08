@@ -140,10 +140,17 @@ public:
     /// @param source Origin of the policy (for error messages and validation).
     /// @param base_filename Base filename without extension or path (e.g., ``"my-policy"``).
     ///                      Must not contain path components. The ``.conf`` extension is added automatically.
+    /// @param allow_replace If ``true``, allows overwriting an existing policy file.
+    ///                        If ``false``, throws if the file already exists.
+    /// @return Path to the created policy file.
     /// @throws VendorChangeManagerError if validation or file write fails,
-    ///                                  or if base_filename contains path components.
-    void save_policy_from_toml(
-        std::string_view toml_content, std::string_view source, const std::filesystem::path & base_filename);
+    ///                                  if base_filename contains path components,
+    ///                                  or if file exists and allow_replace is false.
+    std::filesystem::path save_policy_from_toml(
+        std::string_view toml_content,
+        std::string_view source,
+        const std::filesystem::path & base_filename,
+        bool allow_replace);
 
     /// Save a vendor change policy from a TOML file to a configuration file
     /// in the vendor directory (``/etc/dnf/vendors.d/`` or installroot equivalent).
@@ -151,9 +158,14 @@ public:
     /// @param path Path to the TOML file containing the policy.
     /// @param base_filename Base filename without extension or path (e.g., ``"my-policy"``).
     ///                      Must not contain path components. The ``.conf`` extension is added automatically.
+    /// @param allow_replace If ``true``, allows overwriting an existing policy file.
+    ///                        If ``false``, throws if the file already exists.
+    /// @return Path to the created policy file.
     /// @throws VendorChangeManagerError if file read, validation, or write fails,
-    ///                                  or if base_filename contains path components.
-    void save_policy_from_toml(const std::filesystem::path & path, const std::filesystem::path & base_filename);
+    ///                                  if base_filename contains path components,
+    ///                                  or if file exists and allow_replace is false.
+    std::filesystem::path save_policy_from_toml(
+        const std::filesystem::path & path, const std::filesystem::path & base_filename, bool allow_replace);
 
     /// Save a vendor change policy from compact format to a configuration file
     /// in the vendor directory (``/etc/dnf/vendors.d/`` or installroot equivalent).
@@ -162,10 +174,17 @@ public:
     /// @param source Origin of the policy (for error messages).
     /// @param base_filename Base filename without extension or path (e.g., ``"my-policy"``).
     ///                      Must not contain path components. The ``.conf`` extension is added automatically.
+    /// @param allow_replace If ``true``, allows overwriting an existing policy file.
+    ///                        If ``false``, throws if the file already exists.
+    /// @return Path to the created policy file.
     /// @throws VendorChangeManagerError if conversion or file write fails,
-    ///                                  or if base_filename contains path components.
-    void save_policy_from_compact(
-        std::string_view policy_str, std::string_view source, const std::filesystem::path & base_filename);
+    ///                                  if base_filename contains path components,
+    ///                                  or if file exists and allow_replace is false.
+    std::filesystem::path save_policy_from_compact(
+        std::string_view policy_str,
+        std::string_view source,
+        const std::filesystem::path & base_filename,
+        bool allow_replace);
 
     /// Remove a vendor change policy configuration file.
     /// Removes the file from the vendor configuration directory (``/etc/dnf/vendors.d/`` or installroot equivalent).

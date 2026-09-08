@@ -313,16 +313,16 @@ class TestVendorChangeManager(unittest.TestCase):
         self.assertEqual(files[1], distr_allow_fedora)
 
         # Test save_policy_from_compact
-        vcm.save_policy_from_compact(POLICY_COMPACT_TEST_2, "test:code", "allow_fedora")
+        vcm.save_policy_from_compact(POLICY_COMPACT_TEST_2, "test:code", "allow_fedora", False)
         with open(allow_fedora, 'r') as f:
             self.assertEqual(f.read(), POLICY_TOML_TEST_2)
 
         # fail - file already exists
         with self.assertRaises(libdnf5.exception.BaseVendorChangeManagerError):
-            vcm.save_policy_from_compact(POLICY_COMPACT_TEST_2, "test:code", "allow_fedora")
+            vcm.save_policy_from_compact(POLICY_COMPACT_TEST_2, "test:code", "allow_fedora", False)
 
         # Test save_policy_from_toml with TOML content string
-        vcm.save_policy_from_toml(POLICY_TOML_TEST_1, "test:code", "test1")
+        vcm.save_policy_from_toml(POLICY_TOML_TEST_1, "test:code", "test1", False)
         with open(test1, 'r') as f:
             self.assertEqual(f.read(), POLICY_TOML_TEST_1)
 
@@ -332,7 +332,7 @@ class TestVendorChangeManager(unittest.TestCase):
         with open(path, 'w') as f:
             f.write(POLICY_TOML_TEST_1)
 
-        vcm.save_policy_from_toml(path, "from_toml_file")
+        vcm.save_policy_from_toml(path, "from_toml_file", False)
         from_toml_file = os.path.join(self.system_vendor_cfg_dir, "from_toml_file.conf")
         with open(from_toml_file, 'r') as f:
             self.assertEqual(f.read(), POLICY_TOML_TEST_1)
