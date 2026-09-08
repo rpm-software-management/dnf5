@@ -355,8 +355,10 @@ void VendorChangeManagerTest::test_work_with_files() {
 
     // Test remove_policy_file
     CPPUNIT_ASSERT_THROW(vcm->remove_policy_file(distr_allow_cmdline), libdnf5::base::VendorChangeManagerError);
-    vcm->remove_policy_file("allow_fedora");
-    vcm->remove_policy_file("test1");
+    auto removed_path = vcm->remove_policy_file("allow_fedora");
+    CPPUNIT_ASSERT_EQUAL(allow_fedora, removed_path);
+    removed_path = vcm->remove_policy_file("test1");
+    CPPUNIT_ASSERT_EQUAL(test1, removed_path);
 
     files = vcm->get_policy_files();
     CPPUNIT_ASSERT_EQUAL(2U, static_cast<unsigned int>(files.size()));

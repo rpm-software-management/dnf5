@@ -350,8 +350,10 @@ sub read_file {
         $vcm->remove_policy_file($distr_allow_cmdline);
     } qr//, "remove_policy_file throws on distribution file";
 
-    $vcm->remove_policy_file("allow_fedora");
-    $vcm->remove_policy_file("test1");
+    my $removed_path = $vcm->remove_policy_file("allow_fedora");
+    is($removed_path, $allow_fedora, "remove_policy_file returned correct path for allow_fedora");
+    $removed_path = $vcm->remove_policy_file("test1");
+    is($removed_path, $test1, "remove_policy_file returned correct path for test1");
 
     $files = $vcm->get_policy_files();
     @files = @$files;
