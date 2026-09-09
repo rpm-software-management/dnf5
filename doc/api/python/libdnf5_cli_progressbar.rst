@@ -2,5 +2,5 @@ libdnf5_cli.progressbar
 =======================
 
 
-.. automodule:: libdnf5_cli.progressbar
+.. autoapimodule:: libdnf5_cli.progressbar
     :members:
