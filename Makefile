@@ -143,6 +143,7 @@ $(STAMPS_DIR)/integration-tests: FORCE
 	echo -n "$$stamp" | cmp -s "$@" || echo -n "$$stamp" > "$@"
 
 $(STAMPS_DIR)/test-integration-build: $(STAMPS_DIR)/rpms-mock $(STAMPS_DIR)/CI_BASE_IMAGE $(STAMPS_DIR)/integration-tests
+	set -e
 	mkdir -p "$(STAMPS_DIR)"
 	"$(CONTAINER_TEST)" build --base="$(CI_BASE_IMAGE)"
 	touch "$(STAMPS_DIR)/test-integration-build"
