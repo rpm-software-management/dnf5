@@ -2,5 +2,5 @@ libdnf5.logger
 ==============
 
 
-.. automodule:: libdnf5.logger
+.. autoapimodule:: libdnf5.logger
     :members:
