@@ -332,12 +332,8 @@ It supports RPM packages%{?with_modulemd:, modulemd modules,} and comps groups &
 %dir %{_sysconfdir}/dnf/dnf5-plugins
 %doc %{_libdir}/dnf5/plugins/README
 %dir %{_libdir}/libdnf5/plugins
-%dir %{_datadir}/bash-completion/
-%dir %{_datadir}/bash-completion/completions/
-%{_datadir}/bash-completion/completions/dnf*
-%dir %{_datadir}/zsh/
-%dir %{_datadir}/zsh/site-functions/
-%{_datadir}/zsh/site-functions/_dnf5
+%{bash_completions_dir}/dnf*
+%{zsh_completions_dir}/_dnf5
 %license COPYING.md
 %license gpl-2.0.txt
 %doc AUTHORS.md CHANGELOG.md CONTRIBUTING.md README.md
@@ -1124,7 +1120,7 @@ DNF5 plugin for working with RPM package manifest files.
 %if %{with dnf5_obsoletes_dnf}
 ln -sr %{buildroot}%{_bindir}/dnf5 %{buildroot}%{_bindir}/dnf
 ln -sr %{buildroot}%{_bindir}/dnf5 %{buildroot}%{_bindir}/yum
-ln -sr %{buildroot}%{_datadir}/bash-completion/completions/dnf5 %{buildroot}%{_datadir}/bash-completion/completions/dnf
+ln -sr %{buildroot}%{bash_completions_dir}/dnf5 %{buildroot}%{bash_completions_dir}/dnf
 %if %{with man}
     for file in %{buildroot}%{_mandir}/man[578]/dnf5[-.]*; do
         dir=$(dirname $file)
