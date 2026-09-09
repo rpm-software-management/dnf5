@@ -79,6 +79,8 @@ filters = [
 ]
 EOF
 
+my $POLICY_TOML_EMPTY = "version = '1.2'\n";
+
 
 sub setup_test_base {
     my $base = new libdnf5::base::Base();
@@ -136,6 +138,14 @@ sub read_file {
     is($vcm->get_loaded_policy_source(0), "text:test", "Policy source is correct");
     is($vcm->get_loaded_policy_as_compact(0), $POLICY_COMPACT_TEST_1, "Policy as compact matches");
     is($vcm->get_loaded_policy_as_toml(0), $POLICY_TOML_TEST_1, "Policy as TOML matches");
+
+    # Loading an empty compact format succeeds, but no policy is added to VendorChangeManager
+    $vcm->load_policy_from_compact("", "text:empty1");
+    is($vcm->get_loaded_policies_count(), 1, "Empty compact policy not added");
+
+    # Loading an empty compact format succeeds, but no policy is added to VendorChangeManager
+    $vcm->load_policy_from_compact(" \n \t ", "text:empty2");
+    is($vcm->get_loaded_policies_count(), 1, "Whitespace-only compact policy not added");
 }
 
 # Test: load_policy_from_toml_content
@@ -150,6 +160,11 @@ sub read_file {
     is($vcm->get_loaded_policy_source(0), "text:test", "Policy source is correct");
     is($vcm->get_loaded_policy_as_compact(0), $POLICY_COMPACT_TEST_1, "Policy as compact matches");
     is($vcm->get_loaded_policy_as_toml(0), $POLICY_TOML_TEST_1, "Policy as TOML matches");
+
+    # Loading an empty policy (only version is present) from TOML string succeeds,
+    # but no policy is added to VendorChangeManager.
+    $vcm->load_policy_from_toml($POLICY_TOML_EMPTY, "text:toml_only_version");
+    is($vcm->get_loaded_policies_count(), 1, "Empty TOML policy not added");
 }
 
 # Test: load_policy_from_toml_file
@@ -170,6 +185,13 @@ sub read_file {
     is($source, "file://" . $path, "Policy source is file URI");
     is($vcm->get_loaded_policy_as_compact(0), $POLICY_COMPACT_TEST_1, "Policy as compact matches");
     is($vcm->get_loaded_policy_as_toml(0), $POLICY_TOML_TEST_1, "Policy as TOML matches");
+
+    # Loading an empty policy (only version is present) from TOML file succeeds,
+    # but no policy is added to VendorChangeManager.
+    my $path_empty = "$installroot/tmp/empty_policy.conf";
+    write_file($path_empty, $POLICY_TOML_EMPTY);
+    $vcm->load_policy_from_toml($path_empty);
+    is($vcm->get_loaded_policies_count(), 1, "Empty TOML file policy not added");
 }
 
 # Test: convert_toml_to_compact
@@ -189,6 +211,10 @@ sub read_file {
     $compact = libdnf5::base::VendorChangeManager::convert_policy_toml_to_compact(
         $POLICY_TOML_TEST_2, "text:test");
     is($compact, $POLICY_COMPACT_TEST_2, "TOML to compact conversion (test_2)");
+
+    $compact = libdnf5::base::VendorChangeManager::convert_policy_toml_to_compact(
+        $POLICY_TOML_EMPTY, "text:test");
+    is($compact, "", "Empty TOML to compact conversion");
 }
 
 # Test: convert_toml_file_to_compact
@@ -202,6 +228,12 @@ sub read_file {
 
     my $compact = libdnf5::base::VendorChangeManager::convert_policy_toml_to_compact($path);
     is($compact, $POLICY_COMPACT_TEST_1, "TOML file to compact conversion");
+
+    # Create a TOML file with an empty policy (only version is present)
+    my $path_empty = "$installroot/tmp/empty_policy.conf";
+    write_file($path_empty, $POLICY_TOML_EMPTY);
+    $compact = libdnf5::base::VendorChangeManager::convert_policy_toml_to_compact($path_empty);
+    is($compact, "", "Empty TOML file to compact conversion");
 }
 
 # Test: convert_compact_to_toml
@@ -221,6 +253,9 @@ sub read_file {
     $toml = libdnf5::base::VendorChangeManager::convert_policy_compact_to_toml(
         $POLICY_COMPACT_TEST_2, "text:test");
     is($toml, $POLICY_TOML_TEST_2, "Compact to TOML conversion (test_2)");
+
+    $toml = libdnf5::base::VendorChangeManager::convert_policy_compact_to_toml("", "text:test");
+    is($toml, $POLICY_TOML_EMPTY, "Empty compact to TOML conversion");
 }
 
 # Test: unload_policies
