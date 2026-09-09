@@ -210,7 +210,15 @@ To build RPMs using Mock for a more reproducible build (or to target a
 different Fedora version):
 ```
 make rpms-mock
-make rpms-mock MOCK_CONFIG=fedora-43-x86_64
+make rpms-mock FEDORA_VERSION=43
+```
+
+`FEDORA_VERSION` also sets the default base image used to build the
+integration test container. To use a non-Fedora Mock root (e.g. rhel or epel)
+or a different container image, override `MOCK_CONFIG` and `CI_BASE_IMAGE`
+directly instead, independently of `FEDORA_VERSION`:
+```
+make rpms-mock MOCK_CONFIG=epel-10-x86_64
 ```
 
 If the container is already built, you can skip the RPM build and container
