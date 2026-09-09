@@ -909,8 +909,9 @@ VendorChangeManager::VendorChangePolicy VendorChangePolicyCompactFormat::parse()
     pos = 0;
 
     skip_white_spaces();
+
     if (at_end()) {
-        throw_error(Error(M_("Empty vendor policy string")));
+        return policy;
     }
 
     if (peek() != '@') {
@@ -941,10 +942,6 @@ VendorChangeManager::VendorChangePolicy VendorChangePolicyCompactFormat::parse()
 
     if (!at_end()) {
         throw_error(Error(M_("Unexpected character '{}'"), peek()));
-    }
-
-    if (policy.vendor_entries.empty() && policy.outgoing_packages.empty() && policy.incoming_packages.empty()) {
-        throw_error(Error(M_("Empty policy: no vendor definitions or package filters specified")));
     }
 
     return policy;
