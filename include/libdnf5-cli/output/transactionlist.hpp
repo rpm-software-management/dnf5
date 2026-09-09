@@ -28,7 +28,11 @@
 namespace libdnf5::cli::output {
 
 LIBDNF_CLI_API void print_transaction_list(std::vector<libdnf5::transaction::Transaction> & ts_list);
+LIBDNF_CLI_API void print_transaction_list(
+    std::vector<libdnf5::transaction::Transaction> & ts_list, bool complete_history);
 LIBDNF_CLI_API void print_transaction_list_json(std::vector<libdnf5::transaction::Transaction> & ts_list);
+LIBDNF_CLI_API void print_transaction_list_json(
+    std::vector<libdnf5::transaction::Transaction> & ts_list, bool complete_history);
 
 }  // namespace libdnf5::cli::output
 
