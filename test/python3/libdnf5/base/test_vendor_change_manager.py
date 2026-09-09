@@ -63,6 +63,8 @@ filters = [
 ]
 '''
 
+POLICY_TOML_EMPTY = "version = '1.2'\n"
+
 
 class TestVendorChangeManager(unittest.TestCase):
     """Test VendorChangeManager API"""
@@ -108,6 +110,14 @@ class TestVendorChangeManager(unittest.TestCase):
         self.assertEqual(vcm.get_loaded_policy_as_compact(0), POLICY_COMPACT_TEST_1)
         self.assertEqual(vcm.get_loaded_policy_as_toml(0), POLICY_TOML_TEST_1)
 
+        # Loading an empty compact format succeeds, but no policy is added to VendorChangeManager
+        vcm.load_policy_from_compact("", "text:empty1")
+        self.assertEqual(vcm.get_loaded_policies_count(), 1)
+
+        # Loading an empty compact format succeeds, but no policy is added to VendorChangeManager
+        vcm.load_policy_from_compact(" \n \t ", "text:empty2")
+        self.assertEqual(vcm.get_loaded_policies_count(), 1)
+
     def test_load_policy_from_toml_content(self):
         """Test loading vendor policy from TOML content string"""
         self.base.setup()
@@ -119,6 +129,11 @@ class TestVendorChangeManager(unittest.TestCase):
         self.assertEqual(vcm.get_loaded_policy_source(0), "text:test")
         self.assertEqual(vcm.get_loaded_policy_as_compact(0), POLICY_COMPACT_TEST_1)
         self.assertEqual(vcm.get_loaded_policy_as_toml(0), POLICY_TOML_TEST_1)
+
+        # Loading an empty policy (only version is present) from TOML string succeeds,
+        # but no policy is added to VendorChangeManager.
+        vcm.load_policy_from_toml(POLICY_TOML_EMPTY, "text:toml_only_version")
+        self.assertEqual(vcm.get_loaded_policies_count(), 1)
 
     def test_load_policy_from_toml_file(self):
         """Test loading vendor policy from TOML file"""
@@ -139,6 +154,14 @@ class TestVendorChangeManager(unittest.TestCase):
         self.assertEqual(vcm.get_loaded_policy_as_compact(0), POLICY_COMPACT_TEST_1)
         self.assertEqual(vcm.get_loaded_policy_as_toml(0), POLICY_TOML_TEST_1)
 
+        # Loading an empty policy (only version is present) from TOML file succeeds,
+        # but no policy is added to VendorChangeManager.
+        path_empty = os.path.join(installroot, "tmp", "empty_policy.conf")
+        with open(path_empty, 'w') as f:
+            f.write(POLICY_TOML_EMPTY)
+        vcm.load_policy_from_toml(path_empty)
+        self.assertEqual(vcm.get_loaded_policies_count(), 1)
+
     def test_convert_toml_to_compact(self):
         """Test converting TOML to compact format"""
         compact = libdnf5.base.VendorChangeManager.convert_policy_toml_to_compact(
@@ -157,6 +180,10 @@ class TestVendorChangeManager(unittest.TestCase):
             POLICY_TOML_TEST_2, "text:test")
         self.assertEqual(compact, POLICY_COMPACT_TEST_2)
 
+        compact = libdnf5.base.VendorChangeManager.convert_policy_toml_to_compact(
+            POLICY_TOML_EMPTY, "text:test")
+        self.assertEqual(compact, "")
+
     def test_convert_toml_file_to_compact(self):
         """Test converting TOML file to compact format"""
         installroot = self.base.get_config().installroot
@@ -167,6 +194,13 @@ class TestVendorChangeManager(unittest.TestCase):
 
         compact = libdnf5.base.VendorChangeManager.convert_policy_toml_to_compact(path)
         self.assertEqual(compact, POLICY_COMPACT_TEST_1)
+
+        # Create a TOML file with an empty policy (only version is present)
+        path_empty = os.path.join(installroot, "tmp", "empty_policy.conf")
+        with open(path_empty, 'w') as f:
+            f.write(POLICY_TOML_EMPTY)
+        compact = libdnf5.base.VendorChangeManager.convert_policy_toml_to_compact(path_empty)
+        self.assertEqual(compact, "")
 
     def test_convert_compact_to_toml(self):
         """Test converting compact format to TOML"""
@@ -185,6 +219,9 @@ class TestVendorChangeManager(unittest.TestCase):
         toml = libdnf5.base.VendorChangeManager.convert_policy_compact_to_toml(
             POLICY_COMPACT_TEST_2, "text:test")
         self.assertEqual(toml, POLICY_TOML_TEST_2)
+
+        toml = libdnf5.base.VendorChangeManager.convert_policy_compact_to_toml("", "text:test")
+        self.assertEqual(toml, POLICY_TOML_EMPTY)
 
     def test_unload_policies(self):
         """Test unload all vendor change policies from memory"""
