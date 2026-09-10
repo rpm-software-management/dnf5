@@ -25,9 +25,11 @@
 #include "utils/sqlite3/sqlite3.hpp"
 
 #include "libdnf5/base/base_weak.hpp"
+#include "libdnf5/transaction/transaction_item_action.hpp"
 #include "libdnf5/transaction/transaction_item_reason.hpp"
 
 #include <memory>
+#include <set>
 
 
 namespace libdnf5::transaction {
@@ -73,6 +75,14 @@ public:
 
     /// Get transaction item count for history transactions specified by transaction ids.
     static std::unordered_map<int64_t, int64_t> transactions_item_counts(
+        const BaseWeakPtr & base, const std::vector<Transaction> & transactions);
+
+    /// Get the set of distinct transaction item actions for the specified transactions.
+    /// It gets the actions in a single db query.
+    /// The REPLACED action is omitted for packages that were replaced merely
+    /// as a result of being upgraded/downgraded within the same transaction;
+    /// it is kept for packages obsoleted by a differently named package.
+    static std::unordered_map<int64_t, std::set<TransactionItemAction>> transactions_item_actions(
         const BaseWeakPtr & base, const std::vector<Transaction> & transactions);
 
     /// Filter out transactions that don't contain any rpm with name from pkg_names

@@ -323,6 +323,99 @@ std::unordered_map<int64_t, int64_t> TransactionDbUtils::transactions_item_count
     return id_to_count;
 }
 
+// "Replaced" is used both for the old side of an Upgrade/Downgrade/Reinstall
+// and for packages genuinely obsoleted by a differently-named package. Only
+// the latter is interesting to report, so a "Replaced" item is skipped when
+// the same transaction contains an Upgrade/Downgrade/Reinstall of the same
+// package name.
+static constexpr const char * ITEM_ACTIONS_SQL_UPGRADED_CTE = R"**(
+    WITH "upgraded" AS (
+        SELECT DISTINCT
+            "ti"."trans_id" AS "trans_id",
+            "pn"."name" AS "name",
+            "rpm"."arch_id" AS "arch_id"
+        FROM "trans_item" "ti"
+        JOIN "trans_item_action" "tia" ON "ti"."action_id" = "tia"."id"
+        JOIN "rpm" USING ("item_id")
+        JOIN "pkg_name" "pn" ON "rpm"."name_id" = "pn"."id"
+        WHERE "tia"."name" IN ('Upgrade', 'Downgrade', 'Reinstall')
+)**";
+
+static constexpr const char * ITEM_ACTIONS_SQL_MAIN = R"**(
+    )
+    SELECT DISTINCT
+        "ti"."trans_id" AS "trans_id",
+        "tia"."name" AS "action"
+    FROM "trans_item" "ti"
+    JOIN "trans_item_action" "tia" ON "ti"."action_id" = "tia"."id"
+    LEFT JOIN "rpm" USING ("item_id")
+    LEFT JOIN "pkg_name" "pn" ON "rpm"."name_id" = "pn"."id"
+    LEFT JOIN "upgraded" "u" ON
+        "u"."trans_id" = "ti"."trans_id"
+        AND "u"."name" = "pn"."name"
+        AND "u"."arch_id" = "rpm"."arch_id"
+    WHERE
+        ("tia"."name" != 'Replaced' OR "u"."trans_id" IS NULL)
+)**";
+
+std::unordered_map<int64_t, std::set<TransactionItemAction>> TransactionDbUtils::transactions_item_actions(
+    const BaseWeakPtr & base, const std::vector<Transaction> & transactions) {
+    auto conn = transaction_db_connect(*base);
+
+    // If every transaction in the history was requested, filtering by id would
+    // only add overhead (a huge IN list plus double the bound parameters) without
+    // narrowing the result, so skip it. Since "trans"."id" is a unique primary
+    // key, matching the total row count means the requested set is the whole table.
+    bool filter_by_ids = !transactions.empty();
+    if (filter_by_ids) {
+        auto count_query = libdnf5::utils::SQLite3::Query(*conn, "SELECT COUNT(*) AS \"cnt\" FROM \"trans\"");
+        count_query.step();
+        if (static_cast<int64_t>(transactions.size()) == count_query.get<int64_t>("cnt")) {
+            filter_by_ids = false;
+        }
+    }
+
+    // Same id filter is applied both inside the "upgraded" CTE and to the outer
+    // query, so it needs to be injected (and bound) twice.
+    std::string id_filter;
+    if (filter_by_ids) {
+        id_filter = " AND \"ti\".\"trans_id\" IN (";
+        for (size_t i = 0; i < transactions.size(); ++i) {
+            if (i == 0) {
+                id_filter += "?";
+            } else {
+                id_filter += ", ?";
+            }
+        }
+        id_filter += ")";
+    }
+
+    std::string sql = ITEM_ACTIONS_SQL_UPGRADED_CTE;
+    sql += id_filter;
+    sql += ITEM_ACTIONS_SQL_MAIN;
+    sql += id_filter;
+
+    auto query = libdnf5::utils::SQLite3::Query(*conn, sql);
+
+    if (filter_by_ids) {
+        for (size_t i = 0; i < transactions.size(); ++i) {
+            query.bind(static_cast<int>(i + 1), transactions[i].get_id());
+        }
+        for (size_t i = 0; i < transactions.size(); ++i) {
+            query.bind(static_cast<int>(transactions.size() + i + 1), transactions[i].get_id());
+        }
+    }
+
+    std::unordered_map<int64_t, std::set<TransactionItemAction>> id_to_actions;
+
+    while (query.step() == libdnf5::utils::SQLite3::Statement::StepResult::ROW) {
+        id_to_actions[query.get<int64_t>("trans_id")].insert(
+            transaction_item_action_from_string(query.get<std::string>("action")));
+    }
+
+    return id_to_actions;
+}
+
 static constexpr const char * SQL_TRANS_CONTAINS_RPM_NAME = R"**(
     SELECT DISTINCT
         "t"."id"
