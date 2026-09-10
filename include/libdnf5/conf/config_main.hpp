@@ -102,6 +102,8 @@ public:
     const OptionStringList & get_group_package_types_option() const;
     OptionStringAppendSet & get_optional_metadata_types_option();
     const OptionStringAppendSet & get_optional_metadata_types_option() const;
+    OptionBool & get_filelists_auto_load_option();
+    const OptionBool & get_filelists_auto_load_option() const;
     OptionBool & get_use_host_config_option();
     const OptionBool & get_use_host_config_option() const;
 

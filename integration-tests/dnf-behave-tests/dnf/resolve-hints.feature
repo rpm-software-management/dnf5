@@ -110,7 +110,7 @@ Scenario: --allowerasing is not printed if the option is already present
         """
 
 Scenario: filelists metadata is hinted on missing file dependency
-   When I execute dnf with args "install DoesNotExist RequiresFileDep"
+   When I execute dnf with args "install --setopt=filelists_auto_load=false DoesNotExist RequiresFileDep"
    Then the exit code is 1
     And stderr is
         """

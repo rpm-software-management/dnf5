@@ -226,7 +226,10 @@ LibrepoError::LibrepoError(std::unique_ptr<GError> && lr_error)
 
 
 void RepoDownloader::add(
-    libdnf5::repo::Repo & repo, const std::string & destdir, std::function<repo_loading_func> load_repo) try {
+    libdnf5::repo::Repo & repo,
+    const std::string & destdir,
+    std::function<repo_loading_func> load_repo,
+    const std::string & description_override) try {
     auto & cbd = callback_data.emplace_back();
     cbd.repo = repo.get_weak_ptr();
     cbd.destination = destdir;
@@ -239,12 +242,19 @@ void RepoDownloader::add(
     auto * download_callbacks = cbd.repo->get_base()->get_download_callbacks();
     auto & config = cbd.repo->get_config();
     if (download_callbacks) {
-        cbd.user_cb_data = download_callbacks->add_new_download(
-            download_data.user_data,
-            !config.get_name_option().get_value().empty()
-                ? config.get_name_option().get_value().c_str()
-                : (!config.get_id().empty() ? config.get_id().c_str() : "unknown"),
-            -1);
+        const auto & repo_name = config.get_name_option().get_value();
+        const auto repo_id = config.get_id();
+        const char * description;
+        if (!description_override.empty()) {
+            description = description_override.c_str();
+        } else if (!repo_name.empty()) {
+            description = repo_name.c_str();
+        } else if (!repo_id.empty()) {
+            description = repo_id.c_str();
+        } else {
+            description = "unknown";
+        }
+        cbd.user_cb_data = download_callbacks->add_new_download(download_data.user_data, description, -1);
         cbd.prev_total_to_download = 0;
         cbd.prev_downloaded = 0;
         cbd.sum_prev_downloaded = 0;

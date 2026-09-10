@@ -32,6 +32,7 @@
 #include <solv/repo.h>
 
 #include <filesystem>
+#include <set>
 
 
 static const constexpr size_t CHKSUM_BYTES = 32;
@@ -158,6 +159,11 @@ private:
 
     /// List of system repo environmental groups without valid file with xml definition
     std::vector<std::string> environments_missing_xml;
+
+    /// Extension repodata names already loaded into the pool, so a later attempt
+    /// for the same type (e.g. after metadata was downloaded on demand)
+    /// doesn't load it twice.
+    std::set<std::string> loaded_ext_type_names;
 
 public:
     ::Repo * repo{nullptr};  // libsolv pool retains ownership

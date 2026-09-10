@@ -417,6 +417,12 @@ public:
 
 private:
     LIBDNF_LOCAL rpm::PackageId get_running_kernel_internal();
+
+    /// Downloads and loads filelists metadata (not loaded by default) for enabled available
+    /// repos, to retry dependency resolution after a solver problem suggested it's needed.
+    /// Returns whether any new data was actually loaded (see goal.cpp for full details).
+    LIBDNF_LOCAL bool try_auto_load_filelists();
+
     class LIBDNF_LOCAL Impl;
     std::unique_ptr<Impl> p_impl;
 };
