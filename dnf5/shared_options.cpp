@@ -103,6 +103,25 @@ void create_downloadonly_option(dnf5::Command & command) {
     command.get_argument_parser_command()->register_named_arg(downloadonly);
 }
 
+void create_download_order_options(dnf5::Command & command) {
+    auto & parser = command.get_context().get_argument_parser();
+
+    auto sort = parser.add_new_named_arg("download-sort");
+    sort->set_long_name("download-sort");
+    sort->set_description("Sort the packages to download by the given key");
+    sort->set_has_value(true);
+    sort->set_arg_value_help("size");
+    sort->link_value(&command.get_context().get_base().get_config().get_download_sort_option());
+    command.get_argument_parser_command()->register_named_arg(sort);
+
+    auto reverse = parser.add_new_named_arg("download-reverse");
+    reverse->set_long_name("download-reverse");
+    reverse->set_description("Reverse the order packages are downloaded in.");
+    reverse->set_const_value("true");
+    reverse->link_value(&command.get_context().get_base().get_config().get_download_sort_reverse_option());
+    command.get_argument_parser_command()->register_named_arg(reverse);
+}
+
 void create_offline_option(dnf5::Command & command) {
     auto & ctx = command.get_context();
     auto & parser = command.get_context().get_argument_parser();
