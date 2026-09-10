@@ -75,6 +75,7 @@
 #include <libdnf5-cli/utils/units.hpp>
 #include <libdnf5-cli/utils/userconfirm.hpp>
 #include <libdnf5/base/base.hpp>
+#include <libdnf5/base/vendor_change_manager.hpp>
 #include <libdnf5/common/xdg.hpp>
 #include <libdnf5/conf/const.hpp>
 #include <libdnf5/logger/factory.hpp>
@@ -353,6 +354,59 @@ void RootCommand::set_argument_parser() {
     global_options_group->register_argument(no_allow_vendor_change);
 
     no_allow_vendor_change->add_conflict_argument(*allow_vendor_change);
+
+    {
+        auto add_vendor_policy = parser.add_new_named_arg("add-vendor-policy");
+        add_vendor_policy->set_long_name("add-vendor-policy");
+        add_vendor_policy->set_has_value(true);
+        add_vendor_policy->set_arg_value_help("POLICY");
+        add_vendor_policy->set_description(
+            _("Add a vendor change policy for this run. Can be specified multiple times."));
+        add_vendor_policy->set_parse_hook_func([&ctx](
+                                                   [[maybe_unused]] ArgumentParser::NamedArg * arg,
+                                                   [[maybe_unused]] const char * option,
+                                                   const char * value) {
+            ctx.get_cmdline_vendor_policies().emplace_back(value);
+            return true;
+        });
+        global_options_group->register_argument(add_vendor_policy);
+    }
+
+    {
+        auto clear_vendor_policies = parser.add_new_named_arg("clear-vendor-policies");
+        clear_vendor_policies->set_long_name("clear-vendor-policies");
+        clear_vendor_policies->set_description(libdnf5::utils::sformat(
+            _("Remove all vendor change policies. Can be combined with {} to replace them."),
+            "--add-vendor-policy=POLICY"));
+        clear_vendor_policies->set_parse_hook_func([&ctx](
+                                                       [[maybe_unused]] ArgumentParser::NamedArg * arg,
+                                                       [[maybe_unused]] const char * option,
+                                                       [[maybe_unused]] const char * value) {
+            ctx.set_clear_vendor_policies(true);
+            return true;
+        });
+        clear_vendor_policies->add_conflict_argument(*allow_vendor_change);
+        global_options_group->register_argument(clear_vendor_policies);
+    }
+
+    {
+        auto remove_vendor_policy_source = parser.add_new_named_arg("remove-vendor-policy-source");
+        remove_vendor_policy_source->set_long_name("remove-vendor-policy-source");
+        remove_vendor_policy_source->set_has_value(true);
+        remove_vendor_policy_source->set_arg_value_help("SOURCE");
+        remove_vendor_policy_source->set_description(
+            _("Remove vendor change policies whose source matches the specified pattern. "
+              "Supports globs, can be specified multiple times."));
+        remove_vendor_policy_source->set_parse_hook_func([&ctx](
+                                                             [[maybe_unused]] ArgumentParser::NamedArg * arg,
+                                                             [[maybe_unused]] const char * option,
+                                                             const char * value) {
+            ctx.add_remove_vendor_policy_source(value);
+            return true;
+        });
+        remove_vendor_policy_source->add_conflict_argument(*allow_vendor_change);
+        global_options_group->register_argument(remove_vendor_policy_source);
+    }
 
     {
         auto no_docs = parser.add_new_named_arg("no-docs");
@@ -647,6 +701,20 @@ void RootCommand::set_argument_parser() {
     }
 
     {
+        auto dump_vendor_policies = parser.add_new_named_arg("dump-vendor-policies");
+        dump_vendor_policies->set_long_name("dump-vendor-policies");
+        dump_vendor_policies->set_description(_("Print loaded vendor change policies to stdout"));
+        dump_vendor_policies->set_parse_hook_func([&ctx](
+                                                      [[maybe_unused]] ArgumentParser::NamedArg * arg,
+                                                      [[maybe_unused]] const char * option,
+                                                      [[maybe_unused]] const char * value) {
+            ctx.set_dump_vendor_policies(true);
+            return true;
+        });
+        global_options_group->register_argument(dump_vendor_policies);
+    }
+
+    {
         auto version = parser.add_new_named_arg("version");
         version->set_long_name("version");
         version->set_description(_("Show DNF5 version and exit"));
@@ -736,6 +804,7 @@ void RootCommand::pre_configure() {
     if (arg_parser.get_named_arg("dump-variables", false).get_parse_count() > 0 ||
         arg_parser.get_named_arg("dump-main-config", false).get_parse_count() > 0 ||
         arg_parser.get_named_arg("dump-repo-config", false).get_parse_count() > 0 ||
+        arg_parser.get_named_arg("dump-vendor-policies", false).get_parse_count() > 0 ||
         arg_parser.get_named_arg("version", false).get_parse_count() > 0) {
         return;
     }
@@ -1016,6 +1085,22 @@ static void dump_variables(Context & context) {
     }
 }
 
+static void dump_vendor_policies(Context & context) {
+    context.print_output(_("======== Vendor Change Policies: ========"));
+    auto vcm = context.get_base().get_vendor_change_manager();
+    const auto count = vcm->get_loaded_policies_count();
+    for (std::size_t i = 0; i < count; ++i) {
+        context.print_output(libdnf5::utils::sformat(_("Policy #{}: source: {}"), i, vcm->get_loaded_policy_source(i)));
+        context.print_output("  " + vcm->get_loaded_policy_as_compact(i));
+    }
+    auto & config = context.get_base().get_config();
+    if (config.get_allow_vendor_change_option().get_value()) {
+        context.print_output(
+            _("allow_vendor_change is enabled. "
+              "Packages can be replaced by any vendor, and vendor change policies will be ignored."));
+    }
+}
+
 static void print_new_leaves(Context & context) {
     libdnf5::rpm::PackageQuery pkg_query(context.get_base());
     pkg_query.filter_installed();
@@ -1225,8 +1310,9 @@ static void print_resolve_hints(dnf5::Context & context) {
     bool has_vendor_change_skipped =
         context.get_transaction() && !context.get_transaction()->get_vendor_change_skipped_packages().empty();
     if (!conf.get_allow_vendor_change_option().get_value() && (vendor_change || has_vendor_change_skipped)) {
-        const std::string_view arg{"--allow-vendor-change"};
-        hints.emplace_back(libdnf5::utils::sformat(_("{} to allow changing package vendors"), arg));
+        hints.emplace_back(
+            libdnf5::utils::sformat(_("{} to add specific vendor change rules"), "--add-vendor-policy=POLICY"));
+        hints.emplace_back(libdnf5::utils::sformat(_("{} to allow all vendor changes"), "--allow-vendor-change"));
     }
 
     if (hints.size() > 0) {
@@ -1556,6 +1642,8 @@ int main(int argc, char * argv[]) try {
                 context.apply_repository_setopts();
             }
 
+            context.apply_cmdline_vendor_policies();
+
             // Run selected command
             command->configure();
 
@@ -1567,6 +1655,10 @@ int main(int argc, char * argv[]) try {
 
             if (const auto & repo_id_list = context.get_dump_repo_config_id_list(); !repo_id_list.empty()) {
                 dump_repository_configuration(context, repo_id_list);
+            }
+
+            if (context.get_dump_vendor_policies()) {
+                dump_vendor_policies(context);
             }
 
             // std::nullopt == Unknown whether system is bootc

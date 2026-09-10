@@ -55,3 +55,32 @@ Examples:
     | ^t.ird.*  | NOT_REGEX       | vendor-1.3-1 : Third Vendor   |
     | ^t.ird.*  | NOT_IREGEX      | vendor-1.2-1 : Second Vendor  |
     | ^p.ird.*  | NOT_IREGEX      | vendor-1.3-1 : Third Vendor   |
+
+
+Scenario Outline: Upgrade with vendor policy - <comparator> (--add-vendor-policy)
+  Given I use repository "dnf-ci-vendor-1-updates"
+  Given I use repository "dnf-ci-vendor-2-updates"
+  Given I use repository "dnf-ci-vendor-3-updates"
+   When I execute dnf with args "--add-vendor-policy=in:<comparator>\"<vendor>\" upgrade '*'"
+   Then the exit code is 0
+  Given I successfully execute rpm with args "--queryformat='%{{name}}-%{{version}}-%{{release}} : %{{vendor}}\n' -q -i vendor"
+   Then the exit code is 0
+    And stdout contains lines
+    """
+    <stdout_line>
+    """
+
+Examples:
+    | vendor     | comparator | stdout_line                   |
+    | Third      | !^         | vendor-1.2-1 : Second Vendor  |
+    | third      | !^         | vendor-1.3-1 : Third Vendor   |
+    | third      | !i^        | vendor-1.2-1 : Second Vendor  |
+    | five       | !i^        | vendor-1.3-1 : Third Vendor   |
+    | rd\ Vendor | !$         | vendor-1.2-1 : Second Vendor  |
+    | rd\ vendor | !$         | vendor-1.3-1 : Third Vendor   |
+    | rd\ vendor | !i$        | vendor-1.2-1 : Second Vendor  |
+    | five       | !i$        | vendor-1.3-1 : Third Vendor   |
+    | ^T.ird.*   | !=~        | vendor-1.2-1 : Second Vendor  |
+    | ^t.ird.*   | !=~        | vendor-1.3-1 : Third Vendor   |
+    | ^t.ird.*   | !i=~       | vendor-1.2-1 : Second Vendor  |
+    | ^p.ird.*   | !i=~       | vendor-1.3-1 : Third Vendor   |
