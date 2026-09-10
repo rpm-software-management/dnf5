@@ -28,6 +28,7 @@
 #include <unistd.h>
 
 #include <cstdio>
+#include <optional>
 
 constexpr const int MODE = 0664;
 
@@ -44,6 +45,7 @@ private:
     const std::filesystem::path path;
     int lock_fd{-1};
     bool keep_file{false};
+    std::optional<LockAccess> held_access;
 };
 
 Locker::Locker(const std::filesystem::path & path, const bool keep_file) : p_impl{new Impl{path, keep_file}} {};
@@ -100,6 +102,7 @@ bool Locker::lock(LockAccess access, LockBlocking blocking) {
         }
     }
 
+    p_impl->held_access = access;
     return true;
 }
 
@@ -186,6 +189,18 @@ std::string Locker::read_content() {
     return content;
 }
 
+LockAccess Locker::held_lock_access() const {
+    if (!p_impl->held_access) {
+        throw RuntimeError(M_("The lock file \"{}\" is not locked"), p_impl->path.string());
+    }
+
+    return *p_impl->held_access;
+}
+
+bool Locker::holds_lock() const noexcept {
+    return p_impl->held_access.has_value();
+}
+
 void Locker::Impl::unlock() {
     if (lock_fd != -1) {
         if (close(lock_fd) == -1) {
@@ -197,6 +212,7 @@ void Locker::Impl::unlock() {
             }
         }
         lock_fd = -1;
+        held_access.reset();
     }
 }
 

@@ -129,3 +129,43 @@ void UtilsLockerTest::test_nonexistent_directory() {
     CPPUNIT_ASSERT_THROW(locker.write_lock(), libdnf5::SystemError);
     CPPUNIT_ASSERT_THROW(locker.read_lock(), libdnf5::SystemError);
 }
+
+
+void UtilsLockerTest::test_holds_lock_unlocked() {
+    Locker locker(lock_file_path);
+    CPPUNIT_ASSERT(!locker.holds_lock());
+}
+
+
+void UtilsLockerTest::test_holds_lock_read_lock() {
+    Locker locker(lock_file_path);
+    CPPUNIT_ASSERT(locker.read_lock());
+    CPPUNIT_ASSERT(locker.holds_lock());
+}
+
+
+void UtilsLockerTest::test_holds_lock_write_lock() {
+    Locker locker(lock_file_path);
+    CPPUNIT_ASSERT(locker.write_lock());
+    CPPUNIT_ASSERT(locker.holds_lock());
+}
+
+
+void UtilsLockerTest::test_held_lock_access_unlocked() {
+    Locker locker(lock_file_path);
+    CPPUNIT_ASSERT_THROW(locker.held_lock_access(), libdnf5::RuntimeError);
+}
+
+
+void UtilsLockerTest::test_held_lock_access_read_lock() {
+    Locker locker(lock_file_path);
+    CPPUNIT_ASSERT(locker.read_lock());
+    CPPUNIT_ASSERT_EQUAL(LockAccess::READ, locker.held_lock_access());
+}
+
+
+void UtilsLockerTest::test_held_lock_access_write_lock() {
+    Locker locker(lock_file_path);
+    CPPUNIT_ASSERT(locker.write_lock());
+    CPPUNIT_ASSERT_EQUAL(LockAccess::WRITE, locker.held_lock_access());
+}

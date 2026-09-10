@@ -87,6 +87,9 @@ class TestTutorial(base_test_case.BaseTestCase):
         with open("tutorial/repo/load_repo.py", "r") as f:
             file += f.read()
 
+        # Acquire a write lock on the system repository before using it
+        file += "\nbase.lock_system_repo(libdnf5.utils.LockAccess_WRITE, libdnf5.utils.LockBlocking_BLOCKING)\n"
+
         with open("tutorial/transaction/transaction.py", "r") as f:
             file += f.read()
 

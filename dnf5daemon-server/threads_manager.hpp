@@ -23,6 +23,8 @@
 #include "dbus.hpp"
 #include "utils.hpp"
 
+#include "libdnf5/utils/locker.hpp"
+
 #include <fmt/format.h>
 #include <locale.h>
 #include <sdbus-c++/sdbus-c++.h>
@@ -77,8 +79,13 @@ public:
                     std::optional<std::lock_guard<std::mutex>> libdnf5_lock;
                     if constexpr (UseLibdnf5Mutex) {
                         libdnf5_lock.emplace(service.get_session().get_libdnf5_mutex());
+                        service.get_session().get_base()->lock_system_repo(
+                            libdnf5::utils::LockAccess::WRITE, libdnf5::utils::LockBlocking::BLOCKING);
                     }
                     reply = (service.*method)(call);
+                    if constexpr (UseLibdnf5Mutex) {
+                        service.get_session().get_base()->unlock_system_repo();
+                    }
                 } catch (const sdbus::Error & ex) {
                     reply = call.createErrorReply(ex);
                 } catch (const std::exception & ex) {

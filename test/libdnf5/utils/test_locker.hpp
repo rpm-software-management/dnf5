@@ -21,6 +21,12 @@ class UtilsLockerTest : public CppUnit::TestCase {
     CPPUNIT_TEST(test_unlock);
     CPPUNIT_TEST(test_destructor_cleanup);
     CPPUNIT_TEST(test_nonexistent_directory);
+    CPPUNIT_TEST(test_holds_lock_unlocked);
+    CPPUNIT_TEST(test_holds_lock_read_lock);
+    CPPUNIT_TEST(test_holds_lock_write_lock);
+    CPPUNIT_TEST(test_held_lock_access_unlocked);
+    CPPUNIT_TEST(test_held_lock_access_read_lock);
+    CPPUNIT_TEST(test_held_lock_access_write_lock);
     CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -36,6 +42,12 @@ public:
     void test_unlock();
     void test_destructor_cleanup();
     void test_nonexistent_directory();
+    void test_holds_lock_unlocked();
+    void test_holds_lock_read_lock();
+    void test_holds_lock_write_lock();
+    void test_held_lock_access_unlocked();
+    void test_held_lock_access_read_lock();
+    void test_held_lock_access_write_lock();
 
 private:
     std::string temp_dir;
