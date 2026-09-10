@@ -65,6 +65,9 @@ const std::string POLICY_TOML_TEST_2 =
     "  { filter = 'version', value = \"2.0\", comparator = 'GTE' }\n"
     "]\n";
 
+
+const std::string POLICY_TOML_EMPTY = "version = '1.2'\n";
+
 }  // namespace
 
 
@@ -98,6 +101,14 @@ void VendorChangeManagerTest::test_load_policy_from_compact() {
     CPPUNIT_ASSERT_EQUAL(std::string("text:test"), vcm->get_loaded_policy_source(0));
     CPPUNIT_ASSERT_EQUAL(POLICY_COMPACT_TEST_1, vcm->get_loaded_policy_as_compact(0));
     CPPUNIT_ASSERT_EQUAL(POLICY_TOML_TEST_1, vcm->get_loaded_policy_as_toml(0));
+
+    // Loading an empty compact format succeeds, but no policy is added to VendorChangeManager
+    vcm->load_policy_from_compact("", "text:empty1");
+    CPPUNIT_ASSERT_EQUAL(static_cast<std::size_t>(1), vcm->get_loaded_policies_count());
+
+    // Loading an empty compact format succeeds, but no policy is added to VendorChangeManager
+    vcm->load_policy_from_compact(" \n \t ", "text:empty2");
+    CPPUNIT_ASSERT_EQUAL(static_cast<std::size_t>(1), vcm->get_loaded_policies_count());
 }
 
 
@@ -113,6 +124,11 @@ void VendorChangeManagerTest::test_load_policy_from_toml_content() {
     CPPUNIT_ASSERT_EQUAL(std::string("text:test"), vcm->get_loaded_policy_source(0));
     CPPUNIT_ASSERT_EQUAL(POLICY_COMPACT_TEST_1, vcm->get_loaded_policy_as_compact(0));
     CPPUNIT_ASSERT_EQUAL(POLICY_TOML_TEST_1, vcm->get_loaded_policy_as_toml(0));
+
+    // Loading an empty policy (only version is present) from TOML string succeeds,
+    // but no policy is added to VendorChangeManager.
+    vcm->load_policy_from_toml(POLICY_TOML_EMPTY, "text:toml_only_version");
+    CPPUNIT_ASSERT_EQUAL(static_cast<std::size_t>(1), vcm->get_loaded_policies_count());
 }
 
 
@@ -128,13 +144,22 @@ void VendorChangeManagerTest::test_load_policy_from_toml_file() {
         libdnf5::utils::fs::File(path, "w").write(POLICY_TOML_TEST_1);
     }
 
-    vcm->load_policy_from_toml(std::filesystem::path(path));
+    vcm->load_policy_from_toml(path);
 
     CPPUNIT_ASSERT_EQUAL(static_cast<std::size_t>(1), vcm->get_loaded_policies_count());
     std::string source = vcm->get_loaded_policy_source(0);
     CPPUNIT_ASSERT_EQUAL("file://" + path.string(), source);
     CPPUNIT_ASSERT_EQUAL(POLICY_COMPACT_TEST_1, vcm->get_loaded_policy_as_compact(0));
     CPPUNIT_ASSERT_EQUAL(POLICY_TOML_TEST_1, vcm->get_loaded_policy_as_toml(0));
+
+    // Loading an empty policy (only version is present) from TOML file succeeds,
+    // but no policy is added to VendorChangeManager.
+    const auto path_empty = installroot / "tmp" / "empty_policy.conf";
+    {
+        libdnf5::utils::fs::File(path_empty, "w").write(POLICY_TOML_EMPTY);
+    }
+    vcm->load_policy_from_toml(path_empty);
+    CPPUNIT_ASSERT_EQUAL(static_cast<std::size_t>(1), vcm->get_loaded_policies_count());
 }
 
 
@@ -152,6 +177,9 @@ void VendorChangeManagerTest::test_convert_toml_to_compact() {
 
     compact = libdnf5::base::VendorChangeManager::convert_policy_toml_to_compact(POLICY_TOML_TEST_2, "text:test");
     CPPUNIT_ASSERT_EQUAL(POLICY_COMPACT_TEST_2, compact);
+
+    compact = libdnf5::base::VendorChangeManager::convert_policy_toml_to_compact(POLICY_TOML_EMPTY, "text:test");
+    CPPUNIT_ASSERT_EQUAL(std::string(""), compact);
 }
 
 
@@ -167,6 +195,14 @@ void VendorChangeManagerTest::test_convert_toml_file_to_compact() {
 
     std::string compact = libdnf5::base::VendorChangeManager::convert_policy_toml_to_compact(path);
     CPPUNIT_ASSERT_EQUAL(POLICY_COMPACT_TEST_1, compact);
+
+    // Create a TOML file with an empty policy (only version is present)
+    const auto path_empty = installroot / "tmp" / "empty_policy.conf";
+    {
+        libdnf5::utils::fs::File(path_empty, "w").write(POLICY_TOML_EMPTY);
+    }
+    compact = libdnf5::base::VendorChangeManager::convert_policy_toml_to_compact(path_empty);
+    CPPUNIT_ASSERT_EQUAL(std::string(""), compact);
 }
 
 
@@ -184,6 +220,9 @@ void VendorChangeManagerTest::test_convert_compact_to_toml() {
 
     toml = libdnf5::base::VendorChangeManager::convert_policy_compact_to_toml(POLICY_COMPACT_TEST_2, "text:test");
     CPPUNIT_ASSERT_EQUAL(POLICY_TOML_TEST_2, toml);
+
+    toml = libdnf5::base::VendorChangeManager::convert_policy_compact_to_toml("", "text:test");
+    CPPUNIT_ASSERT_EQUAL(POLICY_TOML_EMPTY, toml);
 }
 
 
