@@ -61,6 +61,7 @@ class ConfigRepo::Impl {
     OptionChild<OptionStringAppendList> protected_packages{main_config.get_protected_packages_option()};
     OptionChild<OptionBool> pkg_gpgcheck{main_config.get_pkg_gpgcheck_option()};
     OptionChild<OptionBool> repo_gpgcheck{main_config.get_repo_gpgcheck_option()};
+    OptionChild<OptionBool> repo_gpgcheck_auto_import_keys{main_config.get_repo_gpgcheck_auto_import_keys_option()};
     OptionChild<OptionBool> enablegroups{main_config.get_enablegroups_option()};
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wdeprecated-declarations"
@@ -156,6 +157,7 @@ ConfigRepo::Impl::Impl(Config & owner, ConfigMain & main_config, const std::stri
     // Compatibility alias for pkg_gpgcheck
     owner.opt_binds().add("gpgcheck", pkg_gpgcheck);
     owner.opt_binds().add("repo_gpgcheck", repo_gpgcheck);
+    owner.opt_binds().add("repo_gpgcheck_auto_import_keys", repo_gpgcheck_auto_import_keys);
     owner.opt_binds().add("enablegroups", enablegroups);
     owner.opt_binds().add("retries", retries);
     owner.opt_binds().add("bandwidth", bandwidth);
@@ -356,6 +358,13 @@ OptionChild<OptionBool> & ConfigRepo::get_repo_gpgcheck_option() {
 }
 const OptionChild<OptionBool> & ConfigRepo::get_repo_gpgcheck_option() const {
     return p_impl->repo_gpgcheck;
+}
+
+OptionChild<OptionBool> & ConfigRepo::get_repo_gpgcheck_auto_import_keys_option() {
+    return p_impl->repo_gpgcheck_auto_import_keys;
+}
+const OptionChild<OptionBool> & ConfigRepo::get_repo_gpgcheck_auto_import_keys_option() const {
+    return p_impl->repo_gpgcheck_auto_import_keys;
 }
 
 OptionChild<OptionBool> & ConfigRepo::get_enablegroups_option() {

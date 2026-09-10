@@ -72,6 +72,30 @@ void ConfTest::test_config_pkg_gpgcheck() {
 #pragma GCC diagnostic pop
 }
 
+void ConfTest::test_config_repo_gpgcheck_auto_import_keys() {
+    // The option is an opt-in and must default to false.
+    CPPUNIT_ASSERT_EQUAL(false, config.get_repo_gpgcheck_auto_import_keys_option().get_value());
+
+    repo::ConfigRepo config_repo(config, "test-repo");
+    CPPUNIT_ASSERT_EQUAL(false, config_repo.get_repo_gpgcheck_auto_import_keys_option().get_value());
+
+    // The repository option inherits the value set in [main].
+    config.get_repo_gpgcheck_auto_import_keys_option().set(Option::Priority::MAINCONFIG, true);
+    CPPUNIT_ASSERT_EQUAL(true, config_repo.get_repo_gpgcheck_auto_import_keys_option().get_value());
+
+    // A per-repository value overrides the inherited one.
+    config_repo.get_repo_gpgcheck_auto_import_keys_option().set(Option::Priority::REPOCONFIG, false);
+    CPPUNIT_ASSERT_EQUAL(false, config_repo.get_repo_gpgcheck_auto_import_keys_option().get_value());
+
+    // The option is registered under its name on both the main and the
+    // repository configuration, so it can be set from configuration files
+    // and --setopt.
+    config.opt_binds().at("repo_gpgcheck_auto_import_keys").new_string(Option::Priority::RUNTIME, "0");
+    CPPUNIT_ASSERT_EQUAL(false, config.get_repo_gpgcheck_auto_import_keys_option().get_value());
+    config_repo.opt_binds().at("repo_gpgcheck_auto_import_keys").new_string(Option::Priority::RUNTIME, "1");
+    CPPUNIT_ASSERT_EQUAL(true, config_repo.get_repo_gpgcheck_auto_import_keys_option().get_value());
+}
+
 void ConfTest::test_gpgcheck_policy_legacy() {
     ConfigMain cfg;
     ConfigParser parser;
