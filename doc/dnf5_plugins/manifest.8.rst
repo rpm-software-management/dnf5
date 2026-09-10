@@ -80,7 +80,7 @@ Options
 
 ``--input``
     Specify a custom path for the prototype input file.
-    By default, ``rpms.in.yaml`` is used.
+    By default, ``packages.input.yaml`` is used.
 
 ``--manifest``
     Specify a custom path for the manifest file.
@@ -112,7 +112,7 @@ Examples
 --------
 
 ``dnf manifest resolve``
-    Resolve the ``rpms.in.yaml`` prototype input file in the current directory
+    Resolve the ``packages.input.yaml`` prototype input file in the current directory
     and create the resulting manifest file at the default location:
     ``packages.manifest.yaml``.
 
@@ -140,4 +140,3 @@ See Also
 ========
 
     | `libpkgmanifest upstream <https://github.com/rpm-software-management/libpkgmanifest>`_
-    | `Prototype input file specification <https://github.com/konflux-ci/rpm-lockfile-prototype?tab=readme-ov-file#whats-the-input_file>`_

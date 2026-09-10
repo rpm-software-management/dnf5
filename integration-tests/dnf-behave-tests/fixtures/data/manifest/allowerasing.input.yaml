@@ -1,0 +1,12 @@
+document: rpm-package-input
+version: 0.0.2
+repositories:
+  - id: protect-running-kernel
+    baseurl: file://$FIXTURES_DIR/repos/protect-running-kernel
+packages:
+  install:
+    - dnf-ci-conflict
+archs:
+  - x86_64
+options:
+  allow_erasing: true

@@ -6,6 +6,7 @@
 #include <libdnf5/rpm/package_query.hpp>
 #include <libdnf5/utils/bgettext/bgettext-lib.h>
 #include <libdnf5/utils/bgettext/bgettext-mark-domain.h>
+#include <libpkgmanifest/common/exception.hpp>
 #include <libpkgmanifest/input/parser.hpp>
 #include <libpkgmanifest/manifest/manifest.hpp>
 #include <libpkgmanifest/manifest/serializer.hpp>
@@ -75,7 +76,27 @@ void ManifestResolveCommand::set_argument_parser() {
 void ManifestResolveCommand::configure() {
     auto & ctx = get_context();
 
-    input = libpkgmanifest::input::Parser().parse_prototype(input_path_option->get_value());
+    const auto & input_path = input_path_option->get_value();
+    libpkgmanifest::input::Parser parser;
+    try {
+        // Try parsing as a non-prototype infile first.
+        input = parser.parse(input_path);
+    } catch (const libpkgmanifest::common::ParserError &) {
+        const auto & non_prototype_parse_ep = std::current_exception();
+        try {
+            // If non-prototype infile parsing fails, it may instead be a valid
+            // rpm-lockfile-prototype infile.
+            input = parser.parse_prototype(input_path);
+            ctx.print_error(libdnf5::utils::sformat(
+                _("Warning: the rpm-lockfile-prototype input file format is deprecated. "
+                  "Consider migrating to the libpkgmanifest input format."),
+                input_path));
+        } catch (const libpkgmanifest::common::ParserError &) {
+            // If the file parses as neither a non-prototype infile or an
+            // rpm-lockfile-prototype infile, throw the non-prototype error.
+            std::rethrow_exception(non_prototype_parse_ep);
+        }
+    }
     arches = input->get_archs();
 
     ctx.set_load_available_repos(Context::LoadAvailableRepos::NONE);

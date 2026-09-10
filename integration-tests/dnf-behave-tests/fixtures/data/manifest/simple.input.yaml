@@ -1,0 +1,12 @@
+document: rpm-package-input
+version: 0.0.2
+repositories:
+  - id: dnf-ci-fedora
+    baseurl: file://$FIXTURES_DIR/repos/dnf-ci-fedora
+packages:
+  install:
+    - dwm
+    - npm
+    - wget
+archs:
+  - x86_64

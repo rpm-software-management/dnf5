@@ -1,0 +1,10 @@
+document: rpm-package-input
+version: 0.0.2
+repositories: []
+packages:
+  install:
+    - dwm
+    - npm
+    - wget
+archs:
+  - x86_64

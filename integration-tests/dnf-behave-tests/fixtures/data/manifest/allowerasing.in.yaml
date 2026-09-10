@@ -1,9 +1,0 @@
-contentOrigin:
-  repos:
-    - repoid: protect-running-kernel
-      baseurl: file://$FIXTURES_DIR/repos/protect-running-kernel
-packages:
-  - dnf-ci-conflict
-arches:
-  - x86_64
-allowerasing: true
