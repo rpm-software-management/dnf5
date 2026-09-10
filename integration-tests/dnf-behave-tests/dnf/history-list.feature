@@ -13,9 +13,9 @@ Scenario: history list
  Then the exit code is 0
   And stdout is history list
       | Id | Command | Action  | Altered |
-      | 3  |         |         | 5       |
-      | 2  |         |         | 3       |
-      | 1  |         |         | 6       |
+      | 3  |         | I       | 5       |
+      | 2  |         | E       | 3       |
+      | 1  |         | I       | 6       |
 
 
 Scenario: history without sub-command
@@ -34,7 +34,7 @@ Scenario: history list 2
  Then the exit code is 0
   And stdout is history list
       | Id | Command | Action  | Altered |
-      | 2  |         |         | 3       |
+      | 2  |         | E       | 3       |
 
 
 Scenario: history list with mulitple args
@@ -42,9 +42,9 @@ Scenario: history list with mulitple args
  Then the exit code is 0
   And stdout is history list
       | Id | Command | Action  | Altered |
-      | 3  |         |         | 5       |
-      | 2  |         |         | 3       |
-      | 1  |         |         | 6       |
+      | 3  |         | I       | 5       |
+      | 2  |         | E       | 3       |
+      | 1  |         | I       | 6       |
 
 
 Scenario: history list last
@@ -52,7 +52,7 @@ Scenario: history list last
  Then the exit code is 0
   And stdout is history list
       | Id | Command | Action  | Altered |
-      | 3  |         |         | 5       |
+      | 3  |         | I       | 5       |
 
 
 Scenario: history last without subcommand
@@ -70,7 +70,7 @@ Scenario: history list last-1
  Then the exit code is 0
   And stdout is history list
       | Id | Command | Action  | Altered |
-      | 2  |         |         | 3       |
+      | 2  |         | E       | 3       |
 
 
 # range tests
@@ -79,8 +79,8 @@ Scenario: history list 1..last-1
  Then the exit code is 0
   And stdout is history list
       | Id | Command | Action  | Altered |
-      | 2  |         |         | 3       |
-      | 1  |         |         | 6       |
+      | 2  |         | E       | 3       |
+      | 1  |         | I       | 6       |
 
 
 Scenario: history list 1..last-2
@@ -88,7 +88,7 @@ Scenario: history list 1..last-2
  Then the exit code is 0
   And stdout is history list
       | Id | Command | Action  | Altered |
-      | 1  |         |         | 6       |
+      | 1  |         | I       | 6       |
 
 
 @xfail
@@ -117,8 +117,8 @@ Scenario: history list 2..3
  Then the exit code is 0
   And stdout is history list
       | Id | Command | Action  | Altered |
-      | 3  |         |         | 5       |
-      | 2  |         |         | 3       |
+      | 3  |         | I       | 5       |
+      | 2  |         | E       | 3       |
 
 
 Scenario: history list 10..11
@@ -132,7 +132,7 @@ Scenario: history list last..11
  Then the exit code is 0
   And stdout is history list
       | Id | Command | Action  | Altered |
-      | 3  |         |         | 5       |
+      | 3  |         | I       | 5       |
 
 
 # "invalid" range tests
@@ -141,8 +141,8 @@ Scenario: history list 3..2
  Then the exit code is 0
   And stdout is history list
       | Id | Command | Action  | Altered |
-      | 3  |         |         | 5       |
-      | 2  |         |         | 3       |
+      | 3  |         | I       | 5       |
+      | 2  |         | E       | 3       |
 
 
 Scenario: history list last-1..1
@@ -150,8 +150,8 @@ Scenario: history list last-1..1
  Then the exit code is 0
   And stdout is history list
       | Id | Command | Action  | Altered |
-      | 2  |         |         | 3       |
-      | 1  |         |         | 6       |
+      | 2  |         | E       | 3       |
+      | 1  |         | I       | 6       |
 
 
 Scenario: history list 11..last-1
@@ -159,8 +159,8 @@ Scenario: history list 11..last-1
  Then the exit code is 0
   And stdout is history list
       | Id | Command | Action  | Altered |
-      | 3  |         |         | 5       |
-      | 2  |         |         | 3       |
+      | 3  |         | I       | 5       |
+      | 2  |         | E       | 3       |
 
 
 Scenario: history list last-1..aaa
@@ -189,8 +189,8 @@ Scenario: history abcde
  Then the exit code is 0
   And stdout is history list
       | Id | Command | Action  | Altered |
-      | 2  |         |         | 3       |
-      | 1  |         |         | 6       |
+      | 2  |         | E       | 3       |
+      | 1  |         | I       | 6       |
 
 
 Scenario: history filesystem
@@ -198,7 +198,7 @@ Scenario: history filesystem
  Then the exit code is 0
   And stdout is history list
       | Id | Command | Action  | Altered |
-      | 1  |         |         | 6       |
+      | 1  |         | I       | 6       |
 
 
 Scenario: history lame (no transaction with such package)
@@ -227,9 +227,9 @@ Scenario: history list --reverse
  Then the exit code is 0
   And stdout is history list
       | Id | Command | Action  | Altered |
-      | 1  |         |         | 6       |
-      | 2  |         |         | 3       |
-      | 3  |         |         | 5       |
+      | 1  |         | I       | 6       |
+      | 2  |         | E       | 3       |
+      | 3  |         | I       | 5       |
 
 
 @bz1846692
@@ -238,5 +238,61 @@ Scenario: history 2..3 --reverse
  Then the exit code is 0
   And stdout is history list
       | Id | Command | Action  | Altered |
-      | 2  |         |         | 3       |
-      | 3  |         |         | 5       |
+      | 2  |         | E       | 3       |
+      | 3  |         | I       | 5       |
+
+
+Scenario: Reinstall in a transaction - the replaced (O) action is omitted
+Given I successfully execute dnf with args "install abcde"
+Given I successfully execute dnf with args "reinstall abcde"
+ When I execute dnf with args "history list last"
+ Then the exit code is 0
+  And stdout is history list
+      | Id | Command | Action  | Altered |
+      | 5  |         | R       | 2       |
+
+
+Scenario: Upgrade in a transaction - the replaced (O) action is omitted
+Given I successfully execute dnf with args "install abcde"
+Given I use repository "dnf-ci-fedora-updates"
+Given I successfully execute dnf with args "upgrade abcde"
+ When I execute dnf with args "history list last"
+ Then the exit code is 0
+  And stdout is history list
+      | Id | Command | Action  | Altered |
+      | 5  |         | U       | 2       |
+
+
+Scenario: Downgrade in a transaction - the replaced (O) action is omitted
+Given I use repository "dnf-ci-fedora-updates"
+Given I successfully execute dnf with args "install abcde"
+Given I successfully execute dnf with args "downgrade abcde"
+ When I execute dnf with args "history list last"
+ Then the exit code is 0
+  And stdout is history list
+      | Id | Command | Action  | Altered |
+      | 5  |         | D       | 2       |
+
+
+Scenario: Obsolete in a transaction - the replaced (O) action is present
+Given I use repository "dnf-ci-obsoletes"
+Given I successfully execute dnf with args "install PackageB-1.0"
+Given I successfully execute dnf with args "upgrade"
+ Then Transaction is following
+      | Action        | Package                                   |
+      | install       | PackageB-Obsoleter-0:1.0-1.x86_64         |
+      | obsoleted     | PackageB-0:1.0-1.x86_64                   |
+ When I execute dnf with args "history list last"
+ Then the exit code is 0
+  And stdout is history list
+      | Id | Command | Action  | Altered |
+      | 5  |         | I, O    | 2       |
+
+
+Scenario: Reason change in a transaction
+Given I successfully execute dnf with args "mark dependency nodejs"
+ When I execute dnf with args "history list last"
+ Then the exit code is 0
+  And stdout is history list
+      | Id | Command | Action  | Altered |
+      | 4  |         | C       | 1       |
