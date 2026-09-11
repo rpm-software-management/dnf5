@@ -12,8 +12,9 @@ VERSION := $(shell rpmspec -q --queryformat '%{VERSION}\n' dnf5.spec | head -n1)
 SOURCE_TARBALL_PREFIX := dnf5-$(VERSION)
 SOURCE_TARBALL_NAME := $(SOURCE_TARBALL_PREFIX).tar.gz
 SOURCE_TARBALL_PATH := $(SOURCE_TARBALL_DIR)/$(SOURCE_TARBALL_NAME)
-MOCK_CONFIG ?= fedora-rawhide-x86_64
-CI_BASE_IMAGE ?= registry.fedoraproject.org/fedora:rawhide
+FEDORA_VERSION ?= rawhide
+MOCK_CONFIG ?= fedora-$(FEDORA_VERSION)-x86_64
+CI_BASE_IMAGE ?= registry.fedoraproject.org/fedora:$(FEDORA_VERSION)
 CONTAINER_TEST = ./integration-tests/container-test
 
 .DEFAULT_GOAL = build
@@ -49,8 +50,7 @@ help:
 	echo "  CMAKE_ARGS=                                             - Extra cmake configure arguments"
 	echo "  CTEST_ARGS=                                             - Extra ctest arguments (e.g. -R libdnf5)"
 	echo "  NPROC=$$(nproc)                                         - Parallel build jobs"
-	echo "  MOCK_CONFIG=fedora-rawhide-x86_64                       - Mock config for rpms-mock"
-	echo "  CI_BASE_IMAGE=registry.fedoraproject.org/fedora:rawhide - Base image for test container"
+	echo "  FEDORA_VERSION=$(FEDORA_VERSION)                                  - Fedora version for rpms-mock and the test container"
 
 .PHONY: build
 build:
