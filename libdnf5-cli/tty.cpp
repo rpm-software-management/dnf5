@@ -24,10 +24,34 @@
 #include <termios.h>
 #include <unistd.h>
 
+#include <atomic>
+#include <chrono>
 #include <cstdlib>
 
 
 namespace libdnf5::cli::tty {
+
+namespace {
+
+// get_width() and is_interactive() sit on the progress bar rendering path, which
+// asks for both several times for every bar it draws. Answering each of those
+// from a syscall is what made drawing a screenful of bars cost hundreds of
+// syscalls, so the syscall results are cached below.
+//
+// The environment overrides are deliberately left uncached: they are read on
+// every call, so tests (which set and unset them repeatedly within one process)
+// keep seeing the current value.
+
+/// Terminal width as last reported by the kernel, 0 when not queried yet.
+std::atomic<int> cached_width{0};
+/// steady_clock tick count at which cached_width was refreshed.
+std::atomic<std::chrono::steady_clock::rep> cached_width_time{0};
+
+/// How long a queried terminal width is reused before asking the kernel again.
+/// Bounds the ioctl() rate while still following a terminal resize promptly.
+constexpr auto WIDTH_CACHE_LIFETIME = std::chrono::milliseconds(100);
+
+}  // namespace
 
 
 int get_width() {
@@ -44,13 +68,26 @@ int get_width() {
         }
     }
 
+    const auto now = std::chrono::steady_clock::now().time_since_epoch();
+    const auto cached = cached_width.load(std::memory_order_relaxed);
+    if (cached > 0) {
+        const auto age = now - std::chrono::steady_clock::duration(cached_width_time.load(std::memory_order_relaxed));
+        if (age < WIDTH_CACHE_LIFETIME) {
+            return cached;
+        }
+    }
+
+    int width = 80;
     struct winsize size;
     if (ioctl(STDOUT_FILENO, TIOCGWINSZ, &size) == 0) {
         if (size.ws_col > 0)
-            return size.ws_col;
+            width = size.ws_col;
     }
 
-    return 80;
+    cached_width_time.store(now.count(), std::memory_order_relaxed);
+    cached_width.store(width, std::memory_order_relaxed);
+
+    return width;
 }
 
 
@@ -67,7 +104,10 @@ bool is_interactive() {
         } catch (std::out_of_range & ex) {
         }
     }
-    return isatty(fileno(stdout)) == 1;
+    // Whether stdout refers to a terminal cannot change for the lifetime of the
+    // process, so this only ever needs to be asked once.
+    static const bool interactive = isatty(fileno(stdout)) == 1;
+    return interactive;
 }
 
 static ColoringEnabled coloring = ColoringEnabled::AUTO;
