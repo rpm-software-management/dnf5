@@ -2,6 +2,10 @@ if(NOT WITH_LIBDNF5_CLI)
     return()
 endif()
 
+if(ENABLE_HTML_ONLY)
+    return()
+endif()
+
 add_definitions(-DLIBDNF_CLI_BUILD_LIBRARY)
 
 set(GETTEXT_DOMAIN libdnf5-cli)

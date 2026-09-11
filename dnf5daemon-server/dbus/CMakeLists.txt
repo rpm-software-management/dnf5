@@ -1,3 +1,8 @@
+if(ENABLE_HTML_ONLY)
+    add_subdirectory(interfaces)
+    return()
+endif()
+
 set(SYSTEMD_UNIT_DIR /usr/lib/systemd/system)
 set(DBUS_SHARE_DIR /usr/share/dbus-1)
 set(DBUS_CONFIG_DIR ${DBUS_SHARE_DIR}/system.d)

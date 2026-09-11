@@ -1,5 +1,5 @@
 message("Running CMake on dnf5...")
-cmake_minimum_required(VERSION 3.21)
+cmake_minimum_required(VERSION 3.22)
 
 
 include(VERSION.cmake)
@@ -12,6 +12,7 @@ set(TMPFILES_DIR "/usr/lib/tmpfiles.d" CACHE PATH "Directory for systemd tmpfile
 
 message("Building ${PROJECT_NAME} version ${PROJECT_VERSION}")
 
+include(CMakeDependentOption)
 
 # build options - components (sub-packages)
 option(WITH_DNF5DAEMON_CLIENT "Build command-line interface for Dnf5daemon" ON)
@@ -38,25 +39,26 @@ option(ENABLE_SOLV_URPMREORDER "Build with support for URPM-like solution reorde
 option(ENABLE_SOLV_FOCUSNEW "Build with SOLVER_FLAG_FOCUS_NEW libsolv flag enabled to ensure new dependencies are installed in latests versions?" ON)
 
 # build options - documentation
-option(WITH_HTML "Build HTML documentation" ON)
-option(WITH_MAN "Build man pages" ON)
+option(ENABLE_HTML_ONLY "Build only HTML documentation, disables any C++ compilation and depencency checking" OFF)
+cmake_dependent_option(WITH_HTML "Build HTML documentation" ON "NOT ENABLE_HTML_ONLY" ON)
+cmake_dependent_option(WITH_MAN "Build man pages" ON "NOT ENABLE_HTML_ONLY" OFF)
 
 # build options - translations
-option(WITH_TRANSLATIONS "Build translations" ON)
+cmake_dependent_option(WITH_TRANSLATIONS "Build translations" ON "NOT ENABLE_HTML_ONLY" OFF)
 
 # build options - tests
-option(WITH_TESTS "Build tests" ON)
-option(WITH_PERFORMANCE_TESTS "Build performance tests (DEBUG ONLY)" OFF)
-option(WITH_DNF5DAEMON_TESTS "Build dnf5daemon tests (requires configured dbus)" OFF)
+cmake_dependent_option(WITH_TESTS "Build tests" ON "NOT ENABLE_HTML_ONLY" OFF)
+cmake_dependent_option(WITH_PERFORMANCE_TESTS "Build performance tests (DEBUG ONLY)" OFF "NOT ENABLE_HTML_ONLY" OFF)
+cmake_dependent_option(WITH_DNF5DAEMON_TESTS "Build dnf5daemon tests (requires configured dbus)" OFF "NOT ENABLE_HTML_ONLY" OFF)
 
 # build options - debugging
-option(WITH_SANITIZERS "Build with address, leak and undefined sanitizers (DEBUG ONLY)" OFF)
+cmake_dependent_option(WITH_SANITIZERS "Build with address, leak and undefined sanitizers (DEBUG ONLY)" OFF "NOT ENABLE_HTML_ONLY" OFF)
 
 # build options - bindings
-option(WITH_GO "Build Go bindings" OFF)
-option(WITH_PERL5 "Build Perl 5 bindings" ON)
+cmake_dependent_option(WITH_GO "Build Go bindings" OFF "NOT ENABLE_HTML_ONLY" OFF)
+cmake_dependent_option(WITH_PERL5 "Build Perl 5 bindings" ON "NOT ENABLE_HTML_ONLY" OFF)
 option(WITH_PYTHON3 "Build Python 3 bindings" ON)
-option(WITH_RUBY "Build Ruby bindings" ON)
+cmake_dependent_option(WITH_RUBY "Build Ruby bindings" ON "NOT ENABLE_HTML_ONLY" OFF)
 
 
 if(WITH_PERFORMANCE_TESTS AND WITH_SANITIZERS)

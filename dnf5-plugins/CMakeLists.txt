@@ -2,6 +2,10 @@ if(NOT WITH_DNF5_PLUGINS)
     return()
 endif()
 
+if(ENABLE_HTML_ONLY)
+    return()
+endif()
+
 set(CMAKE_CXX_VISIBILITY_PRESET hidden)
 set(CMAKE_C_VISIBILITY_PRESET hidden)
 
