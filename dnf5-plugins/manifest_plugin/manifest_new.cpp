@@ -126,6 +126,8 @@ void ManifestNewCommand::populate_manifest(
 }
 
 void ManifestNewCommand::run() {
+    auto & ctx = get_context();
+
     libpkgmanifest::manifest::Serializer serializer;
     if (per_arch_option->get_value()) {
         for (const auto & arch : arches) {
@@ -135,13 +137,16 @@ void ManifestNewCommand::run() {
             std::string path{manifest_path_option->get_value()};
             path = std::regex_replace(path, std::regex("\\.yaml$"), fmt::format(".{}.yaml", arch));
             serializer.serialize(manifest, path);
+            ctx.print_info(libdnf5::utils::sformat(_("Wrote {}"), path));
         }
     } else {
         libpkgmanifest::manifest::Manifest manifest;
         for (const auto & arch : arches) {
             populate_manifest(manifest, arch, arches.size() > 1);
         }
-        serializer.serialize(manifest, manifest_path_option->get_value());
+        const auto & path = manifest_path_option->get_value();
+        serializer.serialize(manifest, path);
+        ctx.print_info(libdnf5::utils::sformat(_("Wrote {}"), path));
     }
 }
 
