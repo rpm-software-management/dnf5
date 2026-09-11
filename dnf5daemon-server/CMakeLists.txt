@@ -2,6 +2,11 @@ if(NOT WITH_DNF5DAEMON_SERVER)
     return()
 endif()
 
+if(ENABLE_HTML_ONLY)
+    add_subdirectory(dbus)
+    return()
+endif()
+
 set(DNF5DAEMON_SERVER_BIN dnf5daemon-server)
 file(GLOB_RECURSE DNF5DAEMON_SERVER_SOURCES *.cpp)
 
