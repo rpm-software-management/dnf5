@@ -45,6 +45,7 @@ void * DownloadCallbacks::add_new_download(
     ppb->set_number_widget_visible(number_widget_visible);
     ppb->set_auto_finish(false);
     multi_progress_bar->add_bar(std::move(progress_bar));
+    ++num_of_downloads;
     return ppb;
 }
 
@@ -87,7 +88,21 @@ int DownloadCallbacks::end(void * user_cb_data, TransferStatus status, const cha
             multi_progress_bar->bar_set_state(progress_bar, libdnf5::cli::progressbar::ProgressBarState::ERROR);
             break;
     }
-    print();
+    ++num_of_ended_downloads;
+    // Rate limit the repaint the same way progress() does. Repainting once per
+    // completed download is what makes downloading many small packages (a
+    // reposync of a whole repository, for example) expensive: every repaint
+    // re-renders each bar and rewrites the whole block of lines, so the cost
+    // grows with the number of packages rather than with the time spent.
+    //
+    // Nothing is lost by waiting - a repaint prints every bar that has finished
+    // since the previous one, in order - and the last download always repaints,
+    // so the final state of every bar reaches the terminal. libdnf5 guarantees
+    // exactly one end() call per add_new_download(), including for downloads
+    // that were interrupted, so the counters cannot drift.
+    if (all_downloads_ended() || is_time_to_print()) {
+        print();
+    }
     return ReturnCode::OK;
 }
 
@@ -98,31 +113,38 @@ int DownloadCallbacks::mirror_failure(void * user_cb_data, const char * msg, con
         message = message + " - " + metadata;
     }
     multi_progress_bar->bar_add_message(progress_bar, libdnf5::cli::progressbar::MessageType::ERROR, message);
-    print();
+    // The message is attached to the bar, so it is printed by the next repaint.
+    // A failing mirror is always followed by an end() call for the same target,
+    // which repaints if this one didn't.
+    if (is_time_to_print()) {
+        print();
+    }
     return ReturnCode::OK;
 }
 
 void DownloadCallbacks::reset_progress_bar() {
     multi_progress_bar.reset();
+    num_of_downloads = 0;
+    num_of_ended_downloads = 0;
     if (printed) {
         printed = false;
     }
 }
 
-bool DownloadCallbacks::is_time_to_print() {
-    auto now = std::chrono::steady_clock::now();
-    auto delta = now - prev_print_time;
+bool DownloadCallbacks::all_downloads_ended() const noexcept {
+    return num_of_ended_downloads >= num_of_downloads;
+}
+
+bool DownloadCallbacks::is_time_to_print() const noexcept {
+    auto delta = std::chrono::steady_clock::now() - prev_print_time;
     auto ms = std::chrono::duration_cast<std::chrono::milliseconds>(delta).count();
-    if (ms > 100) {
-        // 100ms equals to 10 FPS and that seems to be smooth enough
-        prev_print_time = now;
-        return true;
-    }
-    return false;
+    // 100ms equals to 10 FPS and that seems to be smooth enough
+    return ms > 100;
 }
 
 void DownloadCallbacks::print() {
     multi_progress_bar->print();
+    prev_print_time = std::chrono::steady_clock::now();
     printed = true;
 }
 
