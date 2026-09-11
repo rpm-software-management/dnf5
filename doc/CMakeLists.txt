@@ -80,6 +80,10 @@ if(WITH_HTML)
     add_dependencies(doc doc-html)
     add_dependencies(doc-html doxygen)
 
+    if(WITH_PYTHON3)
+        add_dependencies(doc-html python3-swig)
+    endif()
+
     #install(FILES ${HTML_FILES} )
 endif()
 
