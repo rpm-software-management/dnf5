@@ -2,5 +2,5 @@ libdnf5.transaction
 ===================
 
 
-.. automodule:: libdnf5.transaction
+.. autoapimodule:: libdnf5.transaction
     :members:

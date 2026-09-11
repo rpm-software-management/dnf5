@@ -1,3 +1,7 @@
+if(ENABLE_HTML_ONLY)
+    return()
+endif()
+
 # use sources found under the current directory
 file(GLOB_RECURSE LIBDNF5_SOURCES *.cpp *.c)
 

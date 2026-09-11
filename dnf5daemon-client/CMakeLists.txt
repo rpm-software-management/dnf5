@@ -2,6 +2,10 @@ if(NOT WITH_DNF5DAEMON_CLIENT)
     return()
 endif()
 
+if(ENABLE_HTML_ONLY)
+    return()
+endif()
+
 set(DNF5DAEMON_CLIENT_BIN dnf5daemon-client)
 file(GLOB_RECURSE DNF5DAEMON_CLIENT_SOURCES *.cpp)
 

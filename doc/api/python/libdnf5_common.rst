@@ -2,5 +2,5 @@ libdnf5.common
 ==============
 
 
-.. automodule:: libdnf5.common
+.. autoapimodule:: libdnf5.common
     :members:

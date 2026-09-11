@@ -2,5 +2,5 @@ libdnf5.repo
 ============
 
 
-.. automodule:: libdnf5.repo
+.. autoapimodule:: libdnf5.repo
     :members:

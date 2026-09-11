@@ -40,6 +40,7 @@ option(ENABLE_SOLV_FOCUSNEW "Build with SOLVER_FLAG_FOCUS_NEW libsolv flag enabl
 # build options - documentation
 option(WITH_HTML "Build HTML documentation" ON)
 option(WITH_MAN "Build man pages" ON)
+option(ENABLE_HTML_ONLY "Build only HTML documentation, disables any C++ compilation and depencency checking" OFF)
 
 # build options - translations
 option(WITH_TRANSLATIONS "Build translations" ON)
@@ -141,8 +142,8 @@ add_subdirectory("include")
 add_subdirectory("libdnf5")
 add_subdirectory("libdnf5-cli")
 add_subdirectory("libdnf5-plugins")
-add_subdirectory("doc")
 add_subdirectory("bindings")
+add_subdirectory("doc")
 
 # dnf5daemon
 add_subdirectory("dnf5daemon-server")

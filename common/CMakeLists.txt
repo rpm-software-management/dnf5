@@ -1,3 +1,7 @@
+if(ENABLE_HTML_ONLY)
+    return()
+endif()
+
 file(GLOB_RECURSE COMMON_SOURCES *.cpp *.c)
 
 include_directories(.)
