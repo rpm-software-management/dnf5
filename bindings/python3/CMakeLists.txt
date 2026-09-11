@@ -55,8 +55,21 @@ function(add_python3_module LIBRARY_NAME MODULE_NAME)
     install(TARGETS ${TARGET_NAME} LIBRARY DESTINATION ${Python3_SITEARCH}/${LIBRARY_NAME})
     install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${MODULE_NAME}.py DESTINATION ${Python3_SITEARCH}/${LIBRARY_NAME})
     install(DIRECTORY ${DISTINFO_PATH} DESTINATION ${Python3_SITEARCH})
+
+    # For makefile generators we cannot rely on .py files directly we have to use
+    # ..._swig_compilation targets, to support makefiles and also other generators create
+    # the target manually if it doesn't exist.
+    # See also second note at https://cmake.org/cmake/help/latest/module/UseSWIG.html
+    if(NOT TARGET python3_${MODULE_NAME}_swig_compilation)
+        add_custom_target(python3_${MODULE_NAME}_swig_compilation
+            DEPENDS "${CMAKE_CURRENT_BINARY_DIR}/${MODULE_NAME}.py")
+    endif()
+    add_dependencies(python3-swig python3_${MODULE_NAME}_swig_compilation)
 endfunction()
 
+# Collect automatically generated swig module targets,
+# it allows running just swig without any cpp compilation.
+add_custom_target(python3-swig)
 
 add_subdirectory(libdnf5)
 add_subdirectory(libdnf5_cli)
