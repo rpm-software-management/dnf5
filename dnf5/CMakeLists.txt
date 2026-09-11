@@ -2,6 +2,9 @@ if(NOT WITH_DNF5)
     return()
 endif()
 
+if(ENABLE_HTML_ONLY)
+    return()
+endif()
 
 find_package(Threads)
 
