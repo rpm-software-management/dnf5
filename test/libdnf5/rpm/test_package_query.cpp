@@ -28,6 +28,7 @@
 #include <libdnf5/rpm/package_set.hpp>
 
 #include <filesystem>
+#include <fstream>
 #include <set>
 #include <vector>
 
@@ -60,6 +61,62 @@ void RpmPackageQueryTest::test_size() {
 
     PackageQuery query(base);
     CPPUNIT_ASSERT_EQUAL((size_t)5, query.size());
+}
+
+namespace {
+
+// Write a suggest-reboot.d drop-in inside the test installroot.
+void write_suggest_reboot_conf(
+    const std::filesystem::path & installroot,
+    const std::string & relative_dir,
+    const std::string & file_name,
+    const std::string & content) {
+    const auto dir = installroot / relative_dir;
+    std::filesystem::create_directories(dir);
+    std::ofstream stream{dir / file_name};
+    stream << content;
+}
+
+constexpr const char * SUGGEST_REBOOT_VENDOR_DIR = "usr/share/dnf5/suggest-reboot.d";
+constexpr const char * SUGGEST_REBOOT_LOCAL_DIR = "etc/dnf/suggest-reboot.d";
+
+}  // namespace
+
+void RpmPackageQueryTest::test_filter_reboot_suggested_from_config() {
+    add_repo_solv("solv-repo1");
+
+    const std::filesystem::path installroot{base.get_config().get_installroot_option().get_value()};
+    write_suggest_reboot_conf(installroot, SUGGEST_REBOOT_VENDOR_DIR, "default.conf", "# comment\n\n  pkg  \n");
+
+    PackageQuery query(base);
+    query.filter_reboot_suggested();
+
+    std::set<std::string> names;
+    for (const auto & pkg : query) {
+        names.insert(pkg.get_name());
+    }
+    // The name listed in the drop-in is matched; whitespace and comments are ignored.
+    CPPUNIT_ASSERT(names.contains("pkg"));
+    CPPUNIT_ASSERT(!names.contains("pkg-libs"));
+}
+
+void RpmPackageQueryTest::test_filter_reboot_suggested_local_overrides_vendor() {
+    add_repo_solv("solv-repo1");
+
+    const std::filesystem::path installroot{base.get_config().get_installroot_option().get_value()};
+    write_suggest_reboot_conf(installroot, SUGGEST_REBOOT_VENDOR_DIR, "default.conf", "pkg\n");
+    // Same file name in /etc replaces the vendor file outright.
+    write_suggest_reboot_conf(installroot, SUGGEST_REBOOT_LOCAL_DIR, "default.conf", "pkg-libs\n");
+
+    PackageQuery query(base);
+    query.filter_reboot_suggested();
+
+    std::set<std::string> names;
+    for (const auto & pkg : query) {
+        names.insert(pkg.get_name());
+    }
+    CPPUNIT_ASSERT(names.contains("pkg-libs"));
+    CPPUNIT_ASSERT(!names.contains("pkg"));
 }
 
 void RpmPackageQueryTest::test_filter_latest_evr() {

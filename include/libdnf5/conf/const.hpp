@@ -53,6 +53,11 @@ const std::vector<std::string> VARS_DIRS{"/usr/share/dnf5/vars.d", "/etc/dnf/var
 
 constexpr char VENDOR_CONF_DIR[] = "/etc/dnf/vendors.d";
 
+// Drop-in directories listing packages whose installation or upgrade suggests a system reboot.
+// Higher precedence first: a file overrides a same-named file from a later directory.
+const std::vector<std::string> SUGGEST_REBOOT_CONF_DIRS{
+    "/etc/dnf/suggest-reboot.d", "/usr/share/dnf5/suggest-reboot.d"};
+
 const std::vector<std::string> GROUP_PACKAGE_TYPES{"mandatory", "default", "conditional"};
 const std::vector<std::string> INSTALLONLYPKGS{
     "kernel",

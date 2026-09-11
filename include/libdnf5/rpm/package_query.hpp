@@ -1057,9 +1057,9 @@ public:
     void filter_leaves();
 
     /// Filter packages whose installation or upgrade should cause a system
-    /// reboot to be recommended. These are packages that either (1) belong to
-    /// a hardcoded set of "core packages", including the kernel and systemd,
-    /// or (2) have an associated `reboot_suggested` advisory.
+    /// reboot to be recommended. These are packages that either (1) are listed
+    /// in the `suggest-reboot.d` drop-in configuration directories, or (2) have
+    /// an associated `reboot_suggested` advisory.
     void filter_reboot_suggested();
 
     /// Filter the leaf packages and return them grouped by their dependencies.
