@@ -4,17 +4,15 @@ build:
   os: "ubuntu-lts-latest"
   apt_packages:
     - swig
+    - cmake
+    - doxygen
   tools:
     python: latest
   jobs:
-    pre_build:
-      - python doc/rtd_build.py
-
-python:
-  install:
-    - requirements: doc/requirements.txt
-
-sphinx:
-  builder: html
-  configuration: doc/conf.py
-  fail_on_warning: false
+    build:
+      html:
+        - pip install -r doc/requirements.txt
+        - cmake -B build -S . -DENABLE_HTML_ONLY=ON
+        - cmake --build build --target doc-html
+        - mkdir -p $READTHEDOCS_OUTPUT/
+        - cp -r build/doc/html $READTHEDOCS_OUTPUT/
