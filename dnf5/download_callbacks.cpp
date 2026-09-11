@@ -138,8 +138,9 @@ bool DownloadCallbacks::all_downloads_ended() const noexcept {
 bool DownloadCallbacks::is_time_to_print() const noexcept {
     auto delta = std::chrono::steady_clock::now() - prev_print_time;
     auto ms = std::chrono::duration_cast<std::chrono::milliseconds>(delta).count();
-    // 100ms equals to 10 FPS and that seems to be smooth enough
-    return ms > 100;
+    // 200ms equals to 5 FPS. Still reads as live movement, and halves the output
+    // of a long download compared to 10 FPS.
+    return ms > 200;
 }
 
 void DownloadCallbacks::print() {
