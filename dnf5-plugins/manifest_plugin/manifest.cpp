@@ -6,6 +6,8 @@
 #include "download_callbacks.hpp"
 
 #include <dnf5/context.hpp>
+#include <libdnf5-cli/output/adapters/transaction.hpp>
+#include <libdnf5-cli/output/transaction_table.hpp>
 #include <libdnf5-cli/utils/userconfirm.hpp>
 #include <libdnf5/logger/logger.hpp>
 #include <libdnf5/repo/repo_errors.hpp>
@@ -301,6 +303,8 @@ std::vector<libdnf5::rpm::Package> ManifestSubcommand::resolve_goal(
     libdnf5::Goal & goal, libdnf5::Base & base, const bool include_srpms) {
     auto & ctx = get_context();
 
+    ctx.print_info(libdnf5::utils::sformat(_("Resolving transaction for arch {}"), base.get_vars()->get_value("arch")));
+
     // Resolve the goal
     auto transaction = goal.resolve();
     if (transaction.get_problems() != libdnf5::GoalProblem::NO_PROBLEM) {
@@ -344,6 +348,9 @@ std::vector<libdnf5::rpm::Package> ManifestSubcommand::resolve_goal(
         }
         resolved_pkgs_set.insert(source_pkgs.begin(), source_pkgs.end());
     }
+
+    libdnf5::cli::output::TransactionAdapter cli_output_transaction{transaction};
+    libdnf5::cli::output::print_transaction_table(cli_output_transaction);
 
     std::vector<libdnf5::rpm::Package> resolved_pkgs{resolved_pkgs_set.begin(), resolved_pkgs_set.end()};
     return sort_pkgs(std::move(resolved_pkgs));
