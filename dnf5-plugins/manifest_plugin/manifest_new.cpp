@@ -91,7 +91,7 @@ void ManifestNewCommand::configure() {
     if (arch_option->get_priority() > libdnf5::Option::Priority::DEFAULT) {
         arches = std::vector<std::string>(arch_option->get_value().begin(), arch_option->get_value().end());
     } else {
-        arches = {ctx.get_base().get_vars()->get_value("arch")};
+        arches = {ctx.get_base().get_vars()->get_value("basearch")};
     }
 
     ctx.set_load_available_repos(Context::LoadAvailableRepos::NONE);
