@@ -58,6 +58,16 @@ void ConfTest::test_config_repo() {
     CPPUNIT_ASSERT_EQUAL(baseurl, config_repo.get_baseurl_option().get_value());
 }
 
+void ConfTest::test_config_repo_backslash() {
+    repo::ConfigRepo config_repo(config, "repo-backslash");
+    ConfigParser parser;
+    parser.read(PROJECT_SOURCE_DIR "/test/libdnf5/conf/data/main.conf");
+    base->setup();
+    config_repo.load_from_parser(parser, "repo-backslash", *base->get_vars(), logger);
+
+    CPPUNIT_ASSERT_EQUAL(std::string("M\\y ug\\\\ly name"), config_repo.get_name_option().get_value());
+}
+
 void ConfTest::test_config_pkg_gpgcheck() {
     // Ensure both pkg_gpgcheck and gpgcheck point to the same underlying OptionBool object
 
