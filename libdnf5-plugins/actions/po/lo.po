@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-26 03:48+0000\n"
-"PO-Revision-Date: 2026-05-07 16:09+0000\n"
+"POT-Creation-Date: 2026-09-08 12:03+0000\n"
+"PO-Revision-Date: 2026-09-08 05:18+0000\n"
 "Last-Translator: Bone NI <bounkirdni@gmail.com>\n"
 "Language-Team: Lao <https://translate.fedoraproject.org/projects/dnf5/"
 "libdnf5-plugin-actions/lo/>\n"
@@ -16,89 +16,89 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.17.1\n"
+"X-Generator: Weblate 2026.9\n"
 
-#: actions.cpp:237
+#: actions.cpp:239
 #, c++-format
 msgid "File \"{}\" on line {}: {}"
 msgstr "ໄຟລ໌ \"{}\" ຢູ່ແຖວທີ {}: {}"
 
-#: actions.cpp:636 actions.cpp:642 actions.cpp:648 actions.cpp:654
+#: actions.cpp:627 actions.cpp:633 actions.cpp:639 actions.cpp:645
 msgid "\"HOOK:PKG_FILTER:DIRECTION:OPTIONS:CMD\" format expected"
 msgstr "ຕ້ອງການຮູບແບບ \"HOOK:PKG_FILTER:DIRECTION:OPTIONS:CMD\""
 
-#: actions.cpp:676
+#: actions.cpp:667
 #, c++-format
 msgid "Unknown \"enabled\" option value \"{}\""
 msgstr "ບໍ່ຮູ້ຈັກຄ່າຂອງຕົວເລືອກ \"enabled\" \"{}\""
 
-#: actions.cpp:683
+#: actions.cpp:674
 #, c++-format
 msgid "Unknown option \"{}\""
 msgstr "ບໍ່ຮູ້ຈັກຕົວເລືອກ \"{}\""
 
-#: actions.cpp:711
+#: actions.cpp:702
 #, c++-format
 msgid "Unknown hook \"{}\""
 msgstr "ບໍ່ຮູ້ຈັກ hook \"{}\""
 
-#: actions.cpp:720
+#: actions.cpp:711
 msgid ""
 "Package filter can only be used in GOAL_RESOLVED, PRE_TRANS and POST_TRANS "
 "hooks"
 msgstr ""
-"ຕົວຕອງແພັກເກດສາມາດໃຊ້ໄດ້ສະເພາະໃນ hook GOAL_RESOLVED, PRE_TRANS ແລະ POST_TRANS ເທົ່າ"
-"ນັ້ນ"
+"ຕົວຕອງແພັກເກດສາມາດໃຊ້ໄດ້ສະເພາະໃນ hook GOAL_RESOLVED, PRE_TRANS ແລະ POST_TRANS "
+"ເທົ່ານັ້ນ"
 
-#: actions.cpp:726
+#: actions.cpp:717
 msgid "Cannot use direction without package filter"
 msgstr "ບໍ່ສາມາດໃຊ້ທິດທາງ (direction) ໂດຍບໍ່ມີຕົວຕອງແພັກເກດ"
 
-#: actions.cpp:740
+#: actions.cpp:731
 #, c++-format
 msgid "Unknown package direction \"{}\""
 msgstr "ບໍ່ຮູ້ຈັກທິດທາງແພັກເກດ \"{}\""
 
-#: actions.cpp:747
+#: actions.cpp:738
 #, c++-format
 msgid "Unknown mode \"{}\""
 msgstr "ບໍ່ຮູ້ຈັກໂໝດ \"{}\""
 
-#: actions.cpp:755
+#: actions.cpp:746
 #, c++-format
 msgid "Unsupported value of the \"raise_error\" option: {}"
 msgstr "ຄ່າຂອງຕົວເລືອກ \"raise_error\" ບໍ່ຮອງຮັບ: {}"
 
-#: actions.cpp:760
+#: actions.cpp:751
 msgid "Missing command"
 msgstr "ຄຳສັ່ງຫາຍໄປ"
 
-#: actions.cpp:953
+#: actions.cpp:946
 #, c++-format
-msgid "Synax error: Missing equal sign (=) in action output line: {}"
-msgstr "ໄວຍາກອນຜິດພາດ: ເຄື່ອງໝາຍເທົ່າກັບ (=) ຫາຍໄປໃນແຖວຜົນອອກຂອງການກະທຳ: {}"
+msgid "Syntax error: Missing equal sign (=) in action output line: {}"
+msgstr "ຂໍ້ຜິດພາດທາງໄວຍາກອນ: ຂາດເຄື່ອງໝາຍເທົ່າກັບ (=) ໃນແຖວຜົນອອກຂອງການກະທຳ: {}"
 
-#: actions.cpp:964
+#: actions.cpp:957
 #, c++-format
 msgid "Cannot set option: Action output line: {}"
 msgstr "ບໍ່ສາມາດຕັ້ງຕົວເລືອກ: ແຖວຜົນອອກຂອງການກະທຳ: {}"
 
-#: actions.cpp:982
+#: actions.cpp:975
 #, c++-format
 msgid "Action sent the wrong log level: {}"
 msgstr "ການກະທຳສົ່ງລະດັບບັນທຶກ (log level) ທີ່ບໍ່ຖືກຕ້ອງ: {}"
 
-#: actions.cpp:987 actions.cpp:1794
+#: actions.cpp:980 actions.cpp:1792
 #, c++-format
 msgid "Action calls for stop: {}"
 msgstr "ການກະທຳຮ້ອງຂໍໃຫ້ຢຸດ: {}"
 
-#: actions.cpp:990 actions.cpp:1801
+#: actions.cpp:983 actions.cpp:1799
 #, c++-format
 msgid "Action sent error message: {}"
 msgstr "ການກະທຳສົ່ງຂໍ້ຄວາມຂໍ້ຜິດພາດ: {}"
 
-#: actions.cpp:995
+#: actions.cpp:988
 #, c++-format
 msgid ""
 "Syntax error: Action output line must start with \"tmp.\" or \"conf.\" or "
@@ -107,63 +107,63 @@ msgstr ""
 "ໄວຍາກອນຜິດພາດ: ແຖວຜົນອອກຂອງການກະທຳຕ້ອງເລີ່ມຕົ້ນດ້ວຍ \"tmp.\" ຫຼື \"conf.\" ຫຼື \"var.\" "
 "ຫຼື \"stop=\" ຫຼື \"error=\": {}"
 
-#: actions.cpp:1020
+#: actions.cpp:1013
 msgid "Error reading from action (from pipe)"
 msgstr "ເກີດຂໍ້ຜິດພາດໃນການອ່ານຈາກການກະທຳ (ຈາກ pipe)"
 
-#: actions.cpp:1038
+#: actions.cpp:1031
 #, c++-format
 msgid "Syntax error in json request from action: Missing starting '{{' char"
 msgstr "ໄວຍາກອນຜິດພາດໃນການຮ້ອງຂໍ json ຈາກການກະທຳ: ຕົວອັກສອນເລີ່ມຕົ້ນ '{{' ຫາຍໄປ"
 
-#: actions.cpp:1062
+#: actions.cpp:1055
 msgid "Error during processing of a request from action."
 msgstr "ເກີດຂໍ້ຜິດພາດໃນລະຫວ່າງການປະມວນຜົນການຮ້ອງຂໍຈາກການກະທຳ."
 
-#: actions.cpp:1071
+#: actions.cpp:1064
 #, c++-format
 msgid "Syntax error in json request from action: {}"
 msgstr "ໄວຍາກອນຜິດພາດໃນການຮ້ອງຂໍ json ຈາກການກະທຳ: {}"
 
-#: actions.cpp:1079
+#: actions.cpp:1072
 msgid "Syntax error in json request from action: Incomplete input"
 msgstr "ໄວຍາກອນຜິດພາດໃນການຮ້ອງຂໍ json ຈາກການກະທຳ: ຂໍ້ມູນຂາເຂົ້າບໍ່ສົມບູນ"
 
-#: actions.cpp:1154
+#: actions.cpp:1147
 msgid "Cannot write response"
 msgstr "ບໍ່ສາມາດຂຽນການຕອບກັບ"
 
-#: actions.cpp:1821
+#: actions.cpp:1819
 msgid "Actions plugin: Cannot create pipe"
 msgstr "ປລັກອິນການກະທຳ: ບໍ່ສາມາດສ້າງ pipe"
 
-#: actions.cpp:1913
+#: actions.cpp:1911
 msgid "Actions plugin: Cannot fork"
 msgstr "ປລັກອິນການກະທຳ: ບໍ່ສາມາດ fork"
 
-#: actions.cpp:1968
+#: actions.cpp:1966
 msgid "Actions plugin: Cannot bind command stdin"
 msgstr "ປລັກອິນການກະທຳ: ບໍ່ສາມາດຜູກມັດ stdin ຂອງຄຳສັ່ງ"
 
-#: actions.cpp:1970
+#: actions.cpp:1968
 msgid "Actions plugin: Cannot bind command stdout"
 msgstr "ປລັກອິນການກະທຳ: ບໍ່ສາມາດຜູກມັດ stdout ຂອງຄຳສັ່ງ"
 
-#: actions.cpp:1988
+#: actions.cpp:1986
 #, c++-format
 msgid "Cannot execute action, command \"{}\" arguments \"{}\""
 msgstr "ບໍ່ສາມາດປະຕິບັດການກະທຳ, ຄຳສັ່ງ \"{}\" ພ້ອມອາກິວເມັນ \"{}\""
 
-#: actions.cpp:1996
+#: actions.cpp:1994
 msgid "Error during preparation child process"
 msgstr "ເກີດຂໍ້ຜິດພາດໃນລະຫວ່າງການກຽມໂປຣເຊສລູກ (child process)"
 
-#: actions.cpp:2015
+#: actions.cpp:2013
 #, c++-format
 msgid "Exit code: {}"
 msgstr "ລະຫັດອອກ (Exit code): {}"
 
-#: actions.cpp:2019
+#: actions.cpp:2017
 #, c++-format
 msgid "Terminated by signal: {}"
 msgstr "ຖືກຢຸດໂດຍສັນຍານ (signal): {}"

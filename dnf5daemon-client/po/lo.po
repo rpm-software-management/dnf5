@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-26 03:48+0000\n"
+"POT-Creation-Date: 2026-09-08 12:03+0000\n"
 "PO-Revision-Date: 2026-05-07 16:09+0000\n"
 "Last-Translator: Bone NI <bounkirdni@gmail.com>\n"
 "Language-Team: Lao <https://translate.fedoraproject.org/projects/dnf5/"
@@ -38,8 +38,7 @@ msgstr "ສະແດງແຈ້ງການທີ່ມີທຸກເວີຊ
 msgid ""
 "Show advisories containing newer versions of installed packages. This is the "
 "default behavior."
-msgstr ""
-"ສະແດງແຈ້ງການທີ່ມີເວີຊັນໃໝ່ກວ່າຂອງແພັກເກດທີ່ຕິດຕັ້ງແລ້ວ. ນີ້ແມ່ນຄ່າເລີ່ມຕົ້ນ."
+msgstr "ສະແດງແຈ້ງການທີ່ມີເວີຊັນໃໝ່ກວ່າຂອງແພັກເກດທີ່ຕິດຕັ້ງແລ້ວ. ນີ້ແມ່ນຄ່າເລີ່ມຕົ້ນ."
 
 #: commands/advisory/arguments.hpp:55
 msgid ""
@@ -50,15 +49,13 @@ msgstr "ສະແດງແຈ້ງການທີ່ມີເວີຊັນດ
 msgid ""
 "Show advisories containing newer versions of installed packages for which a "
 "newer version is available."
-msgstr ""
-"ສະແດງແຈ້ງການທີ່ມີເວີຊັນໃໝ່ກວ່າຂອງແພັກເກດທີ່ຕິດຕັ້ງແລ້ວ ເຊິ່ງມີເວີຊັນໃໝ່ກວ່າມີໃຫ້ໃຊ້."
+msgstr "ສະແດງແຈ້ງການທີ່ມີເວີຊັນໃໝ່ກວ່າຂອງແພັກເກດທີ່ຕິດຕັ້ງແລ້ວ ເຊິ່ງມີເວີຊັນໃໝ່ກວ່າມີໃຫ້ໃຊ້."
 
 #: commands/advisory/arguments.hpp:80
 msgid ""
 "Show only advisories containing packages with specified names. List option, "
 "supports globs."
-msgstr ""
-"ສະແດງສະເພາະແຈ້ງການທີ່ມີແພັກເກດຕາມຊື່ທີ່ລະບຸ. ເປັນຕົວເລືອກແບບລາຍຊື່, ຮອງຮັບ globs."
+msgstr "ສະແດງສະເພາະແຈ້ງການທີ່ມີແພັກເກດຕາມຊື່ທີ່ລະບຸ. ເປັນຕົວເລືອກແບບລາຍຊື່, ຮອງຮັບ globs."
 
 #: commands/advisory/arguments.hpp:81
 msgid "PACKAGE_NAME,..."
@@ -165,8 +162,7 @@ msgstr "ສະແດງກຸ່ມທີ່ຖືກເຊື່ອງໄວ້
 msgid ""
 "Show only groups containing packages with specified names. List option, "
 "supports globs."
-msgstr ""
-"ສະແດງສະເພາະກຸ່ມທີ່ມີແພັກເກດຕາມຊື່ທີ່ລະບຸ. ເປັນຕົວເລືອກແບບລາຍຊື່, ຮອງຮັບ globs."
+msgstr "ສະແດງສະເພາະກຸ່ມທີ່ມີແພັກເກດຕາມຊື່ທີ່ລະບຸ. ເປັນຕົວເລືອກແບບລາຍຊື່, ຮອງຮັບ globs."
 
 #: commands/repo/repo.cpp:37
 msgid "Manage repositories"
@@ -185,16 +181,14 @@ msgstr "ເກີດຂໍ້ຜິດພາດໃນການວິເຄາະ
 msgid ""
 "This command has to be run with superuser privileges (under the root user on "
 "most systems)."
-msgstr ""
-"ຄຳສັ່ງນີ້ຕ້ອງໄດ້ຮັບການເປີດໃຊ້ດ້ວຍສິດທິຜູ້ໃຊ້ສູງສຸດ (ພາຍໃຕ້ຜູ້ໃຊ້ root ໃນລະບົບສ່ວນໃຫຍ່)."
+msgstr "ຄຳສັ່ງນີ້ຕ້ອງໄດ້ຮັບການເປີດໃຊ້ດ້ວຍສິດທິຜູ້ໃຊ້ສູງສຸດ (ພາຍໃຕ້ຜູ້ໃຊ້ root ໃນລະບົບສ່ວນໃຫຍ່)."
 
-#: main.cpp:158
+#: main.cpp:172
 #, c++-format
 msgid ""
 "{}: Badly formatted argument value: Last key character cannot be '.': {}"
-msgstr ""
-"{}: ຮູບແບບຄ່າອາຄິວເມນບໍ່ຖືກຕ້ອງ: ຕົວອັກສອນສຸດທ້າຍຂອງຄີເປັນ '.' ບໍ່ໄດ້: {}"
+msgstr "{}: ຮູບແບບຄ່າອາຄິວເມນບໍ່ຖືກຕ້ອງ: ຕົວອັກສອນສຸດທ້າຍຂອງຄີເປັນ '.' ບໍ່ໄດ້: {}"
 
-#: main.cpp:258 main.cpp:308
+#: main.cpp:272 main.cpp:322
 msgid ". Add \"--help\" for more information about the arguments."
 msgstr ". ຕື່ມ \"--help\" ເພື່ອເບິ່ງຂໍ້ມູນເພີ່ມເຕີມກ່ຽວກັບອາກິວເມັນ."

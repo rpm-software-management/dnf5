@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-26 03:48+0000\n"
+"POT-Creation-Date: 2026-09-08 12:03+0000\n"
 "PO-Revision-Date: 2026-06-20 09:10+0000\n"
 "Last-Translator: Jean-Baptiste Holcroft <jean-baptiste@holcroft.fr>\n"
 "Language-Team: Chinese (Simplified) <https://translate.fedoraproject.org/"
@@ -21,20 +21,20 @@ msgstr ""
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Generator: Weblate 2026.6.1\n"
 
-#: repoclosure.cpp:46
+#: repoclosure.cpp:48
 msgid "Print list of unresolved dependencies for repositories"
 msgstr "打印存储库中未解决的依赖列表"
 
-#: repoclosure.cpp:155
+#: repoclosure.cpp:159
 #, c++-format
 msgid "No match for argument \"{}\"."
 msgstr "没有与参数 \"{}\" 匹配的内容。"
 
-#: repoclosure.cpp:161
+#: repoclosure.cpp:165
 msgid "Failed to resolve package specifications."
 msgstr "无法解析软件包规范。"
 
-#: repoclosure.cpp:220
+#: repoclosure.cpp:244
 #, c++-format
 msgid ""
 "Error: Repoclosure ended with unresolved dependencies ({}) across {} "

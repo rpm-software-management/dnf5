@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-26 03:48+0000\n"
+"POT-Creation-Date: 2026-09-08 12:03+0000\n"
 "PO-Revision-Date: 2026-04-05 19:58+0000\n"
 "Last-Translator: Keith Bowes <zooplah@gmail.com>\n"
 "Language-Team: Esperanto <https://translate.fedoraproject.org/projects/dnf5/"
@@ -28,7 +28,7 @@ msgstr "from-repofile: dosiero \"{}\" ne ekzistas"
 msgid "from-repofile: {}"
 msgstr "from-repofile: {}"
 
-#: addrepo.cpp:169 setopt.cpp:83 setvar.cpp:49
+#: addrepo.cpp:169 setopt.cpp:53 setvar.cpp:49
 #, c++-format
 msgid "{}: Badly formatted argument value \"{}\""
 msgstr "{}: Malbone formatita argumenta valoro \"{}\""
@@ -38,7 +38,7 @@ msgstr "{}: Malbone formatita argumenta valoro \"{}\""
 msgid "Cannot set repository option \"{}={}\": {}"
 msgstr "Ne eblas agordi deponejan opcion \"{}={}\": {}"
 
-#: addrepo.cpp:187 setopt.cpp:138
+#: addrepo.cpp:187 setopt.cpp:108
 #, c++-format
 msgid "Sets the \"{}\" option again with a different value: \"{}\" != \"{}\""
 msgstr "Reagordas la opcion \"{}\" kun alia valoro: \"{}\" != \"{}\""
@@ -107,16 +107,29 @@ msgstr ""
 msgid "A repository with id \"{}\" already configured in file: {}"
 msgstr "Deponejo kun la identigilo \"{}\" jam agordita en dosiero: {}"
 
-#: addrepo.cpp:486 setopt.cpp:263
+#: addrepo.cpp:486 shared.hpp:150
 #, c++-format
 msgid "Cannot read repositories from directory \"{}\": {}"
 msgstr "Ne eblas legi deponejojn el dosierujo \"{}\": {}"
 
-#: config-manager.cpp:43
+#: config-manager.cpp:44
 msgid "Manage configuration"
 msgstr "Administri agordon"
 
-#: setopt.cpp:91 unsetopt.cpp:72
+#: repos.cpp:56 setopt.cpp:140
+#, c++-format
+msgid "No matching repository to modify: {}"
+msgstr "Neniu kongruanta deponejo modifota: {}"
+
+#: repos.hpp:42
+msgid "Enables repositories"
+msgstr ""
+
+#: repos.hpp:50
+msgid "Disables repositories"
+msgstr ""
+
+#: setopt.cpp:61 unsetopt.cpp:73
 #, c++-format
 msgid ""
 "{}: Badly formatted argument value: Last key character cannot be '.': {}"
@@ -124,17 +137,17 @@ msgstr ""
 "{}: Malbone formita argumenta valoro: Lasta ŝlosila signo ne povas esti '.': "
 "{}"
 
-#: setopt.cpp:100 unsetopt.cpp:81
+#: setopt.cpp:70 unsetopt.cpp:82
 #, c++-format
 msgid "{}: Empty repository id is not allowed: {}"
 msgstr "{}: Malplena deponeja identigilo ne estas permesata: {}"
 
-#: setopt.cpp:109
+#: setopt.cpp:79
 #, c++-format
 msgid "Cannot set repository option \"{}\": {}"
 msgstr "Ne eblas agordi deponejan opcion \"{}\": {}"
 
-#: setopt.cpp:116 setopt.cpp:179
+#: setopt.cpp:86 setopt.cpp:149
 #, c++-format
 msgid ""
 "Sets the \"{}\" option of the repository \"{}\" again with a different "
@@ -143,15 +156,10 @@ msgstr ""
 "Reagordas la opcion \"{}\" de la deponejo \"{}\" kun alia valoro: \"{}\" != "
 "\"{}\""
 
-#: setopt.cpp:130
+#: setopt.cpp:100
 #, c++-format
 msgid "Cannot set option: \"{}\": {}"
 msgstr "Ne eblas agordi la opcion: \"{}\": {}"
-
-#: setopt.cpp:170
-#, c++-format
-msgid "No matching repository to modify: {}"
-msgstr "Neniu kongruanta deponejo modifota: {}"
 
 #: setvar.cpp:60
 #, c++-format
@@ -172,7 +180,7 @@ msgstr "Mankas vojo al la dosierujo de variabloj"
 msgid "Cannot write variable to file \"{}\": {}"
 msgstr "Ne eblas skribi variablon al dosiero \"{}\": {}"
 
-#: shared.hpp:58
+#: shared.hpp:59
 #, c++-format
 msgid ""
 "The path \"{}\" exists, but it is not a directory or a symlink to a "
@@ -181,13 +189,13 @@ msgstr ""
 "La vojo \"{} ekzistas sed ĝi ne estas dosierujo aŭ simbola ligilo al "
 "dosierujo."
 
-#: shared.hpp:63
+#: shared.hpp:64
 #, c++-format
 msgid "The path \"{}\" exists, but it is a symlink to a non-existent object."
 msgstr ""
 "La vojo \"{}\" ekzistas sed ĝi estas simbola ligilo al neekzista objekto."
 
-#: shared.hpp:69
+#: shared.hpp:70
 #, c++-format
 msgid ""
 "Directory \"{}\" does not exist. Add \"--create-missing-dir\" to create "
@@ -196,17 +204,17 @@ msgstr ""
 "Dosierujo \"{}\" ne ekzistas. Aldonu la opcion \"--create-missing-dir\" por "
 "krei mankaj dosierujoj."
 
-#: shared.hpp:80
+#: shared.hpp:81
 #, c++-format
 msgid "Variable name can contain only ASCII letters, numbers and '_': {}"
 msgstr "Variabla nomo povas enhavi nur askiajn literojn, ciferojn kaj '_': {}"
 
-#: unsetopt.cpp:93
+#: unsetopt.cpp:94
 #, c++-format
 msgid "config-manager: Request to remove unsupported repository option: {}"
 msgstr "config-manager: Peto forigi nekonatan deponejan opcion: {}"
 
-#: unsetopt.cpp:105
+#: unsetopt.cpp:106
 #, c++-format
 msgid "config-manager: Request to remove unsupported main option: {}"
 msgstr "config-manager: Peto forigi nekonatan ĉefan opcion: {}"
@@ -245,7 +253,7 @@ msgstr ""
 "config-manager: Peto forigi deponejan opcion sed ĝi ne ĉeestas en la "
 "transpasoj: {}.{}"
 
-#: unsetopt.cpp:214
+#: unsetopt.cpp:208
 #, c++-format
 msgid ""
 "config-manager: Request to remove repository option but file with overrides "

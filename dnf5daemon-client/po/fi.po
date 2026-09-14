@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-26 03:48+0000\n"
+"POT-Creation-Date: 2026-09-08 12:03+0000\n"
 "PO-Revision-Date: 2025-07-19 11:40+0000\n"
 "Last-Translator: Ricky Tigg <ricky.tigg@gmail.com>\n"
 "Language-Team: Finnish <https://translate.fedoraproject.org/projects/dnf5/"
@@ -154,6 +154,7 @@ msgid "CVE_ID,..."
 msgstr "CVE-TUNNUS,..."
 
 #: commands/clean/clean.cpp:88
+#, c++-format
 msgid "Error cleaning the cache: {}"
 msgstr "Virhe välimuistin puhdistamisessa: {}"
 
@@ -197,6 +198,7 @@ msgid "search for packages matching various criteria"
 msgstr "etsi eri kriteereitä vastaavia paketteja"
 
 #: commands/repoquery/repoquery.cpp:159
+#, c++-format
 msgid "Error parsing JSON object \"{}\": {}"
 msgstr "Virhe jäsennettäessä JSON-objektia \"{}\": {}"
 
@@ -208,13 +210,14 @@ msgstr ""
 "Tämä komento on suoritettava pääkäyttäjän oikeuksilla (käyttäjänä root "
 "useimmissa järjestelmissä)."
 
-#: main.cpp:158
+#: main.cpp:172
+#, c++-format
 msgid ""
 "{}: Badly formatted argument value: Last key character cannot be '.': {}"
 msgstr ""
 "{}: Virheellisesti muotoiltu argumenttiarvo: Viimeinen avainmerkki ei voi "
 "olla '.': {}"
 
-#: main.cpp:258 main.cpp:308
+#: main.cpp:272 main.cpp:322
 msgid ". Add \"--help\" for more information about the arguments."
 msgstr "Lisää `--help` saadaksesi lisätietoja argumenteista."

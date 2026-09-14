@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-26 03:48+0000\n"
-"PO-Revision-Date: 2026-06-20 09:10+0000\n"
+"POT-Creation-Date: 2026-09-08 12:03+0000\n"
+"PO-Revision-Date: 2026-08-28 08:18+0000\n"
 "Last-Translator: Priit Jõerüüt "
 "<jrtkbfdr@users.noreply.translate.fedoraproject.org>\n"
 "Language-Team: Estonian <https://translate.fedoraproject.org/projects/dnf5/"
@@ -18,34 +18,40 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 2026.6.1\n"
+"X-Generator: Weblate 2026.8.1\n"
 
 #: commands/advisory/advisory.cpp:35
 msgid "Manage advisories"
-msgstr ""
+msgstr "Halda nõuandmikke"
 
 #: commands/advisory/advisory_info.hpp:34
 msgid "Print details about advisories"
-msgstr ""
+msgstr "Väljasta nõuandmike üksikasjad"
 
 #: commands/advisory/advisory_list.hpp:34
 msgid "List advisories"
-msgstr ""
+msgstr "Nõuandmike loend"
 
 #: commands/advisory/arguments.hpp:32
 msgid "Show advisories containing any version of installed packages."
 msgstr ""
+"Näita nõuandmikke, mis sisaldavad teavet ükspuha missuguste paigaldatud "
+"pakettide kohta."
 
 #: commands/advisory/arguments.hpp:43
 msgid ""
 "Show advisories containing newer versions of installed packages. This is the "
 "default behavior."
 msgstr ""
+"Näita nõuandmikke, mis sisaldavad teavet paigaldatud pakettide viimaste "
+"versioonide kohta. See on ka vaikimisi tööpõhimõte."
 
 #: commands/advisory/arguments.hpp:55
 msgid ""
 "Show advisories containing equal and older versions of installed packages."
 msgstr ""
+"Näita nõuandmikke, mis sisaldavad teavet paigaldatud pakettide võrdsete või "
+"vanemate versioonide kohta."
 
 #: commands/advisory/arguments.hpp:67
 msgid ""
@@ -69,11 +75,11 @@ msgstr ""
 
 #: commands/advisory/arguments.hpp:95
 msgid "Show only advisories referencing a bugzilla."
-msgstr ""
+msgstr "Näita nõuandmikke, mis viitavad Bugzilla kirjele."
 
 #: commands/advisory/arguments.hpp:102
 msgid "Show only advisories referencing a CVE."
-msgstr ""
+msgstr "Näita nõuandmikke, mis viitavad CVE kirjele."
 
 #: commands/advisory/arguments.hpp:113
 msgid ""
@@ -183,12 +189,12 @@ msgid ""
 "most systems)."
 msgstr ""
 
-#: main.cpp:158
+#: main.cpp:172
 #, c++-format
 msgid ""
 "{}: Badly formatted argument value: Last key character cannot be '.': {}"
 msgstr ""
 
-#: main.cpp:258 main.cpp:308
+#: main.cpp:272 main.cpp:322
 msgid ". Add \"--help\" for more information about the arguments."
 msgstr ""

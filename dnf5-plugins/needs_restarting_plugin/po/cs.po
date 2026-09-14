@@ -3,13 +3,15 @@
 # This file is distributed under the same license as the PACKAGE package.
 # Krystof Cerny <cleverline1mc@gmail.com>, 2024.
 # Petr Pisar <ppisar@redhat.com>, 2025.
+# Jonáš Loskot <alius@users.noreply.translate.fedoraproject.org>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-26 03:48+0000\n"
-"PO-Revision-Date: 2025-05-02 15:33+0000\n"
-"Last-Translator: Petr Pisar <ppisar@redhat.com>\n"
+"POT-Creation-Date: 2026-09-08 12:03+0000\n"
+"PO-Revision-Date: 2026-09-11 21:17+0000\n"
+"Last-Translator: Jonáš Loskot "
+"<alius@users.noreply.translate.fedoraproject.org>\n"
 "Language-Team: Czech <https://translate.fedoraproject.org/projects/dnf5/dnf5-"
 "plugin-needs-restarting/cs/>\n"
 "Language: cs\n"
@@ -17,8 +19,16 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Weblate 5.11.1\n"
+"X-Generator: Weblate 2026.9.1\n"
 
-#: needs_restarting.cpp:230
+#: needs_restarting.cpp:384
+#, c++-format
 msgid "Couldn't connect to D-Bus: {}"
 msgstr "Ke sběrnici D-Bus se nebylo možné připojit: {}"
+
+#: needs_restarting.cpp:495
+msgid ""
+"Warning: The following services should not be restarted but require a reboot:"
+msgstr ""
+"Varování: Následující služby by neměly být restartovány, ale vyžadují "
+"restart systému:"

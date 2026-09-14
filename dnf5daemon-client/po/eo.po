@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-26 03:48+0000\n"
+"POT-Creation-Date: 2026-09-08 12:03+0000\n"
 "PO-Revision-Date: 2026-03-19 21:58+0000\n"
 "Last-Translator: Keith Bowes <zooplah@gmail.com>\n"
 "Language-Team: Esperanto <https://translate.fedoraproject.org/projects/dnf5/"
@@ -84,7 +84,8 @@ msgstr "Montri nur avizojn, kiuj mencias CVE-on."
 #: commands/advisory/arguments.hpp:113
 msgid ""
 "Include content contained in advisories with specified name. List option."
-msgstr "Inkluzivigi enhavon enhavita en avizoj kun specifita nomo. Lista opcio."
+msgstr ""
+"Inkluzivigi enhavon enhavita en avizoj kun specifita nomo. Lista opcio."
 
 #: commands/advisory/arguments.hpp:114
 msgid "ADVISORY_NAME,..."
@@ -201,7 +202,7 @@ msgstr ""
 "Oni devas esti la ĉefuzulo (la uzulo root en la plejparto de sistemoj) por "
 "plenumigi ĉi tiun komandon."
 
-#: main.cpp:158
+#: main.cpp:172
 #, c++-format
 msgid ""
 "{}: Badly formatted argument value: Last key character cannot be '.': {}"
@@ -209,6 +210,6 @@ msgstr ""
 "{}: Malbone formita argumenta valoro: Lasta ŝlosila signo ne povas esti '.': "
 "{}"
 
-#: main.cpp:258 main.cpp:308
+#: main.cpp:272 main.cpp:322
 msgid ". Add \"--help\" for more information about the arguments."
 msgstr "Aldoneblas \"--help\" por pliaj informoj pri la argumentoj."

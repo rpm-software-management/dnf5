@@ -1,13 +1,14 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# Temuri Doghonadze <temuri.doghonadze@gmail.com>, 2023, 2024.
+# Temuri Doghonadze <temuri.doghonadze@gmail.com>, 2023, 2024, 2026.
+# Weblate Translation Memory <noreply-mt-weblate-translation-memory@weblate.org>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-26 03:48+0000\n"
-"PO-Revision-Date: 2024-01-26 02:46+0000\n"
+"POT-Creation-Date: 2026-09-08 12:03+0000\n"
+"PO-Revision-Date: 2026-09-03 07:23+0000\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <https://translate.fedoraproject.org/projects/dnf5/"
 "dnf5-plugin-copr/ka/>\n"
@@ -16,20 +17,21 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.3.1\n"
+"X-Generator: Weblate 2026.8.1\n"
 
 #: copr.cpp:48
 msgid "Copr hub (the web-UI/API server) hostname"
 msgstr "Copr hub (web-UI/API სერვერის) ჰოსტის სახელი"
 
 #: copr.cpp:88
+#, c++-format
 msgid ""
 "Copr project ID to {}.  Use either a format OWNER/PROJECT or HUB/OWNER/"
 "PROJECT (if HUB is not specified, the default one, or --hub <ARG>, is used.  "
 "OWNER is either a username, or a @groupname.  PROJECT can be a simple "
-"project name, or a \"project directory\" containing colons, e.g. 'project:"
-"custom:123'.  HUB can be either the Copr frontend hostname (e.g. copr."
-"fedorainfracloud.org ) or the shortcut (e.g. fedora).  Example: 'fedora/"
+"project name, or a \"project directory\" containing colons, e.g. "
+"'project:custom:123'.  HUB can be either the Copr frontend hostname (e.g. "
+"copr.fedorainfracloud.org ) or the shortcut (e.g. fedora).  Example: 'fedora/"
 "@footeam/coolproject'."
 msgstr ""
 "Copr პროექტის ID {}-მდე.  გამოიყენეთ ან ფორმატი OWNER/PROJECT ან HUB/OWNER/"
@@ -41,6 +43,7 @@ msgstr ""
 "მაგალითად: 'fedora/@footeam/coolproject'."
 
 #: copr.cpp:106
+#, c++-format
 msgid "Invalid PROJECT_SPEC format '{}'"
 msgstr "არასწორი PROJECT_SPEC-ის ფორმატი '{}'"
 
@@ -58,8 +61,8 @@ msgid ""
 "\n"
 "The Fedora Project does not exercise any power over the contents of\n"
 "this repository beyond the rules outlined in the Copr FAQ at\n"
-"<https://docs.pagure.org/copr.copr/user_documentation.html#what-i-can-build-"
-"in-copr>,\n"
+"<https://docs.copr.fedorainfracloud.org/user_documentation.html#what-i-can-"
+"build-in-copr>,\n"
 "and packages are not held to any quality or security level.\n"
 "\n"
 "Please do not file bug reports about these packages in Fedora\n"
@@ -71,14 +74,15 @@ msgstr ""
 "\n"
 "პროექტი Fedora ამ რეპოზიტორიის შემცველობას არანაირად არ ამოწმებს,\n"
 "იმ წესების გარდა, რომლებიც აღწერილია Copr-ის ხ.დ.კ.ში მისამართზე\n"
-"<https://docs.pagure.org/copr.copr/user_documentation.html#what-i-can-build-"
-"in-copr>,\n"
+"<https://docs.copr.fedorainfracloud.org/user_documentation.html#what-i-can-"
+"build-in-copr>,\n"
 "და პაკეტები არ მოწმდება ხარისხზე თუ უსაფრთხოებაზე.\n"
 "\n"
 "არ მოგვწეროთ შეცდომების შესახებ Fedora Bugzilla-ში.\n"
 "პრობლემების შემთხვევაში, ამ რეპოზიტორიის მფლობელს დაუკავშირდით.\n"
 
 #: copr_constants.hpp:41
+#, c++-format
 msgid ""
 "Maintainer of the enabled Copr repository decided to make\n"
 "it dependent on other repositories. Such repositories are\n"
@@ -111,6 +115,7 @@ msgid "print useful info about the system, useful for debugging"
 msgstr "სისტემის შესახებ ინფორმაციის გამოტანა. გამოსადეგია გამართვისთვის"
 
 #: copr_disable.cpp:35
+#, c++-format
 msgid ""
 "disable specified Copr repository (if exists), keep {}/*.repo file - just "
 "mark enabled=0"
@@ -119,9 +124,10 @@ msgstr ""
 "წაიშლება, უბრალოდ მოინიშნება, როგორც enabled=0"
 
 #: copr_enable.cpp:38
+#, c++-format
 msgid ""
-"download the repository info from a Copr server and install it as a {}/*."
-"repo file"
+"download the repository info from a Copr server and install it as a {}/"
+"*.repo file"
 msgstr ""
 "გადმოწერეთ რეპოზიტორიის ინფორმაცია Copr სერვერიდან და დააყენეთ ის, როგორც "
 "ფაილი {}/*.repo"
@@ -135,16 +141,27 @@ msgstr ""
 "'fedora-rawhide-ppc64le'. როცა მითითებული არაა, ბრძანება 'dnf copr' სცდის, "
 "დაადგინოს ის."
 
-#: copr_list.cpp:51
+#: copr_list.cpp:53
 msgid "list Copr repositories"
 msgstr "Copr რეპოზიტორიების სია"
 
+#: copr_list.cpp:86
+msgid ""
+"No repositories were loaded from the installroot. To use the configuration "
+"and repositories of the host system, pass --use-host-config."
+msgstr ""
+"მითითებული ძირითადი საქაღალდიდან რეპოზიტორიები არ ჩატვირთულა. კონფიგურაცის "
+"მასპინძელი სისტემის კონფიგურაციისა და რეპოზიტორიების გამოსაყენებლად გადაეცით "
+"პარამეტრი --use-host-config."
+
 #: copr_remove.cpp:35
+#, c++-format
 msgid ""
 "remove specified Copr repository from the system (removes the {}/*.repo file)"
 msgstr "მითითებული Copr რეპოზიტორიის წაშლა სისტემიდან (წაშლის {}/*.repo ფაილს)"
 
 #: copr_repo.cpp:91
+#, c++-format
 msgid "Directory '{}' not found in '{}' Copr project."
 msgstr "საქაღალდე '{}' ვერ ვიპოვე '{}' Copr პროექტში."
 
@@ -173,18 +190,22 @@ msgid "Can't parse Copr repo spec: "
 msgstr "ვერ დავამუშავე Copr რეპოს სპეციფიკაცია: "
 
 #: copr_repo.cpp:344
+#, c++-format
 msgid "Can't remove the {} repo file"
 msgstr "ვერ წავშალე რეპო ფაილი {}"
 
 #: copr_repo.cpp:347
+#, c++-format
 msgid "Repo file {} successfully removed"
 msgstr "რეპო ფაილ {} წარმატებით წაიშალა"
 
 #: copr_repo.cpp:393
+#, c++-format
 msgid "Can't find item {} in {}"
 msgstr "ვერ ვიპოვე {} ელემენტი {}-ში"
 
 #: copr_repo.cpp:449
+#, c++-format
 msgid "Removing old config file '{}'"
 msgstr "ვშლი ძველ კონფიგურაციის ფაილს '{}'"
 
@@ -193,6 +214,7 @@ msgid "Can't remove"
 msgstr "ვერ წავშალე"
 
 #: copr_repo.cpp:526
+#, c++-format
 msgid ""
 "Copr repofile '{}' has an old format, fix by re-enabling it $ {} copr enable "
 "{}"
@@ -201,17 +223,21 @@ msgstr ""
 "ბრძანების გაშვებით: $ {} copr enable {}"
 
 #: copr_repo.cpp:560
+#, c++-format
 msgid "Repo id '{}' in '{}' is suspicious"
 msgstr "რეპოს id '{}' '{}'-ში საეჭვოა"
 
 #: copr_repo.cpp:567
+#, c++-format
 msgid "Repo id '{}' doesn't belong to '{}' repofile"
 msgstr "რეპოს id '{}' რეპოფაილს '{}' არ ეკუთვნის"
 
 #: copr_repo.cpp:618
+#, c++-format
 msgid "Copr repository '{}' in '{}' disabled."
 msgstr "Copr რეპო '{}' '{}'-ში გათიშულია."
 
 #: copr_repo.cpp:632 copr_repo.cpp:657
+#, c++-format
 msgid "Repository '{}' not found on this system"
 msgstr "რეპოზიტორია '{}' ამ სისტემაზე აღმოჩენილი არაა"

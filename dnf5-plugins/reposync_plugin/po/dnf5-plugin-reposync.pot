@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-26 03:48+0000\n"
+"POT-Creation-Date: 2026-09-08 12:03+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -21,15 +21,15 @@ msgstr ""
 msgid "Synchronize a remote DNF repository to a local directory."
 msgstr ""
 
-#: reposync.cpp:159
+#: reposync.cpp:162
 msgid "Can't use --norepopath with multiple repositories enabled"
 msgstr ""
 
-#: reposync.cpp:164
+#: reposync.cpp:167
 msgid "Can't use --safe-write-path with multiple repositories enabled"
 msgstr ""
 
-#: reposync.cpp:250
+#: reposync.cpp:261
 #, c++-format
 msgid ""
 "Download destination '{0}' for location '{1}' of '{2}' package from '{3}' "
@@ -38,33 +38,42 @@ msgstr ""
 
 #: reposync.cpp:289
 #, c++-format
+msgid "Failed to download package: {}"
+msgstr ""
+
+#: reposync.cpp:292
+msgid "Failed to download one or more packages"
+msgstr ""
+
+#: reposync.cpp:304
+#, c++-format
 msgid "Failed to create directory '{0}' iterator: {1}"
 msgstr ""
 
-#: reposync.cpp:302
+#: reposync.cpp:317
 #, c++-format
 msgid "Failed to delete file {0}: {1}"
 msgstr ""
 
-#: reposync.cpp:305
+#: reposync.cpp:320
 #, c++-format
 msgid "[DELETED] {}"
 msgstr ""
 
-#: reposync.cpp:321
+#: reposync.cpp:336
 #, c++-format
 msgid "Removing '{}' with failing OpenPGP check: {}"
 msgstr ""
 
-#: reposync.cpp:384
+#: reposync.cpp:399
 msgid "Failed to get mirror for metadata."
 msgstr ""
 
-#: reposync.cpp:394
+#: reposync.cpp:409
 #, c++-format
 msgid "Failed to get mirror for package: \"{}\""
 msgstr ""
 
-#: reposync.cpp:410
+#: reposync.cpp:425
 msgid "OpenPGP signature check failed"
 msgstr ""

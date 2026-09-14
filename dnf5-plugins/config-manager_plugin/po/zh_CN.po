@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-26 03:48+0000\n"
+"POT-Creation-Date: 2026-09-08 12:03+0000\n"
 "PO-Revision-Date: 2026-07-03 16:17+0000\n"
 "Last-Translator: Jesse Guo <jesseguotech@outlook.com>\n"
 "Language-Team: Chinese (Simplified) <https://translate.fedoraproject.org/"
@@ -32,7 +32,7 @@ msgstr "无法通过指定文件添加软件源：文件 \"{}\" 不存在"
 msgid "from-repofile: {}"
 msgstr ""
 
-#: addrepo.cpp:169 setopt.cpp:83 setvar.cpp:49
+#: addrepo.cpp:169 setopt.cpp:53 setvar.cpp:49
 #, c++-format
 msgid "{}: Badly formatted argument value \"{}\""
 msgstr "{}：错误的参数值格式 \"{}\""
@@ -42,7 +42,7 @@ msgstr "{}：错误的参数值格式 \"{}\""
 msgid "Cannot set repository option \"{}={}\": {}"
 msgstr "无法设置软件仓库选项 \"{}={}\"：{}"
 
-#: addrepo.cpp:187 setopt.cpp:138
+#: addrepo.cpp:187 setopt.cpp:108
 #, c++-format
 msgid "Sets the \"{}\" option again with a different value: \"{}\" != \"{}\""
 msgstr "使用不同的值重复设置了选项“{}”：“{}” != “{}”"
@@ -100,54 +100,64 @@ msgstr ""
 msgid ""
 "File \"{}\" already exists and configures repositories with IDs \"{}\". Add "
 "\"--overwrite\" to overwrite."
-msgstr "文件 \"{}\" 已存在并已用ID \"{}\" 配置软件仓库。添加 \"--overwrite\" 以覆盖。"
+msgstr ""
+"文件 \"{}\" 已存在并已用ID \"{}\" 配置软件仓库。添加 \"--overwrite\" 以覆盖。"
 
 #: addrepo.cpp:474 addrepo.cpp:500
 #, c++-format
 msgid "A repository with id \"{}\" already configured in file: {}"
 msgstr "ID为 \"{}\" 的软件仓库已配置在此文件中：{}"
 
-#: addrepo.cpp:486 setopt.cpp:263
+#: addrepo.cpp:486 shared.hpp:150
 #, c++-format
 msgid "Cannot read repositories from directory \"{}\": {}"
 msgstr "无法在 \"{}\" 目录中读取软件仓库：{}"
 
-#: config-manager.cpp:43
+#: config-manager.cpp:44
 msgid "Manage configuration"
 msgstr "管理配置"
 
-#: setopt.cpp:91 unsetopt.cpp:72
+#: repos.cpp:56 setopt.cpp:140
+#, c++-format
+msgid "No matching repository to modify: {}"
+msgstr "没有符合的软件仓库可供修改：{}"
+
+#: repos.hpp:42
+msgid "Enables repositories"
+msgstr ""
+
+#: repos.hpp:50
+msgid "Disables repositories"
+msgstr ""
+
+#: setopt.cpp:61 unsetopt.cpp:73
 #, c++-format
 msgid ""
 "{}: Badly formatted argument value: Last key character cannot be '.': {}"
 msgstr "{}：错误的参数值格式：键名的结尾字符不能是\".\"：{}"
 
-#: setopt.cpp:100 unsetopt.cpp:81
+#: setopt.cpp:70 unsetopt.cpp:82
 #, c++-format
 msgid "{}: Empty repository id is not allowed: {}"
 msgstr "{}：不允许使用空的软件仓库ID：{}"
 
-#: setopt.cpp:109
+#: setopt.cpp:79
 #, c++-format
 msgid "Cannot set repository option \"{}\": {}"
 msgstr "无法设置软件仓库选项 \"{}\"：{}"
 
-#: setopt.cpp:116 setopt.cpp:179
+#: setopt.cpp:86 setopt.cpp:149
 #, c++-format
 msgid ""
 "Sets the \"{}\" option of the repository \"{}\" again with a different "
 "value: \"{}\" != \"{}\""
-msgstr "将 \"{}\" 选项（来自软件仓库 \"{}\" ）重新设置成不同的值：\"{}\" != \"{}\""
+msgstr ""
+"将 \"{}\" 选项（来自软件仓库 \"{}\" ）重新设置成不同的值：\"{}\" != \"{}\""
 
-#: setopt.cpp:130
+#: setopt.cpp:100
 #, c++-format
 msgid "Cannot set option: \"{}\": {}"
 msgstr "无法设置选项：\"{}\": {}"
-
-#: setopt.cpp:170
-#, c++-format
-msgid "No matching repository to modify: {}"
-msgstr "没有符合的软件仓库可供修改：{}"
 
 #: setvar.cpp:60
 #, c++-format
@@ -168,36 +178,36 @@ msgstr "缺少vars目录的路径"
 msgid "Cannot write variable to file \"{}\": {}"
 msgstr "无法将变量写入文件 \"{}\"：{}"
 
-#: shared.hpp:58
+#: shared.hpp:59
 #, c++-format
 msgid ""
 "The path \"{}\" exists, but it is not a directory or a symlink to a "
 "directory."
 msgstr "路径 \"{}\" 存在，但不是目录或指向目录的符号链接。"
 
-#: shared.hpp:63
+#: shared.hpp:64
 #, c++-format
 msgid "The path \"{}\" exists, but it is a symlink to a non-existent object."
 msgstr "路径 \"{}\" 存在，但是一个指向不存在对象的符号链接。"
 
-#: shared.hpp:69
+#: shared.hpp:70
 #, c++-format
 msgid ""
 "Directory \"{}\" does not exist. Add \"--create-missing-dir\" to create "
 "missing directories."
 msgstr "目录 \"{}\" 不存在。添加 \"--create-missing-dir\" 来创建缺失的目录。"
 
-#: shared.hpp:80
+#: shared.hpp:81
 #, c++-format
 msgid "Variable name can contain only ASCII letters, numbers and '_': {}"
 msgstr "变量名只能包含ASCII字母、数字和\"_\"：{}"
 
-#: unsetopt.cpp:93
+#: unsetopt.cpp:94
 #, c++-format
 msgid "config-manager: Request to remove unsupported repository option: {}"
 msgstr "config-manager: 请求移除不支持的软件仓库选项: {}"
 
-#: unsetopt.cpp:105
+#: unsetopt.cpp:106
 #, c++-format
 msgid "config-manager: Request to remove unsupported main option: {}"
 msgstr ""
@@ -229,7 +239,7 @@ msgid ""
 "the overrides: {}.{}"
 msgstr ""
 
-#: unsetopt.cpp:214
+#: unsetopt.cpp:208
 #, c++-format
 msgid ""
 "config-manager: Request to remove repository option but file with overrides "

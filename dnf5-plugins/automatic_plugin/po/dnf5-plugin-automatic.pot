@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-26 03:48+0000\n"
+"POT-Creation-Date: 2026-09-08 12:03+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,105 +17,112 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: automatic.cpp:206
+#: automatic.cpp:217
 msgid ""
 "An alternative CLI to 'dnf upgrade' suitable to be executed automatically "
 "and regularly."
 msgstr ""
 
-#: automatic.cpp:212
+#: automatic.cpp:223
 msgid "Apply random delay before execution."
 msgstr ""
 
-#: automatic.cpp:217
+#: automatic.cpp:228
 msgid "Automatically download updated packages"
 msgstr ""
 
-#: automatic.cpp:224
+#: automatic.cpp:235
 msgid "Do not automatically download updated packages"
 msgstr ""
 
-#: automatic.cpp:233
+#: automatic.cpp:244
 msgid "Automatically install downloaded updates"
 msgstr ""
 
-#: automatic.cpp:240
+#: automatic.cpp:251
 msgid "Do not automatically install downloaded updates"
 msgstr ""
 
-#: automatic.cpp:300
+#: automatic.cpp:311
 #, c++-format
 msgid ""
 "Warning: Configuration file location \"{}\" for dnf automatic is deprecated. "
 "See dnf5-automatic(8) for details."
 msgstr ""
 
-#: automatic.cpp:355
+#: automatic.cpp:344
+#, c++-format
+msgid ""
+"The \"email\" emitter is configured but the installed libcurl does not "
+"support the {} protocol."
+msgstr ""
+
+#: automatic.cpp:387
 msgid "Resolved transaction:"
 msgstr ""
 
-#: automatic.cpp:384
+#: automatic.cpp:416
 msgid "Downloading packages:"
 msgstr ""
 
-#: automatic.cpp:394
+#: automatic.cpp:426
 msgid "Packages downloaded."
 msgstr ""
 
-#: automatic.cpp:397
+#: automatic.cpp:429
 msgid "Running transaction:"
 msgstr ""
 
-#: automatic.cpp:411
+#: automatic.cpp:443
 msgid "Transaction finished."
 msgstr ""
 
-#: automatic.cpp:413
+#: automatic.cpp:445
 msgid "Transaction failed: "
 msgstr ""
 
-#: automatic.cpp:444
+#: automatic.cpp:478
 #, c++-format
 msgid "Unknown report emitter for dnf5 automatic: \"{}\"."
 msgstr ""
 
-#: automatic.cpp:459
+#: automatic.cpp:493
 #, c++-format
 msgid "Error: reboot command returned nonzero exit code: {}"
 msgstr ""
 
-#: emitters.cpp:63
+#: emitters.cpp:64
 msgid "No new upgrades available."
 msgstr ""
 
-#: emitters.cpp:67
+#: emitters.cpp:68
 #, c++-format
 msgid "{} packages can be upgraded."
 msgstr ""
 
-#: emitters.cpp:70
+#: emitters.cpp:71
 #, c++-format
 msgid "{} new upgrades have been downloaded."
 msgstr ""
 
-#: emitters.cpp:73
+#: emitters.cpp:74
 #, c++-format
 msgid "{} new upgrades have been installed."
 msgstr ""
 
-#: emitters.cpp:81
+#: emitters.cpp:82
 msgid "Failed to check for upgrades."
 msgstr ""
 
-#: emitters.cpp:84
+#: emitters.cpp:85
 msgid "Failed to download upgrades."
 msgstr ""
 
-#: emitters.cpp:87
+#: emitters.cpp:88
 msgid "Failed to install upgrades."
 msgstr ""
 
-#: emitters.cpp:142 emitters.cpp:163
+#: emitters.cpp:143 emitters.cpp:164
 #, c++-format
 msgid "[{}] dnf5-automatic: {}"
 msgstr ""

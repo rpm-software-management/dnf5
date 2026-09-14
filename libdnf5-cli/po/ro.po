@@ -1,13 +1,13 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# Remus-Gabriel Chelu <remusgabriel.chelu@disroot.org>, 2024, 2025.
+# Remus-Gabriel Chelu <remusgabriel.chelu@disroot.org>, 2024, 2025, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-26 03:48+0000\n"
-"PO-Revision-Date: 2025-06-10 10:29+0000\n"
+"POT-Creation-Date: 2026-09-08 12:03+0000\n"
+"PO-Revision-Date: 2026-09-04 11:18+0000\n"
 "Last-Translator: Remus-Gabriel Chelu <remusgabriel.chelu@disroot.org>\n"
 "Language-Team: Romanian <https://translate.fedoraproject.org/projects/dnf5/"
 "libdnf5-cli/ro/>\n"
@@ -17,112 +17,136 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : (n==0 || (n%100 > 0 && n%100 < "
 "20)) ? 1 : 2;\n"
-"X-Generator: Weblate 5.11.4\n"
+"X-Generator: Weblate 2026.9\n"
 
 #: argument_parser.cpp:68
+#, c++-format
 msgid "Misconfigured alias \"{}\": cannot convert \"{}\" to a number"
 msgstr "Alias „{}” greșit configurat: nu se poate converti „{}” într-un număr"
 
 #: argument_parser.cpp:76
+#, c++-format
 msgid "Misconfigured alias \"{}\": index \"{}\" out of range"
 msgstr "Alias „{}” greșit configurat: indicele „{}” este în afara intervalului"
 
 #: argument_parser.cpp:98
+#, c++-format
 msgid "\"{}\" not allowed together with named argument \"{}\""
 msgstr "„{}” nu este permis împreună cu argumentul numit „{}”"
 
 #: argument_parser.cpp:100
+#, c++-format
 msgid "\"{}\" not allowed in command \"{}\""
 msgstr "„{}” nu este permis în comanda „{}”"
 
 #: argument_parser.cpp:102
+#, c++-format
 msgid "\"{}\" not allowed together with positional argument \"{}\""
 msgstr "„{}” nu este permis împreună cu argumentul pozițional „{}”"
 
 #: argument_parser.cpp:147
+#, c++-format
 msgid "Argument id \"{}\" already registered in group \"{}\""
 msgstr "Id-ul argumentului „{}” este deja înregistrat în grupul „{}”"
 
 #: argument_parser.cpp:274
+#, c++-format
 msgid "Invalid character '.' in argument id \"{}\""
 msgstr "Caracter „.” nevalid în id-ul argumentului „{}”"
 
-#: argument_parser.cpp:382 argument_parser.cpp:387
+#: argument_parser.cpp:383 argument_parser.cpp:388
+#, c++-format
 msgid "Too few values for positional argument \"{}\""
 msgstr "Prea puține valori pentru argumentul pozițional „{}”"
 
-#: argument_parser.cpp:548
+#: argument_parser.cpp:549
+#, c++-format
 msgid "Missing value for named argument \"--{}\""
 msgstr "Lipsește valoarea pentru argumentul numit „--{}”"
 
-#: argument_parser.cpp:556
+#: argument_parser.cpp:557
+#, c++-format
 msgid "Unexpected value for named argument \"--{}\""
 msgstr "Valoare neașteptată pentru argumentul numit „--{}”"
 
-#: argument_parser.cpp:598
+#: argument_parser.cpp:599
+#, c++-format
 msgid "Missing value for named argument \"-{}\""
 msgstr "Lipsește valoarea pentru argumentul numit „-{}”"
 
 #. print usage
-#: argument_parser.cpp:694
+#: argument_parser.cpp:696
 msgid "Usage:"
 msgstr "Utilizare:"
 
-#: argument_parser.cpp:702
+#: argument_parser.cpp:704
 msgid "Description:"
 msgstr "Descriere:"
 
-#: argument_parser.cpp:979
+#: argument_parser.cpp:997
+#, c++-format
 msgid "Command id \"{}\" already registered for command \"{}\""
 msgstr "Id de comandă „{}” deja înregistrat pentru comanda „{}”"
 
-#: argument_parser.cpp:990
+#: argument_parser.cpp:1008
+#, c++-format
 msgid "Named argument id \"{}\" already registered for command \"{}\""
 msgstr ""
 "Id-ul argumentului numit „{}” este deja înregistrat pentru comanda „{}”"
 
-#: argument_parser.cpp:1000
+#: argument_parser.cpp:1018
+#, c++-format
 msgid "Positional argument id \"{}\" already registered for command \"{}\""
 msgstr ""
 "Id-ul argumentului pozițional „{}” este deja înregistrat pentru comanda „{}”"
 
-#: argument_parser.cpp:1010
+#: argument_parser.cpp:1028
+#, c++-format
 msgid "Group id \"{}\" already registered for command \"{}\""
 msgstr "Id-ul grupului „{}” este deja înregistrat pentru comanda „{}”"
 
-#: argument_parser.cpp:1037
+#: argument_parser.cpp:1055
+#, c++-format
 msgid "Command id \"{}\" does not contain subcommand with id \"{}\""
 msgstr "Id-ul de comandă „{}” nu conține subcomanda cu id-ul „{}”"
 
-#: argument_parser.cpp:1045
+#: argument_parser.cpp:1063
+#, c++-format
 msgid "Command id \"{}\" does not contain named argument with id \"{}\""
 msgstr "Id-ul de comandă „{}” nu conține un argument numit cu id-ul „{}”"
 
-#: argument_parser.cpp:1053
+#: argument_parser.cpp:1071
+#, c++-format
 msgid "Command id \"{}\" does not contain positional argument with id \"{}\""
 msgstr "Id-ul de comandă „{}” nu conține un argument pozițional cu id-ul „{}”"
 
-#: argument_parser.cpp:1060
+#: argument_parser.cpp:1078
+#, c++-format
 msgid "Command id \"{}\" does not contain group with id \"{}\""
 msgstr "Id-ul de comandă „{}” nu conține grupul cu id-ul „{}”"
 
-#: argument_parser.cpp:1177 argument_parser.cpp:1388
+#: argument_parser.cpp:1204 argument_parser.cpp:1425
+#, c++-format
 msgid "Unknown argument \"{}\" for command \"{}\""
 msgstr "Argument necunoscut „{}” pentru comanda „{}”"
 
-#: argument_parser.cpp:1192 argument_parser.cpp:1403
+#: argument_parser.cpp:1219 argument_parser.cpp:1440
+#, c++-format
 msgid "Missing positional argument \"{}\" for command \"{}\""
 msgstr "Lipsește argumentul pozițional „{}” pentru comanda „{}”"
 
-#: argument_parser.cpp:1274
+#: argument_parser.cpp:1301
+#, c++-format
 msgid "Missing value for command alias \"{}\""
 msgstr "Lipsește valoarea pentru comanda alias „{}”"
 
-#: argument_parser.cpp:1610
+#: argument_parser.cpp:1647
+#, c++-format
 msgid "Named argument with path id \"{}\" not found"
 msgstr "Argumentul numit cu id-ul de rută „{}” nu a fost găsit"
 
-#: argument_parser.cpp:1620
+#: argument_parser.cpp:1657
+#, c++-format
 msgid "Positional argument with path id \"{}\" not found"
 msgstr "Argumentul pozițional cu id-ul de rută „{}” nu a fost găsit"
 
@@ -157,13 +181,13 @@ msgstr "Nume"
 msgid "Epoch"
 msgstr "Epoca"
 
-#: output/packageinfo.cpp:69 output/transaction_table.cpp:289
+#: output/packageinfo.cpp:69 output/transaction_table.cpp:290
 msgid "Version"
 msgstr "Versiunea"
 
 #: output/packageinfo.cpp:70
 msgid "Release"
-msgstr "Ramura de lansare"
+msgstr "Ediția"
 
 #: output/packageinfo.cpp:71
 msgid "Architecture"
@@ -189,7 +213,8 @@ msgstr "Sursa"
 msgid "From repository"
 msgstr "Din depozitul"
 
-#: output/packageinfo.cpp:96 output/transaction_table.cpp:295
+#: output/packageinfo.cpp:96 output/transaction_table.cpp:296
+#: output/transactioninfo.cpp:76
 msgid "Repository"
 msgstr "Depozit"
 
@@ -205,7 +230,7 @@ msgstr "URL"
 msgid "License"
 msgstr "Licență"
 
-#: output/packageinfo.cpp:104
+#: output/packageinfo.cpp:104 output/transactioninfo.cpp:107
 msgid "Description"
 msgstr "Descriere"
 
@@ -217,20 +242,53 @@ msgstr "Furnizor"
 msgid " (exact)"
 msgstr " (corespondență exactă)"
 
-#: output/search.cpp:90
-msgid "No matches found."
-msgstr "Nu s-au găsit potriviri."
-
-#: output/search.cpp:101
+#: output/search.cpp:100
 msgid "Matched fields: "
 msgstr "Câmpuri cu potrivire: "
 
-#: output/transaction_table.cpp:127
+#: output/status.cpp:45
+msgid "Groups"
+msgstr "Grupuri"
+
+#: output/status.cpp:46 output/status.cpp:55 output/status.cpp:72
+msgid "installed"
+msgstr "instalat"
+
+#: output/status.cpp:47 output/status.cpp:56 output/status.cpp:73
+msgid "available"
+msgstr "disponibil"
+
+#: output/status.cpp:54
+msgid "Environments"
+msgstr "Medii"
+
+#: output/status.cpp:71
+msgid "Packages"
+msgstr "Pachete"
+
+#: output/status.cpp:74
+msgid "user-installed"
+msgstr "instalat-de-utilizator"
+
+#: output/status.cpp:84
+msgid "Installed Size"
+msgstr "Dimensiunea instalată"
+
+#: output/status.cpp:90
+msgid "Enabled Repositories"
+msgstr "Depozitele activate"
+
+#: output/status.cpp:101
+msgid "Last Transaction"
+msgstr "Ultima tranzacție"
+
+#: output/transaction_table.cpp:128
 msgid "Transaction Summary:\n"
 msgstr "Rezumatul tranzacției:\n"
 
 #. Keep the replaceble number aligned across all messages.
-#: output/transaction_table.cpp:132
+#: output/transaction_table.cpp:133
+#, c++-format
 msgid " Installing:      {:4} package\n"
 msgid_plural " Installing:      {:4} packages\n"
 msgstr[0] " Se instalează:     {:4} pachet\n"
@@ -238,7 +296,8 @@ msgstr[1] " Se instalează:     {:4} pachete\n"
 msgstr[2] " Se instalează:     {:4} de pachete\n"
 
 #. Keep the replaceble number aligned across all messages.
-#: output/transaction_table.cpp:141
+#: output/transaction_table.cpp:142
+#, c++-format
 msgid " Reinstalling:    {:4} package\n"
 msgid_plural " Reinstalling:    {:4} packages\n"
 msgstr[0] " Se reinstalează:   {:4} pachet\n"
@@ -246,7 +305,8 @@ msgstr[1] " Se reinstalează:   {:4} de pachete\n"
 msgstr[2] " Se reinstalează:   {:4} pachete\n"
 
 #. Keep the replaceble number aligned across all messages.
-#: output/transaction_table.cpp:150
+#: output/transaction_table.cpp:151
+#, c++-format
 msgid " Upgrading:       {:4} package\n"
 msgid_plural " Upgrading:       {:4} packages\n"
 msgstr[0] " Se actualizează:   {:4} pachet\n"
@@ -254,7 +314,8 @@ msgstr[1] " Se actualizează:   {:4} pachete\n"
 msgstr[2] " Se actualizează:   {:4} de pachete\n"
 
 #. Keep the replaceble number aligned across all messages.
-#: output/transaction_table.cpp:159
+#: output/transaction_table.cpp:160
+#, c++-format
 msgid " Replacing:       {:4} package\n"
 msgid_plural " Replacing:       {:4} packages\n"
 msgstr[0] " Se înlocuiește:    {:4} pachet\n"
@@ -262,7 +323,8 @@ msgstr[1] " Se înlocuiesc:     {:4} pachete\n"
 msgstr[2] " Se înlocuiesc:     {:4} de pachete\n"
 
 #. Keep the replaceble number aligned across all messages.
-#: output/transaction_table.cpp:168
+#: output/transaction_table.cpp:169
+#, c++-format
 msgid " Removing:        {:4} package\n"
 msgid_plural " Removing:        {:4} packages\n"
 msgstr[0] " Se elimină:        {:4} pachet\n"
@@ -270,7 +332,8 @@ msgstr[1] " Se elimină:        {:4} pachete\n"
 msgstr[2] " Se elimină:        {:4} de pachete\n"
 
 #. Keep the replaceble number aligned across all messages.
-#: output/transaction_table.cpp:177
+#: output/transaction_table.cpp:178
+#, c++-format
 msgid " Downgrading:     {:4} package\n"
 msgid_plural " Downgrading:     {:4} packages\n"
 msgstr[0] " Se retrogradează:  {:4} pachet\n"
@@ -278,7 +341,8 @@ msgstr[1] " Se retrogradează:  {:4} pachete\n"
 msgstr[2] " Se retrogradează:  {:4} de pachete\n"
 
 #. Keep the replaceble number aligned across all messages.
-#: output/transaction_table.cpp:186
+#: output/transaction_table.cpp:187
+#, c++-format
 msgid " Changing reason: {:4} package\n"
 msgid_plural " Changing reason: {:4} packages\n"
 msgstr[0] " Schimbând motivul: {:4} pachet\n"
@@ -286,145 +350,273 @@ msgstr[1] " Schimbând motivul: {:4} pachete\n"
 msgstr[2] " Schimbând motivul: {:4} de pachete\n"
 
 #. Keep the replaceble number aligned across all messages.
-#: output/transaction_table.cpp:195
+#: output/transaction_table.cpp:196
+#, c++-format
 msgid " Skipping:        {:4} package\n"
 msgid_plural " Skipping:        {:4} packages\n"
 msgstr[0] " Se omite:          {:4} pachet\n"
 msgstr[1] " Se omit:           {:4} pachete\n"
 msgstr[2] " Se omit:           {:4} de pachete\n"
 
-#: output/transaction_table.cpp:277
+#: output/transaction_table.cpp:278 output/transactioninfo.cpp:74
 msgid "Package"
 msgstr "Pachet"
 
-#: output/transaction_table.cpp:283
+#: output/transaction_table.cpp:284
 msgid "Arch"
 msgstr "Arhitectura"
 
-#: output/transaction_table.cpp:301
+#: output/transaction_table.cpp:302
 msgid "Size"
 msgstr "Dimensiune"
 
-#: output/transaction_table.cpp:357 output/transaction_table.cpp:451
+#: output/transaction_table.cpp:364 output/transaction_table.cpp:434
+#: output/transaction_table.cpp:475
+#, c++-format
 msgid "{} -> {}"
 msgstr "{} -> {}"
 
-#: output/transaction_table.cpp:373
+#: output/transaction_table.cpp:380
+#, c++-format
 msgid "replacing {}"
 msgstr "se înlocuiește {}"
 
-#: output/transaction_table.cpp:409 output/transaction_table.cpp:426
+#: output/transaction_table.cpp:422 output/transaction_table.cpp:450
 msgid " <name-unset>"
 msgstr " <nume-nedefinit>"
 
-#: output/transaction_table.cpp:457
+#: output/transaction_table.cpp:481
 msgid "replacing "
 msgstr "se înlocuiește "
 
-#: output/transaction_table.cpp:470
+#: output/transaction_table.cpp:494
 msgid "Skipping packages with conflicts:"
 msgstr "Se omit pachetele cu conflicte:"
 
-#: output/transaction_table.cpp:472
+#: output/transaction_table.cpp:496
 msgid "Skipping packages with broken dependencies:"
 msgstr "Se omit pachetele cu dependențe rupte:"
 
-#: output/transaction_table.cpp:533
+#: output/transaction_table.cpp:558
 msgid "Installing dependencies:"
 msgstr "Se instalează dependențele:"
 
-#: output/transaction_table.cpp:535
+#: output/transaction_table.cpp:560
 msgid "Installing weak dependencies:"
 msgstr "Se instalează dependențele slabe:"
 
-#: output/transaction_table.cpp:537
+#: output/transaction_table.cpp:562
 msgid "Installing group/module packages:"
 msgstr "Se instalează pachetele de grupuri/module:"
 
-#: output/transaction_table.cpp:539
+#: output/transaction_table.cpp:564
 msgid "Installing:"
 msgstr "Se instalează:"
 
-#: output/transaction_table.cpp:543
+#: output/transaction_table.cpp:568
 msgid "Upgrading:"
 msgstr "Se actualizează:"
 
-#: output/transaction_table.cpp:546
+#: output/transaction_table.cpp:571
 msgid "Downgrading:"
 msgstr "Se retrogradează:"
 
-#: output/transaction_table.cpp:549
+#: output/transaction_table.cpp:574
 msgid "Reinstalling:"
 msgstr "Se reinstalează:"
 
-#: output/transaction_table.cpp:553
+#: output/transaction_table.cpp:578
 msgid "Removing dependent packages:"
 msgstr "Se elimină pachetele dependente:"
 
-#: output/transaction_table.cpp:555
+#: output/transaction_table.cpp:580
 msgid "Removing unused dependencies:"
 msgstr "Se elimină dependențele neutilizate:"
 
-#: output/transaction_table.cpp:557
+#: output/transaction_table.cpp:582
 msgid "Removing:"
 msgstr "Se elimină:"
 
-#: output/transaction_table.cpp:561
+#: output/transaction_table.cpp:586
 msgid "Changing reason:"
 msgstr "Schimbând motivul (tipul de operație):"
 
-#: output/transaction_table.cpp:593
+#: output/transaction_table.cpp:618
 msgid "Installing groups dependencies:"
 msgstr "Se instalează dependențele grupurilor:"
 
-#: output/transaction_table.cpp:595
+#: output/transaction_table.cpp:620
 msgid "Installing groups:"
 msgstr "Se instalează grupurile:"
 
-#: output/transaction_table.cpp:599
+#: output/transaction_table.cpp:624
 msgid "Removing groups:"
 msgstr "Se elimină grupurile:"
 
-#: output/transaction_table.cpp:602
+#: output/transaction_table.cpp:627
 msgid "Upgrading groups:"
 msgstr "Se actualizează grupurile:"
 
-#: output/transaction_table.cpp:629
+#: output/transaction_table.cpp:630
+msgid "Changing reason of installed groups:"
+msgstr "Schimbarea motivului pentru care au fost instalate grupurile:"
+
+#: output/transaction_table.cpp:657
 msgid "Installing environmental groups:"
 msgstr "Se instalează grupurile de mediu:"
 
-#: output/transaction_table.cpp:632
+#: output/transaction_table.cpp:660
 msgid "Removing environmental groups:"
 msgstr "Se elimină grupurile de mediu:"
 
-#: output/transaction_table.cpp:635
+#: output/transaction_table.cpp:663
 msgid "Upgrading environmental groups:"
 msgstr "Se actualizează grupurile de mediu:"
 
-#: output/transaction_table.cpp:662
+#: output/transaction_table.cpp:690
 msgid "Enabling module streams:"
 msgstr "Se activează fluxurile de module:"
 
-#: output/transaction_table.cpp:665
+#: output/transaction_table.cpp:693
 msgid "Disabling modules:"
 msgstr "Se dezactivează modulele:"
 
-#: output/transaction_table.cpp:668
+#: output/transaction_table.cpp:696
 msgid "Resetting modules:"
 msgstr "Se reinițializează modulele:"
 
-#: output/transaction_table.cpp:671
+#: output/transaction_table.cpp:699
 msgid "Switching module streams:"
 msgstr "Se schimbă fluxurile de module:"
 
-#: output/transaction_table.cpp:745
+#: output/transaction_table.cpp:771 output/transaction_table.cpp:772
+msgid "(none)"
+msgstr "(niciunul)"
+
+#: output/transaction_table.cpp:778
+#, c++-format
+msgid "Skipping {0} package due to vendor change restriction: {1}."
+msgid_plural "Skipping {0} packages due to vendor change restriction: {1}."
+msgstr[0] ""
+"Se omite {0} pachet din cauza restricției privind schimbarea furnizorului: "
+"{1}."
+msgstr[1] ""
+"Se omit {0} pachete din cauza restricției privind schimbarea furnizorului: "
+"{1}."
+msgstr[2] ""
+"Se omit {0} de pachete din cauza restricției privind schimbarea "
+"furnizorului: {1}."
+
+#: output/transaction_table.cpp:799
 msgid "Nothing to do."
 msgstr "Nimic de făcut."
 
-#: progressbar/multi_progress_bar.cpp:36
+#. The two spaces indent the table the same way as child lines in KeyValueTable
+#: output/transactioninfo.cpp:73
+msgid "Action"
+msgstr "Acțiune"
+
+#: output/transactioninfo.cpp:75
+msgid "Reason"
+msgstr "Motiv"
+
+#: output/transactioninfo.cpp:98
+msgid "Transaction ID"
+msgstr "ID tranzacție"
+
+#: output/transactioninfo.cpp:99
+msgid "Begin time"
+msgstr "Ora de începere"
+
+#: output/transactioninfo.cpp:100
+msgid "Begin rpmdb"
+msgstr "Începerea construirii rpmdb"
+
+#: output/transactioninfo.cpp:101
+msgid "End time"
+msgstr "Ora de terminare"
+
+#: output/transactioninfo.cpp:102
+msgid "End rpmdb"
+msgstr "Terminarea construirii rpmdb"
+
+#: output/transactioninfo.cpp:104
+msgid "User"
+msgstr "Utilizator"
+
+#: output/transactioninfo.cpp:105
+msgid "Status"
+msgstr "Stare"
+
+#: output/transactioninfo.cpp:106
+msgid "Releasever"
+msgstr "Versiunea-lansată"
+
+#: output/transactioninfo.cpp:108
+msgid "Comment"
+msgstr "Comentariu"
+
+#: output/transactioninfo.cpp:111
+msgid "Packages altered:"
+msgstr "Pachete modificate:"
+
+#: output/transactioninfo.cpp:112
+msgid "Groups altered:"
+msgstr "Grupuri modificate:"
+
+#: output/transactioninfo.cpp:113
+msgid "Environments altered:"
+msgstr "Medii modificate:"
+
+#: output/transactionlist.cpp:53
+msgid "ID"
+msgstr "ID"
+
+#: output/transactionlist.cpp:54
+msgid "Command line"
+msgstr "Linia de comandă"
+
+#: output/transactionlist.cpp:55
+msgid "Date and time"
+msgstr "Data și ora"
+
+#: output/transactionlist.cpp:56
+msgid "Action(s)"
+msgstr "Acțiuni"
+
+#: output/transactionlist.cpp:57
+msgid "Altered"
+msgstr "Modificat"
+
+#. namespace
+#: progressbar/multi_progress_bar.cpp:85
 msgid "Total"
 msgstr "Total"
 
-#: session.cpp:149
+#: session.cpp:153
 msgid "Missing command"
 msgstr "Lipsește comanda"
+
+#: session.cpp:260
+#, c++-format
+msgid ""
+"Invalid date passed: \"{}\". Dates in \"YYYY-MM-DD\" format are expected"
+msgstr ""
+"Dată nevalidă introdusă: „{}”. Sunt așteptate date în formatul „AAAA-LL-ZZ\""
+
+#: session.cpp:270
+#, c++-format
+msgid "\"{}\" date cannot be represented by time_t type on this platform"
+msgstr ""
+"Data „{}” nu poate fi reprezentată de tipul time_t pe această platformă"
+
+#: utils/userconfirm.cpp:46
+msgid "Is this ok [Y/n]: "
+msgstr "Este în regulă [D/n]: "
+
+#: utils/userconfirm.cpp:49
+msgid "Is this ok [y/N]: "
+msgstr "Este în regulă [d/N]: "
+
+#~ msgid "No matches found."
+#~ msgstr "Nu s-au găsit potriviri."

@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-26 03:48+0000\n"
+"POT-Creation-Date: 2026-09-08 12:03+0000\n"
 "PO-Revision-Date: 2026-04-16 07:09+0000\n"
 "Last-Translator: Pavel Borecki <pavel.borecki@gmail.com>\n"
 "Language-Team: Czech <https://translate.fedoraproject.org/projects/dnf5/"
@@ -22,6 +22,7 @@ msgstr ""
 "X-Generator: Weblate 5.17\n"
 
 #: advisory/advisory.cpp:81
+#, c++-format
 msgid ""
 "Bad libsolv id for advisory \"{}\", solvable name \"{}\" doesn't have "
 "advisory prefix \"{}\""
@@ -29,170 +30,192 @@ msgstr ""
 "Chybné id libsolv pro doporučení \"{}\", řešitelný název \"{}\" nemá "
 "doporučenou předponu \"{}\""
 
-#: base/goal.cpp:482
+#: advisory/advisory_collection.cpp:94
+msgid "This libdnf5 does not support modularity"
+msgstr ""
+
+#: base/active_transaction_info.cpp:93 base/active_transaction_info.cpp:95
+#, fuzzy, c++-format
+#| msgid "Error during transaction replay JSON parsing : {}"
+msgid "Error parsing transaction info: {}"
+msgstr "Chyba parsování JSON při přehrání transakce: {}"
+
+#: base/base.cpp:185
+#, c++-format
+msgid "Invalid option value: enabled={}"
+msgstr "Neplatná hodnota volby: enabled={}"
+
+#: base/goal.cpp:490
+#, c++-format
 msgid "Unsupported argument for REMOVE action: {}"
 msgstr "Nepodporovaný argument pro akci REMOVE: {}"
 
 #. TODO(lukash) throw a proper exception
-#: base/goal.cpp:1652
+#: base/goal.cpp:1741
+#, c++-format
 msgid "Incorrect configuration value for multilib_policy: {}"
 msgstr "Nesprávná hodnota konfigurace pro multilib_policy: {}"
 
-#: base/goal_elements.cpp:352
+#: base/goal_elements.cpp:358 transaction/transaction_item_action.cpp:64
 msgid "Install"
 msgstr "Nainstalovat"
 
-#: base/goal_elements.cpp:354
+#: base/goal_elements.cpp:360
 msgid "Install via provide"
 msgstr ""
 
-#: base/goal_elements.cpp:356
+#: base/goal_elements.cpp:362
 msgid "Install by group"
 msgstr "Nainstalovat podle skupiny"
 
-#: base/goal_elements.cpp:358
+#: base/goal_elements.cpp:364 transaction/transaction_item_action.cpp:66
 msgid "Upgrade"
 msgstr "Přejít na novější verzi"
 
-#: base/goal_elements.cpp:360
+#: base/goal_elements.cpp:366
 msgid "Upgrade all"
 msgstr "Přejít na novější verze všeho"
 
-#: base/goal_elements.cpp:362
+#: base/goal_elements.cpp:368
 msgid "Upgrade minimal"
 msgstr "Přejít na nejnižší možnou novější verzi"
 
-#: base/goal_elements.cpp:364
+#: base/goal_elements.cpp:370
 msgid "Upgrade all minimal"
 msgstr "Přejít na nejnižší možnou novější verzi u všeho"
 
-#: base/goal_elements.cpp:366
+#: base/goal_elements.cpp:372 transaction/transaction_item_action.cpp:68
 msgid "Downgrade"
 msgstr "Vrátit na starší verzi"
 
-#: base/goal_elements.cpp:368
+#: base/goal_elements.cpp:374 transaction/transaction_item_action.cpp:70
 msgid "Reinstall"
 msgstr "Přeinstalovat"
 
-#: base/goal_elements.cpp:370
+#: base/goal_elements.cpp:376
 msgid "Install or reinstall"
 msgstr "Nainstalovat nebo přeinstalovat"
 
-#: base/goal_elements.cpp:372
+#: base/goal_elements.cpp:378 transaction/transaction_item_action.cpp:72
 msgid "Remove"
 msgstr "Odstranit"
 
-#: base/goal_elements.cpp:374
+#: base/goal_elements.cpp:380
 msgid "Distrosync"
 msgstr ""
 
-#: base/goal_elements.cpp:376
+#: base/goal_elements.cpp:382
 msgid "Distrosync all"
 msgstr ""
 
-#: base/goal_elements.cpp:378
+#: base/goal_elements.cpp:384 transaction/transaction_item_action.cpp:76
 msgid "Reason Change"
 msgstr "Změna důvodu"
 
-#: base/goal_elements.cpp:380
+#: base/goal_elements.cpp:386
 msgid "Resolve"
 msgstr "Vyřešit"
 
-#: base/goal_elements.cpp:382
+#: base/goal_elements.cpp:388 transaction/transaction_item_action.cpp:78
 msgid "Enable"
 msgstr "Povolit"
 
-#: base/goal_elements.cpp:384
+#: base/goal_elements.cpp:390 transaction/transaction_item_action.cpp:80
 msgid "Disable"
 msgstr "Zakázat"
 
-#: base/goal_elements.cpp:386
+#: base/goal_elements.cpp:392 transaction/transaction_item_action.cpp:82
 msgid "Reset"
 msgstr "Reset"
 
-#: base/goal_elements.cpp:388
+#: base/goal_elements.cpp:394
 msgid "Parse serialized transaction"
 msgstr "Zpracovat serializované transakce"
 
-#: base/goal_elements.cpp:390
+#: base/goal_elements.cpp:396
 msgid "Install action"
 msgstr ""
 
-#: base/goal_elements.cpp:392
+#: base/goal_elements.cpp:398
 msgid "Remove action"
 msgstr ""
 
-#: base/goal_elements.cpp:394
+#: base/goal_elements.cpp:400
 msgid "Upgrade action"
 msgstr ""
 
-#: base/goal_elements.cpp:396
+#: base/goal_elements.cpp:402
 msgid "Reinstall action"
 msgstr ""
 
-#: base/goal_elements.cpp:398
+#: base/goal_elements.cpp:404
 msgid "Reason change action"
 msgstr ""
 
-#: base/goal_elements.cpp:400
+#: base/goal_elements.cpp:406
 msgid "Reason override"
 msgstr ""
 
-#: base/goal_elements.cpp:402
+#: base/goal_elements.cpp:408
 msgid "Revert comps upgrade"
 msgstr ""
 
-#: base/goal_elements.cpp:404
+#: base/goal_elements.cpp:410
 msgid "Install debug RPMs"
 msgstr ""
 
-#: base/goal_elements.cpp:406
+#: base/goal_elements.cpp:412
 #, fuzzy
 #| msgid "No transaction in progress"
 msgid "Transaction merge"
 msgstr "Žádná transakce neprobíhá"
 
 #: base/log_event.cpp:141
-#, fuzzy
+#, fuzzy, c++-format
 #| msgid "No {} to remove for argument: {}"
 msgid "No packages to remove for argument: {}"
 msgstr "Ne {} k odstranění pro argument: {}"
 
 #: base/log_event.cpp:143
-#, fuzzy
+#, fuzzy, c++-format
 #| msgid "No {} to remove for argument: {}"
 msgid "No groups to remove for argument: {}"
 msgstr "Ne {} k odstranění pro argument: {}"
 
 #: base/log_event.cpp:146
-#, fuzzy
+#, fuzzy, c++-format
 #| msgid "No {} to remove for argument: {}"
 msgid "No environmental groups to remove for argument: {}"
 msgstr "Ne {} k odstranění pro argument: {}"
 
 #: base/log_event.cpp:148
-#, fuzzy
+#, fuzzy, c++-format
 #| msgid "No {} to remove for argument: {}"
 msgid "No modules to remove for argument: {}"
 msgstr "Ne {} k odstranění pro argument: {}"
 
 #: base/log_event.cpp:152
+#, c++-format
 msgid "No match for group from environment: {}"
 msgstr "Žádná shoda pro skupinu z prostředí: {}"
 
 #: base/log_event.cpp:154
+#, c++-format
 msgid "No match for group package: {}"
 msgstr "Žádná shoda pro skupinový balíček: {}"
 
 #: base/log_event.cpp:158
+#, c++-format
 msgid "Cannot perform {0}, no match for: {1}."
 msgstr ""
 
 #: base/log_event.cpp:160
+#, c++-format
 msgid "No match for argument: {}"
 msgstr "Žádná shoda pro argument: {}"
 
 #: base/log_event.cpp:163
+#, c++-format
 msgid "No match for argument '{0}' in selected advisories"
 msgstr "Žádná shoda pro argument „{0}“ ve vybraných upozorněních"
 
@@ -201,18 +224,22 @@ msgid "No match in selected advisories"
 msgstr ""
 
 #: base/log_event.cpp:169
+#, c++-format
 msgid "No match for argument '{0}' in repositories '{1}'"
 msgstr "Žádná shoda pro argument '{0}' v repozitářích '{1}'"
 
 #: base/log_event.cpp:175
+#, c++-format
 msgid "Cannot perform {0} for {1} '{2}' because it is not installed."
 msgstr "Není možné provést {0} pro {1} „{2}“, protože není nainstalované."
 
 #: base/log_event.cpp:180
+#, c++-format
 msgid "Packages for argument '{}' available, but not installed."
 msgstr "Balíčky pro argument „{}“ jsou dostupné, ale nejsou nainstalovány."
 
 #: base/log_event.cpp:184
+#, c++-format
 msgid ""
 "Packages for argument '{}' available, but installed for a different "
 "architecture."
@@ -221,24 +248,29 @@ msgstr ""
 "architekturu."
 
 #: base/log_event.cpp:188
+#, c++-format
 msgid "Cannot perform {0} because '{1}' matches only source packages."
 msgstr ""
 "Nebylo možné provést {0} protože „{1}“ odpovídá pouze zdrojovým balíčkům."
 
 #: base/log_event.cpp:192
+#, c++-format
 msgid "Argument '{}' matches only source packages."
 msgstr "Argument '{}' odpovídá pouze zdrojovým balíčkům."
 
 #: base/log_event.cpp:196
+#, c++-format
 msgid "Cannot perform {0} because '{1}' matches only excluded packages."
 msgstr ""
 "Není možné provést {0}, protože „{1}“ odpovídá pouze vyloučeným balíkům."
 
 #: base/log_event.cpp:200
+#, c++-format
 msgid "Argument '{}' matches only excluded packages."
 msgstr "Argument '{}' odpovídá pouze vyloučeným balíkům."
 
 #: base/log_event.cpp:204
+#, c++-format
 msgid ""
 "Cannot perform {0} because '{1}' matches only packages excluded by "
 "versionlock."
@@ -247,18 +279,22 @@ msgstr ""
 "pomocí versionlock."
 
 #: base/log_event.cpp:208
+#, c++-format
 msgid "Argument '{}' matches only packages excluded by versionlock."
 msgstr "Argument „{}“ odpovídá pouze balíkům, vyloučeným pomocí versionlock."
 
 #: base/log_event.cpp:213
+#, c++-format
 msgid "  * Maybe you meant: {}"
 msgstr "  * Možná jste měli na mysli: {}"
 
 #: base/log_event.cpp:216
+#, c++-format
 msgid "There are following alternatives for '{0}': {1}"
 msgstr "Existují následující alternativy pro '{0}': {1}"
 
 #: base/log_event.cpp:223
+#, c++-format
 msgid ""
 "The lowest available version of the \"{}\" package is already installed, "
 "cannot downgrade it."
@@ -267,6 +303,7 @@ msgstr ""
 "downgradovat."
 
 #: base/log_event.cpp:229
+#, c++-format
 msgid ""
 "Installed packages for argument '{0}' are not available in repositories in "
 "the same version, available versions: {1}, cannot reinstall."
@@ -275,12 +312,14 @@ msgstr ""
 "verzích v repozitářích. Verze k dispozici: {1} – není možné přeinstalovat."
 
 #: base/log_event.cpp:235
+#, c++-format
 msgid ""
 "Cannot perform {0} because '{1}' is installed in a different version: '{2}'."
 msgstr ""
 "Není možné provést {0}, protože „{1}“ je nainstalované v jiné verzi: „{2}“."
 
 #: base/log_event.cpp:241
+#, c++-format
 msgid ""
 "Packages for argument '{}' installed and available, but in a different "
 "version."
@@ -288,22 +327,39 @@ msgstr ""
 "Balíčky pro argument '{}' jsou nainstalované a dostupné, ale v jiné verzi."
 
 #: base/log_event.cpp:243
+#, c++-format
 msgid "Packages for argument '{}' installed, but not available."
 msgstr "Balíčky pro argument '{}' jsou nainstalovány, ale nejsou dostupné."
 
-#: base/log_event.cpp:252
+#: base/log_event.cpp:248
+#, fuzzy, c++-format
+#| msgid "Package \"{}\" is already installed."
+msgid "Group \"{}\" is already installed."
+msgstr "Balíček \"{}\" je již nainstalován."
+
+#: base/log_event.cpp:251
+#, fuzzy, c++-format
+#| msgid "Package \"{}\" is already installed."
+msgid "Environmental group \"{}\" is already installed."
+msgstr "Balíček \"{}\" je již nainstalován."
+
+#: base/log_event.cpp:258
+#, c++-format
 msgid "Package \"{}\" is already installed with reason \"{}\"."
 msgstr "Balíček \"{}\" je již nainstalován s důvodem \"{}\"."
 
-#: base/log_event.cpp:254
+#: base/log_event.cpp:260
+#, c++-format
 msgid "Package \"{}\" is already installed."
 msgstr "Balíček \"{}\" je již nainstalován."
 
-#: base/log_event.cpp:263
+#: base/log_event.cpp:269
+#, c++-format
 msgid "Debug data written to \"{}\""
 msgstr "Debug data zapsána do \"{}\""
 
-#: base/log_event.cpp:267
+#: base/log_event.cpp:273
+#, c++-format
 msgid ""
 "{0} upgrade cannot be reverted, however associated package actions will be. "
 "({1} id: '{2}') ."
@@ -311,17 +367,19 @@ msgstr ""
 "Přechod na novější verzi {0} není možné vzít zpět, nicméně s balíčkem "
 "související akce budou (vzaty zpět). ({1} identif.: „{2}“)."
 
-#: base/log_event.cpp:273
+#: base/log_event.cpp:279
+#, c++-format
 msgid "{} action for argument \"{}\" is not supported."
 msgstr "Akce {} pro argument \"{}\" není podporována."
 
 #. Format a leading line of the error message.
-#: base/log_event.cpp:282
+#: base/log_event.cpp:288
+#, c++-format
 msgid "Unable to resolve argument '{}':"
 msgstr "Nebylo možné vyřešit argument „{}“:"
 
-#: base/log_event.cpp:286
-#, fuzzy
+#: base/log_event.cpp:292
+#, fuzzy, c++-format
 #| msgid ""
 #| "\n"
 #| "  - Argument '{}' matches {} streams ('{}') of module '{}', but none of "
@@ -347,29 +405,30 @@ msgstr[2] ""
 "  - Argument '{}' odpovídá {} streamům ('{}') modulu '{}', ale žádný ze "
 "streamů není povolen ani výchozí."
 
-#: base/log_event.cpp:293
+#: base/log_event.cpp:299
 msgid "', '"
 msgstr ""
 
-#: base/log_event.cpp:302
+#: base/log_event.cpp:308
 msgid "Modular dependency problems:\n"
 msgstr "Problémy s modulární závislostí:\n"
 
-#: base/log_event.cpp:309
+#: base/log_event.cpp:315
 msgid "Modular dependency problems with the latest modules:\n"
 msgstr "Problémy modulárních závislostí s nejnovějšími moduly: %s\n"
 
-#: base/log_event.cpp:316
+#: base/log_event.cpp:322
 msgid "Modular dependency problems with the defaults:\n"
 msgstr "Problémy modulárních závislostí s výchozími:\n"
 
-#: base/log_event.cpp:331
+#: base/log_event.cpp:337
+#, c++-format
 msgid ""
 "The operation would result in switching of module '{0}' stream '{1}' to "
 "stream '{2}'\n"
 msgstr "Operace by vedla k streamu „{1}“ modulu „{0}“ na stream „{2}“\n"
 
-#: base/log_event.cpp:336
+#: base/log_event.cpp:342
 msgid ""
 "Error: It is not possible to switch enabled streams of a module unless "
 "explicitly enabled via configuration option module_stream_switch."
@@ -377,43 +436,49 @@ msgstr ""
 "Chyba: Není možné přepnout povolené streamy modulu pokud není výslovně "
 "povoleno prostřednictvím předvolby nastavení module_stream_switch."
 
-#: base/log_event.cpp:341
+#: base/log_event.cpp:347
+#, c++-format
 msgid ""
 "Extra package '{0}' (with action '{1}') which is not present in the stored "
 "transaction was pulled into the transaction.\n"
 msgstr ""
 
-#: base/log_event.cpp:347
+#: base/log_event.cpp:353
+#, c++-format
 msgid "Cannot parse file: '{0}': {1}.\n"
 msgstr ""
 
-#: base/log_event.cpp:354
+#: base/log_event.cpp:360
+#, c++-format
 msgid ""
 "Could not find debuginfo package for the following packages resolved from "
 "the argument '{0}': {1}"
 msgstr ""
 
-#: base/log_event.cpp:357 base/log_event.cpp:368
+#: base/log_event.cpp:363 base/log_event.cpp:374
 msgctxt "String for joining NEVRAs - e.g. `foo-4-4.noarch, bar-5-5.noarch`"
 msgid ", "
 msgstr ""
 
-#: base/log_event.cpp:364
+#: base/log_event.cpp:370
+#, c++-format
 msgid ""
 "Could not find debugsource package for the following packages resolved from "
 "the argument '{0}': {1}"
 msgstr ""
 
-#: base/log_event.cpp:371
+#: base/log_event.cpp:377
+#, c++-format
 msgid "Transaction merge error: '{0}'"
 msgstr ""
 
 #: base/solver_problems.cpp:41
+#, c++-format
 msgid "{} does not belong to a distupgrade repository"
 msgstr "{} nepatří do distupgrade repozitáře"
 
 #: base/solver_problems.cpp:42
-#, fuzzy
+#, fuzzy, c++-format
 #| msgid "{} has inferior architecture"
 msgid "{0} from {1} has inferior architecture"
 msgstr "{} má horší architekturu"
@@ -424,106 +489,110 @@ msgstr "{} má horší architekturu"
 msgid "problem with installed package"
 msgstr "problém s nainstalovaným balíčkem "
 
-#: base/solver_problems.cpp:44 base/solver_problems.cpp:80
+#: base/solver_problems.cpp:44 base/solver_problems.cpp:83
 msgid "conflicting requests"
 msgstr "protichůdné požadavky"
 
-#: base/solver_problems.cpp:45 base/solver_problems.cpp:81
+#: base/solver_problems.cpp:45 base/solver_problems.cpp:84
 msgid "unsupported request"
 msgstr "nepodporovaný požadavek"
 
-#: base/solver_problems.cpp:46 base/solver_problems.cpp:82
+#: base/solver_problems.cpp:46 base/solver_problems.cpp:85
+#, c++-format
 msgid "nothing provides requested {}"
 msgstr "nic neposkytuje požadované {}"
 
 #: base/solver_problems.cpp:47
+#, c++-format
 msgid "package {} does not exist"
 msgstr "balíček {} neexistuje"
 
-#: base/solver_problems.cpp:48 base/solver_problems.cpp:84
+#: base/solver_problems.cpp:48 base/solver_problems.cpp:87
+#, c++-format
 msgid "{} is provided by the system"
 msgstr "{} poskytuje systém"
 
-#: base/solver_problems.cpp:49 base/solver_problems.cpp:85
+#: base/solver_problems.cpp:49 base/solver_problems.cpp:88
 msgid "some dependency problem"
 msgstr "nějaký problém se závislostí"
 
 #: base/solver_problems.cpp:50
+#, c++-format
 msgid "cannot install the best update candidate for package {}"
 msgstr "nelze nainstalovat nejlepšího kandidáta pro aktualizaci balíčku {}"
 
-#: base/solver_problems.cpp:51 base/solver_problems.cpp:87
+#: base/solver_problems.cpp:51 base/solver_problems.cpp:90
 msgid "cannot install the best candidate for the job"
 msgstr "nelze nainstalovat nejlepšího kandidáta pro danou práci"
 
 #: base/solver_problems.cpp:52
-#, fuzzy
+#, fuzzy, c++-format
 #| msgid "package {} is filtered out by modular filtering"
 msgid "package {0} from {1} is filtered out by modular filtering"
 msgstr "balíček {} je odfiltrován modulárním filtrováním"
 
 #: base/solver_problems.cpp:53
-#, fuzzy
+#, fuzzy, c++-format
 #| msgid "package {} does not have a compatible architecture"
 msgid "package {0} from {1} does not have a compatible architecture"
 msgstr "balíček {} nemá kompatibilní architekturu"
 
 #: base/solver_problems.cpp:54
-#, fuzzy
+#, fuzzy, c++-format
 #| msgid "package {} is not installable"
 msgid "package {0} from {1} is not installable"
 msgstr "balíček {} nelze nainstalovat"
 
 #: base/solver_problems.cpp:55
-#, fuzzy
+#, fuzzy, c++-format
 #| msgid "package {} is filtered out by exclude filtering"
 msgid "package {0} from {1} is filtered out by exclude filtering"
 msgstr "balíček {} je odfiltrován vyloučeným filtrováním"
 
 #: base/solver_problems.cpp:56
-#, fuzzy
+#, fuzzy, c++-format
 #| msgid "nothing provides {0} needed by {1}"
 msgid "nothing provides {0} needed by {1} from {2}"
 msgstr "nic neposkytuje {0} potřebné pro {1}"
 
 #: base/solver_problems.cpp:57
-#, fuzzy
+#, fuzzy, c++-format
 #| msgid "cannot install both {0} and {1}"
 msgid "cannot install both {0} from {1} and {2} from {3}"
 msgstr "nelze nainstalovat současně {0} a {1}"
 
 #: base/solver_problems.cpp:58
-#, fuzzy
+#, fuzzy, c++-format
 #| msgid "package {0} conflicts with {1} provided by {2}"
 msgid "package {0} from {1} conflicts with {2} provided by {3} from {4}"
 msgstr "balíček {0} je v konfliktu s {1} poskytnutým {2}"
 
 #: base/solver_problems.cpp:60
-#, fuzzy
+#, fuzzy, c++-format
 #| msgid "package {0} conflicts with {1} provided by {2}"
 msgid "installed package {0} conflicts with {1} provided by {2} from {3}"
 msgstr "balíček {0} je v konfliktu s {1} poskytnutým {2}"
 
 #: base/solver_problems.cpp:61
-#, fuzzy
+#, fuzzy, c++-format
 #| msgid "package {0} obsoletes {1} provided by {2}"
 msgid "package {0} from {1} obsoletes {2} provided by {3} from {4}"
 msgstr "balíček {0} zastarává {1} poskytovaný {2}"
 
 #: base/solver_problems.cpp:62
-#, fuzzy
+#, fuzzy, c++-format
 #| msgid "installed package {0} obsoletes {1} provided by {2}"
 msgid "installed package {0} obsoletes {1} provided by {2} from {3}"
 msgstr "nainstalovaný balíček {0} zastarává {1} poskytovaným {2}"
 
 #: base/solver_problems.cpp:64
-#, fuzzy
+#, fuzzy, c++-format
 #| msgid "package {0} implicitly obsoletes {1} provided by {2}"
 msgid "package {0} from {1} implicitly obsoletes {2} provided by {3} from {4}"
 msgstr "balíček {0} implicitně zastarává {1} poskytovaným {2}"
 
 #: base/solver_problems.cpp:66
-#, fuzzy
+#, fuzzy, c++-format
 #| msgid "package {1} requires {0}, but none of the providers can be installed"
 msgid ""
 "package {1} from {2} requires {0}, but none of the providers can be installed"
@@ -532,7 +601,7 @@ msgstr ""
 "poskytovatelů"
 
 #: base/solver_problems.cpp:68
-#, fuzzy
+#, fuzzy, c++-format
 #| msgid "package {1} requires {0}, but none of the providers can be installed"
 msgid ""
 "installed package {1} requires {0}, but none of the providers can be "
@@ -542,209 +611,238 @@ msgstr ""
 "poskytovatelů"
 
 #: base/solver_problems.cpp:69
-#, fuzzy
+#, fuzzy, c++-format
 #| msgid "package {1} conflicts with {0} provided by itself"
 msgid "package {0} from {1} conflicts with {2} provided by itself"
 msgstr "balíček {1} je v konfliktu s {0} poskytovaným sebou samotným"
 
 #: base/solver_problems.cpp:70
-#, fuzzy
+#, fuzzy, c++-format
 #| msgid "both package {0} and {2} obsolete {1}"
 msgid "both package {0} from {1} and {3} from {4} obsolete {2}"
 msgstr "oba balíčky {0} a {2} zastarávají {1}"
 
 #: base/solver_problems.cpp:72
+#, c++-format
 msgid ""
 "The operation would result in removing the following protected packages: {}"
 msgstr "Operace by vedla k odstranění následujících chráněných balíčků: {}"
 
 #: base/solver_problems.cpp:75
+#, fuzzy, c++-format
+#| msgid ""
+#| "The operation would result in removing the following protected packages: "
+#| "{}"
+msgid ""
+"The operation would result in broken dependencies for the following "
+"protected packages: {}"
+msgstr "Operace by vedla k odstranění následujících chráněných balíčků: {}"
+
+#: base/solver_problems.cpp:78
+#, c++-format
 msgid "The operation would result in removing of running kernel: {}"
 msgstr "Operace by vedla k odstranění běžícího jádra: {}"
 
-#: base/solver_problems.cpp:77
-#, fuzzy
+#: base/solver_problems.cpp:80
+#, fuzzy, c++-format
 #| msgid "{} does not belong to a distupgrade repository"
 msgid "module {} does not belong to a distupgrade repository"
 msgstr "{} nepatří do distupgrade repozitáře"
 
-#: base/solver_problems.cpp:78
-#, fuzzy
+#: base/solver_problems.cpp:81
+#, fuzzy, c++-format
 #| msgid "{} has inferior architecture"
 msgid "module {} has inferior architecture"
 msgstr "{} má horší architekturu"
 
-#: base/solver_problems.cpp:79
-#, fuzzy
+#: base/solver_problems.cpp:82
+#, fuzzy, c++-format
 #| msgid "problem with installed package "
 msgid "problem with installed module {}"
 msgstr "problém s nainstalovaným balíčkem "
 
-#: base/solver_problems.cpp:83
-#, fuzzy
+#: base/solver_problems.cpp:86
+#, fuzzy, c++-format
 #| msgid "package {} does not exist"
 msgid "module {} does not exist"
 msgstr "balíček {} neexistuje"
 
-#: base/solver_problems.cpp:86
-#, fuzzy
+#: base/solver_problems.cpp:89
+#, fuzzy, c++-format
 #| msgid "cannot install the best update candidate for package {}"
 msgid "cannot install the best update candidate for module {}"
 msgstr "nelze nainstalovat nejlepšího kandidáta pro aktualizaci balíčku {}"
 
-#: base/solver_problems.cpp:88 base/solver_problems.cpp:91
+#: base/solver_problems.cpp:91 base/solver_problems.cpp:94
+#, c++-format
 msgid "module {} is disabled"
 msgstr ""
 
-#: base/solver_problems.cpp:89
-#, fuzzy
+#: base/solver_problems.cpp:92
+#, fuzzy, c++-format
 #| msgid "package {} does not have a compatible architecture"
 msgid "module {} does not have a compatible architecture"
 msgstr "balíček {} nemá kompatibilní architekturu"
 
-#: base/solver_problems.cpp:90
-#, fuzzy
+#: base/solver_problems.cpp:93
+#, fuzzy, c++-format
 #| msgid "package {} is not installable"
 msgid "module {} is not installable"
 msgstr "balíček {} nelze nainstalovat"
 
-#: base/solver_problems.cpp:92
-#, fuzzy
+#: base/solver_problems.cpp:95
+#, fuzzy, c++-format
 #| msgid "nothing provides {0} needed by {1}"
 msgid "nothing provides {0} needed by module {1}"
 msgstr "nic neposkytuje {0} potřebné pro {1}"
 
-#: base/solver_problems.cpp:93
-#, fuzzy
+#: base/solver_problems.cpp:96
+#, fuzzy, c++-format
 #| msgid "cannot install both {0} and {1}"
 msgid "cannot install both modules {0} and {1}"
 msgstr "nelze nainstalovat současně {0} a {1}"
 
-#: base/solver_problems.cpp:94
-#, fuzzy
+#: base/solver_problems.cpp:97
+#, fuzzy, c++-format
 #| msgid "package {0} conflicts with {1} provided by {2}"
 msgid "module {0} conflicts with {1} provided by {2}"
 msgstr "balíček {0} je v konfliktu s {1} poskytnutým {2}"
 
-#: base/solver_problems.cpp:95
-#, fuzzy
+#: base/solver_problems.cpp:98
+#, fuzzy, c++-format
 #| msgid "package {0} obsoletes {1} provided by {2}"
 msgid "module {0} obsoletes {1} provided by {2}"
 msgstr "balíček {0} zastarává {1} poskytovaný {2}"
 
-#: base/solver_problems.cpp:96
-#, fuzzy
+#: base/solver_problems.cpp:99
+#, fuzzy, c++-format
 #| msgid "installed package {0} obsoletes {1} provided by {2}"
 msgid "installed module {0} obsoletes {1} provided by {2}"
 msgstr "nainstalovaný balíček {0} zastarává {1} poskytovaným {2}"
 
-#: base/solver_problems.cpp:97
-#, fuzzy
+#: base/solver_problems.cpp:100
+#, fuzzy, c++-format
 #| msgid "package {0} implicitly obsoletes {1} provided by {2}"
 msgid "module {0} implicitly obsoletes {1} provided by {2}"
 msgstr "balíček {0} implicitně zastarává {1} poskytovaným {2}"
 
-#: base/solver_problems.cpp:98
-#, fuzzy
+#: base/solver_problems.cpp:101
+#, fuzzy, c++-format
 #| msgid "package {1} requires {0}, but none of the providers can be installed"
 msgid "module {1} requires {0}, but none of the providers can be installed"
 msgstr ""
 "balíček {1} vyžaduje {0}, ale nelze ho nainstalovat od žádného z "
 "poskytovatelů"
 
-#: base/solver_problems.cpp:99
-#, fuzzy
+#: base/solver_problems.cpp:102
+#, fuzzy, c++-format
 #| msgid "package {1} conflicts with {0} provided by itself"
 msgid "module {1} conflicts with {0} provided by itself"
 msgstr "balíček {1} je v konfliktu s {0} poskytovaným sebou samotným"
 
-#: base/solver_problems.cpp:100
-#, fuzzy
+#: base/solver_problems.cpp:103
+#, fuzzy, c++-format
 #| msgid "both package {0} and {2} obsolete {1}"
 msgid "both module {0} and {2} obsolete {1}"
 msgstr "oba balíčky {0} a {2} zastarávají {1}"
 
-#: base/solver_problems.cpp:290
+#: base/solver_problems.cpp:294
 msgid "Problem: "
 msgstr "Problém: "
 
-#: base/solver_problems.cpp:294
+#: base/solver_problems.cpp:298
+#, c++-format
 msgid "Problem {}: "
 msgstr "Problém {}: "
 
-#: base/transaction.cpp:80
+#: base/transaction.cpp:88
 msgid "This transaction has been already run before."
 msgstr "Tato transakce již proběhla dříve."
 
-#: base/transaction.cpp:81
+#: base/transaction.cpp:89
 msgid "Cannot run transaction with resolving problems."
 msgstr "Nelze spustit transakci s nevyřešenými problémy."
 
-#: base/transaction.cpp:82
+#: base/transaction.cpp:90
 msgid "Rpm transaction check failed."
 msgstr "Kontrola transakce Rpm se nezdařila."
 
-#: base/transaction.cpp:84
+#: base/transaction.cpp:92
 msgid ""
 "Failed to obtain rpm transaction lock. Another transaction is in progress."
 msgstr "Nepodařilo se získat zámek rpm transakce. Probíhá další transakce."
 
-#: base/transaction.cpp:85
+#: base/transaction.cpp:93
 msgid "Rpm transaction failed."
 msgstr "Transakce Rpm se nezdařila."
 
-#: base/transaction.cpp:86
+#: base/transaction.cpp:94
 msgid "Signature verification failed."
 msgstr "Ověření podpisu selhalo."
 
-#: base/transaction.cpp:90
+#: base/transaction.cpp:98
 #, fuzzy
 #| msgid "The repository does not have any PGP keys configured."
 msgid "The repository does not have any OpenPGP keys configured."
 msgstr "Repozitář nemá nakonfigurované žádné klíče PGP."
 
-#: base/transaction.cpp:91
+#: base/transaction.cpp:99
 msgid "Public key is not installed."
 msgstr "Veřejný klíč není nainstalován."
 
-#: base/transaction.cpp:92
+#: base/transaction.cpp:100
 msgid "Canceled by the user."
 msgstr "Zrušeno uživatelem."
 
-#: base/transaction.cpp:93
+#: base/transaction.cpp:101
 msgid "Public key import failed."
 msgstr "Import veřejného klíče se nezdařil."
 
-#: base/transaction.cpp:980
+#: base/transaction.cpp:993
+msgid "poll failed during scriptlets pipe processing"
+msgstr ""
+
+#: base/transaction.cpp:1016
+#, fuzzy
+#| msgid "Failed to set scriptlet output file, cannot open file \"{}\": {}"
+msgid "failed to read scriptlet output from pipe"
+msgstr ""
+"Nepodařilo se nastavit výstupní soubor skriptletu, nelze otevřít soubor \"{}"
+"\": {}"
+
+#: base/transaction.cpp:1134
+#, c++-format
 msgid "Invalid tsflag: {}"
 msgstr "Neplatný tsflag: {}"
 
-#: base/transaction.cpp:1314
+#: base/transaction.cpp:1568
+#, c++-format
 msgid "Public key \"{}\" is already present, not importing."
 msgstr "Veřejný klíč \"{}\" již existuje, neimportuje se."
 
-#: base/transaction.cpp:1335
+#: base/transaction.cpp:1589
+#, c++-format
 msgid "An error occurred importing key \"{}\": {}"
 msgstr "Při importu klíče \"{}\" došlo k chybě: {}"
 
-#: base/transaction.cpp:1369
-#, fuzzy
+#: base/transaction.cpp:1623
+#, fuzzy, c++-format
 #| msgid "PGP check for package \"{}\" ({}) from repo \"{}\" has failed: "
 msgid "OpenPGP check for package \"{}\" ({}) from repo \"{}\" has failed: "
 msgstr ""
 "Kontrola PGP pro balíček \"{}\" ({}) z repozitáře \"{}\" se nezdařila: "
 
-#: base/transaction.cpp:1397
+#: base/transaction.cpp:1651
 msgid "Import of the key didn't help, wrong key?"
 msgstr "Import klíče nepomohl, špatný klíč?"
 
-#: base/transaction.cpp:1416
+#: base/transaction.cpp:1670
 msgctxt "It is a joining character for repositories IDs"
 msgid ", "
 msgstr ""
 
-#: base/transaction.cpp:1419
-#, fuzzy
+#: base/transaction.cpp:1673
+#, fuzzy, c++-format
 #| msgid "Warning: skipped PGP checks for {} package(s)."
 msgid "Warning: skipped OpenPGP checks for {0} package from repository: {1}"
 msgid_plural ""
@@ -753,8 +851,8 @@ msgstr[0] "Upozornění: vynechané PGP kontroly pro {} balík(y)."
 msgstr[1] "Upozornění: vynechané PGP kontroly pro {} balík(y)."
 msgstr[2] "Upozornění: vynechané PGP kontroly pro {} balík(y)."
 
-#: base/transaction.cpp:1422
-#, fuzzy
+#: base/transaction.cpp:1676
+#, fuzzy, c++-format
 #| msgid "Warning: skipped PGP checks for {} package(s)."
 msgid "Warning: skipped OpenPGP checks for {0} package from repositories: {1}"
 msgid_plural ""
@@ -763,6 +861,45 @@ msgstr[0] "Upozornění: vynechané PGP kontroly pro {} balík(y)."
 msgstr[1] "Upozornění: vynechané PGP kontroly pro {} balík(y)."
 msgstr[2] "Upozornění: vynechané PGP kontroly pro {} balík(y)."
 
+#: base/vendor_change_manager.cpp:145
+#, fuzzy
+#| msgid "Cannot load shared library \"{}\": {}"
+msgid "{func}(): Cannot remove file: {path}: {msg}"
+msgstr "Nelze načíst sdílenou knihovnu \"{}\": {}"
+
+#: base/vendor_change_manager.cpp:151
+msgid "{func}(): File does not exist: {path}"
+msgstr ""
+
+#: base/vendor_change_manager.cpp:240
+#, fuzzy
+#| msgid "Cannot load shared library \"{}\": {}"
+msgid "{func}(): Cannot remove existing policy file: {path}"
+msgstr "Nelze načíst sdílenou knihovnu \"{}\": {}"
+
+#: base/vendor_change_manager.cpp:252
+msgid "{func}(): Cannot create file: {path}"
+msgstr ""
+
+#: base/vendor_change_manager.cpp:269
+#, fuzzy
+#| msgid "Cannot load shared library \"{}\": {}"
+msgid "{func}(): Cannot write to file: {path}"
+msgstr "Nelze načíst sdílenou knihovnu \"{}\": {}"
+
+#: base/vendor_change_manager.cpp:306
+msgid "{func}(): Base filename cannot be empty"
+msgstr ""
+
+#: base/vendor_change_manager.cpp:312
+msgid ""
+"{func}(): Base filename must not contain path components: {base_filename}"
+msgstr ""
+
+#: base/vendor_change_manager.cpp:437
+msgid "{func}(): Path must have .conf extension: {path}"
+msgstr ""
+
 #: common/exception.cpp:78
 msgid "System error"
 msgstr "Systémová chyba"
@@ -770,6 +907,18 @@ msgstr "Systémová chyba"
 #: common/exception.cpp:199
 msgid "General RuntimeError exception"
 msgstr "Obecná výjimka RuntimeError"
+
+#: common/proc.cpp:88
+#, fuzzy, c++-format
+#| msgid "Cannot reinstall package \"{}\""
+msgid "Cannot stat {}"
+msgstr "Nelze přeinstalovat balíček \"{}\""
+
+#: common/proc.cpp:124
+#, fuzzy, c++-format
+#| msgid "cannot open file"
+msgid "Cannot open {}"
+msgstr "nelze otevřít soubor"
 
 #: common/sack/query.cpp:27
 msgid "Query must contain exactly one object."
@@ -784,16 +933,21 @@ msgid "get_user_runtime_dir(): Cannot determine the user's runtime directory"
 msgstr ""
 "get_user_runtime_dir(): Nelze určit adresář běhového prostředí uživatele"
 
-#: comps/environment/environment.cpp:325
-msgid "failed to save xml document for comps"
-msgstr "nepodařilo se uložit xml dokument pro comps"
+#: comps/environment/environment.cpp:361
+#, fuzzy, c++-format
+#| msgid "Failed to save xml document for group \"{}\" to file \"{}\": {}"
+msgid "Failed to save xml document for environment \"{}\" to file \"{}\": {}"
+msgstr ""
+"Nepodařilo se uložit xml dokument pro skupinu \"{}\" do souboru \"{}\": {}"
 
-#: comps/group/group.cpp:373
+#: comps/group/group.cpp:354
+#, c++-format
 msgid "Failed to save xml document for group \"{}\" to file \"{}\": {}"
 msgstr ""
 "Nepodařilo se uložit xml dokument pro skupinu \"{}\" do souboru \"{}\": {}"
 
 #: comps/group/package.cpp:118 comps/group/package.cpp:121
+#, c++-format
 msgid "Invalid package type: {}"
 msgstr "Neplatný typ balíčku: {}"
 
@@ -802,71 +956,88 @@ msgid "Input is empty. Must contain a value."
 msgstr "Vstup je prázdný. Musí obsahovat hodnotu."
 
 #: conf/config_main.cpp:63
+#, c++-format
 msgid "Input value '{}' must not be negative"
 msgstr "Vstupní hodnota '{}' nesmí být záporná"
 
 #: conf/config_main.cpp:68
+#, c++-format
 msgid "Could not convert '{}' to bytes"
 msgstr "Nelze převést '{}' na bajty"
 
 #: conf/config_main.cpp:84
+#, c++-format
 msgid "Unknown unit '{}'"
 msgstr "Neznámá jednotka '{}'"
 
-#: conf/config_main.cpp:281
+#: conf/config_main.cpp:291
+#, c++-format
 msgid "The throttle value {} is outside the allowed range {} ... {}"
 msgstr "Hodnota throttle {} je mimo povolený rozsah {} ... {}"
 
 #: conf/config_parser.cpp:54
+#, c++-format
 msgid "Section \"{}\" not found"
 msgstr "Sekce \"{}\" nebyla nalezena"
 
 #: conf/config_parser.cpp:59
+#, c++-format
 msgid "Section \"{}\" does not contain option \"{}\""
 msgstr "Sekce \"{}\" neobsahuje volbu \"{}\""
 
 #: conf/config_parser.cpp:96
+#, c++-format
 msgid "Configuration file \"{}\" not found"
 msgstr "Konfigurační soubor \"{}\" nebyl nalezen"
 
 #: conf/config_parser.cpp:99
+#, c++-format
 msgid "Unable to access configuration file \"{}\""
 msgstr "Nelze získat přístup ke konfiguračnímu souboru \"{}\""
 
 #: conf/config_parser.cpp:102
+#, c++-format
 msgid "Error in configuration file \"{}\""
 msgstr "Chyba v konfiguračním souboru \"{}\""
 
 #: conf/option_binds.cpp:29
+#, c++-format
 msgid "Option \"{}\" not found"
 msgstr "Volba \"{}\" nebyla nalezena"
 
 #: conf/option_binds.cpp:32
+#, c++-format
 msgid "Option \"{}\" already exists"
 msgstr "Volba \"{}\" již existuje"
 
 #: conf/option_bool.cpp:82
+#, c++-format
 msgid "Invalid boolean value \"{}\""
 msgstr "Neplatná logická hodnota \"{}\""
 
 #: conf/option_enum.cpp:68
+#, c++-format
 msgid "Enum option value \"{}\" not allowed"
 msgstr "Výčtová hodnota volby \"{}\" není povolena"
 
 #: conf/option_number.cpp:99
+#, c++-format
 msgid "Input value {} is outside the allowed range {} ... {}"
 msgstr "Vstupní hodnota {} je mimo povolený rozsah {} ... {}"
 
 #: conf/option_number.cpp:112
+#, c++-format
 msgid "Invalid number option value \"{}\""
 msgstr "Neplatný počet hodnot volby \"{}\""
 
 #: conf/option_path.cpp:93
+#, c++-format
 msgid "Only absolute paths allowed, relative path \"{}\" detected"
 msgstr ""
 "Jsou povoleny pouze absolutní cesty, byla zjištěna relativní cesta \"{}\""
 
 #: conf/option_path.cpp:98
+#, c++-format
 msgid "Path \"{}\" does not exist"
 msgstr "Cesta \"{}\" neexistuje"
 
@@ -875,11 +1046,13 @@ msgid "Empty time option value"
 msgstr "Prázdná hodnota volby času"
 
 #: conf/option_seconds.cpp:50
+#, c++-format
 msgid "Invalid time option value \"{}\", number or \"never\" expected"
 msgstr ""
 "Neplatná časová hodnota volby \"{}\", číslo nebo \"never\" bylo očekáváno"
 
 #: conf/option_seconds.cpp:54
+#, c++-format
 msgid ""
 "Invalid time option value \"{}\", negative values except \"-1\" not allowed"
 msgstr ""
@@ -887,14 +1060,17 @@ msgstr ""
 "povoleny"
 
 #: conf/option_seconds.cpp:59
+#, c++-format
 msgid "Unknown time format \"{}\""
 msgstr "Neznámý formát času \"{}\""
 
 #: conf/option_seconds.cpp:78
+#, c++-format
 msgid "Unknown time unit '{}'"
 msgstr "Neznámá jednotka času '{}'"
 
 #: conf/option_string.cpp:89
+#, c++-format
 msgid ""
 "Input value \"{}\" not allowed, allowed values for this option are defined "
 "by regular expression \"{}\""
@@ -908,7 +1084,8 @@ msgstr ""
 msgid "Option value is not set"
 msgstr "Hodnota volby není nastavena"
 
-#: conf/option_string_list.cpp:175
+#: conf/option_string_list.cpp:178
+#, c++-format
 msgid ""
 "Input item value \"{}\" not allowed, allowed values for this option are "
 "defined by regular expression \"{}\""
@@ -916,19 +1093,22 @@ msgstr ""
 "Hodnota vstupní položky \"{}\" není povolena, povolené hodnoty pro tuto "
 "volbu jsou definovány regulárním výrazem \"{}\""
 
-#: conf/vars.cpp:313 conf/vars.cpp:353
+#: conf/vars.cpp:344 conf/vars.cpp:384
+#, c++-format
 msgid "Variable \"{}\" is read-only"
 msgstr "Proměnná \"{}\" je pouze pro čtení"
 
-#: logger/rotating_file_logger.cpp:65
+#: logger/rotating_file_logger.cpp:75
 msgid "Cannot open log file"
 msgstr "Nelze otevřít logovací soubor"
 
 #: module/module_db.cpp:76 module/module_db.cpp:85 module/module_sack.cpp:767
+#, c++-format
 msgid "No such module: {}"
 msgstr "Žádný takový modul: {}"
 
 #: module/module_db.cpp:268
+#, c++-format
 msgid "Cannot enable multiple streams for module '{}'"
 msgstr "Nelze povolit více streamů pro modul '{}'"
 
@@ -938,30 +1118,34 @@ msgstr "Nelze povolit více streamů pro modul '{}'"
 #. DNF_ERROR_REMOVAL_OF_PROTECTED_PKG);
 #. }
 #. TODO(lukash) replace with a proper and descriptive exception
-#: module/module_goal_private.cpp:83 rpm/solv/goal_private.cpp:342
-#: rpm/solv/goal_private.cpp:764
+#: module/module_goal_private.cpp:83 rpm/solv/goal_private.cpp:354
+#: rpm/solv/goal_private.cpp:776
 msgid "no solution possible"
 msgstr "žádné řešení není možné"
 
 #: module/module_metadata.cpp:102
+#, c++-format
 msgid "Failed to update from string: {}"
 msgstr "Aktualizace z řetězce: {} se nezdařila"
 
 #: module/module_metadata.cpp:129
-#, fuzzy
+#, fuzzy, c++-format
 #| msgid "Failed to resolve modules."
 msgid "Failed to resolve module metadata: {}"
 msgstr "Nepodařilo se vyřešit moduly."
 
 #: module/module_metadata.cpp:140
+#, c++-format
 msgid "Failed to upgrade defaults: {}"
 msgstr "Nepodařilo se upgradovat výchozí hodnoty: {}"
 
 #: module/module_metadata.cpp:144
+#, c++-format
 msgid "Failed to upgrade streams: {}"
 msgstr "Nepodařilo se upgradovat streamy: {}"
 
 #: module/module_sack.cpp:93
+#, c++-format
 msgid "Failed to load module metadata for repository \"{}\": {}"
 msgstr "Nepodařilo se načíst metadata modulu pro repozitář \"{}\": {}"
 
@@ -978,40 +1162,41 @@ msgid "Missing ':' in the value"
 msgstr "V hodnotě chybí ':'"
 
 #: module/module_sack.cpp:911
+#, c++-format
 msgid "Invalid module status: {}"
 msgstr "Neplatný stav modulu: {}"
 
-#: plugin/plugins.cpp:67
+#: plugin/plugins.cpp:68
+#, c++-format
 msgid ""
-"Unsupported plugin API combination. API version provided by plugin "
-"\"{}\" (\"{}\") is \"{}.{}\". API version in libdnf is \"{}.{}\"."
+"Unsupported plugin API combination. API version provided by plugin \"{}\" "
+"(\"{}\") is \"{}.{}\". API version in libdnf is \"{}.{}\"."
 msgstr ""
-"Nepodporovaná kombinace API pluginu. Verze API poskytovaná pluginem "
-"\"{}\" (\"{}\") je \"{}.{}\". Verze API v libdnf je \"{}.{}\"."
+"Nepodporovaná kombinace API pluginu. Verze API poskytovaná pluginem \"{}\" "
+"(\"{}\") je \"{}.{}\". Verze API v libdnf je \"{}.{}\"."
 
-#: plugin/plugins.cpp:92
+#: plugin/plugins.cpp:93
 msgid "Failed to create a libdnf plugin instance"
 msgstr ""
 
-#: plugin/plugins.cpp:146
+#: plugin/plugins.cpp:147
+#, c++-format
 msgid "Cannot find plugin library \"{}\""
 msgstr "Nelze najít knihovnu pluginu \"{}\""
 
-#: plugin/plugins.cpp:213
-msgid "Invalid option value: enabled={}"
-msgstr "Neplatná hodnota volby: enabled={}"
-
-#: plugin/plugins.cpp:237
-msgid "Plugins::load_plugins(): config_dir_path cannot be empty"
+#: plugin/plugins.cpp:181
+#, fuzzy
+#| msgid "Plugins::load_plugins(): config_dir_path cannot be empty"
+msgid "Plugins::load_plugins(): config_dirs cannot be empty"
 msgstr "Plugins::load_plugins(): config_dir_path nemůže být prázdný"
 
-#: plugin/plugins.cpp:253
-#, fuzzy
+#: plugin/plugins.cpp:194
+#, fuzzy, c++-format
 #| msgid "Cannot load plugins: {}"
 msgid "Cannot load libdnf plugin enabled from: {}"
 msgstr "Nelze načíst pluginy: {}"
 
-#: repo/config_repo.cpp:581
+#: repo/config_repo.cpp:593
 msgid "get_unique_id(): Computation of SHA256 failed"
 msgstr "get_unique_id(): Výpočet SHA256 se nezdařil"
 
@@ -1023,7 +1208,7 @@ msgstr "Nelze stáhnout soubory, je aktivována volba cacheonly."
 msgid "Failed to download files"
 msgstr "Stažení souborů se nezdařilo"
 
-#: repo/librepo.cpp:118
+#: repo/librepo.cpp:84
 msgid ""
 "Maximum download speed is lower than minimum, please change configuration of "
 "minrate or throttle"
@@ -1031,53 +1216,59 @@ msgstr ""
 "Maximální rychlost stahování je nižší než minimální. Změňte prosím "
 "konfiguraci minrate nebo throttle"
 
-#: repo/librepo.cpp:181
+#: repo/librepo.cpp:147
 msgid "'proxy_username' is set but not 'proxy_password'"
 msgstr ""
 
-#: repo/package_downloader.cpp:154
+#: repo/package_downloader.cpp:165
+#, c++-format
 msgid "Cannot download the \"{0}\" package, cacheonly option is activated."
 msgstr "Nelze stáhnout balíček \"{0}\", je aktivována volba cacheonly."
 
-#: repo/package_downloader.cpp:231
+#: repo/package_downloader.cpp:255
 #, fuzzy
 #| msgid "Failed to download files"
 msgid "Already downloaded"
 msgstr "Stažení souborů se nezdařilo"
 
-#: repo/package_downloader.cpp:279
+#: repo/package_downloader.cpp:303
 msgid "Failed to download packages"
 msgstr "Stažení balíčků se nezdařilo"
 
-#: repo/repo.cpp:61
+#: repo/repo.cpp:62
+#, c++-format
 msgid "Failed to load RPM \"{}\": doesn't have the \".rpm\" extension"
 msgstr "Nelze načíst RPM \"{}\": nemá příponu \".rpm\""
 
-#: repo/repo.cpp:65
+#: repo/repo.cpp:66
+#, c++-format
 msgid "Failed to access RPM \"{}\": {}"
 msgstr "Nepodařilo se získat přístup k RPM \"{}\": {}"
 
-#: repo/repo.cpp:107
+#: repo/repo.cpp:108
+#, c++-format
 msgid "Invalid repository id \"{}\": unexpected character '{}'"
 msgstr "Neplatné ID repozitáře \"{}\": neočekávaný znak \"{}\""
 
-#: repo/repo.cpp:150
+#: repo/repo.cpp:151
+#, c++-format
 msgid "Repository \"{}\" has no source (baseurl, mirrorlist or metalink) set."
 msgstr ""
 "Repozitář \"{}\" nemá nastaven žádný zdroj (baseurl, mirrorlist nebo "
 "metalink)."
 
-#: repo/repo.cpp:161
+#: repo/repo.cpp:162
+#, c++-format
 msgid "Repository \"{}\" has unsupported type \"{}\", skipping."
 msgstr "Repozitář \"{}\" má nepodporovaný typ \"{}\", přeskakuji."
 
-#: repo/repo.cpp:221 repo/repo.cpp:241 repo/repo_sack.cpp:368
-#, fuzzy
+#: repo/repo.cpp:222 repo/repo.cpp:242 repo/repo_sack.cpp:370
+#, fuzzy, c++-format
 #| msgid "Failed to download metadata ({}: \"{}\") for repository \"{}\""
 msgid "Failed to download metadata ({}: \"{}\") for repository \"{}\": {}"
 msgstr "Nepodařilo se stáhnout metadata ({}: \"{}\") pro repozitář \"{}\""
 
-#: repo/repo.cpp:439
+#: repo/repo.cpp:440
 msgid ""
 "Failed to load repository: \"primary\" data not present or in unsupported "
 "format"
@@ -1085,19 +1276,20 @@ msgstr ""
 "Nepodařilo se načíst repozitář: \"primární\" data nejsou k dispozici nebo "
 "jsou v nepodporovaném formátu"
 
-#: repo/repo.cpp:505
-#, fuzzy
+#: repo/repo.cpp:506
+#, fuzzy, c++-format
 #| msgid "Failed to load RPM \"{}\": doesn't have the \".rpm\" extension"
 msgid "Failed to load comps \"{}\": doesn't have the \".xml\" extension"
 msgstr "Nelze načíst RPM \"{}\": nemá příponu \".rpm\""
 
-#: repo/repo.cpp:512
-#, fuzzy
+#: repo/repo.cpp:513
+#, fuzzy, c++-format
 #| msgid "Failed to load RPM \"{}\": {}"
 msgid "Failed to load xml Comps \"{}\": {}"
 msgstr "Nepodařilo se načíst RPM \"{}\": {}"
 
-#: repo/repo.cpp:530
+#: repo/repo.cpp:531
+#, c++-format
 msgid "Failed to load RPM \"{}\": {}"
 msgstr "Nepodařilo se načíst RPM \"{}\": {}"
 
@@ -1109,63 +1301,93 @@ msgstr "Nelze určit ID repozitáře v mezipaměti."
 msgid "Empty path to the repository cache directory."
 msgstr "Prázdná cesta k adresáři mezipaměti repozitáře."
 
-#: repo/repo_downloader.cpp:214
+#: repo/repo_config_override.cpp:69
+#, fuzzy, c++-format
+#| msgid "Failed to download metadata ({}: \"{}\") for repository \"{}\""
+msgid "Cannot set option \"{}\" for repository \"{}\": {}"
+msgstr "Nepodařilo se stáhnout metadata ({}: \"{}\") pro repozitář \"{}\""
+
+#: repo/repo_config_override.cpp:84
+#, fuzzy, c++-format
+#| msgid "Cannot set root directory \"{}\""
+msgid "Cannot create directory \"{}\": {}"
+msgstr "Nelze nastavit kořenový adresář \"{}\""
+
+#: repo/repo_config_override.cpp:136 repo/repo_config_override.cpp:143
+#, fuzzy, c++-format
+#| msgid "Cannot load shared library \"{}\": {}"
+msgid "Cannot write to file \"{}\": {}"
+msgstr "Nelze načíst sdílenou knihovnu \"{}\": {}"
+
+#: repo/repo_config_override.cpp:157
+#, fuzzy, c++-format
+#| msgid "Cannot load shared library \"{}\": {}"
+msgid "Cannot set permissions on file \"{}\": {}"
+msgstr "Nelze načíst sdílenou knihovnu \"{}\": {}"
+
+#: repo/repo_downloader.cpp:224
+#, c++-format
 msgid "Librepo error: {}"
 msgstr "Chyba Librepo: {}"
 
-#: repo/repo_downloader.cpp:258
+#: repo/repo_downloader.cpp:269
 #, fuzzy
 #| msgid "Failed to resolve modules."
 msgid "Failed to set up metadata download"
 msgstr "Nepodařilo se vyřešit moduly."
 
-#: repo/repo_downloader.cpp:312 repo/repo_downloader.cpp:362
+#: repo/repo_downloader.cpp:323 repo/repo_downloader.cpp:373
 #, fuzzy
 #| msgid "Failed to download files"
 msgid "Failed to download metadata"
 msgstr "Stažení souborů se nezdařilo"
 
-#: repo/repo_downloader.cpp:426
+#: repo/repo_downloader.cpp:437
+#, c++-format
 msgid "Error checking if metalink \"{}\" is in sync for repository \"{}\""
 msgstr ""
 "Chyba při kontrole, zda je metalink \"{}\" synchronizován pro úložiště \"{}\""
 
-#: repo/repo_downloader.cpp:446
+#: repo/repo_downloader.cpp:457
+#, c++-format
 msgid "Error checking if repomd ({}: \"{}\") is in sync for repository \"{}\""
 msgstr ""
 "Chyba při kontrole, zda jsou repomd ({}: \"{}\") synchronizována pro "
 "repozitář \"{}\""
 
-#: repo/repo_downloader.cpp:515
+#: repo/repo_downloader.cpp:526
+#, c++-format
 msgid "Error loading local metadata for repository \"{}\""
 msgstr "Chyba při načítání místních metadat pro repozitář „{}“"
 
-#: repo/repo_downloader.cpp:597
+#: repo/repo_downloader.cpp:608
+#, c++-format
 msgid ""
 "No valid source (baseurl, mirrorlist or metalink) found for repository \"{}\""
 msgstr ""
 "Pro repozitář \"{}\" nebyl nalezen žádný platný zdroj (baseurl, mirrorlist "
 "nebo metalink)"
 
-#: repo/repo_pgp.cpp:60
-#, fuzzy
+#: repo/repo_pgp.cpp:65
+#, fuzzy, c++-format
 #| msgid "Failed to import pgp keys into temporary keyring: {}"
 msgid "Failed to import OpenPGP keys into temporary keyring: {}"
 msgstr "Nepodařilo se importovat pgp klíče do dočasného svazku klíčů: {}"
 
-#: repo/repo_pgp.cpp:66 repo/repo_pgp.cpp:93
-#, fuzzy
+#: repo/repo_pgp.cpp:71 repo/repo_pgp.cpp:98
+#, fuzzy, c++-format
 #| msgid "Failed to list pgp keys: {}"
 msgid "Failed to list OpenPGP keys: {}"
 msgstr "Nepodařilo se vypsat pgp klíče: {}"
 
-#: repo/repo_pgp.cpp:141
-#, fuzzy
+#: repo/repo_pgp.cpp:146
+#, fuzzy, c++-format
 #| msgid "Failed to import pgp keys: {}"
 msgid "Failed to import OpenPGP keys: {}"
 msgstr "Nepodařilo se importovat pgp klíče: {}"
 
 #: repo/repo_sack.cpp:159
+#, c++-format
 msgid ""
 "Failed to create repo \"{}\": Id is present more than once in the "
 "configuration"
@@ -1173,68 +1395,86 @@ msgstr ""
 "Nepodařilo se vytvořit repozitář \"{}\": ID je v konfiguraci přítomno více "
 "než jednou"
 
-#: repo/repo_sack.cpp:631
+#: repo/repo_sack.cpp:637
+#, c++-format
 msgid "Cache-only enabled but no cache for repository \"{}\""
 msgstr "Povolena pouze mezipaměť, ale žádná mezipaměť pro repozitář \"{}\""
 
 #: repo/solv_repo.cpp:267
+#, c++-format
 msgid "Failed to load repomd for repo \"{}\" from \"{}\": {}."
 msgstr "Nepodařilo se načíst repomd pro repozitář \"{}\" z \"{}\": {}."
 
 #: repo/solv_repo.cpp:275
+#, c++-format
 msgid "Failed to load primary for repo \"{}\" from \"{}\": {}."
 msgstr ""
 "Nepodařilo se načíst primární repozitář pro repozitář \"{}\" z \"{}\": {}."
 
 #: repo/solv_repo.cpp:323
+#, c++-format
 msgid "Unsupported extended repodata type for the system repo: \"{}\"."
 msgstr ""
 "Nepodporovaný typ rozšířených dat repozitáře pro systémový repozitář: \"{}\"."
 
 #: repo/solv_repo.cpp:395
+#, c++-format
 msgid "Failed to load {} extension for repo \"{}\" from \"{}\": {}"
 msgstr "Nepodařilo se načíst rozšíření {} pro repozitář \"{}\" z \"{}\": {}"
 
 #: repo/solv_repo.cpp:431
+#, c++-format
 msgid "Failed to load system repo from root \"{}\": {}"
 msgstr ""
 "Nepodařilo se načíst systémový repozitář z kořenového adresáře \"{}\": {}"
 
 #: repo/solv_repo.cpp:532
+#, c++-format
 msgid "Failed to load {} cache for repo \"{}\" from \"{}\": {}"
 msgstr "Nepodařilo se načíst mezipaměť {} pro repozitář \"{}\" z \"{}\": {}"
 
 #: repo/solv_repo.cpp:586
+#, c++-format
 msgid "Failed to write primary cache for repo \"{}\" to \"{}\": {}"
 msgstr ""
 "Nepodařilo se zapsat primární mezipaměť pro repozitář \"{}\" do \"{}\": {}"
 
 #: repo/solv_repo.cpp:608
+#, c++-format
 msgid "Failed to re-load primary cache for repo \"{}\" from \"{}\": {}"
 msgstr ""
 "Nepodařilo se znovu načíst primární mezipaměť pro repozitář \"{}\" z \"{}\": "
 "{}"
 
 #: repo/solv_repo.cpp:673
+#, c++-format
 msgid "Failed to write {} cache for repo \"{}\" to \"{}\": {}"
 msgstr "Nepodařilo se zapsat mezipaměť {} pro repozitář \"{}\" do \"{}\": {}"
 
 #: repo/solv_repo.cpp:694
+#, c++-format
 msgid "Failed to re-load {} cache for repo \"{}\" from \"{}\": {}"
 msgstr ""
 "Nepodařilo se znovu načíst mezipaměť {} pro repozitář \"{}\" z \"{}\": {}"
 
 #: repo/temp_files_memory.cpp:52
+#, c++-format
 msgid ""
 "An error occurred when parsing the temporary files memory file at '{}': {}"
 msgstr ""
 "Při parsování souboru na '{}': {} paměti dočasných souborů došlo k chybě"
 
+#: rpm/checksum.cpp:98
+msgid "Unknown checksum type"
+msgstr ""
+
 #: rpm/nevra.cpp:82
+#, c++-format
 msgid "NEVRA string \"{}\" contains ':' multiple times"
 msgstr "Řetězec NEVRA \"{}\" obsahuje ':' vícekrát"
 
 #: rpm/nevra.cpp:86
+#, c++-format
 msgid "Invalid character '{}' in NEVRA string \"{}\""
 msgstr "Neplatný znak '{}' v řetězci NEVRA \"{}\""
 
@@ -1242,7 +1482,7 @@ msgstr "Neplatný znak '{}' v řetězci NEVRA \"{}\""
 msgid "Package with rpmdbid was not found"
 msgstr "Balíček s rpmdbid nebyl nalezen"
 
-#: rpm/package.cpp:478
+#: rpm/package.cpp:486
 msgid "<unknown>"
 msgstr ""
 
@@ -1267,142 +1507,425 @@ msgid "Problem occurred when opening the package."
 msgstr "Nastal problém při otevírání balíčku."
 
 #: rpm/rpm_signature.cpp:64
+#, c++-format
 msgid "Failed to set rpm transaction rootDir \"{}\"."
 msgstr "Selhalo nastavení rpm transakce rootDir \"{}\"."
 
-#: rpm/rpm_signature.cpp:290
+#: rpm/rpm_signature.cpp:282
+#, c++-format
 msgid "\"{}\": key is not an armored public key."
 msgstr "\"{}\": klíč není veřejný klíč jako prostý text kódovaný base64."
 
-#: rpm/rpm_signature.cpp:295
+#: rpm/rpm_signature.cpp:287
+#, c++-format
 msgid "Failed to import public key \"{}\" to rpmdb: {}"
 msgstr "Nepodařilo se importovat veřejný klíč „{}“ do rpmdb: {}"
 
 #. TODO(jrohel): Why? Librpm does not provide this information.
-#: rpm/transaction.cpp:114
+#: rpm/transaction.cpp:116
+#, c++-format
 msgid "Cannot set root directory \"{}\""
 msgstr "Nelze nastavit kořenový adresář \"{}\""
 
-#: rpm/transaction.cpp:125
+#: rpm/transaction.cpp:127
 #, c-format
 msgid "Error %i opening rpm database"
 msgstr "Chyba %i při otevírání rpm databáze"
 
-#: rpm/transaction.cpp:134
+#: rpm/transaction.cpp:136
 msgid "The rpmdbCookie() function did not return cookie of rpm database."
 msgstr "Funkce rpmdbCookie() nevrátila cookie databáze rpm."
 
-#: rpm/transaction.cpp:199
+#: rpm/transaction.cpp:228
+#, c++-format
+msgid ""
+"The rpm transaction would unexpectedly remove packages not planned by the "
+"solver: {}. This typically happens when the rpmdb contains duplicate package "
+"versions after an interrupted upgrade. Please remove the duplicate packages "
+"using \"dnf remove\" and retry."
+msgstr ""
+
+#: rpm/transaction.cpp:236
 msgid "Failed to order the rpm transaction."
 msgstr "Spravování rpm transakce se nezdařilo."
 
-#: rpm/transaction.cpp:235
+#: rpm/transaction.cpp:272
+#, c++-format
 msgid ""
 "Failed to set scriptlet output file, cannot duplicate file descriptor: {}"
 msgstr ""
 "Nepodařilo se nastavit výstupní soubor skriptletu, nelze duplikovat "
 "deskriptor souboru: {}"
 
-#: rpm/transaction.cpp:254
+#: rpm/transaction.cpp:291
+#, c++-format
 msgid "Failed to set scriptlet output file, cannot open file \"{}\": {}"
 msgstr ""
-"Nepodařilo se nastavit výstupní soubor skriptletu, nelze otevřít soubor "
-"\"{}\": {}"
+"Nepodařilo se nastavit výstupní soubor skriptletu, nelze otevřít soubor \"{}"
+"\": {}"
 
-#: rpm/transaction.cpp:275
+#: rpm/transaction.cpp:312
+#, c++-format
 msgid "Failed to read package header, cannot open file \"{}\": {}"
 msgstr ""
 "Nepodařilo se přečíst hlavičku balíčku, nelze otevřít soubor \"{}\": {}"
 
-#: rpm/transaction.cpp:292
+#: rpm/transaction.cpp:329
+#, c++-format
 msgid "Failed to read package header from file \"{}\""
 msgstr "Nepodařilo se přečíst hlavičku balíčku ze souboru \"{}\""
 
-#: rpm/transaction.cpp:305
+#: rpm/transaction.cpp:342
 msgid "Cannot init rpm database iterator"
 msgstr "Nelze inicializovat iterátor rpm databáze"
 
-#: rpm/transaction.cpp:309
+#: rpm/transaction.cpp:346
 msgid "Package was not found in rpm database"
 msgstr "Balíček nebyl nalezen v rpm databázi"
 
 #. TODO(jrohel): Why? Librpm does not provide this information.
-#: rpm/transaction.cpp:325
+#: rpm/transaction.cpp:362
+#, c++-format
 msgid "Cannot reinstall package \"{}\""
 msgstr "Nelze přeinstalovat balíček \"{}\""
 
 #. TODO(jrohel): Why? Librpm does not provide this information.
-#: rpm/transaction.cpp:343
+#: rpm/transaction.cpp:380
+#, c++-format
 msgid "Cannot remove package \"{}\""
 msgstr "Nelze odstranit balíček \"{}\""
 
-#: rpm/transaction.cpp:362
-#, fuzzy
+#: rpm/transaction.cpp:399
+#, fuzzy, c++-format
 #| msgid "Cannot remove package \"{}\""
 msgid "Cannot upgrade package \"{}\""
 msgstr "Nelze odstranit balíček \"{}\""
 
-#: rpm/transaction.cpp:366
-#, fuzzy
+#: rpm/transaction.cpp:403
+#, fuzzy, c++-format
 #| msgid "Cannot remove package \"{}\""
 msgid "Cannot downgrade package \"{}\""
 msgstr "Nelze odstranit balíček \"{}\""
 
-#: rpm/transaction.cpp:370
-#, fuzzy
+#: rpm/transaction.cpp:407
+#, fuzzy, c++-format
 #| msgid "Cannot reinstall package \"{}\""
 msgid "Cannot install package \"{}\""
 msgstr "Nelze přeinstalovat balíček \"{}\""
 
 #: rpm/versionlock_config.cpp:284 system/state.cpp:605
+#, c++-format
 msgid "{}"
 msgstr "{}"
 
 #. TODO(lukash) throw proper exception class
-#: solv/pool.cpp:174
+#: solv/pool.cpp:198
+#, c++-format
 msgid "Failed to convert epoch \"{}\" to number"
 msgstr "Nepodařilo se převést epochu \"{}\" na číslo"
 
 #: solv/solver.cpp:79
+#, c++-format
 msgid "Writing debugsolver data into \"{}\" failed: {}"
 msgstr "Zápis dat debugsolveru do \"{}\" se nezdařil: {}"
 
+#: solv/vendor_change_manager.cpp:339
+#, fuzzy, c++-format
+#| msgid "Missing section header on line {}"
+msgid "Missing \"version\" key in \"{}\""
+msgstr "Chybí hlavička sekce na řádku {}"
+
+#: solv/vendor_change_manager.cpp:351
+#, fuzzy, c++-format
+#| msgid "Unsupported TOML version \"{}\", maximum supported version is \"{}\""
+msgid "Unsupported version \"{}\" in \"{}\". Supported versions: {}"
+msgstr "Nepodporovaná verze TOML \"{}\", maximální podporovaná verze je \"{}\""
+
+#: solv/vendor_change_manager.cpp:362
+#, c++-format
+msgid ""
+"Configuration \"{}\" uses version \"1.0\" which does not support combining "
+"'equivalent_vendors' with 'outgoing_vendors' and 'incoming_vendors'"
+msgstr ""
+
+#: solv/vendor_change_manager.cpp:394 solv/vendor_change_manager.cpp:432
+#: solv/vendor_change_manager.cpp:484 solv/vendor_change_manager.cpp:709
+#, c++-format
+msgid "Unknown key '{}' in \"{}\" on line {}"
+msgstr ""
+
+#: solv/vendor_change_manager.cpp:401
+#, c++-format
+msgid ""
+"Configuration \"{}\" uses version \"1.0\" which does not support key '{}' on "
+"line {}"
+msgstr ""
+
+#: solv/vendor_change_manager.cpp:420
+#, c++-format
+msgid ""
+"Filter \"cmdline_repo\" is only allowed in the 'incoming_packages' section. "
+"Error in \"{}\" in table starting on line {}"
+msgstr ""
+
+#: solv/vendor_change_manager.cpp:442
+#, c++-format
+msgid ""
+"Missing package filter definition in \"{}\" in table starting on line {}"
+msgstr ""
+
+#: solv/vendor_change_manager.cpp:473
+#, c++-format
+msgid ""
+"Unsupported comparator \"{}\" for vendor definition in \"{}\" on line {}"
+msgstr ""
+
+#: solv/vendor_change_manager.cpp:494
+#, c++-format
+msgid "Missing 'vendor' key in \"{}\" in table starting on line {}"
+msgstr ""
+
+#: solv/vendor_change_manager.cpp:507
+#, c++-format
+msgid ""
+"Invalid regex vendor pattern \"{}\" in \"{}\" in table starting on line {}: "
+"{}"
+msgstr ""
+
+#: solv/vendor_change_manager.cpp:535
+#, c++-format
+msgid "Bad value type in \"{}\" on line {}: {}"
+msgstr ""
+
+#: solv/vendor_change_manager.cpp:541
+#, fuzzy, c++-format
+#| msgid "An error occurred importing key \"{}\": {}"
+msgid "An error occurred when parsing \"{}\": {}"
+msgstr "Při importu klíče \"{}\" došlo k chybě: {}"
+
+#: solv/vendor_change_manager.cpp:555
+#, c++-format
+msgid ""
+"Configuration \"{}\" uses version \"1.0\" which does not support "
+"'incoming_vendors' without 'outgoing_vendors'"
+msgstr ""
+
+#: solv/vendor_change_manager.cpp:561
+#, c++-format
+msgid ""
+"Configuration \"{}\" uses version \"1.0\" which does not support "
+"'outgoing_vendors' without 'incoming_vendors'"
+msgstr ""
+
+#: solv/vendor_change_manager.cpp:651
+#, c++-format
+msgid "Unknown 'comparator' \"{}\" in \"{}\" on line {}"
+msgstr ""
+
+#: solv/vendor_change_manager.cpp:655
+#, c++-format
+msgid ""
+"Configuration \"{}\" uses version \"{}\" which does not support 'comparator' "
+"\"{}\""
+msgstr ""
+
+#: solv/vendor_change_manager.cpp:694
+#, c++-format
+msgid "Unknown 'filter' \"{}\" in \"{}\" on line {}"
+msgstr ""
+
+#: solv/vendor_change_manager.cpp:715
+#, c++-format
+msgid "Missing 'filter' key in \"{}\" for table entry on line {}"
+msgstr ""
+
+#: solv/vendor_change_manager.cpp:720
+#, c++-format
+msgid "Missing 'value' key in \"{}\" for table entry on line {}"
+msgstr ""
+
+#: solv/vendor_change_manager.cpp:727
+#, c++-format
+msgid ""
+"Filter \"cmdline_repo\" in \"{}\" in table starting on line {} does not "
+"support comparator \"{}\". Only the default \"EXACT\" comparator is allowed "
+"for this filter"
+msgstr ""
+
+#: solv/vendor_change_manager.cpp:744
+#, c++-format
+msgid ""
+"Invalid 'value' \"{}\" in \"{}\" in table starting on line {}. Only "
+"\"true\", \"1\", \"false\", \"0\" are supported"
+msgstr ""
+
+#: solv/vendor_change_manager.cpp:754 solv/vendor_change_manager.cpp:765
+#, c++-format
+msgid ""
+"Filter \"{}\" in \"{}\" in table starting on line {} does not support "
+"comparator \"{}\""
+msgstr ""
+
+#: solv/vendor_change_manager.cpp:781
+#, c++-format
+msgid "Invalid epoch value \"{}\" in \"{}\" in table starting on line {}"
+msgstr ""
+
+#: solv/vendor_change_manager.cpp:796
+#, c++-format
+msgid "Invalid regex \"{}\" in \"{}\" in table starting on line {}: {}"
+msgstr ""
+
+#: solv/vendor_change_manager.cpp:848
+msgid "Unexpected end of input"
+msgstr ""
+
+#: solv/vendor_change_manager.cpp:865
+#, c++-format
+msgid "Expected '{}' but found end of input"
+msgstr ""
+
+#: solv/vendor_change_manager.cpp:867
+#, c++-format
+msgid "Expected '{}' but found '{}'"
+msgstr ""
+
+#: solv/vendor_change_manager.cpp:877
+#, c++-format
+msgid "Compact vendor change policy parse error in \"{}\" at position {}"
+msgstr ""
+
+#: solv/vendor_change_manager.cpp:913
+msgid "Empty vendor policy string"
+msgstr ""
+
+#: solv/vendor_change_manager.cpp:930
+msgid "Expected package filter after '@'"
+msgstr ""
+
+#: solv/vendor_change_manager.cpp:943
+#, fuzzy, c++-format
+#| msgid "Invalid repository id \"{}\": unexpected character '{}'"
+msgid "Unexpected character '{}'"
+msgstr "Neplatné ID repozitáře \"{}\": neočekávaný znak \"{}\""
+
+#: solv/vendor_change_manager.cpp:947
+msgid "Empty policy: no vendor definitions or package filters specified"
+msgstr ""
+
+#: solv/vendor_change_manager.cpp:1023
+msgid "Expected quoted string starting with '\"'"
+msgstr ""
+
+#: solv/vendor_change_manager.cpp:1031
+msgid "Unterminated escape sequence"
+msgstr ""
+
+#: solv/vendor_change_manager.cpp:1037
+#, c++-format
+msgid "Invalid escape sequence '\\{}'. Only '\\\"' and '\\\\' are supported"
+msgstr ""
+
+#: solv/vendor_change_manager.cpp:1044
+msgid "Unterminated quoted string"
+msgstr ""
+
+#: solv/vendor_change_manager.cpp:1079
+msgid "Expected direction prefix 'in', 'out', or 'eq'"
+msgstr ""
+
+#: solv/vendor_change_manager.cpp:1143
+msgid ""
+"Expected comparison operator: relational (<, <=, >, >=) or string (=, ^, $, "
+"*, =*, =~; optionally prefixed with ! and/or i"
+msgstr ""
+
+#: solv/vendor_change_manager.cpp:1208
+msgid ""
+"Vendor definition does not support relational comparators. Use string "
+"comparators: =, ^, $, *, =*, =~"
+msgstr ""
+
+#: solv/vendor_change_manager.cpp:1216
+#, c++-format
+msgid "Invalid regex vendor pattern '{}': {}"
+msgstr ""
+
+#: solv/vendor_change_manager.cpp:1234
+#, fuzzy, c++-format
+#| msgid "Unknown time unit '{}'"
+msgid "Unknown filter field name '{}'"
+msgstr "Neznámá jednotka času '{}'"
+
+#: solv/vendor_change_manager.cpp:1244
+msgid "Expected filter field name"
+msgstr ""
+
+#: solv/vendor_change_manager.cpp:1267
+#, fuzzy, c++-format
+#| msgid "Invalid enum option value \"{}\""
+msgid "Invalid epoch value \"{}\""
+msgstr "Neplatná výčtová hodnota volby \"{}\""
+
+#: solv/vendor_change_manager.cpp:1271
+msgid "Filter 'cmdline_repo' only supports the '=' (EXACT) comparator"
+msgstr ""
+
+#: solv/vendor_change_manager.cpp:1274
+msgid "Filter 'cmdline_repo' is only allowed in incoming packages ('in:')"
+msgstr ""
+
+#: solv/vendor_change_manager.cpp:1285
+#, c++-format
+msgid ""
+"Invalid value '{}' for 'cmdline_repo' filter. Use 'true', '1', 'false', or "
+"'0'"
+msgstr ""
+
+#: solv/vendor_change_manager.cpp:1289
+#, c++-format
+msgid "Filter '{}' only supports relational comparators: =, !=, >, >=, <, <="
+msgstr ""
+
+#: solv/vendor_change_manager.cpp:1293
+#, c++-format
+msgid "Filter '{}' only supports string comparators: =, ^, $, *, =*, =~"
+msgstr ""
+
+#: solv/vendor_change_manager.cpp:1302
+#, fuzzy, c++-format
+#| msgid "Invalid package type: {}"
+msgid "Invalid regex '{}': {}"
+msgstr "Neplatný typ balíčku: {}"
+
+#: solv/vendor_change_manager.cpp:1313
+msgid "Package filters do not support 'eq' direction. Use 'in' or 'out'"
+msgstr ""
+
+#: solv/vendor_change_manager.cpp:1404 solv/vendor_change_manager.cpp:1454
+#: solv/vendor_change_manager.cpp:1465 solv/vendor_change_manager.cpp:1476
+msgid "{func}(): Policy index {idx} is out of range"
+msgstr ""
+
 #: system/state.cpp:282 system/state.cpp:291
+#, c++-format
 msgid "Invalid TOML version \"{}\", \"MAJOR.MINOR\" expected"
 msgstr "Neplatná verze TOML \"{}\", očekává se \"MAJOR.MINOR\""
 
 #: system/state.cpp:299
+#, c++-format
 msgid "{} state for \"{}\" not found."
 msgstr "Stav {} pro \"{}\" nebyl nalezen."
 
 #: system/state.cpp:303
+#, c++-format
 msgid "Loading system state TOML file {} failed (see dnf5-system-state(7)): {}"
 msgstr ""
 
 #: system/state.cpp:640
+#, c++-format
 msgid "Unsupported TOML version \"{}\", maximum supported version is \"{}\""
 msgstr "Nepodporovaná verze TOML \"{}\", maximální podporovaná verze je \"{}\""
-
-#: transaction/Swdb.cpp:91
-msgid "In progress"
-msgstr "Probíhá"
-
-#: transaction/Swdb.cpp:99 transaction/Swdb.cpp:126 transaction/Swdb.cpp:136
-#: transaction/Swdb.cpp:150 transaction/Swdb.cpp:273 transaction/Swdb.cpp:281
-msgid "Not in progress"
-msgstr "Neprobíhá"
-
-#: transaction/Swdb.cpp:158
-msgid "No transaction in progress"
-msgstr "Žádná transakce neprobíhá"
-
-#: transaction/Transformer.cpp:647
-msgid "Transformer: can't open history persist dir"
-msgstr "Transformer: nelze otevřít historii persist dir"
-
-#: transaction/Transformer.cpp:660
-msgid "Couldn't find a history database"
-msgstr "Nepodařilo se najít databázi historie"
 
 #. TODO(dmach): replace with a better exception class
 #: transaction/db/comps_environment_group.cpp:100
@@ -1422,99 +1945,165 @@ msgstr "Nelze získat 'version' z tabulky 'config'"
 msgid "Failed to insert record into table 'item' in history database"
 msgstr "Nepodařilo se vložit záznam do tabulky 'položka' v databázi historie"
 
-#: transaction/offline.cpp:195
+#: transaction/offline.cpp:212
 #, fuzzy
 #| msgid "error reading a line from file"
 msgid "error reading offline state file"
 msgstr "chyba při čtení řádku ze souboru"
 
-#: transaction/offline.cpp:200
+#: transaction/offline.cpp:217
 msgid "incompatible version of state data"
 msgstr ""
 
-#: transaction/transaction.cpp:96
+#: transaction/transaction.cpp:87
+msgid "Started"
+msgstr ""
+
+#: transaction/transaction.cpp:89
+msgid "Ok"
+msgstr ""
+
+#: transaction/transaction.cpp:91
+msgid "Error"
+msgstr ""
+
+#: transaction/transaction.cpp:110
+#, c++-format
 msgid "Invalid transaction state: {}"
 msgstr "Neplatný stav transakce: {}"
 
-#: transaction/transaction.cpp:279
+#: transaction/transaction.cpp:313
 msgid "Transaction has already started!"
 msgstr "Transakce již začala!"
 
-#: transaction/transaction_item_action.cpp:28
+#: transaction/transaction_item_action.cpp:30
+#, c++-format
 msgid "Invalid transaction item action: {}"
 msgstr "Neplatná akce položky transakce: {}"
 
-#: transaction/transaction_item_reason.cpp:28
+#: transaction/transaction_item_action.cpp:74
+msgid "Replaced"
+msgstr ""
+
+#: transaction/transaction_item_action.cpp:84
+msgid "Switch"
+msgstr ""
+
+#: transaction/transaction_item_reason.cpp:30
+#, c++-format
 msgid "Invalid transaction item reason: {}"
 msgstr "Neplatný důvod položky transakce: {}"
 
+#: transaction/transaction_item_reason.cpp:56
+msgid "None"
+msgstr ""
+
+#: transaction/transaction_item_reason.cpp:58
+msgid "Dependency"
+msgstr ""
+
+#: transaction/transaction_item_reason.cpp:60
+msgid "User"
+msgstr ""
+
+#: transaction/transaction_item_reason.cpp:62
+msgid "Clean"
+msgstr ""
+
+#: transaction/transaction_item_reason.cpp:64
+msgid "Weak Dependency"
+msgstr ""
+
+#: transaction/transaction_item_reason.cpp:66
+#, fuzzy
+#| msgid "groups"
+msgid "Group"
+msgstr "skupiny"
+
+#: transaction/transaction_item_reason.cpp:68
+msgid "External User"
+msgstr ""
+
 #: transaction/transaction_item_state.cpp:28
+#, c++-format
 msgid "Invalid transaction item state: {}"
 msgstr "Neplatný stav položky transakce: {}"
 
 #: transaction/transaction_item_type.cpp:28
+#, c++-format
 msgid "Invalid transaction item type: {}"
 msgstr "Neplatný typ položky transakce: {}"
 
 #: transaction/transaction_merge.cpp:102
+#, c++-format
 msgid ""
 "Action '{0}' '{1}' cannot be merged after it was '{2}' in preceding "
 "transactions -> setting '{0}'."
 msgstr ""
 
 #: transaction/transaction_merge.cpp:116
+#, c++-format
 msgid ""
 "Action 'Upgrade' '{0}' cannot be merged because it is not present at that "
 "point -> setting 'Install'."
 msgstr ""
 
 #: transaction/transaction_merge.cpp:174 transaction/transaction_merge.cpp:231
+#, c++-format
 msgid ""
 "Action 'Reinstall' '{0}' cannot be merged because it is not present at that "
 "point -> setting 'Install'."
 msgstr ""
 
 #: transaction/transaction_merge.cpp:194
+#, c++-format
 msgid ""
 "Action '{0}' '{1}' cannot be merged after it was '{2}' in preceding "
 "transaction -> setting '{0}'."
 msgstr ""
 
 #: transaction/transaction_merge.cpp:215
+#, c++-format
 msgid "Unexpected action encountered: '{0}' during transaction merge."
 msgstr ""
 
 #: transaction/transaction_merge.cpp:224
+#, c++-format
 msgid ""
-"Action '{0}' '{1}' cannot be merged because it is not present at that point -"
-"> skipping it."
+"Action '{0}' '{1}' cannot be merged because it is not present at that point "
+"-> skipping it."
 msgstr ""
 
 #: transaction/transaction_merge.cpp:245
+#, c++-format
 msgid ""
-"Action '{0}' '{1}' cannot be merged because it is not present at that point -"
-"> setting 'INSTALL'."
+"Action '{0}' '{1}' cannot be merged because it is not present at that point "
+"-> setting 'INSTALL'."
 msgstr ""
 
 #: transaction/transaction_merge.cpp:266
+#, c++-format
 msgid ""
 "Action '{0}' '{1}' cannot be merged because it is not present at that point "
 "(present versions are: {2}) -> skipping it."
 msgstr ""
 
 #: transaction/transaction_merge.cpp:277
+#, c++-format
 msgid ""
 "Action '{0}' '{1}' cannot be merged because it is already present at that "
 "point -> skipping it."
 msgstr ""
 
 #: transaction/transaction_merge.cpp:294
+#, c++-format
 msgid ""
 "Action '{0}' '{1}' cannot be merged because it is already installed in "
 "version '{2}' -> keeping the action from older transaction with '{1}'."
 msgstr ""
 
 #: transaction/transaction_merge.cpp:304
+#, c++-format
 msgid "Invalid action encountered: '{0}' during transaction merge."
 msgstr ""
 
@@ -1523,22 +2112,24 @@ msgid "Transaction replay JSON serialized transaction input is empty"
 msgstr "Serializovaný vstup transakce JSON při přehrání transakce je prázdný"
 
 #: transaction/transaction_sr.cpp:58
+#, c++-format
 msgid "Error during transaction replay JSON parsing : {}"
 msgstr "Chyba parsování JSON při přehrání transakce: {}"
 
 #: transaction/transaction_sr.cpp:68
-#, fuzzy
+#, fuzzy, c++-format
 #| msgid "Unsupported TOML version \"{}\", maximum supported version is \"{}\""
 msgid "Unexpected version format: \"{}\", supported version is \"{}\""
 msgstr "Nepodporovaná verze TOML \"{}\", maximální podporovaná verze je \"{}\""
 
 #: transaction/transaction_sr.cpp:74
+#, c++-format
 msgid "Incompatible major version: \"{}\", supported major version is \"{}\""
 msgstr ""
 "Nekompatibilní hlavní verze: \"{}\", podporovaná hlavní verze je \"{}\""
 
 #: transaction/transaction_sr.cpp:81
-#, fuzzy
+#, fuzzy, c++-format
 #| msgid "Invalid time option value \"{}\", number or \"never\" expected"
 msgid "Invalid minor version: \"{}\", number expected"
 msgstr ""
@@ -1581,6 +2172,7 @@ msgid "Unexpected type of \"rpms\", array expected"
 msgstr ""
 
 #: transaction/transaction_sr.cpp:202
+#, c++-format
 msgid "Cannot parse NEVRA for rpm \"{}\""
 msgstr ""
 
@@ -1602,43 +2194,93 @@ msgid ""
 "and action \"Reason Change\""
 msgstr ""
 
-#: utils/fs/file.cpp:86
+#: utils/bootc.cpp:46
+#, c++-format
+msgid "Error checking bootc status: {}"
+msgstr ""
+
+#: utils/bootc.cpp:49
+#, c++-format
+msgid "Error checking bootc status: bootc command failed with exit code {}"
+msgstr ""
+
+#: utils/bootc.cpp:58
+msgid "Error checking bootc status: Failed to parse JSON output"
+msgstr ""
+
+#: utils/bootc.cpp:73
+#, fuzzy, c++-format
+#| msgid "Failed to update from string: {}"
+msgid "Failed to query status of bootc system: {}"
+msgstr "Aktualizace z řetězce: {} se nezdařila"
+
+#: utils/bootc.cpp:90
+#, fuzzy
+#| msgid "Failed to download files"
+msgid "Failed to stat /usr filesystem"
+msgstr "Stažení souborů se nezdařilo"
+
+#: utils/bootc.cpp:125
+#, c++-format
+msgid "Error running `bootc usr-overlay --read-only`: {}"
+msgstr ""
+
+#: utils/bootc.cpp:128
+#, c++-format
+msgid ""
+"Error running `bootc usr-overlay --read-only`: bootc command failed with "
+"exit code {}"
+msgstr ""
+
+#: utils/bootc.cpp:136
+#, fuzzy
+#| msgid "Failed to execute uname()"
+msgid "Failed to unshare mount namespace"
+msgstr "Nepodařilo se spustit uname()"
+
+#: utils/bootc.cpp:143
+#, fuzzy, c++-format
+#| msgid "Failed to resolve modules."
+msgid "Failed to remount /usr as read-write: {}"
+msgstr "Nepodařilo se vyřešit moduly."
+
+#: utils/fs/file.cpp:87
 msgid "cannot open file"
 msgstr "nelze otevřít soubor"
 
-#: utils/fs/file.cpp:99
+#: utils/fs/file.cpp:100
 msgid "cannot open file from fd"
 msgstr "nelze otevřít soubor pomocí jeho popisovače"
 
-#: utils/fs/file.cpp:109
+#: utils/fs/file.cpp:110
 msgid "cannot close file"
 msgstr "nelze zavřít soubor"
 
-#: utils/fs/file.cpp:139 utils/fs/file.cpp:168
+#: utils/fs/file.cpp:140 utils/fs/file.cpp:169
 msgid "error reading file"
 msgstr "chyba při čtení ze souboru"
 
-#: utils/fs/file.cpp:154 utils/fs/file.cpp:180
+#: utils/fs/file.cpp:155 utils/fs/file.cpp:181
 msgid "error writing file"
 msgstr "chyba při zápisu do souboru"
 
-#: utils/fs/file.cpp:189
+#: utils/fs/file.cpp:190
 msgid "error flushing file"
 msgstr "chyba vyrovnávací paměti souboru"
 
-#: utils/fs/file.cpp:198
+#: utils/fs/file.cpp:199
 msgid "error seeking in file"
 msgstr "chyba hledání v souboru"
 
-#: utils/fs/file.cpp:209
+#: utils/fs/file.cpp:210
 msgid "error retrieving file position"
 msgstr "chyba při načítání pozice souboru"
 
-#: utils/fs/file.cpp:297
+#: utils/fs/file.cpp:296
 msgid "error reading a line from file"
 msgstr "chyba při čtení řádku ze souboru"
 
-#: utils/fs/file.cpp:335
+#: utils/fs/file.cpp:334
 msgid "error retrieving file descriptor"
 msgstr "chyba při načítání deskriptoru souboru"
 
@@ -1655,98 +2297,160 @@ msgid "cannot close temporary file"
 msgstr "nelze zavřít dočasný soubor"
 
 #: utils/iniparser.cpp:126
+#, c++-format
 msgid "Missing ']' on line {}"
 msgstr "Na řádku {} chybí ']'"
 
 #: utils/iniparser.cpp:129
+#, c++-format
 msgid "Empty section name on line {}"
 msgstr "Prázdný název sekce na řádku {}"
 
 #: utils/iniparser.cpp:137
+#, c++-format
 msgid "Text after section on line {}"
 msgstr "Text za sekcí na řádku {}"
 
 #: utils/iniparser.cpp:147
+#, c++-format
 msgid "Missing section header on line {}"
 msgstr "Chybí hlavička sekce na řádku {}"
 
 #: utils/iniparser.cpp:152
+#, c++-format
 msgid "Illegal continuation line on line {}"
 msgstr "Neplatné pokračování řádku {}"
 
 #: utils/iniparser.cpp:159
+#, c++-format
 msgid "Missing option name on line {}"
 msgstr "Na řádku {} chybí název volby"
 
 #: utils/iniparser.cpp:163
+#, c++-format
 msgid "Missing '=' on line {}"
 msgstr "Na řádku {} chybí '='"
 
 #. returns localized message, problem with later translation
 #: utils/library.cpp:34
+#, c++-format
 msgid "Cannot load shared library \"{}\": {}"
 msgstr "Nelze načíst sdílenou knihovnu \"{}\": {}"
 
 #: utils/library.cpp:48
+#, c++-format
 msgid "Cannot obtain address of symbol \"{}\": {}"
 msgstr "Nelze získat adresu symbolu \"{}\": {}"
 
 #: utils/locale.cpp:57
-#, fuzzy
+#, fuzzy, c++-format
 #| msgid "Cannot load shared library \"{}\": {}"
 msgid "Cannot set the locale \"{}\": {}"
 msgstr "Nelze načíst sdílenou knihovnu \"{}\": {}"
 
-#: utils/locker.cpp:45
-msgid "Failed to open lock file \"{}\""
-msgstr "Nepodařilo se otevřít soubor zámku \"{}\""
-
-#: utils/locker.cpp:60
+#: utils/locker.cpp:99
+#, c++-format
 msgid "Failed to obtain lock \"{}\""
 msgstr "Nepodařilo se získat zámek \"{}\""
 
-#: utils/locker.cpp:70
+#: utils/locker.cpp:108
+msgid "File is already open."
+msgstr ""
+
+#: utils/locker.cpp:121
+#, c++-format
+msgid "Failed to open lock file \"{}\""
+msgstr "Nepodařilo se otevřít soubor zámku \"{}\""
+
+#: utils/locker.cpp:127 utils/locker.cpp:164
+#, fuzzy, c++-format
+#| msgid "The package is not signed."
+msgid "The lock file \"{}\" is not opened"
+msgstr "Balíček není podepsaný."
+
+#: utils/locker.cpp:132
+#, fuzzy, c++-format
+#| msgid "Failed to close lock file \"{}\""
+msgid "Failed to truncate lock file \"{}\""
+msgstr "Nepodařilo se zavřít soubor zámku \"{}\""
+
+#: utils/locker.cpp:135 utils/locker.cpp:172
+#, fuzzy, c++-format
+#| msgid "Failed to close lock file \"{}\""
+msgid "Failed to seek lock file \"{}\""
+msgstr "Nepodařilo se zavřít soubor zámku \"{}\""
+
+#: utils/locker.cpp:143
+#, fuzzy, c++-format
+#| msgid "Failed to delete lock file \"{}\""
+msgid "Failed to write to lock file \"{}\""
+msgstr "Nepodařilo se smazat soubor zámku \"{}\""
+
+#: utils/locker.cpp:150
+#, fuzzy, c++-format
+#| msgid "Failed to open lock file \"{}\""
+msgid "Failed to sync lock file \"{}\""
+msgstr "Nepodařilo se otevřít soubor zámku \"{}\""
+
+#: utils/locker.cpp:178
+#, fuzzy, c++-format
+#| msgid "Failed to open lock file \"{}\""
+msgid "Failed to read from lock file \"{}\""
+msgstr "Nepodařilo se otevřít soubor zámku \"{}\""
+
+#: utils/locker.cpp:192
+#, c++-format
 msgid "Failed to close lock file \"{}\""
 msgstr "Nepodařilo se zavřít soubor zámku \"{}\""
 
-#: utils/locker.cpp:73
+#: utils/locker.cpp:196
+#, c++-format
 msgid "Failed to delete lock file \"{}\""
 msgstr "Nepodařilo se smazat soubor zámku \"{}\""
 
 #: utils/sqlite3/sqlite3.cpp:29
+#, c++-format
 msgid "SQL statement compilation failed: \"{}\""
 msgstr "Kompilace příkazu SQL se nezdařila: \"{}\""
 
 #: utils/sqlite3/sqlite3.cpp:31
+#, c++-format
 msgid "Binding integer value to SQL statement failed: \"{}\""
 msgstr "Navázání hodnoty integer s SQL příkazem se nezdařilo: \"{}\""
 
 #: utils/sqlite3/sqlite3.cpp:33
+#, c++-format
 msgid "Binding integer64 value to SQL statement failed: \"{}\""
 msgstr "Navázání hodnoty integer64 s SQL příkazem se nezdařilo: \"{}\""
 
 #: utils/sqlite3/sqlite3.cpp:35
+#, c++-format
 msgid "Binding unsigned integer32 value to SQL statement failed: \"{}\""
 msgstr ""
 "Navázání hodnoty unsigned integer32 s SQL příkazem se nezdařilo: \"{}\""
 
 #: utils/sqlite3/sqlite3.cpp:37
+#, c++-format
 msgid "Binding double value to SQL statement failed: \"{}\""
 msgstr "Navázání hodnoty double s SQL příkazem se nezdařilo: \"{}\""
 
 #: utils/sqlite3/sqlite3.cpp:39
+#, c++-format
 msgid "Binding bool value to SQL statement failed: \"{}\""
 msgstr "Navázání hodnoty bool s SQL příkazem se nezdařilo: \"{}\""
 
 #: utils/sqlite3/sqlite3.cpp:40
+#, c++-format
 msgid "Binding text to SQL statement failed: \"{}\""
 msgstr "Navázání textové hodnoty s SQL příkazem se nezdařilo: \"{}\""
 
 #: utils/sqlite3/sqlite3.cpp:41
+#, c++-format
 msgid "Binding blob to SQL statement failed: \"{}\""
 msgstr "Navázání hodnoty blob s SQL příkazem se nezdařilo: \"{}\""
 
 #: utils/sqlite3/sqlite3.cpp:42
+#, c++-format
 msgid "SQL statement evaluation failed: \"{}\""
 msgstr "Vyhodnocení SQL příkazu se nezdařilo: \"{}\""
 
@@ -1756,32 +2460,83 @@ msgstr ""
 "Nedostatek paměti nebo výsledek překračují maximální délku řetězce SQLite3"
 
 #: utils/sqlite3/sqlite3.cpp:46
+#, c++-format
 msgid "Column \"{}\" not found"
 msgstr "Sloupec \"{}\" nebyl nalezen"
 
 #: utils/sqlite3/sqlite3.cpp:48
+#, c++-format
 msgid "SQL statement execution failed: \"{}\""
 msgstr "Spuštění SQL příkazu se nezdařilo: \"{}\""
 
 #: utils/sqlite3/sqlite3.cpp:68
+#, c++-format
 msgid "Failed to open database \"{}\""
 msgstr "Nepodařilo se otevřít databázi \"{}\""
 
 #: utils/sqlite3/sqlite3.cpp:105
+#, c++-format
 msgid "Failed to close database \"{}\""
 msgstr "Nepodařilo se zavřít databázi \"{}\""
 
 #: utils/sqlite3/sqlite3.cpp:117 utils/sqlite3/sqlite3.cpp:143
+#, c++-format
 msgid "Failed to open backup database \"{}\""
 msgstr "Nepodařilo se otevřít záložní databázi \"{}\""
 
 #: utils/sqlite3/sqlite3.cpp:132
+#, c++-format
 msgid "Failed to backup database \"{}\" into \"{}\""
 msgstr "Zálohování databáze \"{}\" do \"{}\" se nezdařilo"
 
 #: utils/sqlite3/sqlite3.cpp:158
+#, c++-format
 msgid "Failed to restore database \"{}\""
 msgstr "Obnovení databáze \"{}\" se nezdařilo"
+
+#: utils/subprocess.cpp:29
+#, fuzzy
+#| msgid "cannot create temporary file"
+msgid "cannot create pipe"
+msgstr "nelze vytvořit dočasný soubor"
+
+#: utils/subprocess.cpp:98
+msgid "cannot fork"
+msgstr ""
+
+#: utils/subprocess.cpp:173
+msgid "cannot bind child stdin"
+msgstr ""
+
+#: utils/subprocess.cpp:175
+msgid "cannot bind child stdout"
+msgstr ""
+
+#: utils/subprocess.cpp:177
+#, fuzzy
+#| msgid "cannot open file"
+msgid "cannot bind child stderr"
+msgstr "nelze otevřít soubor"
+
+#: utils/subprocess.cpp:180
+#, fuzzy, c++-format
+#| msgid "Failed to execute uname()"
+msgid "failed to execute command: {}"
+msgstr "Nepodařilo se spustit uname()"
+
+#: utils/subprocess.cpp:185
+#, fuzzy, c++-format
+#| msgid "Error during transaction replay JSON parsing : {}"
+msgid "error during preparation of child process: {}"
+msgstr "Chyba parsování JSON při přehrání transakce: {}"
+
+#: utils/subprocess.cpp:211
+msgid "poll failed during subprocess I/O"
+msgstr ""
+
+#: utils/subprocess.cpp:257
+msgid "unexpected child process status after waitpid"
+msgstr ""
 
 #: utils/system.cpp:34
 msgid "failed to read rpm config files"
@@ -1790,6 +2545,24 @@ msgstr "nepodařilo se přečíst konfigurační rpm soubory"
 #: utils/system.cpp:52
 msgid "Failed to execute uname()"
 msgstr "Nepodařilo se spustit uname()"
+
+#~ msgid "failed to save xml document for comps"
+#~ msgstr "nepodařilo se uložit xml dokument pro comps"
+
+#~ msgid "In progress"
+#~ msgstr "Probíhá"
+
+#~ msgid "Not in progress"
+#~ msgstr "Neprobíhá"
+
+#~ msgid "No transaction in progress"
+#~ msgstr "Žádná transakce neprobíhá"
+
+#~ msgid "Transformer: can't open history persist dir"
+#~ msgstr "Transformer: nelze otevřít historii persist dir"
+
+#~ msgid "Couldn't find a history database"
+#~ msgstr "Nepodařilo se najít databázi historie"
 
 #, fuzzy
 #~| msgid "Warning: skipped PGP checks for {} package(s)."
@@ -1802,9 +2575,6 @@ msgstr "Nepodařilo se spustit uname()"
 #~ msgid "packages"
 #~ msgstr "balíčky"
 
-#~ msgid "groups"
-#~ msgstr "skupiny"
-
 #~ msgid "environmental groups"
 #~ msgstr "skupiny prostředí"
 
@@ -1813,9 +2583,6 @@ msgstr "Nepodařilo se spustit uname()"
 
 #~ msgid "Failed to resolve modules."
 #~ msgstr "Nepodařilo se vyřešit moduly."
-
-#~ msgid "Invalid enum option value \"{}\""
-#~ msgstr "Neplatná výčtová hodnota volby \"{}\""
 
 #~ msgid "Failed to resolve: {}"
 #~ msgstr "Nepodařilo se vyřešit: {}"

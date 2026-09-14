@@ -7,9 +7,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-26 03:48+0000\n"
-"PO-Revision-Date: 2026-06-06 10:01+0000\n"
-"Last-Translator: Ega Natha <ega8642@gmail.com>\n"
+"POT-Creation-Date: 2026-09-08 12:03+0000\n"
+"PO-Revision-Date: 2026-09-11 21:18+0000\n"
+"Last-Translator: Arif Budiman <arifpedia@gmail.com>\n"
 "Language-Team: Indonesian <https://translate.fedoraproject.org/projects/dnf5/"
 "libdnf5-cli/id/>\n"
 "Language: id\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 2026.6.1\n"
+"X-Generator: Weblate 2026.9.1\n"
 
 #: argument_parser.cpp:68
 #, c++-format
@@ -56,96 +56,96 @@ msgstr "ID argumen \"{}\" sudah terdaftar dalam grup \"{}\""
 msgid "Invalid character '.' in argument id \"{}\""
 msgstr "Karakter '.' tidak valid pada ID argumen \"{}\""
 
-#: argument_parser.cpp:382 argument_parser.cpp:387
+#: argument_parser.cpp:383 argument_parser.cpp:388
 #, c++-format
 msgid "Too few values for positional argument \"{}\""
 msgstr "Nilai terlalu sedikit untuk argumen posisi \"{}\""
 
-#: argument_parser.cpp:548
+#: argument_parser.cpp:549
 #, c++-format
 msgid "Missing value for named argument \"--{}\""
 msgstr "Nilai untuk argumen bernama \"--{}\" tidak ada"
 
-#: argument_parser.cpp:556
+#: argument_parser.cpp:557
 #, c++-format
 msgid "Unexpected value for named argument \"--{}\""
 msgstr "Nilai tidak terduga untuk argumen bernama \"--{}\""
 
-#: argument_parser.cpp:598
+#: argument_parser.cpp:599
 #, c++-format
 msgid "Missing value for named argument \"-{}\""
 msgstr "Nilai untuk argumen bernama \"-{}\" tidak ada"
 
 #. print usage
-#: argument_parser.cpp:694
+#: argument_parser.cpp:696
 msgid "Usage:"
 msgstr "Penggunaan:"
 
-#: argument_parser.cpp:702
+#: argument_parser.cpp:704
 msgid "Description:"
 msgstr "Deskripsi:"
 
-#: argument_parser.cpp:979
+#: argument_parser.cpp:997
 #, c++-format
 msgid "Command id \"{}\" already registered for command \"{}\""
 msgstr "ID perintah \"{}\" sudah terdaftar untuk perintah \"{}\""
 
-#: argument_parser.cpp:990
+#: argument_parser.cpp:1008
 #, c++-format
 msgid "Named argument id \"{}\" already registered for command \"{}\""
 msgstr "ID argumen bernama \"{}\" sudah terdaftar untuk perintah \"{}\""
 
-#: argument_parser.cpp:1000
+#: argument_parser.cpp:1018
 #, c++-format
 msgid "Positional argument id \"{}\" already registered for command \"{}\""
 msgstr "ID argumen posisi \"{}\" sudah terdaftar untuk perintah \"{}\""
 
-#: argument_parser.cpp:1010
+#: argument_parser.cpp:1028
 #, c++-format
 msgid "Group id \"{}\" already registered for command \"{}\""
 msgstr "ID grup \"{}\" sudah terdaftar untuk perintah \"{}\""
 
-#: argument_parser.cpp:1037
+#: argument_parser.cpp:1055
 #, c++-format
 msgid "Command id \"{}\" does not contain subcommand with id \"{}\""
 msgstr "ID perintah \"{}\" tidak berisi subperintah dengan ID \"{}\""
 
-#: argument_parser.cpp:1045
+#: argument_parser.cpp:1063
 #, c++-format
 msgid "Command id \"{}\" does not contain named argument with id \"{}\""
 msgstr "ID perintah \"{}\" tidak berisi argumen bernama dengan ID \"{}\""
 
-#: argument_parser.cpp:1053
+#: argument_parser.cpp:1071
 #, c++-format
 msgid "Command id \"{}\" does not contain positional argument with id \"{}\""
 msgstr "ID perintah \"{}\" tidak berisi argumen posisi dengan ID \"{}\""
 
-#: argument_parser.cpp:1060
+#: argument_parser.cpp:1078
 #, c++-format
 msgid "Command id \"{}\" does not contain group with id \"{}\""
 msgstr "ID perintah \"{}\" tidak berisi grup dengan ID \"{}\""
 
-#: argument_parser.cpp:1177 argument_parser.cpp:1388
+#: argument_parser.cpp:1204 argument_parser.cpp:1425
 #, c++-format
 msgid "Unknown argument \"{}\" for command \"{}\""
 msgstr "Argumen \"{}\" tidak dikenal untuk perintah \"{}\""
 
-#: argument_parser.cpp:1192 argument_parser.cpp:1403
+#: argument_parser.cpp:1219 argument_parser.cpp:1440
 #, c++-format
 msgid "Missing positional argument \"{}\" for command \"{}\""
 msgstr "Argumen posisi \"{}\" tidak ada untuk perintah \"{}\""
 
-#: argument_parser.cpp:1274
+#: argument_parser.cpp:1301
 #, c++-format
 msgid "Missing value for command alias \"{}\""
 msgstr "Nilai untuk alias perintah \"{}\" tidak ada"
 
-#: argument_parser.cpp:1610
+#: argument_parser.cpp:1647
 #, c++-format
 msgid "Named argument with path id \"{}\" not found"
 msgstr "Argumen bernama dengan ID jalur \"{}\" tidak ditemukan"
 
-#: argument_parser.cpp:1620
+#: argument_parser.cpp:1657
 #, c++-format
 msgid "Positional argument with path id \"{}\" not found"
 msgstr "Argumen posisi dengan ID jalur \"{}\" tidak ditemukan"
@@ -181,7 +181,7 @@ msgstr "Nama"
 msgid "Epoch"
 msgstr "Epoch"
 
-#: output/packageinfo.cpp:69 output/transaction_table.cpp:289
+#: output/packageinfo.cpp:69 output/transaction_table.cpp:290
 msgid "Version"
 msgstr "Versi"
 
@@ -213,7 +213,8 @@ msgstr "Sumber"
 msgid "From repository"
 msgstr "Dari repositori"
 
-#: output/packageinfo.cpp:96 output/transaction_table.cpp:295
+#: output/packageinfo.cpp:96 output/transaction_table.cpp:296
+#: output/transactioninfo.cpp:76
 msgid "Repository"
 msgstr "Repositori"
 
@@ -229,7 +230,7 @@ msgstr "URL"
 msgid "License"
 msgstr "Lisensi"
 
-#: output/packageinfo.cpp:104
+#: output/packageinfo.cpp:104 output/transactioninfo.cpp:107
 msgid "Description"
 msgstr "Deskripsi"
 
@@ -241,208 +242,359 @@ msgstr "Vendor"
 msgid " (exact)"
 msgstr " (persis)"
 
-#: output/search.cpp:90
-msgid "No matches found."
-msgstr "Tidak ditemukan yang cocok."
-
-#: output/search.cpp:101
+#: output/search.cpp:100
 msgid "Matched fields: "
 msgstr "Bidang yang cocok: "
 
-#: output/transaction_table.cpp:127
+#: output/status.cpp:45
+msgid "Groups"
+msgstr "Grup"
+
+#: output/status.cpp:46 output/status.cpp:55 output/status.cpp:72
+msgid "installed"
+msgstr "terinstal"
+
+#: output/status.cpp:47 output/status.cpp:56 output/status.cpp:73
+msgid "available"
+msgstr "tersedia"
+
+#: output/status.cpp:54
+msgid "Environments"
+msgstr "Lingkungan"
+
+#: output/status.cpp:71
+msgid "Packages"
+msgstr "Paket"
+
+#: output/status.cpp:74
+msgid "user-installed"
+msgstr "diinstal oleh pengguna"
+
+#: output/status.cpp:84
+msgid "Installed Size"
+msgstr "Ukuran Terinstal"
+
+#: output/status.cpp:90
+msgid "Enabled Repositories"
+msgstr "Repositori Aktif"
+
+#: output/status.cpp:101
+msgid "Last Transaction"
+msgstr "Transaksi Terakhir"
+
+#: output/transaction_table.cpp:128
 msgid "Transaction Summary:\n"
 msgstr "Ringkasan Transaksi:\n"
 
 #. Keep the replaceble number aligned across all messages.
-#: output/transaction_table.cpp:132
+#: output/transaction_table.cpp:133
 #, c++-format
 msgid " Installing:      {:4} package\n"
 msgid_plural " Installing:      {:4} packages\n"
 msgstr[0] " Menginstal:       {:4} paket\n"
 
 #. Keep the replaceble number aligned across all messages.
-#: output/transaction_table.cpp:141
+#: output/transaction_table.cpp:142
 #, c++-format
 msgid " Reinstalling:    {:4} package\n"
 msgid_plural " Reinstalling:    {:4} packages\n"
 msgstr[0] " Menginstal ulang: {:4} paket\n"
 
 #. Keep the replaceble number aligned across all messages.
-#: output/transaction_table.cpp:150
+#: output/transaction_table.cpp:151
 #, c++-format
 msgid " Upgrading:       {:4} package\n"
 msgid_plural " Upgrading:       {:4} packages\n"
 msgstr[0] " Meningkatkan:     {:4} paket\n"
 
 #. Keep the replaceble number aligned across all messages.
-#: output/transaction_table.cpp:159
+#: output/transaction_table.cpp:160
 #, c++-format
 msgid " Replacing:       {:4} package\n"
 msgid_plural " Replacing:       {:4} packages\n"
 msgstr[0] " Mengganti:        {:4} paket\n"
 
 #. Keep the replaceble number aligned across all messages.
-#: output/transaction_table.cpp:168
+#: output/transaction_table.cpp:169
 #, c++-format
 msgid " Removing:        {:4} package\n"
 msgid_plural " Removing:        {:4} packages\n"
 msgstr[0] " Menghapus:        {:4} paket\n"
 
 #. Keep the replaceble number aligned across all messages.
-#: output/transaction_table.cpp:177
+#: output/transaction_table.cpp:178
 #, c++-format
 msgid " Downgrading:     {:4} package\n"
 msgid_plural " Downgrading:     {:4} packages\n"
 msgstr[0] " Menurunkan versi: {:4} paket\n"
 
 #. Keep the replaceble number aligned across all messages.
-#: output/transaction_table.cpp:186
+#: output/transaction_table.cpp:187
 #, c++-format
 msgid " Changing reason: {:4} package\n"
 msgid_plural " Changing reason: {:4} packages\n"
 msgstr[0] " Mengubah alasan:  {:4} paket\n"
 
 #. Keep the replaceble number aligned across all messages.
-#: output/transaction_table.cpp:195
+#: output/transaction_table.cpp:196
 #, c++-format
 msgid " Skipping:        {:4} package\n"
 msgid_plural " Skipping:        {:4} packages\n"
 msgstr[0] " Melewati:         {:4} paket\n"
 
-#: output/transaction_table.cpp:277
+#: output/transaction_table.cpp:278 output/transactioninfo.cpp:74
 msgid "Package"
 msgstr "Paket"
 
-#: output/transaction_table.cpp:283
+#: output/transaction_table.cpp:284
 msgid "Arch"
 msgstr "Arch"
 
-#: output/transaction_table.cpp:301
+#: output/transaction_table.cpp:302
 msgid "Size"
 msgstr "Ukuran"
 
-#: output/transaction_table.cpp:357 output/transaction_table.cpp:451
+#: output/transaction_table.cpp:364 output/transaction_table.cpp:434
+#: output/transaction_table.cpp:475
 #, c++-format
 msgid "{} -> {}"
 msgstr "{} -> {}"
 
-#: output/transaction_table.cpp:373
+#: output/transaction_table.cpp:380
 #, c++-format
 msgid "replacing {}"
 msgstr "mengganti {}"
 
-#: output/transaction_table.cpp:409 output/transaction_table.cpp:426
+#: output/transaction_table.cpp:422 output/transaction_table.cpp:450
 msgid " <name-unset>"
 msgstr " <nama-belum-diatur>"
 
-#: output/transaction_table.cpp:457
+#: output/transaction_table.cpp:481
 msgid "replacing "
 msgstr "mengganti "
 
-#: output/transaction_table.cpp:470
+#: output/transaction_table.cpp:494
 msgid "Skipping packages with conflicts:"
 msgstr "Melewati paket yang memiliki konflik:"
 
-#: output/transaction_table.cpp:472
+#: output/transaction_table.cpp:496
 msgid "Skipping packages with broken dependencies:"
 msgstr "Melewati paket yang memiliki dependensi rusak:"
 
-#: output/transaction_table.cpp:533
+#: output/transaction_table.cpp:558
 msgid "Installing dependencies:"
 msgstr "Menginstal dependensi:"
 
-#: output/transaction_table.cpp:535
+#: output/transaction_table.cpp:560
 msgid "Installing weak dependencies:"
 msgstr "Menginstal dependensi lemah:"
 
-#: output/transaction_table.cpp:537
+#: output/transaction_table.cpp:562
 msgid "Installing group/module packages:"
 msgstr "Menginstal paket grup/modul:"
 
-#: output/transaction_table.cpp:539
+#: output/transaction_table.cpp:564
 msgid "Installing:"
 msgstr "Menginstal:"
 
-#: output/transaction_table.cpp:543
+#: output/transaction_table.cpp:568
 msgid "Upgrading:"
 msgstr "Meningkatkan:"
 
-#: output/transaction_table.cpp:546
+#: output/transaction_table.cpp:571
 msgid "Downgrading:"
 msgstr "Menurunkan versi:"
 
-#: output/transaction_table.cpp:549
+#: output/transaction_table.cpp:574
 msgid "Reinstalling:"
 msgstr "Menginstal ulang:"
 
-#: output/transaction_table.cpp:553
+#: output/transaction_table.cpp:578
 msgid "Removing dependent packages:"
 msgstr "Menghapus paket yang bergantung:"
 
-#: output/transaction_table.cpp:555
+#: output/transaction_table.cpp:580
 msgid "Removing unused dependencies:"
 msgstr "Menghapus dependensi yang tidak terpakai:"
 
-#: output/transaction_table.cpp:557
+#: output/transaction_table.cpp:582
 msgid "Removing:"
 msgstr "Menghapus:"
 
-#: output/transaction_table.cpp:561
+#: output/transaction_table.cpp:586
 msgid "Changing reason:"
 msgstr "Mengubah alasan:"
 
-#: output/transaction_table.cpp:593
+#: output/transaction_table.cpp:618
 msgid "Installing groups dependencies:"
 msgstr "Menginstal dependensi grup:"
 
-#: output/transaction_table.cpp:595
+#: output/transaction_table.cpp:620
 msgid "Installing groups:"
 msgstr "Menginstal grup:"
 
-#: output/transaction_table.cpp:599
+#: output/transaction_table.cpp:624
 msgid "Removing groups:"
 msgstr "Menghapus grup:"
 
-#: output/transaction_table.cpp:602
+#: output/transaction_table.cpp:627
 msgid "Upgrading groups:"
 msgstr "Meningkatkan grup:"
 
-#: output/transaction_table.cpp:629
+#: output/transaction_table.cpp:630
+msgid "Changing reason of installed groups:"
+msgstr "Mengubah alasan grup yang diinstal:"
+
+#: output/transaction_table.cpp:657
 msgid "Installing environmental groups:"
 msgstr "Menginstal grup lingkungan:"
 
-#: output/transaction_table.cpp:632
+#: output/transaction_table.cpp:660
 msgid "Removing environmental groups:"
 msgstr "Menghapus grup lingkungan:"
 
-#: output/transaction_table.cpp:635
+#: output/transaction_table.cpp:663
 msgid "Upgrading environmental groups:"
 msgstr "Meningkatkan grup lingkungan:"
 
-#: output/transaction_table.cpp:662
+#: output/transaction_table.cpp:690
 msgid "Enabling module streams:"
 msgstr "Mengaktifkan stream modul:"
 
-#: output/transaction_table.cpp:665
+#: output/transaction_table.cpp:693
 msgid "Disabling modules:"
 msgstr "Menonaktifkan modul:"
 
-#: output/transaction_table.cpp:668
+#: output/transaction_table.cpp:696
 msgid "Resetting modules:"
 msgstr "Mereset modul:"
 
-#: output/transaction_table.cpp:671
+#: output/transaction_table.cpp:699
 msgid "Switching module streams:"
 msgstr "Beralih stream modul:"
 
-#: output/transaction_table.cpp:745
+#: output/transaction_table.cpp:771 output/transaction_table.cpp:772
+msgid "(none)"
+msgstr "(tidak ada)"
+
+#: output/transaction_table.cpp:778
+#, c++-format
+msgid "Skipping {0} package due to vendor change restriction: {1}."
+msgid_plural "Skipping {0} packages due to vendor change restriction: {1}."
+msgstr[0] "Melewati {0} paket karena pembatasan perubahan vendor: {1}."
+
+#: output/transaction_table.cpp:799
 msgid "Nothing to do."
 msgstr "Tidak ada yang perlu dilakukan."
 
-#: progressbar/multi_progress_bar.cpp:36
+#. The two spaces indent the table the same way as child lines in KeyValueTable
+#: output/transactioninfo.cpp:73
+msgid "Action"
+msgstr "Tindakan"
+
+#: output/transactioninfo.cpp:75
+msgid "Reason"
+msgstr "Alasan"
+
+#: output/transactioninfo.cpp:98
+msgid "Transaction ID"
+msgstr "ID Transaksi"
+
+#: output/transactioninfo.cpp:99
+msgid "Begin time"
+msgstr "Waktu Mulai"
+
+#: output/transactioninfo.cpp:100
+msgid "Begin rpmdb"
+msgstr "rpmdb Awal"
+
+#: output/transactioninfo.cpp:101
+msgid "End time"
+msgstr "Waktu Selesai"
+
+#: output/transactioninfo.cpp:102
+msgid "End rpmdb"
+msgstr "rpmdb Akhir"
+
+#: output/transactioninfo.cpp:104
+msgid "User"
+msgstr "Pengguna"
+
+#: output/transactioninfo.cpp:105
+msgid "Status"
+msgstr "Status"
+
+#: output/transactioninfo.cpp:106
+msgid "Releasever"
+msgstr "Versi Rilis"
+
+#: output/transactioninfo.cpp:108
+msgid "Comment"
+msgstr "Komentar"
+
+#: output/transactioninfo.cpp:111
+msgid "Packages altered:"
+msgstr "Paket yang diubah:"
+
+#: output/transactioninfo.cpp:112
+msgid "Groups altered:"
+msgstr "Grup yang diubah:"
+
+#: output/transactioninfo.cpp:113
+msgid "Environments altered:"
+msgstr "Lingkungan yang diubah:"
+
+#: output/transactionlist.cpp:53
+msgid "ID"
+msgstr "ID"
+
+#: output/transactionlist.cpp:54
+msgid "Command line"
+msgstr "Baris perintah"
+
+#: output/transactionlist.cpp:55
+msgid "Date and time"
+msgstr "Tanggal dan waktu"
+
+#: output/transactionlist.cpp:56
+msgid "Action(s)"
+msgstr "Tindakan"
+
+#: output/transactionlist.cpp:57
+msgid "Altered"
+msgstr "Diubah"
+
+#. namespace
+#: progressbar/multi_progress_bar.cpp:85
 msgid "Total"
 msgstr "Total"
 
-#: session.cpp:149
+#: session.cpp:153
 msgid "Missing command"
 msgstr "Perintah tidak ada"
+
+#: session.cpp:260
+#, c++-format
+msgid ""
+"Invalid date passed: \"{}\". Dates in \"YYYY-MM-DD\" format are expected"
+msgstr ""
+"Tanggal tidak valid diberikan: \"{}\". Tanggal dalam format \"YYYY-MM-DD\" "
+"diharapkan"
+
+#: session.cpp:270
+#, c++-format
+msgid "\"{}\" date cannot be represented by time_t type on this platform"
+msgstr ""
+"Tanggal \"{}\" tidak dapat direpresentasikan oleh tipe time_t pada platform "
+"ini"
+
+#: utils/userconfirm.cpp:46
+msgid "Is this ok [Y/n]: "
+msgstr "Apakah ini sudah benar [Y/n]: "
+
+#: utils/userconfirm.cpp:49
+msgid "Is this ok [y/N]: "
+msgstr "Apakah ini sudah benar [y/N]: "
+
+#~ msgid "No matches found."
+#~ msgstr "Tidak ditemukan yang cocok."

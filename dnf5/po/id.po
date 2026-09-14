@@ -8,9 +8,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-26 03:48+0000\n"
-"PO-Revision-Date: 2026-06-06 10:01+0000\n"
-"Last-Translator: Ega Natha <ega8642@gmail.com>\n"
+"POT-Creation-Date: 2026-09-08 12:03+0000\n"
+"PO-Revision-Date: 2026-09-11 21:18+0000\n"
+"Last-Translator: Arif Budiman <arifpedia@gmail.com>\n"
 "Language-Team: Indonesian <https://translate.fedoraproject.org/projects/dnf5/"
 "dnf5/id/>\n"
 "Language: id\n"
@@ -18,13 +18,14 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 2026.6.1\n"
+"X-Generator: Weblate 2026.9.1\n"
 
-#: cmdline_aliases.cpp:84 context.cpp:301 main.cpp:1357
+#: cmdline_aliases.cpp:84 context.cpp:198 main.cpp:1449
 msgid ", "
 msgstr ", "
 
 #: cmdline_aliases.cpp:145
+#, c++-format
 msgid ""
 "Attached named argument \"{}\" not found: {}: Requested in file \"{}\" on "
 "line {}: {}"
@@ -33,6 +34,7 @@ msgstr ""
 "berkas \"{}\" pada baris {}: {}"
 
 #: cmdline_aliases.cpp:159
+#, c++-format
 msgid ""
 "Unknown attribute \"{}\" of attached named argument for alias \"{}\" in file "
 "\"{}\" on line {}: {}"
@@ -41,33 +43,40 @@ msgstr ""
 "alias \"{}\" dalam berkas \"{}\" pada baris {}: {}"
 
 #: cmdline_aliases.cpp:171
+#, c++-format
 msgid "Missing attribute \"id_path\" for alias \"{}\" in file \"{}\""
 msgstr ""
 "Atribut \"id_path\" tidak ditemukan untuk alias \"{}\" dalam berkas \"{}\""
 
 #: cmdline_aliases.cpp:208
+#, c++-format
 msgid "Unsupported version \"{}\" in file \"{}\". Supported versions: {}"
 msgstr ""
 "Versi yang tidak didukung \"{}\" dalam berkas \"{}\". Versi yang didukung: {}"
 
 #: cmdline_aliases.cpp:218
+#, c++-format
 msgid "Bad value type of attribute \"version\" in file \"{}\" on line {}: {}"
 msgstr ""
 "Nilai atribut \"version\" tidak valid dalam berkas \"{}\" pada baris {}: {}"
 
 #: cmdline_aliases.cpp:224
+#, c++-format
 msgid "Missing attribute \"version\" in file \"{}\""
 msgstr "Atribut \"version\" tidak ditemukan dalam berkas \"{}\""
 
 #: cmdline_aliases.cpp:236
+#, c++-format
 msgid "Unknown key \"{}\" in file \"{}\" on line {}: {}"
 msgstr "Kunci yang tidak dikenal \"{}\" dalam berkas \"{}\" pada baris {}: {}"
 
 #: cmdline_aliases.cpp:253
+#, c++-format
 msgid "Empty or bad element id path in file \"{}\" on line {}: {}"
 msgstr "ID elemen kosong atau salah dalam berkas \"{}\" pada baris {}: {}"
 
 #: cmdline_aliases.cpp:272
+#, c++-format
 msgid ""
 "Parent command \"{}\" not found: {}: Requested in file \"{}\" on line {}: {}"
 msgstr ""
@@ -75,17 +84,20 @@ msgstr ""
 "baris {}: {}"
 
 #: cmdline_aliases.cpp:301
+#, c++-format
 msgid "Unknown type \"{}\" of element \"{}\" in file \"{}\" on line {}: {}"
 msgstr ""
 "Jenis yang tidak dikenal \"{}\" dari elemen \"{}\" dalam berkas \"{}\" pada "
 "baris {}: {}"
 
 #: cmdline_aliases.cpp:312
+#, c++-format
 msgid "Missing attribute \"type\" for element \"{}\" in file \"{}\""
 msgstr ""
 "Atribut \"type\" tidak ditemukan untuk elemen \"{}\" dalam berkas \"{}\""
 
 #: cmdline_aliases.cpp:331
+#, c++-format
 msgid ""
 "Named argument \"{}\" already registered. Requested in file \"{}\" on line "
 "{}: {}"
@@ -94,6 +106,7 @@ msgstr ""
 "baris {}: {}"
 
 #: cmdline_aliases.cpp:347
+#, c++-format
 msgid ""
 "Command \"{}\" already registered. Requested in file \"{}\" on line {}: {}"
 msgstr ""
@@ -101,17 +114,20 @@ msgstr ""
 "{}"
 
 #: cmdline_aliases.cpp:375
+#, c++-format
 msgid "Unknown attribute \"{}\" of group \"{}\" in file \"{}\" on line {}: {}"
 msgstr ""
 "Atribut yang tidak dikenal \"{}\" dari grup \"{}\" dalam berkas \"{}\" pada "
 "baris {}: {}"
 
 #: cmdline_aliases.cpp:387
+#, c++-format
 msgid "Missing attribute \"header\" for element \"{}\" in file \"{}\""
 msgstr ""
 "Atribut \"header\" tidak ditemukan untuk elemen \"{}\" dalam berkas \"{}\""
 
 #: cmdline_aliases.cpp:428 cmdline_aliases.cpp:538
+#, c++-format
 msgid ""
 "The \"short_name\" attribute of named argument \"{}\" must be one character "
 "long in file \"{}\" on line {}: {}"
@@ -120,18 +136,21 @@ msgstr ""
 "karakter dalam berkas \"{}\" pada baris {}: {}"
 
 #: cmdline_aliases.cpp:446
+#, c++-format
 msgid "Source \"{}\" not found: {}: Requested in file \"{}\" on line {}: {}"
 msgstr ""
-"Sumber \"{}\" tidak ditemukan: {}: Diminta dalam berkas \"{}\" pada baris {}:"
-" {}"
+"Sumber \"{}\" tidak ditemukan: {}: Diminta dalam berkas \"{}\" pada baris "
+"{}: {}"
 
 #: cmdline_aliases.cpp:462 cmdline_aliases.cpp:563 cmdline_aliases.cpp:676
+#, c++-format
 msgid "Group \"{}\" not found: {}: Requested in file \"{}\" on line {}: {}"
 msgstr ""
 "Grup \"{}\" tidak ditemukan: {}: Diminta dalam berkas \"{}\" pada baris {}: "
 "{}"
 
 #: cmdline_aliases.cpp:476 cmdline_aliases.cpp:579
+#, c++-format
 msgid ""
 "Unknown attribute \"{}\" of named argument \"{}\" in file \"{}\" on line {}: "
 "{}"
@@ -140,12 +159,14 @@ msgstr ""
 "\"{}\" pada baris {}: {}"
 
 #: cmdline_aliases.cpp:489
+#, c++-format
 msgid "Missing attribute \"source\" for named argument \"{}\" in file \"{}\""
 msgstr ""
 "Atribut \"source\" tidak ditemukan untuk argumen bernama \"{}\" dalam berkas "
 "\"{}\""
 
 #: cmdline_aliases.cpp:498 cmdline_aliases.cpp:592
+#, c++-format
 msgid ""
 "At least one of the attributes \"long_name\" and \"short_name\" must be set "
 "for named argument \"{}\" in file \"{}\""
@@ -154,6 +175,7 @@ msgstr ""
 "ditetapkan untuk argumen bernama \"{}\" dalam berkas \"{}\"."
 
 #: cmdline_aliases.cpp:657
+#, c++-format
 msgid ""
 "Attached command \"{}\" not found: {}: Requested in file \"{}\" on line {}: "
 "{}"
@@ -162,6 +184,7 @@ msgstr ""
 "pada baris {}: {}"
 
 #: cmdline_aliases.cpp:691
+#, c++-format
 msgid ""
 "Used config file version \"1.0\" for attribute \"{}\" of command \"{}\" in "
 "file \"{}\" on line {}: {}"
@@ -170,6 +193,7 @@ msgstr ""
 "perintah \"{}\" dalam berkas \"{}\" pada baris {}: {}"
 
 #: cmdline_aliases.cpp:713
+#, c++-format
 msgid ""
 "Unknown attribute \"{}\" of required value for alias \"{}\" in file \"{}\" "
 "on line {}: {}"
@@ -178,14 +202,16 @@ msgstr ""
 "\"{}\" dalam berkas \"{}\" pada baris {}: {}"
 
 #: cmdline_aliases.cpp:726
+#, c++-format
 msgid ""
 "Missing attribute \"value_help\" of required value for alias \"{}\" in file "
 "\"{}\""
 msgstr ""
-"Atribut \"value_help\" yang diperlukan untuk alias \"{}\" dalam berkas \"{}\""
-" tidak ditemukan."
+"Atribut \"value_help\" yang diperlukan untuk alias \"{}\" dalam berkas \"{}"
+"\" tidak ditemukan."
 
 #: cmdline_aliases.cpp:740
+#, c++-format
 msgid ""
 "Unknown attribute \"{}\" of command \"{}\" in file \"{}\" on line {}: {}"
 msgstr ""
@@ -193,6 +219,7 @@ msgstr ""
 "baris {}: {}"
 
 #: cmdline_aliases.cpp:756
+#, c++-format
 msgid ""
 "Missing attribute \"attached_command\" for command \"{}\" in file \"{}\""
 msgstr ""
@@ -200,10 +227,12 @@ msgstr ""
 "berkas \"{}\""
 
 #: cmdline_aliases.cpp:791
+#, c++-format
 msgid "Bad value type in file \"{}\" on line {}: {}"
 msgstr "Jenis nilai yang tidak valid dalam berkas \"{}\" pada baris {}: {}"
 
 #: cmdline_aliases.cpp:804
+#, c++-format
 msgid "Syntax error in file \"{}\" on line {}:"
 msgstr "Kesalahan sintaksis pada berkas \"{}\" pada baris {}:"
 
@@ -218,6 +247,11 @@ msgstr "Cetak detail tentang advisori"
 #: commands/advisory/advisory_list.hpp:35
 msgid "List advisories"
 msgstr "Daftar advisori"
+
+#: commands/advisory/advisory_subcommand.cpp:93 commands/no_matches.cpp:74
+#: commands/repoquery/repoquery.cpp:903
+msgid "No matches found: no repositories are enabled."
+msgstr "Tidak ditemukan kecocokan: tidak ada repositori yang diaktifkan."
 
 #: commands/advisory/advisory_summary.cpp:44
 msgid "All"
@@ -241,7 +275,8 @@ msgstr "Cetak ringkasan advisori"
 
 #: commands/advisory/arguments.hpp:34
 msgid "Show advisories containing any version of installed packages."
-msgstr "Tampilkan advisori yang berisi versi apa pun dari paket yang terpasang."
+msgstr ""
+"Tampilkan advisori yang berisi versi apa pun dari paket yang terpasang."
 
 #: commands/advisory/arguments.hpp:45
 msgid ""
@@ -290,50 +325,53 @@ msgstr "Tampilkan hanya advisori yang merujuk ke Bugzilla."
 msgid "Show only advisories referencing a CVE."
 msgstr "Tampilkan hanya advisori yang merujuk ke CVE."
 
-#: commands/advisory_shared.hpp:76
+#: commands/advisory_shared.hpp:93
+#, c++-format
 msgid "No advisory found matching the requested name: \"{}\""
 msgstr "Advisori tidak ditemukan untuk nama yang diminta: \"{}\""
 
-#: commands/advisory_shared.hpp:109
+#: commands/advisory_shared.hpp:132
+#, c++-format
 msgid "No advisory found fixing the Bugzilla ID: \"{}\""
 msgstr "Tidak ditemukan advisori untuk memperbaiki Bugzilla ID: \"{}\""
 
-#: commands/advisory_shared.hpp:128
+#: commands/advisory_shared.hpp:157
+#, c++-format
 msgid "No advisory found fixing the CVE ID: \"{}\""
 msgstr "Tidak ditemukan advisori perbaikan untuk ID CVE: \"{}\""
 
-#: commands/advisory_shared.hpp:143
+#: commands/advisory_shared.hpp:178
 msgid "No advisory found matching the specified filters."
 msgstr "Tidak ditemukan advisori yang sesuai dengan filter yang ditentukan."
 
-#: commands/advisory_shared.hpp:158
+#: commands/advisory_shared.hpp:193
 msgid ""
 "Include content contained in advisories with specified name. List option."
 msgstr ""
 "Sertakan konten yang terdapat dalam advisori dengan nama yang ditentukan. "
 "Opsi daftar."
 
-#: commands/advisory_shared.hpp:159
+#: commands/advisory_shared.hpp:194
 msgid "ADVISORY_NAME,..."
 msgstr "NAMA_ADVISORI,..."
 
-#: commands/advisory_shared.hpp:166
+#: commands/advisory_shared.hpp:201
 msgid "Include content contained in security advisories."
 msgstr "Sertakan konten yang terdapat dalam advisori keamanan."
 
-#: commands/advisory_shared.hpp:173
+#: commands/advisory_shared.hpp:208
 msgid "Include content contained in bugfix advisories."
 msgstr "Sertakan konten yang terdapat dalam advisori perbaikan bug."
 
-#: commands/advisory_shared.hpp:180
+#: commands/advisory_shared.hpp:215
 msgid "Include content contained in enhancement advisories."
 msgstr "Sertakan konten yang terdapat dalam advisori peningkatan."
 
-#: commands/advisory_shared.hpp:187
+#: commands/advisory_shared.hpp:222
 msgid "Include content contained in newpackage advisories."
 msgstr "Sertakan konten yang terdapat dalam advisori paket baru."
 
-#: commands/advisory_shared.hpp:198
+#: commands/advisory_shared.hpp:233
 msgid ""
 "Include content contained in advisories with specified severity. List "
 "option. Can be \"critical\", \"important\", \"moderate\", \"low\", \"none\"."
@@ -342,11 +380,11 @@ msgstr ""
 "ditentukan. Opsi daftar. Dapat berupa \"critical\", \"important\", "
 "\"moderate\", \"low\", \"none\"."
 
-#: commands/advisory_shared.hpp:200
+#: commands/advisory_shared.hpp:235
 msgid "ADVISORY_SEVERITY,..."
 msgstr "TINGKAT_KEPARAHAN_ADVISORI,..."
 
-#: commands/advisory_shared.hpp:212
+#: commands/advisory_shared.hpp:247
 msgid ""
 "Include content contained in advisories that fix a Bugzilla ID, Eg. 123123. "
 "List option."
@@ -354,11 +392,11 @@ msgstr ""
 "Sertakan konten yang terdapat dalam advisori yang memperbaiki ID Bugzilla, "
 "mis. 123123. Opsi daftar."
 
-#: commands/advisory_shared.hpp:213
+#: commands/advisory_shared.hpp:248
 msgid "BUGZILLA_ID,..."
 msgstr "ID_BUGZILLA,..."
 
-#: commands/advisory_shared.hpp:223
+#: commands/advisory_shared.hpp:258
 msgid ""
 "Include content contained in advisories that fix a CVE (Common "
 "Vulnerabilities and Exposures) ID, Eg. CVE-2201-0123. List option."
@@ -366,7 +404,7 @@ msgstr ""
 "Sertakan konten yang terdapat dalam advisori yang memperbaiki ID CVE (Common "
 "Vulnerabilities and Exposures), mis. CVE-2201-0123. Opsi daftar."
 
-#: commands/advisory_shared.hpp:225
+#: commands/advisory_shared.hpp:260
 msgid "CVE_ID,..."
 msgstr "ID_CVE,..."
 
@@ -375,6 +413,17 @@ msgid "Remove all unneeded packages originally installed as dependencies."
 msgstr ""
 "Hapus semua paket yang tidak diperlukan yang awalnya dipasang sebagai "
 "dependensi."
+
+#: commands/autoremove/autoremove.cpp:65
+#, c++-format
+msgid ""
+"Unneeded protected package: {0} (and its dependencies) cannot be removed, "
+"either mark it as user-installed or change protected_packages configuration "
+"option."
+msgstr ""
+"Paket terlindungi yang tidak diperlukan: {0} (beserta dependensinya) tidak "
+"dapat dihapus. Tandai sebagai diinstal oleh pengguna atau ubah opsi "
+"konfigurasi protected_packages."
 
 #: commands/check-upgrade/check-upgrade.cpp:47
 msgid "Check for available package upgrades"
@@ -398,26 +447,32 @@ msgid "Check for problems in the packagedb"
 msgstr "Periksa masalah dalam packagedb"
 
 #: commands/check/check.cpp:335
+#, c++-format
 msgid "Check discovered {} problem(s) in {} package(s)"
 msgstr "Ditemukan masalah {} dalam paket {}"
 
 #: commands/clean/clean.cpp:91
+#, c++-format
 msgid "List of cache types to clean up. Supported types: {0}"
 msgstr "Daftar jenis cache yang perlu dibersihkan. Jenis yang didukung: {0}"
 
 #: commands/clean/clean.cpp:109
+#, c++-format
 msgid "Unknown cache type \"{0}\". Supported types: {1}"
 msgstr "Jenis cache yang tidak dikenal \"{0}\". Jenis yang didukung: {1}"
 
 #: commands/clean/clean.cpp:166
+#, c++-format
 msgid "Failed to cleanup repository cache in path \"{0}\": {1}"
 msgstr "Gagal membersihkan cache repositori di jalur \"{0}\": {1}"
 
 #: commands/clean/clean.cpp:176
+#, c++-format
 msgid "Cache directory \"{}\" does not exist. Nothing to clean."
 msgstr "Direktori cache \"{}\" tidak ada. Tidak ada yang perlu dibersihkan."
 
 #: commands/clean/clean.cpp:181
+#, c++-format
 msgid "Cannot iterate cache directory \"{}\": {}"
 msgstr "Tidak dapat mengiterasi direktori cache \"{}\": {}"
 
@@ -425,34 +480,36 @@ msgstr "Tidak dapat mengiterasi direktori cache \"{}\": {}"
 msgid "Install debuginfo packages."
 msgstr "Pasang paket debuginfo."
 
-#: commands/distro-sync/distro-sync.cpp:44
+#: commands/distro-sync/distro-sync.cpp:42
 msgid ""
 "Upgrade or downgrade installed software to the latest available versions"
 msgstr ""
 "Tingkatkan atau turunkan perangkat lunak yang terpasang ke versi terbaru "
 "yang tersedia"
 
-#: commands/do/do.cpp:44
+#: commands/do/do.cpp:42
 msgid "Do transaction"
 msgstr "Lakukan transaksi"
 
-#: commands/do/do.cpp:49
+#: commands/do/do.cpp:47
 msgid "Action to be done on the following items."
 msgstr "Aksi yang perlu dilakukan pada item-item berikut."
 
-#: commands/do/do.cpp:63
+#: commands/do/do.cpp:61
+#, c++-format
 msgid "Unsupported action \"{}\""
 msgstr "Aksi \"{}\" tidak didukung"
 
-#: commands/do/do.cpp:73
+#: commands/do/do.cpp:71
 msgid "Type of the following items."
 msgstr "Ketik butir berikut."
 
-#: commands/do/do.cpp:86
+#: commands/do/do.cpp:84
+#, c++-format
 msgid "Unsupported item type \"{}\""
 msgstr "Tipe butir \"{}\" tidak didukung"
 
-#: commands/do/do.cpp:99
+#: commands/do/do.cpp:98
 msgid "List of items to take action on"
 msgstr "Daftar item yang perlu ditindaklanjuti"
 
@@ -468,48 +525,52 @@ msgstr "Hanya pemasangan ulang paket yang didukung."
 msgid "Action was not defined"
 msgstr "Tindakan tidak didefinisikan"
 
-#: commands/do/do.cpp:230
-msgid "Invalid Environmet/Group specification: {}"
-msgstr "Spesifikasi Lingkungan/Grup tidak valid: {}"
+#: commands/do/do.cpp:231
+#, c++-format
+msgid "Invalid Environment/Group specification: {}"
+msgstr "Spesifikasi Environment/Grup tidak valid: {}"
 
-#: commands/do/do.cpp:314
+#: commands/do/do.cpp:317
 msgid "Downgrading environments and groups is not supported."
 msgstr "Penurunan tingkat lingkungan dan grup tidak didukung."
 
-#: commands/do/do.cpp:330
-msgid "Reinstaling environments and groups is not supported."
-msgstr "Pemasangan ulang lingkungan dan grup tidak didukung."
+#: commands/do/do.cpp:332
+msgid "Reinstalling environments and groups is not supported."
+msgstr "Penginstalan ulang environment dan grup tidak didukung."
 
-#: commands/downgrade/downgrade.cpp:42
+#: commands/downgrade/downgrade.cpp:40
 msgid "Downgrade software"
 msgstr "Penurunan versi perangkat lunak"
 
-#: commands/download/download.cpp:106
+#: commands/download/download.cpp:123
 msgid "When running with --url, prints URLs from all available mirrors"
 msgstr ""
 "Saat dijalankan dengan opsi --url, menampilkan URL dari semua cermin yang "
 "tersedia"
 
-#: commands/download/download.cpp:122
+#: commands/download/download.cpp:139
+#, c++-format
 msgid "Invalid urlprotocol option: {}"
 msgstr "Opsi urlprotocol tidak valid: {}"
 
-#: commands/download/download.cpp:149 main.cpp:627
+#: commands/download/download.cpp:166 main.cpp:685
+#, c++-format
 msgid "Unsupported architecture \"{0}\". Please choose one from {1}"
 msgstr ""
 "Arsitektur yang tidak didukung \"{0}\". Silakan pilih salah satu dari {1}"
 
 #. TODO(jrohel): Add support for requiring an argument by another argument in ArgumentParser?
-#: commands/download/download.cpp:186
+#: commands/download/download.cpp:207
 msgid "Option \"--alldeps\" should be used with \"--resolve\""
 msgstr "Opsi \"--alldeps\" harus digunakan bersama dengan \"--resolve\""
 
-#: commands/download/download.cpp:226
+#: commands/download/download.cpp:261
+#, c++-format
 msgid ""
 "No package \"{}\" available; You might want to use --skip-unavailable option."
 msgstr ""
-"Tidak ada paket \"{}\" yang tersedia; Anda mungkin ingin menggunakan opsi "
-"--skip-unavailable."
+"Tidak ada paket \"{}\" yang tersedia; Anda mungkin ingin menggunakan opsi --"
+"skip-unavailable."
 
 #: commands/environment/arguments.hpp:33
 msgid "Show only available environments."
@@ -520,41 +581,27 @@ msgid "Show only installed environments."
 msgstr "Tampilkan hanya lingkungan yang terpasang."
 
 #: commands/environment/arguments.hpp:47
-msgid "Pattern matching environment IDs."
-msgstr "Pencocokan pola ID lingkungan."
+msgid "Pattern matching environment identifiers."
+msgstr "Pencocokan pola untuk pengenal environment."
 
-#: commands/environment/environment.cpp:35
+#: commands/environment/environment.cpp:38
 msgid "Manage comps environments"
 msgstr "Kelola lingkungan komputasi"
 
-#: commands/from_repo.cpp:35
-msgid ""
-"The following items can be selected only from the specified repositories. "
-"All enabled repositories will still be used to satisfy dependencies."
-msgstr ""
-"Item-item berikut hanya dapat dipilih dari repositori yang ditentukan. Semua "
-"repositori yang diaktifkan tetap akan digunakan untuk memenuhi "
-"ketergantungan."
+#: commands/environment/environment_info.cpp:101
+#: commands/environment/environment_list.cpp:99
+msgid "No matches found: no environments are installed."
+msgstr "Tidak ditemukan kecocokan: tidak ada environment yang terinstal."
 
-#: commands/from_repo.cpp:38 commands/from_repo.cpp:70
-msgid "REPO_ID,..."
-msgstr "REPO_ID,..."
+#: commands/environment/environment_info.cpp:103
+#: commands/environment/environment_list.cpp:101
+msgid "No matches found: no environments are available."
+msgstr "Tidak ditemukan kecocokan: tidak ada environment yang tersedia."
 
-#: commands/from_repo.cpp:53
-msgid "\"--from_repo\" already defined with diferent value"
-msgstr "\"--from_repo\" sudah didefinisikan dengan nilai yang berbeda"
-
-#: commands/from_repo.cpp:68
-msgid ""
-"Filters installed packages by the ID of the repository they were installed "
-"from."
-msgstr ""
-"Filter mengelompokkan paket yang dipasang berdasarkan ID repositori tempat "
-"paket tersebut dipasang."
-
-#: commands/from_repo.cpp:79
-msgid "\"--installed-from_repo\" already defined with diferent value"
-msgstr "\"--installed-from_repo\" sudah didefinisikan dengan nilai yang berbeda"
+#: commands/environment/environment_info.cpp:105
+#: commands/environment/environment_list.cpp:103
+msgid "No matches found: no environments exist."
+msgstr "Tidak ditemukan kecocokan: tidak ada environment yang ada."
 
 #: commands/group/arguments.hpp:34
 msgid "Show only available groups."
@@ -577,16 +624,48 @@ msgstr ""
 "daftar, mendukung glob."
 
 #: commands/group/arguments.hpp:67
-msgid "Pattern matching group IDS."
-msgstr "Kelompok pencocokan pola IDS."
+msgid "Pattern matching group identifiers."
+msgstr "Pencocokan pola untuk pengenal grup."
 
-#: commands/group/arguments.hpp:76
-msgid "Include optional packages from group."
+#: commands/group/arguments.hpp:77
+msgid "Pattern matching group or environment identifiers."
+msgstr "Pencocokan pola untuk pengenal grup atau environment."
+
+#: commands/group/arguments.hpp:86
+msgid "Include optional packages from groups."
 msgstr "Sertakan paket opsional dari grup."
 
-#: commands/group/arguments.hpp:83
-msgid "Operate on groups only, no packages are changed."
-msgstr "Sertakan paket opsional dari grup."
+#: commands/group/arguments.hpp:97
+msgid "Operate on environments and groups only, no packages are changed."
+msgstr ""
+"Operasikan hanya pada environment dan grup; tidak ada paket yang diubah."
+
+#: commands/group/group_list.cpp:114
+msgid "No matches found: no groups are installed."
+msgstr "Tidak ditemukan kecocokan: tidak ada grup yang terinstal."
+
+#: commands/group/group_list.cpp:116
+msgid "No matches found: no groups are available."
+msgstr "Tidak ditemukan kecocokan: tidak ada grup yang tersedia."
+
+#: commands/group/group_list.cpp:118
+msgid "No matches found: no groups exist."
+msgstr "Tidak ditemukan kecocokan: tidak ada grup yang ada."
+
+#: commands/group/group_list.cpp:144
+#, c++-format
+msgid "Groups: {0} ({1} {2}, {3} {4})"
+msgstr "Grup: {0} ({1} {2}, {3} {4})"
+
+#: commands/group/group_list.cpp:147
+msgid "installed"
+msgid_plural "installed"
+msgstr[0] "terinstal"
+
+#: commands/group/group_list.cpp:149
+msgid "available"
+msgid_plural "available"
+msgstr[0] "tersedia"
 
 #: commands/history/arguments.hpp:37
 msgid "Transaction ID"
@@ -625,7 +704,7 @@ msgstr ""
 msgid "Manage transaction history"
 msgstr "Kelola riwayat transaksi"
 
-#: commands/history/history_info.cpp:70
+#: commands/history/history_info.cpp:78
 msgid ""
 "No match found, history info defaults to considering only the last "
 "transaction, specify \"1..last\" range to search all transactions."
@@ -634,16 +713,16 @@ msgstr ""
 "mempertimbangkan transaksi terakhir. Tentukan rentang \"1..last\" untuk "
 "mencari semua transaksi."
 
-#: commands/history/history_redo.cpp:54
-#: commands/history/history_rollback.cpp:58
-#: commands/history/history_store.cpp:65 commands/history/history_undo.cpp:57
+#: commands/history/history_redo.cpp:56
+#: commands/history/history_rollback.cpp:60
+#: commands/history/history_store.cpp:65 commands/history/history_undo.cpp:59
 msgid "No matching transaction ID found, exactly one required."
 msgstr ""
 "Tidak ditemukan ID transaksi yang cocok, diperlukan tepat satu ID transaksi."
 
-#: commands/history/history_redo.cpp:58
-#: commands/history/history_rollback.cpp:62
-#: commands/history/history_undo.cpp:61
+#: commands/history/history_redo.cpp:60
+#: commands/history/history_rollback.cpp:64
+#: commands/history/history_undo.cpp:63
 msgid "Matched more than one transaction ID, exactly one required."
 msgstr ""
 "Terdapat lebih dari satu ID transaksi yang cocok, padahal hanya diperlukan "
@@ -656,10 +735,12 @@ msgstr ""
 "diperbolehkan."
 
 #: commands/history/history_store.cpp:80
+#, c++-format
 msgid "File \"{}\" already exists, it will be overwritten.\n"
 msgstr "Berkas \"{}\" sudah ada, akan ditimpa.\n"
 
 #: commands/history/transaction_id.cpp:32
+#, c++-format
 msgid ""
 "Invalid transaction ID range \"{}\", \"ID\" or \"ID..ID\" expected, where ID "
 "is \"NUMBER\", \"last\" or \"last-NUMBER\"."
@@ -667,7 +748,7 @@ msgstr ""
 "ID transaksi tidak valid dalam rentang \"{}\", diharapkan \"ID\" atau "
 "\"ID..ID\", di mana ID adalah \"NUMBER\", ‘last’, atau \"last-NUMBER\"."
 
-#: commands/install/install.cpp:43
+#: commands/install/install.cpp:41
 msgid "Install software"
 msgstr "Pasang perangkat lunak"
 
@@ -678,20 +759,23 @@ msgstr ""
 "Menampilkan daftar kelompok paket yang terpasang yang tidak diperlukan oleh "
 "paket lain yang terpasang"
 
-#: commands/list/list.cpp:46
-msgid "Lists packages depending on the packages' relation to the system"
+#: commands/list/info.hpp:38
+msgid ""
+"Lists packages depending on the packages' relation to the system with "
+"additional details"
 msgstr ""
-"Menampilkan daftar paket berdasarkan hubungan paket tersebut dengan sistem"
+"Menampilkan daftar paket berdasarkan hubungan paket dengan sistem, disertai "
+"detail tambahan"
 
-#: commands/list/list.cpp:50
+#: commands/list/list.cpp:49
 msgid "List of package-spec-NI to match (case insensitively)"
 msgstr "Daftar package-spec-NI yang cocok (tidak peka huruf besar/kecil)"
 
-#: commands/list/list.cpp:62
+#: commands/list/list.cpp:61
 msgid "Show all versions of the packages, not only the latest ones."
 msgstr "Tampilkan semua versi paket, bukan hanya yang terbaru."
 
-#: commands/list/list.cpp:70
+#: commands/list/list.cpp:69
 msgid "List installed packages."
 msgstr "Daftar paket yang terpasang."
 
@@ -727,51 +811,52 @@ msgstr "Daftar peningkatan yang tersedia untuk paket yang terpasang."
 msgid "List packages which will be removed by the 'dnf autoremove' command."
 msgstr "Daftar paket yang akan dihapus oleh perintah ‘dnf autoremove’."
 
-#: commands/list/list.cpp:203 commands/list/list.cpp:208
+#: commands/list/list.cpp:214 commands/list/list.cpp:219
 msgid "Installed packages"
 msgstr "Paket yang terpasang"
 
-#: commands/list/list.cpp:204 commands/list/list.cpp:217
+#: commands/list/list.cpp:215 commands/list/list.cpp:228
 msgid "Available packages"
 msgstr "Paket yang tersedia"
 
-#: commands/list/list.cpp:225
+#: commands/list/list.cpp:236
 msgid "Available upgrades"
 msgstr "Peningkatan yang tersedia"
 
-#: commands/list/list.cpp:241
+#: commands/list/list.cpp:252
 msgid "Obsoleting packages"
 msgstr "Menggantikan paket-paket yang sudah usang"
 
-#: commands/list/list.cpp:246
+#: commands/list/list.cpp:257
 msgid "Autoremove packages"
 msgstr "Hapus paket secara otomatis"
 
-#: commands/list/list.cpp:250
+#: commands/list/list.cpp:261
 msgid "Extra packages"
 msgstr "Paket tambahan"
 
-#: commands/list/list.cpp:261
+#: commands/list/list.cpp:272
 msgid "Recently added packages"
 msgstr "Paket yang baru ditambahkan"
 
-#: commands/list/list.cpp:266
-msgid "No matching packages to list"
-msgstr "Tidak ada paket yang cocok untuk ditampilkan"
+#: commands/list/list.hpp:48
+msgid "Lists packages depending on the packages' relation to the system"
+msgstr ""
+"Menampilkan daftar paket berdasarkan hubungan paket tersebut dengan sistem"
 
 #: commands/mark/mark.cpp:38
 msgid "Change the reason of an installed package"
 msgstr "Ubah alasan pemasangan paket yang telah dipasang"
 
-#: commands/module/arguments.hpp:36
+#: commands/module/arguments.hpp:35
 msgid "Show enabled modules."
 msgstr "Tampilkan modul yang diaktifkan."
 
-#: commands/module/arguments.hpp:43
+#: commands/module/arguments.hpp:42
 msgid "Show disabled modules."
 msgstr "Tampilkan modul yang dinonaktifkan."
 
-#: commands/module/arguments.hpp:50
+#: commands/module/arguments.hpp:49
 msgid "Pattern matching module NSVCAs."
 msgstr "Modul pencocokan pola NSVCAs."
 
@@ -779,15 +864,41 @@ msgstr "Modul pencocokan pola NSVCAs."
 msgid "Manage modules"
 msgstr "Kelola modul"
 
-#: commands/module/module_list.cpp:85
+#: commands/module/module_list.cpp:88
+msgid "No matches found: no module streams are enabled."
+msgstr "Tidak ditemukan kecocokan: tidak ada aliran modul yang diaktifkan."
+
+#: commands/module/module_list.cpp:90
+msgid "No matches found: no module streams are disabled."
+msgstr "Tidak ditemukan kecocokan: tidak ada aliran modul yang dinonaktifkan."
+
+#: commands/module/module_list.cpp:92
+msgid "No matches found: no module streams exist."
+msgstr "Tidak ditemukan kecocokan: tidak ada aliran modul yang ada."
+
+#: commands/no_matches.cpp:14
+#, c++-format
 msgid "No matches found for \"{}\"."
 msgstr "Tidak ditemukan hasil yang sesuai untuk \"{}\"."
+
+#: commands/no_matches.cpp:28
+msgid ""
+"No repositories were loaded from the installroot. To use the configuration "
+"and repositories of the host system, pass --use-host-config."
+msgstr ""
+"Tidak ada repositori yang dimuat dari installroot. Untuk menggunakan "
+"konfigurasi dan repositori sistem host, gunakan opsi --use-host-config."
+
+#: commands/no_matches.cpp:78 commands/no_matches.hpp:45
+msgid "No matches found."
+msgstr "Tidak ditemukan kecocokan."
 
 #: commands/offline/offline.cpp:217
 msgid "Manage offline transactions"
 msgstr "Kelola transaksi luring"
 
-#: commands/offline/offline.cpp:249
+#: commands/offline/offline.cpp:251
+#, c++-format
 msgid ""
 "Error reading state: {}. Rerun the command you used to initiate the offline "
 "transaction, e.g. `dnf5 system-upgrade download [OPTIONS]`."
@@ -796,11 +907,26 @@ msgstr ""
 "gunakan untuk memulai transaksi luring, misalnya `dnf5 system-upgrade "
 "download [OPTIONS]`."
 
-#: commands/offline/offline.cpp:272
+#: commands/offline/offline.cpp:264
+msgid ""
+"The system has been modified since the offline transaction was prepared."
+msgstr "Sistem telah dimodifikasi sejak transaksi offline disiapkan."
+
+#: commands/offline/offline.cpp:268
+#, c++-format
+msgid ""
+"The system has been modified since the offline transaction was prepared. To "
+"reschedule, run: {}"
+msgstr ""
+"Sistem telah dimodifikasi sejak transaksi offline disiapkan. Untuk "
+"menjadwalkan ulang, jalankan: {}"
+
+#: commands/offline/offline.cpp:290
+#, c++-format
 msgid "Couldn't connect to D-Bus: {}"
 msgstr "Tidak dapat terhubung ke D-Bus: {}"
 
-#: commands/offline/offline.cpp:303
+#: commands/offline/offline.cpp:325
 msgid ""
 "Prepare the system to perform the offline transaction and reboot to start "
 "the transaction."
@@ -808,32 +934,35 @@ msgstr ""
 "Siapkan sistem untuk melakukan transaksi luring dan reboot untuk memulai "
 "transaksi."
 
-#: commands/offline/offline.cpp:310
+#: commands/offline/offline.cpp:332
 msgid "Power off the system after the operation is complete"
 msgstr "Matikan sistem setelah operasi selesai"
 
-#: commands/offline/offline.cpp:321
+#: commands/offline/offline.cpp:343
 msgid "No offline transaction is stored."
 msgstr "Tidak ada transaksi luring yang disimpan."
 
-#: commands/offline/offline.cpp:329
+#: commands/offline/offline.cpp:352
 msgid "System is not ready for offline transaction."
 msgstr "Sistem belum siap untuk transaksi luring."
 
-#: commands/offline/offline.cpp:332
+#: commands/offline/offline.cpp:355
+#, c++-format
 msgid "Data directory {} does not exist."
 msgstr "Direktori data {} tidak ada."
 
-#: commands/offline/offline.cpp:357
+#: commands/offline/offline.cpp:380
+#, c++-format
 msgid "{} is not wanted by system-update.target."
 msgstr "{} tidak diinginkan oleh sistem-update.target."
 
-#: commands/offline/offline.cpp:367
+#: commands/offline/offline.cpp:390
+#, c++-format
 msgid "The system will now reboot to upgrade to release version {}."
 msgstr ""
 "Sistem akan memulai ulang untuk melakukan peningkatan ke versi rilis {}."
 
-#: commands/offline/offline.cpp:371
+#: commands/offline/offline.cpp:394
 msgid ""
 "The system will now reboot to perform the offline transaction initiated by "
 "the following command:"
@@ -841,7 +970,7 @@ msgstr ""
 "Sistem akan melakukan reboot untuk menjalankan transaksi luring yang "
 "diinisialisasi oleh perintah berikut:"
 
-#: commands/offline/offline.cpp:402
+#: commands/offline/offline.cpp:425
 msgid ""
 "Internal use only, not intended to be run by the user. Execute the "
 "transaction in the offline environment."
@@ -849,111 +978,167 @@ msgstr ""
 "Hanya untuk penggunaan internal, tidak dimaksudkan untuk dijalankan oleh "
 "pengguna. Jalankan transaksi dalam lingkungan luring."
 
-#: commands/offline/offline.cpp:436
+#: commands/offline/offline.cpp:459
 msgid "Trigger file does not exist. Exiting."
 msgstr "Berkas pemicu tidak ditemukan. Keluar."
 
-#: commands/offline/offline.cpp:440
+#: commands/offline/offline.cpp:463
 msgid "Another offline transaction tool is running. Exiting."
 msgstr "Alat transaksi luring lainnya sedang berjalan. Keluar."
 
-#: commands/offline/offline.cpp:467
+#: commands/offline/offline.cpp:495
 msgid "Starting offline transaction. This will take a while."
 msgstr "Mulai transaksi luring. Ini akan memakan waktu."
 
-#: commands/offline/offline.cpp:471
+#: commands/offline/offline.cpp:499
 msgid "Starting system upgrade. This will take a while."
 msgstr "Memulai proses peningkatan sistem. Proses ini akan memakan waktu."
 
-#: commands/offline/offline.cpp:483
+#: commands/offline/offline.cpp:511
 msgid "Use `dnf5 offline reboot` to begin the transaction."
 msgstr "Gunakan perintah `dnf5 luring reboot` untuk memulai transaksi."
 
-#: commands/offline/offline.cpp:534
+#: commands/offline/offline.cpp:564
 msgid "Transaction failed: "
 msgstr "Transaksi gagal: "
 
-#: commands/offline/offline.cpp:604
+#: commands/offline/offline.cpp:634
+#, c++-format
 msgid "Error reading journal: {}"
 msgstr "Kesalahan saat membaca jurnal: {}"
 
-#: commands/offline/offline.cpp:610
+#: commands/offline/offline.cpp:640
+#, c++-format
 msgid "Add journal match failed: {}"
 msgstr "Penambahan jurnal gagal: {}"
 
-#: commands/offline/offline.cpp:638
+#: commands/offline/offline.cpp:668
 msgid "No logs were found."
 msgstr "Tidak ditemukan log."
 
-#: commands/offline/offline.cpp:642
+#: commands/offline/offline.cpp:672
 msgid "The following boots appear to contain offline transaction logs:"
 msgstr "Boot berikut tampaknya mengandung log transaksi luring:"
 
-#: commands/offline/offline.cpp:659
+#: commands/offline/offline.cpp:689
 msgid "Cannot find logs with this index."
 msgstr "Tidak dapat menemukan log dengan indeks ini."
 
-#: commands/offline/offline.cpp:666
+#: commands/offline/offline.cpp:696
 msgid "Unable to match systemd journal entry."
 msgstr "Tidak dapat mencocokkan entri jurnal systemd."
 
-#: commands/offline/offline.cpp:678
+#: commands/offline/offline.cpp:708
 msgid "Show logs from past offline transactions"
 msgstr "Tampilkan riwayat transaksi luring sebelumnya"
 
-#: commands/offline/offline.cpp:686
+#: commands/offline/offline.cpp:716
 msgid ""
 "Which log to show. Run without any arguments to get a list of available logs."
 msgstr ""
 "Log mana yang akan ditampilkan. Jalankan tanpa argumen apa pun untuk "
 "mendapatkan daftar log yang tersedia."
 
-#: commands/offline/offline.cpp:701
+#: commands/offline/offline.cpp:731
 msgid ""
 "systemd is not supported in this build of DNF 5; the `log` subcommand is "
 "unavailable."
 msgstr ""
 "systemd tidak didukung dalam versi DNF 5 ini; perintah `log` tidak tersedia."
 
-#: commands/offline/offline.cpp:706
+#: commands/offline/offline.cpp:736
 msgid "Show status of the current offline transaction"
 msgstr "Tampilkan status transaksi luring saat ini"
 
-#: commands/offline/offline.cpp:722
+#: commands/offline/offline.cpp:752
+msgid ""
+"The system has been modified since the offline transaction was prepared. The "
+"offline transaction initiated by the following command is no longer valid:"
+msgstr ""
+"Sistem telah dimodifikasi sejak transaksi offline disiapkan. Transaksi "
+"offline yang dimulai oleh perintah berikut tidak lagi valid:"
+
+#: commands/offline/offline.cpp:756
+msgid ""
+"To reschedule, run the command above. To clean up, run `dnf5 offline clean`."
+msgstr ""
+"Untuk menjadwalkan ulang, jalankan perintah di atas. Untuk membersihkan, "
+"jalankan `dnf5 offline clean`."
+
+#: commands/offline/offline.cpp:760
 msgid "An offline transaction was initiated by the following command:"
 msgstr "Transaksi luring dimulai dengan perintah berikut:"
 
-#: commands/offline/offline.cpp:724
+#: commands/offline/offline.cpp:762
 msgid ""
 "Run `dnf5 offline reboot` to reboot and perform the offline transaction."
 msgstr ""
 "Jalankan perintah `dnf5 luring reboot` untuk me-reboot sistem dan melakukan "
 "transaksi luring."
 
-#: commands/offline/offline.cpp:726
+#: commands/offline/offline.cpp:764
 msgid ""
 "An offline transaction was started, but it did not finish. Run `dnf5 offline "
 "log` for more information. The command that initiated the transaction was:"
 msgstr ""
-"Transaksi luring telah dimulai, tetapi tidak selesai. Jalankan perintah `"
-"dnf5 luring log` untuk informasi lebih lanjut. Perintah yang memulai "
+"Transaksi luring telah dimulai, tetapi tidak selesai. Jalankan perintah "
+"`dnf5 luring log` untuk informasi lebih lanjut. Perintah yang memulai "
 "transaksi adalah:"
 
-#: commands/offline/offline.cpp:731
+#: commands/offline/offline.cpp:769
 msgid "Unknown offline transaction status: "
 msgstr "Status transaksi luring tidak diketahui: "
 
-#: commands/provides/provides.cpp:48
+#: commands/provides/provides.cpp:50
 msgid "Find what package provides the given value"
 msgstr "Temukan paket yang menyediakan nilai yang diberikan"
 
-#: commands/reinstall/reinstall.cpp:42
+#: commands/provides/provides.cpp:136
+msgid ""
+"If searching for a file, try specifying the full path or using a wildcard "
+"prefix (\"*/\") at the beginning."
+msgstr ""
+"Jika mencari berkas, coba tentukan path lengkap atau gunakan awalan wildcard "
+"(\"*/\") di bagian awal."
+
+#: commands/reinstall/reinstall.cpp:40
 msgid "Reinstall software"
 msgstr "Pasang ulang perangkat lunak"
 
-#: commands/remove/remove.cpp:42
+#: commands/remove/remove.cpp:48
 msgid "Remove (uninstall) software"
 msgstr "Hapus (uninstall) perangkat lunak"
+
+#: commands/remove/remove.cpp:129
+msgid ""
+"Option '--limit' must be equal or greater than 1 (to keep at least the "
+"newest installed package)."
+msgstr ""
+"Opsi '--limit' harus sama dengan atau lebih besar dari 1 (untuk "
+"mempertahankan setidaknya paket terinstal terbaru)."
+
+#: commands/remove/remove.cpp:237
+msgid "Option '--limit' can only be used with '--oldinstallonly'."
+msgstr "Opsi '--limit' hanya dapat digunakan dengan '--oldinstallonly'."
+
+#: commands/remove/remove.cpp:242
+msgid ""
+"Missing positional arguments for \"remove\" command. Add \"--help\" for more "
+"information about the arguments."
+msgstr ""
+"Argumen posisional untuk perintah \"remove\" tidak ada. Tambahkan \"--help\" "
+"untuk informasi lebih lanjut mengenai argumen."
+
+#: commands/remove/remove.cpp:269
+#, c++-format
+msgid ""
+"Warning: The currently running kernel '{}' is not the latest installed "
+"version and was not removed. Please reboot into the latest kernel and run "
+"this command again to complete the cleanup."
+msgstr ""
+"Peringatan: Kernel yang sedang berjalan '{}' bukan versi terinstal terbaru "
+"dan tidak dihapus. Boot ulang ke kernel terbaru, lalu jalankan perintah ini "
+"lagi untuk menyelesaikan pembersihan."
 
 #: commands/replay/replay.cpp:38
 msgid "Replay a transaction that was previously stored to a directory"
@@ -983,7 +1168,7 @@ msgstr "Kelola repositori"
 msgid "Search for packages matching various criteria"
 msgstr "Cari paket yang sesuai dengan berbagai kriteria"
 
-#: commands/repoquery/repoquery.cpp:525
+#: commands/repoquery/repoquery.cpp:527
 msgid ""
 "Option \"--exactdeps\" has to be used either with \"--whatrequires\" or \"--"
 "whatdepends\""
@@ -991,7 +1176,7 @@ msgstr ""
 "Opsi \"--exactdeps\" harus digunakan bersama dengan \"--whatrequires\" atau "
 "\"--whatdepends\"."
 
-#: commands/repoquery/repoquery.cpp:530
+#: commands/repoquery/repoquery.cpp:532
 msgid ""
 "Option \"--recursive\" has to be used either with \"--whatrequires\" or \"--"
 "providers-of=requires\""
@@ -1007,11 +1192,19 @@ msgstr "Cari juga deskripsi paket dan URL."
 msgid "Patterns"
 msgstr "Polanya"
 
-#: commands/search/search.cpp:44
+#: commands/search/search.cpp:49
 msgid "Search for software matching all specified strings"
 msgstr "Cari perangkat lunak yang sesuai dengan semua string yang ditentukan"
 
-#: commands/swap/swap.cpp:44
+#: commands/search/search.cpp:70
+msgid "Options --name and --summary cannot be used together."
+msgstr "Opsi --name dan --summary tidak dapat digunakan bersamaan."
+
+#: commands/search/search.cpp:74
+msgid "Option --all cannot be used with --name or --summary."
+msgstr "Opsi --all tidak dapat digunakan dengan --name atau --summary."
+
+#: commands/swap/swap.cpp:42
 msgid "Remove software and install another in one transaction"
 msgstr ""
 "Hapus perangkat lunak dan pasang perangkat lunak lain dalam satu transaksi"
@@ -1044,11 +1237,11 @@ msgstr "Simpan transaksi distro-sync untuk dilakukan secara luring"
 msgid "Store an upgrade transaction to be performed offline"
 msgstr "Simpan transaksi peningkatan yang akan dilakukan secara luring"
 
-#: commands/upgrade/upgrade.cpp:43
+#: commands/upgrade/upgrade.cpp:41
 msgid "Upgrade software"
 msgstr "Tingkatkan perangkat lunak"
 
-#: commands/upgrade/upgrade.cpp:50
+#: commands/upgrade/upgrade.cpp:48
 msgid ""
 "Upgrade packages only to the lowest versions that fix advisories of type "
 "bugfix, enhancement, security, or newpackage. In case that any option "
@@ -1062,6 +1255,7 @@ msgstr ""
 
 #. TODO(mblaha): add full command line
 #: commands/versionlock/utils.cpp:35
+#, c++-format
 msgid "Added by 'versionlock {}' command on {}"
 msgstr "Ditambahkan oleh perintah ‘versionlock {}’ pada {}"
 
@@ -1074,19 +1268,22 @@ msgid "Add new entry to versionlock configuration"
 msgstr "Tambahkan entri baru ke konfigurasi VersionLock"
 
 #: commands/versionlock/versionlock_add.cpp:44
-msgid "List of package package-spec-N to add versionlock for"
-msgstr "Daftar paket package-spec-N yang perlu ditambahkan versi kunci untuk"
+msgid "List of packages to lock to their current versions"
+msgstr "Daftar paket yang dikunci pada versi saat ini"
 
 #: commands/versionlock/versionlock_add.cpp:107
-#: commands/versionlock/versionlock_exclude.cpp:126
+#: commands/versionlock/versionlock_exclude.cpp:128
+#, c++-format
 msgid "No package found for \"{}\"."
 msgstr "Tidak ditemukan paket untuk \"{}\"."
 
 #: commands/versionlock/versionlock_add.cpp:134
+#, c++-format
 msgid "Adding versionlock on \"{0} = {1}\"."
 msgstr "Menambahkan versi kunci pada \"{0} = {1}\"."
 
 #: commands/versionlock/versionlock_add.cpp:137
+#, c++-format
 msgid "Package \"{}\" is already locked."
 msgstr "Paket \"{}\" sudah terkunci."
 
@@ -1110,29 +1307,66 @@ msgstr "Menghapus entri versionlock:"
 msgid "Add new exclude entry to versionlock configuration"
 msgstr "Tambahkan entri pengecualian baru ke konfigurasi versionlock"
 
-#: commands/versionlock/versionlock_exclude.cpp:44
-msgid "List of package-spec-N to add versionlock exclude for"
+#: commands/versionlock/versionlock_exclude.cpp:45
+msgid ""
+"List of packages to exclude. If no version is specified, all available "
+"versions of the package will be excluded."
 msgstr ""
-"Daftar paket-spec-N yang perlu ditambahkan pengecualian versionlock untuk"
+"Daftar paket yang dikecualikan. Jika tidak ada versi yang ditentukan, semua "
+"versi paket yang tersedia akan dikecualikan."
 
-#: commands/versionlock/versionlock_exclude.cpp:89
-#: commands/versionlock/versionlock_exclude.cpp:101
+#: commands/versionlock/versionlock_exclude.cpp:91
+#: commands/versionlock/versionlock_exclude.cpp:103
+#, c++-format
 msgid "Adding versionlock exclude on \"{0} = {1}\"."
 msgstr "Menambahkan pengecualian versionlock pada \"{0} = {1}\"."
 
-#: commands/versionlock/versionlock_exclude.cpp:140
+#: commands/versionlock/versionlock_exclude.cpp:142
+#, c++-format
 msgid "Package \"{}\" is already excluded."
 msgstr "Paket \"{}\" sudah dikecualikan."
 
 #: context.cpp:73
+#, c++-format
+msgid "Command: {}"
+msgstr "Perintah: {}"
+
+#: context.cpp:81
+#, c++-format
+msgid "Process ID: {} (still running)"
+msgstr "ID Proses: {} (masih berjalan)"
+
+#: context.cpp:83
+#, c++-format
+msgid "Process ID: {}"
+msgstr "ID Proses: {}"
+
+#: context.cpp:92
+#, c++-format
+msgid "Started: {}"
+msgstr "Dimulai: {}"
+
+#: context.cpp:99
+#, c++-format
+msgid "Comment: {}"
+msgstr "Komentar: {}"
+
+#: context.cpp:103
+msgid "Details about the currently running transaction:\n"
+msgstr "Rincian transaksi yang sedang berjalan:\n"
+
+#: context.cpp:121
+#, c++-format
 msgid "Importing OpenPGP key 0x{}:\n"
 msgstr "Mengimpor kunci OpenPGP 0x{}:\n"
 
-#: context.cpp:75 context.cpp:100
+#: context.cpp:123 context.cpp:148
+#, c++-format
 msgid " UserID     : \"{}\"\n"
 msgstr " ID Pengguna     : \"{}\"\n"
 
-#: context.cpp:78
+#: context.cpp:126
+#, c++-format
 msgid ""
 " Fingerprint: {}\n"
 " From       : {}\n"
@@ -1140,53 +1374,59 @@ msgstr ""
 " Sidik jari: {}\n"
 " Dari       : {}\n"
 
-#: context.cpp:87
+#: context.cpp:135
 msgid "The key was successfully imported."
 msgstr "Kunci telah berhasil diimpor."
 
-#: context.cpp:96
+#: context.cpp:144
+#, c++-format
 msgid "The following OpenPGP key (0x{}) is about to be removed:"
 msgstr "Kunci OpenPGP berikut (0x{}) akan segera dihapus:"
 
-#: context.cpp:98
+#: context.cpp:146
+#, c++-format
 msgid " Reason     : {}\n"
 msgstr " Alasan     : {}\n"
 
-#: context.cpp:102
+#: context.cpp:150
+#, c++-format
 msgid " Fingerprint: {}\n"
 msgstr " Sidik jari: {}\n"
 
-#: context.cpp:104
+#: context.cpp:152
 msgid "As a result, installing packages signed with this key will fail."
 msgstr ""
 "Akibatnya, pemasangan paket yang ditandatangani dengan kunci ini akan gagal."
 
-#: context.cpp:105
+#: context.cpp:153
 msgid "It is recommended to remove the expired key to allow importing"
 msgstr ""
 "Disarankan untuk menghapus kunci yang telah kadaluwarsa agar dapat melakukan "
 "impor"
 
-#: context.cpp:106
+#: context.cpp:154
 msgid ""
 "an updated key. This might leave already installed packages unverifiable."
 msgstr ""
 "kunci yang diperbarui. Hal ini mungkin akan menyebabkan paket yang sudah "
 "terpasang tidak dapat diverifikasi."
 
-#: context.cpp:109
+#: context.cpp:157
 msgid "The system will now proceed with removing the key."
 msgstr "Sistem akan melanjutkan dengan menghapus kunci."
 
-#: context.cpp:115
+#: context.cpp:163
+#, c++-format
 msgid "Key 0x{} was successfully removed."
 msgstr "Kunci 0x{} telah berhasil dihapus."
 
-#: context.cpp:295
+#: context.cpp:192
+#, c++-format
 msgid "setopt: \"{}.{}\": {}"
 msgstr "setopt: \"{}.{}\": {}"
 
-#: context.cpp:305
+#: context.cpp:202
+#, c++-format
 msgid ""
 "No matching repositories for {}. To use repositories from a host system, "
 "pass --use-host-config option"
@@ -1194,45 +1434,69 @@ msgstr ""
 "Tidak ada repositori yang cocok untuk {}. Untuk menggunakan repositori dari "
 "sistem host, gunakan opsi --use-host-config"
 
-#: context.cpp:309
+#: context.cpp:206
+#, c++-format
 msgid "No matching repositories for {}"
 msgstr "Tidak ada repositori yang cocok untuk {}"
 
-#: context.cpp:355
+#: context.cpp:278
+msgid ""
+"Waiting for a lock on the system repository; another process is currently "
+"accessing it. Use the \"--skip-file-locks\" option to bypass the lock."
+msgstr ""
+"Menunggu kunci pada repositori sistem; proses lain sedang mengaksesnya. "
+"Gunakan opsi \"--skip-file-locks\" untuk melewati kunci."
+
+#: context.cpp:282
+msgid ""
+"Waiting for a lock on the system repository. The following processes are "
+"currently accessing it:"
+msgstr ""
+"Menunggu kunci pada repositori sistem. Proses berikut sedang mengaksesnya:"
+
+#: context.cpp:292
+msgid "Use the \"--skip-file-locks\" option to bypass the lock."
+msgstr "Gunakan opsi \"--skip-file-locks\" untuk melewati kunci."
+
+#. If we're only loading the system repo, we can skip the message.
+#: context.cpp:300
 msgid "Updating and loading repositories:"
 msgstr "Memperbarui dan memuat repositori:"
 
-#: context.cpp:365
+#: context.cpp:315
 msgid "Repositories loaded."
 msgstr "Repositori termuat."
 
-#: context.cpp:371
+#: context.cpp:322
 msgid "Testing offline transaction"
 msgstr "Pengujian transaksi luring"
 
-#: context.cpp:375 context.cpp:523
+#: context.cpp:326 context.cpp:525
+#, c++-format
 msgid "Transaction failed: {}"
 msgstr "Transaksi gagal: {}"
 
-#: context.cpp:380 context.cpp:528
+#: context.cpp:339 context.cpp:538
+#, c++-format
 msgid "  - {}"
 msgstr "  - {}"
 
-#: context.cpp:447
+#: context.cpp:441
+#, c++-format
 msgid ""
 "Location \"{}\" already contains a stored transaction, it will be "
 "overwritten."
 msgstr ""
 "Lokasi \"{}\" sudah berisi transaksi yang disimpan, sehingga akan ditimpa."
 
-#: context.cpp:476
+#: context.cpp:475
 msgid ""
 "There is already an offline transaction queued, initiated by the following "
 "command:"
 msgstr ""
 "Sudah ada transaksi luring yang antri, yang diinisiasi oleh perintah berikut:"
 
-#: context.cpp:478
+#: context.cpp:477
 msgid ""
 "Continuing will cancel the old offline transaction and replace it with this "
 "one."
@@ -1248,114 +1512,138 @@ msgid ""
 msgstr ""
 "Transaksi disimpan untuk dijalankan secara luring. Jalankan perintah `dnf5 "
 "luring reboot` untuk me-reboot sistem dan menjalankan transaksi. Untuk "
-"membatalkan transaksi dan menghapus berkas yang diunduh, gunakan perintah `"
-"dnf5 luring clean`."
+"membatalkan transaksi dan menghapus berkas yang diunduh, gunakan perintah "
+"`dnf5 luring clean`."
 
 #: context.cpp:502
 msgid "Running transaction"
 msgstr "Transkasi berjalan"
 
-#: context.cpp:820
+#: context.cpp:551
+msgid "Warning: Pending offline transaction has been invalidated."
+msgstr "Peringatan: Transaksi offline yang tertunda telah dibatalkan."
+
+#: context.cpp:553
+#, c++-format
+msgid "To reschedule, run: {}"
+msgstr "Untuk menjadwalkan ulang, jalankan: {}"
+
+#: context.cpp:916
+#, c++-format
 msgid "Upgrading {}"
 msgstr "Memperbarui {}"
 
-#: context.cpp:823
+#: context.cpp:919
+#, c++-format
 msgid "Downgrading {}"
 msgstr "Menurunkan {}"
 
-#: context.cpp:826
+#: context.cpp:922
+#, c++-format
 msgid "Reinstalling {}"
 msgstr "Memasang ulang {}"
 
-#: context.cpp:839
+#: context.cpp:935
+#, c++-format
 msgid "Unexpected action in TransactionPackage: {}"
 msgstr "Aksi tak terduga dalam TransactionPackage: {}"
 
-#: context.cpp:845
+#: context.cpp:941
+#, c++-format
 msgid "Installing {}"
 msgstr "Memasang {}"
 
-#: context.cpp:866
+#: context.cpp:962
 msgid "Prepare transaction"
 msgstr "Mempersiapkan transaksi"
 
-#: context.cpp:886
+#: context.cpp:982
+#, c++-format
 msgid "Removing {}"
 msgstr "Menghapus {}"
 
-#: context.cpp:889
+#: context.cpp:985
+#, c++-format
 msgid "Cleanup {}"
 msgstr "Membersihkan {}"
 
-#: context.cpp:907
+#: context.cpp:1004
+#, c++-format
 msgid "Unpack error: {}"
 msgstr "Kesalahan saat mengekstrak: {}"
 
-#: context.cpp:915
+#: context.cpp:1013
+#, c++-format
 msgid "Cpio error: {}"
 msgstr "Kesalahan Cpio: {}"
 
-#: context.cpp:925
+#: context.cpp:1023
 msgid "Scriptlet output:"
 msgstr "Output skrip:"
 
-#: context.cpp:948
+#: context.cpp:1046
 msgid "Running scriptlets"
 msgstr "Menjalankan skrip kecil"
 
-#: context.cpp:953
+#: context.cpp:1052
+#, c++-format
 msgid "Running {} scriptlet: {}"
-msgstr "Menjalankan skrip kecil: {}"
+msgstr "Menjalankan scriptlet {}: {}"
 
-#: context.cpp:968
+#: context.cpp:1068
+#, c++-format
 msgid "Finished {} scriptlet: {}"
 msgstr "Selesai {} skrip kecil: {}"
 
-#: context.cpp:974
+#: context.cpp:1075
+#, c++-format
 msgid "Non-critical error in {} scriptlet: {}"
 msgstr "Kesalahan non-kritis dalam skrip {}: {}"
 
-#: context.cpp:983
+#: context.cpp:1085
+#, c++-format
 msgid "Error in {} scriptlet: {}"
 msgstr "Kesalahan dalam skrip {}: {}"
 
-#: context.cpp:1018
+#: context.cpp:1120
 msgid "Verify package files"
 msgstr "Verifikasi berkas paket"
 
 #: library.cpp:33
+#, c++-format
 msgid "Cannot load shared library \"{}\": {}"
 msgstr "Tidak dapat memuat perpustakaan bersama \"{}\": {}"
 
 #: library.cpp:47
+#, c++-format
 msgid "Cannot obtain address of symbol \"{}\": {}"
 msgstr "Tidak dapat memperoleh alamat simbol \"{}\": {}"
 
-#: main.cpp:133
+#: main.cpp:142
 msgid "Utility for packages maintaining"
 msgstr "Utilitas untuk paket pemeliharaan"
 
-#: main.cpp:134
+#: main.cpp:143
 msgid "DNF5 is a program for maintaining packages."
 msgstr "DNF5 adalah program untuk mengelola paket."
 
-#: main.cpp:135
+#: main.cpp:144
 msgid "Unclassified options:"
 msgstr "Opsi yang tidak diklasifikasikan:"
 
-#: main.cpp:138
+#: main.cpp:147
 msgid "Global options:"
 msgstr "Opsi global:"
 
-#: main.cpp:143
+#: main.cpp:152
 msgid "Print help"
 msgstr "Tampilkan bantuan"
 
-#: main.cpp:150
+#: main.cpp:159
 msgid "Configuration file location"
 msgstr "Lokasi berkas konfigurasi"
 
-#: main.cpp:158
+#: main.cpp:167
 msgid ""
 "In combination with a non-interactive command, shows just the relevant "
 "content. Suppresses messages notifying about the current state or actions of "
@@ -1365,7 +1653,7 @@ msgstr ""
 "yang relevan. Menekan pesan yang memberitahukan tentang status saat ini atau "
 "tindakan dnf5."
 
-#: main.cpp:173
+#: main.cpp:182
 msgid ""
 "Run entirely from system cache, don't update the cache and use it even in "
 "case it is expired."
@@ -1373,87 +1661,101 @@ msgstr ""
 "Jalankan sepenuhnya dari cache sistem, jangan perbarui cache, dan gunakan "
 "bahkan jika cache telah kadaluwarsa."
 
-#: main.cpp:182
+#: main.cpp:191
 msgid "Control whether color is used."
 msgstr "Kontrol apakah warna digunakan."
 
-#: main.cpp:188
+#: main.cpp:197
 msgid "Force refreshing metadata before running the command."
 msgstr "Segarkan metadata secara paksa sebelum menjalankan perintah."
 
-#: main.cpp:204
+#: main.cpp:213
+#, c++-format
 msgid "Failed to expire repository cache in path \"{0}\": {1}"
 msgstr "Gagal menghapus cache repositori di jalur \"{0}\": {1}"
 
-#: main.cpp:218
+#: main.cpp:227
 msgid "create additional repository using id and path"
 msgstr "buat repositori tambahan menggunakan id dan jalur"
 
-#: main.cpp:226
+#: main.cpp:235
+#, c++-format
 msgid "repofrompath: Incorrect repoid and path specification \"{}\""
 msgstr "repofrompath: Spesifikasi repoid dan jalur yang salah \"{}\""
 
-#: main.cpp:238
+#: main.cpp:247
 msgid "set arbitrary config and repo options"
 msgstr "Atur opsi config dan repo secara arbitrer"
 
-#: main.cpp:240
+#: main.cpp:249
 msgid ""
 "Override a configuration option from the configuration file. To override "
 "configuration options for repositories, use repoid.option for  the\n"
 "              <option>.  Values  for configuration options like excludepkgs, "
 "includepkgs, installonlypkgs and tsflags are appended to the original "
 "value,\n"
-"              they do not override it. However, specifying an empty value (e."
-"g. --setopt=tsflags=) will clear the option."
+"              they do not override it. However, specifying an empty value "
+"(e.g. --setopt=tsflags=) will clear the option."
 msgstr ""
 "Mengganti opsi konfigurasi dari berkas konfigurasi. Untuk mengganti opsi "
 "konfigurasi repositori, gunakan repoid.option untuk  <option>.  Nilai  untuk "
 "opsi konfigurasi seperti excludepkgs, includepkgs, installonlypkgs, dan "
 "tsflags ditambahkan ke nilai asli,  \n"
-"              bukan menggantikannya. Namun, menentukan nilai kosong ("
-"misalnya --setopt=tsflags=) akan menghapus opsi tersebut."
+"              bukan menggantikannya. Namun, menentukan nilai kosong "
+"(misalnya --setopt=tsflags=) akan menghapus opsi tersebut."
 
-#: main.cpp:249 main.cpp:288
+#: main.cpp:258 main.cpp:297
+#, c++-format
 msgid "{}: Badly formatted argument value \"{}\""
 msgstr "{}: Nilai argumen berformat buruk \"{}\""
 
-#: main.cpp:256
+#: main.cpp:265
+#, c++-format
 msgid ""
 "{}: Badly formatted argument value: Last key character cannot be '.': {}"
 msgstr ""
 "{}: Nilai argumen berformat buruk: Karakter terakhir kunci tidak boleh '.': "
 "{}"
 
-#: main.cpp:269
+#: main.cpp:278
+#, c++-format
 msgid "setopt: \"{0}\": {1}"
 msgstr "setopt: \"{0}\": {1}"
 
-#: main.cpp:281
+#: main.cpp:290
 msgid "set arbitrary variable"
 msgstr "tetapkan variabel sembarang"
 
-#: main.cpp:295
+#: main.cpp:304
+#, c++-format
 msgid "setvar: {}"
 msgstr "setvar: {}"
 
-#: main.cpp:304
+#: main.cpp:313
 msgid "automatically answer yes for all questions"
 msgstr "secara otomatis menjawab \"ya\" untuk semua pertanyaan"
 
-#: main.cpp:311
+#: main.cpp:320
 msgid "automatically answer no for all questions"
 msgstr "secara otomatis menjawab \"tidak\" untuk semua pertanyaan"
 
-#: main.cpp:318
+#: main.cpp:327
 msgid "try the best available package versions in transactions"
 msgstr "coba gunakan versi paket terbaik yang tersedia dalam transaksi"
 
-#: main.cpp:325
+#: main.cpp:334
 msgid "do not limit the transaction to the best candidate"
 msgstr "jangan membatasi transaksi hanya pada kandidat terbaik"
 
-#: main.cpp:336
+#: main.cpp:343
+msgid "allow automatic package replacements from different vendors"
+msgstr "izinkan penggantian paket otomatis dari vendor yang berbeda"
+
+#: main.cpp:350
+msgid "do not allow automatic package replacements from different vendors"
+msgstr "jangan izinkan penggantian paket otomatis dari vendor yang berbeda"
+
+#: main.cpp:361
 msgid ""
 "Don't install files that are marked as documentation (which includes man "
 "pages and texinfo documents)"
@@ -1461,11 +1763,11 @@ msgstr ""
 "Jangan memasang berkas yang ditandai sebagai dokumentasi (yang mencakup "
 "halaman manual dan dokumen Texinfo)."
 
-#: main.cpp:352
+#: main.cpp:377
 msgid "exclude packages by name or glob"
 msgstr "mengecualikan paket berdasarkan nama atau glob"
 
-#: main.cpp:371
+#: main.cpp:396
 msgid ""
 "Enable additional repositories. List option. Supports globs, can be "
 "specified multiple times."
@@ -1473,7 +1775,7 @@ msgstr ""
 "Aktifkan repositori tambahan. Daftar opsi. Mendukung globs, dapat ditentukan "
 "beberapa kali."
 
-#: main.cpp:389
+#: main.cpp:414
 msgid ""
 "Disable repositories. List option. Supports globs, can be specified multiple "
 "times."
@@ -1481,7 +1783,7 @@ msgstr ""
 "Nonaktifkan repositori. Daftar opsi. Mendukung globs, dapat ditentukan "
 "beberapa kali."
 
-#: main.cpp:407
+#: main.cpp:432
 msgid ""
 "Enable just specific repositories. List option. Supports globs, can be "
 "specified multiple times."
@@ -1489,16 +1791,16 @@ msgstr ""
 "Aktifkan hanya repositori tertentu. Daftar opsi. Mendukung globs, dapat "
 "ditentukan beberapa kali."
 
-#: main.cpp:429
+#: main.cpp:454
 msgid "disable OpenPGP signature checking (if RPM policy allows)"
 msgstr ""
 "nonaktifkan pemeriksaan tanda tangan OpenPGP (jika kebijakan RPM mengizinkan)"
 
-#: main.cpp:446
+#: main.cpp:471
 msgid "Disable all libdnf5 plugins"
 msgstr "Nonaktifkan semua plugin libdnf5"
 
-#: main.cpp:456
+#: main.cpp:481
 msgid ""
 "Enable libdnf5 plugins by name. List option. Supports globs, can be "
 "specified multiple times."
@@ -1506,7 +1808,7 @@ msgstr ""
 "Aktifkan plugin libdnf5 berdasarkan nama. Daftar opsi. Mendukung globs, "
 "dapat ditentukan beberapa kali."
 
-#: main.cpp:471
+#: main.cpp:496
 msgid ""
 "Disable libdnf5 plugins by name. List option. Supports globs, can be "
 "specified multiple times."
@@ -1514,11 +1816,11 @@ msgstr ""
 "Nonaktifkan plugin libdnf5 berdasarkan nama. Daftar opsi. Mendukung pola "
 "glob, dapat ditentukan beberapa kali."
 
-#: main.cpp:488
+#: main.cpp:513
 msgid "add a comment to transaction"
 msgstr "tambahkan komentar ke transaksi"
 
-#: main.cpp:490
+#: main.cpp:515
 msgid ""
 "Adds a comment to the action. If a transaction takes place, the comment is "
 "stored in it."
@@ -1526,22 +1828,30 @@ msgstr ""
 "Menambahkan komentar ke tindakan. Jika transaksi terjadi, komentar tersebut "
 "disimpan di dalamnya."
 
-#: main.cpp:503
+#: main.cpp:528
 msgid "set install root"
 msgstr "atur root pemasangan"
 
-#: main.cpp:510
+#: main.cpp:535
 msgid ""
 "use configuration, reposdir, and vars from the host system rather than the "
 "installroot"
 msgstr ""
 "gunakan konfigurasi, reposdir, dan vars dari sistem host daripada installroot"
 
-#: main.cpp:519
+#: main.cpp:544
 msgid "override the value of $releasever in config and repo files"
 msgstr "menimpa nilai $releasever di berkas konfigurasi dan repositori"
 
-#: main.cpp:532
+#: main.cpp:557
+msgid "override the value of $releasever_major in config and repo files"
+msgstr "timpa nilai $releasever_major dalam berkas konfigurasi dan repo"
+
+#: main.cpp:570
+msgid "override the value of $releasever_minor in config and repo files"
+msgstr "timpa nilai $releasever_minor dalam berkas konfigurasi dan repo"
+
+#: main.cpp:583
 msgid ""
 "Show newly installed leaf packages and packages that became leaves after a "
 "transaction."
@@ -1549,61 +1859,70 @@ msgstr ""
 "Tampilkan paket daun yang baru dipasang dan paket yang menjadi daun setelah "
 "transaksi."
 
-#: main.cpp:546
+#: main.cpp:597
 msgid "Dump detailed solving results into files"
 msgstr "Simpan hasil penyelesaian detail ke dalam berkas"
 
-#: main.cpp:555
+#: main.cpp:606
 msgid "Print main configuration values to stdout"
 msgstr "Cetak nilai konfigurasi utama ke stdout"
 
-#: main.cpp:572
+#: main.cpp:623
 msgid ""
 "Print repository configuration values to stdout. List option. Supports globs"
 msgstr ""
 "Cetak nilai konfigurasi repositori ke stdout. Daftar opsi. Mendukung globs"
 
-#: main.cpp:587
+#: main.cpp:638
 msgid "Print variable values to stdout"
 msgstr "Cetak nilai variabel ke stdout"
 
-#: main.cpp:601
+#: main.cpp:652
 msgid "Show DNF5 version and exit"
 msgstr "Tampilkan versi DNF5 dan keluar"
 
-#: main.cpp:608
+#: main.cpp:666
 msgid "Force the use of a different architecture."
 msgstr "Memaksa penggunaan arsitektur yang berbeda."
 
-#: main.cpp:646
+#: main.cpp:698
+msgid "Skip acquiring file locks, such as the lock on the system repository"
+msgstr "Lewati pengambilan kunci berkas, seperti kunci pada repositori sistem"
+
+#: main.cpp:713
 msgid "Software Management Commands:"
 msgstr "Perintah Manajemen Perangkat lunak:"
 
-#: main.cpp:653
+#: main.cpp:720
 msgid "Query Commands:"
 msgstr "Perintah Kueri:"
 
-#: main.cpp:660
+#: main.cpp:727
 msgid "Subcommands:"
 msgstr "Subperintah:"
 
-#: main.cpp:759
+#: main.cpp:828
+#, c++-format
 msgid "{} version {}.{}.{}.{}"
 msgstr "{} versi {}.{}.{}.{}"
 
-#: main.cpp:762
+#: main.cpp:831
+#, c++-format
 msgid "{} plugin API version {}.{}"
 msgstr "Versi API pengaya {} {}.{}"
 
-#: main.cpp:767
+#: main.cpp:836
+#, c++-format
 msgid "libdnf5 version {}.{}.{}.{}"
 msgstr "libdnf5 versi {}.{}.{}.{}"
 
-#: main.cpp:770
+#: main.cpp:839
+#, c++-format
 msgid "libdnf5 plugin API version {}.{}"
 msgstr "libdnf5 plugin API versi {}.{}"
 
-#: main.cpp:777
+#: main.cpp:846
+#, c++-format
 msgid ""
 "\n"
 "Loaded {} plugins:"
@@ -1611,26 +1930,39 @@ msgstr ""
 "\n"
 "Pengaya {} termuat:"
 
-#: main.cpp:782
+#: main.cpp:851 main.cpp:867
+#, c++-format
 msgid "  name: {}"
 msgstr "  nama: {}"
 
-#: main.cpp:785
+#: main.cpp:854 main.cpp:870
+#, c++-format
 msgid "  version: {}.{}.{}"
 msgstr "  versi: {}.{}.{}"
 
-#: main.cpp:787
+#: main.cpp:856 main.cpp:872
+#, c++-format
 msgid "  API version: {}.{}"
 msgstr "  versi API: {}.{}"
 
-#: main.cpp:825
+#: main.cpp:863
+msgid ""
+"\n"
+"Loaded libdnf5 plugins:"
+msgstr ""
+"\n"
+"Plugin libdnf5 yang dimuat:"
+
+#: main.cpp:910
+#, c++-format
 msgid ""
 "Total size of inbound packages is {:.0f} {:s}. Need to download {:.0f} {:s}."
 msgstr ""
 "Total ukuran paket yang diterima adalah {:.0f} {:s}. Perlu mengunduh {:.0f} "
 "{:s}."
 
-#: main.cpp:842
+#: main.cpp:927
+#, c++-format
 msgid ""
 "After this operation, {:.0f} {:s} extra will be used (install {:.0f} {:s}, "
 "remove {:.0f} {:s})."
@@ -1638,7 +1970,8 @@ msgstr ""
 "Setelah operasi ini, akan ada penambahan sebanyak {:.0f} {:s} (pasang {:.0f} "
 "{:s}, hapus {:.0f} {:s})."
 
-#: main.cpp:853
+#: main.cpp:938
+#, c++-format
 msgid ""
 "After this operation, {:.0f} {:s} will be freed (install {:.0f} {:s}, remove "
 "{:.0f} {:s})."
@@ -1646,39 +1979,45 @@ msgstr ""
 "Setelah operasi ini, akan ada pengurangan sebanyak {:.0f} {:s} (pasang "
 "{:.0f} {:s}, hapus {:.0f} {:s})."
 
-#: main.cpp:865
+#: main.cpp:950
 msgid "======== Main configuration: ========"
 msgstr "======== Konfigurasi utama: ========"
 
-#: main.cpp:902
+#: main.cpp:987
+#, c++-format
 msgid "No matching repo to dump configuration: \"{}\""
 msgstr "Tidak ada repositori yang cocok untuk mengekspor konfigurasi: \"{}\""
 
-#: main.cpp:907
+#: main.cpp:992
+#, c++-format
 msgid "======== \"{}\" repository configuration: ========"
 msgstr "======== Konfigurasi repositori \"{}\": ========"
 
-#: main.cpp:927
+#: main.cpp:1012
 msgid "======== Variables: ========"
 msgstr "======== Variabel: ========"
 
-#: main.cpp:967
+#: main.cpp:1052
 msgid "New leaves:"
 msgstr "Daun baru:"
 
-#: main.cpp:969
+#: main.cpp:1054
+#, c++-format
 msgid " {}"
 msgstr " {}"
 
-#: main.cpp:1013
+#: main.cpp:1114
+#, c++-format
 msgid "{} to skip unavailable packages"
 msgstr "{} untuk melewati paket yang tidak tersedia"
 
-#: main.cpp:1021
+#: main.cpp:1122
+#, c++-format
 msgid "{} to allow extra packages in the transaction"
 msgstr "{} untuk mengizinkan menambahkan paket tambahan dalam transaksi"
 
-#: main.cpp:1034
+#: main.cpp:1135
+#, c++-format
 msgid ""
 "{} to allow mismatches between installed and stored transaction packages. "
 "This can result in an empty transaction because among other things the "
@@ -1688,28 +2027,38 @@ msgstr ""
 "tersimpan. Ini dapat mengakibatkan transaksi kosong karena antara hal lain "
 "opsi ini dapat mengabaikan aksi Hapus yang gagal."
 
-#: main.cpp:1081
+#: main.cpp:1191
+#, c++-format
 msgid "{} to not limit the transaction to the best candidates"
 msgstr "{} untuk tidak membatasi transaksi ke kandidat terbaik"
 
-#: main.cpp:1088
+#: main.cpp:1198
+#, c++-format
 msgid "{} to allow removing of installed packages to resolve problems"
 msgstr ""
 "{} untuk mengizinkan menghapus paket yang terpasang untuk mengatasi masalah"
 
-#: main.cpp:1097
+#: main.cpp:1207
+#, c++-format
 msgid "{} to load additional filelists metadata"
 msgstr "{} untuk memuat metadata daftar berkas tambahan"
 
-#: main.cpp:1104
+#: main.cpp:1214
+#, c++-format
 msgid "{} to skip uninstallable packages"
 msgstr "{} untuk melewati paket yang dapat di pasang"
 
-#: main.cpp:1110
+#: main.cpp:1229
+#, c++-format
+msgid "{} to allow changing package vendors"
+msgstr "{} untuk mengizinkan perubahan vendor paket"
+
+#: main.cpp:1233
 msgid "You can try to add to command line:"
 msgstr "Anda dapat mencoba menambahkan ke baris perintah:"
 
-#: main.cpp:1128
+#: main.cpp:1251
+#, c++-format
 msgid ""
 "No matches were found for the following plugin name patterns while enabling "
 "libdnf plugins: {}"
@@ -1717,7 +2066,8 @@ msgstr ""
 "Tidak ditemukan plugin yang sesuai dengan pola nama plugin berikut saat "
 "mengaktifkan plugin libdnf: {}"
 
-#: main.cpp:1129
+#: main.cpp:1252
+#, c++-format
 msgid ""
 "No matches were found for the following plugin name patterns while disabling "
 "libdnf plugins: {}"
@@ -1725,31 +2075,37 @@ msgstr ""
 "Tidak ditemukan plugin yang sesuai dengan pola nama plugin berikut saat "
 "menonaktifkan plugin libdnf: {}"
 
-#: main.cpp:1226
+#: main.cpp:1318
+#, c++-format
 msgid "--- DNF5 launched with arguments: \"{}\" ---"
 msgstr "--- DNF5 diluncurkan dengan argumen: \"{}\" ---"
 
-#: main.cpp:1262
+#: main.cpp:1354
+#, c++-format
 msgid "Invalid \"index\" in \"--complete=<index>[,...]\": {}"
 msgstr "\"Index\" yang tidak valid dalam \"--complete=<index>[,...]\": {}"
 
-#: main.cpp:1301
+#: main.cpp:1393
+#, c++-format
 msgid "{}."
 msgstr "{}."
 
-#: main.cpp:1304 main.cpp:1556
+#: main.cpp:1396 main.cpp:1777
+#, c++-format
 msgid "{}. Add \"--help\" for more information about the arguments."
 msgstr "{}. Tambahkan \"--help\" untuk informasi lebih lanjut tentang argumen."
 
-#: main.cpp:1313
+#: main.cpp:1405
+#, c++-format
 msgid ""
 "It could be a command provided by a plugin, try: dnf5 install 'dnf5-"
 "command({})'"
 msgstr ""
-"Ini bisa jadi perintah yang disediakan oleh plugin, coba: dnf5 install "
-"'dnf5-command({})'"
+"Ini bisa jadi perintah yang disediakan oleh plugin, coba: dnf5 install 'dnf5-"
+"command({})'"
 
-#: main.cpp:1355
+#: main.cpp:1447
+#, c++-format
 msgid ""
 "The argument is available for commands: {}. (It has to be placed after the "
 "command.)"
@@ -1757,11 +2113,20 @@ msgstr ""
 "Argumen ini tersedia untuk perintah: {}. (Harus ditempatkan setelah "
 "perintah.)"
 
-#: main.cpp:1399
+#: main.cpp:1484
 msgid "No read/execute access in current directory, moving to /"
 msgstr "Tidak ada akses baca/eksekusi di direktori saat ini, berpindah ke /"
 
-#: main.cpp:1471
+#: main.cpp:1519
+#, c++-format
+msgid ""
+"{}. Dropping all logs. To redirect the log file location use the \"logdir\" "
+"configuration option."
+msgstr ""
+"{}. Menghapus semua log. Untuk mengalihkan lokasi berkas log, gunakan opsi "
+"konfigurasi \"logdir\"."
+
+#: main.cpp:1578
 msgid ""
 "The requested operation requires superuser privileges. Please log in as a "
 "user with elevated rights, or use the \"--assumeno\" or \"--downloadonly\" "
@@ -1771,15 +2136,55 @@ msgstr ""
 "pengguna dengan hak tinggi, atau gunakan opsi \"--assumeno\" atau \"--"
 "downloadonly\" untuk menjalankan perintah tanpa mengubah keadaan sistem."
 
-#: main.cpp:1512
+#: main.cpp:1592
+#, c++-format
+msgid "Warning: {}"
+msgstr "Peringatan: {}"
+
+#: main.cpp:1605
+msgid ""
+"Error: /usr is configured to be read-only. You may be running an image-based "
+"or immutable operating system. For more information, refer to your "
+"distribution's documentation."
+msgstr ""
+"Kesalahan: /usr dikonfigurasi hanya-baca. Anda mungkin menjalankan sistem "
+"operasi berbasis image atau immutable. Untuk informasi lebih lanjut, lihat "
+"dokumentasi distribusi Anda."
+
+#: main.cpp:1624
+msgid ""
+"Error: persistent transactions aren't supported on bootc systems. Pass --"
+"transient to perform this operation in a transient overlay which will reset "
+"when the system reboots."
+msgstr ""
+"Kesalahan: transaksi persisten tidak didukung pada sistem bootc. Tambahkan --"
+"transient untuk menjalankan operasi ini dalam overlay sementara yang akan "
+"diatur ulang saat sistem di-boot ulang."
+
+#: main.cpp:1634
+msgid ""
+"Error: this bootc system is configured to be read-only. Pass --transient to "
+"perform this operation in a transient overlay which will reset when the "
+"system reboots."
+msgstr ""
+"Kesalahan: sistem bootc ini dikonfigurasi hanya-baca. Tambahkan --transient "
+"untuk menjalankan operasi ini dalam overlay sementara yang akan diatur ulang "
+"saat sistem di-boot ulang."
+
+#: main.cpp:1645
+msgid "Error: transient transactions are only supported on bootc systems."
+msgstr "Kesalahan: transaksi sementara hanya didukung pada sistem bootc."
+
+#: main.cpp:1686
+#, c++-format
 msgid "The operation will only store the transaction in {}"
 msgstr "Operasi ini hanya akan menyimpan transaksi dalam {}"
 
-#: main.cpp:1514
+#: main.cpp:1688
 msgid "The operation will only download packages for the transaction."
 msgstr "Operasi ini hanya akan mengunduh paket untuk transaksi."
 
-#: main.cpp:1519
+#: main.cpp:1693
 msgid ""
 "Test mode enabled: Only package downloads, OpenPGP key installations and "
 "transaction checks will be performed."
@@ -1787,42 +2192,126 @@ msgstr ""
 "Mode uji coba diaktifkan: Hanya unduhan paket, pemasangan kunci OpenPGP, dan "
 "pemeriksaan transaksi yang akan dilakukan."
 
-#: main.cpp:1527
-msgid ""
-"Error: this bootc system is configured to be read-only. For more "
-"information, run `bootc --help`."
-msgstr ""
-"Kesalahan: Sistem bootc ini dikonfigurasi sebagai read-only. Untuk informasi "
-"lebih lanjut, jalankan `bootc --help`."
+#: main.cpp:1702
+msgid "Warning: A pending offline transaction will be invalidated."
+msgstr "Peringatan: Transaksi offline yang tertunda akan dibatalkan."
 
-#: main.cpp:1544
+#: main.cpp:1705
+#, c++-format
 msgid ""
-"No repositories were loaded from the installroot. To use the configuration "
-"and repositories of the host system, pass --use-host-config."
+"Warning: A pending offline transaction initiated by the following command "
+"will be invalidated: {}"
 msgstr ""
-"Tidak ada repositori yang dimuat dari installroot. Untuk menggunakan "
-"konfigurasi dan repositori sistem host, gunakan opsi --use-host-config."
+"Peringatan: Transaksi offline tertunda yang dimulai oleh perintah berikut "
+"akan dibatalkan: {}"
 
-#: main.cpp:1566
+#: main.cpp:1730
+msgid ""
+"This transaction would modify the following paths, possibly introducing "
+"inconsistencies when the transient overlay on /usr is discarded. See the "
+"usr_drift_protected_paths configuration option for more information."
+msgstr ""
+"Transaksi ini akan memodifikasi path berikut, yang mungkin menimbulkan "
+"inkonsistensi saat overlay sementara pada /usr dibuang. Lihat opsi "
+"konfigurasi usr_drift_protected_paths untuk informasi lebih lanjut."
+
+#: main.cpp:1741
+msgid ""
+"Operation aborted. Pass --setopt=usr_drift_protected_paths= to disable this "
+"check and proceed anyway."
+msgstr ""
+"Operasi dibatalkan. Tambahkan --setopt=usr_drift_protected_paths= untuk "
+"menonaktifkan pemeriksaan ini dan tetap melanjutkan."
+
+#: main.cpp:1750
+msgid ""
+"A transient overlay will be created on /usr that will be discarded on "
+"reboot. Keep in mind that changes to /etc and /var will still persist, and "
+"packages commonly modify these directories."
+msgstr ""
+"Overlay sementara akan dibuat pada /usr dan dibuang saat boot ulang. Perlu "
+"diingat bahwa perubahan pada /etc dan /var tetap akan dipertahankan, serta "
+"paket umumnya memodifikasi direktori tersebut."
+
+#: main.cpp:1787
+#, c++-format
 msgid "Command returned error: {}"
 msgstr "Perintah mengembalikan galat: {}"
 
-#: main.cpp:1574
+#: main.cpp:1795
 msgid "DNF5 finished"
 msgstr "DNF5 selesai"
 
-#: main.cpp:1578
+#: main.cpp:1799
 msgid "Complete!"
 msgstr "Selesai!"
 
-#: shared_options.cpp:32
+#: shared_options.cpp:31
 msgid "Allow removing of installed packages to resolve problems"
 msgstr "Mengizinkan menghapus paket yang terpasang untuk mengatasi masalah"
 
-#: shared_options.cpp:42
+#: shared_options.cpp:41
 msgid "Allow resolving of depsolve problems by skipping packages"
 msgstr "Mengizinkan mengatasi masalah depsolve dengan melewati paket"
 
-#: shared_options.cpp:54
+#: shared_options.cpp:53
 msgid "Allow skipping unavailable packages"
 msgstr "Mengizinkan melewati paket yang tidak tersedia"
+
+#: shared_options.cpp:175
+msgid ""
+"The following items can be selected only from the specified repositories. "
+"All enabled repositories will still be used to satisfy dependencies."
+msgstr ""
+"Item-item berikut hanya dapat dipilih dari repositori yang ditentukan. Semua "
+"repositori yang diaktifkan tetap akan digunakan untuk memenuhi "
+"ketergantungan."
+
+#: shared_options.cpp:178 shared_options.cpp:211
+msgid "REPO_ID,..."
+msgstr "REPO_ID,..."
+
+#: shared_options.cpp:193
+msgid "\"--from_repo\" already defined with different value"
+msgstr "\"--from_repo\" sudah didefinisikan dengan nilai yang berbeda"
+
+#: shared_options.cpp:209
+msgid ""
+"Filters installed packages by the ID of the repository they were installed "
+"from."
+msgstr ""
+"Filter mengelompokkan paket yang dipasang berdasarkan ID repositori tempat "
+"paket tersebut dipasang."
+
+#: shared_options.cpp:220
+msgid "\"--installed-from_repo\" already defined with different value"
+msgstr "\"--installed-from_repo\" sudah didefinisikan dengan nilai yang berbeda"
+
+#: shared_options.cpp:236
+msgid ""
+"The following items can be selected only from the specified vendors. The "
+"vendor is ignored or vendor change policies (if allow_vendor_change=0) will "
+"still be used for items that satisfy dependencies."
+msgstr ""
+"Item berikut hanya dapat dipilih dari vendor yang ditentukan. Vendor akan "
+"diabaikan atau kebijakan perubahan vendor (jika allow_vendor_change=0) tetap "
+"digunakan untuk item yang memenuhi dependensi."
+
+#: shared_options.cpp:239
+msgid "VENDOR,..."
+msgstr "VENDOR,..."
+
+#: shared_options.cpp:248
+msgid "\"--from_vendor\" already defined with different value"
+msgstr "\"--from_vendor\" sudah didefinisikan dengan nilai yang berbeda"
+
+#~ msgid "No matching packages to list"
+#~ msgstr "Tidak ada paket yang cocok untuk ditampilkan"
+
+#~ msgid "List of package package-spec-N to add versionlock for"
+#~ msgstr ""
+#~ "Daftar paket package-spec-N yang perlu ditambahkan versi kunci untuk"
+
+#~ msgid "List of package-spec-N to add versionlock exclude for"
+#~ msgstr ""
+#~ "Daftar paket-spec-N yang perlu ditambahkan pengecualian versionlock untuk"

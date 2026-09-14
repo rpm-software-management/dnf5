@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-26 03:48+0000\n"
+"POT-Creation-Date: 2026-09-08 12:03+0000\n"
 "PO-Revision-Date: 2024-10-10 02:54+0000\n"
 "Last-Translator: 김인수 <simmon@nplob.com>\n"
 "Language-Team: Korean <https://translate.fedoraproject.org/projects/dnf5/"
@@ -19,22 +19,27 @@ msgstr ""
 "X-Generator: Weblate 5.7.2\n"
 
 #: addrepo.cpp:136
+#, c++-format
 msgid "from-repofile: \"{}\" file does not exist"
 msgstr "from-repofile: \"{}\" 파일이 존재하지 않습니다"
 
 #: addrepo.cpp:139
+#, c++-format
 msgid "from-repofile: {}"
 msgstr "from-repofile: {}"
 
-#: addrepo.cpp:169 setopt.cpp:83 setvar.cpp:49
+#: addrepo.cpp:169 setopt.cpp:53 setvar.cpp:49
+#, c++-format
 msgid "{}: Badly formatted argument value \"{}\""
 msgstr "{}: 잘못된 형식의 인수 값 \"{}\""
 
 #: addrepo.cpp:179
+#, c++-format
 msgid "Cannot set repository option \"{}={}\": {}"
 msgstr "저장소 옵션을 설정 할 수 없습니다 \"{}={}\": {}"
 
-#: addrepo.cpp:187 setopt.cpp:138
+#: addrepo.cpp:187 setopt.cpp:108
+#, c++-format
 msgid "Sets the \"{}\" option again with a different value: \"{}\" != \"{}\""
 msgstr "다른 값으로 \"{}\" 옵션을 다시 설정합니다: \"{}\" != \"{}\""
 
@@ -43,22 +48,26 @@ msgid "Missing path to repository configuration directory"
 msgstr "저장소 구성 디렉토리에 경로 누락"
 
 #: addrepo.cpp:303
+#, c++-format
 msgid "Failed to copy repository configuration file \"{}\": {}"
 msgstr "저장소 구성 파일을 복사하는 데 실패했습니다 \"{}\": {}"
 
 #: addrepo.cpp:314
+#, c++-format
 msgid "Failed to download repository configuration file \"{}\": {}"
 msgstr "저장소 구성 파일을 내려받는 데 실패했습니다 \"{}\": {}"
 
 #: addrepo.cpp:342
+#, c++-format
 msgid ""
 "Error in added repository configuration file. Cannot set repository option "
 "\"{}={}\": {}"
 msgstr ""
-"추가된 저장소 구성 파일에서 오류. 저장소 옵션을 설정 할 수 없습니다 \"{}"
-"={}\": {}"
+"추가된 저장소 구성 파일에서 오류. 저장소 옵션을 설정 할 수 없습니다 \"{}={}"
+"\": {}"
 
 #: addrepo.cpp:376
+#, c++-format
 msgid "Bad baseurl: {}={}"
 msgstr "잘못된 baseurl: {}={}"
 
@@ -71,10 +80,12 @@ msgstr ""
 "set=metalink=<URL> 중의 하나는 비어있지-않는 URL로 설정되어야 합니다"
 
 #: addrepo.cpp:429
+#, c++-format
 msgid "Failed to save repository configuration file \"{}\": {}"
 msgstr "저장소 구성 파일을 저장하는 데 실패함 \"{}\": {}"
 
 #: addrepo.cpp:451
+#, c++-format
 msgid ""
 "File \"{}\" already exists and configures repositories with IDs \"{}\". Add "
 "\"--add-or-replace\" or \"--overwrite\"."
@@ -83,6 +94,7 @@ msgstr ""
 "replace\" 또는 \"--overwrite\"를 추가합니다."
 
 #: addrepo.cpp:454
+#, c++-format
 msgid ""
 "File \"{}\" already exists and configures repositories with IDs \"{}\". Add "
 "\"--overwrite\" to overwrite."
@@ -91,51 +103,72 @@ msgstr ""
 "overwrite\" 추가합니다."
 
 #: addrepo.cpp:474 addrepo.cpp:500
+#, c++-format
 msgid "A repository with id \"{}\" already configured in file: {}"
 msgstr "id \"{}\"를 갖는 저장소는 이미 파일에서 구성되어 있습니다: {}"
 
-#: addrepo.cpp:486 setopt.cpp:263
+#: addrepo.cpp:486 shared.hpp:150
+#, c++-format
 msgid "Cannot read repositories from directory \"{}\": {}"
 msgstr "디렉토리에서 저장소를 읽을 수 없습니다 \"{}\": {}"
 
-#: config-manager.cpp:43
+#: config-manager.cpp:44
 msgid "Manage configuration"
 msgstr "환경설정을 관리합니다"
 
-#: setopt.cpp:91 unsetopt.cpp:72
+#: repos.cpp:56 setopt.cpp:140
+#, c++-format
+msgid "No matching repository to modify: {}"
+msgstr "수정하는 데 일치하는 저장소가 없습니다: {}"
+
+#: repos.hpp:42
+msgid "Enables repositories"
+msgstr ""
+
+#: repos.hpp:50
+msgid "Disables repositories"
+msgstr ""
+
+#: setopt.cpp:61 unsetopt.cpp:73
+#, c++-format
 msgid ""
 "{}: Badly formatted argument value: Last key character cannot be '.': {}"
 msgstr ""
 "{}: 잘못된 형식의 인수 값: 마지막 키 문자는 다음과 같을 수 없습니다 '.': {}"
 
-#: setopt.cpp:100 unsetopt.cpp:81
+#: setopt.cpp:70 unsetopt.cpp:82
+#, c++-format
 msgid "{}: Empty repository id is not allowed: {}"
 msgstr "{}: 빈 저장소 id는 허용되지 않습니다: {}"
 
-#: setopt.cpp:109
+#: setopt.cpp:79
+#, c++-format
 msgid "Cannot set repository option \"{}\": {}"
 msgstr "저장소 옵션을 설정 할 수 없습니다 \"{}\": {}"
 
-#: setopt.cpp:116 setopt.cpp:179
+#: setopt.cpp:86 setopt.cpp:149
+#, fuzzy, c++-format
+#| msgid ""
+#| "Sets the \"{}\" option of the repository \"{}\" again with a different "
+#| "value: \"{}\" != \"{}\""
 msgid ""
 "Sets the \"{}\" option of the repository \"{}\" again with a different "
 "value: \"{}\" != \"{}\""
 msgstr ""
 "다른 값을 갖는 저장소 \"{}\"의 옵션을 다시 설정합니다: \"{}\" != \"{}\""
 
-#: setopt.cpp:130
+#: setopt.cpp:100
+#, c++-format
 msgid "Cannot set option: \"{}\": {}"
 msgstr "옵션을 설정 할 수 없습니다: \"{}\": {}"
 
-#: setopt.cpp:170
-msgid "No matching repository to modify: {}"
-msgstr "수정하는 데 일치하는 저장소가 없습니다: {}"
-
 #: setvar.cpp:60
+#, c++-format
 msgid "Cannot set \"{}\": Variable \"{}\" is read-only"
 msgstr "\"{}\"를 설정 할 수 없습니다: 변수 \"{}\"는 읽기-전용입니다"
 
 #: setvar.cpp:68
+#, c++-format
 msgid "Sets the \"{}\" variable again with a different value: \"{}\" != \"{}\""
 msgstr "다른 값을 갖는 \"{}\" 변수를 다시 설정 합니다: \"{}\" != \"{}\""
 
@@ -144,10 +177,12 @@ msgid "Missing path to vars directory"
 msgstr "vras 디렉토리에 누락된 경로"
 
 #: setvar.cpp:110
+#, c++-format
 msgid "Cannot write variable to file \"{}\": {}"
 msgstr "파일에 변수를 쓸 수 없습니다 \"{}\": {}"
 
-#: shared.hpp:58
+#: shared.hpp:59
+#, c++-format
 msgid ""
 "The path \"{}\" exists, but it is not a directory or a symlink to a "
 "directory."
@@ -155,11 +190,13 @@ msgstr ""
 "경로 \"{}\"가 존재하지만, 디렉토리 또는 디렉토리에 대한 심볼릭링크가 아닙니"
 "다."
 
-#: shared.hpp:63
+#: shared.hpp:64
+#, c++-format
 msgid "The path \"{}\" exists, but it is a symlink to a non-existent object."
 msgstr "경로 \"{}\"가 존재하지만, 존재하지-않는 개체로 심볼릭링크입니다."
 
-#: shared.hpp:69
+#: shared.hpp:70
+#, c++-format
 msgid ""
 "Directory \"{}\" does not exist. Add \"--create-missing-dir\" to create "
 "missing directories."
@@ -167,19 +204,23 @@ msgstr ""
 "디렉토리 \"{}\"가 존재하지 않습니다. \"--create-missing-dir\"를 추가하여 누락"
 "된 디렉토리를 생성합니다."
 
-#: shared.hpp:80
+#: shared.hpp:81
+#, c++-format
 msgid "Variable name can contain only ASCII letters, numbers and '_': {}"
 msgstr "변수 이름은 ASCII 문자, 숫자 및 '_'만 포함 할 수 있습니다: {}"
 
-#: unsetopt.cpp:93
+#: unsetopt.cpp:94
+#, c++-format
 msgid "config-manager: Request to remove unsupported repository option: {}"
 msgstr "config-manager: 미지원 저장소 옵션을 제거하도록 요청합니다: {}"
 
-#: unsetopt.cpp:105
+#: unsetopt.cpp:106
+#, c++-format
 msgid "config-manager: Request to remove unsupported main option: {}"
 msgstr "config-manager: 미지원된 주요 옵션을 제거하도록 요청합니다: {}"
 
 #: unsetopt.cpp:140
+#, c++-format
 msgid ""
 "config-manager: Request to remove main option but it is not present in the "
 "config file: {}"
@@ -188,6 +229,7 @@ msgstr ""
 "습니다: {}"
 
 #: unsetopt.cpp:152
+#, c++-format
 msgid ""
 "config-manager: Request to remove main option but config file not found: {}"
 msgstr ""
@@ -195,6 +237,7 @@ msgstr ""
 "니다: {}"
 
 #: unsetopt.cpp:186
+#, c++-format
 msgid ""
 "config-manager: Request to remove repository option but repoid is not "
 "present in the overrides: {}"
@@ -203,6 +246,7 @@ msgstr ""
 "하지 않습니다: {}"
 
 #: unsetopt.cpp:194
+#, c++-format
 msgid ""
 "config-manager: Request to remove repository option but it is not present in "
 "the overrides: {}.{}"
@@ -210,7 +254,8 @@ msgstr ""
 "config-manager: 저장소 옵션을 제거하려고 요청하지만 재정의에서 존재하지 않습"
 "니다: {}.{}"
 
-#: unsetopt.cpp:214
+#: unsetopt.cpp:208
+#, c++-format
 msgid ""
 "config-manager: Request to remove repository option but file with overrides "
 "not found: {}"
@@ -219,6 +264,7 @@ msgstr ""
 "없습니다: {}"
 
 #: unsetvar.cpp:69
+#, c++-format
 msgid ""
 "config-manager: Request to remove variable but vars directory was not found: "
 "{}"
@@ -227,6 +273,7 @@ msgstr ""
 "다: {}"
 
 #: unsetvar.cpp:82
+#, c++-format
 msgid ""
 "config-manager: Request to remove variable but it is not present in the vars "
 "directory: {}"
@@ -235,5 +282,6 @@ msgstr ""
 "다: {}"
 
 #: unsetvar.cpp:88
+#, c++-format
 msgid "Cannot remove variable file \"{}\": {}"
 msgstr "변수 파일을 제거 할 수 없습니다 \"{}\": {}"

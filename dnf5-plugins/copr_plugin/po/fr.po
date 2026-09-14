@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-26 03:48+0000\n"
+"POT-Creation-Date: 2026-09-08 12:03+0000\n"
 "PO-Revision-Date: 2025-07-24 14:05+0000\n"
 "Last-Translator: Léane GRASSER <leane.grasser@proton.me>\n"
 "Language-Team: French <https://translate.fedoraproject.org/projects/dnf5/"
@@ -24,13 +24,14 @@ msgid "Copr hub (the web-UI/API server) hostname"
 msgstr "Nom d'hôte du hub Copr (interface Web/serveur d'API)"
 
 #: copr.cpp:88
+#, c++-format
 msgid ""
 "Copr project ID to {}.  Use either a format OWNER/PROJECT or HUB/OWNER/"
 "PROJECT (if HUB is not specified, the default one, or --hub <ARG>, is used.  "
 "OWNER is either a username, or a @groupname.  PROJECT can be a simple "
-"project name, or a \"project directory\" containing colons, e.g. 'project:"
-"custom:123'.  HUB can be either the Copr frontend hostname (e.g. copr."
-"fedorainfracloud.org ) or the shortcut (e.g. fedora).  Example: 'fedora/"
+"project name, or a \"project directory\" containing colons, e.g. "
+"'project:custom:123'.  HUB can be either the Copr frontend hostname (e.g. "
+"copr.fedorainfracloud.org ) or the shortcut (e.g. fedora).  Example: 'fedora/"
 "@footeam/coolproject'."
 msgstr ""
 "ID de projet Copr à utiliser pour l'opération « {} ». Utilisez le format "
@@ -43,6 +44,7 @@ msgstr ""
 "(ex. fedora). Exemple : 'fedora/@equipefoo/projetcool'."
 
 #: copr.cpp:106
+#, c++-format
 msgid "Invalid PROJECT_SPEC format '{}'"
 msgstr "Format PROJECT_SPEC '{}' invalide"
 
@@ -54,14 +56,27 @@ msgstr ""
 "communauté ou d'autres tiers)"
 
 #: copr_constants.hpp:29
+#, fuzzy
+#| msgid ""
+#| "Enabling a Copr repository. Please note that this repository is not part\n"
+#| "of the main distribution, and quality may vary.\n"
+#| "\n"
+#| "The Fedora Project does not exercise any power over the contents of\n"
+#| "this repository beyond the rules outlined in the Copr FAQ at\n"
+#| "<https://docs.pagure.org/copr.copr/user_documentation.html#what-i-can-"
+#| "build-in-copr>,\n"
+#| "and packages are not held to any quality or security level.\n"
+#| "\n"
+#| "Please do not file bug reports about these packages in Fedora\n"
+#| "Bugzilla. In case of problems, contact the owner of this repository.\n"
 msgid ""
 "Enabling a Copr repository. Please note that this repository is not part\n"
 "of the main distribution, and quality may vary.\n"
 "\n"
 "The Fedora Project does not exercise any power over the contents of\n"
 "this repository beyond the rules outlined in the Copr FAQ at\n"
-"<https://docs.pagure.org/copr.copr/user_documentation.html#what-i-can-build-"
-"in-copr>,\n"
+"<https://docs.copr.fedorainfracloud.org/user_documentation.html#what-i-can-"
+"build-in-copr>,\n"
 "and packages are not held to any quality or security level.\n"
 "\n"
 "Please do not file bug reports about these packages in Fedora\n"
@@ -84,6 +99,7 @@ msgstr ""
 "ces paquets. En cas de problème, contactez le propriétaire de ce dépôt.\n"
 
 #: copr_constants.hpp:41
+#, c++-format
 msgid ""
 "Maintainer of the enabled Copr repository decided to make\n"
 "it dependent on other repositories. Such repositories are\n"
@@ -116,17 +132,19 @@ msgid "print useful info about the system, useful for debugging"
 msgstr "afficher des infos utiles à propos du système, utile pour le débogage"
 
 #: copr_disable.cpp:35
+#, c++-format
 msgid ""
 "disable specified Copr repository (if exists), keep {}/*.repo file - just "
 "mark enabled=0"
 msgstr ""
-"désactiver le dépôt Copr spécifié (s'il existe), garder les fichiers {}/*."
-"repo et définir enabled=0"
+"désactiver le dépôt Copr spécifié (s'il existe), garder les fichiers {}/"
+"*.repo et définir enabled=0"
 
 #: copr_enable.cpp:38
+#, c++-format
 msgid ""
-"download the repository info from a Copr server and install it as a {}/*."
-"repo file"
+"download the repository info from a Copr server and install it as a {}/"
+"*.repo file"
 msgstr ""
 "télécharger les infos sur le dépôt d'un serveur Copr et l'installer sous la "
 "forme d'un fichier {}/*.repo"
@@ -140,17 +158,25 @@ msgstr ""
 "Lorsque l'option n'est pas spécifiée, la commande 'dnf copr' effectue une "
 "détection automatique."
 
-#: copr_list.cpp:51
+#: copr_list.cpp:53
 msgid "list Copr repositories"
 msgstr "lister les dépôts Copr"
 
+#: copr_list.cpp:86
+msgid ""
+"No repositories were loaded from the installroot. To use the configuration "
+"and repositories of the host system, pass --use-host-config."
+msgstr ""
+
 #: copr_remove.cpp:35
+#, c++-format
 msgid ""
 "remove specified Copr repository from the system (removes the {}/*.repo file)"
 msgstr ""
 "retirer le dépôt Copr spécifié du système (supprime les fichiers {}/*.repo)"
 
 #: copr_repo.cpp:91
+#, c++-format
 msgid "Directory '{}' not found in '{}' Copr project."
 msgstr "Répertoire '{}' introuvable dans le projet Copr '{}'."
 
@@ -179,18 +205,22 @@ msgid "Can't parse Copr repo spec: "
 msgstr "Impossible d'analyser les spécifications du dépôt Copr : "
 
 #: copr_repo.cpp:344
+#, c++-format
 msgid "Can't remove the {} repo file"
 msgstr "Impossible de supprimer le fichier de dépôt {}"
 
 #: copr_repo.cpp:347
+#, c++-format
 msgid "Repo file {} successfully removed"
 msgstr "Fichier de dépôt {} supprimé avec succès"
 
 #: copr_repo.cpp:393
+#, c++-format
 msgid "Can't find item {} in {}"
 msgstr "Impossible de trouver l'élément {} dans {}"
 
 #: copr_repo.cpp:449
+#, c++-format
 msgid "Removing old config file '{}'"
 msgstr "Suppression de l'ancien fichier de configuration '{}'"
 
@@ -199,6 +229,7 @@ msgid "Can't remove"
 msgstr "Suppression impossible"
 
 #: copr_repo.cpp:526
+#, c++-format
 msgid ""
 "Copr repofile '{}' has an old format, fix by re-enabling it $ {} copr enable "
 "{}"
@@ -207,17 +238,21 @@ msgstr ""
 "réactivant : $ {} copr enable {}"
 
 #: copr_repo.cpp:560
+#, c++-format
 msgid "Repo id '{}' in '{}' is suspicious"
 msgstr "L'ID de dépôt '{}' dans '{}' est suspect"
 
 #: copr_repo.cpp:567
+#, c++-format
 msgid "Repo id '{}' doesn't belong to '{}' repofile"
 msgstr "L'ID de dépôt '{}' ne devrait pas être dans le repofile '{}'"
 
 #: copr_repo.cpp:618
+#, c++-format
 msgid "Copr repository '{}' in '{}' disabled."
 msgstr "Dépôt Copr '{}' dans '{}' désactivé."
 
 #: copr_repo.cpp:632 copr_repo.cpp:657
+#, c++-format
 msgid "Repository '{}' not found on this system"
 msgstr "Dépôt '{}' introuvable sur ce système"

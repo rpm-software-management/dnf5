@@ -3,13 +3,14 @@
 # This file is distributed under the same license as the PACKAGE package.
 # Languages add-on <noreply-addon-languages@weblate.org>, 2026.
 # Eskil Gerdrup <eskil.gerdrup@outlook.com>, 2026.
+# Adaline Simonian <adalinesimonian@pm.me>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-26 03:48+0000\n"
-"PO-Revision-Date: 2026-06-10 15:38+0000\n"
-"Last-Translator: Eskil Gerdrup <eskil.gerdrup@outlook.com>\n"
+"POT-Creation-Date: 2026-09-08 12:03+0000\n"
+"PO-Revision-Date: 2026-09-02 16:15+0000\n"
+"Last-Translator: Adaline Simonian <adalinesimonian@pm.me>\n"
 "Language-Team: Norwegian Nynorsk <https://translate.fedoraproject.org/"
 "projects/dnf5/dnf5daemon-client/nn/>\n"
 "Language: nn\n"
@@ -17,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 2026.6.1\n"
+"X-Generator: Weblate 2026.8.1\n"
 
 #: commands/advisory/advisory.cpp:35
 msgid "Manage advisories"
@@ -199,12 +200,13 @@ msgid ""
 "most systems)."
 msgstr ""
 
-#: main.cpp:158
+#: main.cpp:172
 #, c++-format
 msgid ""
 "{}: Badly formatted argument value: Last key character cannot be '.': {}"
 msgstr ""
+"{}: Dåleg formatert argumentverdi: Siste tastteikn kan ikkje vera «.»: {}"
 
-#: main.cpp:258 main.cpp:308
+#: main.cpp:272 main.cpp:322
 msgid ". Add \"--help\" for more information about the arguments."
 msgstr ""

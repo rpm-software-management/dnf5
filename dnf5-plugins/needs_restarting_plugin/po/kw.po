@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-26 03:48+0000\n"
+"POT-Creation-Date: 2026-09-08 12:03+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
@@ -22,7 +22,12 @@ msgstr ""
 "n % 100 == 63 || n % 100 == 83) ? 3 : ((n != 1 && (n % 100 == 1 || n % 100 "
 "== 21 || n % 100 == 41 || n % 100 == 61 || n % 100 == 81)) ? 4 : 5))));\n"
 
-#: needs_restarting.cpp:230
+#: needs_restarting.cpp:384
 #, c++-format
 msgid "Couldn't connect to D-Bus: {}"
+msgstr ""
+
+#: needs_restarting.cpp:495
+msgid ""
+"Warning: The following services should not be restarted but require a reboot:"
 msgstr ""

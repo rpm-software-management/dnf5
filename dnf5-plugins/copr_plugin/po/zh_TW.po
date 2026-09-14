@@ -3,13 +3,13 @@
 # This file is distributed under the same license as the PACKAGE package.
 # hsu zangmen <chzang55@gmail.com>, 2025.
 # Weblate Translation Memory <noreply-mt-weblate-translation-memory@weblate.org>, 2025.
-# Cheng-Chia Tseng <pswo10680@gmail.com>, 2025.
+# Cheng-Chia Tseng <pswo10680@gmail.com>, 2025, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-26 03:48+0000\n"
-"PO-Revision-Date: 2025-07-02 18:28+0000\n"
+"POT-Creation-Date: 2026-09-08 12:03+0000\n"
+"PO-Revision-Date: 2026-08-27 04:18+0000\n"
 "Last-Translator: Cheng-Chia Tseng <pswo10680@gmail.com>\n"
 "Language-Team: Chinese (Traditional) <https://translate.fedoraproject.org/"
 "projects/dnf5/dnf5-plugin-copr/zh_TW/>\n"
@@ -18,30 +18,32 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.12.2\n"
+"X-Generator: Weblate 2026.8.1\n"
 
 #: copr.cpp:48
 msgid "Copr hub (the web-UI/API server) hostname"
 msgstr "Copr hub (web-UI/API 伺服器) 的主機名稱"
 
 #: copr.cpp:88
+#, c++-format
 msgid ""
 "Copr project ID to {}.  Use either a format OWNER/PROJECT or HUB/OWNER/"
 "PROJECT (if HUB is not specified, the default one, or --hub <ARG>, is used.  "
 "OWNER is either a username, or a @groupname.  PROJECT can be a simple "
-"project name, or a \"project directory\" containing colons, e.g. 'project:"
-"custom:123'.  HUB can be either the Copr frontend hostname (e.g. copr."
-"fedorainfracloud.org ) or the shortcut (e.g. fedora).  Example: 'fedora/"
+"project name, or a \"project directory\" containing colons, e.g. "
+"'project:custom:123'.  HUB can be either the Copr frontend hostname (e.g. "
+"copr.fedorainfracloud.org ) or the shortcut (e.g. fedora).  Example: 'fedora/"
 "@footeam/coolproject'."
 msgstr ""
 "Copr 專案 ID 到 {}。 使用格式 OWNER/PROJECT 或 HUB/OWNER/PROJECT（如果沒有指"
 "定 HUB，則使用預設格式，或 --hub <ARG>。 OWNER 可以是使用者名稱，或是 @group "
 "名稱。 PROJECT 可以是簡單的專案名稱，或是包含冒號的「專案目錄」，例如 "
-"'project:custom:123'。 HUB 可以是 Copr 前端主機名稱 (例如：copr."
-"fedorainfracloud.org )，或是捷徑 (例如：fedora)。 例如：'fedora/@footeam/"
-"coolproject'。"
+"'project:custom:123'。 HUB 可以是 Copr 前端主機名稱 (例如："
+"copr.fedorainfracloud.org )，或是捷徑 (例如：fedora)。 例如：'fedora/"
+"@footeam/coolproject'。"
 
 #: copr.cpp:106
+#, c++-format
 msgid "Invalid PROJECT_SPEC format '{}'"
 msgstr "無效的 PROJECT_SPEC 格式 '{}'"
 
@@ -51,14 +53,27 @@ msgid ""
 msgstr "管理 Copr 軟體庫（使用者/社群/第三方提供的附加元件）"
 
 #: copr_constants.hpp:29
+#, fuzzy
+#| msgid ""
+#| "Enabling a Copr repository. Please note that this repository is not part\n"
+#| "of the main distribution, and quality may vary.\n"
+#| "\n"
+#| "The Fedora Project does not exercise any power over the contents of\n"
+#| "this repository beyond the rules outlined in the Copr FAQ at\n"
+#| "<https://docs.pagure.org/copr.copr/user_documentation.html#what-i-can-"
+#| "build-in-copr>,\n"
+#| "and packages are not held to any quality or security level.\n"
+#| "\n"
+#| "Please do not file bug reports about these packages in Fedora\n"
+#| "Bugzilla. In case of problems, contact the owner of this repository.\n"
 msgid ""
 "Enabling a Copr repository. Please note that this repository is not part\n"
 "of the main distribution, and quality may vary.\n"
 "\n"
 "The Fedora Project does not exercise any power over the contents of\n"
 "this repository beyond the rules outlined in the Copr FAQ at\n"
-"<https://docs.pagure.org/copr.copr/user_documentation.html#what-i-can-build-"
-"in-copr>,\n"
+"<https://docs.copr.fedorainfracloud.org/user_documentation.html#what-i-can-"
+"build-in-copr>,\n"
 "and packages are not held to any quality or security level.\n"
 "\n"
 "Please do not file bug reports about these packages in Fedora\n"
@@ -78,6 +93,7 @@ msgstr ""
 "如有問題，請聯絡此軟體庫的擁有者。\n"
 
 #: copr_constants.hpp:41
+#, c++-format
 msgid ""
 "Maintainer of the enabled Copr repository decided to make\n"
 "it dependent on other repositories. Such repositories are\n"
@@ -109,16 +125,18 @@ msgid "print useful info about the system, useful for debugging"
 msgstr "列出系統的有用資訊，有助於進行除錯"
 
 #: copr_disable.cpp:35
+#, c++-format
 msgid ""
 "disable specified Copr repository (if exists), keep {}/*.repo file - just "
 "mark enabled=0"
 msgstr ""
-"停用指定的 Copr 儲存庫（如果存在），保留 {}/*.repo 檔案 - 僅標記 enabled=0"
+"停用指定的 Copr 軟體庫（如果存在），保留 {}/*.repo 檔案 - 僅標記 enabled=0"
 
 #: copr_enable.cpp:38
+#, c++-format
 msgid ""
-"download the repository info from a Copr server and install it as a {}/*."
-"repo file"
+"download the repository info from a Copr server and install it as a {}/"
+"*.repo file"
 msgstr "從 Copr 伺服器下載軟體庫資訊，並將其安裝為 {}/*.repo 檔案"
 
 #: copr_enable.cpp:46
@@ -129,16 +147,24 @@ msgstr ""
 "以 NAME-RELEASE-ARCH 格式指定的 Chroot，例如 'fedora-rawhide-ppc64le'。 若未"
 "指定選項時，則「dnf copr」命令會嘗試偵測。"
 
-#: copr_list.cpp:51
+#: copr_list.cpp:53
 msgid "list Copr repositories"
 msgstr "列出 Copr 軟體庫"
 
+#: copr_list.cpp:86
+msgid ""
+"No repositories were loaded from the installroot. To use the configuration "
+"and repositories of the host system, pass --use-host-config."
+msgstr ""
+
 #: copr_remove.cpp:35
+#, c++-format
 msgid ""
 "remove specified Copr repository from the system (removes the {}/*.repo file)"
 msgstr "從系統中移除指定的 Copr 軟體庫（移除 {}/*.repo 檔案）"
 
 #: copr_repo.cpp:91
+#, c++-format
 msgid "Directory '{}' not found in '{}' Copr project."
 msgstr "在 '{}' 中找不到目錄 '{}' Copr 專案。"
 
@@ -167,18 +193,22 @@ msgid "Can't parse Copr repo spec: "
 msgstr "無法解析 Copr repo 規格： "
 
 #: copr_repo.cpp:344
+#, c++-format
 msgid "Can't remove the {} repo file"
 msgstr "無法移除 {} repo 檔案"
 
 #: copr_repo.cpp:347
+#, c++-format
 msgid "Repo file {} successfully removed"
 msgstr "Repo 檔案 {} 已成功移除"
 
 #: copr_repo.cpp:393
+#, c++-format
 msgid "Can't find item {} in {}"
 msgstr "無法在 {} 中找到項目 {}"
 
 #: copr_repo.cpp:449
+#, c++-format
 msgid "Removing old config file '{}'"
 msgstr "移除舊的組態檔 '{}'"
 
@@ -187,23 +217,28 @@ msgid "Can't remove"
 msgstr "無法移除"
 
 #: copr_repo.cpp:526
+#, c++-format
 msgid ""
 "Copr repofile '{}' has an old format, fix by re-enabling it $ {} copr enable "
 "{}"
 msgstr "Copr repofile '{}' 的格式過時，請重新啟用來修正 $ {} copr enable {}"
 
 #: copr_repo.cpp:560
+#, c++-format
 msgid "Repo id '{}' in '{}' is suspicious"
 msgstr "'{}' 中的 Repo ID '{}' 可疑"
 
 #: copr_repo.cpp:567
+#, c++-format
 msgid "Repo id '{}' doesn't belong to '{}' repofile"
 msgstr "Repo ID '{}' 不屬於 '{}' repofile"
 
 #: copr_repo.cpp:618
+#, c++-format
 msgid "Copr repository '{}' in '{}' disabled."
 msgstr "Copr 軟體庫 '{}' in '{}' 已停用。"
 
 #: copr_repo.cpp:632 copr_repo.cpp:657
+#, c++-format
 msgid "Repository '{}' not found on this system"
 msgstr "本系統未找到軟體庫「{}」"

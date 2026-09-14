@@ -3,13 +3,14 @@
 # This file is distributed under the same license as the PACKAGE package.
 # Aleksey Fedorov <aleksejfedorov963@gmail.com>, 2024, 2025.
 # Igor Gorbounov <igor.gorbounov@gmail.com>, 2026.
+# Andrei Stepanov <adem4ik@gmail.com>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-26 03:48+0000\n"
-"PO-Revision-Date: 2026-03-31 19:58+0000\n"
-"Last-Translator: Igor Gorbounov <igor.gorbounov@gmail.com>\n"
+"POT-Creation-Date: 2026-09-08 12:03+0000\n"
+"PO-Revision-Date: 2026-09-10 18:18+0000\n"
+"Last-Translator: Andrei Stepanov <adem4ik@gmail.com>\n"
 "Language-Team: Russian <https://translate.fedoraproject.org/projects/dnf5/"
 "libdnf5-cli/ru/>\n"
 "Language: ru\n"
@@ -18,124 +19,148 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 5.16.2\n"
+"X-Generator: Weblate 2026.9.1\n"
 
 #: argument_parser.cpp:68
+#, c++-format
 msgid "Misconfigured alias \"{}\": cannot convert \"{}\" to a number"
 msgstr ""
 "Неправильно настроенный псевдоним «{}»: невозможно преобразовать «{}» в число"
 
 #: argument_parser.cpp:76
+#, c++-format
 msgid "Misconfigured alias \"{}\": index \"{}\" out of range"
 msgstr ""
 "Неправильно настроенный псевдоним \"{}\": индекс \"{}\" выходит за пределы "
 "диапазона"
 
 #: argument_parser.cpp:98
+#, c++-format
 msgid "\"{}\" not allowed together with named argument \"{}\""
 msgstr "\"{}\" не допускается вместе с именованным аргументом \"{}\""
 
 #: argument_parser.cpp:100
+#, c++-format
 msgid "\"{}\" not allowed in command \"{}\""
 msgstr "\"{}\" не допускается в команде \"{}\""
 
 #: argument_parser.cpp:102
+#, c++-format
 msgid "\"{}\" not allowed together with positional argument \"{}\""
 msgstr "\"{}\" не допускается вместе с позиционным аргументом \"{}\""
 
 #: argument_parser.cpp:147
+#, c++-format
 msgid "Argument id \"{}\" already registered in group \"{}\""
 msgstr "Идентификатор аргумента \"{}\" уже зарегистрирован в группе \"{}\""
 
 #: argument_parser.cpp:274
+#, c++-format
 msgid "Invalid character '.' in argument id \"{}\""
 msgstr "Недопустимый символ '.' в идентификаторе аргумента \"{}\""
 
-#: argument_parser.cpp:382 argument_parser.cpp:387
+#: argument_parser.cpp:383 argument_parser.cpp:388
+#, c++-format
 msgid "Too few values for positional argument \"{}\""
 msgstr "Слишком мало значений для позиционного аргумента \"{}\""
 
-#: argument_parser.cpp:548
+#: argument_parser.cpp:549
+#, c++-format
 msgid "Missing value for named argument \"--{}\""
 msgstr "Недостающее значение для именованного аргумента \"--{}\""
 
-#: argument_parser.cpp:556
+#: argument_parser.cpp:557
+#, c++-format
 msgid "Unexpected value for named argument \"--{}\""
 msgstr "Неожиданное значение для именованного аргумента \"--{}\""
 
-#: argument_parser.cpp:598
+#: argument_parser.cpp:599
+#, c++-format
 msgid "Missing value for named argument \"-{}\""
 msgstr "Недостающее значение для именованного аргумента \"-{}\""
 
 #. print usage
-#: argument_parser.cpp:694
+#: argument_parser.cpp:696
 msgid "Usage:"
 msgstr "Использование:"
 
-#: argument_parser.cpp:702
+#: argument_parser.cpp:704
 msgid "Description:"
 msgstr "Описание:"
 
-#: argument_parser.cpp:979
+#: argument_parser.cpp:997
+#, c++-format
 msgid "Command id \"{}\" already registered for command \"{}\""
 msgstr "Идентификатор команды \"{}\" уже зарегистрирован для команды \"{}\""
 
-#: argument_parser.cpp:990
+#: argument_parser.cpp:1008
+#, c++-format
 msgid "Named argument id \"{}\" already registered for command \"{}\""
 msgstr ""
 "Идентификатор именованного аргумента \"{}\" уже зарегистрирован для команды "
 "\"{}\""
 
-#: argument_parser.cpp:1000
+#: argument_parser.cpp:1018
+#, c++-format
 msgid "Positional argument id \"{}\" already registered for command \"{}\""
 msgstr ""
 "Идентификатор позиционного аргумента \"{}\" уже зарегистрирован для команды "
 "\"{}\""
 
-#: argument_parser.cpp:1010
+#: argument_parser.cpp:1028
+#, c++-format
 msgid "Group id \"{}\" already registered for command \"{}\""
 msgstr "Идентификатор группы \"{}\" уже зарегистрирован для команды \"{}\""
 
-#: argument_parser.cpp:1037
+#: argument_parser.cpp:1055
+#, c++-format
 msgid "Command id \"{}\" does not contain subcommand with id \"{}\""
 msgstr ""
 "Команда с идентификатором \"{}\" не содержит подкоманду с идентификатором "
 "\"{}\""
 
-#: argument_parser.cpp:1045
+#: argument_parser.cpp:1063
+#, c++-format
 msgid "Command id \"{}\" does not contain named argument with id \"{}\""
 msgstr ""
 "Команда с идентификатором \"{}\" не содержит именованного аргумента с "
 "идентификатором \"{}\""
 
-#: argument_parser.cpp:1053
+#: argument_parser.cpp:1071
+#, c++-format
 msgid "Command id \"{}\" does not contain positional argument with id \"{}\""
 msgstr ""
 "Команда с идентификатором \"{}\" не содержит позиционного аргумента с "
 "идентификатором \"{}\""
 
-#: argument_parser.cpp:1060
+#: argument_parser.cpp:1078
+#, c++-format
 msgid "Command id \"{}\" does not contain group with id \"{}\""
 msgstr ""
 "Команда с идентификатором \"{}\" не содержит группу с идентификатором \"{}\""
 
-#: argument_parser.cpp:1177 argument_parser.cpp:1388
+#: argument_parser.cpp:1204 argument_parser.cpp:1425
+#, c++-format
 msgid "Unknown argument \"{}\" for command \"{}\""
 msgstr "Неизвестный аргумент \"{}\" для команды \"{}\""
 
-#: argument_parser.cpp:1192 argument_parser.cpp:1403
+#: argument_parser.cpp:1219 argument_parser.cpp:1440
+#, c++-format
 msgid "Missing positional argument \"{}\" for command \"{}\""
 msgstr "Отсутствует позиционный аргумент \"{}\" для команды \"{}\""
 
-#: argument_parser.cpp:1274
+#: argument_parser.cpp:1301
+#, c++-format
 msgid "Missing value for command alias \"{}\""
 msgstr "Отсутствует значение псевдонима команды \"{}\""
 
-#: argument_parser.cpp:1610
+#: argument_parser.cpp:1647
+#, c++-format
 msgid "Named argument with path id \"{}\" not found"
 msgstr "Именованный аргумент с идентификатором пути \"{}\" не найден"
 
-#: argument_parser.cpp:1620
+#: argument_parser.cpp:1657
+#, c++-format
 msgid "Positional argument with path id \"{}\" not found"
 msgstr "Позиционный аргумент с идентификатором пути \"{}\" не найден"
 
@@ -172,7 +197,7 @@ msgstr "Имя"
 msgid "Epoch"
 msgstr "Этап"
 
-#: output/packageinfo.cpp:69 output/transaction_table.cpp:289
+#: output/packageinfo.cpp:69 output/transaction_table.cpp:290
 msgid "Version"
 msgstr "Версия"
 
@@ -204,7 +229,8 @@ msgstr "Источник"
 msgid "From repository"
 msgstr "Из репозитория"
 
-#: output/packageinfo.cpp:96 output/transaction_table.cpp:295
+#: output/packageinfo.cpp:96 output/transaction_table.cpp:296
+#: output/transactioninfo.cpp:76
 msgid "Repository"
 msgstr "Репозиторий"
 
@@ -220,7 +246,7 @@ msgstr "URL-адрес"
 msgid "License"
 msgstr "Лицензия"
 
-#: output/packageinfo.cpp:104
+#: output/packageinfo.cpp:104 output/transactioninfo.cpp:107
 msgid "Description"
 msgstr "Описание"
 
@@ -232,20 +258,53 @@ msgstr "Поставщик"
 msgid " (exact)"
 msgstr " (точно)"
 
-#: output/search.cpp:90
-msgid "No matches found."
-msgstr "Совпадений не найдено."
-
-#: output/search.cpp:101
+#: output/search.cpp:100
 msgid "Matched fields: "
 msgstr "Совпадающие поля: "
 
-#: output/transaction_table.cpp:127
+#: output/status.cpp:45
+msgid "Groups"
+msgstr "Группы"
+
+#: output/status.cpp:46 output/status.cpp:55 output/status.cpp:72
+msgid "installed"
+msgstr "установленные"
+
+#: output/status.cpp:47 output/status.cpp:56 output/status.cpp:73
+msgid "available"
+msgstr "доступные"
+
+#: output/status.cpp:54
+msgid "Environments"
+msgstr "Окружения"
+
+#: output/status.cpp:71
+msgid "Packages"
+msgstr "Пакеты"
+
+#: output/status.cpp:74
+msgid "user-installed"
+msgstr "установленные пользователем"
+
+#: output/status.cpp:84
+msgid "Installed Size"
+msgstr "Размер установки"
+
+#: output/status.cpp:90
+msgid "Enabled Repositories"
+msgstr "Включённые репозитории"
+
+#: output/status.cpp:101
+msgid "Last Transaction"
+msgstr "Последняя транзакция"
+
+#: output/transaction_table.cpp:128
 msgid "Transaction Summary:\n"
 msgstr "Сводка транзакции:\n"
 
 #. Keep the replaceble number aligned across all messages.
-#: output/transaction_table.cpp:132
+#: output/transaction_table.cpp:133
+#, c++-format
 msgid " Installing:      {:4} package\n"
 msgid_plural " Installing:      {:4} packages\n"
 msgstr[0] " Установка:      {:4} пакета\n"
@@ -253,7 +312,8 @@ msgstr[1] " Установка:      {:4} пакетов\n"
 msgstr[2] " Установка:      {:4} пакетов\n"
 
 #. Keep the replaceble number aligned across all messages.
-#: output/transaction_table.cpp:141
+#: output/transaction_table.cpp:142
+#, c++-format
 msgid " Reinstalling:    {:4} package\n"
 msgid_plural " Reinstalling:    {:4} packages\n"
 msgstr[0] " Переустановка:      {:4} пакета\n"
@@ -261,7 +321,8 @@ msgstr[1] " Переустановка:      {:4} пакетов\n"
 msgstr[2] " Переустановка:      {:4} пакетов\n"
 
 #. Keep the replaceble number aligned across all messages.
-#: output/transaction_table.cpp:150
+#: output/transaction_table.cpp:151
+#, c++-format
 msgid " Upgrading:       {:4} package\n"
 msgid_plural " Upgrading:       {:4} packages\n"
 msgstr[0] " Обновление:       {:4} пакета\n"
@@ -269,7 +330,8 @@ msgstr[1] " Обновление:       {:4} пакетов\n"
 msgstr[2] " Обновление:       {:4} пакетов\n"
 
 #. Keep the replaceble number aligned across all messages.
-#: output/transaction_table.cpp:159
+#: output/transaction_table.cpp:160
+#, c++-format
 msgid " Replacing:       {:4} package\n"
 msgid_plural " Replacing:       {:4} packages\n"
 msgstr[0] " Замена:       {:4} пакета\n"
@@ -277,7 +339,8 @@ msgstr[1] " Замена:       {:4} пакетов\n"
 msgstr[2] " Замена:       {:4} пакетов\n"
 
 #. Keep the replaceble number aligned across all messages.
-#: output/transaction_table.cpp:168
+#: output/transaction_table.cpp:169
+#, c++-format
 msgid " Removing:        {:4} package\n"
 msgid_plural " Removing:        {:4} packages\n"
 msgstr[0] " Удаление:        {:4} пакета\n"
@@ -285,7 +348,8 @@ msgstr[1] " Удаление:        {:4} пакетов\n"
 msgstr[2] " Удаление:        {:4} пакетов\n"
 
 #. Keep the replaceble number aligned across all messages.
-#: output/transaction_table.cpp:177
+#: output/transaction_table.cpp:178
+#, c++-format
 msgid " Downgrading:     {:4} package\n"
 msgid_plural " Downgrading:     {:4} packages\n"
 msgstr[0] " Откат:        {:4} пакета\n"
@@ -293,7 +357,8 @@ msgstr[1] " Откат:        {:4} пакетов\n"
 msgstr[2] " Откат:        {:4} пакетов\n"
 
 #. Keep the replaceble number aligned across all messages.
-#: output/transaction_table.cpp:186
+#: output/transaction_table.cpp:187
+#, c++-format
 msgid " Changing reason: {:4} package\n"
 msgid_plural " Changing reason: {:4} packages\n"
 msgstr[0] " Изменение причины: {:4} пакета\n"
@@ -301,145 +366,266 @@ msgstr[1] " Изменение причины: {:4} пакетов\n"
 msgstr[2] " Изменение причины: {:4} пакетов\n"
 
 #. Keep the replaceble number aligned across all messages.
-#: output/transaction_table.cpp:195
+#: output/transaction_table.cpp:196
+#, c++-format
 msgid " Skipping:        {:4} package\n"
 msgid_plural " Skipping:        {:4} packages\n"
 msgstr[0] " Пропуск:        {:4} пакета\n"
 msgstr[1] " Пропуск:        {:4} пакетов\n"
 msgstr[2] " Пропуск:        {:4} пакетов\n"
 
-#: output/transaction_table.cpp:277
+#: output/transaction_table.cpp:278 output/transactioninfo.cpp:74
 msgid "Package"
 msgstr "Пакет"
 
-#: output/transaction_table.cpp:283
+#: output/transaction_table.cpp:284
 msgid "Arch"
 msgstr "Арх."
 
-#: output/transaction_table.cpp:301
+#: output/transaction_table.cpp:302
 msgid "Size"
 msgstr "Размер"
 
-#: output/transaction_table.cpp:357 output/transaction_table.cpp:451
+#: output/transaction_table.cpp:364 output/transaction_table.cpp:434
+#: output/transaction_table.cpp:475
+#, c++-format
 msgid "{} -> {}"
 msgstr "{} -> {}"
 
-#: output/transaction_table.cpp:373
+#: output/transaction_table.cpp:380
+#, c++-format
 msgid "replacing {}"
 msgstr "замена {}"
 
-#: output/transaction_table.cpp:409 output/transaction_table.cpp:426
+#: output/transaction_table.cpp:422 output/transaction_table.cpp:450
 msgid " <name-unset>"
 msgstr " <имя-не-задано>"
 
-#: output/transaction_table.cpp:457
+#: output/transaction_table.cpp:481
 msgid "replacing "
 msgstr "замена "
 
-#: output/transaction_table.cpp:470
+#: output/transaction_table.cpp:494
 msgid "Skipping packages with conflicts:"
 msgstr "Пропуск пакетов с конфликтами:"
 
-#: output/transaction_table.cpp:472
+#: output/transaction_table.cpp:496
 msgid "Skipping packages with broken dependencies:"
 msgstr "Пропуск пакетов со сломанными зависимостями:"
 
-#: output/transaction_table.cpp:533
+#: output/transaction_table.cpp:558
 msgid "Installing dependencies:"
 msgstr "Установка зависимостей:"
 
-#: output/transaction_table.cpp:535
+#: output/transaction_table.cpp:560
 msgid "Installing weak dependencies:"
 msgstr "Установка слабых зависимостей:"
 
-#: output/transaction_table.cpp:537
+#: output/transaction_table.cpp:562
 msgid "Installing group/module packages:"
 msgstr "Установка пакетов групп/модулей:"
 
-#: output/transaction_table.cpp:539
+#: output/transaction_table.cpp:564
 msgid "Installing:"
 msgstr "Установка:"
 
-#: output/transaction_table.cpp:543
+#: output/transaction_table.cpp:568
 msgid "Upgrading:"
 msgstr "Обновление:"
 
-#: output/transaction_table.cpp:546
+#: output/transaction_table.cpp:571
 msgid "Downgrading:"
 msgstr "Откат:"
 
-#: output/transaction_table.cpp:549
+#: output/transaction_table.cpp:574
 msgid "Reinstalling:"
 msgstr "Переустановка:"
 
-#: output/transaction_table.cpp:553
+#: output/transaction_table.cpp:578
 msgid "Removing dependent packages:"
 msgstr "Удаление зависимых пакетов:"
 
-#: output/transaction_table.cpp:555
+#: output/transaction_table.cpp:580
 msgid "Removing unused dependencies:"
 msgstr "Удаление неиспользуемых зависимостей:"
 
-#: output/transaction_table.cpp:557
+#: output/transaction_table.cpp:582
 msgid "Removing:"
 msgstr "Удаление:"
 
-#: output/transaction_table.cpp:561
+#: output/transaction_table.cpp:586
 msgid "Changing reason:"
 msgstr "Изменение причины:"
 
-#: output/transaction_table.cpp:593
+#: output/transaction_table.cpp:618
 msgid "Installing groups dependencies:"
 msgstr "Установка групповых зависимостей:"
 
-#: output/transaction_table.cpp:595
+#: output/transaction_table.cpp:620
 msgid "Installing groups:"
 msgstr "Установка групп:"
 
-#: output/transaction_table.cpp:599
+#: output/transaction_table.cpp:624
 msgid "Removing groups:"
 msgstr "Удаление групп:"
 
-#: output/transaction_table.cpp:602
+#: output/transaction_table.cpp:627
 msgid "Upgrading groups:"
 msgstr "Обновление групп:"
 
-#: output/transaction_table.cpp:629
+#: output/transaction_table.cpp:630
+msgid "Changing reason of installed groups:"
+msgstr "Изменение причины установленных групп:"
+
+#: output/transaction_table.cpp:657
 msgid "Installing environmental groups:"
 msgstr "Установка групп сред:"
 
-#: output/transaction_table.cpp:632
+#: output/transaction_table.cpp:660
 msgid "Removing environmental groups:"
 msgstr "Удаление групп сред:"
 
-#: output/transaction_table.cpp:635
+#: output/transaction_table.cpp:663
 msgid "Upgrading environmental groups:"
 msgstr "Обновление групп сред:"
 
-#: output/transaction_table.cpp:662
+#: output/transaction_table.cpp:690
 msgid "Enabling module streams:"
 msgstr "Включение потоков модулей:"
 
-#: output/transaction_table.cpp:665
+#: output/transaction_table.cpp:693
 msgid "Disabling modules:"
 msgstr "Отключение модулей:"
 
-#: output/transaction_table.cpp:668
+#: output/transaction_table.cpp:696
 msgid "Resetting modules:"
 msgstr "Сброс настроек модулей:"
 
-#: output/transaction_table.cpp:671
+#: output/transaction_table.cpp:699
 msgid "Switching module streams:"
 msgstr "Переключение потоков модулей:"
 
-#: output/transaction_table.cpp:745
+#: output/transaction_table.cpp:771 output/transaction_table.cpp:772
+msgid "(none)"
+msgstr "(нет)"
+
+#: output/transaction_table.cpp:778
+#, c++-format
+msgid "Skipping {0} package due to vendor change restriction: {1}."
+msgid_plural "Skipping {0} packages due to vendor change restriction: {1}."
+msgstr[0] "Пропуск {0} пакета из-за ограничения смены поставщика: {1}."
+msgstr[1] "Пропуск {0} пакетов из-за ограничения смены поставщика: {1}."
+msgstr[2] "Пропуск {0} пакетов из-за ограничения смены поставщика: {1}."
+
+#: output/transaction_table.cpp:799
 msgid "Nothing to do."
 msgstr "Нечего делать."
 
-#: progressbar/multi_progress_bar.cpp:36
+#. The two spaces indent the table the same way as child lines in KeyValueTable
+#: output/transactioninfo.cpp:73
+msgid "Action"
+msgstr "Действие"
+
+#: output/transactioninfo.cpp:75
+msgid "Reason"
+msgstr "Причина"
+
+#: output/transactioninfo.cpp:98
+msgid "Transaction ID"
+msgstr "Идентификатор транзакции"
+
+#: output/transactioninfo.cpp:99
+msgid "Begin time"
+msgstr "Время начала"
+
+#: output/transactioninfo.cpp:100
+msgid "Begin rpmdb"
+msgstr "Начало rpmdb"
+
+#: output/transactioninfo.cpp:101
+msgid "End time"
+msgstr "Время окончания"
+
+#: output/transactioninfo.cpp:102
+msgid "End rpmdb"
+msgstr "Конец rpmdb"
+
+#: output/transactioninfo.cpp:104
+msgid "User"
+msgstr "Пользователь"
+
+#: output/transactioninfo.cpp:105
+msgid "Status"
+msgstr "Статус"
+
+#: output/transactioninfo.cpp:106
+msgid "Releasever"
+msgstr "Версия релиза"
+
+#: output/transactioninfo.cpp:108
+msgid "Comment"
+msgstr "Комментарий"
+
+#: output/transactioninfo.cpp:111
+msgid "Packages altered:"
+msgstr "Изменено пакетов:"
+
+#: output/transactioninfo.cpp:112
+msgid "Groups altered:"
+msgstr "Изменено групп:"
+
+#: output/transactioninfo.cpp:113
+msgid "Environments altered:"
+msgstr "Изменено сред:"
+
+#: output/transactionlist.cpp:53
+msgid "ID"
+msgstr "ID"
+
+#: output/transactionlist.cpp:54
+msgid "Command line"
+msgstr "Командная строка"
+
+#: output/transactionlist.cpp:55
+msgid "Date and time"
+msgstr "Дата и время"
+
+#: output/transactionlist.cpp:56
+msgid "Action(s)"
+msgstr "Действие(я)"
+
+#: output/transactionlist.cpp:57
+msgid "Altered"
+msgstr "Изменено"
+
+#. namespace
+#: progressbar/multi_progress_bar.cpp:85
 msgid "Total"
 msgstr "Всего"
 
-#: session.cpp:149
+#: session.cpp:153
 msgid "Missing command"
 msgstr "Отсутствует команда"
+
+#: session.cpp:260
+#, c++-format
+msgid ""
+"Invalid date passed: \"{}\". Dates in \"YYYY-MM-DD\" format are expected"
+msgstr ""
+"Передана недопустимая дата: \"{}\". Ожидаются даты в формате \"ГГГГ-ММ-ДД\""
+
+#: session.cpp:270
+#, c++-format
+msgid "\"{}\" date cannot be represented by time_t type on this platform"
+msgstr "Дата \"{}\" не может быть представлена типом time_t на этой платформе"
+
+#: utils/userconfirm.cpp:46
+msgid "Is this ok [Y/n]: "
+msgstr "Всё верно? [Д/н]: "
+
+#: utils/userconfirm.cpp:49
+msgid "Is this ok [y/N]: "
+msgstr "Всё верно? [д/Н]: "
+
+#~ msgid "No matches found."
+#~ msgstr "Совпадений не найдено."

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-26 03:48+0000\n"
+"POT-Creation-Date: 2026-09-08 12:03+0000\n"
 "PO-Revision-Date: 2026-05-07 16:09+0000\n"
 "Last-Translator: Bone NI <bounkirdni@gmail.com>\n"
 "Language-Team: Lao <https://translate.fedoraproject.org/projects/dnf5/dnf5-"
@@ -25,6 +25,6 @@ msgid ""
 msgstr "ຄ່າບໍ່ຖືກຕ້ອງສຳລັບການກຳນົດມາໂຄຣ \"{}\". ຕ້ອງການຮູບແບບ \"macro expr\"."
 
 #. failed to parse some of inputs (invalid spec, no package matched...)
-#: builddep.cpp:341
+#: builddep.cpp:359
 msgid "Failed to parse some inputs."
 msgstr "ບໍ່ສາມາດວິເຄາະຂໍ້ມູນນຳເຂົ້າບາງຢ່າງ."

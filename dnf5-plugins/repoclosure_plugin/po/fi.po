@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-26 03:48+0000\n"
+"POT-Creation-Date: 2026-09-08 12:03+0000\n"
 "PO-Revision-Date: 2025-03-21 02:53+0000\n"
 "Last-Translator: Ricky Tigg <ricky.tigg@gmail.com>\n"
 "Language-Team: Finnish <https://translate.fedoraproject.org/projects/dnf5/"
@@ -19,19 +19,21 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Generator: Weblate 5.10.4\n"
 
-#: repoclosure.cpp:46
+#: repoclosure.cpp:48
 msgid "Print list of unresolved dependencies for repositories"
 msgstr "Tulosta luettelo tietovarastojen ratkaisemattomista riippuvuuksista"
 
-#: repoclosure.cpp:155
+#: repoclosure.cpp:159
+#, c++-format
 msgid "No match for argument \"{}\"."
 msgstr "Ei vastaavuutta argumentille \"{}\"."
 
-#: repoclosure.cpp:161
+#: repoclosure.cpp:165
 msgid "Failed to resolve package specifications."
 msgstr "Paketin teknisten tietojen ratkaiseminen epäonnistui."
 
-#: repoclosure.cpp:220
+#: repoclosure.cpp:244
+#, c++-format
 msgid ""
 "Error: Repoclosure ended with unresolved dependencies ({}) across {} "
 "packages."
