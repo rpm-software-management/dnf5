@@ -145,6 +145,7 @@ class ConfigMain::Impl {
     OptionStringList group_package_types{GROUP_PACKAGE_TYPES};
     OptionStringAppendSet optional_metadata_types{
         OptionStringAppendSet::ValueType{libdnf5::METADATA_TYPE_COMPS, libdnf5::METADATA_TYPE_UPDATEINFO}};
+    OptionBool filelists_auto_load{true};
     OptionNumber<std::uint32_t> installonly_limit{3, 0, [](const std::string & value) -> std::uint32_t {
                                                       if (value == "<off>") {
                                                           return 0;
@@ -484,6 +485,7 @@ ConfigMain::Impl::Impl(Config & owner) : owner(owner) {
     owner.opt_binds().add("deltarpm_percentage", deltarpm_percentage);
     owner.opt_binds().add("skip_if_unavailable", skip_if_unavailable);
     owner.opt_binds().add("optional_metadata_types", optional_metadata_types);
+    owner.opt_binds().add("filelists_auto_load", filelists_auto_load);
 }
 
 ConfigMain::ConfigMain() {
@@ -690,6 +692,13 @@ OptionStringAppendSet & ConfigMain::get_optional_metadata_types_option() {
 }
 const OptionStringAppendSet & ConfigMain::get_optional_metadata_types_option() const {
     return p_impl->optional_metadata_types;
+}
+
+OptionBool & ConfigMain::get_filelists_auto_load_option() {
+    return p_impl->filelists_auto_load;
+}
+const OptionBool & ConfigMain::get_filelists_auto_load_option() const {
+    return p_impl->filelists_auto_load;
 }
 
 OptionNumber<std::uint32_t> & ConfigMain::get_installonly_limit_option() {
@@ -1476,6 +1485,7 @@ void ConfigMain::Impl::load_from_config(const ConfigMain::Impl & other) {
     load_option(installonlypkgs, other.installonlypkgs);
     load_option(group_package_types, other.group_package_types);
     load_option(optional_metadata_types, other.optional_metadata_types);
+    load_option(filelists_auto_load, other.filelists_auto_load);
     load_option(installonly_limit, other.installonly_limit);
     load_option(tsflags, other.tsflags);
     load_option(assumeyes, other.assumeyes);

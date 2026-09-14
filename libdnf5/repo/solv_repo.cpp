@@ -330,11 +330,15 @@ void SolvRepo::load_repo_ext(RepodataType type, const DownloadData & download_da
 }
 
 void SolvRepo::load_repo_ext(RepodataType type, const std::string & in_type_name, const DownloadData & download_data) {
+    std::string type_name = in_type_name.empty() ? repodata_type_to_name(type) : in_type_name;
+
+    if (loaded_ext_type_names.contains(type_name)) {
+        return;
+    }
+
     auto & logger = *base->get_logger();
     solv::Pool & pool = type == RepodataType::COMPS ? static_cast<solv::Pool &>(get_comps_pool(base))
                                                     : static_cast<solv::Pool &>(get_rpm_pool(base));
-
-    std::string type_name = in_type_name.empty() ? repodata_type_to_name(type) : in_type_name;
 
     std::string ext_fn;
 
@@ -360,6 +364,7 @@ void SolvRepo::load_repo_ext(RepodataType type, const std::string & in_type_name
             updateinfo_solvables_end = pool->nsolvables;
         }
 
+        loaded_ext_type_names.insert(type_name);
         return;
     }
 
@@ -398,6 +403,8 @@ void SolvRepo::load_repo_ext(RepodataType type, const std::string & in_type_name
             ext_fn,
             std::string(pool_errstr(*get_rpm_pool(base))));
     }
+
+    loaded_ext_type_names.insert(type_name);
 
     if (config.get_build_cache_option().get_value()) {
         if (type == RepodataType::COMPS) {

@@ -34,6 +34,11 @@
 #include <memory>
 
 
+namespace libdnf5 {
+class Goal;
+}
+
+
 namespace libdnf5::solv {
 class Pool;
 }
@@ -314,6 +319,11 @@ public:
     // @replaces libdnf:repo/Repo.hpp:method:Repo.downloadMetadata(const std::string & destdir)
     void download_metadata(const std::string & destdir);
 
+    /// Downloads repository metadata, using a custom download progress bar
+    /// description (e.g. to distinguish a metadata-type-specific download)
+    /// @since 5.4.4
+    void download_metadata(const std::string & destdir, const std::string & description);
+
     /// Returns a list of pairs of the rpmmd type and filename of the Appstream data of the repo
     std::vector<std::pair<std::string, std::string>> get_appstream_metadata() const;
 
@@ -326,11 +336,19 @@ private:
     friend class PackageDownloader;
     friend class RepoDownloader;
     friend class solv::Pool;
+    friend class libdnf5::Goal;
 
     /// Loads the repository objects into sacks.
     ///
     /// Also writes the libsolv's solv/solvx cache files.
     LIBDNF_LOCAL void load();
+
+    /// Downloads and loads filelists metadata if they wasn't requested when
+    /// this repository was originally loaded (e.g. because dependency
+    /// resolution later determined it's needed).
+    ///
+    /// @return `true` if new data was loaded into the pool, `false` if nothing changed.
+    LIBDNF_LOCAL bool load_filelists_metadata();
 
     LIBDNF_LOCAL void add_libsolv_testcase(const std::string & path);
 
