@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-26 03:48+0000\n"
+"POT-Creation-Date: 2026-09-08 12:03+0000\n"
 "PO-Revision-Date: 2025-05-13 11:25+0000\n"
 "Last-Translator: David Medina <dmedinacpnl@gmail.com>\n"
 "Language-Team: Catalan <https://translate.fedoraproject.org/projects/dnf5/"
@@ -149,6 +149,7 @@ msgid "CVE_ID,..."
 msgstr "CVE_ID,..."
 
 #: commands/clean/clean.cpp:88
+#, c++-format
 msgid "Error cleaning the cache: {}"
 msgstr "Error al netejar la memòria cau: {}"
 
@@ -192,6 +193,7 @@ msgid "search for packages matching various criteria"
 msgstr "cerca per paquets coincidents amb criteris diversos"
 
 #: commands/repoquery/repoquery.cpp:159
+#, c++-format
 msgid "Error parsing JSON object \"{}\": {}"
 msgstr "Error a l'analitzar l'objecte JSON \"{}\": {}"
 
@@ -203,12 +205,13 @@ msgstr ""
 "Aquesta ordre cal executar-la amb privilegis de súper-usuari (com a usuari "
 "root a la majoria de sistemes)."
 
-#: main.cpp:158
+#: main.cpp:172
+#, c++-format
 msgid ""
 "{}: Badly formatted argument value: Last key character cannot be '.': {}"
 msgstr ""
 "{}: valor de l'argument incorrecte: l'últim caràcter clau no pot ser '.': {}"
 
-#: main.cpp:258 main.cpp:308
+#: main.cpp:272 main.cpp:322
 msgid ". Add \"--help\" for more information about the arguments."
 msgstr ". Afegiu \"--help\" per més informació sobre els arguments."

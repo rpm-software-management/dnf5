@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-26 03:48+0000\n"
+"POT-Creation-Date: 2026-09-08 12:03+0000\n"
 "PO-Revision-Date: 2025-10-19 15:53+0000\n"
 "Last-Translator: Oğuz Ersen <oguz@ersen.moe>\n"
 "Language-Team: Turkish <https://translate.fedoraproject.org/projects/dnf5/"
@@ -22,109 +22,133 @@ msgstr ""
 "X-Generator: Weblate 5.13.3\n"
 
 #: argument_parser.cpp:68
+#, c++-format
 msgid "Misconfigured alias \"{}\": cannot convert \"{}\" to a number"
 msgstr "Yanlış yapılandırılmış takma ad \"{}\": \"{}\" sayıya dönüştürülemiyor"
 
 #: argument_parser.cpp:76
+#, c++-format
 msgid "Misconfigured alias \"{}\": index \"{}\" out of range"
 msgstr "Yanlış yapılandırılmış takma ad \"{}\": \"{}\" indeksi aralık dışı"
 
 #: argument_parser.cpp:98
+#, c++-format
 msgid "\"{}\" not allowed together with named argument \"{}\""
 msgstr "\"{}\" ile belirtilen \"{}\" argümanı birlikte kullanılamaz"
 
 #: argument_parser.cpp:100
+#, c++-format
 msgid "\"{}\" not allowed in command \"{}\""
 msgstr "\"{}\", \"{}\" komutu içinde izin verilmez"
 
 #: argument_parser.cpp:102
+#, c++-format
 msgid "\"{}\" not allowed together with positional argument \"{}\""
 msgstr ""
 "\"{}\" konumsal argüman(positional argument) \"{}\" ile birlikte kullanılamaz"
 
 #: argument_parser.cpp:147
+#, c++-format
 msgid "Argument id \"{}\" already registered in group \"{}\""
 msgstr "\"{}\" argüman kimliği \"{}\" grubunda zaten kayıtlı"
 
 #: argument_parser.cpp:274
+#, c++-format
 msgid "Invalid character '.' in argument id \"{}\""
 msgstr "\"{}\" argüman kimliğinde geçersiz '.' karakteri"
 
-#: argument_parser.cpp:382 argument_parser.cpp:387
+#: argument_parser.cpp:383 argument_parser.cpp:388
+#, c++-format
 msgid "Too few values for positional argument \"{}\""
 msgstr "\"{}\" konumsal argümanı için çok az değer"
 
-#: argument_parser.cpp:548
+#: argument_parser.cpp:549
+#, c++-format
 msgid "Missing value for named argument \"--{}\""
 msgstr "Belirtilen \"--{}\" argümanı için değer eksik"
 
-#: argument_parser.cpp:556
+#: argument_parser.cpp:557
+#, c++-format
 msgid "Unexpected value for named argument \"--{}\""
 msgstr "Belirtilen \"--{}\" argümanı için beklenmeyen değer"
 
-#: argument_parser.cpp:598
+#: argument_parser.cpp:599
+#, c++-format
 msgid "Missing value for named argument \"-{}\""
 msgstr "Belirtilen \"-{}\" argümanı için değer eksik"
 
 #. print usage
-#: argument_parser.cpp:694
+#: argument_parser.cpp:696
 msgid "Usage:"
 msgstr "Kullanım:"
 
-#: argument_parser.cpp:702
+#: argument_parser.cpp:704
 msgid "Description:"
 msgstr "Açıklama:"
 
-#: argument_parser.cpp:979
+#: argument_parser.cpp:997
+#, c++-format
 msgid "Command id \"{}\" already registered for command \"{}\""
 msgstr "\"{}\" komut kimliği \"{}\" komutu için zaten kayıtlı"
 
-#: argument_parser.cpp:990
+#: argument_parser.cpp:1008
+#, c++-format
 msgid "Named argument id \"{}\" already registered for command \"{}\""
 msgstr "Belirtilen \"{}\" argüman kimliği \"{}\" komutu için zaten kayıtlı"
 
-#: argument_parser.cpp:1000
+#: argument_parser.cpp:1018
+#, c++-format
 msgid "Positional argument id \"{}\" already registered for command \"{}\""
 msgstr "\"{}\" konumsal argüman kimliği \"{}\" komutu için zaten kayıtlı"
 
-#: argument_parser.cpp:1010
+#: argument_parser.cpp:1028
+#, c++-format
 msgid "Group id \"{}\" already registered for command \"{}\""
 msgstr "\"{}\" grup kimliği \"{}\" komutu için zaten kayıtlı"
 
-#: argument_parser.cpp:1037
+#: argument_parser.cpp:1055
+#, c++-format
 msgid "Command id \"{}\" does not contain subcommand with id \"{}\""
 msgstr "\"{}\" komut kimliği \"{}\" kimliğine sahip alt komut içermiyor"
 
-#: argument_parser.cpp:1045
+#: argument_parser.cpp:1063
+#, c++-format
 msgid "Command id \"{}\" does not contain named argument with id \"{}\""
 msgstr ""
 "\"{}\" komut kimliği \"{}\" kimliğine sahip belirtilen argümanı içermiyor"
 
-#: argument_parser.cpp:1053
+#: argument_parser.cpp:1071
+#, c++-format
 msgid "Command id \"{}\" does not contain positional argument with id \"{}\""
 msgstr "\"{}\" komut kimliği \"{}\" kimliğine sahip konumsal argüman içermiyor"
 
-#: argument_parser.cpp:1060
+#: argument_parser.cpp:1078
+#, c++-format
 msgid "Command id \"{}\" does not contain group with id \"{}\""
 msgstr "\"{}\" komut kimliği \"{}\" kimliğine sahip grup içermiyor"
 
-#: argument_parser.cpp:1177 argument_parser.cpp:1388
+#: argument_parser.cpp:1204 argument_parser.cpp:1425
+#, c++-format
 msgid "Unknown argument \"{}\" for command \"{}\""
 msgstr "Bilinmeyen argüman \"{}\" (\"{}\" komutu için)"
 
-#: argument_parser.cpp:1192 argument_parser.cpp:1403
+#: argument_parser.cpp:1219 argument_parser.cpp:1440
+#, c++-format
 msgid "Missing positional argument \"{}\" for command \"{}\""
 msgstr "\"{}\" konumsal argümanı eksik (\"{}\" komutu için)"
 
-#: argument_parser.cpp:1274
+#: argument_parser.cpp:1301
+#, c++-format
 msgid "Missing value for command alias \"{}\""
 msgstr "Komut takma adı \"{}\" için değer eksik"
 
-#: argument_parser.cpp:1610
+#: argument_parser.cpp:1647
+#, c++-format
 msgid "Named argument with path id \"{}\" not found"
 msgstr "\"{}\" yol kimliğine sahip belirtilen argüman bulunamadı"
 
-#: argument_parser.cpp:1620
+#: argument_parser.cpp:1657
+#, c++-format
 msgid "Positional argument with path id \"{}\" not found"
 msgstr "\"{}\" yol kimliğine sahip konumsal argüman bulunamadı"
 
@@ -159,7 +183,7 @@ msgstr "Ad"
 msgid "Epoch"
 msgstr "Dönem"
 
-#: output/packageinfo.cpp:69 output/transaction_table.cpp:289
+#: output/packageinfo.cpp:69 output/transaction_table.cpp:290
 msgid "Version"
 msgstr "Sürüm"
 
@@ -191,7 +215,8 @@ msgstr "Kaynak"
 msgid "From repository"
 msgstr "Geldiği depo"
 
-#: output/packageinfo.cpp:96 output/transaction_table.cpp:295
+#: output/packageinfo.cpp:96 output/transaction_table.cpp:296
+#: output/transactioninfo.cpp:76
 msgid "Repository"
 msgstr "Depo"
 
@@ -207,7 +232,7 @@ msgstr "URL"
 msgid "License"
 msgstr "Lisans"
 
-#: output/packageinfo.cpp:104
+#: output/packageinfo.cpp:104 output/transactioninfo.cpp:107
 msgid "Description"
 msgstr "Açıklama"
 
@@ -219,206 +244,380 @@ msgstr "Sağlayıcı"
 msgid " (exact)"
 msgstr " (tam)"
 
-#: output/search.cpp:90
-msgid "No matches found."
-msgstr "Eşleşme bulunamadı."
-
-#: output/search.cpp:101
+#: output/search.cpp:100
 msgid "Matched fields: "
 msgstr "Eşleşen alanlar: "
 
-#: output/transaction_table.cpp:127
+#: output/status.cpp:45
+msgid "Groups"
+msgstr ""
+
+#: output/status.cpp:46 output/status.cpp:55 output/status.cpp:72
+#, fuzzy
+#| msgid "Installed size"
+msgid "installed"
+msgstr "Kurulu boyutu"
+
+#: output/status.cpp:47 output/status.cpp:56 output/status.cpp:73
+msgid "available"
+msgstr ""
+
+#: output/status.cpp:54
+msgid "Environments"
+msgstr ""
+
+#: output/status.cpp:71
+#, fuzzy
+#| msgid "Package"
+msgid "Packages"
+msgstr "Paket"
+
+#: output/status.cpp:74
+msgid "user-installed"
+msgstr ""
+
+#: output/status.cpp:84
+#, fuzzy
+#| msgid "Installed size"
+msgid "Installed Size"
+msgstr "Kurulu boyutu"
+
+#: output/status.cpp:90
+#, fuzzy
+#| msgid "Repository"
+msgid "Enabled Repositories"
+msgstr "Depo"
+
+#: output/status.cpp:101
+#, fuzzy
+#| msgid "Transaction Summary:\n"
+msgid "Last Transaction"
+msgstr "İşlem Özeti:\n"
+
+#: output/transaction_table.cpp:128
 msgid "Transaction Summary:\n"
 msgstr "İşlem Özeti:\n"
 
 #. Keep the replaceble number aligned across all messages.
-#: output/transaction_table.cpp:132
+#: output/transaction_table.cpp:133
+#, c++-format
 msgid " Installing:      {:4} package\n"
 msgid_plural " Installing:      {:4} packages\n"
 msgstr[0] " Kuruluyor:       {:4} paket\n"
 msgstr[1] " Kuruluyor:       {:4} paket\n"
 
 #. Keep the replaceble number aligned across all messages.
-#: output/transaction_table.cpp:141
+#: output/transaction_table.cpp:142
+#, c++-format
 msgid " Reinstalling:    {:4} package\n"
 msgid_plural " Reinstalling:    {:4} packages\n"
 msgstr[0] " Yeniden kuruluyor: {:4} paket\n"
 msgstr[1] " Yeniden kuruluyor: {:4} paket\n"
 
 #. Keep the replaceble number aligned across all messages.
-#: output/transaction_table.cpp:150
+#: output/transaction_table.cpp:151
+#, c++-format
 msgid " Upgrading:       {:4} package\n"
 msgid_plural " Upgrading:       {:4} packages\n"
 msgstr[0] " Yükseltiliyor:   {:4} paket\n"
 msgstr[1] " Yükseltiliyor:   {:4} paket\n"
 
 #. Keep the replaceble number aligned across all messages.
-#: output/transaction_table.cpp:159
+#: output/transaction_table.cpp:160
+#, c++-format
 msgid " Replacing:       {:4} package\n"
 msgid_plural " Replacing:       {:4} packages\n"
 msgstr[0] " Değiştiriliyor:  {:4} paket\n"
 msgstr[1] " Değiştiriliyor:  {:4} paket\n"
 
 #. Keep the replaceble number aligned across all messages.
-#: output/transaction_table.cpp:168
+#: output/transaction_table.cpp:169
+#, c++-format
 msgid " Removing:        {:4} package\n"
 msgid_plural " Removing:        {:4} packages\n"
 msgstr[0] " Kaldırılıyor:    {:4} paket\n"
 msgstr[1] " Kaldırılıyor:    {:4} paket\n"
 
 #. Keep the replaceble number aligned across all messages.
-#: output/transaction_table.cpp:177
+#: output/transaction_table.cpp:178
+#, c++-format
 msgid " Downgrading:     {:4} package\n"
 msgid_plural " Downgrading:     {:4} packages\n"
 msgstr[0] " Sürümü düşürülüyor: {:4} package\n"
 msgstr[1] " Sürümü düşürülüyor: {:4} package\n"
 
 #. Keep the replaceble number aligned across all messages.
-#: output/transaction_table.cpp:186
+#: output/transaction_table.cpp:187
+#, c++-format
 msgid " Changing reason: {:4} package\n"
 msgid_plural " Changing reason: {:4} packages\n"
 msgstr[0] " Sebep değiştiriliyor: {:4} package\n"
 msgstr[1] " Sebep değiştiriliyor: {:4} package\n"
 
 #. Keep the replaceble number aligned across all messages.
-#: output/transaction_table.cpp:195
+#: output/transaction_table.cpp:196
+#, c++-format
 msgid " Skipping:        {:4} package\n"
 msgid_plural " Skipping:        {:4} packages\n"
 msgstr[0] " Atlanıyor:       {:4} package\n"
 msgstr[1] " Atlanıyor:       {:4} package\n"
 
-#: output/transaction_table.cpp:277
+#: output/transaction_table.cpp:278 output/transactioninfo.cpp:74
 msgid "Package"
 msgstr "Paket"
 
-#: output/transaction_table.cpp:283
+#: output/transaction_table.cpp:284
 msgid "Arch"
 msgstr "Mimari"
 
-#: output/transaction_table.cpp:301
+#: output/transaction_table.cpp:302
 msgid "Size"
 msgstr "Boyut"
 
-#: output/transaction_table.cpp:357 output/transaction_table.cpp:451
+#: output/transaction_table.cpp:364 output/transaction_table.cpp:434
+#: output/transaction_table.cpp:475
+#, c++-format
 msgid "{} -> {}"
 msgstr "{} -> {}"
 
-#: output/transaction_table.cpp:373
+#: output/transaction_table.cpp:380
+#, c++-format
 msgid "replacing {}"
 msgstr "{} değiştiriliyor"
 
-#: output/transaction_table.cpp:409 output/transaction_table.cpp:426
+#: output/transaction_table.cpp:422 output/transaction_table.cpp:450
 msgid " <name-unset>"
 msgstr " <ad-ayarlanmadı>"
 
-#: output/transaction_table.cpp:457
+#: output/transaction_table.cpp:481
 msgid "replacing "
 msgstr "değiştiriliyor "
 
-#: output/transaction_table.cpp:470
+#: output/transaction_table.cpp:494
 msgid "Skipping packages with conflicts:"
 msgstr "Çakışan paketler atlanıyor:"
 
-#: output/transaction_table.cpp:472
+#: output/transaction_table.cpp:496
 msgid "Skipping packages with broken dependencies:"
 msgstr "Hatalı bağımlılıkları olan paketler atlanıyor:"
 
-#: output/transaction_table.cpp:533
+#: output/transaction_table.cpp:558
 msgid "Installing dependencies:"
 msgstr "Bağımlılıklar kuruluyor:"
 
-#: output/transaction_table.cpp:535
+#: output/transaction_table.cpp:560
 msgid "Installing weak dependencies:"
 msgstr "Zayıf bağımlılıklar kuruluyor:"
 
-#: output/transaction_table.cpp:537
+#: output/transaction_table.cpp:562
 msgid "Installing group/module packages:"
 msgstr "Grup/modül paketleri kuruluyor:"
 
-#: output/transaction_table.cpp:539
+#: output/transaction_table.cpp:564
 msgid "Installing:"
 msgstr "Kuruluyor:"
 
-#: output/transaction_table.cpp:543
+#: output/transaction_table.cpp:568
 msgid "Upgrading:"
 msgstr "Yükseltiliyor:"
 
-#: output/transaction_table.cpp:546
+#: output/transaction_table.cpp:571
 msgid "Downgrading:"
 msgstr "Sürümü düşürülüyor:"
 
-#: output/transaction_table.cpp:549
+#: output/transaction_table.cpp:574
 msgid "Reinstalling:"
 msgstr "Yeniden kuruluyor:"
 
-#: output/transaction_table.cpp:553
+#: output/transaction_table.cpp:578
 msgid "Removing dependent packages:"
 msgstr "Bağımlı paketler kaldırılıyor:"
 
-#: output/transaction_table.cpp:555
+#: output/transaction_table.cpp:580
 msgid "Removing unused dependencies:"
 msgstr "Kullanılmayan bağımlılıklar kaldırılıyor:"
 
-#: output/transaction_table.cpp:557
+#: output/transaction_table.cpp:582
 msgid "Removing:"
 msgstr "Kaldırılıyor:"
 
-#: output/transaction_table.cpp:561
+#: output/transaction_table.cpp:586
 msgid "Changing reason:"
 msgstr "Sebep değiştiriliyor:"
 
-#: output/transaction_table.cpp:593
+#: output/transaction_table.cpp:618
 msgid "Installing groups dependencies:"
 msgstr "Grup bağımlılıkları kuruluyor:"
 
-#: output/transaction_table.cpp:595
+#: output/transaction_table.cpp:620
 msgid "Installing groups:"
 msgstr "Gruplar kuruluyor:"
 
-#: output/transaction_table.cpp:599
+#: output/transaction_table.cpp:624
 msgid "Removing groups:"
 msgstr "Gruplar kaldırılıyor:"
 
-#: output/transaction_table.cpp:602
+#: output/transaction_table.cpp:627
 msgid "Upgrading groups:"
 msgstr "Gruplar yükseltiliyor:"
 
-#: output/transaction_table.cpp:629
+#: output/transaction_table.cpp:630
+#, fuzzy
+#| msgid "Changing reason:"
+msgid "Changing reason of installed groups:"
+msgstr "Sebep değiştiriliyor:"
+
+#: output/transaction_table.cpp:657
 msgid "Installing environmental groups:"
 msgstr "Ortam grupları kuruluyor:"
 
-#: output/transaction_table.cpp:632
+#: output/transaction_table.cpp:660
 msgid "Removing environmental groups:"
 msgstr "Ortam grupları kaldırılıyor:"
 
-#: output/transaction_table.cpp:635
+#: output/transaction_table.cpp:663
 msgid "Upgrading environmental groups:"
 msgstr "Ortam grupları yükseltiliyor:"
 
-#: output/transaction_table.cpp:662
+#: output/transaction_table.cpp:690
 msgid "Enabling module streams:"
 msgstr "Modül akışları etkinleştiriliyor:"
 
-#: output/transaction_table.cpp:665
+#: output/transaction_table.cpp:693
 msgid "Disabling modules:"
 msgstr "Modüller devre dışı bırakılıyor:"
 
-#: output/transaction_table.cpp:668
+#: output/transaction_table.cpp:696
 msgid "Resetting modules:"
 msgstr "Modüller sıfırlanıyor:"
 
-#: output/transaction_table.cpp:671
+#: output/transaction_table.cpp:699
 msgid "Switching module streams:"
 msgstr "Modül akışları değiştiriliyor:"
 
-#: output/transaction_table.cpp:745
+#: output/transaction_table.cpp:771 output/transaction_table.cpp:772
+msgid "(none)"
+msgstr ""
+
+#: output/transaction_table.cpp:778
+#, c++-format
+msgid "Skipping {0} package due to vendor change restriction: {1}."
+msgid_plural "Skipping {0} packages due to vendor change restriction: {1}."
+msgstr[0] ""
+msgstr[1] ""
+
+#: output/transaction_table.cpp:799
 msgid "Nothing to do."
 msgstr "Yapılacak bir şey yok."
 
-#: progressbar/multi_progress_bar.cpp:36
+#. The two spaces indent the table the same way as child lines in KeyValueTable
+#: output/transactioninfo.cpp:73
+msgid "Action"
+msgstr ""
+
+#: output/transactioninfo.cpp:75
+msgid "Reason"
+msgstr ""
+
+#: output/transactioninfo.cpp:98
+#, fuzzy
+#| msgid "Transaction Summary:\n"
+msgid "Transaction ID"
+msgstr "İşlem Özeti:\n"
+
+#: output/transactioninfo.cpp:99
+msgid "Begin time"
+msgstr ""
+
+#: output/transactioninfo.cpp:100
+msgid "Begin rpmdb"
+msgstr ""
+
+#: output/transactioninfo.cpp:101
+msgid "End time"
+msgstr ""
+
+#: output/transactioninfo.cpp:102
+msgid "End rpmdb"
+msgstr ""
+
+#: output/transactioninfo.cpp:104
+msgid "User"
+msgstr ""
+
+#: output/transactioninfo.cpp:105
+msgid "Status"
+msgstr ""
+
+#: output/transactioninfo.cpp:106
+#, fuzzy
+#| msgid "Release"
+msgid "Releasever"
+msgstr "Dağıtım"
+
+#: output/transactioninfo.cpp:108
+msgid "Comment"
+msgstr ""
+
+#: output/transactioninfo.cpp:111
+msgid "Packages altered:"
+msgstr ""
+
+#: output/transactioninfo.cpp:112
+msgid "Groups altered:"
+msgstr ""
+
+#: output/transactioninfo.cpp:113
+msgid "Environments altered:"
+msgstr ""
+
+#: output/transactionlist.cpp:53
+msgid "ID"
+msgstr ""
+
+#: output/transactionlist.cpp:54
+msgid "Command line"
+msgstr ""
+
+#: output/transactionlist.cpp:55
+msgid "Date and time"
+msgstr ""
+
+#: output/transactionlist.cpp:56
+msgid "Action(s)"
+msgstr ""
+
+#: output/transactionlist.cpp:57
+msgid "Altered"
+msgstr ""
+
+#. namespace
+#: progressbar/multi_progress_bar.cpp:85
 msgid "Total"
 msgstr "Toplam"
 
-#: session.cpp:149
+#: session.cpp:153
 msgid "Missing command"
 msgstr "Eksik komut"
+
+#: session.cpp:260
+#, c++-format
+msgid ""
+"Invalid date passed: \"{}\". Dates in \"YYYY-MM-DD\" format are expected"
+msgstr ""
+
+#: session.cpp:270
+#, c++-format
+msgid "\"{}\" date cannot be represented by time_t type on this platform"
+msgstr ""
+
+#: utils/userconfirm.cpp:46
+msgid "Is this ok [Y/n]: "
+msgstr ""
+
+#: utils/userconfirm.cpp:49
+msgid "Is this ok [y/N]: "
+msgstr ""
+
+#~ msgid "No matches found."
+#~ msgstr "Eşleşme bulunamadı."

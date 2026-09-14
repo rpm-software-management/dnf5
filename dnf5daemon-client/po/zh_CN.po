@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-26 03:48+0000\n"
+"POT-Creation-Date: 2026-09-08 12:03+0000\n"
 "PO-Revision-Date: 2026-06-20 09:10+0000\n"
 "Last-Translator: Jean-Baptiste Holcroft <jean-baptiste@holcroft.fr>\n"
 "Language-Team: Chinese (Simplified) <https://translate.fedoraproject.org/"
@@ -132,13 +132,15 @@ msgstr "BUGZILLA_ID,..."
 msgid ""
 "Include content contained in advisories that fix a CVE (Common "
 "Vulnerabilities and Exposures) ID, Eg. CVE-2201-0123. List option."
-msgstr "包含修复CVE(常见漏洞和暴露)ID(例如CVE-2201-0123)的建议中的内容，列表选项。"
+msgstr ""
+"包含修复CVE(常见漏洞和暴露)ID(例如CVE-2201-0123)的建议中的内容，列表选项。"
 
 #: commands/advisory/arguments.hpp:182
 msgid "CVE_ID,..."
 msgstr "CVE_ID,..."
 
 #: commands/clean/clean.cpp:88
+#, c++-format
 msgid "Error cleaning the cache: {}"
 msgstr "清除缓存错误: {}"
 
@@ -178,6 +180,7 @@ msgid "search for packages matching various criteria"
 msgstr "搜索符合条件的软件包"
 
 #: commands/repoquery/repoquery.cpp:159
+#, c++-format
 msgid "Error parsing JSON object \"{}\": {}"
 msgstr "解析JSON对象错误 \"{}\": {}"
 
@@ -187,11 +190,12 @@ msgid ""
 "most systems)."
 msgstr "该命令必须以管理员权限运行(大多数系统是在root用户下)。"
 
-#: main.cpp:158
+#: main.cpp:172
+#, c++-format
 msgid ""
 "{}: Badly formatted argument value: Last key character cannot be '.': {}"
 msgstr "{}：错误的参数值格式：键名的结尾字符不能是\".\"：{}"
 
-#: main.cpp:258 main.cpp:308
+#: main.cpp:272 main.cpp:322
 msgid ". Add \"--help\" for more information about the arguments."
 msgstr "。添加 \"--help\" 参数来获取更多参数信息。"

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-26 03:48+0000\n"
+"POT-Creation-Date: 2026-09-08 12:03+0000\n"
 "PO-Revision-Date: 2024-02-02 13:40+0000\n"
 "Last-Translator: Aleksey Fedorov <aleksejfedorov963@gmail.com>\n"
 "Language-Team: Russian <https://translate.fedoraproject.org/projects/dnf5/"
@@ -20,6 +20,7 @@ msgstr ""
 "X-Generator: Weblate 5.3.1\n"
 
 #: builddep.cpp:84
+#, c++-format
 msgid ""
 "Invalid value for macro definition \"{}\". \"macro expr\" format expected."
 msgstr ""
@@ -27,6 +28,6 @@ msgstr ""
 "expr\"."
 
 #. failed to parse some of inputs (invalid spec, no package matched...)
-#: builddep.cpp:341
+#: builddep.cpp:359
 msgid "Failed to parse some inputs."
 msgstr "Не удалось разобрать некоторые входные данные."

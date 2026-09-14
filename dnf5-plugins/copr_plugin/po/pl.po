@@ -1,13 +1,13 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# Paweł Marciniak <sunwire+fas@gmail.com>, 2024.
+# Paweł Marciniak <sunwire+fas@gmail.com>, 2024, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-26 03:48+0000\n"
-"PO-Revision-Date: 2024-10-17 17:14+0000\n"
+"POT-Creation-Date: 2026-09-08 12:03+0000\n"
+"PO-Revision-Date: 2026-09-02 07:20+0000\n"
 "Last-Translator: Paweł Marciniak <sunwire+fas@gmail.com>\n"
 "Language-Team: Polish <https://translate.fedoraproject.org/projects/dnf5/"
 "dnf5-plugin-copr/pl/>\n"
@@ -17,31 +17,33 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 5.7.2\n"
+"X-Generator: Weblate 2026.8.1\n"
 
 #: copr.cpp:48
 msgid "Copr hub (the web-UI/API server) hostname"
 msgstr "Nazwa hosta huba Copr (serwera interfejsu użytkownika/API)"
 
 #: copr.cpp:88
+#, c++-format
 msgid ""
 "Copr project ID to {}.  Use either a format OWNER/PROJECT or HUB/OWNER/"
 "PROJECT (if HUB is not specified, the default one, or --hub <ARG>, is used.  "
 "OWNER is either a username, or a @groupname.  PROJECT can be a simple "
-"project name, or a \"project directory\" containing colons, e.g. 'project:"
-"custom:123'.  HUB can be either the Copr frontend hostname (e.g. copr."
-"fedorainfracloud.org ) or the shortcut (e.g. fedora).  Example: 'fedora/"
+"project name, or a \"project directory\" containing colons, e.g. "
+"'project:custom:123'.  HUB can be either the Copr frontend hostname (e.g. "
+"copr.fedorainfracloud.org ) or the shortcut (e.g. fedora).  Example: 'fedora/"
 "@footeam/coolproject'."
 msgstr ""
 "Identyfikator projektu Copr do {}. Użyj formatu OWNER/PROJECT lub HUB/OWNER/"
 "PROJECT (jeśli HUB nie jest określony, używany jest format domyślny lub --"
 "hub <ARG>). OWNER jest nazwą użytkownika lub @groupname. PROJECT może być "
 "prostą nazwą projektu lub „katalogiem projektu” zawierającym dwukropki, np. "
-"'project:custom:123'. HUB może być nazwą hosta frontendu Copr (np. copr."
-"fedorainfracloud.org) lub skrótem (np. fedora). Przykład: 'fedora/@footeam/"
-"coolproject'."
+"'project:custom:123'. HUB może być nazwą hosta frontendu Copr (np. "
+"copr.fedorainfracloud.org) lub skrótem (np. fedora). Przykład: 'fedora/"
+"@footeam/coolproject'."
 
 #: copr.cpp:106
+#, c++-format
 msgid "Invalid PROJECT_SPEC format '{}'"
 msgstr "Nieprawidłowy format PROJEKT_SPEC '{}'"
 
@@ -59,8 +61,8 @@ msgid ""
 "\n"
 "The Fedora Project does not exercise any power over the contents of\n"
 "this repository beyond the rules outlined in the Copr FAQ at\n"
-"<https://docs.pagure.org/copr.copr/user_documentation.html#what-i-can-build-"
-"in-copr>,\n"
+"<https://docs.copr.fedorainfracloud.org/user_documentation.html#what-i-can-"
+"build-in-copr>,\n"
 "and packages are not held to any quality or security level.\n"
 "\n"
 "Please do not file bug reports about these packages in Fedora\n"
@@ -68,19 +70,20 @@ msgid ""
 msgstr ""
 "Włączanie repozytorium Copr. Należy pamiętać, że to repozytorium nie jest "
 "częścią\n"
-"głównej dystrybucji, a jakość może się różnić.\n"
+"głównej dystrybucji i jego jakość może się różnić.\n"
 "\n"
-"Projekt Fedora nie sprawuje żadnej władzy nad zawartością\n"
+"Projekt Fedora nie sprawuje żadnej kontroli nad zawartością\n"
 "tego repozytorium poza zasadami określonymi w FAQ Copr pod adresem\n"
-"<https://docs.pagure.org/copr.copr/user_documentation.html#what-i-can-build-"
-"in-copr>,\n"
+"<https://docs.copr.fedorainfracloud.org/user_documentation.html#what-i-can-"
+"build-in-copr>,\n"
 "a pakiety nie są objęte żadnym poziomem jakości ani bezpieczeństwa.\n"
 "\n"
-"Prosimy nie zgłaszać błędów dotyczących tych pakietów w Bugzilli\n"
-"Fedory. W przypadku problemów skontaktuj się z właścicielem tego "
+"Prosimy nie zgłaszać błędów dotyczących tych pakietów w\n"
+"Bugzilli Fedory. W przypadku problemów prosimy o kontakt z właścicielem tego "
 "repozytorium.\n"
 
 #: copr_constants.hpp:41
+#, c++-format
 msgid ""
 "Maintainer of the enabled Copr repository decided to make\n"
 "it dependent on other repositories. Such repositories are\n"
@@ -113,6 +116,7 @@ msgid "print useful info about the system, useful for debugging"
 msgstr "Wyświetl przydatne informacje o systemie, przydatne przy debugowaniu"
 
 #: copr_disable.cpp:35
+#, c++-format
 msgid ""
 "disable specified Copr repository (if exists), keep {}/*.repo file - just "
 "mark enabled=0"
@@ -121,9 +125,10 @@ msgstr ""
 "- po prostu ustaw enabled=0"
 
 #: copr_enable.cpp:38
+#, c++-format
 msgid ""
-"download the repository info from a Copr server and install it as a {}/*."
-"repo file"
+"download the repository info from a Copr server and install it as a {}/"
+"*.repo file"
 msgstr ""
 "pobierz informacje o repozytorium z serwera Copr i zainstaluj je jako plik "
 "{}/*.repo"
@@ -136,16 +141,27 @@ msgstr ""
 "Chroot określony w formacie NAME-RELEASE-ARCH, np. 'fedora-rawhide-ppc64le'. "
 "Gdy nie jest określony, polecenie 'dnf copr' próbuje go wykryć."
 
-#: copr_list.cpp:51
+#: copr_list.cpp:53
 msgid "list Copr repositories"
 msgstr "lista repozytoriów Copr"
 
+#: copr_list.cpp:86
+msgid ""
+"No repositories were loaded from the installroot. To use the configuration "
+"and repositories of the host system, pass --use-host-config."
+msgstr ""
+"Żadne repozytoria nie zostały załadowane z katalogu instalacyjnego. Aby użyć "
+"konfiguracji i repozytoriów systemu hosta, należy podać parametr --use-host-"
+"config."
+
 #: copr_remove.cpp:35
+#, c++-format
 msgid ""
 "remove specified Copr repository from the system (removes the {}/*.repo file)"
 msgstr "usuń określone repozytorium Copr z systemu (usuwa plik {}/*.repo)"
 
 #: copr_repo.cpp:91
+#, c++-format
 msgid "Directory '{}' not found in '{}' Copr project."
 msgstr "Nie znaleziono katalogu '{}' w projekcie Copr '{}'."
 
@@ -174,18 +190,22 @@ msgid "Can't parse Copr repo spec: "
 msgstr "Nie można przeanalizować specyfikacji repozytorium Copr: "
 
 #: copr_repo.cpp:344
+#, c++-format
 msgid "Can't remove the {} repo file"
 msgstr "Nie można usunąć pliku repozytorium {}"
 
 #: copr_repo.cpp:347
+#, c++-format
 msgid "Repo file {} successfully removed"
 msgstr "Plik repozytorium {} został pomyślnie usunięty"
 
 #: copr_repo.cpp:393
+#, c++-format
 msgid "Can't find item {} in {}"
 msgstr "Nie można znaleźć elementu {} w {}"
 
 #: copr_repo.cpp:449
+#, c++-format
 msgid "Removing old config file '{}'"
 msgstr "Usuwanie starego pliku konfiguracyjnego '{}'"
 
@@ -194,6 +214,7 @@ msgid "Can't remove"
 msgstr "Nie można usunąć"
 
 #: copr_repo.cpp:526
+#, c++-format
 msgid ""
 "Copr repofile '{}' has an old format, fix by re-enabling it $ {} copr enable "
 "{}"
@@ -202,17 +223,21 @@ msgstr ""
 "ponownie $ {} copr enable {}"
 
 #: copr_repo.cpp:560
+#, c++-format
 msgid "Repo id '{}' in '{}' is suspicious"
 msgstr "Identyfikator repozytorium „{}” w „{}” jest podejrzany"
 
 #: copr_repo.cpp:567
+#, c++-format
 msgid "Repo id '{}' doesn't belong to '{}' repofile"
 msgstr "Identyfikator repozytorium '{}' nie należy do repozytorium '{}'"
 
 #: copr_repo.cpp:618
+#, c++-format
 msgid "Copr repository '{}' in '{}' disabled."
 msgstr "Repozytorium Copr '{}' w '{}' wyłączone."
 
 #: copr_repo.cpp:632 copr_repo.cpp:657
+#, c++-format
 msgid "Repository '{}' not found on this system"
 msgstr "Repozytorium '{}' nie zostało znalezione w tym systemie"

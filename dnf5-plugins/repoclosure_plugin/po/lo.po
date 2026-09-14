@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-26 03:48+0000\n"
+"POT-Creation-Date: 2026-09-08 12:03+0000\n"
 "PO-Revision-Date: 2026-05-07 16:09+0000\n"
 "Last-Translator: Bone NI <bounkirdni@gmail.com>\n"
 "Language-Team: Lao <https://translate.fedoraproject.org/projects/dnf5/dnf5-"
@@ -18,24 +18,24 @@ msgstr ""
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Generator: Weblate 5.17.1\n"
 
-#: repoclosure.cpp:46
+#: repoclosure.cpp:48
 msgid "Print list of unresolved dependencies for repositories"
 msgstr "ສະແດງລາຍຊື່ສິ່ງທີ່ຈຳເປັນຕ້ອງໃຊ້ທີ່ຍັງບໍ່ທັນໄດ້ຮັບການແກ້ໄຂສຳລັບຄັງເກັບ"
 
-#: repoclosure.cpp:155
+#: repoclosure.cpp:159
 #, c++-format
 msgid "No match for argument \"{}\"."
 msgstr "ບໍ່ພົບສິ່ງທີ່ກົງກັນສຳລັບອາກິວເມນ \"{}\"."
 
-#: repoclosure.cpp:161
+#: repoclosure.cpp:165
 msgid "Failed to resolve package specifications."
 msgstr "ບໍ່ສາມາດແກ້ໄຂຂໍ້ກຳນົດຂອງແພັກເກັດໄດ້."
 
-#: repoclosure.cpp:220
+#: repoclosure.cpp:244
 #, c++-format
 msgid ""
 "Error: Repoclosure ended with unresolved dependencies ({}) across {} "
 "packages."
 msgstr ""
-"ຂໍ້ຜິດພາດ: Repoclosure ສິ້ນສຸດລົງດ້ວຍສິ່ງທີ່ຈຳເປັນຕ້ອງໃຊ້ທີ່ຍັງບໍ່ທັນໄດ້ຮັບການແກ້ໄຂ ({}) ໃນ {} ແພັກເກັ"
-"ດ."
+"ຂໍ້ຜິດພາດ: Repoclosure ສິ້ນສຸດລົງດ້ວຍສິ່ງທີ່ຈຳເປັນຕ້ອງໃຊ້ທີ່ຍັງບໍ່ທັນໄດ້ຮັບການແກ້ໄຂ ({}) ໃນ {} "
+"ແພັກເກັດ."

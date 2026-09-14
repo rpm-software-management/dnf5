@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-26 03:48+0000\n"
+"POT-Creation-Date: 2026-09-08 12:03+0000\n"
 "PO-Revision-Date: 2026-03-05 02:22+0000\n"
 "Last-Translator: Massii Aqvayli <massiin@proton.me>\n"
 "Language-Team: Kabyle <https://translate.fedoraproject.org/projects/dnf5/"
@@ -29,7 +29,7 @@ msgstr ""
 msgid "from-repofile: {}"
 msgstr ""
 
-#: addrepo.cpp:169 setopt.cpp:83 setvar.cpp:49
+#: addrepo.cpp:169 setopt.cpp:53 setvar.cpp:49
 #, c++-format
 msgid "{}: Badly formatted argument value \"{}\""
 msgstr "{}: Azal n ufakul yettwamsel s wudem arameɣtu \"{}\""
@@ -39,7 +39,7 @@ msgstr "{}: Azal n ufakul yettwamsel s wudem arameɣtu \"{}\""
 msgid "Cannot set repository option \"{}={}\": {}"
 msgstr "Ur izmir ara ad isbadu tanefrunt n ukufi \"{}={}\": {}"
 
-#: addrepo.cpp:187 setopt.cpp:138
+#: addrepo.cpp:187 setopt.cpp:108
 #, c++-format
 msgid "Sets the \"{}\" option again with a different value: \"{}\" != \"{}\""
 msgstr ""
@@ -101,16 +101,29 @@ msgstr ""
 msgid "A repository with id \"{}\" already configured in file: {}"
 msgstr ""
 
-#: addrepo.cpp:486 setopt.cpp:263
+#: addrepo.cpp:486 shared.hpp:150
 #, c++-format
 msgid "Cannot read repositories from directory \"{}\": {}"
 msgstr ""
 
-#: config-manager.cpp:43
+#: config-manager.cpp:44
 msgid "Manage configuration"
 msgstr "Sefrek tawila"
 
-#: setopt.cpp:91 unsetopt.cpp:72
+#: repos.cpp:56 setopt.cpp:140
+#, c++-format
+msgid "No matching repository to modify: {}"
+msgstr "Ulac akufi inmeɣran i usnifel n: {}"
+
+#: repos.hpp:42
+msgid "Enables repositories"
+msgstr ""
+
+#: repos.hpp:50
+msgid "Disables repositories"
+msgstr ""
+
+#: setopt.cpp:61 unsetopt.cpp:73
 #, c++-format
 msgid ""
 "{}: Badly formatted argument value: Last key character cannot be '.': {}"
@@ -118,17 +131,17 @@ msgstr ""
 "{}: Azal n ufakul ur yemsil ara akken iwata: Asekkil aneggaru ur izmir ara "
 "ad yili d '.': {}"
 
-#: setopt.cpp:100 unsetopt.cpp:81
+#: setopt.cpp:70 unsetopt.cpp:82
 #, c++-format
 msgid "{}: Empty repository id is not allowed: {}"
 msgstr "{}: Asulay n ukufi ilem ur yettwasireg ara: {}"
 
-#: setopt.cpp:109
+#: setopt.cpp:79
 #, c++-format
 msgid "Cannot set repository option \"{}\": {}"
 msgstr "Ur izmir ara ad isbadu tanefrunt n ukufi \"{}\": {}"
 
-#: setopt.cpp:116 setopt.cpp:179
+#: setopt.cpp:86 setopt.cpp:149
 #, c++-format
 msgid ""
 "Sets the \"{}\" option of the repository \"{}\" again with a different "
@@ -137,15 +150,10 @@ msgstr ""
 "Sbadu tanefrunt \"{}\" n ukufi \"{}\" tikkelt nniḍen s wazal yemgaraden: \"{}"
 "\" != \"{}\""
 
-#: setopt.cpp:130
+#: setopt.cpp:100
 #, c++-format
 msgid "Cannot set option: \"{}\": {}"
 msgstr "Ur izmir ara ad isbadu tanefrunt: \"{}\": {}"
-
-#: setopt.cpp:170
-#, c++-format
-msgid "No matching repository to modify: {}"
-msgstr "Ulac akufi inmeɣran i usnifel n: {}"
 
 #: setvar.cpp:60
 #, c++-format
@@ -167,7 +175,7 @@ msgstr ""
 msgid "Cannot write variable to file \"{}\": {}"
 msgstr ""
 
-#: shared.hpp:58
+#: shared.hpp:59
 #, c++-format
 msgid ""
 "The path \"{}\" exists, but it is not a directory or a symlink to a "
@@ -175,12 +183,12 @@ msgid ""
 msgstr ""
 "Abrid \"{}\" yella, maca mačči d akaram neɣ d aseɣwen azamulan ɣer ukaram."
 
-#: shared.hpp:63
+#: shared.hpp:64
 #, c++-format
 msgid "The path \"{}\" exists, but it is a symlink to a non-existent object."
 msgstr "Abrid \"{}\" yella, maca d aseɣwen azamulan ɣer tɣawsa ur nelli."
 
-#: shared.hpp:69
+#: shared.hpp:70
 #, c++-format
 msgid ""
 "Directory \"{}\" does not exist. Add \"--create-missing-dir\" to create "
@@ -189,17 +197,17 @@ msgstr ""
 "Akaram \"{}\" ur yella ara. Rnu \"--create-missing-dir\" iwakken ad d-"
 "tesnulfuḍ ikaramen i ixuṣṣen."
 
-#: shared.hpp:80
+#: shared.hpp:81
 #, c++-format
 msgid "Variable name can contain only ASCII letters, numbers and '_': {}"
 msgstr ""
 
-#: unsetopt.cpp:93
+#: unsetopt.cpp:94
 #, c++-format
 msgid "config-manager: Request to remove unsupported repository option: {}"
 msgstr ""
 
-#: unsetopt.cpp:105
+#: unsetopt.cpp:106
 #, c++-format
 msgid "config-manager: Request to remove unsupported main option: {}"
 msgstr ""
@@ -231,7 +239,7 @@ msgid ""
 "the overrides: {}.{}"
 msgstr ""
 
-#: unsetopt.cpp:214
+#: unsetopt.cpp:208
 #, c++-format
 msgid ""
 "config-manager: Request to remove repository option but file with overrides "

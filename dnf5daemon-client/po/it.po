@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-26 03:48+0000\n"
+"POT-Creation-Date: 2026-09-08 12:03+0000\n"
 "PO-Revision-Date: 2025-05-03 16:58+0000\n"
 "Last-Translator: Salvatore Cocuzza <info@salvatorecocuzza.it>\n"
 "Language-Team: Italian <https://translate.fedoraproject.org/projects/dnf5/"
@@ -150,6 +150,7 @@ msgid "CVE_ID,..."
 msgstr "ID_CVE,..."
 
 #: commands/clean/clean.cpp:88
+#, c++-format
 msgid "Error cleaning the cache: {}"
 msgstr "Errore durante la pulizia della cache: {}"
 
@@ -192,6 +193,7 @@ msgid "search for packages matching various criteria"
 msgstr "cerca pacchetti che corrispondono a vari criteri"
 
 #: commands/repoquery/repoquery.cpp:159
+#, c++-format
 msgid "Error parsing JSON object \"{}\": {}"
 msgstr "Errore durante l'analisi dell'oggetto JSON \"{}\": {}"
 
@@ -203,13 +205,14 @@ msgstr ""
 "Questo comando deve essere eseguito con privilegi di superutente (come "
 "utente root sulla maggior parte dei sistemi)."
 
-#: main.cpp:158
+#: main.cpp:172
+#, c++-format
 msgid ""
 "{}: Badly formatted argument value: Last key character cannot be '.': {}"
 msgstr ""
 "{}: Valore argomento formattato in modo errato: l'ultimo carattere della "
 "chiave non può essere '.': {}"
 
-#: main.cpp:258 main.cpp:308
+#: main.cpp:272 main.cpp:322
 msgid ". Add \"--help\" for more information about the arguments."
 msgstr ". Aggiungere \"--help\" per maggiori informazioni sugli argomenti."

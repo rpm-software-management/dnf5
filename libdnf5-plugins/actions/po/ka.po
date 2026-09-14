@@ -1,16 +1,15 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# Temuri Doghonadze <temuri.doghonadze@gmail.com>, 2023, 2024, 2025.
+# Temuri Doghonadze <temuri.doghonadze@gmail.com>, 2023, 2024, 2025, 2026.
 # Weblate Translation Memory <noreply-mt-weblate-translation-memory@weblate.org>, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-26 03:48+0000\n"
-"PO-Revision-Date: 2025-02-19 09:09+0000\n"
-"Last-Translator: Weblate Translation Memory <noreply-mt-weblate-translation-"
-"memory@weblate.org>\n"
+"POT-Creation-Date: 2026-09-08 12:03+0000\n"
+"PO-Revision-Date: 2026-09-03 07:23+0000\n"
+"Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <https://translate.fedoraproject.org/projects/dnf5/"
 "libdnf5-plugin-actions/ka/>\n"
 "Language: ka\n"
@@ -18,29 +17,33 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.10\n"
+"X-Generator: Weblate 2026.8.1\n"
 
-#: actions.cpp:237
+#: actions.cpp:239
+#, c++-format
 msgid "File \"{}\" on line {}: {}"
 msgstr "ფაილი \"{}\" ხაზზე {}: {}"
 
-#: actions.cpp:636 actions.cpp:642 actions.cpp:648 actions.cpp:654
+#: actions.cpp:627 actions.cpp:633 actions.cpp:639 actions.cpp:645
 msgid "\"HOOK:PKG_FILTER:DIRECTION:OPTIONS:CMD\" format expected"
 msgstr "მოველოდი ფორმატს \"HOOK:PKG_FILTER:DIRECTION:OPTIONS:CMD\""
 
-#: actions.cpp:676
+#: actions.cpp:667
+#, c++-format
 msgid "Unknown \"enabled\" option value \"{}\""
 msgstr "უცნობი \"enabled\" პარამეტრის მნიშვნელობა \"{}\""
 
-#: actions.cpp:683
+#: actions.cpp:674
+#, c++-format
 msgid "Unknown option \"{}\""
 msgstr "უცნობი პარამეტრი \"{}\""
 
-#: actions.cpp:711
+#: actions.cpp:702
+#, c++-format
 msgid "Unknown hook \"{}\""
 msgstr "უცნობი ჰუკი \"{}\""
 
-#: actions.cpp:720
+#: actions.cpp:711
 msgid ""
 "Package filter can only be used in GOAL_RESOLVED, PRE_TRANS and POST_TRANS "
 "hooks"
@@ -48,48 +51,57 @@ msgstr ""
 "პაკეტების ფილტრი, მხოლოდ, GOAL_RESOLVED, PRE_TRANS და POST_TRANS ჰუკებში "
 "შეგიძლიათ, გამოიყენოთ"
 
-#: actions.cpp:726
+#: actions.cpp:717
 msgid "Cannot use direction without package filter"
 msgstr "მიმართულებას პაკეტების ფილტრის გარეშე ვერ გამოიყენებთ"
 
-#: actions.cpp:740
+#: actions.cpp:731
+#, c++-format
 msgid "Unknown package direction \"{}\""
 msgstr "უცნობი პაკეტის მიმართულება \"{}\""
 
-#: actions.cpp:747
+#: actions.cpp:738
+#, c++-format
 msgid "Unknown mode \"{}\""
 msgstr "უცნობი რეჟიმი \"{}\""
 
-#: actions.cpp:755
+#: actions.cpp:746
+#, c++-format
 msgid "Unsupported value of the \"raise_error\" option: {}"
 msgstr "მხარდაუჭერელი მნიშნელობა პარამეტრისთვის \"raise_error\": {}"
 
-#: actions.cpp:760
+#: actions.cpp:751
 msgid "Missing command"
 msgstr "ნაკლული ბრძანება"
 
-#: actions.cpp:953
-msgid "Synax error: Missing equal sign (=) in action output line: {}"
+#: actions.cpp:946
+#, c++-format
+msgid "Syntax error: Missing equal sign (=) in action output line: {}"
 msgstr ""
 "სინტაქსის შეცდომა: აკლია ტოლობის ნიშანი(=) ქმედების გამოტანის ხაზზე: {}"
 
-#: actions.cpp:964
+#: actions.cpp:957
+#, c++-format
 msgid "Cannot set option: Action output line: {}"
 msgstr "პარამეტრის დაყენება შეუძლებელია: ქმედების გამოტანილი ხაზი: {}"
 
-#: actions.cpp:982
+#: actions.cpp:975
+#, c++-format
 msgid "Action sent the wrong log level: {}"
 msgstr "ქმედებამ გააგზავნა არასწორი ჟურნალის დონე: {}"
 
-#: actions.cpp:987 actions.cpp:1794
+#: actions.cpp:980 actions.cpp:1792
+#, c++-format
 msgid "Action calls for stop: {}"
 msgstr "ქმედების გამოძახებები გასაჩერებლად: {}"
 
-#: actions.cpp:990 actions.cpp:1801
+#: actions.cpp:983 actions.cpp:1799
+#, c++-format
 msgid "Action sent error message: {}"
 msgstr "ქმედების გამოგზავნილი შეცდომის შეტყობინება: {}"
 
-#: actions.cpp:995
+#: actions.cpp:988
+#, c++-format
 msgid ""
 "Syntax error: Action output line must start with \"tmp.\" or \"conf.\" or "
 "\"var.\" or \"stop=\" or \"error=\": {}"
@@ -97,62 +109,67 @@ msgstr ""
 "სინტაქსის შეცდომა: ქმედების გამოტანის ხაზი უნდა იწყებოდეს ერთ-ერთი "
 "სტრიქონით: \"tmp.\", \"conf.\", \"var.\", \"stop=\", ან \"error=\": {}"
 
-#: actions.cpp:1020
+#: actions.cpp:1013
 msgid "Error reading from action (from pipe)"
 msgstr "ქმედებიდან (გადაცემის არხიდან) წაკითხვის შეცდომა"
 
-#: actions.cpp:1038
+#: actions.cpp:1031
+#, c++-format
 msgid "Syntax error in json request from action: Missing starting '{{' char"
 msgstr ""
 "სინტაქსის შეცდომა json ტიპის მოთხოვნაში ქმედებიდან: აკლია დამწყები '{{' "
 "სიმბოლო"
 
-#: actions.cpp:1062
+#: actions.cpp:1055
 msgid "Error during processing of a request from action."
 msgstr "შეცდომა ქმედებიდან მოთხოვნის დამუშავებისას."
 
-#: actions.cpp:1071
+#: actions.cpp:1064
+#, c++-format
 msgid "Syntax error in json request from action: {}"
 msgstr "სინტაქისს შეცდომა json მოთხოვნაში ქმედებიდან: {}"
 
-#: actions.cpp:1079
+#: actions.cpp:1072
 msgid "Syntax error in json request from action: Incomplete input"
 msgstr "სინტაქსის შეცდომა json მოთხოვნაში ქმედებიდან: შეყვანა დაუსრულებელია"
 
-#: actions.cpp:1154
+#: actions.cpp:1147
 msgid "Cannot write response"
 msgstr "პასუხის ჩაწერა შეუძლებელია"
 
-#: actions.cpp:1821
+#: actions.cpp:1819
 msgid "Actions plugin: Cannot create pipe"
 msgstr "ქმედების დამატება: ვერ შევქმენი ფაიფი"
 
-#: actions.cpp:1913
+#: actions.cpp:1911
 msgid "Actions plugin: Cannot fork"
 msgstr "ქმედების დამატება: დაფორკვა შეუძლებელია"
 
-#: actions.cpp:1968
+#: actions.cpp:1966
 msgid "Actions plugin: Cannot bind command stdin"
 msgstr ""
 "ქმედების დამატება: ბრძანების სტანდარტულ შეყვანაზე მიმაგრება შეუძლებელია"
 
-#: actions.cpp:1970
+#: actions.cpp:1968
 msgid "Actions plugin: Cannot bind command stdout"
 msgstr "ქმედების დამატება: ბრძანების გამოტანის არხზე მიმაგრება შეუძლებელია"
 
-#: actions.cpp:1988
+#: actions.cpp:1986
+#, c++-format
 msgid "Cannot execute action, command \"{}\" arguments \"{}\""
 msgstr "ქმედების შესრულება შეუძლებელია. ბრძანება \"{}\". არგუმენტები \"{}\""
 
-#: actions.cpp:1996
+#: actions.cpp:1994
 msgid "Error during preparation child process"
 msgstr "შეცდომა შვილი პროცესის მომზადებისას"
 
-#: actions.cpp:2015
+#: actions.cpp:2013
+#, c++-format
 msgid "Exit code: {}"
 msgstr "გასვლის კოდი: {}"
 
-#: actions.cpp:2019
+#: actions.cpp:2017
+#, c++-format
 msgid "Terminated by signal: {}"
 msgstr "შეწყდა სიგნალით: {}"
 

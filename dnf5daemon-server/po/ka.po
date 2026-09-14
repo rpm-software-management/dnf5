@@ -1,13 +1,13 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# Temuri Doghonadze <temuri.doghonadze@gmail.com>, 2023.
+# Temuri Doghonadze <temuri.doghonadze@gmail.com>, 2023, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-26 03:48+0000\n"
-"PO-Revision-Date: 2023-11-28 02:51+0000\n"
+"POT-Creation-Date: 2026-09-08 12:03+0000\n"
+"PO-Revision-Date: 2026-09-03 07:23+0000\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <https://translate.fedoraproject.org/projects/dnf5/"
 "dnf5daemon-server/ka/>\n"
@@ -16,12 +16,19 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.2.1\n"
+"X-Generator: Weblate 2026.8.1\n"
 
 #: threads_manager.cpp:94
+#, c++-format
+msgid "Invalid locale \"{}\"."
+msgstr "არასწორი ლოკალი \"{}\"."
+
+#: threads_manager.cpp:100
+#, c++-format
 msgid "Failed to create locale \"{}\"."
 msgstr "ლოკალის \"{}\" შექმნა ჩავარდა."
 
-#: threads_manager.cpp:99
+#: threads_manager.cpp:105
+#, c++-format
 msgid "Failed to use locale \"{}\"."
 msgstr "ლოკალის \"{}\" გამოყენება ჩავარდა."

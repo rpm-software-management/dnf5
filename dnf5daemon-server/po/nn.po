@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-26 03:48+0000\n"
+"POT-Creation-Date: 2026-09-08 12:03+0000\n"
 "PO-Revision-Date: 2026-06-10 15:38+0000\n"
 "Last-Translator: Eskil Gerdrup <eskil.gerdrup@outlook.com>\n"
 "Language-Team: Norwegian Nynorsk <https://translate.fedoraproject.org/"
@@ -20,11 +20,17 @@ msgstr ""
 "X-Generator: Weblate 2026.6.1\n"
 
 #: threads_manager.cpp:94
+#, fuzzy, c++-format
+#| msgid "Failed to use locale \"{}\"."
+msgid "Invalid locale \"{}\"."
+msgstr "Kunne ikkje nytta lokalet \"{}\"."
+
+#: threads_manager.cpp:100
 #, c++-format
 msgid "Failed to create locale \"{}\"."
 msgstr "Kunne ikkje oppretta lokalet \"{}\"."
 
-#: threads_manager.cpp:99
+#: threads_manager.cpp:105
 #, c++-format
 msgid "Failed to use locale \"{}\"."
 msgstr "Kunne ikkje nytta lokalet \"{}\"."

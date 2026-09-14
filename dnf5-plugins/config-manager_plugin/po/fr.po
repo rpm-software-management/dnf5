@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-26 03:48+0000\n"
+"POT-Creation-Date: 2026-09-08 12:03+0000\n"
 "PO-Revision-Date: 2024-10-08 08:41+0000\n"
 "Last-Translator: Léane GRASSER <leane.grasser@proton.me>\n"
 "Language-Team: French <https://translate.fedoraproject.org/projects/dnf5/"
@@ -20,41 +20,49 @@ msgstr ""
 "X-Generator: Weblate 5.7.2\n"
 
 #: addrepo.cpp:136
+#, c++-format
 msgid "from-repofile: \"{}\" file does not exist"
 msgstr "from-repofile: le fichier \"{}\" n'existe pas"
 
 #: addrepo.cpp:139
+#, c++-format
 msgid "from-repofile: {}"
 msgstr "from-repofile: {}"
 
-#: addrepo.cpp:169 setopt.cpp:83 setvar.cpp:49
+#: addrepo.cpp:169 setopt.cpp:53 setvar.cpp:49
+#, c++-format
 msgid "{}: Badly formatted argument value \"{}\""
 msgstr "{}: valeur d'argument \"{}\" mal formatée"
 
 #: addrepo.cpp:179
+#, c++-format
 msgid "Cannot set repository option \"{}={}\": {}"
 msgstr "Impossible de définir l'option de dépôt \"{}={}\": {}"
 
-#: addrepo.cpp:187 setopt.cpp:138
+#: addrepo.cpp:187 setopt.cpp:108
+#, c++-format
 msgid "Sets the \"{}\" option again with a different value: \"{}\" != \"{}\""
 msgstr ""
-"Définit l'option \"{}\" à nouveau avec une valeur différente : \"{}\" != "
-"\"{}\""
+"Définit l'option \"{}\" à nouveau avec une valeur différente : \"{}\" != \"{}"
+"\""
 
 #: addrepo.cpp:253
 msgid "Missing path to repository configuration directory"
 msgstr "Chemin d'accès au répertoire des configurations des dépôts manquant"
 
 #: addrepo.cpp:303
+#, c++-format
 msgid "Failed to copy repository configuration file \"{}\": {}"
 msgstr "Échec de la copie du fichier de configuration de dépôt \"{}\" : {}"
 
 #: addrepo.cpp:314
+#, c++-format
 msgid "Failed to download repository configuration file \"{}\": {}"
 msgstr ""
 "Éched du téléchargement du fichier de configuration de dépôt \"{}\" : {}"
 
 #: addrepo.cpp:342
+#, c++-format
 msgid ""
 "Error in added repository configuration file. Cannot set repository option "
 "\"{}={}\": {}"
@@ -63,6 +71,7 @@ msgstr ""
 "définir l'option de dépôt \"{}={}\" : {}"
 
 #: addrepo.cpp:376
+#, c++-format
 msgid "Bad baseurl: {}={}"
 msgstr "baseurl incorrecte : {}={}"
 
@@ -76,11 +85,13 @@ msgstr ""
 "non vide"
 
 #: addrepo.cpp:429
+#, c++-format
 msgid "Failed to save repository configuration file \"{}\": {}"
 msgstr ""
 "Échec de l'enregistrement du fichier de configuration de dépôt \"{}\" : {}"
 
 #: addrepo.cpp:451
+#, c++-format
 msgid ""
 "File \"{}\" already exists and configures repositories with IDs \"{}\". Add "
 "\"--add-or-replace\" or \"--overwrite\"."
@@ -89,6 +100,7 @@ msgstr ""
 "Ajoutez \"--add-or-replace\" ou \"--overwrite\"."
 
 #: addrepo.cpp:454
+#, c++-format
 msgid ""
 "File \"{}\" already exists and configures repositories with IDs \"{}\". Add "
 "\"--overwrite\" to overwrite."
@@ -97,33 +109,52 @@ msgstr ""
 "Ajoutez \"--overwrite\" pour écraser le fichier."
 
 #: addrepo.cpp:474 addrepo.cpp:500
+#, c++-format
 msgid "A repository with id \"{}\" already configured in file: {}"
 msgstr "Un dépôt avec pour ID \"{}\" est déjà configuré dans le fichier : {}"
 
-#: addrepo.cpp:486 setopt.cpp:263
+#: addrepo.cpp:486 shared.hpp:150
+#, c++-format
 msgid "Cannot read repositories from directory \"{}\": {}"
 msgstr "Impossible de lire les dépôts dans le répertoire \"{}\" : {}"
 
-#: config-manager.cpp:43
+#: config-manager.cpp:44
 msgid "Manage configuration"
 msgstr "Gérer la configuration"
 
-#: setopt.cpp:91 unsetopt.cpp:72
+#: repos.cpp:56 setopt.cpp:140
+#, c++-format
+msgid "No matching repository to modify: {}"
+msgstr "Aucun dépôt correspondant à modifier : {}"
+
+#: repos.hpp:42
+msgid "Enables repositories"
+msgstr ""
+
+#: repos.hpp:50
+msgid "Disables repositories"
+msgstr ""
+
+#: setopt.cpp:61 unsetopt.cpp:73
+#, c++-format
 msgid ""
 "{}: Badly formatted argument value: Last key character cannot be '.': {}"
 msgstr ""
 "{}: valeur d'argument mal formatée : le dernier caractère ne peut pas être "
 "'.' : {}"
 
-#: setopt.cpp:100 unsetopt.cpp:81
+#: setopt.cpp:70 unsetopt.cpp:82
+#, c++-format
 msgid "{}: Empty repository id is not allowed: {}"
 msgstr "{} : les ID de dépôt vides ne sont pas autorisés : {}"
 
-#: setopt.cpp:109
+#: setopt.cpp:79
+#, c++-format
 msgid "Cannot set repository option \"{}\": {}"
 msgstr "Impossible de définir l'option de dépôt \"{}\" : {}"
 
-#: setopt.cpp:116 setopt.cpp:179
+#: setopt.cpp:86 setopt.cpp:149
+#, c++-format
 msgid ""
 "Sets the \"{}\" option of the repository \"{}\" again with a different "
 "value: \"{}\" != \"{}\""
@@ -131,19 +162,18 @@ msgstr ""
 "Définit l'option \"{}\" du dépôt \"{}\" à nouveau avec une valeur "
 "différente : \"{}\" != \"{}\""
 
-#: setopt.cpp:130
+#: setopt.cpp:100
+#, c++-format
 msgid "Cannot set option: \"{}\": {}"
 msgstr "Impossible de définir l'option : \"{}\" : {}"
 
-#: setopt.cpp:170
-msgid "No matching repository to modify: {}"
-msgstr "Aucun dépôt correspondant à modifier : {}"
-
 #: setvar.cpp:60
+#, c++-format
 msgid "Cannot set \"{}\": Variable \"{}\" is read-only"
 msgstr "Impossible de définir \"{}\" : la variable \"{}\" est en lecture seule"
 
 #: setvar.cpp:68
+#, c++-format
 msgid "Sets the \"{}\" variable again with a different value: \"{}\" != \"{}\""
 msgstr ""
 "Définit la variable \"{}\" à nouveau avec une valeur différente : \"{}\" != "
@@ -154,10 +184,12 @@ msgid "Missing path to vars directory"
 msgstr "Chemin d'accès aux variables manquant"
 
 #: setvar.cpp:110
+#, c++-format
 msgid "Cannot write variable to file \"{}\": {}"
 msgstr "Impossible d'écrire la variable dans le fichier \"{}\" : {}"
 
-#: shared.hpp:58
+#: shared.hpp:59
+#, c++-format
 msgid ""
 "The path \"{}\" exists, but it is not a directory or a symlink to a "
 "directory."
@@ -165,13 +197,15 @@ msgstr ""
 "Le chemin d'accès \"{}\" existe, mais il ne s'agit ni d'un répertoire ni "
 "d'un lien symbolique vers un répertoire."
 
-#: shared.hpp:63
+#: shared.hpp:64
+#, c++-format
 msgid "The path \"{}\" exists, but it is a symlink to a non-existent object."
 msgstr ""
 "Le chemin d'accès \"{}\" existe, mais il s'agit d'un lien symbolique vers un "
 "objet qui n'existe pas."
 
-#: shared.hpp:69
+#: shared.hpp:70
+#, c++-format
 msgid ""
 "Directory \"{}\" does not exist. Add \"--create-missing-dir\" to create "
 "missing directories."
@@ -179,25 +213,29 @@ msgstr ""
 "Le répertoire \"{}\" n'existe pas. Ajoutez \"--create-missing-dir\" pour "
 "créer les répertoires manquants."
 
-#: shared.hpp:80
+#: shared.hpp:81
+#, c++-format
 msgid "Variable name can contain only ASCII letters, numbers and '_': {}"
 msgstr ""
 "Le nom de la variable ne peut contenir que des caractères ASCII (lettres, "
 "nombres et '_') : {}"
 
-#: unsetopt.cpp:93
+#: unsetopt.cpp:94
+#, c++-format
 msgid "config-manager: Request to remove unsupported repository option: {}"
 msgstr ""
 "config-manager: suppression d'une option de dépôt non prise en charge "
 "demandée : {}"
 
-#: unsetopt.cpp:105
+#: unsetopt.cpp:106
+#, c++-format
 msgid "config-manager: Request to remove unsupported main option: {}"
 msgstr ""
 "config-manage: suppression d'une option principale non prise en charge "
 "demandée : {}"
 
 #: unsetopt.cpp:140
+#, c++-format
 msgid ""
 "config-manager: Request to remove main option but it is not present in the "
 "config file: {}"
@@ -206,6 +244,7 @@ msgstr ""
 "absente du fichier de configuration : {}"
 
 #: unsetopt.cpp:152
+#, c++-format
 msgid ""
 "config-manager: Request to remove main option but config file not found: {}"
 msgstr ""
@@ -213,6 +252,7 @@ msgstr ""
 "fichier de configuration est introuvable : {}"
 
 #: unsetopt.cpp:186
+#, c++-format
 msgid ""
 "config-manager: Request to remove repository option but repoid is not "
 "present in the overrides: {}"
@@ -221,6 +261,7 @@ msgstr ""
 "est absent des overrides : {}"
 
 #: unsetopt.cpp:194
+#, c++-format
 msgid ""
 "config-manager: Request to remove repository option but it is not present in "
 "the overrides: {}.{}"
@@ -228,7 +269,8 @@ msgstr ""
 "config-manager: suppression d'une option de dépôt demandée, mais elle est "
 "absente des overrides : {}.{}"
 
-#: unsetopt.cpp:214
+#: unsetopt.cpp:208
+#, c++-format
 msgid ""
 "config-manager: Request to remove repository option but file with overrides "
 "not found: {}"
@@ -237,6 +279,7 @@ msgstr ""
 "contenant les overrides est introuvable : {}"
 
 #: unsetvar.cpp:69
+#, c++-format
 msgid ""
 "config-manager: Request to remove variable but vars directory was not found: "
 "{}"
@@ -245,6 +288,7 @@ msgstr ""
 "variables est introuvable : {}"
 
 #: unsetvar.cpp:82
+#, c++-format
 msgid ""
 "config-manager: Request to remove variable but it is not present in the vars "
 "directory: {}"
@@ -253,5 +297,6 @@ msgstr ""
 "du répertoire des variables : {}"
 
 #: unsetvar.cpp:88
+#, c++-format
 msgid "Cannot remove variable file \"{}\": {}"
 msgstr "Impossible de supprimer le fichier de variable \"{}\" : {}"

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-26 03:48+0000\n"
+"POT-Creation-Date: 2026-09-08 12:03+0000\n"
 "PO-Revision-Date: 2026-01-19 12:58+0000\n"
 "Last-Translator: Demir Kolak <demirkolak8@gmail.com>\n"
 "Language-Team: Turkish <https://translate.fedoraproject.org/projects/dnf5/"
@@ -54,8 +54,8 @@ msgid ""
 "\n"
 "The Fedora Project does not exercise any power over the contents of\n"
 "this repository beyond the rules outlined in the Copr FAQ at\n"
-"<https://docs.pagure.org/copr.copr/user_documentation.html#what-i-can-build-"
-"in-copr>,\n"
+"<https://docs.copr.fedorainfracloud.org/user_documentation.html#what-i-can-"
+"build-in-copr>,\n"
 "and packages are not held to any quality or security level.\n"
 "\n"
 "Please do not file bug reports about these packages in Fedora\n"
@@ -90,8 +90,8 @@ msgid ""
 "disable specified Copr repository (if exists), keep {}/*.repo file - just "
 "mark enabled=0"
 msgstr ""
-"belirtilen Copr deposunu devre dışı bırak (varsa), {}/*.repo dosyasını "
-"sakla - sadece enabled=0 olarak işaretle"
+"belirtilen Copr deposunu devre dışı bırak (varsa), {}/*.repo dosyasını sakla "
+"- sadece enabled=0 olarak işaretle"
 
 #: copr_enable.cpp:38
 #, c++-format
@@ -108,9 +108,15 @@ msgid ""
 "ppc64le'.  When not specified, the 'dnf copr' command attempts to detect it."
 msgstr ""
 
-#: copr_list.cpp:51
+#: copr_list.cpp:53
 msgid "list Copr repositories"
 msgstr "Copr depolarını listele"
+
+#: copr_list.cpp:86
+msgid ""
+"No repositories were loaded from the installroot. To use the configuration "
+"and repositories of the host system, pass --use-host-config."
+msgstr ""
 
 #: copr_remove.cpp:35
 #, c++-format
@@ -195,6 +201,6 @@ msgid "Copr repository '{}' in '{}' disabled."
 msgstr ""
 
 #: copr_repo.cpp:632 copr_repo.cpp:657
-#, c++-format, fuzzy
+#, fuzzy, c++-format
 msgid "Repository '{}' not found on this system"
 msgstr "Depo {} bu sistemde bulunamadı."

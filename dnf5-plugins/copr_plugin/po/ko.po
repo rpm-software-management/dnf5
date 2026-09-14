@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-26 03:48+0000\n"
+"POT-Creation-Date: 2026-09-08 12:03+0000\n"
 "PO-Revision-Date: 2024-06-08 02:49+0000\n"
 "Last-Translator: 김인수 <simmon@nplob.com>\n"
 "Language-Team: Korean <https://translate.fedoraproject.org/projects/dnf5/"
@@ -24,13 +24,14 @@ msgid "Copr hub (the web-UI/API server) hostname"
 msgstr "Copr hub (web-UI/API 서버) 호스트이름"
 
 #: copr.cpp:88
+#, c++-format
 msgid ""
 "Copr project ID to {}.  Use either a format OWNER/PROJECT or HUB/OWNER/"
 "PROJECT (if HUB is not specified, the default one, or --hub <ARG>, is used.  "
 "OWNER is either a username, or a @groupname.  PROJECT can be a simple "
-"project name, or a \"project directory\" containing colons, e.g. 'project:"
-"custom:123'.  HUB can be either the Copr frontend hostname (e.g. copr."
-"fedorainfracloud.org ) or the shortcut (e.g. fedora).  Example: 'fedora/"
+"project name, or a \"project directory\" containing colons, e.g. "
+"'project:custom:123'.  HUB can be either the Copr frontend hostname (e.g. "
+"copr.fedorainfracloud.org ) or the shortcut (e.g. fedora).  Example: 'fedora/"
 "@footeam/coolproject'."
 msgstr ""
 "{}에 대한 Copr 프로젝트 ID.  형식 OWNER/PROJECT 또는 HUB/OWNER/PROJECT (만약 "
@@ -42,6 +43,7 @@ msgstr ""
 "페도라) 중에 하나 일 수 있습니다. 예: 'fedora/@footeam/coolproject'."
 
 #: copr.cpp:106
+#, c++-format
 msgid "Invalid PROJECT_SPEC format '{}'"
 msgstr "잘못된 PROJECT_SPEC 형식 '{}'"
 
@@ -53,14 +55,27 @@ msgstr ""
 "능)"
 
 #: copr_constants.hpp:29
+#, fuzzy
+#| msgid ""
+#| "Enabling a Copr repository. Please note that this repository is not part\n"
+#| "of the main distribution, and quality may vary.\n"
+#| "\n"
+#| "The Fedora Project does not exercise any power over the contents of\n"
+#| "this repository beyond the rules outlined in the Copr FAQ at\n"
+#| "<https://docs.pagure.org/copr.copr/user_documentation.html#what-i-can-"
+#| "build-in-copr>,\n"
+#| "and packages are not held to any quality or security level.\n"
+#| "\n"
+#| "Please do not file bug reports about these packages in Fedora\n"
+#| "Bugzilla. In case of problems, contact the owner of this repository.\n"
 msgid ""
 "Enabling a Copr repository. Please note that this repository is not part\n"
 "of the main distribution, and quality may vary.\n"
 "\n"
 "The Fedora Project does not exercise any power over the contents of\n"
 "this repository beyond the rules outlined in the Copr FAQ at\n"
-"<https://docs.pagure.org/copr.copr/user_documentation.html#what-i-can-build-"
-"in-copr>,\n"
+"<https://docs.copr.fedorainfracloud.org/user_documentation.html#what-i-can-"
+"build-in-copr>,\n"
 "and packages are not held to any quality or security level.\n"
 "\n"
 "Please do not file bug reports about these packages in Fedora\n"
@@ -81,6 +96,7 @@ msgstr ""
 "이들 문제는, 이들 저장소 소유자와 접촉하세요.\n"
 
 #: copr_constants.hpp:41
+#, c++-format
 msgid ""
 "Maintainer of the enabled Copr repository decided to make\n"
 "it dependent on other repositories. Such repositories are\n"
@@ -113,6 +129,7 @@ msgid "print useful info about the system, useful for debugging"
 msgstr "디버깅을 위해 유용한 시스템에 대해 유익한 정보를 출력합니다"
 
 #: copr_disable.cpp:35
+#, c++-format
 msgid ""
 "disable specified Copr repository (if exists), keep {}/*.repo file - just "
 "mark enabled=0"
@@ -121,9 +138,10 @@ msgstr ""
 "단지 enabled=0를 표시합니다"
 
 #: copr_enable.cpp:38
+#, c++-format
 msgid ""
-"download the repository info from a Copr server and install it as a {}/*."
-"repo file"
+"download the repository info from a Copr server and install it as a {}/"
+"*.repo file"
 msgstr "Copr 서버에서 저장소 정보를 내려받고 {}/*.repo 파일로 이를 설치합니다"
 
 #: copr_enable.cpp:46
@@ -135,17 +153,25 @@ msgstr ""
 "ppc64le')에서 지정되었습니다.  지정되지 않았을 때에, 'dnf copr' 명령이 이를 "
 "탐지하려고 합니다."
 
-#: copr_list.cpp:51
+#: copr_list.cpp:53
 msgid "list Copr repositories"
 msgstr "Copr 저장소 목록"
 
+#: copr_list.cpp:86
+msgid ""
+"No repositories were loaded from the installroot. To use the configuration "
+"and repositories of the host system, pass --use-host-config."
+msgstr ""
+
 #: copr_remove.cpp:35
+#, c++-format
 msgid ""
 "remove specified Copr repository from the system (removes the {}/*.repo file)"
 msgstr ""
 "시스템에서 지정된 Copr 저장소를 제거합니다 ({}/*.repo 파일을 제거합니다)"
 
 #: copr_repo.cpp:91
+#, c++-format
 msgid "Directory '{}' not found in '{}' Copr project."
 msgstr "디렉토리 '{}'는 '{}' Copr 프로젝트에서 찾을 수 없습니다."
 
@@ -174,18 +200,22 @@ msgid "Can't parse Copr repo spec: "
 msgstr "Copr 저장소 상세를 구문 분석 할 수 없습니다: "
 
 #: copr_repo.cpp:344
+#, c++-format
 msgid "Can't remove the {} repo file"
 msgstr "{} 저장소 파일을 제거 할 수 없습니다"
 
 #: copr_repo.cpp:347
+#, c++-format
 msgid "Repo file {} successfully removed"
 msgstr "저장소 파일 {}이 성공적으로 제거되었습니다"
 
 #: copr_repo.cpp:393
+#, c++-format
 msgid "Can't find item {} in {}"
 msgstr "항목 {}을 찾을 수 없습니다 ({}에서)"
 
 #: copr_repo.cpp:449
+#, c++-format
 msgid "Removing old config file '{}'"
 msgstr "오래된 config 파일 '{}'을 제거 중"
 
@@ -194,6 +224,7 @@ msgid "Can't remove"
 msgstr "제거 할 수 없습니다"
 
 #: copr_repo.cpp:526
+#, c++-format
 msgid ""
 "Copr repofile '{}' has an old format, fix by re-enabling it $ {} copr enable "
 "{}"
@@ -202,17 +233,21 @@ msgstr ""
 "화 하여 수정합니다"
 
 #: copr_repo.cpp:560
+#, c++-format
 msgid "Repo id '{}' in '{}' is suspicious"
 msgstr "저장소 id '{}'('{}'에서)가 의심스럽습니다"
 
 #: copr_repo.cpp:567
+#, c++-format
 msgid "Repo id '{}' doesn't belong to '{}' repofile"
 msgstr "저장소 id '{}'는 '{}' repofile에 속하지 않습니다"
 
 #: copr_repo.cpp:618
+#, c++-format
 msgid "Copr repository '{}' in '{}' disabled."
 msgstr "Copr 저장소 '{}'('{}'에서)는 사용 할 수 없습니다."
 
 #: copr_repo.cpp:632 copr_repo.cpp:657
+#, c++-format
 msgid "Repository '{}' not found on this system"
 msgstr "저장소 '{}'는 이 시스템에서 찾을 수 없습니다"

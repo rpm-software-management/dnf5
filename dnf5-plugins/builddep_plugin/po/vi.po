@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-26 03:48+0000\n"
+"POT-Creation-Date: 2026-09-08 12:03+0000\n"
 "PO-Revision-Date: 2025-09-02 14:20+0000\n"
 "Last-Translator: Tri Phuong Nguyen <triphuongvasa@gmail.com>\n"
 "Language-Team: Vietnamese <https://translate.fedoraproject.org/projects/dnf5/"
@@ -23,10 +23,10 @@ msgstr ""
 msgid ""
 "Invalid value for macro definition \"{}\". \"macro expr\" format expected."
 msgstr ""
-"Giá trị không hợp lệ cho định nghĩa macro \"{}\". Yêu cầu định dạng "
-"\"macro expr\"."
+"Giá trị không hợp lệ cho định nghĩa macro \"{}\". Yêu cầu định dạng \"macro "
+"expr\"."
 
 #. failed to parse some of inputs (invalid spec, no package matched...)
-#: builddep.cpp:341
+#: builddep.cpp:359
 msgid "Failed to parse some inputs."
 msgstr "Xử lý một số dữ liệu đã nhập thất bại."

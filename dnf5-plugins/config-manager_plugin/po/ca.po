@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-26 03:48+0000\n"
+"POT-Creation-Date: 2026-09-08 12:03+0000\n"
 "PO-Revision-Date: 2025-03-14 03:08+0000\n"
 "Last-Translator: David Medina <dmedinacpnl@gmail.com>\n"
 "Language-Team: Catalan <https://translate.fedoraproject.org/projects/dnf5/"
@@ -20,22 +20,27 @@ msgstr ""
 "X-Generator: Weblate 5.10.2\n"
 
 #: addrepo.cpp:136
+#, c++-format
 msgid "from-repofile: \"{}\" file does not exist"
 msgstr "from-repofile: El fitxer \"{}\" no existeix"
 
 #: addrepo.cpp:139
+#, c++-format
 msgid "from-repofile: {}"
 msgstr "from-repofile: {}"
 
-#: addrepo.cpp:169 setopt.cpp:83 setvar.cpp:49
+#: addrepo.cpp:169 setopt.cpp:53 setvar.cpp:49
+#, c++-format
 msgid "{}: Badly formatted argument value \"{}\""
 msgstr "{}: format incorrecte del valor de l'argument \"{}\""
 
 #: addrepo.cpp:179
+#, c++-format
 msgid "Cannot set repository option \"{}={}\": {}"
 msgstr "No es pot establir l'opció de repositori \"{}={}\": {}"
 
-#: addrepo.cpp:187 setopt.cpp:138
+#: addrepo.cpp:187 setopt.cpp:108
+#, c++-format
 msgid "Sets the \"{}\" option again with a different value: \"{}\" != \"{}\""
 msgstr ""
 "Estableix un altre cop l'opció {} amb un valor diferent: \"{}\" != \"{}\""
@@ -45,14 +50,17 @@ msgid "Missing path to repository configuration directory"
 msgstr "Falta el camí al directori de configuració del dipòsit"
 
 #: addrepo.cpp:303
+#, c++-format
 msgid "Failed to copy repository configuration file \"{}\": {}"
 msgstr "No s'ha pogut copiar el fitxer de configuració del dipòsit {}: {}"
 
 #: addrepo.cpp:314
+#, c++-format
 msgid "Failed to download repository configuration file \"{}\": {}"
 msgstr "No s'ha pogut baixar el fitxer de configuració del dipòsit {}: {}"
 
 #: addrepo.cpp:342
+#, c++-format
 msgid ""
 "Error in added repository configuration file. Cannot set repository option "
 "\"{}={}\": {}"
@@ -61,6 +69,7 @@ msgstr ""
 "l'opció de repositori \"{}={}\": {}"
 
 #: addrepo.cpp:376
+#, c++-format
 msgid "Bad baseurl: {}={}"
 msgstr "Baseurl incorrecte: {}={}"
 
@@ -73,10 +82,12 @@ msgstr ""
 "set=mirrorlist=<URL>, --set=metalink=<URL> s'ha d'establir en un URL no buit"
 
 #: addrepo.cpp:429
+#, c++-format
 msgid "Failed to save repository configuration file \"{}\": {}"
 msgstr "No s'ha pogut desar el fitxer de configuració del dipòsit {}: {}"
 
 #: addrepo.cpp:451
+#, c++-format
 msgid ""
 "File \"{}\" already exists and configures repositories with IDs \"{}\". Add "
 "\"--add-or-replace\" or \"--overwrite\"."
@@ -85,6 +96,7 @@ msgstr ""
 "hi \"--add-or-replace\" o \"--overwrite\"."
 
 #: addrepo.cpp:454
+#, c++-format
 msgid ""
 "File \"{}\" already exists and configures repositories with IDs \"{}\". Add "
 "\"--overwrite\" to overwrite."
@@ -93,32 +105,51 @@ msgstr ""
 "hi \"--overwrite\" per sobreescriure'l."
 
 #: addrepo.cpp:474 addrepo.cpp:500
+#, c++-format
 msgid "A repository with id \"{}\" already configured in file: {}"
 msgstr "Un dipòsit amb l'identificador {} ja està configurat al fitxer: {}"
 
-#: addrepo.cpp:486 setopt.cpp:263
+#: addrepo.cpp:486 shared.hpp:150
+#, c++-format
 msgid "Cannot read repositories from directory \"{}\": {}"
 msgstr "No es poden llegir els repositoris del directori {}: {}"
 
-#: config-manager.cpp:43
+#: config-manager.cpp:44
 msgid "Manage configuration"
 msgstr "Gestiona la configuració"
 
-#: setopt.cpp:91 unsetopt.cpp:72
+#: repos.cpp:56 setopt.cpp:140
+#, c++-format
+msgid "No matching repository to modify: {}"
+msgstr "No hi ha cap repositori coincident per modificar: {}"
+
+#: repos.hpp:42
+msgid "Enables repositories"
+msgstr ""
+
+#: repos.hpp:50
+msgid "Disables repositories"
+msgstr ""
+
+#: setopt.cpp:61 unsetopt.cpp:73
+#, c++-format
 msgid ""
 "{}: Badly formatted argument value: Last key character cannot be '.': {}"
 msgstr ""
 "{}: valor de l'argument incorrecte: l'últim caràcter clau no pot ser '.': {}"
 
-#: setopt.cpp:100 unsetopt.cpp:81
+#: setopt.cpp:70 unsetopt.cpp:82
+#, c++-format
 msgid "{}: Empty repository id is not allowed: {}"
 msgstr "{}: un identificador de repositori buit no està permès: {}"
 
-#: setopt.cpp:109
+#: setopt.cpp:79
+#, c++-format
 msgid "Cannot set repository option \"{}\": {}"
 msgstr "No es pot establir l'opció de repositori {}: {}"
 
-#: setopt.cpp:116 setopt.cpp:179
+#: setopt.cpp:86 setopt.cpp:149
+#, c++-format
 msgid ""
 "Sets the \"{}\" option of the repository \"{}\" again with a different "
 "value: \"{}\" != \"{}\""
@@ -126,19 +157,18 @@ msgstr ""
 "Estableix l'opció \"{}\" del repositori {} un altre cop amb un valor "
 "diferent: \"{}\" != \"{}\""
 
-#: setopt.cpp:130
+#: setopt.cpp:100
+#, c++-format
 msgid "Cannot set option: \"{}\": {}"
 msgstr "No es pot establir l'opció: \"{}\": {}"
 
-#: setopt.cpp:170
-msgid "No matching repository to modify: {}"
-msgstr "No hi ha cap repositori coincident per modificar: {}"
-
 #: setvar.cpp:60
+#, c++-format
 msgid "Cannot set \"{}\": Variable \"{}\" is read-only"
 msgstr "No es pot establir {}: la variable \"{}\" és només de lectura"
 
 #: setvar.cpp:68
+#, c++-format
 msgid "Sets the \"{}\" variable again with a different value: \"{}\" != \"{}\""
 msgstr ""
 "Estableix un altre cop la variable \"{}\" amb un valor diferent: \"{}\" != "
@@ -149,10 +179,12 @@ msgid "Missing path to vars directory"
 msgstr "Falta el camí al directori vars"
 
 #: setvar.cpp:110
+#, c++-format
 msgid "Cannot write variable to file \"{}\": {}"
 msgstr "No es pot escriure la variable al fitxer {}: {}"
 
-#: shared.hpp:58
+#: shared.hpp:59
+#, c++-format
 msgid ""
 "The path \"{}\" exists, but it is not a directory or a symlink to a "
 "directory."
@@ -160,12 +192,14 @@ msgstr ""
 "El camí {} existeix, però no és un directori ni un enllaç simbòlic a un "
 "directori."
 
-#: shared.hpp:63
+#: shared.hpp:64
+#, c++-format
 msgid "The path \"{}\" exists, but it is a symlink to a non-existent object."
 msgstr ""
 "El camí {} existeix, però és un enllaç simbòlic a un objecte inexistent."
 
-#: shared.hpp:69
+#: shared.hpp:70
+#, c++-format
 msgid ""
 "Directory \"{}\" does not exist. Add \"--create-missing-dir\" to create "
 "missing directories."
@@ -173,23 +207,27 @@ msgstr ""
 "El directori {} no existeix. Afegiu \"--create-missing-dir\" per crear els "
 "directoris que falten."
 
-#: shared.hpp:80
+#: shared.hpp:81
+#, c++-format
 msgid "Variable name can contain only ASCII letters, numbers and '_': {}"
 msgstr ""
 "El nom de la variable només pot contenir lletres ASCII, números i '_': {}"
 
-#: unsetopt.cpp:93
+#: unsetopt.cpp:94
+#, c++-format
 msgid "config-manager: Request to remove unsupported repository option: {}"
 msgstr ""
 "config-manager: sol·licitud per suprimir l'opció de repositori no "
 "compatible: {}"
 
-#: unsetopt.cpp:105
+#: unsetopt.cpp:106
+#, c++-format
 msgid "config-manager: Request to remove unsupported main option: {}"
 msgstr ""
 "config-manager: sol·licitud per suprimir l'opció principal no compatible: {}"
 
 #: unsetopt.cpp:140
+#, c++-format
 msgid ""
 "config-manager: Request to remove main option but it is not present in the "
 "config file: {}"
@@ -198,6 +236,7 @@ msgstr ""
 "present al fitxer de configuració: {}"
 
 #: unsetopt.cpp:152
+#, c++-format
 msgid ""
 "config-manager: Request to remove main option but config file not found: {}"
 msgstr ""
@@ -205,6 +244,7 @@ msgstr ""
 "trobat el fitxer de configuració: {}"
 
 #: unsetopt.cpp:186
+#, c++-format
 msgid ""
 "config-manager: Request to remove repository option but repoid is not "
 "present in the overrides: {}"
@@ -213,6 +253,7 @@ msgstr ""
 "no és present a les sobreescriptures: {}"
 
 #: unsetopt.cpp:194
+#, c++-format
 msgid ""
 "config-manager: Request to remove repository option but it is not present in "
 "the overrides: {}.{}"
@@ -220,7 +261,8 @@ msgstr ""
 "config-manager: sol·licita suprimir l'opció del repositori, però no és "
 "present a les sobreescriptures: {}.{}"
 
-#: unsetopt.cpp:214
+#: unsetopt.cpp:208
+#, c++-format
 msgid ""
 "config-manager: Request to remove repository option but file with overrides "
 "not found: {}"
@@ -229,6 +271,7 @@ msgstr ""
 "s'ha trobat el fitxer amb sobreescriptures: {}"
 
 #: unsetvar.cpp:69
+#, c++-format
 msgid ""
 "config-manager: Request to remove variable but vars directory was not found: "
 "{}"
@@ -237,6 +280,7 @@ msgstr ""
 "directori vars: {}"
 
 #: unsetvar.cpp:82
+#, c++-format
 msgid ""
 "config-manager: Request to remove variable but it is not present in the vars "
 "directory: {}"
@@ -245,5 +289,6 @@ msgstr ""
 "directori vars: {}"
 
 #: unsetvar.cpp:88
+#, c++-format
 msgid "Cannot remove variable file \"{}\": {}"
 msgstr "No es pot suprimir el fitxer variable {}: {}"

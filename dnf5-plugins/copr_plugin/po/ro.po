@@ -1,13 +1,13 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# Remus-Gabriel Chelu <remusgabriel.chelu@disroot.org>, 2024.
+# Remus-Gabriel Chelu <remusgabriel.chelu@disroot.org>, 2024, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-26 03:48+0000\n"
-"PO-Revision-Date: 2024-10-01 12:38+0000\n"
+"POT-Creation-Date: 2026-09-08 12:03+0000\n"
+"PO-Revision-Date: 2026-09-02 07:20+0000\n"
 "Last-Translator: Remus-Gabriel Chelu <remusgabriel.chelu@disroot.org>\n"
 "Language-Team: Romanian <https://translate.fedoraproject.org/projects/dnf5/"
 "dnf5-plugin-copr/ro/>\n"
@@ -17,32 +17,34 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : (n==0 || (n%100 > 0 && n%100 < "
 "20)) ? 1 : 2;\n"
-"X-Generator: Weblate 5.7.2\n"
+"X-Generator: Weblate 2026.8.1\n"
 
 #: copr.cpp:48
 msgid "Copr hub (the web-UI/API server) hostname"
 msgstr "Numele gazdei hub Copr (serverul web-UI/API)"
 
 #: copr.cpp:88
+#, c++-format
 msgid ""
 "Copr project ID to {}.  Use either a format OWNER/PROJECT or HUB/OWNER/"
 "PROJECT (if HUB is not specified, the default one, or --hub <ARG>, is used.  "
 "OWNER is either a username, or a @groupname.  PROJECT can be a simple "
-"project name, or a \"project directory\" containing colons, e.g. 'project:"
-"custom:123'.  HUB can be either the Copr frontend hostname (e.g. copr."
-"fedorainfracloud.org ) or the shortcut (e.g. fedora).  Example: 'fedora/"
+"project name, or a \"project directory\" containing colons, e.g. "
+"'project:custom:123'.  HUB can be either the Copr frontend hostname (e.g. "
+"copr.fedorainfracloud.org ) or the shortcut (e.g. fedora).  Example: 'fedora/"
 "@footeam/coolproject'."
 msgstr ""
 "ID-ul proiectului copr pentru operația {}. Utilizați fie formatul PROPRIETAR/"
 "PROIECT, fie HUB/PROPRIETAR/PROIECT, (dacă nu este specificat HUB, este "
 "utilizat cel implicit sau --hub <ARG>. PROPRIETAR este fie un nume de "
 "utilizator, fie un @groupname. PROIECT poate fi un nume simplu de proiect "
-"sau un „director de proiect” care conține două puncte, de exemplu „project:"
-"custom:123”. HUB poate fi fie numele de gazdă al interfeței Copr (de "
-"exemplu, copr.fedorainfracloud.org ), fie prescurtarea (de exemplu, fedora). "
-"Exemplu: „fedora/@footeam/coolproject”."
+"sau un „director de proiect” care conține două puncte, de exemplu "
+"„project:custom:123”. HUB poate fi fie numele de gazdă al interfeței Copr "
+"(de exemplu, copr.fedorainfracloud.org ), fie prescurtarea (de exemplu, "
+"fedora). Exemplu: „fedora/@footeam/coolproject”."
 
 #: copr.cpp:106
+#, c++-format
 msgid "Invalid PROJECT_SPEC format '{}'"
 msgstr "Format SPECIFICAȚII_PROIECT nevalid „{}”"
 
@@ -60,8 +62,8 @@ msgid ""
 "\n"
 "The Fedora Project does not exercise any power over the contents of\n"
 "this repository beyond the rules outlined in the Copr FAQ at\n"
-"<https://docs.pagure.org/copr.copr/user_documentation.html#what-i-can-build-"
-"in-copr>,\n"
+"<https://docs.copr.fedorainfracloud.org/user_documentation.html#what-i-can-"
+"build-in-copr>,\n"
 "and packages are not held to any quality or security level.\n"
 "\n"
 "Please do not file bug reports about these packages in Fedora\n"
@@ -72,8 +74,8 @@ msgstr ""
 "\n"
 "Proiectul Fedora nu exercită nicio putere asupra conținutului acestui\n"
 "depozit în afara regulilor subliniate în FAQ Copr la\n"
-"<https://docs.pagure.org/copr.copr/user_documentation.html#what-i-can-build-"
-"in-copr>,\n"
+"<https://docs.copr.fedorainfracloud.org/user_documentation.html#what-i-can-"
+"build-in-copr>,\n"
 "iar pachetele nu sunt ținute la niciun nivel de calitate sau securitate.\n"
 "\n"
 "Vă rugăm să nu depuneți rapoarte de eroare cu privire la aceste pachete\n"
@@ -81,6 +83,7 @@ msgstr ""
 "depozit.\n"
 
 #: copr_constants.hpp:41
+#, c++-format
 msgid ""
 "Maintainer of the enabled Copr repository decided to make\n"
 "it dependent on other repositories. Such repositories are\n"
@@ -112,6 +115,7 @@ msgid "print useful info about the system, useful for debugging"
 msgstr "afișează informații utile despre sistem, utile pentru depanare"
 
 #: copr_disable.cpp:35
+#, c++-format
 msgid ""
 "disable specified Copr repository (if exists), keep {}/*.repo file - just "
 "mark enabled=0"
@@ -120,9 +124,10 @@ msgstr ""
 "*.repo - doar îl marchează ca enabled=0"
 
 #: copr_enable.cpp:38
+#, c++-format
 msgid ""
-"download the repository info from a Copr server and install it as a {}/*."
-"repo file"
+"download the repository info from a Copr server and install it as a {}/"
+"*.repo file"
 msgstr ""
 "descarcă informațiile despre depozit de pe un server Copr și le instalează "
 "ca un fișier {}/*.repo"
@@ -136,17 +141,27 @@ msgstr ""
 "rawhide-ppc64le”. Atunci când nu este specificat, comanda «dnf copr» "
 "încearcă să îl detecteze."
 
-#: copr_list.cpp:51
+#: copr_list.cpp:53
 msgid "list Copr repositories"
 msgstr "listează depozitele Copr"
 
+#: copr_list.cpp:86
+msgid ""
+"No repositories were loaded from the installroot. To use the configuration "
+"and repositories of the host system, pass --use-host-config."
+msgstr ""
+"Nu au fost încărcate depozite din installroot. Pentru a utiliza configurația "
+"și depozitele sistemului gazdă, introduceți „--use-host-config”."
+
 #: copr_remove.cpp:35
+#, c++-format
 msgid ""
 "remove specified Copr repository from the system (removes the {}/*.repo file)"
 msgstr ""
 "elimină depozitul Copr specificat din sistem (elimină fișierul {}/*.repo)"
 
 #: copr_repo.cpp:91
+#, c++-format
 msgid "Directory '{}' not found in '{}' Copr project."
 msgstr "Directorul „{}” nu a fost găsit în proiectul Copr „{}”."
 
@@ -175,18 +190,22 @@ msgid "Can't parse Copr repo spec: "
 msgstr "Nu se pot analiza specificațiile repo Copr: "
 
 #: copr_repo.cpp:344
+#, c++-format
 msgid "Can't remove the {} repo file"
 msgstr "Nu se poate elimina fișierul repo {}"
 
 #: copr_repo.cpp:347
+#, c++-format
 msgid "Repo file {} successfully removed"
 msgstr "Fișierul repo {} a fost eliminat cu succes"
 
 #: copr_repo.cpp:393
+#, c++-format
 msgid "Can't find item {} in {}"
 msgstr "Nu se poate găsi elementul {} în {}"
 
 #: copr_repo.cpp:449
+#, c++-format
 msgid "Removing old config file '{}'"
 msgstr "Se elimină fișierul de configurare vechi „{}”"
 
@@ -195,6 +214,7 @@ msgid "Can't remove"
 msgstr "Nu se poate elimina"
 
 #: copr_repo.cpp:526
+#, c++-format
 msgid ""
 "Copr repofile '{}' has an old format, fix by re-enabling it $ {} copr enable "
 "{}"
@@ -203,17 +223,21 @@ msgstr ""
 "«$ {} copr enable {}»"
 
 #: copr_repo.cpp:560
+#, c++-format
 msgid "Repo id '{}' in '{}' is suspicious"
 msgstr "Id-ul repo „{}” din „{}” este suspect"
 
 #: copr_repo.cpp:567
+#, c++-format
 msgid "Repo id '{}' doesn't belong to '{}' repofile"
 msgstr "Id-ul repo „{}” nu aparține fișierului repo „{}”"
 
 #: copr_repo.cpp:618
+#, c++-format
 msgid "Copr repository '{}' in '{}' disabled."
 msgstr "Depozitul Copr „{}” în „{}” este dezactivat."
 
 #: copr_repo.cpp:632 copr_repo.cpp:657
+#, c++-format
 msgid "Repository '{}' not found on this system"
 msgstr "Depozitul „{}” nu a fost găsit pe acest sistem"

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-26 03:48+0000\n"
+"POT-Creation-Date: 2026-09-08 12:03+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -180,12 +180,12 @@ msgid ""
 "most systems)."
 msgstr ""
 
-#: main.cpp:158
+#: main.cpp:172
 #, c++-format
 msgid ""
 "{}: Badly formatted argument value: Last key character cannot be '.': {}"
 msgstr ""
 
-#: main.cpp:258 main.cpp:308
+#: main.cpp:272 main.cpp:322
 msgid ". Add \"--help\" for more information about the arguments."
 msgstr ""

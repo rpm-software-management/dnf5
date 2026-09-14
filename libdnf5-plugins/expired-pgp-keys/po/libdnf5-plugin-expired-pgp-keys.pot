@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-26 03:48+0000\n"
+"POT-Creation-Date: 2026-09-08 12:03+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,7 +17,49 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: expired-pgp-keys.cpp:93
+#: expired-pgp-keys.cpp:105
+#, c++-format
+msgid "The following OpenPGP key (0x{}) is about to be removed:"
+msgstr ""
+
+#: expired-pgp-keys.cpp:111
 #, c++-format
 msgid "Expired on {}"
+msgstr ""
+
+#: expired-pgp-keys.cpp:112
+#, c++-format
+msgid " Reason     : {}\n"
+msgstr ""
+
+#: expired-pgp-keys.cpp:115
+#, c++-format
+msgid " UserID     : \"{}\"\n"
+msgstr ""
+
+#: expired-pgp-keys.cpp:117
+#, c++-format
+msgid " Fingerprint: {}\n"
+msgstr ""
+
+#: expired-pgp-keys.cpp:123
+msgid ""
+"As a result, installing packages signed with this key will fail.\n"
+"It is recommended to remove the expired key to allow importing\n"
+"an updated key. This might leave already installed packages unverifiable."
+msgstr ""
+
+#: expired-pgp-keys.cpp:128
+msgid "The system will now proceed with removing the key."
+msgstr ""
+
+#: expired-pgp-keys.cpp:145
+#, c++-format
+msgid "Key 0x{} was successfully removed."
+msgstr ""
+
+#: expired-pgp-keys.cpp:338
+msgid ""
+"The application requested to abort the operation when asked whether to "
+"remove the expired OpenPGP key."
 msgstr ""

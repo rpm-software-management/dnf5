@@ -1,11 +1,11 @@
 # Temuri Doghonadze <temuri.doghonadze@gmail.com>, 2023, 2024, 2025, 2026.
-# Weblate Translation Memory <noreply-mt-weblate-translation-memory@weblate.org>, 2024.
+# Weblate Translation Memory <noreply-mt-weblate-translation-memory@weblate.org>, 2024, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-26 03:48+0000\n"
-"PO-Revision-Date: 2026-03-16 06:58+0000\n"
+"POT-Creation-Date: 2026-09-08 12:03+0000\n"
+"PO-Revision-Date: 2026-09-04 11:18+0000\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <https://translate.fedoraproject.org/projects/dnf5/"
 "libdnf5-cli/ka/>\n"
@@ -14,115 +14,139 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.16.2\n"
+"X-Generator: Weblate 2026.9\n"
 
 #: argument_parser.cpp:68
+#, c++-format
 msgid "Misconfigured alias \"{}\": cannot convert \"{}\" to a number"
 msgstr ""
 "არასწორად მითითებული ფსევდონიმი \"{}\": \"{}\"-ის რიცხვში გადაყვანა "
 "შეუძლებელია"
 
 #: argument_parser.cpp:76
+#, c++-format
 msgid "Misconfigured alias \"{}\": index \"{}\" out of range"
 msgstr ""
 "არასწორად მითითებული ფსევდონიმი \"{}\": ინდექსი \"{}\" დიაპაზონს გარეთაა"
 
 #: argument_parser.cpp:98
+#, c++-format
 msgid "\"{}\" not allowed together with named argument \"{}\""
 msgstr "\"{}\" დაუშვებელია მითითებულ არგუმენტთან \"{}\" ერთად"
 
 #: argument_parser.cpp:100
+#, c++-format
 msgid "\"{}\" not allowed in command \"{}\""
 msgstr "\"{}\" დაუშვებელია ბრძანებაში \"{}\""
 
 #: argument_parser.cpp:102
+#, c++-format
 msgid "\"{}\" not allowed together with positional argument \"{}\""
 msgstr "\"{}\" დაუშვებელია პოზიციურ არგუმენტთან \"{}\" ერთად"
 
 #: argument_parser.cpp:147
+#, c++-format
 msgid "Argument id \"{}\" already registered in group \"{}\""
 msgstr "არგუმენტის id \"{}\" უკვე რეგისტრირებულია ჯგუფში \"{}\""
 
 #: argument_parser.cpp:274
+#, c++-format
 msgid "Invalid character '.' in argument id \"{}\""
 msgstr "არასწორი სიმბოლო '.' არგუმენტში id-ით \"{}\""
 
-#: argument_parser.cpp:382 argument_parser.cpp:387
+#: argument_parser.cpp:383 argument_parser.cpp:388
+#, c++-format
 msgid "Too few values for positional argument \"{}\""
 msgstr "არასაკმარისი მნიშვნელობა პოზიციური არგუმენტისთვის \"{}\""
 
-#: argument_parser.cpp:548
+#: argument_parser.cpp:549
+#, c++-format
 msgid "Missing value for named argument \"--{}\""
 msgstr "აკლია მნიშვნელობა მითითებული არგუმენტისთვის \"--{}\""
 
-#: argument_parser.cpp:556
+#: argument_parser.cpp:557
+#, c++-format
 msgid "Unexpected value for named argument \"--{}\""
 msgstr "მოულოდნელი მნიშვნელობა მითითებული არგუმენტისთვის \"--{}\""
 
-#: argument_parser.cpp:598
+#: argument_parser.cpp:599
+#, c++-format
 msgid "Missing value for named argument \"-{}\""
 msgstr "აკლია მნიშვნელობა მითითებული არგუმენტისთვის \"-{}\""
 
 #. print usage
-#: argument_parser.cpp:694
+#: argument_parser.cpp:696
 msgid "Usage:"
 msgstr "გამოყენება:"
 
-#: argument_parser.cpp:702
+#: argument_parser.cpp:704
 msgid "Description:"
 msgstr "აღწერა:"
 
-#: argument_parser.cpp:979
+#: argument_parser.cpp:997
+#, c++-format
 msgid "Command id \"{}\" already registered for command \"{}\""
 msgstr "ბრძანების id \"{}\" უკვე რეგისტრირებულია ბრძანებისთვის \"{}\""
 
-#: argument_parser.cpp:990
+#: argument_parser.cpp:1008
+#, c++-format
 msgid "Named argument id \"{}\" already registered for command \"{}\""
 msgstr ""
 "მითითებული არგუმენტის id \"{}\" უკვე რეგისტრირებულია ბრძანებისთვის \"{}\""
 
-#: argument_parser.cpp:1000
+#: argument_parser.cpp:1018
+#, c++-format
 msgid "Positional argument id \"{}\" already registered for command \"{}\""
 msgstr ""
 "პოზიციური არგუმენტის id \"{}\" უკვე რეგისტრირებულია ბრძანებისთვის \"{}\""
 
-#: argument_parser.cpp:1010
+#: argument_parser.cpp:1028
+#, c++-format
 msgid "Group id \"{}\" already registered for command \"{}\""
 msgstr "ჯგუფის id \"{}\" უკვე რეგისტრირებულია ბრძანებისთვის \"{}\""
 
-#: argument_parser.cpp:1037
+#: argument_parser.cpp:1055
+#, c++-format
 msgid "Command id \"{}\" does not contain subcommand with id \"{}\""
 msgstr "ბრძანება id-ით \"{}\" ქვებრძანებას id-ით \"{}\" არ შეიცავს"
 
-#: argument_parser.cpp:1045
+#: argument_parser.cpp:1063
+#, c++-format
 msgid "Command id \"{}\" does not contain named argument with id \"{}\""
 msgstr "ბრძანება id-ით \"{}\" მითითებულ არგუმენტს id-ით \"{}\" არ შეიცავს"
 
-#: argument_parser.cpp:1053
+#: argument_parser.cpp:1071
+#, c++-format
 msgid "Command id \"{}\" does not contain positional argument with id \"{}\""
 msgstr "ბრძანება id-ით \"{}\" პოზიციურ არგუმენტს id-ით \"{}\" არ შეიცავს"
 
-#: argument_parser.cpp:1060
+#: argument_parser.cpp:1078
+#, c++-format
 msgid "Command id \"{}\" does not contain group with id \"{}\""
 msgstr "ბრძანება id-ით \"{}\" ჯგუფს id-ით \"{}\" არ შეიცავს"
 
-#: argument_parser.cpp:1177 argument_parser.cpp:1388
+#: argument_parser.cpp:1204 argument_parser.cpp:1425
+#, c++-format
 msgid "Unknown argument \"{}\" for command \"{}\""
 msgstr "უცნობი არგუმენტი \"{}\" ბრძანებისთვის \"{}\""
 
-#: argument_parser.cpp:1192 argument_parser.cpp:1403
+#: argument_parser.cpp:1219 argument_parser.cpp:1440
+#, c++-format
 msgid "Missing positional argument \"{}\" for command \"{}\""
 msgstr "აკლია პოზიციური არგუმენტი \"{}\" ბრძანებისთვის \"{}\""
 
-#: argument_parser.cpp:1274
+#: argument_parser.cpp:1301
+#, c++-format
 msgid "Missing value for command alias \"{}\""
 msgstr "აკლია მნიშვნელობა ბრძანების ფსევდონიმისთვის \"{}\""
 
-#: argument_parser.cpp:1610
+#: argument_parser.cpp:1647
+#, c++-format
 msgid "Named argument with path id \"{}\" not found"
 msgstr "მითითებული არგუმენტი ბილიკის id-ით \"{}\" არ არსებობს"
 
-#: argument_parser.cpp:1620
+#: argument_parser.cpp:1657
+#, c++-format
 msgid "Positional argument with path id \"{}\" not found"
 msgstr "პოზიციური არგუმენტი ბილიკის id-ით \"{}\" არ არსებობს"
 
@@ -159,7 +183,7 @@ msgstr "სახელი"
 msgid "Epoch"
 msgstr "ეპოქა"
 
-#: output/packageinfo.cpp:69 output/transaction_table.cpp:289
+#: output/packageinfo.cpp:69 output/transaction_table.cpp:290
 msgid "Version"
 msgstr "ვერსია"
 
@@ -191,7 +215,8 @@ msgstr "წყარო"
 msgid "From repository"
 msgstr "რეპოზიტორიიდან"
 
-#: output/packageinfo.cpp:96 output/transaction_table.cpp:295
+#: output/packageinfo.cpp:96 output/transaction_table.cpp:296
+#: output/transactioninfo.cpp:76
 msgid "Repository"
 msgstr "რეპოზიტორია"
 
@@ -207,7 +232,7 @@ msgstr "URL"
 msgid "License"
 msgstr "ლიცენზია"
 
-#: output/packageinfo.cpp:104
+#: output/packageinfo.cpp:104 output/transactioninfo.cpp:107
 msgid "Description"
 msgstr "აღწერა"
 
@@ -219,206 +244,366 @@ msgstr "მომწოდებელი"
 msgid " (exact)"
 msgstr " (ზუსტი)"
 
-#: output/search.cpp:90
-msgid "No matches found."
-msgstr "დამთხვევის გარეშე."
-
-#: output/search.cpp:101
+#: output/search.cpp:100
 msgid "Matched fields: "
 msgstr "ემთხვევა ველები: "
 
-#: output/transaction_table.cpp:127
+#: output/status.cpp:45
+msgid "Groups"
+msgstr "ჯგუფები"
+
+#: output/status.cpp:46 output/status.cpp:55 output/status.cpp:72
+msgid "installed"
+msgstr "დაყენებული"
+
+#: output/status.cpp:47 output/status.cpp:56 output/status.cpp:73
+msgid "available"
+msgstr "ხელმისაწვდომია"
+
+#: output/status.cpp:54
+msgid "Environments"
+msgstr "გარემოები"
+
+#: output/status.cpp:71
+msgid "Packages"
+msgstr "პაკეტები"
+
+#: output/status.cpp:74
+msgid "user-installed"
+msgstr "მომხმარებლის-დაყენებული"
+
+#: output/status.cpp:84
+msgid "Installed Size"
+msgstr "დაყენებული ზომა"
+
+#: output/status.cpp:90
+msgid "Enabled Repositories"
+msgstr "ჩართული რეპოზიტორიები"
+
+#: output/status.cpp:101
+msgid "Last Transaction"
+msgstr "ბოლო ტრანზაქცია"
+
+#: output/transaction_table.cpp:128
 msgid "Transaction Summary:\n"
 msgstr "ტრანზაქციის შეჯამება:\n"
 
 #. Keep the replaceble number aligned across all messages.
-#: output/transaction_table.cpp:132
+#: output/transaction_table.cpp:133
+#, c++-format
 msgid " Installing:      {:4} package\n"
 msgid_plural " Installing:      {:4} packages\n"
 msgstr[0] " დაყენება:      {:4} პაკეტის\n"
 msgstr[1] " დაყენება      {:4} პაკეტის\n"
 
 #. Keep the replaceble number aligned across all messages.
-#: output/transaction_table.cpp:141
+#: output/transaction_table.cpp:142
+#, c++-format
 msgid " Reinstalling:    {:4} package\n"
 msgid_plural " Reinstalling:    {:4} packages\n"
 msgstr[0] " თავიდან დაყენება:      {:4} პაკეტისთვის\n"
 msgstr[1] " თავიდან დაყენება:      {:4} პაკეტისთვის\n"
 
 #. Keep the replaceble number aligned across all messages.
-#: output/transaction_table.cpp:150
+#: output/transaction_table.cpp:151
+#, c++-format
 msgid " Upgrading:       {:4} package\n"
 msgid_plural " Upgrading:       {:4} packages\n"
 msgstr[0] " ვერსიის აწევა:      {:4} პაკეტისთვის\n"
 msgstr[1] " ვერსიის აწევა:      {:4} პაკეტისთვის\n"
 
 #. Keep the replaceble number aligned across all messages.
-#: output/transaction_table.cpp:159
+#: output/transaction_table.cpp:160
+#, c++-format
 msgid " Replacing:       {:4} package\n"
 msgid_plural " Replacing:       {:4} packages\n"
 msgstr[0] " ჩანაცვლდება:      {:4} პაკეტი\n"
 msgstr[1] " ჩანაცვლდება:      {:4} პაკეტი\n"
 
 #. Keep the replaceble number aligned across all messages.
-#: output/transaction_table.cpp:168
+#: output/transaction_table.cpp:169
+#, c++-format
 msgid " Removing:        {:4} package\n"
 msgid_plural " Removing:        {:4} packages\n"
 msgstr[0] " წაიშლება:      {:4} პაკეტი\n"
 msgstr[1] " წაიშლება:      {:4} პაკეტი\n"
 
 #. Keep the replaceble number aligned across all messages.
-#: output/transaction_table.cpp:177
+#: output/transaction_table.cpp:178
+#, c++-format
 msgid " Downgrading:     {:4} package\n"
 msgid_plural " Downgrading:     {:4} packages\n"
 msgstr[0] " ვერსიის ჩამოწევა:      {:4} პაკეტისთვის\n"
 msgstr[1] " ვერსიის ჩამოწევა:      {:4} პაკეტისთვის\n"
 
 #. Keep the replaceble number aligned across all messages.
-#: output/transaction_table.cpp:186
+#: output/transaction_table.cpp:187
+#, c++-format
 msgid " Changing reason: {:4} package\n"
 msgid_plural " Changing reason: {:4} packages\n"
 msgstr[0] " მიზეზის შეცვლა: {:4} პაკეტისთვის\n"
 msgstr[1] " მიზეზის შეცვლა: {:4} პაკეტისთვის\n"
 
 #. Keep the replaceble number aligned across all messages.
-#: output/transaction_table.cpp:195
+#: output/transaction_table.cpp:196
+#, c++-format
 msgid " Skipping:        {:4} package\n"
 msgid_plural " Skipping:        {:4} packages\n"
 msgstr[0] " გამოტოვებული იქნება: {:4} პაკეტი\n"
 msgstr[1] " გამოტოვებული იქნება: {:4} პაკეტი\n"
 
-#: output/transaction_table.cpp:277
+#: output/transaction_table.cpp:278 output/transactioninfo.cpp:74
 msgid "Package"
 msgstr "პაკეტი"
 
-#: output/transaction_table.cpp:283
+#: output/transaction_table.cpp:284
 msgid "Arch"
 msgstr "არქიტექტურა"
 
-#: output/transaction_table.cpp:301
+#: output/transaction_table.cpp:302
 msgid "Size"
 msgstr "ზომა"
 
-#: output/transaction_table.cpp:357 output/transaction_table.cpp:451
+#: output/transaction_table.cpp:364 output/transaction_table.cpp:434
+#: output/transaction_table.cpp:475
+#, c++-format
 msgid "{} -> {}"
 msgstr "{} -> {}"
 
-#: output/transaction_table.cpp:373
+#: output/transaction_table.cpp:380
+#, c++-format
 msgid "replacing {}"
 msgstr "{}-ის ჩანაცვლება"
 
-#: output/transaction_table.cpp:409 output/transaction_table.cpp:426
+#: output/transaction_table.cpp:422 output/transaction_table.cpp:450
 msgid " <name-unset>"
 msgstr " <name-unset>"
 
-#: output/transaction_table.cpp:457
+#: output/transaction_table.cpp:481
 msgid "replacing "
 msgstr "ჩანაცვლება "
 
-#: output/transaction_table.cpp:470
+#: output/transaction_table.cpp:494
 msgid "Skipping packages with conflicts:"
 msgstr "გამოტოვებული იქნება პაკეტები კონფლიქტებით:"
 
-#: output/transaction_table.cpp:472
+#: output/transaction_table.cpp:496
 msgid "Skipping packages with broken dependencies:"
 msgstr "გამოტოვებული იქნება პაკეტები გაფუჭებული დამოკიდებულებებით:"
 
-#: output/transaction_table.cpp:533
+#: output/transaction_table.cpp:558
 msgid "Installing dependencies:"
 msgstr "დამოკიდებულებების დაყენება:"
 
-#: output/transaction_table.cpp:535
+#: output/transaction_table.cpp:560
 msgid "Installing weak dependencies:"
 msgstr "სუსტი დამოკიდებულებების დაყენება:"
 
-#: output/transaction_table.cpp:537
+#: output/transaction_table.cpp:562
 msgid "Installing group/module packages:"
 msgstr "ჯგუფის/მოდულის პაკეტის დაყენება:"
 
-#: output/transaction_table.cpp:539
+#: output/transaction_table.cpp:564
 msgid "Installing:"
 msgstr "დაყენება:"
 
-#: output/transaction_table.cpp:543
+#: output/transaction_table.cpp:568
 msgid "Upgrading:"
 msgstr "ვერსიის აწევა:"
 
-#: output/transaction_table.cpp:546
+#: output/transaction_table.cpp:571
 msgid "Downgrading:"
 msgstr "ვერსიის დაწევა:"
 
-#: output/transaction_table.cpp:549
+#: output/transaction_table.cpp:574
 msgid "Reinstalling:"
 msgstr "გადაყენება:"
 
-#: output/transaction_table.cpp:553
+#: output/transaction_table.cpp:578
 msgid "Removing dependent packages:"
 msgstr "დამოკიდებული პაკეტების წაშლა:"
 
-#: output/transaction_table.cpp:555
+#: output/transaction_table.cpp:580
 msgid "Removing unused dependencies:"
 msgstr "გამოუყენებელი დამოკიდებულებების წაშლა:"
 
-#: output/transaction_table.cpp:557
+#: output/transaction_table.cpp:582
 msgid "Removing:"
 msgstr "წაიშლება:"
 
-#: output/transaction_table.cpp:561
+#: output/transaction_table.cpp:586
 msgid "Changing reason:"
 msgstr "შეცვლის მიზეზი:"
 
-#: output/transaction_table.cpp:593
+#: output/transaction_table.cpp:618
 msgid "Installing groups dependencies:"
 msgstr "ჯგუფის დამოკიდებულებები დაყენება:"
 
-#: output/transaction_table.cpp:595
+#: output/transaction_table.cpp:620
 msgid "Installing groups:"
 msgstr "ჯგუფების დაყენება:"
 
-#: output/transaction_table.cpp:599
+#: output/transaction_table.cpp:624
 msgid "Removing groups:"
 msgstr "ჯგუფების წაშლა:"
 
-#: output/transaction_table.cpp:602
+#: output/transaction_table.cpp:627
 msgid "Upgrading groups:"
 msgstr "ჯგუფების განახლება:"
 
-#: output/transaction_table.cpp:629
+#: output/transaction_table.cpp:630
+msgid "Changing reason of installed groups:"
+msgstr "დაყენებული ჯგუფების მიზეზის შეცვლა:"
+
+#: output/transaction_table.cpp:657
 msgid "Installing environmental groups:"
 msgstr "გარემოს ჯგუფების დაყენება:"
 
-#: output/transaction_table.cpp:632
+#: output/transaction_table.cpp:660
 msgid "Removing environmental groups:"
 msgstr "გარემოს ჯგუფების წაშლა:"
 
-#: output/transaction_table.cpp:635
+#: output/transaction_table.cpp:663
 msgid "Upgrading environmental groups:"
 msgstr "გარემოს ჯგუფების ვერსიის აწევა:"
 
-#: output/transaction_table.cpp:662
+#: output/transaction_table.cpp:690
 msgid "Enabling module streams:"
 msgstr "მოდულის ნაკადების ჩართვა:"
 
-#: output/transaction_table.cpp:665
+#: output/transaction_table.cpp:693
 msgid "Disabling modules:"
 msgstr "გაითიშება მოდულები:"
 
-#: output/transaction_table.cpp:668
+#: output/transaction_table.cpp:696
 msgid "Resetting modules:"
 msgstr "ჩამოიყრება მოდულები:"
 
-#: output/transaction_table.cpp:671
+#: output/transaction_table.cpp:699
 msgid "Switching module streams:"
 msgstr "მოდულური ნაკადების გადართვა:"
 
-#: output/transaction_table.cpp:745
+#: output/transaction_table.cpp:771 output/transaction_table.cpp:772
+msgid "(none)"
+msgstr "(არცერთი)"
+
+#: output/transaction_table.cpp:778
+#, c++-format
+msgid "Skipping {0} package due to vendor change restriction: {1}."
+msgid_plural "Skipping {0} packages due to vendor change restriction: {1}."
+msgstr[0] "{0} პაკეტის გამოტოვება მომწოდებლის ცვლილების აკრძალვის გამო: {1}."
+msgstr[1] "{0} პაკეტის გამოტოვება მომწოდებლის ცვლილების აკრძალვის გამო: {1}."
+
+#: output/transaction_table.cpp:799
 msgid "Nothing to do."
 msgstr "გასაკეთებელი არაფერია."
 
-#: progressbar/multi_progress_bar.cpp:36
+#. The two spaces indent the table the same way as child lines in KeyValueTable
+#: output/transactioninfo.cpp:73
+msgid "Action"
+msgstr "ქმედება"
+
+#: output/transactioninfo.cpp:75
+msgid "Reason"
+msgstr "მიზეზი"
+
+#: output/transactioninfo.cpp:98
+msgid "Transaction ID"
+msgstr "ტრანზაქციის ID"
+
+#: output/transactioninfo.cpp:99
+msgid "Begin time"
+msgstr "დაწყების დრო"
+
+#: output/transactioninfo.cpp:100
+msgid "Begin rpmdb"
+msgstr "დასაწყისის rpmdb"
+
+#: output/transactioninfo.cpp:101
+msgid "End time"
+msgstr "დასრულების დრო"
+
+#: output/transactioninfo.cpp:102
+msgid "End rpmdb"
+msgstr "დასასრულის rpmdb"
+
+#: output/transactioninfo.cpp:104
+msgid "User"
+msgstr "მომხმარებელი"
+
+#: output/transactioninfo.cpp:105
+msgid "Status"
+msgstr "სტატუსი"
+
+#: output/transactioninfo.cpp:106
+msgid "Releasever"
+msgstr "გამოცემისვერსია"
+
+#: output/transactioninfo.cpp:108
+msgid "Comment"
+msgstr "კომენტარი"
+
+#: output/transactioninfo.cpp:111
+msgid "Packages altered:"
+msgstr "შეცვლილი პაკეტები:"
+
+#: output/transactioninfo.cpp:112
+msgid "Groups altered:"
+msgstr "შეცვლილი ჯგუფები:"
+
+#: output/transactioninfo.cpp:113
+msgid "Environments altered:"
+msgstr "შეცვლილი გარემოები:"
+
+#: output/transactionlist.cpp:53
+msgid "ID"
+msgstr "ID"
+
+#: output/transactionlist.cpp:54
+msgid "Command line"
+msgstr "ბრძანების სტრიქონი"
+
+#: output/transactionlist.cpp:55
+msgid "Date and time"
+msgstr "თარიღი და დრო"
+
+#: output/transactionlist.cpp:56
+msgid "Action(s)"
+msgstr "ქმედებები"
+
+#: output/transactionlist.cpp:57
+msgid "Altered"
+msgstr "შეცვლილია"
+
+#. namespace
+#: progressbar/multi_progress_bar.cpp:85
 msgid "Total"
 msgstr "სულ"
 
-#: session.cpp:149
+#: session.cpp:153
 msgid "Missing command"
 msgstr "ნაკლული ბრძანება"
+
+#: session.cpp:260
+#, c++-format
+msgid ""
+"Invalid date passed: \"{}\". Dates in \"YYYY-MM-DD\" format are expected"
+msgstr ""
+"გადაცემულია არასწორი მონაცემები: \"{}\". მოველოდი თარიღს ფორმატში \"წწწწ-თთ-"
+"დდ\""
+
+#: session.cpp:270
+#, c++-format
+msgid "\"{}\" date cannot be represented by time_t type on this platform"
+msgstr "ამ პლატფორმაზე თარიღი \"{}\" ვერ იქნება წარმოდგენილი ტიპით time_t"
+
+#: utils/userconfirm.cpp:46
+msgid "Is this ok [Y/n]: "
+msgstr "ყველაფერი კარგადაა? [Y/n]: "
+
+#: utils/userconfirm.cpp:49
+msgid "Is this ok [y/N]: "
+msgstr "ყველაფერი კარგადაა? [y/N]: "
+
+#~ msgid "No matches found."
+#~ msgstr "დამთხვევის გარეშე."

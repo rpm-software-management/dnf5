@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-26 03:48+0000\n"
+"POT-Creation-Date: 2026-09-08 12:03+0000\n"
 "PO-Revision-Date: 2026-01-19 12:58+0000\n"
 "Last-Translator: Jouko Tiilikainen "
 "<jti65@users.noreply.translate.fedoraproject.org>\n"
@@ -23,11 +23,12 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Generator: Weblate 5.15.2\n"
 
-#: cmdline_aliases.cpp:84 context.cpp:301 main.cpp:1357
+#: cmdline_aliases.cpp:84 context.cpp:198 main.cpp:1449
 msgid ", "
 msgstr ", "
 
 #: cmdline_aliases.cpp:145
+#, c++-format
 msgid ""
 "Attached named argument \"{}\" not found: {}: Requested in file \"{}\" on "
 "line {}: {}"
@@ -36,6 +37,7 @@ msgstr ""
 "rivillä {}: {}"
 
 #: cmdline_aliases.cpp:159
+#, c++-format
 msgid ""
 "Unknown attribute \"{}\" of attached named argument for alias \"{}\" in file "
 "\"{}\" on line {}: {}"
@@ -44,49 +46,59 @@ msgstr ""
 "\"{}\" tiedostossa \"{}\" rivillä {}: {}"
 
 #: cmdline_aliases.cpp:171
+#, c++-format
 msgid "Missing attribute \"id_path\" for alias \"{}\" in file \"{}\""
 msgstr "Tiedostosta \"{}\" puuttuu aliaksen \"{}\" attribuutti \"id_path\""
 
 #: cmdline_aliases.cpp:208
+#, c++-format
 msgid "Unsupported version \"{}\" in file \"{}\". Supported versions: {}"
 msgstr "Ei tuettu versio \"{}\" tiedostossa \"{}\". Tuetut versiot: {}"
 
 #: cmdline_aliases.cpp:218
+#, c++-format
 msgid "Bad value type of attribute \"version\" in file \"{}\" on line {}: {}"
 msgstr ""
-"Virheellinen attribuutin \"versio\" arvotyyppi tiedostossa \"{}\" rivillä {}"
-": {}"
+"Virheellinen attribuutin \"versio\" arvotyyppi tiedostossa \"{}\" rivillä "
+"{}: {}"
 
 #: cmdline_aliases.cpp:224
+#, c++-format
 msgid "Missing attribute \"version\" in file \"{}\""
 msgstr "Tiedostosta \"{}\" puuttuu attribuutti \"versio\""
 
 #: cmdline_aliases.cpp:236
+#, c++-format
 msgid "Unknown key \"{}\" in file \"{}\" on line {}: {}"
 msgstr "Tuntematon avain \"{}\" tiedostossa \"{}\" rivillä {}: {}"
 
 #: cmdline_aliases.cpp:253
+#, c++-format
 msgid "Empty or bad element id path in file \"{}\" on line {}: {}"
 msgstr ""
 "Tyhjä tai virheellinen elementin tunnuspolku tiedostossa \"{}\" rivillä {}: "
 "{}"
 
 #: cmdline_aliases.cpp:272
+#, c++-format
 msgid ""
 "Parent command \"{}\" not found: {}: Requested in file \"{}\" on line {}: {}"
 msgstr ""
 "Pääkomentoa \"{}\" ei löydy: {}: Pyydetty tiedostossa \"{}\" rivillä {}: {}"
 
 #: cmdline_aliases.cpp:301
+#, c++-format
 msgid "Unknown type \"{}\" of element \"{}\" in file \"{}\" on line {}: {}"
 msgstr ""
 "Tuntematon tyyppi \"{}\" elementin \"{}\" tiedostossa \"{}\" rivillä {}: {}"
 
 #: cmdline_aliases.cpp:312
+#, c++-format
 msgid "Missing attribute \"type\" for element \"{}\" in file \"{}\""
 msgstr "Tiedoston \"{}\" elementistä \"{}\" puuttuu attribuutti \"type\""
 
 #: cmdline_aliases.cpp:331
+#, c++-format
 msgid ""
 "Named argument \"{}\" already registered. Requested in file \"{}\" on line "
 "{}: {}"
@@ -95,22 +107,26 @@ msgstr ""
 "rivillä {}: {}"
 
 #: cmdline_aliases.cpp:347
+#, c++-format
 msgid ""
 "Command \"{}\" already registered. Requested in file \"{}\" on line {}: {}"
 msgstr ""
 "Komento \"{}\" on jo rekisteröity. Pyydetty tiedostossa \"{}\" rivillä {}: {}"
 
 #: cmdline_aliases.cpp:375
+#, c++-format
 msgid "Unknown attribute \"{}\" of group \"{}\" in file \"{}\" on line {}: {}"
 msgstr ""
 "Tuntematon attribuutti \"{}\" ryhmästä \"{}\" tiedostossa \"{}\" rivillä {}: "
 "{}"
 
 #: cmdline_aliases.cpp:387
+#, c++-format
 msgid "Missing attribute \"header\" for element \"{}\" in file \"{}\""
 msgstr "Tiedoston \"{}\" elementistä \"{}\" puuttuu attribuutti \"header\""
 
 #: cmdline_aliases.cpp:428 cmdline_aliases.cpp:538
+#, c++-format
 msgid ""
 "The \"short_name\" attribute of named argument \"{}\" must be one character "
 "long in file \"{}\" on line {}: {}"
@@ -119,15 +135,18 @@ msgstr ""
 "tiedostossa \"{}\" rivillä {}: {}"
 
 #: cmdline_aliases.cpp:446
+#, c++-format
 msgid "Source \"{}\" not found: {}: Requested in file \"{}\" on line {}: {}"
 msgstr ""
 "Lähdettä \"{}\" ei löydy: {}: Pyydetty tiedostossa \"{}\" rivillä {}: {}"
 
 #: cmdline_aliases.cpp:462 cmdline_aliases.cpp:563 cmdline_aliases.cpp:676
+#, c++-format
 msgid "Group \"{}\" not found: {}: Requested in file \"{}\" on line {}: {}"
 msgstr "Ryhmää \"{}\" ei löydy: {}: Pyydetty tiedostossa \"{}\" rivillä {}: {}"
 
 #: cmdline_aliases.cpp:476 cmdline_aliases.cpp:579
+#, c++-format
 msgid ""
 "Unknown attribute \"{}\" of named argument \"{}\" in file \"{}\" on line {}: "
 "{}"
@@ -136,12 +155,14 @@ msgstr ""
 "rivillä {}: {}"
 
 #: cmdline_aliases.cpp:489
+#, c++-format
 msgid "Missing attribute \"source\" for named argument \"{}\" in file \"{}\""
 msgstr ""
 "Tiedostossa \"{}\" nimetylle argumentille \"{}\" puuttuu attribuutti "
 "\"source\""
 
 #: cmdline_aliases.cpp:498 cmdline_aliases.cpp:592
+#, c++-format
 msgid ""
 "At least one of the attributes \"long_name\" and \"short_name\" must be set "
 "for named argument \"{}\" in file \"{}\""
@@ -150,6 +171,7 @@ msgstr ""
 "nimetylle argumentille \"{}\" tiedostossa \"{}\""
 
 #: cmdline_aliases.cpp:657
+#, c++-format
 msgid ""
 "Attached command \"{}\" not found: {}: Requested in file \"{}\" on line {}: "
 "{}"
@@ -158,6 +180,7 @@ msgstr ""
 "{}: {}"
 
 #: cmdline_aliases.cpp:691
+#, c++-format
 msgid ""
 "Used config file version \"1.0\" for attribute \"{}\" of command \"{}\" in "
 "file \"{}\" on line {}: {}"
@@ -166,6 +189,7 @@ msgstr ""
 "attribuutille \"{}\" tiedostossa \"{}\" rivillä {}: {}"
 
 #: cmdline_aliases.cpp:713
+#, c++-format
 msgid ""
 "Unknown attribute \"{}\" of required value for alias \"{}\" in file \"{}\" "
 "on line {}: {}"
@@ -174,6 +198,7 @@ msgstr ""
 "tiedostossa \"{}\" rivillä {}: {}"
 
 #: cmdline_aliases.cpp:726
+#, c++-format
 msgid ""
 "Missing attribute \"value_help\" of required value for alias \"{}\" in file "
 "\"{}\""
@@ -182,6 +207,7 @@ msgstr ""
 "tiedostosta \"{}\""
 
 #: cmdline_aliases.cpp:740
+#, c++-format
 msgid ""
 "Unknown attribute \"{}\" of command \"{}\" in file \"{}\" on line {}: {}"
 msgstr ""
@@ -189,6 +215,7 @@ msgstr ""
 "{}"
 
 #: cmdline_aliases.cpp:756
+#, c++-format
 msgid ""
 "Missing attribute \"attached_command\" for command \"{}\" in file \"{}\""
 msgstr ""
@@ -196,10 +223,12 @@ msgstr ""
 "\""
 
 #: cmdline_aliases.cpp:791
+#, c++-format
 msgid "Bad value type in file \"{}\" on line {}: {}"
 msgstr "Virheellinen arvotyyppi tiedostossa \"{}\" rivillä {}: {}"
 
 #: cmdline_aliases.cpp:804
+#, c++-format
 msgid "Syntax error in file \"{}\" on line {}:"
 msgstr "Syntaksivirhe tiedostossa \"{}\" rivillä {}:"
 
@@ -214,6 +243,13 @@ msgstr "Tulosta tiedot neuvoista"
 #: commands/advisory/advisory_list.hpp:35
 msgid "List advisories"
 msgstr "Luettele neuvot"
+
+#: commands/advisory/advisory_subcommand.cpp:93 commands/no_matches.cpp:74
+#: commands/repoquery/repoquery.cpp:903
+#, fuzzy
+#| msgid "No matching repositories for {}"
+msgid "No matches found: no repositories are enabled."
+msgstr "Ei vastaavia tietovarastoja {}:lle"
 
 #: commands/advisory/advisory_summary.cpp:44
 msgid "All"
@@ -288,50 +324,53 @@ msgstr "Näytä vain bugzilaan viittaavat neuvot."
 msgid "Show only advisories referencing a CVE."
 msgstr "Näytä vain CVE:hen viittaavat neuvot."
 
-#: commands/advisory_shared.hpp:76
+#: commands/advisory_shared.hpp:93
+#, c++-format
 msgid "No advisory found matching the requested name: \"{}\""
 msgstr "Pyydettyä nimeä \"{}\" vastaavaa tiedotetta ei löytynyt"
 
-#: commands/advisory_shared.hpp:109
+#: commands/advisory_shared.hpp:132
+#, c++-format
 msgid "No advisory found fixing the Bugzilla ID: \"{}\""
 msgstr "Bugzillan tunnukseen \"{}\" liittyvää korjaustiedotetta ei löytynyt"
 
-#: commands/advisory_shared.hpp:128
+#: commands/advisory_shared.hpp:157
+#, c++-format
 msgid "No advisory found fixing the CVE ID: \"{}\""
 msgstr "CVE-tunnuksen \"{}\" korjaavaa tiedotetta ei löytynyt"
 
-#: commands/advisory_shared.hpp:143
+#: commands/advisory_shared.hpp:178
 msgid "No advisory found matching the specified filters."
 msgstr "Määritettyjä suodattimia vastaavia tiedotteita ei löytynyt."
 
-#: commands/advisory_shared.hpp:158
+#: commands/advisory_shared.hpp:193
 msgid ""
 "Include content contained in advisories with specified name. List option."
 msgstr ""
 "Sisällytä määritetyllä nimellä varustettujen tiedotteiden sisältö. "
 "Luettelovaihtoehto."
 
-#: commands/advisory_shared.hpp:159
+#: commands/advisory_shared.hpp:194
 msgid "ADVISORY_NAME,..."
 msgstr "NEUVON_NIMI,..."
 
-#: commands/advisory_shared.hpp:166
+#: commands/advisory_shared.hpp:201
 msgid "Include content contained in security advisories."
 msgstr "Sisällytä tietoturvatiedotteissa oleva sisältö."
 
-#: commands/advisory_shared.hpp:173
+#: commands/advisory_shared.hpp:208
 msgid "Include content contained in bugfix advisories."
 msgstr "Sisällytä viankorjaustiedotteissa oleva sisältö."
 
-#: commands/advisory_shared.hpp:180
+#: commands/advisory_shared.hpp:215
 msgid "Include content contained in enhancement advisories."
 msgstr "Sisällytä parannustiedotteissa oleva sisältö."
 
-#: commands/advisory_shared.hpp:187
+#: commands/advisory_shared.hpp:222
 msgid "Include content contained in newpackage advisories."
 msgstr "Sisällytä newpackage-tiedotteissa oleva sisältö."
 
-#: commands/advisory_shared.hpp:198
+#: commands/advisory_shared.hpp:233
 msgid ""
 "Include content contained in advisories with specified severity. List "
 "option. Can be \"critical\", \"important\", \"moderate\", \"low\", \"none\"."
@@ -340,11 +379,11 @@ msgstr ""
 "Luettelovaihtoehto. Voi olla 'critical', 'important', 'moderate', 'low', "
 "'none'."
 
-#: commands/advisory_shared.hpp:200
+#: commands/advisory_shared.hpp:235
 msgid "ADVISORY_SEVERITY,..."
 msgstr "NEUVON_VAKAVUUS..."
 
-#: commands/advisory_shared.hpp:212
+#: commands/advisory_shared.hpp:247
 msgid ""
 "Include content contained in advisories that fix a Bugzilla ID, Eg. 123123. "
 "List option."
@@ -352,11 +391,11 @@ msgstr ""
 "Sisällytä tiedotteissa oleva sisältö, jotka korjaavat jokin Bugzilla-"
 "tunnuksen, esim. 123123. Luettelovaihtoehto."
 
-#: commands/advisory_shared.hpp:213
+#: commands/advisory_shared.hpp:248
 msgid "BUGZILLA_ID,..."
 msgstr "BUGZILLAN_TUNNUS,..."
 
-#: commands/advisory_shared.hpp:223
+#: commands/advisory_shared.hpp:258
 msgid ""
 "Include content contained in advisories that fix a CVE (Common "
 "Vulnerabilities and Exposures) ID, Eg. CVE-2201-0123. List option."
@@ -365,7 +404,7 @@ msgstr ""
 "Vulnerabilities and Exposures)-tunnuksen, esim. CVE-2201-0123. "
 "Luettelovaihtoehto."
 
-#: commands/advisory_shared.hpp:225
+#: commands/advisory_shared.hpp:260
 msgid "CVE_ID,..."
 msgstr "CVE-TUNNUS,..."
 
@@ -374,6 +413,14 @@ msgid "Remove all unneeded packages originally installed as dependencies."
 msgstr ""
 "Poista kaikki tarpeettomat paketit, jotka on alun perin asennettu "
 "riippuvuuksina."
+
+#: commands/autoremove/autoremove.cpp:65
+#, c++-format
+msgid ""
+"Unneeded protected package: {0} (and its dependencies) cannot be removed, "
+"either mark it as user-installed or change protected_packages configuration "
+"option."
+msgstr ""
 
 #: commands/check-upgrade/check-upgrade.cpp:47
 msgid "Check for available package upgrades"
@@ -397,27 +444,33 @@ msgid "Check for problems in the packagedb"
 msgstr "Tarkista packagedb ongelmien varalta"
 
 #: commands/check/check.cpp:335
+#, c++-format
 msgid "Check discovered {} problem(s) in {} package(s)"
 msgstr "Tarkistus löysi {} ongelmaa {} paketissa"
 
 #: commands/clean/clean.cpp:91
+#, c++-format
 msgid "List of cache types to clean up. Supported types: {0}"
 msgstr "Luettelo siivottavista välimuistityypeistä. Tuetut tyypit: {0}"
 
 #: commands/clean/clean.cpp:109
+#, c++-format
 msgid "Unknown cache type \"{0}\". Supported types: {1}"
 msgstr "Tuntematon välimuistityyppi ”{0}”. Tuetut tyypit: {1}"
 
 #: commands/clean/clean.cpp:166
+#, c++-format
 msgid "Failed to cleanup repository cache in path \"{0}\": {1}"
 msgstr ""
 "Ohjelmistolähteen välimuistin siivoaminen polussa ”{0}” epäonnistui: {1}"
 
 #: commands/clean/clean.cpp:176
+#, c++-format
 msgid "Cache directory \"{}\" does not exist. Nothing to clean."
 msgstr "Välimuistihakemistoa ”{}” ei ole olemassa. Ei siivottavaa."
 
 #: commands/clean/clean.cpp:181
+#, c++-format
 msgid "Cannot iterate cache directory \"{}\": {}"
 msgstr "Välimuistihakemistoa \"{}\" ei voi iteroida: {}"
 
@@ -425,34 +478,36 @@ msgstr "Välimuistihakemistoa \"{}\" ei voi iteroida: {}"
 msgid "Install debuginfo packages."
 msgstr "Asenna debuginfo-paketit."
 
-#: commands/distro-sync/distro-sync.cpp:44
+#: commands/distro-sync/distro-sync.cpp:42
 msgid ""
 "Upgrade or downgrade installed software to the latest available versions"
 msgstr ""
 "Päivitä tai varhenna asennetut ohjelmistot uusimpiin saatavilla oleviin "
 "versioihin"
 
-#: commands/do/do.cpp:44
+#: commands/do/do.cpp:42
 msgid "Do transaction"
 msgstr "Suorita transaktio"
 
-#: commands/do/do.cpp:49
+#: commands/do/do.cpp:47
 msgid "Action to be done on the following items."
 msgstr "Seuraaville kohteille tehtävä toimenpide."
 
-#: commands/do/do.cpp:63
+#: commands/do/do.cpp:61
+#, c++-format
 msgid "Unsupported action \"{}\""
 msgstr "Ei-tuettu toimenpide \"{}\""
 
-#: commands/do/do.cpp:73
+#: commands/do/do.cpp:71
 msgid "Type of the following items."
 msgstr "Seuraavien kohteiden tyyppi."
 
-#: commands/do/do.cpp:86
+#: commands/do/do.cpp:84
+#, c++-format
 msgid "Unsupported item type \"{}\""
 msgstr "Ei-tuettu kohdetyyppi \"{}\""
 
-#: commands/do/do.cpp:99
+#: commands/do/do.cpp:98
 msgid "List of items to take action on"
 msgstr "Luettelo kohteista, joille on ryhdyttävä toimenpiteisiin"
 
@@ -468,48 +523,55 @@ msgstr "Vain paketin uudelleenasennusta tuetaan."
 msgid "Action was not defined"
 msgstr "Toimenpidettä ei määritetty"
 
-#: commands/do/do.cpp:230
-msgid "Invalid Environmet/Group specification: {}"
+#: commands/do/do.cpp:231
+#, fuzzy, c++-format
+#| msgid "Invalid Environmet/Group specification: {}"
+msgid "Invalid Environment/Group specification: {}"
 msgstr "Virheellinen ympäristön/ryhmän määritys: {}"
 
-#: commands/do/do.cpp:314
+#: commands/do/do.cpp:317
 msgid "Downgrading environments and groups is not supported."
 msgstr "Ympäristöjen ja ryhmien päivittämistä alempaan versioon ei tueta."
 
-#: commands/do/do.cpp:330
-msgid "Reinstaling environments and groups is not supported."
+#: commands/do/do.cpp:332
+#, fuzzy
+#| msgid "Reinstaling environments and groups is not supported."
+msgid "Reinstalling environments and groups is not supported."
 msgstr "Ympäristöjen ja ryhmien uudelleenasentamista ei tueta."
 
-#: commands/downgrade/downgrade.cpp:42
+#: commands/downgrade/downgrade.cpp:40
 msgid "Downgrade software"
 msgstr "Varhenna ohjelmistoja"
 
-#: commands/download/download.cpp:106
+#: commands/download/download.cpp:123
 msgid "When running with --url, prints URLs from all available mirrors"
 msgstr ""
 "Suoritettaessa valitsimen ”--url” kanssa tulosta kaikkien saatavilla olevien "
 "peilipalvelimien URL:t"
 
-#: commands/download/download.cpp:122
+#: commands/download/download.cpp:139
+#, c++-format
 msgid "Invalid urlprotocol option: {}"
 msgstr "Virheellinen URL-protokollan urlprotocol-valitsin: {}"
 
-#: commands/download/download.cpp:149 main.cpp:627
+#: commands/download/download.cpp:166 main.cpp:685
+#, c++-format
 msgid "Unsupported architecture \"{0}\". Please choose one from {1}"
 msgstr "Arkkitehtuuria ”{0}” ei tueta. Ole hyvä ja valitse yksi joukosta {1}"
 
 #. TODO(jrohel): Add support for requiring an argument by another argument in ArgumentParser?
-#: commands/download/download.cpp:186
+#: commands/download/download.cpp:207
 msgid "Option \"--alldeps\" should be used with \"--resolve\""
 msgstr ""
 "Valitsinta”'--alldeps” tulee käyttää yhdessä valitsimen ”--resolve” kanssa"
 
-#: commands/download/download.cpp:226
+#: commands/download/download.cpp:261
+#, c++-format
 msgid ""
 "No package \"{}\" available; You might want to use --skip-unavailable option."
 msgstr ""
-"Pakettia \"{}\" ei ole saatavilla; kannattaa käyttää `--skip-"
-"unavailable`-valitsinta."
+"Pakettia \"{}\" ei ole saatavilla; kannattaa käyttää `--skip-unavailable`-"
+"valitsinta."
 
 #: commands/environment/arguments.hpp:33
 msgid "Show only available environments."
@@ -520,41 +582,31 @@ msgid "Show only installed environments."
 msgstr "Näytä vain asennetut ympäristöt."
 
 #: commands/environment/arguments.hpp:47
-msgid "Pattern matching environment IDs."
+#, fuzzy
+#| msgid "Pattern matching environment IDs."
+msgid "Pattern matching environment identifiers."
 msgstr "Lauseketta vastaavat ympäristötunnukset."
 
-#: commands/environment/environment.cpp:35
+#: commands/environment/environment.cpp:38
 msgid "Manage comps environments"
 msgstr "Hallitse comps-ympäristöjä"
 
-#: commands/from_repo.cpp:35
-msgid ""
-"The following items can be selected only from the specified repositories. "
-"All enabled repositories will still be used to satisfy dependencies."
+#: commands/environment/environment_info.cpp:101
+#: commands/environment/environment_list.cpp:99
+msgid "No matches found: no environments are installed."
 msgstr ""
-"Seuraavat kohteet voidaan valita vain määritetyistä tietovarastoista. "
-"Kaikkia käytössä olevia tietovarastoja käytetään edelleen riippuvuuksien "
-"täyttämiseen."
 
-#: commands/from_repo.cpp:38 commands/from_repo.cpp:70
-msgid "REPO_ID,..."
-msgstr "TIETOVARASTON_TUNNUS,..."
-
-#: commands/from_repo.cpp:53
-msgid "\"--from_repo\" already defined with diferent value"
-msgstr "\"--from_repo\" jo määritelty eri arvolla"
-
-#: commands/from_repo.cpp:68
-msgid ""
-"Filters installed packages by the ID of the repository they were installed "
-"from."
+#: commands/environment/environment_info.cpp:103
+#: commands/environment/environment_list.cpp:101
+msgid "No matches found: no environments are available."
 msgstr ""
-"Suodattaa asennetut paketit sen tietovaraston tunnuksen mukaan, josta ne on "
-"asennettu."
 
-#: commands/from_repo.cpp:79
-msgid "\"--installed-from_repo\" already defined with diferent value"
-msgstr "\"--installed-from_repo\" jo määritelty eri arvolla"
+#: commands/environment/environment_info.cpp:105
+#: commands/environment/environment_list.cpp:103
+#, fuzzy
+#| msgid "No matches found for \"{}\"."
+msgid "No matches found: no environments exist."
+msgstr "Ei tuloksia haulle ”{}”."
 
 #: commands/group/arguments.hpp:34
 msgid "Show only available groups."
@@ -577,16 +629,67 @@ msgstr ""
 "Luettelovaihtoehto, tukee laajamittaisia."
 
 #: commands/group/arguments.hpp:67
-msgid "Pattern matching group IDS."
+#, fuzzy
+#| msgid "Pattern matching group IDS."
+msgid "Pattern matching group identifiers."
 msgstr "Lauseketta vastaavat ryhmien tunnukset."
 
-#: commands/group/arguments.hpp:76
-msgid "Include optional packages from group."
+#: commands/group/arguments.hpp:77
+#, fuzzy
+#| msgid "Pattern matching environment IDs."
+msgid "Pattern matching group or environment identifiers."
+msgstr "Lauseketta vastaavat ympäristötunnukset."
+
+#: commands/group/arguments.hpp:86
+#, fuzzy
+#| msgid "Include optional packages from group."
+msgid "Include optional packages from groups."
 msgstr "Sisällytä valinnaiset paketit ryhmästä."
 
-#: commands/group/arguments.hpp:83
-msgid "Operate on groups only, no packages are changed."
+#: commands/group/arguments.hpp:97
+#, fuzzy
+#| msgid "Operate on groups only, no packages are changed."
+msgid "Operate on environments and groups only, no packages are changed."
 msgstr "Käsittele vain ryhmiä, paketteja ei muuteta."
+
+#: commands/group/group_list.cpp:114
+#, fuzzy
+#| msgid "No matches found for \"{}\"."
+msgid "No matches found: no groups are installed."
+msgstr "Ei tuloksia haulle ”{}”."
+
+#: commands/group/group_list.cpp:116
+#, fuzzy
+#| msgid "No matches found for \"{}\"."
+msgid "No matches found: no groups are available."
+msgstr "Ei tuloksia haulle ”{}”."
+
+#: commands/group/group_list.cpp:118
+#, fuzzy
+#| msgid "No matches found for \"{}\"."
+msgid "No matches found: no groups exist."
+msgstr "Ei tuloksia haulle ”{}”."
+
+#: commands/group/group_list.cpp:144
+#, c++-format
+msgid "Groups: {0} ({1} {2}, {3} {4})"
+msgstr ""
+
+#: commands/group/group_list.cpp:147
+#, fuzzy
+#| msgid "Installed"
+msgid "installed"
+msgid_plural "installed"
+msgstr[0] "Asennettu"
+msgstr[1] "Asennettu"
+
+#: commands/group/group_list.cpp:149
+#, fuzzy
+#| msgid "Available"
+msgid "available"
+msgid_plural "available"
+msgstr[0] "Saatavilla"
+msgstr[1] "Saatavilla"
 
 #: commands/history/arguments.hpp:37
 msgid "Transaction ID"
@@ -622,7 +725,7 @@ msgstr ""
 msgid "Manage transaction history"
 msgstr "Hallitse transaktiohistoriaa"
 
-#: commands/history/history_info.cpp:70
+#: commands/history/history_info.cpp:78
 msgid ""
 "No match found, history info defaults to considering only the last "
 "transaction, specify \"1..last\" range to search all transactions."
@@ -630,15 +733,15 @@ msgstr ""
 "Vastaavaa ei löytynyt, historiatietojen oletusarvo on vain viimeinen "
 "tapahtuma, määritä alue \"1..last\" etsiäksesi kaikki tapahtumat."
 
-#: commands/history/history_redo.cpp:54
-#: commands/history/history_rollback.cpp:58
-#: commands/history/history_store.cpp:65 commands/history/history_undo.cpp:57
+#: commands/history/history_redo.cpp:56
+#: commands/history/history_rollback.cpp:60
+#: commands/history/history_store.cpp:65 commands/history/history_undo.cpp:59
 msgid "No matching transaction ID found, exactly one required."
 msgstr "Transaktiotunnistetta ei löytynyt, täsmälleen yksi vaaditaan."
 
-#: commands/history/history_redo.cpp:58
-#: commands/history/history_rollback.cpp:62
-#: commands/history/history_undo.cpp:61
+#: commands/history/history_redo.cpp:60
+#: commands/history/history_rollback.cpp:64
+#: commands/history/history_undo.cpp:63
 msgid "Matched more than one transaction ID, exactly one required."
 msgstr ""
 "Vastasi useampaa kuin yhtä transaktiotunnistetta; täsmälleen yksi vaaditaan."
@@ -649,10 +752,12 @@ msgstr ""
 "Useita transaktioita valittu tallennettavaksi; täsmälleen yksi sallitaan."
 
 #: commands/history/history_store.cpp:80
+#, c++-format
 msgid "File \"{}\" already exists, it will be overwritten.\n"
 msgstr "Tiedosto ”{}” on jo olemassa; sen päälle kirjoitetaan.\n"
 
 #: commands/history/transaction_id.cpp:32
+#, c++-format
 msgid ""
 "Invalid transaction ID range \"{}\", \"ID\" or \"ID..ID\" expected, where ID "
 "is \"NUMBER\", \"last\" or \"last-NUMBER\"."
@@ -660,7 +765,7 @@ msgstr ""
 "Virheellinen transaktiotunnistealue ”{}”, odotetaan ”ID” tai ”ID..ID” jossa "
 "ID on ”NUMERO”, ”viimeinen” tai ”viimeinen-NUMERO”."
 
-#: commands/install/install.cpp:43
+#: commands/install/install.cpp:41
 msgid "Install software"
 msgstr "Asenna ohjelmistoja"
 
@@ -671,19 +776,23 @@ msgstr ""
 "Luettele asennettujen pakettien ryhmät, joita muut asennetut paketit eivät "
 "vaadi"
 
-#: commands/list/list.cpp:46
-msgid "Lists packages depending on the packages' relation to the system"
+#: commands/list/info.hpp:38
+#, fuzzy
+#| msgid "Lists packages depending on the packages' relation to the system"
+msgid ""
+"Lists packages depending on the packages' relation to the system with "
+"additional details"
 msgstr "Luetteloi paketit riippuen pakettien suhteesta järjestelmään"
 
-#: commands/list/list.cpp:50
+#: commands/list/list.cpp:49
 msgid "List of package-spec-NI to match (case insensitively)"
 msgstr "Vastaavien paketti-spec-NI:n luettelo (kirjainkokoa ei erotella)"
 
-#: commands/list/list.cpp:62
+#: commands/list/list.cpp:61
 msgid "Show all versions of the packages, not only the latest ones."
 msgstr "Näytä pakettien kaikki versiot, ei vain uusimmat."
 
-#: commands/list/list.cpp:70
+#: commands/list/list.cpp:69
 msgid "List installed packages."
 msgstr "Luetteloi asennetut paketit."
 
@@ -719,51 +828,51 @@ msgstr "Luetteloi asennettuihin paketteihin saatavilla olevat paketit."
 msgid "List packages which will be removed by the 'dnf autoremove' command."
 msgstr "Luetteloi paketit, jotka poistetaan ”dnf autoremove” -komennolla."
 
-#: commands/list/list.cpp:203 commands/list/list.cpp:208
+#: commands/list/list.cpp:214 commands/list/list.cpp:219
 msgid "Installed packages"
 msgstr "Asennetut paketit"
 
-#: commands/list/list.cpp:204 commands/list/list.cpp:217
+#: commands/list/list.cpp:215 commands/list/list.cpp:228
 msgid "Available packages"
 msgstr "Saatavilla olevat paketit"
 
-#: commands/list/list.cpp:225
+#: commands/list/list.cpp:236
 msgid "Available upgrades"
 msgstr "Saatavilla olevat päivitykset"
 
-#: commands/list/list.cpp:241
+#: commands/list/list.cpp:252
 msgid "Obsoleting packages"
 msgstr "Vanhentavat paketit"
 
-#: commands/list/list.cpp:246
+#: commands/list/list.cpp:257
 msgid "Autoremove packages"
 msgstr "Automaattisesti poistettavat paketit"
 
-#: commands/list/list.cpp:250
+#: commands/list/list.cpp:261
 msgid "Extra packages"
 msgstr "Lisäpaketit"
 
-#: commands/list/list.cpp:261
+#: commands/list/list.cpp:272
 msgid "Recently added packages"
 msgstr "Äskettäin lisätyt paketit"
 
-#: commands/list/list.cpp:266
-msgid "No matching packages to list"
-msgstr "Ei yhtään vastaavaa pakettia lueteltavaksi"
+#: commands/list/list.hpp:48
+msgid "Lists packages depending on the packages' relation to the system"
+msgstr "Luetteloi paketit riippuen pakettien suhteesta järjestelmään"
 
 #: commands/mark/mark.cpp:38
 msgid "Change the reason of an installed package"
 msgstr "Vaihda paketin asentamisen syytä"
 
-#: commands/module/arguments.hpp:36
+#: commands/module/arguments.hpp:35
 msgid "Show enabled modules."
 msgstr "Näytä käytössä olevat moduulit."
 
-#: commands/module/arguments.hpp:43
+#: commands/module/arguments.hpp:42
 msgid "Show disabled modules."
 msgstr "Näytä käytöstä poistetut moduulit."
 
-#: commands/module/arguments.hpp:50
+#: commands/module/arguments.hpp:49
 msgid "Pattern matching module NSVCAs."
 msgstr "Malli vastaa moduulin NSVCA:ta."
 
@@ -771,15 +880,45 @@ msgstr "Malli vastaa moduulin NSVCA:ta."
 msgid "Manage modules"
 msgstr "Hallitse moduuleja"
 
-#: commands/module/module_list.cpp:85
+#: commands/module/module_list.cpp:88
+msgid "No matches found: no module streams are enabled."
+msgstr ""
+
+#: commands/module/module_list.cpp:90
+msgid "No matches found: no module streams are disabled."
+msgstr ""
+
+#: commands/module/module_list.cpp:92
+#, fuzzy
+#| msgid "No matches found for \"{}\"."
+msgid "No matches found: no module streams exist."
+msgstr "Ei tuloksia haulle ”{}”."
+
+#: commands/no_matches.cpp:14
+#, c++-format
 msgid "No matches found for \"{}\"."
+msgstr "Ei tuloksia haulle ”{}”."
+
+#: commands/no_matches.cpp:28
+msgid ""
+"No repositories were loaded from the installroot. To use the configuration "
+"and repositories of the host system, pass --use-host-config."
+msgstr ""
+"Ei tietovarastoja ladattu ulospäin installrootilta . Käyttääksesi "
+"isäntäjärjestelmän kokoonpanoa ja tietovarastoja, välitä `--use-host-config`."
+
+#: commands/no_matches.cpp:78 commands/no_matches.hpp:45
+#, fuzzy
+#| msgid "No matches found for \"{}\"."
+msgid "No matches found."
 msgstr "Ei tuloksia haulle ”{}”."
 
 #: commands/offline/offline.cpp:217
 msgid "Manage offline transactions"
 msgstr "Hallitse yhteydettömän tilan transaktioita"
 
-#: commands/offline/offline.cpp:249
+#: commands/offline/offline.cpp:251
+#, c++-format
 msgid ""
 "Error reading state: {}. Rerun the command you used to initiate the offline "
 "transaction, e.g. `dnf5 system-upgrade download [OPTIONS]`."
@@ -787,11 +926,24 @@ msgstr ""
 "Virhe luettaessa tilaa: {}. Suorita uudelleen komento, jolla aloitit ei-"
 "verkkotapahtuman, esim. `dnf5 system-upgrade download [VAIHTOEHDOT]`."
 
-#: commands/offline/offline.cpp:272
+#: commands/offline/offline.cpp:264
+msgid ""
+"The system has been modified since the offline transaction was prepared."
+msgstr ""
+
+#: commands/offline/offline.cpp:268
+#, c++-format
+msgid ""
+"The system has been modified since the offline transaction was prepared. To "
+"reschedule, run: {}"
+msgstr ""
+
+#: commands/offline/offline.cpp:290
+#, c++-format
 msgid "Couldn't connect to D-Bus: {}"
 msgstr "Yhteys D-Busiin ei onnistunut: {}"
 
-#: commands/offline/offline.cpp:303
+#: commands/offline/offline.cpp:325
 msgid ""
 "Prepare the system to perform the offline transaction and reboot to start "
 "the transaction."
@@ -799,32 +951,35 @@ msgstr ""
 "Valmistele järjestelmä suorittamaan ei-verkkotapahtuma ja käynnistä se "
 "uudelleen käynnistääksesi tapahtuman."
 
-#: commands/offline/offline.cpp:310
+#: commands/offline/offline.cpp:332
 msgid "Power off the system after the operation is complete"
 msgstr "Sammuta järjestelmä kun toimenpide valmistuu"
 
-#: commands/offline/offline.cpp:321
+#: commands/offline/offline.cpp:343
 msgid "No offline transaction is stored."
 msgstr "Ei-verkkotapahtumaa ei ole tallennettu."
 
-#: commands/offline/offline.cpp:329
+#: commands/offline/offline.cpp:352
 msgid "System is not ready for offline transaction."
 msgstr "Järjestelmä ei ole valmis ei-verkkotapahtumaan."
 
-#: commands/offline/offline.cpp:332
+#: commands/offline/offline.cpp:355
+#, c++-format
 msgid "Data directory {} does not exist."
 msgstr "Tietohakemistoa {} ei ole olemassa."
 
-#: commands/offline/offline.cpp:357
+#: commands/offline/offline.cpp:380
+#, c++-format
 msgid "{} is not wanted by system-update.target."
 msgstr "System-update.target ei sitä {} halua."
 
-#: commands/offline/offline.cpp:367
+#: commands/offline/offline.cpp:390
+#, c++-format
 msgid "The system will now reboot to upgrade to release version {}."
 msgstr ""
 "Järjestelmä käynnistyy nyt uudelleen päivittääkseen julkaisuversioon {}."
 
-#: commands/offline/offline.cpp:371
+#: commands/offline/offline.cpp:394
 msgid ""
 "The system will now reboot to perform the offline transaction initiated by "
 "the following command:"
@@ -832,7 +987,7 @@ msgstr ""
 "Järjestelmä käynnistyy nyt uudelleen suorittaakseen ei-verkkotapahtuman, "
 "joka on aloitettu seuraavalla komennolla:"
 
-#: commands/offline/offline.cpp:402
+#: commands/offline/offline.cpp:425
 msgid ""
 "Internal use only, not intended to be run by the user. Execute the "
 "transaction in the offline environment."
@@ -840,67 +995,69 @@ msgstr ""
 "Vain sisäiseen käyttöön, ei ole tarkoitettu käyttäjän käytettäväksi. Suorita "
 "tapahtuma ei-verkkoympäristössä."
 
-#: commands/offline/offline.cpp:436
+#: commands/offline/offline.cpp:459
 msgid "Trigger file does not exist. Exiting."
 msgstr "Laukaisutiedostoa ei ole olemassa. Poistutaan."
 
-#: commands/offline/offline.cpp:440
+#: commands/offline/offline.cpp:463
 msgid "Another offline transaction tool is running. Exiting."
 msgstr "Toinen ei-verkkotapahtumatyökalu on käynnissä. Poistutaan."
 
-#: commands/offline/offline.cpp:467
+#: commands/offline/offline.cpp:495
 msgid "Starting offline transaction. This will take a while."
 msgstr ""
 "Käynnistetään ei-verkkotilassa oleva tapahtuma. Tämä kestää jonkin aikaa."
 
-#: commands/offline/offline.cpp:471
+#: commands/offline/offline.cpp:499
 msgid "Starting system upgrade. This will take a while."
 msgstr "Aloitetaan järjestelmäpäivitys. Tämä saattaa kestää hetken."
 
-#: commands/offline/offline.cpp:483
+#: commands/offline/offline.cpp:511
 msgid "Use `dnf5 offline reboot` to begin the transaction."
 msgstr "Suorita `dnf5 offline reboot` aloittaaksesi tapahtuman."
 
-#: commands/offline/offline.cpp:534
+#: commands/offline/offline.cpp:564
 msgid "Transaction failed: "
 msgstr "Transaktio epäonnistui: "
 
-#: commands/offline/offline.cpp:604
+#: commands/offline/offline.cpp:634
+#, c++-format
 msgid "Error reading journal: {}"
 msgstr "Virhe päiväkirjan lukemisessa: {}"
 
-#: commands/offline/offline.cpp:610
+#: commands/offline/offline.cpp:640
+#, c++-format
 msgid "Add journal match failed: {}"
 msgstr "Lisää päiväkirjaosuma epäonnistui: {}"
 
-#: commands/offline/offline.cpp:638
+#: commands/offline/offline.cpp:668
 msgid "No logs were found."
 msgstr "Lokeja ei löytynyt."
 
-#: commands/offline/offline.cpp:642
+#: commands/offline/offline.cpp:672
 msgid "The following boots appear to contain offline transaction logs:"
 msgstr "Seuraavat käynnistykset näyttävät sisältävän ei-verkkotapahtumalokeja:"
 
-#: commands/offline/offline.cpp:659
+#: commands/offline/offline.cpp:689
 msgid "Cannot find logs with this index."
 msgstr "Lokeja ei löydy tällä indeksillä."
 
-#: commands/offline/offline.cpp:666
+#: commands/offline/offline.cpp:696
 msgid "Unable to match systemd journal entry."
 msgstr "Ei voida täsmäyttää systemd-lokitietuetta."
 
-#: commands/offline/offline.cpp:678
+#: commands/offline/offline.cpp:708
 msgid "Show logs from past offline transactions"
 msgstr "Näytä lokit aiemmista ei-verkkotapahtumista"
 
-#: commands/offline/offline.cpp:686
+#: commands/offline/offline.cpp:716
 msgid ""
 "Which log to show. Run without any arguments to get a list of available logs."
 msgstr ""
 "Mikä loki näytetään. Suorita ilman argumentteja saadaksesi luettelon "
 "käytettävissä olevista lokeista."
 
-#: commands/offline/offline.cpp:701
+#: commands/offline/offline.cpp:731
 msgid ""
 "systemd is not supported in this build of DNF 5; the `log` subcommand is "
 "unavailable."
@@ -908,22 +1065,39 @@ msgstr ""
 "systemd:tä ei tueta tässä DNF 5:n koontiversiossa; alikomento `log` ei ole "
 "käytettävissä."
 
-#: commands/offline/offline.cpp:706
+#: commands/offline/offline.cpp:736
 msgid "Show status of the current offline transaction"
 msgstr "Näytä nykyisen ei-verkkotapahtuman tila"
 
-#: commands/offline/offline.cpp:722
+#: commands/offline/offline.cpp:752
+#, fuzzy
+#| msgid ""
+#| "The system will now reboot to perform the offline transaction initiated "
+#| "by the following command:"
+msgid ""
+"The system has been modified since the offline transaction was prepared. The "
+"offline transaction initiated by the following command is no longer valid:"
+msgstr ""
+"Järjestelmä käynnistyy nyt uudelleen suorittaakseen ei-verkkotapahtuman, "
+"joka on aloitettu seuraavalla komennolla:"
+
+#: commands/offline/offline.cpp:756
+msgid ""
+"To reschedule, run the command above. To clean up, run `dnf5 offline clean`."
+msgstr ""
+
+#: commands/offline/offline.cpp:760
 msgid "An offline transaction was initiated by the following command:"
 msgstr "Ei-verkkotapahtuma aloitettiin seuraavalla komennolla:"
 
-#: commands/offline/offline.cpp:724
+#: commands/offline/offline.cpp:762
 msgid ""
 "Run `dnf5 offline reboot` to reboot and perform the offline transaction."
 msgstr ""
 "Suorita `dnf5 offline reboot` käynnistääksesi uudelleen ja suorittaaksesi ei-"
 "verkkotapahtuman."
 
-#: commands/offline/offline.cpp:726
+#: commands/offline/offline.cpp:764
 msgid ""
 "An offline transaction was started, but it did not finish. Run `dnf5 offline "
 "log` for more information. The command that initiated the transaction was:"
@@ -931,21 +1105,53 @@ msgstr ""
 "Ei-verkkotapahtuma aloitettiin, mutta se ei päättynyt. Suorita `dnf5 offline "
 "log` saadaksesi lisätietoja. Komento, joka aloitti tapahtuman, oli:"
 
-#: commands/offline/offline.cpp:731
+#: commands/offline/offline.cpp:769
 msgid "Unknown offline transaction status: "
 msgstr "Tuntematon ei-verkkotapahtuman tila: "
 
-#: commands/provides/provides.cpp:48
+#: commands/provides/provides.cpp:50
 msgid "Find what package provides the given value"
 msgstr "Etsi, mikä paketti tarjoaa annetun arvon"
 
-#: commands/reinstall/reinstall.cpp:42
+#: commands/provides/provides.cpp:136
+msgid ""
+"If searching for a file, try specifying the full path or using a wildcard "
+"prefix (\"*/\") at the beginning."
+msgstr ""
+
+#: commands/reinstall/reinstall.cpp:40
 msgid "Reinstall software"
 msgstr "Asenna ohjelmisto uudelleen"
 
-#: commands/remove/remove.cpp:42
+#: commands/remove/remove.cpp:48
 msgid "Remove (uninstall) software"
 msgstr "Poista ohjelmiston asennus"
+
+#: commands/remove/remove.cpp:129
+msgid ""
+"Option '--limit' must be equal or greater than 1 (to keep at least the "
+"newest installed package)."
+msgstr ""
+
+#: commands/remove/remove.cpp:237
+msgid "Option '--limit' can only be used with '--oldinstallonly'."
+msgstr ""
+
+#: commands/remove/remove.cpp:242
+#, fuzzy
+#| msgid "{}. Add \"--help\" for more information about the arguments."
+msgid ""
+"Missing positional arguments for \"remove\" command. Add \"--help\" for more "
+"information about the arguments."
+msgstr "{}. Lisää `--help` lisätietojen saamiseksi argumenteista."
+
+#: commands/remove/remove.cpp:269
+#, c++-format
+msgid ""
+"Warning: The currently running kernel '{}' is not the latest installed "
+"version and was not removed. Please reboot into the latest kernel and run "
+"this command again to complete the cleanup."
+msgstr ""
 
 #: commands/replay/replay.cpp:38
 msgid "Replay a transaction that was previously stored to a directory"
@@ -975,7 +1181,7 @@ msgstr "Hallinnoi tietovarastoja"
 msgid "Search for packages matching various criteria"
 msgstr "Etsi paketteja, jotka vastaavat eri kriteerejä"
 
-#: commands/repoquery/repoquery.cpp:525
+#: commands/repoquery/repoquery.cpp:527
 msgid ""
 "Option \"--exactdeps\" has to be used either with \"--whatrequires\" or \"--"
 "whatdepends\""
@@ -983,7 +1189,7 @@ msgstr ""
 "Vaihtoehtoa `--exactdeps` on käytettävä joko `--whatrequires`:n- tai `--"
 "whatdepends`:n kanssa"
 
-#: commands/repoquery/repoquery.cpp:530
+#: commands/repoquery/repoquery.cpp:532
 msgid ""
 "Option \"--recursive\" has to be used either with \"--whatrequires\" or \"--"
 "providers-of=requires\""
@@ -999,11 +1205,22 @@ msgstr "Hae myös paketin kuvauksesta ja URL:stä."
 msgid "Patterns"
 msgstr "Mallit"
 
-#: commands/search/search.cpp:44
+#: commands/search/search.cpp:49
 msgid "Search for software matching all specified strings"
 msgstr "Etsi ohjelmistoja, jotka vastaavat kaikkia määritettyjä merkkijonoja"
 
-#: commands/swap/swap.cpp:44
+#: commands/search/search.cpp:70
+msgid "Options --name and --summary cannot be used together."
+msgstr ""
+
+#: commands/search/search.cpp:74
+#, fuzzy
+#| msgid "Option \"--alldeps\" should be used with \"--resolve\""
+msgid "Option --all cannot be used with --name or --summary."
+msgstr ""
+"Valitsinta”'--alldeps” tulee käyttää yhdessä valitsimen ”--resolve” kanssa"
+
+#: commands/swap/swap.cpp:42
 msgid "Remove software and install another in one transaction"
 msgstr "Poista ohjelmisto ja asenna toinen yhdellä tapahtumalla"
 
@@ -1037,11 +1254,11 @@ msgstr ""
 msgid "Store an upgrade transaction to be performed offline"
 msgstr "Tallenna päivitystapahtuma ei-verkkotilassa suoritettavaa varten"
 
-#: commands/upgrade/upgrade.cpp:43
+#: commands/upgrade/upgrade.cpp:41
 msgid "Upgrade software"
 msgstr "Päivitä ohjelmisto"
 
-#: commands/upgrade/upgrade.cpp:50
+#: commands/upgrade/upgrade.cpp:48
 msgid ""
 "Upgrade packages only to the lowest versions that fix advisories of type "
 "bugfix, enhancement, security, or newpackage. In case that any option "
@@ -1056,6 +1273,7 @@ msgstr ""
 
 #. TODO(mblaha): add full command line
 #: commands/versionlock/utils.cpp:35
+#, c++-format
 msgid "Added by 'versionlock {}' command on {}"
 msgstr "Lisätty komennolla 'versionlock {}' {}:lla"
 
@@ -1068,19 +1286,25 @@ msgid "Add new entry to versionlock configuration"
 msgstr "Lisää uusi merkintä versiolukituskokoonpanoon"
 
 #: commands/versionlock/versionlock_add.cpp:44
-msgid "List of package package-spec-N to add versionlock for"
-msgstr "Luettelo paketeista package-spec-N, joihin versionlock lisätään"
+#, fuzzy
+#| msgid "List of package specs to remove versionlock for"
+msgid "List of packages to lock to their current versions"
+msgstr ""
+"Luettelo pakettien teknisistä tiedoista, joiden versiolukitus poistetaan"
 
 #: commands/versionlock/versionlock_add.cpp:107
-#: commands/versionlock/versionlock_exclude.cpp:126
+#: commands/versionlock/versionlock_exclude.cpp:128
+#, c++-format
 msgid "No package found for \"{}\"."
 msgstr "Pakettia ei löydy \"{}\":lle."
 
 #: commands/versionlock/versionlock_add.cpp:134
+#, c++-format
 msgid "Adding versionlock on \"{0} = {1}\"."
 msgstr "Lisätään versiolukitus \"{0} = {1}\":lle."
 
 #: commands/versionlock/versionlock_add.cpp:137
+#, c++-format
 msgid "Package \"{}\" is already locked."
 msgstr "Paketti ”{}” on jo lukittu."
 
@@ -1105,30 +1329,68 @@ msgstr "Poistetaan versiolukitusmerkintää:"
 msgid "Add new exclude entry to versionlock configuration"
 msgstr "Lisää uusi poissulkemismerkintä versiolukitusmääritykseen"
 
-#: commands/versionlock/versionlock_exclude.cpp:44
-msgid "List of package-spec-N to add versionlock exclude for"
+#: commands/versionlock/versionlock_exclude.cpp:45
+msgid ""
+"List of packages to exclude. If no version is specified, all available "
+"versions of the package will be excluded."
 msgstr ""
-"Luettelo paketti-spec-N:stä, joihin versionlockista poissuljettava on "
-"lisättävä"
 
-#: commands/versionlock/versionlock_exclude.cpp:89
-#: commands/versionlock/versionlock_exclude.cpp:101
+#: commands/versionlock/versionlock_exclude.cpp:91
+#: commands/versionlock/versionlock_exclude.cpp:103
+#, c++-format
 msgid "Adding versionlock exclude on \"{0} = {1}\"."
 msgstr "Lisätään versiolukituksen poissulkeminen \"{0} = {1}\":een."
 
-#: commands/versionlock/versionlock_exclude.cpp:140
+#: commands/versionlock/versionlock_exclude.cpp:142
+#, c++-format
 msgid "Package \"{}\" is already excluded."
 msgstr "Paketti ”{}” on jo suljettu pois."
 
 #: context.cpp:73
+#, fuzzy, c++-format
+#| msgid "Query Commands:"
+msgid "Command: {}"
+msgstr "Kyselykomennot:"
+
+#: context.cpp:81
+#, c++-format
+msgid "Process ID: {} (still running)"
+msgstr ""
+
+#: context.cpp:83
+#, c++-format
+msgid "Process ID: {}"
+msgstr ""
+
+#: context.cpp:92
+#, fuzzy, c++-format
+#| msgid "setvar: {}"
+msgid "Started: {}"
+msgstr "setvar: {}"
+
+#: context.cpp:99
+#, c++-format
+msgid "Comment: {}"
+msgstr ""
+
+#: context.cpp:103
+#, fuzzy
+#| msgid "Show status of the current offline transaction"
+msgid "Details about the currently running transaction:\n"
+msgstr "Näytä nykyisen ei-verkkotapahtuman tila"
+
+#: context.cpp:121
+#, c++-format
 msgid "Importing OpenPGP key 0x{}:\n"
 msgstr "Tuodaan OpenPGP-avain 0x{}:\n"
 
-#: context.cpp:75 context.cpp:100
+#: context.cpp:123 context.cpp:148
+#, c++-format
 msgid " UserID     : \"{}\"\n"
 msgstr " Käyttäjätunniste     : ”{}”\n"
 
-#: context.cpp:78
+#: context.cpp:126
+#, c++-format
 msgid ""
 " Fingerprint: {}\n"
 " From       : {}\n"
@@ -1136,52 +1398,58 @@ msgstr ""
 " Sormenjälki: {}\n"
 " Lähde: {}\n"
 
-#: context.cpp:87
+#: context.cpp:135
 msgid "The key was successfully imported."
 msgstr "Avain tuotiin onnistuneesti."
 
-#: context.cpp:96
+#: context.cpp:144
+#, c++-format
 msgid "The following OpenPGP key (0x{}) is about to be removed:"
 msgstr "Seuraava OpenPGP-avain (0x{}) ollaan poistamassa:"
 
-#: context.cpp:98
+#: context.cpp:146
+#, c++-format
 msgid " Reason     : {}\n"
 msgstr " Syy     : {}\n"
 
-#: context.cpp:102
+#: context.cpp:150
+#, c++-format
 msgid " Fingerprint: {}\n"
 msgstr " Sormenjälki: {}\n"
 
-#: context.cpp:104
+#: context.cpp:152
 msgid "As a result, installing packages signed with this key will fail."
 msgstr ""
 "Sen seurauksena tällä avaimella allekirjoitettujen pakettien asentaminen "
 "epäonnistuu."
 
-#: context.cpp:105
+#: context.cpp:153
 msgid "It is recommended to remove the expired key to allow importing"
 msgstr "On suositeltavaa poistaa vanhentunut avain tuonnin mahdollistamiseksi"
 
-#: context.cpp:106
+#: context.cpp:154
 msgid ""
 "an updated key. This might leave already installed packages unverifiable."
 msgstr ""
 "päivitetty avain. Tämä saattaa jättää jo asennettuja paketteja "
 "vahvistamattomiksi."
 
-#: context.cpp:109
+#: context.cpp:157
 msgid "The system will now proceed with removing the key."
 msgstr "Järjestelmä jatkaa nyt avaimen poistamista."
 
-#: context.cpp:115
+#: context.cpp:163
+#, c++-format
 msgid "Key 0x{} was successfully removed."
 msgstr "Avain 0x{} poistettiin onnistuneesti."
 
-#: context.cpp:295
+#: context.cpp:192
+#, c++-format
 msgid "setopt: \"{}.{}\": {}"
 msgstr "setopt: \"{}.{}\": {}"
 
-#: context.cpp:305
+#: context.cpp:202
+#, c++-format
 msgid ""
 "No matching repositories for {}. To use repositories from a host system, "
 "pass --use-host-config option"
@@ -1189,44 +1457,65 @@ msgstr ""
 "Ei vastaavia tietovarastoja {}:lle. Jos haluat käyttää tietovarastoja "
 "isäntäjärjestelmästä, välitä vaihtoehto `--use-host-config`"
 
-#: context.cpp:309
+#: context.cpp:206
+#, c++-format
 msgid "No matching repositories for {}"
 msgstr "Ei vastaavia tietovarastoja {}:lle"
 
-#: context.cpp:355
+#: context.cpp:278
+msgid ""
+"Waiting for a lock on the system repository; another process is currently "
+"accessing it. Use the \"--skip-file-locks\" option to bypass the lock."
+msgstr ""
+
+#: context.cpp:282
+msgid ""
+"Waiting for a lock on the system repository. The following processes are "
+"currently accessing it:"
+msgstr ""
+
+#: context.cpp:292
+msgid "Use the \"--skip-file-locks\" option to bypass the lock."
+msgstr ""
+
+#. If we're only loading the system repo, we can skip the message.
+#: context.cpp:300
 msgid "Updating and loading repositories:"
 msgstr "Päivitetään ja ladataan ohjelmistolähteet:"
 
-#: context.cpp:365
+#: context.cpp:315
 msgid "Repositories loaded."
 msgstr "Ohjelmistolähteet ladattu."
 
-#: context.cpp:371
+#: context.cpp:322
 msgid "Testing offline transaction"
 msgstr "Testataan ei-verkkotapahtumaa"
 
-#: context.cpp:375 context.cpp:523
+#: context.cpp:326 context.cpp:525
+#, c++-format
 msgid "Transaction failed: {}"
 msgstr "Tapahtuma epäonnistui: {}"
 
-#: context.cpp:380 context.cpp:528
+#: context.cpp:339 context.cpp:538
+#, c++-format
 msgid "  - {}"
 msgstr "  - {}"
 
-#: context.cpp:447
+#: context.cpp:441
+#, c++-format
 msgid ""
 "Location \"{}\" already contains a stored transaction, it will be "
 "overwritten."
 msgstr "Sijainti \"{}\" sisältää jo tallennetun tapahtuman, se korvataan."
 
-#: context.cpp:476
+#: context.cpp:475
 msgid ""
 "There is already an offline transaction queued, initiated by the following "
 "command:"
 msgstr ""
 "Jonossa on jo ei-verkkotapahtuma, joka on aloitettu seuraavalla komennolla:"
 
-#: context.cpp:478
+#: context.cpp:477
 msgid ""
 "Continuing will cancel the old offline transaction and replace it with this "
 "one."
@@ -1247,107 +1536,134 @@ msgstr ""
 msgid "Running transaction"
 msgstr "Suoritetaan transaktio"
 
-#: context.cpp:820
+#: context.cpp:551
+#, fuzzy
+#| msgid "Starting offline transaction. This will take a while."
+msgid "Warning: Pending offline transaction has been invalidated."
+msgstr ""
+"Käynnistetään ei-verkkotilassa oleva tapahtuma. Tämä kestää jonkin aikaa."
+
+#: context.cpp:553
+#, c++-format
+msgid "To reschedule, run: {}"
+msgstr ""
+
+#: context.cpp:916
+#, c++-format
 msgid "Upgrading {}"
 msgstr "Päivitetään {}"
 
-#: context.cpp:823
+#: context.cpp:919
+#, c++-format
 msgid "Downgrading {}"
 msgstr "Versiota alennetaan {}"
 
-#: context.cpp:826
+#: context.cpp:922
+#, c++-format
 msgid "Reinstalling {}"
 msgstr "Asennetaan uudelleen {}"
 
-#: context.cpp:839
+#: context.cpp:935
+#, c++-format
 msgid "Unexpected action in TransactionPackage: {}"
 msgstr "Odottamaton toimenpide TransactionPackagessa: {}"
 
-#: context.cpp:845
+#: context.cpp:941
+#, c++-format
 msgid "Installing {}"
 msgstr "Asennetaan {}"
 
-#: context.cpp:866
+#: context.cpp:962
 msgid "Prepare transaction"
 msgstr "Valmistellaan transaktiota"
 
-#: context.cpp:886
+#: context.cpp:982
+#, c++-format
 msgid "Removing {}"
 msgstr "Poistetaan {}"
 
-#: context.cpp:889
+#: context.cpp:985
+#, c++-format
 msgid "Cleanup {}"
 msgstr "Puhdistus {}"
 
-#: context.cpp:907
+#: context.cpp:1004
+#, c++-format
 msgid "Unpack error: {}"
 msgstr "Pakkauksen purkuvirhe: {}"
 
-#: context.cpp:915
+#: context.cpp:1013
+#, c++-format
 msgid "Cpio error: {}"
 msgstr "Cpio-virhe: {}"
 
-#: context.cpp:925
+#: context.cpp:1023
 msgid "Scriptlet output:"
 msgstr "Sovelman tuloste:"
 
-#: context.cpp:948
+#: context.cpp:1046
 msgid "Running scriptlets"
 msgstr "Suoritetaan sovelmia"
 
-#: context.cpp:953
+#: context.cpp:1052
+#, c++-format
 msgid "Running {} scriptlet: {}"
 msgstr "Suoritetaan sovelmaa {}: {}"
 
-#: context.cpp:968
+#: context.cpp:1068
+#, c++-format
 msgid "Finished {} scriptlet: {}"
 msgstr "Valmis sovelma {}: {}"
 
-#: context.cpp:974
+#: context.cpp:1075
+#, c++-format
 msgid "Non-critical error in {} scriptlet: {}"
 msgstr "Ei-kriittinen virhe sovelmassa {}: {}"
 
-#: context.cpp:983
+#: context.cpp:1085
+#, c++-format
 msgid "Error in {} scriptlet: {}"
 msgstr "Virhe sovelmassa {}: {}"
 
-#: context.cpp:1018
+#: context.cpp:1120
 msgid "Verify package files"
 msgstr "Vahvista pakettitiedostot"
 
 #: library.cpp:33
+#, c++-format
 msgid "Cannot load shared library \"{}\": {}"
 msgstr "Jaettua kirjastoa ”{}” ei voi ladata: {}"
 
 #: library.cpp:47
+#, c++-format
 msgid "Cannot obtain address of symbol \"{}\": {}"
 msgstr "Symbolin \"{}\" osoitetta ei voi saada: {}"
 
-#: main.cpp:133
+#: main.cpp:142
 msgid "Utility for packages maintaining"
 msgstr "Apuohjelma pakettien ylläpitoon"
 
-#: main.cpp:134
+#: main.cpp:143
 msgid "DNF5 is a program for maintaining packages."
 msgstr "DNF5 on ohjelma pakettien hallintaan."
 
-#: main.cpp:135
+#: main.cpp:144
 msgid "Unclassified options:"
 msgstr "Luokittelemattomat vaihtoehdot:"
 
-#: main.cpp:138
+#: main.cpp:147
 msgid "Global options:"
 msgstr "Laajamittaiset vaihtoehdot:"
 
-#: main.cpp:143
+#: main.cpp:152
 msgid "Print help"
 msgstr "Tulosta ohje"
 
-#: main.cpp:150
+#: main.cpp:159
 msgid "Configuration file location"
 msgstr "Asetustiedoston sijainti"
 
-#: main.cpp:158
+#: main.cpp:167
 msgid ""
 "In combination with a non-interactive command, shows just the relevant "
 "content. Suppresses messages notifying about the current state or actions of "
@@ -1357,7 +1673,7 @@ msgstr ""
 "sisällön. Estää viestit, jotka ilmoittavat dnf5:n nykyisestä tilasta tai "
 "toimenpiteistä."
 
-#: main.cpp:173
+#: main.cpp:182
 msgid ""
 "Run entirely from system cache, don't update the cache and use it even in "
 "case it is expired."
@@ -1365,41 +1681,43 @@ msgstr ""
 "Suorita kokonaan järjestelmän välimuistista, älä päivitä välimuistia ja "
 "käytä sitä, vaikka se olisi vanhentunut."
 
-#: main.cpp:182
+#: main.cpp:191
 msgid "Control whether color is used."
 msgstr "Hallitse, käytetäänkö väriä."
 
-#: main.cpp:188
+#: main.cpp:197
 msgid "Force refreshing metadata before running the command."
 msgstr "Pakota metatietojen päivittäminen ennen komennon suorittamista."
 
-#: main.cpp:204
+#: main.cpp:213
+#, c++-format
 msgid "Failed to expire repository cache in path \"{0}\": {1}"
 msgstr ""
 "Ohjelmistolähteen välimuistin vanheneminen polussa \"{0}\" epäonnistui: {1}"
 
-#: main.cpp:218
+#: main.cpp:227
 msgid "create additional repository using id and path"
 msgstr "luo lisäohjelmistolähde tunnuksen ja polun avulla"
 
-#: main.cpp:226
+#: main.cpp:235
+#, c++-format
 msgid "repofrompath: Incorrect repoid and path specification \"{}\""
 msgstr ""
 "repofrompath: Virheellinen tietovaraston tunnus ja polkumääritys \"{}\""
 
-#: main.cpp:238
+#: main.cpp:247
 msgid "set arbitrary config and repo options"
 msgstr "aseta mielivaltaisia asetus- ja ohjelmistolähdevalitsimia"
 
-#: main.cpp:240
+#: main.cpp:249
 msgid ""
 "Override a configuration option from the configuration file. To override "
 "configuration options for repositories, use repoid.option for  the\n"
 "              <option>.  Values  for configuration options like excludepkgs, "
 "includepkgs, installonlypkgs and tsflags are appended to the original "
 "value,\n"
-"              they do not override it. However, specifying an empty value (e."
-"g. --setopt=tsflags=) will clear the option."
+"              they do not override it. However, specifying an empty value "
+"(e.g. --setopt=tsflags=) will clear the option."
 msgstr ""
 "Ohita kokoonpanoasetus määritystiedostosta. Voit ohittaa tietovarastojen "
 "määritysasetukset käyttämällä repoid.option:a\n"
@@ -1409,46 +1727,58 @@ msgstr ""
 "              Tyhjän arvon määrittäminen (esim. '--setopt=tsflags=') "
 "kuitenkin tyhjentää vaihtoehdon."
 
-#: main.cpp:249 main.cpp:288
+#: main.cpp:258 main.cpp:297
+#, c++-format
 msgid "{}: Badly formatted argument value \"{}\""
 msgstr "{}: Virheellisesti muotoiltu argumentin arvo \"{}\""
 
-#: main.cpp:256
+#: main.cpp:265
+#, c++-format
 msgid ""
 "{}: Badly formatted argument value: Last key character cannot be '.': {}"
 msgstr ""
 "{}: Virheellisesti muotoiltu argumenttiarvo: Viimeinen avainmerkki ei voi "
 "olla '.': {}"
 
-#: main.cpp:269
+#: main.cpp:278
+#, c++-format
 msgid "setopt: \"{0}\": {1}"
 msgstr "setopt: \"{0}\": {1}"
 
-#: main.cpp:281
+#: main.cpp:290
 msgid "set arbitrary variable"
 msgstr "aseta mielivaltainen muuttuja"
 
-#: main.cpp:295
+#: main.cpp:304
+#, c++-format
 msgid "setvar: {}"
 msgstr "setvar: {}"
 
-#: main.cpp:304
+#: main.cpp:313
 msgid "automatically answer yes for all questions"
 msgstr "vastaa automaattisesti ”kyllä” kaikkiin kysymyksiin"
 
-#: main.cpp:311
+#: main.cpp:320
 msgid "automatically answer no for all questions"
 msgstr "vastaa automaattisesti ”ei” kaikkiin kysymyksiin"
 
-#: main.cpp:318
+#: main.cpp:327
 msgid "try the best available package versions in transactions"
 msgstr "kokeile parhaita saatavilla olevia pakettiversioita tapahtumissa"
 
-#: main.cpp:325
+#: main.cpp:334
 msgid "do not limit the transaction to the best candidate"
 msgstr "älä rajoita transaktiota parhaaseen ehdokkaaseen"
 
-#: main.cpp:336
+#: main.cpp:343
+msgid "allow automatic package replacements from different vendors"
+msgstr ""
+
+#: main.cpp:350
+msgid "do not allow automatic package replacements from different vendors"
+msgstr ""
+
+#: main.cpp:361
 msgid ""
 "Don't install files that are marked as documentation (which includes man "
 "pages and texinfo documents)"
@@ -1456,11 +1786,11 @@ msgstr ""
 "Älä asenna tiedostoja, jotka on merkitty dokumentaatioksi (joka sisältää man-"
 "sivut ja texinfo-asiakirjat)"
 
-#: main.cpp:352
+#: main.cpp:377
 msgid "exclude packages by name or glob"
 msgstr "sulje pois paketit käyttäen nimeä tai joukkoa (glob)"
 
-#: main.cpp:371
+#: main.cpp:396
 msgid ""
 "Enable additional repositories. List option. Supports globs, can be "
 "specified multiple times."
@@ -1468,7 +1798,7 @@ msgstr ""
 "Ota käyttöön lisäohjelmistolähteitä. Luettelovalitsin. Tukee globeja "
 "(joukkoja), voidaan määrittää useita kertoja."
 
-#: main.cpp:389
+#: main.cpp:414
 msgid ""
 "Disable repositories. List option. Supports globs, can be specified multiple "
 "times."
@@ -1476,7 +1806,7 @@ msgstr ""
 "Poista ohjelmistolähteet käytöstä. Luettelovalitsin. Tukee globeja "
 "(joukkoja), voidaan määrittää useita kertoja."
 
-#: main.cpp:407
+#: main.cpp:432
 msgid ""
 "Enable just specific repositories. List option. Supports globs, can be "
 "specified multiple times."
@@ -1484,17 +1814,17 @@ msgstr ""
 "Ota käyttöön vain tietyt tietovarastot. Luettelovaihtoehto. Tukee "
 "laajamittaisia, voidaan määrittää useita kertoja."
 
-#: main.cpp:429
+#: main.cpp:454
 msgid "disable OpenPGP signature checking (if RPM policy allows)"
 msgstr ""
 "poista OpenPGP-allekirjoituksen tarkistus käytöstä (jos RPM-käytäntö sallii "
 "sen)"
 
-#: main.cpp:446
+#: main.cpp:471
 msgid "Disable all libdnf5 plugins"
 msgstr "Poista käytöstä kaikki libdnf5-liitännäiset"
 
-#: main.cpp:456
+#: main.cpp:481
 msgid ""
 "Enable libdnf5 plugins by name. List option. Supports globs, can be "
 "specified multiple times."
@@ -1502,7 +1832,7 @@ msgstr ""
 "Ota libdnf5-lisäosat käyttöön nimen mukaan. Luettelovaihtoehto. Tukee "
 "laajamittaisia, voidaan määrittää useita kertoja."
 
-#: main.cpp:471
+#: main.cpp:496
 msgid ""
 "Disable libdnf5 plugins by name. List option. Supports globs, can be "
 "specified multiple times."
@@ -1510,11 +1840,11 @@ msgstr ""
 "Poista libdnf5-lisäosat käytöstä nimen mukaan. Luettelovaihtoehto. Tukee "
 "laajamittaisia, voidaan määrittää useita kertoja."
 
-#: main.cpp:488
+#: main.cpp:513
 msgid "add a comment to transaction"
 msgstr "lisää kommentti transaktioon"
 
-#: main.cpp:490
+#: main.cpp:515
 msgid ""
 "Adds a comment to the action. If a transaction takes place, the comment is "
 "stored in it."
@@ -1522,11 +1852,11 @@ msgstr ""
 "Lisää kommentin toimenpiteeseen. Jos tapahtuma toteutuu, kommentti "
 "tallennetaan siihen."
 
-#: main.cpp:503
+#: main.cpp:528
 msgid "set install root"
 msgstr "aseta asennuksen juurihakemisto"
 
-#: main.cpp:510
+#: main.cpp:535
 msgid ""
 "use configuration, reposdir, and vars from the host system rather than the "
 "installroot"
@@ -1534,11 +1864,23 @@ msgstr ""
 "käytä kokoonpanoa, tietovarastohakemistoa ja muuttujia isäntäjärjestelmästä "
 "asennusjuuren sijaan"
 
-#: main.cpp:519
+#: main.cpp:544
 msgid "override the value of $releasever in config and repo files"
 msgstr "ohittaa $releasever-arvon asetus- ja ohjelmistolähdetiedostoissa"
 
-#: main.cpp:532
+#: main.cpp:557
+#, fuzzy
+#| msgid "override the value of $releasever in config and repo files"
+msgid "override the value of $releasever_major in config and repo files"
+msgstr "ohittaa $releasever-arvon asetus- ja ohjelmistolähdetiedostoissa"
+
+#: main.cpp:570
+#, fuzzy
+#| msgid "override the value of $releasever in config and repo files"
+msgid "override the value of $releasever_minor in config and repo files"
+msgstr "ohittaa $releasever-arvon asetus- ja ohjelmistolähdetiedostoissa"
+
+#: main.cpp:583
 msgid ""
 "Show newly installed leaf packages and packages that became leaves after a "
 "transaction."
@@ -1546,62 +1888,71 @@ msgstr ""
 "Näytä äskettäin asennetut lehtipaketit ja paketit, joista tuli tapahtuman "
 "seurauksena lehtiä."
 
-#: main.cpp:546
+#: main.cpp:597
 msgid "Dump detailed solving results into files"
 msgstr "Upota yksityiskohtaiset ratkaisutulokset tiedostoihin"
 
-#: main.cpp:555
+#: main.cpp:606
 msgid "Print main configuration values to stdout"
 msgstr "Tulosta päämääritysarvot stdout:een"
 
-#: main.cpp:572
+#: main.cpp:623
 msgid ""
 "Print repository configuration values to stdout. List option. Supports globs"
 msgstr ""
 "Tulosta ohjelmistolähteen määritysarvot stdout:een. Luettelovaihtoehto. "
 "Tukee laajamittaisia"
 
-#: main.cpp:587
+#: main.cpp:638
 msgid "Print variable values to stdout"
 msgstr "Tulosta muuttujan arvot oletustulosteeseen (stdout)"
 
-#: main.cpp:601
+#: main.cpp:652
 msgid "Show DNF5 version and exit"
 msgstr "Näytä DNF5:n versio ja poistu"
 
-#: main.cpp:608
+#: main.cpp:666
 msgid "Force the use of a different architecture."
 msgstr "Pakota käyttämään eri arkkitehtuurin."
 
-#: main.cpp:646
+#: main.cpp:698
+msgid "Skip acquiring file locks, such as the lock on the system repository"
+msgstr ""
+
+#: main.cpp:713
 msgid "Software Management Commands:"
 msgstr "Ohjelmistohallinnan komennot:"
 
-#: main.cpp:653
+#: main.cpp:720
 msgid "Query Commands:"
 msgstr "Kyselykomennot:"
 
-#: main.cpp:660
+#: main.cpp:727
 msgid "Subcommands:"
 msgstr "Alikomennot:"
 
-#: main.cpp:759
+#: main.cpp:828
+#, c++-format
 msgid "{} version {}.{}.{}.{}"
 msgstr "{}:n versio {}.{}.{}.{}"
 
-#: main.cpp:762
+#: main.cpp:831
+#, c++-format
 msgid "{} plugin API version {}.{}"
 msgstr "{}:n liitännäisrajapinnan versio {}.{}"
 
-#: main.cpp:767
+#: main.cpp:836
+#, c++-format
 msgid "libdnf5 version {}.{}.{}.{}"
 msgstr "libdnf5:n versio {}.{}.{}.{}"
 
-#: main.cpp:770
+#: main.cpp:839
+#, c++-format
 msgid "libdnf5 plugin API version {}.{}"
 msgstr "libdnf5:n liitännäisrajapinnan versio {}.{}"
 
-#: main.cpp:777
+#: main.cpp:846
+#, c++-format
 msgid ""
 "\n"
 "Loaded {} plugins:"
@@ -1609,25 +1960,42 @@ msgstr ""
 "\n"
 "Ladatut {}-liitännäiset:"
 
-#: main.cpp:782
+#: main.cpp:851 main.cpp:867
+#, c++-format
 msgid "  name: {}"
 msgstr "  nimi: {}"
 
-#: main.cpp:785
+#: main.cpp:854 main.cpp:870
+#, c++-format
 msgid "  version: {}.{}.{}"
 msgstr "  versio: {}.{}.{}"
 
-#: main.cpp:787
+#: main.cpp:856 main.cpp:872
+#, c++-format
 msgid "  API version: {}.{}"
 msgstr "  API-versio: {}.{}"
 
-#: main.cpp:825
+#: main.cpp:863
+#, fuzzy
+#| msgid ""
+#| "\n"
+#| "Loaded {} plugins:"
+msgid ""
+"\n"
+"Loaded libdnf5 plugins:"
+msgstr ""
+"\n"
+"Ladatut {}-liitännäiset:"
+
+#: main.cpp:910
+#, c++-format
 msgid ""
 "Total size of inbound packages is {:.0f} {:s}. Need to download {:.0f} {:s}."
 msgstr ""
 "Saapuvien pakettien koko yhteensä on {:.0f} {:s}. Ladattavaa on {:.0f} {:s}."
 
-#: main.cpp:842
+#: main.cpp:927
+#, c++-format
 msgid ""
 "After this operation, {:.0f} {:s} extra will be used (install {:.0f} {:s}, "
 "remove {:.0f} {:s})."
@@ -1635,47 +2003,54 @@ msgstr ""
 "Tämän toimenpiteen jälkeen tilaa käytetään {:.0f} {:s} enemmän (asennetaan "
 "{:.0f} {:s}, poistetaan {:.0f} {:s})."
 
-#: main.cpp:853
+#: main.cpp:938
+#, c++-format
 msgid ""
 "After this operation, {:.0f} {:s} will be freed (install {:.0f} {:s}, remove "
 "{:.0f} {:s})."
 msgstr ""
-"Tämän toimenpiteen jälkeen tilaa vapautuu {:.0f} {:s} (asennetaan {:.0f} {:"
-"s}, poistetaan {:.0f} {:s})."
+"Tämän toimenpiteen jälkeen tilaa vapautuu {:.0f} {:s} (asennetaan {:.0f} "
+"{:s}, poistetaan {:.0f} {:s})."
 
-#: main.cpp:865
+#: main.cpp:950
 msgid "======== Main configuration: ========"
 msgstr "======== Pääkokoonpano: ========"
 
-#: main.cpp:902
+#: main.cpp:987
+#, c++-format
 msgid "No matching repo to dump configuration: \"{}\""
 msgstr "Ei vastaavaa tietovarastoa, mihin upota kokoonpano: \"{}\""
 
-#: main.cpp:907
+#: main.cpp:992
+#, c++-format
 msgid "======== \"{}\" repository configuration: ========"
 msgstr "======== Ohjelmistolähteen \"{}\" kokoonpano: ========"
 
-#: main.cpp:927
+#: main.cpp:1012
 msgid "======== Variables: ========"
 msgstr "======== Muuttujat: ========"
 
-#: main.cpp:967
+#: main.cpp:1052
 msgid "New leaves:"
 msgstr "Uudet lehdet:"
 
-#: main.cpp:969
+#: main.cpp:1054
+#, c++-format
 msgid " {}"
 msgstr " {}"
 
-#: main.cpp:1013
+#: main.cpp:1114
+#, c++-format
 msgid "{} to skip unavailable packages"
 msgstr "{} ei-saatavilla olevien pakettien ohittamiseksi"
 
-#: main.cpp:1021
+#: main.cpp:1122
+#, c++-format
 msgid "{} to allow extra packages in the transaction"
 msgstr "{} ylimääräisten pakettien sallimiseksi tapahtumassa"
 
-#: main.cpp:1034
+#: main.cpp:1135
+#, c++-format
 msgid ""
 "{} to allow mismatches between installed and stored transaction packages. "
 "This can result in an empty transaction because among other things the "
@@ -1685,29 +2060,40 @@ msgstr ""
 "sallimiseksi. Tämä voi johtaa tyhjään tapahtumaan, koska vaihtoehto voi muun "
 "muassa jättää huomiotta epäonnistuneet Poista-toiminnot."
 
-#: main.cpp:1081
+#: main.cpp:1191
+#, c++-format
 msgid "{} to not limit the transaction to the best candidates"
 msgstr "{}, jotta tapahtumaa ei rajoiteta parhaisiin ehdokkaisiin"
 
-#: main.cpp:1088
+#: main.cpp:1198
+#, c++-format
 msgid "{} to allow removing of installed packages to resolve problems"
 msgstr ""
 "{} mahdollistaakseen asennettujen pakettien poistamisen ongelmien "
 "ratkaisemiseksi"
 
-#: main.cpp:1097
+#: main.cpp:1207
+#, c++-format
 msgid "{} to load additional filelists metadata"
 msgstr "{} lisää tiedostolistan metatietojen lataamiseksi"
 
-#: main.cpp:1104
+#: main.cpp:1214
+#, c++-format
 msgid "{} to skip uninstallable packages"
 msgstr "{} ei-asennettavissa olevien pakettien ohittamiseksi"
 
-#: main.cpp:1110
+#: main.cpp:1229
+#, fuzzy, c++-format
+#| msgid "{} to allow extra packages in the transaction"
+msgid "{} to allow changing package vendors"
+msgstr "{} ylimääräisten pakettien sallimiseksi tapahtumassa"
+
+#: main.cpp:1233
 msgid "You can try to add to command line:"
 msgstr "Voit yrittää lisätä komentoriville:"
 
-#: main.cpp:1128
+#: main.cpp:1251
+#, c++-format
 msgid ""
 "No matches were found for the following plugin name patterns while enabling "
 "libdnf plugins: {}"
@@ -1715,7 +2101,8 @@ msgstr ""
 "Seuraaville lisäosien nimimalleille ei löytynyt osumia, kun libdnf-lisäosat "
 "otettiin käyttöön: {}"
 
-#: main.cpp:1129
+#: main.cpp:1252
+#, c++-format
 msgid ""
 "No matches were found for the following plugin name patterns while disabling "
 "libdnf plugins: {}"
@@ -1723,23 +2110,28 @@ msgstr ""
 "Seuraaville lisäosien nimimalleille ei löytynyt osumia, kun libdnf-lisäosat "
 "poistettiin käytöstä: {}"
 
-#: main.cpp:1226
+#: main.cpp:1318
+#, c++-format
 msgid "--- DNF5 launched with arguments: \"{}\" ---"
 msgstr "--- DNF5 käynnistetty argumenteilla: ”{}” ---"
 
-#: main.cpp:1262
+#: main.cpp:1354
+#, c++-format
 msgid "Invalid \"index\" in \"--complete=<index>[,...]\": {}"
 msgstr "Epäkelvollinen \"index\" kohdassa '--complete=<index>[,...]': {}"
 
-#: main.cpp:1301
+#: main.cpp:1393
+#, c++-format
 msgid "{}."
 msgstr "{}."
 
-#: main.cpp:1304 main.cpp:1556
+#: main.cpp:1396 main.cpp:1777
+#, c++-format
 msgid "{}. Add \"--help\" for more information about the arguments."
 msgstr "{}. Lisää `--help` lisätietojen saamiseksi argumenteista."
 
-#: main.cpp:1313
+#: main.cpp:1405
+#, c++-format
 msgid ""
 "It could be a command provided by a plugin, try: dnf5 install 'dnf5-"
 "command({})'"
@@ -1747,7 +2139,8 @@ msgstr ""
 "Se voi olla lisäosan tarjoama komento; kokeile `dnf5 install 'dnf5-"
 "command({})'`"
 
-#: main.cpp:1355
+#: main.cpp:1447
+#, c++-format
 msgid ""
 "The argument is available for commands: {}. (It has to be placed after the "
 "command.)"
@@ -1755,11 +2148,18 @@ msgstr ""
 "Argumentti on käytettävissä komennoille: {} (Se on sijoitettava komennon "
 "jälkeen.)"
 
-#: main.cpp:1399
+#: main.cpp:1484
 msgid "No read/execute access in current directory, moving to /"
 msgstr "Ei luku-/suoritusoikeuksia nykyisessä hakemistossa, siirrytään tähän /"
 
-#: main.cpp:1471
+#: main.cpp:1519
+#, c++-format
+msgid ""
+"{}. Dropping all logs. To redirect the log file location use the \"logdir\" "
+"configuration option."
+msgstr ""
+
+#: main.cpp:1578
 msgid ""
 "The requested operation requires superuser privileges. Please log in as a "
 "user with elevated rights, or use the \"--assumeno\" or \"--downloadonly\" "
@@ -1769,15 +2169,52 @@ msgstr ""
 "korotetuilla oikeuksilla tai käytä vaihtoehtoja `--assumeno` tai `--"
 "downloadonly` suorittaaksesi komennon muuttamatta järjestelmän tilaa."
 
-#: main.cpp:1512
+#: main.cpp:1592
+#, c++-format
+msgid "Warning: {}"
+msgstr ""
+
+#: main.cpp:1605
+msgid ""
+"Error: /usr is configured to be read-only. You may be running an image-based "
+"or immutable operating system. For more information, refer to your "
+"distribution's documentation."
+msgstr ""
+
+#: main.cpp:1624
+msgid ""
+"Error: persistent transactions aren't supported on bootc systems. Pass --"
+"transient to perform this operation in a transient overlay which will reset "
+"when the system reboots."
+msgstr ""
+
+#: main.cpp:1634
+#, fuzzy
+#| msgid ""
+#| "Error: this bootc system is configured to be read-only. For more "
+#| "information, run `bootc --help`."
+msgid ""
+"Error: this bootc system is configured to be read-only. Pass --transient to "
+"perform this operation in a transient overlay which will reset when the "
+"system reboots."
+msgstr ""
+"Virhe: Tämä bootc-järjestelmä on määritetty vain luku -tilaan. Saat "
+"lisätietoja suorittamalla `bootc --help`."
+
+#: main.cpp:1645
+msgid "Error: transient transactions are only supported on bootc systems."
+msgstr ""
+
+#: main.cpp:1686
+#, c++-format
 msgid "The operation will only store the transaction in {}"
 msgstr "Toiminto tallentaa vain tapahtuman {}:een"
 
-#: main.cpp:1514
+#: main.cpp:1688
 msgid "The operation will only download packages for the transaction."
 msgstr "Toiminto lataa vain paketteja tapahtumaa varten."
 
-#: main.cpp:1519
+#: main.cpp:1693
 msgid ""
 "Test mode enabled: Only package downloads, OpenPGP key installations and "
 "transaction checks will be performed."
@@ -1785,45 +2222,135 @@ msgstr ""
 "Testitila käytössä: Vain pakettien lataukset, OpenPGP-avainten asennukset ja "
 "tapahtumatarkistukset suoritetaan."
 
-#: main.cpp:1527
-msgid ""
-"Error: this bootc system is configured to be read-only. For more "
-"information, run `bootc --help`."
+#: main.cpp:1702
+#, fuzzy
+#| msgid "Starting offline transaction. This will take a while."
+msgid "Warning: A pending offline transaction will be invalidated."
 msgstr ""
-"Virhe: Tämä bootc-järjestelmä on määritetty vain luku -tilaan. Saat "
-"lisätietoja suorittamalla `bootc --help`."
+"Käynnistetään ei-verkkotilassa oleva tapahtuma. Tämä kestää jonkin aikaa."
 
-#: main.cpp:1544
+#: main.cpp:1705
+#, fuzzy, c++-format
+#| msgid "An offline transaction was initiated by the following command:"
 msgid ""
-"No repositories were loaded from the installroot. To use the configuration "
-"and repositories of the host system, pass --use-host-config."
-msgstr ""
-"Ei tietovarastoja ladattu ulospäin installrootilta . Käyttääksesi "
-"isäntäjärjestelmän kokoonpanoa ja tietovarastoja, välitä `--use-host-config`."
+"Warning: A pending offline transaction initiated by the following command "
+"will be invalidated: {}"
+msgstr "Ei-verkkotapahtuma aloitettiin seuraavalla komennolla:"
 
-#: main.cpp:1566
+#: main.cpp:1730
+msgid ""
+"This transaction would modify the following paths, possibly introducing "
+"inconsistencies when the transient overlay on /usr is discarded. See the "
+"usr_drift_protected_paths configuration option for more information."
+msgstr ""
+
+#: main.cpp:1741
+msgid ""
+"Operation aborted. Pass --setopt=usr_drift_protected_paths= to disable this "
+"check and proceed anyway."
+msgstr ""
+
+#: main.cpp:1750
+msgid ""
+"A transient overlay will be created on /usr that will be discarded on "
+"reboot. Keep in mind that changes to /etc and /var will still persist, and "
+"packages commonly modify these directories."
+msgstr ""
+
+#: main.cpp:1787
+#, c++-format
 msgid "Command returned error: {}"
 msgstr "Komento palautti virheen: {}"
 
-#: main.cpp:1574
+#: main.cpp:1795
 msgid "DNF5 finished"
 msgstr "DNF5 valmis"
 
-#: main.cpp:1578
+#: main.cpp:1799
 msgid "Complete!"
 msgstr "Valmis!"
 
-#: shared_options.cpp:32
+#: shared_options.cpp:31
 msgid "Allow removing of installed packages to resolve problems"
 msgstr "Salli asennettujen pakettien poistaminen ongelmien ratkaisemiseksi"
 
-#: shared_options.cpp:42
+#: shared_options.cpp:41
 msgid "Allow resolving of depsolve problems by skipping packages"
 msgstr "Salli depsolve-ongelmien ratkaiseminen ohittamalla paketteja"
 
-#: shared_options.cpp:54
+#: shared_options.cpp:53
 msgid "Allow skipping unavailable packages"
 msgstr "Salli ei-saatavilla olevien pakettien ohittaminen"
+
+#: shared_options.cpp:175
+msgid ""
+"The following items can be selected only from the specified repositories. "
+"All enabled repositories will still be used to satisfy dependencies."
+msgstr ""
+"Seuraavat kohteet voidaan valita vain määritetyistä tietovarastoista. "
+"Kaikkia käytössä olevia tietovarastoja käytetään edelleen riippuvuuksien "
+"täyttämiseen."
+
+#: shared_options.cpp:178 shared_options.cpp:211
+msgid "REPO_ID,..."
+msgstr "TIETOVARASTON_TUNNUS,..."
+
+#: shared_options.cpp:193
+#, fuzzy
+#| msgid "\"--from_repo\" already defined with diferent value"
+msgid "\"--from_repo\" already defined with different value"
+msgstr "\"--from_repo\" jo määritelty eri arvolla"
+
+#: shared_options.cpp:209
+msgid ""
+"Filters installed packages by the ID of the repository they were installed "
+"from."
+msgstr ""
+"Suodattaa asennetut paketit sen tietovaraston tunnuksen mukaan, josta ne on "
+"asennettu."
+
+#: shared_options.cpp:220
+#, fuzzy
+#| msgid "\"--installed-from_repo\" already defined with diferent value"
+msgid "\"--installed-from_repo\" already defined with different value"
+msgstr "\"--installed-from_repo\" jo määritelty eri arvolla"
+
+#: shared_options.cpp:236
+#, fuzzy
+#| msgid ""
+#| "The following items can be selected only from the specified repositories. "
+#| "All enabled repositories will still be used to satisfy dependencies."
+msgid ""
+"The following items can be selected only from the specified vendors. The "
+"vendor is ignored or vendor change policies (if allow_vendor_change=0) will "
+"still be used for items that satisfy dependencies."
+msgstr ""
+"Seuraavat kohteet voidaan valita vain määritetyistä tietovarastoista. "
+"Kaikkia käytössä olevia tietovarastoja käytetään edelleen riippuvuuksien "
+"täyttämiseen."
+
+#: shared_options.cpp:239
+#, fuzzy
+#| msgid "CVE_ID,..."
+msgid "VENDOR,..."
+msgstr "CVE-TUNNUS,..."
+
+#: shared_options.cpp:248
+#, fuzzy
+#| msgid "\"--from_repo\" already defined with diferent value"
+msgid "\"--from_vendor\" already defined with different value"
+msgstr "\"--from_repo\" jo määritelty eri arvolla"
+
+#~ msgid "No matching packages to list"
+#~ msgstr "Ei yhtään vastaavaa pakettia lueteltavaksi"
+
+#~ msgid "List of package package-spec-N to add versionlock for"
+#~ msgstr "Luettelo paketeista package-spec-N, joihin versionlock lisätään"
+
+#~ msgid "List of package-spec-N to add versionlock exclude for"
+#~ msgstr ""
+#~ "Luettelo paketti-spec-N:stä, joihin versionlockista poissuljettava on "
+#~ "lisättävä"
 
 #~ msgid " From       : {}\n"
 #~ msgstr " Lähde       : {}\n"

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-26 03:48+0000\n"
+"POT-Creation-Date: 2026-09-08 12:03+0000\n"
 "PO-Revision-Date: 2024-01-11 22:23+0000\n"
 "Last-Translator: Rafael Fontenelle <rafaelff@gnome.org>\n"
 "Language-Team: Portuguese (Brazil) <https://translate.fedoraproject.org/"
@@ -19,9 +19,17 @@ msgstr ""
 "X-Generator: Weblate 5.3.1\n"
 
 #: threads_manager.cpp:94
+#, fuzzy, c++-format
+#| msgid "Failed to use locale \"{}\"."
+msgid "Invalid locale \"{}\"."
+msgstr "Falha ao usar a localidade \"{}\"."
+
+#: threads_manager.cpp:100
+#, c++-format
 msgid "Failed to create locale \"{}\"."
 msgstr "Falha ao criar localidade \"{}\"."
 
-#: threads_manager.cpp:99
+#: threads_manager.cpp:105
+#, c++-format
 msgid "Failed to use locale \"{}\"."
 msgstr "Falha ao usar a localidade \"{}\"."

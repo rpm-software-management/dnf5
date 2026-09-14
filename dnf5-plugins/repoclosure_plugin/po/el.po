@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-26 03:48+0000\n"
+"POT-Creation-Date: 2026-09-08 12:03+0000\n"
 "PO-Revision-Date: 2026-02-27 00:58+0000\n"
 "Last-Translator: Efstathios Iosifidis <eiosifidis@yandex.com>\n"
 "Language-Team: Greek <https://translate.fedoraproject.org/projects/dnf5/dnf5-"
@@ -20,24 +20,24 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Generator: Weblate 5.16.1\n"
 
-#: repoclosure.cpp:46
+#: repoclosure.cpp:48
 msgid "Print list of unresolved dependencies for repositories"
 msgstr "Εκτύπωση της λίστας των μη επιλυμένων εξαρτήσεων για τα αποθετήρια"
 
-#: repoclosure.cpp:155
+#: repoclosure.cpp:159
 #, c++-format
 msgid "No match for argument \"{}\"."
 msgstr "Δεν βρέθηκε αντιστοιχία για το όρισμα «{}»."
 
-#: repoclosure.cpp:161
+#: repoclosure.cpp:165
 msgid "Failed to resolve package specifications."
 msgstr "Αποτυχία επίλυσης προδιαγραφών πακέτου."
 
-#: repoclosure.cpp:220
+#: repoclosure.cpp:244
 #, c++-format
 msgid ""
 "Error: Repoclosure ended with unresolved dependencies ({}) across {} "
 "packages."
 msgstr ""
-"Σφάλμα: Η διαδικασία Repoclosure ολοκληρώθηκε με μη επιλυμένες εξαρτήσεις ("
-"{}) σε {} πακέτα."
+"Σφάλμα: Η διαδικασία Repoclosure ολοκληρώθηκε με μη επιλυμένες εξαρτήσεις "
+"({}) σε {} πακέτα."
