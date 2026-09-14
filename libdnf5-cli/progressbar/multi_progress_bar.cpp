@@ -100,6 +100,8 @@ MultiProgressBar::MultiProgressBar() : MultiProgressBar(TrackingMode::ON_RENDER)
 
 MultiProgressBar::~MultiProgressBar() {
     if (tty::is_interactive()) {
+        // Clear any taskbar/tab progress indicator so it does not linger.
+        tty::set_taskbar_progress(std::cerr, tty::TaskbarProgressState::CLEAR);
         std::cerr << tty::cursor_show;
     }
 }
@@ -287,6 +289,20 @@ std::ostream & operator<<(std::ostream & stream, MultiProgressBar & mbar) {
         }
 
         text_buffer << mbar_total;
+
+        // Report overall progress to the terminal taskbar/tab (OSC 9;4).
+        // Remove the indicator once finished so it does not linger after exit.
+        // Emitted after streaming the total bar, which refreshes its cached
+        // percentage (via update()), so get_percent_done() is not stale.
+        if (is_interactive) {
+            if (mbar_total.is_finished()) {
+                tty::set_taskbar_progress(text_buffer, tty::TaskbarProgressState::CLEAR);
+            } else {
+                tty::set_taskbar_progress(
+                    text_buffer, tty::TaskbarProgressState::NORMAL, mbar_total.get_percent_done());
+            }
+        }
+
         // +1 for the divider line, +1 for the total bar line
         mbar.p_impl->num_of_lines_to_clear += 2;
         if (mbar_total.is_finished()) {
