@@ -70,6 +70,19 @@ bool is_interactive() {
     return isatty(fileno(stdout)) == 1;
 }
 
+std::ostream & set_taskbar_progress(std::ostream & stream, TaskbarProgressState state, int percent) {
+    if (is_interactive()) {
+        if (percent < 0) {
+            percent = 0;
+        } else if (percent > 100) {
+            percent = 100;
+        }
+        // OSC 9 ; 4 ; <state> ; <percent> ST
+        stream << "\x1b]9;4;" << static_cast<int>(state) << ";" << percent << "\x1b\x5c";
+    }
+    return stream;
+}
+
 static ColoringEnabled coloring = ColoringEnabled::AUTO;
 
 void coloring_enable(ColoringEnabled value) {

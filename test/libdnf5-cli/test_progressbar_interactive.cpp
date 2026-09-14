@@ -48,6 +48,8 @@ std::string perform_control_sequences(const std::string & target) {
         ESC,
         CONTROL_SEQUENCE_INTRO,
         CONTROL_SEQUENCE_AMOUNT,
+        OSC_STRING,
+        OSC_ESCAPE,
     };
     ControlSequence state = EMPTY;
     std::vector<std::string> output = {{}};
@@ -60,12 +62,28 @@ std::string perform_control_sequences(const std::string & target) {
             current_column = 0;
         } else if (current_value == '\r') {
             current_column = 0;
-        } else if (current_value == '\x1b') {
+        } else if (current_value == '\x1b' && state != OSC_STRING && state != OSC_ESCAPE) {
             state = ESC;
         } else if (current_value == '[' && state == ESC) {
             state = CONTROL_SEQUENCE_INTRO;
             amount = 1;
             amount_str.clear();
+        } else if (current_value == ']' && state == ESC) {
+            // Operating System Command (e.g. OSC 9;4 taskbar progress).
+            // It has no effect on the visible screen, so consume it up to
+            // its ST ("\x1b\\") terminator.
+            state = OSC_STRING;
+        } else if (state == OSC_STRING) {
+            if (current_value == '\x1b') {
+                state = OSC_ESCAPE;
+            }
+            // otherwise: part of the OSC payload, ignore it
+        } else if (state == OSC_ESCAPE) {
+            if (current_value == '\x5c') {
+                state = EMPTY;
+            } else {
+                state = OSC_STRING;
+            }
         } else if ((state == CONTROL_SEQUENCE_INTRO || state == CONTROL_SEQUENCE_AMOUNT) && isdigit(current_value)) {
             // current_value has to be one of: 0123456789
             amount_str += current_value;
@@ -144,6 +162,17 @@ int count_cursor_up_lines(const std::string & text) {
     return lines_up;
 }
 
+// Extracts all OSC 9;4 taskbar progress sequences ("\x1b]9;4;<state>;<percent>\x1b\\")
+// from the output as a list of "<state>;<percent>" strings, in order of appearance.
+std::vector<std::string> extract_taskbar_progress(const std::string & text) {
+    std::vector<std::string> result;
+    std::regex osc_regex("\\x1b\\]9;4;(\\d+;\\d+)\\x1b\\x5c");
+    for (std::sregex_iterator it(text.begin(), text.end(), osc_regex), end; it != end; ++it) {
+        result.push_back((*it)[1].str());
+    }
+    return result;
+}
+
 }  //namespace
 
 void ProgressbarInteractiveTest::setUp() {
@@ -185,6 +214,18 @@ void ProgressbarInteractiveTest::test_perform_control_sequences() {
 
     expected = "xxx\naaa\nssss";
     CPPUNIT_ASSERT_EQUAL(expected, perform_control_sequences("xxx\nfffff\x1b[2K\raaa\nssss"));
+
+    // OSC sequences (e.g. OSC 9;4 taskbar progress) have no effect on the
+    // visible screen and are consumed up to their ST terminator.
+    expected = "aaabbb";
+    CPPUNIT_ASSERT_EQUAL(
+        expected,
+        perform_control_sequences("aaa\x1b]9;4;1;42\x1b\x5c"
+                                  "bbb"));
+    CPPUNIT_ASSERT_EQUAL(
+        expected,
+        perform_control_sequences("aaa\x1b]9;4;0;0\x1b\x5c"
+                                  "bbb"));
 }
 
 void ProgressbarInteractiveTest::test_download_progress_bar() {
@@ -939,4 +980,39 @@ void ProgressbarInteractiveTest::test_multi_progress_bars_on_change_with_message
         "";
 
     ASSERT_MATCHES(expected, perform_control_sequences(oss.str()));
+}
+
+void ProgressbarInteractiveTest::test_taskbar_progress_sequences() {
+    // The MultiProgressBar reports overall progress to the terminal taskbar via
+    // OSC 9;4. Verify the reported percentage reflects the current render (not a
+    // stale, one-render-behind value) and that the indicator is cleared when done.
+
+    auto download_progress_bar1 = std::make_unique<libdnf5::cli::progressbar::DownloadProgressBar>(10, "test1");
+    download_progress_bar1->set_ticks(10);
+    download_progress_bar1->set_state(libdnf5::cli::progressbar::ProgressBarState::SUCCESS);
+
+    auto download_progress_bar2 = std::make_unique<libdnf5::cli::progressbar::DownloadProgressBar>(10, "test2");
+    download_progress_bar2->set_auto_finish(false);
+    download_progress_bar2->start();
+
+    libdnf5::cli::progressbar::MultiProgressBar multi_progress_bar;
+    multi_progress_bar.add_bar(std::move(download_progress_bar1));
+    auto download_progress_bar2_raw = download_progress_bar2.get();
+    multi_progress_bar.add_bar(std::move(download_progress_bar2));
+
+    download_progress_bar2_raw->set_ticks(4);
+    download_progress_bar2_raw->set_state(libdnf5::cli::progressbar::ProgressBarState::STARTED);
+
+    // In progress: 14 of 20 ticks overall -> 70%. Must be reported on this very
+    // render (a stale implementation would report 0% on the first render).
+    std::ostringstream oss;
+    oss << multi_progress_bar;
+    CPPUNIT_ASSERT_EQUAL(std::string("1;70"), libdnf5::utils::string::join(extract_taskbar_progress(oss.str()), " "));
+
+    // Finish the last bar: the indicator is cleared (state 0).
+    download_progress_bar2_raw->set_ticks(10);
+    download_progress_bar2_raw->set_state(libdnf5::cli::progressbar::ProgressBarState::SUCCESS);
+    oss.str("");
+    oss << multi_progress_bar;
+    CPPUNIT_ASSERT_EQUAL(std::string("0;0"), libdnf5::utils::string::join(extract_taskbar_progress(oss.str()), " "));
 }
