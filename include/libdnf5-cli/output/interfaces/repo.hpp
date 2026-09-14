@@ -69,6 +69,7 @@ public:
     virtual uint64_t get_size() const = 0;
     virtual uint64_t get_pkgs() const = 0;
     virtual uint64_t get_available_pkgs() const = 0;
+    virtual uint64_t get_unique_nevras() const = 0;
     virtual std::vector<std::string> get_mirrors() const = 0;
 };
 
