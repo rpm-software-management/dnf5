@@ -1,3 +1,69 @@
+# 5.4.5.0
+
+- Update translations from weblate
+- spec: Fix shell completions paths
+- Makefile: Add set -e to test-integration-build recipe
+- spec: Version RPM provides
+- Unit tests: VendorChangeManager::remove_policy_file test return value
+- VendorChangeManager: Make remove_policy_file return removed file path
+- Unit tests: Extend VendorChangeManager save_policy_from_* tests
+- VendorChangeManager: Add allow_replace parameter to save_policy_from_*
+- Migrate .gitignore from ci-dnf-stack
+- spec: Shorten overlong package summary
+- doc: Remove shared.i workaround from rtd_build.py
+- bindings: Rename exception.hpp to exception.swg
+- bindings: Rename SWIG include files from .i to .swg extension
+- readthedocs: switch to latest versions of ubuntu and python
+- Add status command with system summary statistics- #2865
+- test: Add VendorChangeManager unit tests for Python, Perl, and Ruby
+- Unit tests for base::VendorChangeManager
+- test: add get_install_prefix() helper to TestCaseFixture
+- SWIG Perl: add get_policy_files() wrapper returning vector<string>
+- SWIG: Add support for std::filesystem::path
+- libdnf5: Add VendorChangeManager methods for config files management
+- libdnf5: Refactor vendor policy parsing to accept TOML content directly
+- VendorChangeManager: Add unload_policy() method
+- libdnf5: Add VendorChangeManager policy query and conversion methods API
+- libdnf5: Move vendor policy loading logic to VendorChangeManager
+- SWIG: add support for VendorChangeManagerError exception
+- libdnf5: Add public VendorChangeManagerError and use nested exceptions
+- libdnf5: Add base::VendorChangeManager API and compact policy format
+- libdnf5: VendorChangePolicy: Preserve vendor entries order
+- libdnf5: add support for named arguments in exception formatting
+- SWIG: include std_string_view.i and require SWIG >= 4.3
+- doc: Document "repoquery --unsatisfied" as dropped
+- Makefile: Add .DEFAULT_GOAL = build
+- ci: Add Qodo configuration file
+- Remove DNF5_FORCE_COLUMNS fallback to FORCE_COLUMNS enviroment variable
+- build: Specify a time zone for "git archive" command
+- Fix changelog man page inconsistency
+- spec: Build-require perl(lib) for tests
+- comps-environment.feature: group installation and removal
+- Don't ignore advisory upgrade with lover libsolv id evr
+- spec: Mark all /etc configuration files as noreplacible
+- tests: Allow vendor change in the Dockerfile
+- Makefile: Refactor to improve change detection
+- integration-tests Dockerfile: sync fixes from ci-dnf-stack
+- Use fedora:rawhide for CI tests by default
+- Makefile: Build for rawhide by default
+- Makefile: Multi-line scripts must fail immediately
+- Makefile: don't consider untracked files dirty
+- Adjust tests for unified error reporting in query commands
+- search: Report when no repositories are enabled
+- list: Report unmatched specs and no repos enabled
+- provides: Report when no repositories are enabled
+- repoquery: Report when no repositories are enabled
+- copr: Print installroot hint when no repositories are configured
+- dnf5: Report unmatched specs and no repos enabled
+- dnf5: Reuse the --use-host-config hint helper
+- Add helpers for reporting "No matches"
+- Include <cstring> wherever std::strcmp() is used
+- transaction: Do not execute empty transactions
+- needs-restarting: Restore DNF 4 restart-safety semantics for --services
+- Move integration tests from ci-dnf-stack
+- libdnf5: Fix dangling reference bug in is_vendor_change_allowed
+- spec: Fix bcond ordering so plugin_systemd_inhibit is enabled
+
 # 5.4.4.0
 
 - dnf5daemon-server: Validate locale strings
