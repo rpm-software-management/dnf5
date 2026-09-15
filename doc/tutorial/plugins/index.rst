@@ -1,14 +1,24 @@
 Tutorial: Writing Plugins
 =========================
 
-Plugins are the means to extend the existing functionality of DNF5. They are
-written in the native language of DNF5, which is C++. Two types of plugins are
-supported:
+Plugins are the means to extend the existing functionality of DNF5. Two types of
+plugins are supported:
 
 * :ref:`dnf5 plugins`:
     * **Active:** Used to implement one or more commands.
 * :ref:`libdnf5 plugins`:
     * **Passive:** Used to implement additional logic into the library using hooks.
+
+They are written in the native language of DNF5, which is C++.
+
+However, a libdnf5 plugin can register other libdnf5 plugins, so it is
+possible to write a plugin that will load and register libdnf5 plugins written
+in different languages. The experimental ``python_plugins_loader`` does this for
+Python.
+
+In addition, the ``actions`` libdnf5 plugin allows configuring any executable to
+be triggered by a selected plugin hook. See the
+:ref:`actions plugin documentation <actions_plugin_ref-label>` for more details.
 
 .. note::
     Existing plugins from the preceding DNF project are not compatible
