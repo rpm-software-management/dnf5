@@ -92,6 +92,8 @@ const std::map<base::Transaction::TransactionRunResult, BgettextMessage> TRANSAC
      M_("Failed to obtain rpm transaction lock. Another transaction is in progress.")},
     {base::Transaction::TransactionRunResult::ERROR_RPM_RUN, M_("Rpm transaction failed.")},
     {base::Transaction::TransactionRunResult::ERROR_GPG_CHECK, M_("Signature verification failed.")},
+    {base::Transaction::TransactionRunResult::ERROR_SYSTEM_CHANGED,
+     M_("This transaction is no longer valid because the system repository has changed since it was loaded.")},
 };
 
 const std::map<base::ImportRepoKeysResult, BgettextMessage> IMPORT_REPO_KEYS_RESULT_DICT = {
@@ -439,6 +441,7 @@ std::string Transaction::transaction_result_to_string(const TransactionRunResult
         case TransactionRunResult::ERROR_LOCK:
         case TransactionRunResult::ERROR_RPM_RUN:
         case TransactionRunResult::ERROR_GPG_CHECK:
+        case TransactionRunResult::ERROR_SYSTEM_CHANGED:
             return TM_(TRANSACTION_RUN_RESULT_DICT.at(result), 1);
     }
     return {};
@@ -1070,6 +1073,11 @@ Transaction::TransactionRunResult Transaction::Impl::_run(
     const std::optional<uint32_t> user_id,
     const std::string & comment,
     const bool test_only) {
+    auto system_repo = base->get_repo_sack()->get_system_repo();
+    if (system_repo->is_loaded() && !system_repo->is_system_repo_up_to_date()) {
+        return TransactionRunResult::ERROR_SYSTEM_CHANGED;
+    }
+
     concurrent_transaction.reset();
 
     // do not allow running a transaction multiple times

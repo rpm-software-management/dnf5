@@ -60,6 +60,7 @@ public:
         ERROR_CHECK,
         ERROR_RPM_RUN,
         ERROR_GPG_CHECK,
+        ERROR_SYSTEM_CHANGED,
     };
 
     Transaction(const Transaction & transaction);

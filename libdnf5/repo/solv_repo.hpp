@@ -121,6 +121,12 @@ public:
     /// @return      True if the group was successfully read.
     bool read_group_solvable_from_xml(const std::string & path);
 
+    // Cookie when the system repo was loaded.
+    // Replace this with system repo cookie once it is implemented:
+    // https://github.com/rpm-software-management/dnf5/issues/2794
+    // The rpm db cookie doesn't track changes in reasons, groups,... (lidnf5 system state)
+    std::string rpm_db_cookie;
+
 private:
     // "type_name == nullptr" means load "primary" cache (.solv file)
     bool load_solv_cache(solv::Pool & pool, const char * type_name, int flags);
