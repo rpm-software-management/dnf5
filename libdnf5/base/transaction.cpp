@@ -46,6 +46,7 @@
 #include "libdnf5/comps/group/query.hpp"
 #include "libdnf5/conf/const.hpp"
 #include "libdnf5/repo/package_downloader.hpp"
+#include "libdnf5/rpm/package_download_order.hpp"
 #include "libdnf5/rpm/package_query.hpp"
 #include "libdnf5/utils/bgettext/bgettext-lib.h"
 #include "libdnf5/utils/bgettext/bgettext-mark-domain.h"
@@ -58,12 +59,14 @@
 #include <sys/ioctl.h>
 #include <unistd.h>
 
+#include <algorithm>
 #include <filesystem>
 #include <iostream>
 #include <set>
 #include <sstream>
 #include <string_view>
 #include <thread>
+#include <vector>
 
 
 namespace libdnf5::base {
@@ -446,12 +449,26 @@ std::string Transaction::transaction_result_to_string(const TransactionRunResult
 
 void Transaction::download() {
     libdnf5::repo::PackageDownloader downloader(p_impl->base);
+
+    std::vector<libdnf5::rpm::Package> packages_to_download;
     for (auto & tspkg : this->get_transaction_packages()) {
         if (transaction_item_action_is_inbound(tspkg.get_action()) &&
             (get_download_local_pkgs() ||
              tspkg.get_package().get_repo()->get_type() != libdnf5::repo::Repo::Type::COMMANDLINE)) {
-            downloader.add(tspkg.get_package());
+            packages_to_download.push_back(tspkg.get_package());
         }
+    }
+
+    auto & config = p_impl->base->get_config();
+    if (config.get_download_sort_option().get_value() == "size") {
+        libdnf5::rpm::sort_packages_by_download_size(
+            packages_to_download, config.get_download_sort_reverse_option().get_value());
+    } else if (config.get_download_sort_reverse_option().get_value()) {
+        std::reverse(packages_to_download.begin(), packages_to_download.end());
+    }
+
+    for (auto & pkg : packages_to_download) {
+        downloader.add(pkg);
     }
     downloader.download();
 }
