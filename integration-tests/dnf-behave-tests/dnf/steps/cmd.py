@@ -396,6 +396,8 @@ base.load_config()
 
 base.setup()
 
+base.lock_system_repo(libdnf5.utils.LockAccess_WRITE, libdnf5.utils.LockBlocking_BLOCKING)
+
 repo_sack = base.get_repo_sack()
 repo_sack.create_repos_from_system_configuration()
 repo_sack.load_repos()
