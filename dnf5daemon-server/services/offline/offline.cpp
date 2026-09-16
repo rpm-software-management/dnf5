@@ -263,14 +263,12 @@ sdbus::MethodReply Offline::get_status(sdbus::MethodCall & call) {
     std::string state_error;
     auto state = read_transaction_state(state_error);
     bool is_valid = false;
+    bool expose_state = state.has_value();
     if (state && state->is_pending()) {
-        try {
-            is_valid = state->check_rpmdb_cookie(*session.get_base());
-        } catch (const std::exception & ex) {
-            session.get_base()->get_logger()->warning("Failed to check offline transaction validity: {}", ex.what());
-        }
+        is_valid = state->check_rpmdb_cookie(*session.get_base());
+        expose_state = is_valid;
     }
-    if (state) {
+    if (state && expose_state) {
         const auto & state_data = state->get_data();
         transaction_state["status"] = sdbus::Variant(state_data.get_status());
         transaction_state["cachedir"] = sdbus::Variant(state_data.get_cachedir());
@@ -452,6 +450,11 @@ sdbus::MethodReply Offline::schedule_for_next_boot(sdbus::MethodCall & call) {
         if (status != libdnf5::offline::STATUS_DOWNLOAD_COMPLETE && status != libdnf5::offline::STATUS_READY) {
             error_msg =
                 fmt::format("Cannot schedule offline transaction for next boot. Transaction status is \"{}\".", status);
+        } else if (!state->check_rpmdb_cookie(*session.get_base())) {
+            state->invalidate();
+            error_msg =
+                "Cannot schedule offline transaction for next boot. The system has been modified since the "
+                "offline transaction was prepared.";
         } else {
             const auto scheduled = offline_transaction_scheduled();
             if (scheduled == Scheduled::ANOTHER_TOOL) {
