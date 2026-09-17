@@ -93,6 +93,7 @@
 
 # 5.4.3.0
 
+- Require GCC ≥ 14.1 for std::chrono::parse()
 - Update translations from weblate
 - Port bootc functionality from DNF4
 - Add --[no-]allow-vendor-change option

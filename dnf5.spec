@@ -184,7 +184,7 @@ BuildRequires:  pkgconfig(libacl)
 %if %{with clang}
 BuildRequires:  clang
 %else
-BuildRequires:  gcc-c++ >= 10.1
+BuildRequires:  gcc-c++ >= 14.1
 %endif
 
 %if %{with tests}
