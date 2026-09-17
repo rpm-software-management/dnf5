@@ -100,8 +100,11 @@ public:
         return accept_key_import;
     }
 
+    void repokey_imported([[maybe_unused]] const libdnf5::rpm::KeyInfo & key_info) override { ++repokey_imported_cnt; }
+
     bool accept_key_import{true};
     int repokey_import_cnt = 0;
+    int repokey_imported_cnt = 0;
 };
 
 }  // namespace
@@ -278,4 +281,69 @@ void RepoTest::test_load_repo_gpgcheck_refused_key_shows_error() {
         "Download callback should report 'Signing key not found' error exactly once (second pass only)",
         1,
         signing_key_error_cnt);
+}
+
+void RepoTest::test_load_repo_gpgcheck_auto_import_keys() {
+    std::string repoid("repomd-repo1-gpg");
+    std::filesystem::path repo_path = PROJECT_SOURCE_DIR "/test/data/repos-repomd";
+    repo_path /= repoid;
+    auto repo = repo_sack->create_repo(repoid);
+    repo->get_config().get_baseurl_option().set("file://" + repo_path.string());
+    repo->get_config().get_repo_gpgcheck_option().set(true);
+    repo->get_config().get_repo_gpgcheck_auto_import_keys_option().set(true);
+    repo->get_config().get_gpgkey_option().set(
+        std::vector<std::string>{"file://" + std::string(PROJECT_SOURCE_DIR) + "/test/data/keys/repo-gpg-key.pub"});
+
+    auto dl_callbacks = std::make_unique<DownloadCallbacks>();
+    auto dl_callbacks_ptr = dl_callbacks.get();
+    base.set_download_callbacks(std::move(dl_callbacks));
+
+    // The callback would refuse the import. With auto import enabled it must
+    // not be asked at all.
+    auto callbacks = std::make_unique<RepoCallbacks>();
+    auto cbs = callbacks.get();
+    cbs->accept_key_import = false;
+    repo->set_callbacks(std::move(callbacks));
+
+    repo_sack->load_repos(libdnf5::repo::Repo::Type::AVAILABLE);
+
+    // The key was imported without asking the callback, and the imported
+    // notification still fired.
+    CPPUNIT_ASSERT_EQUAL(0, cbs->repokey_import_cnt);
+    CPPUNIT_ASSERT_EQUAL(1, cbs->repokey_imported_cnt);
+
+    // The repository loaded without any download error, so the metadata
+    // signature verification passed with the auto-imported key.
+    CPPUNIT_ASSERT_MESSAGE("Expected no download errors", dl_callbacks_ptr->end_error_messages.empty());
+}
+
+void RepoTest::test_load_repo_gpgcheck_auto_import_keys_assumeno() {
+    std::string repoid("repomd-repo1-gpg");
+    std::filesystem::path repo_path = PROJECT_SOURCE_DIR "/test/data/repos-repomd";
+    repo_path /= repoid;
+    auto repo = repo_sack->create_repo(repoid);
+    repo->get_config().get_baseurl_option().set("file://" + repo_path.string());
+    repo->get_config().get_repo_gpgcheck_option().set(true);
+    repo->get_config().get_repo_gpgcheck_auto_import_keys_option().set(true);
+    repo->get_config().get_gpgkey_option().set(
+        std::vector<std::string>{"file://" + std::string(PROJECT_SOURCE_DIR) + "/test/data/keys/repo-gpg-key.pub"});
+    repo->get_config().get_skip_if_unavailable_option().set(true);
+
+    // assumeno takes precedence over the option: the import goes through the
+    // callback, which declines it.
+    base.get_config().get_assumeno_option().set(true);
+
+    auto dl_callbacks = std::make_unique<DownloadCallbacks>();
+    base.set_download_callbacks(std::move(dl_callbacks));
+
+    auto callbacks = std::make_unique<RepoCallbacks>();
+    auto cbs = callbacks.get();
+    cbs->accept_key_import = false;
+    repo->set_callbacks(std::move(callbacks));
+
+    repo_sack->load_repos(libdnf5::repo::Repo::Type::AVAILABLE);
+
+    // The callback was consulted and nothing was imported.
+    CPPUNIT_ASSERT_EQUAL(1, cbs->repokey_import_cnt);
+    CPPUNIT_ASSERT_EQUAL(0, cbs->repokey_imported_cnt);
 }

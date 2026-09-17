@@ -1292,6 +1292,35 @@ configuration.
        already imported for package signature verification and this option is turned on, it may be needed
        to import it again for the repository.
 
+       To import these keys without asking for confirmation, see
+       :ref:`repo_gpgcheck_auto_import_keys <repo_gpgcheck_auto_import_keys_options-label>`.
+
+    Default: ``False``.
+
+.. _repo_gpgcheck_auto_import_keys_options-label:
+
+``repo_gpgcheck_auto_import_keys``
+    :ref:`boolean <boolean-label>`
+
+    If enabled, DNF5 imports the OpenPGP keys configured in ``gpgkey`` for this repository's
+    metadata signature check without asking for confirmation. The signature check itself is not
+    affected.
+
+    The keys for this check are stored per repository and keyed by the resolved repository URL,
+    so the confirmation is otherwise requested again whenever the repository URL changes, for
+    example after a ``$releasever`` change. In non-interactive runs a declined confirmation makes
+    loading the repository fail, or the repository is skipped when ``skip_if_unavailable`` is
+    enabled.
+
+    Only keys from local (``file://``) ``gpgkey`` URLs are imported automatically, for example a
+    key file installed by a package. Keys fetched from a remote URL always ask for confirmation
+    so the fingerprint can be verified before the key is trusted.
+    :ref:`assumeno <assumeno_options-label>` takes precedence over this option: the import is
+    declined as usual and nothing is imported. The option does not affect importing keys into
+    the RPM database for package signature verification.
+
+    Only applies when :ref:`repo_gpgcheck <repo_gpgcheck_options-label>` is enabled.
+
     Default: ``False``.
 
 .. _skip_if_unavailable_options-label:
