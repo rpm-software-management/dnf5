@@ -109,7 +109,14 @@ void print_changelogs(
         }
 
         for (auto & chlog : changelogs) {
-            std::cout << std::put_time(std::gmtime(&chlog.get_timestamp()), "* %a %b %d %X %Y ");
+            // Print in the local timezone with an offset indicator, like the
+            // other timestamps
+            // (https://github.com/rpm-software-management/dnf5/issues/2200).
+            if (const auto * local_time = std::localtime(&chlog.get_timestamp())) {
+                std::cout << std::put_time(local_time, "* %a %b %d %X %Y %z ");
+            } else {
+                std::cout << "* " << chlog.get_timestamp() << " ";
+            }
             std::cout << chlog.get_author() << "\n";
             std::cout << chlog.get_text() << "\n" << std::endl;
         }
