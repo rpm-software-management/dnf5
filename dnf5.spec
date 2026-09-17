@@ -19,12 +19,7 @@
 %bcond_without modulemd
 %endif
 %bcond_without systemd
-# Disable SOLVER_FLAG_FOCUS_NEW only for RHEL
-%if 0%{?rhel} && 0%{?rhel} < 11
-%bcond_with    focus_new
-%else
 %bcond_without focus_new
-%endif
 
 # Main components
 %bcond_without dnf5
