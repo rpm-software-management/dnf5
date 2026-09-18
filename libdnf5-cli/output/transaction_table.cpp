@@ -740,6 +740,10 @@ void TransactionTable::set_colors_enabled(bool enable) {
 
 void TransactionTable::set_term_width(std::size_t width) {
     scols_table_set_termwidth(*p_impl->tb, width);
+    // Force libsmartcols to honour the width we set even when the output is not a
+    // terminal; otherwise the layout (maxout/truncation) is only applied for a real
+    // TTY and DNF5_FORCE_COLUMNS / piped output would be ignored.
+    scols_table_set_termforce(*p_impl->tb, SCOLS_TERMFORCE_ALWAYS);
 }
 
 
@@ -793,6 +797,10 @@ bool print_transaction_table(ITransaction & transaction) {
     print_resolve_logs(transaction);
 
     TransactionTable table(transaction);
+    // Explicitly set the terminal width so the layout honours DNF5_FORCE_COLUMNS and
+    // is deterministic when the output is not a TTY (libsmartcols only auto-detects
+    // the width from a real terminal otherwise).
+    table.set_term_width(static_cast<std::size_t>(libdnf5::cli::tty::get_width()));
     table.print_table();
 
     if (transaction.empty()) {
