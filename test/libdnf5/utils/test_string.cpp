@@ -23,6 +23,8 @@
 #include "../shared/utils.hpp"
 #include "utils/string.hpp"
 
+#include <cstdlib>
+
 
 using namespace libdnf5::utils::string;
 
@@ -67,6 +69,30 @@ void UtilsStringTest::test_join() {
     CPPUNIT_ASSERT_EQUAL(std::string("aa; bb"), join(std::vector<std::string>({"aa", "bb"}), "; "));
 }
 
+
+void UtilsStringTest::test_format_epoch() {
+    const char * original_tz = getenv("TZ");
+    std::string original_tz_value = original_tz ? original_tz : "";
+    // 2026-09-17 06:56:24 UTC (from dnf5 issue #2949)
+    const std::time_t epoch = 1789628184;
+    // format_epoch must render the timestamp in the local timezone with the
+    // UTC offset, not in plain UTC.
+    setenv("TZ", "Asia/Shanghai", 1);
+    tzset();
+    CPPUNIT_ASSERT_EQUAL(std::string("2026-09-17 14:56:24 +0800"), format_epoch(epoch));
+    setenv("TZ", "UTC", 1);
+    tzset();
+    CPPUNIT_ASSERT_EQUAL(std::string("2026-09-17 06:56:24 +0000"), format_epoch(epoch));
+    // Out-of-range timestamps must not crash; fall back to raw seconds.
+    CPPUNIT_ASSERT_EQUAL(std::string("99999999999999999 seconds since Unix epoch"), format_epoch(99999999999999999));
+    // Restore the original timezone for the other tests.
+    if (original_tz) {
+        setenv("TZ", original_tz_value.c_str(), 1);
+    } else {
+        unsetenv("TZ");
+    }
+    tzset();
+}
 
 void UtilsStringTest::test_split() {
     CPPUNIT_ASSERT_EQUAL(std::vector<std::string>({""}), split("", "; "));
