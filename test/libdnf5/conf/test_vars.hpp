@@ -30,6 +30,7 @@
 class VarsTest : public TestCaseFixture {
     CPPUNIT_TEST_SUITE(VarsTest);
     CPPUNIT_TEST(test_vars);
+    CPPUNIT_TEST(test_vars_backslash);
     CPPUNIT_TEST(test_vars_multiple_dirs);
     CPPUNIT_TEST(test_vars_env);
     CPPUNIT_TEST(test_vars_api);
@@ -42,6 +43,7 @@ public:
     void setUp() override;
 
     void test_vars();
+    void test_vars_backslash();
     void test_vars_multiple_dirs();
     void test_vars_env();
     void test_vars_api();
