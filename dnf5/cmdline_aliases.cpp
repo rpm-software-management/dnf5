@@ -22,13 +22,18 @@
 #include "utils/string.hpp"
 
 #include <libdnf5/common/preserve_order_map.hpp>
+#include <libdnf5/utils/bgettext/bgettext-lib.h>
 #include <libdnf5/utils/bgettext/bgettext-mark-domain.h>
+#include <libdnf5/utils/format.hpp>
 #include <libdnf5/utils/format_locale.hpp>
 #include <toml.hpp>
 
+#include <algorithm>
 #include <array>
 #include <iostream>
+#include <limits>
 #include <optional>
+#include <set>
 #include <type_traits>
 #include <vector>
 
@@ -38,7 +43,7 @@ namespace dnf5 {
 
 namespace {
 
-constexpr std::array<const char *, 2> CONF_FILE_SUPPORTED_VERSIONS = {"1.0", "1.1"};
+constexpr std::array<const char *, 3> CONF_FILE_SUPPORTED_VERSIONS = {"1.0", "1.1", "1.2"};
 
 using ArgParser = libdnf5::cli::ArgumentParser;
 
@@ -70,11 +75,16 @@ inline std::string location_lines(const toml::source_location & location) {
 #endif  // #ifdef TOML11_COMPAT
 
 
-// If the `arg` is of type `std::array<const char*, 2>`, it joins the elements with a `delimiter` string;
+// If the `arg` is of type `std::array<const char *, N>`, it joins the elements with a `delimiter` string;
 // otherwise, it returns the original value.
 template <typename T>
+struct is_const_char_ptr_array : std::false_type {};
+template <std::size_t N>
+struct is_const_char_ptr_array<std::array<const char *, N>> : std::true_type {};
+
+template <typename T>
 auto join_if_array(const T & arg, const char * delimiter) {
-    if constexpr (std::is_same_v<T, std::array<const char *, 2>>) {
+    if constexpr (is_const_char_ptr_array<std::decay_t<T>>::value) {
         return libdnf5::utils::string::join(arg, delimiter);
     } else {
         return arg;
@@ -180,7 +190,10 @@ bool attach_named_args(
 }
 
 void load_aliases_from_toml_file(
-    Context & context, const fs::path & config_file_path, const std::string & locale_name) {
+    Context & context,
+    const fs::path & config_file_path,
+    const std::string & locale_name,
+    CommandFlagAliasTable & command_flag_aliases) {
     auto & arg_parser = context.get_argument_parser();
     auto logger = context.get_base().get_logger();
 
@@ -262,6 +275,244 @@ void load_aliases_from_toml_file(
             const std::string element_parent_id_path =
                 element_id_pos == 0 ? "" : element_id_path.substr(0, element_id_pos - 1);
 
+            // dnf4 compatibility: 'command_flag' entries are handled before
+            // parent-command resolution - the parent may be a command alias
+            // (like updateinfo), and the table only needs the names.
+            {
+                bool is_command_flag = false;
+                std::optional<toml::source_location> type_location;
+                try {
+#ifdef TOML11_COMPAT
+                    const auto el_type = toml::find(element_options, "type");
+#else
+                    const auto el_type = toml::find<toml::ordered_value>(element_options, "type");
+#endif  // #ifdef TOML11_COMPAT
+                    is_command_flag = (std::string(el_type.as_string()) == "command_flag");
+                    type_location = el_type.location();
+                } catch (const std::out_of_range &) {
+                } catch (const toml::type_error &) {
+                }
+                if (is_command_flag) {
+                    if (version == "1.0" || version == "1.1") {
+                        print_and_log_error(
+                            *logger,
+                            M_("Used config file version \"{}\" for alias type \"command_flag\" of element \"{}\" "
+                               "in file \"{}\" on line {}: {}"),
+                            version,
+                            element_id_path,
+                            config_file_path.native(),
+                            location_first_line_num(*type_location),
+                            location_lines(*type_location));
+                        continue;
+                    }
+                    if (element_parent_id_path.empty() || element_parent_id_path.find('.') != std::string::npos) {
+                        print_and_log_warning(
+                            *logger,
+                            M_("Command flag alias \"{}\" must be named \"<command>.<flag>\" in file \"{}\" "
+                               "on line {}: {}"),
+                            element_id_path,
+                            config_file_path.native(),
+                            location_first_line_num(*type_location),
+                            location_lines(*type_location));
+                        continue;
+                    }
+                    const auto alias_key =
+                        std::pair<std::string, std::string>{element_parent_id_path, "--" + element_id};
+                    if (command_flag_aliases.count(alias_key) > 0) {
+                        print_and_log_error(
+                            *logger,
+                            M_("Command flag alias \"{}\" already registered. Requested in file \"{}\" on line {}: {}"),
+                            element_id_path,
+                            config_file_path.native(),
+                            location_first_line_num(*type_location),
+                            location_lines(*type_location));
+                        continue;
+                    }
+                    CommandFlagAlias alias;
+                    bool defined = false;
+                    bool broken = false;
+                    try {
+                        for (auto & [key, value] : element_options.as_table()) {
+                            if (key == "type") {
+                                continue;
+                            } else if (key == "reject_message") {
+                                alias.reject_message = value.as_string();
+                                if (alias.reject_message.empty()) {
+                                    const auto location = value.location();
+                                    print_and_log_error(
+                                        *logger,
+                                        M_("Bad value \"\" of attribute \"reject_message\" for element \"{}\" "
+                                           "in file \"{}\" on line {}: {}"),
+                                        element_id_path,
+                                        config_file_path.native(),
+                                        location_first_line_num(location),
+                                        location_lines(location));
+                                    broken = true;
+                                } else {
+                                    defined = true;
+                                }
+                            } else if (key == "attached_command") {
+                                const std::string attached{value.as_string()};
+                                alias.words = libdnf5::utils::string::split(attached, ".");
+                                bool bad_path = alias.words.empty();
+                                for (const auto & word : alias.words) {
+                                    if (word.empty()) {
+                                        bad_path = true;
+                                    }
+                                }
+                                if (bad_path) {
+                                    const auto location = value.location();
+                                    print_and_log_error(
+                                        *logger,
+                                        M_("Bad value \"{}\" of attribute \"attached_command\" for element \"{}\" "
+                                           "in file \"{}\" on line {}: {}"),
+                                        attached,
+                                        element_id_path,
+                                        config_file_path.native(),
+                                        location_first_line_num(location),
+                                        location_lines(location));
+                                    broken = true;
+                                } else {
+                                    defined = true;
+                                }
+                            } else if (key == "attached_flags") {
+                                for (const auto & flag : value.as_array()) {
+                                    alias.attached_flags.emplace_back(flag.as_string());
+                                    if (alias.attached_flags.back().empty()) {
+                                        const auto location = value.location();
+                                        print_and_log_error(
+                                            *logger,
+                                            M_("Bad value \"\" of attribute \"attached_flags\" for element \"{}\" "
+                                               "in file \"{}\" on line {}: {}"),
+                                            element_id_path,
+                                            config_file_path.native(),
+                                            location_first_line_num(location),
+                                            location_lines(location));
+                                        broken = true;
+                                        break;
+                                    }
+                                }
+                            } else if (key == "positional_template") {
+                                alias.positional_template = value.as_string();
+                            } else if (key == "token_prefix_maps") {
+                                for (const auto & map_entry : value.as_array()) {
+                                    std::optional<std::string> prefix;
+                                    std::optional<std::string> map_template;
+                                    for (auto & [map_key, map_value] : map_entry.as_table()) {
+                                        if (map_key == "prefix") {
+                                            prefix = std::string(map_value.as_string());
+                                        } else if (map_key == "template") {
+                                            map_template = std::string(map_value.as_string());
+                                        } else {
+                                            const auto location = map_value.location();
+                                            print_and_log_warning(
+                                                *logger,
+                                                M_("Unknown attribute \"{}\" of \"token_prefix_maps\" for element "
+                                                   "\"{}\" in file \"{}\" on line {}: {}"),
+                                                map_key,
+                                                element_id_path,
+                                                config_file_path.native(),
+                                                location_first_line_num(location),
+                                                location_lines(location));
+                                        }
+                                    }
+                                    if (prefix && prefix->empty()) {
+                                        const auto location = value.location();
+                                        print_and_log_error(
+                                            *logger,
+                                            M_("Bad value \"\" of attribute \"prefix\" in \"token_prefix_maps\" "
+                                               "for element \"{}\" in file \"{}\" on line {}: {}"),
+                                            element_id_path,
+                                            config_file_path.native(),
+                                            location_first_line_num(location),
+                                            location_lines(location));
+                                        broken = true;
+                                        break;
+                                    }
+                                    if (!prefix || !map_template) {
+                                        const auto location = value.location();
+                                        print_and_log_error(
+                                            *logger,
+                                            M_("Missing attribute \"prefix\" or \"template\" in \"token_prefix_maps\" "
+                                               "for element \"{}\" in file \"{}\" on line {}: {}"),
+                                            element_id_path,
+                                            config_file_path.native(),
+                                            location_first_line_num(location),
+                                            location_lines(location));
+                                        broken = true;
+                                        break;
+                                    }
+                                    alias.token_prefix_maps.emplace_back(std::move(*prefix), std::move(*map_template));
+                                }
+                            } else if (key == "companion_flag") {
+                                alias.companion_flag = value.as_string();
+                            } else if (key == "precedence") {
+                                const auto precedence = value.as_integer();
+                                if (precedence < std::numeric_limits<int>::min() ||
+                                    precedence > std::numeric_limits<int>::max()) {
+                                    const auto location = value.location();
+                                    print_and_log_error(
+                                        *logger,
+                                        M_("Bad value \"{}\" of attribute \"precedence\" for element \"{}\" "
+                                           "in file \"{}\" on line {}: {}"),
+                                        std::to_string(precedence),
+                                        element_id_path,
+                                        config_file_path.native(),
+                                        location_first_line_num(location),
+                                        location_lines(location));
+                                    broken = true;
+                                } else {
+                                    alias.precedence = static_cast<int>(precedence);
+                                }
+                            } else if (key == "drop_bare_positionals") {
+                                alias.drop_bare_positionals = value.as_boolean();
+                            } else if (key == "dropped_note") {
+                                alias.dropped_note = value.as_string();
+                            } else if (key == "leading_positionals") {
+                                alias.leading_positionals = value.as_boolean();
+                            } else if (key == "positional_suffix_gate") {
+                                alias.positional_suffix_gate = value.as_string();
+                            } else if (key == "gate_reject_message") {
+                                alias.gate_reject_message = value.as_string();
+                            } else {
+                                const auto location = value.location();
+                                print_and_log_warning(
+                                    *logger,
+                                    M_("Unknown attribute \"{}\" of command flag alias \"{}\" in file \"{}\" "
+                                       "on line {}: {}"),
+                                    key,
+                                    element_id_path,
+                                    config_file_path.native(),
+                                    location_first_line_num(location),
+                                    location_lines(location));
+                            }
+                        }
+                    } catch (const toml::type_error & e) {
+                        auto location = e.location();
+                        print_and_log_error(
+                            *logger,
+                            M_("Bad value type in file \"{}\" on line {}: {}"),
+                            config_file_path.native(),
+                            location_first_line_num(location),
+                            location_lines(location));
+                        continue;
+                    }
+                    if (broken) {
+                        continue;
+                    }
+                    if (!defined) {
+                        print_and_log_error(
+                            *logger,
+                            M_("Missing attribute \"attached_command\" or \"reject_message\" for element \"{}\" in "
+                               "file \"{}\""),
+                            element_id_path,
+                            config_file_path.native());
+                        continue;
+                    }
+                    command_flag_aliases.emplace(alias_key, std::move(alias));
+                    continue;
+                }
+            }
             ArgParser::Command * element_parent_cmd;
             try {
                 element_parent_cmd = &arg_parser.get_command(element_parent_id_path);
@@ -818,7 +1069,10 @@ void load_aliases_from_toml_file(
 }  // namespace
 
 void load_cmdline_aliases(
-    Context & context, const std::filesystem::path & config_dir_path, const std::string & locale) {
+    Context & context,
+    const std::filesystem::path & config_dir_path,
+    const std::string & locale,
+    CommandFlagAliasTable & command_flag_aliases) {
     auto logger = context.get_base().get_logger();
 
     std::vector<fs::path> config_paths;
@@ -832,8 +1086,348 @@ void load_cmdline_aliases(
 
     const std::string locale_name = locale.substr(0, locale.find('.'));  // Strip encoding (e.g. ".UTF-8") from locale
     for (const auto & path : config_paths) {
-        load_aliases_from_toml_file(context, path, locale_name);
+        load_aliases_from_toml_file(context, path, locale_name, command_flag_aliases);
     }
+}
+
+
+namespace {
+
+/// Collects the value-taking named arguments visible to the rewrite: global
+/// options on the root command, options of the given command word, and
+/// options of every resolvable prefix of the attached command path.
+std::vector<libdnf5::cli::ArgumentParser::NamedArg *> collect_value_args(
+    libdnf5::cli::ArgumentParser & arg_parser, const std::string & cmd_word, const std::vector<std::string> & words) {
+    std::vector<libdnf5::cli::ArgumentParser::NamedArg *> value_args;
+    auto add_from = [&value_args, &arg_parser](const std::string & path) {
+        try {
+            for (auto * named_arg : arg_parser.get_command(path).get_named_args()) {
+                if (named_arg->get_has_value()) {
+                    value_args.push_back(named_arg);
+                }
+            }
+        } catch (const libdnf5::cli::ArgumentParserNotFoundError &) {
+        }
+    };
+    add_from("");
+    if (!cmd_word.empty()) {
+        add_from(cmd_word);
+    }
+    std::string path;
+    for (const auto & word : words) {
+        path = path.empty() ? word : path + "." + word;
+        add_from(path);
+    }
+    return value_args;
+}
+
+/// Whether the token is an option that takes its value as the next argument.
+bool takes_separate_value(
+    const std::vector<libdnf5::cli::ArgumentParser::NamedArg *> & value_args, const std::string & token) {
+    if (token.rfind("-", 0) != 0 || token.find('=') != std::string::npos) {
+        return false;
+    }
+    for (auto * named_arg : value_args) {
+        if (token.rfind("--", 0) == 0) {
+            if (!named_arg->get_long_name().empty() && token.substr(2) == named_arg->get_long_name()) {
+                return true;
+            }
+        } else if (token.size() == 2 && named_arg->get_short_name() == token[1]) {
+            return true;
+        }
+    }
+    return false;
+}
+
+}  // namespace
+
+std::optional<RewrittenArgv> apply_command_flag_aliases(
+    Context & context, const CommandFlagAliasTable & command_flag_aliases, int argc, const char * const * argv) {
+    if (command_flag_aliases.empty()) {
+        return std::nullopt;
+    }
+    auto & arg_parser = context.get_argument_parser();
+    auto & logger = *context.get_base().get_logger();
+
+    // The command word is the first argument that is not an option and not
+    // the value of a preceding value-taking global option.
+    const auto root_value_args = collect_value_args(arg_parser, "", {});
+    int cmd_i = -1;
+    for (int i = 1; i < argc; ++i) {
+        if (argv[i][0] != '-') {
+            cmd_i = i;
+            break;
+        }
+        if (takes_separate_value(root_value_args, argv[i])) {
+            ++i;  // the next token is the option's value, not the command
+        }
+    }
+    if (cmd_i <= 0) {
+        return std::nullopt;
+    }
+    const std::string cmd_word = argv[cmd_i];
+
+    // Select the entry to execute before executing anything: a dnf4 line can
+    // carry several matching flags in any order ('updateinfo --all --list').
+    // The highest-precedence match executes; ties go to the leftmost token.
+    // A trigger that names an existing option of the command would change
+    // the meaning of a working command line; such entries are ignored.
+    auto is_existing_option = [&arg_parser, &cmd_word](const std::string & flag_name) {
+        for (const auto & path : {std::string(), cmd_word}) {
+            try {
+                for (auto * named_arg : arg_parser.get_command(path).get_named_args()) {
+                    if (named_arg->get_long_name() == flag_name) {
+                        return true;
+                    }
+                }
+            } catch (const libdnf5::cli::ArgumentParserNotFoundError &) {
+            }
+        }
+        return false;
+    };
+
+    auto best_it = command_flag_aliases.end();
+    int best_i = -1;
+    std::set<std::string> shadow_warned;
+    // The scan must know the value-taking options of every candidate
+    // attached command too: their values must not be read as triggers.
+    auto scan_value_args = collect_value_args(arg_parser, cmd_word, {});
+    for (const auto & [alias_key, alias_entry] : command_flag_aliases) {
+        if (alias_key.first != cmd_word || alias_entry.words.empty()) {
+            continue;
+        }
+        for (auto * named_arg : collect_value_args(arg_parser, "", alias_entry.words)) {
+            if (std::find(scan_value_args.begin(), scan_value_args.end(), named_arg) == scan_value_args.end()) {
+                scan_value_args.push_back(named_arg);
+            }
+        }
+    }
+    for (int i = cmd_i + 1; i < argc; ++i) {
+        std::string token = argv[i];
+        if (takes_separate_value(scan_value_args, token)) {
+            ++i;  // the next token is the option's value, not a trigger
+            continue;
+        }
+        const auto eq = token.find('=');
+        if (token.rfind("--", 0) == 0 && eq != std::string::npos) {
+            token = token.substr(0, eq);
+        }
+        const auto entry = command_flag_aliases.find({cmd_word, token});
+        if (entry == command_flag_aliases.end()) {
+            continue;
+        }
+        if (is_existing_option(entry->first.second.substr(2))) {
+            if (shadow_warned.insert(entry->first.second).second) {
+                print_and_log_warning(
+                    logger,
+                    M_("Command flag alias \"{}.{}\" matches an existing option of the command, ignored"),
+                    cmd_word,
+                    entry->first.second.substr(2));
+            }
+            continue;
+        }
+        if (best_it == command_flag_aliases.end() || entry->second.precedence > best_it->second.precedence) {
+            best_it = entry;
+            best_i = i;
+        }
+    }
+    if (best_it == command_flag_aliases.end()) {
+        return std::nullopt;
+    }
+    // Everything after a bare "--" is an operand by parser contract; the
+    // rewrite cannot preserve that boundary, so leave such lines untouched.
+    for (int i = 1; i < argc; ++i) {
+        if (std::string_view{argv[i]} == "--") {
+            return std::nullopt;
+        }
+    }
+    const auto & alias = best_it->second;
+
+    if (!alias.reject_message.empty()) {
+        // Print the guidance and leave the arguments untouched so the parser
+        // produces its normal error.
+        std::cerr << alias.reject_message << std::endl;
+        logger.warning("Command flag alias for \"{} {}\": {}", cmd_word, argv[best_i], alias.reject_message);
+        return std::nullopt;
+    }
+
+    // Validate the attached command before rewriting so a broken alias entry
+    // produces a clear error instead of a confusing parse error.
+    std::string attached_path;
+    for (const auto & word : alias.words) {
+        attached_path = attached_path.empty() ? word : attached_path + "." + word;
+    }
+    try {
+        arg_parser.get_command(attached_path);
+    } catch (const libdnf5::cli::ArgumentParserNotFoundError &) {
+        print_and_log_error(
+            logger,
+            M_("Attached command \"{}\" of command flag alias \"{}{}\" not found"),
+            attached_path,
+            cmd_word + ".",
+            best_it->first.second.substr(2));
+        return std::nullopt;
+    }
+
+    std::string eq_value;
+    bool has_eq = false;
+    {
+        const std::string token = argv[best_i];
+        const auto eq = token.find('=');
+        if (token.rfind("--", 0) == 0 && eq != std::string::npos) {
+            has_eq = true;
+            eq_value = token.substr(eq + 1);
+        }
+    }
+    // A value given in the --flag=VALUE form is only meaningful with a
+    // template, and an empty value is only meaningful to reject. Otherwise
+    // print a note and leave the arguments untouched so the parser error
+    // stands instead of the value being silently discarded.
+    if (has_eq && (alias.positional_template.empty() || eq_value.empty())) {
+        const auto note =
+            alias.positional_template.empty()
+                ? libdnf5::utils::sformat(
+                      _("Command flag alias \"{}.{}\" does not accept a value"),
+                      cmd_word,
+                      best_it->first.second.substr(2))
+                : libdnf5::utils::sformat(
+                      _("Command flag alias \"{}.{}\" requires a value"), cmd_word, best_it->first.second.substr(2));
+        std::cerr << note << std::endl;
+        logger.warning("{}", note);
+        return std::nullopt;
+    }
+
+    const auto value_args = collect_value_args(arg_parser, cmd_word, alias.words);
+
+    if (!alias.positional_suffix_gate.empty()) {
+        bool gate_ok = true;
+        const auto & suffix = alias.positional_suffix_gate;
+        auto ends_with = [&suffix](const std::string & value) {
+            return value.size() >= suffix.size() &&
+                   value.compare(value.size() - suffix.size(), suffix.size(), suffix) == 0;
+        };
+        if (!eq_value.empty() && !ends_with(eq_value)) {
+            gate_ok = false;
+        }
+        bool skip_value = false;
+        const int gate_from = alias.leading_positionals ? cmd_i + 1 : best_i + 1;
+        for (int j = gate_from; gate_ok && j < argc; ++j) {
+            if (j == best_i) {
+                continue;
+            }
+            const std::string value = argv[j];
+            if (skip_value) {
+                skip_value = false;
+                continue;
+            }
+            if (takes_separate_value(value_args, value)) {
+                skip_value = true;
+                continue;
+            }
+            if (value.rfind("-", 0) != 0 && !ends_with(value)) {
+                gate_ok = false;
+            }
+        }
+        if (!gate_ok) {
+            // Value shape does not match; print the guidance and leave the
+            // arguments untouched (the normal parser error stands).
+            if (!alias.gate_reject_message.empty()) {
+                std::cerr << alias.gate_reject_message << std::endl;
+                logger.warning(
+                    "Command flag alias for \"{} {}\": {}", cmd_word, argv[best_i], alias.gate_reject_message);
+            }
+            return std::nullopt;
+        }
+    }
+
+    auto apply_template = [](const std::string & template_string, const std::string & value) {
+        std::string out = template_string;
+        const auto placeholder = out.find("${}");
+        if (placeholder != std::string::npos) {
+            out.replace(placeholder, 3, value);
+        }
+        return out;
+    };
+
+    RewrittenArgv rewritten;
+    bool copy_value_verbatim = false;
+    for (int j = 0; j < argc; ++j) {
+        if (j == cmd_i) {
+            for (const auto & word : alias.words) {
+                rewritten.storage.emplace_back(word);
+            }
+            for (const auto & flag : alias.attached_flags) {
+                rewritten.storage.emplace_back(flag);
+            }
+            if (!eq_value.empty()) {
+                rewritten.storage.emplace_back(apply_template(alias.positional_template, eq_value));
+            }
+            continue;
+        }
+        if (j == best_i) {
+            continue;
+        }
+        std::string current = argv[j];
+        if (copy_value_verbatim) {
+            // The value of the preceding value-taking option, not an operand.
+            copy_value_verbatim = false;
+            rewritten.storage.emplace_back(std::move(current));
+            continue;
+        }
+        if (j > cmd_i && !alias.companion_flag.empty() && current == alias.companion_flag) {
+            continue;  // consumed together with the trigger flag
+        }
+        // dnf4 grammars marked leading_positionals accepted operands before
+        // the flag too; tokens before the command word stay untouched.
+        const bool operand_scope = j > best_i || (alias.leading_positionals && j > cmd_i && j < best_i);
+        if (j > cmd_i && takes_separate_value(value_args, current)) {
+            // The next token is this option's value wherever the option
+            // stands, so the value slot is protected in the whole line.
+            copy_value_verbatim = true;
+            rewritten.storage.emplace_back(std::move(current));
+            continue;
+        }
+        if (operand_scope && current.rfind("-", 0) != 0 && alias.drop_bare_positionals &&
+            current.find('=') == std::string::npos) {
+            // dnf4 allowed redundant bare arguments here; dnf5's target
+            // grammar has no place for them. Drop, loudly.
+            if (!alias.dropped_note.empty()) {
+                const auto note =
+                    libdnf5::utils::sformat(_("{}: ignoring argument \"{}\""), alias.dropped_note, current);
+                std::cerr << note << std::endl;
+                logger.warning("{}", note);
+            }
+            continue;
+        }
+        if (operand_scope && current.rfind("-", 0) != 0 && !alias.positional_template.empty()) {
+            rewritten.storage.emplace_back(apply_template(alias.positional_template, current));
+            continue;
+        }
+        if (operand_scope && current.rfind("-", 0) == 0) {
+            bool mapped = false;
+            for (const auto & [prefix, map_template] : alias.token_prefix_maps) {
+                if (current.rfind(prefix, 0) == 0) {
+                    rewritten.storage.emplace_back(apply_template(map_template, current.substr(prefix.size())));
+                    mapped = true;
+                    break;
+                }
+            }
+            if (mapped) {
+                continue;
+            }
+        }
+        rewritten.storage.emplace_back(std::move(current));
+    }
+    rewritten.argv.reserve(rewritten.storage.size());
+    for (const auto & piece : rewritten.storage) {
+        rewritten.argv.push_back(piece.c_str());
+    }
+    logger.debug(
+        "Command flag alias \"{}.{}\" rewrote the command line to: {}",
+        cmd_word,
+        best_it->first.second.substr(2),
+        libdnf5::utils::string::join(rewritten.storage, " "));
+    return rewritten;
 }
 
 }  // namespace dnf5
