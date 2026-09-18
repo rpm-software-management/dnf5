@@ -17,6 +17,11 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
+// For wcwidth()
+#ifndef _XOPEN_SOURCE
+#define _XOPEN_SOURCE
+#endif
+
 #include "libdnf5-cli/output/transaction_table.hpp"
 
 #include "smartcols_table_wrapper.hpp"
@@ -33,11 +38,14 @@
 #include <libdnf5/utils/bgettext/bgettext-lib.h>
 #include <libdnf5/utils/to_underlying.hpp>
 #include <libsmartcols/libsmartcols.h>
+#include <wchar.h>
 
 #include <algorithm>
 #include <cstdlib>
+#include <cwchar>
 #include <map>
 #include <optional>
+#include <unordered_map>
 #include <unordered_set>
 
 namespace libdnf5::cli::output {
@@ -69,6 +77,74 @@ const char * action_color(libdnf5::transaction::TransactionItemAction action) {
 }
 
 constexpr const char * SKIPPED_COLOR = "red";
+
+
+// Number of terminal columns occupied by a (possibly multi-byte, UTF-8) string.
+size_t display_width(const char * data) {
+    if (data == nullptr) {
+        return 0;
+    }
+    size_t width = 0;
+    std::mbstate_t state{};
+    const char * p = data;
+    size_t remaining = std::char_traits<char>::length(data);
+    while (remaining > 0) {
+        wchar_t wc;
+        size_t len = std::mbrtowc(&wc, p, remaining, &state);
+        if (len == 0) {
+            break;
+        }
+        if (len == static_cast<size_t>(-1) || len == static_cast<size_t>(-2)) {
+            // Invalid/incomplete sequence: count one column and resync.
+            width += 1;
+            p += 1;
+            remaining -= 1;
+            state = std::mbstate_t{};
+            continue;
+        }
+        int w = wcwidth(wc);
+        if (w > 0) {
+            width += static_cast<size_t>(w);
+        }
+        p += len;
+        remaining -= len;
+    }
+    return width;
+}
+
+
+// Translate the libsmartcols color names used by this table into ANSI escape
+// sequences, so a manually printed line matches the table's coloring. Returns an
+// empty string for unknown names (or if the value already is a raw escape).
+std::string color_name_to_ansi(const char * name) {
+    if (name == nullptr) {
+        return "";
+    }
+    const std::string n(name);
+    if (n == "bold") {
+        return "\033[1m";
+    }
+    if (n == "halfbright") {
+        return "\033[2m";
+    }
+    if (n == "red") {
+        return "\033[31m";
+    }
+    if (n == "green") {
+        return "\033[32m";
+    }
+    if (n == "brown") {
+        return "\033[33m";
+    }
+    if (n == "magenta") {
+        return "\033[35m";
+    }
+    // smartcols also accepts raw escape sequences; pass those through unchanged.
+    if (!n.empty() && n.front() == '\033') {
+        return n;
+    }
+    return "";
+}
 
 
 class TransactionTableSection {
@@ -276,7 +352,7 @@ TransactionTable::Impl::Impl(ITransaction & transaction) {
     scols_table_enable_noheadings(*tb, 1);
     struct libscols_line * header_ln = scols_table_new_line(*tb, NULL);
 
-    auto column = scols_table_new_column(*tb, _("Package"), 0.3, 0);
+    auto column = scols_table_new_column(*tb, _("Package"), 0.25, SCOLS_FL_TRUNC);
     auto header = scols_column_get_header(column);
     auto cell = scols_line_get_cell(header_ln, COL_NAME);
     scols_cell_set_data(cell, scols_cell_get_data(header));
@@ -288,7 +364,7 @@ TransactionTable::Impl::Impl(ITransaction & transaction) {
     scols_cell_set_data(cell, scols_cell_get_data(header));
     scols_cell_set_color(cell, "bold");
 
-    column = scols_table_new_column(*tb, _("Version"), 0.3, SCOLS_FL_TRUNC);
+    column = scols_table_new_column(*tb, _("Version"), 0.5, SCOLS_FL_TRUNC);
     header = scols_column_get_header(column);
     cell = scols_line_get_cell(header_ln, COL_EVR);
     scols_cell_set_data(cell, scols_cell_get_data(header));
@@ -338,13 +414,8 @@ TransactionTable::Impl::Impl(ITransaction & transaction) {
         // column. Thus adding a indentation manually.
         scols_line_set_data(ln, COL_NAME, (" " + pkg->get_name()).c_str());
         scols_line_set_data(ln, COL_ARCH, pkg->get_arch().c_str());
-        // Always show epoch in EVR (epoch:version-release)
-        std::string evr_with_epoch = pkg->get_epoch();
-        if (evr_with_epoch.empty()) {
-            evr_with_epoch = "0";
-        }
-        evr_with_epoch += ":" + pkg->get_version() + "-" + pkg->get_release();
-        scols_line_set_data(ln, COL_EVR, evr_with_epoch.c_str());
+        std::string new_evr = libdnf5::rpm::to_evr_string(*pkg);
+        scols_line_set_data(ln, COL_EVR, new_evr.c_str());
         if (tspkg->get_action() == libdnf5::transaction::TransactionItemAction::REMOVE) {
             scols_line_set_data(ln, COL_REPO, pkg->get_from_repo_id().c_str());
         } else {
@@ -369,47 +440,61 @@ TransactionTable::Impl::Impl(ITransaction & transaction) {
             scols_cell_set_color(scols_line_get_cell(ln_reason, COL_NAME), replaced_color);
             section.set_last_line(ln_reason);
         }
-        for (auto & replaced : tspkg->get_replaces()) {
-            // highlight incoming packages with epoch/version change
-            if (tspkg->get_package()->get_epoch() != replaced->get_epoch() ||
-                tspkg->get_package()->get_version() != replaced->get_version()) {
-                auto cl_evr = scols_line_get_cell(ln, COL_EVR);
-                scols_cell_set_color(cl_evr, "bold");
-            }
 
-            struct libscols_line * ln_replaced = scols_table_new_line(*tb, ln);
-            std::string name(libdnf5::utils::sformat(_("replacing {}"), replaced->get_name()));
-            scols_line_set_data(ln_replaced, COL_NAME, ("   " + name).c_str());
-            scols_line_set_data(ln_replaced, COL_ARCH, replaced->get_arch().c_str());
-            // Always show epoch in EVR (epoch:version-release) for consistency with main package lines
-            std::string replaced_evr_with_epoch = replaced->get_epoch();
-            if (replaced_evr_with_epoch.empty()) {
-                replaced_evr_with_epoch = "0";
-            }
-            replaced_evr_with_epoch += ":" + replaced->get_version() + "-" + replaced->get_release();
-            scols_line_set_data(ln_replaced, COL_EVR, replaced_evr_with_epoch.c_str());
-            scols_line_set_data(ln_replaced, COL_REPO, replaced->get_from_repo_id().c_str());
+        const auto & replaces = tspkg->get_replaces();
 
-            auto replaced_size = static_cast<int64_t>(replaced->get_install_size());
-            scols_line_set_data(
-                ln_replaced, COL_SIZE, libdnf5::cli::utils::units::format_size_aligned(replaced_size).c_str());
-            auto replaced_color = action_color(libdnf5::transaction::TransactionItemAction::REPLACED);
-            auto obsoleted_color = "brown";
+        bool suppress_replacing = false;
+        if (replaces.size() == 1 && replaces.front()->get_name() == pkg->get_name()) {
+            const auto & old_pkg = *replaces.front();
+            const std::string old_evr = libdnf5::rpm::to_evr_string(old_pkg);
+            const bool arch_changed = old_pkg.get_arch() != pkg->get_arch();
+            const bool evr_changed = old_evr != new_evr;
+            const bool repo_changed = old_pkg.get_from_repo_id() != pkg->get_repo_id();
 
-            scols_cell_set_color(scols_line_get_cell(ln_replaced, COL_EVR), replaced_color);
-            if (pkg->get_arch() == replaced->get_arch()) {
-                scols_cell_set_color(scols_line_get_cell(ln_replaced, COL_ARCH), replaced_color);
-            } else {
-                scols_cell_set_color(scols_line_get_cell(ln_replaced, COL_ARCH), obsoleted_color);
+            if (evr_changed && !arch_changed) {
+                scols_line_set_data(ln, COL_EVR, libdnf5::utils::sformat(_("{} -> {}"), old_evr, new_evr).c_str());
+                scols_cell_set_color(scols_line_get_cell(ln, COL_EVR), "bold");
+                suppress_replacing = true;
+            } else if (!evr_changed && !arch_changed && !repo_changed) {
+                suppress_replacing = true;
             }
-            if (pkg->get_name() == replaced->get_name()) {
-                scols_cell_set_color(scols_line_get_cell(ln_replaced, COL_NAME), replaced_color);
-            } else {
-                scols_cell_set_color(scols_line_get_cell(ln_replaced, COL_NAME), obsoleted_color);
+        }
+
+        if (!suppress_replacing) {
+            for (auto & replaced : replaces) {
+                // highlight incoming packages with epoch/version change
+                if (pkg->get_epoch() != replaced->get_epoch() || pkg->get_version() != replaced->get_version()) {
+                    scols_cell_set_color(scols_line_get_cell(ln, COL_EVR), "bold");
+                }
+
+                struct libscols_line * ln_replaced = scols_table_new_line(*tb, ln);
+                std::string name(libdnf5::utils::sformat(_("replacing {}"), replaced->get_name()));
+                scols_line_set_data(ln_replaced, COL_NAME, ("   " + name).c_str());
+                scols_line_set_data(ln_replaced, COL_ARCH, replaced->get_arch().c_str());
+                scols_line_set_data(ln_replaced, COL_EVR, libdnf5::rpm::to_evr_string(*replaced).c_str());
+                scols_line_set_data(ln_replaced, COL_REPO, replaced->get_from_repo_id().c_str());
+
+                auto replaced_size = static_cast<int64_t>(replaced->get_install_size());
+                scols_line_set_data(
+                    ln_replaced, COL_SIZE, libdnf5::cli::utils::units::format_size_aligned(replaced_size).c_str());
+                const auto replaced_color = action_color(libdnf5::transaction::TransactionItemAction::REPLACED);
+                const auto obsoleted_color = "brown";
+
+                scols_cell_set_color(scols_line_get_cell(ln_replaced, COL_EVR), replaced_color);
+                if (pkg->get_arch() == replaced->get_arch()) {
+                    scols_cell_set_color(scols_line_get_cell(ln_replaced, COL_ARCH), replaced_color);
+                } else {
+                    scols_cell_set_color(scols_line_get_cell(ln_replaced, COL_ARCH), obsoleted_color);
+                }
+                if (pkg->get_name() == replaced->get_name()) {
+                    scols_cell_set_color(scols_line_get_cell(ln_replaced, COL_NAME), replaced_color);
+                } else {
+                    scols_cell_set_color(scols_line_get_cell(ln_replaced, COL_NAME), obsoleted_color);
+                }
+                scols_cell_set_color(scols_line_get_cell(ln_replaced, COL_REPO), replaced_color);
+                scols_cell_set_color(scols_line_get_cell(ln_replaced, COL_SIZE), replaced_color);
+                section.set_last_line(ln_replaced);
             }
-            scols_cell_set_color(scols_line_get_cell(ln_replaced, COL_REPO), replaced_color);
-            scols_cell_set_color(scols_line_get_cell(ln_replaced, COL_SIZE), replaced_color);
-            section.set_last_line(ln_replaced);
         }
     }
 
@@ -529,14 +614,113 @@ void TransactionTable::Impl::print_table() {
     }
     auto fd = scols_table_get_stream(*tb);
 
+    size_t name_w = 0, arch_w = 0, ver_w = 0, repo_w = 0, size_w = 0;
+    {
+        struct libscols_iter * m_itr = scols_new_iter(SCOLS_ITER_FORWARD);
+        struct libscols_line * m_ln = nullptr;
+        while (scols_table_next_line(*tb, m_itr, &m_ln) == 0) {
+            name_w = std::max(name_w, display_width(scols_cell_get_data(scols_line_get_cell(m_ln, COL_NAME))));
+            arch_w = std::max(arch_w, display_width(scols_cell_get_data(scols_line_get_cell(m_ln, COL_ARCH))));
+            ver_w = std::max(ver_w, display_width(scols_cell_get_data(scols_line_get_cell(m_ln, COL_EVR))));
+            repo_w = std::max(repo_w, display_width(scols_cell_get_data(scols_line_get_cell(m_ln, COL_REPO))));
+            size_w = std::max(size_w, display_width(scols_cell_get_data(scols_line_get_cell(m_ln, COL_SIZE))));
+        }
+        scols_free_iter(m_itr);
+    }
+
+    // Never shrink Package below its header, so the heading stays legible.
+    const size_t min_pkg =
+        display_width(scols_cell_get_data(scols_line_get_cell(sections.front().get_first_line(), COL_NAME)));
+
+    struct libscols_column * pkg_col = scols_table_get_column(*tb, COL_NAME);
+    const size_t termwidth = scols_table_get_termwidth(*tb);
+    if (termwidth > 0) {
+        const size_t separators = 4;
+        const size_t fixed = arch_w + size_w + separators;
+        if (termwidth > fixed) {
+            repo_w = std::min(repo_w, std::max<size_t>(12, termwidth / 5));
+            const size_t avail = termwidth - fixed;
+            // Smallest Version width kept when it must be truncated to make room
+            // for the package name (never larger than the actual content).
+            const size_t min_ver = std::min<size_t>(20, ver_w);
+            size_t pkg_budget;
+            size_t ver_budget;
+            if (termwidth > 80 && avail > repo_w + min_ver && name_w <= avail - repo_w - min_ver) {
+                // Wide terminal: prefer keeping the whole row (package name included) on a single line.
+                pkg_budget = std::max(min_pkg, std::min(name_w, avail - repo_w - min_ver));
+                ver_budget = std::min(ver_w, avail - pkg_budget - repo_w);
+                scols_column_set_flags(pkg_col, 0);
+            } else {
+                // Narrow terminal (<= 80 cols): prioritise Version so the full transition stays readable
+                ver_budget = ver_w;
+                if (avail > repo_w + min_pkg && ver_budget > avail - repo_w - min_pkg) {
+                    ver_budget = avail - repo_w - min_pkg;
+                }
+                pkg_budget = min_pkg;
+                if (avail > ver_budget + repo_w) {
+                    pkg_budget = std::max(min_pkg, std::min(name_w, avail - ver_budget - repo_w));
+                }
+                scols_column_set_flags(pkg_col, SCOLS_FL_TRUNC);
+            }
+            const double tw = static_cast<double>(termwidth);
+            scols_column_set_whint(pkg_col, static_cast<double>(pkg_budget) / tw);
+            scols_column_set_whint(scols_table_get_column(*tb, COL_EVR), static_cast<double>(ver_budget) / tw);
+            scols_column_set_whint(scols_table_get_column(*tb, COL_REPO), static_cast<double>(repo_w) / tw);
+        }
+    }
+
+    // Compute the layout once so we know the final Package column width and can
+    // detect names that would overflow it.
+    size_t pkg_w = 0;
+    {
+        char * tmp = nullptr;
+        if (scols_table_print_range_to_string(
+                *tb, sections.front().get_first_line(), sections.back().get_last_line(), &tmp) == 0) {
+            pkg_w = scols_column_get_width(pkg_col);
+        }
+        std::free(tmp);
+    }
+    const bool colors = scols_table_colors_wanted(*tb) == 1;
+
+    std::unordered_map<struct libscols_line *, std::string> section_headers;
     for (const auto & section : sections) {
-        const auto header = section.get_header();
-        if (!header.empty()) {
-            std::fputs(section.get_header().c_str(), fd);
+        if (!section.get_header().empty()) {
+            section_headers[section.get_first_line()] = section.get_header();
+        }
+    }
+
+    struct libscols_iter * itr = scols_new_iter(SCOLS_ITER_FORWARD);
+    struct libscols_line * ln = nullptr;
+    while (scols_table_next_line(*tb, itr, &ln) == 0) {
+        auto header_it = section_headers.find(ln);
+        if (header_it != section_headers.end()) {
+            std::fputs(header_it->second.c_str(), fd);
             std::fputc('\n', fd);
         }
-        scols_table_print_range(*tb, section.get_first_line(), section.get_last_line());
+
+        struct libscols_cell * pkg_cell = scols_line_get_cell(ln, COL_NAME);
+        const char * name_data = scols_cell_get_data(pkg_cell);
+        if (name_data != nullptr && pkg_w > 0 && display_width(name_data) > pkg_w) {
+            std::string name(name_data);
+            std::string ansi = colors ? color_name_to_ansi(scols_cell_get_color(pkg_cell)) : "";
+            if (!ansi.empty()) {
+                std::fputs(ansi.c_str(), fd);
+                std::fputs(name.c_str(), fd);
+                std::fputs("\033[0m", fd);
+            } else {
+                std::fputs(name.c_str(), fd);
+            }
+            std::fputc('\n', fd);
+
+            scols_cell_set_data(pkg_cell, "");
+            scols_table_print_range(*tb, ln, ln);
+            scols_cell_set_data(pkg_cell, name.c_str());
+        } else {
+            scols_table_print_range(*tb, ln, ln);
+        }
     }
+    scols_free_iter(itr);
+
     std::fputc('\n', fd);
     // add empty line after the transaction table
     std::fputc('\n', fd);
