@@ -25,19 +25,27 @@
 #include "libdnf5-cli/tty.hpp"
 
 #include "libdnf5/transaction/transaction_history.hpp"
+#include "libdnf5/transaction/transaction_item_action.hpp"
 
 #include <json-c/json.h>
 #include <libdnf5/utils/bgettext/bgettext-lib.h>
 #include <libsmartcols/libsmartcols.h>
+
+#include <algorithm>
+#include <set>
+#include <string>
+#include <vector>
 
 
 namespace libdnf5::cli::output {
 
 void print_transaction_list(std::vector<libdnf5::transaction::Transaction> & ts_list) {
     std::unordered_map<int64_t, int64_t> id_to_item_count;
+    std::unordered_map<int64_t, std::set<libdnf5::transaction::TransactionItemAction>> id_to_actions;
     if (!ts_list.empty()) {
         libdnf5::transaction::TransactionHistory history(ts_list[0].get_base());
         id_to_item_count = history.get_transaction_item_counts(ts_list);
+        id_to_actions = history.get_transaction_item_actions(ts_list);
     }
 
     std::unique_ptr<libscols_table, decltype(&scols_unref_table)> table(scols_new_table(), &scols_unref_table);
@@ -65,8 +73,15 @@ void print_transaction_list(std::vector<libdnf5::transaction::Transaction> & ts_
         scols_line_set_data(ln, 0, std::to_string(ts.get_id()).c_str());
         scols_line_set_data(ln, 1, ts.get_description().c_str());
         scols_line_set_data(ln, 2, libdnf5::utils::string::format_epoch(ts.get_dt_start()).c_str());
-        // TODO(lukash) fill the Actions(s), if we even want them?
-        scols_line_set_data(ln, 3, "");
+        std::vector<std::string> action_letters;
+        for (const auto & action : id_to_actions[ts.get_id()]) {
+            auto letter = libdnf5::transaction::transaction_item_action_to_letter(action);
+            if (!letter.empty()) {
+                action_letters.push_back(letter);
+            }
+        }
+        std::sort(action_letters.begin(), action_letters.end());
+        scols_line_set_data(ln, 3, libdnf5::utils::string::join(action_letters, ", ").c_str());
         scols_line_set_data(ln, 4, std::to_string(id_to_item_count.at(ts.get_id())).c_str());
     }
 
@@ -76,9 +91,11 @@ void print_transaction_list(std::vector<libdnf5::transaction::Transaction> & ts_
 // [NOTE] When editing JSON output format, do not forget to update the docs at doc/commands/history.8.rst
 void print_transaction_list_json(std::vector<libdnf5::transaction::Transaction> & ts_list) {
     std::unordered_map<int64_t, int64_t> id_to_item_count;
+    std::unordered_map<int64_t, std::set<libdnf5::transaction::TransactionItemAction>> id_to_actions;
     if (!ts_list.empty()) {
         libdnf5::transaction::TransactionHistory history(ts_list[0].get_base());
         id_to_item_count = history.get_transaction_item_counts(ts_list);
+        id_to_actions = history.get_transaction_item_actions(ts_list);
     }
 
     json_object * json_transactions = json_object_new_array();
@@ -98,6 +115,14 @@ void print_transaction_list_json(std::vector<libdnf5::transaction::Transaction> 
         json_object_object_add(json_transaction, "releasever", json_object_new_string(ts.get_releasever().c_str()));
         json_object_object_add(
             json_transaction, "altered_count", json_object_new_int64(id_to_item_count.at(ts.get_id())));
+
+        json_object * json_actions = json_object_new_array();
+        for (const auto & action : id_to_actions[ts.get_id()]) {
+            json_object_array_add(
+                json_actions,
+                json_object_new_string(libdnf5::transaction::transaction_item_action_to_string(action).c_str()));
+        }
+        json_object_object_add(json_transaction, "actions", json_actions);
 
         json_object_array_add(json_transactions, json_transaction);
     }

@@ -93,6 +93,11 @@ std::unordered_map<int64_t, int64_t> TransactionHistory::get_transaction_item_co
     return TransactionDbUtils::transactions_item_counts(p_impl->base, transactions);
 }
 
+std::unordered_map<int64_t, std::set<TransactionItemAction>> TransactionHistory::get_transaction_item_actions(
+    const std::vector<Transaction> & transactions) {
+    return TransactionDbUtils::transactions_item_actions(p_impl->base, transactions);
+}
+
 void TransactionHistory::filter_transactions_by_pkg_names(
     std::vector<Transaction> & transactions, const std::vector<std::string> & pkg_names) {
     TransactionDbUtils::filter_transactions_by_pkg_names(p_impl->base, transactions, pkg_names);

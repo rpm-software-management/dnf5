@@ -106,6 +106,20 @@ public:
     /// @return Mapped transaction id -> count.
     std::unordered_map<int64_t, int64_t> get_transaction_item_counts(const std::vector<Transaction> & transactions);
 
+    /// Get the set of distinct transaction item actions for the specified transactions.
+    /// It gets the actions in a single db query.
+    /// The REPLACED action is omitted for packages that were replaced merely
+    /// as a result of being upgraded/downgraded/reinstalled within the same
+    /// transaction; it is kept for packages obsoleted by a differently named
+    /// package.
+    ///
+    /// @param transactions Get actions for these transactions.
+    ///
+    /// @return Mapped transaction id -> set of actions.
+    /// @since 5.4.5.0
+    std::unordered_map<int64_t, std::set<TransactionItemAction>> get_transaction_item_actions(
+        const std::vector<Transaction> & transactions);
+
     /// Filter out transactions that don't contain any rpm with matching name
     ///
     /// @param transactions     Vector of Transactions to filter
