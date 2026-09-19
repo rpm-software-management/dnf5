@@ -1,0 +1,13 @@
+document: rpm-package-input
+version: 0.0.2
+repositories:
+  - id: dnf-ci-fedora-modular
+    baseurl: file://$FIXTURES_DIR/repos/dnf-ci-fedora-modular
+packages:
+  install:
+    - nodejs
+modules:
+  enable:
+    - nodejs:10
+archs:
+  - x86_64
