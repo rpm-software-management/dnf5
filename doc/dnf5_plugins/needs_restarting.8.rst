@@ -59,15 +59,15 @@ Options
 Configuration
 =============
 
-The set of packages whose installation or upgrade suggests a reboot is provided by ``libdnf5`` and is shared with every consumer of that information, not just this command. It contains a built-in list covering the kernel, ``systemd`` and other core packages, extended by any names found in ``*.conf`` drop-in files in the following directories:
+The set of packages whose installation or upgrade suggests a reboot is provided by ``libdnf5`` and is shared with every consumer of that information, not just this command. It is read from ``*.conf`` drop-in files in the following directories:
 
 ``/etc/dnf/suggest-reboot.d/``
     | Local administrator configuration.
 
 ``/usr/share/dnf5/suggest-reboot.d/``
-    | Additions shipped by packages.
+    | Defaults shipped by packages. ``libdnf5`` installs ``default.conf`` here, covering the kernel, ``systemd`` and other core packages.
 
-Drop-in files can only add to the built-in list, never remove from it. Files with different names are merged. A file in the local directory overrides a file with the same name in the packaged additions directory, so an administrator can replace a package-supplied file by creating one with the same name.
+Files with different names are merged. A file in the local directory overrides a file with the same name in the packaged defaults directory, so an administrator can replace ``default.conf`` wholesale by creating ``/etc/dnf/suggest-reboot.d/default.conf``.
 
 Only files with the ``.conf`` extension are read. Each file contains one package name per line. Leading and trailing whitespace is ignored, and empty lines and lines beginning with ``#`` are treated as comments. Package names that are not installed are ignored, so a single file may list packages that are not present on the system.
 
