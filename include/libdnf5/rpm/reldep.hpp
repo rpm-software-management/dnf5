@@ -26,10 +26,11 @@
 
 #include <memory>
 #include <string>
-#include <vector>
 
 
 namespace libdnf5::rpm {
+
+class ReldepList;
 
 struct ReldepId {
 public:
@@ -50,6 +51,10 @@ public:
 class LIBDNF_API Reldep {
 public:
     enum class CmpType { NONE = 0, GT = (1 << 0), EQ = (1 << 1), GTE = (GT | EQ), LT = (1 << 2), LTE = (LT | EQ) };
+
+    /// Operators used in relational dependencies. `NONE` denotes a plain dependency.
+    /// @since 5.4.6.0
+    enum class ReldepOperator { NONE, EQ, GT, GTE, LT, LTE, AND, OR, WITH, WITHOUT, IF, UNLESS, ELSE };
 
     /// @brief Creates a reldep from Char*. If parsing fails it raises std::runtime_error.
     ///
@@ -98,6 +103,15 @@ public:
     /// @brief Test if pattern is rich dependency
     /// Return true if pattern start with "("
     static bool is_rich_dependency(const std::string & pattern);
+
+    /// Returns the relational dependency operator, or `NONE` for a plain dependency.
+    /// @since 5.4.7.0
+    ReldepOperator get_operator() const noexcept;
+
+    /// Returns an empty list for a plain dependency. Otherwise, returns a list
+    /// of exactly two items: the left and the right operands.
+    /// @since 5.4.7.0
+    ReldepList get_operands() const;
 
     /// Return unique ID representing Reldep
     int get_hash() const;
