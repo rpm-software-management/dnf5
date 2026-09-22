@@ -22,6 +22,7 @@
 #include "solv/pool.hpp"
 #include "solv/reldep_parser.hpp"
 
+#include "libdnf5/rpm/reldep_list.hpp"
 #include "libdnf5/utils/bgettext/bgettext-mark-domain.h"
 
 // workaround, libsolv lacks 'extern "C"' in its header file
@@ -138,6 +139,55 @@ BaseWeakPtr Reldep::get_base() const {
 bool Reldep::is_rich_dependency(const std::string & pattern) {
     return pattern[0] == '(';
 };
+
+Reldep::ReldepOperator Reldep::get_operator() const noexcept {
+    const auto id = static_cast<unsigned int>(p_impl->id.id);
+    if (!ISRELDEP(id)) {
+        return ReldepOperator::NONE;
+    }
+
+    const auto * relation = GETRELDEP(*get_rpm_pool(p_impl->base), id);
+    switch (relation->flags) {
+        case REL_EQ:
+            return ReldepOperator::EQ;
+        case REL_GT:
+            return ReldepOperator::GT;
+        case REL_GT | REL_EQ:
+            return ReldepOperator::GTE;
+        case REL_LT:
+            return ReldepOperator::LT;
+        case REL_LT | REL_EQ:
+            return ReldepOperator::LTE;
+        case REL_AND:
+            return ReldepOperator::AND;
+        case REL_OR:
+            return ReldepOperator::OR;
+        case REL_WITH:
+            return ReldepOperator::WITH;
+        case REL_WITHOUT:
+            return ReldepOperator::WITHOUT;
+        case REL_COND:
+            return ReldepOperator::IF;
+        case REL_UNLESS:
+            return ReldepOperator::UNLESS;
+        case REL_ELSE:
+            return ReldepOperator::ELSE;
+        default:
+            return ReldepOperator::NONE;
+    }
+}
+
+ReldepList Reldep::get_operands() const {
+    ReldepList operands(p_impl->base);
+    const auto id = static_cast<unsigned int>(p_impl->id.id);
+    if (!ISRELDEP(id)) {
+        return operands;
+    }
+    const auto * relation = GETRELDEP(*get_rpm_pool(p_impl->base), id);
+    operands.add(ReldepId(relation->name));
+    operands.add(ReldepId(relation->evr));
+    return operands;
+}
 
 /// Return unique ID representing Reldep
 int Reldep::get_hash() const {

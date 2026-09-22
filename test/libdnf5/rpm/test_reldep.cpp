@@ -30,6 +30,8 @@ void ReldepTest::test_short_reldep() {
     CPPUNIT_ASSERT(std::string(a.get_relation()) == "");
     CPPUNIT_ASSERT(std::string(a.get_version()) == "");
     CPPUNIT_ASSERT(a.to_string() == "labirinto.txt");
+    CPPUNIT_ASSERT(a.get_operator() == libdnf5::rpm::Reldep::ReldepOperator::NONE);
+    CPPUNIT_ASSERT(a.get_operands().empty());
 
     libdnf5::rpm::Reldep b(base, "labirinto.txt");
     CPPUNIT_ASSERT(a == b);
@@ -46,6 +48,11 @@ void ReldepTest::test_full_reldep() {
     CPPUNIT_ASSERT(std::string(a.get_relation()) == " = ");
     CPPUNIT_ASSERT(std::string(a.get_version()) == "4.2.0");
     CPPUNIT_ASSERT(a.to_string() == "python3-labirinto = 4.2.0");
+    CPPUNIT_ASSERT(a.get_operator() == libdnf5::rpm::Reldep::ReldepOperator::EQ);
+    const auto operands = a.get_operands();
+    CPPUNIT_ASSERT(operands.size() == 2);
+    CPPUNIT_ASSERT(operands.get(0).to_string() == "python3-labirinto");
+    CPPUNIT_ASSERT(operands.get(1).to_string() == "4.2.0");
 
     libdnf5::rpm::Reldep b(base, "python3-labirinto > 1.2.0");
     CPPUNIT_ASSERT(a != b);
@@ -58,6 +65,11 @@ void ReldepTest::test_rich_reldep() {
     CPPUNIT_ASSERT(std::string(a.get_relation()) == " if ");
     CPPUNIT_ASSERT(std::string(a.get_version()) == "labirinto.txt");
     CPPUNIT_ASSERT(a.to_string() == "(lab-list if labirinto.txt)");
+    CPPUNIT_ASSERT(a.get_operator() == libdnf5::rpm::Reldep::ReldepOperator::IF);
+    const auto operands = a.get_operands();
+    CPPUNIT_ASSERT(operands.size() == 2);
+    CPPUNIT_ASSERT(operands.get(0).to_string() == "lab-list");
+    CPPUNIT_ASSERT(operands.get(1).to_string() == "labirinto.txt");
 
     libdnf5::rpm::Reldep b(base, "(labirinto unless labirinto_c)");
     CPPUNIT_ASSERT(std::string(b.get_name()) == "labirinto");
