@@ -19,6 +19,8 @@
 
 #include "libdnf5/conf/option_binds.hpp"
 
+#include "utils/on_scope_exit.hpp"
+
 #include "libdnf5/utils/bgettext/bgettext-mark-domain.h"
 
 #include <utility>
@@ -70,6 +72,17 @@ void OptionBinds::Item::new_string(Option::Priority priority, const std::string 
     }
 }
 
+void OptionBinds::Item::new_string(Option::Priority priority, const std::string & value, const std::string & source) {
+    if (p_impl->new_str_func) {
+        // Custom function doesn't support source directly, set it via option
+        libdnf5::utils::OnScopeExit clear{[this]() noexcept { p_impl->option->clear_pending_source(); }};
+        p_impl->option->set_pending_source(source);
+        p_impl->new_str_func(priority, value);
+    } else {
+        p_impl->option->set(priority, value, source);
+    }
+}
+
 std::string OptionBinds::Item::get_value_string() const {
     if (p_impl->get_value_str_func) {
         return p_impl->get_value_str_func();
@@ -79,6 +92,10 @@ std::string OptionBinds::Item::get_value_string() const {
 
 bool OptionBinds::Item::get_is_append_option() const {
     return p_impl->is_append_option;
+}
+
+const std::string & OptionBinds::Item::get_source() const {
+    return p_impl->option->get_source();
 }
 
 

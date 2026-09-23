@@ -142,6 +142,8 @@ protected:
     const Option * get_parent() const noexcept;
 
 private:
+    friend class OptionBinds;
+
     class LIBDNF_LOCAL Impl;
     ImplPtr<Impl> p_impl;
 };
