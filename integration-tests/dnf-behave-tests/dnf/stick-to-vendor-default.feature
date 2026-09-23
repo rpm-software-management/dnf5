@@ -1,5 +1,6 @@
 Feature: DNF allow_vendor_change defaults to false
 Background:
+  Given I set environment variable "DNF5_FORCE_COLUMNS" to "500"
   Given I use repository "dnf-ci-vendor-1"
    And I configure dnf with
        | key                 | value |

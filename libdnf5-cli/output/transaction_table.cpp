@@ -451,11 +451,15 @@ TransactionTable::Impl::Impl(ITransaction & transaction) {
             const bool evr_changed = old_evr != new_evr;
             const bool repo_changed = old_pkg.get_from_repo_id() != pkg->get_repo_id();
 
-            if (evr_changed && !arch_changed) {
-                scols_line_set_data(ln, COL_EVR, libdnf5::utils::sformat(_("{} -> {}"), old_evr, new_evr).c_str());
-                scols_cell_set_color(scols_line_get_cell(ln, COL_EVR), "bold");
-                suppress_replacing = true;
-            } else if (!evr_changed && !arch_changed && !repo_changed) {
+            // When only the EVR changes (same name, arch and repo) show the
+            // version transition inline as "old -> new" and suppress the
+            // redundant "replacing ..." sub-line. If the repository also changed
+            // keep the full "replacing ..." line so the source repo is not lost.
+            if (!arch_changed && !repo_changed) {
+                if (evr_changed) {
+                    scols_line_set_data(ln, COL_EVR, libdnf5::utils::sformat(_("{} -> {}"), old_evr, new_evr).c_str());
+                    scols_cell_set_color(scols_line_get_cell(ln, COL_EVR), "bold");
+                }
                 suppress_replacing = true;
             }
         }

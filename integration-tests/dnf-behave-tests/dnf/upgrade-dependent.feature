@@ -9,6 +9,9 @@ Feature: Upgrade dependency of another RPM
 #       labirinto-2 requires labirinto-libs-2
 # - best must be set to False (Fedora default)
 # - attempt to upgrade dependent package (here labirinto-libs)
+Background:
+  Given I set environment variable "DNF5_FORCE_COLUMNS" to "500"
+
 @bz2142257
 Scenario: Upgrade dependency of another RPM with best=False
   Given I configure dnf with

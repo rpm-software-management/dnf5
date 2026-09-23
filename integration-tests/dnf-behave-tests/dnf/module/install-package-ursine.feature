@@ -3,6 +3,7 @@
 Feature: Installing package from ursine repo
 
 Background: Enable repositories
+  Given I set environment variable "DNF5_FORCE_COLUMNS" to "500"
   Given I use repository "dnf-ci-thirdparty"
     And I use repository "dnf-ci-fedora"
 

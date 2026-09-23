@@ -2,6 +2,9 @@ Feature: Upgrade with duplicate multilib packages in rpmdb
 
 
 # https://github.com/rpm-software-management/dnf5/issues/518
+Background:
+  Given I set environment variable "DNF5_FORCE_COLUMNS" to "500"
+
 Scenario: Upgrade reports duplicate versions across architectures in rpmdb
   Given I use repository "upgrade-multilib"
     And I successfully execute dnf with args "install duplicate-versions-0:1.0-1.x86_64 duplicate-versions-0:1.0-1.i686"

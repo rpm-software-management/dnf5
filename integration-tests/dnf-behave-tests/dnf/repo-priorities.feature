@@ -2,6 +2,7 @@ Feature: Repositories with priorities
 
 
 Background: Use repositories with priorities 1, 2, and 3
+  Given I set environment variable "DNF5_FORCE_COLUMNS" to "500"
   Given I use repository "dnf-ci-priority-1" with configuration
         | key      | value |
         | priority | 1     |

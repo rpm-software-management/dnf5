@@ -3,6 +3,9 @@ Feature: Tests for different package download sources
 
 # dnf5 does not fall-back to baseurl if mirrorlist fails.
 # https://github.com/rpm-software-management/dnf5/issues/1763
+Background:
+  Given I set environment variable "DNF5_FORCE_COLUMNS" to "500"
+
 @xfail
 @bz1775184
 Scenario: baseurl is used if all mirrors from mirrorlist fail
