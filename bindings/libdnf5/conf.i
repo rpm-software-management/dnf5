@@ -179,6 +179,11 @@ def create_config_option_attributes(cls):
             ))
 
 create_config_option_attributes(ConfigMain)
+
+import re as _re
+common.keep_owner_alive_for_methods(ConfigMain, [attr for attr in dir(ConfigMain)
+                                                 if _re.search(r'get_\w+_option', attr)] + ['opt_binds'])
+del _re
 %}
 #endif
 

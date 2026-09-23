@@ -330,6 +330,43 @@ fix_swigtype_trait(ClassName)
 %template(PreserveOrderMapStringString) libdnf5::PreserveOrderMap<std::string, std::string>;
 %template(PreserveOrderMapStringPreserveOrderMapStringString) libdnf5::PreserveOrderMap<std::string, libdnf5::PreserveOrderMap<std::string, std::string>>;
 
+// keep_alive attaches a reference to the owner on the returned object, so that
+// Python keeps the owner (and, transitively, whatever the owner references)
+// alive for at least as long as the returned object is reachable.
+#if defined(SWIGPYTHON)
+%pythoncode %{
+def keep_alive(obj, owner):
+    """Attach a reference to `owner` on `obj` to keep `owner` alive as long
+    as `obj` is reachable. Returns `obj`."""
+    if obj is not None and owner is not None:
+        try:
+            obj.__dict__.setdefault('_swig_kept_alive', []).append(owner)
+        except (AttributeError, TypeError):
+            pass
+    return obj
+
+
+def keep_owner_alive(method):
+    """Wrap a bound-method descriptor so the object it returns keeps a
+    reference to the instance it was called on (`self`). Used for accessors
+    that return a reference/pointer/weak pointer into memory owned by the
+    instance."""
+    def wrapper(self, *args, **kwargs):
+        return keep_alive(method(self, *args, **kwargs), self)
+    wrapper.__doc__ = getattr(method, '__doc__', None)
+    wrapper.__name__ = getattr(method, '__name__', 'wrapper')
+    return wrapper
+
+
+def keep_owner_alive_for_methods(cls, method_names):
+    """Apply keep_owner_alive to each named method that exists on `cls`."""
+    for name in method_names:
+        method = getattr(cls, name, None)
+        if method is not None:
+            setattr(cls, name, keep_owner_alive(method))
+%}
+#endif
+
 // The following adds Python attribute shortcuts for getters and setters
 // from C++ structures that act as plain data objects.
 //
