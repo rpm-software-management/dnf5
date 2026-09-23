@@ -359,6 +359,9 @@ It supports RPM packages%{?with_modulemd:, modulemd modules,} and comps groups &
 %{_mandir}/man8/dnf5-list.8.*
 %{_mandir}/man8/dnf5-makecache.8.*
 %{_mandir}/man8/dnf5-mark.8.*
+%if 0%{?fedora} || 0%{?rhel} > 10
+%{_mandir}/man8/microdnf.8.*
+%endif
 %if %{with modulemd}
 %{_mandir}/man8/dnf5-module.8.*
 %endif
@@ -430,6 +433,7 @@ It supports RPM packages%{?with_modulemd:, modulemd modules,} and comps groups &
 %{_mandir}/man8/dnf-system-upgrade.8.*
 %{_mandir}/man8/dnf-upgrade.8.*
 %{_mandir}/man8/dnf-versionlock.8.*
+%{_mandir}/man8/yum.8.*
 %{_mandir}/man7/dnf-aliases.7.*
 %{_mandir}/man7/dnf-caching.7.*
 %{_mandir}/man7/dnf-comps.7.*
@@ -1130,6 +1134,7 @@ ln -sr %{buildroot}%{bash_completions_dir}/dnf5 %{buildroot}%{bash_completions_d
         filename=$(basename $file)
         ln -sr $file $dir/${filename/dnf5/dnf}
     done
+    ln -sr %{buildroot}%{_mandir}/man8/dnf5.8 %{buildroot}%{_mandir}/man8/yum.8
 %endif
 # Make "dnf-makecache" the "real" unit name, but keep compatibility for playbooks that refer to dnf5-makecache
 mv %{buildroot}%{_unitdir}/dnf5-makecache.service %{buildroot}%{_unitdir}/dnf-makecache.service
@@ -1160,6 +1165,9 @@ touch %{buildroot}%{_sharedstatedir}/dnf/system-repo.lock
 
 %if 0%{?fedora} || 0%{?rhel} > 10
 ln -sr %{buildroot}%{_bindir}/dnf5 %{buildroot}%{_bindir}/microdnf
+%if %{with man}
+ln -sr %{buildroot}%{_mandir}/man8/dnf5.8 %{buildroot}%{_mandir}/man8/microdnf.8
+%endif
 %endif
 
 %if %{with systemd}
