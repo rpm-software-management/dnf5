@@ -5,8 +5,12 @@ repos:
   rev: v5.0.0
   hooks:
   - id: trailing-whitespace
-    exclude:
-       test/libdnf5/iniparser/test_iniparser.cpp
+    exclude: |
+      (?x)^(
+        gpl-2\.0\.txt |
+        lgpl-2\.1\.txt |
+        test/libdnf5/iniparser/test_iniparser.cpp
+      )$
   - id: end-of-file-fixer
   - id: check-xml
     exclude: \.tito/tito\.props|comps_syntax_error\.xml
