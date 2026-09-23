@@ -340,6 +340,8 @@ public:
     OptionBool & get_skip_if_unavailable_option();
     const OptionBool & get_skip_if_unavailable_option() const;
 
+    using Config::load_from_parser;
+
     void load_from_parser(
         const libdnf5::ConfigParser & parser,
         const std::string & section,
