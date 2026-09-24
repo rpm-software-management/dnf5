@@ -75,6 +75,32 @@ void Option::assert_not_locked() const {
     libdnf_user_assert(!p_impl->locked, "Attempting to write to a locked option: {}", get_lock_comment());
 }
 
+const char * Option::priority_to_string(Priority priority) noexcept {
+    switch (priority) {
+        case Priority::EMPTY:
+            return "EMPTY";
+        case Priority::DEFAULT:
+            return "DEFAULT";
+        case Priority::MAINCONFIG:
+            return "MAINCONFIG";
+        case Priority::AUTOMATICCONFIG:
+            return "AUTOMATICCONFIG";
+        case Priority::REPOCONFIG:
+            return "REPOCONFIG";
+        case Priority::INSTALLROOT:
+            return "INSTALLROOT";
+        case Priority::PLUGINDEFAULT:
+            return "PLUGINDEFAULT";
+        case Priority::PLUGINCONFIG:
+            return "PLUGINCONFIG";
+        case Priority::COMMANDLINE:
+            return "COMMANDLINE";
+        case Priority::RUNTIME:
+            return "RUNTIME";
+    }
+    return "UNKNOWN";
+}
+
 const std::string & Option::get_lock_comment() const noexcept {
     return p_impl->lock_comment;
 }

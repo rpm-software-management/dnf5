@@ -115,6 +115,9 @@ public:
     /// @since 1.0
     void assert_not_locked() const;
 
+    /// Converts Priority enum value to string representation.
+    static const char * priority_to_string(Priority priority) noexcept;
+
 protected:
     void set_priority(Priority priority);
     const std::string & get_lock_comment() const noexcept;
