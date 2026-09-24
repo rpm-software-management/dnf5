@@ -73,3 +73,17 @@ Scenario: Upgrade doesn't install older installonly pkg when never version is al
    When I execute dnf with args "upgrade installonlyA-2.0"
    Then the exit code is 0
     And Transaction is empty
+
+
+Scenario: Over limit installonly packages during an unrelated transaction
+   Given I configure dnf with
+        | key                          | value         |
+        | installonlypkgs              | installonlyA  |
+    And I successfully execute dnf with args "install installonlyA-2.0 installonlyA-2.2"
+    And I use repository "simple-base"
+   When I execute dnf with args "--setopt=installonly_limit=2 install labirinto"
+   Then the exit code is 0
+    And Transaction is following
+        | Action        | Package                       |
+        | install       | labirinto-0:1.0-1.fc29.x86_64 |
+    And stderr contains "Exceeded installonly_limit \(2\): found 3 installed: 'installonlyA-0:1.0-1.x86_64', 'installonlyA-0:2.0-1.x86_64', 'installonlyA-0:2.2-1.x86_64'. You can use 'remove --oldinstallonly'."
