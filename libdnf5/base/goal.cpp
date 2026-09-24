@@ -3604,6 +3604,21 @@ base::Transaction Goal::resolve() {
 
     ret |= p_impl->rpm_goal.resolve();
 
+    for (const libdnf5::solv::IdQueue & over : p_impl->rpm_goal.unrelated_overlimit_installonly) {
+        std::set<std::string> nevras;
+        for (Id id : over) {
+            nevras.insert(pool.get_full_nevra(id));
+        }
+        transaction.p_impl->add_resolve_log(
+            GoalAction::RESOLVE,
+            GoalProblem::OVERLIMIT_INSTALLONLY,
+            {},
+            libdnf5::transaction::TransactionItemType::PACKAGE,
+            std::to_string(cfg_main.get_installonly_limit_option().get_value()),
+            nevras,
+            libdnf5::Logger::Level::WARNING);
+    }
+
     // Write debug solver data
     // Note: Modules debug data are handled separately when resolving module goal in ModuleSack::Impl::module_solve()
     if (cfg_main.get_debug_solver_option().get_value()) {
