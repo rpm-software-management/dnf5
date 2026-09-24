@@ -2,13 +2,16 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # Paweł Marciniak <sunwire+fas@gmail.com>, 2024, 2025.
+# Tomasz Bojanowski <tomasz@bojanowski.me>, 2026.
+# Weblate Translation Memory <noreply-mt-weblate-translation-memory@weblate.org>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-08 12:03+0000\n"
-"PO-Revision-Date: 2025-05-01 13:57+0000\n"
-"Last-Translator: Paweł Marciniak <sunwire+fas@gmail.com>\n"
+"POT-Creation-Date: 2026-09-22 14:19+0000\n"
+"PO-Revision-Date: 2026-09-17 21:16+0000\n"
+"Last-Translator: Weblate Translation Memory <noreply-mt-weblate-translation-"
+"memory@weblate.org>\n"
 "Language-Team: Polish <https://translate.fedoraproject.org/projects/dnf5/"
 "dnf5daemon-client/pl/>\n"
 "Language: pl\n"
@@ -17,7 +20,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 5.11.1\n"
+"X-Generator: Weblate 2026.9.1\n"
 
 #: commands/advisory/advisory.cpp:35
 msgid "Manage advisories"
@@ -25,11 +28,11 @@ msgstr "Zarządzaj ostrzeżeniami"
 
 #: commands/advisory/advisory_info.hpp:34
 msgid "Print details about advisories"
-msgstr "Wydrukuj szczegóły dotyczące ostrzeżeń"
+msgstr "Wyświetl szczegóły ostrzeżeń"
 
 #: commands/advisory/advisory_list.hpp:34
 msgid "List advisories"
-msgstr "Wyświetl ostrzeżenia"
+msgstr "Wyświetl listę ostrzeżeń"
 
 #: commands/advisory/arguments.hpp:32
 msgid "Show advisories containing any version of installed packages."
@@ -63,7 +66,7 @@ msgid ""
 "Show only advisories containing packages with specified names. List option, "
 "supports globs."
 msgstr ""
-"Pokaż tylko komunikaty zawierające pakiety o określonych nazwach. Opcja "
+"Pokaż tylko ostrzeżenia zawierające pakiety o określonych nazwach. Opcja "
 "listy, obsługuje wzorce."
 
 #: commands/advisory/arguments.hpp:81
@@ -115,7 +118,7 @@ msgid ""
 "option. Can be \"critical\", \"important\", \"moderate\", \"low\", \"none\"."
 msgstr ""
 "Uwzględnij treść zawartą w ostrzeżeniach o określonej powadze. Opcja listy. "
-"Może być „critical\", „important\", „moderate\", „low\", „none\"."
+"Może być „critical”, „important”, „moderate”, „low”, „none”."
 
 #: commands/advisory/arguments.hpp:157
 msgid "ADVISORY_SEVERITY,..."
@@ -131,7 +134,7 @@ msgstr ""
 
 #: commands/advisory/arguments.hpp:170
 msgid "BUGZILLA_ID,..."
-msgstr "ID_BUGZILLI..."
+msgstr "ID_BUGZILLI,..."
 
 #: commands/advisory/arguments.hpp:180
 msgid ""
@@ -154,7 +157,7 @@ msgstr "Błąd podczas czyszczenia pamięci podręcznej: {}"
 msgid ""
 "Upgrade or downgrade installed software to the latest available versions"
 msgstr ""
-"Uaktualnij lub obniż wersję zainstalowanego oprogramowania do najnowszych "
+"Zaktualizuj lub obniż wersję zainstalowanego oprogramowania do najnowszych "
 "dostępnych wersji"
 
 #: commands/group/group.cpp:41

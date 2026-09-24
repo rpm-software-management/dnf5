@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-08 12:03+0000\n"
-"PO-Revision-Date: 2026-04-04 03:58+0000\n"
+"POT-Creation-Date: 2026-09-22 14:19+0000\n"
+"PO-Revision-Date: 2026-09-14 20:46+0000\n"
 "Last-Translator: Keith Bowes <zooplah@gmail.com>\n"
 "Language-Team: Esperanto <https://translate.fedoraproject.org/projects/dnf5/"
 "libdnf5-cli/eo/>\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.16.2\n"
+"X-Generator: Weblate 2026.9.1\n"
 
 #: argument_parser.cpp:68
 #, c++-format
@@ -182,7 +182,7 @@ msgstr "Nomo"
 msgid "Epoch"
 msgstr "Epoko"
 
-#: output/packageinfo.cpp:69 output/transaction_table.cpp:290
+#: output/packageinfo.cpp:69 output/transaction_table.cpp:291
 msgid "Version"
 msgstr "Eldono"
 
@@ -214,7 +214,7 @@ msgstr "Fonto"
 msgid "From repository"
 msgstr "El deponejo"
 
-#: output/packageinfo.cpp:96 output/transaction_table.cpp:296
+#: output/packageinfo.cpp:96 output/transaction_table.cpp:297
 #: output/transactioninfo.cpp:76
 msgid "Repository"
 msgstr "Deponejo"
@@ -249,56 +249,46 @@ msgstr "Kongruintaj kampoj: "
 
 #: output/status.cpp:45
 msgid "Groups"
-msgstr ""
+msgstr "Grupoj"
 
 #: output/status.cpp:46 output/status.cpp:55 output/status.cpp:72
-#, fuzzy
-#| msgid "Installed size"
 msgid "installed"
-msgstr "Instalita grando"
+msgstr "instalitaj"
 
 #: output/status.cpp:47 output/status.cpp:56 output/status.cpp:73
 msgid "available"
-msgstr ""
+msgstr "disponeblaj"
 
 #: output/status.cpp:54
 msgid "Environments"
-msgstr ""
+msgstr "Medioj"
 
 #: output/status.cpp:71
-#, fuzzy
-#| msgid "Package"
 msgid "Packages"
-msgstr "Pako"
+msgstr "Pakoj"
 
 #: output/status.cpp:74
 msgid "user-installed"
-msgstr ""
+msgstr "uzule instalitaj"
 
 #: output/status.cpp:84
-#, fuzzy
-#| msgid "Installed size"
 msgid "Installed Size"
-msgstr "Instalita grando"
+msgstr "Instalita Grando"
 
 #: output/status.cpp:90
-#, fuzzy
-#| msgid "Repository"
 msgid "Enabled Repositories"
-msgstr "Deponejo"
+msgstr "Ŝaltitaj Deponejoj"
 
 #: output/status.cpp:101
-#, fuzzy
-#| msgid "Transaction Summary:\n"
 msgid "Last Transaction"
-msgstr "Transakcia resumo:\n"
+msgstr "Lastatempa transakcio"
 
-#: output/transaction_table.cpp:128
+#: output/transaction_table.cpp:129
 msgid "Transaction Summary:\n"
 msgstr "Transakcia resumo:\n"
 
 #. Keep the replaceble number aligned across all messages.
-#: output/transaction_table.cpp:133
+#: output/transaction_table.cpp:134
 #, c++-format
 msgid " Installing:      {:4} package\n"
 msgid_plural " Installing:      {:4} packages\n"
@@ -306,7 +296,7 @@ msgstr[0] " Instalas:       {:4} pakon\n"
 msgstr[1] " Instalas:       {:4} pakojn\n"
 
 #. Keep the replaceble number aligned across all messages.
-#: output/transaction_table.cpp:142
+#: output/transaction_table.cpp:143
 #, c++-format
 msgid " Reinstalling:    {:4} package\n"
 msgid_plural " Reinstalling:    {:4} packages\n"
@@ -314,7 +304,7 @@ msgstr[0] " Reinstalas:     {:4} pakon\n"
 msgstr[1] " Reinstalas:     {:4} pakojn\n"
 
 #. Keep the replaceble number aligned across all messages.
-#: output/transaction_table.cpp:151
+#: output/transaction_table.cpp:152
 #, c++-format
 msgid " Upgrading:       {:4} package\n"
 msgid_plural " Upgrading:       {:4} packages\n"
@@ -322,7 +312,7 @@ msgstr[0] " Promocias:      {:4} pakon\n"
 msgstr[1] " Promocias:      {:4} pakojn\n"
 
 #. Keep the replaceble number aligned across all messages.
-#: output/transaction_table.cpp:160
+#: output/transaction_table.cpp:161
 #, c++-format
 msgid " Replacing:       {:4} package\n"
 msgid_plural " Replacing:       {:4} packages\n"
@@ -330,7 +320,7 @@ msgstr[0] " Anstataŭigas:   {:4} pakon\n"
 msgstr[1] " Anstataŭigas:   {:4} pakojn\n"
 
 #. Keep the replaceble number aligned across all messages.
-#: output/transaction_table.cpp:169
+#: output/transaction_table.cpp:170
 #, c++-format
 msgid " Removing:        {:4} package\n"
 msgid_plural " Removing:        {:4} packages\n"
@@ -338,7 +328,7 @@ msgstr[0] " Forigas:        {:4} pakon\n"
 msgstr[1] " Forigas:        {:4} pakojn\n"
 
 #. Keep the replaceble number aligned across all messages.
-#: output/transaction_table.cpp:178
+#: output/transaction_table.cpp:179
 #, c++-format
 msgid " Downgrading:     {:4} package\n"
 msgid_plural " Downgrading:     {:4} packages\n"
@@ -346,7 +336,7 @@ msgstr[0] " Malpromocias:   {:4} pakon\n"
 msgstr[1] " Malpromocias:   {:4} pakojn\n"
 
 #. Keep the replaceble number aligned across all messages.
-#: output/transaction_table.cpp:187
+#: output/transaction_table.cpp:188
 #, c++-format
 msgid " Changing reason: {:4} package\n"
 msgid_plural " Changing reason: {:4} packages\n"
@@ -354,241 +344,235 @@ msgstr[0] " Ŝanĝo de kialo: {:4} pako\n"
 msgstr[1] " Ŝanĝo de kialo: {:4} pakoj\n"
 
 #. Keep the replaceble number aligned across all messages.
-#: output/transaction_table.cpp:196
+#: output/transaction_table.cpp:197
 #, c++-format
 msgid " Skipping:        {:4} package\n"
 msgid_plural " Skipping:        {:4} packages\n"
 msgstr[0] " Preterpasas:    {:4} pakon\n"
 msgstr[1] " Preterpasas:    {:4} pakojn\n"
 
-#: output/transaction_table.cpp:278 output/transactioninfo.cpp:74
+#: output/transaction_table.cpp:279 output/transactioninfo.cpp:74
 msgid "Package"
 msgstr "Pako"
 
-#: output/transaction_table.cpp:284
+#: output/transaction_table.cpp:285
 msgid "Arch"
 msgstr "Arĥitekturo"
 
-#: output/transaction_table.cpp:302
+#: output/transaction_table.cpp:303
 msgid "Size"
 msgstr "Grando"
 
-#: output/transaction_table.cpp:364 output/transaction_table.cpp:434
-#: output/transaction_table.cpp:475
+#: output/transaction_table.cpp:365 output/transaction_table.cpp:435
+#: output/transaction_table.cpp:476
 #, c++-format
 msgid "{} -> {}"
 msgstr "{} -> {}"
 
-#: output/transaction_table.cpp:380
+#: output/transaction_table.cpp:381
 #, c++-format
 msgid "replacing {}"
 msgstr "anstataŭigo de {}"
 
-#: output/transaction_table.cpp:422 output/transaction_table.cpp:450
+#: output/transaction_table.cpp:423 output/transaction_table.cpp:451
 msgid " <name-unset>"
 msgstr " <nomo-neagordita>"
 
-#: output/transaction_table.cpp:481
+#: output/transaction_table.cpp:482
 msgid "replacing "
 msgstr "anstataŭigo de "
 
-#: output/transaction_table.cpp:494
+#: output/transaction_table.cpp:495
 msgid "Skipping packages with conflicts:"
 msgstr "Preterpasas pakojn kun konfliktojn:"
 
-#: output/transaction_table.cpp:496
+#: output/transaction_table.cpp:497
 msgid "Skipping packages with broken dependencies:"
 msgstr "Preterpasas pakojn kun rompitaj dependaĵoj:"
 
-#: output/transaction_table.cpp:558
+#: output/transaction_table.cpp:559
 msgid "Installing dependencies:"
 msgstr "Instalas dependaĵojn:"
 
-#: output/transaction_table.cpp:560
+#: output/transaction_table.cpp:561
 msgid "Installing weak dependencies:"
 msgstr "Instalas malfortajn dependaĵojn:"
 
-#: output/transaction_table.cpp:562
+#: output/transaction_table.cpp:563
 msgid "Installing group/module packages:"
 msgstr "Instalas grupajn/modulajn pakojn:"
 
-#: output/transaction_table.cpp:564
+#: output/transaction_table.cpp:565
 msgid "Installing:"
 msgstr "Instalas:"
 
-#: output/transaction_table.cpp:568
+#: output/transaction_table.cpp:569
 msgid "Upgrading:"
 msgstr "Promocias:"
 
-#: output/transaction_table.cpp:571
+#: output/transaction_table.cpp:572
 msgid "Downgrading:"
 msgstr "Malpromocias:"
 
-#: output/transaction_table.cpp:574
+#: output/transaction_table.cpp:575
 msgid "Reinstalling:"
 msgstr "Reinstalas:"
 
-#: output/transaction_table.cpp:578
+#: output/transaction_table.cpp:579
 msgid "Removing dependent packages:"
 msgstr "Forigas dependajn pakojn:"
 
-#: output/transaction_table.cpp:580
+#: output/transaction_table.cpp:581
 msgid "Removing unused dependencies:"
 msgstr "Forigas neuzatajn dependaĵojn:"
 
-#: output/transaction_table.cpp:582
+#: output/transaction_table.cpp:583
 msgid "Removing:"
 msgstr "Forigas:"
 
-#: output/transaction_table.cpp:586
+#: output/transaction_table.cpp:587
 msgid "Changing reason:"
 msgstr "Ŝanĝas kialon:"
 
-#: output/transaction_table.cpp:618
+#: output/transaction_table.cpp:619
 msgid "Installing groups dependencies:"
 msgstr "Instalas dependaĵojn de grupoj:"
 
-#: output/transaction_table.cpp:620
+#: output/transaction_table.cpp:621
 msgid "Installing groups:"
 msgstr "Instalas grupojn:"
 
-#: output/transaction_table.cpp:624
+#: output/transaction_table.cpp:625
 msgid "Removing groups:"
 msgstr "Forigas grupojn:"
 
-#: output/transaction_table.cpp:627
+#: output/transaction_table.cpp:628
 msgid "Upgrading groups:"
 msgstr "Promocias grupojn:"
 
-#: output/transaction_table.cpp:630
-#, fuzzy
-#| msgid "Changing reason:"
+#: output/transaction_table.cpp:631
 msgid "Changing reason of installed groups:"
-msgstr "Ŝanĝas kialon:"
+msgstr "Ŝanĝas kialon de instalitaj grupoj:"
 
-#: output/transaction_table.cpp:657
+#: output/transaction_table.cpp:658
 msgid "Installing environmental groups:"
 msgstr "Instalas mediajn grupojn:"
 
-#: output/transaction_table.cpp:660
+#: output/transaction_table.cpp:661
 msgid "Removing environmental groups:"
 msgstr "Forigas mediajn grupojn:"
 
-#: output/transaction_table.cpp:663
+#: output/transaction_table.cpp:664
 msgid "Upgrading environmental groups:"
 msgstr "Promocias mediajn grupojn:"
 
-#: output/transaction_table.cpp:690
+#: output/transaction_table.cpp:691
 msgid "Enabling module streams:"
 msgstr "Ŝaltas modulajn fluojn:"
 
-#: output/transaction_table.cpp:693
+#: output/transaction_table.cpp:694
 msgid "Disabling modules:"
 msgstr "Malŝaltas modulojn:"
 
-#: output/transaction_table.cpp:696
+#: output/transaction_table.cpp:697
 msgid "Resetting modules:"
 msgstr "Restarigas modulojn:"
 
-#: output/transaction_table.cpp:699
+#: output/transaction_table.cpp:700
 msgid "Switching module streams:"
 msgstr "Ŝanĝas modulajn fluojn:"
 
-#: output/transaction_table.cpp:771 output/transaction_table.cpp:772
+#: output/transaction_table.cpp:776 output/transaction_table.cpp:777
 msgid "(none)"
-msgstr ""
+msgstr "(neniuj)"
 
-#: output/transaction_table.cpp:778
+#: output/transaction_table.cpp:783
 #, c++-format
 msgid "Skipping {0} package due to vendor change restriction: {1}."
 msgid_plural "Skipping {0} packages due to vendor change restriction: {1}."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Preterlasas {0} pakon pro limigo de ŝanĝo de vendinto: {1}."
+msgstr[1] "Preterlasas {0} pakojn pro limigo de ŝanĝo de vendinto: {1}."
 
-#: output/transaction_table.cpp:799
+#: output/transaction_table.cpp:812
 msgid "Nothing to do."
 msgstr "Nenio farota."
 
 #. The two spaces indent the table the same way as child lines in KeyValueTable
 #: output/transactioninfo.cpp:73
 msgid "Action"
-msgstr ""
+msgstr "Ago"
 
 #: output/transactioninfo.cpp:75
 msgid "Reason"
-msgstr ""
+msgstr "Kialo"
 
 #: output/transactioninfo.cpp:98
-#, fuzzy
-#| msgid "Transaction Summary:\n"
 msgid "Transaction ID"
-msgstr "Transakcia resumo:\n"
+msgstr "Transakcia identigilo"
 
 #: output/transactioninfo.cpp:99
 msgid "Begin time"
-msgstr ""
+msgstr "Komenco-tempo"
 
 #: output/transactioninfo.cpp:100
 msgid "Begin rpmdb"
-msgstr ""
+msgstr "Komenci fari RPM-datumbazon"
 
 #: output/transactioninfo.cpp:101
 msgid "End time"
-msgstr ""
+msgstr "Fino-tempo"
 
 #: output/transactioninfo.cpp:102
 msgid "End rpmdb"
-msgstr ""
+msgstr "Fini fari RPM-datumbazon"
 
 #: output/transactioninfo.cpp:104
 msgid "User"
-msgstr ""
+msgstr "Uzulo"
 
 #: output/transactioninfo.cpp:105
 msgid "Status"
-msgstr ""
+msgstr "Stato"
 
 #: output/transactioninfo.cpp:106
-#, fuzzy
-#| msgid "Release"
 msgid "Releasever"
-msgstr "Numero"
+msgstr "Eldonnumero"
 
 #: output/transactioninfo.cpp:108
 msgid "Comment"
-msgstr ""
+msgstr "Komento"
 
 #: output/transactioninfo.cpp:111
 msgid "Packages altered:"
-msgstr ""
+msgstr "Ŝanĝitaj pakoj:"
 
 #: output/transactioninfo.cpp:112
 msgid "Groups altered:"
-msgstr ""
+msgstr "Ŝanĝitaj grupoj:"
 
 #: output/transactioninfo.cpp:113
 msgid "Environments altered:"
-msgstr ""
+msgstr "Ŝanĝitaj medioj:"
 
 #: output/transactionlist.cpp:53
 msgid "ID"
-msgstr ""
+msgstr "Identigilo"
 
 #: output/transactionlist.cpp:54
 msgid "Command line"
-msgstr ""
+msgstr "Komandlinio"
 
 #: output/transactionlist.cpp:55
 msgid "Date and time"
-msgstr ""
+msgstr "Dato kaj tempo"
 
 #: output/transactionlist.cpp:56
 msgid "Action(s)"
-msgstr ""
+msgstr "Ago(j)"
 
 #: output/transactionlist.cpp:57
 msgid "Altered"
-msgstr ""
+msgstr "Ŝanĝita(j)"
 
 #. namespace
 #: progressbar/multi_progress_bar.cpp:85
@@ -603,20 +587,21 @@ msgstr "Mankas komando"
 #, c++-format
 msgid ""
 "Invalid date passed: \"{}\". Dates in \"YYYY-MM-DD\" format are expected"
-msgstr ""
+msgstr "Nevalida dato: \"{}\". Datoj devas esti laŭ la formato \"JJJJ-MM-TT\""
 
 #: session.cpp:270
 #, c++-format
 msgid "\"{}\" date cannot be represented by time_t type on this platform"
 msgstr ""
+"Ne eblas prezenti la daton \"{}\" per la datumtipo time_t en ĉi tiu platformo"
 
 #: utils/userconfirm.cpp:46
 msgid "Is this ok [Y/n]: "
-msgstr ""
+msgstr "Ĉu tio bonas [J/n]: "
 
 #: utils/userconfirm.cpp:49
 msgid "Is this ok [y/N]: "
-msgstr ""
+msgstr "Ĉu tio bonas [j/N]: "
 
 #~ msgid "No matches found."
 #~ msgstr "Neniuj kongruoj troveblaj."

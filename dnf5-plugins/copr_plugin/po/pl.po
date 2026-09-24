@@ -2,13 +2,14 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # Paweł Marciniak <sunwire+fas@gmail.com>, 2024, 2026.
+# Tomasz Bojanowski <tomasz@bojanowski.me>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-08 12:03+0000\n"
-"PO-Revision-Date: 2026-09-02 07:20+0000\n"
-"Last-Translator: Paweł Marciniak <sunwire+fas@gmail.com>\n"
+"POT-Creation-Date: 2026-09-22 14:19+0000\n"
+"PO-Revision-Date: 2026-09-22 17:49+0000\n"
+"Last-Translator: Tomasz Bojanowski <tomasz@bojanowski.me>\n"
 "Language-Team: Polish <https://translate.fedoraproject.org/projects/dnf5/"
 "dnf5-plugin-copr/pl/>\n"
 "Language: pl\n"
@@ -17,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 2026.8.1\n"
+"X-Generator: Weblate 2026.9.1\n"
 
 #: copr.cpp:48
 msgid "Copr hub (the web-UI/API server) hostname"
@@ -45,7 +46,7 @@ msgstr ""
 #: copr.cpp:106
 #, c++-format
 msgid "Invalid PROJECT_SPEC format '{}'"
-msgstr "Nieprawidłowy format PROJEKT_SPEC '{}'"
+msgstr "Nieprawidłowy format PROJECT_SPEC „{}”"
 
 #: copr_constants.hpp:27
 msgid ""
@@ -163,11 +164,11 @@ msgstr "usuń określone repozytorium Copr z systemu (usuwa plik {}/*.repo)"
 #: copr_repo.cpp:91
 #, c++-format
 msgid "Directory '{}' not found in '{}' Copr project."
-msgstr "Nie znaleziono katalogu '{}' w projekcie Copr '{}'."
+msgstr "Nie znaleziono katalogu „{}” w projekcie Copr „{}”."
 
 #: copr_repo.cpp:97
 msgid "You can use one of these available directories:"
-msgstr "Możesz użyć jednego z poniższych dostępnych katalogów:"
+msgstr "Można użyć jednego z poniższych dostępnych katalogów:"
 
 #: copr_repo.cpp:113
 msgid "Chroot not found in the given Copr project"
@@ -179,7 +180,7 @@ msgstr "Nie można wykryć chroot, należy to określić jawnie."
 
 #: copr_repo.cpp:121
 msgid "We tried to find these repos without a success:"
-msgstr "Próbowaliśmy znaleźć następujące repozytoria, ale nie udało nam się:"
+msgstr "Nie odnaleziono następujących repozytoriów:"
 
 #: copr_repo.cpp:126
 msgid "You can choose one of the available chroots explicitly:"
@@ -197,7 +198,7 @@ msgstr "Nie można usunąć pliku repozytorium {}"
 #: copr_repo.cpp:347
 #, c++-format
 msgid "Repo file {} successfully removed"
-msgstr "Plik repozytorium {} został pomyślnie usunięty"
+msgstr "Plik repozytorium {} został usunięty"
 
 #: copr_repo.cpp:393
 #, c++-format
@@ -207,7 +208,7 @@ msgstr "Nie można znaleźć elementu {} w {}"
 #: copr_repo.cpp:449
 #, c++-format
 msgid "Removing old config file '{}'"
-msgstr "Usuwanie starego pliku konfiguracyjnego '{}'"
+msgstr "Usuwanie starego pliku konfiguracyjnego „{}”"
 
 #: copr_repo.cpp:452
 msgid "Can't remove"
@@ -219,7 +220,7 @@ msgid ""
 "Copr repofile '{}' has an old format, fix by re-enabling it $ {} copr enable "
 "{}"
 msgstr ""
-"Plik repozytorium Copr '{}' ma stary format, napraw go, włączając go "
+"Plik repozytorium Copr „{}” ma stary format, napraw go, włączając go "
 "ponownie $ {} copr enable {}"
 
 #: copr_repo.cpp:560
@@ -230,14 +231,14 @@ msgstr "Identyfikator repozytorium „{}” w „{}” jest podejrzany"
 #: copr_repo.cpp:567
 #, c++-format
 msgid "Repo id '{}' doesn't belong to '{}' repofile"
-msgstr "Identyfikator repozytorium '{}' nie należy do repozytorium '{}'"
+msgstr "Identyfikator repozytorium „{}” nie należy do pliku repozytorium „{}”"
 
 #: copr_repo.cpp:618
 #, c++-format
 msgid "Copr repository '{}' in '{}' disabled."
-msgstr "Repozytorium Copr '{}' w '{}' wyłączone."
+msgstr "Repozytorium Copr „{}” w „{}” wyłączone."
 
 #: copr_repo.cpp:632 copr_repo.cpp:657
 #, c++-format
 msgid "Repository '{}' not found on this system"
-msgstr "Repozytorium '{}' nie zostało znalezione w tym systemie"
+msgstr "Repozytorium „{}” nie zostało znalezione w tym systemie"

@@ -2,13 +2,14 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # Paweł Marciniak <sunwire+fas@gmail.com>, 2024, 2026.
+# Tomasz Bojanowski <tomasz@bojanowski.me>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-08 12:03+0000\n"
-"PO-Revision-Date: 2026-09-02 07:20+0000\n"
-"Last-Translator: Paweł Marciniak <sunwire+fas@gmail.com>\n"
+"POT-Creation-Date: 2026-09-22 14:19+0000\n"
+"PO-Revision-Date: 2026-09-22 17:55+0000\n"
+"Last-Translator: Tomasz Bojanowski <tomasz@bojanowski.me>\n"
 "Language-Team: Polish <https://translate.fedoraproject.org/projects/dnf5/"
 "dnf5-plugin-config-manager/pl/>\n"
 "Language: pl\n"
@@ -17,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 2026.8.1\n"
+"X-Generator: Weblate 2026.9.1\n"
 
 #: addrepo.cpp:136
 #, c++-format
@@ -37,7 +38,7 @@ msgstr "{}: Nieprawidłowo sformatowana wartość argumentu „{}”"
 #: addrepo.cpp:179
 #, c++-format
 msgid "Cannot set repository option \"{}={}\": {}"
-msgstr "Nie można ustawić opcji repozytorium \"{}={}\": {}"
+msgstr "Nie można ustawić opcji repozytorium „{}={}”: {}"
 
 #: addrepo.cpp:187 setopt.cpp:108
 #, c++-format
@@ -65,7 +66,7 @@ msgid ""
 "\"{}={}\": {}"
 msgstr ""
 "Błąd w dodanym pliku konfiguracji repozytorium. Nie można ustawić opcji "
-"repozytorium \"{}={}\": {}"
+"repozytorium „{}={}”: {}"
 
 #: addrepo.cpp:376
 #, c++-format
@@ -161,7 +162,7 @@ msgstr ""
 #: setopt.cpp:100
 #, c++-format
 msgid "Cannot set option: \"{}\": {}"
-msgstr "Nie można ustawić opcji: \"{}\": {}"
+msgstr "Nie można ustawić opcji: „{}”: {}"
 
 #: setvar.cpp:60
 #, c++-format
@@ -180,7 +181,7 @@ msgstr "Brak ścieżki do katalogu zmiennych"
 #: setvar.cpp:110
 #, c++-format
 msgid "Cannot write variable to file \"{}\": {}"
-msgstr "Nie można zapisać zmiennej do pliku \"{}\": {}"
+msgstr "Nie można zapisać zmiennej do pliku „{}”: {}"
 
 #: shared.hpp:59
 #, c++-format
@@ -288,4 +289,4 @@ msgstr ""
 #: unsetvar.cpp:88
 #, c++-format
 msgid "Cannot remove variable file \"{}\": {}"
-msgstr "Nie można usunąć pliku zmiennej \"{}\": {}"
+msgstr "Nie można usunąć pliku zmiennej „{}”: {}"

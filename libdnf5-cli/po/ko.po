@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-08 12:03+0000\n"
+"POT-Creation-Date: 2026-09-22 14:19+0000\n"
 "PO-Revision-Date: 2025-09-30 03:54+0000\n"
 "Last-Translator: 김인수 <simmon@nplob.com>\n"
 "Language-Team: Korean <https://translate.fedoraproject.org/projects/dnf5/"
@@ -181,7 +181,7 @@ msgstr "이름"
 msgid "Epoch"
 msgstr "기간"
 
-#: output/packageinfo.cpp:69 output/transaction_table.cpp:290
+#: output/packageinfo.cpp:69 output/transaction_table.cpp:291
 msgid "Version"
 msgstr "버전"
 
@@ -213,7 +213,7 @@ msgstr "원천"
 msgid "From repository"
 msgstr "저장소 출처"
 
-#: output/packageinfo.cpp:96 output/transaction_table.cpp:296
+#: output/packageinfo.cpp:96 output/transaction_table.cpp:297
 #: output/transactioninfo.cpp:76
 msgid "Repository"
 msgstr "저장소"
@@ -292,210 +292,210 @@ msgstr "저장소"
 msgid "Last Transaction"
 msgstr "연결 요약:\n"
 
-#: output/transaction_table.cpp:128
+#: output/transaction_table.cpp:129
 msgid "Transaction Summary:\n"
 msgstr "연결 요약:\n"
 
 #. Keep the replaceble number aligned across all messages.
-#: output/transaction_table.cpp:133
+#: output/transaction_table.cpp:134
 #, c++-format
 msgid " Installing:      {:4} package\n"
 msgid_plural " Installing:      {:4} packages\n"
 msgstr[0] " 설치 중:       {:4} 꾸러미\n"
 
 #. Keep the replaceble number aligned across all messages.
-#: output/transaction_table.cpp:142
+#: output/transaction_table.cpp:143
 #, c++-format
 msgid " Reinstalling:    {:4} package\n"
 msgid_plural " Reinstalling:    {:4} packages\n"
 msgstr[0] " 재설치 중:    {:4} 꾸러미\n"
 
 #. Keep the replaceble number aligned across all messages.
-#: output/transaction_table.cpp:151
+#: output/transaction_table.cpp:152
 #, c++-format
 msgid " Upgrading:       {:4} package\n"
 msgid_plural " Upgrading:       {:4} packages\n"
 msgstr[0] " 향상 중:       {:4} 꾸러미\n"
 
 #. Keep the replaceble number aligned across all messages.
-#: output/transaction_table.cpp:160
+#: output/transaction_table.cpp:161
 #, c++-format
 msgid " Replacing:       {:4} package\n"
 msgid_plural " Replacing:       {:4} packages\n"
 msgstr[0] " 교체 중:       {:4} 꾸러미\n"
 
 #. Keep the replaceble number aligned across all messages.
-#: output/transaction_table.cpp:169
+#: output/transaction_table.cpp:170
 #, c++-format
 msgid " Removing:        {:4} package\n"
 msgid_plural " Removing:        {:4} packages\n"
 msgstr[0] " 제거 중:       {:4} 꾸러미\n"
 
 #. Keep the replaceble number aligned across all messages.
-#: output/transaction_table.cpp:178
+#: output/transaction_table.cpp:179
 #, c++-format
 msgid " Downgrading:     {:4} package\n"
 msgid_plural " Downgrading:     {:4} packages\n"
 msgstr[0] " 하향 중:     {:4} 꾸러미\n"
 
 #. Keep the replaceble number aligned across all messages.
-#: output/transaction_table.cpp:187
+#: output/transaction_table.cpp:188
 #, c++-format
 msgid " Changing reason: {:4} package\n"
 msgid_plural " Changing reason: {:4} packages\n"
 msgstr[0] " 원인 변경 중: {:4} 꾸러미\n"
 
 #. Keep the replaceble number aligned across all messages.
-#: output/transaction_table.cpp:196
+#: output/transaction_table.cpp:197
 #, c++-format
 msgid " Skipping:        {:4} package\n"
 msgid_plural " Skipping:        {:4} packages\n"
 msgstr[0] " 건너뛰는 중:        {:4} 꾸러미\n"
 
-#: output/transaction_table.cpp:278 output/transactioninfo.cpp:74
+#: output/transaction_table.cpp:279 output/transactioninfo.cpp:74
 msgid "Package"
 msgstr "꾸러미"
 
-#: output/transaction_table.cpp:284
+#: output/transaction_table.cpp:285
 msgid "Arch"
 msgstr "구조"
 
-#: output/transaction_table.cpp:302
+#: output/transaction_table.cpp:303
 msgid "Size"
 msgstr "크기"
 
-#: output/transaction_table.cpp:364 output/transaction_table.cpp:434
-#: output/transaction_table.cpp:475
+#: output/transaction_table.cpp:365 output/transaction_table.cpp:435
+#: output/transaction_table.cpp:476
 #, c++-format
 msgid "{} -> {}"
 msgstr "{} -> {}"
 
-#: output/transaction_table.cpp:380
+#: output/transaction_table.cpp:381
 #, c++-format
 msgid "replacing {}"
 msgstr "대체 중 {}"
 
-#: output/transaction_table.cpp:422 output/transaction_table.cpp:450
+#: output/transaction_table.cpp:423 output/transaction_table.cpp:451
 msgid " <name-unset>"
 msgstr " <name-unset>"
 
-#: output/transaction_table.cpp:481
+#: output/transaction_table.cpp:482
 msgid "replacing "
 msgstr "교체 "
 
-#: output/transaction_table.cpp:494
+#: output/transaction_table.cpp:495
 msgid "Skipping packages with conflicts:"
 msgstr "충돌이 있는 꾸러미 건너뛰기:"
 
-#: output/transaction_table.cpp:496
+#: output/transaction_table.cpp:497
 msgid "Skipping packages with broken dependencies:"
 msgstr "손상된 종속성이 있는 꾸러미 건너뛰기:"
 
-#: output/transaction_table.cpp:558
+#: output/transaction_table.cpp:559
 msgid "Installing dependencies:"
 msgstr "종속 꾸러미 설치 중:"
 
-#: output/transaction_table.cpp:560
+#: output/transaction_table.cpp:561
 msgid "Installing weak dependencies:"
 msgstr "취약한 종속 꾸러미 설치 중:"
 
-#: output/transaction_table.cpp:562
+#: output/transaction_table.cpp:563
 msgid "Installing group/module packages:"
 msgstr "그룹/모듈 꾸러미 설치 중:"
 
-#: output/transaction_table.cpp:564
+#: output/transaction_table.cpp:565
 msgid "Installing:"
 msgstr "설치 중:"
 
-#: output/transaction_table.cpp:568
+#: output/transaction_table.cpp:569
 msgid "Upgrading:"
 msgstr "향상 중:"
 
-#: output/transaction_table.cpp:571
+#: output/transaction_table.cpp:572
 msgid "Downgrading:"
 msgstr "하향설치 중:"
 
-#: output/transaction_table.cpp:574
+#: output/transaction_table.cpp:575
 msgid "Reinstalling:"
 msgstr "재설치 중:"
 
-#: output/transaction_table.cpp:578
+#: output/transaction_table.cpp:579
 msgid "Removing dependent packages:"
 msgstr "종속된 꾸러미 제거 중:"
 
-#: output/transaction_table.cpp:580
+#: output/transaction_table.cpp:581
 msgid "Removing unused dependencies:"
 msgstr "사용하지 않는 의존성 제거 중:"
 
-#: output/transaction_table.cpp:582
+#: output/transaction_table.cpp:583
 msgid "Removing:"
 msgstr "제거 중:"
 
-#: output/transaction_table.cpp:586
+#: output/transaction_table.cpp:587
 msgid "Changing reason:"
 msgstr "변경 원인:"
 
-#: output/transaction_table.cpp:618
+#: output/transaction_table.cpp:619
 msgid "Installing groups dependencies:"
 msgstr "그룹 의존성 설치 중:"
 
-#: output/transaction_table.cpp:620
+#: output/transaction_table.cpp:621
 msgid "Installing groups:"
 msgstr "그룹 설치 중:"
 
-#: output/transaction_table.cpp:624
+#: output/transaction_table.cpp:625
 msgid "Removing groups:"
 msgstr "그룹 제거 중:"
 
-#: output/transaction_table.cpp:627
+#: output/transaction_table.cpp:628
 msgid "Upgrading groups:"
 msgstr "그룹 향상 중:"
 
-#: output/transaction_table.cpp:630
+#: output/transaction_table.cpp:631
 #, fuzzy
 #| msgid "Changing reason:"
 msgid "Changing reason of installed groups:"
 msgstr "변경 원인:"
 
-#: output/transaction_table.cpp:657
+#: output/transaction_table.cpp:658
 msgid "Installing environmental groups:"
 msgstr "환경 그룹 설치 중:"
 
-#: output/transaction_table.cpp:660
+#: output/transaction_table.cpp:661
 msgid "Removing environmental groups:"
 msgstr "환경 그룹 제거 중:"
 
-#: output/transaction_table.cpp:663
+#: output/transaction_table.cpp:664
 msgid "Upgrading environmental groups:"
 msgstr "환경 그룹 향상 중:"
 
-#: output/transaction_table.cpp:690
+#: output/transaction_table.cpp:691
 msgid "Enabling module streams:"
 msgstr "모듈 스트림 활성화:"
 
-#: output/transaction_table.cpp:693
+#: output/transaction_table.cpp:694
 msgid "Disabling modules:"
 msgstr "모듈 비활성화:"
 
-#: output/transaction_table.cpp:696
+#: output/transaction_table.cpp:697
 msgid "Resetting modules:"
 msgstr "모듈 재설정:"
 
-#: output/transaction_table.cpp:699
+#: output/transaction_table.cpp:700
 msgid "Switching module streams:"
 msgstr "모듈 스트림 전환 중:"
 
-#: output/transaction_table.cpp:771 output/transaction_table.cpp:772
+#: output/transaction_table.cpp:776 output/transaction_table.cpp:777
 msgid "(none)"
 msgstr ""
 
-#: output/transaction_table.cpp:778
+#: output/transaction_table.cpp:783
 #, c++-format
 msgid "Skipping {0} package due to vendor change restriction: {1}."
 msgid_plural "Skipping {0} packages due to vendor change restriction: {1}."
 msgstr[0] ""
 
-#: output/transaction_table.cpp:799
+#: output/transaction_table.cpp:812
 msgid "Nothing to do."
 msgstr "처리가 필요하지 않습니다."
 

@@ -6,13 +6,14 @@
 # Karol Kosek <krkkx@protonmail.com>, 2025.
 # Marcin Juszkiewicz <mjuszkie@redhat.com>, 2025.
 # Nik Nikovsky <zejdzztegomaila@gmail.com>, 2026.
+# Tomasz Bojanowski <tomasz@bojanowski.me>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-08 12:03+0000\n"
-"PO-Revision-Date: 2026-09-04 11:18+0000\n"
-"Last-Translator: Paweł Marciniak <sunwire+fas@gmail.com>\n"
+"POT-Creation-Date: 2026-09-22 14:19+0000\n"
+"PO-Revision-Date: 2026-09-23 07:59+0000\n"
+"Last-Translator: Tomasz Bojanowski <tomasz@bojanowski.me>\n"
 "Language-Team: Polish <https://translate.fedoraproject.org/projects/dnf5/"
 "dnf5/pl/>\n"
 "Language: pl\n"
@@ -21,7 +22,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 2026.9\n"
+"X-Generator: Weblate 2026.9.1\n"
 
 #: cmdline_aliases.cpp:84 context.cpp:198 main.cpp:1449
 msgid ", "
@@ -33,8 +34,8 @@ msgid ""
 "Attached named argument \"{}\" not found: {}: Requested in file \"{}\" on "
 "line {}: {}"
 msgstr ""
-"Dołączony argument nazwany \"{}\" nie został znaleziony: {}: Żądano w pliku "
-"\"{}\" w linii {}: {}"
+"Dołączony argument nazwany „{}” nie został znaleziony: {}: Żądano w pliku "
+"„{}” w wierszu {}: {}"
 
 #: cmdline_aliases.cpp:159
 #, c++-format
@@ -42,13 +43,13 @@ msgid ""
 "Unknown attribute \"{}\" of attached named argument for alias \"{}\" in file "
 "\"{}\" on line {}: {}"
 msgstr ""
-"Nieznany atrybut „{}” dołączonego nazwanego argumentu dla aliasu „{}” w "
-"pliku „{}” w linii {}: {}"
+"Nieznany atrybut „{}” dołączonego nazwanego argumentu aliasu „{}” w pliku "
+"„{}” w wierszu {}: {}"
 
 #: cmdline_aliases.cpp:171
 #, c++-format
 msgid "Missing attribute \"id_path\" for alias \"{}\" in file \"{}\""
-msgstr "Brak atrybutu „id_path” dla aliasu „{}” w pliku „{}”"
+msgstr "Brak atrybutu „id_path” aliasu „{}” w pliku „{}”"
 
 #: cmdline_aliases.cpp:208
 #, c++-format
@@ -59,7 +60,7 @@ msgstr "Nieobsługiwana wersja „{}” w pliku „{}”. Obsługiwane wersje: {
 #, c++-format
 msgid "Bad value type of attribute \"version\" in file \"{}\" on line {}: {}"
 msgstr ""
-"Nieprawidłowy typ wartości atrybutu „wersja” w pliku „{}” w linii {}: {}"
+"Nieprawidłowy typ wartości atrybutu „version” w pliku „{}” w wierszu {}: {}"
 
 #: cmdline_aliases.cpp:224
 #, c++-format
@@ -69,13 +70,14 @@ msgstr "Brak atrybutu „wersja” w pliku „{}”"
 #: cmdline_aliases.cpp:236
 #, c++-format
 msgid "Unknown key \"{}\" in file \"{}\" on line {}: {}"
-msgstr "Nieznany klucz „{}” w pliku „{}” w linii {}: {}"
+msgstr "Nieznany klucz „{}” w pliku „{}” w wierszu {}: {}"
 
 #: cmdline_aliases.cpp:253
 #, c++-format
 msgid "Empty or bad element id path in file \"{}\" on line {}: {}"
 msgstr ""
-"Pusta lub błędna ścieżka identyfikatora elementu w pliku „{}” w linii {}: {}"
+"Pusta lub błędna ścieżka identyfikatora elementu w pliku „{}” w wierszu {}: "
+"{}"
 
 #: cmdline_aliases.cpp:272
 #, c++-format
@@ -88,12 +90,12 @@ msgstr ""
 #: cmdline_aliases.cpp:301
 #, c++-format
 msgid "Unknown type \"{}\" of element \"{}\" in file \"{}\" on line {}: {}"
-msgstr "Nieznany typ „{}” elementu „{}” w pliku „{}” w linii {}: {}"
+msgstr "Nieznany typ „{}” elementu „{}” w pliku „{}” w wierszu {}: {}"
 
 #: cmdline_aliases.cpp:312
 #, c++-format
 msgid "Missing attribute \"type\" for element \"{}\" in file \"{}\""
-msgstr "Brak atrybutu „type” dla elementu „{}” w pliku „{}”"
+msgstr "Brak atrybutu „type” elementu „{}” w pliku „{}”"
 
 #: cmdline_aliases.cpp:331
 #, c++-format
@@ -101,26 +103,26 @@ msgid ""
 "Named argument \"{}\" already registered. Requested in file \"{}\" on line "
 "{}: {}"
 msgstr ""
-"Nazwany argument \"{}\" jest już zarejestrowany. Zażądano w pliku \"{}\" w "
-"linii {}: {}"
+"Nazwany argument „{}” jest już zarejestrowany. Zażądano w pliku „{}” w "
+"wierszu {}: {}"
 
 #: cmdline_aliases.cpp:347
 #, c++-format
 msgid ""
 "Command \"{}\" already registered. Requested in file \"{}\" on line {}: {}"
 msgstr ""
-"Polecenie \"{}\" jest już zarejestrowane. Zażądano w pliku \"{}\" w linii "
-"{}: {}"
+"Polecenie „{}” jest już zarejestrowane. Zażądano w pliku „{}” w wierszu {}: "
+"{}"
 
 #: cmdline_aliases.cpp:375
 #, c++-format
 msgid "Unknown attribute \"{}\" of group \"{}\" in file \"{}\" on line {}: {}"
-msgstr "Nieznany atrybut „{}” grupy „{}” w pliku „{}” w linii {}: {}"
+msgstr "Nieznany atrybut „{}” grupy „{}” w pliku „{}” w wierszu {}: {}"
 
 #: cmdline_aliases.cpp:387
 #, c++-format
 msgid "Missing attribute \"header\" for element \"{}\" in file \"{}\""
-msgstr "Brak atrybutu „header” dla elementu „{}” w pliku „{}”"
+msgstr "Brak atrybutu „header” elementu „{}” w pliku „{}”"
 
 #: cmdline_aliases.cpp:428 cmdline_aliases.cpp:538
 #, c++-format
@@ -135,13 +137,13 @@ msgstr ""
 #, c++-format
 msgid "Source \"{}\" not found: {}: Requested in file \"{}\" on line {}: {}"
 msgstr ""
-"Źródło „{}” nie zostało znalezione: {}: Żądano w pliku „{}” w linii {}: {}"
+"Źródło „{}” nie zostało znalezione: {}: Żądano w pliku „{}” w wierszu {}: {}"
 
 #: cmdline_aliases.cpp:462 cmdline_aliases.cpp:563 cmdline_aliases.cpp:676
 #, c++-format
 msgid "Group \"{}\" not found: {}: Requested in file \"{}\" on line {}: {}"
 msgstr ""
-"Grupa \"{}\" nie została znaleziona: {}: Żądano w pliku \"{}\" w linii {}: {}"
+"Grupa „{}” nie została znaleziona: {}: Żądano w pliku „{}” w wierszu {}: {}"
 
 #: cmdline_aliases.cpp:476 cmdline_aliases.cpp:579
 #, c++-format
@@ -149,12 +151,12 @@ msgid ""
 "Unknown attribute \"{}\" of named argument \"{}\" in file \"{}\" on line {}: "
 "{}"
 msgstr ""
-"Nieznany atrybut „{}” argumentu nazwanego „{}” w pliku „{}” w linii {}: {}"
+"Nieznany atrybut „{}” argumentu nazwanego „{}” w pliku „{}” w wierszu {}: {}"
 
 #: cmdline_aliases.cpp:489
 #, c++-format
 msgid "Missing attribute \"source\" for named argument \"{}\" in file \"{}\""
-msgstr "Brak atrybutu „source” dla argumentu nazwanego „{}” w pliku „{}”"
+msgstr "Brak atrybutu „source” argumentu nazwanego „{}” w pliku „{}”"
 
 #: cmdline_aliases.cpp:498 cmdline_aliases.cpp:592
 #, c++-format
@@ -172,7 +174,7 @@ msgid ""
 "{}"
 msgstr ""
 "Dołączone polecenie „{}” nie zostało znalezione: {}: Żądano w pliku „{}” w "
-"linii {}: {}"
+"wierszu {}: {}"
 
 #: cmdline_aliases.cpp:691
 #, c++-format
@@ -181,7 +183,7 @@ msgid ""
 "file \"{}\" on line {}: {}"
 msgstr ""
 "Użyto pliku konfiguracyjnego w wersji „1.0” dla atrybutu „{}” polecenia „{}” "
-"w pliku „{}” w linii {}: {}"
+"w pliku „{}” w wierszu {}: {}"
 
 #: cmdline_aliases.cpp:713
 #, c++-format
@@ -189,38 +191,37 @@ msgid ""
 "Unknown attribute \"{}\" of required value for alias \"{}\" in file \"{}\" "
 "on line {}: {}"
 msgstr ""
-"Nieznany atrybut „{}” wymaganej wartości dla aliasu „{}” w pliku „{}” w "
-"linii {}: {}"
+"Nieznany atrybut „{}” wymaganej wartości aliasu „{}” w pliku „{}” w wierszu "
+"{}: {}"
 
 #: cmdline_aliases.cpp:726
 #, c++-format
 msgid ""
 "Missing attribute \"value_help\" of required value for alias \"{}\" in file "
 "\"{}\""
-msgstr ""
-"Brak atrybutu „value_help” wymaganej wartości dla aliasu „{}” w pliku „{}”"
+msgstr "Brak atrybutu „value_help” wymaganej wartości aliasu „{}” w pliku „{}”"
 
 #: cmdline_aliases.cpp:740
 #, c++-format
 msgid ""
 "Unknown attribute \"{}\" of command \"{}\" in file \"{}\" on line {}: {}"
-msgstr "Nieznany atrybut „{}” polecenia „{}” w pliku „{}” w linii {}: {}"
+msgstr "Nieznany atrybut „{}” polecenia „{}” w pliku „{}” w wierszu {}: {}"
 
 #: cmdline_aliases.cpp:756
 #, c++-format
 msgid ""
 "Missing attribute \"attached_command\" for command \"{}\" in file \"{}\""
-msgstr "Brak atrybutu „attached_command” dla polecenia „{}” w pliku „{}”"
+msgstr "Brak atrybutu „attached_command” polecenia „{}” w pliku „{}”"
 
 #: cmdline_aliases.cpp:791
 #, c++-format
 msgid "Bad value type in file \"{}\" on line {}: {}"
-msgstr "Nieprawidłowy typ wartości w pliku \"{}\" w linii {}: {}"
+msgstr "Nieprawidłowy typ wartości w pliku „{}” w wierszu {}: {}"
 
 #: cmdline_aliases.cpp:804
 #, c++-format
 msgid "Syntax error in file \"{}\" on line {}:"
-msgstr "Błąd składni w pliku \"{}\" w wierszu {}:"
+msgstr "Błąd składni w pliku „{}” w wierszu {}:"
 
 #: commands/advisory/advisory.cpp:36
 msgid "Manage advisories"
@@ -228,11 +229,11 @@ msgstr "Zarządzaj ostrzeżeniami"
 
 #: commands/advisory/advisory_info.hpp:35
 msgid "Print details about advisories"
-msgstr "Wydrukuj szczegóły dotyczące ostrzeżeń"
+msgstr "Wyświetl szczegóły ostrzeżeń"
 
 #: commands/advisory/advisory_list.hpp:35
 msgid "List advisories"
-msgstr "Wyświetl ostrzeżenia"
+msgstr "Wyświetl listę ostrzeżeń"
 
 #: commands/advisory/advisory_subcommand.cpp:93 commands/no_matches.cpp:74
 #: commands/repoquery/repoquery.cpp:903
@@ -257,7 +258,7 @@ msgstr "Dostępne"
 
 #: commands/advisory/advisory_summary.hpp:33
 msgid "Print summary of advisories"
-msgstr "Pokaż podsumowanie ostrzeżeń"
+msgstr "Wyświetl podsumowanie ostrzeżeń"
 
 #: commands/advisory/arguments.hpp:34
 msgid "Show advisories containing any version of installed packages."
@@ -291,7 +292,7 @@ msgid ""
 "Show only advisories containing packages with specified names. List option, "
 "supports globs."
 msgstr ""
-"Pokaż tylko komunikaty zawierające pakiety o określonych nazwach. Opcja "
+"Pokaż tylko ostrzeżenia zawierające pakiety o określonych nazwach. Opcja "
 "listy, obsługuje wzorce."
 
 #: commands/advisory/arguments.hpp:83 commands/history/arguments.hpp:81
@@ -363,7 +364,7 @@ msgid ""
 "option. Can be \"critical\", \"important\", \"moderate\", \"low\", \"none\"."
 msgstr ""
 "Uwzględnij treść zawartą w ostrzeżeniach o określonej powadze. Opcja listy. "
-"Może być „critical\", „important\", „moderate\", „low\", „none\"."
+"Może być „critical”, „important”, „moderate”, „low”, „none”."
 
 #: commands/advisory_shared.hpp:235
 msgid "ADVISORY_SEVERITY,..."
@@ -379,7 +380,7 @@ msgstr ""
 
 #: commands/advisory_shared.hpp:248
 msgid "BUGZILLA_ID,..."
-msgstr "ID_BUGZILLI..."
+msgstr "ID_BUGZILLI,..."
 
 #: commands/advisory_shared.hpp:258
 msgid ""
@@ -433,7 +434,7 @@ msgstr "Sprawdź, czy nie ma problemów w packagedb"
 #: commands/check/check.cpp:335
 #, c++-format
 msgid "Check discovered {} problem(s) in {} package(s)"
-msgstr "Sprawdź odkryte {} problemy w {} pakietach"
+msgstr "Sprawdzanie wykryło {} problemów w {} pakietach"
 
 #: commands/clean/clean.cpp:91
 #, c++-format
@@ -470,7 +471,7 @@ msgstr "Zainstaluj pakiety debuginfo."
 msgid ""
 "Upgrade or downgrade installed software to the latest available versions"
 msgstr ""
-"Uaktualnij lub obniż wersję zainstalowanego oprogramowania do najnowszych "
+"Zaktualizuj lub obniż wersję zainstalowanego oprogramowania do najnowszych "
 "dostępnych wersji"
 
 #: commands/do/do.cpp:42
@@ -553,7 +554,7 @@ msgstr "Opcja „--alldeps” powinna być używana z opcją „--resolve”"
 #, c++-format
 msgid ""
 "No package \"{}\" available; You might want to use --skip-unavailable option."
-msgstr "Brak dostępnego pakietu \"{}\". Możesz użyć opcji --skip-unavailable."
+msgstr "Brak dostępnego pakietu „{}”. Można użyć opcji --skip-unavailable."
 
 #: commands/environment/arguments.hpp:33
 msgid "Show only available environments."
@@ -719,7 +720,7 @@ msgstr "Wybrano wiele transakcji do zapisania, dozwolona jest tylko jedna."
 #: commands/history/history_store.cpp:80
 #, c++-format
 msgid "File \"{}\" already exists, it will be overwritten.\n"
-msgstr "Plik \"{}\" już istnieje, zostanie nadpisany.\n"
+msgstr "Plik „{}” już istnieje, zostanie nadpisany.\n"
 
 #: commands/history/transaction_id.cpp:32
 #, c++-format
@@ -752,7 +753,8 @@ msgstr ""
 #: commands/list/list.cpp:49
 msgid "List of package-spec-NI to match (case insensitively)"
 msgstr ""
-"Lista pakietów-spec-NI do dopasowania (bez uwzględniania wielkości liter)"
+"Lista argumentów package-spec-NI do dopasowania (bez uwzględniania wielkości "
+"liter)"
 
 #: commands/list/list.cpp:61
 msgid "Show all versions of the packages, not only the latest ones."
@@ -771,16 +773,16 @@ msgid ""
 "List extras, that is packages installed on the system that are not available "
 "in any known repository."
 msgstr ""
-"Wyświetl dodatki, czyli pakiety zainstalowane w systemie, które nie są "
-"dostępne w żadnym znanym repozytorium."
+"Wyświetl pakiety dodatkowe, czyli zainstalowane w systemie, których nie ma w "
+"żadnym znanym repozytorium."
 
 #: commands/list/list.cpp:89
 msgid ""
 "List packages installed on the system that are obsoleted by packages in any "
 "known repository."
 msgstr ""
-"Wyświetla listę pakietów zainstalowanych w systemie, które zostały "
-"zastąpione pakietami w dowolnym znanym repozytorium."
+"Wyświetl listę pakietów zainstalowanych w systemie, które zostały zastąpione "
+"przez pakiety z dowolnego znanego repozytorium."
 
 #: commands/list/list.cpp:94
 msgid "List packages recently added into the repositories."
@@ -788,7 +790,7 @@ msgstr "Wyświetl listę pakietów ostatnio dodanych do repozytoriów."
 
 #: commands/list/list.cpp:98
 msgid "List upgrades available for the installed packages."
-msgstr "Wyświetl listę uaktualnień dostępnych dla zainstalowanych pakietów."
+msgstr "Wyświetl listę aktualizacji dostępnych dla zainstalowanych pakietów."
 
 #: commands/list/list.cpp:102
 msgid "List packages which will be removed by the 'dnf autoremove' command."
@@ -903,7 +905,7 @@ msgid ""
 "reschedule, run: {}"
 msgstr ""
 "System został zmodyfikowany od czasu przygotowania transakcji offline. Aby "
-"przeplanować transakcję, uruchom: {}"
+"zaplanować ją ponownie, uruchom: {}"
 
 #: commands/offline/offline.cpp:290
 #, c++-format
@@ -944,7 +946,7 @@ msgstr "{} nie jest pożądany przez system-update.target."
 #, c++-format
 msgid "The system will now reboot to upgrade to release version {}."
 msgstr ""
-"System zostanie teraz uruchomiony ponownie w celu uaktualnienia do wersji {}."
+"System zostanie teraz uruchomiony ponownie w celu aktualizacji do wydania {}."
 
 #: commands/offline/offline.cpp:394
 msgid ""
@@ -994,7 +996,7 @@ msgstr "Błąd podczas odczytu dziennika: {}"
 #: commands/offline/offline.cpp:640
 #, c++-format
 msgid "Add journal match failed: {}"
-msgstr "Dodanie dopasowania dziennika nie powiodło się: {}"
+msgstr "Dodanie dopasowania dziennika się nie powiodło: {}"
 
 #: commands/offline/offline.cpp:668
 msgid "No logs were found."
@@ -1016,7 +1018,7 @@ msgstr "Nie można dopasować wpisu dziennika systemd."
 
 #: commands/offline/offline.cpp:708
 msgid "Show logs from past offline transactions"
-msgstr "Pokaż logi z poprzednich transakcji offline"
+msgstr "Pokaż dzienniki z poprzednich transakcji offline"
 
 #: commands/offline/offline.cpp:716
 msgid ""
@@ -1035,7 +1037,7 @@ msgstr ""
 
 #: commands/offline/offline.cpp:736
 msgid "Show status of the current offline transaction"
-msgstr "Pokaż status bieżącej transakcji offline"
+msgstr "Pokaż stan bieżącej transakcji offline"
 
 #: commands/offline/offline.cpp:752
 msgid ""
@@ -1076,7 +1078,7 @@ msgstr ""
 
 #: commands/offline/offline.cpp:769
 msgid "Unknown offline transaction status: "
-msgstr "Nieznany status transakcji offline: "
+msgstr "Nieznany stan transakcji offline: "
 
 #: commands/provides/provides.cpp:50
 msgid "Find what package provides the given value"
@@ -1205,7 +1207,7 @@ msgstr "Przygotowuje system do aktualizacji do nowego wydania"
 
 #: commands/system-upgrade/system-upgrade.cpp:72
 msgid "Download everything needed to upgrade to a new release"
-msgstr "Pobierz wszystko, co jest potrzebne do uaktualnienia do nowej wersji"
+msgstr "Pobierz wszystko, co jest potrzebne do aktualizacji do nowego wydania"
 
 #: commands/system-upgrade/system-upgrade.cpp:80
 msgid ""
@@ -1222,17 +1224,15 @@ msgstr "Wymagana jest wersja --releasever większa niż bieżąca wersja systemu
 #: commands/system-upgrade/system-upgrade.cpp:150
 msgid "Store a distro-sync transaction to be performed offline"
 msgstr ""
-"Przechowuj transakcję synchronizacji dystrybucji, która będzie wykonywana w "
-"trybie offline"
+"Zapisz transakcję synchronizacji dystrybucji do wykonania w trybie offline"
 
 #: commands/system-upgrade/system-upgrade.cpp:172
 msgid "Store an upgrade transaction to be performed offline"
-msgstr ""
-"Przechowuj transakcję uaktualnienia, która zostanie wykonana w trybie offline"
+msgstr "Zapisz transakcję aktualizacji do wykonania w trybie offline"
 
 #: commands/upgrade/upgrade.cpp:41
 msgid "Upgrade software"
-msgstr "Uaktualnij oprogramowanie"
+msgstr "Zaktualizuj oprogramowanie"
 
 #: commands/upgrade/upgrade.cpp:48
 msgid ""
@@ -1241,21 +1241,21 @@ msgid ""
 "limiting advisories is used it upgrades packages only to the lowest versions "
 "that fix advisories that matching selected advisory property"
 msgstr ""
-"Uaktualniaj pakiety tylko do najniższych wersji, które naprawiają "
-"ostrzeżenia typu bugfix, enhancement, security lub newpackage. W przypadku "
-"użycia jakiejkolwiek opcji ograniczającej ostrzeżenia uaktualnia ona pakiety "
-"tylko do najniższych wersji, które naprawiają ostrzeżenia, które pasują do "
+"Aktualizuj pakiety tylko do najniższych wersji, które naprawiają ostrzeżenia "
+"typu bugfix, enhancement, security lub newpackage. W przypadku użycia "
+"jakiejkolwiek opcji ograniczającej ostrzeżenia pakiety są aktualizowane "
+"tylko do najniższych wersji, które naprawiają ostrzeżenia pasujące do "
 "wybranej właściwości ostrzeżenia"
 
 #. TODO(mblaha): add full command line
 #: commands/versionlock/utils.cpp:35
 #, c++-format
 msgid "Added by 'versionlock {}' command on {}"
-msgstr "Dodano poleceniem 'versionlock {}' w {}"
+msgstr "Dodano poleceniem „versionlock {}” w dniu {}"
 
 #: commands/versionlock/versionlock.cpp:40
 msgid "Manage versionlock configuration"
-msgstr "Zarządzaj konfiguracją blokady wersji"
+msgstr "Zarządzaj konfiguracją versionlock"
 
 #: commands/versionlock/versionlock_add.cpp:37
 msgid "Add new entry to versionlock configuration"
@@ -1299,7 +1299,7 @@ msgstr "Usuwanie wpisu blokady wersji:"
 
 #: commands/versionlock/versionlock_exclude.cpp:37
 msgid "Add new exclude entry to versionlock configuration"
-msgstr "Dodaj nowy wpis wykluczenia do konfiguracji blokady wersji"
+msgstr "Dodaj nowy wpis wykluczenia do konfiguracji versionlock"
 
 #: commands/versionlock/versionlock_exclude.cpp:45
 msgid ""
@@ -1357,7 +1357,7 @@ msgstr "Importowanie klucza OpenPGP 0x{}:\n"
 #: context.cpp:123 context.cpp:148
 #, c++-format
 msgid " UserID     : \"{}\"\n"
-msgstr " Identyfikator użytkownika: \"{}\"\n"
+msgstr " Identyfikator użytkownika: „{}”\n"
 
 #: context.cpp:126
 #, c++-format
@@ -1370,7 +1370,7 @@ msgstr ""
 
 #: context.cpp:135
 msgid "The key was successfully imported."
-msgstr "Klucz został pomyślnie zaimportowany."
+msgstr "Klucz został zaimportowany."
 
 #: context.cpp:144
 #, c++-format
@@ -1411,12 +1411,12 @@ msgstr "System przystąpi teraz do usuwania klucza."
 #: context.cpp:163
 #, c++-format
 msgid "Key 0x{} was successfully removed."
-msgstr "Klucz 0x{} został pomyślnie usunięty."
+msgstr "Klucz 0x{} został usunięty."
 
 #: context.cpp:192
 #, c++-format
 msgid "setopt: \"{}.{}\": {}"
-msgstr "setopt: \"{}.{}\": {}"
+msgstr "setopt: „{}.{}”: {}"
 
 #: context.cpp:202
 #, c++-format
@@ -1468,7 +1468,7 @@ msgstr "Testowanie transakcji offline"
 #: context.cpp:326 context.cpp:525
 #, c++-format
 msgid "Transaction failed: {}"
-msgstr "Transakcja nie powiodła się: {}"
+msgstr "Transakcja się nie powiodła: {}"
 
 #: context.cpp:339 context.cpp:538
 #, c++-format
@@ -1717,7 +1717,7 @@ msgstr ""
 #: main.cpp:278
 #, c++-format
 msgid "setopt: \"{0}\": {1}"
-msgstr "setopt: \"{0}\": {1}"
+msgstr "setopt: „{0}”: {1}"
 
 #: main.cpp:290
 msgid "set arbitrary variable"
@@ -1855,8 +1855,8 @@ msgid ""
 "Show newly installed leaf packages and packages that became leaves after a "
 "transaction."
 msgstr ""
-"Pokaż nowo zainstalowane pakiety osamotnione i pakiety, które stały się "
-"osamotnione po transakcji."
+"Pokaż nowo zainstalowane pakiety liściowe i pakiety, które stały się liśćmi "
+"po transakcji."
 
 #: main.cpp:597
 msgid "Dump detailed solving results into files"
@@ -1875,7 +1875,7 @@ msgstr ""
 
 #: main.cpp:638
 msgid "Print variable values to stdout"
-msgstr "Wyświetl wartości zmienne na standardowe wyjście (stdout)"
+msgstr "Wyświetl wartości zmiennych na standardowe wyjście"
 
 #: main.cpp:652
 msgid "Show DNF5 version and exit"
@@ -1992,7 +1992,7 @@ msgstr "Brak pasującego repozytorium do zrzutu konfiguracji: „{}”"
 #: main.cpp:992
 #, c++-format
 msgid "======== \"{}\" repository configuration: ========"
-msgstr "======== Konfiguracja repozytorium \"{}\": ========"
+msgstr "======== Konfiguracja repozytorium „{}”: ========"
 
 #: main.cpp:1012
 msgid "======== Variables: ========"
@@ -2000,7 +2000,7 @@ msgstr "======== Zmienne: ========"
 
 #: main.cpp:1052
 msgid "New leaves:"
-msgstr "Nowe pozostałości:"
+msgstr "Nowe pakiety liściowe:"
 
 #: main.cpp:1054
 #, c++-format
@@ -2055,7 +2055,7 @@ msgstr "{} aby umożliwić zmianę dostawcy pakietów"
 
 #: main.cpp:1233
 msgid "You can try to add to command line:"
-msgstr "Możesz spróbować dodać do wiersza poleceń:"
+msgstr "Można spróbować dodać do wiersza poleceń:"
 
 #: main.cpp:1251
 #, c++-format
@@ -2078,7 +2078,7 @@ msgstr ""
 #: main.cpp:1318
 #, c++-format
 msgid "--- DNF5 launched with arguments: \"{}\" ---"
-msgstr "--- Uruchomiono DNF5 z argumentami: \"{}\" ---"
+msgstr "--- Uruchomiono DNF5 z argumentami: „{}” ---"
 
 #: main.cpp:1354
 #, c++-format
@@ -2123,8 +2123,8 @@ msgid ""
 "{}. Dropping all logs. To redirect the log file location use the \"logdir\" "
 "configuration option."
 msgstr ""
-"{}. Usunięcie wszystkich logów. Aby przekierować lokalizację pliku logu, "
-"użyj opcji konfiguracji „logdir”."
+"{}. Usunięcie wszystkich dzienników. Aby przekierować lokalizację pliku "
+"dziennika, użyj opcji konfiguracji „logdir”."
 
 #: main.cpp:1578
 msgid ""

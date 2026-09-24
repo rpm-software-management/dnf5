@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-08 12:03+0000\n"
-"PO-Revision-Date: 2026-09-09 07:34+0000\n"
+"POT-Creation-Date: 2026-09-22 14:19+0000\n"
+"PO-Revision-Date: 2026-09-20 00:18+0000\n"
 "Last-Translator: Bone NI <bounkirdni@gmail.com>\n"
 "Language-Team: Lao <https://translate.fedoraproject.org/projects/dnf5/"
 "libdnf5/lo/>\n"
@@ -782,10 +782,8 @@ msgid "{func}(): File does not exist: {path}"
 msgstr "{func}(): ໄຟລ໌ບໍ່ມີຢູ່: {path}"
 
 #: base/vendor_change_manager.cpp:240
-#, fuzzy
-#| msgid "{func}(): Cannot write to file: {path}"
 msgid "{func}(): Cannot remove existing policy file: {path}"
-msgstr "{func}(): ບໍ່ສາມາດຂຽນໄຟລ໌ໄດ້: {path}"
+msgstr "{func}(): ບໍ່ສາມາດລຶບໄຟລ໌ນະໂຍບາຍທີ່ມີຢູ່: {path}"
 
 #: base/vendor_change_manager.cpp:252
 msgid "{func}(): Cannot create file: {path}"
@@ -1654,45 +1652,37 @@ msgstr "ຄາດຫວັງ '{}' ແຕ່ພົບ '{}'"
 msgid "Compact vendor change policy parse error in \"{}\" at position {}"
 msgstr "ເກີດຂໍ້ຜິດພາດໃນການແປນະໂຍບາຍການປ່ຽນແປງຜູ້ສະໜອງແບບກະທັດຮັດໃນ \"{}\" ທີ່ຕຳແໜ່ງທີ {}"
 
-#: solv/vendor_change_manager.cpp:913
-msgid "Empty vendor policy string"
-msgstr "ສະຕຣິງນະໂຍບາຍຜູ້ສະໜອງຫວ່າງເປົ່າ"
-
-#: solv/vendor_change_manager.cpp:930
+#: solv/vendor_change_manager.cpp:931
 msgid "Expected package filter after '@'"
 msgstr "ຄາດຫວັງຕົວກອງແພັກເກັດຫຼັງຈາກ '@'"
 
-#: solv/vendor_change_manager.cpp:943
+#: solv/vendor_change_manager.cpp:944
 #, c++-format
 msgid "Unexpected character '{}'"
 msgstr "ຕົວອັກສອນ '{}' ບໍ່ຄາດຄິດ"
 
-#: solv/vendor_change_manager.cpp:947
-msgid "Empty policy: no vendor definitions or package filters specified"
-msgstr "ນະໂຍບາຍຫວ່າງເປົ່າ: ບໍ່ມີການລະບຸນິຍາມຜູ້ສະໜອງ ຫຼື ຕົວກອງແພັກເກັດ"
-
-#: solv/vendor_change_manager.cpp:1023
+#: solv/vendor_change_manager.cpp:1020
 msgid "Expected quoted string starting with '\"'"
 msgstr "ຄາດຫວັງສະຕຣິງທີ່ມີເຄື່ອງໝາຍວົງຢືມເລີ່ມຕົ້ນດ້ວຍ '\"'"
 
-#: solv/vendor_change_manager.cpp:1031
+#: solv/vendor_change_manager.cpp:1028
 msgid "Unterminated escape sequence"
 msgstr "ລຳດັບ escape ບໍ່ຖືກປິດ"
 
-#: solv/vendor_change_manager.cpp:1037
+#: solv/vendor_change_manager.cpp:1034
 #, c++-format
 msgid "Invalid escape sequence '\\{}'. Only '\\\"' and '\\\\' are supported"
 msgstr "ລຳດັບ escape '\\{}' ບໍ່ຖືກຕ້ອງ. ຮອງຮັບພຽງ '\\\"' ແລະ '\\\\' ເທົ່ານັ້ນ"
 
-#: solv/vendor_change_manager.cpp:1044
+#: solv/vendor_change_manager.cpp:1041
 msgid "Unterminated quoted string"
 msgstr "ສະຕຣິງທີ່ມີເຄື່ອງໝາຍວົງຢືມບໍ່ຖືກປິດ"
 
-#: solv/vendor_change_manager.cpp:1079
+#: solv/vendor_change_manager.cpp:1076
 msgid "Expected direction prefix 'in', 'out', or 'eq'"
 msgstr "ຄາດຫວັງຄຳນຳໜ້າທິດທາງ 'in', 'out', ຫຼື 'eq'"
 
-#: solv/vendor_change_manager.cpp:1143
+#: solv/vendor_change_manager.cpp:1140
 msgid ""
 "Expected comparison operator: relational (<, <=, >, >=) or string (=, ^, $, "
 "*, =*, =~; optionally prefixed with ! and/or i"
@@ -1700,41 +1690,41 @@ msgstr ""
 "ຄາດຫວັງຕົວດຳເນີນການປຽບທຽບ: ແບບຄວາມສຳພັນ (<, <=, >, >=) ຫຼື ແບບສະຕຣິງ (=, ^, $, *, "
 "=*, =~; ເຊິ່ງອາດມີ ! ແລະ/ຫຼື i ນຳໜ້າ)"
 
-#: solv/vendor_change_manager.cpp:1208
+#: solv/vendor_change_manager.cpp:1205
 msgid ""
 "Vendor definition does not support relational comparators. Use string "
 "comparators: =, ^, $, *, =*, =~"
 msgstr ""
 "ນິຍາມຜູ້ສະໜອງບໍ່ຮອງຮັບຕົວປຽບທຽບແບບຄວາມສຳພັນ. ໃຫ້ໃຊ້ຕົວປຽບທຽບແບບສະຕຣິງ: =, ^, $, *, =*, =~"
 
-#: solv/vendor_change_manager.cpp:1216
+#: solv/vendor_change_manager.cpp:1213
 #, c++-format
 msgid "Invalid regex vendor pattern '{}': {}"
 msgstr "ຮູບແບບ regex ຜູ້ສະໜອງ '{}' ບໍ່ຖືກຕ້ອງ: {}"
 
-#: solv/vendor_change_manager.cpp:1234
+#: solv/vendor_change_manager.cpp:1231
 #, c++-format
 msgid "Unknown filter field name '{}'"
 msgstr "ບໍ່ຮູ້ຈັກຊື່ຊ່ອງຂໍ້ມູນຕົວກອງ '{}'"
 
-#: solv/vendor_change_manager.cpp:1244
+#: solv/vendor_change_manager.cpp:1241
 msgid "Expected filter field name"
 msgstr "ຄາດຫວັງຊື່ຊ່ອງຂໍ້ມູນຕົວກອງ"
 
-#: solv/vendor_change_manager.cpp:1267
+#: solv/vendor_change_manager.cpp:1264
 #, c++-format
 msgid "Invalid epoch value \"{}\""
 msgstr "ຄ່າ epoch \"{}\" ບໍ່ຖືກຕ້ອງ"
 
-#: solv/vendor_change_manager.cpp:1271
+#: solv/vendor_change_manager.cpp:1268
 msgid "Filter 'cmdline_repo' only supports the '=' (EXACT) comparator"
 msgstr "ຕົວກອງ 'cmdline_repo' ຮອງຮັບພຽງຕົວປຽບທຽບ '=' (EXACT) ເທົ່ານັ້ນ"
 
-#: solv/vendor_change_manager.cpp:1274
+#: solv/vendor_change_manager.cpp:1271
 msgid "Filter 'cmdline_repo' is only allowed in incoming packages ('in:')"
 msgstr "ຕົວກອງ 'cmdline_repo' ອະນຸຍາດໃຫ້ໃຊ້ໄດ້ພຽງແຕ່ໃນແພັກເກັດຂາເຂົ້າ ('in:') ເທົ່ານັ້ນ"
 
-#: solv/vendor_change_manager.cpp:1285
+#: solv/vendor_change_manager.cpp:1282
 #, c++-format
 msgid ""
 "Invalid value '{}' for 'cmdline_repo' filter. Use 'true', '1', 'false', or "
@@ -1742,27 +1732,27 @@ msgid ""
 msgstr ""
 "ຄ່າ '{}' ບໍ່ຖືກຕ້ອງສຳລັບຕົວກອງ 'cmdline_repo'. ໃຫ້ໃຊ້ 'true', '1', 'false', ຫຼື '0'"
 
-#: solv/vendor_change_manager.cpp:1289
+#: solv/vendor_change_manager.cpp:1286
 #, c++-format
 msgid "Filter '{}' only supports relational comparators: =, !=, >, >=, <, <="
 msgstr "ຕົວກອງ '{}' ຮອງຮັບພຽງຕົວປຽບທຽບແບບຄວາມສຳພັນ: =, !=, >, >=, <, <="
 
-#: solv/vendor_change_manager.cpp:1293
+#: solv/vendor_change_manager.cpp:1290
 #, c++-format
 msgid "Filter '{}' only supports string comparators: =, ^, $, *, =*, =~"
 msgstr "ຕົວກອງ '{}' ຮອງຮັບພຽງຕົວປຽບທຽບແບບສະຕຣິງ: =, ^, $, *, =*, =~"
 
-#: solv/vendor_change_manager.cpp:1302
+#: solv/vendor_change_manager.cpp:1299
 #, c++-format
 msgid "Invalid regex '{}': {}"
 msgstr "regex '{}' ບໍ່ຖືກຕ້ອງ: {}"
 
-#: solv/vendor_change_manager.cpp:1313
+#: solv/vendor_change_manager.cpp:1310
 msgid "Package filters do not support 'eq' direction. Use 'in' or 'out'"
 msgstr "ຕົວກອງແພັກເກັດບໍ່ຮອງຮັບທິດທາງ 'eq'. ໃຫ້ໃຊ້ 'in' ຫຼື 'out'"
 
-#: solv/vendor_change_manager.cpp:1404 solv/vendor_change_manager.cpp:1454
-#: solv/vendor_change_manager.cpp:1465 solv/vendor_change_manager.cpp:1476
+#: solv/vendor_change_manager.cpp:1401 solv/vendor_change_manager.cpp:1451
+#: solv/vendor_change_manager.cpp:1462 solv/vendor_change_manager.cpp:1473
 msgid "{func}(): Policy index {idx} is out of range"
 msgstr "{func}(): ດັດຊະນີນະໂຍບາຍ {idx} ຢູ່ນອກຂອບເຂດ"
 
@@ -2387,6 +2377,12 @@ msgstr "ບໍ່ສາມາດອ່ານໄຟລ໌ຕັ້ງຄ່າ rp
 #: utils/system.cpp:52
 msgid "Failed to execute uname()"
 msgstr "ບໍ່ສາມາດດຳເນີນການຄຳສັ່ງ uname() ໄດ້"
+
+#~ msgid "Empty vendor policy string"
+#~ msgstr "ສະຕຣິງນະໂຍບາຍຜູ້ສະໜອງຫວ່າງເປົ່າ"
+
+#~ msgid "Empty policy: no vendor definitions or package filters specified"
+#~ msgstr "ນະໂຍບາຍຫວ່າງເປົ່າ: ບໍ່ມີການລະບຸນິຍາມຜູ້ສະໜອງ ຫຼື ຕົວກອງແພັກເກັດ"
 
 #~ msgid "failed to save xml document for comps"
 #~ msgstr "ບໍ່ສາມາດບັນທຶກເອກະສານ xml ສຳລັບ comps"

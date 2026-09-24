@@ -4,14 +4,15 @@
 # Göran Uddeborg <goeran@uddeborg.se>, 2024, 2025, 2026.
 # Luna Jernberg <bittin@reimu.nl>, 2024, 2025.
 # Weblate Translation Memory <noreply-mt-weblate-translation-memory@weblate.org>, 2024, 2025, 2026.
-# Luna Jernberg <droidbittin@gmail.com>, 2025.
+# Luna Jernberg <droidbittin@gmail.com>, 2025, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-08 12:03+0000\n"
-"PO-Revision-Date: 2026-09-08 14:32+0000\n"
-"Last-Translator: Göran Uddeborg <goeran@uddeborg.se>\n"
+"POT-Creation-Date: 2026-09-22 14:19+0000\n"
+"PO-Revision-Date: 2026-09-22 08:18+0000\n"
+"Last-Translator: Weblate Translation Memory <noreply-mt-weblate-translation-"
+"memory@weblate.org>\n"
 "Language-Team: Swedish <https://translate.fedoraproject.org/projects/dnf5/"
 "dnf5/sv/>\n"
 "Language: sv\n"
@@ -646,7 +647,7 @@ msgstr[1] "Tillgängliga"
 
 #: commands/history/arguments.hpp:37
 msgid "Transaction ID"
-msgstr "Transaktions ID"
+msgstr "Transaktions-ID"
 
 #: commands/history/arguments.hpp:44
 msgid "Reverse the order of transactions."
@@ -840,13 +841,11 @@ msgstr "Inga matchningar fanns: inga modulströmmar är aktiverade."
 
 #: commands/module/module_list.cpp:90
 msgid "No matches found: no module streams are disabled."
-msgstr ""
+msgstr "Inga matchningar hittades: inga modulströmmar är inaktiverade."
 
 #: commands/module/module_list.cpp:92
-#, fuzzy
-#| msgid "No matches found for \"{}\"."
 msgid "No matches found: no module streams exist."
-msgstr "Inga matchningar hittades för \"{}\"."
+msgstr "Inga matchningar hittades: Inga modulströmmar existerar."
 
 #: commands/no_matches.cpp:14
 #, c++-format
@@ -858,14 +857,12 @@ msgid ""
 "No repositories were loaded from the installroot. To use the configuration "
 "and repositories of the host system, pass --use-host-config."
 msgstr ""
-"Inga förråd laddades från installationsroten. För att använda värdsystemets "
+"Inga förråd laddades från installationsrooten. För att använda värdsystemets "
 "konfiguration och förråd, skicka --use-host-config."
 
 #: commands/no_matches.cpp:78 commands/no_matches.hpp:45
-#, fuzzy
-#| msgid "No matches found for \"{}\"."
 msgid "No matches found."
-msgstr "Inga matchningar hittades för \"{}\"."
+msgstr "Inga matchningar hittades."
 
 #: commands/offline/offline.cpp:217
 msgid "Manage offline transactions"
@@ -885,6 +882,7 @@ msgstr ""
 msgid ""
 "The system has been modified since the offline transaction was prepared."
 msgstr ""
+"Systemet har modifierats sedan transaktionen i offlineläge förbereddes."
 
 #: commands/offline/offline.cpp:268
 #, c++-format
@@ -892,6 +890,8 @@ msgid ""
 "The system has been modified since the offline transaction was prepared. To "
 "reschedule, run: {}"
 msgstr ""
+"Systemet har modifierats sedan transaktionen i offlineläge förbereddes. För "
+"att schemalägga om, kör: {}"
 
 #: commands/offline/offline.cpp:290
 #, c++-format
@@ -1025,21 +1025,20 @@ msgid "Show status of the current offline transaction"
 msgstr "Visa status för den aktuella frånkopplade transaktionen"
 
 #: commands/offline/offline.cpp:752
-#, fuzzy
-#| msgid ""
-#| "The system will now reboot to perform the offline transaction initiated "
-#| "by the following command:"
 msgid ""
 "The system has been modified since the offline transaction was prepared. The "
 "offline transaction initiated by the following command is no longer valid:"
 msgstr ""
-"Systemet kommer nu starta om för att utföra den frånkopplade transaktionen "
-"som initierades av följande kommando:"
+"Systemet har modifierats sedan transaktionen i offlineläge förbereddes. "
+"Offline-transaktionen som initierades med följande kommando är inte längre "
+"giltig:"
 
 #: commands/offline/offline.cpp:756
 msgid ""
 "To reschedule, run the command above. To clean up, run `dnf5 offline clean`."
 msgstr ""
+"För att schemalägga om, kör kommandot ovan. För att rensa, kör `dnf5 offline "
+"clean`."
 
 #: commands/offline/offline.cpp:760
 msgid "An offline transaction was initiated by the following command:"
@@ -1073,6 +1072,8 @@ msgid ""
 "If searching for a file, try specifying the full path or using a wildcard "
 "prefix (\"*/\") at the beginning."
 msgstr ""
+"Om du söker efter en fil, prova att ange hela sökvägen eller använd ett "
+"jokerteckenprefix (\"*/\") i början."
 
 #: commands/reinstall/reinstall.cpp:40
 msgid "Reinstall software"
@@ -1087,18 +1088,20 @@ msgid ""
 "Option '--limit' must be equal or greater than 1 (to keep at least the "
 "newest installed package)."
 msgstr ""
+"Flaggan '--limit' måste vara lika med eller större än 1 (för att behålla "
+"åtminstone det senast installerade paketet)."
 
 #: commands/remove/remove.cpp:237
 msgid "Option '--limit' can only be used with '--oldinstallonly'."
-msgstr ""
+msgstr "Flaggan '--limit' kan endast användas med '--oldinstallonly'."
 
 #: commands/remove/remove.cpp:242
-#, fuzzy
-#| msgid "{}. Add \"--help\" for more information about the arguments."
 msgid ""
 "Missing positional arguments for \"remove\" command. Add \"--help\" for more "
 "information about the arguments."
-msgstr "{}. Lägg till \"--help\" för mer information om argumenten."
+msgstr ""
+"Obligatoriska positionsargument saknas för kommandot \"remove\". Lägg till "
+"\"--help\" för mer information om argumenten."
 
 #: commands/remove/remove.cpp:269
 #, c++-format
@@ -1107,6 +1110,9 @@ msgid ""
 "version and was not removed. Please reboot into the latest kernel and run "
 "this command again to complete the cleanup."
 msgstr ""
+"Varning: Den kärna som körs för närvarande, ”{}”, är inte den senaste "
+"installerade versionen och har inte tagits bort. Starta om datorn med den "
+"senaste kärnan och kör detta kommando igen för att slutföra rensningen."
 
 #: commands/replay/replay.cpp:38
 msgid "Replay a transaction that was previously stored to a directory"
@@ -1166,13 +1172,11 @@ msgstr "Sök efter programvara som matchar alla angivna strängar"
 
 #: commands/search/search.cpp:70
 msgid "Options --name and --summary cannot be used together."
-msgstr ""
+msgstr "Flaggorna --name och --summary kan inte användas tillsammans."
 
 #: commands/search/search.cpp:74
-#, fuzzy
-#| msgid "Option \"--alldeps\" should be used with \"--resolve\""
 msgid "Option --all cannot be used with --name or --summary."
-msgstr "Alternativet \"--alldeps\" ska användas med \"--resolve\""
+msgstr "Flaggan --all kan inte användas med --name eller --summary."
 
 #: commands/swap/swap.cpp:42
 msgid "Remove software and install another in one transaction"
@@ -1237,10 +1241,8 @@ msgid "Add new entry to versionlock configuration"
 msgstr "Lägg till ny post i versionslåskonfigurationen"
 
 #: commands/versionlock/versionlock_add.cpp:44
-#, fuzzy
-#| msgid "List of package specs to remove versionlock for"
 msgid "List of packages to lock to their current versions"
-msgstr "Lista över paketspecifikationer att ta bort versionslås för"
+msgstr "Lista över paket som ska låsas till sina nuvarande versioner"
 
 #: commands/versionlock/versionlock_add.cpp:107
 #: commands/versionlock/versionlock_exclude.cpp:128
@@ -1283,6 +1285,8 @@ msgid ""
 "List of packages to exclude. If no version is specified, all available "
 "versions of the package will be excluded."
 msgstr ""
+"Lista över paket som ska exkluderas. Om ingen version anges kommer alla "
+"tillgängliga versioner av paketet att exkluderas."
 
 #: commands/versionlock/versionlock_exclude.cpp:91
 #: commands/versionlock/versionlock_exclude.cpp:103
@@ -1296,37 +1300,33 @@ msgid "Package \"{}\" is already excluded."
 msgstr "Paketet \"{}\" är redan exkluderat."
 
 #: context.cpp:73
-#, fuzzy, c++-format
-#| msgid "Query Commands:"
+#, c++-format
 msgid "Command: {}"
-msgstr "Frågekommandon:"
+msgstr "Kommando: {}"
 
 #: context.cpp:81
 #, c++-format
 msgid "Process ID: {} (still running)"
-msgstr ""
+msgstr "Process-ID: {} (körs fortfarande)"
 
 #: context.cpp:83
 #, c++-format
 msgid "Process ID: {}"
-msgstr ""
+msgstr "Process-ID: {}"
 
 #: context.cpp:92
-#, fuzzy, c++-format
-#| msgid "setvar: {}"
+#, c++-format
 msgid "Started: {}"
-msgstr "setvar: {}"
+msgstr "Startad: {}"
 
 #: context.cpp:99
 #, c++-format
 msgid "Comment: {}"
-msgstr ""
+msgstr "Kommentar: {}"
 
 #: context.cpp:103
-#, fuzzy
-#| msgid "Show status of the current offline transaction"
 msgid "Details about the currently running transaction:\n"
-msgstr "Visa status för den aktuella frånkopplade transaktionen"
+msgstr "Detaljer om den pågående transaktionen:\n"
 
 #: context.cpp:121
 #, c++-format
@@ -1417,16 +1417,20 @@ msgid ""
 "Waiting for a lock on the system repository; another process is currently "
 "accessing it. Use the \"--skip-file-locks\" option to bypass the lock."
 msgstr ""
+"Väntar på ett lås för systemförrådet; en annan process kommer för närvarande "
+"åt det. Använd flaggan \"--skip-file-locks\" för att kringgå låset."
 
 #: context.cpp:282
 msgid ""
 "Waiting for a lock on the system repository. The following processes are "
 "currently accessing it:"
 msgstr ""
+"Väntar på ett lås för systemförrådet. Följande processer kommer för "
+"närvarande åt det:"
 
 #: context.cpp:292
 msgid "Use the \"--skip-file-locks\" option to bypass the lock."
-msgstr ""
+msgstr "Använd flaggan \"--skip-file-locks\" för att kringgå låset."
 
 #. If we're only loading the system repo, we can skip the message.
 #: context.cpp:300
@@ -1490,15 +1494,13 @@ msgid "Running transaction"
 msgstr "Kör transaktionen"
 
 #: context.cpp:551
-#, fuzzy
-#| msgid "Starting offline transaction. This will take a while."
 msgid "Warning: Pending offline transaction has been invalidated."
-msgstr "Startar frånkopplad transaktion. Detta kommer att ta ett tag."
+msgstr "Varning: Väntande offline-transaktion har ogiltigförklarats."
 
 #: context.cpp:553
 #, c++-format
 msgid "To reschedule, run: {}"
-msgstr ""
+msgstr "För att schemalägga om, kör: {}"
 
 #: context.cpp:916
 #, c++-format
@@ -1723,11 +1725,11 @@ msgstr "begränsa inte transaktionen till den bästa kandidaten"
 
 #: main.cpp:343
 msgid "allow automatic package replacements from different vendors"
-msgstr ""
+msgstr "tillåt automatiska paketersättningar från olika leverantörer"
 
 #: main.cpp:350
 msgid "do not allow automatic package replacements from different vendors"
-msgstr ""
+msgstr "tillåt inte automatiska paketersättningar från olika leverantörer"
 
 #: main.cpp:361
 msgid ""
@@ -1818,16 +1820,12 @@ msgid "override the value of $releasever in config and repo files"
 msgstr "åsidosätt värdet på $releasever i config- och repo-filer"
 
 #: main.cpp:557
-#, fuzzy
-#| msgid "override the value of $releasever in config and repo files"
 msgid "override the value of $releasever_major in config and repo files"
-msgstr "åsidosätt värdet på $releasever i config- och repo-filer"
+msgstr "åsidosätt värdet för $releasever_major i konfigurations och repofiler"
 
 #: main.cpp:570
-#, fuzzy
-#| msgid "override the value of $releasever in config and repo files"
 msgid "override the value of $releasever_minor in config and repo files"
-msgstr "åsidosätt värdet på $releasever i config- och repo-filer"
+msgstr "åsidosätt värdet för $releasever_minor i konfigurations och repofiler"
 
 #: main.cpp:583
 msgid ""
@@ -1866,7 +1864,7 @@ msgstr "Framtvinga användningen av en annan arkitektur."
 
 #: main.cpp:698
 msgid "Skip acquiring file locks, such as the lock on the system repository"
-msgstr ""
+msgstr "Hoppa över att hämta fil-lås, till exempel låset på systemförrådet"
 
 #: main.cpp:713
 msgid "Software Management Commands:"
@@ -1925,16 +1923,12 @@ msgid "  API version: {}.{}"
 msgstr "  API version: {}.{}"
 
 #: main.cpp:863
-#, fuzzy
-#| msgid ""
-#| "\n"
-#| "Loaded {} plugins:"
 msgid ""
 "\n"
 "Loaded libdnf5 plugins:"
 msgstr ""
 "\n"
-"Laddade {} plugins:"
+"Laddade libdnf5 plugins:"
 
 #: main.cpp:910
 #, c++-format
@@ -2031,10 +2025,9 @@ msgid "{} to skip uninstallable packages"
 msgstr "{} för att hoppa över oinstallerbara paket"
 
 #: main.cpp:1229
-#, fuzzy, c++-format
-#| msgid "{} to allow extra packages in the transaction"
+#, c++-format
 msgid "{} to allow changing package vendors"
-msgstr "{} för att tillåta extra paket i transaktionen"
+msgstr "{} att tillåta byte av paketleverantörer"
 
 #: main.cpp:1233
 msgid "You can try to add to command line:"
@@ -2106,6 +2099,8 @@ msgid ""
 "{}. Dropping all logs. To redirect the log file location use the \"logdir\" "
 "configuration option."
 msgstr ""
+"{}. Skippar alla loggar. Använd konfigurationsalternativet ”logdir” för att "
+"ändra platsen för loggfilen."
 
 #: main.cpp:1578
 msgid ""
@@ -2121,7 +2116,7 @@ msgstr ""
 #: main.cpp:1592
 #, c++-format
 msgid "Warning: {}"
-msgstr ""
+msgstr "Varning: {}"
 
 #: main.cpp:1605
 msgid ""
@@ -2129,6 +2124,9 @@ msgid ""
 "or immutable operating system. For more information, refer to your "
 "distribution's documentation."
 msgstr ""
+"Fel: /usr är konfigurerad som skrivskyddad. Du kör kanske ett avbildsbaserat "
+"eller oföränderligt (immutable) operativsystem. Mer information finns i "
+"dokumentationen för din distribution."
 
 #: main.cpp:1624
 msgid ""
@@ -2136,23 +2134,23 @@ msgid ""
 "transient to perform this operation in a transient overlay which will reset "
 "when the system reboots."
 msgstr ""
+"Fel: persistenta transaktioner stöds inte på bootc-system. Använd flaggan --"
+"transient för att utföra åtgärden i ett temporärt överläggslager som "
+"återställs vid omstart av systemet."
 
 #: main.cpp:1634
-#, fuzzy
-#| msgid ""
-#| "Error: this bootc system is configured to be read-only. For more "
-#| "information, run `bootc --help`."
 msgid ""
 "Error: this bootc system is configured to be read-only. Pass --transient to "
 "perform this operation in a transient overlay which will reset when the "
 "system reboots."
 msgstr ""
-"Fel: detta bootc-system är konfigurerat att vara skrivskyddat. För mer "
-"information, kör `bootc --help`."
+"Fel: Det här bootc-systemet är konfigurerat som skrivskyddat. Ange --"
+"transient för att utföra åtgärden i ett tillfälligt överläggslager som "
+"återställs när systemet startas om."
 
 #: main.cpp:1645
 msgid "Error: transient transactions are only supported on bootc systems."
-msgstr ""
+msgstr "Fel: transienta transaktioner stöds endast på bootc-system."
 
 #: main.cpp:1686
 #, c++-format
@@ -2172,18 +2170,17 @@ msgstr ""
 "och transaktionskontroller kommer att utföras."
 
 #: main.cpp:1702
-#, fuzzy
-#| msgid "Starting offline transaction. This will take a while."
 msgid "Warning: A pending offline transaction will be invalidated."
-msgstr "Startar frånkopplad transaktion. Detta kommer att ta ett tag."
+msgstr "Varning: En väntande offlinetransaktion kommer att ogiltigförklaras."
 
 #: main.cpp:1705
-#, fuzzy, c++-format
-#| msgid "An offline transaction was initiated by the following command:"
+#, c++-format
 msgid ""
 "Warning: A pending offline transaction initiated by the following command "
 "will be invalidated: {}"
-msgstr "En frånkopplad transaktion initierades av följande kommando:"
+msgstr ""
+"Varning: En väntande offline-transaktion som initierats av följande kommando "
+"kommer att ogiltigförklaras: {}"
 
 #: main.cpp:1730
 msgid ""
@@ -2191,12 +2188,17 @@ msgid ""
 "inconsistencies when the transient overlay on /usr is discarded. See the "
 "usr_drift_protected_paths configuration option for more information."
 msgstr ""
+"Denna transaktion skulle ändra följande sökvägar, vilket potentiellt kan "
+"leda till inkonsekvenser när det temporära överlagret på /usr tas bort. Se "
+"konfigurationsalternativet usr_drift_protected_paths för mer information."
 
 #: main.cpp:1741
 msgid ""
 "Operation aborted. Pass --setopt=usr_drift_protected_paths= to disable this "
 "check and proceed anyway."
 msgstr ""
+"Åtgärden avbröts. Ange --setopt=usr_drift_protected_paths= för att "
+"inaktivera den här kontrollen och fortsätt ändå."
 
 #: main.cpp:1750
 msgid ""
@@ -2204,6 +2206,9 @@ msgid ""
 "reboot. Keep in mind that changes to /etc and /var will still persist, and "
 "packages commonly modify these directories."
 msgstr ""
+"Ett tillfälligt överlägg (overlay) skapas över /usr och tas bort vid "
+"omstart. Tänk på att ändringar i /etc och /var kommer att finnas kvar, och "
+"att paket ofta ändrar dessa kataloger."
 
 #: main.cpp:1787
 #, c++-format
@@ -2243,8 +2248,6 @@ msgid "REPO_ID,..."
 msgstr "REPO_ID,..."
 
 #: shared_options.cpp:193
-#, fuzzy
-#| msgid "\"--from_repo\" already defined with diferent value"
 msgid "\"--from_repo\" already defined with different value"
 msgstr "\"--from_repo\" redan definierat med annat värde"
 
@@ -2256,35 +2259,26 @@ msgstr ""
 "Filtrera installerade paket efter ID:t för det förråd det installerades från."
 
 #: shared_options.cpp:220
-#, fuzzy
-#| msgid "\"--installed-from_repo\" already defined with diferent value"
 msgid "\"--installed-from_repo\" already defined with different value"
 msgstr "\"--installed-from_repo\" redan definierat med annat värde"
 
 #: shared_options.cpp:236
-#, fuzzy
-#| msgid ""
-#| "The following items can be selected only from the specified repositories. "
-#| "All enabled repositories will still be used to satisfy dependencies."
 msgid ""
 "The following items can be selected only from the specified vendors. The "
 "vendor is ignored or vendor change policies (if allow_vendor_change=0) will "
 "still be used for items that satisfy dependencies."
 msgstr ""
-"Följande objekt kan endast väljas från de angivna förråden. Alla aktiverade "
-"förråd kommer fortfarande att användas för att uppfylla beroenden."
+"Följande objekt kan endast väljas från de angivna leverantörerna. "
+"Leverantören ignoreras, eller så tillämpas reglerna för leverantörsbyte (om "
+"allow_vendor_change=0), för objekt som uppfyller beroenden."
 
 #: shared_options.cpp:239
-#, fuzzy
-#| msgid "CVE_ID,..."
 msgid "VENDOR,..."
-msgstr "CVE_ID,..."
+msgstr "LEVERANTÖR,..."
 
 #: shared_options.cpp:248
-#, fuzzy
-#| msgid "\"--from_repo\" already defined with diferent value"
 msgid "\"--from_vendor\" already defined with different value"
-msgstr "\"--from_repo\" redan definierat med annat värde"
+msgstr "\"--from_vendor\" redan definierat med annat värde"
 
 #~ msgid "No matching packages to list"
 #~ msgstr "Inga matchande paket att lista"
