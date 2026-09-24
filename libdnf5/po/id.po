@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-08 12:03+0000\n"
+"POT-Creation-Date: 2026-09-22 14:19+0000\n"
 "PO-Revision-Date: 2026-09-11 21:18+0000\n"
 "Last-Translator: Arif Budiman <arifpedia@gmail.com>\n"
 "Language-Team: Indonesian <https://translate.fedoraproject.org/projects/dnf5/"
@@ -830,7 +830,8 @@ msgstr "{func}(): Berkas tidak ada: {path}"
 
 #: base/vendor_change_manager.cpp:240
 msgid "{func}(): Cannot remove existing policy file: {path}"
-msgstr "{func}(): Tidak dapat menghapus berkas kebijakan yang sudah ada: {path}"
+msgstr ""
+"{func}(): Tidak dapat menghapus berkas kebijakan yang sudah ada: {path}"
 
 #: base/vendor_change_manager.cpp:252
 msgid "{func}(): Cannot create file: {path}"
@@ -1750,46 +1751,37 @@ msgstr ""
 "Kesalahan penguraian kebijakan perubahan vendor ringkas dalam \"{}\" pada "
 "posisi {}"
 
-#: solv/vendor_change_manager.cpp:913
-msgid "Empty vendor policy string"
-msgstr "String kebijakan vendor kosong"
-
-#: solv/vendor_change_manager.cpp:930
+#: solv/vendor_change_manager.cpp:931
 msgid "Expected package filter after '@'"
 msgstr "Diharapkan filter paket setelah '@'"
 
-#: solv/vendor_change_manager.cpp:943
+#: solv/vendor_change_manager.cpp:944
 #, c++-format
 msgid "Unexpected character '{}'"
 msgstr "Karakter '{}' tidak terduga"
 
-#: solv/vendor_change_manager.cpp:947
-msgid "Empty policy: no vendor definitions or package filters specified"
-msgstr ""
-"Kebijakan kosong: tidak ada definisi vendor atau filter paket yang ditentukan"
-
-#: solv/vendor_change_manager.cpp:1023
+#: solv/vendor_change_manager.cpp:1020
 msgid "Expected quoted string starting with '\"'"
 msgstr "Diharapkan string yang dikutip, diawali dengan '\"'"
 
-#: solv/vendor_change_manager.cpp:1031
+#: solv/vendor_change_manager.cpp:1028
 msgid "Unterminated escape sequence"
 msgstr "Urutan escape tidak diakhiri"
 
-#: solv/vendor_change_manager.cpp:1037
+#: solv/vendor_change_manager.cpp:1034
 #, c++-format
 msgid "Invalid escape sequence '\\{}'. Only '\\\"' and '\\\\' are supported"
 msgstr "Urutan escape '{}' tidak valid. Hanya '\"' dan '\\' yang didukung"
 
-#: solv/vendor_change_manager.cpp:1044
+#: solv/vendor_change_manager.cpp:1041
 msgid "Unterminated quoted string"
 msgstr "String yang dikutip tidak diakhiri"
 
-#: solv/vendor_change_manager.cpp:1079
+#: solv/vendor_change_manager.cpp:1076
 msgid "Expected direction prefix 'in', 'out', or 'eq'"
 msgstr "Diharapkan prefiks arah 'in', 'out', atau 'eq'"
 
-#: solv/vendor_change_manager.cpp:1143
+#: solv/vendor_change_manager.cpp:1140
 msgid ""
 "Expected comparison operator: relational (<, <=, >, >=) or string (=, ^, $, "
 "*, =*, =~; optionally prefixed with ! and/or i"
@@ -1797,7 +1789,7 @@ msgstr ""
 "Diharapkan operator perbandingan: relasional (<, <=, >, >=) atau string (=, "
 "^, $, *, =*, =~; opsional diawali dengan ! dan/atau i"
 
-#: solv/vendor_change_manager.cpp:1208
+#: solv/vendor_change_manager.cpp:1205
 msgid ""
 "Vendor definition does not support relational comparators. Use string "
 "comparators: =, ^, $, *, =*, =~"
@@ -1805,34 +1797,34 @@ msgstr ""
 "Definisi vendor tidak mendukung komparator relasional. Gunakan komparator "
 "string: =, ^, $, *, =*, =~"
 
-#: solv/vendor_change_manager.cpp:1216
+#: solv/vendor_change_manager.cpp:1213
 #, c++-format
 msgid "Invalid regex vendor pattern '{}': {}"
 msgstr "Pola vendor regex '{}' tidak valid: {}"
 
-#: solv/vendor_change_manager.cpp:1234
+#: solv/vendor_change_manager.cpp:1231
 #, c++-format
 msgid "Unknown filter field name '{}'"
 msgstr "Nama bidang filter '{}' tidak dikenal"
 
-#: solv/vendor_change_manager.cpp:1244
+#: solv/vendor_change_manager.cpp:1241
 msgid "Expected filter field name"
 msgstr "Diharapkan nama bidang filter"
 
-#: solv/vendor_change_manager.cpp:1267
+#: solv/vendor_change_manager.cpp:1264
 #, c++-format
 msgid "Invalid epoch value \"{}\""
 msgstr "Nilai epoch \"{}\" tidak valid"
 
-#: solv/vendor_change_manager.cpp:1271
+#: solv/vendor_change_manager.cpp:1268
 msgid "Filter 'cmdline_repo' only supports the '=' (EXACT) comparator"
 msgstr "Filter 'cmdline_repo' hanya mendukung komparator '=' (EXACT)"
 
-#: solv/vendor_change_manager.cpp:1274
+#: solv/vendor_change_manager.cpp:1271
 msgid "Filter 'cmdline_repo' is only allowed in incoming packages ('in:')"
 msgstr "Filter 'cmdline_repo' hanya diizinkan dalam paket masuk ('in:')"
 
-#: solv/vendor_change_manager.cpp:1285
+#: solv/vendor_change_manager.cpp:1282
 #, c++-format
 msgid ""
 "Invalid value '{}' for 'cmdline_repo' filter. Use 'true', '1', 'false', or "
@@ -1841,27 +1833,27 @@ msgstr ""
 "Nilai '{}' tidak valid untuk filter 'cmdline_repo'. Gunakan 'true', '1', "
 "'false', atau '0'"
 
-#: solv/vendor_change_manager.cpp:1289
+#: solv/vendor_change_manager.cpp:1286
 #, c++-format
 msgid "Filter '{}' only supports relational comparators: =, !=, >, >=, <, <="
 msgstr "Filter '{}' hanya mendukung komparator relasional: =, !=, >, >=, <, <="
 
-#: solv/vendor_change_manager.cpp:1293
+#: solv/vendor_change_manager.cpp:1290
 #, c++-format
 msgid "Filter '{}' only supports string comparators: =, ^, $, *, =*, =~"
 msgstr "Filter '{}' hanya mendukung komparator string: =, ^, $, *, =*, =~"
 
-#: solv/vendor_change_manager.cpp:1302
+#: solv/vendor_change_manager.cpp:1299
 #, c++-format
 msgid "Invalid regex '{}': {}"
 msgstr "Regex '{}' tidak valid: {}"
 
-#: solv/vendor_change_manager.cpp:1313
+#: solv/vendor_change_manager.cpp:1310
 msgid "Package filters do not support 'eq' direction. Use 'in' or 'out'"
 msgstr "Filter paket tidak mendukung arah 'eq'. Gunakan 'in' atau 'out'"
 
-#: solv/vendor_change_manager.cpp:1404 solv/vendor_change_manager.cpp:1454
-#: solv/vendor_change_manager.cpp:1465 solv/vendor_change_manager.cpp:1476
+#: solv/vendor_change_manager.cpp:1401 solv/vendor_change_manager.cpp:1451
+#: solv/vendor_change_manager.cpp:1462 solv/vendor_change_manager.cpp:1473
 msgid "{func}(): Policy index {idx} is out of range"
 msgstr "{func}(): Indeks kebijakan {idx} berada di luar rentang"
 
@@ -2511,6 +2503,14 @@ msgstr "gagal membaca berkas konfigurasi RPM"
 #: utils/system.cpp:52
 msgid "Failed to execute uname()"
 msgstr "Gagal menjalankan fungsi uname()"
+
+#~ msgid "Empty vendor policy string"
+#~ msgstr "String kebijakan vendor kosong"
+
+#~ msgid "Empty policy: no vendor definitions or package filters specified"
+#~ msgstr ""
+#~ "Kebijakan kosong: tidak ada definisi vendor atau filter paket yang "
+#~ "ditentukan"
 
 #~ msgid "failed to save xml document for comps"
 #~ msgstr "gagal menyimpan dokumen XML untuk comps"

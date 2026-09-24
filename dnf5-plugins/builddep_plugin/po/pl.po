@@ -2,13 +2,14 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # Paweł Marciniak <sunwire+fas@gmail.com>, 2024.
+# Tomasz Bojanowski <tomasz@bojanowski.me>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-08 12:03+0000\n"
-"PO-Revision-Date: 2024-10-11 19:04+0000\n"
-"Last-Translator: Paweł Marciniak <sunwire+fas@gmail.com>\n"
+"POT-Creation-Date: 2026-09-22 14:19+0000\n"
+"PO-Revision-Date: 2026-09-22 17:49+0000\n"
+"Last-Translator: Tomasz Bojanowski <tomasz@bojanowski.me>\n"
 "Language-Team: Polish <https://translate.fedoraproject.org/projects/dnf5/"
 "dnf5-plugin-builddep/pl/>\n"
 "Language: pl\n"
@@ -17,15 +18,14 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 5.7.2\n"
+"X-Generator: Weblate 2026.9.1\n"
 
 #: builddep.cpp:84
 #, c++-format
 msgid ""
 "Invalid value for macro definition \"{}\". \"macro expr\" format expected."
 msgstr ""
-"Nieprawidłowa wartość dla definicji makra „{}”. Oczekiwano formatu „macro "
-"expr”."
+"Nieprawidłowa wartość definicji makra „{}”. Oczekiwano formatu „macro expr”."
 
 #. failed to parse some of inputs (invalid spec, no package matched...)
 #: builddep.cpp:359

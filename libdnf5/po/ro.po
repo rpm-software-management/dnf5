@@ -2,12 +2,13 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # Remus-Gabriel Chelu <remusgabriel.chelu@disroot.org>, 2024, 2025, 2026.
+# Petru Rebeja <petru@rebeja.eu>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-08 12:03+0000\n"
-"PO-Revision-Date: 2026-09-10 18:18+0000\n"
+"POT-Creation-Date: 2026-09-22 14:19+0000\n"
+"PO-Revision-Date: 2026-09-14 18:17+0000\n"
 "Last-Translator: Remus-Gabriel Chelu <remusgabriel.chelu@disroot.org>\n"
 "Language-Team: Romanian <https://translate.fedoraproject.org/projects/dnf5/"
 "libdnf5/ro/>\n"
@@ -1777,48 +1778,38 @@ msgstr ""
 "Eroare de analizare a politicii de schimbare a furnizorului compact în „{}” "
 "la poziția {}"
 
-#: solv/vendor_change_manager.cpp:913
-msgid "Empty vendor policy string"
-msgstr "Șir de politică pentru furnizor gol"
-
-#: solv/vendor_change_manager.cpp:930
+#: solv/vendor_change_manager.cpp:931
 msgid "Expected package filter after '@'"
 msgstr "Se aștepta un filtru de pachete după „@”"
 
-#: solv/vendor_change_manager.cpp:943
+#: solv/vendor_change_manager.cpp:944
 #, c++-format
 msgid "Unexpected character '{}'"
 msgstr "Caracter neașteptat „{}”"
 
-#: solv/vendor_change_manager.cpp:947
-msgid "Empty policy: no vendor definitions or package filters specified"
-msgstr ""
-"Politică goală: nu sunt specificate definiții de furnizori sau filtre de "
-"pachete"
-
-#: solv/vendor_change_manager.cpp:1023
+#: solv/vendor_change_manager.cpp:1020
 msgid "Expected quoted string starting with '\"'"
 msgstr "Se aștepta un șir de caractere care începe cu '\"'"
 
-#: solv/vendor_change_manager.cpp:1031
+#: solv/vendor_change_manager.cpp:1028
 msgid "Unterminated escape sequence"
 msgstr "Secvență de eludare neterminată"
 
-#: solv/vendor_change_manager.cpp:1037
+#: solv/vendor_change_manager.cpp:1034
 #, c++-format
 msgid "Invalid escape sequence '\\{}'. Only '\\\"' and '\\\\' are supported"
 msgstr ""
 "Secvență de eludare nevalidă „\\{}”. Sunt acceptate doar „\\\"” și „\\\\”"
 
-#: solv/vendor_change_manager.cpp:1044
+#: solv/vendor_change_manager.cpp:1041
 msgid "Unterminated quoted string"
 msgstr "Șir citat neterminat"
 
-#: solv/vendor_change_manager.cpp:1079
+#: solv/vendor_change_manager.cpp:1076
 msgid "Expected direction prefix 'in', 'out', or 'eq'"
 msgstr "Se aștepta prefixul de direcție „in”, „out” sau „eq”"
 
-#: solv/vendor_change_manager.cpp:1143
+#: solv/vendor_change_manager.cpp:1140
 msgid ""
 "Expected comparison operator: relational (<, <=, >, >=) or string (=, ^, $, "
 "*, =*, =~; optionally prefixed with ! and/or i"
@@ -1826,7 +1817,7 @@ msgstr ""
 "Operator de comparație așteptat: relațional (<, <=, >, >=) sau șir de "
 "caractere (=, ^, $, *, =*, =~; opțional precedat de ! și/sau i"
 
-#: solv/vendor_change_manager.cpp:1208
+#: solv/vendor_change_manager.cpp:1205
 msgid ""
 "Vendor definition does not support relational comparators. Use string "
 "comparators: =, ^, $, *, =*, =~"
@@ -1834,67 +1825,67 @@ msgstr ""
 "Definiția furnizorului nu acceptă comparatori relaționali. Utilizați "
 "comparatori de tip șir de caractere: =, ^, $, *, =*, =~"
 
-#: solv/vendor_change_manager.cpp:1216
+#: solv/vendor_change_manager.cpp:1213
 #, c++-format
 msgid "Invalid regex vendor pattern '{}': {}"
 msgstr "Modelul de expresie regulată al furnizorului nu este valid: „{}”: {}"
 
-#: solv/vendor_change_manager.cpp:1234
+#: solv/vendor_change_manager.cpp:1231
 #, c++-format
 msgid "Unknown filter field name '{}'"
 msgstr "Nume necunoscut al câmpului de filtrare „{}”"
 
-#: solv/vendor_change_manager.cpp:1244
+#: solv/vendor_change_manager.cpp:1241
 msgid "Expected filter field name"
 msgstr "Se aștepta numele câmpului de filtrare"
 
-#: solv/vendor_change_manager.cpp:1267
+#: solv/vendor_change_manager.cpp:1264
 #, c++-format
 msgid "Invalid epoch value \"{}\""
 msgstr "Valoare de epocă nevalidă „{}”"
 
-#: solv/vendor_change_manager.cpp:1271
+#: solv/vendor_change_manager.cpp:1268
 msgid "Filter 'cmdline_repo' only supports the '=' (EXACT) comparator"
-msgstr "Filtrul „cmdline_repo” acceptă doar comparatorul „=” (EXACT)"
+msgstr "Filtrul „cmdline_repo” acceptă doar comparatorul „=” (EXACT)."
 
-#: solv/vendor_change_manager.cpp:1274
+#: solv/vendor_change_manager.cpp:1271
 msgid "Filter 'cmdline_repo' is only allowed in incoming packages ('in:')"
 msgstr "Filtrul „cmdline_repo” este permis numai în pachetele primite („in:”)"
 
-#: solv/vendor_change_manager.cpp:1285
+#: solv/vendor_change_manager.cpp:1282
 #, c++-format
 msgid ""
 "Invalid value '{}' for 'cmdline_repo' filter. Use 'true', '1', 'false', or "
 "'0'"
 msgstr ""
-"Valoare nevalidă „{}” pentru filtrul „cmdline_repo”. Utilizați „true”, „1”, "
-"„false” sau „0”"
+"Valoarea „{}” nu este validă pentru filtrul „cmdline_repo”. Utilizați "
+"„true”, „1”, „false” sau „0”"
 
-#: solv/vendor_change_manager.cpp:1289
+#: solv/vendor_change_manager.cpp:1286
 #, c++-format
 msgid "Filter '{}' only supports relational comparators: =, !=, >, >=, <, <="
 msgstr ""
 "Filtrul „{}” acceptă doar operatorii de comparație relațională: =, !=, >, "
 ">=, <, <="
 
-#: solv/vendor_change_manager.cpp:1293
+#: solv/vendor_change_manager.cpp:1290
 #, c++-format
 msgid "Filter '{}' only supports string comparators: =, ^, $, *, =*, =~"
 msgstr ""
 "Filtrul „{}” acceptă doar operatorii de comparare pentru șiruri de "
 "caractere: =, ^, $, *, =*, =~"
 
-#: solv/vendor_change_manager.cpp:1302
+#: solv/vendor_change_manager.cpp:1299
 #, c++-format
 msgid "Invalid regex '{}': {}"
 msgstr "Expresie regulată nevalidă „{}”: {}"
 
-#: solv/vendor_change_manager.cpp:1313
+#: solv/vendor_change_manager.cpp:1310
 msgid "Package filters do not support 'eq' direction. Use 'in' or 'out'"
 msgstr "Filtrele de pachete nu acceptă direcția „eq”. Utilizați „in” sau „out”"
 
-#: solv/vendor_change_manager.cpp:1404 solv/vendor_change_manager.cpp:1454
-#: solv/vendor_change_manager.cpp:1465 solv/vendor_change_manager.cpp:1476
+#: solv/vendor_change_manager.cpp:1401 solv/vendor_change_manager.cpp:1451
+#: solv/vendor_change_manager.cpp:1462 solv/vendor_change_manager.cpp:1473
 msgid "{func}(): Policy index {idx} is out of range"
 msgstr "{func}(): Indicele politicii {idx} este în afara intervalului"
 
@@ -2540,6 +2531,14 @@ msgstr "eșec la citirea fișierelor de configurare RPM"
 #: utils/system.cpp:52
 msgid "Failed to execute uname()"
 msgstr "Execuția uname() a eșuat"
+
+#~ msgid "Empty vendor policy string"
+#~ msgstr "Șir de politică pentru furnizor gol"
+
+#~ msgid "Empty policy: no vendor definitions or package filters specified"
+#~ msgstr ""
+#~ "Politică goală: nu sunt specificate definiții de furnizori sau filtre de "
+#~ "pachete"
 
 #~ msgid "failed to save xml document for comps"
 #~ msgstr "nu s-a putut salva documentul xml pentru comps"

@@ -1,7 +1,7 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# Ricky Tigg <ricky.tigg@gmail.com>, 2024, 2025.
+# Ricky Tigg <ricky.tigg@gmail.com>, 2024, 2025, 2026.
 # Weblate Translation Memory <noreply-mt-weblate-translation-memory@weblate.org>, 2024.
 # Jiri Grönroos <jiri.gronroos@iki.fi>, 2024, 2025.
 # Ville-Pekka Vainio <vpvainio@iki.fi>, 2024.
@@ -10,10 +10,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-08 12:03+0000\n"
-"PO-Revision-Date: 2026-01-19 12:58+0000\n"
-"Last-Translator: Jouko Tiilikainen "
-"<jti65@users.noreply.translate.fedoraproject.org>\n"
+"POT-Creation-Date: 2026-09-22 14:19+0000\n"
+"PO-Revision-Date: 2026-09-17 11:18+0000\n"
+"Last-Translator: Ricky Tigg <ricky.tigg@gmail.com>\n"
 "Language-Team: Finnish <https://translate.fedoraproject.org/projects/dnf5/"
 "dnf5/fi/>\n"
 "Language: fi\n"
@@ -21,7 +20,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.15.2\n"
+"X-Generator: Weblate 2026.9.1\n"
 
 #: cmdline_aliases.cpp:84 context.cpp:198 main.cpp:1449
 msgid ", "
@@ -246,10 +245,8 @@ msgstr "Luettele neuvot"
 
 #: commands/advisory/advisory_subcommand.cpp:93 commands/no_matches.cpp:74
 #: commands/repoquery/repoquery.cpp:903
-#, fuzzy
-#| msgid "No matching repositories for {}"
 msgid "No matches found: no repositories are enabled."
-msgstr "Ei vastaavia tietovarastoja {}:lle"
+msgstr "Ei osumia: yhtään tietoivarastoa ei ole otettu käyttöön."
 
 #: commands/advisory/advisory_summary.cpp:44
 msgid "All"
@@ -421,6 +418,9 @@ msgid ""
 "either mark it as user-installed or change protected_packages configuration "
 "option."
 msgstr ""
+"Tarpeeton suojattu paketti: {0}:a ja sen riippuvuuksia ei voi poistaa; joko "
+"merkitse se käyttäjän asentamaksi tai muuta protected_packages-"
+"määritysasetusta."
 
 #: commands/check-upgrade/check-upgrade.cpp:47
 msgid "Check for available package upgrades"
@@ -524,8 +524,7 @@ msgid "Action was not defined"
 msgstr "Toimenpidettä ei määritetty"
 
 #: commands/do/do.cpp:231
-#, fuzzy, c++-format
-#| msgid "Invalid Environmet/Group specification: {}"
+#, c++-format
 msgid "Invalid Environment/Group specification: {}"
 msgstr "Virheellinen ympäristön/ryhmän määritys: {}"
 
@@ -534,8 +533,6 @@ msgid "Downgrading environments and groups is not supported."
 msgstr "Ympäristöjen ja ryhmien päivittämistä alempaan versioon ei tueta."
 
 #: commands/do/do.cpp:332
-#, fuzzy
-#| msgid "Reinstaling environments and groups is not supported."
 msgid "Reinstalling environments and groups is not supported."
 msgstr "Ympäristöjen ja ryhmien uudelleenasentamista ei tueta."
 
@@ -552,7 +549,7 @@ msgstr ""
 #: commands/download/download.cpp:139
 #, c++-format
 msgid "Invalid urlprotocol option: {}"
-msgstr "Virheellinen URL-protokollan urlprotocol-valitsin: {}"
+msgstr "Virheellinen urlprotocol-valitsin: {}"
 
 #: commands/download/download.cpp:166 main.cpp:685
 #, c++-format
@@ -582,8 +579,6 @@ msgid "Show only installed environments."
 msgstr "Näytä vain asennetut ympäristöt."
 
 #: commands/environment/arguments.hpp:47
-#, fuzzy
-#| msgid "Pattern matching environment IDs."
 msgid "Pattern matching environment identifiers."
 msgstr "Lauseketta vastaavat ympäristötunnukset."
 
@@ -594,19 +589,17 @@ msgstr "Hallitse comps-ympäristöjä"
 #: commands/environment/environment_info.cpp:101
 #: commands/environment/environment_list.cpp:99
 msgid "No matches found: no environments are installed."
-msgstr ""
+msgstr "Ei osumia: ympäristöjä ei ole asennettu."
 
 #: commands/environment/environment_info.cpp:103
 #: commands/environment/environment_list.cpp:101
 msgid "No matches found: no environments are available."
-msgstr ""
+msgstr "Ei osumia: ympäristöjä ei ole saatavilla."
 
 #: commands/environment/environment_info.cpp:105
 #: commands/environment/environment_list.cpp:103
-#, fuzzy
-#| msgid "No matches found for \"{}\"."
 msgid "No matches found: no environments exist."
-msgstr "Ei tuloksia haulle ”{}”."
+msgstr "Ei osumia: ympäristöjä ei ole olemassa."
 
 #: commands/group/arguments.hpp:34
 msgid "Show only available groups."
@@ -629,67 +622,49 @@ msgstr ""
 "Luettelovaihtoehto, tukee laajamittaisia."
 
 #: commands/group/arguments.hpp:67
-#, fuzzy
-#| msgid "Pattern matching group IDS."
 msgid "Pattern matching group identifiers."
 msgstr "Lauseketta vastaavat ryhmien tunnukset."
 
 #: commands/group/arguments.hpp:77
-#, fuzzy
-#| msgid "Pattern matching environment IDs."
 msgid "Pattern matching group or environment identifiers."
-msgstr "Lauseketta vastaavat ympäristötunnukset."
+msgstr "Lauseketta vastaavat ryhmä- tai ympäristötunnukset."
 
 #: commands/group/arguments.hpp:86
-#, fuzzy
-#| msgid "Include optional packages from group."
 msgid "Include optional packages from groups."
-msgstr "Sisällytä valinnaiset paketit ryhmästä."
+msgstr "Sisällytä valinnaiset paketit ryhmistä."
 
 #: commands/group/arguments.hpp:97
-#, fuzzy
-#| msgid "Operate on groups only, no packages are changed."
 msgid "Operate on environments and groups only, no packages are changed."
-msgstr "Käsittele vain ryhmiä, paketteja ei muuteta."
+msgstr "Kohdistuu vain ympäristöihin ja ryhmiin; paketteja ei muuteta."
 
 #: commands/group/group_list.cpp:114
-#, fuzzy
-#| msgid "No matches found for \"{}\"."
 msgid "No matches found: no groups are installed."
-msgstr "Ei tuloksia haulle ”{}”."
+msgstr "Ei osumia: yhtään ryhmää ei ole asennettu."
 
 #: commands/group/group_list.cpp:116
-#, fuzzy
-#| msgid "No matches found for \"{}\"."
 msgid "No matches found: no groups are available."
-msgstr "Ei tuloksia haulle ”{}”."
+msgstr "Ei osumia: ryhmiä ei ole saatavilla."
 
 #: commands/group/group_list.cpp:118
-#, fuzzy
-#| msgid "No matches found for \"{}\"."
 msgid "No matches found: no groups exist."
-msgstr "Ei tuloksia haulle ”{}”."
+msgstr "Ei osumia: ryhmiä ei ole olemassa."
 
 #: commands/group/group_list.cpp:144
 #, c++-format
 msgid "Groups: {0} ({1} {2}, {3} {4})"
-msgstr ""
+msgstr "Ryhmät: {0} ({1} {2}, {3} {4})"
 
 #: commands/group/group_list.cpp:147
-#, fuzzy
-#| msgid "Installed"
 msgid "installed"
 msgid_plural "installed"
-msgstr[0] "Asennettu"
-msgstr[1] "Asennettu"
+msgstr[0] "asennettu"
+msgstr[1] "asennettu"
 
 #: commands/group/group_list.cpp:149
-#, fuzzy
-#| msgid "Available"
 msgid "available"
 msgid_plural "available"
-msgstr[0] "Saatavilla"
-msgstr[1] "Saatavilla"
+msgstr[0] "saatavilla"
+msgstr[1] "saatavilla"
 
 #: commands/history/arguments.hpp:37
 msgid "Transaction ID"
@@ -777,12 +752,12 @@ msgstr ""
 "vaadi"
 
 #: commands/list/info.hpp:38
-#, fuzzy
-#| msgid "Lists packages depending on the packages' relation to the system"
 msgid ""
 "Lists packages depending on the packages' relation to the system with "
 "additional details"
-msgstr "Luetteloi paketit riippuen pakettien suhteesta järjestelmään"
+msgstr ""
+"Luetteloi paketit riippuen pakettien suhteesta järjestelmään lisätietojen "
+"kanssa"
 
 #: commands/list/list.cpp:49
 msgid "List of package-spec-NI to match (case insensitively)"
@@ -882,17 +857,15 @@ msgstr "Hallitse moduuleja"
 
 #: commands/module/module_list.cpp:88
 msgid "No matches found: no module streams are enabled."
-msgstr ""
+msgstr "Ei osumia: yhtään moduulivirtaa ei ole otettu käyttöön."
 
 #: commands/module/module_list.cpp:90
 msgid "No matches found: no module streams are disabled."
-msgstr ""
+msgstr "Ei osumia: yhtään moduulivirtaa ei ole poistettu käytöstä."
 
 #: commands/module/module_list.cpp:92
-#, fuzzy
-#| msgid "No matches found for \"{}\"."
 msgid "No matches found: no module streams exist."
-msgstr "Ei tuloksia haulle ”{}”."
+msgstr "Ei osumia: moduulivirtoja ei ole olemassa."
 
 #: commands/no_matches.cpp:14
 #, c++-format
@@ -908,10 +881,8 @@ msgstr ""
 "isäntäjärjestelmän kokoonpanoa ja tietovarastoja, välitä `--use-host-config`."
 
 #: commands/no_matches.cpp:78 commands/no_matches.hpp:45
-#, fuzzy
-#| msgid "No matches found for \"{}\"."
 msgid "No matches found."
-msgstr "Ei tuloksia haulle ”{}”."
+msgstr "Ei osumia."
 
 #: commands/offline/offline.cpp:217
 msgid "Manage offline transactions"
@@ -930,6 +901,7 @@ msgstr ""
 msgid ""
 "The system has been modified since the offline transaction was prepared."
 msgstr ""
+"Järjestelmää on muutettu sen jälkeen, kun ei-verkkotapahtuma valmisteltiin."
 
 #: commands/offline/offline.cpp:268
 #, c++-format
@@ -937,6 +909,8 @@ msgid ""
 "The system has been modified since the offline transaction was prepared. To "
 "reschedule, run: {}"
 msgstr ""
+"Järjestelmää on muutettu sen jälkeen, kun ei-verkkotapahtuma valmisteltiin. "
+"Sen uudelleenajoittamiseksi, suorita: {}"
 
 #: commands/offline/offline.cpp:290
 #, c++-format
@@ -1070,21 +1044,19 @@ msgid "Show status of the current offline transaction"
 msgstr "Näytä nykyisen ei-verkkotapahtuman tila"
 
 #: commands/offline/offline.cpp:752
-#, fuzzy
-#| msgid ""
-#| "The system will now reboot to perform the offline transaction initiated "
-#| "by the following command:"
 msgid ""
 "The system has been modified since the offline transaction was prepared. The "
 "offline transaction initiated by the following command is no longer valid:"
 msgstr ""
-"Järjestelmä käynnistyy nyt uudelleen suorittaakseen ei-verkkotapahtuman, "
-"joka on aloitettu seuraavalla komennolla:"
+"Järjestelmää on muutettu sen jälkeen, kun ei-verkkotapahtuma valmisteltiin. "
+"Seuraavalla komennolla käynnistetty ei-verkkotapahtuma ei ole enää voimassa:"
 
 #: commands/offline/offline.cpp:756
 msgid ""
 "To reschedule, run the command above. To clean up, run `dnf5 offline clean`."
 msgstr ""
+"Suorita yllä oleva komento ajoittaaksesi toiminnon uudelleen. Suorita `dnf5 "
+"offline clean` siivotaksesi."
 
 #: commands/offline/offline.cpp:760
 msgid "An offline transaction was initiated by the following command:"
@@ -1118,6 +1090,8 @@ msgid ""
 "If searching for a file, try specifying the full path or using a wildcard "
 "prefix (\"*/\") at the beginning."
 msgstr ""
+"Tiedoston etsimisessä, kokeile määrittää koko polku tai käyttää "
+"jokerimerkkietuliitettä (\"*/\") alussa."
 
 #: commands/reinstall/reinstall.cpp:40
 msgid "Reinstall software"
@@ -1132,18 +1106,21 @@ msgid ""
 "Option '--limit' must be equal or greater than 1 (to keep at least the "
 "newest installed package)."
 msgstr ""
+"Valitsimen '--limit' arvon on oltava yhtä suuri tai suurempi kuin yksi, "
+"jotta ainakin uusin asennettu paketti säilytettäisiin."
 
 #: commands/remove/remove.cpp:237
 msgid "Option '--limit' can only be used with '--oldinstallonly'."
 msgstr ""
+"Valitsinta '--limit' voi käyttää vain yhdessä '--oldinstallonly':n kanssa."
 
 #: commands/remove/remove.cpp:242
-#, fuzzy
-#| msgid "{}. Add \"--help\" for more information about the arguments."
 msgid ""
 "Missing positional arguments for \"remove\" command. Add \"--help\" for more "
 "information about the arguments."
-msgstr "{}. Lisää `--help` lisätietojen saamiseksi argumenteista."
+msgstr ""
+"Komennolta 'remove' puuttuu paikkaperusteisia argumentteja. Lisää '--help' "
+"saadaksesi lisätietoja argumenteista."
 
 #: commands/remove/remove.cpp:269
 #, c++-format
@@ -1152,6 +1129,9 @@ msgid ""
 "version and was not removed. Please reboot into the latest kernel and run "
 "this command again to complete the cleanup."
 msgstr ""
+"Varoitus: Tällä hetkellä käytössä oleva ydin ”{}” ei ole uusin asennettu "
+"versio, eikä sitä poistettu. Käynnistä järjestelmä uudelleen uusimmalla "
+"ytimellä ja suorita tämä komento uudelleen puhdistuksen viimeistelemiseksi."
 
 #: commands/replay/replay.cpp:38
 msgid "Replay a transaction that was previously stored to a directory"
@@ -1211,14 +1191,13 @@ msgstr "Etsi ohjelmistoja, jotka vastaavat kaikkia määritettyjä merkkijonoja"
 
 #: commands/search/search.cpp:70
 msgid "Options --name and --summary cannot be used together."
-msgstr ""
+msgstr "Valitsimia '--name' ja '--summary' ei voi käyttää yhdessä."
 
 #: commands/search/search.cpp:74
-#, fuzzy
-#| msgid "Option \"--alldeps\" should be used with \"--resolve\""
 msgid "Option --all cannot be used with --name or --summary."
 msgstr ""
-"Valitsinta”'--alldeps” tulee käyttää yhdessä valitsimen ”--resolve” kanssa"
+"Valitsinta '--all' ei voi käyttää valitsinten '--name' tai '--summary' "
+"kanssa."
 
 #: commands/swap/swap.cpp:42
 msgid "Remove software and install another in one transaction"
@@ -1286,11 +1265,8 @@ msgid "Add new entry to versionlock configuration"
 msgstr "Lisää uusi merkintä versiolukituskokoonpanoon"
 
 #: commands/versionlock/versionlock_add.cpp:44
-#, fuzzy
-#| msgid "List of package specs to remove versionlock for"
 msgid "List of packages to lock to their current versions"
-msgstr ""
-"Luettelo pakettien teknisistä tiedoista, joiden versiolukitus poistetaan"
+msgstr "Luettelo paketeista, jotka lukitaan nykyisiin versioihinsa"
 
 #: commands/versionlock/versionlock_add.cpp:107
 #: commands/versionlock/versionlock_exclude.cpp:128
@@ -1334,6 +1310,8 @@ msgid ""
 "List of packages to exclude. If no version is specified, all available "
 "versions of the package will be excluded."
 msgstr ""
+"Luettelo pois jätettävistä paketeista. Jos versiota ei määritetä, kaikki "
+"paketin saatavilla olevat versiot jätetään pois."
 
 #: commands/versionlock/versionlock_exclude.cpp:91
 #: commands/versionlock/versionlock_exclude.cpp:103
@@ -1347,37 +1325,33 @@ msgid "Package \"{}\" is already excluded."
 msgstr "Paketti ”{}” on jo suljettu pois."
 
 #: context.cpp:73
-#, fuzzy, c++-format
-#| msgid "Query Commands:"
+#, c++-format
 msgid "Command: {}"
-msgstr "Kyselykomennot:"
+msgstr "Komento: {}"
 
 #: context.cpp:81
 #, c++-format
 msgid "Process ID: {} (still running)"
-msgstr ""
+msgstr "Prosessitunnus: {} (yhä käynnissä)"
 
 #: context.cpp:83
 #, c++-format
 msgid "Process ID: {}"
-msgstr ""
+msgstr "Prosessitunnus: {}"
 
 #: context.cpp:92
-#, fuzzy, c++-format
-#| msgid "setvar: {}"
+#, c++-format
 msgid "Started: {}"
-msgstr "setvar: {}"
+msgstr "Käynnistetty: {}"
 
 #: context.cpp:99
 #, c++-format
 msgid "Comment: {}"
-msgstr ""
+msgstr "Kommentti: {}"
 
 #: context.cpp:103
-#, fuzzy
-#| msgid "Show status of the current offline transaction"
 msgid "Details about the currently running transaction:\n"
-msgstr "Näytä nykyisen ei-verkkotapahtuman tila"
+msgstr "Yksityiskohdat parhaillaan käynnissä olevasta tapahtumasta:\n"
 
 #: context.cpp:121
 #, c++-format
@@ -1467,16 +1441,20 @@ msgid ""
 "Waiting for a lock on the system repository; another process is currently "
 "accessing it. Use the \"--skip-file-locks\" option to bypass the lock."
 msgstr ""
+"Odotetaan lukitusta järjestelmän tietovarastolle; toinen prosessi käyttää "
+"sitä parhaillaan. Ohita lukitus käyttämällä '--skip-file-locks'-valitsinta."
 
 #: context.cpp:282
 msgid ""
 "Waiting for a lock on the system repository. The following processes are "
 "currently accessing it:"
 msgstr ""
+"Odotetaan järjestelmän tietovaraston lukitusta. Seuraavat prosessit "
+"käyttävät sitä parhaillaan:"
 
 #: context.cpp:292
 msgid "Use the \"--skip-file-locks\" option to bypass the lock."
-msgstr ""
+msgstr "Ohita lukitus käyttämällä '--skip-file-locks'-valitsinta."
 
 #. If we're only loading the system repo, we can skip the message.
 #: context.cpp:300
@@ -1537,16 +1515,13 @@ msgid "Running transaction"
 msgstr "Suoritetaan transaktio"
 
 #: context.cpp:551
-#, fuzzy
-#| msgid "Starting offline transaction. This will take a while."
 msgid "Warning: Pending offline transaction has been invalidated."
-msgstr ""
-"Käynnistetään ei-verkkotilassa oleva tapahtuma. Tämä kestää jonkin aikaa."
+msgstr "Varoitus: Odottava ei-verkkotapahtuma on mitätöity."
 
 #: context.cpp:553
 #, c++-format
 msgid "To reschedule, run: {}"
-msgstr ""
+msgstr "Uudelleenajoittamiseksi, suorita: {}"
 
 #: context.cpp:916
 #, c++-format
@@ -1772,11 +1747,11 @@ msgstr "älä rajoita transaktiota parhaaseen ehdokkaaseen"
 
 #: main.cpp:343
 msgid "allow automatic package replacements from different vendors"
-msgstr ""
+msgstr "salli pakettien automaattiset korvaukset eri toimittajilta"
 
 #: main.cpp:350
 msgid "do not allow automatic package replacements from different vendors"
-msgstr ""
+msgstr "älä salli pakettien automaattista korvaamista eri toimittajilta"
 
 #: main.cpp:361
 msgid ""
@@ -1869,16 +1844,12 @@ msgid "override the value of $releasever in config and repo files"
 msgstr "ohittaa $releasever-arvon asetus- ja ohjelmistolähdetiedostoissa"
 
 #: main.cpp:557
-#, fuzzy
-#| msgid "override the value of $releasever in config and repo files"
 msgid "override the value of $releasever_major in config and repo files"
-msgstr "ohittaa $releasever-arvon asetus- ja ohjelmistolähdetiedostoissa"
+msgstr "ohittaa $releasever_major-arvon asetus- ja tietovarastotiedostoissa"
 
 #: main.cpp:570
-#, fuzzy
-#| msgid "override the value of $releasever in config and repo files"
 msgid "override the value of $releasever_minor in config and repo files"
-msgstr "ohittaa $releasever-arvon asetus- ja ohjelmistolähdetiedostoissa"
+msgstr "ohittaa $releasever_minor-arvon asetus- ja tietovarastotiedostoissa"
 
 #: main.cpp:583
 msgid ""
@@ -1918,6 +1889,7 @@ msgstr "Pakota käyttämään eri arkkitehtuurin."
 #: main.cpp:698
 msgid "Skip acquiring file locks, such as the lock on the system repository"
 msgstr ""
+"Ohita tiedostolukkojen, kuten järjestelmän tietovaraston lukon, hankkiminen"
 
 #: main.cpp:713
 msgid "Software Management Commands:"
@@ -1976,16 +1948,12 @@ msgid "  API version: {}.{}"
 msgstr "  API-versio: {}.{}"
 
 #: main.cpp:863
-#, fuzzy
-#| msgid ""
-#| "\n"
-#| "Loaded {} plugins:"
 msgid ""
 "\n"
 "Loaded libdnf5 plugins:"
 msgstr ""
 "\n"
-"Ladatut {}-liitännäiset:"
+"Ladatut libdnf5-liitännäiset:"
 
 #: main.cpp:910
 #, c++-format
@@ -2083,10 +2051,9 @@ msgid "{} to skip uninstallable packages"
 msgstr "{} ei-asennettavissa olevien pakettien ohittamiseksi"
 
 #: main.cpp:1229
-#, fuzzy, c++-format
-#| msgid "{} to allow extra packages in the transaction"
+#, c++-format
 msgid "{} to allow changing package vendors"
-msgstr "{} ylimääräisten pakettien sallimiseksi tapahtumassa"
+msgstr "{} mahdollistaakseen pakettien toimittajien vaihtamisen"
 
 #: main.cpp:1233
 msgid "You can try to add to command line:"
@@ -2158,6 +2125,8 @@ msgid ""
 "{}. Dropping all logs. To redirect the log file location use the \"logdir\" "
 "configuration option."
 msgstr ""
+"{}. Kaikki lokitiedot hylätään. Lokitiedoston sijainnin "
+"uudelleenohjaamiseksi, käytä 'logdir'-määritysvaihtoehtoa."
 
 #: main.cpp:1578
 msgid ""
@@ -2172,7 +2141,7 @@ msgstr ""
 #: main.cpp:1592
 #, c++-format
 msgid "Warning: {}"
-msgstr ""
+msgstr "Varoitus: {}"
 
 #: main.cpp:1605
 msgid ""
@@ -2180,6 +2149,9 @@ msgid ""
 "or immutable operating system. For more information, refer to your "
 "distribution's documentation."
 msgstr ""
+"Virhe: /usr on määritetty vain luku -tilaan. Käytössäsi saattaa olla "
+"levykuvapohjainen tai muuttumaton käyttöjärjestelmä. Lisätietoja on jakelusi "
+"dokumentaatiossa."
 
 #: main.cpp:1624
 msgid ""
@@ -2187,23 +2159,23 @@ msgid ""
 "transient to perform this operation in a transient overlay which will reset "
 "when the system reboots."
 msgstr ""
+"Virhe: pysyviä transaktioita ei tueta bootc-järjestelmissä. Käytä valitsinta "
+"'--transient' suorittaaksesi toiminnon väliaikaisessa peittokerroksessa, "
+"joka nollautuu järjestelmän käynnistyessä uudelleen."
 
 #: main.cpp:1634
-#, fuzzy
-#| msgid ""
-#| "Error: this bootc system is configured to be read-only. For more "
-#| "information, run `bootc --help`."
 msgid ""
 "Error: this bootc system is configured to be read-only. Pass --transient to "
 "perform this operation in a transient overlay which will reset when the "
 "system reboots."
 msgstr ""
-"Virhe: Tämä bootc-järjestelmä on määritetty vain luku -tilaan. Saat "
-"lisätietoja suorittamalla `bootc --help`."
+"Virhe: tämä bootc-järjestelmä on määritetty vain luku -tilaan. Käytä "
+"valitsinta '--transient' suorittaaksesi toiminnon väliaikaisessa "
+"peittokerroksessa, joka nollautuu järjestelmän käynnistyessä uudelleen."
 
 #: main.cpp:1645
 msgid "Error: transient transactions are only supported on bootc systems."
-msgstr ""
+msgstr "Virhe: Väliaikaisia tapahtumia tuetaan vain bootc-järjestelmissä."
 
 #: main.cpp:1686
 #, c++-format
@@ -2223,19 +2195,17 @@ msgstr ""
 "tapahtumatarkistukset suoritetaan."
 
 #: main.cpp:1702
-#, fuzzy
-#| msgid "Starting offline transaction. This will take a while."
 msgid "Warning: A pending offline transaction will be invalidated."
-msgstr ""
-"Käynnistetään ei-verkkotilassa oleva tapahtuma. Tämä kestää jonkin aikaa."
+msgstr "Varoitus: Käsittelyssä oleva ei-verkkotapahtuma mitätöidään."
 
 #: main.cpp:1705
-#, fuzzy, c++-format
-#| msgid "An offline transaction was initiated by the following command:"
+#, c++-format
 msgid ""
 "Warning: A pending offline transaction initiated by the following command "
 "will be invalidated: {}"
-msgstr "Ei-verkkotapahtuma aloitettiin seuraavalla komennolla:"
+msgstr ""
+"Varoitus: Seuraavan komennon käynnistämä, vireillä oleva ei-verkkotapahtuma "
+"mitätöidään: {}"
 
 #: main.cpp:1730
 msgid ""
@@ -2243,12 +2213,17 @@ msgid ""
 "inconsistencies when the transient overlay on /usr is discarded. See the "
 "usr_drift_protected_paths configuration option for more information."
 msgstr ""
+"Tämä toimenpide muuttaisi seuraavia polkuja, mikä saattaisi aiheuttaa "
+"epäjohdonmukaisuuksia, kun /usr-hakemiston väliaikainen peittotaso "
+"poistetaan käytöstä. Lisätietoja on usr_drift_protected_paths-asetuksessa."
 
 #: main.cpp:1741
 msgid ""
 "Operation aborted. Pass --setopt=usr_drift_protected_paths= to disable this "
 "check and proceed anyway."
 msgstr ""
+"Toiminto keskeytettiin. Ohita tarkistus ja jatka silti käyttämällä "
+"valitsinta '--setopt=usr_drift_protected_paths='."
 
 #: main.cpp:1750
 msgid ""
@@ -2256,6 +2231,10 @@ msgid ""
 "reboot. Keep in mind that changes to /etc and /var will still persist, and "
 "packages commonly modify these directories."
 msgstr ""
+"/usr-hakemistoon luodaan väliaikainen peittokerros, joka häviää järjestelmän "
+"uudelleenkäynnistyksen yhteydessä. On hyvä muistaa, että /etc- ja /var-"
+"hakemistoihin tehdyt muutokset säilyvät, ja paketit muokkaavat näitä "
+"hakemistoja tyypillisesti."
 
 #: main.cpp:1787
 #, c++-format
@@ -2296,8 +2275,6 @@ msgid "REPO_ID,..."
 msgstr "TIETOVARASTON_TUNNUS,..."
 
 #: shared_options.cpp:193
-#, fuzzy
-#| msgid "\"--from_repo\" already defined with diferent value"
 msgid "\"--from_repo\" already defined with different value"
 msgstr "\"--from_repo\" jo määritelty eri arvolla"
 
@@ -2310,36 +2287,27 @@ msgstr ""
 "asennettu."
 
 #: shared_options.cpp:220
-#, fuzzy
-#| msgid "\"--installed-from_repo\" already defined with diferent value"
 msgid "\"--installed-from_repo\" already defined with different value"
 msgstr "\"--installed-from_repo\" jo määritelty eri arvolla"
 
 #: shared_options.cpp:236
-#, fuzzy
-#| msgid ""
-#| "The following items can be selected only from the specified repositories. "
-#| "All enabled repositories will still be used to satisfy dependencies."
 msgid ""
 "The following items can be selected only from the specified vendors. The "
 "vendor is ignored or vendor change policies (if allow_vendor_change=0) will "
 "still be used for items that satisfy dependencies."
 msgstr ""
-"Seuraavat kohteet voidaan valita vain määritetyistä tietovarastoista. "
-"Kaikkia käytössä olevia tietovarastoja käytetään edelleen riippuvuuksien "
-"täyttämiseen."
+"Seuraavat kohteet voidaan valita vain määritetyiltä toimittajilta. "
+"Toimittaja jätetään huomiotta, tai toimittajan vaihtoa koskevia käytäntöjä "
+"(jos allow_vendor_change=0) sovelletaan edelleen nimikkeisiin, jotka "
+"täyttävät riippuvuudet."
 
 #: shared_options.cpp:239
-#, fuzzy
-#| msgid "CVE_ID,..."
 msgid "VENDOR,..."
-msgstr "CVE-TUNNUS,..."
+msgstr "TOIMITTAJA,..."
 
 #: shared_options.cpp:248
-#, fuzzy
-#| msgid "\"--from_repo\" already defined with diferent value"
 msgid "\"--from_vendor\" already defined with different value"
-msgstr "\"--from_repo\" jo määritelty eri arvolla"
+msgstr "'--from_vendor' jo määritetty eri arvolla"
 
 #~ msgid "No matching packages to list"
 #~ msgstr "Ei yhtään vastaavaa pakettia lueteltavaksi"

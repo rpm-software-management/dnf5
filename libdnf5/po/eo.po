@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-08 12:03+0000\n"
-"PO-Revision-Date: 2026-04-06 22:59+0000\n"
+"POT-Creation-Date: 2026-09-22 14:19+0000\n"
+"PO-Revision-Date: 2026-09-17 11:18+0000\n"
 "Last-Translator: Keith Bowes <zooplah@gmail.com>\n"
 "Language-Team: Esperanto <https://translate.fedoraproject.org/projects/dnf5/"
 "libdnf5/eo/>\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.16.2\n"
+"X-Generator: Weblate 2026.9.1\n"
 
 #: advisory/advisory.cpp:81
 #, c++-format
@@ -29,13 +29,12 @@ msgstr ""
 
 #: advisory/advisory_collection.cpp:94
 msgid "This libdnf5 does not support modularity"
-msgstr ""
+msgstr "Ĉi tiu libdnf5 ne enhavas modulecon."
 
 #: base/active_transaction_info.cpp:93 base/active_transaction_info.cpp:95
-#, fuzzy, c++-format
-#| msgid "Error during transaction replay JSON parsing : {}"
+#, c++-format
 msgid "Error parsing transaction info: {}"
-msgstr "Eraro dum transakcia refaro de JSON-analizo: {}"
+msgstr "Eraro dum analizo de transakciaj informoj: {}"
 
 #: base/base.cpp:185
 #, c++-format
@@ -319,16 +318,14 @@ msgid "Packages for argument '{}' installed, but not available."
 msgstr "Pakoj por argumento '{}' instalitaj, sed ne disponeblaj."
 
 #: base/log_event.cpp:248
-#, fuzzy, c++-format
-#| msgid "Package \"{}\" is already installed."
+#, c++-format
 msgid "Group \"{}\" is already installed."
-msgstr "Pako \"{}\" jam estas instalita."
+msgstr "Grupo \"{}\" jam estas instalita."
 
 #: base/log_event.cpp:251
-#, fuzzy, c++-format
-#| msgid "Package \"{}\" is already installed."
+#, c++-format
 msgid "Environmental group \"{}\" is already installed."
-msgstr "Pako \"{}\" jam estas instalita."
+msgstr "Medigrupo \"{}\" jam estas instalita."
 
 #: base/log_event.cpp:258
 #, c++-format
@@ -594,14 +591,12 @@ msgid ""
 msgstr "La operacio kaŭzus la forigon de la jenaj protektataj pakoj: {}"
 
 #: base/solver_problems.cpp:75
-#, fuzzy, c++-format
-#| msgid ""
-#| "The operation would result in removing the following protected packages: "
-#| "{}"
+#, c++-format
 msgid ""
 "The operation would result in broken dependencies for the following "
 "protected packages: {}"
-msgstr "La operacio kaŭzus la forigon de la jenaj protektataj pakoj: {}"
+msgstr ""
+"La operacio kaŭzus rompitajn dependaĵojn de la jenaj protektataj pakoj: {}"
 
 #: base/solver_problems.cpp:78
 #, c++-format
@@ -745,15 +740,11 @@ msgstr "Importo de publika ŝlosilo malsukcesis."
 
 #: base/transaction.cpp:993
 msgid "poll failed during scriptlets pipe processing"
-msgstr ""
+msgstr "enketado malsukcesis dum traktado de dukto de skriptetoj"
 
 #: base/transaction.cpp:1016
-#, fuzzy
-#| msgid "Failed to set scriptlet output file, cannot open file \"{}\": {}"
 msgid "failed to read scriptlet output from pipe"
-msgstr ""
-"Malsukcesis elekti skriptetan eligo-dosieron, ne eblas malfermi dosieron \"{}"
-"\": {}"
+msgstr "malsukcesis legi eligon de skripteto el dukto"
 
 #: base/transaction.cpp:1134
 #, c++-format
@@ -805,43 +796,38 @@ msgstr[1] ""
 "Averto: preterpasis OpenPGP-kontrolojn por {0} pakoj el deponejoj: {1}"
 
 #: base/vendor_change_manager.cpp:145
-#, fuzzy
-#| msgid "Cannot set the locale \"{}\": {}"
 msgid "{func}(): Cannot remove file: {path}: {msg}"
-msgstr "Ne eblas starigi lokaĵaron \"{}\": {}"
+msgstr "{func}()): Ne eblas forigi dosieron: {path}: {msg}"
 
 #: base/vendor_change_manager.cpp:151
 msgid "{func}(): File does not exist: {path}"
-msgstr ""
+msgstr "{func}(): Dosiero ne ekzistas: {path}"
 
 #: base/vendor_change_manager.cpp:240
-#, fuzzy
-#| msgid "Cannot set the locale \"{}\": {}"
 msgid "{func}(): Cannot remove existing policy file: {path}"
-msgstr "Ne eblas starigi lokaĵaron \"{}\": {}"
+msgstr "{func}(): Ne eblas forigi jaman politiko-dosieron: {path}"
 
 #: base/vendor_change_manager.cpp:252
 msgid "{func}(): Cannot create file: {path}"
-msgstr ""
+msgstr "{func}(): Ne eblas krei dosieron: {path}"
 
 #: base/vendor_change_manager.cpp:269
-#, fuzzy
-#| msgid "Cannot set the locale \"{}\": {}"
 msgid "{func}(): Cannot write to file: {path}"
-msgstr "Ne eblas starigi lokaĵaron \"{}\": {}"
+msgstr "{func}(): Ne eblas skribi al dosiero: {path}"
 
 #: base/vendor_change_manager.cpp:306
 msgid "{func}(): Base filename cannot be empty"
-msgstr ""
+msgstr "{func}(): Baza dosiernome ne eblas malpleni"
 
 #: base/vendor_change_manager.cpp:312
 msgid ""
 "{func}(): Base filename must not contain path components: {base_filename}"
 msgstr ""
+"{func}(): Baza dosiernomo devas ne enhavi vojajn partojn: {base_filename}"
 
 #: base/vendor_change_manager.cpp:437
 msgid "{func}(): Path must have .conf extension: {path}"
-msgstr ""
+msgstr "{func}(): Dosiero devas havi sufikson .conf: {path}"
 
 #: common/exception.cpp:78
 msgid "System error"
@@ -852,16 +838,14 @@ msgid "General RuntimeError exception"
 msgstr "Ĝenerala escepto RuntimeError"
 
 #: common/proc.cpp:88
-#, fuzzy, c++-format
-#| msgid "Cannot install package \"{}\""
+#, c++-format
 msgid "Cannot stat {}"
-msgstr "Ne eblas instali pakon \"{}\""
+msgstr "{} ne atingeblas"
 
 #: common/proc.cpp:124
-#, fuzzy, c++-format
-#| msgid "cannot open file"
+#, c++-format
 msgid "Cannot open {}"
-msgstr "ne eblas malfermi dosieron"
+msgstr "{} ne fermeblas"
 
 #: common/sack/query.cpp:27
 msgid "Query must contain exactly one object."
@@ -878,11 +862,10 @@ msgstr ""
 "uzulo"
 
 #: comps/environment/environment.cpp:361
-#, fuzzy, c++-format
-#| msgid "Failed to save xml document for group \"{}\" to file \"{}\": {}"
+#, c++-format
 msgid "Failed to save xml document for environment \"{}\" to file \"{}\": {}"
 msgstr ""
-"Malsukcesis konservi xml-dokumenton por grupo \"{}\" al dosiero \"{}\": {}"
+"Malsukcesis konservi xml-dokumenton por medio \"{}\" al dosiero \"{}\": {}"
 
 #: comps/group/group.cpp:354
 #, c++-format
@@ -1127,10 +1110,8 @@ msgid "Cannot find plugin library \"{}\""
 msgstr "Ne eblas trovi kromprograman bibliotekon \"{}\""
 
 #: plugin/plugins.cpp:181
-#, fuzzy
-#| msgid "Plugins::load_plugins(): config_dir_path cannot be empty"
 msgid "Plugins::load_plugins(): config_dirs cannot be empty"
-msgstr "Plugins::load_plugins(): config_dir_path ne rajtas esti malplena"
+msgstr "Plugins::load_plugins(): config_dirs ne eblas esti malplena"
 
 #: plugin/plugins.cpp:194
 #, c++-format
@@ -1238,28 +1219,24 @@ msgid "Empty path to the repository cache directory."
 msgstr "Malplena vojo al la kaŝmemora dosierujo de la deponejo."
 
 #: repo/repo_config_override.cpp:69
-#, fuzzy, c++-format
-#| msgid "Failed to download metadata ({}: \"{}\") for repository \"{}\": {}"
+#, c++-format
 msgid "Cannot set option \"{}\" for repository \"{}\": {}"
-msgstr "Malsukcesis elŝuti metadatumojn ({}: \"{}\") por deponejo \"{}\": {}"
+msgstr "Maleblas agordi opcion \"{}\" por deponejo \"{}\": {}"
 
 #: repo/repo_config_override.cpp:84
-#, fuzzy, c++-format
-#| msgid "Cannot set root directory \"{}\""
+#, c++-format
 msgid "Cannot create directory \"{}\": {}"
-msgstr "Ne eblas elekti radikan dosiuerujon \"{}\""
+msgstr "Ne eblas krei dosiuerujon \"{}\": {}"
 
 #: repo/repo_config_override.cpp:136 repo/repo_config_override.cpp:143
-#, fuzzy, c++-format
-#| msgid "Cannot set the locale \"{}\": {}"
+#, c++-format
 msgid "Cannot write to file \"{}\": {}"
-msgstr "Ne eblas starigi lokaĵaron \"{}\": {}"
+msgstr "Ne eblas skribi al dosieron\"{}\": {}"
 
 #: repo/repo_config_override.cpp:157
-#, fuzzy, c++-format
-#| msgid "Cannot set the locale \"{}\": {}"
+#, c++-format
 msgid "Cannot set permissions on file \"{}\": {}"
-msgstr "Ne eblas starigi lokaĵaron \"{}\": {}"
+msgstr "Ne eblas agordi atingorajtojn de dosiero \"{}\": {}"
 
 #: repo/repo_downloader.cpp:224
 #, c++-format
@@ -1389,7 +1366,7 @@ msgstr ""
 
 #: rpm/checksum.cpp:98
 msgid "Unknown checksum type"
-msgstr ""
+msgstr "Nekonata kontrolsuma tipo"
 
 #: rpm/nevra.cpp:82
 #, c++-format
@@ -1467,6 +1444,10 @@ msgid ""
 "versions after an interrupted upgrade. Please remove the duplicate packages "
 "using \"dnf remove\" and retry."
 msgstr ""
+"La RPM-transakcio neatendite forigus pakojn ne planitaj de la solvilo: {}. "
+"Tiu tipe okazas kiam la RPM-datumbazo enhavas duobligitajn pako-eldonojn "
+"post interrompita promocio. Bonvolu forigi la duobligitajn pakojn per \"dnf "
+"remove\" kaj reprovi."
 
 #: rpm/transaction.cpp:236
 msgid "Failed to order the rpm transaction."
@@ -1549,16 +1530,14 @@ msgid "Writing debugsolver data into \"{}\" failed: {}"
 msgstr "Skribo de datumoj de senerariga solvilo al \"{}\" malsukcesis: {}"
 
 #: solv/vendor_change_manager.cpp:339
-#, fuzzy, c++-format
-#| msgid "Missing section header on line {}"
+#, c++-format
 msgid "Missing \"version\" key in \"{}\""
-msgstr "Sekcia ĉapo en linio {} mankas"
+msgstr "Ŝlosilo \"version\" en \"{}\" mankas"
 
 #: solv/vendor_change_manager.cpp:351
-#, fuzzy, c++-format
-#| msgid "Unsupported TOML version \"{}\", maximum supported version is \"{}\""
+#, c++-format
 msgid "Unsupported version \"{}\" in \"{}\". Supported versions: {}"
-msgstr "Neregata TOML-eldono \"{}\", maksimuma regata eldono estas \"{}\""
+msgstr "Nekonata eldono \"{}\" en \"{}\". Konataj eldonoj: {}"
 
 #: solv/vendor_change_manager.cpp:362
 #, c++-format
@@ -1566,12 +1545,14 @@ msgid ""
 "Configuration \"{}\" uses version \"1.0\" which does not support combining "
 "'equivalent_vendors' with 'outgoing_vendors' and 'incoming_vendors'"
 msgstr ""
+"Agordo \"{}\" uzas eldonon \"1.0\", kiu ne ebligas kombinon de "
+"'equivalent_vendors' kun 'outgoing_vendors' kaj 'incoming_vendors'"
 
 #: solv/vendor_change_manager.cpp:394 solv/vendor_change_manager.cpp:432
 #: solv/vendor_change_manager.cpp:484 solv/vendor_change_manager.cpp:709
 #, c++-format
 msgid "Unknown key '{}' in \"{}\" on line {}"
-msgstr ""
+msgstr "Nekonata ŝlosilo '{}' en \"{}\" en linio {}"
 
 #: solv/vendor_change_manager.cpp:401
 #, c++-format
@@ -1579,6 +1560,7 @@ msgid ""
 "Configuration \"{}\" uses version \"1.0\" which does not support key '{}' on "
 "line {}"
 msgstr ""
+"Agordo \"{}\" uzas eldonon \"1.0\", kiu ne ebligas ŝlosilon '{}' en linio {}"
 
 #: solv/vendor_change_manager.cpp:420
 #, c++-format
@@ -1586,23 +1568,27 @@ msgid ""
 "Filter \"cmdline_repo\" is only allowed in the 'incoming_packages' section. "
 "Error in \"{}\" in table starting on line {}"
 msgstr ""
+"Filtrilo \"cmd_repo\" estas permesata nur en la sekcio 'incoming_packages'. "
+"Eraro en \"{}\" en tabelo komencanta en linio {}"
 
 #: solv/vendor_change_manager.cpp:442
 #, c++-format
 msgid ""
 "Missing package filter definition in \"{}\" in table starting on line {}"
-msgstr ""
+msgstr "Paka filtrila difino en \"{}\" en tabelo komencanta en linio {} mankas"
 
 #: solv/vendor_change_manager.cpp:473
 #, c++-format
 msgid ""
 "Unsupported comparator \"{}\" for vendor definition in \"{}\" on line {}"
 msgstr ""
+"Valoro \"{}\" de 'comparator' por difino de vendinto en \"{}\" en linio {}"
+"estas nekonata"
 
 #: solv/vendor_change_manager.cpp:494
 #, c++-format
 msgid "Missing 'vendor' key in \"{}\" in table starting on line {}"
-msgstr ""
+msgstr "La ŝlosilo 'vendor' en \"{}\" en tabelo komencanta en linio {} mankas"
 
 #: solv/vendor_change_manager.cpp:507
 #, c++-format
@@ -1610,17 +1596,18 @@ msgid ""
 "Invalid regex vendor pattern \"{}\" in \"{}\" in table starting on line {}: "
 "{}"
 msgstr ""
+"Nevalida regulesprima ŝablono por vendinto \"{}\" en {} en tabelo komencanta "
+"en linio {}: {}"
 
 #: solv/vendor_change_manager.cpp:535
 #, c++-format
 msgid "Bad value type in \"{}\" on line {}: {}"
-msgstr ""
+msgstr "Malbona valora tipo en \"{}\" en linio {}: {}"
 
 #: solv/vendor_change_manager.cpp:541
-#, fuzzy, c++-format
-#| msgid "An error occurred importing key \"{}\": {}"
+#, c++-format
 msgid "An error occurred when parsing \"{}\": {}"
-msgstr "Eraro okazis dum importado de ŝlosilo: \"{}\": {}"
+msgstr "Eraro okazis dum analizo de \"{}\": {}"
 
 #: solv/vendor_change_manager.cpp:555
 #, c++-format
@@ -1628,6 +1615,8 @@ msgid ""
 "Configuration \"{}\" uses version \"1.0\" which does not support "
 "'incoming_vendors' without 'outgoing_vendors'"
 msgstr ""
+"Agordo \"{}\" uzas eldonon \"1.0\", kiu ne ebligas uzon de "
+"'incoming_vendors' sen 'outgoing_vendors'"
 
 #: solv/vendor_change_manager.cpp:561
 #, c++-format
@@ -1635,11 +1624,13 @@ msgid ""
 "Configuration \"{}\" uses version \"1.0\" which does not support "
 "'outgoing_vendors' without 'incoming_vendors'"
 msgstr ""
+"Agordo \"{}\" uzas eldonon \"1.0\", kiu ne ebligas uzon de outgoing_vendors' "
+"send 'incoming_vendors'"
 
 #: solv/vendor_change_manager.cpp:651
 #, c++-format
 msgid "Unknown 'comparator' \"{}\" in \"{}\" on line {}"
-msgstr ""
+msgstr "Nekonata valoro \"{}\" de 'comparator' en \"{}\" en linio {}"
 
 #: solv/vendor_change_manager.cpp:655
 #, c++-format
@@ -1647,21 +1638,22 @@ msgid ""
 "Configuration \"{}\" uses version \"{}\" which does not support 'comparator' "
 "\"{}\""
 msgstr ""
+"Agordo \"{}\" uzas eldonon \"{}\", kiu ne ebligas uzon de 'comparator' \"{}\""
 
 #: solv/vendor_change_manager.cpp:694
 #, c++-format
 msgid "Unknown 'filter' \"{}\" in \"{}\" on line {}"
-msgstr ""
+msgstr "Nekonata valoro \"{}\" de 'filter' en \"{}\" en linio {}"
 
 #: solv/vendor_change_manager.cpp:715
 #, c++-format
 msgid "Missing 'filter' key in \"{}\" for table entry on line {}"
-msgstr ""
+msgstr "Ŝlosilo por 'filter' en \"{}\" por tabelero en lino {} mankas"
 
 #: solv/vendor_change_manager.cpp:720
 #, c++-format
 msgid "Missing 'value' key in \"{}\" for table entry on line {}"
-msgstr ""
+msgstr "La ŝlosilo 'valoro' en \"{}\" por tabelero en linio {} mankas"
 
 #: solv/vendor_change_manager.cpp:727
 #, c++-format
@@ -1670,6 +1662,9 @@ msgid ""
 "support comparator \"{}\". Only the default \"EXACT\" comparator is allowed "
 "for this filter"
 msgstr ""
+"Filtrilo \"cmd_repo\" en \"{}\" en tabelo komencanta en linio {} ne ebligas "
+"uzon de valoro \"{}\" de 'comparator'. Nur la apriora valoro \"EXACT\" estas "
+"permesata por ĉi tiu filtrilo."
 
 #: solv/vendor_change_manager.cpp:744
 #, c++-format
@@ -1677,6 +1672,8 @@ msgid ""
 "Invalid 'value' \"{}\" in \"{}\" in table starting on line {}. Only "
 "\"true\", \"1\", \"false\", \"0\" are supported"
 msgstr ""
+"Nevalida 'value' \"{}\" en \"{}\" en tabelo komencanta en linio {}. La solaj "
+"eblaj valoroj estas \"true\", \"1\", \"false\", \"0\""
 
 #: solv/vendor_change_manager.cpp:754 solv/vendor_change_manager.cpp:765
 #, c++-format
@@ -1684,147 +1681,147 @@ msgid ""
 "Filter \"{}\" in \"{}\" in table starting on line {} does not support "
 "comparator \"{}\""
 msgstr ""
+"Filtrilo \"{}\" en \"{}\" en tabelo komencanta en linio {} ne ebligas la "
+"valoron \"{}\" de 'comparator'"
 
 #: solv/vendor_change_manager.cpp:781
 #, c++-format
 msgid "Invalid epoch value \"{}\" in \"{}\" in table starting on line {}"
 msgstr ""
+"Nevalida epoka valoro \"{}\" en \"{}\" en tabelo komencanta en linio {}"
 
 #: solv/vendor_change_manager.cpp:796
 #, c++-format
 msgid "Invalid regex \"{}\" in \"{}\" in table starting on line {}: {}"
 msgstr ""
+"Nevalida regulesprimo \"{}\" en \"{}\" en tabelo komencanta en linio {}: {}"
 
 #: solv/vendor_change_manager.cpp:848
 msgid "Unexpected end of input"
-msgstr ""
+msgstr "Neatendita fino de enigo"
 
 #: solv/vendor_change_manager.cpp:865
 #, c++-format
 msgid "Expected '{}' but found end of input"
-msgstr ""
+msgstr "Atendis uzon de '{}' sed trovis la finon de enigon"
 
 #: solv/vendor_change_manager.cpp:867
 #, c++-format
 msgid "Expected '{}' but found '{}'"
-msgstr ""
+msgstr "Atendita '{}' sed trovita '{}'"
 
 #: solv/vendor_change_manager.cpp:877
 #, c++-format
 msgid "Compact vendor change policy parse error in \"{}\" at position {}"
 msgstr ""
+"Analiza eraro dum densigi vendinto-ŝanĝan politikon en \"{}\" je pozicio {}"
 
-#: solv/vendor_change_manager.cpp:913
-msgid "Empty vendor policy string"
-msgstr ""
-
-#: solv/vendor_change_manager.cpp:930
+#: solv/vendor_change_manager.cpp:931
 msgid "Expected package filter after '@'"
-msgstr ""
+msgstr "Neatendita pako-filtrilo post '{}'"
 
-#: solv/vendor_change_manager.cpp:943
-#, fuzzy, c++-format
-#| msgid "Invalid repository id \"{}\": unexpected character '{}'"
+#: solv/vendor_change_manager.cpp:944
+#, c++-format
 msgid "Unexpected character '{}'"
-msgstr "Nevalida deponeja identigilo \"{}\": neatendita signo '{}'"
+msgstr "Neatendita signo '{}'"
 
-#: solv/vendor_change_manager.cpp:947
-msgid "Empty policy: no vendor definitions or package filters specified"
-msgstr ""
-
-#: solv/vendor_change_manager.cpp:1023
+#: solv/vendor_change_manager.cpp:1020
 msgid "Expected quoted string starting with '\"'"
-msgstr ""
+msgstr "Neatendita citita ĉeno komenciĝinta per '\"'"
 
-#: solv/vendor_change_manager.cpp:1031
+#: solv/vendor_change_manager.cpp:1028
 msgid "Unterminated escape sequence"
-msgstr ""
+msgstr "Nefinigita eskapa sinsekvo"
 
-#: solv/vendor_change_manager.cpp:1037
+#: solv/vendor_change_manager.cpp:1034
 #, c++-format
 msgid "Invalid escape sequence '\\{}'. Only '\\\"' and '\\\\' are supported"
-msgstr ""
+msgstr "Nevalida eskapa sinsekvo '\\{}'. Nur '\\\"' kaj '\\\\' eblas"
 
-#: solv/vendor_change_manager.cpp:1044
+#: solv/vendor_change_manager.cpp:1041
 msgid "Unterminated quoted string"
-msgstr ""
+msgstr "Nefinigita citita ĉeno"
 
-#: solv/vendor_change_manager.cpp:1079
+#: solv/vendor_change_manager.cpp:1076
 msgid "Expected direction prefix 'in', 'out', or 'eq'"
-msgstr ""
+msgstr "Atendis direkto-prefikson 'in', 'out', aŭ 'eq'"
 
-#: solv/vendor_change_manager.cpp:1143
+#: solv/vendor_change_manager.cpp:1140
 msgid ""
 "Expected comparison operator: relational (<, <=, >, >=) or string (=, ^, $, "
 "*, =*, =~; optionally prefixed with ! and/or i"
 msgstr ""
+"Atendis komparilon: rilata (<, <=, >, >=) aŭ ĉena (=, ^, $, *, =*, =!; "
+"laŭvole prefiksita kun ! kajaŭ i"
 
-#: solv/vendor_change_manager.cpp:1208
+#: solv/vendor_change_manager.cpp:1205
 msgid ""
 "Vendor definition does not support relational comparators. Use string "
 "comparators: =, ^, $, *, =*, =~"
 msgstr ""
+"Difino de difino ne konas rilatajn komparilojn. Uzu ĉenajn komparilojn: =, "
+"^, $, *, =*, =~"
 
-#: solv/vendor_change_manager.cpp:1216
+#: solv/vendor_change_manager.cpp:1213
 #, c++-format
 msgid "Invalid regex vendor pattern '{}': {}"
-msgstr ""
+msgstr "Nevalida regulesprima ŝablono '{}' por vendinto: {}"
 
-#: solv/vendor_change_manager.cpp:1234
-#, fuzzy, c++-format
-#| msgid "Unknown time unit '{}'"
+#: solv/vendor_change_manager.cpp:1231
+#, c++-format
 msgid "Unknown filter field name '{}'"
-msgstr "Nevalida tempa unuo '{}'"
+msgstr "Nekonata filtrila kamponomo '{}'"
 
-#: solv/vendor_change_manager.cpp:1244
+#: solv/vendor_change_manager.cpp:1241
 msgid "Expected filter field name"
-msgstr ""
+msgstr "Atendis filtrilan kamponomon"
 
-#: solv/vendor_change_manager.cpp:1267
-#, fuzzy, c++-format
-#| msgid "Invalid boolean value \"{}\""
+#: solv/vendor_change_manager.cpp:1264
+#, c++-format
 msgid "Invalid epoch value \"{}\""
-msgstr "Nevalida bulea valoro \"{}\""
+msgstr "Nevalida epoka valoro \"{}\""
+
+#: solv/vendor_change_manager.cpp:1268
+msgid "Filter 'cmdline_repo' only supports the '=' (EXACT) comparator"
+msgstr "Filtrilo 'cmdline_repo' konas nur la komparilo '=' (EXACT)"
 
 #: solv/vendor_change_manager.cpp:1271
-msgid "Filter 'cmdline_repo' only supports the '=' (EXACT) comparator"
-msgstr ""
-
-#: solv/vendor_change_manager.cpp:1274
 msgid "Filter 'cmdline_repo' is only allowed in incoming packages ('in:')"
 msgstr ""
+"Filtrilo 'cmdline_repo' estas permesata nur en envenantaj pakoj ('in:')"
 
-#: solv/vendor_change_manager.cpp:1285
+#: solv/vendor_change_manager.cpp:1282
 #, c++-format
 msgid ""
 "Invalid value '{}' for 'cmdline_repo' filter. Use 'true', '1', 'false', or "
 "'0'"
 msgstr ""
+"Nevalida valoro '{}' por filtrilo 'cmdline_repo'. La valoroj 'true', '1', "
+"'false' aŭ '0' uzeblas"
 
-#: solv/vendor_change_manager.cpp:1289
+#: solv/vendor_change_manager.cpp:1286
 #, c++-format
 msgid "Filter '{}' only supports relational comparators: =, !=, >, >=, <, <="
-msgstr ""
+msgstr "Filtrilo '{}' konas nur rilatajn komparilojn: =, !=, #, >=, <, <="
 
-#: solv/vendor_change_manager.cpp:1293
+#: solv/vendor_change_manager.cpp:1290
 #, c++-format
 msgid "Filter '{}' only supports string comparators: =, ^, $, *, =*, =~"
-msgstr ""
+msgstr "Filtro '{}' konas nur ĉenajn komparilojn: =, ^, $, *, =*, =~"
 
-#: solv/vendor_change_manager.cpp:1302
-#, fuzzy, c++-format
-#| msgid "Invalid package type: {}"
+#: solv/vendor_change_manager.cpp:1299
+#, c++-format
 msgid "Invalid regex '{}': {}"
-msgstr "Nevalida pako-tipo: {}"
+msgstr "Nevalida regulesprimo '{}': {}"
 
-#: solv/vendor_change_manager.cpp:1313
+#: solv/vendor_change_manager.cpp:1310
 msgid "Package filters do not support 'eq' direction. Use 'in' or 'out'"
-msgstr ""
+msgstr "Paka filtrilo ne konas la direkton 'eq', sed nur 'in' aŭ 'out'["
 
-#: solv/vendor_change_manager.cpp:1404 solv/vendor_change_manager.cpp:1454
-#: solv/vendor_change_manager.cpp:1465 solv/vendor_change_manager.cpp:1476
+#: solv/vendor_change_manager.cpp:1401 solv/vendor_change_manager.cpp:1451
+#: solv/vendor_change_manager.cpp:1462 solv/vendor_change_manager.cpp:1473
 msgid "{func}(): Policy index {idx} is out of range"
-msgstr ""
+msgstr "{func}(): Politika indico {idx} estas ekster gamo"
 
 #: system/state.cpp:282 system/state.cpp:291
 #, c++-format
@@ -1876,15 +1873,15 @@ msgstr "nekongruanta eldono de stataj datumoj"
 
 #: transaction/transaction.cpp:87
 msgid "Started"
-msgstr ""
+msgstr "Komencita"
 
 #: transaction/transaction.cpp:89
 msgid "Ok"
-msgstr ""
+msgstr "Bone"
 
 #: transaction/transaction.cpp:91
 msgid "Error"
-msgstr ""
+msgstr "Eraro"
 
 #: transaction/transaction.cpp:110
 #, c++-format
@@ -1902,11 +1899,11 @@ msgstr "Nevalida ago de transakcia ero: {}"
 
 #: transaction/transaction_item_action.cpp:74
 msgid "Replaced"
-msgstr ""
+msgstr "Anstataŭita"
 
 #: transaction/transaction_item_action.cpp:84
 msgid "Switch"
-msgstr ""
+msgstr "Baskulo"
 
 #: transaction/transaction_item_reason.cpp:30
 #, c++-format
@@ -1915,31 +1912,31 @@ msgstr "Nevalida kialo de transakcia ero: {}"
 
 #: transaction/transaction_item_reason.cpp:56
 msgid "None"
-msgstr ""
+msgstr "Nenio"
 
 #: transaction/transaction_item_reason.cpp:58
 msgid "Dependency"
-msgstr ""
+msgstr "Dependaĵo"
 
 #: transaction/transaction_item_reason.cpp:60
 msgid "User"
-msgstr ""
+msgstr "Uzulo"
 
 #: transaction/transaction_item_reason.cpp:62
 msgid "Clean"
-msgstr ""
+msgstr "Purigi"
 
 #: transaction/transaction_item_reason.cpp:64
 msgid "Weak Dependency"
-msgstr ""
+msgstr "Malforta dependaĵo"
 
 #: transaction/transaction_item_reason.cpp:66
 msgid "Group"
-msgstr ""
+msgstr "Grupo"
 
 #: transaction/transaction_item_reason.cpp:68
 msgid "External User"
-msgstr ""
+msgstr "Ekstera Uzulo"
 
 #: transaction/transaction_item_state.cpp:28
 #, c++-format
@@ -2132,33 +2129,32 @@ msgstr ""
 #: utils/bootc.cpp:46
 #, c++-format
 msgid "Error checking bootc status: {}"
-msgstr ""
+msgstr "Eraro dum kontrolo de bootc-stato: {}"
 
 #: utils/bootc.cpp:49
 #, c++-format
 msgid "Error checking bootc status: bootc command failed with exit code {}"
 msgstr ""
+"Eraro dum kontrolo de bootc-stato: la komando bootc malsukcesis kun elira "
+"kodo {}"
 
 #: utils/bootc.cpp:58
 msgid "Error checking bootc status: Failed to parse JSON output"
-msgstr ""
+msgstr "Eraro dum kontrolo de bootc-stato: Malsukcesis analizi JSON-eligon"
 
 #: utils/bootc.cpp:73
-#, fuzzy, c++-format
-#| msgid "Failed to update from string: {}"
+#, c++-format
 msgid "Failed to query status of bootc system: {}"
-msgstr "Malsukcesis ĝisdatigi laŭ ĉeno: {}"
+msgstr "Malsukcesis peti staton de bootc-sistemo: {}"
 
 #: utils/bootc.cpp:90
-#, fuzzy
-#| msgid "Failed to download files"
 msgid "Failed to stat /usr filesystem"
-msgstr "Malsukcesis elŝuti dosierojn"
+msgstr "Malsukcesis atingi dosiersistemon de /usr"
 
 #: utils/bootc.cpp:125
 #, c++-format
 msgid "Error running `bootc usr-overlay --read-only`: {}"
-msgstr ""
+msgstr "Ero dum plenumo de `bootc user-overlay --read-only`: {}"
 
 #: utils/bootc.cpp:128
 #, c++-format
@@ -2166,18 +2162,17 @@ msgid ""
 "Error running `bootc usr-overlay --read-only`: bootc command failed with "
 "exit code {}"
 msgstr ""
+"Eraro dum plenumo de `bootc usr-overlay --read-only`: la komando bootc "
+"malsukcesis kun elira kodo {}"
 
 #: utils/bootc.cpp:136
-#, fuzzy
-#| msgid "Failed to execute uname()"
 msgid "Failed to unshare mount namespace"
-msgstr "uname() ne plenumeblas"
+msgstr "Malsukcesis malkunhavi surmeta nomspacon"
 
 #: utils/bootc.cpp:143
-#, fuzzy, c++-format
-#| msgid "Failed to resolve module metadata: {}"
+#, c++-format
 msgid "Failed to remount /usr as read-write: {}"
-msgstr "Malsukcesis solvi modulan metadatumojn: {}"
+msgstr "Malsukcesis dum resurmeto de /usr kiel legebla kaj skribebla: {}"
 
 #: utils/fs/file.cpp:87
 msgid "cannot open file"
@@ -2289,7 +2284,7 @@ msgstr "Malsukcesis krei ŝlosodosieron \"{}\""
 
 #: utils/locker.cpp:108
 msgid "File is already open."
-msgstr ""
+msgstr "Dosiero jam estas malferma."
 
 #: utils/locker.cpp:121
 #, c++-format
@@ -2297,40 +2292,34 @@ msgid "Failed to open lock file \"{}\""
 msgstr "Malsukcesis malfermi ŝlosodosieron \"{}\""
 
 #: utils/locker.cpp:127 utils/locker.cpp:164
-#, fuzzy, c++-format
-#| msgid "The package is not signed."
+#, c++-format
 msgid "The lock file \"{}\" is not opened"
-msgstr "La pako ne estas subskribita."
+msgstr "La ŝlosodosiero \"{}\" ne estas malferma."
 
 #: utils/locker.cpp:132
-#, fuzzy, c++-format
-#| msgid "Failed to close lock file \"{}\""
+#, c++-format
 msgid "Failed to truncate lock file \"{}\""
-msgstr "Malsukcesis fermi ŝlosodosieron \"{}\""
+msgstr "Malsukcesis distranĉi ŝlosodosieron \"{}\""
 
 #: utils/locker.cpp:135 utils/locker.cpp:172
-#, fuzzy, c++-format
-#| msgid "Failed to close lock file \"{}\""
+#, c++-format
 msgid "Failed to seek lock file \"{}\""
-msgstr "Malsukcesis fermi ŝlosodosieron \"{}\""
+msgstr "Malsukcesis serĉi ŝlosodosieron \"{}\""
 
 #: utils/locker.cpp:143
-#, fuzzy, c++-format
-#| msgid "Failed to delete lock file \"{}\""
+#, c++-format
 msgid "Failed to write to lock file \"{}\""
-msgstr "Malsukcesis forigi ŝlosodosieron \"{}\""
+msgstr "Malsukcesis skribi al ŝlosodosiero \"{}\""
 
 #: utils/locker.cpp:150
-#, fuzzy, c++-format
-#| msgid "Failed to open lock file \"{}\""
+#, c++-format
 msgid "Failed to sync lock file \"{}\""
-msgstr "Malsukcesis malfermi ŝlosodosieron \"{}\""
+msgstr "Malsukcesis sinkronigi ŝlosodosieron \"{}\""
 
 #: utils/locker.cpp:178
-#, fuzzy, c++-format
-#| msgid "Failed to open lock file \"{}\""
+#, c++-format
 msgid "Failed to read from lock file \"{}\""
-msgstr "Malsukcesis malfermi ŝlosodosieron \"{}\""
+msgstr "Malsukcesis legi el ŝlosodosiero \"{}\""
 
 #: utils/locker.cpp:192
 #, c++-format
@@ -2428,48 +2417,42 @@ msgid "Failed to restore database \"{}\""
 msgstr "Malsukcesis restarigi datumbazon \"{}\""
 
 #: utils/subprocess.cpp:29
-#, fuzzy
-#| msgid "cannot create temporary file"
 msgid "cannot create pipe"
-msgstr "ne eblas krei provizoran dosieron"
+msgstr "ne eblas krei dukton"
 
 #: utils/subprocess.cpp:98
 msgid "cannot fork"
-msgstr ""
+msgstr "ne eblas disforkiĝi"
 
 #: utils/subprocess.cpp:173
 msgid "cannot bind child stdin"
-msgstr ""
+msgstr "ne eblas ligi idan ĉefenigujon"
 
 #: utils/subprocess.cpp:175
 msgid "cannot bind child stdout"
-msgstr ""
+msgstr "ne eblas ligi idan ĉefeligujon"
 
 #: utils/subprocess.cpp:177
-#, fuzzy
-#| msgid "cannot open file"
 msgid "cannot bind child stderr"
-msgstr "ne eblas malfermi dosieron"
+msgstr "ne eblas ligi idan ĉeferarujon"
 
 #: utils/subprocess.cpp:180
-#, fuzzy, c++-format
-#| msgid "Failed to execute uname()"
+#, c++-format
 msgid "failed to execute command: {}"
-msgstr "uname() ne plenumeblas"
+msgstr "malsukcesis plenumi komandon: {}"
 
 #: utils/subprocess.cpp:185
-#, fuzzy, c++-format
-#| msgid "Error during transaction replay JSON parsing : {}"
+#, c++-format
 msgid "error during preparation of child process: {}"
-msgstr "Eraro dum transakcia refaro de JSON-analizo: {}"
+msgstr "Eraro dum pretigo de ida procezo: {}"
 
 #: utils/subprocess.cpp:211
 msgid "poll failed during subprocess I/O"
-msgstr ""
+msgstr "enketo malsukcesis dum subproceza enigon/eligon"
 
 #: utils/subprocess.cpp:257
 msgid "unexpected child process status after waitpid"
-msgstr ""
+msgstr "neatendita stato de ida procezo post waitpid()"
 
 #: utils/system.cpp:34
 msgid "failed to read rpm config files"

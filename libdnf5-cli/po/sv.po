@@ -1,14 +1,15 @@
 # Rafael Fontenelle <rafaelff@gnome.org>, 2024.
 # Luna Jernberg <bittin@reimu.nl>, 2024, 2025.
-# Weblate Translation Memory <noreply-mt-weblate-translation-memory@weblate.org>, 2024.
+# Weblate Translation Memory <noreply-mt-weblate-translation-memory@weblate.org>, 2024, 2026.
 # Göran Uddeborg <goeran@uddeborg.se>, 2024, 2025.
+# Luna Jernberg <droidbittin@gmail.com>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-08 12:03+0000\n"
-"PO-Revision-Date: 2025-06-11 09:23+0000\n"
-"Last-Translator: Luna Jernberg <bittin@reimu.nl>\n"
+"POT-Creation-Date: 2026-09-22 14:19+0000\n"
+"PO-Revision-Date: 2026-09-22 08:18+0000\n"
+"Last-Translator: Luna Jernberg <droidbittin@gmail.com>\n"
 "Language-Team: Swedish <https://translate.fedoraproject.org/projects/dnf5/"
 "libdnf5-cli/sv/>\n"
 "Language: sv\n"
@@ -16,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.11.4\n"
+"X-Generator: Weblate 2026.9.1\n"
 
 #: argument_parser.cpp:68
 #, c++-format
@@ -180,7 +181,7 @@ msgstr "Namn"
 msgid "Epoch"
 msgstr "Epok"
 
-#: output/packageinfo.cpp:69 output/transaction_table.cpp:290
+#: output/packageinfo.cpp:69 output/transaction_table.cpp:291
 msgid "Version"
 msgstr "Version"
 
@@ -212,7 +213,7 @@ msgstr "Källa"
 msgid "From repository"
 msgstr "Från förråd"
 
-#: output/packageinfo.cpp:96 output/transaction_table.cpp:296
+#: output/packageinfo.cpp:96 output/transaction_table.cpp:297
 #: output/transactioninfo.cpp:76
 msgid "Repository"
 msgstr "Förråd"
@@ -247,56 +248,46 @@ msgstr "Matchade fält: "
 
 #: output/status.cpp:45
 msgid "Groups"
-msgstr ""
+msgstr "Grupper"
 
 #: output/status.cpp:46 output/status.cpp:55 output/status.cpp:72
-#, fuzzy
-#| msgid "Installed size"
 msgid "installed"
-msgstr "Installerad storlek"
+msgstr "installerad"
 
 #: output/status.cpp:47 output/status.cpp:56 output/status.cpp:73
 msgid "available"
-msgstr ""
+msgstr "tillgänglig"
 
 #: output/status.cpp:54
 msgid "Environments"
-msgstr ""
+msgstr "Miljöer"
 
 #: output/status.cpp:71
-#, fuzzy
-#| msgid "Package"
 msgid "Packages"
 msgstr "Paket"
 
 #: output/status.cpp:74
 msgid "user-installed"
-msgstr ""
+msgstr "användar-installerade"
 
 #: output/status.cpp:84
-#, fuzzy
-#| msgid "Installed size"
 msgid "Installed Size"
-msgstr "Installerad storlek"
+msgstr "Installerad Storlek"
 
 #: output/status.cpp:90
-#, fuzzy
-#| msgid "Repository"
 msgid "Enabled Repositories"
-msgstr "Förråd"
+msgstr "Aktiverade Förråd"
 
 #: output/status.cpp:101
-#, fuzzy
-#| msgid "Transaction Summary:\n"
 msgid "Last Transaction"
-msgstr "Transaktionssammanfattning:\n"
+msgstr "Senaste transaktion"
 
-#: output/transaction_table.cpp:128
+#: output/transaction_table.cpp:129
 msgid "Transaction Summary:\n"
 msgstr "Transaktionssammanfattning:\n"
 
 #. Keep the replaceble number aligned across all messages.
-#: output/transaction_table.cpp:133
+#: output/transaction_table.cpp:134
 #, c++-format
 msgid " Installing:      {:4} package\n"
 msgid_plural " Installing:      {:4} packages\n"
@@ -304,7 +295,7 @@ msgstr[0] " Installerar:      {:4} paket\n"
 msgstr[1] " Installerar:      {:4} paket\n"
 
 #. Keep the replaceble number aligned across all messages.
-#: output/transaction_table.cpp:142
+#: output/transaction_table.cpp:143
 #, c++-format
 msgid " Reinstalling:    {:4} package\n"
 msgid_plural " Reinstalling:    {:4} packages\n"
@@ -312,7 +303,7 @@ msgstr[0] " Installerar om:   {:4} paket\n"
 msgstr[1] " Installerar om:   {:4} paket\n"
 
 #. Keep the replaceble number aligned across all messages.
-#: output/transaction_table.cpp:151
+#: output/transaction_table.cpp:152
 #, c++-format
 msgid " Upgrading:       {:4} package\n"
 msgid_plural " Upgrading:       {:4} packages\n"
@@ -320,7 +311,7 @@ msgstr[0] " Uppgraderar:      {:4} paket\n"
 msgstr[1] " Uppgraderar:      {:4} paket\n"
 
 #. Keep the replaceble number aligned across all messages.
-#: output/transaction_table.cpp:160
+#: output/transaction_table.cpp:161
 #, c++-format
 msgid " Replacing:       {:4} package\n"
 msgid_plural " Replacing:       {:4} packages\n"
@@ -328,7 +319,7 @@ msgstr[0] " Ersätter:         {:4} paket\n"
 msgstr[1] " Ersätter:         {:4} paket\n"
 
 #. Keep the replaceble number aligned across all messages.
-#: output/transaction_table.cpp:169
+#: output/transaction_table.cpp:170
 #, c++-format
 msgid " Removing:        {:4} package\n"
 msgid_plural " Removing:        {:4} packages\n"
@@ -336,7 +327,7 @@ msgstr[0] " Tar bort:         {:4} paket\n"
 msgstr[1] " Tar bort:         {:4} paket\n"
 
 #. Keep the replaceble number aligned across all messages.
-#: output/transaction_table.cpp:178
+#: output/transaction_table.cpp:179
 #, c++-format
 msgid " Downgrading:     {:4} package\n"
 msgid_plural " Downgrading:     {:4} packages\n"
@@ -344,7 +335,7 @@ msgstr[0] " Nedgraderar:      {:4} paket\n"
 msgstr[1] " Nedgraderar:      {:4} paket\n"
 
 #. Keep the replaceble number aligned across all messages.
-#: output/transaction_table.cpp:187
+#: output/transaction_table.cpp:188
 #, c++-format
 msgid " Changing reason: {:4} package\n"
 msgid_plural " Changing reason: {:4} packages\n"
@@ -352,241 +343,239 @@ msgstr[0] " Ändrar orsak:     {:4} paket\n"
 msgstr[1] " Ändrar orsak:     {:4} paket\n"
 
 #. Keep the replaceble number aligned across all messages.
-#: output/transaction_table.cpp:196
+#: output/transaction_table.cpp:197
 #, c++-format
 msgid " Skipping:        {:4} package\n"
 msgid_plural " Skipping:        {:4} packages\n"
 msgstr[0] " Hoppar över:      {:4} paket\n"
 msgstr[1] " Hoppar över:      {:4} paket\n"
 
-#: output/transaction_table.cpp:278 output/transactioninfo.cpp:74
+#: output/transaction_table.cpp:279 output/transactioninfo.cpp:74
 msgid "Package"
 msgstr "Paket"
 
-#: output/transaction_table.cpp:284
+#: output/transaction_table.cpp:285
 msgid "Arch"
 msgstr "Arkitektur"
 
-#: output/transaction_table.cpp:302
+#: output/transaction_table.cpp:303
 msgid "Size"
 msgstr "Storlek"
 
-#: output/transaction_table.cpp:364 output/transaction_table.cpp:434
-#: output/transaction_table.cpp:475
+#: output/transaction_table.cpp:365 output/transaction_table.cpp:435
+#: output/transaction_table.cpp:476
 #, c++-format
 msgid "{} -> {}"
 msgstr "{} → {}"
 
-#: output/transaction_table.cpp:380
+#: output/transaction_table.cpp:381
 #, c++-format
 msgid "replacing {}"
 msgstr "ersätter {}"
 
-#: output/transaction_table.cpp:422 output/transaction_table.cpp:450
+#: output/transaction_table.cpp:423 output/transaction_table.cpp:451
 msgid " <name-unset>"
 msgstr " <namnet ej satt>"
 
-#: output/transaction_table.cpp:481
+#: output/transaction_table.cpp:482
 msgid "replacing "
 msgstr "ersätter "
 
-#: output/transaction_table.cpp:494
+#: output/transaction_table.cpp:495
 msgid "Skipping packages with conflicts:"
 msgstr "Hoppar över paket med konflikter:"
 
-#: output/transaction_table.cpp:496
+#: output/transaction_table.cpp:497
 msgid "Skipping packages with broken dependencies:"
 msgstr "Hoppar över paket med brutna beroenden:"
 
-#: output/transaction_table.cpp:558
+#: output/transaction_table.cpp:559
 msgid "Installing dependencies:"
 msgstr "Installerar beroenden:"
 
-#: output/transaction_table.cpp:560
+#: output/transaction_table.cpp:561
 msgid "Installing weak dependencies:"
 msgstr "Installerar svaga beroenden:"
 
-#: output/transaction_table.cpp:562
+#: output/transaction_table.cpp:563
 msgid "Installing group/module packages:"
 msgstr "Installerar grupp/modulpaket:"
 
-#: output/transaction_table.cpp:564
+#: output/transaction_table.cpp:565
 msgid "Installing:"
 msgstr "Installerar:"
 
-#: output/transaction_table.cpp:568
+#: output/transaction_table.cpp:569
 msgid "Upgrading:"
 msgstr "Uppgraderar:"
 
-#: output/transaction_table.cpp:571
+#: output/transaction_table.cpp:572
 msgid "Downgrading:"
 msgstr "Nedgraderar:"
 
-#: output/transaction_table.cpp:574
+#: output/transaction_table.cpp:575
 msgid "Reinstalling:"
 msgstr "Ominstallerar:"
 
-#: output/transaction_table.cpp:578
+#: output/transaction_table.cpp:579
 msgid "Removing dependent packages:"
 msgstr "Tar bort beroende paket:"
 
-#: output/transaction_table.cpp:580
+#: output/transaction_table.cpp:581
 msgid "Removing unused dependencies:"
 msgstr "Tar bort oanvända beroenden:"
 
-#: output/transaction_table.cpp:582
+#: output/transaction_table.cpp:583
 msgid "Removing:"
 msgstr "Tar bort:"
 
-#: output/transaction_table.cpp:586
+#: output/transaction_table.cpp:587
 msgid "Changing reason:"
 msgstr "Ändrar anledning:"
 
-#: output/transaction_table.cpp:618
+#: output/transaction_table.cpp:619
 msgid "Installing groups dependencies:"
 msgstr "Installera gruppberoenden:"
 
-#: output/transaction_table.cpp:620
+#: output/transaction_table.cpp:621
 msgid "Installing groups:"
 msgstr "Installerar grupper:"
 
-#: output/transaction_table.cpp:624
+#: output/transaction_table.cpp:625
 msgid "Removing groups:"
 msgstr "Tar bort grupper:"
 
-#: output/transaction_table.cpp:627
+#: output/transaction_table.cpp:628
 msgid "Upgrading groups:"
 msgstr "Uppgraderar grupper:"
 
-#: output/transaction_table.cpp:630
-#, fuzzy
-#| msgid "Changing reason:"
+#: output/transaction_table.cpp:631
 msgid "Changing reason of installed groups:"
-msgstr "Ändrar anledning:"
+msgstr "Ändra orsak till installerade grupper:"
 
-#: output/transaction_table.cpp:657
+#: output/transaction_table.cpp:658
 msgid "Installing environmental groups:"
 msgstr "Installerar miljögrupper:"
 
-#: output/transaction_table.cpp:660
+#: output/transaction_table.cpp:661
 msgid "Removing environmental groups:"
 msgstr "Tar bort miljögrupper:"
 
-#: output/transaction_table.cpp:663
+#: output/transaction_table.cpp:664
 msgid "Upgrading environmental groups:"
 msgstr "Uppgraderar miljögrupper:"
 
-#: output/transaction_table.cpp:690
+#: output/transaction_table.cpp:691
 msgid "Enabling module streams:"
 msgstr "Aktiverar modulströmmar:"
 
-#: output/transaction_table.cpp:693
+#: output/transaction_table.cpp:694
 msgid "Disabling modules:"
 msgstr "Avaktiverar moduler:"
 
-#: output/transaction_table.cpp:696
+#: output/transaction_table.cpp:697
 msgid "Resetting modules:"
 msgstr "Återställer moduler:"
 
-#: output/transaction_table.cpp:699
+#: output/transaction_table.cpp:700
 msgid "Switching module streams:"
 msgstr "Byter modulströmmar:"
 
-#: output/transaction_table.cpp:771 output/transaction_table.cpp:772
+#: output/transaction_table.cpp:776 output/transaction_table.cpp:777
 msgid "(none)"
-msgstr ""
+msgstr "(ingen)"
 
-#: output/transaction_table.cpp:778
+#: output/transaction_table.cpp:783
 #, c++-format
 msgid "Skipping {0} package due to vendor change restriction: {1}."
 msgid_plural "Skipping {0} packages due to vendor change restriction: {1}."
 msgstr[0] ""
+"Hoppar över paketet {0} på grund av begränsning gällande byte av leverantör: "
+"{1}."
 msgstr[1] ""
+"Hoppar över paketet {0} på grund av begränsning gällande byte av leverantör: "
+"{1}."
 
-#: output/transaction_table.cpp:799
+#: output/transaction_table.cpp:812
 msgid "Nothing to do."
 msgstr "Inget att göra."
 
 #. The two spaces indent the table the same way as child lines in KeyValueTable
 #: output/transactioninfo.cpp:73
 msgid "Action"
-msgstr ""
+msgstr "Åtgärd"
 
 #: output/transactioninfo.cpp:75
 msgid "Reason"
-msgstr ""
+msgstr "Orsak"
 
 #: output/transactioninfo.cpp:98
-#, fuzzy
-#| msgid "Transaction Summary:\n"
 msgid "Transaction ID"
-msgstr "Transaktionssammanfattning:\n"
+msgstr "Transaktions-ID"
 
 #: output/transactioninfo.cpp:99
 msgid "Begin time"
-msgstr ""
+msgstr "Start tid"
 
 #: output/transactioninfo.cpp:100
 msgid "Begin rpmdb"
-msgstr ""
+msgstr "Starta rpmdb"
 
 #: output/transactioninfo.cpp:101
 msgid "End time"
-msgstr ""
+msgstr "Slut tid"
 
 #: output/transactioninfo.cpp:102
 msgid "End rpmdb"
-msgstr ""
+msgstr "Stoppa rpmdb"
 
 #: output/transactioninfo.cpp:104
 msgid "User"
-msgstr ""
+msgstr "Användare"
 
 #: output/transactioninfo.cpp:105
 msgid "Status"
-msgstr ""
+msgstr "Status"
 
 #: output/transactioninfo.cpp:106
-#, fuzzy
-#| msgid "Release"
 msgid "Releasever"
-msgstr "Utgåva"
+msgstr "Releaseversion"
 
 #: output/transactioninfo.cpp:108
 msgid "Comment"
-msgstr ""
+msgstr "Kommentar"
 
 #: output/transactioninfo.cpp:111
 msgid "Packages altered:"
-msgstr ""
+msgstr "Ändrade paket:"
 
 #: output/transactioninfo.cpp:112
 msgid "Groups altered:"
-msgstr ""
+msgstr "Grupper ändrade:"
 
 #: output/transactioninfo.cpp:113
 msgid "Environments altered:"
-msgstr ""
+msgstr "Miljöer ändrade:"
 
 #: output/transactionlist.cpp:53
 msgid "ID"
-msgstr ""
+msgstr "ID"
 
 #: output/transactionlist.cpp:54
 msgid "Command line"
-msgstr ""
+msgstr "Kommandorad"
 
 #: output/transactionlist.cpp:55
 msgid "Date and time"
-msgstr ""
+msgstr "Datum och tid"
 
 #: output/transactionlist.cpp:56
 msgid "Action(s)"
-msgstr ""
+msgstr "Åtgärd(er)"
 
 #: output/transactionlist.cpp:57
 msgid "Altered"
-msgstr ""
+msgstr "Ändrade"
 
 #. namespace
 #: progressbar/multi_progress_bar.cpp:85
@@ -602,19 +591,20 @@ msgstr "Saknar kommando"
 msgid ""
 "Invalid date passed: \"{}\". Dates in \"YYYY-MM-DD\" format are expected"
 msgstr ""
+"Ogiltigt datum passerat: \"{}\". Datum i formatet \"ÅÅÅÅ-MM-DD\" förväntas"
 
 #: session.cpp:270
 #, c++-format
 msgid "\"{}\" date cannot be represented by time_t type on this platform"
-msgstr ""
+msgstr "Datumet ”{}” kan inte representeras av typen time_t på denna plattform"
 
 #: utils/userconfirm.cpp:46
 msgid "Is this ok [Y/n]: "
-msgstr ""
+msgstr "Är detta ok [J/n]: "
 
 #: utils/userconfirm.cpp:49
 msgid "Is this ok [y/N]: "
-msgstr ""
+msgstr "Är detta ok [j/N]: "
 
 #~ msgid "No matches found."
 #~ msgstr "Inga matchningar hittades."

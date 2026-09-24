@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-08 12:03+0000\n"
+"POT-Creation-Date: 2026-09-22 14:19+0000\n"
 "PO-Revision-Date: 2026-04-08 08:58+0000\n"
 "Last-Translator: Ali Ciloqlu <ali.ciloqlu@murena.io>\n"
 "Language-Team: Italian <https://translate.fedoraproject.org/projects/dnf5/"
@@ -1761,115 +1761,107 @@ msgstr ""
 msgid "Compact vendor change policy parse error in \"{}\" at position {}"
 msgstr ""
 
-#: solv/vendor_change_manager.cpp:913
-msgid "Empty vendor policy string"
-msgstr ""
-
-#: solv/vendor_change_manager.cpp:930
+#: solv/vendor_change_manager.cpp:931
 msgid "Expected package filter after '@'"
 msgstr ""
 
-#: solv/vendor_change_manager.cpp:943
+#: solv/vendor_change_manager.cpp:944
 #, fuzzy, c++-format
 #| msgid "Invalid repository id \"{}\": unexpected character '{}'"
 msgid "Unexpected character '{}'"
 msgstr "Id repository \"{}\" non valido: carattere inatteso '{}'"
 
-#: solv/vendor_change_manager.cpp:947
-msgid "Empty policy: no vendor definitions or package filters specified"
-msgstr ""
-
-#: solv/vendor_change_manager.cpp:1023
+#: solv/vendor_change_manager.cpp:1020
 msgid "Expected quoted string starting with '\"'"
 msgstr ""
 
-#: solv/vendor_change_manager.cpp:1031
+#: solv/vendor_change_manager.cpp:1028
 msgid "Unterminated escape sequence"
 msgstr ""
 
-#: solv/vendor_change_manager.cpp:1037
+#: solv/vendor_change_manager.cpp:1034
 #, c++-format
 msgid "Invalid escape sequence '\\{}'. Only '\\\"' and '\\\\' are supported"
 msgstr ""
 
-#: solv/vendor_change_manager.cpp:1044
+#: solv/vendor_change_manager.cpp:1041
 msgid "Unterminated quoted string"
 msgstr ""
 
-#: solv/vendor_change_manager.cpp:1079
+#: solv/vendor_change_manager.cpp:1076
 msgid "Expected direction prefix 'in', 'out', or 'eq'"
 msgstr ""
 
-#: solv/vendor_change_manager.cpp:1143
+#: solv/vendor_change_manager.cpp:1140
 msgid ""
 "Expected comparison operator: relational (<, <=, >, >=) or string (=, ^, $, "
 "*, =*, =~; optionally prefixed with ! and/or i"
 msgstr ""
 
-#: solv/vendor_change_manager.cpp:1208
+#: solv/vendor_change_manager.cpp:1205
 msgid ""
 "Vendor definition does not support relational comparators. Use string "
 "comparators: =, ^, $, *, =*, =~"
 msgstr ""
 
-#: solv/vendor_change_manager.cpp:1216
+#: solv/vendor_change_manager.cpp:1213
 #, c++-format
 msgid "Invalid regex vendor pattern '{}': {}"
 msgstr ""
 
-#: solv/vendor_change_manager.cpp:1234
+#: solv/vendor_change_manager.cpp:1231
 #, fuzzy, c++-format
 #| msgid "Unknown time unit '{}'"
 msgid "Unknown filter field name '{}'"
 msgstr "Unità di tempo '{}' sconosciuta"
 
-#: solv/vendor_change_manager.cpp:1244
+#: solv/vendor_change_manager.cpp:1241
 msgid "Expected filter field name"
 msgstr ""
 
-#: solv/vendor_change_manager.cpp:1267
+#: solv/vendor_change_manager.cpp:1264
 #, fuzzy, c++-format
 #| msgid "Invalid boolean value \"{}\""
 msgid "Invalid epoch value \"{}\""
 msgstr "Valore booleano \"{}\" non valido"
 
-#: solv/vendor_change_manager.cpp:1271
+#: solv/vendor_change_manager.cpp:1268
 msgid "Filter 'cmdline_repo' only supports the '=' (EXACT) comparator"
 msgstr ""
 
-#: solv/vendor_change_manager.cpp:1274
+#: solv/vendor_change_manager.cpp:1271
 msgid "Filter 'cmdline_repo' is only allowed in incoming packages ('in:')"
 msgstr ""
 
-#: solv/vendor_change_manager.cpp:1285
+#: solv/vendor_change_manager.cpp:1282
 #, c++-format
 msgid ""
 "Invalid value '{}' for 'cmdline_repo' filter. Use 'true', '1', 'false', or "
 "'0'"
 msgstr ""
 
-#: solv/vendor_change_manager.cpp:1289
+#: solv/vendor_change_manager.cpp:1286
 #, c++-format
 msgid "Filter '{}' only supports relational comparators: =, !=, >, >=, <, <="
 msgstr ""
 
-#: solv/vendor_change_manager.cpp:1293
+#: solv/vendor_change_manager.cpp:1290
 #, c++-format
 msgid "Filter '{}' only supports string comparators: =, ^, $, *, =*, =~"
 msgstr ""
 
-#: solv/vendor_change_manager.cpp:1302
+#: solv/vendor_change_manager.cpp:1299
 #, fuzzy, c++-format
 #| msgid "Invalid package type: {}"
 msgid "Invalid regex '{}': {}"
 msgstr "Tipo di pacchetto non valido: {}"
 
-#: solv/vendor_change_manager.cpp:1313
+#: solv/vendor_change_manager.cpp:1310
 msgid "Package filters do not support 'eq' direction. Use 'in' or 'out'"
 msgstr ""
 
-#: solv/vendor_change_manager.cpp:1404 solv/vendor_change_manager.cpp:1454
-#: solv/vendor_change_manager.cpp:1465 solv/vendor_change_manager.cpp:1476
+#: solv/vendor_change_manager.cpp:1401 solv/vendor_change_manager.cpp:1451
+#: solv/vendor_change_manager.cpp:1462 solv/vendor_change_manager.cpp:1473
 msgid "{func}(): Policy index {idx} is out of range"
 msgstr ""
 
