@@ -49,6 +49,8 @@ public:
         std::string get_value_string() const;
         bool get_is_append_option() const;
         const std::string & get_source() const;
+        const Option & get_option() const noexcept;
+        Option & get_option() noexcept;
 
     private:
         friend class OptionBinds;

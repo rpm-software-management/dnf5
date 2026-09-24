@@ -98,6 +98,14 @@ const std::string & OptionBinds::Item::get_source() const {
     return p_impl->option->get_source();
 }
 
+const Option & OptionBinds::Item::get_option() const noexcept {
+    return *p_impl->option;
+}
+
+Option & OptionBinds::Item::get_option() noexcept {
+    return *p_impl->option;
+}
+
 
 // =========== OptionBinds class ===============
 class OptionBinds::Impl {
