@@ -50,7 +50,8 @@ Scenario: Hint shown when vendor change blocked by default
        """
        Skipping 1 package due to vendor change restriction: "First Vendor" -> "Second Vendor".
        """
-   And stderr contains "--allow-vendor-change to allow changing package vendors"
+   And stderr contains "--add-vendor-policy=POLICY to add specific vendor change rules"
+   And stderr contains "--allow-vendor-change to allow all vendor changes"
 
 
 Scenario: Override default with --setopt=allow_vendor_change=true
