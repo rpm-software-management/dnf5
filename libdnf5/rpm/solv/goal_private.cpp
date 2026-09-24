@@ -264,35 +264,37 @@ bool GoalPrivate::limit_installonly_packages(libdnf5::solv::IdQueue & job, Id ru
     bool reresolve = false;
 
     // Use maps to handle each package just once
-    libdnf5::solv::SolvMap marked_for_install_providers_map(spool.get_nsolvables());
+    libdnf5::solv::SolvMap installed_after_transaction_providers_map(spool.get_nsolvables());
     libdnf5::solv::SolvMap available_unused_providers_map(spool.get_nsolvables());
 
     for (Id install_only_provide : installonly) {
         Id p;
         Id pp;
 
-        // Add all providers of installonly provides that are marked for install
-        // to `marked_for_install_providers_map` SolvMap those that are not marked
+        // Add all providers of installonly provides that would be installed after the transaction
+        // (contains both currently installed and newly installed by the transaction)
+        // to `installed_after_transaction_providers_map` SolvMap those that are not marked
         // for install and are not already installed are added to available_unused_providers_map.
         FOR_PROVIDES(p, pp, install_only_provide) {
             // TODO(jmracek)  Replace the test by cached data from sack.p_impl->get_solvables()
             if (!spool.is_package(p)) {
                 continue;
             }
-            // According to libsolv-bindings the decision level is positive for installs
-            // and negative for conflicts (conflicts with another package or dependency
-            // conflicts = dependencies cannot be met).
+            // The decision level:
+            // positive: selected to be present after solve
+            // negative: selected not to be present
+            // (it is not limited to packages taking part in the transaction)
             if (libsolv_solver.get_decisionlevel(p) > 0) {
-                marked_for_install_providers_map.add_unsafe(p);
+                installed_after_transaction_providers_map.add_unsafe(p);
             } else {
                 available_unused_providers_map.add_unsafe(p);
             }
         }
     }
 
-    libdnf5::solv::IdQueue marked_for_install_providers;
-    for (const auto & pkg_id : marked_for_install_providers_map) {
-        marked_for_install_providers.push_back(pkg_id);
+    libdnf5::solv::IdQueue installed_after_transaction_providers;
+    for (const auto & pkg_id : installed_after_transaction_providers_map) {
+        installed_after_transaction_providers.push_back(pkg_id);
     }
 
     std::vector<Solvable *> available_unused_providers;
@@ -304,14 +306,15 @@ bool GoalPrivate::limit_installonly_packages(libdnf5::solv::IdQueue & job, Id ru
     }
 
     const InstallonlyCmpData installonly_cmp_data{spool, running_kernel};
-    marked_for_install_providers.sort(&installonly_cmp, &installonly_cmp_data);
+    installed_after_transaction_providers.sort(&installonly_cmp, &installonly_cmp_data);
     std::sort(available_unused_providers.begin(), available_unused_providers.end(), name_solvable_cmp_key);
 
     libdnf5::solv::IdQueue same_names;
     // For each set of `marked_for_install_providers` with the same name ensure at most `installonly_limit`
     // are installed. Also for each name ensure `available_unused_providers` with that name are not installed.
-    while (!marked_for_install_providers.empty()) {
-        Id name = same_name_subqueue(spool, &marked_for_install_providers.get_queue(), &same_names.get_queue());
+    while (!installed_after_transaction_providers.empty()) {
+        Id name =
+            same_name_subqueue(spool, &installed_after_transaction_providers.get_queue(), &same_names.get_queue());
         if (same_names.size() <= static_cast<int>(installonly_limit)) {
             continue;
         }
