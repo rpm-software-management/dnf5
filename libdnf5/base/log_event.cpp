@@ -376,6 +376,14 @@ std::string LogEvent::to_string(
         case GoalProblem::MERGE_ERROR: {
             return ret.append(utils::sformat(_("Transaction merge error: '{0}'"), *additional_data.begin()));
         }
+        case GoalProblem::OVERLIMIT_INSTALLONLY: {
+            return ret.append(utils::sformat(
+                _("Exceeded installonly_limit ({0}): found {1} installed: '{2}'. You can use 'remove "
+                  "--oldinstallonly'."),
+                *spec,
+                additional_data.size(),
+                utils::string::join(additional_data, _("', '"))));
+        }
     }
     return ret;
 }

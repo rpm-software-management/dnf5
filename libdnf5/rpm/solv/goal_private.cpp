@@ -310,12 +310,29 @@ bool GoalPrivate::limit_installonly_packages(libdnf5::solv::IdQueue & job, Id ru
     std::sort(available_unused_providers.begin(), available_unused_providers.end(), name_solvable_cmp_key);
 
     libdnf5::solv::IdQueue same_names;
-    // For each set of `marked_for_install_providers` with the same name ensure at most `installonly_limit`
-    // are installed. Also for each name ensure `available_unused_providers` with that name are not installed.
+    // For each set of `installed_after_transaction_providers` with the same name that are being installed in the transaction
+    // ensure at most `installonly_limit` are installed.
+    // Also for each name ensure `available_unused_providers` with that name are not installed.
     while (!installed_after_transaction_providers.empty()) {
         Id name =
             same_name_subqueue(spool, &installed_after_transaction_providers.get_queue(), &same_names.get_queue());
         if (same_names.size() <= static_cast<int>(installonly_limit)) {
+            continue;
+        }
+
+        // Check if the over the limit packages are being installed in the transaction.
+        // If they are not don't add them, we don't want to add the removes to unrelated transactions.
+        libdnf5::solv::IdQueue installing;
+        for (int k = 0; k < same_names.size(); ++k) {
+            Id id = same_names[k];
+            Solvable * s = spool.id2solvable(id);
+            if (spool->installed != s->repo) {
+                installing.push_back(id);
+                break;
+            }
+        }
+        if (!installing.size()) {
+            unrelated_overlimit_installonly.push_back(same_names);
             continue;
         }
 
