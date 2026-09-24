@@ -66,6 +66,7 @@ There are the following types of aliases:
     - :ref:`command <aliases_misc_command_ref-label>`
     - :ref:`cloned_named_arg <aliases_misc_cloned_named_arg_ref-label>`
     - :ref:`named_arg <aliases_misc_named_arg_ref-label>`
+    - :ref:`command_flag <aliases_misc_command_flag_ref-label>`
     - :ref:`group <aliases_misc_group_ref-label>`
 
 
@@ -269,6 +270,75 @@ Examples:
         attached_named_args = [
          { id_path = 'setopt', value = 'tsflags=${}' }
         ]
+
+
+.. _aliases_misc_command_flag_ref-label:
+
+Type: command_flag
+------------------
+
+The ``command_flag`` alias maps an option to a command and can rewrite the values that follow it. It serves
+compatibility with grammars where an option selected what is a separate command now, for example DNF4's
+``updateinfo --list``. When the named command and the option both appear on the command line, the arguments
+are translated before parsing: the command word is replaced by the attached command and the option is
+consumed. Command lines that match no entry are not touched, and logs and history keep the command line
+as the user typed it. Added in config file version 1.2.
+
+The element name has the ``<command>.<option name without dashes>`` form. The entry matches the long
+option ``--<option name>`` of ``<command>``; short options cannot be triggers. Command lines that contain the ``--`` separator are never rewritten. An entry whose
+option already exists for the command is ignored with a warning.
+
+Keys:
+    - ``type`` - Must have value ``command_flag``.
+    - ``attached_command`` - Path to the command that the option selects.
+    - ``attached_flags`` - Array of options that are always passed with the attached command.
+    - ``positional_template`` - Template applied to each following positional argument; ``${}`` is replaced
+      by the value. Also applied to a value given in the ``--option=value`` form.
+    - ``token_prefix_maps`` - Array of tables with ``prefix`` and ``template`` keys. A following option that
+      starts with ``prefix`` is replaced by ``template``, with ``${}`` replaced by the rest of the option.
+    - ``companion_flag`` - An option consumed together with the trigger option.
+    - ``leading_positionals`` - When true, the value handling also covers positional arguments between the
+      command and the trigger option. Default is false.
+    - ``drop_bare_positionals`` - When true, following positional arguments are dropped instead of copied.
+      Default is false.
+    - ``dropped_note`` - Message printed to standard error for each dropped argument.
+    - ``positional_suffix_gate`` - When set, the translation applies only if every following value ends with
+      this suffix; otherwise the arguments are left unchanged and ``gate_reject_message``, if set, is printed
+      to standard error.
+    - ``gate_reject_message`` - Message printed when the suffix gate does not match.
+    - ``reject_message`` - When set, matching prints this message to standard error and no translation
+      happens. Use it to give guidance for grammars with no equivalent; the normal parser error follows.
+    - ``precedence`` - When several options on one command line match entries, the entry with the highest
+      precedence is used; ties go to the leftmost option. Default is 0.
+
+The required keys are ``type``, and either ``attached_command`` or ``reject_message``.
+
+Examples:
+  - DNF4's ``updateinfo --list`` runs ``advisory list``:
+
+    .. code-block:: TOML
+
+        ['updateinfo.list']
+        type = 'command_flag'
+        attached_command = 'advisory.list'
+
+  - An option that selects a subcommand and always adds an option to it:
+
+    .. code-block:: TOML
+
+        ['updateinfo.summary']
+        type = 'command_flag'
+        attached_command = 'advisory.summary'
+        attached_flags = ['--with-cve']
+
+  - DNF4's ``config-manager --set-enabled repo1 repo2`` runs ``config-manager setopt repo1.enabled=1 repo2.enabled=1``:
+
+    .. code-block:: TOML
+
+        ['config-manager.set-enabled']
+        type = 'command_flag'
+        attached_command = 'config-manager.setopt'
+        positional_template = '${}.enabled=1'
 
 
 .. _aliases_misc_group_ref-label:
