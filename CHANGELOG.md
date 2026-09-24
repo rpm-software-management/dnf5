@@ -1,3 +1,20 @@
+# 5.4.6.0
+
+- Update translations from weblate
+- spec: Symlink microdnf(8) and yum(8) manual pages to dnf5(8)
+- Update FSF's address in GPL-2.0 disclaimers
+- Update LGPL-2.1 and GPL-2.0 texts to current FSF's wording
+- fix:  DNF5_FORCE_COLUMNS / non-TTY width in transaction table
+- progressbar: Report progress to terminal taskbar via OSC 9;4
+- Makefile: Add FEDORA_VERSION to unify defaults
+- spec: Require GCC ≥ 14.1 for std::chrono::parse()
+- dnf5daemon: Hide invalid offline transactions
+- Clarify plugin source language options
+- needs-restarting: Configure extra packages that require a reboot
+- VendorChangeManager: Allow empty vendor policies in compact format
+- manifest: Log before resolving & after writing files
+- manifest: Print transaction table on resolve
+
 # 5.4.5.0
 
 - Update translations from weblate
