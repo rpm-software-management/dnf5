@@ -3105,36 +3105,13 @@ void PackageQuery::filter_installonly() {
     filter_provides(installonly_packages, libdnf5::sack::QueryCmp::EQ);
 }
 
-static const std::unordered_set<std::string> CORE_PACKAGE_NAMES = {
-    // See https://access.redhat.com/solutions/27943. These packages should all
-    // also have a reboot_suggested advisory, but it's good to handle them
-    // explicitly, just to be sure.
-    "kernel",
-    "kernel-core",
-    "kernel-PAE",
-    "kernel-rt",
-    "kernel-smp",
-    "kernel-xen",
-    "linux-firmware",
-    "microcode_ctl",
-    "dbus",
-    "glibc",
-    "hal",
-    "systemd",
-    "udev",
-    "gnutls",
-    "openssl-libs",
-    "dbus-broker",
-    "dbus-daemon",
-};
-
 /// Load the names of packages whose installation or upgrade suggests a system reboot.
 ///
-/// Starts from the built-in `CORE_PACKAGE_NAMES` and adds the names read from `*.conf` drop-in
-/// files in `SUGGEST_REBOOT_CONF_DIRS`, one name per line. Leading and trailing whitespace is
-/// stripped; empty lines and lines starting with `#` are ignored. A file overrides a same-named
-/// file from a lower-precedence directory; files with different names are merged. Drop-in files
-/// can only add to the built-in list, never remove from it.
+/// The names are read from `*.conf` drop-in files in `SUGGEST_REBOOT_CONF_DIRS`, one name per
+/// line. Leading and trailing whitespace is stripped; empty lines and lines starting with `#`
+/// are ignored. A file overrides a same-named file from a lower-precedence directory; files
+/// with different names are merged. The default list is shipped by libdnf5 as
+/// `/usr/share/dnf5/suggest-reboot.d/default.conf`.
 static std::set<std::string> load_suggest_reboot_package_names(const libdnf5::BaseWeakPtr & base) {
     auto & config = base->get_config();
     auto & logger = *base->get_logger();
@@ -3149,7 +3126,7 @@ static std::set<std::string> load_suggest_reboot_package_names(const libdnf5::Ba
         conf_dirs.push_back(use_host_config ? conf_dir : installroot / conf_dir.relative_path());
     }
 
-    std::set<std::string> names{CORE_PACKAGE_NAMES.begin(), CORE_PACKAGE_NAMES.end()};
+    std::set<std::string> names;
     for (const auto & conf_file : utils::fs::create_sorted_file_list(conf_dirs, ".conf")) {
         std::ifstream stream{conf_file};
         if (!stream.is_open()) {

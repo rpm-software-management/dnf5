@@ -85,8 +85,8 @@ constexpr const char * SUGGEST_REBOOT_LOCAL_DIR = "etc/dnf/suggest-reboot.d";
 void RpmPackageQueryTest::test_filter_reboot_suggested_without_config() {
     add_repo_solv("solv-repo1");
 
-    // No drop-in files exist: the built-in list applies on its own and the
-    // missing configuration directories are not an error.
+    // No drop-in files exist: the missing configuration directories are not an
+    // error and no package is reported through configuration.
     PackageQuery query(base);
     query.filter_reboot_suggested();
 
