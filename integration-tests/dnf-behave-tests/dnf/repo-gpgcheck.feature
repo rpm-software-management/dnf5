@@ -51,3 +51,30 @@ Scenario: Remote gpg key is imported for already cached repo
         | Action        | Package                       |
         | reinstall     | labirinto-0:1.0-1.fc29.x86_64 |
     And stderr contains "The key was successfully imported."
+
+
+Scenario: Local key is imported without confirmation when repo_gpgcheck_auto_import_keys is enabled
+  Given I do not assume yes
+    And I use repository "simple-base" with configuration
+        | key                            | value                                                                   |
+        | pkg_gpgcheck                   | 0                                                                       |
+        | repo_gpgcheck                  | 1                                                                       |
+        | repo_gpgcheck_auto_import_keys | 1                                                                       |
+        | gpgkey                         | file://{context.dnf.fixturesdir}/gpgkeys/keys/dnf-ci-gpg/dnf-ci-gpg-public |
+   When I execute dnf with args "makecache"
+   Then the exit code is 0
+    And stderr contains "The key was successfully imported."
+    And stderr does not contain "Is this ok"
+
+
+Scenario: Remote key still asks for confirmation when repo_gpgcheck_auto_import_keys is enabled
+  Given I do not assume yes
+    And I use repository "simple-base" with configuration
+        | key                            | value                                                              |
+        | pkg_gpgcheck                   | 0                                                                  |
+        | repo_gpgcheck                  | 1                                                                  |
+        | repo_gpgcheck_auto_import_keys | 1                                                                  |
+        | gpgkey                         | http://localhost:{context.dnf.ports[key_server]}/dnf-ci-gpg-public |
+   When I execute dnf with args "makecache"
+   Then the exit code is 1
+    And stderr contains "Importing OpenPGP key"

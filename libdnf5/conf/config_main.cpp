@@ -262,6 +262,7 @@ class ConfigMain::Impl {
     OptionEnum gpgcheck_policy{"legacy", {"legacy", "full", "all"}};
     OptionBool pkg_gpgcheck{false};
     OptionBool repo_gpgcheck{false};
+    OptionBool repo_gpgcheck_auto_import_keys{false};
     OptionBool enabled{true};
     OptionBool enablegroups{true};
     OptionNumber<std::uint32_t> bandwidth{0, str_to_bytes};
@@ -462,6 +463,7 @@ ConfigMain::Impl::Impl(Config & owner) : owner(owner) {
     owner.opt_binds().add("gpgcheck", pkg_gpgcheck);
     owner.opt_binds().add("gpgcheck_policy", gpgcheck_policy);
     owner.opt_binds().add("repo_gpgcheck", repo_gpgcheck);
+    owner.opt_binds().add("repo_gpgcheck_auto_import_keys", repo_gpgcheck_auto_import_keys);
     owner.opt_binds().add("enabled", enabled);
     owner.opt_binds().add("enablegroups", enablegroups);
     owner.opt_binds().add("bandwidth", bandwidth);
@@ -1235,6 +1237,13 @@ const OptionBool & ConfigMain::get_repo_gpgcheck_option() const {
     return p_impl->repo_gpgcheck;
 }
 
+OptionBool & ConfigMain::get_repo_gpgcheck_auto_import_keys_option() {
+    return p_impl->repo_gpgcheck_auto_import_keys;
+}
+const OptionBool & ConfigMain::get_repo_gpgcheck_auto_import_keys_option() const {
+    return p_impl->repo_gpgcheck_auto_import_keys;
+}
+
 OptionEnum & ConfigMain::get_gpgcheck_policy_option() {
     return p_impl->gpgcheck_policy;
 }
@@ -1556,6 +1565,7 @@ void ConfigMain::Impl::load_from_config(const ConfigMain::Impl & other) {
     load_option(gpgcheck_policy, other.gpgcheck_policy);
     load_option(pkg_gpgcheck, other.pkg_gpgcheck);
     load_option(repo_gpgcheck, other.repo_gpgcheck);
+    load_option(repo_gpgcheck_auto_import_keys, other.repo_gpgcheck_auto_import_keys);
     load_option(enabled, other.enabled);
     load_option(enablegroups, other.enablegroups);
     load_option(bandwidth, other.bandwidth);
