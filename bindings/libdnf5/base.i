@@ -264,5 +264,22 @@ common.create_attributes_from_getters_and_setters(GoalJobSettings)
 %}
 #endif
 
+#if defined(SWIGPYTHON)
+%pythoncode %{
+common.keep_owner_alive_for_methods(Base, [
+    'get_config',
+    'get_logger',
+    'get_comps_sack',
+    'get_repo_sack',
+    'get_rpm_package_sack',
+    'get_module_sack',
+    'get_vendor_change_manager',
+    'get_transaction_history',
+    'get_vars',
+    'get_weak_ptr',
+])
+%}
+#endif
+
 // Deletes any previously defined catches
 %catches();
