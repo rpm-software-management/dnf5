@@ -143,7 +143,7 @@ Each non-comment line defines an action and consists of five items separated by 
       * ``R`` - package used for reinstallation
       * ``E`` - erased (removed) package from the system
       * ``O`` - replaced package (was obsoleted/upgraded/downgraded/reinstalled/removed)
-      * ``?`` - package with changed installation reason
+      * ``C`` - package with changed installation reason
 
   The command will be evaluated for each package that matched the ``package_filter`` and
   the ``direction``. However, after variable substitution, any duplicate commands will be
@@ -485,7 +485,7 @@ The ``trans_packages`` domain can only be used in ``goal_resolved``, ``pre_trans
     * ``R`` - package used for reinstallation
     * ``E`` - erased (removed) package from the system
     * ``O`` - replaced package (was obsoleted/upgraded/downgraded/reinstalled/removed)
-    * ``?`` - package with changed installation reason
+    * ``C`` - package with changed installation reason
 
   * ``direction`` - package direction in transaction
 

@@ -132,8 +132,7 @@ std::string transaction_item_action_to_letter(TransactionItemAction action) {
         case TransactionItemAction::REPLACED:
             return "O";  // TODO(lukash) historically Obsolete, do we change this?
         case TransactionItemAction::REASON_CHANGE:
-            // TODO(dmach): replace "?" with something better
-            return "?";
+            return "C";
         case TransactionItemAction::ENABLE:
         case TransactionItemAction::DISABLE:
         case TransactionItemAction::RESET:

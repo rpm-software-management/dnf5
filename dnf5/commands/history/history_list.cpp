@@ -54,6 +54,8 @@ void HistoryListCommand::run() {
         history.filter_transactions_by_pkg_names(transactions, contains_pkgs->get_value());
     }
 
+    const bool complete_history = ts_specs.empty() && contains_pkgs->get_value().empty();
+
     if (reverse->get_value()) {
         std::sort(transactions.begin(), transactions.end(), std::greater{});
     } else {
@@ -62,9 +64,9 @@ void HistoryListCommand::run() {
 
     auto & ctx = get_context();
     if (ctx.get_json_output_requested()) {
-        libdnf5::cli::output::print_transaction_list_json(transactions);
+        libdnf5::cli::output::print_transaction_list_json(transactions, complete_history);
     } else {
-        libdnf5::cli::output::print_transaction_list(transactions);
+        libdnf5::cli::output::print_transaction_list(transactions, complete_history);
     }
 }
 
