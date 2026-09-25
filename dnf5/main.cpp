@@ -1106,6 +1106,11 @@ static void print_resolve_hints(dnf5::Context & context) {
     auto transaction_problems = context.get_transaction()->get_problems();
     auto * command = context.get_selected_command()->get_argument_parser_command();
 
+    // Inform the user that extra metadata was downloaded
+    if (context.get_transaction()->get_filelists_auto_loaded()) {
+        context.print_info(_("Automatically downloaded and loaded filelists metadata to retry dependency resolution."));
+    }
+
     // hint --skip-unavailable if a package was not found
     if ((transaction_problems & libdnf5::GoalProblem::NOT_FOUND) == libdnf5::GoalProblem::NOT_FOUND &&
         !conf.get_skip_unavailable_option().get_value()) {
