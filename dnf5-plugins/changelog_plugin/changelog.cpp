@@ -110,7 +110,13 @@ void ChangelogCommand::run() {
     if (since > 0) {
         const auto since_time = static_cast<time_t>(since);
         filter = {libdnf5::cli::output::ChangelogFilterType::SINCE, since};
-        std::cout << "Listing changelogs since " << std::put_time(std::localtime(&since_time), "%c") << std::endl;
+        // Use localtime_r() because std::localtime() is not thread-safe.
+        std::tm since_tm{};
+        if (localtime_r(&since_time, &since_tm) != nullptr) {
+            std::cout << "Listing changelogs since " << std::put_time(&since_tm, "%c %z") << std::endl;
+        } else {
+            std::cout << "Listing changelogs since " << since_time << std::endl;
+        }
     } else if (count != 0) {
         filter = {libdnf5::cli::output::ChangelogFilterType::COUNT, count};
         std::cout << "Listing only latest changelogs" << std::endl;
