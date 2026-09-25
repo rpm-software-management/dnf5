@@ -83,6 +83,8 @@ Options
 ``--downloadonly``
     | Download the resolved package set without executing an RPM transaction.
 
+.. include:: ../_shared/options/download-order.rst
+
 .. include:: ../_shared/options/transaction.rst
 
 .. include:: ../_shared/options/advisories.rst

@@ -77,6 +77,7 @@ Options
 ``--allmirrors``
     | To be used together with ``--url``. It prints out space-separated URLs from all available mirrors for each package.
 
+.. include:: ../_shared/options/download-order.rst
 
 Examples
 ========
@@ -104,6 +105,9 @@ Examples
 
 ``dnf5 download kernel --debuginfo``
     | Download the ``kernel`` debuginfo rpm.
+
+``dnf5 download maven-compiler-plugin --resolve --download-sort=size --download-reverse``
+    | Download the ``maven-compiler-plugin`` package with its dependencies, largest package first.
 
 See Also
 ========

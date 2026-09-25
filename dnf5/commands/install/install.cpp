@@ -59,6 +59,7 @@ void InstallCommand::set_argument_parser() {
     create_from_repo_option(*this, from_repos, true);
     create_from_vendor_option(*this, from_vendors, true);
     create_downloadonly_option(*this);
+    create_download_order_options(*this);
     create_offline_option(*this);
 
     advisory_name = std::make_unique<AdvisoryOption>(*this);
