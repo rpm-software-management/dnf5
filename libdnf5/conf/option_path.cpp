@@ -108,6 +108,7 @@ void OptionPath::set(Priority priority, const std::string & value) {
         test(val);
         OptionString::p_impl->value = val;
         set_priority(priority);
+        set_source(take_pending_source());
     }
 }
 

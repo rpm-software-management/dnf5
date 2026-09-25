@@ -178,6 +178,8 @@ public:
     /// persistent data are stored.
     std::string get_persistdir() const;
 
+    using Config::load_from_parser;
+
     void load_from_parser(
         const libdnf5::ConfigParser & parser,
         const std::string & section,

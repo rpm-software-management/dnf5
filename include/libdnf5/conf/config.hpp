@@ -46,6 +46,14 @@ public:
         Logger & logger,
         Option::Priority priority);
 
+    void load_from_parser(
+        const ConfigParser & parser,
+        const std::string & section,
+        const Vars & vars,
+        Logger & logger,
+        Option::Priority priority,
+        const std::string & source);
+
 private:
     class LIBDNF_LOCAL Impl;
     ImplPtr<Impl> p_impl;

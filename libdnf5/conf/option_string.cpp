@@ -100,6 +100,7 @@ void OptionString::set(Priority priority, const std::string & value) {
         test(value);
         p_impl->value = value;
         set_priority(priority);
+        set_source(take_pending_source());
     }
 }
 
