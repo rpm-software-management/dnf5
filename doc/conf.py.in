@@ -39,8 +39,9 @@ needs_sphinx = '4.1.2'
 # ones.
 extensions = [
     'breathe',
-    'autoapi.extension',
 ]
+if '@WITH_PYTHON3@' == 'ON':
+    extensions += ['autoapi.extension']
 breathe_projects = {'dnf5': '@CMAKE_CURRENT_BINARY_DIR@/xml/'}
 breathe_default_project = 'dnf5'
 
@@ -72,6 +73,8 @@ templates_path = ['_templates']
 # directories to ignore when looking for source files.
 # This pattern also affects html_static_path and html_extra_path.
 exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
+if '@WITH_PYTHON3@' != 'ON':
+    exclude_patterns += ['api/python/**']
 
 
 # -- Options for HTML output -------------------------------------------------

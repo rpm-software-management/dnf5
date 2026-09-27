@@ -1,3 +1,11 @@
+# Normalize CMake boolean spellings for the RST preprocessor and Sphinx.
+if(WITH_PYTHON3)
+    set(WITH_PYTHON3 ON)
+else()
+    set(WITH_PYTHON3 OFF)
+endif()
+
+
 # Collect RST files, preprocess them with ./atp.py and save the output into
 # "processed" binary directory. The output files are recorded in RST_OUTPUTS
 # variable.
@@ -18,6 +26,7 @@ foreach(RST_SOURCE IN LISTS RST_SOURCES)
         OUTPUT ${PROCESSED_DIR}/${RST_SOURCE}
         COMMAND ${Python3_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/atp.py
             --define "WITH_MODULEMD=${WITH_MODULEMD}"
+            --define "WITH_PYTHON3=${WITH_PYTHON3}"
             ${CMAKE_CURRENT_SOURCE_DIR}/${RST_SOURCE} ${PROCESSED_DIR}/${RST_SOURCE}
         COMMENT "Preprocessing ${RST_SOURCE}"
         DEPENDS ${RST_SOURCE} ${CMAKE_CURRENT_SOURCE_DIR}/atp.py
