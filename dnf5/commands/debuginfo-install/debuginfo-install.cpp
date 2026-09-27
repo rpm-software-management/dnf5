@@ -55,6 +55,10 @@ void DebuginfoInstallCommand::set_argument_parser() {
         parser.add_init_value(std::unique_ptr<libdnf5::Option>(new libdnf5::OptionString(nullptr))),
         patterns_to_debuginfo_install_options);
     patterns_arg->set_description("List of package-spec-NPFB to install the associated debuginfo packages for");
+    patterns_arg->set_complete_hook_func([&ctx](const char * arg) {
+        // Only absolute paths are resolved as file specs, so do not offer relative paths.
+        return ctx.match_specs(arg, true, true, arg[0] == '/', false, ".*");
+    });
     cmd.register_positional_arg(patterns_arg);
     create_offline_option(*this);
     create_store_option(*this);
