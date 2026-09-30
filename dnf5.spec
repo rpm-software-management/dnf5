@@ -43,7 +43,7 @@
 %bcond_without plugin_local
 %endif
 %bcond_without plugin_manifest
-%bcond_without plugin_rhsm
+%bcond_without plugin_rhsm_container
 %if %{with systemd}
 %bcond_without plugin_systemd_inhibit
 %else
@@ -245,7 +245,7 @@ BuildRequires:  python3dist(dbus-python)
 %endif
 %endif
 
-%if %{with plugin_rhsm}
+%if %{with plugin_rhsm_container}
 BuildRequires:  pkgconfig(librhsm) >= 0.0.3
 BuildRequires:  pkgconfig(glib-2.0) >= 2.44.0
 %endif
@@ -783,23 +783,25 @@ Libdnf5 plugin for detecting and removing expired PGP keys.
 %endif
 %endif
 
-# ========== libdnf5-plugin-plugin_rhsm ==========
+# ========== libdnf5-plugin-plugin_rhsm_container ==========
 
-%if %{with plugin_rhsm}
-%package -n libdnf5-plugin-rhsm
-Summary:        Libdnf5 rhsm (Red Hat Subscription Manager) plugin
+%if %{with plugin_rhsm_container}
+%package -n libdnf5-plugin-rhsm-container
+Summary:        Libdnf5 rhsm (Red Hat Subscription Manager) plugin for containers
 License:        LGPL-2.1-or-later
 Requires:       libdnf5%{?_isa} = %{version}-%{release}
+Provides:       libdnf5-plugin-rhsm = %{version}-%{release}
+Obsoletes:      libdnf5-plugin-rhsm <= 5.4.6.0-1
 
-%description -n libdnf5-plugin-rhsm
+%description -n libdnf5-plugin-rhsm-container
 Libdnf5 plugin with basic support for Red Hat subscriptions.
 Synchronizes the the enrollment with the vendor system. This can change
 the contents of the repositories configuration files according
-to the subscription levels.
+to the entitlement certificate that is shared by host with containers.
 
-%files -n libdnf5-plugin-rhsm -f libdnf5-plugin-rhsm.lang
-%{_libdir}/libdnf5/plugins/rhsm.*
-%config(noreplace) %{_sysconfdir}/dnf/libdnf5-plugins/rhsm.conf
+%files -n libdnf5-plugin-rhsm-container -f libdnf5-plugin-rhsm-container.lang
+%{_libdir}/libdnf5/plugins/rhsm-container.*
+%config(noreplace) %{_sysconfdir}/dnf/libdnf5-plugins/rhsm-container.conf
 %endif
 
 
@@ -1080,7 +1082,7 @@ DNF5 plugin for working with RPM package manifest files.
     -DWITH_PLUGIN_APPSTREAM=%{?with_plugin_appstream:ON}%{!?with_plugin_appstream:OFF} \
     -DWITH_PLUGIN_EXPIRED_PGP_KEYS=%{?with_plugin_expired_pgp_keys:ON}%{!?with_plugin_expired_pgp_keys:OFF} \
     -DWITH_PLUGIN_LOCAL=%{?with_plugin_local:ON}%{!?with_plugin_local:OFF} \
-    -DWITH_PLUGIN_RHSM=%{?with_plugin_rhsm:ON}%{!?with_plugin_rhsm:OFF} \
+    -DWITH_PLUGIN_RHSM_CONTAINER=%{?with_plugin_rhsm_container:ON}%{!?with_plugin_rhsm_container:OFF} \
     -DWITH_PLUGIN_MANIFEST=%{?with_plugin_manifest:ON}%{!?with_plugin_manifest:OFF} \
     -DWITH_PLUGIN_SYSTEMD_INHIBIT=%{?with_plugin_systemd_inhibit:ON}%{!?with_plugin_systemd_inhibit:OFF} \
     -DWITH_PYTHON_PLUGINS_LOADER=%{?with_python_plugins_loader:ON}%{!?with_python_plugins_loader:OFF} \
@@ -1206,8 +1208,8 @@ mkdir -p %{buildroot}%{_libdir}/libdnf5/plugins
 %if %{with plugin_expired_pgp_keys}
 %find_lang libdnf5-plugin-expired-pgp-keys
 %endif
-%if %{with plugin_rhsm}
-%find_lang libdnf5-plugin-rhsm
+%if %{with plugin_rhsm_container}
+%find_lang libdnf5-plugin-rhsm-container
 %endif
 
 %ldconfig_scriptlets
