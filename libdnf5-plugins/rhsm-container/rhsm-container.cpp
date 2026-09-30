@@ -30,13 +30,13 @@ using namespace libdnf5;
 
 namespace {
 
-constexpr const char * PLUGIN_NAME = "rhsm";
+constexpr const char * PLUGIN_NAME = "rhsm-container";
 constexpr plugin::Version PLUGIN_VERSION{0, 1, 0};
 constexpr PluginAPIVersion REQUIRED_PLUGIN_API_VERSION{.major = 2, .minor = 0};
 
 constexpr const char * attrs[]{"author.name", "author.email", "description", nullptr};
 constexpr const char * attrs_value[]{
-    "Jaroslav Rohel", "jrohel@redhat.com", "RHSM (Red Hat Subscription Manager) Plugin."};
+    "Jaroslav Rohel", "jrohel@redhat.com", "RHSM (Red Hat Subscription Manager) Plugin for Containers."};
 
 
 class Rhsm : public plugin::IPlugin {
