@@ -113,9 +113,16 @@ inline std::string tolower(const std::string & s) {
 template <typename T>
 inline std::string format_epoch(T epoch_num) {
     if (std::in_range<time_t>(epoch_num)) {
-        const auto epoch = static_cast<time_t>(epoch_num);
-        return fmt::format(
-            "{:%F %X}", std::chrono::round<std::chrono::seconds>(std::chrono::system_clock::from_time_t(epoch)));
+        auto epoch = static_cast<time_t>(epoch_num);
+        // Convert to std::tm in the local timezone first. Formatting a
+        // system_clock time point directly would render the time in UTC.
+        // The UTC offset is appended per
+        // https://github.com/rpm-software-management/dnf5/issues/2200.
+        // Use localtime_r() because std::localtime() is not thread-safe.
+        std::tm local_time{};
+        if (localtime_r(&epoch, &local_time) != nullptr) {
+            return fmt::format("{:%F %X %z}", local_time);
+        }
     }
     return fmt::format("{} seconds since Unix epoch", epoch_num);
 }
