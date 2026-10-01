@@ -200,6 +200,21 @@ Following options are applicable in the general context for any ``dnf5`` command
 ``--allow-vendor-change``
     | Allow automatic package replacements from different vendors for RPM upgrades or downgrades.
 
+``--allow-vendor-change-to=VENDOR``
+    | Allow switching packages from any vendor to packages from VENDOR.
+    | Supports globs, can be specified multiple times.
+    | Example: ``--allow-vendor-change-to='Fedora*'`` allows upgrading from any third-party vendor to "Fedora*".
+
+``--allow-vendor-change-from=VENDOR``
+    | Allow replacing packages from VENDOR to packages from any vendor.
+    | Supports globs, can be specified multiple times.
+    | Example: ``--allow-vendor-change-from=rpmfusion`` allows switching from rpmfusion to any other vendor.
+
+``--allow-vendor-change-for-pkgs=PKG_NAME,...``
+    | Allow vendor changes for packages matching PKG_NAME (both to and from any vendor).
+    | List option. Supports globs, can be specified multiple times.
+    | Example: ``--allow-vendor-change-for-pkgs='kernel,systemd'`` allows vendor changes for these packages.
+
 .. _best_option_ref-label:
 
 ``--best``
