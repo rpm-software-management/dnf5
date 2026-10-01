@@ -108,6 +108,19 @@ using namespace libdnf5::cli;
 
 namespace {
 
+std::string quote_string(std::string_view str) {
+    std::string result;
+    result.reserve(str.size());
+    for (const char c : str) {
+        if (c == '"' || c == '\\') {
+            result += '\\';
+        }
+        result += c;
+    }
+    return result;
+}
+
+
 // Registers `group` and all its arguments to `command`
 void register_group_with_args(
     libdnf5::cli::ArgumentParser::Command & command, libdnf5::cli::ArgumentParser::Group & group) {
@@ -353,6 +366,73 @@ void RootCommand::set_argument_parser() {
     global_options_group->register_argument(no_allow_vendor_change);
 
     no_allow_vendor_change->add_conflict_argument(*allow_vendor_change);
+
+    {
+        auto allow_vendor_change_to = parser.add_new_named_arg("allow-vendor-change-to");
+        allow_vendor_change_to->set_long_name("allow-vendor-change-to");
+        allow_vendor_change_to->set_has_value(true);
+        allow_vendor_change_to->set_arg_value_help("VENDOR");
+        allow_vendor_change_to->set_description(
+            _("Allow switching packages from any vendor to packages from VENDOR. "
+              "Supports globs, can be specified multiple times."));
+        allow_vendor_change_to->set_parse_hook_func([&ctx](
+                                                        [[maybe_unused]] ArgumentParser::NamedArg * arg,
+                                                        [[maybe_unused]] const char * option,
+                                                        const char * value) {
+            auto policy = "in:=*\"" + quote_string(value) + '"';
+            ctx.get_cmdline_vendor_policies().emplace_back(policy);
+            return true;
+        });
+        global_options_group->register_argument(allow_vendor_change_to);
+    }
+
+    {
+        auto allow_vendor_change_from = parser.add_new_named_arg("allow-vendor-change-from");
+        allow_vendor_change_from->set_long_name("allow-vendor-change-from");
+        allow_vendor_change_from->set_has_value(true);
+        allow_vendor_change_from->set_arg_value_help("VENDOR");
+        allow_vendor_change_from->set_description(
+            _("Allow replacing packages from VENDOR to packages from any vendor. "
+              "Supports globs, can be specified multiple times."));
+        allow_vendor_change_from->set_parse_hook_func([&ctx](
+                                                          [[maybe_unused]] ArgumentParser::NamedArg * arg,
+                                                          [[maybe_unused]] const char * option,
+                                                          const char * value) {
+            auto policy = "out:=*\"" + quote_string(value) + '"';
+            ctx.get_cmdline_vendor_policies().emplace_back(policy);
+            return true;
+        });
+        global_options_group->register_argument(allow_vendor_change_from);
+    }
+
+    {
+        auto allow_vendor_change_for_pkgs = parser.add_new_named_arg("allow-vendor-change-for-pkgs");
+        allow_vendor_change_for_pkgs->set_long_name("allow-vendor-change-for-pkgs");
+        allow_vendor_change_for_pkgs->set_has_value(true);
+        allow_vendor_change_for_pkgs->set_arg_value_help("PKG_NAME,...");
+        allow_vendor_change_for_pkgs->set_description(
+            _("Allow vendor changes for packages matching PKG_NAME (bidirectional). "
+              "List option. Supports globs, can be specified multiple times."));
+        allow_vendor_change_for_pkgs->set_parse_hook_func([&ctx](
+                                                              [[maybe_unused]] ArgumentParser::NamedArg * arg,
+                                                              [[maybe_unused]] const char * option,
+                                                              const char * value) {
+            libdnf5::OptionStringList pkgs_patterns(value);
+            std::string policy;
+            bool first = true;
+            for (auto & pkg_pattern : pkgs_patterns.get_value()) {
+                const std::string quoted_pkg_pattern = quote_string(pkg_pattern);
+                policy += first ? '@' : ',';
+                first = false;
+                policy += "in:[name=*\"" + quoted_pkg_pattern + "\"],out:[name=*\"" + quoted_pkg_pattern + "\"]";
+            }
+            if (!policy.empty()) {
+                ctx.get_cmdline_vendor_policies().emplace_back(policy);
+            }
+            return true;
+        });
+        global_options_group->register_argument(allow_vendor_change_for_pkgs);
+    }
 
     {
         auto with_vendor_policy = parser.add_new_named_arg("with-vendor-policy");
