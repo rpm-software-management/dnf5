@@ -211,6 +211,12 @@ public:
     const OptionString & get_comment_option() const;
     OptionBool & get_downloadonly_option();
     const OptionBool & get_downloadonly_option() const;
+    /// Sort the packages to download by the given key. Currently only "size" and "none" are supported.
+    OptionEnum & get_download_sort_option();
+    const OptionEnum & get_download_sort_option() const;
+    /// Reverses the order set by the `download_sort` option.
+    OptionBool & get_download_sort_reverse_option();
+    const OptionBool & get_download_sort_reverse_option() const;
     OptionBool & get_ignorearch_option();
     const OptionBool & get_ignorearch_option() const;
 

@@ -25,6 +25,7 @@
 #include <libdnf5/repo/package_downloader.hpp>
 #include <libdnf5/rpm/arch.hpp>
 #include <libdnf5/rpm/package.hpp>
+#include <libdnf5/rpm/package_download_order.hpp>
 #include <libdnf5/rpm/package_query.hpp>
 #include <libdnf5/rpm/package_set.hpp>
 #include <libdnf5/utils/bgettext/bgettext-mark-domain.h>
@@ -32,6 +33,7 @@
 #include <algorithm>
 #include <iostream>
 #include <map>
+#include <vector>
 
 
 namespace dnf5 {
@@ -185,6 +187,7 @@ void DownloadCommand::set_argument_parser() {
     cmd.register_named_arg(url);
     cmd.register_named_arg(urlprotocol);
     cmd.register_named_arg(allmirrors);
+    create_download_order_options(*this);
     cmd.register_positional_arg(keys);
 }
 
@@ -408,7 +411,22 @@ void DownloadCommand::run() {
     // for download command, we don't want to mark the packages for removal
     downloader.force_keep_packages(true);
 
+    // Packages are collected in NEVRA order (the default); optionally re-sorted below.
+    std::vector<libdnf5::rpm::Package> sorted_packages;
+    sorted_packages.reserve(packages_to_download.size());
     for (auto & [nevra, pkg] : packages_to_download) {
+        sorted_packages.push_back(pkg);
+    }
+
+    auto & config = ctx.get_base().get_config();
+    if (config.get_download_sort_option().get_value() == "size") {
+        libdnf5::rpm::sort_packages_by_download_size(
+            sorted_packages, config.get_download_sort_reverse_option().get_value());
+    } else if (config.get_download_sort_reverse_option().get_value()) {
+        std::reverse(sorted_packages.begin(), sorted_packages.end());
+    }
+
+    for (auto & pkg : sorted_packages) {
         downloader.add(pkg);
     }
 

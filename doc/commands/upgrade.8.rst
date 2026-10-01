@@ -75,6 +75,8 @@ Options
 ``--downloadonly``
     | Only download packages for transaction.
 
+.. include:: ../_shared/options/download-order.rst
+
 .. include:: ../_shared/options/transaction.rst
 
 .. include:: ../_shared/options/advisories.rst
