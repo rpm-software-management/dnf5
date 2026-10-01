@@ -28,7 +28,6 @@
 class OptionTest : public CppUnit::TestCase {
     CPPUNIT_TEST_SUITE(OptionTest);
     CPPUNIT_TEST(test_options_bool);
-    CPPUNIT_TEST(test_options_child);
     CPPUNIT_TEST(test_options_enum);
     CPPUNIT_TEST(test_options_number);
     CPPUNIT_TEST(test_options_path);
@@ -45,11 +44,16 @@ class OptionTest : public CppUnit::TestCase {
     CPPUNIT_TEST(test_options_list_add);
     CPPUNIT_TEST(test_options_list_add_item);
     CPPUNIT_TEST(test_options_string_append_list);
+    CPPUNIT_TEST(test_options_string_list_items_info);
+    CPPUNIT_TEST(test_options_string_set_items_info);
+    CPPUNIT_TEST(test_options_string_append_list_items_info);
+    CPPUNIT_TEST(test_options_string_append_set_items_info);
+    CPPUNIT_TEST(test_options_child);
+    CPPUNIT_TEST(test_options_child_string_list);
     CPPUNIT_TEST_SUITE_END();
 
 public:
     void test_options_bool();
-    void test_options_child();
     void test_options_enum();
     void test_options_number();
     void test_options_path();
@@ -66,6 +70,12 @@ public:
     void test_options_list_add();
     void test_options_list_add_item();
     void test_options_string_append_list();
+    void test_options_string_list_items_info();
+    void test_options_string_set_items_info();
+    void test_options_string_append_list_items_info();
+    void test_options_string_append_set_items_info();
+    void test_options_child();
+    void test_options_child_string_list();
 };
 
 

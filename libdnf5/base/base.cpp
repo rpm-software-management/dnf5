@@ -113,7 +113,8 @@ void Base::load_config() {
     for (const auto & path : paths) {
         ConfigParser parser;
         parser.read(path);
-        p_impl->config.load_from_parser(parser, "main", p_impl->vars, *get_logger());
+        p_impl->config.load_from_parser(
+            parser, "main", p_impl->vars, *get_logger(), Option::Priority::MAINCONFIG, "file://" + path.string());
     }
 
     // Finally, if a user configuration filename is defined or the file exists in the default location,
@@ -121,7 +122,13 @@ void Base::load_config() {
     if (user_defined_config_file_name || fs::exists(conf_file_path)) {
         ConfigParser parser;
         parser.read(conf_file_path);
-        p_impl->config.load_from_parser(parser, "main", p_impl->vars, *get_logger());
+        p_impl->config.load_from_parser(
+            parser,
+            "main",
+            p_impl->vars,
+            *get_logger(),
+            Option::Priority::MAINCONFIG,
+            "file://" + conf_file_path.string());
     }
 }
 

@@ -19,6 +19,10 @@
 
 #include "libdnf5/conf/option.hpp"
 
+#include "utils/on_scope_exit.hpp"
+
+#include <vector>
+
 namespace libdnf5 {
 
 class Option::Impl {
@@ -31,6 +35,11 @@ private:
     Priority priority;
     bool locked{false};
     std::string lock_comment;
+    std::string source;
+    std::string pending_source;
+
+    // Used by OptionChild to delegate get_source() to parent when no own value is set
+    const Option * parent{nullptr};
 };
 
 Option::Option(Priority priority) : p_impl(new Impl(priority)) {}
@@ -66,8 +75,79 @@ void Option::assert_not_locked() const {
     libdnf_user_assert(!p_impl->locked, "Attempting to write to a locked option: {}", get_lock_comment());
 }
 
+const char * Option::priority_to_string(Priority priority) noexcept {
+    switch (priority) {
+        case Priority::EMPTY:
+            return "EMPTY";
+        case Priority::DEFAULT:
+            return "DEFAULT";
+        case Priority::MAINCONFIG:
+            return "MAINCONFIG";
+        case Priority::AUTOMATICCONFIG:
+            return "AUTOMATICCONFIG";
+        case Priority::REPOCONFIG:
+            return "REPOCONFIG";
+        case Priority::INSTALLROOT:
+            return "INSTALLROOT";
+        case Priority::PLUGINDEFAULT:
+            return "PLUGINDEFAULT";
+        case Priority::PLUGINCONFIG:
+            return "PLUGINCONFIG";
+        case Priority::COMMANDLINE:
+            return "COMMANDLINE";
+        case Priority::RUNTIME:
+            return "RUNTIME";
+    }
+    return "UNKNOWN";
+}
+
 const std::string & Option::get_lock_comment() const noexcept {
     return p_impl->lock_comment;
+}
+
+void Option::set(Priority priority, const std::string & value, std::string source) {
+    set_pending_source(std::move(source));
+    libdnf5::utils::OnScopeExit clear{[this]() noexcept { clear_pending_source(); }};
+    set(priority, value);
+}
+
+void Option::set(const std::string & value, std::string source) {
+    set_pending_source(std::move(source));
+    libdnf5::utils::OnScopeExit clear{[this]() noexcept { clear_pending_source(); }};
+    set(value);
+}
+
+void Option::set_source(std::string source) {
+    p_impl->source = std::move(source);
+}
+
+void Option::set_pending_source(std::string source) {
+    p_impl->pending_source = std::move(source);
+}
+
+void Option::clear_pending_source() noexcept {
+    p_impl->pending_source.clear();
+}
+
+std::string Option::take_pending_source() noexcept {
+    std::string src = std::move(p_impl->pending_source);
+    p_impl->pending_source.clear();
+    return src;
+}
+
+// When this option has no own value (priority == EMPTY) and has a parent,
+// delegate to the parent's source. This allows OptionChild to inherit
+// the source from its parent option without needing a virtual get_source().
+const std::string & Option::get_source() const noexcept {
+    return (p_impl->priority == Priority::EMPTY && p_impl->parent) ? p_impl->parent->p_impl->source : p_impl->source;
+}
+
+void Option::set_parent(const Option * parent) noexcept {
+    p_impl->parent = parent;
+}
+
+const Option * Option::get_parent() const noexcept {
+    return p_impl->parent;
 }
 
 }  // namespace libdnf5

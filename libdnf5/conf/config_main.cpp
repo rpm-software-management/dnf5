@@ -1439,12 +1439,27 @@ void ConfigMain::load_from_parser(
 }
 
 namespace {
+
+// Copies value, priority, and source from one option to another.
 template <class T>
 void load_option(T & dest, const T & src) {
     if (!src.empty()) {
-        dest.set(src.get_priority(), src.get_value());
+        dest.set(src.get_priority(), src.get_value(), std::string(src.get_source()));
     }
 }
+
+// Overload for string container options (list/set, both append and non-append).
+// Copies each item individually to preserve per-item priority and source,
+// since items may originate from different sources (e.g. via add() calls).
+template <typename T, bool IsAppend>
+void load_option(OptionStringContainer<T, IsAppend> & dest, const OptionStringContainer<T, IsAppend> & src) {
+    if (!src.empty()) {
+        for (const auto & item : src.get_items_info()) {
+            dest.add_item(item.priority, std::string(item.value), std::string(item.source));
+        }
+    }
+}
+
 }  // namespace
 
 void ConfigMain::Impl::load_from_config(const ConfigMain::Impl & other) {

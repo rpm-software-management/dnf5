@@ -761,7 +761,13 @@ void RepoSack::create_repos_from_file(const std::string & path) {
         }
         repo->set_repo_file_path(path);
         auto & repo_cfg = repo->get_config();
-        repo_cfg.load_from_parser(parser, section, *p_impl->base->get_vars(), *p_impl->base->get_logger());
+        repo_cfg.load_from_parser(
+            parser,
+            section,
+            *p_impl->base->get_vars(),
+            *p_impl->base->get_logger(),
+            Option::Priority::REPOCONFIG,
+            "file://" + path);
 
         if (repo_cfg.get_name_option().get_priority() == Option::Priority::DEFAULT) {
             logger.debug("Repo \"{}\" is missing name in configuration file \"{}\", using id.", repo_id, path);
@@ -849,7 +855,12 @@ void RepoSack::load_repos_configuration_overrides() {
             repo_query.filter_id(repo_id_pattern, sack::QueryCmp::GLOB);
             for (auto & repo : repo_query) {
                 repo->get_config().load_from_parser(
-                    parser, section, *p_impl->base->get_vars(), *p_impl->base->get_logger());
+                    parser,
+                    section,
+                    *p_impl->base->get_vars(),
+                    *p_impl->base->get_logger(),
+                    Option::Priority::REPOCONFIG,
+                    "file://" + path.string());
             }
         }
     }
