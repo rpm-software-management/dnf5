@@ -168,6 +168,9 @@ These are available after installing the ``dnf5-plugins`` package.
 :ref:`copr <copr_plugin_ref-label>`
     | Manage Copr repositories (add-ons provided by users/community/third-party).
 
+:ref:`deptree <deptree_plugin_ref-label>`
+    | Display a package dependency graph.
+
 :ref:`needs-restarting <needs_restarting_plugin_ref-label>`
     | Determine whether the system should be rebooted.
 

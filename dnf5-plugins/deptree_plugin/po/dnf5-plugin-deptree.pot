@@ -1,0 +1,86 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-09-23 09:13+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: dnf5-plugins/deptree_plugin/deptree.cpp:31
+msgid "Display package dependency trees from repository metadata."
+msgstr ""
+
+#: dnf5-plugins/deptree_plugin/deptree.cpp:35
+msgid "Package names, NEVRAs, or glob patterns."
+msgstr ""
+
+#: dnf5-plugins/deptree_plugin/deptree.cpp:45
+msgid "Show packages requiring each package."
+msgstr ""
+
+#: dnf5-plugins/deptree_plugin/deptree.cpp:47
+msgid "Print a sorted, deduplicated package list."
+msgstr ""
+
+#: dnf5-plugins/deptree_plugin/deptree.cpp:49
+msgid "Show requirement capability nodes."
+msgstr ""
+
+#: dnf5-plugins/deptree_plugin/deptree.cpp:51
+msgid "Include all matching package versions."
+msgstr ""
+
+#: dnf5-plugins/deptree_plugin/deptree.cpp:57
+msgid "Limit traversal to N dependency levels."
+msgstr ""
+
+#: dnf5-plugins/deptree_plugin/deptree.cpp:71
+msgid ""
+"Comma-separated dependency types: requires, recommends, suggests, "
+"supplements, enhances."
+msgstr ""
+
+#: dnf5-plugins/deptree_plugin/deptree.cpp:100
+#, c++-format
+msgid "No match for argument \"{}\"."
+msgstr ""
+
+#: dnf5-plugins/deptree_plugin/deptree_graph.cpp:298
+#, c++-format
+msgid "choice: {}"
+msgstr ""
+
+#: dnf5-plugins/deptree_plugin/deptree_graph.cpp:300
+#, c++-format
+msgid "if {}:"
+msgstr ""
+
+#: dnf5-plugins/deptree_plugin/deptree_graph.cpp:302
+msgid "else:"
+msgstr ""
+
+#: dnf5-plugins/deptree_plugin/deptree_graph.cpp:304
+#, c++-format
+msgid "requirement: {}"
+msgstr ""
+
+#: dnf5-plugins/deptree_plugin/deptree_graph.cpp
+#, c++-format
+msgid "unsatisfied: {}"
+msgstr ""
+
+#: dnf5-plugins/deptree_plugin/deptree_graph.cpp:319
+#, c++-format
+msgid "{} [already shown]"
+msgstr ""
