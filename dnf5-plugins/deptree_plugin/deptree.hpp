@@ -32,6 +32,7 @@ private:
     std::unique_ptr<libdnf5::cli::session::BoolOption> show_duplicates{nullptr};
     std::unique_ptr<libdnf5::cli::session::BoolOption> show_requires{nullptr};
     std::unique_ptr<libdnf5::cli::session::BoolOption> installed{nullptr};
+    std::unique_ptr<libdnf5::cli::session::AppendStringListOption> contains_pkgs{nullptr};
     std::set<std::string> arches{};
     libdnf5::OptionNumber<std::int32_t> * depth_option{nullptr};
 };

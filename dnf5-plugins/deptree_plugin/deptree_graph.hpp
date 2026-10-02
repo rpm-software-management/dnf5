@@ -117,6 +117,9 @@ private:
     void expand(std::string node_id, int level);
 };
 
+// Keeps only shortest paths from graph roots to each package whose name matches a glob pattern.
+void prune_to_package_names(Graph & graph, const std::vector<std::string> & patterns);
+
 void print_tree(const Graph & graph);
 void print_json(const Graph & graph);
 

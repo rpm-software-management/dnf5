@@ -51,6 +51,12 @@ void DeptreeCommand::set_argument_parser() {
         *this, "showduplicates", '\0', _("Include all matching package versions."), false);
     installed = std::make_unique<libdnf5::cli::session::BoolOption>(
         *this, "installed", '\0', _("Display dependency trees for installed packages only."), false);
+    contains_pkgs = std::make_unique<libdnf5::cli::session::AppendStringListOption>(
+        *this,
+        "contains-pkgs",
+        '\0',
+        _("Show only branches leading to packages with specified names. List option, supports globs."),
+        "PACKAGE_NAME,...");
 
     auto * arch_arg = parser.add_new_named_arg("arch");
     arch_arg->set_long_name("arch");
@@ -132,7 +138,10 @@ void DeptreeCommand::run() {
         show_requires->get_value(),
         show_duplicates->get_value(),
         depth_option->get_value());
-    const auto graph = builder.build(root_query);
+    auto graph = builder.build(root_query);
+    if (!contains_pkgs->get_value().empty()) {
+        prune_to_package_names(graph, contains_pkgs->get_value());
+    }
 
     if (flat->get_value()) {
         std::set<std::string> packages;

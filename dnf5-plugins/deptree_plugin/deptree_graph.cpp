@@ -3,12 +3,15 @@
 
 #include "deptree_graph.hpp"
 
+#include <fnmatch.h>
 #include <libdnf5/base/base.hpp>
 #include <libdnf5/utils/bgettext/bgettext-lib.h>
 #include <libdnf5/utils/format.hpp>
 
 #include <algorithm>
+#include <deque>
 #include <iostream>
+#include <limits>
 #include <utility>
 
 namespace dnf5 {
@@ -323,6 +326,143 @@ void GraphBuilder::expand(std::string node_id, int level) {
         // Only bump the level for PACKAGE type nodes
         const auto next_level = level + (graph.nodes.at(edge.target).type == Node::Type::PACKAGE ? 1 : 0);
         expand(edge.target, next_level);
+    }
+}
+
+void prune_to_package_names(Graph & graph, const std::vector<std::string> & patterns) {
+    // Invert the forward dependency edges so shortest paths can be reconstructed
+    // from matching package nodes back to the selected roots.
+    std::map<std::string, std::vector<std::string>> incoming;
+    for (const auto & [source, outgoing] : graph.edges) {
+        for (const auto & edge : outgoing) {
+            incoming[edge.target].push_back(source);
+        }
+    }
+
+    // Match only RPM package names; structural nodes never act as pruning targets.
+    std::set<std::string> matching_packages;
+    for (const auto & [id, node] : graph.nodes) {
+        if (node.type != Node::Type::PACKAGE ||
+            std::none_of(patterns.begin(), patterns.end(), [&](const auto & pattern) {
+                return fnmatch(pattern.c_str(), node.package->get_name().c_str(), 0) == 0;
+            })) {
+            continue;
+        }
+        matching_packages.insert(id);
+    }
+
+    // A dependency level is entered only at a package node. Nodes that expose
+    // dependency-expression structure are retained for display but add no depth.
+    const auto package_level = [&graph](const std::string & node_id) {
+        return graph.nodes.at(node_id).type == Node::Type::PACKAGE ? 1 : 0;
+    };
+    // 0-1 BFS is Dijkstra's shortest-path algorithm specialized for edge costs
+    // of zero and one. Zero-cost edges go to the front of the deque, avoiding
+    // counting choice, requirement, and conditional nodes as package levels.
+    const auto shortest_distances =
+        [&graph](const std::set<std::string> & starts, const auto & next_nodes, const auto & edge_cost) {
+            constexpr auto infinity = std::numeric_limits<int>::max();
+            std::map<std::string, int> distances;
+            for (const auto & [id, node] : graph.nodes) {
+                distances.emplace(id, infinity);
+            }
+            std::deque<std::string> pending;
+            for (const auto & start : starts) {
+                distances.at(start) = 0;
+                pending.push_back(start);
+            }
+            while (!pending.empty()) {
+                const auto node_id = std::move(pending.front());
+                pending.pop_front();
+                const auto current_distance = distances.at(node_id);
+                for (const auto & next : next_nodes(node_id)) {
+                    const auto next_distance = current_distance + edge_cost(node_id, next);
+                    if (next_distance >= distances.at(next)) {
+                        continue;
+                    }
+                    distances.at(next) = next_distance;
+                    if (edge_cost(node_id, next) == 0) {
+                        pending.push_front(next);
+                    } else {
+                        pending.push_back(next);
+                    }
+                }
+            }
+            return distances;
+        };
+
+    // Measure the minimum package depth from any selected root to every graph node.
+    const auto distances_from_roots = shortest_distances(
+        graph.roots,
+        [&graph](const std::string & node_id) {
+            std::vector<std::string> result;
+            if (const auto edges = graph.edges.find(node_id); edges != graph.edges.end()) {
+                for (const auto & edge : edges->second) {
+                    result.push_back(edge.target);
+                }
+            }
+            return result;
+        },
+        [&package_level](const std::string &, const std::string & target) { return package_level(target); });
+    constexpr auto infinity = std::numeric_limits<int>::max();
+    std::set<std::string> retained;
+    std::set<std::pair<std::string, std::string>> retained_edges;
+    // Reconstruct paths backwards from every match independently. This keeps a
+    // shortest path to each matching package, rather than only to the closest
+    // package matched by the glob.
+    std::vector<std::string> pending;
+    for (const auto & package : matching_packages) {
+        if (distances_from_roots.at(package) != infinity && retained.insert(package).second) {
+            pending.push_back(package);
+        }
+    }
+    while (!pending.empty()) {
+        const auto node_id = std::move(pending.back());
+        pending.pop_back();
+        for (const auto & parent : incoming[node_id]) {
+            // Retain edges that preserve the minimum root distance: zero for a
+            // structural node, one when entering a package node.
+            if (distances_from_roots.at(parent) + package_level(node_id) != distances_from_roots.at(node_id)) {
+                continue;
+            }
+            retained_edges.emplace(parent, node_id);
+            if (retained.insert(parent).second) {
+                pending.push_back(parent);
+            }
+        }
+    }
+
+    for (auto it = graph.nodes.begin(); it != graph.nodes.end();) {
+        if (!retained.contains(it->first)) {
+            it = graph.nodes.erase(it);
+        } else {
+            ++it;
+        }
+    }
+    for (auto it = graph.roots.begin(); it != graph.roots.end();) {
+        if (!retained.contains(*it)) {
+            it = graph.roots.erase(it);
+        } else {
+            ++it;
+        }
+    }
+    for (auto edge_it = graph.edges.begin(); edge_it != graph.edges.end();) {
+        if (!retained.contains(edge_it->first)) {
+            edge_it = graph.edges.erase(edge_it);
+            continue;
+        }
+        auto & outgoing = edge_it->second;
+        outgoing.erase(
+            std::remove_if(
+                outgoing.begin(),
+                outgoing.end(),
+                [&](const Edge & edge) { return !retained_edges.contains({edge_it->first, edge.target}); }),
+            outgoing.end());
+        if (outgoing.empty()) {
+            edge_it = graph.edges.erase(edge_it);
+        } else {
+            ++edge_it;
+        }
     }
 }
 

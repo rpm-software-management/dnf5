@@ -54,6 +54,13 @@ Options
 ``--installed``
     | Display dependency trees for installed packages only.
 
+``--contains-pkgs=PACKAGE_NAME,...``
+    | Show only branches leading to packages with specified names. This is a
+      list option; package-name globs are supported. A matching package is
+      retained as a leaf, along with all shortest paths from a selected root to
+      it. Each matching package is considered separately. Dependency levels are
+      counted as for ``--depth``.
+
 ``--arch=ARCH[,ARCH...]``
     | Limit roots, provider candidates, and reverse dependents to the specified
       architectures. This option can be specified multiple times.
@@ -130,3 +137,6 @@ Examples
 ``dnf5 deptree --types=requires,recommends --json bash``
     | Emit a JSON dependency graph that includes both hard and recommended
       dependencies.
+
+``dnf5 deptree --contains-pkgs='DeepDependencyB*' packageA``
+    | Show only shortest dependency paths from ``packageA`` that reach matching packages.
