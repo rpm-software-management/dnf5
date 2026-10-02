@@ -16,9 +16,9 @@ Given I use repository "dnf-ci-fedora"
 Given I use repository "dnf-ci-fedora-updates"
  When I execute dnf with args "check-upgrade"
  Then the exit code is 100
- Then stdout contains "glibc.x86_64\s+2.28-26.fc29\s+dnf-ci-fedora-updates"
- Then stdout contains "glibc-common.x86_64\s+2.28-26.fc29\s+dnf-ci-fedora-updates"
- Then stdout contains "glibc-all-langpacks.x86_64\s+2.28-26.fc29\s+dnf-ci-fedora-updates"
+ Then stdout contains "glibc.x86_64\s+2.28-9.fc29\s+->\s+2.28-26.fc29\s+dnf-ci-fedora-updates"
+ Then stdout contains "glibc-common.x86_64\s+2.28-9.fc29\s+->\s+2.28-26.fc29\s+dnf-ci-fedora-updates"
+ Then stdout contains "glibc-all-langpacks.x86_64\s+2.28-9.fc29\s+->\s+2.28-26.fc29\s+dnf-ci-fedora-updates"
 Given I use repository "dnf-ci-fedora-updates" with configuration
       | key           | value   |
       | priority      | 100     |
@@ -38,9 +38,9 @@ Given I use repository "dnf-ci-fedora"
   """
   {
     "upgrades": [
-      { "name": "glibc", "arch": "x86_64", "evr": "2.28-26.fc29", "repository": "dnf-ci-fedora-updates" },
-      { "name": "glibc-common", "arch": "x86_64", "evr": "2.28-26.fc29", "repository": "dnf-ci-fedora-updates" },
-      { "name": "glibc-all-langpacks", "arch": "x86_64", "evr": "2.28-26.fc29", "repository": "dnf-ci-fedora-updates" }
+      { "name": "glibc", "arch": "x86_64", "current_evr": "2.28-9.fc29", "evr": "2.28-26.fc29", "repository": "dnf-ci-fedora-updates" },
+      { "name": "glibc-common", "arch": "x86_64", "current_evr": "2.28-9.fc29", "evr": "2.28-26.fc29", "repository": "dnf-ci-fedora-updates" },
+      { "name": "glibc-all-langpacks", "arch": "x86_64", "current_evr": "2.28-9.fc29", "evr": "2.28-26.fc29", "repository": "dnf-ci-fedora-updates" }
     ],
     "obsoleting_packages": [
       {
