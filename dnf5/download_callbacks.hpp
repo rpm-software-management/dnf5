@@ -44,11 +44,15 @@ private:
 
     int mirror_failure(void * user_cb_data, const char * msg, const char * url, const char * metadata) override;
 
-    bool is_time_to_print();
+    /// @return `true` when every download registered so far has reported its result.
+    bool all_downloads_ended() const noexcept;
+    bool is_time_to_print() const noexcept;
     void print();
 
     std::unique_ptr<libdnf5::cli::progressbar::MultiProgressBar> multi_progress_bar;
     std::chrono::time_point<std::chrono::steady_clock> prev_print_time{std::chrono::steady_clock::now()};
+    std::size_t num_of_downloads{0};
+    std::size_t num_of_ended_downloads{0};
     bool printed{false};
 
     bool number_widget_visible{false};
