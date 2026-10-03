@@ -35,7 +35,8 @@ Scenario: Skipping section shown alongside a successful partial upgrade
         """
         Skipping 1 package due to vendor change restriction: "Vendor A" -> "Vendor B".
         """
-    And stderr contains "--allow-vendor-change to allow changing package vendors"
+    And stderr contains "--add-vendor-policy=POLICY to add specific vendor change rules"
+    And stderr contains "--allow-vendor-change to allow all vendor changes"
 
 
 Scenario: Skipping section and hint shown when all upgrades are blocked (nothing to do)
@@ -50,7 +51,8 @@ Scenario: Skipping section and hint shown when all upgrades are blocked (nothing
         """
         Skipping 1 package due to vendor change restriction: "Vendor A" -> "Vendor B".
         """
-    And stderr contains "--allow-vendor-change to allow changing package vendors"
+    And stderr contains "--add-vendor-policy=POLICY to add specific vendor change rules"
+    And stderr contains "--allow-vendor-change to allow all vendor changes"
 
 
 Scenario: Skipping section shown when reinstall is blocked by vendor change
@@ -67,7 +69,8 @@ Scenario: Skipping section shown when reinstall is blocked by vendor change
         """
         Skipping 1 package due to vendor change restriction: "Vendor A" -> "Vendor B".
         """
-    And stderr contains "--allow-vendor-change to allow changing package vendors"
+    And stderr contains "--add-vendor-policy=POLICY to add specific vendor change rules"
+    And stderr contains "--allow-vendor-change to allow all vendor changes"
 
 
 Scenario: Skipping section shown when downgrade is blocked by vendor change
@@ -82,7 +85,8 @@ Scenario: Skipping section shown when downgrade is blocked by vendor change
         """
         Skipping 1 package due to vendor change restriction: "Vendor B" -> "Vendor A".
         """
-    And stderr contains "--allow-vendor-change to allow changing package vendors"
+    And stderr contains "--add-vendor-policy=POLICY to add specific vendor change rules"
+    And stderr contains "--allow-vendor-change to allow all vendor changes"
 
 
 Scenario: Skipping section shown when install-via-obsolete is blocked by vendor change
@@ -98,7 +102,8 @@ Scenario: Skipping section shown when install-via-obsolete is blocked by vendor 
         """
         Skipping 1 package due to vendor change restriction: "Vendor A" -> "Vendor B".
         """
-    And stderr contains "--allow-vendor-change to allow changing package vendors"
+    And stderr contains "--add-vendor-policy=POLICY to add specific vendor change rules"
+    And stderr contains "--allow-vendor-change to allow all vendor changes"
 
 
 Scenario: distro-sync shows skipping section when vendor change is blocked
@@ -114,7 +119,8 @@ Scenario: distro-sync shows skipping section when vendor change is blocked
         """
         Skipping 1 package due to vendor change restriction: "Vendor A" -> "Vendor B".
         """
-    And stderr contains "--allow-vendor-change to allow changing package vendors"
+    And stderr contains "--add-vendor-policy=POLICY to add specific vendor change rules"
+    And stderr contains "--allow-vendor-change to allow all vendor changes"
 
 
 Scenario: Multiple vendor transitions shown as separate lines in the skipping section
@@ -135,7 +141,8 @@ Scenario: Multiple vendor transitions shown as separate lines in the skipping se
         """
         Skipping 1 package due to vendor change restriction: "Vendor A" -> "Vendor C".
         """
-    And stderr contains "--allow-vendor-change to allow changing package vendors"
+    And stderr contains "--add-vendor-policy=POLICY to add specific vendor change rules"
+    And stderr contains "--allow-vendor-change to allow all vendor changes"
 
 
 Scenario: Skipping section renders "(none)" for packages with no vendor metadata
@@ -151,4 +158,5 @@ Scenario: Skipping section renders "(none)" for packages with no vendor metadata
         """
         Skipping 1 package due to vendor change restriction: "(none)" -> "Vendor B".
         """
-    And stderr contains "--allow-vendor-change to allow changing package vendors"
+    And stderr contains "--add-vendor-policy=POLICY to add specific vendor change rules"
+    And stderr contains "--allow-vendor-change to allow all vendor changes"
