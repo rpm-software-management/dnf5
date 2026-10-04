@@ -65,6 +65,29 @@ namespace {
 
 constexpr const char * STORED_REPO_PREFIX = "@stored_transaction";
 
+// Format metadata age like Python's datetime.timedelta used by DNF4.
+std::string format_metadata_age(int64_t age) {
+    const auto days = age / 86400;
+    age %= 86400;
+
+    const auto hours = age / 3600;
+    age %= 3600;
+
+    const auto minutes = age / 60;
+    const auto seconds = age % 60;
+
+    if (days > 0) {
+        return libdnf5::utils::sformat(
+            P_("{} day, {}:{:02}:{:02}", "{} days, {}:{:02}:{:02}", static_cast<unsigned long>(days)),
+            days,
+            hours,
+            minutes,
+            seconds);
+    }
+
+    return fmt::format("{}:{:02}:{:02}", hours, minutes, seconds);
+}
+
 // Helper function to format active transaction information for error messages
 std::string format_active_transaction_info(const libdnf5::base::ActiveTransactionInfo & info) {
     std::string result;
@@ -311,6 +334,42 @@ void Context::Impl::load_repos(bool load_system, bool load_available) {
     if (auto download_callbacks = dynamic_cast<DownloadCallbacks *>(base.get_download_callbacks())) {
         download_callbacks->reset_progress_bar();
     }
+
+    if (load_available) {
+        libdnf5::repo::RepoQuery repos(base);
+        repos.filter_enabled(true);
+        repos.filter_type(libdnf5::repo::Repo::Type::AVAILABLE);
+
+        int64_t min_age = 0;
+        int64_t max_timestamp = -1;
+        bool metadata_found = false;
+
+        for (auto & repo : repos) {
+            auto timestamp = repo->get_timestamp();
+            if (timestamp < 0) {
+                continue;
+            }
+
+            auto age = repo->get_age();
+
+            if (!metadata_found) {
+                min_age = age;
+                max_timestamp = timestamp;
+                metadata_found = true;
+            } else {
+                min_age = std::min(min_age, age);
+                max_timestamp = std::max(max_timestamp, timestamp);
+            }
+        }
+
+        if (metadata_found && min_age != 0 && max_timestamp != 0) {
+            print_info(libdnf5::utils::sformat(
+                _("Last metadata expiration check: {} ago on {}."),
+                format_metadata_age(min_age),
+                libdnf5::utils::string::format_epoch(max_timestamp)));
+        }
+    }
+
     if (load_available) {
         print_info(_("Repositories loaded."));
     }
