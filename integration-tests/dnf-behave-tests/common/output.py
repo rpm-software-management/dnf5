@@ -23,6 +23,12 @@ def strip_reposync_dnf5(found_lines, line_number):
     while line_number < len(found_lines) and sync_line_dnf5.fullmatch(found_lines[line_number].strip()):
         found_lines.pop(line_number)
 
+    if (
+        line_number < len(found_lines)
+        and found_lines[line_number].strip().startswith("Last metadata expiration check:")
+    ):
+        found_lines.pop(line_number)
+
     if line_number < len(found_lines) and found_lines[line_number].strip() == "Repositories loaded.":
         found_lines.pop(line_number)
 

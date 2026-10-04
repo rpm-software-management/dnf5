@@ -40,9 +40,10 @@ Given I use repository "simple-base" as http
  When I sleep for "1" seconds
   And I execute dnf with args "repoquery labirinto"
  Then the exit code is 0
-  And stderr is
+  And stderr matches line by line
   """
   Updating and loading repositories:
+  Last metadata expiration check: .* ago on .*\.
   Repositories loaded.
   """
   And stdout is
