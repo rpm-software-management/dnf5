@@ -35,6 +35,8 @@ public:
 
     void reset_progress_bar();
 
+    bool has_download_activity() const noexcept { return multi_progress_bar != nullptr; }
+
 private:
     void * add_new_download(void * user_data, const char * description, double total_to_download) override;
 

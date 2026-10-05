@@ -18,9 +18,10 @@ Scenario: Create a metadata cache using "makecache" and then test that "repoquer
       nodejs-1:5.12.1-1.fc29.src
       nodejs-1:5.12.1-1.fc29.x86_64
       """
-  And stderr is
+  And stderr matches line by line
       """
       Updating and loading repositories:
+      Last metadata expiration check: .* ago on .*\.
       Repositories loaded.
       """
 
@@ -46,9 +47,10 @@ Scenario: Tests that "repoquery" downloads metadata (creates a cache) and then "
       """
       Metadata cache created.
       """
-   And stderr is
+   And stderr matches line by line
       """
       Updating and loading repositories:
+      Last metadata expiration check: .* ago on .*\.
       Repositories loaded.
       """
 

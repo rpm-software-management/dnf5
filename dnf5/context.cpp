@@ -331,7 +331,10 @@ void Context::Impl::load_repos(bool load_system, bool load_available) {
         base.get_repo_sack()->load_repos(libdnf5::repo::Repo::Type::AVAILABLE);
     }
 
+    bool repository_download_activity = false;
+
     if (auto download_callbacks = dynamic_cast<DownloadCallbacks *>(base.get_download_callbacks())) {
+        repository_download_activity = download_callbacks->has_download_activity();
         download_callbacks->reset_progress_bar();
     }
 
@@ -362,7 +365,7 @@ void Context::Impl::load_repos(bool load_system, bool load_available) {
             }
         }
 
-        if (metadata_found && min_age != 0 && max_timestamp != 0) {
+        if (metadata_found && !repository_download_activity && max_timestamp != 0) {
             print_info(libdnf5::utils::sformat(
                 _("Last metadata expiration check: {} ago on {}."),
                 format_metadata_age(min_age),
