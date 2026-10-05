@@ -92,6 +92,11 @@ public:
     const OptionChild<OptionBool> & get_pkg_gpgcheck_option() const;
     OptionChild<OptionBool> & get_repo_gpgcheck_option();
     const OptionChild<OptionBool> & get_repo_gpgcheck_option() const;
+    /// Import OpenPGP keys from gpgkey URLs under the build-time keys directory
+    /// without asking for a confirmation. Covers both repository metadata keys
+    /// and package signing keys.
+    OptionChild<OptionBool> & get_auto_import_local_keys_option();
+    const OptionChild<OptionBool> & get_auto_import_local_keys_option() const;
     OptionChild<OptionBool> & get_enablegroups_option();
     const OptionChild<OptionBool> & get_enablegroups_option() const;
     /// @deprecated The option does nothing
