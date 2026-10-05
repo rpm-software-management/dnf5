@@ -23,6 +23,7 @@
 
 #include "libdnf5/common/exception.hpp"
 #include "libdnf5/common/sack/query_cmp.hpp"
+#include "libdnf5/rpm/versionlock_config_errors.hpp"
 #include "libdnf5/utils/fs/file.hpp"
 
 #include <fmt/format.h>
@@ -243,8 +244,20 @@ VersionlockConfig::VersionlockConfig(const std::filesystem::path & path) : path(
     if (!std::filesystem::exists(path)) {
         return;
     }
+    // Opening the file reports errors (e.g. the file exists but is not readable)
+    // as a FileSystemError carrying the errno, while a malformed TOML file is
+    // reported as a VersionlockParseError. This prevents an uncaught toml11
+    // exception from terminating the process.
+    // See https://github.com/rpm-software-management/dnf5/issues/2545
+    auto file = utils::fs::File(this->path, "r");
 
-    auto toml_value = toml::parse(this->path);
+    toml::value toml_value;
+    try {
+        toml_value = toml::parse(file.get(), this->path.string());
+    } catch (const toml::exception & e) {
+        throw VersionlockParseError(
+            M_("Error parsing versionlock file \"{}\": {}"), this->path.string(), std::string(e.what()));
+    }
 
     if (!toml_value.contains("version")) {
         // TODO(mblaha) Log unversioned versionlock file?
