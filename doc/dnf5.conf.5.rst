@@ -979,6 +979,34 @@ as the default value, which repositories can then override in their
 configuration.
 
 
+.. _auto_import_local_keys_options-label:
+
+``auto_import_local_keys``
+    :ref:`boolean <boolean-label>`
+
+    If enabled, DNF5 will import OpenPGP keys from the ``gpgkey`` URLs of this repository without
+    asking for confirmation, as long as the key file is inside the trusted keys directory,
+    ``/etc/pki/rpm-gpg`` by default. The directory is set when DNF5 is built (CMake option
+    ``AUTO_IMPORT_KEYS_DIR``) and cannot be changed in configuration files. A typical use is a key
+    file installed by a package of the distribution.
+
+    The key URL must be spelled ``file:///path``. The path is resolved before it is compared with
+    the directory, so ``..``, a symlink pointing outside the directory, and a directory whose name
+    only starts with the same prefix (for example ``/etc/pki/rpm-gpg-other``) are not trusted. Any
+    other key, including a key from a remote URL or a key spelled ``file:/path``, asks for
+    confirmation as usual, so the fingerprint can be verified before the key is trusted.
+    :ref:`assumeno <assumeno_options-label>` takes precedence: the import is declined and nothing
+    is imported.
+
+    The option applies to both places where DNF5 imports keys: the per-repository keyring used for
+    the metadata signature check (:ref:`repo_gpgcheck <repo_gpgcheck_options-label>`) and the RPM
+    database used for the package signature check
+    (:ref:`pkg_gpgcheck <pkg_gpgcheck_options-label>`). Keys for the package check are imported
+    when a transaction runs, so commands that only read repositories do not change the RPM
+    database. The signature checks themselves are not affected.
+
+    Default: ``False``.
+
 .. _bandwidth_options-label:
 
 ``bandwidth``
@@ -1105,6 +1133,9 @@ configuration.
 
     Doesn't apply for packages passed directly as arguments, as they are not in any repository,
     see :ref:`localpkg_gpgcheck <localpkg_gpgcheck_options-label>`.
+
+    To import the repository's signing keys without asking for confirmation, see
+    :ref:`auto_import_local_keys <auto_import_local_keys_options-label>`.
 
 .. _includepkgs_options-label:
 
@@ -1307,6 +1338,9 @@ configuration.
        This means that DNF5 may ask to import the same key multiple times. For example, when a key was
        already imported for package signature verification and this option is turned on, it may be needed
        to import it again for the repository.
+
+       To import these keys without asking for confirmation, see
+       :ref:`auto_import_local_keys <auto_import_local_keys_options-label>`.
 
     Default: ``False``.
 
