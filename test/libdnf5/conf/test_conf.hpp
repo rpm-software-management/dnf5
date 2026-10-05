@@ -33,6 +33,8 @@ class ConfTest : public TestCaseFixture {
     CPPUNIT_TEST(test_config_main);
     CPPUNIT_TEST(test_config_repo);
     CPPUNIT_TEST(test_config_pkg_gpgcheck);
+    CPPUNIT_TEST(test_config_auto_import_local_keys);
+    CPPUNIT_TEST(test_is_key_auto_importable);
     CPPUNIT_TEST(test_config_load_from_config);
     CPPUNIT_TEST(test_gpgcheck_policy_legacy);
     CPPUNIT_TEST(test_gpgcheck_policy_full);
@@ -48,6 +50,8 @@ public:
     void test_config_main();
     void test_config_repo();
     void test_config_pkg_gpgcheck();
+    void test_config_auto_import_local_keys();
+    void test_is_key_auto_importable();
     void test_config_load_from_config();
     void test_gpgcheck_policy_legacy();
     void test_gpgcheck_policy_full();
