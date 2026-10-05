@@ -51,3 +51,31 @@ Scenario: Remote gpg key is imported for already cached repo
         | Action        | Package                       |
         | reinstall     | labirinto-0:1.0-1.fc29.x86_64 |
     And stderr contains "The key was successfully imported."
+
+
+# Keys that are imported without a confirmation must be inside the trusted
+# directory (/etc/pki/rpm-gpg by default); see auto-import-local-keys.feature.
+Scenario: Local key outside the trusted directory still asks for confirmation when auto_import_local_keys is enabled
+  Given I do not assume yes
+    And I use repository "simple-base" with configuration
+        | key                    | value                                                                      |
+        | pkg_gpgcheck           | 0                                                                          |
+        | repo_gpgcheck          | 1                                                                          |
+        | auto_import_local_keys | 1                                                                          |
+        | gpgkey                 | file://{context.dnf.fixturesdir}/gpgkeys/keys/dnf-ci-gpg/dnf-ci-gpg-public |
+   When I execute dnf with args "makecache"
+   Then the exit code is 1
+    And stderr contains "Importing OpenPGP key"
+
+
+Scenario: Remote key still asks for confirmation when auto_import_local_keys is enabled
+  Given I do not assume yes
+    And I use repository "simple-base" with configuration
+        | key                    | value                                                              |
+        | pkg_gpgcheck           | 0                                                                  |
+        | repo_gpgcheck          | 1                                                                  |
+        | auto_import_local_keys | 1                                                                  |
+        | gpgkey                 | http://localhost:{context.dnf.ports[key_server]}/dnf-ci-gpg-public |
+   When I execute dnf with args "makecache"
+   Then the exit code is 1
+    And stderr contains "Importing OpenPGP key"

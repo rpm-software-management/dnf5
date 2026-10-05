@@ -100,8 +100,11 @@ public:
         return accept_key_import;
     }
 
+    void repokey_imported([[maybe_unused]] const libdnf5::rpm::KeyInfo & key_info) override { ++repokey_imported_cnt; }
+
     bool accept_key_import{true};
     int repokey_import_cnt = 0;
+    int repokey_imported_cnt = 0;
 };
 
 }  // namespace
@@ -278,4 +281,38 @@ void RepoTest::test_load_repo_gpgcheck_refused_key_shows_error() {
         "Download callback should report 'Signing key not found' error exactly once (second pass only)",
         1,
         signing_key_error_cnt);
+}
+
+void RepoTest::test_load_auto_import_local_keys_outside_dir() {
+    // The positive case, a key inside the trusted directory imported without
+    // asking, cannot be exercised here: the directory is set at build time and
+    // the test must not write to it. is_key_auto_importable() is covered with a
+    // temporary directory in ConfTest and the end-to-end behaviour in the
+    // auto-import-local-keys.feature integration tests. This test checks that
+    // the location rule reaches the repository key import: a local key outside
+    // the directory still goes through the confirmation callback.
+    std::string repoid("repomd-repo1-gpg");
+    std::filesystem::path repo_path = PROJECT_SOURCE_DIR "/test/data/repos-repomd";
+    repo_path /= repoid;
+    auto repo = repo_sack->create_repo(repoid);
+    repo->get_config().get_baseurl_option().set("file://" + repo_path.string());
+    repo->get_config().get_repo_gpgcheck_option().set(true);
+    repo->get_config().get_auto_import_local_keys_option().set(true);
+    repo->get_config().get_gpgkey_option().set(
+        std::vector<std::string>{"file://" + std::string(PROJECT_SOURCE_DIR) + "/test/data/keys/repo-gpg-key.pub"});
+    repo->get_config().get_skip_if_unavailable_option().set(true);
+
+    auto dl_callbacks = std::make_unique<DownloadCallbacks>();
+    base.set_download_callbacks(std::move(dl_callbacks));
+
+    auto callbacks = std::make_unique<RepoCallbacks>();
+    auto cbs = callbacks.get();
+    cbs->accept_key_import = false;
+    repo->set_callbacks(std::move(callbacks));
+
+    repo_sack->load_repos(libdnf5::repo::Repo::Type::AVAILABLE);
+
+    // The callback was consulted and declined, so nothing was imported.
+    CPPUNIT_ASSERT_EQUAL(1, cbs->repokey_import_cnt);
+    CPPUNIT_ASSERT_EQUAL(0, cbs->repokey_imported_cnt);
 }
