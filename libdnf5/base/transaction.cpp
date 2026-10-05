@@ -27,6 +27,7 @@
 #include "module/module_sack_impl.hpp"
 #endif
 #include "../repo/repo_sack_private.hpp"
+#include "repo/key_auto_import.hpp"
 #include "repo/temp_files_memory.hpp"
 #include "rpm/package_set_impl.hpp"
 #include "solv/pool.hpp"
@@ -1558,10 +1559,14 @@ ImportRepoKeysResult Transaction::Impl::import_repo_keys(libdnf5::repo::Repo & r
         return ImportRepoKeysResult::NO_KEYS;
     }
 
+    auto & logger = *base->get_logger();
     bool all_keys_already_present{true};
     bool some_key_import_failed{false};
     bool some_key_declined{false};
     for (auto const & key_url : key_urls) {
+        // Keys allowed by auto_import_local_keys skip the confirmation callback.
+        const bool auto_import = repo::is_key_auto_importable(repo.get_config(), key_url);
+
         for (auto & key_info : rpm_signature.parse_key_file(key_url)) {
             if (rpm_signature.key_present(key_info)) {
                 signature_problems.push_back(
@@ -1572,7 +1577,9 @@ ImportRepoKeysResult Transaction::Impl::import_repo_keys(libdnf5::repo::Repo & r
             all_keys_already_present = false;
 
             auto & callbacks = repo.get_callbacks();
-            if (callbacks && !callbacks->repokey_import(key_info)) {
+            if (auto_import) {
+                repo::log_auto_import(logger, key_info, key_url, repo.get_id());
+            } else if (callbacks && !callbacks->repokey_import(key_info)) {
                 some_key_declined = true;
                 continue;
             }

@@ -286,6 +286,11 @@ public:
     const OptionBool & get_pkg_gpgcheck_option() const;
     OptionBool & get_repo_gpgcheck_option();
     const OptionBool & get_repo_gpgcheck_option() const;
+    /// Import OpenPGP keys from gpgkey URLs under the build-time keys directory
+    /// without asking for a confirmation. Covers both repository metadata keys
+    /// and package signing keys.
+    OptionBool & get_auto_import_local_keys_option();
+    const OptionBool & get_auto_import_local_keys_option() const;
     OptionEnum & get_gpgcheck_policy_option();
     const OptionEnum & get_gpgcheck_policy_option() const;
     /// @deprecated Use ConfigRepo::get_enabled_option()

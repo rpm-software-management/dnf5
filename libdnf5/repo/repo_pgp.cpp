@@ -19,6 +19,8 @@
 
 #include "repo_pgp.hpp"
 
+#include "key_auto_import.hpp"
+
 #include "libdnf5/base/base.hpp"
 #include "libdnf5/repo/repo_errors.hpp"
 #include "libdnf5/utils/bgettext/bgettext-mark-domain.h"
@@ -122,6 +124,9 @@ void RepoPgp::import_key(int fd, const std::string & url) {
 
     auto key_infos = rawkey2infos(fd, url);
 
+    // Keys allowed by auto_import_local_keys skip the confirmation callback.
+    const bool auto_import = is_key_auto_importable(config, url);
+
     auto known_keys = load_keys_ids_from_keyring();
     for (auto & key_info : key_infos) {
         if (std::find(known_keys.begin(), known_keys.end(), key_info.get_key_id()) != known_keys.end()) {
@@ -130,7 +135,9 @@ void RepoPgp::import_key(int fd, const std::string & url) {
             continue;
         }
 
-        if (callbacks && !callbacks->repokey_import(key_info)) {
+        if (auto_import) {
+            log_auto_import(logger, key_info, url, config.get_id());
+        } else if (callbacks && !callbacks->repokey_import(key_info)) {
             continue;
         }
 
