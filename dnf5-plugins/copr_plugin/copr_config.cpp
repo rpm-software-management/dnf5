@@ -101,7 +101,7 @@ void CoprConfig::load_all_configuration() {
     name_version += "-" + this->get_value("main", "releasever");
     this->set_value("main", "name_version", name_version);
 
-    std::string arch = base.get_vars()->get_value("arch");
+    std::string arch = base.get_vars()->get_value("basearch");
     this->set_value("main", "arch", arch);
 }
 
