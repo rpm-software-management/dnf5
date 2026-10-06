@@ -54,6 +54,8 @@ public:
     /// Parses input string and sets new value and runtime priority.
     void set(const std::string & value) override;
 
+    using Option::set;
+
     /// Gets the stored value.
     // @replaces libdnf:conf/OptionEnum.hpp:method:OptionEnum<std::string>.getValue()
     const std::string & get_value() const;
