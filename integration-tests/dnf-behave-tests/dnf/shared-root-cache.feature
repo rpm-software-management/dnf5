@@ -27,6 +27,7 @@ Scenario: Root cache is shared when user metadata are empty
    Then stderr matches line by line
         """
         Updating and loading repositories:
+        Last metadata expiration check: .* ago on .*\.
         Repositories loaded.
         """
     And stdout is
@@ -73,9 +74,10 @@ Scenario: When root cache is shared metalink is copied as well and unprivileged 
         """
         http://localhost:{context.dnf.ports[simple-base]}/x86_64/labirinto-1.0-1.fc29.x86_64.rpm
         """
-   Then stderr is
+   Then stderr matches line by line
         """
         Updating and loading repositories:
+        Last metadata expiration check: .* ago on .*\.
         Repositories loaded.
         """
    When I execute "find | sort" in "{context.dnf.installroot}/var/cache/dnf-user"
@@ -107,9 +109,10 @@ Scenario: When root cache is shared mirrorlist is copied as well and unprivilege
         """
         http://localhost:{context.dnf.ports[simple-base]}/x86_64/labirinto-1.0-1.fc29.x86_64.rpm
         """
-    Then stderr is
+    Then stderr matches line by line
         """
         Updating and loading repositories:
+        Last metadata expiration check: .* ago on .*\.
         Repositories loaded.
         """
    When I execute "find | sort" in "{context.dnf.installroot}/var/cache/dnf-user"
