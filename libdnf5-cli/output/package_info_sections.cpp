@@ -38,23 +38,23 @@ PackageInfoSections::~PackageInfoSections() = default;
 
 void PackageInfoSections::print(const std::unique_ptr<PkgColorizer> & colorizer) {
     bool separator_needed = false;
-    for (const auto & [heading, pkg_set, obsoletes] : p_impl->sections) {
-        if (!heading.empty()) {
+    for (const auto & section : p_impl->sections) {
+        if (!section.heading.empty()) {
             if (separator_needed) {
                 std::cout << std::endl;
             }
-            std::cout << heading << std::endl;
+            std::cout << section.heading << std::endl;
             separator_needed = false;
         }
 
         // iterate through the packages in section according to NEVRA
-        for (auto && package : pkg_set.to_sorted_vector()) {
+        for (auto && package : section.pkg_set.to_sorted_vector()) {
             if (separator_needed) {
                 std::cout << std::endl;
             }
             libdnf5::cli::output::PackageAdapter cli_pkg(package);
-            auto obsoletes_it = obsoletes.find(package.get_id());
-            if (obsoletes_it != obsoletes.end()) {
+            auto obsoletes_it = section.obsoletes.find(package.get_id());
+            if (obsoletes_it != section.obsoletes.end()) {
                 libdnf5::cli::output::print_package_info(cli_pkg, colorizer, obsoletes_it->second);
             } else {
                 libdnf5::cli::output::print_package_info(cli_pkg, colorizer);

@@ -29,8 +29,8 @@ Scenario: check-upgrade --minimal cve and advisory
     And stdout matches line by line
         """
         Upgrades
-        advisory_A.x86_64 +1.0-2 +dnf-ci-security
-        advisory_B.x86_64 +1.0-2 +dnf-ci-security
+        advisory_A.x86_64 +1.0-1 +-> +1.0-2 +dnf-ci-security
+        advisory_B.x86_64 +1.0-1 +-> +1.0-2 +dnf-ci-security
         """
 
 Scenario: upgrade-minimal with pkgs specified cve and advisory
@@ -51,8 +51,8 @@ Scenario: check-upgrade --minimal with pkgs specified cve and advisory
     And stdout matches line by line
         """
         Upgrades
-        advisory_A.x86_64 +1.0-2 +dnf-ci-security
-        advisory_B.x86_64 +1.0-2 +dnf-ci-security
+        advisory_A.x86_64 +1.0-1 +-> +1.0-2 +dnf-ci-security
+        advisory_B.x86_64 +1.0-1 +-> +1.0-2 +dnf-ci-security
         """
 
 Scenario: upgrade advisories
@@ -81,8 +81,8 @@ Scenario: check-upgrade --minimal advisories
     And stdout matches line by line
         """
         Upgrades
-        advisory_A.x86_64 +1.0-2 +dnf-ci-security
-        advisory_B.x86_64 +1.0-4 +dnf-ci-security
+        advisory_A.x86_64 +1.0-1 +-> +1.0-2 +dnf-ci-security
+        advisory_B.x86_64 +1.0-1 +-> +1.0-4 +dnf-ci-security
         """
 
 Scenario: upgrade cves
@@ -102,7 +102,7 @@ Scenario: check-upgrade cves
     And stdout matches line by line
         """
         Upgrades
-        advisory_B.x86_64 +1.0-4 +dnf-ci-security
+        advisory_B.x86_64 +1.0-1 +-> +1.0-4 +dnf-ci-security
         """
 
 Scenario: upgrade-minimal sec-severity
@@ -122,7 +122,7 @@ Scenario: check-upgrade --minimal with sec-severity
     And stdout matches line by line
         """
         Upgrades
-        advisory_B.x86_64 +1.0-2 +dnf-ci-security
+        advisory_B.x86_64 +1.0-1 +-> +1.0-2 +dnf-ci-security
         """
 
 Scenario: upgrade-minimal with pkgs specified sec-severity
@@ -142,7 +142,7 @@ Scenario: check-upgrade --minimal with pkgs specified sec-severity
     And stdout matches line by line
         """
         Upgrades
-        advisory_B.x86_64 +1.0-2 +dnf-ci-security
+        advisory_B.x86_64 +1.0-1 +-> +1.0-2 +dnf-ci-security
         """
 
 Scenario: upgrade secseverity
@@ -171,6 +171,6 @@ Scenario: check-upgrade --minimal security plus bugfix
     And stdout matches line by line
         """
         Upgrades
-        advisory_A.x86_64 +1.0-3 +dnf-ci-security
-        advisory_B.x86_64 +1.0-4 +dnf-ci-security
+        advisory_A.x86_64 +1.0-1 +-> +1.0-3 +dnf-ci-security
+        advisory_B.x86_64 +1.0-1 +-> +1.0-4 +dnf-ci-security
         """

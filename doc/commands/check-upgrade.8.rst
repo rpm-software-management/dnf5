@@ -37,7 +37,7 @@ Non-interactively checks for available updates of specified packages. If no ``<p
 is provided, it checks for updates for the entire system.
 
 ``DNF5`` will exit with code `100` if updates are available and list them; `0` if no updates
-are available.
+are available. For each package available for upgrade, the output displays the package name and architecture, the currently installed version, an arrow (``->``), the available version, and the repository.
 
 If terminal is available, list of the packages is colored, packages available for reinstall are
 (by default) colored with bold green and packages available for upgrade with bold blue. This
@@ -79,7 +79,7 @@ Examples
 ========
 
 ``dnf5 check-upgrade``
-    | Print a list of packages that have updates available.
+    | Print a list of packages that have updates available with their current and available versions.
 
 ``dnf5 check-upgrade --changelogs``
     | Print changelogs for all packages with pending updates.
@@ -98,6 +98,7 @@ The command returns a JSON object with the following structure:
     - ``name`` (string): package name
     - ``arch`` (string): package architecture
     - ``evr`` (string): available update version
+    - ``current_evr`` (string): (only for upgrades) version of the package currently installed on the system
     - ``repository`` (string): repository ID from which the update is available
     - ``obsoletes`` (array): (only for the “Obsoleting packages” section) list of the packages that
       obsolete this package (they have the same structure as above, omitting ``obsoletes``)
