@@ -1,18 +1,42 @@
-summary:
-    Check libdnf5 and libdnf5-cli rpm files with rpminspect for ABI compatibility
+summary: Check libdnf5 and libdnf5-cli rpm files with rpminspect for ABI compatibility
 discover:
-    how: shell
-    tests:
-      - name: Use rpminspect to compare ABI with last nightly build of libdnf5 and libdnf5-cli
-        test: rpminspect-fedora -t BAD -T abidiff /var/share/test-artifacts/nightly/libdnf5-5*.rpm /var/share/test-artifacts/libdnf5-5*.rpm; rpminspect-fedora -t BAD -T abidiff /var/share/test-artifacts/nightly/libdnf5-cli-5*.rpm /var/share/test-artifacts/libdnf5-cli-5*.rpm
+  how: shell
+  tests:
+    - name: Use abidiff to compare ABI with last nightly build of libdnf5
+      test: abidiff --d1 /var/share/dnf5-nightly/usr/lib/debug
+        --hd1 /var/share/dnf5-nightly/usr/include
+        --d2 /var/share/test-artifacts/usr/lib/debug
+        --hd2 /var/share/test-artifacts/usr/include
+        /var/share/dnf5-nightly/usr/lib64/libdnf5.so.*
+        /var/share/test-artifacts/usr/lib64/libdnf5.so.*
+    - name: Use abidiff to compare ABI with last nightly build of libdnf5-cli
+      test: abidiff --d1 /var/share/dnf5-nightly/usr/lib/debug
+        --hd1 /var/share/dnf5-nightly/usr/include
+        --d2 /var/share/test-artifacts/usr/lib/debug
+        --hd2 /var/share/test-artifacts/usr/include
+        /var/share/dnf5-nightly/usr/lib64/libdnf5-cli.so.*
+        /var/share/test-artifacts/usr/lib64/libdnf5-cli.so.*
 prepare:
   - name: packages
     how: install
     package:
-    - rpminspect
-    - rpminspect-data-fedora
-  - name: get-current-builds
+      - libabigail
+      - rpm
+      - cpio
+  - name: prepare-data
     how: shell
-    script: dnf copr enable rpmsoftwaremanagement/dnf-nightly fedora-rawhide-x86_64 -y && dnf download libdnf5 libdnf5-cli --repo copr:copr.fedorainfracloud.org:rpmsoftwaremanagement:dnf-nightly --destdir=/var/share/test-artifacts/nightly
+    script:
+      - dnf copr enable rpmsoftwaremanagement/dnf-nightly fedora-rawhide-x86_64 -y
+      # To compare ABI we need the binary libraries, header files, subpackage debuginfo,
+      # and the main package debuginfo (which contains the shared .dwz debug files).
+      # Download nightly packages to /var/share/dnf5-nightly/ next to Copr builds in /var/share/test-artificats:
+      # https://packit.dev/docs/configuration/upstream/tests#rpminspect
+      - dnf download dnf5-debuginfo libdnf5-debuginfo libdnf5-devel libdnf5
+        libdnf5-cli-debuginfo libdnf5-cli-devel libdnf5-cli --repo
+        copr:copr.fedorainfracloud.org:rpmsoftwaremanagement:dnf-nightly
+        --destdir=/var/share/dnf5-nightly
+      # Extract packages
+      - cd /var/share/dnf5-nightly && for rpm in *.rpm; do rpm2cpio "$rpm" | cpio -idmv; done
+      - cd /var/share/test-artifacts && for rpm in *.rpm; do rpm2cpio "$rpm" | cpio -idmv; done
 execute:
-    how: tmt
+  how: tmt
