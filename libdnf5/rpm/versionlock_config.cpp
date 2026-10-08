@@ -30,6 +30,7 @@
 #include <toml.hpp>
 
 #include <map>
+#include <sstream>
 #include <utility>
 
 namespace {
@@ -243,8 +244,15 @@ VersionlockConfig::VersionlockConfig(const std::filesystem::path & path) : path(
     if (!std::filesystem::exists(path)) {
         return;
     }
+    const auto file_content = utils::fs::File(this->path, "r").read();
 
-    auto toml_value = toml::parse(this->path);
+    toml::value toml_value;
+    try {
+        std::istringstream file_stream(file_content);
+        toml_value = toml::parse(file_stream, this->path.string());
+    } catch (const toml::exception & e) {
+        throw Error(M_("Error parsing versionlock file \"{}\": {}"), this->path.string(), std::string(e.what()));
+    }
 
     if (!toml_value.contains("version")) {
         // TODO(mblaha) Log unversioned versionlock file?
