@@ -813,11 +813,12 @@ static void load_plugins(Context & context) {
     }
 }
 
-static void load_cmdline_aliases(Context & context) {
+static void load_cmdline_aliases(Context & context, CommandFlagAliasTable & command_flag_aliases) {
     std::string locale_name = setlocale(LC_MESSAGES, NULL);
-    load_cmdline_aliases(context, INSTALL_PREFIX "/share/dnf5/aliases.d", locale_name);
-    load_cmdline_aliases(context, SYSCONFIG_DIR "/dnf/dnf5-aliases.d", locale_name);
-    load_cmdline_aliases(context, libdnf5::xdg::get_user_config_dir() / "dnf5/aliases.d", locale_name);
+    load_cmdline_aliases(context, INSTALL_PREFIX "/share/dnf5/aliases.d", locale_name, command_flag_aliases);
+    load_cmdline_aliases(context, SYSCONFIG_DIR "/dnf/dnf5-aliases.d", locale_name, command_flag_aliases);
+    load_cmdline_aliases(
+        context, libdnf5::xdg::get_user_config_dir() / "dnf5/aliases.d", locale_name, command_flag_aliases);
 }
 
 static void print_versions(Context & context) {
@@ -1333,7 +1334,8 @@ int main(int argc, char * argv[]) try {
 
         dnf5::add_commands(context);
         dnf5::load_plugins(context);
-        dnf5::load_cmdline_aliases(context);
+        dnf5::CommandFlagAliasTable command_flag_aliases;
+        dnf5::load_cmdline_aliases(context, command_flag_aliases);
 
         // Argument completion handler
         // If the argument at position 1 is "--complete=<index>[,add_description=1/0]", this is a request to complete
@@ -1369,11 +1371,23 @@ int main(int argc, char * argv[]) try {
             return 0;
         }
 
+        // dnf4 compatibility: apply 'command_flag' aliases ("updateinfo
+        // --list" -> "advisory list") before parsing. Logs and history keep
+        // the command line as the user typed it, and command lines that
+        // match no entry are not touched.
+        const auto rewritten_args = dnf5::apply_command_flag_aliases(context, command_flag_aliases, argc, argv);
+        int parse_argc = argc;
+        const char * const * parse_argv = argv;
+        if (rewritten_args) {
+            parse_argc = static_cast<int>(rewritten_args->argv.size());
+            parse_argv = rewritten_args->argv.data();
+        }
+
         // Parse command line arguments
         {
             auto & arg_parser = context.get_argument_parser();
             try {
-                arg_parser.parse(argc, argv);
+                arg_parser.parse(parse_argc, parse_argv);
             } catch (libdnf5::cli::ArgumentParserError & ex) {
                 // Error during parsing arguments. Try to find "--help"/"-h".
                 bool help_printed{false};
