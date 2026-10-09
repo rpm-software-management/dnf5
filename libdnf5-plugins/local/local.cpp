@@ -184,7 +184,7 @@ libdnf5::repo::RepoWeakPtr LocalPlugin::setup_local_repo(
 
 
 void LocalPlugin::run_createrepo(const std::filesystem::path & dir) {
-    std::vector<const char *> c_args{"--update", dir.c_str()};
+    std::vector<const char *> command{"createrepo_c", "--update", dir.c_str()};
 
     // --quiet is on by default
     OptionBool quiet_option = OptionBool(true);
@@ -198,21 +198,21 @@ void LocalPlugin::run_createrepo(const std::filesystem::path & dir) {
     }
 
     if (verbose_option.get_value()) {
-        c_args.push_back("--verbose");
+        command.push_back("--verbose");
     } else if (quiet_option.get_value()) {
-        c_args.push_back("--quiet");
+        command.push_back("--quiet");
     }
 
     std::filesystem::path cachedir;
     if (config.has_option("createrepo", "cachedir")) {
         cachedir = config.get_value("createrepo", "cachedir");
         if (!cachedir.empty()) {
-            c_args.push_back("--cachedir");
-            c_args.push_back(cachedir.c_str());
+            command.push_back("--cachedir");
+            command.push_back(cachedir.c_str());
         }
     }
     // execvp expects null terminated array of arguments
-    c_args.push_back(nullptr);
+    command.push_back(nullptr);
 
     // TODO(mblaha): use libdnf5::utils::subprocess::run() instead of manual fork/exec
     int pipefd[2];
@@ -232,10 +232,10 @@ void LocalPlugin::run_createrepo(const std::filesystem::path & dir) {
         dup2(pipefd[1], STDERR_FILENO);
 
         // Run program
-        execvp("createrepo_c", const_cast<char * const *>(c_args.data()));
+        execvp(command[0], const_cast<char * const *>(command.data()));
 
         // execvp should replace this process if it doesn't there was an error
-        printf("Failed to execvp createrepo_c: %s\n", strerror(errno));
+        printf("Failed to execvp %s: %s\n", command[0], strerror(errno));
         _exit(255);
     } else {
         // This is the parent process
@@ -260,10 +260,10 @@ void LocalPlugin::run_createrepo(const std::filesystem::path & dir) {
             }
 
             for (const auto & line : libdnf5::utils::string::split(output, "\n")) {
-                logger.info("local plugin: createrepo_c: {}", line);
+                logger.info("local plugin: %s: {}", command[0], line);
                 // This print can interleave with the installation transaction progressbar
                 // but I think we are missing an API the could print this correctly.
-                printf("local plugin: createrepo_c: %s\n", line.c_str());
+                printf("local plugin: %s: %s\n", command[0], line.c_str());
             }
         }
 
