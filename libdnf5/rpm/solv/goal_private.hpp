@@ -176,6 +176,10 @@ public:
     /// Add packages that should not be used by solver to satisfy weak dependencies
     void add_exclude_from_weak(const libdnf5::solv::SolvMap & solvmap);
 
+    /// Detected installonly packages that are over the current limit but are not
+    /// part of this goal's changes
+    std::vector<libdnf5::solv::IdQueue> unrelated_overlimit_installonly;
+
 private:
     bool limit_installonly_packages(libdnf5::solv::IdQueue & job, Id running_kernel);
 
@@ -305,6 +309,7 @@ inline GoalPrivate & GoalPrivate::operator=(const GoalPrivate & src) {
         groups.clear();
         environments.clear();
         reason_changes.clear();
+        unrelated_overlimit_installonly.clear();
     }
     return *this;
 }
