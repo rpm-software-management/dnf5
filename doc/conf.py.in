@@ -24,6 +24,7 @@ sys.path.insert(0, os.path.join(libdnf_docdir, "../bindings/python3"))
 WITH_PYTHON3 = $<IF:$<BOOL:@WITH_PYTHON3@>,True,False>
 WITH_MODULEMD = $<IF:$<BOOL:@WITH_MODULEMD@>,True,False>
 WITH_DNF5_OBSOLETES_DNF = $<IF:$<BOOL:@WITH_DNF5_OBSOLETES_DNF@>,True,False>
+WITH_HTML = $<IF:$<BOOL:@WITH_HTML@>,True,False>
 
 # -- Project information -----------------------------------------------------
 
@@ -44,7 +45,7 @@ needs_sphinx = '4.1.2'
 extensions = [
     'breathe',
 ]
-if WITH_PYTHON3:
+if WITH_PYTHON3 and WITH_HTML:
     extensions += ['autoapi.extension']
 breathe_projects = {'dnf5': '@CMAKE_CURRENT_BINARY_DIR@/xml/'}
 breathe_default_project = 'dnf5'
@@ -77,30 +78,30 @@ templates_path = ['_templates']
 # directories to ignore when looking for source files.
 # This pattern also affects html_static_path and html_extra_path.
 exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
-if not WITH_PYTHON3:
+if not WITH_PYTHON3 or not WITH_HTML:
     exclude_patterns += ['api/python/**']
 
 
 # -- Options for HTML output -------------------------------------------------
+if WITH_HTML:
+    # The theme to use for HTML and HTML Help pages.  See the documentation for
+    # a list of builtin themes.
+    #
+    #html_theme = 'alabaster'
+    #html_theme = 'default'
+    html_theme = 'sphinx_rtd_theme'
 
-# The theme to use for HTML and HTML Help pages.  See the documentation for
-# a list of builtin themes.
-#
-#html_theme = 'alabaster'
-#html_theme = 'default'
-html_theme = 'sphinx_rtd_theme'
+    html_context = {
+      'display_github': True,
+      'github_user': 'rpm-software-management',
+      'github_repo': 'dnf5',
+      'github_version': 'main/doc/'
+    }
 
-html_context = {
-  'display_github': True,
-  'github_user': 'rpm-software-management',
-  'github_repo': 'dnf5',
-  'github_version': 'main/doc/'
-}
-
-# Add any paths that contain custom static files (such as style sheets) here,
-# relative to this directory. They are copied after the builtin static files,
-# so a file named "default.css" will overwrite the builtin "default.css".
-html_static_path = ['_static']
+    # Add any paths that contain custom static files (such as style sheets) here,
+    # relative to this directory. They are copied after the builtin static files,
+    # so a file named "default.css" will overwrite the builtin "default.css".
+    html_static_path = ['_static']
 
 
 # -- Options for manual page output --------------------------------------------
