@@ -21,6 +21,10 @@ except NameError:
 sys.path.insert(0, os.path.join(libdnf_docdir, "sphinx"))
 sys.path.insert(0, os.path.join(libdnf_docdir, "../bindings/python3"))
 
+WITH_PYTHON3 = $<IF:$<BOOL:@WITH_PYTHON3@>,True,False>
+WITH_MODULEMD = $<IF:$<BOOL:@WITH_MODULEMD@>,True,False>
+WITH_DNF5_OBSOLETES_DNF = $<IF:$<BOOL:@WITH_DNF5_OBSOLETES_DNF@>,True,False>
+
 # -- Project information -----------------------------------------------------
 
 project = 'dnf5'
@@ -40,7 +44,7 @@ needs_sphinx = '4.1.2'
 extensions = [
     'breathe',
 ]
-if '@WITH_PYTHON3@' == 'ON':
+if WITH_PYTHON3:
     extensions += ['autoapi.extension']
 breathe_projects = {'dnf5': '@CMAKE_CURRENT_BINARY_DIR@/xml/'}
 breathe_default_project = 'dnf5'
@@ -73,7 +77,7 @@ templates_path = ['_templates']
 # directories to ignore when looking for source files.
 # This pattern also affects html_static_path and html_extra_path.
 exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
-if '@WITH_PYTHON3@' != 'ON':
+if not WITH_PYTHON3:
     exclude_patterns += ['api/python/**']
 
 
@@ -169,13 +173,13 @@ man_pages = [
     ('dnf5.conf-todo.5', 'dnf5.conf-todo', 'Options that are documented/implemented in DNF but not in DNF5', AUTHORS, 5),
     ('dnf5.conf-deprecated.5', 'dnf5.conf-deprecated', 'Config Options that are deprecated in DNF5', AUTHORS, 5),
 ]
-if "@WITH_MODULEMD@" == "ON":
+if WITH_MODULEMD:
     man_pages.append(('commands/module.8', 'dnf5-module', ' Module Command', AUTHORS, 8))
     man_pages.append(('misc/modularity.7', 'dnf5-modularity', 'Modularity Overview', AUTHORS, 7))
 
 
-dnf_makecache_timer_name = "dnf-makecache.timer" if "@WITH_DNF5_OBSOLETES_DNF@" == "ON" else "dnf5-makecache.timer"
-dnf_makecache_service_name = "dnf-makecache.service" if "@WITH_DNF5_OBSOLETES_DNF@" == "ON" else "dnf5-makecache.service"
+dnf_makecache_timer_name = "dnf-makecache.timer" if WITH_DNF5_OBSOLETES_DNF else "dnf5-makecache.timer"
+dnf_makecache_service_name = "dnf-makecache.service" if WITH_DNF5_OBSOLETES_DNF else "dnf5-makecache.service"
 
 rst_prolog = f"""
 .. _DNF: https://github.com/rpm-software-management/dnf/
