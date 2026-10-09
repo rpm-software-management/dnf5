@@ -184,7 +184,7 @@ libdnf5::repo::RepoWeakPtr LocalPlugin::setup_local_repo(
 
 
 void LocalPlugin::run_createrepo(const std::filesystem::path & dir) {
-    std::vector<const char *> c_args{"--update", dir.c_str()};
+    std::vector<const char *> c_args{"createrepo_c", "--update", dir.c_str()};
 
     // --quiet is on by default
     OptionBool quiet_option = OptionBool(true);
