@@ -128,6 +128,18 @@ class TestReldepList(base_test_case.BaseTestCase):
             result.append(reldep)
         self.assertEqual(result, expect)
 
+    def test_get_operands(self):
+        plain = libdnf5.rpm.Reldep(self.base, "labirinto.txt")
+        self.assertEqual(list(plain.get_operands()), [])
+
+        versioned = libdnf5.rpm.Reldep(self.base, "python3-labirinto = 4.2.0")
+        operands = versioned.get_operands()
+        self.assertEqual([operand.to_string() for operand in operands], ["python3-labirinto", "4.2.0"])
+
+        rich = libdnf5.rpm.Reldep(self.base, "(lab-list if labirinto.txt)")
+        operands = rich.get_operands()
+        self.assertEqual([operand.to_string() for operand in operands], ["lab-list", "labirinto.txt"])
+
     # add_reldep_with_glob uses libsolvs Dataiterator which needs the actual packages
     def test_add_reldep_with_glob(self):
         list1 = libdnf5.rpm.ReldepList(self.base)
