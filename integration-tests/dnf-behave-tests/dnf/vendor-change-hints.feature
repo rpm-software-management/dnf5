@@ -35,6 +35,8 @@ Scenario: Skipping section shown alongside a successful partial upgrade
         """
         Skipping 1 package due to vendor change restriction: "Vendor A" -> "Vendor B".
         """
+    And stderr contains "--allow-vendor-change-to=VENDOR to allow switching to packages from VENDOR"
+    And stderr contains "--allow-vendor-change-from=VENDOR to allow replacing packages from VENDOR"
     And stderr contains "--with-vendor-policy=POLICY to add specific vendor change rules"
     And stderr contains "--allow-vendor-change to allow all vendor changes"
 
