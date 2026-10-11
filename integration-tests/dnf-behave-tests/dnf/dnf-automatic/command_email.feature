@@ -17,7 +17,7 @@ Scenario: dnf-automatic pass multiple recipients as separate arguments
     emit_via = command_email
     [command_email]
     email_to = recipient1,recipient2
-    command_format = "printf '%s\\n' {email_to}"
+    command_format = "printf '%s\n' {email_to}"
     """
    When I execute dnf with args "automatic"
    Then the exit code is 0

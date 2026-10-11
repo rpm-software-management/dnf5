@@ -47,6 +47,23 @@ void VarsTest::test_vars() {
     CPPUNIT_ASSERT_EQUAL("456"s, base->get_vars()->substitute("${unset:-${var1:+${var2:+$var2}}}"));
 }
 
+void VarsTest::test_vars_backslash() {
+    base->setup();
+    auto vars = base->get_vars();
+    vars->set("var1", "value1", libdnf5::Vars::Priority::PLUGIN);
+
+    // Backslashes should be preserved unless escaping special characters ($, \ or } in subexpressions)
+    CPPUNIT_ASSERT_EQUAL("M\\y ug\\ly name"s, vars->substitute("M\\y ug\\\\ly name"));
+    CPPUNIT_ASSERT_EQUAL("My ug\\ly name"s, vars->substitute("My ug\\ly name"));
+    CPPUNIT_ASSERT_EQUAL("$var1"s, vars->substitute("\\$var1"));
+    // \\ collapses to \, so \\$var1 becomes \ + expanded value
+    CPPUNIT_ASSERT_EQUAL("\\value1"s, vars->substitute("\\\\$var1"));
+    // Literal backslash: double backslash becomes single backslash
+    CPPUNIT_ASSERT_EQUAL("\\"s, vars->substitute("\\\\"));
+    // To test escaped brace, we need another one to actually close the expression
+    CPPUNIT_ASSERT_EQUAL("default}ext"s, vars->substitute("${unset:-default\\}ext}"));
+}
+
 
 void VarsTest::test_vars_multiple_dirs() {
     base->get_config().get_varsdir_option().set(std::vector<std::string>{
