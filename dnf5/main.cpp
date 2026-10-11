@@ -1358,6 +1358,10 @@ static void print_resolve_hints(dnf5::Context & context) {
     bool has_vendor_change_skipped =
         context.get_transaction() && !context.get_transaction()->get_vendor_change_skipped_packages().empty();
     if (!conf.get_allow_vendor_change_option().get_value() && (vendor_change || has_vendor_change_skipped)) {
+        hints.emplace_back(libdnf5::utils::sformat(
+            _("{} to allow switching to packages from VENDOR"), "--allow-vendor-change-to=VENDOR"));
+        hints.emplace_back(libdnf5::utils::sformat(
+            _("{} to allow replacing packages from VENDOR"), "--allow-vendor-change-from=VENDOR"));
         hints.emplace_back(
             libdnf5::utils::sformat(_("{} to add specific vendor change rules"), "--with-vendor-policy=POLICY"));
         hints.emplace_back(libdnf5::utils::sformat(_("{} to allow all vendor changes"), "--allow-vendor-change"));
