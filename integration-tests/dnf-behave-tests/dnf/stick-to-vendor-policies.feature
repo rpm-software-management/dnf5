@@ -130,7 +130,7 @@ Scenario: Upgrade with vendor policy - allow change from First Vendor to Second 
 
 
 Scenario: Upgrade with vendor policy - allow change from First Vendor to Second Vendor and Third (in two config files, Third has newer version)
-  Given I create file "/etc/dnf/vendors.d/allow-first-to-thirh.conf" with
+  Given I create file "/etc/dnf/vendors.d/allow-first-to-third.conf" with
       """
       version = '1.0'
 
@@ -164,7 +164,7 @@ Scenario: Upgrade with vendor policy - allow change from First Vendor to Second 
 
 
 Scenario: Upgrade with vendor policy - allow change from First Vendor to Second Vendor (policy to Third is removed using --disable-vendor-policy-source)
-  Given I create file "/etc/dnf/vendors.d/allow-first-to-thirh.conf" with
+  Given I create file "/etc/dnf/vendors.d/allow-first-to-third.conf" with
       """
       version = '1.0'
 
@@ -187,7 +187,7 @@ Scenario: Upgrade with vendor policy - allow change from First Vendor to Second 
   Given I use repository "dnf-ci-vendor-1-updates"
   Given I use repository "dnf-ci-vendor-2-updates"
   Given I use repository "dnf-ci-vendor-3-updates"
-   When I execute dnf with args "--disable-vendor-policy-source='*/allow-first-to-thirh.conf'  upgrade vendor"
+   When I execute dnf with args "--disable-vendor-policy-source='*/allow-first-to-third.conf'  upgrade vendor"
    Then the exit code is 0
    And Transaction is following
        | Action  | Package             |
@@ -198,7 +198,7 @@ Scenario: Upgrade with vendor policy - allow change from First Vendor to Second 
 
 
 Scenario: Upgrade with vendor policy - allow change from First Vendor to Third Vendor (policy to Second is removed using --disable-vendor-policy-source)
-  Given I create file "/etc/dnf/vendors.d/allow-first-to-thirh.conf" with
+  Given I create file "/etc/dnf/vendors.d/allow-first-to-third.conf" with
       """
       version = '1.0'
 
