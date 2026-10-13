@@ -64,7 +64,13 @@ public:
     static LibrepoHandle & get_cached_handle(Repo & repo);
 
     /// Adds repos for which metadata will be downloaded in parallel
-    void add(libdnf5::repo::Repo & repo, const std::string & destdir, std::function<repo_loading_func> load_repo);
+    /// @param description_override If non-empty, used as the download progress description
+    ///        instead of the repo's configured name.
+    void add(
+        libdnf5::repo::Repo & repo,
+        const std::string & destdir,
+        std::function<repo_loading_func> load_repo,
+        const std::string & description_override = {});
 
     // For each repo downloads metalink (or repomd if no metalink) and
     // checks with local files if the repo needs to be downloaded.

@@ -41,9 +41,11 @@
 #include "libdnf5/common/exception.hpp"
 #include "libdnf5/comps/environment/query.hpp"
 #include "libdnf5/comps/group/query.hpp"
+#include "libdnf5/conf/const.hpp"
 #ifdef WITH_MODULEMD
 #include "libdnf5/module/module_errors.hpp"
 #endif
+#include "libdnf5/repo/repo_query.hpp"
 #include "libdnf5/rpm/package_query.hpp"
 #include "libdnf5/rpm/reldep.hpp"
 #include "libdnf5/utils/bgettext/bgettext-mark-domain.h"
@@ -58,6 +60,31 @@
 #include <unordered_map>
 
 namespace {
+
+// Whether any resolve log looks like it could be an unresolved file-based
+// dependency (a `Requires: /some/path` with no provider), which filelists
+// metadata (not loaded by default, see METADATA_TYPE_FILELISTS) might be able
+// to resolve. Covers both a hard SOLVER_ERROR and the strict-mode/no-best case
+// (SOLVER_PROBLEM_STRICT_RESOLVEMENT).
+bool has_file_dependency_problem(const std::vector<libdnf5::base::LogEvent> & resolve_logs) {
+    for (const auto & resolve_log : resolve_logs) {
+        if (resolve_log.get_problem() != libdnf5::GoalProblem::SOLVER_ERROR &&
+            resolve_log.get_problem() != libdnf5::GoalProblem::SOLVER_PROBLEM_STRICT_RESOLVEMENT) {
+            continue;
+        }
+        for (const auto & problem : resolve_log.get_solver_problems()->get_problems()) {
+            for (const auto & [rule, params] : problem) {
+                if ((rule == libdnf5::ProblemRules::RULE_PKG_NOTHING_PROVIDES_DEP ||
+                     rule == libdnf5::ProblemRules::RULE_JOB_NOTHING_PROVIDES_DEP) &&
+                    !params.empty() && params[0].starts_with('/')) {
+                    return true;
+                }
+            }
+        }
+    }
+    return false;
+}
+
 
 void add_obsoletes_to_data(const libdnf5::rpm::PackageQuery & base_query, libdnf5::rpm::PackageSet & data) {
     libdnf5::rpm::PackageQuery data_query(data);
@@ -3464,41 +3491,89 @@ bool Goal::get_allow_erasing() const {
     return p_impl->allow_erasing;
 }
 
+bool Goal::try_auto_load_filelists() {
+    auto & base = p_impl->base;
+    auto & cfg_main = base->get_config();
+    if (!cfg_main.get_filelists_auto_load_option().get_value()) {
+        return false;
+    }
+    auto & optional_metadata_option = cfg_main.get_optional_metadata_types_option();
+    auto optional_metadata = optional_metadata_option.get_value();
+    if (optional_metadata.contains(libdnf5::METADATA_TYPE_FILELISTS) ||
+        optional_metadata.contains(libdnf5::METADATA_TYPE_ALL)) {
+        // Already loaded (or requested) - nothing more to try.
+        return false;
+    }
+    optional_metadata_option.add(Option::Priority::RUNTIME, std::set<std::string>{libdnf5::METADATA_TYPE_FILELISTS});
+
+    auto & logger = *base->get_logger();
+    std::set<std::string> loaded_repo_ids;
+    repo::RepoQuery repos(base);
+    repos.filter_enabled(true);
+    repos.filter_type(repo::Repo::Type::AVAILABLE);
+    for (auto & repo : repos) {
+        try {
+            if (repo->load_filelists_metadata()) {
+                loaded_repo_ids.insert(repo->get_id());
+            }
+        } catch (const std::exception & ex) {
+            logger.warning(
+                "Automatic filelists retry: failed to load filelists for repo \"{}\": {}", repo->get_id(), ex.what());
+        }
+    }
+
+    if (loaded_repo_ids.empty()) {
+        return false;
+    }
+
+    // The filtered file-provides pool flag was set based on the original (filelists-off)
+    // state (see RepoSack::Impl::load_repos_common); with filelists now loaded it must be
+    // cleared, otherwise file-provides matching stays wrongly restricted to standard dirs.
+    // (provides were already invalidated per-repo inside the successful load_filelists_metadata()
+    // calls above.)
+    set_rpm_pool_flag(base, POOL_FLAG_ADDFILEPROVIDESFILTERED, 0);
+
+    logger.info(
+        "Automatically downloaded and loaded filelists metadata for repositories: {} to retry dependency resolution.",
+        utils::string::join(loaded_repo_ids, ", "));
+
+    return true;
+}
+
 base::Transaction Goal::resolve() {
     libdnf_user_assert(p_impl->base->is_initialized(), "Base instance was not fully initialized by Base::setup()");
 
-    p_impl->rpm_goal = rpm::solv::GoalPrivate(p_impl->base);
+    auto sack = p_impl->base->get_rpm_package_sack();
+    auto & cfg_main = p_impl->base->get_config();
 
-    base::Transaction transaction(p_impl->base);
-    auto ret = GoalProblem::NO_PROBLEM;
+    // --- One-time setup, executed exactly once
+    base::Transaction setup_transaction(p_impl->base);
+    auto setup_ret = GoalProblem::NO_PROBLEM;
 
     // Transaction replay has to be added first because it only adds to other vectors
     // of specs, it doesn't resolve anything. Therefore it doesn't need any Sacks to be ready.
     // In fact given that it can add to rpm_filepaths it has to be added before `add_paths_to_goal()`
     // and thus before the provides are computed.
     // Both serialized and reverted transactions use TransactionReplay.
-    ret |= p_impl->add_serialized_transaction_to_goal(transaction);
-    ret |= p_impl->resolve_reverted_transactions(transaction);
-    ret |= p_impl->resolve_redo_transaction(transaction);
+    setup_ret |= p_impl->add_serialized_transaction_to_goal(setup_transaction);
+    setup_ret |= p_impl->resolve_reverted_transactions(setup_transaction);
+    setup_ret |= p_impl->resolve_redo_transaction(setup_transaction);
 
     p_impl->add_paths_to_goal();
-
-    auto sack = p_impl->base->get_rpm_package_sack();
 
     sack->p_impl->recompute_considered_in_pool();
     sack->p_impl->make_provides_ready();
 
-
 #ifdef WITH_MODULEMD
     module::ModuleSack & module_sack = *p_impl->base->get_module_sack();
-    ret |= p_impl->add_module_specs_to_goal(transaction);
+    setup_ret |= p_impl->add_module_specs_to_goal(setup_transaction);
 
     // Check for switched module streams
-    if (!p_impl->base->get_config().get_module_stream_switch_option().get_value()) {
+    if (!cfg_main.get_module_stream_switch_option().get_value()) {
         auto switched_streams = module_sack.p_impl->module_db->get_all_newly_switched_streams();
         if (!switched_streams.empty()) {
             for (auto item : switched_streams) {
-                transaction.p_impl->add_resolve_log(
+                setup_transaction.p_impl->add_resolve_log(
                     GoalAction::ENABLE,
                     GoalProblem::MODULE_CANNOT_SWITH_STREAMS,
                     GoalJobSettings(),
@@ -3507,7 +3582,7 @@ base::Transaction Goal::resolve() {
                     {"0:" + item.second.first, "1:" + item.second.second},
                     libdnf5::Logger::Level::ERROR);
             }
-            ret |= GoalProblem::MODULE_CANNOT_SWITH_STREAMS;
+            setup_ret |= GoalProblem::MODULE_CANNOT_SWITH_STREAMS;
         }
     }
     // Resolve modules
@@ -3517,123 +3592,155 @@ base::Transaction Goal::resolve() {
 
     if (module_error != GoalProblem::NO_PROBLEM) {
         // Report problems from the module solver
-        transaction.p_impl->add_resolve_log(module_error, module_solver_problems);
+        setup_transaction.p_impl->add_resolve_log(module_error, module_solver_problems);
 
         // Ignore MODULE_SOLVER_ERROR_DEFAULTS and MODULE_SOLVER_ERROR_LATEST with best=false
         // Other errors (MODULE_SOLVER_ERROR and MODULE_SOLVER_ERROR_LATEST with best=true) are returned
         if (module_error != GoalProblem::MODULE_SOLVER_ERROR_DEFAULTS &&
-            (module_error != GoalProblem::MODULE_SOLVER_ERROR_LATEST ||
-             p_impl->base->get_config().get_best_option().get_value())) {
-            ret |= module_error;
+            (module_error != GoalProblem::MODULE_SOLVER_ERROR_LATEST || cfg_main.get_best_option().get_value())) {
+            setup_ret |= module_error;
         }
     }
 
     module_sack.p_impl->enable_dependent_modules();
 #endif
 
+    // Protected packages only depend on config which a filelists retry cannot
+    // change, so the query is computed once and reused by both attempts.
+    auto & protected_packages = cfg_main.get_protected_packages_option().get_value();
+    rpm::PackageQuery protected_query(p_impl->base, rpm::PackageQuery::ExcludeFlags::IGNORE_EXCLUDES);
+    protected_query.filter_name(protected_packages);
 
-    // TODO(jmracek) Apply comps second or later
-    // TODO(jmracek) Reset rpm_goal, setup rpm-goal flags according to conf, (allow downgrade), obsoletes, vendor, ...
-    ret |= p_impl->add_specs_to_goal(transaction);
-    p_impl->add_rpms_to_goal(transaction);
+    auto & installonly_packages = cfg_main.get_installonlypkgs_option().get_value();
+    auto installonly_limit = cfg_main.get_installonly_limit_option().get_value();
 
-    // Resolve group specs to group/environment queries first for two reasons:
-    // 1. group spec can also contain an environmental groups
-    // 2. group removal needs a list of all groups being removed to correctly remove packages
-    ret |= p_impl->resolve_group_specs(p_impl->group_specs, transaction);
+    // User-installed packages are computed lazily on the first attempt that
+    // needs it, then reused on the retry.
+    std::optional<libdnf5::solv::IdQueue> user_installed_packages;
 
-    // Handle environments before groups because they will add/remove groups
-    p_impl->add_resolved_environment_specs_to_goal(transaction);
+    // --- Repeatable: rebuilds the solver job from scratch and solves. Called
+    // a second time only if the first attempt's failure looks like an
+    // unresolved file-based dependency that loading filelists metadata might
+    // fix ---
+    auto resolve_attempt = [&](bool is_filelists_retry) {
+        // Each attempt gets its own Transaction, copied from the one-time setup results so any
+        // setup-phase resolve logs and problems are preserved regardless of which attempt is
+        // ultimately returned.
+        base::Transaction transaction(setup_transaction);
+        auto ret = setup_ret;
 
-    // Then handle groups
-    p_impl->add_resolved_group_specs_to_goal(transaction);
+        p_impl->rpm_goal = rpm::solv::GoalPrivate(p_impl->base);
 
-    ret |= p_impl->add_reason_change_specs_to_goal(transaction);
+        ret |= p_impl->add_specs_to_goal(transaction);
+        p_impl->add_rpms_to_goal(transaction);
 
-    auto & cfg_main = p_impl->base->get_config();
-    // Set goal flags
-    p_impl->rpm_goal.set_allow_vendor_change(cfg_main.get_allow_vendor_change_option().get_value());
-    p_impl->rpm_goal.set_allow_erasing(p_impl->allow_erasing);
-    p_impl->rpm_goal.set_install_weak_deps(cfg_main.get_install_weak_deps_option().get_value());
-    p_impl->rpm_goal.set_allow_downgrade(cfg_main.get_allow_downgrade_option().get_value());
+        // Resolve group specs to group/environment queries first for two reasons:
+        // 1. group spec can also contain an environmental groups
+        // 2. group removal needs a list of all groups being removed to correctly remove packages
+        ret |= p_impl->resolve_group_specs(p_impl->group_specs, transaction);
 
-    if (cfg_main.get_protect_running_kernel_option().get_value()) {
-        p_impl->rpm_goal.set_protected_running_kernel(sack->p_impl->get_running_kernel_id());
-    }
+        // Handle environments before groups because they will add/remove groups
+        p_impl->add_resolved_environment_specs_to_goal(transaction);
 
-    // Set user-installed packages (installed packages with reason USER or GROUP)
-    // proceed only if the transaction could result in removal of unused dependencies
-    if (p_impl->rpm_goal.is_clean_deps_present()) {
-        libdnf5::solv::IdQueue user_installed_packages;
-        rpm::PackageQuery installed_query(p_impl->base, rpm::PackageQuery::ExcludeFlags::IGNORE_EXCLUDES);
-        installed_query.filter_installed();
-        for (const auto & pkg : installed_query) {
-            if (pkg.get_reason() > transaction::TransactionItemReason::DEPENDENCY) {
-                user_installed_packages.push_back(pkg.get_id().id);
+        // Then handle groups
+        p_impl->add_resolved_group_specs_to_goal(transaction);
+
+        ret |= p_impl->add_reason_change_specs_to_goal(transaction);
+
+        // Set goal flags
+        p_impl->rpm_goal.set_allow_vendor_change(cfg_main.get_allow_vendor_change_option().get_value());
+        p_impl->rpm_goal.set_allow_erasing(p_impl->allow_erasing);
+        p_impl->rpm_goal.set_install_weak_deps(cfg_main.get_install_weak_deps_option().get_value());
+        p_impl->rpm_goal.set_allow_downgrade(cfg_main.get_allow_downgrade_option().get_value());
+
+        if (cfg_main.get_protect_running_kernel_option().get_value()) {
+            p_impl->rpm_goal.set_protected_running_kernel(sack->p_impl->get_running_kernel_id());
+        }
+
+        // Set user-installed packages (installed packages with reason USER or GROUP)
+        // proceed only if the transaction could result in removal of unused dependencies
+        if (p_impl->rpm_goal.is_clean_deps_present()) {
+            if (!user_installed_packages) {
+                libdnf5::solv::IdQueue installed_ids;
+                rpm::PackageQuery installed_query(p_impl->base, rpm::PackageQuery::ExcludeFlags::IGNORE_EXCLUDES);
+                installed_query.filter_installed();
+                for (const auto & pkg : installed_query) {
+                    if (pkg.get_reason() > transaction::TransactionItemReason::DEPENDENCY) {
+                        installed_ids.push_back(pkg.get_id().id);
+                    }
+                }
+                user_installed_packages = std::move(installed_ids);
+            }
+            p_impl->rpm_goal.set_user_installed_packages(*user_installed_packages);
+        }
+
+        p_impl->rpm_goal.add_protected_packages(*protected_query.p_impl);
+
+        p_impl->rpm_goal.set_installonly(installonly_packages);
+        p_impl->rpm_goal.set_installonly_limit(installonly_limit);
+
+        // Set exclude weak dependencies from configuration
+        {
+            p_impl->set_exclude_from_weak(cfg_main.get_exclude_from_weak_option().get_value());
+            if (cfg_main.get_exclude_from_weak_autodetect_option().get_value()) {
+                p_impl->autodetect_unsatisfied_installed_weak_dependencies();
             }
         }
-        p_impl->rpm_goal.set_user_installed_packages(std::move(user_installed_packages));
-    }
 
-    // Add protected packages
-    {
-        auto & protected_packages = cfg_main.get_protected_packages_option().get_value();
-        rpm::PackageQuery protected_query(p_impl->base, rpm::PackageQuery::ExcludeFlags::IGNORE_EXCLUDES);
-        protected_query.filter_name(protected_packages);
-        p_impl->rpm_goal.add_protected_packages(*protected_query.p_impl);
-    }
+        auto & pool = get_rpm_pool(p_impl->base);
+        pool.get_incoming_vendor_bypassed_solvables() = p_impl->incoming_vendor_bypassed_solvables;
+        pool.clear_blocked_vendor_changes();
 
-    // Set installonly packages
-    {
-        auto & installonly_packages = cfg_main.get_installonlypkgs_option().get_value();
-        p_impl->rpm_goal.set_installonly(installonly_packages);
-        p_impl->rpm_goal.set_installonly_limit(cfg_main.get_installonly_limit_option().get_value());
-    }
+        ret |= p_impl->rpm_goal.resolve();
 
-    // Set exclude weak dependencies from configuration
-    {
-        p_impl->set_exclude_from_weak(cfg_main.get_exclude_from_weak_option().get_value());
-        if (cfg_main.get_exclude_from_weak_autodetect_option().get_value()) {
-            p_impl->autodetect_unsatisfied_installed_weak_dependencies();
+        // Write debug solver data
+        // Note: Modules debug data are handled separately when resolving module goal in ModuleSack::Impl::module_solve()
+        if (cfg_main.get_debug_solver_option().get_value()) {
+            // The retry writes to distinctly-suffixed directories instead of the plain ones, so
+            // it doesn't silently overwrite the original failing attempt's dump with the
+            // retried one - both remain available for inspection.
+            const std::string suffix = is_filelists_retry ? "-filelists-retry" : "";
+            auto debug_dir = std::filesystem::path(cfg_main.get_debugdir_option().get_value());
+            auto pkgs_debug_dir = std::filesystem::absolute(debug_dir / ("packages" + suffix));
+            auto comps_debug_dir = std::filesystem::absolute(debug_dir / ("comps" + suffix));
+
+            // Ensures the presence of the directories.
+            std::filesystem::create_directories(pkgs_debug_dir);
+            std::filesystem::create_directories(comps_debug_dir);
+
+            p_impl->rpm_goal.write_debugdata(pkgs_debug_dir);
+            p_impl->base->get_repo_sack()->dump_comps_debugdata(comps_debug_dir);
+
+            transaction.p_impl->add_resolve_log(
+                GoalAction::RESOLVE,
+                GoalProblem::WRITE_DEBUG,
+                {},
+                libdnf5::transaction::TransactionItemType::PACKAGE,
+                "",
+                {std::filesystem::canonical(debug_dir)},
+                libdnf5::Logger::Level::WARNING);
         }
-    }
 
-    auto & pool = get_rpm_pool(p_impl->base);
-    pool.get_incoming_vendor_bypassed_solvables() = p_impl->incoming_vendor_bypassed_solvables;
-    pool.clear_blocked_vendor_changes();
-
-    ret |= p_impl->rpm_goal.resolve();
-
-    // Write debug solver data
-    // Note: Modules debug data are handled separately when resolving module goal in ModuleSack::Impl::module_solve()
-    if (cfg_main.get_debug_solver_option().get_value()) {
-        auto debug_dir = std::filesystem::path(cfg_main.get_debugdir_option().get_value());
-        auto pkgs_debug_dir = std::filesystem::absolute(debug_dir / "packages");
-        auto comps_debug_dir = std::filesystem::absolute(debug_dir / "comps");
-
-        // Ensures the presence of the directories.
-        std::filesystem::create_directories(pkgs_debug_dir);
-        std::filesystem::create_directories(comps_debug_dir);
-
-        p_impl->rpm_goal.write_debugdata(pkgs_debug_dir);
-        p_impl->base->get_repo_sack()->dump_comps_debugdata(comps_debug_dir);
-
-        transaction.p_impl->add_resolve_log(
-            GoalAction::RESOLVE,
-            GoalProblem::WRITE_DEBUG,
-            {},
-            libdnf5::transaction::TransactionItemType::PACKAGE,
-            "",
-            {std::filesystem::canonical(debug_dir)},
-            libdnf5::Logger::Level::WARNING);
-    }
-
-    transaction.p_impl->set_transaction(
-        p_impl->rpm_goal,
+        transaction.p_impl->set_transaction(
+            p_impl->rpm_goal,
 #ifdef WITH_MODULEMD
-        module_sack,
+            module_sack,
 #endif
-        ret);
+            ret);
+
+        return transaction;
+    };
+
+    auto transaction = resolve_attempt(false);
+
+    // If the failure looks like it could be an unresolved file-based dependency, try loading
+    // filelists metadata and re-resolving once before reporting it.
+    if (has_file_dependency_problem(transaction.get_resolve_logs()) && try_auto_load_filelists()) {
+        sack->p_impl->recompute_considered_in_pool();
+        sack->p_impl->make_provides_ready();
+        transaction = resolve_attempt(true);
+        transaction.p_impl->filelists_auto_loaded = true;
+    }
 
     auto & plugins = p_impl->base->p_impl->get_plugins();
     plugins.goal_resolved(transaction);

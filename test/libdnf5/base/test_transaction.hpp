@@ -33,6 +33,11 @@ class BaseTransactionTest : public BaseTestCase {
 #ifndef WITH_PERFORMANCE_TESTS
     CPPUNIT_TEST(test_check_gpg_signatures_no_gpgcheck);
     CPPUNIT_TEST(test_check_gpg_signatures_fail);
+    CPPUNIT_TEST(test_auto_load_filelists_on_file_dependency);
+    CPPUNIT_TEST(test_auto_load_filelists_not_needed_when_already_loaded);
+    CPPUNIT_TEST(test_auto_load_filelists_gives_up_when_still_unresolved);
+    CPPUNIT_TEST(test_auto_load_filelists_on_no_best_skip);
+    CPPUNIT_TEST(test_auto_load_filelists_disabled_by_config);
 #endif
 
 #ifdef WITH_PERFORMANCE_TESTS
@@ -43,6 +48,11 @@ class BaseTransactionTest : public BaseTestCase {
 public:
     void test_check_gpg_signatures_no_gpgcheck();
     void test_check_gpg_signatures_fail();
+    void test_auto_load_filelists_on_file_dependency();
+    void test_auto_load_filelists_not_needed_when_already_loaded();
+    void test_auto_load_filelists_gives_up_when_still_unresolved();
+    void test_auto_load_filelists_on_no_best_skip();
+    void test_auto_load_filelists_disabled_by_config();
 };
 
 
