@@ -560,44 +560,44 @@ Scenario: Generate new manifest using installed packages
           - name: basesystem
             repo_id: dnf-ci-fedora
             location: noarch/basesystem-11-6.fc29.noarch.rpm
-            checksum: sha1:*
+            checksum: sha*:*
             size: *
             evr: 11-6.fc29
           - name: setup
             repo_id: dnf-ci-fedora
             location: noarch/setup-2.12.1-1.fc29.noarch.rpm
-            checksum: sha1:*
+            checksum: sha*:*
             size: *
             evr: 2.12.1-1.fc29
         x86_64:
           - name: filesystem
             repo_id: dnf-ci-fedora
             location: x86_64/filesystem-3.9-2.fc29.x86_64.rpm
-            checksum: sha1:*
+            checksum: sha*:*
             size: *
             evr: 3.9-2.fc29
           - name: flac
             repo_id: dnf-ci-fedora
             location: x86_64/flac-1.3.2-8.fc29.x86_64.rpm
-            checksum: sha1:*
+            checksum: sha*:*
             size: *
             evr: 1.3.2-8.fc29
           - name: glibc
             repo_id: dnf-ci-fedora
             location: x86_64/glibc-2.28-9.fc29.x86_64.rpm
-            checksum: sha1:*
+            checksum: sha*:*
             size: *
             evr: 2.28-9.fc29
           - name: glibc-all-langpacks
             repo_id: dnf-ci-fedora
             location: x86_64/glibc-all-langpacks-2.28-9.fc29.x86_64.rpm
-            checksum: sha1:*
+            checksum: sha*:*
             size: *
             evr: 2.28-9.fc29
           - name: glibc-common
             repo_id: dnf-ci-fedora
             location: x86_64/glibc-common-2.28-9.fc29.x86_64.rpm
-            checksum: sha1:*
+            checksum: sha*:*
             size: *
             evr: 2.28-9.fc29
     """
