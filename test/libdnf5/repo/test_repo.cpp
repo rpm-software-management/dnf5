@@ -284,13 +284,13 @@ void RepoTest::test_load_repo_gpgcheck_refused_key_shows_error() {
 }
 
 void RepoTest::test_load_auto_import_local_keys_outside_dir() {
-    // The positive case, a key inside the trusted directory imported without
-    // asking, cannot be exercised here: the directory is set at build time and
-    // the test must not write to it. is_key_auto_importable() is covered with a
-    // temporary directory in ConfTest and the end-to-end behaviour in the
-    // auto-import-local-keys.feature integration tests. This test checks that
-    // the location rule reaches the repository key import: a local key outside
-    // the directory still goes through the confirmation callback.
+    // The positive case, a key inside a trusted directory imported without
+    // asking, cannot be exercised here: the directories are set at build time
+    // and the test must not write to them. is_key_auto_importable() is covered
+    // with temporary directories in ConfTest and the end-to-end behaviour in
+    // the auto-import-local-keys.feature integration tests. This test checks
+    // that the location rule reaches the repository key import: a local key
+    // outside the directories still goes through the confirmation callback.
     std::string repoid("repomd-repo1-gpg");
     std::filesystem::path repo_path = PROJECT_SOURCE_DIR "/test/data/repos-repomd";
     repo_path /= repoid;
