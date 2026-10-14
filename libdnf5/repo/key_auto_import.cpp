@@ -4,8 +4,10 @@
 #include "key_auto_import.hpp"
 
 #include "conf/config.h"
+#include "utils/string.hpp"
 
 #include <system_error>
+#include <vector>
 
 
 namespace libdnf5::repo {
@@ -36,14 +38,29 @@ bool is_inside_directory(const std::filesystem::path & path, const std::filesyst
 }  // namespace
 
 
-const std::filesystem::path & get_auto_import_keys_dir() {
-    static const std::filesystem::path keys_dir{LIBDNF5_AUTO_IMPORT_KEYS_DIR};
-    return keys_dir;
+std::vector<std::filesystem::path> parse_keys_dirs(const std::string & dirs) {
+    std::vector<std::filesystem::path> result;
+    for (const auto & entry : utils::string::split(dirs, ":")) {
+        // An empty entry comes from a leading, trailing or doubled colon. A
+        // relative entry would be resolved against the working directory of
+        // the caller, which is not a place to trust keys from. Both are skipped.
+        std::filesystem::path dir{entry};
+        if (dir.is_absolute()) {
+            result.push_back(std::move(dir));
+        }
+    }
+    return result;
+}
+
+
+const std::vector<std::filesystem::path> & get_auto_import_keys_dirs() {
+    static const std::vector<std::filesystem::path> keys_dirs = parse_keys_dirs(LIBDNF5_AUTO_IMPORT_KEYS_DIRS);
+    return keys_dirs;
 }
 
 
 bool is_key_auto_importable(
-    const ConfigRepo & config, const std::string & key_url, const std::filesystem::path & keys_dir) {
+    const ConfigRepo & config, const std::string & key_url, const std::vector<std::filesystem::path> & keys_dirs) {
     if (!config.get_auto_import_local_keys_option().get_value()) {
         return false;
     }
@@ -64,12 +81,21 @@ bool is_key_auto_importable(
     if (ec) {
         return false;
     }
-    const auto canonical_dir = std::filesystem::canonical(keys_dir, ec);
-    if (ec) {
-        return false;
-    }
 
-    return is_inside_directory(canonical_key, canonical_dir);
+    for (const auto & keys_dir : keys_dirs) {
+        // A directory that cannot be resolved (for example, it does not exist
+        // on this host) cannot hold the key. It is skipped so the other
+        // directories are still checked.
+        std::error_code dir_ec;
+        const auto canonical_dir = std::filesystem::canonical(keys_dir, dir_ec);
+        if (dir_ec) {
+            continue;
+        }
+        if (is_inside_directory(canonical_key, canonical_dir)) {
+            return true;
+        }
+    }
+    return false;
 }
 
 
