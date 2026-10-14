@@ -21,6 +21,7 @@
 #include "test_conf.hpp"
 
 #include "../shared/utils.hpp"
+#include "conf/config.h"
 #include "repo/key_auto_import.hpp"
 
 #include <libdnf5/repo/config_repo.hpp>
@@ -181,11 +182,54 @@ void ConfTest::test_is_key_auto_importable() {
     // Remote keys always go through the confirmation.
     CPPUNIT_ASSERT_EQUAL(false, repo::is_key_auto_importable(config_repo, "https://example.com/key", keys_dirs));
 
+    // Several trusted directories: a key in any of them is accepted, a key in
+    // none of them is rejected, a directory that does not exist is skipped
+    // without hiding the others, and an empty list accepts nothing.
+    const auto second_dir = temp_dir.get_path() / "share-rpm-gpg";
+    stdfs::create_directories(second_dir);
+    const auto second_key = second_dir / "key";
+    std::ofstream(second_key) << "not really a key";
+    const auto missing_dir = temp_dir.get_path() / "missing-dir";
+    const std::vector<stdfs::path> two_dirs{second_dir, keys_dir};
+    CPPUNIT_ASSERT_EQUAL(true, repo::is_key_auto_importable(config_repo, url(key), two_dirs));
+    CPPUNIT_ASSERT_EQUAL(true, repo::is_key_auto_importable(config_repo, url(second_key), two_dirs));
+    CPPUNIT_ASSERT_EQUAL(false, repo::is_key_auto_importable(config_repo, url(outside_key), two_dirs));
+    CPPUNIT_ASSERT_EQUAL(false, repo::is_key_auto_importable(config_repo, url(second_key), keys_dirs));
+    const std::vector<stdfs::path> with_missing{missing_dir, keys_dir};
+    CPPUNIT_ASSERT_EQUAL(true, repo::is_key_auto_importable(config_repo, url(key), with_missing));
+    CPPUNIT_ASSERT_EQUAL(false, repo::is_key_auto_importable(config_repo, url(key), {missing_dir}));
+    CPPUNIT_ASSERT_EQUAL(false, repo::is_key_auto_importable(config_repo, url(key), std::vector<stdfs::path>{}));
+
+    // Without the third argument the build-time directories are used, as the
+    // callers in libdnf5 do. The temporary directory is not one of them.
+    CPPUNIT_ASSERT_EQUAL(false, repo::is_key_auto_importable(config_repo, url(key)));
+
     // assumeno takes precedence over the option.
     config.get_assumeno_option().set(Option::Priority::RUNTIME, true);
     CPPUNIT_ASSERT_EQUAL(false, repo::is_key_auto_importable(config_repo, url(key), keys_dirs));
     config.get_assumeno_option().set(Option::Priority::RUNTIME, false);
     CPPUNIT_ASSERT_EQUAL(true, repo::is_key_auto_importable(config_repo, url(key), keys_dirs));
+}
+
+void ConfTest::test_parse_keys_dirs() {
+    namespace stdfs = std::filesystem;
+
+    // The build-time list is colon-separated. Empty entries are skipped, so a
+    // doubled, leading or trailing colon in the CMake value is harmless. A
+    // relative entry is skipped too: it would be resolved against the working
+    // directory, which is not a place to trust keys from.
+    const std::vector<stdfs::path> expected{"/usr/share/pki/rpm-gpg", "/etc/pki/rpm-gpg"};
+    CPPUNIT_ASSERT_EQUAL(expected, repo::parse_keys_dirs("/usr/share/pki/rpm-gpg:/etc/pki/rpm-gpg"));
+    CPPUNIT_ASSERT_EQUAL(expected, repo::parse_keys_dirs(":/usr/share/pki/rpm-gpg::/etc/pki/rpm-gpg:"));
+    CPPUNIT_ASSERT_EQUAL(expected, repo::parse_keys_dirs("/usr/share/pki/rpm-gpg:keys:/etc/pki/rpm-gpg"));
+    CPPUNIT_ASSERT_EQUAL(std::vector<stdfs::path>{"/etc/pki/rpm-gpg"}, repo::parse_keys_dirs("/etc/pki/rpm-gpg"));
+    CPPUNIT_ASSERT(repo::parse_keys_dirs("").empty());
+    CPPUNIT_ASSERT(repo::parse_keys_dirs("::").empty());
+    CPPUNIT_ASSERT(repo::parse_keys_dirs("keys:./keys:../keys").empty());
+
+    // The directories used by libdnf5 are the parsed value of the CMake option,
+    // whatever value the build was given.
+    CPPUNIT_ASSERT_EQUAL(repo::parse_keys_dirs(LIBDNF5_AUTO_IMPORT_KEYS_DIRS), repo::get_auto_import_keys_dirs());
 }
 
 void ConfTest::test_gpgcheck_policy_legacy() {
