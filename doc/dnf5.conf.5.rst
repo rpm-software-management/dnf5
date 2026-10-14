@@ -985,15 +985,17 @@ configuration.
     :ref:`boolean <boolean-label>`
 
     If enabled, DNF5 will import OpenPGP keys from the ``gpgkey`` URLs of this repository without
-    asking for confirmation, as long as the key file is inside the trusted keys directory,
-    ``/etc/pki/rpm-gpg`` by default. The directory is set when DNF5 is built (CMake option
-    ``AUTO_IMPORT_KEYS_DIR``) and cannot be changed in configuration files. A typical use is a key
-    file installed by a package of the distribution.
+    asking for confirmation, as long as the key file is inside one of the trusted keys directories,
+    ``/usr/share/pki/rpm-gpg`` and ``/etc/pki/rpm-gpg`` by default. The directories are set when
+    DNF5 is built (CMake option ``AUTO_IMPORT_KEYS_DIRS``, a colon-separated list) and cannot be
+    changed in configuration files. A directory that does not exist is ignored. An empty list turns
+    the automatic import off. A typical use is a key file installed by a package of the
+    distribution.
 
     The key URL must be spelled ``file:///path``. The path is resolved before it is compared with
-    the directory, so ``..``, a symlink pointing outside the directory, and a directory whose name
-    only starts with the same prefix (for example ``/etc/pki/rpm-gpg-other``) are not trusted. Any
-    other key, including a key from a remote URL or a key spelled ``file:/path``, asks for
+    the directories, so ``..``, a symlink pointing outside the directories, and a directory whose
+    name only starts with the same prefix (for example ``/etc/pki/rpm-gpg-other``) are not trusted.
+    Any other key, including a key from a remote URL or a key spelled ``file:/path``, asks for
     confirmation as usual, so the fingerprint can be verified before the key is trusted.
     :ref:`assumeno <assumeno_options-label>` takes precedence: the import is declined and nothing
     is imported.
