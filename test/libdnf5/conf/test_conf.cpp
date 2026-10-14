@@ -28,6 +28,7 @@
 
 #include <filesystem>
 #include <fstream>
+#include <vector>
 
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ConfTest);
@@ -134,54 +135,57 @@ void ConfTest::test_is_key_auto_importable() {
 
     repo::ConfigRepo config_repo(config, "test-repo");
     const auto url = [](const stdfs::path & path) { return "file://" + path.string(); };
+    const std::vector<stdfs::path> keys_dirs{keys_dir};
 
     // The option is off by default: nothing is imported automatically.
-    CPPUNIT_ASSERT_EQUAL(false, repo::is_key_auto_importable(config_repo, url(key), keys_dir));
+    CPPUNIT_ASSERT_EQUAL(false, repo::is_key_auto_importable(config_repo, url(key), keys_dirs));
 
     config_repo.get_auto_import_local_keys_option().set(Option::Priority::REPOCONFIG, true);
 
     // A key inside the directory, spelled "file:///path": the one spelling both
     // key readers open as the same file.
-    CPPUNIT_ASSERT_EQUAL(true, repo::is_key_auto_importable(config_repo, url(key), keys_dir));
+    CPPUNIT_ASSERT_EQUAL(true, repo::is_key_auto_importable(config_repo, url(key), keys_dirs));
     // A key in a subdirectory of the directory.
     stdfs::create_directories(keys_dir / "sub");
     std::ofstream(keys_dir / "sub" / "key") << "not really a key";
-    CPPUNIT_ASSERT_EQUAL(true, repo::is_key_auto_importable(config_repo, url(keys_dir / "sub" / "key"), keys_dir));
+    CPPUNIT_ASSERT_EQUAL(true, repo::is_key_auto_importable(config_repo, url(keys_dir / "sub" / "key"), keys_dirs));
     // A symlink inside the directory that resolves to a key inside it.
     const auto alias = keys_dir / "alias";
     stdfs::create_symlink(key, alias);
-    CPPUNIT_ASSERT_EQUAL(true, repo::is_key_auto_importable(config_repo, url(alias), keys_dir));
+    CPPUNIT_ASSERT_EQUAL(true, repo::is_key_auto_importable(config_repo, url(alias), keys_dirs));
 
     // Other spellings are left to the confirmation: "file:/path" and a bare
     // path are read differently by the two key readers, a host name is not
     // accepted, and a relative path would be resolved against the working
     // directory.
-    CPPUNIT_ASSERT_EQUAL(false, repo::is_key_auto_importable(config_repo, "file:" + key.string(), keys_dir));
-    CPPUNIT_ASSERT_EQUAL(false, repo::is_key_auto_importable(config_repo, key.string(), keys_dir));
-    CPPUNIT_ASSERT_EQUAL(false, repo::is_key_auto_importable(config_repo, "file://localhost" + key.string(), keys_dir));
+    CPPUNIT_ASSERT_EQUAL(false, repo::is_key_auto_importable(config_repo, "file:" + key.string(), keys_dirs));
+    CPPUNIT_ASSERT_EQUAL(false, repo::is_key_auto_importable(config_repo, key.string(), keys_dirs));
+    CPPUNIT_ASSERT_EQUAL(
+        false, repo::is_key_auto_importable(config_repo, "file://localhost" + key.string(), keys_dirs));
     const auto relative_key = stdfs::relative(key, stdfs::current_path());
-    CPPUNIT_ASSERT_EQUAL(false, repo::is_key_auto_importable(config_repo, "file://" + relative_key.string(), keys_dir));
-    CPPUNIT_ASSERT_EQUAL(false, repo::is_key_auto_importable(config_repo, relative_key.string(), keys_dir));
+    CPPUNIT_ASSERT_EQUAL(
+        false, repo::is_key_auto_importable(config_repo, "file://" + relative_key.string(), keys_dirs));
+    CPPUNIT_ASSERT_EQUAL(false, repo::is_key_auto_importable(config_repo, relative_key.string(), keys_dirs));
 
     // Paths that leave the directory are rejected: "..", a symlink pointing
     // outside, and a sibling directory sharing the prefix.
     CPPUNIT_ASSERT_EQUAL(
-        false, repo::is_key_auto_importable(config_repo, url(keys_dir / ".." / "outside" / "key"), keys_dir));
-    CPPUNIT_ASSERT_EQUAL(false, repo::is_key_auto_importable(config_repo, url(link), keys_dir));
-    CPPUNIT_ASSERT_EQUAL(false, repo::is_key_auto_importable(config_repo, url(sibling_key), keys_dir));
-    CPPUNIT_ASSERT_EQUAL(false, repo::is_key_auto_importable(config_repo, url(outside_key), keys_dir));
+        false, repo::is_key_auto_importable(config_repo, url(keys_dir / ".." / "outside" / "key"), keys_dirs));
+    CPPUNIT_ASSERT_EQUAL(false, repo::is_key_auto_importable(config_repo, url(link), keys_dirs));
+    CPPUNIT_ASSERT_EQUAL(false, repo::is_key_auto_importable(config_repo, url(sibling_key), keys_dirs));
+    CPPUNIT_ASSERT_EQUAL(false, repo::is_key_auto_importable(config_repo, url(outside_key), keys_dirs));
     // The directory itself is not inside the directory.
-    CPPUNIT_ASSERT_EQUAL(false, repo::is_key_auto_importable(config_repo, url(keys_dir), keys_dir));
+    CPPUNIT_ASSERT_EQUAL(false, repo::is_key_auto_importable(config_repo, url(keys_dir), keys_dirs));
     // A key that does not exist cannot be trusted.
-    CPPUNIT_ASSERT_EQUAL(false, repo::is_key_auto_importable(config_repo, url(keys_dir / "missing"), keys_dir));
+    CPPUNIT_ASSERT_EQUAL(false, repo::is_key_auto_importable(config_repo, url(keys_dir / "missing"), keys_dirs));
     // Remote keys always go through the confirmation.
-    CPPUNIT_ASSERT_EQUAL(false, repo::is_key_auto_importable(config_repo, "https://example.com/key", keys_dir));
+    CPPUNIT_ASSERT_EQUAL(false, repo::is_key_auto_importable(config_repo, "https://example.com/key", keys_dirs));
 
     // assumeno takes precedence over the option.
     config.get_assumeno_option().set(Option::Priority::RUNTIME, true);
-    CPPUNIT_ASSERT_EQUAL(false, repo::is_key_auto_importable(config_repo, url(key), keys_dir));
+    CPPUNIT_ASSERT_EQUAL(false, repo::is_key_auto_importable(config_repo, url(key), keys_dirs));
     config.get_assumeno_option().set(Option::Priority::RUNTIME, false);
-    CPPUNIT_ASSERT_EQUAL(true, repo::is_key_auto_importable(config_repo, url(key), keys_dir));
+    CPPUNIT_ASSERT_EQUAL(true, repo::is_key_auto_importable(config_repo, url(key), keys_dirs));
 }
 
 void ConfTest::test_gpgcheck_policy_legacy() {
