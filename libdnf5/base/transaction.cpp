@@ -93,6 +93,8 @@ const std::map<base::Transaction::TransactionRunResult, BgettextMessage> TRANSAC
      M_("Failed to obtain rpm transaction lock. Another transaction is in progress.")},
     {base::Transaction::TransactionRunResult::ERROR_RPM_RUN, M_("Rpm transaction failed.")},
     {base::Transaction::TransactionRunResult::ERROR_GPG_CHECK, M_("Signature verification failed.")},
+    {base::Transaction::TransactionRunResult::ERROR_SYSTEM_CHANGED,
+     M_("This transaction is no longer valid because the system repository has changed since it was loaded.")},
 };
 
 const std::map<base::ImportRepoKeysResult, BgettextMessage> IMPORT_REPO_KEYS_RESULT_DICT = {
@@ -440,6 +442,7 @@ std::string Transaction::transaction_result_to_string(const TransactionRunResult
         case TransactionRunResult::ERROR_LOCK:
         case TransactionRunResult::ERROR_RPM_RUN:
         case TransactionRunResult::ERROR_GPG_CHECK:
+        case TransactionRunResult::ERROR_SYSTEM_CHANGED:
             return TM_(TRANSACTION_RUN_RESULT_DICT.at(result), 1);
     }
     return {};
@@ -1088,11 +1091,46 @@ Transaction::TransactionRunResult Transaction::Impl::_run(
         return TransactionRunResult::SUCCESS;
     }
 
+    auto & config = base->get_config();
+    const auto & system_repo_lock = base->get_system_repo_lock();
+    const bool system_repo_locked = system_repo_lock && system_repo_lock->holds_lock();
+    // Lock here only if system repo lock is not configured to be skipped and not yet locked by API user
+    const bool manage_system_repo_lock = !config.get_skip_system_repo_lock_option().get_value() && !system_repo_locked;
+
+    if (manage_system_repo_lock) {
+        if (!base->lock_system_repo(libdnf5::utils::LockAccess::WRITE, libdnf5::utils::LockBlocking::NON_BLOCKING)) {
+            throw TransactionError(
+                M_("Failed to acquire system repo lock for writing, lock located at \"{}\""),
+                std::string(base->get_system_repo_lock()->get_path()));
+        }
+    } else if (system_repo_locked) {
+        libdnf_user_assert(
+            system_repo_lock->held_lock_access() == libdnf5::utils::LockAccess::WRITE,
+            "To perform a transaction ensure system repo is locked for writing using "
+            "Base::lock_system_repo or not locked at all in which case it will attempt to "
+            "lock the system repository for writing automatically only for the duration of "
+            "the transaction. Note that the automatic lock can fail and throw an exception. "
+            "See also skip_system_repo_lock configuration option.");
+    }
+    auto base_local_var = base;
+    utils::OnScopeExit unlock([base_local_var, manage_system_repo_lock]() noexcept {
+        if (manage_system_repo_lock) {
+            try {
+                base_local_var->unlock_system_repo();
+            } catch (const SystemError & ex) {
+                base_local_var->get_logger()->debug("Failed to unlock system repo: {}", ex.what());
+            }
+        }
+    });
+
+    auto system_repo = base->get_repo_sack()->get_system_repo();
+    if (system_repo->is_loaded() && !system_repo->is_system_repo_up_to_date()) {
+        return TransactionRunResult::ERROR_SYSTEM_CHANGED;
+    }
+
     if (!check_gpg_signatures()) {
         return TransactionRunResult::ERROR_GPG_CHECK;
     }
-
-    auto & config = base->get_config();
 
     // prepare transaction info
     ActiveTransactionInfo info;

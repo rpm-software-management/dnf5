@@ -60,6 +60,7 @@ public:
         ERROR_CHECK,
         ERROR_RPM_RUN,
         ERROR_GPG_CHECK,
+        ERROR_SYSTEM_CHANGED,
     };
 
     Transaction(const Transaction & transaction);
@@ -130,6 +131,10 @@ public:
     ///
     /// To watch progress or trigger actions during specific transactions events,
     /// setup the `callbacks` object.
+    ///
+    /// During the transaction it attempts to lock the system repo lock for writing if it isn't already locked.
+    /// If the locking fails (another process is writing to the system repo) an exception is thrown.
+    /// Waiting for the lock has to be done manually before, see libdnf5::Base::lock_system_repo.
     ///
     /// After a successful transaction, any temporarily downloaded packages are removed
     /// if the 'keepcache' option is set to 'false' and the transaction involved an inbound action.
