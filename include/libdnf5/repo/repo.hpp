@@ -326,6 +326,7 @@ private:
     friend class PackageDownloader;
     friend class RepoDownloader;
     friend class solv::Pool;
+    friend class base::Transaction;
 
     /// Loads the repository objects into sacks.
     ///
