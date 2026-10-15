@@ -129,12 +129,23 @@ public:
     /// Downloads (if necessary) repositories of selected type and loads them in parallel.
     /// load_repos() can be called only once per each RepoSack.
     /// It also sets up modular filtering.
+    ///
+    /// If the system repository is configured it attempts to lock the system repo lock for reading
+    /// if it isn't already locked. If the locking fails (another process is writing to the system repo)
+    /// an exception is thrown.
+    /// Waiting for the lock has to be done manually before, see libdnf5::Base::lock_system_repo.
+    ///
     /// @param type What repositories to load (libdnf5::Repo::Type::SYSTEM or libdnf5::Repo::Type::AVAILABLE)
     void load_repos(Repo::Type type);
 
     /// Downloads (if necessary) both available and system repositories and loads them in parallel.
     /// load_repos() can be called only once per each RepoSack.
     /// It also sets up modular filtering.
+    ///
+    /// During system repository loading it attempts to lock the system repo lock for reading
+    /// if it isn't already locked. If the locking fails (another process is writing to the system repo)
+    /// an exception is thrown.
+    /// Waiting for the lock has to be done manually before, see libdnf5::Base::lock_system_repo.
     void load_repos();
 
     RepoSackWeakPtr get_weak_ptr();
