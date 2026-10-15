@@ -121,6 +121,9 @@ public:
     /// @return      True if the group was successfully read.
     bool read_group_solvable_from_xml(const std::string & path);
 
+    // Cookie when the system repo was loaded.
+    std::string system_state_cookie;
+
 private:
     // "type_name == nullptr" means load "primary" cache (.solv file)
     bool load_solv_cache(solv::Pool & pool, const char * type_name, int flags);
