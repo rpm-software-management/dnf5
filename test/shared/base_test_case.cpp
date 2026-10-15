@@ -211,6 +211,8 @@ void BaseTestCase::setUp() {
 
     base.setup();
 
+    base.lock_system_repo(libdnf5::utils::LockAccess::WRITE, libdnf5::utils::LockBlocking::BLOCKING);
+
     repo_sack = base.get_repo_sack();
     sack = base.get_rpm_package_sack();
 }

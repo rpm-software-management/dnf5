@@ -78,6 +78,10 @@ void TutorialTest::test_transaction() {
     base.get_config().get_cachedir_option().set(cachedir);
 
 #include "repo/load_repo.cpp"
+
+    // Acquire a write lock on the system repository before using it
+    base.lock_system_repo(libdnf5::utils::LockAccess::WRITE, libdnf5::utils::LockBlocking::BLOCKING);
+
 #include "transaction/transaction.cpp"
 }
 
