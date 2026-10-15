@@ -23,6 +23,7 @@
 #include "repo_cache_private.hpp"
 #include "repo_downloader.hpp"
 #include "solv/pool.hpp"
+#include "utils/on_scope_exit.hpp"
 
 #include "libdnf5/base/base.hpp"
 #include "libdnf5/utils/bgettext/bgettext-mark-domain.h"
@@ -413,16 +414,39 @@ void SolvRepo::load_system_repo(const std::string & rootdir) {
     auto & logger = *base->get_logger();
     auto & pool = get_rpm_pool(base);
     std::string real_rootdir{rootdir};
+    auto & config = base->get_config();
 
     if (rootdir.empty()) {
-        base->get_config().get_installroot_option().lock("installroot locked by loading system repo");
-        real_rootdir = base->get_config().get_installroot_option().get_value();
+        config.get_installroot_option().lock("installroot locked by loading system repo");
+        real_rootdir = config.get_installroot_option().get_value();
     }
     logger.debug("Loading system repo rpmdb from root \"{}\"", real_rootdir);
     pool_set_rootdir(*pool, real_rootdir.c_str());
 
     int solvables_start = pool->nsolvables;
     int repodata_start = repo->nrepodata;
+
+    const auto & system_repo_lock = base->get_system_repo_lock();
+    // Lock here only if system repo lock is not configured to be skipped and not yet locked by API user
+    const bool manage_system_repo_lock = !config.get_skip_system_repo_lock_option().get_value() &&
+                                         (!system_repo_lock || !system_repo_lock->holds_lock());
+    if (manage_system_repo_lock) {
+        if (!base->lock_system_repo(libdnf5::utils::LockAccess::READ, libdnf5::utils::LockBlocking::NON_BLOCKING)) {
+            throw SolvError(
+                M_("Failed to acquire system repo lock for reading, lock located at \"{}\""),
+                std::string(base->get_system_repo_lock()->get_path()));
+        }
+    }
+    auto base_local_var = base;
+    utils::OnScopeExit unlock([base_local_var, manage_system_repo_lock]() noexcept {
+        if (manage_system_repo_lock) {
+            try {
+                base_local_var->unlock_system_repo();
+            } catch (const SystemError & ex) {
+                base_local_var->get_logger()->debug("Failed to unlock system repo: {}", ex.what());
+            }
+        }
+    });
 
     // TODO(egoode) investigate performance hit of RPM_ADD_WITH_CHANGELOG, possibly make this configurable
     int flagsrpm = REPO_REUSE_REPODATA | RPM_ADD_WITH_HDRID | REPO_USE_ROOTDIR | RPM_ADD_WITH_CHANGELOG;
@@ -435,7 +459,7 @@ void SolvRepo::load_system_repo(const std::string & rootdir) {
 
     if (!rootdir.empty()) {
         // if loading an extra repo, reset rootdir back to installroot
-        pool_set_rootdir(*pool, base->get_config().get_installroot_option().get_value().c_str());
+        pool_set_rootdir(*pool, config.get_installroot_option().get_value().c_str());
     }
 
     pool_set_installed(*pool, repo);
@@ -444,6 +468,9 @@ void SolvRepo::load_system_repo(const std::string & rootdir) {
     main_solvables_end = pool->nsolvables;
     main_repodata_start = repodata_start;
     main_repodata_end = repo->nrepodata;
+
+    auto & system_state = base->p_impl->get_system_state();
+    system_state_cookie = system_state.get_system_state_cookie();
 }
 
 
