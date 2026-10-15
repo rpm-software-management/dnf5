@@ -350,6 +350,7 @@ private:
 
     LIBDNF_LOCAL void load_available_repo();
     LIBDNF_LOCAL void load_system_repo();
+    LIBDNF_LOCAL bool is_system_repo_up_to_date() const;
 
     LIBDNF_LOCAL void internalize();
 

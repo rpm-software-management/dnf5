@@ -501,6 +501,13 @@ void Repo::load_system_repo() {
     p_impl->solv_repo->load_system_repo_ext(RepodataType::COMPS);
 }
 
+bool Repo::is_system_repo_up_to_date() const {
+    libdnf_user_assert(
+        get_type() == Type::SYSTEM, "Checking if the system was modified is supported only on system repo");
+
+    return p_impl->solv_repo->system_state_cookie == p_impl->base->p_impl->get_system_state().get_system_state_cookie();
+}
+
 void Repo::add_xml_comps(const std::string & path) {
     if (std::filesystem::path(path).extension() != ".xml") {
         throw RepoCompsError(M_("Failed to load comps \"{}\": doesn't have the \".xml\" extension"), path);
