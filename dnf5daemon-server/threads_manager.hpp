@@ -56,6 +56,30 @@ private:
         }
     }
 
+    template <class S>
+    static bool sender_matches_session(S & service, sdbus::MethodCall & call) {
+        if constexpr (requires { service.get_session(); }) {
+            return call.getSender() == service.get_session().get_sender();
+        } else {
+            return true;
+        }
+    }
+
+    static void send_authorization_error(sdbus::MethodCall & call) {
+        auto reply = call.createErrorReply(sdbus::Error(
+            dnfdaemon::ERROR, "Session method can only be called by the D-Bus sender that opened the session."));
+        try {
+            reply.send();
+        } catch (...) {
+            std::cerr << fmt::format(
+                             "Error sending D-Bus authorization error reply to {}:{}() call: {}",
+                             call.getInterfaceName(),
+                             call.getMemberName(),
+                             current_exception_message())
+                      << std::endl;
+        }
+    }
+
 public:
     template <class S, bool UseLibdnf5Mutex = true>
     void handle_method(
@@ -63,6 +87,11 @@ public:
         sdbus::MethodReply (S::*method)(sdbus::MethodCall &),
         sdbus::MethodCall & call,
         std::optional<std::string> thread_locale = std::nullopt) {
+        if (!sender_matches_session(service, call)) {
+            send_authorization_error(call);
+            return;
+        }
+
         auto worker = std::thread(
             [this](
                 S & service,
@@ -132,6 +161,11 @@ public:
         void (S::*method)(sdbus::MethodCall &, const std::string &),
         sdbus::MethodCall & call,
         std::optional<std::string> thread_locale = std::nullopt) {
+        if (!sender_matches_session(service, call)) {
+            send_authorization_error(call);
+            return;
+        }
+
         auto worker = std::thread(
             [this](
                 S & service,
