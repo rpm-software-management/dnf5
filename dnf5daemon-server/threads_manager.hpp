@@ -45,6 +45,18 @@ public:
     void join_threads(const bool only_finished);
     void finish();
 
+private:
+    static std::string current_exception_message() {
+        try {
+            throw;
+        } catch (const std::exception & ex) {
+            return ex.what();
+        } catch (...) {
+            return "Unknown exception caught";
+        }
+    }
+
+public:
     template <class S, bool UseLibdnf5Mutex = true>
     void handle_method(
         S & service,
@@ -81,20 +93,16 @@ public:
                     reply = (service.*method)(call);
                 } catch (const sdbus::Error & ex) {
                     reply = call.createErrorReply(ex);
-                } catch (const std::exception & ex) {
-                    reply = call.createErrorReply(sdbus::Error(dnfdaemon::ERROR, ex.what()));
                 } catch (...) {
-                    reply = call.createErrorReply(sdbus::Error(dnfdaemon::ERROR, "Unknown exception caught"));
+                    reply = call.createErrorReply(sdbus::Error(dnfdaemon::ERROR, current_exception_message()));
                 }
                 bool success = false;
                 std::string error_msg;
                 try {
                     reply.send();
                     success = true;
-                } catch (const std::exception & e) {
-                    error_msg = e.what();
                 } catch (...) {
-                    error_msg = "Unknown exception caught";
+                    error_msg = current_exception_message();
                 }
                 if (!success) {
                     std::cerr << fmt::format(
@@ -151,10 +159,8 @@ public:
                 std::string error_msg;
                 try {
                     reply.send();
-                } catch (const std::exception & e) {
-                    error_msg = e.what();
                 } catch (...) {
-                    error_msg = "Unknown exception caught";
+                    error_msg = current_exception_message();
                 }
 
                 if (error_msg.empty()) {
@@ -202,10 +208,8 @@ public:
                 try {
                     (service.*method)(signal);
                     success = true;
-                } catch (const std::exception & ex) {
-                    error_msg = ex.what();
                 } catch (...) {
-                    error_msg = "Unknown exception caught";
+                    error_msg = current_exception_message();
                 }
                 if (!success) {
                     std::cerr << fmt::format(
