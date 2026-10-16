@@ -165,3 +165,228 @@ Test Query Aliases:
   ls                            Alias for 'repo list'
   if                            Alias for 'repo info'
 """
+
+
+Scenario: command_flag alias maps a dnf4 flag to a subcommand
+Given I create directory "//etc/dnf/dnf5-aliases.d"
+  And I create file "//etc/dnf/dnf5-aliases.d/TEST_ALIASES.conf" with
+"""
+version = '1.2'
+
+['updateinfo.list']
+type = 'command_flag'
+attached_command = 'advisory.list'
+"""
+ When I execute dnf with args "updateinfo --list"
+ Then the exit code is 0
+
+
+Scenario: command_flag alias rewrites following values through a template
+Given I create directory "//etc/dnf/dnf5-aliases.d"
+  And I create file "//etc/dnf/dnf5-aliases.d/TEST_ALIASES.conf" with
+"""
+version = '1.2'
+
+['repoquery.whatneeds']
+type = 'command_flag'
+attached_command = 'repoquery'
+positional_template = '--whatrequires=${}'
+"""
+ When I execute dnf with args "repoquery --whatneeds labirinto"
+ Then the exit code is 0
+  And stdout contains "vagare"
+
+
+Scenario: command_flag alias requires config file version 1.2
+Given I create directory "//etc/dnf/dnf5-aliases.d"
+  And I create file "//etc/dnf/dnf5-aliases.d/TEST_ALIASES.conf" with
+"""
+version = '1.1'
+
+['updateinfo.list']
+type = 'command_flag'
+attached_command = 'advisory.list'
+"""
+ When I execute dnf with args "updateinfo --list"
+ Then the exit code is 2
+  And stderr contains "Used config file version \"1.1\" for alias type \"command_flag\""
+
+
+Scenario: command_flag alias with reject_message prints guidance and keeps the parser error
+Given I create directory "//etc/dnf/dnf5-aliases.d"
+  And I create file "//etc/dnf/dnf5-aliases.d/TEST_ALIASES.conf" with
+"""
+version = '1.2'
+
+['repoquery.nogo']
+type = 'command_flag'
+reject_message = 'The nogo option has no equivalent'
+"""
+ When I execute dnf with args "repoquery --nogo"
+ Then the exit code is 2
+  And stderr contains "The nogo option has no equivalent"
+  And stderr contains "Unknown argument \"--nogo\""
+
+
+Scenario: command_flag alias with precedence picks the right entry when several flags match
+Given I create directory "//etc/dnf/dnf5-aliases.d"
+  And I create file "//etc/dnf/dnf5-aliases.d/TEST_ALIASES.conf" with
+"""
+version = '1.2'
+
+['updateinfo.list']
+type = 'command_flag'
+attached_command = 'advisory.list'
+precedence = 10
+
+['updateinfo.all']
+type = 'command_flag'
+attached_command = 'advisory.list'
+"""
+ When I execute dnf with args "updateinfo --all --list"
+ Then the exit code is 0
+
+
+Scenario: command_flag alias rewrites dashed tokens through a prefix map
+Given I create directory "//etc/dnf/dnf5-aliases.d"
+  And I create file "//etc/dnf/dnf5-aliases.d/TEST_ALIASES.conf" with
+"""
+version = '1.2'
+
+['repoquery.needsmap']
+type = 'command_flag'
+attached_command = 'repoquery'
+token_prefix_maps = [{ prefix = '--need-', template = '--whatrequires=${}' }]
+"""
+ When I execute dnf with args "repoquery --needsmap --need-labirinto"
+ Then the exit code is 0
+  And stdout contains "vagare"
+
+
+Scenario: command_flag alias leaves a value of a following option untouched
+Given I create directory "//etc/dnf/dnf5-aliases.d"
+  And I create file "//etc/dnf/dnf5-aliases.d/TEST_ALIASES.conf" with
+"""
+version = '1.2'
+
+['repoquery.whatneeds']
+type = 'command_flag'
+attached_command = 'repoquery'
+positional_template = '--whatrequires=${}'
+"""
+ When I execute dnf with args "repoquery --whatneeds labirinto --exclude foo"
+ Then the exit code is 0
+  And stdout contains "vagare"
+
+
+Scenario: command lines that match no command_flag alias are not touched
+Given I create directory "//etc/dnf/dnf5-aliases.d"
+  And I create file "//etc/dnf/dnf5-aliases.d/TEST_ALIASES.conf" with
+"""
+version = '1.2'
+
+['updateinfo.list']
+type = 'command_flag'
+attached_command = 'advisory.list'
+"""
+ When I execute dnf with args "repoquery --no-such-option"
+ Then the exit code is 2
+  And stderr contains "Unknown argument \"--no-such-option\""
+
+
+Scenario: command_flag alias drops redundant bare operands with a note
+Given I create directory "//etc/dnf/dnf5-aliases.d"
+  And I create file "//etc/dnf/dnf5-aliases.d/TEST_ALIASES.conf" with
+"""
+version = '1.2'
+
+['repoquery.dropper']
+type = 'command_flag'
+attached_command = 'repoquery'
+drop_bare_positionals = true
+dropped_note = 'The dropper option takes no arguments'
+"""
+ When I execute dnf with args "repoquery --dropper labirinto"
+ Then the exit code is 0
+  And stderr contains "The dropper option takes no arguments: ignoring argument \"labirinto\""
+
+
+Scenario: command_flag alias with a value gate prints guidance when values do not match
+Given I create directory "//etc/dnf/dnf5-aliases.d"
+  And I create file "//etc/dnf/dnf5-aliases.d/TEST_ALIASES.conf" with
+"""
+version = '1.2'
+
+['repoquery.gatedneeds']
+type = 'command_flag'
+attached_command = 'repoquery'
+positional_template = '--whatrequires=${}'
+positional_suffix_gate = '.rpm'
+gate_reject_message = 'The gatedneeds option only translates .rpm values'
+"""
+ When I execute dnf with args "repoquery --gatedneeds labirinto"
+ Then the exit code is 2
+  And stderr contains "The gatedneeds option only translates .rpm values"
+
+
+Scenario: command_flag alias naming an existing option is ignored and other entries still fire
+Given I create directory "//etc/dnf/dnf5-aliases.d"
+  And I create file "//etc/dnf/dnf5-aliases.d/TEST_ALIASES.conf" with
+"""
+version = '1.2'
+
+['repoquery.available']
+type = 'command_flag'
+attached_command = 'repoquery'
+
+['repoquery.whatneeds']
+type = 'command_flag'
+attached_command = 'repoquery'
+positional_template = '--whatrequires=${}'
+"""
+ When I execute dnf with args "repoquery --available --whatneeds labirinto"
+ Then the exit code is 0
+  And stdout contains "vagare"
+  And stderr contains "Command flag alias \"repoquery.available\" matches an existing option of the command, ignored"
+
+
+Scenario: command_flag alias keeps the typed command line in the log
+Given I create directory "//etc/dnf/dnf5-aliases.d"
+  And I create file "//etc/dnf/dnf5-aliases.d/TEST_ALIASES.conf" with
+"""
+version = '1.2'
+
+['updateinfo.list']
+type = 'command_flag'
+attached_command = 'advisory.list'
+"""
+ When I execute dnf with args "updateinfo --list"
+ Then the exit code is 0
+  And file "/var/log/dnf5.log" contains lines
+"""
+DNF5 launched with arguments: ".*updateinfo --list"
+rewrote the command line to: .*advisory list
+"""
+  And file "/var/log/dnf5.log" does not contain lines
+"""
+DNF5 launched with arguments: ".*advisory list"
+"""
+
+
+Scenario: command_flag alias does not read a value of an attached command option as a trigger
+Given I create directory "//etc/dnf/dnf5-aliases.d"
+  And I create file "//etc/dnf/dnf5-aliases.d/TEST_ALIASES.conf" with
+"""
+version = '1.2'
+
+['updateinfo.list']
+type = 'command_flag'
+attached_command = 'advisory.list'
+
+['updateinfo.all']
+type = 'command_flag'
+attached_command = 'advisory.info'
+precedence = 50
+"""
+ When I execute dnf with args "updateinfo --list --contains-pkgs --all"
+ Then the exit code is 0
