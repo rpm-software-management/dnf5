@@ -69,5 +69,15 @@ wrap_unique_ptr(MemoryBufferLoggerUniquePtr, libdnf5::MemoryBufferLogger);
 %include "libdnf5/logger/rotating_file_logger.hpp"
 %include "libdnf5/logger/factory.hpp"
 
+// Make returned wrapped objects keep their owner alive to avoid use-after-free
+// when a temporary owner is garbage collected. See 'common.i'
+// (install_keep_alive) and
+// https://github.com/rpm-software-management/dnf5/issues/2379
+#if defined(SWIGPYTHON)
+%pythoncode %{
+common.install_keep_alive(globals())
+%}
+#endif
+
 // Deletes any previously defined catches
 %catches();

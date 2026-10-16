@@ -264,5 +264,15 @@ common.create_attributes_from_getters_and_setters(GoalJobSettings)
 %}
 #endif
 
+// Make returned wrapped objects keep their owner alive to avoid use-after-free
+// when a temporary owner is garbage collected (e.g.
+// libdnf5.base.Base().get_config()). See 'common.i' (install_keep_alive) and
+// https://github.com/rpm-software-management/dnf5/issues/2379
+#if defined(SWIGPYTHON)
+%pythoncode %{
+common.install_keep_alive(globals())
+%}
+#endif
+
 // Deletes any previously defined catches
 %catches();

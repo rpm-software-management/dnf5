@@ -62,5 +62,15 @@
 %template(VectorTransaction) std::vector<libdnf5::transaction::Transaction>;
 %template(VectorTransactionPackage) std::vector<libdnf5::transaction::Package>;
 
+// Make returned wrapped objects keep their owner alive to avoid use-after-free
+// when a temporary owner is garbage collected. See 'common.i'
+// (install_keep_alive) and
+// https://github.com/rpm-software-management/dnf5/issues/2379
+#if defined(SWIGPYTHON)
+%pythoncode %{
+common.install_keep_alive(globals())
+%}
+#endif
+
 // Deletes any previously defined catches
 %catches();

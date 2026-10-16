@@ -330,6 +330,80 @@ fix_swigtype_trait(ClassName)
 %template(PreserveOrderMapStringString) libdnf5::PreserveOrderMap<std::string, std::string>;
 %template(PreserveOrderMapStringPreserveOrderMapStringString) libdnf5::PreserveOrderMap<std::string, libdnf5::PreserveOrderMap<std::string, std::string>>;
 
+// Many wrapped methods return a reference, pointer, weak pointer, or a
+// by-value object that internally borrows memory owned by the instance the
+// method was called on (e.g. Base.get_config() returns a reference to a
+// ConfigMain owned by the Base; TransactionHistory.get_latest_transaction()
+// returns a Transaction that holds a weak pointer to the Base). The returned
+// Python proxy does not, on its own, keep the owning object alive, so once the
+// owner is garbage collected the returned object refers to freed memory (see
+// https://github.com/rpm-software-management/dnf5/issues/2379).
+//
+// install_keep_alive() wraps every method of every wrapped class in a module so
+// that, whenever a method returns another wrapped object, a reference to the
+// instance the method was called on (`self`) is attached to the result. Python
+// then keeps `self` (and, transitively, whatever `self` itself keeps alive)
+// alive for at least as long as the returned object is reachable. Applied to
+// all modules, this makes the whole accessor chain memory-safe regardless of
+// how the objects are returned (reference, pointer, weak pointer or value).
+#if defined(SWIGPYTHON)
+%pythoncode %{
+import types as _types
+
+
+def _keep_alive(obj, owner):
+    """Attach a reference to `owner` on `obj` so that Python keeps `owner`
+    alive for as long as `obj` is reachable."""
+    try:
+        obj.__dict__.setdefault('_swig_kept_alive', []).append(owner)
+    except (AttributeError, TypeError):
+        # Object does not have a writable __dict__; nothing we can do.
+        pass
+
+
+def _is_wrapped_object(obj):
+    """Return True if `obj` is a SWIG proxy object (an instance of a wrapped
+    C++ class). Such objects expose a `this` attribute and a `thisown`
+    descriptor on their type."""
+    return obj is not None and hasattr(obj, 'this') and \
+        isinstance(getattr(type(obj), 'thisown', None), property)
+
+
+def _keep_owner_alive(method):
+    """Wrap `method` so that, if it returns a wrapped object, that object keeps
+    a reference to the instance the method was called on (`self`)."""
+    def wrapper(self, *args, **kwargs):
+        result = method(self, *args, **kwargs)
+        if result is not self and _is_wrapped_object(result):
+            _keep_alive(result, self)
+        return result
+    wrapper.__name__ = getattr(method, '__name__', 'wrapper')
+    wrapper.__doc__ = getattr(method, '__doc__', None)
+    wrapper._swig_keep_alive_wrapped = True
+    return wrapper
+
+
+def install_keep_alive(namespace):
+    """Wrap the methods of all wrapped classes in `namespace` (typically a
+    module's globals()) so that returned wrapped objects keep their owner
+    alive. See the comment above for the rationale."""
+    for cls in list(namespace.values()):
+        if not isinstance(cls, type) or \
+                not isinstance(getattr(cls, 'thisown', None), property):
+            continue
+        for name, attr in list(vars(cls).items()):
+            # Skip special methods (operators, iteration, construction, ...);
+            # wrapping them is both risky and unnecessary for the accessor
+            # chains this guards against.
+            if name.startswith('__'):
+                continue
+            if not isinstance(attr, _types.FunctionType) or \
+                    getattr(attr, '_swig_keep_alive_wrapped', False):
+                continue
+            setattr(cls, name, _keep_owner_alive(attr))
+%}
+#endif
+
 // The following adds Python attribute shortcuts for getters and setters
 // from C++ structures that act as plain data objects.
 //
@@ -353,6 +427,15 @@ def create_attributes_from_getters_and_setters(cls):
 
 // Base weak ptr is used across the codebase
 %include "libdnf5/base/base_weak.hpp"
+
+// Make returned wrapped objects keep their owner alive to avoid use-after-free
+// when a temporary owner is garbage collected. See install_keep_alive above and
+// https://github.com/rpm-software-management/dnf5/issues/2379
+#if defined(SWIGPYTHON)
+%pythoncode %{
+install_keep_alive(globals())
+%}
+#endif
 
 // Deletes any previously defined catches
 %catches();
