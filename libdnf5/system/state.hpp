@@ -109,6 +109,13 @@ public:
     const char * get_name() const noexcept override { return "StateLoadError"; }
 };
 
+class StateCookieError : public libdnf5::Error {
+public:
+    using libdnf5::Error::Error;
+
+    const char * get_domain_name() const noexcept override { return "libdnf5::system"; }
+    const char * get_name() const noexcept override { return "StateCookieError"; }
+};
 
 /// A class providing information and allowing modification of the DNF system
 /// state. The state consists of a list of userinstalled packages, installed
@@ -251,6 +258,11 @@ public:
     /// Saves the system state to the filesystem path specified in constructor.
     /// @since 5.0
     void save();
+
+    /// Get a cookie of this system state.
+    /// This includes everything that affects solver dependency resolution.
+    /// @since 5.4.7.0
+    std::string get_system_state_cookie() const;
 
 private:
     friend Base;

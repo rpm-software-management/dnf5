@@ -20,6 +20,7 @@
 #include "system/state.hpp"
 
 #include "utils/fs/utils.hpp"
+#include "utils/on_scope_exit.hpp"
 #include "utils/string.hpp"
 
 #include "libdnf5/base/base.hpp"
@@ -28,9 +29,17 @@
 #include "libdnf5/utils/fs/file.hpp"
 #include "libdnf5/utils/fs/temp.hpp"
 
+#include <fcntl.h>
 #include <libdnf5/comps/group/package.hpp>
+#include <rpm/rpmdb.h>
+#include <rpm/rpmtag.h>
+#include <rpm/rpmts.h>
 #include <toml.hpp>
 
+#include <cstring>
+
+constexpr const char * GPG_PUBKEY_NAME = "gpg-pubkey";
+constexpr std::size_t GPG_PUBKEY_LEN = std::char_traits<char>::length(GPG_PUBKEY_NAME);
 
 namespace toml {
 
@@ -772,6 +781,58 @@ void State::reset_packages_states(
     } catch (const FileSystemError & e) {
         // TODO(mblaha) - log this? (will need access to the base)
     }
+}
+
+std::string State::get_system_state_cookie() const {
+    rpmts ts = rpmtsCreate();
+    utils::OnScopeExit free_ts([&ts]() noexcept { rpmtsFree(ts); });
+    auto & config = base->get_config();
+    auto root_dir = config.get_installroot_option().get_value();
+    if (rpmtsSetRootDir(ts, root_dir.c_str()) != 0) {
+        throw StateCookieError(M_("Failed to set rpm transaction rootDir \"{}\"."), std::string(root_dir));
+    }
+    rpmdb db = rpmtsGetRdb(ts);  // non-NULL after a successful open
+    if (!db) {
+        auto rc = rpmtsOpenDB(ts, O_RDONLY);
+        if (rc != 0) {
+            throw StateCookieError(M_("Error {} opening rpm database"), rc);
+        }
+        db = rpmtsGetRdb(ts);  // non-NULL after a successful open
+        if (!db) {
+            throw StateCookieError(M_("Failed to get rpm database"));
+        }
+    }
+
+    auto ii = rpmdbIndexIteratorInit(db, RPMDBI_NAME);
+    if (!ii) {
+        throw StateCookieError(M_("Failed to initialize database index iterator"));
+    }
+    DIGEST_CTX ctx = rpmDigestInit(RPM_HASH_SHA256, RPMDIGEST_NONE);
+    const void * key = nullptr;
+    size_t keylen = 0;
+    while (rpmdbIndexIteratorNext(ii, &key, &keylen) == 0) {
+        // Skip gpg-pubkey entries, they don't affect dependency resolution
+        if (keylen == GPG_PUBKEY_LEN && memcmp(key, GPG_PUBKEY_NAME, GPG_PUBKEY_LEN) == 0)
+            continue;
+        unsigned int npkgs = rpmdbIndexIteratorNumPkgs(ii);
+        for (unsigned i = 0; i < npkgs; i++) {
+            unsigned offset = rpmdbIndexIteratorPkgOffset(ii, i);
+            rpmDigestUpdate(ctx, &offset, sizeof(offset));
+        }
+        rpmDigestUpdate(ctx, key, keylen);
+    }
+    rpmdbIndexIteratorFree(ii);
+
+    // TODO(amatej): Add all relevant system state data to the digest here
+    // https://github.com/rpm-software-management/dnf5/issues/2794
+    // The rpm db cookie doesn't track changes in reasons, groups,... (libdnf5 system state)
+
+    void * cookie_raw = nullptr;
+    rpmDigestFinal(ctx, &cookie_raw, nullptr, 1);
+    std::string cookie{(char *)cookie_raw};
+    free(cookie_raw);
+
+    return cookie;
 }
 
 }  // namespace libdnf5::system

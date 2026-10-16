@@ -256,6 +256,7 @@ private:
     friend class libdnf5::module::ModuleSack;
     friend class libdnf5::repo::RepoSack;
     friend class libdnf5::repo::SolvRepo;
+    friend class libdnf5::repo::Repo;
 
     /// Load plugins according to configuration
     LIBDNF_LOCAL void load_plugins();
