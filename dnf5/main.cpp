@@ -945,23 +945,93 @@ static void print_transaction_size_stats(Context & context) {
     }
 }
 
+static void dump_list_items(
+    Context & context,
+    const std::string & key,
+    const std::vector<libdnf5::Option::ItemInfo<std::string_view>> & items_info) {
+    if (items_info.empty()) {
+        context.print_output(fmt::format("{} = []", key));
+        return;
+    }
+
+    for (size_t i = 0; i < items_info.size(); ++i) {
+        const auto & item = items_info[i];
+        const char * priority_str = libdnf5::Option::priority_to_string(item.priority);
+        if (!item.source.empty()) {
+            context.print_output(fmt::format("{}[{}] = {} [{}, {}]", key, i, item.value, priority_str, item.source));
+        } else {
+            context.print_output(fmt::format("{}[{}] = {} [{}]", key, i, item.value, priority_str));
+        }
+    }
+}
+
+template <typename T>
+static bool try_dump_list_option(Context & context, const std::string & key, const libdnf5::Option & opt) {
+    // Try direct cast first
+    if (auto * list_opt = dynamic_cast<const T *>(&opt)) {
+        dump_list_items(context, key, list_opt->get_items_info());
+        return true;
+    }
+
+    // Try cast to OptionChild
+    if (auto * child_list_opt = dynamic_cast<const libdnf5::OptionChild<T> *>(&opt)) {
+        const auto & items = child_list_opt->get_value();
+        if (items.empty()) {
+            context.print_output(fmt::format("{} = []", key));
+            return true;
+        }
+        const char * priority_str = libdnf5::Option::priority_to_string(child_list_opt->get_priority());
+        const auto & source = child_list_opt->get_source();
+        size_t i = 0;
+        for (const auto & item : items) {
+            context.print_output(fmt::format("{}[{}] = {} [*{}, *{}]", key, i, item, priority_str, source));
+            ++i;
+        }
+        return true;
+    }
+
+    return false;
+}
+
+static void dump_option_value(Context & context, const std::string & key, const libdnf5::OptionBinds::Item & val) {
+    std::string value;
+    bool was_set{false};
+    try {
+        value = val.get_value_string();
+        was_set = true;
+    } catch (const libdnf5::OptionError &) {
+    }
+
+    if (!was_set) {
+        context.print_output(fmt::format("{}", key));
+        return;
+    }
+
+    // Try to cast to list/set options to get per-item info
+    const auto & opt = val.get_option();
+    if (try_dump_list_option<libdnf5::OptionStringList>(context, key, opt) ||
+        try_dump_list_option<libdnf5::OptionStringAppendList>(context, key, opt) ||
+        try_dump_list_option<libdnf5::OptionStringSet>(context, key, opt) ||
+        try_dump_list_option<libdnf5::OptionStringAppendSet>(context, key, opt)) {
+        // List option already dumped
+    } else {
+        // Regular non-list option
+        const auto priority = val.get_priority();
+        const auto & source = val.get_source();
+        const char * priority_str = libdnf5::Option::priority_to_string(priority);
+        if (!source.empty()) {
+            context.print_output(fmt::format("{} = {} [{}, {}]", key, value, priority_str, source));
+        } else {
+            context.print_output(fmt::format("{} = {} [{}]", key, value, priority_str));
+        }
+    }
+}
+
 static void dump_main_configuration(Context & context) {
     libdnf5::Base & base = context.get_base();
     context.print_output(_("======== Main configuration: ========"));
     for (const auto & option : base.get_config().opt_binds()) {
-        const auto & val = option.second;
-        std::string value;
-        bool was_set{false};
-        try {
-            value = val.get_value_string();
-            was_set = true;
-        } catch (const libdnf5::OptionError &) {
-        }
-        if (was_set) {
-            context.print_output(fmt::format("{} = {}", option.first, value));
-        } else {
-            context.print_output(fmt::format("{}", option.first));
-        }
+        dump_option_value(context, option.first, option.second);
     }
 }
 
@@ -991,19 +1061,7 @@ static void dump_repository_configuration(Context & context, const std::vector<s
         context.print_output(
             libdnf5::utils::sformat(_("======== \"{}\" repository configuration: ========"), repo->get_id()));
         for (const auto & option : repo->get_config().opt_binds()) {
-            const auto & val = option.second;
-            std::string value;
-            bool was_set{false};
-            try {
-                value = val.get_value_string();
-                was_set = true;
-            } catch (const libdnf5::OptionError &) {
-            }
-            if (was_set) {
-                context.print_output(fmt::format("{} = {}", option.first, value));
-            } else {
-                context.print_output(fmt::format("{}", option.first));
-            }
+            dump_option_value(context, option.first, option.second);
         }
     }
 }

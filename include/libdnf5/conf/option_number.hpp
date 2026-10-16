@@ -73,8 +73,16 @@ public:
     // @replaces libdnf:conf/OptionNumber.hpp:method:OptionNumber<T>.set(Priority priority, bool value)
     void set(Priority priority, ValueType value);
 
+    /// Sets new value and priority. Records source if value is accepted.
+    void set(Priority priority, ValueType value, std::string source);
+
     /// Sets new value and runtime priority.
     void set(ValueType value);
+
+    /// Sets new value and runtime priority. Records source if value is accepted.
+    void set(ValueType value, std::string source);
+
+    using Option::set;
 
     /// Parses input string and sets new value and priority.
     /// The value and priority are stored only if the new priority is equal to or higher than the stored priority.

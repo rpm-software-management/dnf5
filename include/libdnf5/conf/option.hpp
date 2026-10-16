@@ -26,6 +26,7 @@
 #include "libdnf5/defs.h"
 
 #include <string>
+#include <string_view>
 
 
 namespace libdnf5 {
@@ -52,6 +53,13 @@ public:
         RUNTIME = 80
     };
 
+    template <typename ValueType>
+    struct ItemInfo {
+        Priority priority;
+        ValueType value;
+        std::string_view source;
+    };
+
     explicit Option(Priority priority = Priority::EMPTY);
     Option(const Option & src);
     virtual ~Option();
@@ -69,8 +77,14 @@ public:
     // @replaces libdnf:conf/Option.hpp:method:Option.set(Priority priority, const std::string & value)
     virtual void set(Priority priority, const std::string & value) = 0;
 
+    /// Parses input string and sets new value and priority (source). Records source if value is accepted.
+    void set(Priority priority, const std::string & value, std::string source);
+
     /// Parses input string and sets new value and runtime priority.
     virtual void set(const std::string & value) = 0;
+
+    /// Parses input string and sets new value and runtime priority. Records source if value is accepted.
+    void set(const std::string & value, std::string source);
 
     /// Gets a string representation of the stored value.
     // @replaces libdnf:conf/Option.hpp:method:Option.getValueString()
@@ -79,6 +93,9 @@ public:
     /// Checks if the option is empty (has no stored value).
     // @replaces libdnf:conf/Option.hpp:method:Option.empty()
     virtual bool empty() const noexcept;
+
+    /// Returns the source that last set this option's value, or an empty string if none.
+    const std::string & get_source() const noexcept;
 
     /// Locks the option.
     /// The locked option is read-only. Its value cannot be changed.
@@ -98,11 +115,38 @@ public:
     /// @since 1.0
     void assert_not_locked() const;
 
+    /// Converts Priority enum value to string representation.
+    static const char * priority_to_string(Priority priority) noexcept;
+
 protected:
     void set_priority(Priority priority);
     const std::string & get_lock_comment() const noexcept;
 
+    /// Sets the source that last set this option's value.
+    /// Called by leaf set() implementations after the value is accepted.
+    void set_source(std::string source);
+
+    /// Stores a pending source to be recorded by the next successful leaf set() call.
+    void set_pending_source(std::string source);
+
+    /// Clears the pending source without recording it. For use with OnScopeExit.
+    void clear_pending_source() noexcept;
+
+    /// Consumes and returns the pending source, or "" if none is set.
+    /// Called by leaf set() implementations when a value is actually accepted.
+    std::string take_pending_source() noexcept;
+
+    /// Sets a pointer to the parent option for source fallback.
+    /// When this option has no value set (priority == EMPTY), get_source() returns parent's source.
+    /// Used by OptionChild to inherit source from the parent option.
+    void set_parent(const Option * parent) noexcept;
+
+    /// Returns a pointer to the parent option, or nullptr if not set.
+    const Option * get_parent() const noexcept;
+
 private:
+    friend class OptionBinds;
+
     class LIBDNF_LOCAL Impl;
     ImplPtr<Impl> p_impl;
 };
