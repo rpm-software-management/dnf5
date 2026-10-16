@@ -1,6 +1,9 @@
 Feature: Test upgrading and downgrading to package with different epoch
 
 
+Background:
+  Given I set environment variable "DNF5_FORCE_COLUMNS" to "500"
+
 Scenario: Upgrade to RPM with same NVR but different epoch
   Given I use repository "epoch0"
     And I successfully execute dnf with args "install dummy"

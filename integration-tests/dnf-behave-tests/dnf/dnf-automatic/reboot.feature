@@ -1,6 +1,7 @@
 Feature: dnf-automatic reboots
 
 Background:
+  Given I set environment variable "DNF5_FORCE_COLUMNS" to "500"
 Given I use repository "simple-base"
   And I successfully execute dnf with args "install labirinto"
   And I use repository "simple-updates"
