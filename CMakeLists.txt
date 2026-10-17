@@ -41,7 +41,7 @@ option(ENABLE_SOLV_FOCUSNEW "Build with SOLVER_FLAG_FOCUS_NEW libsolv flag enabl
 
 # build options - documentation
 option(ENABLE_HTML_ONLY "Build only HTML documentation, disables any C++ compilation and depencency checking" OFF)
-cmake_dependent_option(WITH_HTML "Build HTML documentation" ON "NOT ENABLE_HTML_ONLY" ON)
+cmake_dependent_option(WITH_HTML "Build HTML documentation" OFF "NOT ENABLE_HTML_ONLY" ON)
 cmake_dependent_option(WITH_MAN "Build man pages" ON "NOT ENABLE_HTML_ONLY" OFF)
 
 # build options - translations
