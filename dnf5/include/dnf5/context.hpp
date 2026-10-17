@@ -129,6 +129,11 @@ public:
 
     bool get_dump_variables() const;
 
+    /// Set to true to print loaded vendor change policies
+    void set_dump_vendor_policies(bool enable);
+
+    bool get_dump_vendor_policies() const;
+
     /// Set to true to show newly installed leaf packages and packages that became leaves after a transaction.
     void set_show_new_leaves(bool show_new_leaves);
 
