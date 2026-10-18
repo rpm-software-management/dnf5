@@ -31,6 +31,7 @@
 class ConfTest : public TestCaseFixture {
     CPPUNIT_TEST_SUITE(ConfTest);
     CPPUNIT_TEST(test_config_main);
+    CPPUNIT_TEST(test_metalink_exclude_options);
     CPPUNIT_TEST(test_config_repo);
     CPPUNIT_TEST(test_config_repo_backslash);
     CPPUNIT_TEST(test_config_pkg_gpgcheck);
@@ -49,6 +50,7 @@ public:
     void setUp() override;
 
     void test_config_main();
+    void test_metalink_exclude_options();
     void test_config_repo();
     void test_config_repo_backslash();
     void test_config_pkg_gpgcheck();

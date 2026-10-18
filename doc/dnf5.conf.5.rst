@@ -739,6 +739,37 @@ repository configuration file should aside from repo ID consists of baseurl, met
 
     Default: ``True``.
 
+.. _metalink_exclude_domain_options-label:
+
+``metalink_exclude_domain``
+    :ref:`string <string-label>`
+
+    A single GLib regular expression matched against the hostname of metalink
+    mirror URLs. The default is an empty string, which disables exclusion.
+    This global option is supported only in ``[main]``. It does not filter
+    explicit base URLs or ordinary mirrorlists.
+
+    Matching is case-sensitive and unanchored. Use ``^`` and ``$`` for a full
+    match, ``|`` for alternatives, or ``(?i)`` to ignore case. For example,
+    ``^(mirror1|mirror2)\.example\.com$`` excludes two hostnames. Backslashes
+    and commas are part of the expression, not list separators.
+    See https://docs.gtk.org/glib/struct.Regex.html for the expression syntax.
+    Invalid expressions cause an error when initializing a download handle.
+
+.. _metalink_exclude_location_options-label:
+
+``metalink_exclude_location``
+    :ref:`string <string-label>`
+
+    A single GLib regular expression matched against the metalink ``location``
+    attribute, usually an ISO 3166-1 alpha-2 country code. For example,
+    ``^(XX|YY)$`` excludes either location. The default is an empty string.
+    The scope and matching rules are the same as ``metalink_exclude_domain``.
+    Missing location attributes do not match. A mirror is excluded if either
+    expression matches. If all metalink URLs are excluded, the metalink has
+    no usable mirrors; explicitly configured alternative sources retain their
+    normal fallback behavior.
+
 [main] Options - Colors
 =======================
 
