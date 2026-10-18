@@ -49,8 +49,16 @@ public:
     // @replaces libdnf:conf/OptionChild.hpp:method:OptionChild<T>.set(Priority priority, bool value)
     void set(Priority priority, const typename ParentOptionType::ValueType & value);
 
+    /// Sets new value and priority (source). Records source if value is stored.
+    void set(Priority priority, const typename ParentOptionType::ValueType & value, std::string source);
+
     /// Sets new value and runtime priority.
     void set(const typename ParentOptionType::ValueType & value);
+
+    /// Sets new value and runtime priority. Records source if value is stored.
+    void set(const typename ParentOptionType::ValueType & value, std::string source);
+
+    using Option::set;
 
     /// Sets new value and priority (source).
     /// The value and priority are stored only if the new priority is equal to or higher than the stored priority.
@@ -75,6 +83,9 @@ public:
     /// Checks if the option is empty (has no stored value). If it is empty, checks status of the parent.
     // @replaces libdnf:conf/OptionChild.hpp:method:OptionChild<T>.empty()
     bool empty() const noexcept override;
+
+    /// Returns true if this child option has its own value, false if it inherits from parent.
+    bool has_own_value() const noexcept;
 
 private:
     const ParentOptionType * parent;
@@ -112,6 +123,8 @@ public:
     /// Sets new value and runtime priority.
     void set(const std::string & value) override;
 
+    using Option::set;
+
     /// Gets the stored value. If no value is stored, value from the parent is returned.
     // @replaces libdnf:conf/OptionChild.hpp:method:OptionChild<std::string>.getValue()
     const std::string & get_value() const;
@@ -128,13 +141,18 @@ public:
     // @replaces libdnf:conf/OptionChild.hpp:method:OptionChild<std::string>.empty()
     bool empty() const noexcept override;
 
+    /// Returns true if this child option has its own value, false if it inherits from parent.
+    bool has_own_value() const noexcept;
+
 private:
     const ParentOptionType * parent;
     std::string value;
 };
 
 template <class ParentOptionType, class Enable>
-inline OptionChild<ParentOptionType, Enable>::OptionChild(const ParentOptionType & parent) : parent(&parent) {}
+inline OptionChild<ParentOptionType, Enable>::OptionChild(const ParentOptionType & parent) : parent(&parent) {
+    set_parent(&parent);
+}
 
 template <class ParentOptionType, class Enable>
 inline OptionChild<ParentOptionType, Enable> * OptionChild<ParentOptionType, Enable>::clone() const {
@@ -149,18 +167,31 @@ inline Option::Priority OptionChild<ParentOptionType, Enable>::get_priority() co
 template <class ParentOptionType, class Enable>
 inline void OptionChild<ParentOptionType, Enable>::set(
     Priority priority, const typename ParentOptionType::ValueType & value) {
+    set(priority, value, take_pending_source());
+}
+
+template <class ParentOptionType, class Enable>
+inline void OptionChild<ParentOptionType, Enable>::set(
+    Priority priority, const typename ParentOptionType::ValueType & value, std::string source) {
     assert_not_locked();
 
     if (priority >= Option::get_priority()) {
         parent->test(value);
-        set_priority(priority);
         this->value = value;
+        set_priority(priority);
+        set_source(std::move(source));
     }
 }
 
 template <class ParentOptionType, class Enable>
 inline void OptionChild<ParentOptionType, Enable>::set(const typename ParentOptionType::ValueType & value) {
-    set(Priority::RUNTIME, value);
+    set(Priority::RUNTIME, value, take_pending_source());
+}
+
+template <class ParentOptionType, class Enable>
+inline void OptionChild<ParentOptionType, Enable>::set(
+    const typename ParentOptionType::ValueType & value, std::string source) {
+    set(Priority::RUNTIME, value, std::move(source));
 }
 
 template <class ParentOptionType, class Enable>
@@ -193,12 +224,19 @@ inline bool OptionChild<ParentOptionType, Enable>::empty() const noexcept {
     return Option::get_priority() == Priority::EMPTY && parent->empty();
 }
 
+template <class ParentOptionType, class Enable>
+inline bool OptionChild<ParentOptionType, Enable>::has_own_value() const noexcept {
+    return Option::get_priority() != Priority::EMPTY;
+}
+
 template <class ParentOptionType>
 inline OptionChild<
     ParentOptionType,
     typename std::enable_if<std::is_same<typename ParentOptionType::ValueType, std::string>::value>::type>::
     OptionChild(const ParentOptionType & parent)
-    : parent(&parent) {}
+    : parent(&parent) {
+    set_parent(&parent);
+}
 
 template <class ParentOptionType>
 inline OptionChild<
@@ -231,6 +269,7 @@ inline void OptionChild<
         parent->test(val);
         set_priority(priority);
         this->value = val;
+        set_source(take_pending_source());
     }
 }
 
@@ -272,6 +311,14 @@ inline bool OptionChild<
     typename std::enable_if<std::is_same<typename ParentOptionType::ValueType, std::string>::value>::type>::empty()
     const noexcept {
     return Option::get_priority() == Priority::EMPTY && parent->empty();
+}
+
+template <class ParentOptionType>
+inline bool OptionChild<
+    ParentOptionType,
+    typename std::enable_if<std::is_same<typename ParentOptionType::ValueType, std::string>::value>::type>::
+    has_own_value() const noexcept {
+    return Option::get_priority() != Priority::EMPTY;
 }
 
 }  // namespace libdnf5

@@ -19,6 +19,8 @@
 
 #include "libdnf5/conf/config.hpp"
 
+#include "utils/on_scope_exit.hpp"
+
 
 namespace libdnf5 {
 
@@ -27,6 +29,7 @@ private:
     friend Config;
 
     OptionBinds binds;
+    std::string pending_source;
 };
 
 OptionBinds & Config::opt_binds() noexcept {
@@ -48,13 +51,31 @@ void Config::load_from_parser(
             auto opt_binds_iter = p_impl->binds.find(opt.first);
             if (opt_binds_iter != p_impl->binds.end()) {
                 try {
-                    opt_binds_iter->second.new_string(priority, vars.substitute(opt.second));
+                    const auto & substituted_value = vars.substitute(opt.second);
+                    if (!p_impl->pending_source.empty()) {
+                        opt_binds_iter->second.new_string(priority, substituted_value, p_impl->pending_source);
+                    } else {
+                        opt_binds_iter->second.new_string(priority, substituted_value);
+                    }
                 } catch (const OptionError & ex) {
                     logger.warning("Config error in section \"{}\" key \"{}\": {}", section, opt.first, ex.what());
                 }
             }
         }
     }
+}
+
+void Config::load_from_parser(
+    const ConfigParser & parser,
+    const std::string & section,
+    const Vars & vars,
+    Logger & logger,
+    Option::Priority priority,
+    const std::string & source) {
+    // Set pending source and call the virtual method
+    libdnf5::utils::OnScopeExit clear{[this]() noexcept { p_impl->pending_source.clear(); }};
+    p_impl->pending_source = source;
+    load_from_parser(parser, section, vars, logger, priority);
 }
 
 }  // namespace libdnf5
