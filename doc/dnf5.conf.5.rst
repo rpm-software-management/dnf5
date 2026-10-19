@@ -749,8 +749,8 @@ repository configuration file should aside from repo ID consists of baseurl, met
     This global option is supported only in ``[main]``. It does not filter
     explicit base URLs or ordinary mirrorlists.
 
-    Matching is case-sensitive and unanchored. Use ``^`` and ``$`` for a full
-    match, ``|`` for alternatives, or ``(?i)`` to ignore case. For example,
+    Matching is case-insensitive and unanchored. Use ``^`` and ``$`` for a full
+    match or ``|`` for alternatives. For example,
     ``^(mirror1|mirror2)\.example\.com$`` excludes two hostnames. Backslashes
     and commas are part of the expression, not list separators.
     See https://docs.gtk.org/glib/struct.Regex.html for the expression syntax.
