@@ -79,7 +79,7 @@ Name:           dnf5
 Version:        %{project_version_prime}.%{project_version_major}.%{project_version_minor}.%{project_version_micro}
 Release:        1%{?dist}
 Summary:        Command-line package manager
-License:        GPL-2.0-or-later
+License:        GPL-2.0-or-later AND LGPL-2.1-or-later AND LGPL-2.0-or-later
 URL:            https://github.com/rpm-software-management/dnf5
 Source0:        %{url}/archive/%{version}/dnf5-%{version}.tar.gz
 
@@ -338,6 +338,8 @@ It supports RPM packages%{?with_modulemd:, modulemd modules,} and comps groups &
 %{zsh_completions_dir}/_dnf5
 %license COPYING.md
 %license gpl-2.0.txt
+%license lgpl-2.1.txt
+%license lgpl-2.0.txt
 %doc AUTHORS.md CHANGELOG.md CONTRIBUTING.md README.md
 %if %{with man}
 %{_mandir}/man8/dnf5.8.*
@@ -468,7 +470,7 @@ It supports RPM packages%{?with_modulemd:, modulemd modules,} and comps groups &
 # ========== libdnf5 ==========
 %package -n libdnf5
 Summary:        Package management library
-License:        LGPL-2.1-or-later
+License:        LGPL-2.1-or-later AND LGPL-2.0-or-later
 Requires:       libsolv%{?_isa} >= %{libsolv_version}
 Requires:       librepo%{?_isa} >= %{librepo_version}
 %if 0%{?fedora} >= 43 || 0%{?rhel} >= 11
@@ -525,6 +527,7 @@ Package management library.
 %verify(not md5 size mtime) %attr(0644, root, root) %ghost %{_prefix}/lib/sysimage/libdnf5/system.toml
 %verify(not md5 size mtime) %attr(0644, root, root) %ghost %{_prefix}/lib/sysimage/libdnf5/transaction_history.sqlite{,-shm,-wal}
 %license lgpl-2.1.txt
+%license lgpl-2.0.txt
 %ghost %attr(0755, root, root) %dir %{_var}/cache/libdnf5
 %{_tmpfilesdir}/libdnf5.conf
 %attr(0755, root, root) %dir %{_sharedstatedir}/dnf
@@ -551,7 +554,7 @@ Library for working with a terminal in a command-line package manager.
 
 %package -n dnf5-devel
 Summary:        Development files for dnf5
-License:        LGPL-2.1-or-later
+License:        LGPL-2.1-or-later AND LGPL-2.0-or-later
 Requires:       dnf5%{?_isa} = %{version}-%{release}
 Requires:       libdnf5-devel%{?_isa} = %{version}-%{release}
 Requires:       libdnf5-cli-devel%{?_isa} = %{version}-%{release}
@@ -563,13 +566,14 @@ Development files for dnf5.
 %{_includedir}/dnf5/
 %license COPYING.md
 %license lgpl-2.1.txt
+%license lgpl-2.0.txt
 
 
 # ========== libdnf5-devel ==========
 
 %package -n libdnf5-devel
 Summary:        Development files for libdnf
-License:        LGPL-2.1-or-later
+License:        LGPL-2.1-or-later AND LGPL-2.0-or-later
 Requires:       libdnf5%{?_isa} = %{version}-%{release}
 Requires:       libsolv-devel%{?_isa} >= %{libsolv_version}
 
@@ -583,6 +587,7 @@ Development files for libdnf.
 %{_libdir}/pkgconfig/libdnf5.pc
 %license COPYING.md
 %license lgpl-2.1.txt
+%license lgpl-2.0.txt
 
 
 # ========== libdnf5-cli-devel ==========
@@ -1003,7 +1008,7 @@ copr, deptree, needs-restarting, repoclosure, repomanage, and reposync commands.
 
 %package plugin-automatic
 Summary:        Package manager - automated upgrades
-License:        LGPL-2.1-or-later
+License:        LGPL-2.1-or-later AND LGPL-2.0-or-later
 Requires:       dnf5%{?_isa} = %{version}-%{release}
 Requires:       libdnf5%{?_isa} = %{version}-%{release}
 Requires:       libdnf5-cli%{?_isa} = %{version}-%{release}
@@ -1023,6 +1028,8 @@ automatically and regularly from systemd timers, cron jobs or similar.
 %files plugin-automatic -f dnf5-plugin-automatic.lang
 %ghost %attr(0644, root, root) %{_sysconfdir}/motd.d/dnf5-automatic
 %{_libdir}/dnf5/plugins/automatic_cmd_plugin.so
+%license lgpl-2.1.txt
+%license lgpl-2.0.txt
 %{_datadir}/dnf5/dnf5-plugins/automatic.conf
 %{_datadir}/dbus-1/system.d/org.rpm.dnf.v0.Automatic.conf
 %ghost %attr(0644, root, root) %config(noreplace) %{_sysconfdir}/dnf/automatic.conf
