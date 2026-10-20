@@ -4,6 +4,7 @@
 #include "vendor_change_manager.hpp"
 
 #include "pool.hpp"
+#include "system/state.hpp"
 #include "utils/fs/utils.hpp"
 #include "utils/string.hpp"
 
@@ -163,6 +164,23 @@ bool filter_package_repoid(
 }
 
 
+bool filter_package_installed_from_repoid(
+    const Pool & pool,
+    const Solvable & solvable,
+    const VendorChangeManager::VendorChangePolicy::PackageDef::Filter & filter) {
+    std::string value;
+    const auto solvable_id = pool.solvable2id(const_cast<Solvable *>(&solvable));
+    try {
+        const auto base = pool.get_repo(solvable_id).get_base();
+        value = InternalBaseUser::get_system_state(base).get_package_from_repo(pool.get_nevra(solvable_id));
+    } catch (const system::StateNotFoundError &) {
+        // The package NEVRA was not found in the system state.
+        // Using an empty string as the repository ID from which the package was installed.
+    }
+    return sack::match_string(value, filter.comparator, filter.value);
+}
+
+
 bool filter_package_cmdline_repo(
     const Pool & pool,
     const Solvable & solvable,
@@ -236,7 +254,7 @@ std::string_view package_filter_func_to_name(VendorChangeManager::VendorChangePo
     if (func == filter_package_arch) {
         return "arch";
     }
-    if (func == filter_package_repoid) {
+    if (func == filter_package_repoid || func == filter_package_installed_from_repoid) {
         return "repoid";
     }
     if (func == filter_package_cmdline_repo) {
@@ -413,7 +431,14 @@ VendorChangeManager::VendorChangePolicy VendorChangePolicyTomlFormat::parse() co
                         if (key == "filters") {
                             for (const auto & filter_entry : value.as_array()) {
                                 auto filter = read_package_def_filter(filter_entry, *version);
-                                if (filter.filter_func == filter_package_cmdline_repo &&
+                                if (filter.filter_func == filter_package_repoid &&
+                                    group_type == GroupType::OUTGOING_PACKAGES) {
+                                    // For the outgoing (currently installed) package, the repo it currently
+                                    // resides in (typically "@System") is not meaningful. Test the repo it
+                                    // was installed from instead.
+                                    filter.filter_func = filter_package_installed_from_repoid;
+                                } else if (
+                                    filter.filter_func == filter_package_cmdline_repo &&
                                     group_type == GroupType::OUTGOING_PACKAGES) {
                                     const auto location = filter_entry.location();
                                     throw VendorChangePolicyTomlFormatError(
@@ -1250,6 +1275,12 @@ VendorChangeManager::VendorChangePolicy::PackageDef::Filter VendorChangePolicyCo
 
     std::string field_name = parse_field_name();
     filter.filter_func = resolve_filter_func(field_name);
+
+    if (filter.filter_func == filter_package_repoid && dir == VendorGroupType::OUTGOING) {
+        // For the outgoing (currently installed) package, the repo it currently resides in
+        // (typically "@System") is not meaningful. Test the repo it was installed from instead.
+        filter.filter_func = filter_package_installed_from_repoid;
+    }
 
     skip_white_spaces();
     filter.comparator = parse_comparator();
