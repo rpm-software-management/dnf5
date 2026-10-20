@@ -39,12 +39,8 @@ protect packages from being updated by newer versions. Alternately, it accepts
 a specific package version to exclude from updates, e.g. for when it's
 necessary to skip a specific release of a package that has known issues.
 
-The plugin will walk each entry of the versionlock file, and exclude any
-package of given name that doesn't match conditions listed within the file.
-This is basically the same as using `dnf5 --exclude` for the package name itself
-(as you cannot exclude installed packages), but dnf will still see the versions
-you have installed/versionlocked as available so that `dnf reinstall` will
-still work.
+The libdnf5 library will walk each entry of the versionlock file, and exclude
+any package of given name that doesn't match conditions listed within the file.
 
 Note the versionlock command does not apply any excludes in non-transactional
 operations like `repoquery`, `list`, `info`, etc.
