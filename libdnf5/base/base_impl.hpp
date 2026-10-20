@@ -128,6 +128,10 @@ public:
     static std::vector<plugin::PluginInfo> & get_plugins_info(Base * base) { return base->p_impl->get_plugins_info(); }
 
     static solv::RpmPool & get_rpm_pool(const libdnf5::BaseWeakPtr & base) { return base->p_impl->get_rpm_pool(); }
+
+    static libdnf5::system::State & get_system_state(const libdnf5::BaseWeakPtr & base) {
+        return base->p_impl->get_system_state();
+    }
 };
 
 }  // namespace libdnf5
