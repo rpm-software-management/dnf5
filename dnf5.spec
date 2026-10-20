@@ -880,7 +880,7 @@ installed, removed, or updated.
 %if %{with dnf5daemon_client}
 %package -n dnf5daemon-client
 Summary:        Command-line interface for dnf5daemon-server
-License:        GPL-2.0-or-later
+License:        GPL-2.0-or-later AND LGPL-2.1-or-later
 Requires:       libdnf5%{?_isa} = %{version}-%{release}
 Requires:       libdnf5-cli%{?_isa} = %{version}-%{release}
 Requires:       dnf5daemon-server
@@ -892,6 +892,7 @@ Command-line interface for dnf5daemon-server.
 %{_bindir}/dnf5daemon-client
 %license COPYING.md
 %license gpl-2.0.txt
+%license lgpl-2.1.txt
 %if %{with man}
 %{_mandir}/man8/dnf5daemon-client.8.*
 %endif
