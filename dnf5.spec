@@ -538,7 +538,7 @@ Package management library.
 %if %{with libdnf_cli}
 %package -n libdnf5-cli
 Summary:        Library for working with a terminal in a command-line package manager
-License:        LGPL-2.1-or-later
+License:        GPL-2.0-or-later AND LGPL-2.1-or-later
 Requires:       libdnf5%{?_isa} = %{version}-%{release}
 
 %description -n libdnf5-cli
@@ -547,6 +547,7 @@ Library for working with a terminal in a command-line package manager.
 %files -n libdnf5-cli -f libdnf5-cli.lang
 %{_libdir}/libdnf5-cli.so.3*
 %license COPYING.md
+%license gpl-2.0.txt
 %license lgpl-2.1.txt
 %endif
 
