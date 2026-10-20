@@ -47,7 +47,7 @@ file(GLOB_RECURSE LITERALINCLUDE_SOURCES LIST_DIRECTORIES false FOLLOW_SYMLINKS
     *.cpp *.hpp *.py *.conf CMakeLists.txt)
 list(REMOVE_ITEM LITERALINCLUDE_SOURCES "atp.py" "CMakeLists.txt"
     "sphinx/CMakeLists.txt" "sphinx/dbusdoc.py" "sphinx/dbusdomain.py"
-    "sphinx/dbusparser.py")
+    "sphinx/dbusparser.py" "sphinx/manpage_refs.py")
 foreach(LITERALINCLUDE_SOURCE IN LISTS LITERALINCLUDE_SOURCES)
     cmake_path(GET LITERALINCLUDE_SOURCE PARENT_PATH LITERALINCLUDE_DIRECTORY)
     file(MAKE_DIRECTORY ${PROCESSED_DIR}/${LITERALINCLUDE_DIRECTORY})

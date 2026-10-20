@@ -574,4 +574,4 @@ See Also
 
 * :ref:`DNF5 Vendor Change Policy File Reference <dnf5_vendor_change_policy-label>`
 * :ref:`DNF5 Vendor Change Policy File Reference - v1.0 <dnf5_vendor_change_policy_v1_0-label>`
-* :manpage:`dnf5.conf(5)`, :ref:`DNF5 Configuration Reference <dnf5_conf-label>`
+* :ref:`DNF5 Configuration Reference <dnf5_conf-label>`

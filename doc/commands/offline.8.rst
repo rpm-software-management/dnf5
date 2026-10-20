@@ -103,5 +103,5 @@ Examples
 See Also
 ========
 
-    | :manpage:`dnf5-system-upgrade(8)`, :ref:`System-upgrade command <system-upgrade_command_ref-label>`
+    | :ref:`System-upgrade command <system-upgrade_command_ref-label>`
     | https://www.freedesktop.org/wiki/Software/systemd/SystemUpdates

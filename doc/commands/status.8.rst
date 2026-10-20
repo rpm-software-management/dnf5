@@ -48,4 +48,4 @@ Examples
 See Also
 ========
 
-    | :manpage:`dnf5-comps(7)`, :ref:`Comps groups and environments <comps_misc_ref-label>`
+    | :ref:`Comps groups and environments <comps_misc_ref-label>`

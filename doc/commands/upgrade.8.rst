@@ -107,5 +107,5 @@ Examples
 See Also
 ========
 
-    | :manpage:`dnf5-advisory(8)`, :ref:`Advisory command <advisory_command_ref-label>`
-    | :manpage:`dnf5-specs(7)`, :ref:`Patterns specification <specs_misc_ref-label>`
+    | :ref:`Advisory command <advisory_command_ref-label>`
+    | :ref:`Patterns specification <specs_misc_ref-label>`

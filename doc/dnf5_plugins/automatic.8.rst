@@ -228,4 +228,5 @@ The email emitter configuration. This emitter sends messages directly via an SMT
 ``[base]`` section
 ------------------
 
-Can be used to override settings from DNF's main configuration file. See :manpage:`dnf5.conf(5)`.
+Can be used to override settings from DNF's main configuration file. See
+:ref:`DNF5 Configuration Reference <dnf5_conf-label>`.

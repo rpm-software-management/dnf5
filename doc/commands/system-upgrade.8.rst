@@ -44,16 +44,16 @@ Subcommands
 ===========
 
 ``clean``
-    | See :manpage:`dnf5-offline(8)`, :ref:`Offline command <offline_command_ref-label>`
+    | See :ref:`Offline command <offline_command_ref-label>`
 
 ``download``
     | Downloads all packages needed to upgrade to a new major release and checks that they can be installed.
 
 ``log``
-    | See :manpage:`dnf5-offline(8)`, :ref:`Offline command <offline_command_ref-label>`
+    | See :ref:`Offline command <offline_command_ref-label>`
 
 ``reboot``
-    | See :manpage:`dnf5-offline(8)`, :ref:`Offline command <offline_command_ref-label>`
+    | See :ref:`Offline command <offline_command_ref-label>`
 
 
 Options
@@ -69,16 +69,16 @@ Options
     | Allow removing of installed packages to resolve any potential dependency problems.
 
 ``--number=<boot number>``
-    | See :manpage:`dnf5-offline(8)`, :ref:`Offline command <offline_command_ref-label>`
+    | See :ref:`Offline command <offline_command_ref-label>`
 
 ``--poweroff``
-    | See :manpage:`dnf5-offline(8)`, :ref:`Offline command <offline_command_ref-label>`
+    | See :ref:`Offline command <offline_command_ref-label>`
 
 
 Environment
 ===========
 
-See :manpage:`dnf5-offline(8)`, :ref:`Offline command <offline_command_ref-label>`.
+See :ref:`Offline command <offline_command_ref-label>`.
 
 
 Examples
@@ -103,5 +103,5 @@ Show logs from last upgrade attempt
 See Also
 ========
 
-    | :manpage:`dnf5-offline(8)`, :ref:`Offline command <offline_command_ref-label>`
+    | :ref:`Offline command <offline_command_ref-label>`
     | https://www.freedesktop.org/wiki/Software/systemd/SystemUpdates

@@ -38,7 +38,7 @@ Exclude filtering can be adjusted using the ``includepkgs`` or ``excludepkgs`` c
 
 ``dnf5 --setopt=disable_excludes=* install bash``
 
-For details about the configuration options see :manpage:`dnf5.conf(5)`, :ref:`DNF5 configuration reference <dnf5_conf-label>`.
+For details about the configuration options see :ref:`DNF5 configuration reference <dnf5_conf-label>`.
 
 
 Repository excludes filtering
@@ -60,14 +60,14 @@ Versionlock
 ===========
 
 Additionally, the versionlock functionality is implemented using excludes filtering. However, these excludes are applied only during transactional operations.
-For details see :manpage:`dnf5-versionlock(8)`, :ref:`Versionlock command <versionlock_command_ref-label>`.
+For details see :ref:`Versionlock command <versionlock_command_ref-label>`.
 
 
 @IF WITH_MODULEMD@
 Modular filtering
 =================
 
-For details on how modular filtering works please see :manpage:`dnf5-modularity(7)`, :ref:`the modularity documentation <modularity_misc_ref-label>`.
+For details on how modular filtering works please see :ref:`the modularity documentation <modularity_misc_ref-label>`.
 
 With modularity, only RPM packages from ``active`` module streams are included in the available package set. RPM packages from ``inactive`` module streams, as well as non-modular packages with the same name or provides as a package from an ``active`` module stream, are filtered out. Modular filtering is not applied to packages added from the command line, installed packages, or packages from repositories with ``module_hotfixes=true`` in their ``.repo`` file.
 

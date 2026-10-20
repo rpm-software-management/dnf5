@@ -61,6 +61,6 @@ For commands operating with groups and environments, see references below.
 See Also
 ========
 
-    | :manpage:`dnf5-group(8)`, :ref:`Group command <group_command_ref-label>`
-    | :manpage:`dnf5-environment(8)`, :ref:`Environment command <environment_command_ref-label>`
-    | :manpage:`dnf5-specs(7)`, :ref:`Patterns specification <specs_misc_ref-label>`
+    | :ref:`Group command <group_command_ref-label>`
+    | :ref:`Environment command <environment_command_ref-label>`
+    | :ref:`Patterns specification <specs_misc_ref-label>`

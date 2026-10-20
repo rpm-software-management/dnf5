@@ -172,7 +172,7 @@ Delete, Create, Update
 
 The following commands are used for manual cache deletion and creation:
 
-    | :manpage:`dnf5-clean(8)`, :ref:`Clean command <clean_command_ref-label>`
-    | :manpage:`dnf5-makecache(8)`, :ref:`Makecache command <makecache_command_ref-label>`
+    | :ref:`Clean command <clean_command_ref-label>`
+    | :ref:`Makecache command <makecache_command_ref-label>`
 
 To force metadata update before executing a command, use the ``--refresh`` parameter.

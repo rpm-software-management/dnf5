@@ -281,7 +281,7 @@ Following options are applicable in the general context for any ``dnf5`` command
 
 ``--forcearch=ARCH``
     | Force the use of a specific architecture.
-    | :ref:`See <forcearch_misc_ref-label>` :manpage:`dnf5-forcearch(7)` for more info.
+    | See :ref:`Forcearch parameter <forcearch_misc_ref-label>` for more info.
 
 .. _help_option_ref-label:
 
@@ -291,21 +291,21 @@ Following options are applicable in the general context for any ``dnf5`` command
 ``--installroot=ABSOLUTE_PATH``
     | Setup installroot path.
     | Absolute path is required.
-    | :ref:`See <installroot_misc_ref-label>` :manpage:`dnf5-installroot(7)` for more info.
+    | See :ref:`Installroot parameter <installroot_misc_ref-label>` for more info.
 
 .. _no_allow_vendor_change_option_ref-label:
 
 ``--no-allow-vendor-change``
     | Do not allow automatic package replacements from different vendors for RPM upgrades or downgrades.
     | The behavior of this option can be fine-tuned with vendor change policy configuration.
-    | :ref:`See <vendorpolicy_conf-label>` :manpage:`dnf5.conf-vendorpolicy(5)` for more info.
+    | See :ref:`Vendor change policies <dnf5_vendor_change_policy-label>` for more info.
 
 .. _with_vendor_policy_option_ref-label:
 
 ``--with-vendor-policy=POLICY``
     | Add a vendor change policy for this run using the compact format.
     | Can be specified multiple times. Each value defines one policy.
-    | :ref:`See <vendorpolicy_compact_format-label>` :manpage:`dnf5.conf-vendorpolicy-v1_1(5)` for format details.
+    | See :ref:`Compact format <vendorpolicy_compact_format-label>` for format details.
 
 .. _clear_vendor_policies_option_ref-label:
 
@@ -400,7 +400,7 @@ Following options are applicable in the general context for any ``dnf5`` command
 
 ``--use-host-config``
     | Use configuration files and variable definitions from the host system rather than the installroot.
-    | :ref:`See <installroot_misc_ref-label>` :manpage:`dnf5-installroot(7)` for more info.
+    | See :ref:`Installroot parameter <installroot_misc_ref-label>` for more info.
 
 .. _version_option_ref-label:
 
@@ -439,7 +439,7 @@ To further reduce the bandwidth load, some of the commands where having up-to-da
 is not critical (e.g. the ``group list`` command) do not look at whether a repository is expired
 and whenever any version of it is locally available to the user's account, it will be used.
 
-:ref:`Refer to the <caching_misc_ref-label>` :manpage:`dnf5-caching(7)` for more info regarding
+Refer to the :ref:`Caching documentation <caching_misc_ref-label>` for more info regarding
 metadata and packages caching.
 
 
@@ -530,69 +530,69 @@ See Also
 ========
 
 Commands:
-    | :manpage:`dnf5-advisory(8)`, :ref:`Advisory command <advisory_command_ref-label>`
-    | :manpage:`dnf5-autoremove(8)`, :ref:`Autoremove command <autoremove_command_ref-label>`
-    | :manpage:`dnf5-check(8)`, :ref:`Check command <check_command_ref-label>`
-    | :manpage:`dnf5-check-upgrade(8)`, :ref:`Check-Upgrade command <check-upgrade_command_ref-label>`
-    | :manpage:`dnf5-clean(8)`, :ref:`Clean command <clean_command_ref-label>`
-    | :manpage:`dnf5-distro-sync(8)`, :ref:`Distro-Sync command <distro-sync_command_ref-label>`
-    | :manpage:`dnf5-downgrade(8)`, :ref:`Downgrade command <downgrade_command_ref-label>`
-    | :manpage:`dnf5-download(8)`, :ref:`Download command <download_command_ref-label>`
-    | :manpage:`dnf5-environment(8)`, :ref:`Environment command <environment_command_ref-label>`
-    | :manpage:`dnf5-group(8)`, :ref:`Group command <group_command_ref-label>`
-    | :manpage:`dnf5-history(8)`, :ref:`History command, <history_command_ref-label>`
-    | :manpage:`dnf5-info(8)`, :ref:`Info command <info_command_ref-label>`
-    | :manpage:`dnf5-install(8)`, :ref:`Install command <install_command_ref-label>`
-    | :manpage:`dnf5-leaves(8)`, :ref:`Leaves command <leaves_command_ref-label>`
-    | :manpage:`dnf5-list(8)`, :ref:`List command <list_command_ref-label>`
-    | :manpage:`dnf5-makecache(8)`, :ref:`Makecache command <makecache_command_ref-label>`
-    | :manpage:`dnf5-mark(8)`, :ref:`Mark command <mark_command_ref-label>`@IF WITH_MODULEMD@
-    | :manpage:`dnf5-module(8)`, :ref:`Module command <module_command_ref-label>`@ENDIF@
-    | :manpage:`dnf5-offline(8)`, :ref:`Offline command <offline_command_ref-label>`
-    | :manpage:`dnf5-provides(8)`, :ref:`Provides command <provides_command_ref-label>`
-    | :manpage:`dnf5-reinstall(8)`, :ref:`Reinstall command <reinstall_command_ref-label>`
-    | :manpage:`dnf5-remove(8)`, :ref:`Remove command <remove_command_ref-label>`
-    | :manpage:`dnf5-repo(8)`, :ref:`Repo command <repo_command_ref-label>`
-    | :manpage:`dnf5-repoquery(8)`, :ref:`Repoquery command <repoquery_command_ref-label>`
-    | :manpage:`dnf5-search(8)`, :ref:`Search command <search_command_ref-label>`
-    | :manpage:`dnf5-status(8)`, :ref:`Status command <status_command_ref-label>`
-    | :manpage:`dnf5-swap(8)`, :ref:`Swap command <swap_command_ref-label>`
-    | :manpage:`dnf5-system-upgrade(8)`, :ref:`System-Upgrade command <system-upgrade_command_ref-label>`
-    | :manpage:`dnf5-upgrade(8)`, :ref:`Upgrade command <upgrade_command_ref-label>`
-    | :manpage:`dnf5-versionlock(8)`, :ref:`Versionlock command <versionlock_command_ref-label>`
+    | :ref:`Advisory command <advisory_command_ref-label>`
+    | :ref:`Autoremove command <autoremove_command_ref-label>`
+    | :ref:`Check command <check_command_ref-label>`
+    | :ref:`Check-Upgrade command <check-upgrade_command_ref-label>`
+    | :ref:`Clean command <clean_command_ref-label>`
+    | :ref:`Distro-Sync command <distro-sync_command_ref-label>`
+    | :ref:`Downgrade command <downgrade_command_ref-label>`
+    | :ref:`Download command <download_command_ref-label>`
+    | :ref:`Environment command <environment_command_ref-label>`
+    | :ref:`Group command <group_command_ref-label>`
+    | :ref:`History command <history_command_ref-label>`
+    | :ref:`Info command <info_command_ref-label>`
+    | :ref:`Install command <install_command_ref-label>`
+    | :ref:`Leaves command <leaves_command_ref-label>`
+    | :ref:`List command <list_command_ref-label>`
+    | :ref:`Makecache command <makecache_command_ref-label>`
+    | :ref:`Mark command <mark_command_ref-label>`@IF WITH_MODULEMD@
+    | :ref:`Module command <module_command_ref-label>`@ENDIF@
+    | :ref:`Offline command <offline_command_ref-label>`
+    | :ref:`Provides command <provides_command_ref-label>`
+    | :ref:`Reinstall command <reinstall_command_ref-label>`
+    | :ref:`Remove command <remove_command_ref-label>`
+    | :ref:`Repo command <repo_command_ref-label>`
+    | :ref:`Repoquery command <repoquery_command_ref-label>`
+    | :ref:`Search command <search_command_ref-label>`
+    | :ref:`Status command <status_command_ref-label>`
+    | :ref:`Swap command <swap_command_ref-label>`
+    | :ref:`System-Upgrade command <system-upgrade_command_ref-label>`
+    | :ref:`Upgrade command <upgrade_command_ref-label>`
+    | :ref:`Versionlock command <versionlock_command_ref-label>`
 
 
 Application Plugins:
-    | :manpage:`dnf5-automatic(8)`, :ref:`Automatic command <automatic_plugin_ref-label>`
-    | :manpage:`dnf5-builddep(8)`, :ref:`Builddep command <builddep_plugin_ref-label>`
-    | :manpage:`dnf5-changelog(8)`, :ref:`Changelog command <changelog_plugin_ref-label>`
-    | :manpage:`dnf5-config-manager(8)`, :ref:`Config-manager command <config_manager_plugin_ref-label>`
-    | :manpage:`dnf5-copr(8)`, :ref:`Copr command <copr_plugin_ref-label>`
-    | :manpage:`dnf5-needs-restarting(8)`, :ref:`Needs-Restarting command <needs_restarting_plugin_ref-label>`
-    | :manpage:`dnf5-repoclosure(8)`, :ref:`Repoclosure command <repoclosure_plugin_ref-label>`
-    | :manpage:`dnf5-repomanage(8)`, :ref:`Repomanage command <repomanage_plugin_ref-label>`
-    | :manpage:`dnf5-reposync(8)`, :ref:`Reposync command <reposync_plugin_ref-label>`
+    | :ref:`Automatic command <automatic_plugin_ref-label>`
+    | :ref:`Builddep command <builddep_plugin_ref-label>`
+    | :ref:`Changelog command <changelog_plugin_ref-label>`
+    | :ref:`Config-manager command <config_manager_plugin_ref-label>`
+    | :ref:`Copr command <copr_plugin_ref-label>`
+    | :ref:`Needs-Restarting command <needs_restarting_plugin_ref-label>`
+    | :ref:`Repoclosure command <repoclosure_plugin_ref-label>`
+    | :ref:`Repomanage command <repomanage_plugin_ref-label>`
+    | :ref:`Reposync command <reposync_plugin_ref-label>`
 
 
 Library Plugins:
-    | :manpage:`libdnf5-actions(8)`, :ref:`Actions plugin <actions_plugin_ref-label>`
-    | :manpage:`libdnf5-expired-pgp-keys(8)`, :ref:`Expired PGP keys plugin <expired-pgp-keys_plugin_ref-label>`
-    | :manpage:`libdnf5-local(8)`, :ref:`Local plugin <local_plugin_ref-label>`
+    | :ref:`Actions plugin <actions_plugin_ref-label>`
+    | :ref:`Expired PGP keys plugin <expired-pgp-keys_plugin_ref-label>`
+    | :ref:`Local plugin <local_plugin_ref-label>`
 
 Configuration:
-    | :manpage:`dnf5.conf(5)`, :ref:`DNF5 Configuration Reference <dnf5_conf-label>`
-    | :manpage:`dnf5.conf-vendorpolicy(5)`, :ref:`DNF5 Vendor Change Policy File Reference <vendorpolicy_conf-label>`
+    | :ref:`DNF5 Configuration Reference <dnf5_conf-label>`
+    | :ref:`DNF5 Vendor Change Policy File Reference <dnf5_vendor_change_policy-label>`
 
 Miscellaneous:
-    | :manpage:`dnf5-aliases(7)`, :ref:`Aliases for command line arguments <aliases_misc_ref-label>`
-    | :manpage:`dnf5-caching(7)`, :ref:`Caching <caching_misc_ref-label>`
-    | :manpage:`dnf5-comps(7)`, :ref:`Comps groups and environments <comps_misc_ref-label>`
-    | :manpage:`dnf5-filtering(7)`, :ref:`Packages filtering, <filtering_misc_ref-label>`
-    | :manpage:`dnf5-forcearch(7)`, :ref:`Forcearch parameter <forcearch_misc_ref-label>`
-    | :manpage:`dnf5-installroot(7)`, :ref:`Installroot parameter <installroot_misc_ref-label>`@IF WITH_MODULEMD@
-    | :manpage:`dnf5-modularity(7)`, :ref:`Modularity overview, <modularity_misc_ref-label>`@ENDIF@
-    | :manpage:`dnf5-specs(7)`, :ref:`Patterns specification <specs_misc_ref-label>`
-    | :manpage:`dnf5-system-state(7)`, :ref:`System state <systemstate_misc_ref-label>`
+    | :ref:`Aliases for command line arguments <aliases_misc_ref-label>`
+    | :ref:`Caching <caching_misc_ref-label>`
+    | :ref:`Comps groups and environments <comps_misc_ref-label>`
+    | :ref:`Packages filtering <filtering_misc_ref-label>`
+    | :ref:`Forcearch parameter <forcearch_misc_ref-label>`
+    | :ref:`Installroot parameter <installroot_misc_ref-label>`@IF WITH_MODULEMD@
+    | :ref:`Modularity overview <modularity_misc_ref-label>`@ENDIF@
+    | :ref:`Patterns specification <specs_misc_ref-label>`
+    | :ref:`System state <systemstate_misc_ref-label>`
 
 Project homepage:
     | https://github.com/rpm-software-management/dnf5

@@ -15,7 +15,7 @@ Override the system architecture
 --------------------------------
 
 For the `dnf5` command-line tool, the
-:ref:`--forcearch <forcearch_misc_ref-label>`, :manpage:`dnf5-forcearch(7)`
+:ref:`--forcearch <forcearch_misc_ref-label>`
 option is available. Here's how you can achieve the same effect using the Python API:
 
 .. literalinclude:: ../../tests/bindings/python3/session/force_arch.py
