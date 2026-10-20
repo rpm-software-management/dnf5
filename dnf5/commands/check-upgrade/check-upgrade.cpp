@@ -23,10 +23,15 @@
 #include <libdnf5-cli/output/changelogs.hpp>
 #include <libdnf5-cli/output/package_list_sections.hpp>
 #include <libdnf5/conf/const.hpp>
+#include <libdnf5/rpm/nevra.hpp>
 #include <libdnf5/rpm/package_query.hpp>
 #include <libdnf5/utils/bgettext/bgettext-mark-domain.h>
 
 #include <iostream>
+#include <map>
+#include <string>
+#include <unordered_map>
+#include <vector>
 
 namespace dnf5 {
 
@@ -205,10 +210,62 @@ void CheckUpgradeCommand::run() {
         obsoletes.emplace(pkg.get_id(), obsoleted);
     }
 
+    // prepare a map of upgraded packages {upgrade_candidate_id: installed_pkg}
+    // upgrades_query.filter_upgrades() was already called upstream, so candidate is guaranteed
+    // to be an upgrade, and this loop identifies the matching installed package for display.
+    std::map<libdnf5::rpm::PackageId, libdnf5::rpm::Package> upgrades;
+    if (!upgrades_query.empty()) {
+        libdnf5::rpm::PackageQuery matched_installed(
+            ctx.get_base(), libdnf5::rpm::PackageQuery::ExcludeFlags::IGNORE_EXCLUDES);
+        matched_installed.filter_installed();
+        matched_installed.filter_name(upgrades_query);
+
+        struct InstalledPkgData {
+            libdnf5::rpm::Package pkg;
+            std::string arch;
+        };
+
+        std::unordered_map<std::string, std::vector<InstalledPkgData>> installed_by_name;
+        for (const auto & inst_pkg : matched_installed) {
+            std::string arch = inst_pkg.get_arch();
+            installed_by_name[inst_pkg.get_name()].push_back({inst_pkg, std::move(arch)});
+        }
+
+        for (const auto & cand : upgrades_query) {
+            auto it = installed_by_name.find(cand.get_name());
+            if (it != installed_by_name.end()) {
+                const auto cand_arch = cand.get_arch();
+                const libdnf5::rpm::Package * best_pkg = nullptr;
+                for (const auto & [inst_pkg, inst_arch] : it->second) {
+                    // Match arch (exact arch match, or one of them is "noarch")
+                    if (inst_arch != cand_arch && inst_arch != "noarch" && cand_arch != "noarch") {
+                        continue;
+                    }
+                    // Check libdnf5::rpm::evrcmp(inst_pkg, cand) < 0
+                    if (libdnf5::rpm::evrcmp(inst_pkg, cand) >= 0) {
+                        continue;
+                    }
+                    // Select installed package with highest EVR
+                    if (best_pkg == nullptr) {
+                        best_pkg = &inst_pkg;
+                    } else {
+                        int cmp = libdnf5::rpm::evrcmp(inst_pkg, *best_pkg);
+                        if (cmp > 0 || (cmp == 0 && inst_arch == cand_arch)) {
+                            best_pkg = &inst_pkg;
+                        }
+                    }
+                }
+                if (best_pkg != nullptr) {
+                    upgrades.emplace(cand.get_id(), *best_pkg);
+                }
+            }
+        }
+    }
+
     auto sections = create_output();
 
     bool package_matched = false;
-    package_matched |= sections->add_section("Upgrades", upgrades_query);
+    package_matched |= sections->add_section("Upgrades", upgrades_query, {}, upgrades);
     package_matched |= sections->add_section("Obsoleting packages", obsoletes_query, obsoletes);
 
     if (ctx.get_json_output_requested()) {
