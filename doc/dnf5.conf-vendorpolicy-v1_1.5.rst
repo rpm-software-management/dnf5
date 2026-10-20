@@ -194,7 +194,17 @@ Each entry in ``[[outgoing_packages]]`` or ``[[incoming_packages]]`` can contain
         - ``"version"`` - version string
         - ``"release"`` - release string
         - ``"arch"`` - package architecture
-        - ``"repoid"`` - repository ID
+        - ``"repoid"`` - repository ID; its meaning depends on which list the filter is used in:
+
+          - In ``incoming_packages``, it matches the repository the candidate
+            (new) package is available from.
+          - In ``outgoing_packages``, it matches the repository the installed
+            package was originally installed from, not the repository it
+            currently appears to belong to (which would be the local system).
+            If this information is not available (the package's installation
+            record is missing from the system state), it is treated as an
+            empty string.
+
         - ``"cmdline_repo"`` - whether the package is from command-line repository (boolean)
 
     ``value``
