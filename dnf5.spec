@@ -1058,7 +1058,7 @@ automatically and regularly from systemd timers, cron jobs or similar.
 %if %{with plugin_manifest}
 %package plugin-manifest
 Summary:        DNF5 plugin for working with RPM package manifest files
-License:        LGPL-2.1-or-later
+License:        GPL-2.0-or-later AND LGPL-2.1-or-later
 Requires:       dnf5%{?_isa} = %{version}-%{release}
 Requires:       libdnf5%{?_isa} = %{version}-%{release}
 Requires:       libdnf5-cli%{?_isa} = %{version}-%{release}
@@ -1070,6 +1070,8 @@ DNF5 plugin for working with RPM package manifest files.
 
 %files plugin-manifest
 %{_libdir}/dnf5/plugins/manifest_cmd_plugin.so
+%license gpl-2.0.txt
+%license lgpl-2.1.txt
 %if %{with man}
 %{_mandir}/man8/dnf*-manifest.8.*
 %endif
