@@ -904,7 +904,7 @@ Command-line interface for dnf5daemon-server.
 %if %{with dnf5daemon_server}
 %package -n dnf5daemon-server
 Summary:        Package management service with a DBus interface
-License:        GPL-2.0-or-later
+License:        GPL-2.0-or-later AND LGPL-2.1-or-later
 Requires:       libdnf5%{?_isa} = %{version}-%{release}
 Requires:       libdnf5-cli%{?_isa} = %{version}-%{release}
 Requires:       dbus
@@ -935,6 +935,7 @@ Package management service with a DBus interface.
 %{_datadir}/polkit-1/actions/org.rpm.dnf.v0.policy
 %license COPYING.md
 %license gpl-2.0.txt
+%license lgpl-2.1.txt
 %if %{with man}
 %{_mandir}/man8/dnf5daemon-server.8.*
 %{_mandir}/man8/dnf5daemon-dbus-api.8.*
