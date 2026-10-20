@@ -93,7 +93,7 @@ Options
     | Download the resolved package set without executing an RPM transaction.
 
 ``--offline``
-    | Store the transaction to be performed offline. See :manpage:`dnf5-offline(8)`, :ref:`Offline command <offline_command_ref-label>`.
+    | Store the transaction to be performed offline. See :ref:`Offline command <offline_command_ref-label>`.
 
 ``--transient``
     Applicable only on bootc (bootable containers) systems. Perform transactions using a transient overlay which will be lost on the next reboot. See also the :ref:`persistence <persistence_options-label>` configuration option.
@@ -137,10 +137,10 @@ Examples
 See Also
 ========
 
-    | :manpage:`dnf5-install(8)`, :ref:`Install command <install_command_ref-label>`
-    | :manpage:`dnf5-remove(8)`, :ref:`Remove command <remove_command_ref-label>`
-    | :manpage:`dnf5-upgrade(8)`, :ref:`Upgrade command <upgrade_command_ref-label>`
-    | :manpage:`dnf5-downgrade(8)`, :ref:`Downgrade command <downgrade_command_ref-label>`
-    | :manpage:`dnf5-reinstall(8)`, :ref:`Reinstall command <reinstall_command_ref-label>`
-    | :manpage:`dnf5-advisory(8)`, :ref:`Advisory command <advisory_command_ref-label>`
-    | :manpage:`dnf5-specs(7)`, :ref:`Patterns specification <specs_misc_ref-label>`
+    | :ref:`Install command <install_command_ref-label>`
+    | :ref:`Remove command <remove_command_ref-label>`
+    | :ref:`Upgrade command <upgrade_command_ref-label>`
+    | :ref:`Downgrade command <downgrade_command_ref-label>`
+    | :ref:`Reinstall command <reinstall_command_ref-label>`
+    | :ref:`Advisory command <advisory_command_ref-label>`
+    | :ref:`Patterns specification <specs_misc_ref-label>`

@@ -66,7 +66,7 @@ Typical DNF5 workflow consists of:
     #. libdnf5 plugin ``pre_transaction`` hook
     #. start database transaction
     #. run rpm transaction
-    #. update system_state (See :manpage:`dnf5-system-state(7)`, :ref:`System state <systemstate_misc_ref-label>` for details.)
+    #. update system_state (See :ref:`System state <systemstate_misc_ref-label>` for details.)
     #. finish database transaction
     #. libdnf5 plugin ``post_transaction`` hook
     #. libdnf5 plugin ``post_transaction_cleanup`` hook (guaranteed even on error)

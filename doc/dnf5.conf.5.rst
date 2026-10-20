@@ -633,7 +633,7 @@ repository configuration file should aside from repo ID consists of baseurl, met
 ``system_state_dir``
     :ref:`string <string-label>`
 
-    System state files location. See :manpage:`dnf5-system-state(7)`, :ref:`system state <systemstate_misc_ref-label>` for details.
+    System state files location. See :ref:`system state <systemstate_misc_ref-label>` for details.
 
     Default: ``/usr/lib/sysimage/libdnf5``.
 
@@ -686,7 +686,7 @@ repository configuration file should aside from repo ID consists of baseurl, met
 
     Use configuration files and variable definitions from the host system rather
     than the installroot.
-    :ref:`See <installroot_misc_ref-label>` :manpage:`dnf5-installroot(7)` for more info.
+    See :ref:`Installroot parameter <installroot_misc_ref-label>` for more info.
 
     Default: ``False``.
 
@@ -1748,7 +1748,7 @@ Variables Directories
 See Also
 ========
 
-* :manpage:`dnf5(8)`, :ref:`DNF5 Command Reference <command_ref-label>`
-* :manpage:`dnf5.conf-vendorpolicy(5)`, :ref:`DNF5 Vendor Change Policy File Reference <dnf5_vendor_change_policy-label>`
-* :manpage:`dnf5.conf-todo(5)`, :ref:`Options that are documented/implemented in DNF but not in DNF5 <dnf5_conf_todo-label>`
-* :manpage:`dnf5.conf-deprecated(5)`, :ref:`Config Options that are deprecated in DNF5 <dnf5_conf_deprecated-label>`
+* :ref:`DNF5 Command Reference <command_ref-label>`
+* :ref:`DNF5 Vendor Change Policy File Reference <dnf5_vendor_change_policy-label>`
+* :ref:`Options that are documented/implemented in DNF but not in DNF5 <dnf5_conf_todo-label>`
+* :ref:`Config Options that are deprecated in DNF5 <dnf5_conf_deprecated-label>`

@@ -75,7 +75,7 @@ Examples
 
 ``dnf5 config-manager setopt repo_id.enabled=0``
     | Persistently disable repository using the config-manager plugin command.
-    | See :manpage:`dnf5-config-manager(8)` for more details.
+    | See the :ref:`Config-manager command <config_manager_plugin_ref-label>` for more details.
 
 JSON Output
 ===========
@@ -137,5 +137,5 @@ For more details about the fields, see the ``REPO OPTIONS`` section in dnf5.conf
 See Also
 ========
 
-    | :manpage:`dnf5(8)`, :ref:`--dump-repo-config option <dump_repo_config_option_ref-label>`
-    | :manpage:`dnf5.conf(5)`, :ref:`Repo Options <repo_options-label>`
+    | :ref:`--dump-repo-config option <dump_repo_config_option_ref-label>`
+    | :ref:`Repo Options <repo_options-label>`

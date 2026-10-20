@@ -623,7 +623,7 @@ Dropped configuration options
 -----------------------------
 ``arch`` and ``basearch``
   * It is no longer possible to change the detected architecute in configuration files.
-  * See the :manpage:`dnf5-forcearch(7)`, :ref:`Forcearch parameter <forcearch_misc_ref-label>` for overriding architecture.
+  * See the :ref:`Forcearch parameter <forcearch_misc_ref-label>` for overriding architecture.
 
 ``errorlevel``
   * The option was deprecated in dnf < 5 and is dropped now.

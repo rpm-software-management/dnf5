@@ -79,6 +79,6 @@ For the compact format syntax and examples, see
 See Also
 ========
 
-* :manpage:`dnf5.conf-vendorpolicy-v1_1(5)`, :ref:`DNF5 Vendor Change Policy File Reference - v1.1 / v1.2 <dnf5_vendor_change_policy_v1_1-label>`
-* :manpage:`dnf5.conf-vendorpolicy-v1_0(5)`, :ref:`DNF5 Vendor Change Policy File Reference - v1.0 <dnf5_vendor_change_policy_v1_0-label>`
-* :manpage:`dnf5.conf(5)`, :ref:`DNF5 Configuration Reference <dnf5_conf-label>`
+* :ref:`DNF5 Vendor Change Policy File Reference - v1.1 / v1.2 <dnf5_vendor_change_policy_v1_1-label>`
+* :ref:`DNF5 Vendor Change Policy File Reference - v1.0 <dnf5_vendor_change_policy_v1_0-label>`
+* :ref:`DNF5 Configuration Reference <dnf5_conf-label>`

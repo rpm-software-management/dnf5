@@ -39,10 +39,7 @@ is provided, it checks for updates for the entire system.
 ``DNF5`` will exit with code `100` if updates are available and list them; `0` if no updates
 are available.
 
-If terminal is available, list of the packages is colored, packages available for reinstall are
-(by default) colored with bold green and packages available for upgrade with bold blue. This
-behavior can be adjusted in :manpage:`dnf5.conf(5)` via `color_list_available_upgrade` and
-`color_list_available_reinstall` options.
+.. include:: ../_shared/package-list-colors.rst
 
 Options
 =======
@@ -106,4 +103,4 @@ The command returns a JSON object with the following structure:
 See Also
 ========
 
-    | :manpage:`dnf5-specs(7)`, :ref:`Patterns specification <specs_misc_ref-label>`
+    | :ref:`Patterns specification <specs_misc_ref-label>`

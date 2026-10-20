@@ -73,7 +73,7 @@ Subcommands
     If the ``--with-optional`` option is used, also include ``Optional`` packages of groups. By default,
     all ``Mandatory`` and ``Default`` packages will be installed whenever possible. ``Conditional``
     packages are installed if they meet their requirement. This can be configured by
-    :manpage:`dnf5.conf(5)`, :ref:`group_package_types <group_package_types_options-label>`.
+    :ref:`group_package_types <group_package_types_options-label>`.
 
     If the ``--no-packages`` option is used, no packages will be installed by this command.
     Only currently installed group packages are considered to be installed with the groups.
@@ -159,5 +159,5 @@ Examples
 See Also
 ========
 
-    | :manpage:`dnf5-comps(7)`, :ref:`Comps groups and environments <comps_misc_ref-label>`
-    | :manpage:`dnf5-specs(7)`, :ref:`Patterns specification <specs_misc_ref-label>`
+    | :ref:`Comps groups and environments <comps_misc_ref-label>`
+    | :ref:`Patterns specification <specs_misc_ref-label>`

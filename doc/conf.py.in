@@ -61,6 +61,7 @@ autoapi_add_toctree_entry = False
 autoapi_add_objects_to_toctree = False
 
 extensions += ['dbusdoc']
+extensions += ['manpage_refs']
 
 qapidoc_srctree = os.path.join(libdnf_docdir, '..')
 dbusdoc_srctree = os.path.join(libdnf_docdir, '..')
