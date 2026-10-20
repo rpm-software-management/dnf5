@@ -1013,7 +1013,7 @@ copr, deptree, needs-restarting, repoclosure, repomanage, and reposync commands.
 
 %package plugin-automatic
 Summary:        Package manager - automated upgrades
-License:        LGPL-2.1-or-later AND LGPL-2.0-or-later
+License:        GPL-2.0-or-later AND LGPL-2.1-or-later AND LGPL-2.0-or-later
 Requires:       dnf5%{?_isa} = %{version}-%{release}
 Requires:       libdnf5%{?_isa} = %{version}-%{release}
 Requires:       libdnf5-cli%{?_isa} = %{version}-%{release}
@@ -1033,6 +1033,7 @@ automatically and regularly from systemd timers, cron jobs or similar.
 %files plugin-automatic -f dnf5-plugin-automatic.lang
 %ghost %attr(0644, root, root) %{_sysconfdir}/motd.d/dnf5-automatic
 %{_libdir}/dnf5/plugins/automatic_cmd_plugin.so
+%license gpl-2.0.txt
 %license lgpl-2.1.txt
 %license lgpl-2.0.txt
 %{_datadir}/dnf5/dnf5-plugins/automatic.conf
