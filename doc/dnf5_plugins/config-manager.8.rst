@@ -33,7 +33,7 @@ Synopsis
 Description
 ===========
 
-Manages main configuration, repositories configuration, and variables.
+Manages main configuration, repositories configuration, variables, and vendor change policies.
 
 
 Subcommands
@@ -135,6 +135,39 @@ Subcommands
     globs. ``disable`` command resolves the ``repoid`` pattern, and each matching repository is disabled independently.
     This means repositories added later will not be affected by this command.
 
+``add-vendor-policy --name=POLICY_NAME <--policy=COMPACT_POLICY_STRING|--from-tomlfile=URL_OR_PATH> [--allow-mask] [--allow-replace] [--mask] [--replace]``
+    Creates a vendor change policy file in the system vendor configuration directory (``/etc/dnf/vendors.d/``).
+
+    The policy content is specified either directly on the command line in compact format using the ``--policy``
+    option, or taken from a TOML policy file using the ``--from-tomlfile`` option (local path or URL; a URL is
+    downloaded first). These two options are mutually exclusive, and one of them is required. See
+    :ref:`DNF5 Vendor Change Policy File Reference <dnf5_vendor_change_policy-label>` for the TOML format and
+    :ref:`Compact Format <vendorpolicy_compact_format-label>` for the compact format syntax.
+
+    If a system policy file with the given name already exists, the command fails unless ``--allow-replace``
+    or ``--replace`` is used. If a distribution policy file with the given name already exists in
+    ``/usr/share/dnf5/vendors.d/``, the command fails unless ``--allow-mask`` or ``--mask`` is used --- creating
+    the system policy then masks (hides) the distribution one.
+
+``list-vendor-policies [--name=PATTERN] [--info]``
+    Lists vendor change policy files from both the system (``/etc/dnf/vendors.d/``) and distribution
+    (``/usr/share/dnf5/vendors.d/``) vendor configuration directories.
+
+    Without ``--info``, each file is listed on its own line prefixed with a status indicator: ``+`` for a
+    manageable system policy, ``*`` for a distribution policy, and ``-`` for a distribution policy masked by a
+    system policy of the same name. With ``--info``, detailed information is printed for each policy, including
+    its source file, type, masking relationship, and content converted to compact format. The ``--name`` option
+    filters the listed policies by base filename and supports globs.
+
+``remove-vendor-policy --name=PATTERN``
+    Removes system vendor policy files matching the given base filename pattern from ``/etc/dnf/vendors.d/``.
+    The ``--name`` pattern supports globs.
+
+    Only manageable system policy files are removed; distribution policy files in ``/usr/share/dnf5/vendors.d/``
+    are never removed --- for those, the command only suggests the equivalent ``add-vendor-policy --mask``
+    invocation to mask them. If removing a system policy file uncovers (unmasks) a distribution policy file of
+    the same name, this is reported as well.
+
 .. note::
    Override directories are also listed with examples in :ref:`Drop-in repo directories<drop_in_repo_directories-label>`.
 
@@ -145,17 +178,50 @@ Options
 ``--add-or-replace``
     Allow adding or replacing the repository with the same ID in the existing configuration file.
 
+``--allow-mask``
+    Allow ``add-vendor-policy`` to create a system vendor policy that masks (hides) an existing distribution
+    policy with the given name, instead of failing.
+
+``--allow-replace``
+    Allow ``add-vendor-policy`` to overwrite an existing system vendor policy file with the given name, instead
+    of failing.
+
 ``--create-missing-dir``
     Allow creation of missing directories.
 
 ``--from-repofile=REPO_CONFIGURATION_FILE_URL``
     Specifies the source configuration file with the new repositories.
 
+``--from-tomlfile=URL_OR_PATH``
+    Specifies the source TOML vendor policy file (local path or URL) for ``add-vendor-policy``.
+
 ``--id=REPO_ID``
     Set ID for newly created repository.
 
+``--info``
+    Show detailed information about the vendor policies listed by ``list-vendor-policies``.
+
+``--mask``
+    Like ``--allow-mask``, but additionally requires that a distribution vendor policy file with the given name
+    already exists; fails otherwise.
+
+``--name=NAME``
+    For ``add-vendor-policy``, sets the base filename of the new vendor policy. The ``.conf`` extension must not
+    be included; it is appended automatically to form the destination filename.
+    For ``list-vendor-policies`` and ``remove-vendor-policy``, a glob pattern used to select existing vendor
+    policies by their base filename (also without the ``.conf`` extension); for ``list-vendor-policies`` all
+    policies are listed if omitted.
+
 ``--overwrite``
     Allow replacing the existing repository configuration file by new one.
+
+``--policy=COMPACT_POLICY_STRING``
+    Specifies the vendor change policy for ``add-vendor-policy`` directly in
+    :ref:`compact format <vendorpolicy_compact_format-label>`.
+
+``--replace``
+    Like ``--allow-replace``, but additionally requires that a system vendor policy file with the given name
+    already exists; fails otherwise.
 
 ``--save-filename=FILENAME``
     Set the name of the new repository configuration file. The ``.repo`` extension is added if it is missing.
@@ -200,9 +266,29 @@ Examples
 ``dnf5 config-manager unsetvar myvar1 myvar2``
     Removes ``myvar1`` and ``myvar2`` variables.
 
+``dnf5 config-manager add-vendor-policy --name=allow-my_vendor --policy='in:"My Vendor"'``
+    Creates a new system vendor policy named ``allow-my_vendor`` that allows switching to packages from
+    ``My Vendor``.
+
+``dnf5 config-manager add-vendor-policy --name=allow-cmdline --policy= --allow-mask``
+    Creates a new (empty) system vendor policy named ``allow-cmdline``, masking a distribution policy of the
+    same name if one exists.
+
+``dnf5 config-manager list-vendor-policies``
+    Lists all vendor policy files, marking manageable system policies with ``+``, distribution policies with
+    ``*``, and distribution policies masked by a system policy with ``-``.
+
+``dnf5 config-manager list-vendor-policies --name='allow-*' --info``
+    Shows detailed information about all vendor policies whose base filename starts with ``allow-``.
+
+``dnf5 config-manager remove-vendor-policy --name=allow-cmdline``
+    Removes the system vendor policy file named ``allow-cmdline``. If this unmasks a distribution policy of the
+    same name, that is reported as well.
+
 
 See Also
 ========
 
 Configuration:
     | :manpage:`dnf5.conf(5)`, :ref:`DNF5 Configuration Reference <dnf5_conf-label>`
+    | :manpage:`dnf5.conf-vendorpolicy(5)`, :ref:`DNF5 Vendor Change Policy File Reference <dnf5_vendor_change_policy-label>`

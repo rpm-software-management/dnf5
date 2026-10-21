@@ -260,11 +260,11 @@ Each entry in ``[[outgoing_packages]]`` or ``[[incoming_packages]]`` can contain
 Compact Format
 ==============
 
-Vendor change policies can also be specified using a compact string representation.
-This is useful for the ``--with-vendor-policy`` command-line option or the
-``VendorChangeManager::load_policy_from_compact()`` API method.
-
-Each compact string defines one policy (equivalent to one TOML configuration file).
+A single vendor change policy's rules can also be represented as one compact string, equivalent to one TOML
+configuration file, wherever a full TOML configuration file would be impractical to write or display
+inline --- for example, the ``--with-vendor-policy`` and ``--dump-vendor-policies`` command-line options, or
+the ``VendorChangeManager::load_policy_from_compact()`` and
+``VendorChangeManager::convert_policy_toml_to_compact()`` API methods.
 
 Syntax
 ------
