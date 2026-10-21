@@ -110,6 +110,94 @@ Scenario: Upgrade with vendor policy - any vendor change to "Second vendor" is a
     """
 
 
+Scenario: Upgrade with vendor policy - Allow packages from the dnf-ci-vendor-2-updates repo from any vendor
+  Given I create file "/etc/dnf/vendors.d/test-policy.conf" with
+    """
+    version = '1.1'
+
+    [[incoming_packages]]
+    filters = [
+       { filter = 'repoid', value = 'dnf-ci-vendor-2-updates' },
+    ]
+    """
+  Given I use repository "dnf-ci-vendor-1-updates"
+  Given I use repository "dnf-ci-vendor-2-updates"
+  Given I use repository "dnf-ci-vendor-3-updates"
+   When I execute dnf with args "upgrade '*'"
+   Then the exit code is 0
+  Given I successfully execute rpm with args "--queryformat='%{{name}}-%{{version}}-%{{release}} : %{{vendor}}\n' -q -a"
+   Then the exit code is 0
+    And stdout contains lines
+    """
+    vendor-1.2-1 : Second Vendor
+    vendorpkg-1.10-1 : Second Vendor
+    vendordep-1.6-1 : First Vendor
+    vendordep2-1.1-1 : Second Vendor
+    vendordep3-1.2-1 : Third Vendor
+    """
+
+
+Scenario: Upgrade with vendor policy - Allow packages from the dnf-ci-vendor-2-updates repo from any vendor (--with-vendor-policy)
+  Given I use repository "dnf-ci-vendor-1-updates"
+  Given I use repository "dnf-ci-vendor-2-updates"
+  Given I use repository "dnf-ci-vendor-3-updates"
+   When I execute dnf with args "--with-vendor-policy=@in:[repoid=\"dnf-ci-vendor-2-updates\"] upgrade '*'"
+   Then the exit code is 0
+  Given I successfully execute rpm with args "--queryformat='%{{name}}-%{{version}}-%{{release}} : %{{vendor}}\n' -q -a"
+   Then the exit code is 0
+    And stdout contains lines
+    """
+    vendor-1.2-1 : Second Vendor
+    vendorpkg-1.10-1 : Second Vendor
+    vendordep-1.6-1 : First Vendor
+    vendordep2-1.1-1 : Second Vendor
+    vendordep3-1.2-1 : Third Vendor
+    """
+
+
+Scenario: Upgrade with vendor policy - Allow change vendor of packages installed from the dnf-ci-vendor-1 repo
+  Given I create file "/etc/dnf/vendors.d/test-policy.conf" with
+    """
+    version = '1.1'
+
+    [[outgoing_packages]]
+    filters = [
+       { filter = 'repoid', value = 'dnf-ci-vendor-1' },
+    ]
+    """
+  Given I use repository "dnf-ci-vendor-1-updates"
+  Given I use repository "dnf-ci-vendor-2-updates"
+  Given I use repository "dnf-ci-vendor-3-updates"
+   When I execute dnf with args "upgrade '*'"
+   Then the exit code is 0
+  Given I successfully execute rpm with args "--queryformat='%{{name}}-%{{version}}-%{{release}} : %{{vendor}}\n' -q -a"
+   Then the exit code is 0
+    And stdout contains lines
+    """
+    vendor-1.3-1 : Third Vendor
+    vendorpkg-1.12-1 : Third Vendor
+    vendordep-1.8-1 : Third Vendor
+    vendordep2-1.2-1 : Third Vendor
+    """
+
+
+Scenario: Upgrade with vendor policy - Allow change vendor of packages installed from the dnf-ci-vendor-1 repo (--with-vendor-policy)
+  Given I use repository "dnf-ci-vendor-1-updates"
+  Given I use repository "dnf-ci-vendor-2-updates"
+  Given I use repository "dnf-ci-vendor-3-updates"
+   When I execute dnf with args "--with-vendor-policy=@out:[repoid=\"dnf-ci-vendor-1\"] upgrade '*'"
+   Then the exit code is 0
+  Given I successfully execute rpm with args "--queryformat='%{{name}}-%{{version}}-%{{release}} : %{{vendor}}\n' -q -a"
+   Then the exit code is 0
+    And stdout contains lines
+    """
+    vendor-1.3-1 : Third Vendor
+    vendorpkg-1.12-1 : Third Vendor
+    vendordep-1.8-1 : Third Vendor
+    vendordep2-1.2-1 : Third Vendor
+    """
+
+
 Scenario: Upgrade with vendor policy - Allow packages from the command-line repo from any vendor
   Given I create file "/etc/dnf/vendors.d/test-policy.conf" with
     """
