@@ -210,8 +210,11 @@ BuildRequires:  systemd
 %if %{with html} || %{with man}
 BuildRequires:  python3dist(breathe)
 BuildRequires:  python3dist(sphinx) >= 4.1.2
-BuildRequires:  python3dist(sphinx-autoapi)
+%endif
+
+%if %{with html}
 BuildRequires:  python3dist(sphinx-rtd-theme)
+BuildRequires:  python3dist(sphinx-autoapi)
 %endif
 
 %if %{with sanitizers}
