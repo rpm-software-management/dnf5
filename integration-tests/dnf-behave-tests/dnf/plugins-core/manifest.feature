@@ -724,7 +724,7 @@ Scenario: Download packages from the manifest when a checksum is incorrect or pa
   Given I create and substitute file "/{context.dnf.tempdir}/packages.manifest.yaml" with
     """
     document: rpm-package-manifest
-    version: 0.2.2
+    version: 0.2.3
     data:
       repositories:
         - id: dnf-ci-fedora
@@ -782,7 +782,7 @@ Scenario: Install packages from the manifest when a checksum is incorrect or pac
   Given I create and substitute file "/{context.dnf.tempdir}/packages.manifest.yaml" with
     """
     document: rpm-package-manifest
-    version: 0.2.2
+    version: 0.2.3
     data:
       repositories:
         - id: dnf-ci-fedora
