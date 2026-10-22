@@ -52,6 +52,13 @@ LIBDNF_CLI_API std::ostream & cursor_down(std::ostream & stream);
 LIBDNF_CLI_API std::ostream & cursor_hide(std::ostream & stream);
 LIBDNF_CLI_API std::ostream & cursor_show(std::ostream & stream);
 
+/// Hide the cursor, keeping track of whether the cursor is hidden
+LIBDNF_CLI_API void hide_cursor();
+/// Show the cursor, keeping track of whether the cursor is hidden
+LIBDNF_CLI_API void show_cursor();
+/// Return the cursor visibility state tracked by hide_cursor() and show_cursor().
+LIBDNF_CLI_API bool is_cursor_hidden();
+
 
 /// State of the terminal taskbar/progress indicator, following the ConEmu
 /// `OSC 9;4` de facto protocol (also supported by Konsole, Windows Terminal,
