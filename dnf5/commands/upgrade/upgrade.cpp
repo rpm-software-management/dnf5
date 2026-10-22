@@ -72,6 +72,7 @@ void UpgradeCommand::set_argument_parser() {
     create_from_vendor_option(*this, from_vendors, true);
     create_destdir_option(*this);
     create_downloadonly_option(*this);
+    create_download_order_options(*this);
     auto & destdir = parser.get_named_arg("upgrade.destdir", false);
     destdir.set_description(destdir.get_description() + " Automatically sets the --downloadonly option.");
     create_offline_option(*this);
