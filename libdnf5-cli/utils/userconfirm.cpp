@@ -19,7 +19,10 @@
 
 #include "libdnf5-cli/utils/userconfirm.hpp"
 
+#include "../../libdnf5/utils/on_scope_exit.hpp"
+
 #include <langinfo.h>
+#include <libdnf5-cli/tty.hpp>
 #include <libdnf5/conf/config_main.hpp>
 #include <libdnf5/utils/bgettext/bgettext-lib.h>
 #include <regex.h>
@@ -37,6 +40,14 @@ bool userconfirm(bool assume_no, bool assume_yes, bool default_yes) {
     if (assume_yes) {
         return true;
     }
+
+    const bool cursor_was_hidden = libdnf5::cli::tty::is_cursor_hidden();
+    libdnf5::cli::tty::show_cursor();
+    libdnf5::utils::OnScopeExit restore_cursor([cursor_was_hidden]() noexcept {
+        if (cursor_was_hidden) {
+            libdnf5::cli::tty::hide_cursor();
+        }
+    });
 
     const char * msg_id;
     const char * msg_translated;
