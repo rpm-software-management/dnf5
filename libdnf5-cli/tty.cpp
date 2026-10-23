@@ -84,6 +84,7 @@ std::ostream & set_taskbar_progress(std::ostream & stream, TaskbarProgressState 
 }
 
 static ColoringEnabled coloring = ColoringEnabled::AUTO;
+static bool cursor_hidden = false;
 
 void coloring_enable(ColoringEnabled value) {
     coloring = value;
@@ -156,6 +157,28 @@ TTY_COMMAND(cursor_hide, "\x1b[?25l")
 
 // tty::cursor_show
 TTY_COMMAND(cursor_show, "\x1b[?25h")
+
+void hide_cursor() {
+    if (is_interactive()) {
+        std::cerr << cursor_hide;
+        if (std::cerr) {
+            cursor_hidden = true;
+        }
+    }
+}
+
+void show_cursor() {
+    if (is_interactive()) {
+        std::cerr << cursor_show;
+        if (std::cerr) {
+            cursor_hidden = false;
+        }
+    }
+}
+
+bool is_cursor_hidden() {
+    return cursor_hidden;
+}
 
 
 }  // namespace libdnf5::cli::tty

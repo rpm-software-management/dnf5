@@ -90,7 +90,7 @@ MultiProgressBar::Impl::Impl(TrackingMode tracking_mode) : tracking_mode(trackin
 
 MultiProgressBar::MultiProgressBar(TrackingMode tracking_mode) : p_impl(new Impl(tracking_mode)) {
     if (tty::is_interactive()) {
-        std::cerr << tty::cursor_hide;
+        tty::hide_cursor();
     }
 }
 
@@ -102,7 +102,7 @@ MultiProgressBar::~MultiProgressBar() {
     if (tty::is_interactive()) {
         // Clear any taskbar/tab progress indicator so it does not linger.
         tty::set_taskbar_progress(std::cerr, tty::TaskbarProgressState::CLEAR);
-        std::cerr << tty::cursor_show;
+        tty::show_cursor();
     }
 }
 
