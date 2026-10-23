@@ -565,6 +565,9 @@ LibrepoHandle RepoDownloader::init_remote_handle(Repo & repo, const char * destd
     h.set_opt(LRO_DESTDIR, destdir);
 
     auto & config = download_data.config;
+    const auto & main_config = config.get_main_config();
+    h.set_opt(LRO_METALINK_EXCLUDE_DOMAIN, main_config.get_metalink_exclude_domain_option().get_value().c_str());
+    h.set_opt(LRO_METALINK_EXCLUDE_LOCATION, main_config.get_metalink_exclude_location_option().get_value().c_str());
 
     enum class Source { NONE, METALINK, MIRRORLIST } source{Source::NONE};
     std::string tmp;

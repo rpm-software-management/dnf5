@@ -374,3 +374,29 @@ void ConfTest::test_config_load_from_config() {
     CPPUNIT_ASSERT_EQUAL(static_cast<std::size_t>(1), config_copy.get_excludepkgs_option().get_value().size());
     CPPUNIT_ASSERT_EQUAL(static_cast<std::size_t>(0), config.get_excludepkgs_option().get_value().size());
 }
+
+void ConfTest::test_metalink_exclude_options() {
+    ConfigMain cfg;
+    CPPUNIT_ASSERT_EQUAL(std::string{}, cfg.get_metalink_exclude_domain_option().get_value());
+    CPPUNIT_ASSERT_EQUAL(std::string{}, cfg.get_metalink_exclude_location_option().get_value());
+    const std::string domain = R"(^(mirror1|mirror2)\.example\.com$|^a{1,2}$)";
+    ConfigParser parser;
+    libdnf5::utils::fs::TempDir temp_dir("libdnf_test_metalink_exclude");
+    const auto path = temp_dir.get_path() / "dnf.conf";
+    {
+        std::ofstream output(path);
+        output << "[main]\nmetalink_exclude_domain=" << domain << "\nmetalink_exclude_location=^(XX|YY)$\n";
+    }
+    parser.read(path);
+    cfg.load_from_parser(parser, "main", *base->get_vars(), logger);
+    CPPUNIT_ASSERT_EQUAL(domain, cfg.get_metalink_exclude_domain_option().get_value());
+    CPPUNIT_ASSERT_EQUAL(std::string{"^(XX|YY)$"}, cfg.get_metalink_exclude_location_option().get_value());
+    ConfigMain copy;
+    copy.load_from_config(cfg);
+    CPPUNIT_ASSERT_EQUAL(domain, copy.get_metalink_exclude_domain_option().get_value());
+    CPPUNIT_ASSERT_EQUAL(std::string{"^(XX|YY)$"}, copy.get_metalink_exclude_location_option().get_value());
+    copy.get_metalink_exclude_domain_option().set(Option::Priority::COMMANDLINE, "^override$");
+    copy.get_metalink_exclude_domain_option().set(Option::Priority::MAINCONFIG, "^ignored$");
+    CPPUNIT_ASSERT_EQUAL(std::string{"^override$"}, copy.get_metalink_exclude_domain_option().get_value());
+    CPPUNIT_ASSERT_EQUAL(domain, cfg.get_metalink_exclude_domain_option().get_value());
+}

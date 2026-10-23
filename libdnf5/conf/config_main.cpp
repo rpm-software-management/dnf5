@@ -252,6 +252,8 @@ class ConfigMain::Impl {
     OptionStringAppendList includepkgs{std::vector<std::string>{}};
     OptionStringAppendList exclude_from_weak{std::vector<std::string>{}};
     OptionBool exclude_from_weak_autodetect{true};
+    OptionString metalink_exclude_domain{""};
+    OptionString metalink_exclude_location{""};
     OptionString proxy{""};
     OptionString proxy_username{nullptr};
     OptionString proxy_password{nullptr};
@@ -438,6 +440,8 @@ ConfigMain::Impl::Impl(Config & owner) : owner(owner) {
     owner.opt_binds().add("includepkgs", includepkgs);
     owner.opt_binds().add("exclude_from_weak", exclude_from_weak);
     owner.opt_binds().add("exclude_from_weak_autodetect", exclude_from_weak_autodetect);
+    owner.opt_binds().add("metalink_exclude_domain", metalink_exclude_domain);
+    owner.opt_binds().add("metalink_exclude_location", metalink_exclude_location);
     owner.opt_binds().add("proxy", proxy);
     owner.opt_binds().add("proxy_username", proxy_username);
     owner.opt_binds().add("proxy_password", proxy_password);
@@ -1165,6 +1169,22 @@ const OptionBool & ConfigMain::get_exclude_from_weak_autodetect_option() const {
     return p_impl->exclude_from_weak_autodetect;
 }
 
+OptionString & ConfigMain::get_metalink_exclude_domain_option() {
+    return p_impl->metalink_exclude_domain;
+}
+
+const OptionString & ConfigMain::get_metalink_exclude_domain_option() const {
+    return p_impl->metalink_exclude_domain;
+}
+
+OptionString & ConfigMain::get_metalink_exclude_location_option() {
+    return p_impl->metalink_exclude_location;
+}
+
+const OptionString & ConfigMain::get_metalink_exclude_location_option() const {
+    return p_impl->metalink_exclude_location;
+}
+
 OptionString & ConfigMain::get_proxy_option() {
     return p_impl->proxy;
 }
@@ -1555,6 +1575,8 @@ void ConfigMain::Impl::load_from_config(const ConfigMain::Impl & other) {
     load_option(includepkgs, other.includepkgs);
     load_option(exclude_from_weak, other.exclude_from_weak);
     load_option(exclude_from_weak_autodetect, other.exclude_from_weak_autodetect);
+    load_option(metalink_exclude_domain, other.metalink_exclude_domain);
+    load_option(metalink_exclude_location, other.metalink_exclude_location);
     load_option(proxy, other.proxy);
     load_option(proxy_username, other.proxy_username);
     load_option(proxy_password, other.proxy_password);
