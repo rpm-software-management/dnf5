@@ -55,12 +55,18 @@ Scenario: Test enabling and disabling a project
 
       Please do not file bug reports about these packages in Fedora
       Bugzilla. In case of problems, contact the owner of this repository.
+
+      Not allowing a vendor change in either direction for the repositories enabled by this command (--assumeyes).
+      Saved vendor policy file: {context.dnf.installroot}/etc/dnf/vendors.d/i_copr:localhost:testuser:testproject.conf
+      Saved vendor policy file: {context.dnf.installroot}/etc/dnf/vendors.d/o_copr:localhost:testuser:testproject.conf
       """
  When I execute dnf with args "--use-host-config copr disable testhub/testuser/testproject"
  Then the exit code is 0
   And stdout is
       """
       Copr repository 'localhost/testuser/testproject' in '/etc/yum.repos.d/_copr:localhost:testuser:testproject.repo' disabled.
+      Vendor policy file updated: /etc/dnf/vendors.d/i_copr:localhost:testuser:testproject.conf
+      Vendor policy file updated: /etc/dnf/vendors.d/o_copr:localhost:testuser:testproject.conf
       """
   And stderr is empty
 
@@ -224,11 +230,18 @@ Given I create and substitute file "/{context.dnf.tempdir}/copr/api_3/rpmrepo/te
 
       These repositories are being enabled together with the main
       repository.
+
+
+      Not allowing a vendor change in either direction for the repositories enabled by this command (--assumeyes).
+      Saved vendor policy file: {context.dnf.installroot}/etc/dnf/vendors.d/i_copr:localhost:testuser:depproject.conf
+      Saved vendor policy file: {context.dnf.installroot}/etc/dnf/vendors.d/o_copr:localhost:testuser:depproject.conf
       """
  When I execute dnf with args "copr disable testhub/testuser/depproject --use-host-config"
  Then the exit code is 0
   And stdout is
       """
       Copr repository 'localhost/testuser/depproject' in '/etc/yum.repos.d/_copr:localhost:testuser:depproject.repo' disabled.
+      Vendor policy file updated: /etc/dnf/vendors.d/i_copr:localhost:testuser:depproject.conf
+      Vendor policy file updated: /etc/dnf/vendors.d/o_copr:localhost:testuser:depproject.conf
       """
   And stderr is empty

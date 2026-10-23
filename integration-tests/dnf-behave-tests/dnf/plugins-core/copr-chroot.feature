@@ -84,6 +84,10 @@ Scenario: Test enabling a repo with manually specified chroot (different to curr
 
       Please do not file bug reports about these packages in Fedora
       Bugzilla. In case of problems, contact the owner of this repository.
+
+      Not allowing a vendor change in either direction for the repositories enabled by this command (--assumeyes).
+      Saved vendor policy file: {context.dnf.installroot}/etc/dnf/vendors.d/i_copr:localhost:testuser:testproject.conf
+      Saved vendor policy file: {context.dnf.installroot}/etc/dnf/vendors.d/o_copr:localhost:testuser:testproject.conf
       """
 # --use-host-config has to be used because of https://github.com/rpm-software-management/dnf5/issues/1497
  When I execute dnf with args "repo list f32 --use-host-config"
