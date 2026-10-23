@@ -26,6 +26,7 @@
 #include <fnmatch.h>
 #include <libdnf5-cli/utils/userconfirm.hpp>
 #include <libdnf5/base/base.hpp>
+#include <libdnf5/base/vendor_change_manager.hpp>
 #include <libdnf5/conf/const.hpp>
 
 #include <filesystem>
@@ -134,15 +135,20 @@ void available_chroots_error(
     throw std::runtime_error(message.str());
 }
 
-std::string copr_id_to_copr_file(const std::string & repo_id) {
-    /// Convert copr ID to a repo filename.
+std::string copr_id_to_filename_base(const std::string & repo_id) {
+    /// Convert copr ID to the base filename (without extension), shared by the repo
+    /// configuration file and an associated vendor change policy.
     /// - copr.fedorainfracloud.org/@copr/copr-pull-requests:pr:2545
-    /// + _copr:copr.fedorainfracloud.org:group_copr:copr-pull-requests:pr:2545.repo
+    /// + _copr:copr.fedorainfracloud.org:group_copr:copr-pull-requests:pr:2545
 
     std::string output = std::regex_replace(repo_id, std::regex(":ml$"), "");
     output = std::regex_replace(output, std::regex("/"), ":");
     output = std::regex_replace(output, std::regex("@"), "group_");
-    return "_copr:" + output + ".repo";
+    return "_copr:" + output;
+}
+
+std::string copr_id_to_copr_file(const std::string & repo_id) {
+    return copr_id_to_filename_base(repo_id) + ".repo";
 }
 
 
@@ -338,6 +344,22 @@ std::filesystem::path CoprRepo::file_path() const {
 }
 
 
+std::string CoprRepo::get_vendor_policy_name() const {
+    return copr_id_to_filename_base(id);
+}
+
+
+std::vector<std::string> CoprRepo::get_enabled_repoids() const {
+    std::vector<std::string> result;
+    for (const auto & [repo_id, part] : repositories) {
+        if (part.is_enabled()) {
+            result.push_back(repo_id);
+        }
+    }
+    return result;
+}
+
+
 void CoprRepo::remove() const {
     std::string path = file_path().native();
     if (-1 == unlink(path.c_str())) {
@@ -403,10 +425,10 @@ std::string CoprRepo::get_projectname() {
 }
 
 
-void CoprRepo::save_interactive() {
+bool CoprRepo::save_interactive() {
     std::cerr << COPR_THIRD_PARTY_WARNING;
     if (!libdnf5::cli::utils::userconfirm::userconfirm(base->get_config()))
-        return;
+        return false;
 
     if (has_external_deps()) {
         std::stringstream the_list;
@@ -439,6 +461,7 @@ void CoprRepo::save_interactive() {
     }  // if has_external_deps()
 
     save();
+    return true;
 }
 
 void CoprRepo::remove_old_repo() {
@@ -600,14 +623,58 @@ static std::string repo_id_from_project_spec(libdnf5::Base & base, const std::st
 }
 
 
+// Resets the `base_filename` vendor change policy to an empty (no-effect) policy. Used to revoke
+// the "i"/"o" prefixed policies that may have been granted to a Copr repository while it was enabled.
+static void reset_vendor_policy(libdnf5::Base & base, const std::string & base_filename) {
+    auto vcm = base.get_vendor_change_manager();
+    std::filesystem::path path;
+    bool policy_saved = false;
+    try {
+        path = vcm->save_policy_from_compact("", "copr_plugin", base_filename, true);
+        policy_saved = true;
+    } catch (const libdnf5::Error & e) {
+        warning(_("Failed to update vendor policy file '{}': {}"), base_filename, e.what());
+    }
+    if (policy_saved) {
+        std::cout << libdnf5::utils::sformat(_("Vendor policy file updated: {}"), path.string()) << std::endl;
+    }
+}
+
+
+// Removes the `base_filename` vendor change policy, if one exists and is manageable
+// (i.e. not a distribution-provided policy file). Does nothing otherwise.
+static void remove_vendor_policy_if_manageable(libdnf5::Base & base, const std::string & base_filename) {
+    auto vcm = base.get_vendor_change_manager();
+    const auto policy_path = vcm->find_policy_file(base_filename);
+    if (policy_path.empty() || !vcm->is_policy_file_manageable(policy_path)) {
+        return;
+    }
+    std::filesystem::path removed_path;
+    bool policy_removed = false;
+    try {
+        removed_path = vcm->remove_policy_file(base_filename);
+        policy_removed = true;
+    } catch (const libdnf5::Error & e) {
+        warning(_("Failed to remove vendor policy file '{}': {}"), policy_path.native(), e.what());
+    }
+    if (policy_removed) {
+        std::cout << libdnf5::utils::sformat(_("Removed vendor policy file: {}"), removed_path.string()) << std::endl;
+    }
+}
+
+
 class RepoDisableCB : public CoprRepoCallback {
 private:
+    libdnf5::Base & base;
     std::string id;
     libdnf5::ConfigParser & parser;
 
 public:
     int count = 0;
-    explicit RepoDisableCB(const std::string & id, libdnf5::ConfigParser & cp) : id(id), parser(cp) {}
+    explicit RepoDisableCB(libdnf5::Base & base, const std::string & id, libdnf5::ConfigParser & cp)
+        : base(base),
+          id(id),
+          parser(cp) {}
     dnf5::CoprRepoCallback disable = [&](dnf5::CoprRepo & cr) {
         if (id == cr.get_id()) {
             cr.load_raw_values(parser);
@@ -617,6 +684,12 @@ public:
             std::cout << libdnf5::utils::sformat(
                              _("Copr repository '{}' in '{}' disabled."), cr.get_id(), cr.get_repo_file_path().native())
                       << std::endl;
+
+            // Disabling the Copr repository revokes any vendor change exception previously
+            // granted to it: all its repo parts are disabled, so the policies have no effect anyway.
+            const auto base_filename = cr.get_vendor_policy_name();
+            reset_vendor_policy(base, "i" + base_filename);
+            reset_vendor_policy(base, "o" + base_filename);
         }
     };
 };
@@ -625,7 +698,7 @@ public:
 void copr_repo_disable(libdnf5::Base & base, const std::string & project_spec_string) {
     libdnf5::ConfigParser parser;
     auto repo_id = repo_id_from_project_spec(base, project_spec_string);
-    auto disable = RepoDisableCB(repo_id, parser);
+    auto disable = RepoDisableCB(base, repo_id, parser);
     installed_copr_repositories(base, disable.disable);
 
     if (disable.count == 0)
@@ -635,22 +708,29 @@ void copr_repo_disable(libdnf5::Base & base, const std::string & project_spec_st
 
 class RepoRemoveCB : public CoprRepoCallback {
 private:
+    libdnf5::Base & base;
     std::string id;
 
 public:
     int count = 0;
-    explicit RepoRemoveCB(const std::string & id) : id(id) {}
+    explicit RepoRemoveCB(libdnf5::Base & base, const std::string & id) : base(base), id(id) {}
     dnf5::CoprRepoCallback remove = [&](dnf5::CoprRepo & cr) {
         if (id == cr.get_id()) {
             cr.remove();
             count++;
+
+            // Remove the "i"/"o" prefixed vendor change policies associated with this Copr
+            // repository, if they exist and are manageable (i.e. not distribution-provided).
+            const auto base_filename = cr.get_vendor_policy_name();
+            remove_vendor_policy_if_manageable(base, "i" + base_filename);
+            remove_vendor_policy_if_manageable(base, "o" + base_filename);
         }
     };
 };
 
 void copr_repo_remove(libdnf5::Base & base, const std::string & project_spec_string) {
     auto repo_id = repo_id_from_project_spec(base, project_spec_string);
-    auto remover = RepoRemoveCB(repo_id);
+    auto remover = RepoRemoveCB(base, repo_id);
     installed_copr_repositories(base, remover.remove);
 
     if (remover.count == 0)
