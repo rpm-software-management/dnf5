@@ -87,3 +87,20 @@ Scenario: Over limit installonly packages during an unrelated transaction
         | Action        | Package                       |
         | install       | labirinto-0:1.0-1.fc29.x86_64 |
     And stderr contains "Exceeded installonly_limit \(2\): found 3 installed: 'installonlyA-0:1.0-1.x86_64', 'installonlyA-0:2.0-1.x86_64', 'installonlyA-0:2.2-1.x86_64'. You can use 'remove --oldinstallonly'."
+
+
+Scenario: Automatic removal of a installonly package is stopped if it is protected
+   Given I configure dnf with
+        | key                          | value        |
+        | installonlypkgs              | installonlyA |
+        | protected_packages           | installonlyA |
+        | installonly_limit            | 2            |
+    And I execute dnf with args "install installonlyA-2.0"
+   When I execute dnf with args "upgrade"
+   Then the exit code is 1
+    And stderr is
+    """
+    <REPOSYNC>
+    Failed to resolve the transaction:
+    Problem: The operation would result in removing the following protected packages: installonlyA
+    """
