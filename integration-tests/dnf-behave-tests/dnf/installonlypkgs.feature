@@ -104,3 +104,17 @@ Scenario: Automatic removal of a installonly package is stopped if it is protect
     Failed to resolve the transaction:
     Problem: The operation would result in removing the following protected packages: installonlyA
     """
+
+
+Scenario: Installing two new installonly package versions removes over limit oldest
+   Given I configure dnf with
+        | key                          | value        |
+        | installonlypkgs              | installonlyA |
+        | installonly_limit            | 2            |
+   When I execute dnf with args "install installonlyA-2.0 installonlyA-2.2"
+   Then the exit code is 0
+    And Transaction is following
+        | Action        | Package                     |
+        | install       | installonlyA-0:2.0-1.x86_64 |
+        | install       | installonlyA-0:2.2-1.x86_64 |
+        | remove        | installonlyA-0:1.0-1.x86_64 |
