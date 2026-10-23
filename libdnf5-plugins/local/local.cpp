@@ -184,8 +184,7 @@ libdnf5::repo::RepoWeakPtr LocalPlugin::setup_local_repo(
 
 
 void LocalPlugin::run_createrepo(const std::filesystem::path & dir) {
-    const char * program_name = "createrepo_c";
-    std::vector<const char *> command{program_name, "--update", dir.c_str()};
+    std::vector<const char *> command{"createrepo_c", "--update", dir.c_str()};
 
     // --quiet is on by default
     OptionBool quiet_option = OptionBool(true);
@@ -233,10 +232,10 @@ void LocalPlugin::run_createrepo(const std::filesystem::path & dir) {
         dup2(pipefd[1], STDERR_FILENO);
 
         // Run program
-        execvp(program_name, const_cast<char * const *>(command.data()));
+        execvp(command[0], const_cast<char * const *>(command.data()));
 
         // execvp should replace this process if it doesn't there was an error
-        printf("Failed to execvp %s: %s\n", program_name, strerror(errno));
+        printf("Failed to execvp %s: %s\n", command[0], strerror(errno));
         _exit(255);
     } else {
         // This is the parent process
@@ -261,10 +260,10 @@ void LocalPlugin::run_createrepo(const std::filesystem::path & dir) {
             }
 
             for (const auto & line : libdnf5::utils::string::split(output, "\n")) {
-                logger.info("local plugin: %s: {}", program_name, line);
+                logger.info("local plugin: %s: {}", command[0], line);
                 // This print can interleave with the installation transaction progressbar
                 // but I think we are missing an API the could print this correctly.
-                printf("local plugin: %s: %s\n", program_name, line.c_str());
+                printf("local plugin: %s: %s\n", command[0], line.c_str());
             }
         }
 
