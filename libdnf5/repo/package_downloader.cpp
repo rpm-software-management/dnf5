@@ -61,7 +61,13 @@ public:
     ~PackageTarget() {
         if (need_call_end_callback) {
             if (auto * download_callbacks = package.get_base()->get_download_callbacks()) {
-                download_callbacks->end(user_cb_data, DownloadCallbacks::TransferStatus::ERROR, "Interrupted");
+                try {
+                    download_callbacks->end(user_cb_data, DownloadCallbacks::TransferStatus::ERROR, "Interrupted");
+                } catch (...) {
+                    package.get_base()->get_logger()->error(
+                        "Caught an exception raised by a package \"end\" download callback during cleanup; ignoring "
+                        "it");
+                }
             }
         }
     }
@@ -85,7 +91,13 @@ static int end_callback(void * data, LrTransferStatus status, const char * msg) 
     if (auto * download_callbacks = package_target->package.get_base()->get_download_callbacks()) {
         libdnf_assert(package_target->need_call_end_callback == true, "unexpected end_callback call");
         package_target->need_call_end_callback = false;
-        return download_callbacks->end(package_target->user_cb_data, cb_status, msg);
+        try {
+            return download_callbacks->end(package_target->user_cb_data, cb_status, msg);
+        } catch (...) {
+            package_target->package.get_base()->get_logger()->error(
+                "Caught an exception raised by a package \"end\" download callback; aborting the download");
+            return DownloadCallbacks::ERROR;
+        }
     }
     return 0;
 }
@@ -95,7 +107,13 @@ static int progress_callback(void * data, double total_to_download, double downl
 
     auto * package_target = static_cast<PackageTarget *>(data);
     if (auto * download_callbacks = package_target->package.get_base()->get_download_callbacks()) {
-        return download_callbacks->progress(package_target->user_cb_data, total_to_download, downloaded);
+        try {
+            return download_callbacks->progress(package_target->user_cb_data, total_to_download, downloaded);
+        } catch (...) {
+            package_target->package.get_base()->get_logger()->error(
+                "Caught an exception raised by a package \"progress\" download callback; aborting the download");
+            return DownloadCallbacks::ERROR;
+        }
     }
     return 0;
 }
@@ -105,7 +123,13 @@ static int mirror_failure_callback(void * data, const char * msg, const char * u
 
     auto * package_target = static_cast<PackageTarget *>(data);
     if (auto * download_callbacks = package_target->package.get_base()->get_download_callbacks()) {
-        return download_callbacks->mirror_failure(package_target->user_cb_data, msg, url, nullptr);
+        try {
+            return download_callbacks->mirror_failure(package_target->user_cb_data, msg, url, nullptr);
+        } catch (...) {
+            package_target->package.get_base()->get_logger()->error(
+                "Caught an exception raised by a package \"mirror_failure\" download callback; aborting the download");
+            return DownloadCallbacks::ERROR;
+        }
     }
     return 0;
 }

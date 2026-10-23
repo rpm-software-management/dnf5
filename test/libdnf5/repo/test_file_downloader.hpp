@@ -28,10 +28,12 @@
 class FileDownloaderTest : public BaseTestCase {
     CPPUNIT_TEST_SUITE(FileDownloaderTest);
     CPPUNIT_TEST(test_file_downloader);
+    CPPUNIT_TEST(test_file_downloader_callback_exception);
     CPPUNIT_TEST_SUITE_END();
 
 public:
     void test_file_downloader();
+    void test_file_downloader_callback_exception();
 };
 
 #endif
