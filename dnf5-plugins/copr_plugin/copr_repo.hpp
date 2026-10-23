@@ -157,7 +157,7 @@ public:
     }
 
     bool is_external() const { return id.starts_with("coprdep:"); };
-    bool is_enabled() { return enabled; };
+    bool is_enabled() const { return enabled; };
     bool is_multilib();
     std::string get_id() const { return id; };
     std::string get_baseurl() const { return baseurl; };
@@ -186,10 +186,18 @@ public:
         const std::string & selected_chroot);
 
     std::filesystem::path file_path() const;
+
+    /// Returns the base filename (without extension) to use for a vendor change policy
+    /// associated with this Copr repository -- the same name as the repo configuration
+    /// file returned by file_path(), but without the ".repo" extension.
+    std::string get_vendor_policy_name() const;
+
     void save();
     void remove() const;
     void disable();
-    void save_interactive();
+
+    /// Returns `true` if the repo file was actually saved.
+    bool save_interactive();
 
     friend std::ostream & operator<<(std::ostream & os, const class CoprRepo & copr_repo);
 
@@ -199,6 +207,10 @@ public:
     bool is_multilib() const { return multilib; };
     bool is_enabled() const { return enabled; };
     std::string get_id() const { return id; };
+
+    /// Returns the repoids (as seen by libdnf5) of all currently enabled repositories
+    /// belonging to this Copr project -- the main repository, and any enabled dependency repositories.
+    std::vector<std::string> get_enabled_repoids() const;
 
     std::string get_ownername();
     std::string get_projectname();
