@@ -278,10 +278,10 @@ void LocalPlugin::run_createrepo(const std::filesystem::path & dir) {
         if (WIFEXITED(child_exit_status)) {
             // Terminated normally (exit, _exit, returning from main) -> check exit code
             if (const int exit_status = WEXITSTATUS(child_exit_status); exit_status != 0) {
-                throw LocalPluginError(M_("{} process exited with code {}"), program_name, exit_status);
+                throw LocalPluginError(M_("Createrepo_c process exited with code {}"), exit_status);
             }
         } else if (WIFSIGNALED(child_exit_status)) {
-            throw LocalPluginError(M_("{} process killed by signal {}"), program_name, WTERMSIG(child_exit_status));
+            throw LocalPluginError(M_("Createrepo_c process killed by signal {}"), WTERMSIG(child_exit_status));
         }
     }
 }
