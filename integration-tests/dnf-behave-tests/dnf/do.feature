@@ -2,6 +2,7 @@ Feature: "do" command
 
 
 Background: Install some RPMs from repositories
+  Given I set environment variable "DNF5_FORCE_COLUMNS" to "500"
   Given I use repository "from-repo"
    When I execute dnf with args "do --action=install abcde pkgB"
    Then the exit code is 0

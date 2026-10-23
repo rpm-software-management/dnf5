@@ -17,6 +17,9 @@ Feature: Shell group
 #   conditional: wget, requires filesystem-content
 
 
+Background:
+  Given I set environment variable "DNF5_FORCE_COLUMNS" to "500"
+
 Scenario: Using dnf shell, install a package group
   Given I use repository "dnf-ci-fedora"
     And I use repository "dnf-ci-thirdparty"

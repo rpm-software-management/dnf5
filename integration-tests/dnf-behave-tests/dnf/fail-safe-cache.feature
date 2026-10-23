@@ -4,6 +4,7 @@ Feature: Tests for the correct creation and usage of the modulefailsafe file
 
 
 Background: Copy the dnf-ci-fedora modular repository (to allow modulemd removal and so on)
+  Given I set environment variable "DNF5_FORCE_COLUMNS" to "500"
   Given I copy repository "dnf-ci-fedora-modular" for modification
     And I use repository "dnf-ci-fedora-modular" with configuration
         | key                 | value |

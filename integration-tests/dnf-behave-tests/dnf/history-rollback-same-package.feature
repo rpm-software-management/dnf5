@@ -2,6 +2,7 @@ Feature: Transaction history rollback between states with the same version of a 
 
 
 Background:
+  Given I set environment variable "DNF5_FORCE_COLUMNS" to "500"
   Given I use repository "dnf-ci-fedora"
     And I successfully execute dnf with args "install flac"
 

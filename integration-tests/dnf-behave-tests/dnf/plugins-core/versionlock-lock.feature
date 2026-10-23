@@ -2,6 +2,7 @@ Feature: Tests locking capabilities of the versionlock plugin
 
 
 Background: Set up versionlock infrastructure in the installroot
+  Given I set environment variable "DNF5_FORCE_COLUMNS" to "500"
   Given I create file "/etc/dnf/versionlock.toml" with
     """
     version = "1.0"
