@@ -17,9 +17,13 @@
 # You should have received a copy of the GNU General Public License
 # along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
+import os
+import shutil
+import tempfile
 import unittest
 
 import libdnf5.base
+import libdnf5.utils
 
 
 class TestBase(unittest.TestCase):
@@ -75,3 +79,34 @@ class TestBase(unittest.TestCase):
             cm.exception.rethrow_if_nested()
         self.assertRegex(cm_nested.exception.format(libdnf5.exception.FormatDetailLevel_WithDomainAndName),
                          '^libdnf5::utils::fs::FileSystemError: cannot open file')
+
+    def test_lock_system_repo(self):
+        temp_dir = tempfile.mkdtemp(prefix="libdnf5_python3_unittest.")
+        try:
+            base = libdnf5.base.Base()
+            config = base.get_config()
+            config.installroot = os.path.join(temp_dir, "installroot")
+            config.plugins = False
+
+            self.assertIsNone(base.get_system_repo_lock())
+
+            self.assertTrue(base.lock_system_repo(
+                libdnf5.utils.LockAccess_WRITE,
+                libdnf5.utils.LockBlocking_NON_BLOCKING))
+
+            lock = base.get_system_repo_lock()
+            self.assertIsNotNone(lock)
+            self.assertEqual(
+                libdnf5.utils.LockAccess_WRITE, lock.held_lock_access())
+
+            base.unlock_system_repo()
+            self.assertFalse(lock.holds_lock())
+
+            self.assertTrue(base.lock_system_repo(
+                libdnf5.utils.LockAccess_READ,
+                libdnf5.utils.LockBlocking_BLOCKING))
+            self.assertEqual(
+                libdnf5.utils.LockAccess_READ,
+                base.get_system_repo_lock().held_lock_access())
+        finally:
+            shutil.rmtree(temp_dir)

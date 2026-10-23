@@ -34,7 +34,7 @@ Scenario: Test --disable-modular-filtering with a default module stream
       """
 
 Scenario: Test --disable-modular-filtering with an enabled module stream
- When I execute dnf with args "module enable nodejs:5"
+Given I successfully execute dnf with args "module enable nodejs:5"
  When I execute dnf with args "repoquery nodejs"
  Then the exit code is 0
   And stderr is
