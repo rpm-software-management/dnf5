@@ -18,12 +18,16 @@
 // along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "copr.hpp"
+#include "copr_config.hpp"
 #include "copr_repo.hpp"
 
 #include <libdnf5/base/vendor_change_manager.hpp>
 #include <libdnf5/conf/const.hpp>
+#include <libdnf5/conf/option_bool.hpp>
+#include <libdnf5/conf/option_errors.hpp>
 
 #include <iostream>
+#include <optional>
 
 using namespace libdnf5::cli;
 
@@ -69,10 +73,30 @@ void save_vendor_policy(libdnf5::Base & base, const std::string & policy_str, co
 }
 
 
-// Asks the user whether a vendor change to/from packages of the repositories enabled by the 'enable'
-// command should be allowed, and writes the corresponding vendor change policy/policies (empty ones
-// if not). The default is to not allow a vendor change in either direction.
-// With --assumeyes, this default is kept without asking, matching option 1 below.
+// Human-readable description of a vendor change choice (1-4), matching the interactive menu options.
+const char * vendor_change_choice_description(CoprConfig::VendorChangeChoice choice) {
+    switch (choice) {
+        case CoprConfig::VendorChangeChoice::TO_COPR_REPO:
+            return _(
+                "allow packages from these repositories to replace an already installed "
+                "package from a different vendor");
+        case CoprConfig::VendorChangeChoice::FROM_COPR_REPO:
+            return _(
+                "allow a package installed from these repositories to be replaced "
+                "by a package from a different vendor");
+        case CoprConfig::VendorChangeChoice::BOTH:
+            return _("allow a vendor change in both directions");
+        default:
+            return _("do not allow a vendor change in either direction");
+    }
+}
+
+
+// Determines whether a vendor change to/from packages of the repositories enabled by the 'enable'
+// command should be allowed -- either from `forced_choice` (--vendor-change), or (if not given)
+// from the Copr configuration's "vendor_change" setting (NONE/1 if unset), used directly with
+// --assumeyes or as the interactive prompt's default otherwise -- and writes the corresponding
+// vendor change policy/policies (empty ones if not allowed).
 //
 // Within a single vendor change policy, its outgoing_packages and incoming_packages filters are
 // ANDed together (both must match for the policy to apply) -- so "allow both directions" cannot be
@@ -82,23 +106,36 @@ void save_vendor_policy(libdnf5::Base & base, const std::string & policy_str, co
 // "i" and "o" (a prefix, rather than a suffix, cannot collide with a real base filename, since
 // those always start with "_copr:").
 void ask_and_apply_vendor_change_policy(
-    libdnf5::Base & base, const std::vector<std::string> & enabled_repoids, const std::string & base_filename) {
+    libdnf5::Base & base,
+    const std::vector<std::string> & enabled_repoids,
+    const std::string & base_filename,
+    std::optional<CoprConfig::VendorChangeChoice> forced_choice,
+    CoprConfig::VendorChangeChoice default_choice) {
     auto & config = base.get_config();
     const bool assume_yes = config.get_assumeyes_option().get_value();
 
-    int choice;
+    using VendorChoice = CoprConfig::VendorChangeChoice;
+
+    VendorChoice choice;
     std::cerr << std::endl;
-    if (assume_yes) {
-        std::cerr << _(
-            "Not allowing a vendor change in either direction for the repositories enabled "
-            "by this command (--assumeyes).\n");
-        choice = 1;
+    if (forced_choice) {
+        choice = *forced_choice;
+        std::cerr << libdnf5::utils::sformat(
+            _("Using --vendor-change for the repositories enabled by this command: {}\n"),
+            vendor_change_choice_description(choice));
+    } else if (assume_yes) {
+        choice = default_choice;
+        std::cerr << libdnf5::utils::sformat(
+            _("Using the vendor change setting from the Copr configuration (or its default) for the\n"
+              "repositories enabled by this command: {}\n"),
+            vendor_change_choice_description(choice));
     } else {
+        choice = default_choice;
         std::cerr << _(
             "Packages from the repositories enabled by this command can be allowed to\n"
             "replace, or be replaced by, packages from a different vendor during package\n"
             "replacement (upgrade/downgrade/reinstall) operations:\n");
-        std::cerr << _("  1. Do not allow a vendor change in either direction (default)\n");
+        std::cerr << _("  1. Do not allow a vendor change in either direction\n");
         std::cerr << _(
             "  2. Allow packages from the repositories enabled by this command to\n"
             "     replace an already installed package from a different vendor\n");
@@ -107,20 +144,19 @@ void ask_and_apply_vendor_change_policy(
             "     command to be replaced by a package from a different vendor\n");
         std::cerr << _("  4. Allow both of the above (vendor change allowed in both directions)\n");
 
-        choice = 1;
         while (true) {
-            std::cerr << _("Enter your choice [1-4, default 1]: ");
+            std::cerr << libdnf5::utils::sformat(_("Enter your choice [1-4, default {}]: "), static_cast<int>(choice));
 
             std::string line;
             if (!std::getline(std::cin, line) || line.empty()) {
-                choice = 1;
                 break;
             }
 
             try {
                 std::size_t pos;
-                choice = std::stoi(line, &pos);
-                if (pos == line.size() && choice >= 1 && choice <= 4) {
+                const auto choice_num = std::stoi(line, &pos);
+                if (pos == line.size() && choice_num >= 1 && choice_num <= 4) {
+                    choice = static_cast<VendorChoice>(choice_num);
                     break;
                 }
             } catch (const std::exception &) {
@@ -130,8 +166,8 @@ void ask_and_apply_vendor_change_policy(
         }
     }
 
-    const bool allow_incoming = (choice == 2 || choice == 4);
-    const bool allow_outgoing = (choice == 3 || choice == 4);
+    const bool allow_incoming = (choice == VendorChoice::TO_COPR_REPO || choice == VendorChoice::BOTH);
+    const bool allow_outgoing = (choice == VendorChoice::FROM_COPR_REPO || choice == VendorChoice::BOTH);
 
     // One "in:[repoid=...]" and/or "out:[repoid=...]" entry per enabled repository, so each
     // policy covers the main repository as well as any enabled dependency repositories.
@@ -172,15 +208,52 @@ void CoprEnableCommand::set_argument_parser() {
         return true;
     });
     cmd.register_positional_arg(chroot);
+
+    auto vendor_change = parser.add_new_named_arg("vendor-change");
+    vendor_change->set_long_name("vendor-change");
+    vendor_change->set_has_value(true);
+    vendor_change->set_arg_value_help("to-repo|from-repo|true|false");
+    vendor_change->set_description(
+        _("Allow a vendor change for packages of the repositories enabled by this command, "
+          "without asking interactively. \"to-repo\" allows packages from these repositories "
+          "to replace an already installed package from a different vendor; \"from-repo\" "
+          "allows a package installed from these repositories to be replaced by a package "
+          "from a different vendor; \"true\" allows both; \"false\" allows neither (same as "
+          "the interactive default)."));
+    vendor_change->set_parse_hook_func(
+        [this](
+            [[maybe_unused]] ArgumentParser::NamedArg * arg, [[maybe_unused]] const char * option, const char * value) {
+            const std::string value_str{value};
+            try {
+                auto choice = CoprConfig::vendor_change_choice_from_string(value_str);
+                opt_vendor_change_choice = choice;
+            } catch (const libdnf5::OptionInvalidValueError &) {
+                throw ArgumentParserError(
+                    M_("--vendor-change: Invalid value \"{}\" (expected \"to-repo\", \"from-repo\", "
+                       "or a boolean value)"),
+                    value_str);
+            }
+            return true;
+        });
+    cmd.register_named_arg(vendor_change);
 }
 
 
 void CoprEnableCommand::run() {
     auto & base = get_context().get_base();
     std::unique_ptr<dnf5::CoprConfig> config = std::make_unique<dnf5::CoprConfig>(base);
+    // Only consult the Copr configuration when --vendor-change was not given explicitly, so an
+    // invalid "vendor_change" setting cannot block an --vendor-change override from taking effect.
+    const auto vendor_change_default_choice =
+        opt_vendor_change_choice ? *opt_vendor_change_choice : config->get_vendor_change_choice();
     auto repo = CoprRepo(base, config, get_project_spec(), opt_chroot);
     if (repo.save_interactive()) {
-        ask_and_apply_vendor_change_policy(base, repo.get_enabled_repoids(), repo.get_vendor_policy_name());
+        ask_and_apply_vendor_change_policy(
+            base,
+            repo.get_enabled_repoids(),
+            repo.get_vendor_policy_name(),
+            opt_vendor_change_choice,
+            vendor_change_default_choice);
     }
 }
 
