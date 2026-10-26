@@ -28,8 +28,8 @@ Scenario: Listing available updates
     And stdout is
         """
         Name                   Type        Severity                   Package              Issued
-        FEDORA-2018-318f184000 bugfix      none     glibc-2.28-26.fc29.x86_64 2019-01-17 00:00:00
-        FEDORA-2999:002-02     enhancement Moderate  flac-1.3.3-8.fc29.x86_64 2019-01-17 00:00:00
+        FEDORA-2018-318f184000 bugfix      none     glibc-2.28-26.fc29.x86_64 2019-01-17 00:00:00 +0000
+        FEDORA-2999:002-02     enhancement Moderate  flac-1.3.3-8.fc29.x86_64 2019-01-17 00:00:00 +0000
         """
 
 
@@ -101,7 +101,7 @@ Scenario: advisory info
         Type        : bugfix
         Status      : final
         Vendor      : secresponseteam@foo.bar
-        Issued      : 2019-01-17 00:00:00
+        Issued      : 2019-01-17 00:00:00 +0000
         Description : Fix some stuff
         Message     :
         Rights      :
@@ -129,7 +129,7 @@ Scenario: advisory info
         Type        : enhancement
         Status      : final
         Vendor      : secresponseteam@foo.bar
-        Issued      : 2019-01-17 00:00:00
+        Issued      : 2019-01-17 00:00:00 +0000
         Description : Enhance some stuff
         Message     :
         Rights      :
@@ -172,8 +172,8 @@ Scenario: advisory list
     And stdout is
         """
         Name                   Type        Severity                   Package              Issued
-        FEDORA-2018-318f184000 bugfix      none     glibc-2.28-26.fc29.x86_64 2019-01-17 00:00:00
-        FEDORA-2999:002-02     enhancement Moderate  flac-1.3.3-8.fc29.x86_64 2019-01-17 00:00:00
+        FEDORA-2018-318f184000 bugfix      none     glibc-2.28-26.fc29.x86_64 2019-01-17 00:00:00 +0000
+        FEDORA-2999:002-02     enhancement Moderate  flac-1.3.3-8.fc29.x86_64 2019-01-17 00:00:00 +0000
         """
 
 
@@ -192,7 +192,7 @@ Scenario: advisory list all security
     And stdout is
         """
         Name                   Type     Severity                     Package              Issued
-        FEDORA-2018-318f184113 security Moderate CQRlib-1.1.2-16.fc29.x86_64 2019-01-20 00:00:00
+        FEDORA-2018-318f184113 security Moderate CQRlib-1.1.2-16.fc29.x86_64 2019-01-20 00:00:00 +0000
         """
 
 
@@ -213,8 +213,8 @@ Scenario: advisory list updates
     And stdout is
         """
         Name                   Type        Severity                  Package              Issued
-        FEDORA-2018-318f184112 enhancement Moderate flac-1.4.0-1.fc29.x86_64 2019-01-19 00:00:00
-        FEDORA-2999:002-02     enhancement Moderate flac-1.3.3-8.fc29.x86_64 2019-01-17 00:00:00
+        FEDORA-2018-318f184112 enhancement Moderate flac-1.4.0-1.fc29.x86_64 2019-01-19 00:00:00 +0000
+        FEDORA-2999:002-02     enhancement Moderate flac-1.3.3-8.fc29.x86_64 2019-01-17 00:00:00 +0000
         """
 
 
@@ -235,7 +235,7 @@ Scenario: advisory list installed
     And stdout is
         """
         Name                   Type   Severity                   Package              Issued
-        FEDORA-2018-318f184000 bugfix none     glibc-2.28-26.fc29.x86_64 2019-01-17 00:00:00
+        FEDORA-2018-318f184000 bugfix none     glibc-2.28-26.fc29.x86_64 2019-01-17 00:00:00 +0000
         """
 
 
@@ -255,8 +255,8 @@ Scenario: advisory list available enhancement
         """
         <REPOSYNC>
         Name                   Type        Severity                  Package              Issued
-        FEDORA-2018-318f184112 enhancement Moderate flac-1.4.0-1.fc29.x86_64 2019-01-19 00:00:00
-        FEDORA-2999:002-02     enhancement Moderate flac-1.3.3-8.fc29.x86_64 2019-01-17 00:00:00
+        FEDORA-2018-318f184112 enhancement Moderate flac-1.4.0-1.fc29.x86_64 2019-01-19 00:00:00 +0000
+        FEDORA-2999:002-02     enhancement Moderate flac-1.3.3-8.fc29.x86_64 2019-01-17 00:00:00 +0000
         """
 
 
@@ -275,7 +275,7 @@ Scenario: advisory list all bugfix
         """
         <REPOSYNC>
         Name                   Type   Severity                   Package              Issued
-        FEDORA-2018-318f184000 bugfix none     glibc-2.28-26.fc29.x86_64 2019-01-17 00:00:00
+        FEDORA-2018-318f184000 bugfix none     glibc-2.28-26.fc29.x86_64 2019-01-17 00:00:00 +0000
         """
 
 
@@ -293,7 +293,7 @@ Scenario Outline: advisory list updates plus <option>
     And stdout is
         """
         Name                   Type   Severity                   Package              Issued
-        FEDORA-2018-318f184000 bugfix none     glibc-2.28-26.fc29.x86_64 2019-01-17 00:00:00
+        FEDORA-2018-318f184000 bugfix none     glibc-2.28-26.fc29.x86_64 2019-01-17 00:00:00 +0000
         """
 
 Examples:
@@ -323,7 +323,7 @@ Scenario: advisory info <advisory>
         Type        : bugfix
         Status      : final
         Vendor      : secresponseteam@foo.bar
-        Issued      : 2019-01-17 00:00:00
+        Issued      : 2019-01-17 00:00:00 +0000
         Description : Fix some stuff
         Message     :
         Rights      :
@@ -366,7 +366,7 @@ Scenario: advisory info <advisory-with-respin-suffix>
         Type        : enhancement
         Status      : final
         Vendor      : secresponseteam@foo.bar
-        Issued      : 2019-01-17 00:00:00
+        Issued      : 2019-01-17 00:00:00 +0000
         Description : Enhance some stuff
         Message     :
         Rights      :
@@ -393,8 +393,8 @@ Scenario: advisory lists advisories referencing CVE
     And stdout is
         """
         CVE      Type   Severity                   Package              Issued
-        2999     bugfix none     glibc-2.28-26.fc29.x86_64 2019-01-17 00:00:00
-        CVE-2999 bugfix none     glibc-2.28-26.fc29.x86_64 2019-01-17 00:00:00
+        2999     bugfix none     glibc-2.28-26.fc29.x86_64 2019-01-17 00:00:00 +0000
+        CVE-2999 bugfix none     glibc-2.28-26.fc29.x86_64 2019-01-17 00:00:00 +0000
         """
 
 
@@ -410,7 +410,7 @@ Scenario: advisory lists advisories referencing bugzilla
     And stdout is
         """
         Bugzilla Type   Severity                   Package              Issued
-        222      bugfix none     glibc-2.28-26.fc29.x86_64 2019-01-17 00:00:00
+        222      bugfix none     glibc-2.28-26.fc29.x86_64 2019-01-17 00:00:00 +0000
         """
 
 
@@ -435,7 +435,7 @@ Scenario: advisory show <advisory> of the running kernel after a kernel update
     And stdout is
         """
         Name                   Type   Severity                        Package              Issued
-        FEDORA-2019-348e185000 bugfix Moderate kernel-4.19.15-300.fc29.x86_64 2019-01-17 00:00:00
+        FEDORA-2019-348e185000 bugfix Moderate kernel-4.19.15-300.fc29.x86_64 2019-01-17 00:00:00 +0000
         """
   Given I successfully execute dnf with args "upgrade kernel"
    Then Transaction is following
@@ -453,7 +453,7 @@ Scenario: advisory show <advisory> of the running kernel after a kernel update
     And stdout is
         """
         Name                   Type   Severity                        Package              Issued
-        FEDORA-2019-348e185000 bugfix Moderate kernel-4.19.15-300.fc29.x86_64 2019-01-17 00:00:00
+        FEDORA-2019-348e185000 bugfix Moderate kernel-4.19.15-300.fc29.x86_64 2019-01-17 00:00:00 +0000
         """
   Given I fake kernel release to "4.19.15-300.fc29.x86_64"
    # updated kernel is installed and running
@@ -479,8 +479,8 @@ Scenario: advisory lists advisories referencing CVE with dates
     And stdout is
         """
         CVE      Type   Severity                   Package              Issued
-        2999     bugfix none     glibc-2.28-26.fc29.x86_64 2019-01-17 00:00:00
-        CVE-2999 bugfix none     glibc-2.28-26.fc29.x86_64 2019-01-17 00:00:00
+        2999     bugfix none     glibc-2.28-26.fc29.x86_64 2019-01-17 00:00:00 +0000
+        CVE-2999 bugfix none     glibc-2.28-26.fc29.x86_64 2019-01-17 00:00:00 +0000
         """
 
 
@@ -498,11 +498,11 @@ Scenario: advisory lists advisories with custom type and severity
     And stdout is
         """
         Name                   Type        Severity                               Package              Issued
-        FEDORA-2019-57b5902ed1 security    Critical        labirinto-1.56.2-6.fc30.x86_64 2019-09-15 01:34:29
-        FEDORA-2019-f4eb34cf4c security    Moderate        labirinto-1.56.2-1.fc30.x86_64 2019-05-12 01:21:43
-        FEDORA-2022-2222222222 custom_type custom_severity labirinto-1.56.2-6.fc30.x86_64 2019-09-15 01:34:29
-        FEDORA-2022-2222222223 security    custom_severity labirinto-1.56.2-6.fc30.x86_64 2019-09-15 01:34:29
-        FEDORA-2022-2222222224 custom_type Critical        labirinto-1.56.2-6.fc30.x86_64 2019-09-15 01:34:29
+        FEDORA-2019-57b5902ed1 security    Critical        labirinto-1.56.2-6.fc30.x86_64 2019-09-15 01:34:29 +0000
+        FEDORA-2019-f4eb34cf4c security    Moderate        labirinto-1.56.2-1.fc30.x86_64 2019-05-12 01:21:43 +0000
+        FEDORA-2022-2222222222 custom_type custom_severity labirinto-1.56.2-6.fc30.x86_64 2019-09-15 01:34:29 +0000
+        FEDORA-2022-2222222223 security    custom_severity labirinto-1.56.2-6.fc30.x86_64 2019-09-15 01:34:29 +0000
+        FEDORA-2022-2222222224 custom_type Critical        labirinto-1.56.2-6.fc30.x86_64 2019-09-15 01:34:29 +0000
         """
 
 
@@ -524,7 +524,7 @@ Scenario: advisory prints info for advisories with custom type and severity
         Type        : security
         Status      : stable
         Vendor      : updates@fedoraproject.org
-        Issued      : 2019-05-12 01:21:43
+        Issued      : 2019-05-12 01:21:43 +0000
         Description : GNOME 3.32.2
         Message     :
         Rights      : Copyright (C) 2020 Red Hat, Inc. and others.
@@ -544,7 +544,7 @@ Scenario: advisory prints info for advisories with custom type and severity
         Type        : security
         Status      : stable
         Vendor      : updates@fedoraproject.org
-        Issued      : 2019-09-15 01:34:29
+        Issued      : 2019-09-15 01:34:29 +0000
         Description : mozjs60 60.9.0, including various security, stability and regression fixes from Firefox 60.9.0 ESR. For details, see https://www.mozilla.org/en-US/firefox/60.9.0/releasenotes/
         Message     :
         Rights      : Copyright (C) 2020 Red Hat, Inc. and others.
@@ -559,7 +559,7 @@ Scenario: advisory prints info for advisories with custom type and severity
         Type        : custom_type
         Status      : stable
         Vendor      : updates@fedoraproject.org
-        Issued      : 2019-09-15 01:34:29
+        Issued      : 2019-09-15 01:34:29 +0000
         Description : advisory with custom type and seveirity
         Message     :
         Rights      : Copyright (C) 2020 Red Hat, Inc. and others.
@@ -574,7 +574,7 @@ Scenario: advisory prints info for advisories with custom type and severity
         Type        : security
         Status      : stable
         Vendor      : updates@fedoraproject.org
-        Issued      : 2019-09-15 01:34:29
+        Issued      : 2019-09-15 01:34:29 +0000
         Description : advisory with custom seveirity
         Message     :
         Rights      : Copyright (C) 2020 Red Hat, Inc. and others.
@@ -589,7 +589,7 @@ Scenario: advisory prints info for advisories with custom type and severity
         Type        : custom_type
         Status      : stable
         Vendor      : updates@fedoraproject.org
-        Issued      : 2019-09-15 01:34:29
+        Issued      : 2019-09-15 01:34:29 +0000
         Description : advisory with custom type
         Message     :
         Rights      : Copyright (C) 2020 Red Hat, Inc. and others.
@@ -654,7 +654,7 @@ Given I use repository "security-upgrade"
   And stdout is
       """
       Name         Type     Severity      Package              Issued
-      DNF-D-2022-9 security          D-1-1.x86_64 1970-01-01 00:00:00
+      DNF-D-2022-9 security          D-1-1.x86_64 1970-01-01 00:00:00 +0000
       """
 
 
@@ -696,7 +696,7 @@ Given I use repository "security-upgrade"
   And stdout is
       """
       Name       Type     Severity                       Package              Issued
-      DNF-2019-4 security          change-arch-noarch-2-2.x86_64 1970-01-01 00:00:00
+      DNF-2019-4 security          change-arch-noarch-2-2.x86_64 1970-01-01 00:00:00 +0000
       """
 
 
@@ -713,7 +713,7 @@ Given I successfully execute dnf with args "install kernel flac glibc"
   And stdout is
       """
       Name               Type        Severity                  Package              Issued
-      FEDORA-2999:002-02 enhancement Moderate flac-1.3.3-8.fc29.x86_64 2019-01-17 00:00:00
+      FEDORA-2999:002-02 enhancement Moderate flac-1.3.3-8.fc29.x86_64 2019-01-17 00:00:00 +0000
       """
 
 
@@ -732,7 +732,7 @@ Scenario: package is upgraded if it has both resolved and unresolved advisories
     And stdout is
         """
         Name              Type   Severity                        Package              Issued
-        FEDORA-2026-10-06 bugfix Moderate kernel-4.19.15-302.fc29.x86_64 2026-06-10 00:00:00
+        FEDORA-2026-10-06 bugfix Moderate kernel-4.19.15-302.fc29.x86_64 2026-06-10 00:00:00 +0000
         """
   # Clean all solv files because libsolv loads ids differently when using them
   Given I successfully execute dnf with args "clean all"

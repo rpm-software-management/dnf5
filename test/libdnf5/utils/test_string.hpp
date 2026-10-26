@@ -33,6 +33,7 @@ class UtilsStringTest : public CppUnit::TestCase {
     CPPUNIT_TEST(test_join);
     CPPUNIT_TEST(test_split);
     CPPUNIT_TEST(test_rsplit);
+    CPPUNIT_TEST(test_format_epoch);
     CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -44,6 +45,8 @@ public:
     void test_join();
     void test_split();
     void test_rsplit();
+
+    void test_format_epoch();
 
 private:
 };
