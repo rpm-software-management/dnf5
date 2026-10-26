@@ -18,6 +18,66 @@ Scenario: Reposync with --newest-only option
     And stderr does not contain " SuperRipper-0:1\.2-1\."
 
 
+Scenario: Reposync with --latest-limit option downloads N latest versions for each name.arch
+  Given I use repository "history-recent" as http
+   When I execute dnf with args "reposync --urls --latest-limit=2"
+   Then the exit code is 0
+    And stderr is
+    """
+    <REPOSYNC>
+    """
+    And stdout matches line by line
+    """
+    http://localhost:[0-9]+/noarch/cambio-1-1\.noarch\.rpm
+    http://localhost:[0-9]+/noarch/fragola-3-1\.noarch\.rpm
+    http://localhost:[0-9]+/noarch/fragola-4-1\.noarch\.rpm
+    http://localhost:[0-9]+/src/cambio-1-1\.src\.rpm
+    http://localhost:[0-9]+/src/cambio-2-1\.src\.rpm
+    http://localhost:[0-9]+/src/fragola-3-1\.src\.rpm
+    http://localhost:[0-9]+/src/fragola-4-1\.src\.rpm
+    http://localhost:[0-9]+/x86_64/cambio-2-1\.x86_64\.rpm
+    """
+
+
+Scenario: Reposync with --latest-limit and --delete options removes local packages older than N latest versions
+  Given I use repository "history-recent" as http
+   When I execute dnf with args "reposync --download-path={context.dnf.tempdir} --arch=noarch"
+   Then the exit code is 0
+    And file "//{context.dnf.tempdir}/history-recent/noarch/fragola-1-1.noarch.rpm" exists
+    And file "//{context.dnf.tempdir}/history-recent/noarch/fragola-2-1.noarch.rpm" exists
+   When I execute dnf with args "reposync --download-path={context.dnf.tempdir} --arch=noarch --latest-limit=2 --delete"
+   Then the exit code is 0
+    And stdout contains "\[DELETED\] .*/history-recent/noarch/fragola-1-1\.noarch\.rpm"
+    And stdout contains "\[DELETED\] .*/history-recent/noarch/fragola-2-1\.noarch\.rpm"
+    And file "//{context.dnf.tempdir}/history-recent/noarch/fragola-1-1.noarch.rpm" does not exist
+    And file "//{context.dnf.tempdir}/history-recent/noarch/fragola-2-1.noarch.rpm" does not exist
+    And file "//{context.dnf.tempdir}/history-recent/noarch/fragola-3-1.noarch.rpm" exists
+    And file "//{context.dnf.tempdir}/history-recent/noarch/fragola-4-1.noarch.rpm" exists
+    And file "//{context.dnf.tempdir}/history-recent/noarch/cambio-1-1.noarch.rpm" exists
+
+
+Scenario Outline: Reposync --latest-limit requires a positive integer
+  Given I use repository "history-recent" as http
+   When I execute dnf with args "reposync --urls --latest-limit=<value>"
+   Then the exit code is 2
+    And stdout is empty
+    And stderr contains "Invalid value \"<value>\" for \"--latest-limit\", a positive integer is required"
+
+Examples:
+    | value |
+    | 0     |
+    | -1    |
+    | 2abc  |
+
+
+Scenario: Reposync --latest-limit cannot be used together with --newest-only
+  Given I use repository "history-recent" as http
+   When I execute dnf with args "reposync --urls --newest-only --latest-limit=2"
+   Then the exit code is 2
+    And stdout is empty
+    And stderr contains "\"--latest-limit=2\" not allowed together with named argument"
+
+
 @xfail
 # --downloadcomps is not supported in dnf5
 @bz1653126 @bz1676726

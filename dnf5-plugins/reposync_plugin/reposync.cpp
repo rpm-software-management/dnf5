@@ -31,6 +31,8 @@
 #include <libdnf5/utils/bgettext/bgettext-lib.h>
 #include <libdnf5/utils/bgettext/bgettext-mark-domain.h>
 
+#include <charconv>
+#include <cstdint>
 #include <string>
 #include <string_view>
 #include <vector>
@@ -97,6 +99,33 @@ void ReposyncCommand::set_argument_parser() {
 
     newest_option = std::make_unique<libdnf5::cli::session::BoolOption>(
         *this, "newest-only", 'n', "Download only newest packages per-repo", false);
+
+    latest_limit_option = dynamic_cast<libdnf5::OptionNumber<std::int32_t> *>(
+        parser.add_init_value(std::make_unique<libdnf5::OptionNumber<std::int32_t>>(0)));
+    auto * latest_limit_arg = parser.add_new_named_arg("latest-limit");
+    latest_limit_arg->set_long_name("latest-limit");
+    latest_limit_arg->set_description("Download only N latest packages for each name.arch per-repo");
+    latest_limit_arg->set_has_value(true);
+    latest_limit_arg->set_arg_value_help("N");
+    latest_limit_arg->link_value(latest_limit_option);
+    latest_limit_arg->set_parse_hook_func([]([[maybe_unused]] libdnf5::cli::ArgumentParser::NamedArg * arg,
+                                             [[maybe_unused]] const char * option,
+                                             const char * value) {
+        // Unlike repoquery, negative values ("all but N latest") are rejected. Combined with
+        // --delete they would remove the newest packages from the local copy. The whole value
+        // is checked because OptionNumber accepts trailing characters ("2abc" is read as 2).
+        const std::string_view text(value);
+        std::int32_t limit = 0;
+        const auto [end, error] = std::from_chars(text.data(), text.data() + text.size(), limit);
+        if (error != std::errc() || end != text.data() + text.size() || limit < 1) {
+            throw libdnf5::cli::ArgumentParserInvalidValueError(
+                M_("Invalid value \"{}\" for \"--latest-limit\", a positive integer is required"), std::string(text));
+        }
+        return true;
+    });
+    latest_limit_arg->add_conflict_argument(*newest_option->get_arg());
+    newest_option->get_arg()->add_conflict_argument(*latest_limit_arg);
+    cmd.register_named_arg(latest_limit_arg);
 
     remote_time_option = std::make_unique<libdnf5::cli::session::BoolOption>(
         *this, "remote-time", '\0', "Set timestamps of the downloaded files according to remote side", false);
@@ -194,7 +223,7 @@ std::filesystem::path ReposyncCommand::repo_download_path(const libdnf5::repo::R
     return std::filesystem::weakly_canonical(repo_path);
 }
 
-void ReposyncCommand::limit_to_latest(libdnf5::rpm::PackageQuery & query) {
+void ReposyncCommand::limit_to_latest(libdnf5::rpm::PackageQuery & query, int limit) {
     // TODO(mblaha): implement modularity support
     // https://github.com/rpm-software-management/dnf5/issues/1902
     // Returned query should contain a union of these queries:
@@ -204,7 +233,7 @@ void ReposyncCommand::limit_to_latest(libdnf5::rpm::PackageQuery & query) {
     //   part of an older module version)
     // - all packages from the latest stream version
 
-    query.filter_latest_evr();
+    query.filter_latest_evr(limit);
 }
 
 ReposyncCommand::download_list_type ReposyncCommand::get_packages_list(const libdnf5::repo::Repo & repo) {
@@ -240,7 +269,9 @@ ReposyncCommand::download_list_type ReposyncCommand::get_packages_list(const lib
     query.filter_repo_id(repo.get_id());
 
     if (newest_option->get_value()) {
-        limit_to_latest(query);
+        limit_to_latest(query, 1);
+    } else if (latest_limit_option->get_value() > 0) {
+        limit_to_latest(query, latest_limit_option->get_value());
     }
 
     if (min_buildtime_option->get_arg()->get_parse_count() >= 1) {

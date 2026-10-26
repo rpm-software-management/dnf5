@@ -24,6 +24,7 @@
 
 #include <dnf5/context.hpp>
 #include <libdnf5-cli/session.hpp>
+#include <libdnf5/conf/option_number.hpp>
 #include <libdnf5/repo/repo.hpp>
 #include <libdnf5/rpm/package.hpp>
 
@@ -54,11 +55,12 @@ private:
     std::unique_ptr<libdnf5::cli::session::BoolOption> download_metadata_option{nullptr};
     std::unique_ptr<libdnf5::cli::session::DateOption> min_buildtime_option{nullptr};
     std::unordered_set<std::string> arch_option;
+    libdnf5::OptionNumber<std::int32_t> * latest_limit_option{nullptr};
     libdnf5::OptionString * safe_write_path_option{nullptr};
     libdnf5::OptionString * metadata_path_option{nullptr};
 
     std::filesystem::path repo_download_path(const libdnf5::repo::Repo & repo);
-    void limit_to_latest(libdnf5::rpm::PackageQuery & query);
+    void limit_to_latest(libdnf5::rpm::PackageQuery & query, int limit);
     download_list_type get_packages_list(const libdnf5::repo::Repo & repo);
     void download_packages(const download_list_type & pkg_list);
     void delete_old_local_packages(const libdnf5::repo::Repo & repo, const download_list_type & pkg_list);

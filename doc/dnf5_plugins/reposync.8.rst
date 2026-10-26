@@ -56,7 +56,7 @@ Options
 ``--download-metadata``
     Download all repository metadata. The downloaded copy is instantly usable
     as a repository without the need to run ``createrepo_c``. When used with
-    ``--newest-only``, only the latest package versions are downloaded. However,
+    ``--newest-only`` or ``--latest-limit``, only the latest package versions are downloaded. However,
     the metadata will still reference also older packages. To avoid issues caused
     by missing RPM files, consider updating the metadata using ``createrepo_c --update``.
     Otherwise, DNF will encounter errors when attempting to install older packages.
@@ -67,6 +67,18 @@ Options
 
     Note: For repositories configured with ``gpgcheck=0``, OpenPGP signatures are not
     checked, even when this option is used.
+
+``--latest-limit=<N>``
+    Download only the ``N`` latest versions of each package from each repository.
+    Versions are counted separately for each package name and architecture, so
+    for example source packages are limited independently of binary ones. ``N``
+    must be a positive integer. ``--latest-limit=1`` is equivalent to ``--newest-only``;
+    the two options cannot be used together.
+
+    Combined with ``--delete``, local packages that are no longer among the ``N``
+    latest versions are removed, which keeps a rolling window of versions for
+    rollback. The limit is applied before ``--min-buildtime``, so fewer than ``N``
+    versions are downloaded when some of them are older than the given date.
 
 ``--metadata-path=<path>``
     Specifies the root path where downloaded metadata files are stored. If not
@@ -118,6 +130,10 @@ Examples
 ``dnf reposync --destdir=/my/repos/path --repoid=the_repo``
     Synchronize all packages from the repository with id ``the_repo``. In this
     case files are saved in ``/my/repos/path/the_repo`` directory.
+
+``dnf reposync --repoid=the_repo --latest-limit=3 --delete``
+    Synchronize the three latest versions of each package from ``the_repo``
+    and remove older local copies of the packages.
 
 ``dnf reposync --repoid=the_repo --download-metadata``
     Synchronize all packages and metadata from ``the_repo`` repository.
