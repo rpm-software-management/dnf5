@@ -234,6 +234,8 @@ void DownloadCommand::run() {
     std::map<std::string, libdnf5::rpm::Package> original_binary_pkgs;
     // Container to collect all packages to download
     std::map<std::string, libdnf5::rpm::Package> packages_to_download;
+    // Requested packages whose dependencies are to be resolved (--resolve)
+    std::vector<libdnf5::rpm::Package> pkgs_to_resolve;
 
     libdnf5::rpm::PackageQuery full_pkg_query(ctx.get_base(), libdnf5::sack::ExcludeFlags::IGNORE_VERSIONLOCK);
     for (auto & pattern : *patterns_to_download_options) {
@@ -264,24 +266,50 @@ void DownloadCommand::run() {
 
         for (const auto & pkg : pkg_query) {
             original_binary_pkgs.insert(create_nevra_pkg_pair(pkg));
-
             if (resolve_option->get_value()) {
-                auto goal = std::make_unique<libdnf5::Goal>(ctx.get_base());
-                goal->add_rpm_install(pkg, {});
+                pkgs_to_resolve.push_back(pkg);
+            }
+        }
+    }
 
-                auto transaction = goal->resolve();
-                auto transaction_problems = transaction.get_problems();
-                if (transaction_problems != libdnf5::GoalProblem::NO_PROBLEM) {
-                    if (transaction_problems != libdnf5::GoalProblem::NOT_FOUND) {
-                        throw GoalResolveError(transaction);
-                    }
+    if (!pkgs_to_resolve.empty()) {
+        auto resolve_pkgs = [&](const std::vector<libdnf5::rpm::Package> & pkgs) {
+            libdnf5::Goal goal(ctx.get_base());
+            for (const auto & pkg : pkgs) {
+                goal.add_rpm_install(pkg, {});
+            }
+            return goal.resolve();
+        };
+
+        auto is_resolved = [](libdnf5::base::Transaction & transaction) {
+            auto transaction_problems = transaction.get_problems();
+            return transaction_problems == libdnf5::GoalProblem::NO_PROBLEM ||
+                   transaction_problems == libdnf5::GoalProblem::NOT_FOUND;
+        };
+
+        auto add_inbound_pkgs = [&](libdnf5::base::Transaction & transaction) {
+            for (auto & tspkg : transaction.get_transaction_packages()) {
+                if (transaction_item_action_is_inbound(tspkg.get_action()) &&
+                    tspkg.get_package().get_repo()->get_type() != libdnf5::repo::Repo::Type::COMMANDLINE) {
+                    original_binary_pkgs.insert(create_nevra_pkg_pair(tspkg.get_package()));
                 }
-                for (auto & tspkg : transaction.get_transaction_packages()) {
-                    if (transaction_item_action_is_inbound(tspkg.get_action()) &&
-                        tspkg.get_package().get_repo()->get_type() != libdnf5::repo::Repo::Type::COMMANDLINE) {
-                        original_binary_pkgs.insert(create_nevra_pkg_pair(tspkg.get_package()));
-                    }
+            }
+        };
+
+        // Resolve all requested packages together so that explicitly requested versions
+        // are preferred when resolving the dependencies of the other packages.
+        auto transaction = resolve_pkgs(pkgs_to_resolve);
+        if (is_resolved(transaction)) {
+            add_inbound_pkgs(transaction);
+        } else {
+            // The requested packages cannot be installed together (e.g. multiple versions of
+            // the same package), so resolve each of them separately.
+            for (const auto & pkg : pkgs_to_resolve) {
+                auto pkg_transaction = resolve_pkgs({pkg});
+                if (!is_resolved(pkg_transaction)) {
+                    throw GoalResolveError(pkg_transaction);
                 }
+                add_inbound_pkgs(pkg_transaction);
             }
         }
     }

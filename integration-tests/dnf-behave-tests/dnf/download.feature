@@ -79,6 +79,27 @@ Scenario: Download when package is available from multiple repositories
     And file "/{context.dnf.tempdir}/wget-1.19.6-5.fc29.x86_64.rpm" exists
 
 
+Scenario: Download with resolve option respects explicitly requested versions of dependencies
+  Given I use repository "dependency-chain"
+    And I set working directory to "{context.dnf.tempdir}"
+   When I execute dnf with args "download top mid-1 --resolve"
+   Then the exit code is 0
+    And file "/{context.dnf.tempdir}/top-1-1.fc29.x86_64.rpm" exists
+    And file "/{context.dnf.tempdir}/mid-1-1.fc29.x86_64.rpm" exists
+    And file "/{context.dnf.tempdir}/bot-1-1.fc29.x86_64.rpm" exists
+    And file "/{context.dnf.tempdir}/mid-2-1.fc29.x86_64.rpm" does not exist
+
+
+Scenario: Download with resolve option when multiple versions of the same package are requested
+  Given I use repository "dependency-chain"
+    And I set working directory to "{context.dnf.tempdir}"
+   When I execute dnf with args "download mid-1 mid-2 --resolve"
+   Then the exit code is 0
+    And file "/{context.dnf.tempdir}/mid-1-1.fc29.x86_64.rpm" exists
+    And file "/{context.dnf.tempdir}/mid-2-1.fc29.x86_64.rpm" exists
+    And file "/{context.dnf.tempdir}/bot-1-1.fc29.x86_64.rpm" exists
+
+
 @bz1463723
 Scenario: Download an existing RPM in file:// mode
   Given I use repository "dnf-ci-fedora"
