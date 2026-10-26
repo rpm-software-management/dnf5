@@ -279,6 +279,12 @@ void PackageDownloader::download() try {
     auto removal_enforced = p_impl->keep_packages.has_value() && !p_impl->keep_packages.value();
     auto keep_enforced = p_impl->keep_packages.has_value() && p_impl->keep_packages.value();
     if (removal_enforced || (!keep_enforced && removal_configured)) {
+        // These files will be deleted after the transaction, and won't be
+        // re-verified from disk before that. Skip persisting the checksum
+        // cache (and the fsync() that makes that persistence crash-safe) -
+        // checksums are still computed and verified during download.
+        flags = static_cast<LrPackageDownloadFlag>(flags | LR_PACKAGEDOWNLOAD_TRANSIENT);
+
         std::vector<std::string> package_paths;
         std::transform(
             p_impl->targets.begin(),
