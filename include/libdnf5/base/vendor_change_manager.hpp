@@ -133,6 +133,14 @@ public:
     /// @throws VendorChangeManagerError if parsing fails.
     static std::string convert_policy_compact_to_toml(std::string_view compact_str, std::string_view source);
 
+    /// Ensures the vendor configuration directory (``/etc/dnf/vendors.d/`` or installroot
+    /// equivalent) exists, creating it (and any missing parent directories) if necessary.
+    /// Useful before calling save_policy_from_toml()/save_policy_from_compact() on a system
+    /// where the directory may not already exist (e.g. a minimal ``--installroot``).
+    /// @return ``true`` if the directory was created, ``false`` if it already existed.
+    /// @throws VendorChangeManagerError if the directory could not be created.
+    bool ensure_vendor_conf_dir_exists();
+
     /// Save a vendor change policy from TOML format to a configuration file
     /// in the vendor directory (``/etc/dnf/vendors.d/`` or installroot equivalent).
     /// The TOML content is validated by parsing before saving.

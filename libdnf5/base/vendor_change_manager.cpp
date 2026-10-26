@@ -52,6 +52,8 @@ public:
 
     std::string get_loaded_policy_as_compact(std::size_t index) const { return vcm.get_policy_as_compact(index); }
 
+    bool ensure_vendor_conf_dir_exists();
+
     std::filesystem::path save_policy_from_toml(
         std::string_view toml_content,
         std::string_view source,
@@ -99,6 +101,23 @@ void VendorChangeManager::Impl::load_policies() {
     for (const auto & path : get_policy_files()) {
         vcm.add_policy_from_toml(path);
     }
+}
+
+
+bool VendorChangeManager::Impl::ensure_vendor_conf_dir_exists() {
+    namespace fs = std::filesystem;
+
+    const fs::path dir = get_vendor_conf_dir_path();
+    std::error_code ec;
+    const bool created = fs::create_directories(dir, ec);
+    if (ec) {
+        throw VendorChangeManagerError(
+            M_("{func}(): Cannot create directory: {path}: {msg}"),
+            NamedErrorArg("func", __func__),
+            NamedErrorArg("path", dir.string()),
+            NamedErrorArg("msg", ec.message()));
+    }
+    return created;
 }
 
 
@@ -394,6 +413,11 @@ std::string VendorChangeManager::convert_policy_toml_to_compact(const std::files
 
 std::string VendorChangeManager::convert_policy_compact_to_toml(std::string_view compact_str, std::string_view source) {
     return solv::VendorChangeManager::convert_policy_compact_to_toml(compact_str, source);
+}
+
+
+bool VendorChangeManager::ensure_vendor_conf_dir_exists() {
+    return p_impl->ensure_vendor_conf_dir_exists();
 }
 
 
