@@ -273,10 +273,11 @@ void DownloadCommand::run() {
     }
 
     if (!pkgs_to_resolve.empty()) {
-        auto resolve_pkgs = [&](const std::vector<libdnf5::rpm::Package> & pkgs) {
+        auto resolve_pkgs = [&](const std::vector<libdnf5::rpm::Package> & pkgs,
+                                const libdnf5::GoalJobSettings & settings) {
             libdnf5::Goal goal(ctx.get_base());
             for (const auto & pkg : pkgs) {
-                goal.add_rpm_install(pkg, {});
+                goal.add_rpm_install(pkg, settings);
             }
             return goal.resolve();
         };
@@ -297,15 +298,19 @@ void DownloadCommand::run() {
         };
 
         // Resolve all requested packages together so that explicitly requested versions
-        // are preferred when resolving the dependencies of the other packages.
-        auto transaction = resolve_pkgs(pkgs_to_resolve);
+        // are preferred when resolving the dependencies of the other packages. Skipping
+        // broken packages is disabled, so that a conflict triggers the fallback below
+        // instead of silently omitting the dependencies of a skipped package.
+        libdnf5::GoalJobSettings joint_settings;
+        joint_settings.set_skip_broken(libdnf5::GoalSetting::SET_FALSE);
+        auto transaction = resolve_pkgs(pkgs_to_resolve, joint_settings);
         if (is_resolved(transaction)) {
             add_inbound_pkgs(transaction);
         } else {
             // The requested packages cannot be installed together (e.g. multiple versions of
             // the same package), so resolve each of them separately.
             for (const auto & pkg : pkgs_to_resolve) {
-                auto pkg_transaction = resolve_pkgs({pkg});
+                auto pkg_transaction = resolve_pkgs({pkg}, {});
                 if (!is_resolved(pkg_transaction)) {
                     throw GoalResolveError(pkg_transaction);
                 }

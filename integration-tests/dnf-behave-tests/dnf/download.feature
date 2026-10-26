@@ -100,6 +100,17 @@ Scenario: Download with resolve option when multiple versions of the same packag
     And file "/{context.dnf.tempdir}/bot-1-1.fc29.x86_64.rpm" exists
 
 
+Scenario: Download with resolve option and skip_broken when multiple versions of the same package are requested
+  Given I use repository "install-dependencies"
+    And I set working directory to "{context.dnf.tempdir}"
+   When I execute dnf with args "download foo-1.0 foo-2.0 --resolve --setopt=skip_broken=True"
+   Then the exit code is 0
+    And file "/{context.dnf.tempdir}/foo-1.0-1.fc29.x86_64.rpm" exists
+    And file "/{context.dnf.tempdir}/foo-2.0-1.fc29.x86_64.rpm" exists
+    And file "/{context.dnf.tempdir}/lib-1.0-1.fc29.x86_64.rpm" exists
+    And file "/{context.dnf.tempdir}/lib-2.0-1.fc29.x86_64.rpm" exists
+
+
 @bz1463723
 Scenario: Download an existing RPM in file:// mode
   Given I use repository "dnf-ci-fedora"
