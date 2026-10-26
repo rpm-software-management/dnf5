@@ -85,7 +85,8 @@ Scenario: Test enabling a repo with manually specified chroot (different to curr
       Please do not file bug reports about these packages in Fedora
       Bugzilla. In case of problems, contact the owner of this repository.
 
-      Not allowing a vendor change in either direction for the repositories enabled by this command (--assumeyes).
+      Using the vendor change setting from the Copr configuration (or its default) for the
+      repositories enabled by this command: do not allow a vendor change in either direction
       Saved vendor policy file: {context.dnf.installroot}/etc/dnf/vendors.d/i_copr:localhost:testuser:testproject.conf
       Saved vendor policy file: {context.dnf.installroot}/etc/dnf/vendors.d/o_copr:localhost:testuser:testproject.conf
       """
