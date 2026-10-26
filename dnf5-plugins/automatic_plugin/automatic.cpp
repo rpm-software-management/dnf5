@@ -36,6 +36,8 @@
 #include <libsmartcols/libsmartcols.h>
 #include <netdb.h>
 #include <stdlib.h>
+#include <sys/socket.h>
+#include <sys/types.h>
 
 #include <chrono>
 #include <filesystem>
@@ -68,29 +70,38 @@ static bool reboot_needed(libdnf5::Base & base, const libdnf5::base::Transaction
 
 static bool server_available(std::string_view host, std::string_view service) {
     // Resolve host name/service to IP address/port
+    struct addrinfo hints{};
+    hints.ai_family = AF_UNSPEC;
+    hints.ai_socktype = SOCK_STREAM;
+    hints.ai_protocol = IPPROTO_TCP;
+
     struct addrinfo * server_info;
-    if (getaddrinfo(host.data(), service.data(), nullptr, &server_info) != 0) {
+    if (getaddrinfo(host.data(), service.data(), &hints, &server_info) != 0) {
         return false;
     }
 
-    // Create a socket
-    int sockfd = socket(AF_INET, SOCK_STREAM, 0);
-    if (sockfd < 0) {
-        freeaddrinfo(server_info);
-        return false;
+    bool retval = false;
+    for (auto * server = server_info; server != nullptr; server = server->ai_next) {
+        int sockfd = socket(server->ai_family, server->ai_socktype, server->ai_protocol);
+        if (sockfd < 0) {
+            continue;
+        }
+
+        struct timeval timeout;
+        timeout.tv_sec = 1;
+        timeout.tv_usec = 0;
+        setsockopt(sockfd, SOL_SOCKET, SO_RCVTIMEO, &timeout, sizeof(timeout));
+
+        if (connect(sockfd, server->ai_addr, server->ai_addrlen) == 0) {
+            retval = true;
+        }
+
+        close(sockfd);
+        if (retval) {
+            break;
+        }
     }
 
-    // Attempt to connect to the server
-    bool retval = true;
-    struct timeval timeout;
-    timeout.tv_sec = 1;
-    timeout.tv_usec = 0;
-    setsockopt(sockfd, SOL_SOCKET, SO_RCVTIMEO, &timeout, sizeof(timeout));
-    if (connect(sockfd, server_info->ai_addr, server_info->ai_addrlen) < 0) {
-        retval = false;
-    }
-
-    close(sockfd);
     freeaddrinfo(server_info);
     return retval;
 }
