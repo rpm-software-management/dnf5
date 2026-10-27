@@ -21,6 +21,7 @@
 
 #include "config.h"
 #include "config_utils.hpp"
+#include "utils/convert.hpp"
 #include "utils/deprecate.hpp"
 #include "utils/system.hpp"
 
@@ -40,7 +41,6 @@
 #include <cmath>
 #include <limits>
 #include <sstream>
-#include <stdexcept>
 #include <utility>
 
 namespace libdnf5 {
@@ -62,12 +62,7 @@ static std::uint32_t str_to_bytes(const std::string & str) {
 
     std::size_t idx;
     double res;
-    try {
-        res = std::stod(str, &idx);
-    } catch (const std::logic_error &) {  // std::invalid_argument, std::out_of_range
-        throw OptionInvalidValueError(M_("Could not convert '{}' to bytes"), str);
-    }
-    if (std::isnan(res)) {
+    if (!utils::parse_double(str, res, &idx) || std::isnan(res)) {
         throw OptionInvalidValueError(M_("Could not convert '{}' to bytes"), str);
     }
     if (res < 0) {
@@ -305,11 +300,8 @@ class ConfigMain::Impl {
     OptionNumber<float> throttle{
         0, 0, [](const std::string & value) {
             if (!value.empty() && value.back() == '%') {
-                std::size_t idx;
-                float res;
-                try {
-                    res = std::stof(value, &idx);
-                } catch (const std::logic_error &) {  // std::invalid_argument, std::out_of_range
+                double res;
+                if (!utils::parse_double(value, res)) {
                     throw OptionInvalidValueError(M_("Invalid throttle value \"{}\""), value);
                 }
                 // NaN fails both comparisons below, so test for it explicitly
@@ -319,7 +311,7 @@ class ConfigMain::Impl {
                     throw OptionInvalidValueError(
                         M_("The throttle value {} is outside the allowed range {} ... {}"), value, 0, 100);
                 }
-                return res / 100;
+                return static_cast<float>(res / 100);
             }
             return static_cast<float>(str_to_bytes(value));
         }};

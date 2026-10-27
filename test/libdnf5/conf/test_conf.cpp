@@ -23,12 +23,17 @@
 #include "../shared/utils.hpp"
 #include "conf/config.h"
 #include "repo/key_auto_import.hpp"
+#include "utils/convert.hpp"
 
+#include <libdnf5/conf/option_seconds.hpp>
 #include <libdnf5/repo/config_repo.hpp>
 #include <libdnf5/utils/fs/temp.hpp>
 
+#include <clocale>
 #include <filesystem>
 #include <fstream>
+#include <iostream>
+#include <tuple>
 #include <vector>
 
 
@@ -83,6 +88,49 @@ void ConfTest::test_config_main_byte_sizes() {
     for (const auto * str : {"abc%", "%", "nan%", "101%", "-1%", "1e999%", "abc"}) {
         CPPUNIT_ASSERT_THROW_MESSAGE(str, throttle.set(Option::Priority::RUNTIME, str), OptionError);
     }
+}
+
+void ConfTest::test_parse_double() {
+    double value = 0;
+    std::size_t consumed = 0;
+    for (const auto & [str, val, len] : std::vector<std::tuple<std::string, double, std::size_t>>{
+             {"1.5", 1.5, 3}, {"  2", 2, 3}, {"+2", 2, 2}, {"-2.5", -2.5, 4}, {"1e3", 1000, 3}, {"1.5k", 1.5, 3}}) {
+        CPPUNIT_ASSERT_MESSAGE(str, utils::parse_double(str, value, &consumed));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(str, val, value);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(str, len, consumed);
+    }
+    for (const auto * str : {"", " ", "abc", "k1", "+-2", "1e999", ",5"}) {
+        CPPUNIT_ASSERT_MESSAGE(str, !utils::parse_double(str, value));
+    }
+}
+
+// The decimal separator in the configuration is always '.', whatever the locale of the process is.
+void ConfTest::test_float_options_decimal_comma_locale() {
+    const std::string saved = std::setlocale(LC_NUMERIC, nullptr);
+    bool found = false;
+    for (const auto * name : {"cs_CZ.UTF-8", "de_DE.UTF-8", "fr_FR.UTF-8", "ru_RU.UTF-8", "uk_UA.UTF-8"}) {
+        if (std::setlocale(LC_NUMERIC, name) != nullptr) {
+            found = true;
+            break;
+        }
+    }
+    if (!found) {
+        std::cerr << "test_float_options_decimal_comma_locale: no decimal comma locale installed, skipped" << std::endl;
+        return;
+    }
+    struct Restore {
+        std::string locale;
+        ~Restore() { std::setlocale(LC_NUMERIC, locale.c_str()); }
+    } restore{saved};
+    CPPUNIT_ASSERT_EQUAL(std::string(","), std::string(std::localeconv()->decimal_point));
+
+    config.get_bandwidth_option().set(Option::Priority::RUNTIME, "1.5k");
+    CPPUNIT_ASSERT_EQUAL(static_cast<std::uint32_t>(1536), config.get_bandwidth_option().get_value());
+    config.get_throttle_option().set(Option::Priority::RUNTIME, "12.5%");
+    CPPUNIT_ASSERT_EQUAL(0.125f, config.get_throttle_option().get_value());
+    OptionSeconds seconds(0);
+    seconds.set(Option::Priority::RUNTIME, "1.5m");
+    CPPUNIT_ASSERT_EQUAL(90, seconds.get_value());
 }
 
 void ConfTest::test_config_repo() {

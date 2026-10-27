@@ -19,6 +19,8 @@
 
 #include "libdnf5/conf/option_seconds.hpp"
 
+#include "utils/convert.hpp"
+
 #include "libdnf5/utils/bgettext/bgettext-mark-domain.h"
 
 namespace libdnf5 {
@@ -44,9 +46,7 @@ OptionSeconds::ValueType OptionSeconds::from_string(const std::string & value) c
 
     std::size_t idx;
     double res;
-    try {
-        res = std::stod(value, &idx);
-    } catch (...) {
+    if (!utils::parse_double(value, res, &idx)) {
         throw OptionInvalidValueError(M_("Invalid time option value \"{}\", number or \"never\" expected"), value);
     }
     if (res < 0) {

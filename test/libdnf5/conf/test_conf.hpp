@@ -32,6 +32,8 @@ class ConfTest : public TestCaseFixture {
     CPPUNIT_TEST_SUITE(ConfTest);
     CPPUNIT_TEST(test_config_main);
     CPPUNIT_TEST(test_config_main_byte_sizes);
+    CPPUNIT_TEST(test_parse_double);
+    CPPUNIT_TEST(test_float_options_decimal_comma_locale);
     CPPUNIT_TEST(test_config_repo);
     CPPUNIT_TEST(test_config_repo_backslash);
     CPPUNIT_TEST(test_config_pkg_gpgcheck);
@@ -52,6 +54,8 @@ public:
 
     void test_config_main();
     void test_config_main_byte_sizes();
+    void test_parse_double();
+    void test_float_options_decimal_comma_locale();
     void test_config_repo();
     void test_config_repo_backslash();
     void test_config_pkg_gpgcheck();
