@@ -1,6 +1,9 @@
 Feature: Always use the latest packages when installing dependecies
 
 
+Background:
+  Given I set environment variable "DNF5_FORCE_COLUMNS" to "500"
+
 Scenario: prefer installing latests dependencies rather than smaller transaction
   Given I use repository "install-latest-deps"
     And I successfully execute dnf with args "install krb5-libs-1.0"

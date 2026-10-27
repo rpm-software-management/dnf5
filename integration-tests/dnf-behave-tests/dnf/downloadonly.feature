@@ -1,5 +1,8 @@
 Feature: Only download rpms with --downloadonly and store them in cache
 
+Background:
+  Given I set environment variable "DNF5_FORCE_COLUMNS" to "500"
+
 Scenario: Install/reinstall/upgrade work correctly with --downloadonly option
   Given I use repository "dnf-ci-fedora"
    When I execute dnf with args "install --downloadonly wget"

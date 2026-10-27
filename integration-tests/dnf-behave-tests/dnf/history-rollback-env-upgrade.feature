@@ -2,6 +2,7 @@ Feature: Transaction history rollback of environment upgrades
 
 
 Background:
+  Given I set environment variable "DNF5_FORCE_COLUMNS" to "500"
   Given I use repository "dnf-ci-group-rollback-1"
     And I successfully execute dnf with args "group install dnf-ci-group-rollback-testenv"
    Then Transaction is following

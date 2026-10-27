@@ -1,6 +1,7 @@
 Feature: History of update
 
 Background:
+  Given I set environment variable "DNF5_FORCE_COLUMNS" to "500"
   Given I use repository "dnf-ci-fedora"
 
 Scenario: History of update packages
