@@ -23,6 +23,8 @@
 #include "helpers.hpp"
 #include "json.hpp"
 
+#include "libdnf5/utils/fs/file.hpp"
+
 #include <fnmatch.h>
 #include <libdnf5-cli/utils/userconfirm.hpp>
 #include <libdnf5/base/base.hpp>
@@ -30,7 +32,7 @@
 #include <libdnf5/conf/const.hpp>
 
 #include <filesystem>
-#include <fstream>
+#include <sstream>
 #include <string>
 
 
@@ -383,9 +385,9 @@ void CoprRepo::disable() {
 
 void CoprRepo::save() {
     std::filesystem::path path = file_path();
-    std::ofstream repofile;
-    repofile.open(path);
-    repofile << *this;
+
+    libdnf5::utils::fs::File repofile(path, "w");
+    repofile.write((std::ostringstream() << *this).view());
     repofile.close();
 
     std::filesystem::permissions(
