@@ -52,6 +52,21 @@ void ConfTest::test_config_main() {
     CPPUNIT_ASSERT_EQUAL(pluginpath, config.get_pluginpath_option().get_value());
 }
 
+// "<off>" and 0 disable the limit. Anything that is not a plain non-negative integer is rejected instead
+// of being read as 0 (limit off) or, for "-1", as 4294967295.
+void ConfTest::test_config_main_installonly_limit() {
+    auto & option = config.get_installonly_limit_option();
+    for (const auto & [str, val] :
+         std::vector<std::pair<std::string, std::uint32_t>>{{"<off>", 0}, {"0", 0}, {"2", 2}, {" 5 ", 5}}) {
+        option.set(Option::Priority::RUNTIME, str);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(str, val, option.get_value());
+    }
+    for (const auto * str : {"", "abc", "3abc", "-1", "1.5", "4294967296"}) {
+        CPPUNIT_ASSERT_THROW_MESSAGE(str, option.set(Option::Priority::RUNTIME, str), OptionInvalidValueError);
+    }
+    CPPUNIT_ASSERT_EQUAL(static_cast<std::uint32_t>(5), option.get_value());
+}
+
 void ConfTest::test_config_repo() {
     repo::ConfigRepo config_repo(config, "test-repo");
     ConfigParser parser;

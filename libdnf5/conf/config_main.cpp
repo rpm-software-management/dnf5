@@ -149,11 +149,10 @@ class ConfigMain::Impl {
                                                       if (value == "<off>") {
                                                           return 0;
                                                       }
-                                                      try {
-                                                          return static_cast<std::uint32_t>(std::stoul(value));
-                                                      } catch (...) {
-                                                          return 0;
-                                                      }
+                                                      // Same parsing as the other options: no trailing characters, no
+                                                      // negative values. An invalid value must not silently turn the limit off.
+                                                      static const OptionNumber<std::uint32_t> parser{0};
+                                                      return parser.from_string(value);
                                                   }};
 
     OptionStringAppendList tsflags{std::vector<std::string>{}};
