@@ -199,6 +199,34 @@ void OptionTest::test_options_number() {
     CPPUNIT_ASSERT_THROW(option.set(Option::Priority::RUNTIME, 2), UserAssertionError);
 }
 
+// The whole string has to be a number. Surrounding whitespace and a leading '+' are accepted.
+void OptionTest::test_options_number_from_string() {
+    OptionNumber<int32_t> i32(0);
+    for (const auto & [str, val] : std::vector<std::pair<std::string, int32_t>>{
+             {"2", 2}, {" 2", 2}, {"2 ", 2}, {"+2", 2}, {"-1", -1}, {"07", 7}, {"2147483647", INT32_MAX}}) {
+        i32.set(Option::Priority::RUNTIME, str);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(str, val, i32.get_value());
+    }
+    for (const auto * str : {"", " ", "abc", "2abc", "2 3", "1.5", "1e3", "0x10", "--1", "2147483648"}) {
+        CPPUNIT_ASSERT_THROW_MESSAGE(str, i32.set(Option::Priority::RUNTIME, str), OptionInvalidValueError);
+    }
+
+    OptionNumber<uint32_t> u32(0);
+    u32.set(Option::Priority::RUNTIME, " +3 ");
+    CPPUNIT_ASSERT_EQUAL(3u, u32.get_value());
+    // "-1" must not wrap around to 4294967295
+    for (const auto * str : {"-1", " -1", "-0", "3abc", "4294967296"}) {
+        CPPUNIT_ASSERT_THROW_MESSAGE(str, u32.set(Option::Priority::RUNTIME, str), OptionInvalidValueError);
+    }
+
+    OptionNumber<float> f32(0.0f, -1e6f, 1e6f);
+    f32.set(Option::Priority::RUNTIME, " 1.5 ");
+    CPPUNIT_ASSERT_EQUAL(1.5f, f32.get_value());
+    for (const auto * str : {"1.5x", "0x1p3", ""}) {
+        CPPUNIT_ASSERT_THROW_MESSAGE(str, f32.set(Option::Priority::RUNTIME, str), OptionInvalidValueError);
+    }
+}
+
 void OptionTest::test_options_path() {
     const std::string DEFAULT{"/default_path"};
     constexpr bool EXISTS{false};
