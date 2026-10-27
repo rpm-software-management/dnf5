@@ -1003,15 +1003,49 @@ void ProgressbarInteractiveTest::test_taskbar_progress_sequences() {
     download_progress_bar2_raw->set_ticks(4);
     download_progress_bar2_raw->set_state(libdnf5::cli::progressbar::ProgressBarState::STARTED);
 
-    // In progress: 14 of 20 ticks overall -> 70%. Must be reported on this very
-    // render (a stale implementation would report 0% on the first render).
+    // In progress: 1 of 2 bars done -> 50%. Bar-count matches the [N/total] counter
+    // shown in the terminal (package-level progress, not byte-level).
     std::ostringstream oss;
     oss << multi_progress_bar;
-    CPPUNIT_ASSERT_EQUAL(std::string("1;70"), libdnf5::utils::string::join(extract_taskbar_progress(oss.str()), " "));
+    CPPUNIT_ASSERT_EQUAL(std::string("1;50"), libdnf5::utils::string::join(extract_taskbar_progress(oss.str()), " "));
 
     // Finish the last bar: the indicator is cleared (state 0).
     download_progress_bar2_raw->set_ticks(10);
     download_progress_bar2_raw->set_state(libdnf5::cli::progressbar::ProgressBarState::SUCCESS);
+    oss.str("");
+    oss << multi_progress_bar;
+    CPPUNIT_ASSERT_EQUAL(std::string("0;0"), libdnf5::utils::string::join(extract_taskbar_progress(oss.str()), " "));
+}
+
+void ProgressbarInteractiveTest::test_taskbar_progress_sequences_never_visible() {
+    // OSC 9;4 taskbar progress is emitted even when NEVER_VISIBLE_LIMIT suppresses
+    // the total bar (the case used by RpmTransCB for transaction progress).
+
+    auto bar1 = std::make_unique<libdnf5::cli::progressbar::DownloadProgressBar>(10, "pkg1");
+    bar1->set_ticks(10);
+    bar1->set_state(libdnf5::cli::progressbar::ProgressBarState::SUCCESS);
+
+    auto bar2 = std::make_unique<libdnf5::cli::progressbar::DownloadProgressBar>(10, "pkg2");
+    bar2->set_auto_finish(false);
+    bar2->start();
+
+    libdnf5::cli::progressbar::MultiProgressBar multi_progress_bar;
+    multi_progress_bar.set_total_bar_visible_limit(libdnf5::cli::progressbar::MultiProgressBar::NEVER_VISIBLE_LIMIT);
+    multi_progress_bar.add_bar(std::move(bar1));
+    auto bar2_raw = bar2.get();
+    multi_progress_bar.add_bar(std::move(bar2));
+
+    bar2_raw->set_ticks(4);
+    bar2_raw->set_state(libdnf5::cli::progressbar::ProgressBarState::STARTED);
+
+    // 1 of 2 bars done -> 50%, even though the total bar is not shown.
+    std::ostringstream oss;
+    oss << multi_progress_bar;
+    CPPUNIT_ASSERT_EQUAL(std::string("1;50"), libdnf5::utils::string::join(extract_taskbar_progress(oss.str()), " "));
+
+    // Finish: indicator is cleared.
+    bar2_raw->set_ticks(10);
+    bar2_raw->set_state(libdnf5::cli::progressbar::ProgressBarState::SUCCESS);
     oss.str("");
     oss << multi_progress_bar;
     CPPUNIT_ASSERT_EQUAL(std::string("0;0"), libdnf5::utils::string::join(extract_taskbar_progress(oss.str()), " "));

@@ -249,26 +249,43 @@ std::ostream & operator<<(std::ostream & stream, MultiProgressBar & mbar) {
         mbar.p_impl->num_of_lines_to_clear += bar->calculate_messages_terminal_lines(terminal_width);
     }
 
-    // then print the "total" progress bar
-    if ((mbar.p_impl->bars_all.size() >= mbar.p_impl->total_bar_visible_limit) &&
-        (is_interactive || mbar.p_impl->bars_all.size() == mbar.p_impl->bars_done_count)) {
-        // compute ticks and total_ticks for total progress bar
-        // done bars can be unfinished -> add only processed ticks to both values
-        int64_t ticks = mbar.p_impl->done_ticks;
-        int64_t total_ticks = ticks;
-        if (mbar.p_impl->tracking_mode == MultiProgressBar::TrackingMode::ON_CHANGE) {
-            ticks += mbar.p_impl->inactive_ticks;
-            total_ticks += mbar.p_impl->inactive_total_ticks;
+    // Compute ticks and total_ticks for total progress bar and taskbar reporting.
+    // done bars can be unfinished -> add only processed ticks to both values
+    int64_t ticks = mbar.p_impl->done_ticks;
+    int64_t total_ticks = ticks;
+    if (mbar.p_impl->tracking_mode == MultiProgressBar::TrackingMode::ON_CHANGE) {
+        ticks += mbar.p_impl->inactive_ticks;
+        total_ticks += mbar.p_impl->inactive_total_ticks;
+    }
+    for (auto & bar : mbar.p_impl->bars_todo) {
+        if (const auto bar_total_ticks = bar->get_total_ticks(); bar_total_ticks > 0) {
+            total_ticks += bar_total_ticks;
         }
-        for (auto & bar : mbar.p_impl->bars_todo) {
-            if (const auto bar_total_ticks = bar->get_total_ticks(); bar_total_ticks > 0) {
-                total_ticks += bar_total_ticks;
-            }
-            if (const auto bar_ticks = bar->get_ticks(); bar_ticks > 0) {
-                ticks += bar_ticks;
-            }
+        if (const auto bar_ticks = bar->get_ticks(); bar_ticks > 0) {
+            ticks += bar_ticks;
         }
+    }
+    const bool all_done = (mbar.p_impl->bars_all.size() == mbar.p_impl->bars_done_count);
 
+    // Report overall progress to the terminal taskbar/tab (OSC 9;4).
+    // Emitted regardless of whether the total bar is visible so that callers
+    // using NEVER_VISIBLE_LIMIT (e.g. RpmTransCB) still get taskbar updates.
+    // Use bar-count-based percent to match the [N/total] counter shown on each
+    // line: for transactions, total is set upfront so this tracks whole-transaction
+    // progress; for downloads, it tracks packages downloaded of total.
+    if (all_done) {
+        tty::set_taskbar_progress(text_buffer, tty::TaskbarProgressState::CLEAR);
+    } else {
+        const int64_t total_bars = static_cast<int64_t>(mbar.p_impl->total.get_total());
+        if (total_bars > 0) {
+            const int64_t done_bars = static_cast<int64_t>(mbar.p_impl->bars_done_count);
+            const int percent = std::min(std::max(static_cast<int>(done_bars * 100 / total_bars), 0), 100);
+            tty::set_taskbar_progress(text_buffer, tty::TaskbarProgressState::NORMAL, percent);
+        }
+    }
+
+    // then print the "total" progress bar
+    if ((mbar.p_impl->bars_all.size() >= mbar.p_impl->total_bar_visible_limit) && (is_interactive || all_done)) {
         if (mbar.p_impl->line_printed) {
             text_buffer << std::endl;
         }
@@ -283,25 +300,12 @@ std::ostream & operator<<(std::ostream & stream, MultiProgressBar & mbar) {
         mbar_total.set_total_ticks(total_ticks);
         mbar_total.set_ticks(ticks);
 
-        if (mbar.p_impl->bars_all.size() == mbar.p_impl->bars_done_count) {
+        if (all_done) {
             // all bars have finished, set the "Total" bar as finished too according to their states
             mbar_total.set_state(ProgressBarState::SUCCESS);
         }
 
         text_buffer << mbar_total;
-
-        // Report overall progress to the terminal taskbar/tab (OSC 9;4).
-        // Remove the indicator once finished so it does not linger after exit.
-        // Emitted after streaming the total bar, which refreshes its cached
-        // percentage (via update()), so get_percent_done() is not stale.
-        if (is_interactive) {
-            if (mbar_total.is_finished()) {
-                tty::set_taskbar_progress(text_buffer, tty::TaskbarProgressState::CLEAR);
-            } else {
-                tty::set_taskbar_progress(
-                    text_buffer, tty::TaskbarProgressState::NORMAL, mbar_total.get_percent_done());
-            }
-        }
 
         // +1 for the divider line, +1 for the total bar line
         mbar.p_impl->num_of_lines_to_clear += 2;
