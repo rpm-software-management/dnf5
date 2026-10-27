@@ -609,23 +609,35 @@ void State::rename_new_system_state_files(bool skip_missing) {
 
 void State::save() {
     std::error_code ec;
-    std::filesystem::create_directories(path, ec);
+    // The state has to stay readable for unprivileged users even if the umask is restrictive.
+    utils::fs::create_directories_readable(path, ec);
+    if (ec) {
+        throw FileSystemError(errno, path, M_("{}"), ec.message());
+    }
+    // Also repair a state directory created earlier under a restrictive umask.
+    utils::fs::add_read_for_all(path, ec);
     if (ec) {
         throw FileSystemError(errno, path, M_("{}"), ec.message());
     }
 
-    utils::fs::File(suffix_new(get_package_state_path()), "w")
-        .write(toml_format(make_top_value("packages", package_states)));
-    utils::fs::File(suffix_new(get_nevra_state_path()), "w").write(toml_format(make_top_value("nevras", nevra_states)));
-    utils::fs::File(suffix_new(get_group_state_path()), "w").write(toml_format(make_top_value("groups", group_states)));
-    utils::fs::File(suffix_new(get_environment_state_path()), "w")
-        .write(toml_format(make_top_value("environments", environment_states)));
+    auto write_new_file = [](const std::filesystem::path & file_path, const std::string & content) {
+        auto new_path = suffix_new(file_path);
+        utils::fs::File(new_path, "w").write(content);
+        std::error_code ecode;
+        utils::fs::add_read_for_all(new_path, ecode);
+        if (ecode) {
+            throw FileSystemError(errno, new_path, M_("{}"), ecode.message());
+        }
+    };
+
+    write_new_file(get_package_state_path(), toml_format(make_top_value("packages", package_states)));
+    write_new_file(get_nevra_state_path(), toml_format(make_top_value("nevras", nevra_states)));
+    write_new_file(get_group_state_path(), toml_format(make_top_value("groups", group_states)));
+    write_new_file(get_environment_state_path(), toml_format(make_top_value("environments", environment_states)));
 #ifdef WITH_MODULEMD
-    utils::fs::File(suffix_new(get_module_state_path()), "w")
-        .write(toml_format(make_top_value("modules", module_states)));
+    write_new_file(get_module_state_path(), toml_format(make_top_value("modules", module_states)));
 #endif
-    utils::fs::File(suffix_new(get_system_state_path()), "w")
-        .write(toml_format(make_top_value("system", system_state)));
+    write_new_file(get_system_state_path(), toml_format(make_top_value("system", system_state)));
 
     // Once all new files were written replace the current files
     rename_new_system_state_files(false);

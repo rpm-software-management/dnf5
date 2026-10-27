@@ -19,6 +19,7 @@
 
 #include "libdnf5/rpm/versionlock_config.hpp"
 
+#include "utils/fs/utils.hpp"
 #include "utils/string.hpp"
 
 #include "libdnf5/common/exception.hpp"
@@ -292,12 +293,17 @@ static std::string toml_format(const toml::ordered_value & value) {
 
 void VersionlockConfig::save() {
     std::error_code ecode;
-    std::filesystem::create_directories(path.parent_path(), ecode);
+    // The file has to stay readable for unprivileged users even if the umask is restrictive.
+    utils::fs::create_directories_readable(path.parent_path(), ecode);
     if (ecode) {
         throw FileSystemError(errno, path, M_("{}"), ecode.message());
     }
 
     utils::fs::File(path, "w").write(toml_format(make_top_value("packages", packages)));
+    utils::fs::add_read_for_all(path, ecode);
+    if (ecode) {
+        throw FileSystemError(errno, path, M_("{}"), ecode.message());
+    }
 }
 
 }  // namespace libdnf5::rpm

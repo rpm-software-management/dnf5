@@ -411,3 +411,39 @@ void UtilsFsTest::test_file_flush() {
 
     CPPUNIT_ASSERT_EQUAL(data_w, data_r);
 }
+
+
+void UtilsFsTest::test_add_read_for_all() {
+    namespace fs = std::filesystem;
+    const auto readable = fs::perms::group_read | fs::perms::others_read;
+    const auto searchable = readable | fs::perms::group_exec | fs::perms::others_exec;
+
+    libdnf5::utils::fs::TempDir temp_dir("libdnf_test_add_read_for_all");
+    const auto dir = temp_dir.get_path() / "dir";
+    const auto file = dir / "file";
+    fs::create_directory(dir);
+    libdnf5::utils::fs::File(file, "w").write("x");
+    fs::permissions(dir, fs::perms::owner_all, fs::perm_options::replace);
+    fs::permissions(file, fs::perms::owner_read | fs::perms::owner_write, fs::perm_options::replace);
+
+    std::error_code ec;
+    libdnf5::utils::fs::add_read_for_all(dir, ec);
+    CPPUNIT_ASSERT(!ec);
+    libdnf5::utils::fs::add_read_for_all(file, ec);
+    CPPUNIT_ASSERT(!ec);
+    CPPUNIT_ASSERT((fs::status(dir).permissions() & searchable) == searchable);
+    CPPUNIT_ASSERT((fs::status(file).permissions() & readable) == readable);
+    // Only bits are added: the owner permissions stay as they were.
+    CPPUNIT_ASSERT((fs::status(dir).permissions() & fs::perms::owner_all) == fs::perms::owner_all);
+
+    // Missing path is reported.
+    libdnf5::utils::fs::add_read_for_all(dir / "missing", ec);
+    CPPUNIT_ASSERT(ec);
+
+    // A directory the caller does not own is not touched when it already is readable, as chmod would fail for
+    // an unprivileged user (saving state as a normal user, e.g. when importing history).
+    if (geteuid() != 0) {
+        libdnf5::utils::fs::add_read_for_all("/usr", ec);
+        CPPUNIT_ASSERT_MESSAGE(ec.message(), !ec);
+    }
+}

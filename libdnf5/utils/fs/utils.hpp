@@ -34,6 +34,16 @@ namespace libdnf5::utils::fs {
 /// Implements copy and remove fallback.
 void move_recursive(const std::filesystem::path & src, const std::filesystem::path & dest);
 
+/// Adds read permission for group and others to a file or directory (directories also get search permission),
+/// regardless of the process umask. Used for state and configuration that must stay readable by unprivileged users.
+/// Nothing is changed when the permissions are already there, so it also works for files the caller does not own.
+void add_read_for_all(const std::filesystem::path & path, std::error_code & ec);
+
+/// Like `std::filesystem::create_directories()`, but the directories it creates (including missing parents)
+/// are also made readable and searchable by group and others regardless of the process umask.
+/// Directories that already exist keep their permissions.
+void create_directories_readable(const std::filesystem::path & path, std::error_code & ec);
+
 }  // namespace libdnf5::utils::fs
 
 #endif
