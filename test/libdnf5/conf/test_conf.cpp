@@ -52,6 +52,39 @@ void ConfTest::test_config_main() {
     CPPUNIT_ASSERT_EQUAL(pluginpath, config.get_pluginpath_option().get_value());
 }
 
+// Byte sizes ("1.5k", "3G") that cannot be parsed or do not fit are config errors. They used to escape
+// as std::invalid_argument / std::out_of_range (aborting dnf5) or overflow silently.
+void ConfTest::test_config_main_byte_sizes() {
+    auto & bandwidth = config.get_bandwidth_option();
+    for (const auto & [str, val] : std::vector<std::pair<std::string, std::uint32_t>>{
+             {"0", 0}, {"1k", 1024}, {"1.5K", 1536}, {"3G", 3221225472u}, {"4294967295", 4294967295u}}) {
+        bandwidth.set(Option::Priority::RUNTIME, str);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(str, val, bandwidth.get_value());
+    }
+    for (const auto * str : {"", "abc", "1e999", "nan", "inf", "-5", "5000000000", "4G", "5kb", "3abc"}) {
+        CPPUNIT_ASSERT_THROW_MESSAGE(str, bandwidth.set(Option::Priority::RUNTIME, str), OptionError);
+    }
+    CPPUNIT_ASSERT_EQUAL(static_cast<std::uint32_t>(4294967295u), bandwidth.get_value());
+
+    // log_size is a signed 32 bit option
+    auto & log_size = config.get_log_size_option();
+    log_size.set(Option::Priority::RUNTIME, "1G");
+    CPPUNIT_ASSERT_EQUAL(static_cast<std::int32_t>(1073741824), log_size.get_value());
+    CPPUNIT_ASSERT_THROW(log_size.set(Option::Priority::RUNTIME, "2G"), OptionError);
+    CPPUNIT_ASSERT_THROW(log_size.set(Option::Priority::RUNTIME, "abc"), OptionError);
+
+    auto & throttle = config.get_throttle_option();
+    throttle.set(Option::Priority::RUNTIME, "50%");
+    CPPUNIT_ASSERT_EQUAL(0.5f, throttle.get_value());
+    throttle.set(Option::Priority::RUNTIME, "50 %");
+    CPPUNIT_ASSERT_EQUAL(0.5f, throttle.get_value());
+    throttle.set(Option::Priority::RUNTIME, "1.5k");
+    CPPUNIT_ASSERT_EQUAL(1536.0f, throttle.get_value());
+    for (const auto * str : {"abc%", "%", "nan%", "101%", "-1%", "1e999%", "abc"}) {
+        CPPUNIT_ASSERT_THROW_MESSAGE(str, throttle.set(Option::Priority::RUNTIME, str), OptionError);
+    }
+}
+
 void ConfTest::test_config_repo() {
     repo::ConfigRepo config_repo(config, "test-repo");
     ConfigParser parser;
