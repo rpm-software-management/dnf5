@@ -43,6 +43,7 @@ class ProgressbarInteractiveTest : public CppUnit::TestCase {
     CPPUNIT_TEST(test_multi_progress_bars_on_change_with_messages_with_total);
     CPPUNIT_TEST(test_multi_progress_bars_on_change_with_messages);
     CPPUNIT_TEST(test_taskbar_progress_sequences);
+    CPPUNIT_TEST(test_taskbar_progress_sequences_never_visible);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -66,6 +67,7 @@ public:
     void test_multi_progress_bars_on_change_with_messages_with_total();
     void test_multi_progress_bars_on_change_with_messages();
     void test_taskbar_progress_sequences();
+    void test_taskbar_progress_sequences_never_visible();
 };
 
 
