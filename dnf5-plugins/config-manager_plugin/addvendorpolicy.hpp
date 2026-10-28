@@ -26,6 +26,7 @@ private:
     bool allow_replace{false};                  // Allow replacing an existing policy file in /etc/
     bool mask{false};                           // Require that the new policy masks a distribution policy
     bool replace{false};                        // Require that the new policy replaces an existing policy file in /etc/
+    bool create_missing_dirs{false};            // Allows to create missing directories
 };
 
 }  // namespace dnf5

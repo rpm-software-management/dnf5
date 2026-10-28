@@ -100,6 +100,16 @@ void ConfigManagerAddVendorPolicyCommand::set_argument_parser() {
 
     // Make --allow-replace and --replace mutually exclusive
     allow_replace_opt->add_conflict_argument(*replace_opt);
+
+    auto create_missing_dirs_opt = parser.add_new_named_arg("create-missing-dir");
+    create_missing_dirs_opt->set_long_name("create-missing-dir");
+    create_missing_dirs_opt->set_description("Allow creation of missing directories");
+    create_missing_dirs_opt->set_has_value(false);
+    create_missing_dirs_opt->set_parse_hook_func([this](cli::ArgumentParser::NamedArg *, const char *, const char *) {
+        create_missing_dirs = true;
+        return true;
+    });
+    cmd.register_named_arg(create_missing_dirs_opt);
 }
 
 
@@ -167,6 +177,10 @@ void ConfigManagerAddVendorPolicyCommand::configure() {
 
     try {
         if (compact_policy) {
+            if (create_missing_dirs) {
+                vcm->ensure_vendor_conf_dir_exists();
+            }
+
             // Save policy from compact format
             // VendorChangeManager will convert to TOML and save
             auto dest_path = vcm->save_policy_from_compact(
@@ -188,6 +202,10 @@ void ConfigManagerAddVendorPolicyCommand::configure() {
             if (!std::filesystem::exists(source_location)) {
                 throw ConfigManagerError(
                     M_("Source file does not exist: {path}"), NamedErrorArg("path", source_location));
+            }
+
+            if (create_missing_dirs) {
+                vcm->ensure_vendor_conf_dir_exists();
             }
 
             auto dest_path = vcm->save_policy_from_toml(source_location, policy_name, allow_replace || replace);
@@ -214,6 +232,10 @@ void ConfigManagerAddVendorPolicyCommand::configure() {
             repo::FileDownloader downloader(base);
             downloader.add(source_location, temp_file.get_path());
             downloader.download();
+
+            if (create_missing_dirs) {
+                vcm->ensure_vendor_conf_dir_exists();
+            }
 
             auto dest_path = vcm->save_policy_from_toml(temp_file.get_path(), policy_name, allow_replace || replace);
 
