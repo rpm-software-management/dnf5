@@ -43,6 +43,8 @@ Examples:
         | list                | ls                           |
         | makecache           | mc                           |
         | mark                | mark                         |
+        | provides            | provides                     |
+        | provides            | whatprovides                 |
         | reinstall           | rei                          |
         | reinstall           | reinstall                    |
         | remove              | remove                       |
