@@ -627,3 +627,9 @@ Dropped configuration options
 
 ``errorlevel``
   * The option was deprecated in dnf < 5 and is dropped now.
+
+
+Changes to transaction resolving
+================================
+
+The solver setup was changed to ensure it tries to install the latest versions of new dependencies, even if it results in bigger transactions.
