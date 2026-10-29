@@ -3,6 +3,8 @@
 
 #include "test_versionlock_config.hpp"
 
+#include "../shared/utils.hpp"
+
 #include <libdnf5/common/exception.hpp>
 #include <libdnf5/conf/const.hpp>
 #include <libdnf5/rpm/versionlock_config.hpp>
@@ -11,6 +13,7 @@
 #include <unistd.h>
 
 #include <cstddef>
+#include <filesystem>
 
 
 CPPUNIT_TEST_SUITE_REGISTRATION(RpmVersionlockConfigTest);
@@ -76,4 +79,21 @@ void RpmVersionlockConfigTest::test_load_unreadable_file() {
     std::filesystem::permissions(versionlock_path, std::filesystem::perms::none);
 
     CPPUNIT_ASSERT_THROW(sack->get_versionlock_config(), libdnf5::FileSystemError);
+}
+
+
+void RpmVersionlockConfigTest::test_save_restrictive_umask() {
+    // The file is read by unprivileged users, so it must not depend on the umask of the user that saves it
+    // (https://github.com/rpm-software-management/dnf5/issues/1908).
+    ScopedUmask umask_077(077);
+
+    auto config = sack->get_versionlock_config();
+    config.save();
+
+    namespace fs = std::filesystem;
+    const auto others_read = fs::perms::others_read | fs::perms::group_read;
+    const auto others_search = others_read | fs::perms::others_exec | fs::perms::group_exec;
+    CPPUNIT_ASSERT((fs::status(versionlock_path).permissions() & others_read) == others_read);
+    // The parent directory did not exist, save() creates it.
+    CPPUNIT_ASSERT((fs::status(versionlock_path.parent_path()).permissions() & others_search) == others_search);
 }
