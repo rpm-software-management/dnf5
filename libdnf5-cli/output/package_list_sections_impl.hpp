@@ -28,11 +28,14 @@ namespace libdnf5::cli::output {
 
 class PackageListSections::Impl {
 public:
-    std::vector<std::tuple<
-        std::string,
-        libdnf5::rpm::PackageSet,
-        std::map<libdnf5::rpm::PackageId, std::vector<libdnf5::rpm::Package>>>>
-        sections;
+    struct Section {
+        std::string heading;
+        libdnf5::rpm::PackageSet pkg_set;
+        std::map<libdnf5::rpm::PackageId, std::vector<libdnf5::rpm::Package>> obsoletes;
+        std::map<libdnf5::rpm::PackageId, libdnf5::rpm::Package> upgrades;
+    };
+
+    std::vector<Section> sections;
 };
 
 }  // namespace libdnf5::cli::output

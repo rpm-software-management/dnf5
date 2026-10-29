@@ -209,7 +209,7 @@ Scenario: Check-update command does not report updates filtered out by the versi
     And stdout is
     """
     Upgrades
-    flac.x86_64 1.4.0-1.fc29 dnf-ci-fedora-updates-testing
+    flac.x86_64 1.3.2-8.fc29 -> 1.4.0-1.fc29 dnf-ci-fedora-updates-testing
     """
   # flac package versionlocked on specific minor version
   Given I create file "/etc/dnf/versionlock.toml" with
@@ -235,7 +235,7 @@ Scenario: Check-update command does not report updates filtered out by the versi
     And stdout is
     """
     Upgrades
-    flac.x86_64 1.3.3-3.fc29 dnf-ci-fedora-updates
+    flac.x86_64 1.3.2-8.fc29 -> 1.3.3-3.fc29 dnf-ci-fedora-updates
     """
   # flac package versionlocked on specific version
   Given I create file "/etc/dnf/versionlock.toml" with
