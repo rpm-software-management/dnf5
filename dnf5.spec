@@ -19,12 +19,7 @@
 %bcond_without modulemd
 %endif
 %bcond_without systemd
-# Disable SOLVER_FLAG_FOCUS_NEW only for RHEL
-%if 0%{?rhel} && 0%{?rhel} < 11
-%bcond_with    focus_new
-%else
 %bcond_without focus_new
-%endif
 
 # Main components
 %bcond_without dnf5
@@ -77,7 +72,7 @@
 
 Name:           dnf5
 Version:        %{project_version_prime}.%{project_version_major}.%{project_version_minor}.%{project_version_micro}
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Command-line package manager
 License:        GPL-2.0-or-later AND LGPL-2.1-or-later AND LGPL-2.0-or-later
 URL:            https://github.com/rpm-software-management/dnf5
@@ -1228,6 +1223,9 @@ mkdir -p %{buildroot}%{_libdir}/libdnf5/plugins
 %ldconfig_scriptlets
 
 %changelog
+* Thu Oct 29 2026 Davide Cavalca <dcavalca@fedoraproject.org> - 5.4.6.0-2
+- Ungate focus_new for RHEL 10 now that libsolv has been updated
+
 * Thu Sep 24 2026 Packit Team <hello@packit.dev> - 5.4.6.0-1
 - New upstream release 5.4.6.0
 
