@@ -26,12 +26,14 @@
 //       changed, chroot EOL).
 // TODO: implement 'dnf copr fix' - ^^^ should help
 
+#include "copr_config.hpp"
 #include "copr_constants.hpp"
 #include "helpers.hpp"
 
 #include <dnf5/context.hpp>
 
 #include <iostream>
+#include <optional>
 
 
 namespace dnf5 {
@@ -95,6 +97,11 @@ public:
 class CoprEnableCommand : public CoprSubCommandWithID {
 private:
     std::string opt_chroot = "";
+
+    /// Vendor change choice parsed from --vendor-change, if given.
+    /// If not set, the choice comes from the Copr configuration (or its NONE fallback),
+    /// either used directly (with --assumeyes) or as the interactive prompt's default.
+    std::optional<CoprConfig::VendorChangeChoice> opt_vendor_change_choice;
 
 public:
     explicit CoprEnableCommand(Context & context) : CoprSubCommandWithID(context, "enable") {}

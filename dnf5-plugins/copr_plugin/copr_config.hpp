@@ -33,6 +33,41 @@ private:
     void load_all_configuration();
 
 public:
+    /// Vendor change policy for the 'enable' command, set via the --vendor-change option,
+    /// the "vendor_change" key in the "[main]" section of the Copr configuration, or the
+    /// equivalent interactive prompt. The numeric values match the interactive menu's
+    /// option numbers (1-4).
+    enum class VendorChangeChoice {
+        /// --vendor-change=false (or any OptionBool false value); also the fallback used when
+        /// "vendor_change" is not set in the Copr configuration.
+        /// No vendor change is allowed in either direction.
+        NONE = 1,
+
+        /// --vendor-change=to-repo.
+        /// Packages from the enabled repositories may replace an already installed package
+        /// from a different vendor.
+        TO_COPR_REPO = 2,
+
+        /// --vendor-change=from-repo.
+        /// A package installed from the enabled repositories may be replaced by a package
+        /// from a different vendor.
+        FROM_COPR_REPO = 3,
+
+        /// --vendor-change=true (or any OptionBool true value).
+        /// Vendor change is allowed in both directions.
+        BOTH = 4,
+    };
+
+    /// Parses a --vendor-change / "vendor_change" config value into a VendorChangeChoice.
+    /// @param choice_str One of "to-repo", "from-repo", or any OptionBool-recognized boolean value.
+    /// @throws libdnf5::OptionInvalidValueError if choice_str is none of the above.
+    static VendorChangeChoice vendor_change_choice_from_string(const std::string & choice_str);
+
+    /// Reads the "vendor_change" key from the "[main]" section of the Copr configuration.
+    /// @return The configured choice, or VendorChangeChoice::NONE if "vendor_change" is not set.
+    /// @throws std::runtime_error if "vendor_change" is set to an unrecognized value.
+    VendorChangeChoice get_vendor_change_choice() const;
+
     explicit CoprConfig(libdnf5::Base & base);
     std::string get_hub_hostname(const std::string & hubspec);
     std::string get_hub_url(const std::string & hubspec);

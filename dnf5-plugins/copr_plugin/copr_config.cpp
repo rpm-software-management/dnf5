@@ -22,11 +22,15 @@
 
 #include "copr_constants.hpp"
 
+#include "libdnf5/conf/option_bool.hpp"
+#include "libdnf5/conf/option_errors.hpp"
+#include "libdnf5/utils/format.hpp"
 #include "libdnf5/utils/os_release.hpp"
 
 #include <cstdlib>
 #include <filesystem>
 #include <set>
+#include <stdexcept>
 
 
 namespace dnf5 {
@@ -104,6 +108,35 @@ void CoprConfig::load_all_configuration() {
     std::string arch = base.get_vars()->get_value("arch");
     this->set_value("main", "arch", arch);
 }
+
+
+CoprConfig::VendorChangeChoice CoprConfig::vendor_change_choice_from_string(const std::string & choice_str) {
+    if (choice_str == "to-repo") {
+        return VendorChangeChoice::TO_COPR_REPO;
+    }
+    if (choice_str == "from-repo") {
+        return VendorChangeChoice::FROM_COPR_REPO;
+    }
+    return libdnf5::OptionBool(false).from_string(choice_str) ? VendorChangeChoice::BOTH : VendorChangeChoice::NONE;
+}
+
+
+CoprConfig::VendorChangeChoice CoprConfig::get_vendor_change_choice() const {
+    if (this->has_section("main") && this->has_option("main", "vendor_change")) {
+        const auto & choice_str = this->get_value("main", "vendor_change");
+        try {
+            return vendor_change_choice_from_string(choice_str);
+        } catch (const libdnf5::OptionInvalidValueError &) {
+            throw std::runtime_error(libdnf5::utils::sformat(
+                _("vendor_change config: Invalid value \"{}\" (expected \"to-repo\", \"from-repo\", "
+                  "or a boolean value)"),
+                choice_str));
+        }
+    }
+
+    return VendorChangeChoice::NONE;
+}
+
 
 std::string CoprConfig::get_hub_hostname(const std::string & hubspec) {
     /// Translate HUBSPEC (Copr config ID in the ini files) to a corresponding
