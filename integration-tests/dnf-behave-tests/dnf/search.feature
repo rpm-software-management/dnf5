@@ -39,7 +39,7 @@ Scenario: with installed and available newest package doesn't duplicate results
     And stdout is
         """
         Matched fields: name (exact), summary
-         setup.noarch	A set of system configuration and setup files
+         setup.noarch	A set of system configuration and setup files [installed]
          setup.src	A set of system configuration and setup files
         """
 
@@ -75,6 +75,35 @@ Scenario: All versions of a package are in the output when using the --showdupli
         Matched fields: name (exact)
          flac-0:1.3.2-8.fc29.src	An encoder/decoder for the Free Lossless Audio Codec
          flac-0:1.3.2-8.fc29.x86_64	An encoder/decoder for the Free Lossless Audio Codec
+         flac-0:1.3.3-1.fc29.src	An encoder/decoder for the Free Lossless Audio Codec
+         flac-0:1.3.3-1.fc29.x86_64	An encoder/decoder for the Free Lossless Audio Codec
+         flac-0:1.3.3-2.fc29.src	An encoder/decoder for the Free Lossless Audio Codec
+         flac-0:1.3.3-2.fc29.x86_64	An encoder/decoder for the Free Lossless Audio Codec
+         flac-0:1.3.3-3.fc29.src	An encoder/decoder for the Free Lossless Audio Codec
+         flac-0:1.3.3-3.fc29.x86_64	An encoder/decoder for the Free Lossless Audio Codec
+        Matched fields: name
+         flac-libs-0:1.3.2-8.fc29.x86_64	Libraries for the Free Lossless Audio Codec
+         flac-libs-0:1.3.3-1.fc29.x86_64	Libraries for the Free Lossless Audio Codec
+         flac-libs-0:1.3.3-2.fc29.x86_64	Libraries for the Free Lossless Audio Codec
+         flac-libs-0:1.3.3-3.fc29.x86_64	Libraries for the Free Lossless Audio Codec
+        """
+
+
+Scenario: Older installed version is identified without changing search version selection
+  Given I use repository "dnf-ci-fedora-updates"
+   When I execute dnf with args "install flac-0:1.3.2-8.fc29.x86_64"
+   Then the exit code is 0
+   When I execute dnf with args "search flac"
+   Then the exit code is 0
+    And stdout contains "flac.x86_64\tAn encoder/decoder for the Free Lossless Audio Codec \[installed\]"
+    And stdout does not contain "flac.src\tAn encoder/decoder for the Free Lossless Audio Codec \[installed\]"
+   When I execute dnf with args "search flac --showduplicates"
+   Then the exit code is 0
+    And stdout is
+        """
+        Matched fields: name (exact)
+         flac-0:1.3.2-8.fc29.src	An encoder/decoder for the Free Lossless Audio Codec
+         flac-0:1.3.2-8.fc29.x86_64	An encoder/decoder for the Free Lossless Audio Codec [installed]
          flac-0:1.3.3-1.fc29.src	An encoder/decoder for the Free Lossless Audio Codec
          flac-0:1.3.3-1.fc29.x86_64	An encoder/decoder for the Free Lossless Audio Codec
          flac-0:1.3.3-2.fc29.src	An encoder/decoder for the Free Lossless Audio Codec
