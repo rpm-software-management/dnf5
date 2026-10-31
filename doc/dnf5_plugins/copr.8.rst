@@ -42,7 +42,7 @@ Subcommands
 ``list``
     | List Copr repositories.
 
-``enable <project-spec> [<chroot>]``
+``enable <project-spec> [<chroot>] [--vendor-change=to-repo|from-repo|true|false]``
     | Download the repository info from a Copr server and install it as a `/etc/yum.repos.d/*.repo` file.
 
 ``disable <project-spec>``
@@ -60,6 +60,18 @@ Options
 
 ``--hub``
     | Copr hub (the web-UI/API server) hostname. Defaults to `copr.fedorainfracloud.org`.
+
+``--vendor-change=to-repo|from-repo|true|false``
+    | For the ``enable`` command, sets whether a vendor change is allowed for packages of the
+      repositories it enables, instead of asking interactively. `to-repo` allows packages from
+      these repositories to replace an already installed package from a different vendor.
+      `from-repo` allows a package installed from these repositories to be replaced by a package
+      from a different vendor. `true` allows both; `false` allows neither. Any value accepted for
+      a boolean option (e.g. `1`, `yes`, `no`) can be used in place of `true`/`false`.
+
+      Without this option, the choice is asked for interactively (unless `--assumeyes` is used,
+      in which case the default is used instead), defaulting to the `vendor_change` key in the
+      `[main]` section of the Copr configuration, or to `false` if that is not set either.
 
 
 Arguments
@@ -90,6 +102,11 @@ Examples
 
 ``dnf5 copr enable rhscl/perl516 epel-6-x86_64``
     | Enable the rhscl/perl516 Copr repository, using the epel-6-x86_64 chroot.
+
+``dnf5 copr enable --vendor-change=to-repo rpmsoftwaremanagement/dnf5-testing``
+    | Enable the rpmsoftwaremanagement/dnf5-testing Copr repository, directly setting (instead
+      of being asked by this command) that its packages are allowed to replace an already
+      installed package from a different vendor.
 
 ``dnf5 copr disable rhscl/perl516``
     | Disable the rhscl/perl516 Copr repository
