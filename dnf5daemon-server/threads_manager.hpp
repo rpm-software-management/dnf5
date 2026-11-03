@@ -28,6 +28,7 @@
 #include <sdbus-c++/sdbus-c++.h>
 
 #include <atomic>
+#include <condition_variable>
 #include <iostream>
 #include <mutex>
 #include <optional>
@@ -263,6 +264,7 @@ public:
 
 private:
     std::mutex running_threads_mutex;
+    std::condition_variable collector_cv;
     // flag whether to break the finished threads collector infinite loop
     std::atomic<bool> finish_collector{false};
     // thread that joins finished worker threads
