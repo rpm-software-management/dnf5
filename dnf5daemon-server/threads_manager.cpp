@@ -24,15 +24,14 @@
 #include <locale.h>
 
 #include <algorithm>
-#include <chrono>
-#include <iostream>
 
 ThreadsManager::ThreadsManager() {
     // collecting finished worker threads
     running_threads_collector = std::thread([this]() {
         while (!finish_collector) {
             join_threads(true);
-            std::this_thread::sleep_for(std::chrono::seconds(1));
+            std::unique_lock<std::mutex> lock(running_threads_mutex);
+            collector_cv.wait(lock, [this]() { return finish_collector.load() || !finished_threads.empty(); });
         }
     });
 }
@@ -47,8 +46,11 @@ void ThreadsManager::register_thread(std::thread && thread) {
 }
 
 void ThreadsManager::mark_thread_finished(std::thread::id thread_id) {
-    std::lock_guard<std::mutex> lock(running_threads_mutex);
-    finished_threads.emplace_back(std::move(thread_id));
+    {
+        std::lock_guard<std::mutex> lock(running_threads_mutex);
+        finished_threads.emplace_back(std::move(thread_id));
+    }
+    collector_cv.notify_one();
 }
 
 void ThreadsManager::join_threads(const bool only_finished) {
@@ -81,7 +83,11 @@ void ThreadsManager::finish() {
         return;
     }
     // join all threads
-    finish_collector = true;
+    {
+        std::lock_guard<std::mutex> lock(running_threads_mutex);
+        finish_collector = true;
+    }
+    collector_cv.notify_one();
     join_threads(false);
     running_threads_collector.join();
 }
