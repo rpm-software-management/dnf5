@@ -1,6 +1,6 @@
 %global project_version_prime 5
 %global project_version_major 4
-%global project_version_minor 6
+%global project_version_minor 7
 %global project_version_micro 0
 
 # ========== build options ==========
@@ -72,7 +72,7 @@
 
 Name:           dnf5
 Version:        %{project_version_prime}.%{project_version_major}.%{project_version_minor}.%{project_version_micro}
-Release:        2%{?dist}
+Release:        1%{?dist}
 Summary:        Command-line package manager
 License:        GPL-2.0-or-later AND LGPL-2.1-or-later AND LGPL-2.0-or-later
 URL:            https://github.com/rpm-software-management/dnf5
@@ -1226,6 +1226,9 @@ mkdir -p %{buildroot}%{_libdir}/libdnf5/plugins
 %ldconfig_scriptlets
 
 %changelog
+* Tue Nov 03 2026 Packit Team <hello@packit.dev> - 5.4.7.0-1
+- New upstream release 5.4.7.0
+
 * Thu Oct 29 2026 Davide Cavalca <dcavalca@fedoraproject.org> - 5.4.6.0-2
 - Ungate focus_new for RHEL 10 now that libsolv has been updated
 
