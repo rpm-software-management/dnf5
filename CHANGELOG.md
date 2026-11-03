@@ -1,3 +1,103 @@
+# 5.4.7.0
+
+- Update translations from weblate
+- createrepo's argv[0] should be program name
+- reposync: add --latest-limit=N option
+- cmake: disable WITH_HTML option by default
+- doc/conf.py.in: drop stale and wrong comment
+- Separate dependencies needed for html builds from man page deps
+- doc/conf.py.in: add cmake's file(GENERATE ...)
+- doc: Clarify option placement rules for general vs command-specific options
+- CI tests: Test config-manager vendor policy subcommands
+- doc: Update use of compact format for supplier policies
+- doc: Document config-manager vendor policy subcommands
+- config-manager: Bump version to 0.2.0
+- config-manager: Add --create-missing-dir to add-vendor-policy
+- dnf5-plugin config-manager: add vendor policy management commands
+- changes_from_dnf4.7.rst: add a note about using: SOLVER_FLAG_FOCUS_NEW
+- Ungate focus_new for RHEL 10 now that libsolv has been updated
+- Add whatprovides alias
+- offline: Report progress while waiting for inhibitors
+- offline: Wait for shutdown inhibitors before reboot
+- offline: acquire delay lock before triggering reboot
+- base: Add VendorChangeManager::ensure_vendor_conf_dir_exists()
+- automatic: support IPv6 network availability checks
+- Always show cursor during userconfirm
+- dnf5daemon-server: Enforce session sender ownership
+- dnf5daemon-server: Unify exception message handling
+- base bindings: include utils so that lock_system_repo knows its params
+- repoquery/modules.feature: ensure setup step is successful
+- CI tests for vendor change "repoid" rules
+- doc: Clarify "repoid" filter meaning for incoming vs outgoing packages
+- solv: Use installed-from repo for "repoid" on outgoing packages
+- base: Expose Base::Impl::get_system_state() via InternalBaseUser
+- CI: over limit installonly packages during unrelated transaction
+- installonly_limit: enforce it only if the package is in the transaction
+- limit_installonly_packages: clarify comments and variable names
+- doc: render cross-file references as manual citations
+- test: Bump versions in test manifest files
+- transaction::run: lock system repo and verify it hasn't changed
+- system repo: lock during loading and populate system_state_cookie
+- locker: add holds_lock() and held_lock_access()
+- Repo: store system state cookie and add is_system_repo_up_to_date
+- Add incomplete system state cookie
+- dnf5daemon: enhance failed transaction reporting
+- versionlock.8.rst: clarify docs
+- Fix SIGABRT when versionlock.toml cannot be read or parsed
+- CONTRIBUTING.md: New source files should be LGPLv2.1+
+- spec: Declare LGPL-2.0-or-later where it is actually used
+- license: add GNU Library General Public License v2.0
+- CI tests for dnf5 --dump-vendor-policies
+- doc: Add --dump-vendor-policies option to dnf5 manual page
+- dnf5: Add --dump-vendor-policies option
+- fix(ci): Fix typo "thirh" to "third" in stick-to-vendor-policies.feature
+- test: Cover several trusted directories for auto_import_local_keys
+- doc: Document the trusted key directories of auto_import_local_keys
+- libdnf5: Trust a list of key directories for auto_import_local_keys
+- dnf5: Suggest --allow-vendor-change-to/-from in vendor change hints
+- CI tests: Add tests for --allow-vendor-change-*= options
+- doc: Add documentation for dnf5 --allow-vendor-change-*= options
+- dnf5: Add more vendor change control command-line options
+- CI tests for "--disable-vendor-policy-source="
+- doc: dnf5 global CLI option --disable-vendor-policy-source=
+- dnf5: Add --disable-vendor-policy-source CLI option
+- dnf5: Suggest --with-vendor-policy in vendor change hints
+- CI tests for "--with-vendor-policy=" and "--clear-vendor-policies"
+- doc: Add compact vendor policy format and CLI options documentation
+- dnf5: Add --with-vendor-policy and --clear-vendor-policies CLI options
+- manifest.feature: Allow any SHA version in `manifest new`
+- test: config-manager setopt for a repository created by a plugin
+- config-manager: Allow setopt for repositories created by plugins
+- Restore: Use abidiff directly to comprare ABI of libdnf5 and libdnf5-cli
+- deptree: Add dependency tree command plugin
+- rpm: Expose Reldep operators and operands
+- libdnf5: fix inappropriate backslash consumption in config files
+- ci: manifest: Test download/install of packages recorded from system
+- ci: manifest: Test that download/install report all missing packages
+- ci: manifest: Test that install requires exact checksums
+- manifest: Check checksum of packages to be installed
+- manifest: Move checksum_method_manifest_to_dnf to manifest.cpp
+- manifest: Require libpkgmanifest >= 0.5.10 to use the hdr_checksum field
+- manifest: Store checksum even for installed packages when available
+- Update shared root cache test expectations
+- Fix metadata cache age output after repository refresh
+- Add repository metadata cache age output
+- test: Add auto_import_local_keys coverage
+- doc: Document auto_import_local_keys
+- libdnf5: Add auto_import_local_keys option
+- build: Add AUTO_IMPORT_KEYS_DIR CMake option
+- Renamed rhsm libdnf5 plugin to rhsm-container
+- doc: Add plugin_conf_dir option and deprecate pluginconfpath
+- doc: Fix pluginconfpath and pluginpath option descriptions
+- test: manifest: Use libpkgmanifest infile format
+- manifest: rpms.in.yaml -> packages.input.yaml
+- manifest: Switch rpm-lockfile-prototype to libpkgmanifest infiles
+- debuginfo-install: Add shell completion for arguments
+- Adjust integration tests to check actions in history list
+- history: Show item actions in `history list` output
+- Assign letter to REASON_CHANGE
+- doc: fix build without Python bindings
+
 # 5.4.6.0
 
 - Update translations from weblate
