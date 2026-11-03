@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-22 14:19+0000\n"
-"PO-Revision-Date: 2026-09-10 18:17+0000\n"
+"POT-Creation-Date: 2026-11-02 08:43+0000\n"
+"PO-Revision-Date: 2026-11-03 09:37+0000\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <https://translate.fedoraproject.org/projects/dnf5/"
 "libdnf5/ka/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 2026.9.1\n"
+"X-Generator: Weblate 2026.11\n"
 
 #: advisory/advisory.cpp:81
 #, c++-format
@@ -390,7 +390,7 @@ msgstr[1] ""
 "  - არგუმენტი '{}' ემთხვევა {} ნაკადს ('{}') მოდულისთვის '{}', მაგრამ ეს "
 "ნაკადები ნაგულისხმევად ჩართული არაა."
 
-#: base/log_event.cpp:299
+#: base/log_event.cpp:299 base/log_event.cpp:385
 msgid "', '"
 msgstr "', '"
 
@@ -443,8 +443,8 @@ msgid ""
 "Could not find debuginfo package for the following packages resolved from "
 "the argument '{0}': {1}"
 msgstr ""
-"ვერ ვიპოვე debuginfo პაკეტი შემდეგი პაკეტებისგან, ამოიხსნა არგუმენტიდან "
-"'{0}': {1}"
+"ვერ ვიპოვე debuginfo პაკეტი შემდეგი პაკეტებისგან, ამოიხსნა არგუმენტიდან '{0}"
+"': {1}"
 
 #: base/log_event.cpp:363 base/log_event.cpp:374
 msgctxt "String for joining NEVRAs - e.g. `foo-4-4.noarch, bar-5-5.noarch`"
@@ -464,6 +464,15 @@ msgstr ""
 #, c++-format
 msgid "Transaction merge error: '{0}'"
 msgstr "ტრანზაქციის შერწყმის შეცდომა: '{0}'"
+
+#: base/log_event.cpp:381
+#, c++-format
+msgid ""
+"Exceeded installonly_limit ({0}): found {1} installed: '{2}'. You can use "
+"'remove --oldinstallonly'."
+msgstr ""
+"installonly_limit ({0}) გადაცილებულია: აღმოჩენილია {1} დაყენებულია: '{2}'. "
+"შეგიძლიათ, გამოიყენოთ 'remove --oldinstallonly'."
 
 #: base/solver_problems.cpp:41
 #, c++-format
@@ -717,86 +726,101 @@ msgstr "პრობლემა: "
 msgid "Problem {}: "
 msgstr "პრობლემა {}: "
 
-#: base/transaction.cpp:88
+#: base/transaction.cpp:89
 msgid "This transaction has been already run before."
 msgstr "ეს ტრანზაქცია ადრე უკვე იყო გაშვებული."
 
-#: base/transaction.cpp:89
+#: base/transaction.cpp:90
 msgid "Cannot run transaction with resolving problems."
 msgstr "შეუძლებელია ტრანზაქციის გაშვება პრობლემების გადაწყვეტით."
 
-#: base/transaction.cpp:90
+#: base/transaction.cpp:91
 msgid "Rpm transaction check failed."
 msgstr "Rpm-ის ტრანზაქციის შემოწმება ჩავარდა."
 
-#: base/transaction.cpp:92
+#: base/transaction.cpp:93
 msgid ""
 "Failed to obtain rpm transaction lock. Another transaction is in progress."
 msgstr ""
 "შეცდომა rpm-ის ტრანზაქციის ბლოკის მიღებისას. მიმდინარეობს სხვა ტრანზაქცია."
 
-#: base/transaction.cpp:93
+#: base/transaction.cpp:94
 msgid "Rpm transaction failed."
 msgstr "Rpm-ის ტრანზაქცია ჩავარდა."
 
-#: base/transaction.cpp:94
+#: base/transaction.cpp:95
 msgid "Signature verification failed."
 msgstr "ხელმოწერის გადამოწმება ჩავარდა."
 
-#: base/transaction.cpp:98
+#: base/transaction.cpp:97
+msgid ""
+"This transaction is no longer valid because the system repository has "
+"changed since it was loaded."
+msgstr ""
+"ეს ტრანზაქცია სწორი აღარაა, რადგან სისტემური რეპოზიტორია შეიცვალა მისი "
+"ჩატვირთვის შემდეგ."
+
+#: base/transaction.cpp:101
 msgid "The repository does not have any OpenPGP keys configured."
 msgstr "რეპოზიტორიას OpenPGP გასაღებები მითითებული არ აქვს."
 
-#: base/transaction.cpp:99
+#: base/transaction.cpp:102
 msgid "Public key is not installed."
 msgstr "საჯარო გასაღები დაყენებული არაა."
 
-#: base/transaction.cpp:100
+#: base/transaction.cpp:103
 msgid "Canceled by the user."
 msgstr "გაუქმდა მომხმარებლის მიერ."
 
-#: base/transaction.cpp:101
+#: base/transaction.cpp:104
 msgid "Public key import failed."
 msgstr "საჯარო გასაღების შემოტანა ჩავარდა."
 
-#: base/transaction.cpp:993
+#: base/transaction.cpp:997
 msgid "poll failed during scriptlets pipe processing"
 msgstr "poll ჩავარდა მინისკრიპტების კომუნიკაციის არხის დამუშავებისას"
 
-#: base/transaction.cpp:1016
+#: base/transaction.cpp:1020
 msgid "failed to read scriptlet output from pipe"
 msgstr "კომუნიკაციის არხდან მინისკრიპტის გამოტანის წაკითხვის შეცდომა"
 
-#: base/transaction.cpp:1134
+#: base/transaction.cpp:1103
+#, c++-format
+msgid "Failed to acquire system repo lock for writing, lock located at \"{}\""
+msgstr ""
+"შეცდომა სისტემური რეპოზიტორიის ბლოკის მიღებისას ჩასაწერად. ბლოკი "
+"მოთავსებულია ბილიკზე \"{}\""
+
+#: base/transaction.cpp:1173
 #, c++-format
 msgid "Invalid tsflag: {}"
 msgstr "არასწორი tsflag: {}"
 
-#: base/transaction.cpp:1568
+#: base/transaction.cpp:1611
 #, c++-format
 msgid "Public key \"{}\" is already present, not importing."
 msgstr "საჯარო გასაღები \"{}\" უკვე არსებობს. შემოტანა არ მოხდება."
 
-#: base/transaction.cpp:1589
+#: base/transaction.cpp:1634
 #, c++-format
 msgid "An error occurred importing key \"{}\": {}"
 msgstr "შეცდომა გასაღების \"{}\" შემოტანისას: {}"
 
-#: base/transaction.cpp:1623
+#: base/transaction.cpp:1668
 #, c++-format
 msgid "OpenPGP check for package \"{}\" ({}) from repo \"{}\" has failed: "
 msgstr "OpenPGP-ის შემოწმება პაკეტისთვის \"{}\" ({}) რეპოდან \"{}\" ჩავარდა: "
 
-#: base/transaction.cpp:1651
+#: base/transaction.cpp:1696
 msgid "Import of the key didn't help, wrong key?"
 msgstr "გასაღების შემოტანამ არაფერს უშველა. გასაღები არასწორია?"
 
-#: base/transaction.cpp:1670
+#: base/transaction.cpp:1715
 msgctxt "It is a joining character for repositories IDs"
 msgid ", "
 msgstr ", "
 
-#: base/transaction.cpp:1673
+#: base/transaction.cpp:1718
 #, c++-format
 msgid "Warning: skipped OpenPGP checks for {0} package from repository: {1}"
 msgid_plural ""
@@ -808,7 +832,7 @@ msgstr[1] ""
 "გაფრთხილება: OpenPGP-ით შემოწმების გამოტოვება {0} პაკეტისთვის "
 "რეპოზიტორიებიდან: {1}"
 
-#: base/transaction.cpp:1676
+#: base/transaction.cpp:1721
 #, c++-format
 msgid "Warning: skipped OpenPGP checks for {0} package from repositories: {1}"
 msgid_plural ""
@@ -820,38 +844,42 @@ msgstr[1] ""
 "გაფრთხილება: OpenPGP-ით შემოწმების გამოტოვება {0} პაკეტისთვის "
 "რეპოზიტორიებიდან: {1}"
 
-#: base/vendor_change_manager.cpp:145
+#: base/vendor_change_manager.cpp:115
+msgid "{func}(): Cannot create directory: {path}: {msg}"
+msgstr "{func}(): ვერ შევქმენი საქაღალდე: {path}: {msg}"
+
+#: base/vendor_change_manager.cpp:164
 msgid "{func}(): Cannot remove file: {path}: {msg}"
 msgstr "{func}(): ვერ წავშალე ფაილი: {path}: {msg}"
 
-#: base/vendor_change_manager.cpp:151
+#: base/vendor_change_manager.cpp:170
 msgid "{func}(): File does not exist: {path}"
 msgstr "{func}(): ფაილი არ არსებობს: {path}"
 
-#: base/vendor_change_manager.cpp:240
+#: base/vendor_change_manager.cpp:259
 msgid "{func}(): Cannot remove existing policy file: {path}"
 msgstr "{func}(): ვერ წავშალე არსებული პოლიტიკის ფაილი: {path}"
 
-#: base/vendor_change_manager.cpp:252
+#: base/vendor_change_manager.cpp:271
 msgid "{func}(): Cannot create file: {path}"
 msgstr "{func}(): ფაილის შექმნა შეუძლებელია: {path}"
 
-#: base/vendor_change_manager.cpp:269
+#: base/vendor_change_manager.cpp:288
 msgid "{func}(): Cannot write to file: {path}"
 msgstr "{func}(): ვერ ჩავწერე ფაილში: {path}"
 
-#: base/vendor_change_manager.cpp:306
+#: base/vendor_change_manager.cpp:325
 msgid "{func}(): Base filename cannot be empty"
 msgstr "{func}(): საბაზისო ფაილის სახელი ცარიელი ვერ იქნება"
 
-#: base/vendor_change_manager.cpp:312
+#: base/vendor_change_manager.cpp:331
 msgid ""
 "{func}(): Base filename must not contain path components: {base_filename}"
 msgstr ""
 "{func}(): საბაზისო ფაილის სახელი არ შეიძლება, ბილიკის კომპონენტებს "
 "შეიცავდეს: {base_filename}"
 
-#: base/vendor_change_manager.cpp:437
+#: base/vendor_change_manager.cpp:461
 msgid "{func}(): Path must have .conf extension: {path}"
 msgstr "{func}(): ბილიკს უნდა ჰქონდეს გაფართოება .conf: {path}"
 
@@ -922,7 +950,7 @@ msgstr "'{}'-ის ბაიტებად გარდაქმნის შ�
 msgid "Unknown unit '{}'"
 msgstr "უცნობი ერთეული '{}'"
 
-#: conf/config_main.cpp:291
+#: conf/config_main.cpp:292
 #, c++-format
 msgid "The throttle value {} is outside the allowed range {} ... {}"
 msgstr "შეზღუდვის მნიშვნელობა {} დაშვებული დიაპაზონის ({} ... {}) გარეთაა"
@@ -1045,7 +1073,7 @@ msgstr ""
 "შეყვანილი მნიშვნელობა \"{}\" დაშვებული არაა. ამ პარამეტრისთვის დაშვებული "
 "მნიშვნელობა რეგულარული გამოსახულება \"{}\"-ის მიერ განისაზღვრება"
 
-#: conf/vars.cpp:344 conf/vars.cpp:384
+#: conf/vars.cpp:347 conf/vars.cpp:387
 #, c++-format
 msgid "Variable \"{}\" is read-only"
 msgstr "ცვლადი '{}' მხოლოდ-კითხვადია"
@@ -1070,8 +1098,8 @@ msgstr "მოდულისთვის '{}' მრავალი ნაკ�
 #. DNF_ERROR_REMOVAL_OF_PROTECTED_PKG);
 #. }
 #. TODO(lukash) replace with a proper and descriptive exception
-#: module/module_goal_private.cpp:83 rpm/solv/goal_private.cpp:354
-#: rpm/solv/goal_private.cpp:776
+#: module/module_goal_private.cpp:83 rpm/solv/goal_private.cpp:374
+#: rpm/solv/goal_private.cpp:796
 msgid "no solution possible"
 msgstr "გადაწყვეტა შეუძლებელია"
 
@@ -1146,7 +1174,7 @@ msgstr "Plugins::load_plugins(): config_dirs ცარიელი ვერ ი
 msgid "Cannot load libdnf plugin enabled from: {}"
 msgstr "Libdnf-ის დამატების ჩატვირთვის შეცდომა მდებარეობიდან: {}"
 
-#: repo/config_repo.cpp:593
+#: repo/config_repo.cpp:602
 msgid "get_unique_id(): Computation of SHA256 failed"
 msgstr "get_unique_id(): SHA256-ის გამოთვლის შეცდომა"
 
@@ -1224,17 +1252,17 @@ msgstr ""
 "რეპოზიტორიის ჩატვირთვის შეცდომა; \"ძირითადი\" მონაცემები არ არსებობს ან მისი "
 "ფორმატი მხარდაჭერილი არაა"
 
-#: repo/repo.cpp:506
+#: repo/repo.cpp:513
 #, c++-format
 msgid "Failed to load comps \"{}\": doesn't have the \".xml\" extension"
 msgstr "ჩავარდა წაკითხვა comps ფაილისთვის \"{}\": არ აქვს გაფართოება \".xml\""
 
-#: repo/repo.cpp:513
+#: repo/repo.cpp:520
 #, c++-format
 msgid "Failed to load xml Comps \"{}\": {}"
 msgstr "ჩავარდა ჩატვირთვა XML Comps ფაილისთვის \"{}\": {}"
 
-#: repo/repo.cpp:531
+#: repo/repo.cpp:538
 #, c++-format
 msgid "Failed to load RPM \"{}\": {}"
 msgstr "RPM-ის \"{}\" ჩატვირთვის შეცდომა: {}"
@@ -1306,17 +1334,17 @@ msgid ""
 msgstr ""
 "რეპოზიტორიას \"{}\" წყარო (baseurl, mirrorlist ან metalink)მითითებული არ აქვს"
 
-#: repo/repo_pgp.cpp:65
+#: repo/repo_pgp.cpp:67
 #, c++-format
 msgid "Failed to import OpenPGP keys into temporary keyring: {}"
 msgstr "ჩავარდა OpenPGP გასაღებების შემოტანა დროებით ბრელოკში: {}"
 
-#: repo/repo_pgp.cpp:71 repo/repo_pgp.cpp:98
+#: repo/repo_pgp.cpp:73 repo/repo_pgp.cpp:100
 #, c++-format
 msgid "Failed to list OpenPGP keys: {}"
 msgstr "OpenPGP გასაღების ჩამოთვლა ჩავარდა: {}"
 
-#: repo/repo_pgp.cpp:146
+#: repo/repo_pgp.cpp:153
 #, c++-format
 msgid "Failed to import OpenPGP keys: {}"
 msgstr "ჩავარდა შემოტანა OpenPGP გასაღებებისათვის: {}"
@@ -1335,56 +1363,63 @@ msgstr ""
 msgid "Cache-only enabled but no cache for repository \"{}\""
 msgstr "მხოლოდ-კეში ჩართულია, მაგრამ რეპოზიტორიას \"{}\" კეში არ გააჩნია"
 
-#: repo/solv_repo.cpp:267
+#: repo/solv_repo.cpp:268
 #, c++-format
 msgid "Failed to load repomd for repo \"{}\" from \"{}\": {}."
 msgstr "რეპოზიტორიისთვის \"{}\" \"{}\"-დან repomd-ის ჩატვირთვის შეცდომა: {}."
 
-#: repo/solv_repo.cpp:275
+#: repo/solv_repo.cpp:276
 #, c++-format
 msgid "Failed to load primary for repo \"{}\" from \"{}\": {}."
 msgstr "რეპოზიტორიისთვის \"{}\" \"{}\"-დან primary-ის ჩატვირთვის შეცდომა: {}."
 
-#: repo/solv_repo.cpp:323
+#: repo/solv_repo.cpp:324
 #, c++-format
 msgid "Unsupported extended repodata type for the system repo: \"{}\"."
 msgstr ""
 "მხარდაუჭერელი გაფართოებული რეპოზიტორიის მონაცემების ტიპი სისტემური "
 "რეპოსთვის: \"{}\"."
 
-#: repo/solv_repo.cpp:395
+#: repo/solv_repo.cpp:396
 #, c++-format
 msgid "Failed to load {} extension for repo \"{}\" from \"{}\": {}"
 msgstr "შეცდომა გაფართოების {} ჩატვირთვისას რეპოზიტორიისთვის {} \"{}\"-დან: {}"
 
-#: repo/solv_repo.cpp:431
+#: repo/solv_repo.cpp:436
+#, c++-format
+msgid "Failed to acquire system repo lock for reading, lock located at \"{}\""
+msgstr ""
+"შეცდომა სისტემური რეპოზიტორიის ბლოკის მიღებისას წასაკითხად. ბლოკი "
+"მოთავსებულია ბილიკზე \"{}\""
+
+#: repo/solv_repo.cpp:455
 #, c++-format
 msgid "Failed to load system repo from root \"{}\": {}"
 msgstr "შეცდომა სისტემური რეპოზიტორიის ჩატვირთვისას root-დან \"{}\": {}"
 
-#: repo/solv_repo.cpp:532
+#: repo/solv_repo.cpp:559
 #, c++-format
 msgid "Failed to load {} cache for repo \"{}\" from \"{}\": {}"
 msgstr "შეცდომა {} კეშის ჩატვირთვისას რეპოზიტორიისთვის \"{}\" \"{}\"-დან: {}"
 
-#: repo/solv_repo.cpp:586
+#: repo/solv_repo.cpp:613
 #, c++-format
 msgid "Failed to write primary cache for repo \"{}\" to \"{}\": {}"
 msgstr "ძირითადი კეშის ჩაწერის პრობლემა რეპოზიტორიისთვის \"{}\" \"{}\"-ში: {}"
 
-#: repo/solv_repo.cpp:608
+#: repo/solv_repo.cpp:635
 #, c++-format
 msgid "Failed to re-load primary cache for repo \"{}\" from \"{}\": {}"
 msgstr ""
 "ძირითადი კეშის თავიდან ჩატვირთვის პრობლემა რეპოზიტორიისთვის \"{}\" \"{}\"-"
 "დან: {}"
 
-#: repo/solv_repo.cpp:673
+#: repo/solv_repo.cpp:700
 #, c++-format
 msgid "Failed to write {} cache for repo \"{}\" to \"{}\": {}"
 msgstr "{} კეშის ჩაწერის პრობლემა რეპოზიტორიისთვის \"{}\" \"{}\"-ში: {}"
 
-#: repo/solv_repo.cpp:694
+#: repo/solv_repo.cpp:721
 #, c++-format
 msgid "Failed to re-load {} cache for repo \"{}\" from \"{}\": {}"
 msgstr ""
@@ -1420,7 +1455,7 @@ msgstr "პაკეტი, რომელიც rpmbdbid_ს შეიცა�
 msgid "<unknown>"
 msgstr "<უცნობი>"
 
-#: rpm/reldep.cpp:116 rpm/reldep.cpp:123
+#: rpm/reldep.cpp:117 rpm/reldep.cpp:124
 msgid "Cannot parse a dependency string"
 msgstr "დამოკიდებულების სტრიქონის დამუშავება შეუძლებელია"
 
@@ -1440,7 +1475,7 @@ msgstr "პაკეტი ხელმოწერილი არაა."
 msgid "Problem occurred when opening the package."
 msgstr "პრობლემა პაკეტის გახსნისას."
 
-#: rpm/rpm_signature.cpp:64
+#: rpm/rpm_signature.cpp:64 system/state.cpp:792
 #, c++-format
 msgid "Failed to set rpm transaction rootDir \"{}\"."
 msgstr "'rpm'-ის ტრანზაქციის rootDir-ის \"{}\"-ზე დაყენების შეცდომა."
@@ -1547,7 +1582,12 @@ msgstr "ვერ ჩამოვწიე ვერსია პაკეტი
 msgid "Cannot install package \"{}\""
 msgstr "ვერ დავაყენე პაკეტი \"{}\""
 
-#: rpm/versionlock_config.cpp:284 system/state.cpp:605
+#: rpm/versionlock_config.cpp:259
+#, c++-format
+msgid "Error parsing versionlock file \"{}\": {}"
+msgstr "დამუშავების შეცდომა versionlock-ის ფაილისთვის \"{}\": {}"
+
+#: rpm/versionlock_config.cpp:297 system/state.cpp:614
 #, c++-format
 msgid "{}"
 msgstr "{}"
@@ -1563,17 +1603,17 @@ msgstr "ეპოქის \"{}\" რიცხვში გადაყვან
 msgid "Writing debugsolver data into \"{}\" failed: {}"
 msgstr "შეცდომა debugsolver-ის მონაცემების \"{}\"-ში ჩაწერისას: {}"
 
-#: solv/vendor_change_manager.cpp:339
+#: solv/vendor_change_manager.cpp:357
 #, c++-format
 msgid "Missing \"version\" key in \"{}\""
 msgstr "აკლია \"version\" გასაღები \"{}\"-ში"
 
-#: solv/vendor_change_manager.cpp:351
+#: solv/vendor_change_manager.cpp:369
 #, c++-format
 msgid "Unsupported version \"{}\" in \"{}\". Supported versions: {}"
 msgstr "მხარდაუჭერელი ვერსია \"{}\" \"{}\"-ში. მხარდაჭერილია ვერსიები: {}"
 
-#: solv/vendor_change_manager.cpp:362
+#: solv/vendor_change_manager.cpp:380
 #, c++-format
 msgid ""
 "Configuration \"{}\" uses version \"1.0\" which does not support combining "
@@ -1583,13 +1623,13 @@ msgstr ""
 "'equivalent_vendors'-ის მხარდაჭერა 'outgoing_vendors'-სთან და "
 "'incoming_vendors'-სთან ერთად"
 
-#: solv/vendor_change_manager.cpp:394 solv/vendor_change_manager.cpp:432
-#: solv/vendor_change_manager.cpp:484 solv/vendor_change_manager.cpp:709
+#: solv/vendor_change_manager.cpp:412 solv/vendor_change_manager.cpp:457
+#: solv/vendor_change_manager.cpp:509 solv/vendor_change_manager.cpp:734
 #, c++-format
 msgid "Unknown key '{}' in \"{}\" on line {}"
 msgstr "უცნობი გასაღები \"{}\" \"{}\"-ში ხაზზე {}"
 
-#: solv/vendor_change_manager.cpp:401
+#: solv/vendor_change_manager.cpp:419
 #, c++-format
 msgid ""
 "Configuration \"{}\" uses version \"1.0\" which does not support key '{}' on "
@@ -1598,7 +1638,7 @@ msgstr ""
 "კონფიგურაცია \"{}\" იყენებს ვერსიას \"1.0\", რომელსაც არ აქვს გასაღების '{}' "
 "მხარდაჭერა ხაზზე {}"
 
-#: solv/vendor_change_manager.cpp:420
+#: solv/vendor_change_manager.cpp:445
 #, c++-format
 msgid ""
 "Filter \"cmdline_repo\" is only allowed in the 'incoming_packages' section. "
@@ -1607,25 +1647,25 @@ msgstr ""
 "ფილტრი \"cmdline_repo\", მხოლოდ, დაშვებულია სექციაში 'incoming_packages'. "
 "შეცდომა \"{}\"-ში ცხრილში დაწყებული ხაზიდან {}"
 
-#: solv/vendor_change_manager.cpp:442
+#: solv/vendor_change_manager.cpp:467
 #, c++-format
 msgid ""
 "Missing package filter definition in \"{}\" in table starting on line {}"
 msgstr "აკლია პაკეტის ფილტრის აღწერა \"{}\"-ში ცხრილში დაწყებული ხაზიდან {}"
 
-#: solv/vendor_change_manager.cpp:473
+#: solv/vendor_change_manager.cpp:498
 #, c++-format
 msgid ""
 "Unsupported comparator \"{}\" for vendor definition in \"{}\" on line {}"
 msgstr ""
 "მხარდაუჭერელი შემდარებელი \"{}\" მომწოდებლის აღწერაში \"{}\"-ში ხაზზე {}"
 
-#: solv/vendor_change_manager.cpp:494
+#: solv/vendor_change_manager.cpp:519
 #, c++-format
 msgid "Missing 'vendor' key in \"{}\" in table starting on line {}"
 msgstr "ნაკლული გასაღები 'vendor' \"{}\"-ში ცხრილში ხაზიდან {}"
 
-#: solv/vendor_change_manager.cpp:507
+#: solv/vendor_change_manager.cpp:532
 #, c++-format
 msgid ""
 "Invalid regex vendor pattern \"{}\" in \"{}\" in table starting on line {}: "
@@ -1634,17 +1674,17 @@ msgstr ""
 "არასწორი რეგგამოსის მომწოდებლის ნიმუში \"{}\" \"{}\"-ში ცხრილში დაწყებული "
 "ხაზიდან {}: {}"
 
-#: solv/vendor_change_manager.cpp:535
+#: solv/vendor_change_manager.cpp:560
 #, c++-format
 msgid "Bad value type in \"{}\" on line {}: {}"
 msgstr "არასწორი მნიშვნელობის ტიპი \"{}\"-ში ხაზზე {}: {}"
 
-#: solv/vendor_change_manager.cpp:541
+#: solv/vendor_change_manager.cpp:566
 #, c++-format
 msgid "An error occurred when parsing \"{}\": {}"
 msgstr "შეცდომა \"{}\"-ის დამუშავებისას: {}"
 
-#: solv/vendor_change_manager.cpp:555
+#: solv/vendor_change_manager.cpp:580
 #, c++-format
 msgid ""
 "Configuration \"{}\" uses version \"1.0\" which does not support "
@@ -1653,7 +1693,7 @@ msgstr ""
 "კონფიგურაცია \"{}\" იყენებს ვერსიას \"1.1\", რომელსაც არ აქვს "
 "'incoming_vendors'-ის მხარდაჭერა 'outgoing_vendors'-ის გარეშე"
 
-#: solv/vendor_change_manager.cpp:561
+#: solv/vendor_change_manager.cpp:586
 #, c++-format
 msgid ""
 "Configuration \"{}\" uses version \"1.0\" which does not support "
@@ -1662,36 +1702,36 @@ msgstr ""
 "კონფიგურაცია \"{}\" იყენებს ვერსიას \"1.1\", რომელსაც არ აქვს "
 "'outgoing_vendors'-ის მხარდაჭერა 'incoming_vendors'-ის გარეშე"
 
-#: solv/vendor_change_manager.cpp:651
+#: solv/vendor_change_manager.cpp:676
 #, c++-format
 msgid "Unknown 'comparator' \"{}\" in \"{}\" on line {}"
 msgstr "უცნობი 'comparator' \"{}\" \"{}\"-ში ხაზზე {}"
 
-#: solv/vendor_change_manager.cpp:655
+#: solv/vendor_change_manager.cpp:680
 #, c++-format
 msgid ""
 "Configuration \"{}\" uses version \"{}\" which does not support 'comparator' "
 "\"{}\""
 msgstr ""
-"კონფიგურაცია \"{}\" იყენებს ვერსიას \"{}\", რომელსაც არ აქვს 'შემდარებლის' "
-"\"{}\" მხარდაჭერა"
+"კონფიგურაცია \"{}\" იყენებს ვერსიას \"{}\", რომელსაც არ აქვს 'შემდარებლის' \""
+"{}\" მხარდაჭერა"
 
-#: solv/vendor_change_manager.cpp:694
+#: solv/vendor_change_manager.cpp:719
 #, c++-format
 msgid "Unknown 'filter' \"{}\" in \"{}\" on line {}"
 msgstr "უცნობი 'filter' \"{}\" \"{}\"-ში ხაზზე {}"
 
-#: solv/vendor_change_manager.cpp:715
+#: solv/vendor_change_manager.cpp:740
 #, c++-format
 msgid "Missing 'filter' key in \"{}\" for table entry on line {}"
 msgstr "აკლია გასაღები 'filter' \"{}\"-ში ცხრილის ჩანაწერისთვის ხაზზე {}"
 
-#: solv/vendor_change_manager.cpp:720
+#: solv/vendor_change_manager.cpp:745
 #, c++-format
 msgid "Missing 'value' key in \"{}\" for table entry on line {}"
 msgstr "ნაკლული გასაღები 'value' \"{}\"-ში ცხრილში ხაზიდან {}"
 
-#: solv/vendor_change_manager.cpp:727
+#: solv/vendor_change_manager.cpp:752
 #, c++-format
 msgid ""
 "Filter \"cmdline_repo\" in \"{}\" in table starting on line {} does not "
@@ -1702,7 +1742,7 @@ msgstr ""
 "შემდარებლის \"{}\" მხარდაჭერა. ამ ფილტრისთვის დაშვებულია, მხოლოდ, "
 "ნაგულისხმევი \"EXACT\" შემდარებელი"
 
-#: solv/vendor_change_manager.cpp:744
+#: solv/vendor_change_manager.cpp:769
 #, c++-format
 msgid ""
 "Invalid 'value' \"{}\" in \"{}\" in table starting on line {}. Only "
@@ -1711,7 +1751,7 @@ msgstr ""
 "არასწორი 'value' \"{}\"-ში ცხრილში დაწყებული ხაზიდან {}. მხარდაჭერილია, "
 "მხოლოდ, \"true\", \"1\", \"false\" და \"0\""
 
-#: solv/vendor_change_manager.cpp:754 solv/vendor_change_manager.cpp:765
+#: solv/vendor_change_manager.cpp:779 solv/vendor_change_manager.cpp:790
 #, c++-format
 msgid ""
 "Filter \"{}\" in \"{}\" in table starting on line {} does not support "
@@ -1720,71 +1760,71 @@ msgstr ""
 "ფილტრს \"{}\" \"{}\"-ში ცხრილში დაწყებული ხაზიდან {} არ აქვს შემდარებლის \"{}"
 "\" მხარდაჭერა"
 
-#: solv/vendor_change_manager.cpp:781
+#: solv/vendor_change_manager.cpp:806
 #, c++-format
 msgid "Invalid epoch value \"{}\" in \"{}\" in table starting on line {}"
 msgstr ""
 "არასწორი ეპოქის მნიშვნელობა \"{}\" \"{}\"-ში ცხრილში დაწყებული ხაზიდან {}"
 
-#: solv/vendor_change_manager.cpp:796
+#: solv/vendor_change_manager.cpp:821
 #, c++-format
 msgid "Invalid regex \"{}\" in \"{}\" in table starting on line {}: {}"
 msgstr "არასწორი რეგგამოსი \"{}\" \"{}\"-ში ცხრილში დაწყებული ხაზიდან {}: {}"
 
-#: solv/vendor_change_manager.cpp:848
+#: solv/vendor_change_manager.cpp:873
 msgid "Unexpected end of input"
 msgstr "შეყვანის მოულოდნელი დასასრული"
 
-#: solv/vendor_change_manager.cpp:865
+#: solv/vendor_change_manager.cpp:890
 #, c++-format
 msgid "Expected '{}' but found end of input"
 msgstr "მოველოდი '{}'-ს, მაგრამ აღმოჩენილია შეყვანის დასასრული"
 
-#: solv/vendor_change_manager.cpp:867
+#: solv/vendor_change_manager.cpp:892
 #, c++-format
 msgid "Expected '{}' but found '{}'"
 msgstr "მოველოდი '{}'-ს, მაგრამ აღმოჩენილია '{}'"
 
-#: solv/vendor_change_manager.cpp:877
+#: solv/vendor_change_manager.cpp:902
 #, c++-format
 msgid "Compact vendor change policy parse error in \"{}\" at position {}"
 msgstr ""
 "კომპაქტური მომწოდებლის ცვლილების პოლიტიკის დამუშავების შეცდომა \"{}\"-ში "
 "პოზიციაზე {}"
 
-#: solv/vendor_change_manager.cpp:931
+#: solv/vendor_change_manager.cpp:956
 msgid "Expected package filter after '@'"
 msgstr "მოველოდი პაკეტის ფილტრს '@'-ის შემდეგ"
 
-#: solv/vendor_change_manager.cpp:944
+#: solv/vendor_change_manager.cpp:969
 #, c++-format
 msgid "Unexpected character '{}'"
 msgstr "მოულოდნელი სიმბოლო '{}'"
 
-#: solv/vendor_change_manager.cpp:1020
+#: solv/vendor_change_manager.cpp:1045
 msgid "Expected quoted string starting with '\"'"
 msgstr "მოველოდი ციტირებულ სტრიქონს, რომელიც იწყება სიმბოლოთი '\"'"
 
-#: solv/vendor_change_manager.cpp:1028
+#: solv/vendor_change_manager.cpp:1053
 msgid "Unterminated escape sequence"
 msgstr "დაუსრულებელი სპეციალური სიმბოლოების მიმდევრობა"
 
-#: solv/vendor_change_manager.cpp:1034
+#: solv/vendor_change_manager.cpp:1059
 #, c++-format
 msgid "Invalid escape sequence '\\{}'. Only '\\\"' and '\\\\' are supported"
 msgstr ""
 "არასწორი სპეციალური სიმბოლოების მიმდევრობა '\\{}'. მხარდაჭერილია, მხოლოდ, '\\"
 "\"' და '\\\\'"
 
-#: solv/vendor_change_manager.cpp:1041
+#: solv/vendor_change_manager.cpp:1066
 msgid "Unterminated quoted string"
 msgstr "დაუსრულებელი ციტირებული სტრიქონი"
 
-#: solv/vendor_change_manager.cpp:1076
+#: solv/vendor_change_manager.cpp:1101
 msgid "Expected direction prefix 'in', 'out', or 'eq'"
 msgstr "მოველოდი მიმართულების პრეფიქსს 'in', 'out', ან 'eq'"
 
-#: solv/vendor_change_manager.cpp:1140
+#: solv/vendor_change_manager.cpp:1165
 msgid ""
 "Expected comparison operator: relational (<, <=, >, >=) or string (=, ^, $, "
 "*, =*, =~; optionally prefixed with ! and/or i"
@@ -1792,7 +1832,7 @@ msgstr ""
 "მოველოდი შედარების ოპერატორს: რაციონალურს (<, <=, >, >=), ან სტრიქონს (=, ^, "
 "$, *, =*, =~; სურვილისამებრ პრეფიქსით ! ან/და i"
 
-#: solv/vendor_change_manager.cpp:1205
+#: solv/vendor_change_manager.cpp:1230
 msgid ""
 "Vendor definition does not support relational comparators. Use string "
 "comparators: =, ^, $, *, =*, =~"
@@ -1800,34 +1840,34 @@ msgstr ""
 "მომწოდებლის აღწერს არ აქვს რელაციური შემდარებლების მხარდაჭერა. გამოიყენეთ "
 "სტრიქონის შემდარებლები: =, ^, $, *, =*, =~"
 
-#: solv/vendor_change_manager.cpp:1213
+#: solv/vendor_change_manager.cpp:1238
 #, c++-format
 msgid "Invalid regex vendor pattern '{}': {}"
 msgstr "არასწორი რეგგამოსის მომწოდებლის ნიმუში \"{}\": {}"
 
-#: solv/vendor_change_manager.cpp:1231
+#: solv/vendor_change_manager.cpp:1256
 #, c++-format
 msgid "Unknown filter field name '{}'"
 msgstr "უცნობი ფილტრის ველის სახელი '{}'"
 
-#: solv/vendor_change_manager.cpp:1241
+#: solv/vendor_change_manager.cpp:1266
 msgid "Expected filter field name"
 msgstr "მოველოდი ფილტრის ველის სახელს"
 
-#: solv/vendor_change_manager.cpp:1264
+#: solv/vendor_change_manager.cpp:1295
 #, c++-format
 msgid "Invalid epoch value \"{}\""
 msgstr "არასწორი ეპოქის მნიშვნელობა \"{}\""
 
-#: solv/vendor_change_manager.cpp:1268
+#: solv/vendor_change_manager.cpp:1299
 msgid "Filter 'cmdline_repo' only supports the '=' (EXACT) comparator"
 msgstr "ფილტრს 'cmdline_repo', მხოლოდ, '=' (ზუსტი) შემდარებლის მხარდაჭერა აქვს"
 
-#: solv/vendor_change_manager.cpp:1271
+#: solv/vendor_change_manager.cpp:1302
 msgid "Filter 'cmdline_repo' is only allowed in incoming packages ('in:')"
 msgstr "ფილტრი 'cmdline_repo', მხოლოდ, დაშვებულია შემომავალ პაკეტებში ('in:')"
 
-#: solv/vendor_change_manager.cpp:1282
+#: solv/vendor_change_manager.cpp:1313
 #, c++-format
 msgid ""
 "Invalid value '{}' for 'cmdline_repo' filter. Use 'true', '1', 'false', or "
@@ -1836,58 +1876,71 @@ msgstr ""
 "არასწორი მნიშვნელობა '{}' ფილტრისთვის 'cmdline_repo'. გამოიყენეთ 'true', "
 "'1', 'false',ან '0'"
 
-#: solv/vendor_change_manager.cpp:1286
+#: solv/vendor_change_manager.cpp:1317
 #, c++-format
 msgid "Filter '{}' only supports relational comparators: =, !=, >, >=, <, <="
 msgstr ""
 "ფილტრს '{}' მხოლოდ, რელაციური სემდარებლების მხარდაჭერა აქვს: =, !=, >, >=, "
 "<, <="
 
-#: solv/vendor_change_manager.cpp:1290
+#: solv/vendor_change_manager.cpp:1321
 #, c++-format
 msgid "Filter '{}' only supports string comparators: =, ^, $, *, =*, =~"
 msgstr ""
 "ფილტრს '{}', მხოლოდ, სტრიქონის შემდარებლების მხარდაჭერა აქვს: =, ^, $, *, "
 "=*, =~"
 
-#: solv/vendor_change_manager.cpp:1299
+#: solv/vendor_change_manager.cpp:1330
 #, c++-format
 msgid "Invalid regex '{}': {}"
 msgstr "არასწორი რეგგამოსი '{}': {}"
 
-#: solv/vendor_change_manager.cpp:1310
+#: solv/vendor_change_manager.cpp:1341
 msgid "Package filters do not support 'eq' direction. Use 'in' or 'out'"
 msgstr ""
 "პაკეტის ფილტრებს 'eq' მიმართულების მხარდაჭერა არ აქვთ. გამოიყენეთ 'in', ან "
 "'out'"
 
-#: solv/vendor_change_manager.cpp:1401 solv/vendor_change_manager.cpp:1451
-#: solv/vendor_change_manager.cpp:1462 solv/vendor_change_manager.cpp:1473
+#: solv/vendor_change_manager.cpp:1432 solv/vendor_change_manager.cpp:1482
+#: solv/vendor_change_manager.cpp:1493 solv/vendor_change_manager.cpp:1504
 msgid "{func}(): Policy index {idx} is out of range"
 msgstr "{func}(): პოლიტიკის ინდექსი {idx} დიაპაზონს გარეთაა"
 
-#: system/state.cpp:282 system/state.cpp:291
+#: system/state.cpp:291 system/state.cpp:300
 #, c++-format
 msgid "Invalid TOML version \"{}\", \"MAJOR.MINOR\" expected"
 msgstr "არასწორი TOML-ის ვერსია \"{}\", მოველოდი \"MAJOR.MINOR\""
 
-#: system/state.cpp:299
+#: system/state.cpp:308
 #, c++-format
 msgid "{} state for \"{}\" not found."
 msgstr "{} მდგომარეობა \"{}\"-სთვის აღმოჩენილი არაა."
 
-#: system/state.cpp:303
+#: system/state.cpp:312
 #, c++-format
 msgid "Loading system state TOML file {} failed (see dnf5-system-state(7)): {}"
 msgstr ""
-"სისტემის მდგომარეობის TOML ფაილის {} ჩატვირთვა ჩავარდა (იხ: dnf5-system-"
-"state(7)): {}"
+"სისტემის მდგომარეობის TOML ფაილის {} ჩატვირთვა ჩავარდა (იხ: dnf5-system-state"
+"(7)): {}"
 
-#: system/state.cpp:640
+#: system/state.cpp:649
 #, c++-format
 msgid "Unsupported TOML version \"{}\", maximum supported version is \"{}\""
 msgstr ""
 "TOML-ის მხარდაუჭერელი ვერსია \"{}\". მაქსიმალური მხარდაჭერილი ვერსიაა \"{}\""
+
+#: system/state.cpp:798
+#, c++-format
+msgid "Error {} opening rpm database"
+msgstr "შეცდომა {} rpm-ის ბაზის გახსნისას"
+
+#: system/state.cpp:802
+msgid "Failed to get rpm database"
+msgstr "შეცდომა rpm-ის მონაცემთა ბაზის მიღებსიას"
+
+#: system/state.cpp:808
+msgid "Failed to initialize database index iterator"
+msgstr "მონაცემთა ბაზის ინდექსის იტერატორის ინიციალიზაცია ჩავარდა"
 
 #. TODO(dmach): replace with a better exception class
 #: transaction/db/comps_environment_group.cpp:100
@@ -2015,8 +2068,8 @@ msgid ""
 "Action 'Reinstall' '{0}' cannot be merged because it is not present at that "
 "point -> setting 'Install'."
 msgstr ""
-"ქმედება 'Reinstall' '{0}' შერწყმული ვერ იქნება, რადგან ახლა ის არ არსებობს "
-"-> ვაყენებ 'Install'-ს."
+"ქმედება 'Reinstall' '{0}' შერწყმული ვერ იქნება, რადგან ახლა ის არ "
+"არსებობს -> ვაყენებ 'Install'-ს."
 
 #: transaction/transaction_merge.cpp:194
 #, c++-format
@@ -2024,8 +2077,8 @@ msgid ""
 "Action '{0}' '{1}' cannot be merged after it was '{2}' in preceding "
 "transaction -> setting '{0}'."
 msgstr ""
-"ქმედება '{0}' '{1}' შერწყმული ვერ იქნება, რადგან ის წინა ტრანზაქციაში იყო "
-"'{2}' -> ვაყენებ '{0}'-ს."
+"ქმედება '{0}' '{1}' შერწყმული ვერ იქნება, რადგან ის წინა ტრანზაქციაში იყო '"
+"{2}' -> ვაყენებ '{0}'-ს."
 
 #: transaction/transaction_merge.cpp:215
 #, c++-format
@@ -2183,8 +2236,7 @@ msgstr ""
 
 #: utils/bootc.cpp:58
 msgid "Error checking bootc status: Failed to parse JSON output"
-msgstr ""
-"bootc-ის სტატუსის შემოწმების შეცდომა: JSON გამოტანის დამუშავება ჩავარდა"
+msgstr "bootc-ის სტატუსის შემოწმების შეცდომა: JSON გამოტანის დამუშავება ჩავარდა"
 
 #: utils/bootc.cpp:73
 #, c++-format
@@ -2321,56 +2373,61 @@ msgstr "სიმბოლოსთვს (\"{}\") მისამართი�
 msgid "Cannot set the locale \"{}\": {}"
 msgstr "ვერ დავაყენე ენა \"{}\": {}"
 
-#: utils/locker.cpp:99
+#: utils/locker.cpp:101
 #, c++-format
 msgid "Failed to obtain lock \"{}\""
 msgstr "შეცდომა ბლოკის \"{}\" მიღებისას"
 
-#: utils/locker.cpp:108
+#: utils/locker.cpp:111
 msgid "File is already open."
 msgstr "ფაილი უკვე ღიაა."
 
-#: utils/locker.cpp:121
+#: utils/locker.cpp:124
 #, c++-format
 msgid "Failed to open lock file \"{}\""
 msgstr "შეცდომა დაბლოკვის ფაილის \"{}\" გახსნისას"
 
-#: utils/locker.cpp:127 utils/locker.cpp:164
+#: utils/locker.cpp:130 utils/locker.cpp:167
 #, c++-format
 msgid "The lock file \"{}\" is not opened"
 msgstr "ბლოკის ფაილი \"{}\" ღია არაა"
 
-#: utils/locker.cpp:132
+#: utils/locker.cpp:135
 #, c++-format
 msgid "Failed to truncate lock file \"{}\""
 msgstr "შეცდომა დაბლოკვის ფაილის \"{}\" წაკვეთისას"
 
-#: utils/locker.cpp:135 utils/locker.cpp:172
+#: utils/locker.cpp:138 utils/locker.cpp:175
 #, c++-format
 msgid "Failed to seek lock file \"{}\""
 msgstr "დაბლოკვის ფაილის \"{}\" გადახვევის შეცდომა"
 
-#: utils/locker.cpp:143
+#: utils/locker.cpp:146
 #, c++-format
 msgid "Failed to write to lock file \"{}\""
 msgstr "შეცდომა დაბლოკვის ფაილში \"{}\" ჩაწერისას"
 
-#: utils/locker.cpp:150
+#: utils/locker.cpp:153
 #, c++-format
 msgid "Failed to sync lock file \"{}\""
 msgstr "შეცდომა დაბლოკვის ფაილის \"{}\" სინქრონიზაციისას"
 
-#: utils/locker.cpp:178
+#: utils/locker.cpp:181
 #, c++-format
 msgid "Failed to read from lock file \"{}\""
 msgstr "შეცდომა დაბლოკვის ფაილიდან \"{}\" წაკითხვისას"
 
-#: utils/locker.cpp:192
+#: utils/locker.cpp:194
+#, c++-format
+msgid "The lock file \"{}\" is not locked"
+msgstr "ბლოკის ფაილი \"{}\" ჩაკეტილი არაა"
+
+#: utils/locker.cpp:207
 #, c++-format
 msgid "Failed to close lock file \"{}\""
 msgstr "შეცდომა დაბლოკვის ფაილის \"{}\" დახურვისას"
 
-#: utils/locker.cpp:196
+#: utils/locker.cpp:211
 #, c++-format
 msgid "Failed to delete lock file \"{}\""
 msgstr "შეცდომა დაბლოკვის ფაილის \"{}\" წაშლისას"
@@ -2424,8 +2481,7 @@ msgstr "SQL გამოსახულების შეფასების 
 
 #: utils/sqlite3/sqlite3.cpp:44
 msgid "Insufficient memory or result exceed maximum SQLite3 string length"
-msgstr ""
-"არასაკმარისი მეხსიერება ან შედეგი SQLite3-ის სტრიქონის სიგრძეს აჭარბებს"
+msgstr "არასაკმარისი მეხსიერება ან შედეგი SQLite3-ის სტრიქონის სიგრძეს აჭარბებს"
 
 #: utils/sqlite3/sqlite3.cpp:46
 #, c++-format

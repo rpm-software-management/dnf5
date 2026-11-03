@@ -1,14 +1,14 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# Sijmen Schoon <fedora@vijf.life>, 2025.
+# Sijmen Schoon <fedora@vijf.life>, 2025, 2026.
 # Weblate Translation Memory <noreply-mt-weblate-translation-memory@weblate.org>, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-22 14:19+0000\n"
-"PO-Revision-Date: 2025-06-24 22:34+0000\n"
+"POT-Creation-Date: 2026-11-02 08:43+0000\n"
+"PO-Revision-Date: 2026-11-03 09:51+0000\n"
 "Last-Translator: Sijmen Schoon <fedora@vijf.life>\n"
 "Language-Team: Dutch <https://translate.fedoraproject.org/projects/dnf5/dnf5/"
 "nl/>\n"
@@ -17,9 +17,9 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.12.2\n"
+"X-Generator: Weblate 2026.11\n"
 
-#: cmdline_aliases.cpp:84 context.cpp:198 main.cpp:1449
+#: cmdline_aliases.cpp:84 context.cpp:222 main.cpp:1619
 msgid ", "
 msgstr ", "
 
@@ -220,8 +220,8 @@ msgstr ""
 msgid ""
 "Missing attribute \"attached_command\" for command \"{}\" in file \"{}\""
 msgstr ""
-"Ontbrekend attribuut \"attached_command\" voor commando \"{}\" in bestand "
-"\"{}\""
+"Ontbrekend attribuut \"attached_command\" voor commando \"{}\" in bestand \""
+"{}\""
 
 #: cmdline_aliases.cpp:791
 #, c++-format
@@ -551,7 +551,7 @@ msgstr ""
 msgid "Invalid urlprotocol option: {}"
 msgstr "Ongeldige urlprotocol-optie: {}"
 
-#: commands/download/download.cpp:166 main.cpp:685
+#: commands/download/download.cpp:166 main.cpp:833
 #, c++-format
 msgid "Unsupported architecture \"{0}\". Please choose one from {1}"
 msgstr "Niet-ondersteunde architectuur \"{0}\". Geldige opties: {1}"
@@ -783,8 +783,7 @@ msgstr "Geef pakketten weer afhankelijk van hun relatie tot het systeem"
 
 #: commands/list/list.cpp:49
 msgid "List of package-spec-NI to match (case insensitively)"
-msgstr ""
-"Lijst van package-spec-NI om (hoofdletterongevoelig) mee te vergelijken"
+msgstr "Lijst van package-spec-NI om (hoofdletterongevoelig) mee te vergelijken"
 
 #: commands/list/list.cpp:61
 msgid "Show all versions of the packages, not only the latest ones."
@@ -915,11 +914,11 @@ msgstr ""
 msgid "No matches found."
 msgstr "Geen overeenkomsten gevonden voor \"{}\"."
 
-#: commands/offline/offline.cpp:217
+#: commands/offline/offline.cpp:220
 msgid "Manage offline transactions"
 msgstr "Beheer offline-transacties"
 
-#: commands/offline/offline.cpp:251
+#: commands/offline/offline.cpp:254
 #, c++-format
 msgid ""
 "Error reading state: {}. Rerun the command you used to initiate the offline "
@@ -929,24 +928,37 @@ msgstr ""
 "transactie gestart is opnieuw uit, bijv. `dnf5 system-upgrade download "
 "[OPTIES]`."
 
-#: commands/offline/offline.cpp:264
+#: commands/offline/offline.cpp:267
 msgid ""
 "The system has been modified since the offline transaction was prepared."
 msgstr ""
 
-#: commands/offline/offline.cpp:268
+#: commands/offline/offline.cpp:271
 #, c++-format
 msgid ""
 "The system has been modified since the offline transaction was prepared. To "
 "reschedule, run: {}"
 msgstr ""
 
-#: commands/offline/offline.cpp:290
+#: commands/offline/offline.cpp:293
 #, c++-format
 msgid "Couldn't connect to D-Bus: {}"
 msgstr "Kon niet met D-Bus verbinden: {}"
 
-#: commands/offline/offline.cpp:325
+#: commands/offline/offline.cpp:333
+#, c++-format
+msgid "Waiting for {0} process blocking shutdown ({1}/{2}s)"
+msgid_plural "Waiting for {0} processes blocking shutdown ({1}/{2}s)"
+msgstr[0] ""
+msgstr[1] ""
+
+#: commands/offline/offline.cpp:348
+msgid ""
+"Timed out waiting for processes blocking shutdown. Continuing shutdown "
+"request."
+msgstr ""
+
+#: commands/offline/offline.cpp:411
 msgid ""
 "Prepare the system to perform the offline transaction and reboot to start "
 "the transaction."
@@ -954,34 +966,34 @@ msgstr ""
 "Bereid het systeem voor om een offline-transactie uit te voeren, en start "
 "het opnieuw op om de transactie te starten."
 
-#: commands/offline/offline.cpp:332
+#: commands/offline/offline.cpp:418
 msgid "Power off the system after the operation is complete"
 msgstr "Schakel het systeem uit nadat de operatie voltooid is"
 
-#: commands/offline/offline.cpp:343
+#: commands/offline/offline.cpp:429
 msgid "No offline transaction is stored."
 msgstr "Er is geen offline-transactie opgeslagen."
 
-#: commands/offline/offline.cpp:352
+#: commands/offline/offline.cpp:438
 msgid "System is not ready for offline transaction."
 msgstr "Systeem is niet klaar voor een offline-transactie."
 
-#: commands/offline/offline.cpp:355
+#: commands/offline/offline.cpp:441
 #, c++-format
 msgid "Data directory {} does not exist."
 msgstr "Datamap {} bestaat niet."
 
-#: commands/offline/offline.cpp:380
+#: commands/offline/offline.cpp:466
 #, c++-format
 msgid "{} is not wanted by system-update.target."
 msgstr "{} is niet nodig voor system-update.target."
 
-#: commands/offline/offline.cpp:390
+#: commands/offline/offline.cpp:476
 #, c++-format
 msgid "The system will now reboot to upgrade to release version {}."
 msgstr "Het systeem zal nu herstarten om te upgraden naar releaseversie {}."
 
-#: commands/offline/offline.cpp:394
+#: commands/offline/offline.cpp:480
 msgid ""
 "The system will now reboot to perform the offline transaction initiated by "
 "the following command:"
@@ -989,7 +1001,7 @@ msgstr ""
 "Het systeem zal nu herstarten om de offline-transactie uit te voeren die "
 "gestart met het volgende commando:"
 
-#: commands/offline/offline.cpp:425
+#: commands/offline/offline.cpp:511
 msgid ""
 "Internal use only, not intended to be run by the user. Execute the "
 "transaction in the offline environment."
@@ -997,68 +1009,68 @@ msgstr ""
 "Alleen voor intern gebruik, niet bedoeld om uitgevoerd te worden door de "
 "gebruiker. Voer de transactie uit in de offline-omgeving."
 
-#: commands/offline/offline.cpp:459
+#: commands/offline/offline.cpp:545
 msgid "Trigger file does not exist. Exiting."
 msgstr "Trigger-bestand bestaat niet. DNF sluit af."
 
-#: commands/offline/offline.cpp:463
+#: commands/offline/offline.cpp:549
 msgid "Another offline transaction tool is running. Exiting."
 msgstr "Er draait al een andere offline-transactie-tool. DNF sluit af."
 
-#: commands/offline/offline.cpp:495
+#: commands/offline/offline.cpp:581
 msgid "Starting offline transaction. This will take a while."
 msgstr "Offline-transactie wordt gestart. Dit gaat even duren."
 
-#: commands/offline/offline.cpp:499
+#: commands/offline/offline.cpp:585
 msgid "Starting system upgrade. This will take a while."
 msgstr "Systeem-upgrade wordt gestart. Dit gaat even duren."
 
-#: commands/offline/offline.cpp:511
+#: commands/offline/offline.cpp:597
 msgid "Use `dnf5 offline reboot` to begin the transaction."
 msgstr "Gebruik `dnf5 offline reboot` om de transactie te starten."
 
-#: commands/offline/offline.cpp:564
+#: commands/offline/offline.cpp:650
 msgid "Transaction failed: "
 msgstr "Transactie mislukt: "
 
-#: commands/offline/offline.cpp:634
+#: commands/offline/offline.cpp:720
 #, c++-format
 msgid "Error reading journal: {}"
 msgstr "Fout bij het lezen van journaal: {}"
 
-#: commands/offline/offline.cpp:640
+#: commands/offline/offline.cpp:726
 #, c++-format
 msgid "Add journal match failed: {}"
 msgstr "Fout bij toevoegen van journal-overeenkomst: {}"
 
-#: commands/offline/offline.cpp:668
+#: commands/offline/offline.cpp:754
 msgid "No logs were found."
 msgstr "Geen logs gevonden."
 
-#: commands/offline/offline.cpp:672
+#: commands/offline/offline.cpp:758
 msgid "The following boots appear to contain offline transaction logs:"
 msgstr "De volgende boots lijken offline-transactielogs te bevatten:"
 
-#: commands/offline/offline.cpp:689
+#: commands/offline/offline.cpp:775
 msgid "Cannot find logs with this index."
 msgstr "Kan geen logs vinden met deze index."
 
-#: commands/offline/offline.cpp:696
+#: commands/offline/offline.cpp:782
 msgid "Unable to match systemd journal entry."
 msgstr "Kon geen overeenkomende systemd-journalvermelding vinden."
 
-#: commands/offline/offline.cpp:708
+#: commands/offline/offline.cpp:794
 msgid "Show logs from past offline transactions"
 msgstr "Geef logs weer van vorige offline-transacties"
 
-#: commands/offline/offline.cpp:716
+#: commands/offline/offline.cpp:802
 msgid ""
 "Which log to show. Run without any arguments to get a list of available logs."
 msgstr ""
 "Welk log moet worden weergeven. Draai zonder argumenten om een lijst van "
 "beschikbare logs weer te geven."
 
-#: commands/offline/offline.cpp:731
+#: commands/offline/offline.cpp:817
 msgid ""
 "systemd is not supported in this build of DNF 5; the `log` subcommand is "
 "unavailable."
@@ -1066,11 +1078,11 @@ msgstr ""
 "systemd is niet ondersteund in deze build van DNF 5; het `log`-subcommando "
 "is niet beschikbaar."
 
-#: commands/offline/offline.cpp:736
+#: commands/offline/offline.cpp:822
 msgid "Show status of the current offline transaction"
 msgstr "Geef status van de huidige offline-transactie weer"
 
-#: commands/offline/offline.cpp:752
+#: commands/offline/offline.cpp:838
 #, fuzzy
 #| msgid ""
 #| "The system will now reboot to perform the offline transaction initiated "
@@ -1082,23 +1094,23 @@ msgstr ""
 "Het systeem zal nu herstarten om de offline-transactie uit te voeren die "
 "gestart met het volgende commando:"
 
-#: commands/offline/offline.cpp:756
+#: commands/offline/offline.cpp:842
 msgid ""
 "To reschedule, run the command above. To clean up, run `dnf5 offline clean`."
 msgstr ""
 
-#: commands/offline/offline.cpp:760
+#: commands/offline/offline.cpp:846
 msgid "An offline transaction was initiated by the following command:"
 msgstr "Een offline-transactie is gestart door het volgende commando:"
 
-#: commands/offline/offline.cpp:762
+#: commands/offline/offline.cpp:848
 msgid ""
 "Run `dnf5 offline reboot` to reboot and perform the offline transaction."
 msgstr ""
 "Voer `dnf5 offline reboot` uit om te herstarten en de offline-transactie uit "
 "te voeren."
 
-#: commands/offline/offline.cpp:764
+#: commands/offline/offline.cpp:850
 msgid ""
 "An offline transaction was started, but it did not finish. Run `dnf5 offline "
 "log` for more information. The command that initiated the transaction was:"
@@ -1107,7 +1119,7 @@ msgstr ""
 "log` uit voor meer informatie. Het commando dat deze transactie heeft "
 "gestart was:"
 
-#: commands/offline/offline.cpp:769
+#: commands/offline/offline.cpp:855
 msgid "Unknown offline transaction status: "
 msgstr "Onbekende status van offline-transactie: "
 
@@ -1343,50 +1355,57 @@ msgstr "Versionlock-uitzondering voor \"{0} = {1}\" toevoegen."
 msgid "Package \"{}\" is already excluded."
 msgstr "Pakket \"{}\" is al uitgesloten."
 
-#: context.cpp:73
+#: context.cpp:82
+#, c++-format
+msgid "{} day, {}:{:02}:{:02}"
+msgid_plural "{} days, {}:{:02}:{:02}"
+msgstr[0] ""
+msgstr[1] ""
+
+#: context.cpp:97
 #, fuzzy, c++-format
 #| msgid "Query Commands:"
 msgid "Command: {}"
 msgstr "Opvraagcommando's:"
 
-#: context.cpp:81
+#: context.cpp:105
 #, c++-format
 msgid "Process ID: {} (still running)"
 msgstr ""
 
-#: context.cpp:83
+#: context.cpp:107
 #, c++-format
 msgid "Process ID: {}"
 msgstr ""
 
-#: context.cpp:92
+#: context.cpp:116
 #, fuzzy, c++-format
 #| msgid "setvar: {}"
 msgid "Started: {}"
 msgstr "setvar: {}"
 
-#: context.cpp:99
+#: context.cpp:123
 #, c++-format
 msgid "Comment: {}"
 msgstr ""
 
-#: context.cpp:103
+#: context.cpp:127
 #, fuzzy
 #| msgid "Show status of the current offline transaction"
 msgid "Details about the currently running transaction:\n"
 msgstr "Geef status van de huidige offline-transactie weer"
 
-#: context.cpp:121
+#: context.cpp:145
 #, c++-format
 msgid "Importing OpenPGP key 0x{}:\n"
 msgstr "OpenPGP-sleutel 0x{} toevoegen:\n"
 
-#: context.cpp:123 context.cpp:148
+#: context.cpp:147 context.cpp:172
 #, c++-format
 msgid " UserID     : \"{}\"\n"
 msgstr " UserID     : \"{}\"\n"
 
-#: context.cpp:126
+#: context.cpp:150
 #, c++-format
 msgid ""
 " Fingerprint: {}\n"
@@ -1395,59 +1414,59 @@ msgstr ""
 " Vingerafdruk: {}\n"
 " Van       : {}\n"
 
-#: context.cpp:135
+#: context.cpp:159
 msgid "The key was successfully imported."
 msgstr "De sleutel is succesvol geïmporteerd."
 
-#: context.cpp:144
+#: context.cpp:168
 #, c++-format
 msgid "The following OpenPGP key (0x{}) is about to be removed:"
 msgstr "De volgende OpenPGP-sleutel (0x{}) wordt hierna verwijderd:"
 
-#: context.cpp:146
+#: context.cpp:170
 #, c++-format
 msgid " Reason     : {}\n"
 msgstr " Reden     : {}\n"
 
-#: context.cpp:150
+#: context.cpp:174
 #, c++-format
 msgid " Fingerprint: {}\n"
 msgstr " Vingerafdruk: {}\n"
 
-#: context.cpp:152
+#: context.cpp:176
 msgid "As a result, installing packages signed with this key will fail."
 msgstr ""
 "Hierdoor zal het installeren mislukken van pakketten die met deze sleutel "
 "zijn ondertekend."
 
-#: context.cpp:153
+#: context.cpp:177
 msgid "It is recommended to remove the expired key to allow importing"
 msgstr ""
 "Het is aangeraden om de verlopen sleutel te verwijderen om importeren toe te "
 "staan"
 
-#: context.cpp:154
+#: context.cpp:178
 msgid ""
 "an updated key. This might leave already installed packages unverifiable."
 msgstr ""
 "een bijgewerkte sleutel. Dit kan al geïnstalleerde pakketen onverifieerbaar "
 "maken."
 
-#: context.cpp:157
+#: context.cpp:181
 msgid "The system will now proceed with removing the key."
 msgstr "Het systeem zal nu de sleutel verwijderen."
 
-#: context.cpp:163
+#: context.cpp:187
 #, c++-format
 msgid "Key 0x{} was successfully removed."
 msgstr "Sleutel 0x{} is succesvol verwijderd."
 
-#: context.cpp:192
+#: context.cpp:216
 #, c++-format
 msgid "setopt: \"{}.{}\": {}"
 msgstr "setopt: \"{}.{}\": {}"
 
-#: context.cpp:202
+#: context.cpp:226
 #, c++-format
 msgid ""
 "No matching repositories for {}. To use repositories from a host system, "
@@ -1456,51 +1475,56 @@ msgstr ""
 "Geen overeenkomende repositories voor {}. Om repositories van een "
 "hostsysteem te gebruiken, geef de optie --use-host-config mee"
 
-#: context.cpp:206
+#: context.cpp:230
 #, c++-format
 msgid "No matching repositories for {}"
 msgstr "Geen overeenkomende repositories voor {}"
 
-#: context.cpp:278
+#: context.cpp:302
 msgid ""
 "Waiting for a lock on the system repository; another process is currently "
 "accessing it. Use the \"--skip-file-locks\" option to bypass the lock."
 msgstr ""
 
-#: context.cpp:282
+#: context.cpp:306
 msgid ""
 "Waiting for a lock on the system repository. The following processes are "
 "currently accessing it:"
 msgstr ""
 
-#: context.cpp:292
+#: context.cpp:316
 msgid "Use the \"--skip-file-locks\" option to bypass the lock."
 msgstr ""
 
 #. If we're only loading the system repo, we can skip the message.
-#: context.cpp:300
+#: context.cpp:324
 msgid "Updating and loading repositories:"
 msgstr "Updaten en laden van repositories:"
 
-#: context.cpp:315
+#: context.cpp:371
+#, c++-format
+msgid "Last metadata expiration check: {} ago on {}."
+msgstr ""
+
+#: context.cpp:378
 msgid "Repositories loaded."
 msgstr "Repositories zijn geladen."
 
-#: context.cpp:322
+#: context.cpp:385
 msgid "Testing offline transaction"
 msgstr "Offline-transactie testen"
 
-#: context.cpp:326 context.cpp:525
+#: context.cpp:389 context.cpp:588
 #, c++-format
 msgid "Transaction failed: {}"
 msgstr "Transactie mislukt: {}"
 
-#: context.cpp:339 context.cpp:538
+#: context.cpp:402 context.cpp:601
 #, c++-format
 msgid "  - {}"
 msgstr "  - {}"
 
-#: context.cpp:441
+#: context.cpp:504
 #, c++-format
 msgid ""
 "Location \"{}\" already contains a stored transaction, it will be "
@@ -1509,7 +1533,7 @@ msgstr ""
 "Locatie \"{}\" bevat al een opgeslagen transactie; deze zal worden "
 "overschreven."
 
-#: context.cpp:475
+#: context.cpp:538
 msgid ""
 "There is already an offline transaction queued, initiated by the following "
 "command:"
@@ -1517,14 +1541,14 @@ msgstr ""
 "Er staat al een offline-transactie in de wachtrij, gestart door het volgende "
 "commando:"
 
-#: context.cpp:477
+#: context.cpp:540
 msgid ""
 "Continuing will cancel the old offline transaction and replace it with this "
 "one."
 msgstr ""
 "Doorgaan zal de vorige offline-transactie annuleren en vervangen door deze."
 
-#: context.cpp:496
+#: context.cpp:559
 msgid ""
 "Transaction stored to be performed offline. Run `dnf5 offline reboot` to "
 "reboot and run the transaction. To cancel the transaction and delete the "
@@ -1535,99 +1559,99 @@ msgstr ""
 "transactie te annuleren en de gedownloade bestanden te verwijderen, gebruik "
 "`dnf5 offline clean`."
 
-#: context.cpp:502
+#: context.cpp:565
 msgid "Running transaction"
 msgstr "Transactie uitvoeren"
 
-#: context.cpp:551
+#: context.cpp:614
 #, fuzzy
 #| msgid "Starting offline transaction. This will take a while."
 msgid "Warning: Pending offline transaction has been invalidated."
 msgstr "Offline-transactie wordt gestart. Dit gaat even duren."
 
-#: context.cpp:553
+#: context.cpp:616
 #, c++-format
 msgid "To reschedule, run: {}"
 msgstr ""
 
-#: context.cpp:916
+#: context.cpp:1034
 #, c++-format
 msgid "Upgrading {}"
 msgstr "Upgraden {}"
 
-#: context.cpp:919
+#: context.cpp:1037
 #, c++-format
 msgid "Downgrading {}"
 msgstr "Downgraden {}"
 
-#: context.cpp:922
+#: context.cpp:1040
 #, c++-format
 msgid "Reinstalling {}"
 msgstr "Herinstalleren {}"
 
-#: context.cpp:935
+#: context.cpp:1053
 #, c++-format
 msgid "Unexpected action in TransactionPackage: {}"
 msgstr "Onverwachte actie in TransactionPackage: {}"
 
-#: context.cpp:941
+#: context.cpp:1059
 #, c++-format
 msgid "Installing {}"
 msgstr "Installeren {}"
 
-#: context.cpp:962
+#: context.cpp:1080
 msgid "Prepare transaction"
 msgstr "Transactie voorbereiden"
 
-#: context.cpp:982
+#: context.cpp:1100
 #, c++-format
 msgid "Removing {}"
 msgstr "Verwijderen {}"
 
-#: context.cpp:985
+#: context.cpp:1103
 #, c++-format
 msgid "Cleanup {}"
 msgstr "Opschonen {}"
 
-#: context.cpp:1004
+#: context.cpp:1122
 #, c++-format
 msgid "Unpack error: {}"
 msgstr "Fout bij uitpakken: {}"
 
-#: context.cpp:1013
+#: context.cpp:1131
 #, c++-format
 msgid "Cpio error: {}"
 msgstr "Cpio-fout: {}"
 
-#: context.cpp:1023
+#: context.cpp:1141
 msgid "Scriptlet output:"
 msgstr "Uitvoer van scriptlet:"
 
-#: context.cpp:1046
+#: context.cpp:1164
 msgid "Running scriptlets"
 msgstr "Scriptlets uitvoeren"
 
-#: context.cpp:1052
+#: context.cpp:1170
 #, c++-format
 msgid "Running {} scriptlet: {}"
 msgstr "Scriptlet {} uitvoeren: {}"
 
-#: context.cpp:1068
+#: context.cpp:1186
 #, c++-format
 msgid "Finished {} scriptlet: {}"
 msgstr "Scriptlet {} afgerond: {}"
 
-#: context.cpp:1075
+#: context.cpp:1193
 #, c++-format
 msgid "Non-critical error in {} scriptlet: {}"
 msgstr "Niet-kritieke fout in scriptlet {}: {}"
 
-#: context.cpp:1085
+#: context.cpp:1203
 #, c++-format
 msgid "Error in {} scriptlet: {}"
 msgstr "Fout in scriptlet {}: {}"
 
-#: context.cpp:1120
+#: context.cpp:1238
 msgid "Verify package files"
 msgstr "Pakketbestanden verifiëren"
 
@@ -1641,31 +1665,31 @@ msgstr "Kan gedeelde library \"{}\" niet vinden: {}"
 msgid "Cannot obtain address of symbol \"{}\": {}"
 msgstr "Kan adres van symbool \"{}\" niet verkrijgen: {}"
 
-#: main.cpp:142
+#: main.cpp:156
 msgid "Utility for packages maintaining"
 msgstr "Hulpprogramma voor het onderhouden van pakketten"
 
-#: main.cpp:143
+#: main.cpp:157
 msgid "DNF5 is a program for maintaining packages."
 msgstr "DNF5 is een programma voor het onderhouden van pakketten."
 
-#: main.cpp:144
+#: main.cpp:158
 msgid "Unclassified options:"
 msgstr "Ongeclassificeerde opties:"
 
-#: main.cpp:147
+#: main.cpp:161
 msgid "Global options:"
 msgstr "Globale opties:"
 
-#: main.cpp:152
+#: main.cpp:166
 msgid "Print help"
 msgstr "Hulp tonen"
 
-#: main.cpp:159
+#: main.cpp:173
 msgid "Configuration file location"
 msgstr "Locatie van configuratiebestand"
 
-#: main.cpp:167
+#: main.cpp:181
 msgid ""
 "In combination with a non-interactive command, shows just the relevant "
 "content. Suppresses messages notifying about the current state or actions of "
@@ -1674,7 +1698,7 @@ msgstr ""
 "Toont alleen de relevante inhoud in combinatie met een non-interactief "
 "commando. Onderdrukt berichten over de huidige staat of acties van dnf5."
 
-#: main.cpp:182
+#: main.cpp:196
 msgid ""
 "Run entirely from system cache, don't update the cache and use it even in "
 "case it is expired."
@@ -1682,34 +1706,34 @@ msgstr ""
 "Draai volledig vanuit systeemcache, update de cache niet en gebruik hem ook "
 "als hij verlopen is."
 
-#: main.cpp:191
+#: main.cpp:205
 msgid "Control whether color is used."
 msgstr "Bepaal of kleur gebruikt wordt."
 
-#: main.cpp:197
+#: main.cpp:211
 msgid "Force refreshing metadata before running the command."
 msgstr ""
 "Dwing het verversen van metadata af voordat het commando uitgevoerd wordt."
 
-#: main.cpp:213
+#: main.cpp:227
 #, c++-format
 msgid "Failed to expire repository cache in path \"{0}\": {1}"
 msgstr "Kon repositorycache in pad \"{0}\" niet verversen: {1}"
 
-#: main.cpp:227
+#: main.cpp:241
 msgid "create additional repository using id and path"
 msgstr "maak een extra repository op basis van id en pad"
 
-#: main.cpp:235
+#: main.cpp:249
 #, c++-format
 msgid "repofrompath: Incorrect repoid and path specification \"{}\""
 msgstr "repofrompath: Incorrecte repoid- en padspecificatie: \"{}\""
 
-#: main.cpp:247
+#: main.cpp:261
 msgid "set arbitrary config and repo options"
 msgstr "stel arbitraire configuratie- en repo-opties in"
 
-#: main.cpp:249
+#: main.cpp:263
 msgid ""
 "Override a configuration option from the configuration file. To override "
 "configuration options for repositories, use repoid.option for  the\n"
@@ -1720,20 +1744,20 @@ msgid ""
 "(e.g. --setopt=tsflags=) will clear the option."
 msgstr ""
 "Overschrijf een configuratie-optie uit het configuratiebestand. Gebruik, om "
-"configuratie-opties voor repositories te overschrijven, repoid.optie voor "
-"de \n"
+"configuratie-opties voor repositories te overschrijven, repoid.optie voor de "
+"\n"
 "              <option>. Waarden voor configuratieopties zoals excludepkgs, "
 "includepkgs, installonlypkgs en tsflags worden toegevoegd aan de "
 "oorspronkelijke waarde,\n"
 "              ze overschrijven deze niet. Het opgeven van een lege waarde "
 "(bijv. --setopt=tsflags=) wist echter de optie."
 
-#: main.cpp:258 main.cpp:297
+#: main.cpp:272 main.cpp:311
 #, c++-format
 msgid "{}: Badly formatted argument value \"{}\""
 msgstr "{}: Foutief geformatteerde argumentwaarde \"{}\""
 
-#: main.cpp:265
+#: main.cpp:279
 #, c++-format
 msgid ""
 "{}: Badly formatted argument value: Last key character cannot be '.': {}"
@@ -1741,45 +1765,110 @@ msgstr ""
 "{}: Foutief geformatteerde argumentwaarde: Het laatste teken van de sleutel "
 "mag geen '.' zijn: {}"
 
-#: main.cpp:278
+#: main.cpp:292
 #, c++-format
 msgid "setopt: \"{0}\": {1}"
 msgstr "setopt: \"{0}\": {1}"
 
-#: main.cpp:290
+#: main.cpp:304
 msgid "set arbitrary variable"
 msgstr "stel arbitraire variabele in"
 
-#: main.cpp:304
+#: main.cpp:318
 #, c++-format
 msgid "setvar: {}"
 msgstr "setvar: {}"
 
-#: main.cpp:313
+#: main.cpp:327
 msgid "automatically answer yes for all questions"
 msgstr "alle vragen automatisch met ja beantwoorden"
 
-#: main.cpp:320
+#: main.cpp:334
 msgid "automatically answer no for all questions"
 msgstr "alle vragen automatisch met nee beantwoorden"
 
-#: main.cpp:327
+#: main.cpp:341
 msgid "try the best available package versions in transactions"
 msgstr "probeer de best beschikbare pakketversies in transacties"
 
-#: main.cpp:334
+#: main.cpp:348
 msgid "do not limit the transaction to the best candidate"
 msgstr "beperk de transactie niet tot de beste kandidaat"
 
-#: main.cpp:343
+#: main.cpp:357
 msgid "allow automatic package replacements from different vendors"
 msgstr ""
 
-#: main.cpp:350
+#: main.cpp:364
 msgid "do not allow automatic package replacements from different vendors"
 msgstr ""
 
-#: main.cpp:361
+#: main.cpp:377
+#, fuzzy
+#| msgid ""
+#| "Enable additional repositories. List option. Supports globs, can be "
+#| "specified multiple times."
+msgid ""
+"Allow switching packages from any vendor to packages from VENDOR. Supports "
+"globs, can be specified multiple times."
+msgstr ""
+"Schakel extra repositories in. Lijstoptie. Ondersteunt globs en kan "
+"meermaals worden opgegeven."
+
+#: main.cpp:396
+#, fuzzy
+#| msgid ""
+#| "Disable repositories. List option. Supports globs, can be specified "
+#| "multiple times."
+msgid ""
+"Allow replacing packages from VENDOR to packages from any vendor. Supports "
+"globs, can be specified multiple times."
+msgstr ""
+"Schakel repositories uit. Lijstoptie. Ondersteunt globs en kan meermaals "
+"worden opgegeven."
+
+#: main.cpp:415
+#, fuzzy
+#| msgid ""
+#| "Enable libdnf5 plugins by name. List option. Supports globs, can be "
+#| "specified multiple times."
+msgid ""
+"Allow vendor changes for packages matching PKG_NAME (bidirectional). List "
+"option. Supports globs, can be specified multiple times."
+msgstr ""
+"Schakel libdnf5-plugins in op basis van naam. Lijstoptie. Ondersteunt globs "
+"en kan meermaals worden opgegeven."
+
+#: main.cpp:444
+#, fuzzy
+#| msgid ""
+#| "Disable repositories. List option. Supports globs, can be specified "
+#| "multiple times."
+msgid ""
+"Add a vendor change policy for this run. Can be specified multiple times."
+msgstr ""
+"Schakel repositories uit. Lijstoptie. Ondersteunt globs en kan meermaals "
+"worden opgegeven."
+
+#: main.cpp:459
+#, c++-format
+msgid ""
+"Remove all vendor change policies. Can be combined with {} to replace them."
+msgstr ""
+
+#: main.cpp:478
+#, fuzzy
+#| msgid ""
+#| "Disable repositories. List option. Supports globs, can be specified "
+#| "multiple times."
+msgid ""
+"Disable vendor change policies whose source matches the specified pattern. "
+"Supports globs, can be specified multiple times."
+msgstr ""
+"Schakel repositories uit. Lijstoptie. Ondersteunt globs en kan meermaals "
+"worden opgegeven."
+
+#: main.cpp:495
 msgid ""
 "Don't install files that are marked as documentation (which includes man "
 "pages and texinfo documents)"
@@ -1787,11 +1876,11 @@ msgstr ""
 "Installeer geen bestanden die als documentatie gemarkeerd zijn (waaronder "
 "man-pagina's en texinfo-documenten)"
 
-#: main.cpp:377
+#: main.cpp:511
 msgid "exclude packages by name or glob"
 msgstr "sluit pakketten uit op naam of glob"
 
-#: main.cpp:396
+#: main.cpp:530
 msgid ""
 "Enable additional repositories. List option. Supports globs, can be "
 "specified multiple times."
@@ -1799,7 +1888,7 @@ msgstr ""
 "Schakel extra repositories in. Lijstoptie. Ondersteunt globs en kan "
 "meermaals worden opgegeven."
 
-#: main.cpp:414
+#: main.cpp:548
 msgid ""
 "Disable repositories. List option. Supports globs, can be specified multiple "
 "times."
@@ -1807,7 +1896,7 @@ msgstr ""
 "Schakel repositories uit. Lijstoptie. Ondersteunt globs en kan meermaals "
 "worden opgegeven."
 
-#: main.cpp:432
+#: main.cpp:566
 msgid ""
 "Enable just specific repositories. List option. Supports globs, can be "
 "specified multiple times."
@@ -1815,17 +1904,17 @@ msgstr ""
 "Schakel alleen specifieke repositories in. Lijstopties. Ondersteunt globs "
 "enkan meermaals worden opgegeven."
 
-#: main.cpp:454
+#: main.cpp:588
 msgid "disable OpenPGP signature checking (if RPM policy allows)"
 msgstr ""
 "schakel controle van OpenPGP-handtekeningen uit (indien toegestaan door RPM-"
 "beleid)"
 
-#: main.cpp:471
+#: main.cpp:605
 msgid "Disable all libdnf5 plugins"
 msgstr "Schakel alle libdnf5-plugins uit"
 
-#: main.cpp:481
+#: main.cpp:615
 msgid ""
 "Enable libdnf5 plugins by name. List option. Supports globs, can be "
 "specified multiple times."
@@ -1833,7 +1922,7 @@ msgstr ""
 "Schakel libdnf5-plugins in op basis van naam. Lijstoptie. Ondersteunt globs "
 "en kan meermaals worden opgegeven."
 
-#: main.cpp:496
+#: main.cpp:630
 msgid ""
 "Disable libdnf5 plugins by name. List option. Supports globs, can be "
 "specified multiple times."
@@ -1841,11 +1930,11 @@ msgstr ""
 "Schakel libdnf5-plugins uit op basis van naam. Lijstoptie. Ondersteunt globs "
 "en kan meermaals worden opgegeven."
 
-#: main.cpp:513
+#: main.cpp:647
 msgid "add a comment to transaction"
 msgstr "voeg een opmerking toe aan de transactie"
 
-#: main.cpp:515
+#: main.cpp:649
 msgid ""
 "Adds a comment to the action. If a transaction takes place, the comment is "
 "stored in it."
@@ -1853,11 +1942,11 @@ msgstr ""
 "Voegt een opmerking toe aan de actie. Als een transactie plaatsvindt, wordt "
 "de opmerking hierin opgeslagen."
 
-#: main.cpp:528
+#: main.cpp:662
 msgid "set install root"
 msgstr "stel de installatie-root in"
 
-#: main.cpp:535
+#: main.cpp:669
 msgid ""
 "use configuration, reposdir, and vars from the host system rather than the "
 "installroot"
@@ -1865,26 +1954,26 @@ msgstr ""
 "gebruik configuratie, repo-map en variabelen van het hostsysteem in plaats "
 "van de installatie-root"
 
-#: main.cpp:544
+#: main.cpp:678
 msgid "override the value of $releasever in config and repo files"
 msgstr ""
 "overschrijf de waarde van $releasever in configuratie- en repositorybestanden"
 
-#: main.cpp:557
+#: main.cpp:691
 #, fuzzy
 #| msgid "override the value of $releasever in config and repo files"
 msgid "override the value of $releasever_major in config and repo files"
 msgstr ""
 "overschrijf de waarde van $releasever in configuratie- en repositorybestanden"
 
-#: main.cpp:570
+#: main.cpp:704
 #, fuzzy
 #| msgid "override the value of $releasever in config and repo files"
 msgid "override the value of $releasever_minor in config and repo files"
 msgstr ""
 "overschrijf de waarde van $releasever in configuratie- en repositorybestanden"
 
-#: main.cpp:583
+#: main.cpp:717
 msgid ""
 "Show newly installed leaf packages and packages that became leaves after a "
 "transaction."
@@ -1892,70 +1981,76 @@ msgstr ""
 "Toon de nieuw-geïnstalleerde leaf-pakketten en pakketten die na een "
 "transactie leaf zijn geworden."
 
-#: main.cpp:597
+#: main.cpp:731
 msgid "Dump detailed solving results into files"
 msgstr "Schrijf gedetailleerde oplossingsresultaten weg naar bestanden"
 
-#: main.cpp:606
+#: main.cpp:740
 msgid "Print main configuration values to stdout"
 msgstr "Toon hoofdconfiguratiewaarden op stdout"
 
-#: main.cpp:623
+#: main.cpp:757
 msgid ""
 "Print repository configuration values to stdout. List option. Supports globs"
 msgstr ""
 "Toon configuratiewaarden van repositories op stdout. Lijstoptie. Ondersteunt "
 "globs"
 
-#: main.cpp:638
+#: main.cpp:772
 msgid "Print variable values to stdout"
 msgstr "Toon waarden van variabelen op stdout"
 
-#: main.cpp:652
+#: main.cpp:786
+#, fuzzy
+#| msgid "Print variable values to stdout"
+msgid "Print loaded vendor change policies to stdout"
+msgstr "Toon waarden van variabelen op stdout"
+
+#: main.cpp:800
 msgid "Show DNF5 version and exit"
 msgstr "Toon DNF5-versie en sluit af"
 
-#: main.cpp:666
+#: main.cpp:814
 msgid "Force the use of a different architecture."
 msgstr "Forceer het gebruik van een andere architectuur."
 
-#: main.cpp:698
+#: main.cpp:846
 msgid "Skip acquiring file locks, such as the lock on the system repository"
 msgstr ""
 
-#: main.cpp:713
+#: main.cpp:861
 msgid "Software Management Commands:"
 msgstr "Softwarebeheercommando's:"
 
-#: main.cpp:720
+#: main.cpp:868
 msgid "Query Commands:"
 msgstr "Opvraagcommando's:"
 
-#: main.cpp:727
+#: main.cpp:875
 msgid "Subcommands:"
 msgstr "Subcommando's:"
 
-#: main.cpp:828
+#: main.cpp:977
 #, c++-format
 msgid "{} version {}.{}.{}.{}"
 msgstr "{} versie {}.{}.{}.{}"
 
-#: main.cpp:831
+#: main.cpp:980
 #, c++-format
 msgid "{} plugin API version {}.{}"
 msgstr "{} plugin-API-versie {}.{}"
 
-#: main.cpp:836
+#: main.cpp:985
 #, c++-format
 msgid "libdnf5 version {}.{}.{}.{}"
 msgstr "libdnf5 versie {}.{}.{}.{}"
 
-#: main.cpp:839
+#: main.cpp:988
 #, c++-format
 msgid "libdnf5 plugin API version {}.{}"
 msgstr "libdnf5 plugin-API-versie {}.{}"
 
-#: main.cpp:846
+#: main.cpp:995
 #, c++-format
 msgid ""
 "\n"
@@ -1964,22 +2059,22 @@ msgstr ""
 "\n"
 "{} plugins geladen:"
 
-#: main.cpp:851 main.cpp:867
+#: main.cpp:1000 main.cpp:1016
 #, c++-format
 msgid "  name: {}"
 msgstr "  naam: {}"
 
-#: main.cpp:854 main.cpp:870
+#: main.cpp:1003 main.cpp:1019
 #, c++-format
 msgid "  version: {}.{}.{}"
 msgstr "  versie: {}.{}.{}"
 
-#: main.cpp:856 main.cpp:872
+#: main.cpp:1005 main.cpp:1021
 #, c++-format
 msgid "  API version: {}.{}"
 msgstr "  API-versie: {}.{}"
 
-#: main.cpp:863
+#: main.cpp:1012
 #, fuzzy
 #| msgid ""
 #| "\n"
@@ -1991,7 +2086,7 @@ msgstr ""
 "\n"
 "{} plugins geladen:"
 
-#: main.cpp:910
+#: main.cpp:1059
 #, c++-format
 msgid ""
 "Total size of inbound packages is {:.0f} {:s}. Need to download {:.0f} {:s}."
@@ -1999,7 +2094,7 @@ msgstr ""
 "Totale grootte van inkomende pakketten is {:.0f} {:s}. Er moet {:.0f} {:s} "
 "worden gedownload."
 
-#: main.cpp:927
+#: main.cpp:1076
 #, c++-format
 msgid ""
 "After this operation, {:.0f} {:s} extra will be used (install {:.0f} {:s}, "
@@ -2008,7 +2103,7 @@ msgstr ""
 "Na deze bewerking zal er {:.0f} {:s} extra worden gebruikt ({:.0f} {:s} "
 "geïnstalleerd, {:.0f} {:s} verwijderd)."
 
-#: main.cpp:938
+#: main.cpp:1087
 #, c++-format
 msgid ""
 "After this operation, {:.0f} {:s} will be freed (install {:.0f} {:s}, remove "
@@ -2017,45 +2112,62 @@ msgstr ""
 "Na deze bewerking zal er {:.0f} {:s} worden vrijgemaakt ({:.0f} {:s} "
 "geïnstalleerd, {:.0f} {:s} verwijderd)."
 
-#: main.cpp:950
+#: main.cpp:1099
 msgid "======== Main configuration: ========"
 msgstr "======== Hoofdconfiguratie: ========"
 
-#: main.cpp:987
+#: main.cpp:1136
 #, c++-format
 msgid "No matching repo to dump configuration: \"{}\""
 msgstr ""
 "Geen overeenkomende repository om configuratie van weg te schrijven: \"{}\""
 
-#: main.cpp:992
+#: main.cpp:1141
 #, c++-format
 msgid "======== \"{}\" repository configuration: ========"
 msgstr "======== Configuratie van repository \"{}\": ========"
 
-#: main.cpp:1012
+#: main.cpp:1161
 msgid "======== Variables: ========"
 msgstr "======== Variabelen: ========"
 
-#: main.cpp:1052
+#: main.cpp:1169
+#, fuzzy
+#| msgid "======== Variables: ========"
+msgid "======== Vendor Change Policies: ========"
+msgstr "======== Variabelen: ========"
+
+#: main.cpp:1173
+#, c++-format
+msgid "Policy #{}: source: {}"
+msgstr ""
+
+#: main.cpp:1179
+msgid ""
+"allow_vendor_change is enabled. Packages can be replaced by any vendor, and "
+"vendor change policies will be ignored."
+msgstr ""
+
+#: main.cpp:1217
 msgid "New leaves:"
 msgstr "Nieuwe leaves:"
 
-#: main.cpp:1054
+#: main.cpp:1219
 #, c++-format
 msgid " {}"
 msgstr " {}"
 
-#: main.cpp:1114
+#: main.cpp:1279
 #, c++-format
 msgid "{} to skip unavailable packages"
 msgstr "{} om niet-beschikbare pakketten over te slaan"
 
-#: main.cpp:1122
+#: main.cpp:1287
 #, c++-format
 msgid "{} to allow extra packages in the transaction"
 msgstr "{} om extra pakketten in de transactie toe te staan"
 
-#: main.cpp:1135
+#: main.cpp:1300
 #, c++-format
 msgid ""
 "{} to allow mismatches between installed and stored transaction packages. "
@@ -2066,39 +2178,56 @@ msgstr ""
 "toe te staan. Dit kan resulteren in een lege transactie, omdat deze optie "
 "onder andere mislukte verwijderacties kan negeren."
 
-#: main.cpp:1191
+#: main.cpp:1356
 #, c++-format
 msgid "{} to not limit the transaction to the best candidates"
 msgstr "{} om de transactie niet te beperken tot de beste kandidaten"
 
-#: main.cpp:1198
+#: main.cpp:1363
 #, c++-format
 msgid "{} to allow removing of installed packages to resolve problems"
 msgstr ""
 "{} om het verwijderen van geïnstalleerde pakketten toe te staan op problemen "
 "op te lossen"
 
-#: main.cpp:1207
+#: main.cpp:1372
 #, c++-format
 msgid "{} to load additional filelists metadata"
 msgstr "{} om extra metadata van bestandslijsten te laden"
 
-#: main.cpp:1214
+#: main.cpp:1379
 #, c++-format
 msgid "{} to skip uninstallable packages"
 msgstr "{} om niet-installeerbare pakketten over te slaan"
 
-#: main.cpp:1229
+#: main.cpp:1394
 #, fuzzy, c++-format
 #| msgid "{} to allow extra packages in the transaction"
-msgid "{} to allow changing package vendors"
+msgid "{} to allow switching to packages from VENDOR"
 msgstr "{} om extra pakketten in de transactie toe te staan"
 
-#: main.cpp:1233
+#: main.cpp:1396
+#, fuzzy, c++-format
+#| msgid "{} to allow extra packages in the transaction"
+msgid "{} to allow replacing packages from VENDOR"
+msgstr "{} om extra pakketten in de transactie toe te staan"
+
+#: main.cpp:1398
+#, c++-format
+msgid "{} to add specific vendor change rules"
+msgstr ""
+
+#: main.cpp:1399
+#, fuzzy, c++-format
+#| msgid "{} to allow extra packages in the transaction"
+msgid "{} to allow all vendor changes"
+msgstr "{} om extra pakketten in de transactie toe te staan"
+
+#: main.cpp:1403
 msgid "You can try to add to command line:"
 msgstr "Je kunt proberen om het volgende aan de opdrachtregel toe te voegen:"
 
-#: main.cpp:1251
+#: main.cpp:1421
 #, c++-format
 msgid ""
 "No matches were found for the following plugin name patterns while enabling "
@@ -2107,7 +2236,7 @@ msgstr ""
 "Geen overeenkomsten gevonden voor de volgende pluginnaampatronen bij het "
 "inschakelen van libdnf-plugins: {}"
 
-#: main.cpp:1252
+#: main.cpp:1422
 #, c++-format
 msgid ""
 "No matches were found for the following plugin name patterns while disabling "
@@ -2116,27 +2245,27 @@ msgstr ""
 "Geen overeenkomsten gevonden voor de volgende pluginnaampatronen bij het "
 "uitschakelen van libdnf-plugins: {}"
 
-#: main.cpp:1318
+#: main.cpp:1488
 #, c++-format
 msgid "--- DNF5 launched with arguments: \"{}\" ---"
 msgstr "--- DNF5 gestart met argumenten: \"{}\" ---"
 
-#: main.cpp:1354
+#: main.cpp:1524
 #, c++-format
 msgid "Invalid \"index\" in \"--complete=<index>[,...]\": {}"
 msgstr "Ongeldige \"index\" in \"--complete=<index>[,...]\": {}"
 
-#: main.cpp:1393
+#: main.cpp:1563
 #, c++-format
 msgid "{}."
 msgstr "{}."
 
-#: main.cpp:1396 main.cpp:1777
+#: main.cpp:1566 main.cpp:1953
 #, c++-format
 msgid "{}. Add \"--help\" for more information about the arguments."
 msgstr "{}. Voeg \"--help\" toe voor meer informatie over de argumenten."
 
-#: main.cpp:1405
+#: main.cpp:1575
 #, c++-format
 msgid ""
 "It could be a command provided by a plugin, try: dnf5 install 'dnf5-"
@@ -2145,7 +2274,7 @@ msgstr ""
 "Dit zou een commando kunnen zijn die door een plugin geleverd wordt.Probeer: "
 "dnf5 install 'dnf5-command({})'"
 
-#: main.cpp:1447
+#: main.cpp:1617
 #, c++-format
 msgid ""
 "The argument is available for commands: {}. (It has to be placed after the "
@@ -2154,19 +2283,18 @@ msgstr ""
 "Dit argument is beschikbaar voor de volgende commando's: {}. (Het moet na "
 "het commando worden geplaatst.)"
 
-#: main.cpp:1484
+#: main.cpp:1654
 msgid "No read/execute access in current directory, moving to /"
-msgstr ""
-"Geen lees-/uitvoerrechten in de huidige map. Map wordt gewijzigd naar /"
+msgstr "Geen lees-/uitvoerrechten in de huidige map. Map wordt gewijzigd naar /"
 
-#: main.cpp:1519
+#: main.cpp:1689
 #, c++-format
 msgid ""
 "{}. Dropping all logs. To redirect the log file location use the \"logdir\" "
 "configuration option."
 msgstr ""
 
-#: main.cpp:1578
+#: main.cpp:1754
 msgid ""
 "The requested operation requires superuser privileges. Please log in as a "
 "user with elevated rights, or use the \"--assumeno\" or \"--downloadonly\" "
@@ -2177,26 +2305,26 @@ msgstr ""
 "downloadonly\" om het commando uit te voeren zonder de staat van het systeem "
 "te wijzigen."
 
-#: main.cpp:1592
+#: main.cpp:1768
 #, c++-format
 msgid "Warning: {}"
 msgstr ""
 
-#: main.cpp:1605
+#: main.cpp:1781
 msgid ""
 "Error: /usr is configured to be read-only. You may be running an image-based "
 "or immutable operating system. For more information, refer to your "
 "distribution's documentation."
 msgstr ""
 
-#: main.cpp:1624
+#: main.cpp:1800
 msgid ""
 "Error: persistent transactions aren't supported on bootc systems. Pass --"
 "transient to perform this operation in a transient overlay which will reset "
 "when the system reboots."
 msgstr ""
 
-#: main.cpp:1634
+#: main.cpp:1810
 #, fuzzy
 #| msgid ""
 #| "Error: this bootc system is configured to be read-only. For more "
@@ -2209,20 +2337,20 @@ msgstr ""
 "Fout: dit bootc-systeem is ingesteld als alleen-lezen. Voor meer informatie, "
 "voer `bootc --help` uit."
 
-#: main.cpp:1645
+#: main.cpp:1821
 msgid "Error: transient transactions are only supported on bootc systems."
 msgstr ""
 
-#: main.cpp:1686
+#: main.cpp:1862
 #, c++-format
 msgid "The operation will only store the transaction in {}"
 msgstr "De operatie zal de transactie alleen opslaan in {}"
 
-#: main.cpp:1688
+#: main.cpp:1864
 msgid "The operation will only download packages for the transaction."
 msgstr "De operatie zal alleen pakketten downloaden voor de transactie."
 
-#: main.cpp:1693
+#: main.cpp:1869
 msgid ""
 "Test mode enabled: Only package downloads, OpenPGP key installations and "
 "transaction checks will be performed."
@@ -2230,13 +2358,13 @@ msgstr ""
 "Testmodus ingeschakeld: Alleen pakketdownloads, OpenPGP-sleutelinstallaties "
 "en transactiecontroles worden uitgevoerd."
 
-#: main.cpp:1702
+#: main.cpp:1878
 #, fuzzy
 #| msgid "Starting offline transaction. This will take a while."
 msgid "Warning: A pending offline transaction will be invalidated."
 msgstr "Offline-transactie wordt gestart. Dit gaat even duren."
 
-#: main.cpp:1705
+#: main.cpp:1881
 #, fuzzy, c++-format
 #| msgid "An offline transaction was initiated by the following command:"
 msgid ""
@@ -2244,36 +2372,36 @@ msgid ""
 "will be invalidated: {}"
 msgstr "Een offline-transactie is gestart door het volgende commando:"
 
-#: main.cpp:1730
+#: main.cpp:1906
 msgid ""
 "This transaction would modify the following paths, possibly introducing "
 "inconsistencies when the transient overlay on /usr is discarded. See the "
 "usr_drift_protected_paths configuration option for more information."
 msgstr ""
 
-#: main.cpp:1741
+#: main.cpp:1917
 msgid ""
 "Operation aborted. Pass --setopt=usr_drift_protected_paths= to disable this "
 "check and proceed anyway."
 msgstr ""
 
-#: main.cpp:1750
+#: main.cpp:1926
 msgid ""
 "A transient overlay will be created on /usr that will be discarded on "
 "reboot. Keep in mind that changes to /etc and /var will still persist, and "
 "packages commonly modify these directories."
 msgstr ""
 
-#: main.cpp:1787
+#: main.cpp:1963
 #, c++-format
 msgid "Command returned error: {}"
 msgstr "Commando gaf foutmelding terug: {}"
 
-#: main.cpp:1795
+#: main.cpp:1971
 msgid "DNF5 finished"
 msgstr "DNF5 voltooid"
 
-#: main.cpp:1799
+#: main.cpp:1975
 msgid "Complete!"
 msgstr "Klaar!"
 

@@ -2,596 +2,614 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # Languages add-on <noreply-addon-languages@weblate.org>, 2026.
+# David Medina <dmedinacpnl@gmail.com>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-22 14:19+0000\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Automatically generated\n"
-"Language-Team: none\n"
+"POT-Creation-Date: 2026-11-02 08:43+0000\n"
+"PO-Revision-Date: 2026-11-02 10:26+0000\n"
+"Last-Translator: David Medina <dmedinacpnl@gmail.com>\n"
+"Language-Team: Catalan <https://translate.fedoraproject.org/projects/dnf5/"
+"libdnf5-cli/ca/>\n"
 "Language: ca\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 2026.10.1\n"
 
 #: argument_parser.cpp:68
 #, c++-format
 msgid "Misconfigured alias \"{}\": cannot convert \"{}\" to a number"
-msgstr ""
+msgstr "Àlies mal configurat \"{}\": no es pot convertir \"{}\" a un nombre"
 
 #: argument_parser.cpp:76
 #, c++-format
 msgid "Misconfigured alias \"{}\": index \"{}\" out of range"
-msgstr ""
+msgstr "Àlies mal configurat \"{}\": índex \"{}\" fora de rang"
 
 #: argument_parser.cpp:98
 #, c++-format
 msgid "\"{}\" not allowed together with named argument \"{}\""
-msgstr ""
+msgstr "\"{}\" no està permès juntament amb l'argument anomenat \"{}\""
 
 #: argument_parser.cpp:100
 #, c++-format
 msgid "\"{}\" not allowed in command \"{}\""
-msgstr ""
+msgstr "\"{}\" no es permet a l'ordre \"{}\""
 
 #: argument_parser.cpp:102
 #, c++-format
 msgid "\"{}\" not allowed together with positional argument \"{}\""
-msgstr ""
+msgstr "\"{}\" no està permès juntament amb l'argument posicional \"{}\""
 
 #: argument_parser.cpp:147
 #, c++-format
 msgid "Argument id \"{}\" already registered in group \"{}\""
-msgstr ""
+msgstr "L'ID de l'argument \"{}\" ja s'ha registrat al grup \"{}\""
 
 #: argument_parser.cpp:274
 #, c++-format
 msgid "Invalid character '.' in argument id \"{}\""
-msgstr ""
+msgstr "Caràcter '.' no vàlid a l'ID de l'argument \"{}\""
 
 #: argument_parser.cpp:383 argument_parser.cpp:388
 #, c++-format
 msgid "Too few values for positional argument \"{}\""
-msgstr ""
+msgstr "Hi ha massa valors per a l'argument posicional \"{}\""
 
 #: argument_parser.cpp:549
 #, c++-format
 msgid "Missing value for named argument \"--{}\""
-msgstr ""
+msgstr "Falta el valor de l'argument «--{}»"
 
 #: argument_parser.cpp:557
 #, c++-format
 msgid "Unexpected value for named argument \"--{}\""
-msgstr ""
+msgstr "Valor inesperat per a l'argument «--{}»"
 
 #: argument_parser.cpp:599
 #, c++-format
 msgid "Missing value for named argument \"-{}\""
-msgstr ""
+msgstr "Falta el valor de l'argument anomenat \"-{}\""
 
 #. print usage
 #: argument_parser.cpp:696
 msgid "Usage:"
-msgstr ""
+msgstr "Ús:"
 
 #: argument_parser.cpp:704
 msgid "Description:"
-msgstr ""
+msgstr "Descripció:"
 
 #: argument_parser.cpp:997
 #, c++-format
 msgid "Command id \"{}\" already registered for command \"{}\""
-msgstr ""
+msgstr "L'identificador d'ordre \"{}\" ja s'ha registrat a l'ordre \"{}\""
 
 #: argument_parser.cpp:1008
 #, c++-format
 msgid "Named argument id \"{}\" already registered for command \"{}\""
 msgstr ""
+"L'identificador d'argument anomenat \"{}\" ja s'ha registrat per a l'ordre \""
+"{}\""
 
 #: argument_parser.cpp:1018
 #, c++-format
 msgid "Positional argument id \"{}\" already registered for command \"{}\""
 msgstr ""
+"L'identificador d'argument posicional \"{}\" ja s'ha registrat per a l'ordre "
+"\"{}\""
 
 #: argument_parser.cpp:1028
 #, c++-format
 msgid "Group id \"{}\" already registered for command \"{}\""
-msgstr ""
+msgstr "L'identificador de grup \"{}\" ja s'ha registrat a l'ordre \"{}\""
 
 #: argument_parser.cpp:1055
 #, c++-format
 msgid "Command id \"{}\" does not contain subcommand with id \"{}\""
 msgstr ""
+"L'identificador d'ordre \"{}\" no conté subordre amb l'identificador \"{}\""
 
 #: argument_parser.cpp:1063
 #, c++-format
 msgid "Command id \"{}\" does not contain named argument with id \"{}\""
 msgstr ""
+"L'identificador d'ordre \"{}\" no conté l'argument anomenat amb "
+"l'identificador \"{}\""
 
 #: argument_parser.cpp:1071
 #, c++-format
 msgid "Command id \"{}\" does not contain positional argument with id \"{}\""
-msgstr ""
+msgstr "L'ID d'ordre \"{}\" no conté un argument posicional amb l'ID \"{}\""
 
 #: argument_parser.cpp:1078
 #, c++-format
 msgid "Command id \"{}\" does not contain group with id \"{}\""
 msgstr ""
+"L'identificador d'ordre \"{}\" no conté cap grup amb l'identificador \"{}\""
 
 #: argument_parser.cpp:1204 argument_parser.cpp:1425
 #, c++-format
 msgid "Unknown argument \"{}\" for command \"{}\""
-msgstr ""
+msgstr "Argument desconegut \"{}\" per a l'ordre \"{}\""
 
 #: argument_parser.cpp:1219 argument_parser.cpp:1440
 #, c++-format
 msgid "Missing positional argument \"{}\" for command \"{}\""
-msgstr ""
+msgstr "Manca l'argument posicional \"{}\" per a l'ordre \"{}\""
 
 #: argument_parser.cpp:1301
 #, c++-format
 msgid "Missing value for command alias \"{}\""
-msgstr ""
+msgstr "Falta el valor de l'àlies d'ordre \"{}\""
 
 #: argument_parser.cpp:1647
 #, c++-format
 msgid "Named argument with path id \"{}\" not found"
-msgstr ""
+msgstr "No s'ha trobat l'argument amb nom amb l'ID del camí «{}»"
 
 #: argument_parser.cpp:1657
 #, c++-format
 msgid "Positional argument with path id \"{}\" not found"
-msgstr ""
+msgstr "No s'ha trobat l'argument posicional amb l'ID del camí «{}»"
 
 #: exception.cpp:30
 msgid "Operation aborted by the user."
-msgstr ""
+msgstr "Operació avortada per l'usuari."
 
 #: exception.cpp:33
 msgid "Failed to resolve the transaction"
-msgstr ""
+msgstr "No s'ha pogut resoldre la transacció"
 
 #: output/moduleinfo.cpp:36
 msgid "Hint: [d]efault, [e]nabled, [x]disabled, [i]nstalled, [a]ctive"
-msgstr ""
+msgstr "Consell: [d]efault, [e]nabled, [x]disabled, [i]nstalled, [a]ctive"
 
 #: output/modulelist.cpp:39
 msgid "Hint: [d]efault, [e]nabled, [x]disabled, [i]nstalled"
-msgstr ""
+msgstr "Consell: [d]efault, [e]nabled, [x]disabled, [i]nstalled"
 
 #. Note for translators: This is a right-aligned column separator in
 #. a package properties table as in "Name    : bash".
 #: output/packageinfo.cpp:57
 msgid " : "
-msgstr ""
+msgstr " : "
 
 #. Add package
 #: output/packageinfo.cpp:63
 msgid "Name"
-msgstr ""
+msgstr "Nom"
 
 #: output/packageinfo.cpp:68
 msgid "Epoch"
-msgstr ""
+msgstr "Epoch"
 
 #: output/packageinfo.cpp:69 output/transaction_table.cpp:291
 msgid "Version"
-msgstr ""
+msgstr "Versió"
 
 #: output/packageinfo.cpp:70
 msgid "Release"
-msgstr ""
+msgstr "Publicació"
 
 #: output/packageinfo.cpp:71
 msgid "Architecture"
-msgstr ""
+msgstr "Arquitectura"
 
 #: output/packageinfo.cpp:75
 msgid "Obsoletes"
-msgstr ""
+msgstr "Obsoletes"
 
 #: output/packageinfo.cpp:85
 msgid "Download size"
-msgstr ""
+msgstr "Mida de la baixada"
 
 #: output/packageinfo.cpp:89
 msgid "Installed size"
-msgstr ""
+msgstr "Mida instal·lada"
 
 #: output/packageinfo.cpp:91
 msgid "Source"
-msgstr ""
+msgstr "Font"
 
 #: output/packageinfo.cpp:94
 msgid "From repository"
-msgstr ""
+msgstr "Des del repositori"
 
 #: output/packageinfo.cpp:96 output/transaction_table.cpp:297
 #: output/transactioninfo.cpp:76
 msgid "Repository"
-msgstr ""
+msgstr "Repositori"
 
 #: output/packageinfo.cpp:98
 msgid "Summary"
-msgstr ""
+msgstr "Resum"
 
 #: output/packageinfo.cpp:99
 msgid "URL"
-msgstr ""
+msgstr "URL"
 
 #: output/packageinfo.cpp:100
 msgid "License"
-msgstr ""
+msgstr "Llicència"
 
 #: output/packageinfo.cpp:104 output/transactioninfo.cpp:107
 msgid "Description"
-msgstr ""
+msgstr "Descripció"
 
 #: output/packageinfo.cpp:109
 msgid "Vendor"
-msgstr ""
+msgstr "Proveïdor"
 
 #: output/search.cpp:45
 msgid " (exact)"
-msgstr ""
+msgstr " (exacte)"
 
 #: output/search.cpp:100
 msgid "Matched fields: "
-msgstr ""
+msgstr "Camps coincidents: "
 
 #: output/status.cpp:45
 msgid "Groups"
-msgstr ""
+msgstr "Grups"
 
 #: output/status.cpp:46 output/status.cpp:55 output/status.cpp:72
 msgid "installed"
-msgstr ""
+msgstr "instal·lat"
 
 #: output/status.cpp:47 output/status.cpp:56 output/status.cpp:73
 msgid "available"
-msgstr ""
+msgstr "disponible"
 
 #: output/status.cpp:54
 msgid "Environments"
-msgstr ""
+msgstr "Entorns"
 
 #: output/status.cpp:71
 msgid "Packages"
-msgstr ""
+msgstr "Paquets"
 
 #: output/status.cpp:74
 msgid "user-installed"
-msgstr ""
+msgstr "instal·lat per l'usuari"
 
 #: output/status.cpp:84
 msgid "Installed Size"
-msgstr ""
+msgstr "Mida instal·lada"
 
 #: output/status.cpp:90
 msgid "Enabled Repositories"
-msgstr ""
+msgstr "Repositoris habilitats"
 
 #: output/status.cpp:101
 msgid "Last Transaction"
-msgstr ""
+msgstr "Última transacció"
 
 #: output/transaction_table.cpp:129
 msgid "Transaction Summary:\n"
-msgstr ""
+msgstr "Resum de l'operació:\n"
 
 #. Keep the replaceble number aligned across all messages.
 #: output/transaction_table.cpp:134
 #, c++-format
 msgid " Installing:      {:4} package\n"
 msgid_plural " Installing:      {:4} packages\n"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] " Instal·lació: paquet {:4}\n"
+msgstr[1] " Instal·lació: {:4} paquets\n"
 
 #. Keep the replaceble number aligned across all messages.
 #: output/transaction_table.cpp:143
 #, c++-format
 msgid " Reinstalling:    {:4} package\n"
 msgid_plural " Reinstalling:    {:4} packages\n"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] " Reinstal·lació: paquet {:4}\n"
+msgstr[1] " Reinstal·lació: {:4} paquets\n"
 
 #. Keep the replaceble number aligned across all messages.
 #: output/transaction_table.cpp:152
 #, c++-format
 msgid " Upgrading:       {:4} package\n"
 msgid_plural " Upgrading:       {:4} packages\n"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] " Actualització: paquet {:4}\n"
+msgstr[1] " Actualització: {:4} paquets\n"
 
 #. Keep the replaceble number aligned across all messages.
 #: output/transaction_table.cpp:161
 #, c++-format
 msgid " Replacing:       {:4} package\n"
 msgid_plural " Replacing:       {:4} packages\n"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] " Substitució: paquet {:4}\n"
+msgstr[1] " Substitució: {:4} paquets\n"
 
 #. Keep the replaceble number aligned across all messages.
 #: output/transaction_table.cpp:170
 #, c++-format
 msgid " Removing:        {:4} package\n"
 msgid_plural " Removing:        {:4} packages\n"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] " S'està suprimint: paquet {:4}\n"
+msgstr[1] " S'estan eliminant: {:4} paquets\n"
 
 #. Keep the replaceble number aligned across all messages.
 #: output/transaction_table.cpp:179
 #, c++-format
 msgid " Downgrading:     {:4} package\n"
 msgid_plural " Downgrading:     {:4} packages\n"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] " S'està desactualitzant: paquet {:4}\n"
+msgstr[1] " S'estan desactualitzant: {:4} paquets\n"
 
 #. Keep the replaceble number aligned across all messages.
 #: output/transaction_table.cpp:188
 #, c++-format
 msgid " Changing reason: {:4} package\n"
 msgid_plural " Changing reason: {:4} packages\n"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] " S'està canviant el motiu: {:4} paquet\n"
+msgstr[1] " S'està canviant la raó: {:4} paquets\n"
 
 #. Keep the replaceble number aligned across all messages.
 #: output/transaction_table.cpp:197
 #, c++-format
 msgid " Skipping:        {:4} package\n"
 msgid_plural " Skipping:        {:4} packages\n"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] " S'està ignorant: paquet {:4}\n"
+msgstr[1] " S'estan ignorant: {:4} paquets\n"
 
 #: output/transaction_table.cpp:279 output/transactioninfo.cpp:74
 msgid "Package"
-msgstr ""
+msgstr "Paquet"
 
 #: output/transaction_table.cpp:285
 msgid "Arch"
-msgstr ""
+msgstr "Arc"
 
 #: output/transaction_table.cpp:303
 msgid "Size"
-msgstr ""
+msgstr "Mida"
 
 #: output/transaction_table.cpp:365 output/transaction_table.cpp:435
 #: output/transaction_table.cpp:476
 #, c++-format
 msgid "{} -> {}"
-msgstr ""
+msgstr "{} -} {}"
 
 #: output/transaction_table.cpp:381
 #, c++-format
 msgid "replacing {}"
-msgstr ""
+msgstr "s'està substituint {}"
 
 #: output/transaction_table.cpp:423 output/transaction_table.cpp:451
 msgid " <name-unset>"
-msgstr ""
+msgstr " <name-unset>"
 
 #: output/transaction_table.cpp:482
 msgid "replacing "
-msgstr ""
+msgstr "reemplaçament "
 
 #: output/transaction_table.cpp:495
 msgid "Skipping packages with conflicts:"
-msgstr ""
+msgstr "S'estan ometent els paquets amb conflictes:"
 
 #: output/transaction_table.cpp:497
 msgid "Skipping packages with broken dependencies:"
-msgstr ""
+msgstr "S'ometen els paquets amb dependències trencades:"
 
 #: output/transaction_table.cpp:559
 msgid "Installing dependencies:"
-msgstr ""
+msgstr "S'estan instal·lant dependències:"
 
 #: output/transaction_table.cpp:561
 msgid "Installing weak dependencies:"
-msgstr ""
+msgstr "Instal·lació de dependències febles:"
 
 #: output/transaction_table.cpp:563
 msgid "Installing group/module packages:"
-msgstr ""
+msgstr "S'estan instal·lant els paquets de grup/mòdul:"
 
 #: output/transaction_table.cpp:565
 msgid "Installing:"
-msgstr ""
+msgstr "Instal·lació:"
 
 #: output/transaction_table.cpp:569
 msgid "Upgrading:"
-msgstr ""
+msgstr "Actualització:"
 
 #: output/transaction_table.cpp:572
 msgid "Downgrading:"
-msgstr ""
+msgstr "Desactualitzant:"
 
 #: output/transaction_table.cpp:575
 msgid "Reinstalling:"
-msgstr ""
+msgstr "Reinstal·lació:"
 
 #: output/transaction_table.cpp:579
 msgid "Removing dependent packages:"
-msgstr ""
+msgstr "S'estan eliminant els paquets dependents:"
 
 #: output/transaction_table.cpp:581
 msgid "Removing unused dependencies:"
-msgstr ""
+msgstr "S'estan suprimint les dependències no utilitzades:"
 
 #: output/transaction_table.cpp:583
 msgid "Removing:"
-msgstr ""
+msgstr "S'està suprimint:"
 
 #: output/transaction_table.cpp:587
 msgid "Changing reason:"
-msgstr ""
+msgstr "S'està canviant el motiu:"
 
 #: output/transaction_table.cpp:619
 msgid "Installing groups dependencies:"
-msgstr ""
+msgstr "S'estan instal·lant les dependències dels grups:"
 
 #: output/transaction_table.cpp:621
 msgid "Installing groups:"
-msgstr ""
+msgstr "Instal·lació de grups:"
 
 #: output/transaction_table.cpp:625
 msgid "Removing groups:"
-msgstr ""
+msgstr "Eliminant grups:"
 
 #: output/transaction_table.cpp:628
 msgid "Upgrading groups:"
-msgstr ""
+msgstr "Actualització de grups:"
 
 #: output/transaction_table.cpp:631
 msgid "Changing reason of installed groups:"
-msgstr ""
+msgstr "S'està canviant el motiu dels grups instal·lats:"
 
 #: output/transaction_table.cpp:658
 msgid "Installing environmental groups:"
-msgstr ""
+msgstr "Instal·lació de grups ambientals:"
 
 #: output/transaction_table.cpp:661
 msgid "Removing environmental groups:"
-msgstr ""
+msgstr "Eliminació de grups ambientals:"
 
 #: output/transaction_table.cpp:664
 msgid "Upgrading environmental groups:"
-msgstr ""
+msgstr "Actualització dels grups ambientals:"
 
 #: output/transaction_table.cpp:691
 msgid "Enabling module streams:"
-msgstr ""
+msgstr "Habilitant els fluxos dels mòduls:"
 
 #: output/transaction_table.cpp:694
 msgid "Disabling modules:"
-msgstr ""
+msgstr "S'estan desactivant els mòduls:"
 
 #: output/transaction_table.cpp:697
 msgid "Resetting modules:"
-msgstr ""
+msgstr "Reinicialització dels mòduls:"
 
 #: output/transaction_table.cpp:700
 msgid "Switching module streams:"
-msgstr ""
+msgstr "Commutació de fluxos de mòduls:"
 
 #: output/transaction_table.cpp:776 output/transaction_table.cpp:777
 msgid "(none)"
-msgstr ""
+msgstr "(cap)"
 
 #: output/transaction_table.cpp:783
 #, c++-format
 msgid "Skipping {0} package due to vendor change restriction: {1}."
 msgid_plural "Skipping {0} packages due to vendor change restriction: {1}."
 msgstr[0] ""
+"S'està ometent el paquet {0} a causa de la restricció de canvi del "
+"proveïdor: {1}."
 msgstr[1] ""
+"S'estan ometent {0} paquets a causa de la restricció de canvi del proveïdor: "
+"{1}."
 
 #: output/transaction_table.cpp:812
 msgid "Nothing to do."
-msgstr ""
+msgstr "No hi ha res a fer."
 
 #. The two spaces indent the table the same way as child lines in KeyValueTable
 #: output/transactioninfo.cpp:73
 msgid "Action"
-msgstr ""
+msgstr "Acció"
 
 #: output/transactioninfo.cpp:75
 msgid "Reason"
-msgstr ""
+msgstr "Raó"
 
 #: output/transactioninfo.cpp:98
 msgid "Transaction ID"
-msgstr ""
+msgstr "ID de la transacció"
 
 #: output/transactioninfo.cpp:99
 msgid "Begin time"
-msgstr ""
+msgstr "Hora d'inici"
 
 #: output/transactioninfo.cpp:100
 msgid "Begin rpmdb"
-msgstr ""
+msgstr "Inicia rpmdb"
 
 #: output/transactioninfo.cpp:101
 msgid "End time"
-msgstr ""
+msgstr "Hora final"
 
 #: output/transactioninfo.cpp:102
 msgid "End rpmdb"
-msgstr ""
+msgstr "Finalitza rpmdb"
 
 #: output/transactioninfo.cpp:104
 msgid "User"
-msgstr ""
+msgstr "Usuari"
 
 #: output/transactioninfo.cpp:105
 msgid "Status"
-msgstr ""
+msgstr "Estat"
 
 #: output/transactioninfo.cpp:106
 msgid "Releasever"
-msgstr ""
+msgstr "Llançador"
 
 #: output/transactioninfo.cpp:108
 msgid "Comment"
-msgstr ""
+msgstr "Comentari"
 
 #: output/transactioninfo.cpp:111
 msgid "Packages altered:"
-msgstr ""
+msgstr "Paquets alterats:"
 
 #: output/transactioninfo.cpp:112
 msgid "Groups altered:"
-msgstr ""
+msgstr "Grups alterats:"
 
 #: output/transactioninfo.cpp:113
 msgid "Environments altered:"
-msgstr ""
+msgstr "Entorns alterats:"
 
-#: output/transactionlist.cpp:53
+#: output/transactionlist.cpp:65
 msgid "ID"
-msgstr ""
+msgstr "ID"
 
-#: output/transactionlist.cpp:54
+#: output/transactionlist.cpp:66
 msgid "Command line"
-msgstr ""
+msgstr "Línia d'ordre"
 
-#: output/transactionlist.cpp:55
+#: output/transactionlist.cpp:67
 msgid "Date and time"
-msgstr ""
+msgstr "Data i hora"
 
-#: output/transactionlist.cpp:56
+#: output/transactionlist.cpp:68
 msgid "Action(s)"
-msgstr ""
+msgstr "Accions"
 
-#: output/transactionlist.cpp:57
+#: output/transactionlist.cpp:69
 msgid "Altered"
-msgstr ""
+msgstr "alterat"
 
 #. namespace
 #: progressbar/multi_progress_bar.cpp:85
 msgid "Total"
-msgstr ""
+msgstr "Total"
 
 #: session.cpp:153
 msgid "Missing command"
-msgstr ""
+msgstr "Manca l'ordre"
 
 #: session.cpp:260
 #, c++-format
 msgid ""
 "Invalid date passed: \"{}\". Dates in \"YYYY-MM-DD\" format are expected"
 msgstr ""
+"Data de pas no vàlida: \"{}\". S'esperen dates en el format «AAAA-MM-DD»"
 
 #: session.cpp:270
 #, c++-format
 msgid "\"{}\" date cannot be represented by time_t type on this platform"
 msgstr ""
+"La data \"{}\" no es pot representar amb el tipus de temporitzador d'aquesta "
+"plataforma"
 
-#: utils/userconfirm.cpp:46
+#: utils/userconfirm.cpp:57
 msgid "Is this ok [Y/n]: "
-msgstr ""
+msgstr "Està bé [Y/n]: "
 
-#: utils/userconfirm.cpp:49
+#: utils/userconfirm.cpp:60
 msgid "Is this ok [y/N]: "
-msgstr ""
+msgstr "Està bé [y/N]: "

@@ -2,7 +2,7 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # Rafael Fontenelle <rafaelff@gnome.org>, 2024.
-# Luna Jernberg <bittin@reimu.nl>, 2024, 2025.
+# Luna Jernberg <bittin@reimu.nl>, 2024, 2025, 2026.
 # Göran Uddeborg <goeran@uddeborg.se>, 2024, 2025.
 # Weblate Translation Memory <noreply-mt-weblate-translation-memory@weblate.org>, 2024, 2025, 2026.
 # Luna Jernberg <droidbittin@gmail.com>, 2026.
@@ -10,10 +10,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-22 14:19+0000\n"
-"PO-Revision-Date: 2026-09-22 08:18+0000\n"
-"Last-Translator: Weblate Translation Memory <noreply-mt-weblate-translation-"
-"memory@weblate.org>\n"
+"POT-Creation-Date: 2026-11-02 08:43+0000\n"
+"PO-Revision-Date: 2026-11-03 09:38+0000\n"
+"Last-Translator: Luna Jernberg <droidbittin@gmail.com>\n"
 "Language-Team: Swedish <https://translate.fedoraproject.org/projects/dnf5/"
 "libdnf5/sv/>\n"
 "Language: sv\n"
@@ -21,7 +20,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 2026.9.1\n"
+"X-Generator: Weblate 2026.11\n"
 
 #: advisory/advisory.cpp:81
 #, c++-format
@@ -388,7 +387,7 @@ msgstr[1] ""
 "  - Argumentet ”{}” matchar {} strömmar (”{}”) i modulen ”{}”, men ingen av "
 "strömmarna är aktiverade eller standard."
 
-#: base/log_event.cpp:299
+#: base/log_event.cpp:299 base/log_event.cpp:385
 msgid "', '"
 msgstr "', '"
 
@@ -410,8 +409,8 @@ msgid ""
 "The operation would result in switching of module '{0}' stream '{1}' to "
 "stream '{2}'\n"
 msgstr ""
-"Åtgärden skulle resultera i byte av modulen ”{0}” ström ”{1}” till ström "
-"”{2}”\n"
+"Åtgärden skulle resultera i byte av modulen ”{0}” ström ”{1}” till ström ”{2}"
+"”\n"
 
 #: base/log_event.cpp:342
 msgid ""
@@ -441,8 +440,8 @@ msgid ""
 "Could not find debuginfo package for the following packages resolved from "
 "the argument '{0}': {1}"
 msgstr ""
-"Kunde inte hitta debuginfo paket för följande paket lösta från argument "
-"'{0}': {1}"
+"Kunde inte hitta debuginfo paket för följande paket lösta från argument '{0}"
+"': {1}"
 
 #: base/log_event.cpp:363 base/log_event.cpp:374
 msgctxt "String for joining NEVRAs - e.g. `foo-4-4.noarch, bar-5-5.noarch`"
@@ -455,13 +454,22 @@ msgid ""
 "Could not find debugsource package for the following packages resolved from "
 "the argument '{0}': {1}"
 msgstr ""
-"Kunde inte hitta debugkäll paket för följande paket löst från argument "
-"'{0}' : {1}"
+"Kunde inte hitta debugkäll paket för följande paket löst från argument '{0}' "
+": {1}"
 
 #: base/log_event.cpp:377
 #, c++-format
 msgid "Transaction merge error: '{0}'"
 msgstr "Transaktionssammanslagningsfel: '{0}'"
+
+#: base/log_event.cpp:381
+#, c++-format
+msgid ""
+"Exceeded installonly_limit ({0}): found {1} installed: '{2}'. You can use "
+"'remove --oldinstallonly'."
+msgstr ""
+"Överskred installonly_limit ({0}): hittade{1} installerat: '{2}'. Du kan "
+"använda 'remove --oldinstallonly'."
 
 #: base/solver_problems.cpp:41
 #, c++-format
@@ -711,88 +719,102 @@ msgstr "Problem: "
 msgid "Problem {}: "
 msgstr "Problem {}: "
 
-#: base/transaction.cpp:88
+#: base/transaction.cpp:89
 msgid "This transaction has been already run before."
 msgstr "Denna transaktion har redan körts tidigare."
 
-#: base/transaction.cpp:89
+#: base/transaction.cpp:90
 msgid "Cannot run transaction with resolving problems."
 msgstr "Det går inte att köra transaktionen för att lösa problem."
 
-#: base/transaction.cpp:90
+#: base/transaction.cpp:91
 msgid "Rpm transaction check failed."
 msgstr "Rpm transaktionskontroll misslyckades."
 
-#: base/transaction.cpp:92
+#: base/transaction.cpp:93
 msgid ""
 "Failed to obtain rpm transaction lock. Another transaction is in progress."
 msgstr ""
 "Misslyckades att erhålla rpm-transaktionslås. Ytterligare en transaktion "
 "pågår."
 
-#: base/transaction.cpp:93
+#: base/transaction.cpp:94
 msgid "Rpm transaction failed."
 msgstr "Rpm-transaktion misslyckades."
 
-#: base/transaction.cpp:94
+#: base/transaction.cpp:95
 msgid "Signature verification failed."
 msgstr "Signaturverifiering misslyckades."
 
-#: base/transaction.cpp:98
+#: base/transaction.cpp:97
+msgid ""
+"This transaction is no longer valid because the system repository has "
+"changed since it was loaded."
+msgstr ""
+"Denna transaktion är inte längre giltig eftersom systemarkivet har ändrats "
+"sedan det lästes in."
+
+#: base/transaction.cpp:101
 msgid "The repository does not have any OpenPGP keys configured."
 msgstr "Förrådet har inga OpenPGP-nycklar konfigurerade."
 
-#: base/transaction.cpp:99
+#: base/transaction.cpp:102
 msgid "Public key is not installed."
 msgstr "Publik nyckel är inte installerad."
 
-#: base/transaction.cpp:100
+#: base/transaction.cpp:103
 msgid "Canceled by the user."
 msgstr "Avbröts av användaren."
 
-#: base/transaction.cpp:101
+#: base/transaction.cpp:104
 msgid "Public key import failed."
 msgstr "Import av publik nyckel misslyckades."
 
-#: base/transaction.cpp:993
+#: base/transaction.cpp:997
 msgid "poll failed during scriptlets pipe processing"
 msgstr "poll misslyckades under bearbetning av pipe för skriptdelar"
 
-#: base/transaction.cpp:1016
+#: base/transaction.cpp:1020
 msgid "failed to read scriptlet output from pipe"
 msgstr "Misslyckades med att läsa scriptlet-utdata från pipe"
 
-#: base/transaction.cpp:1134
+#: base/transaction.cpp:1103
+#, c++-format
+msgid "Failed to acquire system repo lock for writing, lock located at \"{}\""
+msgstr ""
+"Misslyckades att förvärva systemarkivet för skrivning, låset finns på \"{}\""
+
+#: base/transaction.cpp:1173
 #, c++-format
 msgid "Invalid tsflag: {}"
 msgstr "Ogiltig tsflag: {}"
 
-#: base/transaction.cpp:1568
+#: base/transaction.cpp:1611
 #, c++-format
 msgid "Public key \"{}\" is already present, not importing."
 msgstr "Publik nyckel \"{}\" finns redan, importerar inte."
 
-#: base/transaction.cpp:1589
+#: base/transaction.cpp:1634
 #, c++-format
 msgid "An error occurred importing key \"{}\": {}"
 msgstr "Ett fel uppstod vid import av nyckeln \"{}\": {}"
 
-#: base/transaction.cpp:1623
+#: base/transaction.cpp:1668
 #, c++-format
 msgid "OpenPGP check for package \"{}\" ({}) from repo \"{}\" has failed: "
 msgstr ""
 "OpenPGP-kontroll för paket \"{}\" ({}) från förråd \"{}\" har misslyckats: "
 
-#: base/transaction.cpp:1651
+#: base/transaction.cpp:1696
 msgid "Import of the key didn't help, wrong key?"
 msgstr "Importen av nyckeln hjälpte inte, fel nyckel?"
 
-#: base/transaction.cpp:1670
+#: base/transaction.cpp:1715
 msgctxt "It is a joining character for repositories IDs"
 msgid ", "
 msgstr ", "
 
-#: base/transaction.cpp:1673
+#: base/transaction.cpp:1718
 #, c++-format
 msgid "Warning: skipped OpenPGP checks for {0} package from repository: {1}"
 msgid_plural ""
@@ -802,46 +824,49 @@ msgstr[0] ""
 msgstr[1] ""
 "Varning: hoppade över OpenPGP-kontroller för {0} paket från flera förråd: {1}"
 
-#: base/transaction.cpp:1676
+#: base/transaction.cpp:1721
 #, c++-format
 msgid "Warning: skipped OpenPGP checks for {0} package from repositories: {1}"
 msgid_plural ""
 "Warning: skipped OpenPGP checks for {0} packages from repositories: {1}"
-msgstr[0] ""
-"Varning: hoppade över OpenPGP-kontroller för {0} paket från förråd: {1}"
+msgstr[0] "Varning: hoppade över OpenPGP-kontroller för {0} paket från förråd: {1}"
 msgstr[1] ""
 "Varning: hoppade över OpenPGP-kontroller för {0} paket från flera förråd: {1}"
 
-#: base/vendor_change_manager.cpp:145
+#: base/vendor_change_manager.cpp:115
+msgid "{func}(): Cannot create directory: {path}: {msg}"
+msgstr "{func}(): Kan inte skapa katalog: {path}: {msg}"
+
+#: base/vendor_change_manager.cpp:164
 msgid "{func}(): Cannot remove file: {path}: {msg}"
 msgstr "{func}(): Kan inte ta bort fil: {path}: {msg}"
 
-#: base/vendor_change_manager.cpp:151
+#: base/vendor_change_manager.cpp:170
 msgid "{func}(): File does not exist: {path}"
 msgstr "{func}(): Filen existerar inte: {path}"
 
-#: base/vendor_change_manager.cpp:240
+#: base/vendor_change_manager.cpp:259
 msgid "{func}(): Cannot remove existing policy file: {path}"
 msgstr "{func}(): Kan inte ta bort befintlig policyfil: {path}"
 
-#: base/vendor_change_manager.cpp:252
+#: base/vendor_change_manager.cpp:271
 msgid "{func}(): Cannot create file: {path}"
 msgstr "{func}(): Kan inte skapa fil: {path}"
 
-#: base/vendor_change_manager.cpp:269
+#: base/vendor_change_manager.cpp:288
 msgid "{func}(): Cannot write to file: {path}"
 msgstr "{func}(): Kan inte skriva till fil: {path}"
 
-#: base/vendor_change_manager.cpp:306
+#: base/vendor_change_manager.cpp:325
 msgid "{func}(): Base filename cannot be empty"
 msgstr "{func}(): Basfilnamn får inte vara tomt"
 
-#: base/vendor_change_manager.cpp:312
+#: base/vendor_change_manager.cpp:331
 msgid ""
 "{func}(): Base filename must not contain path components: {base_filename}"
 msgstr "{func}(): Basfilnamn får inte innehålla sökvägsdelar: {base_filename}"
 
-#: base/vendor_change_manager.cpp:437
+#: base/vendor_change_manager.cpp:461
 msgid "{func}(): Path must have .conf extension: {path}"
 msgstr "{func}(): Sökvägen måste ha filändelsen .conf: {path}"
 
@@ -909,7 +934,7 @@ msgstr "Kan inte konvertera '{}' till bytes"
 msgid "Unknown unit '{}'"
 msgstr "Okänd enhet '{}'"
 
-#: conf/config_main.cpp:291
+#: conf/config_main.cpp:292
 #, c++-format
 msgid "The throttle value {} is outside the allowed range {} ... {}"
 msgstr "Spjällvärdet {} är utanför det tillåtna intervallet {} ... {}"
@@ -1031,7 +1056,7 @@ msgstr ""
 "Inmatningsobjektets värde \"{}\" är inte tillåtet, tillåtna värden för det "
 "här alternativet definieras av reguljärt uttryck \"{}\""
 
-#: conf/vars.cpp:344 conf/vars.cpp:384
+#: conf/vars.cpp:347 conf/vars.cpp:387
 #, c++-format
 msgid "Variable \"{}\" is read-only"
 msgstr "Variabeln \"{}\" är skrivskyddad"
@@ -1056,8 +1081,8 @@ msgstr "Kan inte aktivera flera strömmar för modul '{}'"
 #. DNF_ERROR_REMOVAL_OF_PROTECTED_PKG);
 #. }
 #. TODO(lukash) replace with a proper and descriptive exception
-#: module/module_goal_private.cpp:83 rpm/solv/goal_private.cpp:354
-#: rpm/solv/goal_private.cpp:776
+#: module/module_goal_private.cpp:83 rpm/solv/goal_private.cpp:374
+#: rpm/solv/goal_private.cpp:796
 msgid "no solution possible"
 msgstr "ingen lösning möjlig"
 
@@ -1130,7 +1155,7 @@ msgstr "Plugins::load_plugins(): config_dirs kan inte vara tom"
 msgid "Cannot load libdnf plugin enabled from: {}"
 msgstr "Kan inte ladda libdnf plugin aktiverat från: {}"
 
-#: repo/config_repo.cpp:593
+#: repo/config_repo.cpp:602
 msgid "get_unique_id(): Computation of SHA256 failed"
 msgstr "get_unique_id(): Beräkning av SHA256 misslyckades"
 
@@ -1207,17 +1232,17 @@ msgstr ""
 "Misslyckades att ladda förrådet : \"primär\" data finns inte eller i format "
 "som inte stöds"
 
-#: repo/repo.cpp:506
+#: repo/repo.cpp:513
 #, c++-format
 msgid "Failed to load comps \"{}\": doesn't have the \".xml\" extension"
 msgstr "Misslyckades med att ladda compose \"{}\": har inte \".xml\" tillägget"
 
-#: repo/repo.cpp:513
+#: repo/repo.cpp:520
 #, c++-format
 msgid "Failed to load xml Comps \"{}\": {}"
 msgstr "Misslyckades att ladda xml compose \"{}\": {}"
 
-#: repo/repo.cpp:531
+#: repo/repo.cpp:538
 #, c++-format
 msgid "Failed to load RPM \"{}\": {}"
 msgstr "Misslyckades att ladda RPM \"{}\": {}"
@@ -1289,18 +1314,18 @@ msgstr ""
 "Ingen giltig källa (baseurl, mirrorlist eller metalink) hittades för "
 "förrådet \"{}\""
 
-#: repo/repo_pgp.cpp:65
+#: repo/repo_pgp.cpp:67
 #, c++-format
 msgid "Failed to import OpenPGP keys into temporary keyring: {}"
 msgstr ""
 "Misslyckades att importera OpenPGP nycklar till tillfällig nyckelring: {}"
 
-#: repo/repo_pgp.cpp:71 repo/repo_pgp.cpp:98
+#: repo/repo_pgp.cpp:73 repo/repo_pgp.cpp:100
 #, c++-format
 msgid "Failed to list OpenPGP keys: {}"
 msgstr "Misslyckades att lista OpenPGP nycklar: {}"
 
-#: repo/repo_pgp.cpp:146
+#: repo/repo_pgp.cpp:153
 #, c++-format
 msgid "Failed to import OpenPGP keys: {}"
 msgstr "Misslyckades att importera OpenPGP nycklar: {}"
@@ -1319,53 +1344,60 @@ msgstr ""
 msgid "Cache-only enabled but no cache for repository \"{}\""
 msgstr "Endast cache aktiverat men ingen cache för förråd \"{}\""
 
-#: repo/solv_repo.cpp:267
+#: repo/solv_repo.cpp:268
 #, c++-format
 msgid "Failed to load repomd for repo \"{}\" from \"{}\": {}."
 msgstr "Misslyckades att ladda repomd för förråd \"{}\" från \"{}\": {}."
 
-#: repo/solv_repo.cpp:275
+#: repo/solv_repo.cpp:276
 #, c++-format
 msgid "Failed to load primary for repo \"{}\" from \"{}\": {}."
 msgstr "Misslyckades att ladda primärt för förråd \"{}\" från \"{}\": {}."
 
-#: repo/solv_repo.cpp:323
+#: repo/solv_repo.cpp:324
 #, c++-format
 msgid "Unsupported extended repodata type for the system repo: \"{}\"."
 msgstr "Utvidgad repodatatyp som inte stöds för systemförråd: \"{}\"."
 
-#: repo/solv_repo.cpp:395
+#: repo/solv_repo.cpp:396
 #, c++-format
 msgid "Failed to load {} extension for repo \"{}\" from \"{}\": {}"
 msgstr "Misslyckades att ladda {} utökning för förråd \"{}\" från \"{}\": {}"
 
-#: repo/solv_repo.cpp:431
+#: repo/solv_repo.cpp:436
+#, c++-format
+msgid "Failed to acquire system repo lock for reading, lock located at \"{}\""
+msgstr ""
+"Misslyckades att förvärva systemarkives lås för skrivning, lås finns på \"{}"
+"\""
+
+#: repo/solv_repo.cpp:455
 #, c++-format
 msgid "Failed to load system repo from root \"{}\": {}"
 msgstr "Misslyckades att ladda systemförråd från root \"{}\": {}"
 
-#: repo/solv_repo.cpp:532
+#: repo/solv_repo.cpp:559
 #, c++-format
 msgid "Failed to load {} cache for repo \"{}\" from \"{}\": {}"
 msgstr "Misslyckades att ladda {} cache för förråd \"{}\" från \"{}\": {}"
 
-#: repo/solv_repo.cpp:586
+#: repo/solv_repo.cpp:613
 #, c++-format
 msgid "Failed to write primary cache for repo \"{}\" to \"{}\": {}"
 msgstr "Misslyckades att skriva primärcache för förråd \"{}\" till \"{}\": {}"
 
-#: repo/solv_repo.cpp:608
+#: repo/solv_repo.cpp:635
 #, c++-format
 msgid "Failed to re-load primary cache for repo \"{}\" from \"{}\": {}"
 msgstr ""
 "Misslyckades att ladda om primär cache för förråd \"{}\" från \"{}\": {}"
 
-#: repo/solv_repo.cpp:673
+#: repo/solv_repo.cpp:700
 #, c++-format
 msgid "Failed to write {} cache for repo \"{}\" to \"{}\": {}"
 msgstr "Misslyckades att skriva {} cache för förråd \"{}\" till \"{}\": {}"
 
-#: repo/solv_repo.cpp:694
+#: repo/solv_repo.cpp:721
 #, c++-format
 msgid "Failed to re-load {} cache for repo \"{}\" from \"{}\": {}"
 msgstr "Misslyckades att ladda om {} cache för förråd \"{}\" från \"{}\": {}"
@@ -1399,7 +1431,7 @@ msgstr "Paketet med rpmdbid hittades inte"
 msgid "<unknown>"
 msgstr "<okänd>"
 
-#: rpm/reldep.cpp:116 rpm/reldep.cpp:123
+#: rpm/reldep.cpp:117 rpm/reldep.cpp:124
 msgid "Cannot parse a dependency string"
 msgstr "Kan inte tolka en beroendesträng"
 
@@ -1419,7 +1451,7 @@ msgstr "Paketet är inte signerat."
 msgid "Problem occurred when opening the package."
 msgstr "Ett problem uppstod när paketet öppnades."
 
-#: rpm/rpm_signature.cpp:64
+#: rpm/rpm_signature.cpp:64 system/state.cpp:792
 #, c++-format
 msgid "Failed to set rpm transaction rootDir \"{}\"."
 msgstr "Misslyckades att tälla in rootKat för rpm-transaktionen \"{}\"."
@@ -1525,7 +1557,12 @@ msgstr "Kunde inte nergradera paket \"{}\""
 msgid "Cannot install package \"{}\""
 msgstr "Kan inte installera paket \"{}\""
 
-#: rpm/versionlock_config.cpp:284 system/state.cpp:605
+#: rpm/versionlock_config.cpp:259
+#, c++-format
+msgid "Error parsing versionlock file \"{}\": {}"
+msgstr "Fel vid tolkning av versionlock fil \"{}\":{}"
+
+#: rpm/versionlock_config.cpp:297 system/state.cpp:614
 #, c++-format
 msgid "{}"
 msgstr "{}"
@@ -1541,17 +1578,17 @@ msgstr "Misslyckades att konvertera epok \"{}\" till nummer"
 msgid "Writing debugsolver data into \"{}\" failed: {}"
 msgstr "Misslyckades att skriva felsökningsdata till \"{}\": {}"
 
-#: solv/vendor_change_manager.cpp:339
+#: solv/vendor_change_manager.cpp:357
 #, c++-format
 msgid "Missing \"version\" key in \"{}\""
 msgstr "Saknad ”version”-nyckel i ”{}”"
 
-#: solv/vendor_change_manager.cpp:351
+#: solv/vendor_change_manager.cpp:369
 #, c++-format
 msgid "Unsupported version \"{}\" in \"{}\". Supported versions: {}"
 msgstr "Versionen \"{}\" i \"{}\" stöds inte. Versioner som stöds: {}"
 
-#: solv/vendor_change_manager.cpp:362
+#: solv/vendor_change_manager.cpp:380
 #, c++-format
 msgid ""
 "Configuration \"{}\" uses version \"1.0\" which does not support combining "
@@ -1561,13 +1598,13 @@ msgstr ""
 "kombinationen av 'equivalent_vendors' med 'outgoing_vendors' och "
 "'incoming_vendors'"
 
-#: solv/vendor_change_manager.cpp:394 solv/vendor_change_manager.cpp:432
-#: solv/vendor_change_manager.cpp:484 solv/vendor_change_manager.cpp:709
+#: solv/vendor_change_manager.cpp:412 solv/vendor_change_manager.cpp:457
+#: solv/vendor_change_manager.cpp:509 solv/vendor_change_manager.cpp:734
 #, c++-format
 msgid "Unknown key '{}' in \"{}\" on line {}"
 msgstr "Okänd nyckel \"{}\" i fil \"{}\" på rad {}: {}"
 
-#: solv/vendor_change_manager.cpp:401
+#: solv/vendor_change_manager.cpp:419
 #, c++-format
 msgid ""
 "Configuration \"{}\" uses version \"1.0\" which does not support key '{}' on "
@@ -1576,7 +1613,7 @@ msgstr ""
 "Konfigurationen ”{}” använder version ”1.0”, som inte stöder nyckeln '{}' på "
 "rad {}"
 
-#: solv/vendor_change_manager.cpp:420
+#: solv/vendor_change_manager.cpp:445
 #, c++-format
 msgid ""
 "Filter \"cmdline_repo\" is only allowed in the 'incoming_packages' section. "
@@ -1585,14 +1622,13 @@ msgstr ""
 "Filtret \"cmdline_repo\" är endast tillåtet i avsnittet "
 "\"incoming_packages\". Fel i \"{}\" i tabellen som börjar på rad {}"
 
-#: solv/vendor_change_manager.cpp:442
+#: solv/vendor_change_manager.cpp:467
 #, c++-format
 msgid ""
 "Missing package filter definition in \"{}\" in table starting on line {}"
-msgstr ""
-"Definition av paketfilter saknas i ”{}” i tabellen som börjar på rad {}"
+msgstr "Definition av paketfilter saknas i ”{}” i tabellen som börjar på rad {}"
 
-#: solv/vendor_change_manager.cpp:473
+#: solv/vendor_change_manager.cpp:498
 #, c++-format
 msgid ""
 "Unsupported comparator \"{}\" for vendor definition in \"{}\" on line {}"
@@ -1600,12 +1636,12 @@ msgstr ""
 "Jämförelseoperatorn ”{}” stöds inte för leverantörsdefinitionen i ”{}” på "
 "rad {}"
 
-#: solv/vendor_change_manager.cpp:494
+#: solv/vendor_change_manager.cpp:519
 #, c++-format
 msgid "Missing 'vendor' key in \"{}\" in table starting on line {}"
 msgstr "Saknad nyckel ”vendor” i ”{}” i tabell som börjar på rad {}"
 
-#: solv/vendor_change_manager.cpp:507
+#: solv/vendor_change_manager.cpp:532
 #, c++-format
 msgid ""
 "Invalid regex vendor pattern \"{}\" in \"{}\" in table starting on line {}: "
@@ -1614,17 +1650,17 @@ msgstr ""
 "Ogiltigt regex-mönster för leverantör ”{}” i \" {}” i tabell som börjar på "
 "rad {}:{}"
 
-#: solv/vendor_change_manager.cpp:535
+#: solv/vendor_change_manager.cpp:560
 #, c++-format
 msgid "Bad value type in \"{}\" on line {}: {}"
 msgstr "Felaktig värdetyp i fil \"{}\" på rad {}: {}"
 
-#: solv/vendor_change_manager.cpp:541
+#: solv/vendor_change_manager.cpp:566
 #, c++-format
 msgid "An error occurred when parsing \"{}\": {}"
 msgstr "Ett fel uppstod vid tolkning av \"{}\":{}"
 
-#: solv/vendor_change_manager.cpp:555
+#: solv/vendor_change_manager.cpp:580
 #, c++-format
 msgid ""
 "Configuration \"{}\" uses version \"1.0\" which does not support "
@@ -1633,7 +1669,7 @@ msgstr ""
 "Konfigurationen \"{}\" använder version \"1.0\", som inte stöder "
 "'incoming_vendors' utan 'outgoing_vendors'"
 
-#: solv/vendor_change_manager.cpp:561
+#: solv/vendor_change_manager.cpp:586
 #, c++-format
 msgid ""
 "Configuration \"{}\" uses version \"1.0\" which does not support "
@@ -1642,12 +1678,12 @@ msgstr ""
 "Konfigurationen \"{}\" använder version \"1.0\", som inte stöder "
 "'outgoing_vendors' utan 'incoming_vendors'"
 
-#: solv/vendor_change_manager.cpp:651
+#: solv/vendor_change_manager.cpp:676
 #, c++-format
 msgid "Unknown 'comparator' \"{}\" in \"{}\" on line {}"
 msgstr "Okänd ”jämförelseoperator” ”{}” i ”{}” på rad {}"
 
-#: solv/vendor_change_manager.cpp:655
+#: solv/vendor_change_manager.cpp:680
 #, c++-format
 msgid ""
 "Configuration \"{}\" uses version \"{}\" which does not support 'comparator' "
@@ -1656,22 +1692,22 @@ msgstr ""
 "Konfigurationen \"{}\" använder versionen \"{}\" som inte stöder "
 "jämförelseoperator \"{}\""
 
-#: solv/vendor_change_manager.cpp:694
+#: solv/vendor_change_manager.cpp:719
 #, c++-format
 msgid "Unknown 'filter' \"{}\" in \"{}\" on line {}"
 msgstr "Okänt 'filter' \"{}\" i \"{}\" på rad {}"
 
-#: solv/vendor_change_manager.cpp:715
+#: solv/vendor_change_manager.cpp:740
 #, c++-format
 msgid "Missing 'filter' key in \"{}\" for table entry on line {}"
 msgstr "Saknad ”filter”-nyckel i ”{}” för tabellpost på rad {}"
 
-#: solv/vendor_change_manager.cpp:720
+#: solv/vendor_change_manager.cpp:745
 #, c++-format
 msgid "Missing 'value' key in \"{}\" for table entry on line {}"
 msgstr "Saknad ”value”-nyckel i ”{}” för tabellpost på rad {}"
 
-#: solv/vendor_change_manager.cpp:727
+#: solv/vendor_change_manager.cpp:752
 #, c++-format
 msgid ""
 "Filter \"cmdline_repo\" in \"{}\" in table starting on line {} does not "
@@ -1682,7 +1718,7 @@ msgstr ""
 "jämförelseoperatorn \"{}\". Endast standardjämförelseoperatorn \"EXACT\" är "
 "tillåten för detta filter"
 
-#: solv/vendor_change_manager.cpp:744
+#: solv/vendor_change_manager.cpp:769
 #, c++-format
 msgid ""
 "Invalid 'value' \"{}\" in \"{}\" in table starting on line {}. Only "
@@ -1691,7 +1727,7 @@ msgstr ""
 "Ogiltigt värde \"{}\" i tabellen som börjar på rad {}. Endast \"true\", "
 "\"1\", \"false\" och \"0\" stöds"
 
-#: solv/vendor_change_manager.cpp:754 solv/vendor_change_manager.cpp:765
+#: solv/vendor_change_manager.cpp:779 solv/vendor_change_manager.cpp:790
 #, c++-format
 msgid ""
 "Filter \"{}\" in \"{}\" in table starting on line {} does not support "
@@ -1700,67 +1736,67 @@ msgstr ""
 "Filter \"{}\" i \"{}\" i tabell som börjar på rad{} stöder inte "
 "jämförelseoperatorn \"{}\""
 
-#: solv/vendor_change_manager.cpp:781
+#: solv/vendor_change_manager.cpp:806
 #, c++-format
 msgid "Invalid epoch value \"{}\" in \"{}\" in table starting on line {}"
 msgstr "Ogiltigt epoch-värde ”{}” i ”{}” i tabell som börjar på rad {}"
 
-#: solv/vendor_change_manager.cpp:796
+#: solv/vendor_change_manager.cpp:821
 #, c++-format
 msgid "Invalid regex \"{}\" in \"{}\" in table starting on line {}: {}"
 msgstr "Ogiltigt regex \"{}\" i \"{}\" i tabell som börjar på rad {}:{}"
 
-#: solv/vendor_change_manager.cpp:848
+#: solv/vendor_change_manager.cpp:873
 msgid "Unexpected end of input"
 msgstr "Oväntat slut på indata"
 
-#: solv/vendor_change_manager.cpp:865
+#: solv/vendor_change_manager.cpp:890
 #, c++-format
 msgid "Expected '{}' but found end of input"
 msgstr "Förväntade sig ”{}” men påträffade slutet på indata"
 
-#: solv/vendor_change_manager.cpp:867
+#: solv/vendor_change_manager.cpp:892
 #, c++-format
 msgid "Expected '{}' but found '{}'"
 msgstr "Förväntade sig '{}' men hittade '{}'"
 
-#: solv/vendor_change_manager.cpp:877
+#: solv/vendor_change_manager.cpp:902
 #, c++-format
 msgid "Compact vendor change policy parse error in \"{}\" at position {}"
 msgstr ""
 "Kompakt fel vid tolkning av policy för leverantörsbyte i ”{}” vid position {}"
 
-#: solv/vendor_change_manager.cpp:931
+#: solv/vendor_change_manager.cpp:956
 msgid "Expected package filter after '@'"
 msgstr "Förväntade sig paketfilter efter ”@”"
 
-#: solv/vendor_change_manager.cpp:944
+#: solv/vendor_change_manager.cpp:969
 #, c++-format
 msgid "Unexpected character '{}'"
 msgstr "Oväntat tecken ”{}”"
 
-#: solv/vendor_change_manager.cpp:1020
+#: solv/vendor_change_manager.cpp:1045
 msgid "Expected quoted string starting with '\"'"
 msgstr "Förväntade sig en citerad sträng som börjar med \""
 
-#: solv/vendor_change_manager.cpp:1028
+#: solv/vendor_change_manager.cpp:1053
 msgid "Unterminated escape sequence"
 msgstr "Oavslutad escape-sekvens"
 
-#: solv/vendor_change_manager.cpp:1034
+#: solv/vendor_change_manager.cpp:1059
 #, c++-format
 msgid "Invalid escape sequence '\\{}'. Only '\\\"' and '\\\\' are supported"
 msgstr "Ogiltig escape-sekvens '\\{}'. Endast '\\\"' och '\\\\' stöds"
 
-#: solv/vendor_change_manager.cpp:1041
+#: solv/vendor_change_manager.cpp:1066
 msgid "Unterminated quoted string"
 msgstr "Oavslutad citerad sträng"
 
-#: solv/vendor_change_manager.cpp:1076
+#: solv/vendor_change_manager.cpp:1101
 msgid "Expected direction prefix 'in', 'out', or 'eq'"
 msgstr "Förväntade sig riktningsprefixet 'in', 'out' eller 'eq'"
 
-#: solv/vendor_change_manager.cpp:1140
+#: solv/vendor_change_manager.cpp:1165
 msgid ""
 "Expected comparison operator: relational (<, <=, >, >=) or string (=, ^, $, "
 "*, =*, =~; optionally prefixed with ! and/or i"
@@ -1768,7 +1804,7 @@ msgstr ""
 "Förväntad jämförelseoperator: relationell (<, <=, >, >=) eller sträng (=, ^, "
 "$, *, =*, =~; valfritt prefixerat med ! och/eller i"
 
-#: solv/vendor_change_manager.cpp:1205
+#: solv/vendor_change_manager.cpp:1230
 msgid ""
 "Vendor definition does not support relational comparators. Use string "
 "comparators: =, ^, $, *, =*, =~"
@@ -1776,34 +1812,34 @@ msgstr ""
 "Definitionen av leverantör stöder inte relationella jämförelseoperatorer. "
 "Använd strängjämförelseoperatorer: =, ^, $, *, =*, =~"
 
-#: solv/vendor_change_manager.cpp:1213
+#: solv/vendor_change_manager.cpp:1238
 #, c++-format
 msgid "Invalid regex vendor pattern '{}': {}"
 msgstr "Ogiltigt reguljärt uttryck för leverantörsmönster ”{}”:{}"
 
-#: solv/vendor_change_manager.cpp:1231
+#: solv/vendor_change_manager.cpp:1256
 #, c++-format
 msgid "Unknown filter field name '{}'"
 msgstr "Okänt namn på filterfält ”{}”"
 
-#: solv/vendor_change_manager.cpp:1241
+#: solv/vendor_change_manager.cpp:1266
 msgid "Expected filter field name"
 msgstr "Förväntat namn på filterfält"
 
-#: solv/vendor_change_manager.cpp:1264
+#: solv/vendor_change_manager.cpp:1295
 #, c++-format
 msgid "Invalid epoch value \"{}\""
 msgstr "Ogiltigt epoch-värde \"{}\""
 
-#: solv/vendor_change_manager.cpp:1268
+#: solv/vendor_change_manager.cpp:1299
 msgid "Filter 'cmdline_repo' only supports the '=' (EXACT) comparator"
 msgstr "Filtret ”cmdline_repo” stöder endast ”=” (EXAKT) jämförelseoperatorn"
 
-#: solv/vendor_change_manager.cpp:1271
+#: solv/vendor_change_manager.cpp:1302
 msgid "Filter 'cmdline_repo' is only allowed in incoming packages ('in:')"
 msgstr "Filtret ”cmdline_repo” är endast tillåtet i inkommande paket (”in:”)"
 
-#: solv/vendor_change_manager.cpp:1282
+#: solv/vendor_change_manager.cpp:1313
 #, c++-format
 msgid ""
 "Invalid value '{}' for 'cmdline_repo' filter. Use 'true', '1', 'false', or "
@@ -1812,54 +1848,67 @@ msgstr ""
 "Ogiltigt värde ”{}” för filtret ”cmdline_repo”. Använd 'true', '1', 'false' "
 "eller '0'"
 
-#: solv/vendor_change_manager.cpp:1286
+#: solv/vendor_change_manager.cpp:1317
 #, c++-format
 msgid "Filter '{}' only supports relational comparators: =, !=, >, >=, <, <="
 msgstr ""
 "Filtret ”{}” stöder endast relationella jämförelseoperatorer: =, !=, >, >=, "
 "<, <="
 
-#: solv/vendor_change_manager.cpp:1290
+#: solv/vendor_change_manager.cpp:1321
 #, c++-format
 msgid "Filter '{}' only supports string comparators: =, ^, $, *, =*, =~"
 msgstr ""
 "Filtret ”{}” stöder endast jämförelseoperatorer för strängar: =, ^, $, *, "
 "=*, =~"
 
-#: solv/vendor_change_manager.cpp:1299
+#: solv/vendor_change_manager.cpp:1330
 #, c++-format
 msgid "Invalid regex '{}': {}"
 msgstr "Ogiltig regex '{}':{}"
 
-#: solv/vendor_change_manager.cpp:1310
+#: solv/vendor_change_manager.cpp:1341
 msgid "Package filters do not support 'eq' direction. Use 'in' or 'out'"
 msgstr "Paketfilter stöder inte riktningen 'eq'. Använd'in' eller 'out'"
 
-#: solv/vendor_change_manager.cpp:1401 solv/vendor_change_manager.cpp:1451
-#: solv/vendor_change_manager.cpp:1462 solv/vendor_change_manager.cpp:1473
+#: solv/vendor_change_manager.cpp:1432 solv/vendor_change_manager.cpp:1482
+#: solv/vendor_change_manager.cpp:1493 solv/vendor_change_manager.cpp:1504
 msgid "{func}(): Policy index {idx} is out of range"
 msgstr "{func}(): Policyindex {idx} ligger utanför giltigt intervall"
 
-#: system/state.cpp:282 system/state.cpp:291
+#: system/state.cpp:291 system/state.cpp:300
 #, c++-format
 msgid "Invalid TOML version \"{}\", \"MAJOR.MINOR\" expected"
 msgstr "Ogiltig TOML version \"{}\", \"HUVUD.SMÄRRE\" förväntas"
 
-#: system/state.cpp:299
+#: system/state.cpp:308
 #, c++-format
 msgid "{} state for \"{}\" not found."
 msgstr "{} tillstånd för \"{}\" hittades inte."
 
-#: system/state.cpp:303
+#: system/state.cpp:312
 #, c++-format
 msgid "Loading system state TOML file {} failed (see dnf5-system-state(7)): {}"
 msgstr ""
 "Laddar systemstatus TOML-fil {} misslyckades (se dnf5-system-state(7)): {}"
 
-#: system/state.cpp:640
+#: system/state.cpp:649
 #, c++-format
 msgid "Unsupported TOML version \"{}\", maximum supported version is \"{}\""
 msgstr "Ostödd TOML-version \"{}\", maximalt stödd version är \"{}\""
+
+#: system/state.cpp:798
+#, c++-format
+msgid "Error {} opening rpm database"
+msgstr "Fel {} vid öppnande av rpm databas"
+
+#: system/state.cpp:802
+msgid "Failed to get rpm database"
+msgstr "Misslyckades med att hämta rpm databas"
+
+#: system/state.cpp:808
+msgid "Failed to initialize database index iterator"
+msgstr "Misslyckades med att initiera databasindexiteratorn"
 
 #. TODO(dmach): replace with a better exception class
 #: transaction/db/comps_environment_group.cpp:100
@@ -2290,56 +2339,61 @@ msgstr "Kan inte erhålla adressen till symbol \"{}\": {}"
 msgid "Cannot set the locale \"{}\": {}"
 msgstr "Det går inte att ställa in lokal \"{}:{}"
 
-#: utils/locker.cpp:99
+#: utils/locker.cpp:101
 #, c++-format
 msgid "Failed to obtain lock \"{}\""
 msgstr "Misslyckades att erhålla lås \"{}\""
 
-#: utils/locker.cpp:108
+#: utils/locker.cpp:111
 msgid "File is already open."
 msgstr "Fil är redan öppen."
 
-#: utils/locker.cpp:121
+#: utils/locker.cpp:124
 #, c++-format
 msgid "Failed to open lock file \"{}\""
 msgstr "Misslyckades med att öppna låsfil \"{}\""
 
-#: utils/locker.cpp:127 utils/locker.cpp:164
+#: utils/locker.cpp:130 utils/locker.cpp:167
 #, c++-format
 msgid "The lock file \"{}\" is not opened"
 msgstr "Låsfilen ”{}” är inte öppnad."
 
-#: utils/locker.cpp:132
+#: utils/locker.cpp:135
 #, c++-format
 msgid "Failed to truncate lock file \"{}\""
 msgstr "Misslyckades med att trunkera låsfilen ”{}”"
 
-#: utils/locker.cpp:135 utils/locker.cpp:172
+#: utils/locker.cpp:138 utils/locker.cpp:175
 #, c++-format
 msgid "Failed to seek lock file \"{}\""
 msgstr "Misslyckades att söka efter låsfil \"{}\""
 
-#: utils/locker.cpp:143
+#: utils/locker.cpp:146
 #, c++-format
 msgid "Failed to write to lock file \"{}\""
 msgstr "Misslyckades att skriva till låsfil \"{}\""
 
-#: utils/locker.cpp:150
+#: utils/locker.cpp:153
 #, c++-format
 msgid "Failed to sync lock file \"{}\""
 msgstr "Misslyckades med att synkronisera låsfil \"{}\""
 
-#: utils/locker.cpp:178
+#: utils/locker.cpp:181
 #, c++-format
 msgid "Failed to read from lock file \"{}\""
 msgstr "Misslyckades med att läsa från låsfil \"{}\""
 
-#: utils/locker.cpp:192
+#: utils/locker.cpp:194
+#, c++-format
+msgid "The lock file \"{}\" is not locked"
+msgstr "Låsfilen ”{}” är inte låst."
+
+#: utils/locker.cpp:207
 #, c++-format
 msgid "Failed to close lock file \"{}\""
 msgstr "Misslyckades att stänga låsfil \"{}\""
 
-#: utils/locker.cpp:196
+#: utils/locker.cpp:211
 #, c++-format
 msgid "Failed to delete lock file \"{}\""
 msgstr "Misslyckades att ta bort låsfil \"{}\""
@@ -2362,8 +2416,7 @@ msgstr "Bindning av heltals64-värde till SQL-sats misslyckades: \"{}\""
 #: utils/sqlite3/sqlite3.cpp:35
 #, c++-format
 msgid "Binding unsigned integer32 value to SQL statement failed: \"{}\""
-msgstr ""
-"Bindning av osignerat heltal32-värde till SQL-sats misslyckades: \"{}\""
+msgstr "Bindning av osignerat heltal32-värde till SQL-sats misslyckades: \"{}\""
 
 #: utils/sqlite3/sqlite3.cpp:37
 #, c++-format

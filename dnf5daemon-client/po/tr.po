@@ -1,13 +1,13 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# Oğuz Ersen <oguz@ersen.moe>, 2024, 2025.
+# Oğuz Ersen <oguz@ersen.moe>, 2024, 2025, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-22 14:19+0000\n"
-"PO-Revision-Date: 2025-10-07 23:48+0000\n"
+"POT-Creation-Date: 2026-11-02 08:43+0000\n"
+"PO-Revision-Date: 2026-11-03 09:42+0000\n"
 "Last-Translator: Oğuz Ersen <oguz@ersen.moe>\n"
 "Language-Team: Turkish <https://translate.fedoraproject.org/projects/dnf5/"
 "dnf5daemon-client/tr/>\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.13.3\n"
+"X-Generator: Weblate 2026.11\n"
 
 #: commands/advisory/advisory.cpp:35
 msgid "Manage advisories"
@@ -136,8 +136,8 @@ msgid ""
 "Include content contained in advisories that fix a CVE (Common "
 "Vulnerabilities and Exposures) ID, Eg. CVE-2201-0123. List option."
 msgstr ""
-"Bir CVE (Common Vulnerabilities and Exposures) kimliğini (örn. "
-"CVE-2201-0123) düzelten tavsiyelerdeki içeriği dahil et. Liste seçeneği."
+"Bir CVE (Common Vulnerabilities and Exposures) kimliğini (örn. CVE-2201-"
+"0123) düzelten tavsiyelerdeki içeriği dahil et. Liste seçeneği."
 
 #: commands/advisory/arguments.hpp:182
 msgid "CVE_ID,..."

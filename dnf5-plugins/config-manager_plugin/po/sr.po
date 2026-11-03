@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-22 14:19+0000\n"
-"PO-Revision-Date: 2026-04-23 03:58+0000\n"
+"POT-Creation-Date: 2026-11-02 08:43+0000\n"
+"PO-Revision-Date: 2026-11-03 10:02+0000\n"
 "Last-Translator: \"Марко Костић (Marko Kostić)\" <marko.m.kostic@gmail.com>\n"
 "Language-Team: Serbian <https://translate.fedoraproject.org/projects/dnf5/"
 "dnf5-plugin-config-manager/sr/>\n"
@@ -17,48 +17,48 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 5.17\n"
+"X-Generator: Weblate 2026.11\n"
 
-#: addrepo.cpp:136
+#: addrepo.cpp:115
 #, c++-format
 msgid "from-repofile: \"{}\" file does not exist"
 msgstr "from-repofile: датотека „{}“ не постоји"
 
-#: addrepo.cpp:139
+#: addrepo.cpp:118
 #, c++-format
 msgid "from-repofile: {}"
 msgstr "from-repofile: {}"
 
-#: addrepo.cpp:169 setopt.cpp:53 setvar.cpp:49
+#: addrepo.cpp:148 setopt.cpp:53 setvar.cpp:49
 #, c++-format
 msgid "{}: Badly formatted argument value \"{}\""
 msgstr "{}: лоше обликована вредност аргумента „{}“"
 
-#: addrepo.cpp:179
+#: addrepo.cpp:158
 #, c++-format
 msgid "Cannot set repository option \"{}={}\": {}"
 msgstr "Није могуће поставити опцију ризнице „{}={}“: {}"
 
-#: addrepo.cpp:187 setopt.cpp:108
+#: addrepo.cpp:166 setopt.cpp:108
 #, c++-format
 msgid "Sets the \"{}\" option again with a different value: \"{}\" != \"{}\""
 msgstr "Поново поставља опцију „{}“ са другом вредношћу: „{}“ != „{}“"
 
-#: addrepo.cpp:253
+#: addrepo.cpp:232
 msgid "Missing path to repository configuration directory"
 msgstr "Недостаје путања до директоријума подешавања ризнице"
 
-#: addrepo.cpp:303
+#: addrepo.cpp:282
 #, c++-format
 msgid "Failed to copy repository configuration file \"{}\": {}"
 msgstr "Није успело копирање датотеке подешавања ризнице „{}“: {}"
 
-#: addrepo.cpp:314
+#: addrepo.cpp:293
 #, c++-format
 msgid "Failed to download repository configuration file \"{}\": {}"
 msgstr "Није успело преузимање датотеке подешавања ризнице „{}“: {}"
 
-#: addrepo.cpp:342
+#: addrepo.cpp:321
 #, c++-format
 msgid ""
 "Error in added repository configuration file. Cannot set repository option "
@@ -67,25 +67,25 @@ msgstr ""
 "Грешка у додатој датотеци подешавања ризнице. Није могуће поставити опцију "
 "ризнице „{}={}“: {}"
 
-#: addrepo.cpp:376
+#: addrepo.cpp:355
 #, c++-format
 msgid "Bad baseurl: {}={}"
 msgstr "Лоша основна адреса (baseurl): {}={}"
 
-#: addrepo.cpp:384
+#: addrepo.cpp:363
 msgid ""
 "One of --from-repofile=<URL>, --set=baseurl=<URL>, --set=mirrorlist=<URL>, --"
 "set=metalink=<URL> must be set to a non-empty URL"
 msgstr ""
-"Једно од --from-repofile=<URL>, --set=baseurl=<URL>, --set=mirrorlist=<URL>, "
-"--set=metalink=<URL> мора бити постављено на непразну адресу"
+"Једно од --from-repofile=<URL>, --set=baseurl=<URL>, --set=mirrorlist=<URL>"
+", --set=metalink=<URL> мора бити постављено на непразну адресу"
 
-#: addrepo.cpp:429
+#: addrepo.cpp:408
 #, c++-format
 msgid "Failed to save repository configuration file \"{}\": {}"
 msgstr "Није успело чување датотеке подешавања ризнице „{}“: {}"
 
-#: addrepo.cpp:451
+#: addrepo.cpp:430
 #, c++-format
 msgid ""
 "File \"{}\" already exists and configures repositories with IDs \"{}\". Add "
@@ -94,7 +94,7 @@ msgstr ""
 "Датотека „{}“ већ постоји и подешава ризнице са ИД-овима „{}“. Додајте „--"
 "add-or-replace“ или „--overwrite“."
 
-#: addrepo.cpp:454
+#: addrepo.cpp:433
 #, c++-format
 msgid ""
 "File \"{}\" already exists and configures repositories with IDs \"{}\". Add "
@@ -103,19 +103,193 @@ msgstr ""
 "Датотека „{}“ већ постоји и подешава ризнице са ИД-овима „{}“. Додајте „--"
 "overwrite“ за преписивање."
 
-#: addrepo.cpp:474 addrepo.cpp:500
+#: addrepo.cpp:453 addrepo.cpp:479
 #, c++-format
 msgid "A repository with id \"{}\" already configured in file: {}"
 msgstr "Ризница са ид-ом „{}“ је већ подешена у датотеци: {}"
 
-#: addrepo.cpp:486 shared.hpp:150
+#: addrepo.cpp:465 shared.hpp:156
 #, c++-format
 msgid "Cannot read repositories from directory \"{}\": {}"
 msgstr "Није могуће читање ризница из директоријума „{}“: {}"
 
-#: config-manager.cpp:44
+#: addvendorpolicy.cpp:23
+msgid "Add a vendor change policy from a TOML file or compact format string"
+msgstr ""
+
+#: addvendorpolicy.cpp:29
+msgid "Policy base filename (without .conf extension)"
+msgstr ""
+
+#: addvendorpolicy.cpp:40
+msgid "URL or local path to the source TOML policy file"
+msgstr ""
+
+#: addvendorpolicy.cpp:52
+msgid "Vendor change policy in compact format"
+msgstr ""
+
+#: addvendorpolicy.cpp:64
+msgid "Allow masking a distribution policy"
+msgstr ""
+
+#: addvendorpolicy.cpp:73
+msgid "Allow replacing an existing policy file"
+msgstr ""
+
+#: addvendorpolicy.cpp:82
+msgid "Require that the new policy masks a distribution policy"
+msgstr ""
+
+#: addvendorpolicy.cpp:94
+msgid "Require that the new policy replaces an existing system policy file"
+msgstr ""
+
+#: addvendorpolicy.cpp:123
+msgid "Option \"{option}\" with nonempty value is required"
+msgstr ""
+
+#: addvendorpolicy.cpp:129
+msgid "Either \"{option1}\" or non-empty \"{option2}\" is required"
+msgstr ""
+
+#: addvendorpolicy.cpp:142
+msgid ""
+"Policy file \"{path}\" already exists. Use \"{option}\" to allow replacing "
+"it."
+msgstr ""
+
+#: addvendorpolicy.cpp:150
+msgid ""
+"Distribution policy \"{name}\" already exists. Use \"{option}\" to allow "
+"masking it."
+msgstr ""
+
+#: addvendorpolicy.cpp:165
+msgid ""
+"Cannot add policy: option \"{option}\" requires masking a distribution "
+"policy, but no distribution policy named \"{name}\" exists."
+msgstr ""
+
+#: addvendorpolicy.cpp:172
+msgid ""
+"Cannot add policy: option \"{option}\" requires replacing an existing system "
+"policy, but no system policy file named \"{name}\" exists."
+msgstr ""
+
+#: addvendorpolicy.cpp:191 addvendorpolicy.cpp:215 addvendorpolicy.cpp:244
+msgid "Replaced vendor policy file: {path}"
+msgstr ""
+
+#: addvendorpolicy.cpp:196
+msgid "Created vendor policy file: {path}"
+msgstr ""
+
+#: addvendorpolicy.cpp:204
+#, fuzzy
+#| msgid "from-repofile: \"{}\" file does not exist"
+msgid "Source file does not exist: {path}"
+msgstr "from-repofile: датотека „{}“ не постоји"
+
+#: addvendorpolicy.cpp:222 addvendorpolicy.cpp:251
+msgid "Saved vendor policy file: {path}"
+msgstr ""
+
+#: addvendorpolicy.cpp:260
+msgid "Masked distribution policy file: {path}"
+msgstr ""
+
+#: addvendorpolicy.cpp:264
+msgid "Failed to add vendor policy"
+msgstr ""
+
+#: config-manager.cpp:47
 msgid "Manage configuration"
 msgstr "Управљање подешавањима"
+
+#: listvendorpolicies.cpp:27
+msgid "List vendor change policy files"
+msgstr ""
+
+#: listvendorpolicies.cpp:33 removevendorpolicy.cpp:29
+msgid "Policy base filename pattern (supports globs)"
+msgstr ""
+
+#: listvendorpolicies.cpp:42
+msgid "Show detailed information about the policies"
+msgstr ""
+
+#: listvendorpolicies.cpp:61 removevendorpolicy.cpp:49
+msgid "No vendor policy files found"
+msgstr ""
+
+#: listvendorpolicies.cpp:80 removevendorpolicy.cpp:63
+msgid "No matching vendor policy files found for pattern: {pattern}"
+msgstr ""
+
+#. Note for translators: This is a right-aligned column separator in
+#. a package properties table as in "Name    : bash".
+#: listvendorpolicies.cpp:149
+msgid " : "
+msgstr ""
+
+#. Add policy info
+#: listvendorpolicies.cpp:155
+msgid "Policy"
+msgstr ""
+
+#: listvendorpolicies.cpp:156
+msgid "Source"
+msgstr ""
+
+#: listvendorpolicies.cpp:157
+msgid "Distribution (read-only)"
+msgstr ""
+
+#: listvendorpolicies.cpp:157
+msgid "System (manageable)"
+msgstr ""
+
+#: listvendorpolicies.cpp:157
+msgid "Type"
+msgstr ""
+
+#: listvendorpolicies.cpp:160
+msgid "Masks"
+msgstr ""
+
+#: listvendorpolicies.cpp:165
+msgid "Masked by"
+msgstr ""
+
+#: listvendorpolicies.cpp:174
+msgid "<conversion failed: {what}>"
+msgstr ""
+
+#: listvendorpolicies.cpp:178 listvendorpolicies.cpp:183
+msgid "Compact"
+msgstr ""
+
+#: removevendorpolicy.cpp:23
+msgid "Remove vendor change policy files"
+msgstr ""
+
+#: removevendorpolicy.cpp:74
+msgid "Removed vendor policy file: {path}"
+msgstr ""
+
+#: removevendorpolicy.cpp:78
+msgid "Unmasked distribution policy file: {path}"
+msgstr ""
+
+#: removevendorpolicy.cpp:83
+msgid "Failed to remove policy file: {path}"
+msgstr ""
+
+#: removevendorpolicy.cpp:87
+msgid ""
+"Cannot remove distribution policy file \"{path}\". To mask it, use: {command}"
+msgstr ""
 
 #: repos.cpp:56 setopt.cpp:140
 #, c++-format
@@ -180,7 +354,7 @@ msgstr "Недостаје путања до директоријума пром
 msgid "Cannot write variable to file \"{}\": {}"
 msgstr "Није могуће уписати променљиву у датотеку „{}“: {}"
 
-#: shared.hpp:59
+#: shared.hpp:65
 #, c++-format
 msgid ""
 "The path \"{}\" exists, but it is not a directory or a symlink to a "
@@ -189,12 +363,12 @@ msgstr ""
 "Путања „{}“ постоји, али није директоријум нити симболичка веза до "
 "директоријума."
 
-#: shared.hpp:64
+#: shared.hpp:70
 #, c++-format
 msgid "The path \"{}\" exists, but it is a symlink to a non-existent object."
 msgstr "Путања „{}“ постоји, али је симболичка веза до непостојећег објекта."
 
-#: shared.hpp:70
+#: shared.hpp:76
 #, c++-format
 msgid ""
 "Directory \"{}\" does not exist. Add \"--create-missing-dir\" to create "
@@ -203,7 +377,7 @@ msgstr ""
 "Директоријум „{}“ не постоји. Додајте „--create-missing-dir“ за прављење "
 "директоријума који недостају."
 
-#: shared.hpp:81
+#: shared.hpp:87
 #, c++-format
 msgid "Variable name can contain only ASCII letters, numbers and '_': {}"
 msgstr ""

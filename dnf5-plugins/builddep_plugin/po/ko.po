@@ -1,13 +1,13 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# 김인수 <simmon@nplob.com>, 2024.
+# 김인수 <simmon@nplob.com>, 2024, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-22 14:19+0000\n"
-"PO-Revision-Date: 2024-05-16 02:51+0000\n"
+"POT-Creation-Date: 2026-11-02 08:43+0000\n"
+"PO-Revision-Date: 2026-11-03 09:40+0000\n"
 "Last-Translator: 김인수 <simmon@nplob.com>\n"
 "Language-Team: Korean <https://translate.fedoraproject.org/projects/dnf5/"
 "dnf5-plugin-builddep/ko/>\n"
@@ -16,14 +16,13 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.5.5\n"
+"X-Generator: Weblate 2026.11\n"
 
 #: builddep.cpp:84
 #, c++-format
 msgid ""
 "Invalid value for macro definition \"{}\". \"macro expr\" format expected."
-msgstr ""
-"매크로 정의 \"{}\"를 위해 유효하지 못한 값: \"macro expr\" 형식이 예상됩니다."
+msgstr "매크로 정의 \"{}\"를 위해 유효하지 못한 값: \"macro expr\" 형식이 예상됩니다."
 
 #. failed to parse some of inputs (invalid spec, no package matched...)
 #: builddep.cpp:359

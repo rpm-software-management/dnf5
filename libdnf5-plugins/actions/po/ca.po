@@ -2,97 +2,104 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # Languages add-on <noreply-addon-languages@weblate.org>, 2026.
+# David Medina <dmedinacpnl@gmail.com>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-22 14:19+0000\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Automatically generated\n"
-"Language-Team: none\n"
+"POT-Creation-Date: 2026-11-02 08:43+0000\n"
+"PO-Revision-Date: 2026-11-03 09:07+0000\n"
+"Last-Translator: David Medina <dmedinacpnl@gmail.com>\n"
+"Language-Team: Catalan <https://translate.fedoraproject.org/projects/dnf5/"
+"libdnf5-plugin-actions/ca/>\n"
 "Language: ca\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 2026.11\n"
 
 #: actions.cpp:239
 #, c++-format
 msgid "File \"{}\" on line {}: {}"
-msgstr ""
+msgstr "Fitxer \"{}\" a la línia {}: {}"
 
 #: actions.cpp:627 actions.cpp:633 actions.cpp:639 actions.cpp:645
 msgid "\"HOOK:PKG_FILTER:DIRECTION:OPTIONS:CMD\" format expected"
-msgstr ""
+msgstr "S'esperava el format «HOOK:PKGFILTER:DIRECTION:OPTIONS:CMD»"
 
 #: actions.cpp:667
 #, c++-format
 msgid "Unknown \"enabled\" option value \"{}\""
-msgstr ""
+msgstr "Valor d'opció \"activat\" desconegut \"{}\""
 
 #: actions.cpp:674
 #, c++-format
 msgid "Unknown option \"{}\""
-msgstr ""
+msgstr "Opció desconeguda \"{}\""
 
 #: actions.cpp:702
 #, c++-format
 msgid "Unknown hook \"{}\""
-msgstr ""
+msgstr "Ganxo desconegut \"{}\""
 
 #: actions.cpp:711
 msgid ""
 "Package filter can only be used in GOAL_RESOLVED, PRE_TRANS and POST_TRANS "
 "hooks"
 msgstr ""
+"El filtre de paquets només es pot utilitzar en els ganxos GOALRESOLVED, "
+"PRETRANS i POSTTRANS"
 
 #: actions.cpp:717
 msgid "Cannot use direction without package filter"
-msgstr ""
+msgstr "No es pot utilitzar la direcció sense el filtre de paquets"
 
 #: actions.cpp:731
 #, c++-format
 msgid "Unknown package direction \"{}\""
-msgstr ""
+msgstr "Direcció de paquet desconeguda \"{}\""
 
 #: actions.cpp:738
 #, c++-format
 msgid "Unknown mode \"{}\""
-msgstr ""
+msgstr "Mode desconegut \"{}\""
 
 #: actions.cpp:746
 #, c++-format
 msgid "Unsupported value of the \"raise_error\" option: {}"
-msgstr ""
+msgstr "Valor no admès de l'opció «raiseerror»: {}"
 
 #: actions.cpp:751
 msgid "Missing command"
-msgstr ""
+msgstr "Manca l'ordre"
 
 #: actions.cpp:946
 #, c++-format
 msgid "Syntax error: Missing equal sign (=) in action output line: {}"
 msgstr ""
+"Error de sintaxi: Manca el signe igual (ing) a la línia de sortida de "
+"l'acció: {}"
 
 #: actions.cpp:957
 #, c++-format
 msgid "Cannot set option: Action output line: {}"
-msgstr ""
+msgstr "No es pot establir l'opció: Línia de sortida d'acció: {}"
 
 #: actions.cpp:975
 #, c++-format
 msgid "Action sent the wrong log level: {}"
-msgstr ""
+msgstr "L'acció ha enviat un nivell de registre incorrecte: {}"
 
 #: actions.cpp:980 actions.cpp:1792
 #, c++-format
 msgid "Action calls for stop: {}"
-msgstr ""
+msgstr "Crides d'acció per aturar: {}"
 
 #: actions.cpp:983 actions.cpp:1799
 #, c++-format
 msgid "Action sent error message: {}"
-msgstr ""
+msgstr "Missatge d'error enviat per l'acció: {}"
 
 #: actions.cpp:988
 #, c++-format
@@ -100,64 +107,68 @@ msgid ""
 "Syntax error: Action output line must start with \"tmp.\" or \"conf.\" or "
 "\"var.\" or \"stop=\" or \"error=\": {}"
 msgstr ""
+"Error de sintaxi: la línia de sortida d'acció ha de començar amb «tmp». o «"
+"conf.» o «var». o «stop:» o «error:»: {}"
 
 #: actions.cpp:1013
 msgid "Error reading from action (from pipe)"
-msgstr ""
+msgstr "S'ha produït un error en llegir des de l'acció (des del tub)"
 
 #: actions.cpp:1031
 #, c++-format
 msgid "Syntax error in json request from action: Missing starting '{{' char"
 msgstr ""
+"Error de sintaxi a la sol·licitud json de l'acció: manca el caràcter d'inici "
+"«{{»"
 
 #: actions.cpp:1055
 msgid "Error during processing of a request from action."
-msgstr ""
+msgstr "Error durant el processament d'una sol·licitud de l'acció."
 
 #: actions.cpp:1064
 #, c++-format
 msgid "Syntax error in json request from action: {}"
-msgstr ""
+msgstr "Error de sintaxi a la sol·licitud json de l'acció: {}"
 
 #: actions.cpp:1072
 msgid "Syntax error in json request from action: Incomplete input"
-msgstr ""
+msgstr "Error de sintaxi a la sol·licitud json de l'acció: Entrada incompleta"
 
 #: actions.cpp:1147
 msgid "Cannot write response"
-msgstr ""
+msgstr "No es pot escriure la resposta"
 
 #: actions.cpp:1819
 msgid "Actions plugin: Cannot create pipe"
-msgstr ""
+msgstr "Connector d'accions: no es pot crear la canonada"
 
 #: actions.cpp:1911
 msgid "Actions plugin: Cannot fork"
-msgstr ""
+msgstr "Connector d'accions: no es pot bifurcar"
 
 #: actions.cpp:1966
 msgid "Actions plugin: Cannot bind command stdin"
-msgstr ""
+msgstr "Connector d'accions: no es pot vincular l'ordre stdin"
 
 #: actions.cpp:1968
 msgid "Actions plugin: Cannot bind command stdout"
-msgstr ""
+msgstr "Connector d'accions: no es pot vincular l'ordre stdout"
 
 #: actions.cpp:1986
 #, c++-format
 msgid "Cannot execute action, command \"{}\" arguments \"{}\""
-msgstr ""
+msgstr "No es pot executar l'acció, ordre \"{}\" arguments \"{}\""
 
 #: actions.cpp:1994
 msgid "Error during preparation child process"
-msgstr ""
+msgstr "Error durant el procés fill de preparació"
 
 #: actions.cpp:2013
 #, c++-format
 msgid "Exit code: {}"
-msgstr ""
+msgstr "Codi de sortida: {}"
 
 #: actions.cpp:2017
 #, c++-format
 msgid "Terminated by signal: {}"
-msgstr ""
+msgstr "Finalitzat per senyal: {}"

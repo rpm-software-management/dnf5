@@ -1,14 +1,16 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# 김인수 <simmon@nplob.com>, 2024.
+# 김인수 <simmon@nplob.com>, 2024, 2026.
+# Hyeonmin Oh <hyunmin860@gmail.com>, 2026.
+# Weblate Translation Memory <noreply-mt-weblate-translation-memory@weblate.org>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-22 14:19+0000\n"
-"PO-Revision-Date: 2024-10-10 02:54+0000\n"
-"Last-Translator: 김인수 <simmon@nplob.com>\n"
+"POT-Creation-Date: 2026-11-02 08:43+0000\n"
+"PO-Revision-Date: 2026-11-03 09:42+0000\n"
+"Last-Translator: Hyeonmin Oh <hyunmin860@gmail.com>\n"
 "Language-Team: Korean <https://translate.fedoraproject.org/projects/dnf5/"
 "dnf5-plugin-config-manager/ko/>\n"
 "Language: ko\n"
@@ -16,48 +18,48 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.7.2\n"
+"X-Generator: Weblate 2026.11\n"
 
-#: addrepo.cpp:136
+#: addrepo.cpp:115
 #, c++-format
 msgid "from-repofile: \"{}\" file does not exist"
 msgstr "from-repofile: \"{}\" 파일이 존재하지 않습니다"
 
-#: addrepo.cpp:139
+#: addrepo.cpp:118
 #, c++-format
 msgid "from-repofile: {}"
 msgstr "from-repofile: {}"
 
-#: addrepo.cpp:169 setopt.cpp:53 setvar.cpp:49
+#: addrepo.cpp:148 setopt.cpp:53 setvar.cpp:49
 #, c++-format
 msgid "{}: Badly formatted argument value \"{}\""
-msgstr "{}: 잘못된 형식의 인수 값 \"{}\""
+msgstr "{}: 인수 값 \"{}\"의 형식이 잘못되었습니다"
 
-#: addrepo.cpp:179
+#: addrepo.cpp:158
 #, c++-format
 msgid "Cannot set repository option \"{}={}\": {}"
 msgstr "저장소 옵션을 설정 할 수 없습니다 \"{}={}\": {}"
 
-#: addrepo.cpp:187 setopt.cpp:108
+#: addrepo.cpp:166 setopt.cpp:108
 #, c++-format
 msgid "Sets the \"{}\" option again with a different value: \"{}\" != \"{}\""
 msgstr "다른 값으로 \"{}\" 옵션을 다시 설정합니다: \"{}\" != \"{}\""
 
-#: addrepo.cpp:253
+#: addrepo.cpp:232
 msgid "Missing path to repository configuration directory"
-msgstr "저장소 구성 디렉토리에 경로 누락"
+msgstr "저장소 구성 디렉토리에 누락된 경로"
 
-#: addrepo.cpp:303
+#: addrepo.cpp:282
 #, c++-format
 msgid "Failed to copy repository configuration file \"{}\": {}"
 msgstr "저장소 구성 파일을 복사하는 데 실패했습니다 \"{}\": {}"
 
-#: addrepo.cpp:314
+#: addrepo.cpp:293
 #, c++-format
 msgid "Failed to download repository configuration file \"{}\": {}"
 msgstr "저장소 구성 파일을 내려받는 데 실패했습니다 \"{}\": {}"
 
-#: addrepo.cpp:342
+#: addrepo.cpp:321
 #, c++-format
 msgid ""
 "Error in added repository configuration file. Cannot set repository option "
@@ -66,12 +68,12 @@ msgstr ""
 "추가된 저장소 구성 파일에서 오류. 저장소 옵션을 설정 할 수 없습니다 \"{}={}"
 "\": {}"
 
-#: addrepo.cpp:376
+#: addrepo.cpp:355
 #, c++-format
 msgid "Bad baseurl: {}={}"
 msgstr "잘못된 baseurl: {}={}"
 
-#: addrepo.cpp:384
+#: addrepo.cpp:363
 msgid ""
 "One of --from-repofile=<URL>, --set=baseurl=<URL>, --set=mirrorlist=<URL>, --"
 "set=metalink=<URL> must be set to a non-empty URL"
@@ -79,12 +81,12 @@ msgstr ""
 "--from-repofile=<URL>, --set=baseurl=<URL>, --set=mirrorlist=<URL>, --"
 "set=metalink=<URL> 중의 하나는 비어있지-않는 URL로 설정되어야 합니다"
 
-#: addrepo.cpp:429
+#: addrepo.cpp:408
 #, c++-format
 msgid "Failed to save repository configuration file \"{}\": {}"
 msgstr "저장소 구성 파일을 저장하는 데 실패함 \"{}\": {}"
 
-#: addrepo.cpp:451
+#: addrepo.cpp:430
 #, c++-format
 msgid ""
 "File \"{}\" already exists and configures repositories with IDs \"{}\". Add "
@@ -93,7 +95,7 @@ msgstr ""
 "파일 \"{}\"이 이미 존재하고 ID \"{}\"를 갖는 저장소를 구성합니다. \"--add-or-"
 "replace\" 또는 \"--overwrite\"를 추가합니다."
 
-#: addrepo.cpp:454
+#: addrepo.cpp:433
 #, c++-format
 msgid ""
 "File \"{}\" already exists and configures repositories with IDs \"{}\". Add "
@@ -102,19 +104,193 @@ msgstr ""
 "파일 \"{}\"은 이미 존재하고 ID \"{}\"인 저장소를 구성합니다. 덮어쓰도록 \"--"
 "overwrite\" 추가합니다."
 
-#: addrepo.cpp:474 addrepo.cpp:500
+#: addrepo.cpp:453 addrepo.cpp:479
 #, c++-format
 msgid "A repository with id \"{}\" already configured in file: {}"
 msgstr "id \"{}\"를 갖는 저장소는 이미 파일에서 구성되어 있습니다: {}"
 
-#: addrepo.cpp:486 shared.hpp:150
+#: addrepo.cpp:465 shared.hpp:156
 #, c++-format
 msgid "Cannot read repositories from directory \"{}\": {}"
 msgstr "디렉토리에서 저장소를 읽을 수 없습니다 \"{}\": {}"
 
-#: config-manager.cpp:44
+#: addvendorpolicy.cpp:23
+msgid "Add a vendor change policy from a TOML file or compact format string"
+msgstr ""
+
+#: addvendorpolicy.cpp:29
+msgid "Policy base filename (without .conf extension)"
+msgstr ""
+
+#: addvendorpolicy.cpp:40
+msgid "URL or local path to the source TOML policy file"
+msgstr ""
+
+#: addvendorpolicy.cpp:52
+msgid "Vendor change policy in compact format"
+msgstr ""
+
+#: addvendorpolicy.cpp:64
+msgid "Allow masking a distribution policy"
+msgstr ""
+
+#: addvendorpolicy.cpp:73
+msgid "Allow replacing an existing policy file"
+msgstr ""
+
+#: addvendorpolicy.cpp:82
+msgid "Require that the new policy masks a distribution policy"
+msgstr ""
+
+#: addvendorpolicy.cpp:94
+msgid "Require that the new policy replaces an existing system policy file"
+msgstr ""
+
+#: addvendorpolicy.cpp:123
+msgid "Option \"{option}\" with nonempty value is required"
+msgstr ""
+
+#: addvendorpolicy.cpp:129
+msgid "Either \"{option1}\" or non-empty \"{option2}\" is required"
+msgstr ""
+
+#: addvendorpolicy.cpp:142
+msgid ""
+"Policy file \"{path}\" already exists. Use \"{option}\" to allow replacing "
+"it."
+msgstr ""
+
+#: addvendorpolicy.cpp:150
+msgid ""
+"Distribution policy \"{name}\" already exists. Use \"{option}\" to allow "
+"masking it."
+msgstr ""
+
+#: addvendorpolicy.cpp:165
+msgid ""
+"Cannot add policy: option \"{option}\" requires masking a distribution "
+"policy, but no distribution policy named \"{name}\" exists."
+msgstr ""
+
+#: addvendorpolicy.cpp:172
+msgid ""
+"Cannot add policy: option \"{option}\" requires replacing an existing system "
+"policy, but no system policy file named \"{name}\" exists."
+msgstr ""
+
+#: addvendorpolicy.cpp:191 addvendorpolicy.cpp:215 addvendorpolicy.cpp:244
+msgid "Replaced vendor policy file: {path}"
+msgstr ""
+
+#: addvendorpolicy.cpp:196
+msgid "Created vendor policy file: {path}"
+msgstr ""
+
+#: addvendorpolicy.cpp:204
+#, fuzzy
+#| msgid "from-repofile: \"{}\" file does not exist"
+msgid "Source file does not exist: {path}"
+msgstr "from-repofile: \"{}\" 파일이 존재하지 않습니다"
+
+#: addvendorpolicy.cpp:222 addvendorpolicy.cpp:251
+msgid "Saved vendor policy file: {path}"
+msgstr ""
+
+#: addvendorpolicy.cpp:260
+msgid "Masked distribution policy file: {path}"
+msgstr ""
+
+#: addvendorpolicy.cpp:264
+msgid "Failed to add vendor policy"
+msgstr ""
+
+#: config-manager.cpp:47
 msgid "Manage configuration"
 msgstr "환경설정을 관리합니다"
+
+#: listvendorpolicies.cpp:27
+msgid "List vendor change policy files"
+msgstr ""
+
+#: listvendorpolicies.cpp:33 removevendorpolicy.cpp:29
+msgid "Policy base filename pattern (supports globs)"
+msgstr ""
+
+#: listvendorpolicies.cpp:42
+msgid "Show detailed information about the policies"
+msgstr ""
+
+#: listvendorpolicies.cpp:61 removevendorpolicy.cpp:49
+msgid "No vendor policy files found"
+msgstr ""
+
+#: listvendorpolicies.cpp:80 removevendorpolicy.cpp:63
+msgid "No matching vendor policy files found for pattern: {pattern}"
+msgstr ""
+
+#. Note for translators: This is a right-aligned column separator in
+#. a package properties table as in "Name    : bash".
+#: listvendorpolicies.cpp:149
+msgid " : "
+msgstr ""
+
+#. Add policy info
+#: listvendorpolicies.cpp:155
+msgid "Policy"
+msgstr ""
+
+#: listvendorpolicies.cpp:156
+msgid "Source"
+msgstr ""
+
+#: listvendorpolicies.cpp:157
+msgid "Distribution (read-only)"
+msgstr ""
+
+#: listvendorpolicies.cpp:157
+msgid "System (manageable)"
+msgstr ""
+
+#: listvendorpolicies.cpp:157
+msgid "Type"
+msgstr ""
+
+#: listvendorpolicies.cpp:160
+msgid "Masks"
+msgstr ""
+
+#: listvendorpolicies.cpp:165
+msgid "Masked by"
+msgstr ""
+
+#: listvendorpolicies.cpp:174
+msgid "<conversion failed: {what}>"
+msgstr ""
+
+#: listvendorpolicies.cpp:178 listvendorpolicies.cpp:183
+msgid "Compact"
+msgstr ""
+
+#: removevendorpolicy.cpp:23
+msgid "Remove vendor change policy files"
+msgstr ""
+
+#: removevendorpolicy.cpp:74
+msgid "Removed vendor policy file: {path}"
+msgstr ""
+
+#: removevendorpolicy.cpp:78
+msgid "Unmasked distribution policy file: {path}"
+msgstr ""
+
+#: removevendorpolicy.cpp:83
+msgid "Failed to remove policy file: {path}"
+msgstr ""
+
+#: removevendorpolicy.cpp:87
+msgid ""
+"Cannot remove distribution policy file \"{path}\". To mask it, use: {command}"
+msgstr ""
 
 #: repos.cpp:56 setopt.cpp:140
 #, c++-format
@@ -123,18 +299,17 @@ msgstr "수정하는 데 일치하는 저장소가 없습니다: {}"
 
 #: repos.hpp:42
 msgid "Enables repositories"
-msgstr ""
+msgstr "저장소 활성화"
 
 #: repos.hpp:50
 msgid "Disables repositories"
-msgstr ""
+msgstr "저장소 비활성화"
 
 #: setopt.cpp:61 unsetopt.cpp:73
 #, c++-format
 msgid ""
 "{}: Badly formatted argument value: Last key character cannot be '.': {}"
-msgstr ""
-"{}: 잘못된 형식의 인수 값: 마지막 키 문자는 다음과 같을 수 없습니다 '.': {}"
+msgstr "{}: 인수 값의 형식이 잘못되었습니다. 키의 마지막 문자는 '.'일 수 없습니다: {}"
 
 #: setopt.cpp:70 unsetopt.cpp:82
 #, c++-format
@@ -147,15 +322,13 @@ msgid "Cannot set repository option \"{}\": {}"
 msgstr "저장소 옵션을 설정 할 수 없습니다 \"{}\": {}"
 
 #: setopt.cpp:86 setopt.cpp:149
-#, fuzzy, c++-format
-#| msgid ""
-#| "Sets the \"{}\" option of the repository \"{}\" again with a different "
-#| "value: \"{}\" != \"{}\""
+#, c++-format
 msgid ""
 "Sets the \"{}\" option of the repository \"{}\" again with a different "
 "value: \"{}\" != \"{}\""
 msgstr ""
-"다른 값을 갖는 저장소 \"{}\"의 옵션을 다시 설정합니다: \"{}\" != \"{}\""
+"다른 값을 갖는 저장소 \"{}\"의 \"{}\" 옵션을 다시 설정합니다: \"{}\" != \"{}"
+"\""
 
 #: setopt.cpp:100
 #, c++-format
@@ -181,30 +354,30 @@ msgstr "vras 디렉토리에 누락된 경로"
 msgid "Cannot write variable to file \"{}\": {}"
 msgstr "파일에 변수를 쓸 수 없습니다 \"{}\": {}"
 
-#: shared.hpp:59
+#: shared.hpp:65
 #, c++-format
 msgid ""
 "The path \"{}\" exists, but it is not a directory or a symlink to a "
 "directory."
 msgstr ""
-"경로 \"{}\"가 존재하지만, 디렉토리 또는 디렉토리에 대한 심볼릭링크가 아닙니"
-"다."
+"경로 \"{}\"가 존재하지만, 디렉토리 또는 디렉토리에 대한 심볼릭링크가 "
+"아닙니다."
 
-#: shared.hpp:64
+#: shared.hpp:70
 #, c++-format
 msgid "The path \"{}\" exists, but it is a symlink to a non-existent object."
 msgstr "경로 \"{}\"가 존재하지만, 존재하지-않는 개체로 심볼릭링크입니다."
 
-#: shared.hpp:70
+#: shared.hpp:76
 #, c++-format
 msgid ""
 "Directory \"{}\" does not exist. Add \"--create-missing-dir\" to create "
 "missing directories."
 msgstr ""
-"디렉토리 \"{}\"가 존재하지 않습니다. \"--create-missing-dir\"를 추가하여 누락"
-"된 디렉토리를 생성합니다."
+"디렉토리 \"{}\"가 존재하지 않습니다. \"--create-missing-dir\"를 추가하여 "
+"누락된 디렉토리를 생성합니다."
 
-#: shared.hpp:81
+#: shared.hpp:87
 #, c++-format
 msgid "Variable name can contain only ASCII letters, numbers and '_': {}"
 msgstr "변수 이름은 ASCII 문자, 숫자 및 '_'만 포함 할 수 있습니다: {}"
@@ -225,16 +398,16 @@ msgid ""
 "config-manager: Request to remove main option but it is not present in the "
 "config file: {}"
 msgstr ""
-"config-manager: 주요 옵션을 제거하도록 요청하지만 config 파일에서 존재하지 않"
-"습니다: {}"
+"config-manager: 주요 옵션을 제거하도록 요청하지만 config 파일에서 존재하지 "
+"않습니다: {}"
 
 #: unsetopt.cpp:152
 #, c++-format
 msgid ""
 "config-manager: Request to remove main option but config file not found: {}"
 msgstr ""
-"config-manager: 주요 옵션을 제거하도록 요청하지만 config 파일을 찾을 수 없습"
-"니다: {}"
+"config-manager: 주요 옵션을 제거하도록 요청하지만 config 파일을 찾을 수 "
+"없습니다: {}"
 
 #: unsetopt.cpp:186
 #, c++-format
@@ -242,8 +415,8 @@ msgid ""
 "config-manager: Request to remove repository option but repoid is not "
 "present in the overrides: {}"
 msgstr ""
-"config-manager: 저장소 옵션을 제거하도록 요청하지만 repoid는 재정의에서 존재"
-"하지 않습니다: {}"
+"config-manager: 저장소 옵션을 제거하도록 요청하지만 repoid는 재정의에서 "
+"존재하지 않습니다: {}"
 
 #: unsetopt.cpp:194
 #, c++-format
@@ -251,8 +424,8 @@ msgid ""
 "config-manager: Request to remove repository option but it is not present in "
 "the overrides: {}.{}"
 msgstr ""
-"config-manager: 저장소 옵션을 제거하려고 요청하지만 재정의에서 존재하지 않습"
-"니다: {}.{}"
+"config-manager: 저장소 옵션을 제거하려고 요청하지만 재정의에서 존재하지 "
+"않습니다: {}.{}"
 
 #: unsetopt.cpp:208
 #, c++-format
@@ -269,8 +442,8 @@ msgid ""
 "config-manager: Request to remove variable but vars directory was not found: "
 "{}"
 msgstr ""
-"config-manager: 변수를 제거하려고 요청하지만 var 디렉토리를 찾을 수 없습니"
-"다: {}"
+"config-manager: 변수를 제거하려고 요청하지만 var 디렉토리를 찾을 수 "
+"없습니다: {}"
 
 #: unsetvar.cpp:82
 #, c++-format
@@ -278,8 +451,8 @@ msgid ""
 "config-manager: Request to remove variable but it is not present in the vars "
 "directory: {}"
 msgstr ""
-"config-manager: 변수를 제거하려고 요청하지만 var 디렉토레에서 존재하지 않습니"
-"다: {}"
+"config-manager: 변수를 제거하려고 요청하지만 var 디렉토레에서 존재하지 "
+"않습니다: {}"
 
 #: unsetvar.cpp:88
 #, c++-format

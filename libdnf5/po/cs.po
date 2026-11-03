@@ -1,7 +1,7 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# Petr Ptacek <petr106@atlas.cz>, 2024.
+# Petr Ptacek <petr106@atlas.cz>, 2024, 2026.
 # Weblate Translation Memory <noreply-mt-weblate-translation-memory@weblate.org>, 2024, 2026.
 # Petr Pisar <ppisar@redhat.com>, 2025.
 # Pavel Borecki <pavel.borecki@gmail.com>, 2026.
@@ -9,9 +9,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-22 14:19+0000\n"
-"PO-Revision-Date: 2026-04-16 07:09+0000\n"
-"Last-Translator: Pavel Borecki <pavel.borecki@gmail.com>\n"
+"POT-Creation-Date: 2026-11-02 08:43+0000\n"
+"PO-Revision-Date: 2026-11-03 09:37+0000\n"
+"Last-Translator: Anonymous <noreply@weblate.org>\n"
 "Language-Team: Czech <https://translate.fedoraproject.org/projects/dnf5/"
 "libdnf5/cs/>\n"
 "Language: cs\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Weblate 5.17\n"
+"X-Generator: Weblate 2026.11\n"
 
 #: advisory/advisory.cpp:81
 #, c++-format
@@ -405,7 +405,7 @@ msgstr[2] ""
 "  - Argument '{}' odpovídá {} streamům ('{}') modulu '{}', ale žádný ze "
 "streamů není povolen ani výchozí."
 
-#: base/log_event.cpp:299
+#: base/log_event.cpp:299 base/log_event.cpp:385
 msgid "', '"
 msgstr ""
 
@@ -470,6 +470,13 @@ msgstr ""
 #: base/log_event.cpp:377
 #, c++-format
 msgid "Transaction merge error: '{0}'"
+msgstr ""
+
+#: base/log_event.cpp:381
+#, c++-format
+msgid ""
+"Exceeded installonly_limit ({0}): found {1} installed: '{2}'. You can use "
+"'remove --oldinstallonly'."
 msgstr ""
 
 #: base/solver_problems.cpp:41
@@ -755,54 +762,60 @@ msgstr "Problém: "
 msgid "Problem {}: "
 msgstr "Problém {}: "
 
-#: base/transaction.cpp:88
+#: base/transaction.cpp:89
 msgid "This transaction has been already run before."
 msgstr "Tato transakce již proběhla dříve."
 
-#: base/transaction.cpp:89
+#: base/transaction.cpp:90
 msgid "Cannot run transaction with resolving problems."
 msgstr "Nelze spustit transakci s nevyřešenými problémy."
 
-#: base/transaction.cpp:90
+#: base/transaction.cpp:91
 msgid "Rpm transaction check failed."
 msgstr "Kontrola transakce Rpm se nezdařila."
 
-#: base/transaction.cpp:92
+#: base/transaction.cpp:93
 msgid ""
 "Failed to obtain rpm transaction lock. Another transaction is in progress."
 msgstr "Nepodařilo se získat zámek rpm transakce. Probíhá další transakce."
 
-#: base/transaction.cpp:93
+#: base/transaction.cpp:94
 msgid "Rpm transaction failed."
 msgstr "Transakce Rpm se nezdařila."
 
-#: base/transaction.cpp:94
+#: base/transaction.cpp:95
 msgid "Signature verification failed."
 msgstr "Ověření podpisu selhalo."
 
-#: base/transaction.cpp:98
+#: base/transaction.cpp:97
+msgid ""
+"This transaction is no longer valid because the system repository has "
+"changed since it was loaded."
+msgstr ""
+
+#: base/transaction.cpp:101
 #, fuzzy
 #| msgid "The repository does not have any PGP keys configured."
 msgid "The repository does not have any OpenPGP keys configured."
 msgstr "Repozitář nemá nakonfigurované žádné klíče PGP."
 
-#: base/transaction.cpp:99
+#: base/transaction.cpp:102
 msgid "Public key is not installed."
 msgstr "Veřejný klíč není nainstalován."
 
-#: base/transaction.cpp:100
+#: base/transaction.cpp:103
 msgid "Canceled by the user."
 msgstr "Zrušeno uživatelem."
 
-#: base/transaction.cpp:101
+#: base/transaction.cpp:104
 msgid "Public key import failed."
 msgstr "Import veřejného klíče se nezdařil."
 
-#: base/transaction.cpp:993
+#: base/transaction.cpp:997
 msgid "poll failed during scriptlets pipe processing"
 msgstr ""
 
-#: base/transaction.cpp:1016
+#: base/transaction.cpp:1020
 #, fuzzy
 #| msgid "Failed to set scriptlet output file, cannot open file \"{}\": {}"
 msgid "failed to read scriptlet output from pipe"
@@ -810,38 +823,44 @@ msgstr ""
 "Nepodařilo se nastavit výstupní soubor skriptletu, nelze otevřít soubor \"{}"
 "\": {}"
 
-#: base/transaction.cpp:1134
+#: base/transaction.cpp:1103
+#, fuzzy, c++-format
+#| msgid "Failed to load system repo from root \"{}\": {}"
+msgid "Failed to acquire system repo lock for writing, lock located at \"{}\""
+msgstr ""
+"Nepodařilo se načíst systémový repozitář z kořenového adresáře \"{}\": {}"
+
+#: base/transaction.cpp:1173
 #, c++-format
 msgid "Invalid tsflag: {}"
 msgstr "Neplatný tsflag: {}"
 
-#: base/transaction.cpp:1568
+#: base/transaction.cpp:1611
 #, c++-format
 msgid "Public key \"{}\" is already present, not importing."
 msgstr "Veřejný klíč \"{}\" již existuje, neimportuje se."
 
-#: base/transaction.cpp:1589
+#: base/transaction.cpp:1634
 #, c++-format
 msgid "An error occurred importing key \"{}\": {}"
 msgstr "Při importu klíče \"{}\" došlo k chybě: {}"
 
-#: base/transaction.cpp:1623
+#: base/transaction.cpp:1668
 #, fuzzy, c++-format
 #| msgid "PGP check for package \"{}\" ({}) from repo \"{}\" has failed: "
 msgid "OpenPGP check for package \"{}\" ({}) from repo \"{}\" has failed: "
-msgstr ""
-"Kontrola PGP pro balíček \"{}\" ({}) z repozitáře \"{}\" se nezdařila: "
+msgstr "Kontrola PGP pro balíček \"{}\" ({}) z repozitáře \"{}\" se nezdařila: "
 
-#: base/transaction.cpp:1651
+#: base/transaction.cpp:1696
 msgid "Import of the key didn't help, wrong key?"
 msgstr "Import klíče nepomohl, špatný klíč?"
 
-#: base/transaction.cpp:1670
+#: base/transaction.cpp:1715
 msgctxt "It is a joining character for repositories IDs"
 msgid ", "
 msgstr ""
 
-#: base/transaction.cpp:1673
+#: base/transaction.cpp:1718
 #, fuzzy, c++-format
 #| msgid "Warning: skipped PGP checks for {} package(s)."
 msgid "Warning: skipped OpenPGP checks for {0} package from repository: {1}"
@@ -851,7 +870,7 @@ msgstr[0] "Upozornění: vynechané PGP kontroly pro {} balík(y)."
 msgstr[1] "Upozornění: vynechané PGP kontroly pro {} balík(y)."
 msgstr[2] "Upozornění: vynechané PGP kontroly pro {} balík(y)."
 
-#: base/transaction.cpp:1676
+#: base/transaction.cpp:1721
 #, fuzzy, c++-format
 #| msgid "Warning: skipped PGP checks for {} package(s)."
 msgid "Warning: skipped OpenPGP checks for {0} package from repositories: {1}"
@@ -861,42 +880,48 @@ msgstr[0] "Upozornění: vynechané PGP kontroly pro {} balík(y)."
 msgstr[1] "Upozornění: vynechané PGP kontroly pro {} balík(y)."
 msgstr[2] "Upozornění: vynechané PGP kontroly pro {} balík(y)."
 
-#: base/vendor_change_manager.cpp:145
+#: base/vendor_change_manager.cpp:115
+#, fuzzy
+#| msgid "Cannot load shared library \"{}\": {}"
+msgid "{func}(): Cannot create directory: {path}: {msg}"
+msgstr "Nelze načíst sdílenou knihovnu \"{}\": {}"
+
+#: base/vendor_change_manager.cpp:164
 #, fuzzy
 #| msgid "Cannot load shared library \"{}\": {}"
 msgid "{func}(): Cannot remove file: {path}: {msg}"
 msgstr "Nelze načíst sdílenou knihovnu \"{}\": {}"
 
-#: base/vendor_change_manager.cpp:151
+#: base/vendor_change_manager.cpp:170
 msgid "{func}(): File does not exist: {path}"
 msgstr ""
 
-#: base/vendor_change_manager.cpp:240
+#: base/vendor_change_manager.cpp:259
 #, fuzzy
 #| msgid "Cannot load shared library \"{}\": {}"
 msgid "{func}(): Cannot remove existing policy file: {path}"
 msgstr "Nelze načíst sdílenou knihovnu \"{}\": {}"
 
-#: base/vendor_change_manager.cpp:252
+#: base/vendor_change_manager.cpp:271
 msgid "{func}(): Cannot create file: {path}"
 msgstr ""
 
-#: base/vendor_change_manager.cpp:269
+#: base/vendor_change_manager.cpp:288
 #, fuzzy
 #| msgid "Cannot load shared library \"{}\": {}"
 msgid "{func}(): Cannot write to file: {path}"
 msgstr "Nelze načíst sdílenou knihovnu \"{}\": {}"
 
-#: base/vendor_change_manager.cpp:306
+#: base/vendor_change_manager.cpp:325
 msgid "{func}(): Base filename cannot be empty"
 msgstr ""
 
-#: base/vendor_change_manager.cpp:312
+#: base/vendor_change_manager.cpp:331
 msgid ""
 "{func}(): Base filename must not contain path components: {base_filename}"
 msgstr ""
 
-#: base/vendor_change_manager.cpp:437
+#: base/vendor_change_manager.cpp:461
 msgid "{func}(): Path must have .conf extension: {path}"
 msgstr ""
 
@@ -970,7 +995,7 @@ msgstr "Nelze převést '{}' na bajty"
 msgid "Unknown unit '{}'"
 msgstr "Neznámá jednotka '{}'"
 
-#: conf/config_main.cpp:291
+#: conf/config_main.cpp:292
 #, c++-format
 msgid "The throttle value {} is outside the allowed range {} ... {}"
 msgstr "Hodnota throttle {} je mimo povolený rozsah {} ... {}"
@@ -1093,7 +1118,7 @@ msgstr ""
 "Hodnota vstupní položky \"{}\" není povolena, povolené hodnoty pro tuto "
 "volbu jsou definovány regulárním výrazem \"{}\""
 
-#: conf/vars.cpp:344 conf/vars.cpp:384
+#: conf/vars.cpp:347 conf/vars.cpp:387
 #, c++-format
 msgid "Variable \"{}\" is read-only"
 msgstr "Proměnná \"{}\" je pouze pro čtení"
@@ -1118,8 +1143,8 @@ msgstr "Nelze povolit více streamů pro modul '{}'"
 #. DNF_ERROR_REMOVAL_OF_PROTECTED_PKG);
 #. }
 #. TODO(lukash) replace with a proper and descriptive exception
-#: module/module_goal_private.cpp:83 rpm/solv/goal_private.cpp:354
-#: rpm/solv/goal_private.cpp:776
+#: module/module_goal_private.cpp:83 rpm/solv/goal_private.cpp:374
+#: rpm/solv/goal_private.cpp:796
 msgid "no solution possible"
 msgstr "žádné řešení není možné"
 
@@ -1196,7 +1221,7 @@ msgstr "Plugins::load_plugins(): config_dir_path nemůže být prázdný"
 msgid "Cannot load libdnf plugin enabled from: {}"
 msgstr "Nelze načíst pluginy: {}"
 
-#: repo/config_repo.cpp:593
+#: repo/config_repo.cpp:602
 msgid "get_unique_id(): Computation of SHA256 failed"
 msgstr "get_unique_id(): Výpočet SHA256 se nezdařil"
 
@@ -1276,19 +1301,19 @@ msgstr ""
 "Nepodařilo se načíst repozitář: \"primární\" data nejsou k dispozici nebo "
 "jsou v nepodporovaném formátu"
 
-#: repo/repo.cpp:506
+#: repo/repo.cpp:513
 #, fuzzy, c++-format
 #| msgid "Failed to load RPM \"{}\": doesn't have the \".rpm\" extension"
 msgid "Failed to load comps \"{}\": doesn't have the \".xml\" extension"
 msgstr "Nelze načíst RPM \"{}\": nemá příponu \".rpm\""
 
-#: repo/repo.cpp:513
+#: repo/repo.cpp:520
 #, fuzzy, c++-format
 #| msgid "Failed to load RPM \"{}\": {}"
 msgid "Failed to load xml Comps \"{}\": {}"
 msgstr "Nepodařilo se načíst RPM \"{}\": {}"
 
-#: repo/repo.cpp:531
+#: repo/repo.cpp:538
 #, c++-format
 msgid "Failed to load RPM \"{}\": {}"
 msgstr "Nepodařilo se načíst RPM \"{}\": {}"
@@ -1368,19 +1393,19 @@ msgstr ""
 "Pro repozitář \"{}\" nebyl nalezen žádný platný zdroj (baseurl, mirrorlist "
 "nebo metalink)"
 
-#: repo/repo_pgp.cpp:65
+#: repo/repo_pgp.cpp:67
 #, fuzzy, c++-format
 #| msgid "Failed to import pgp keys into temporary keyring: {}"
 msgid "Failed to import OpenPGP keys into temporary keyring: {}"
 msgstr "Nepodařilo se importovat pgp klíče do dočasného svazku klíčů: {}"
 
-#: repo/repo_pgp.cpp:71 repo/repo_pgp.cpp:98
+#: repo/repo_pgp.cpp:73 repo/repo_pgp.cpp:100
 #, fuzzy, c++-format
 #| msgid "Failed to list pgp keys: {}"
 msgid "Failed to list OpenPGP keys: {}"
 msgstr "Nepodařilo se vypsat pgp klíče: {}"
 
-#: repo/repo_pgp.cpp:146
+#: repo/repo_pgp.cpp:153
 #, fuzzy, c++-format
 #| msgid "Failed to import pgp keys: {}"
 msgid "Failed to import OpenPGP keys: {}"
@@ -1400,58 +1425,65 @@ msgstr ""
 msgid "Cache-only enabled but no cache for repository \"{}\""
 msgstr "Povolena pouze mezipaměť, ale žádná mezipaměť pro repozitář \"{}\""
 
-#: repo/solv_repo.cpp:267
+#: repo/solv_repo.cpp:268
 #, c++-format
 msgid "Failed to load repomd for repo \"{}\" from \"{}\": {}."
 msgstr "Nepodařilo se načíst repomd pro repozitář \"{}\" z \"{}\": {}."
 
-#: repo/solv_repo.cpp:275
+#: repo/solv_repo.cpp:276
 #, c++-format
 msgid "Failed to load primary for repo \"{}\" from \"{}\": {}."
 msgstr ""
 "Nepodařilo se načíst primární repozitář pro repozitář \"{}\" z \"{}\": {}."
 
-#: repo/solv_repo.cpp:323
+#: repo/solv_repo.cpp:324
 #, c++-format
 msgid "Unsupported extended repodata type for the system repo: \"{}\"."
 msgstr ""
 "Nepodporovaný typ rozšířených dat repozitáře pro systémový repozitář: \"{}\"."
 
-#: repo/solv_repo.cpp:395
+#: repo/solv_repo.cpp:396
 #, c++-format
 msgid "Failed to load {} extension for repo \"{}\" from \"{}\": {}"
 msgstr "Nepodařilo se načíst rozšíření {} pro repozitář \"{}\" z \"{}\": {}"
 
-#: repo/solv_repo.cpp:431
+#: repo/solv_repo.cpp:436
+#, fuzzy, c++-format
+#| msgid "Failed to load system repo from root \"{}\": {}"
+msgid "Failed to acquire system repo lock for reading, lock located at \"{}\""
+msgstr ""
+"Nepodařilo se načíst systémový repozitář z kořenového adresáře \"{}\": {}"
+
+#: repo/solv_repo.cpp:455
 #, c++-format
 msgid "Failed to load system repo from root \"{}\": {}"
 msgstr ""
 "Nepodařilo se načíst systémový repozitář z kořenového adresáře \"{}\": {}"
 
-#: repo/solv_repo.cpp:532
+#: repo/solv_repo.cpp:559
 #, c++-format
 msgid "Failed to load {} cache for repo \"{}\" from \"{}\": {}"
 msgstr "Nepodařilo se načíst mezipaměť {} pro repozitář \"{}\" z \"{}\": {}"
 
-#: repo/solv_repo.cpp:586
+#: repo/solv_repo.cpp:613
 #, c++-format
 msgid "Failed to write primary cache for repo \"{}\" to \"{}\": {}"
 msgstr ""
 "Nepodařilo se zapsat primární mezipaměť pro repozitář \"{}\" do \"{}\": {}"
 
-#: repo/solv_repo.cpp:608
+#: repo/solv_repo.cpp:635
 #, c++-format
 msgid "Failed to re-load primary cache for repo \"{}\" from \"{}\": {}"
 msgstr ""
 "Nepodařilo se znovu načíst primární mezipaměť pro repozitář \"{}\" z \"{}\": "
 "{}"
 
-#: repo/solv_repo.cpp:673
+#: repo/solv_repo.cpp:700
 #, c++-format
 msgid "Failed to write {} cache for repo \"{}\" to \"{}\": {}"
 msgstr "Nepodařilo se zapsat mezipaměť {} pro repozitář \"{}\" do \"{}\": {}"
 
-#: repo/solv_repo.cpp:694
+#: repo/solv_repo.cpp:721
 #, c++-format
 msgid "Failed to re-load {} cache for repo \"{}\" from \"{}\": {}"
 msgstr ""
@@ -1486,7 +1518,7 @@ msgstr "Balíček s rpmdbid nebyl nalezen"
 msgid "<unknown>"
 msgstr ""
 
-#: rpm/reldep.cpp:116 rpm/reldep.cpp:123
+#: rpm/reldep.cpp:117 rpm/reldep.cpp:124
 msgid "Cannot parse a dependency string"
 msgstr "Nelze parsovat řetězec závislostí"
 
@@ -1506,7 +1538,7 @@ msgstr "Balíček není podepsaný."
 msgid "Problem occurred when opening the package."
 msgstr "Nastal problém při otevírání balíčku."
 
-#: rpm/rpm_signature.cpp:64
+#: rpm/rpm_signature.cpp:64 system/state.cpp:792
 #, c++-format
 msgid "Failed to set rpm transaction rootDir \"{}\"."
 msgstr "Selhalo nastavení rpm transakce rootDir \"{}\"."
@@ -1567,8 +1599,7 @@ msgstr ""
 #: rpm/transaction.cpp:312
 #, c++-format
 msgid "Failed to read package header, cannot open file \"{}\": {}"
-msgstr ""
-"Nepodařilo se přečíst hlavičku balíčku, nelze otevřít soubor \"{}\": {}"
+msgstr "Nepodařilo se přečíst hlavičku balíčku, nelze otevřít soubor \"{}\": {}"
 
 #: rpm/transaction.cpp:329
 #, c++-format
@@ -1613,7 +1644,13 @@ msgstr "Nelze odstranit balíček \"{}\""
 msgid "Cannot install package \"{}\""
 msgstr "Nelze přeinstalovat balíček \"{}\""
 
-#: rpm/versionlock_config.cpp:284 system/state.cpp:605
+#: rpm/versionlock_config.cpp:259
+#, fuzzy, c++-format
+#| msgid "Error during transaction replay JSON parsing : {}"
+msgid "Error parsing versionlock file \"{}\": {}"
+msgstr "Chyba parsování JSON při přehrání transakce: {}"
+
+#: rpm/versionlock_config.cpp:297 system/state.cpp:614
 #, c++-format
 msgid "{}"
 msgstr "{}"
@@ -1629,122 +1666,122 @@ msgstr "Nepodařilo se převést epochu \"{}\" na číslo"
 msgid "Writing debugsolver data into \"{}\" failed: {}"
 msgstr "Zápis dat debugsolveru do \"{}\" se nezdařil: {}"
 
-#: solv/vendor_change_manager.cpp:339
+#: solv/vendor_change_manager.cpp:357
 #, fuzzy, c++-format
 #| msgid "Missing section header on line {}"
 msgid "Missing \"version\" key in \"{}\""
 msgstr "Chybí hlavička sekce na řádku {}"
 
-#: solv/vendor_change_manager.cpp:351
+#: solv/vendor_change_manager.cpp:369
 #, fuzzy, c++-format
 #| msgid "Unsupported TOML version \"{}\", maximum supported version is \"{}\""
 msgid "Unsupported version \"{}\" in \"{}\". Supported versions: {}"
 msgstr "Nepodporovaná verze TOML \"{}\", maximální podporovaná verze je \"{}\""
 
-#: solv/vendor_change_manager.cpp:362
+#: solv/vendor_change_manager.cpp:380
 #, c++-format
 msgid ""
 "Configuration \"{}\" uses version \"1.0\" which does not support combining "
 "'equivalent_vendors' with 'outgoing_vendors' and 'incoming_vendors'"
 msgstr ""
 
-#: solv/vendor_change_manager.cpp:394 solv/vendor_change_manager.cpp:432
-#: solv/vendor_change_manager.cpp:484 solv/vendor_change_manager.cpp:709
+#: solv/vendor_change_manager.cpp:412 solv/vendor_change_manager.cpp:457
+#: solv/vendor_change_manager.cpp:509 solv/vendor_change_manager.cpp:734
 #, c++-format
 msgid "Unknown key '{}' in \"{}\" on line {}"
 msgstr ""
 
-#: solv/vendor_change_manager.cpp:401
+#: solv/vendor_change_manager.cpp:419
 #, c++-format
 msgid ""
 "Configuration \"{}\" uses version \"1.0\" which does not support key '{}' on "
 "line {}"
 msgstr ""
 
-#: solv/vendor_change_manager.cpp:420
+#: solv/vendor_change_manager.cpp:445
 #, c++-format
 msgid ""
 "Filter \"cmdline_repo\" is only allowed in the 'incoming_packages' section. "
 "Error in \"{}\" in table starting on line {}"
 msgstr ""
 
-#: solv/vendor_change_manager.cpp:442
+#: solv/vendor_change_manager.cpp:467
 #, c++-format
 msgid ""
 "Missing package filter definition in \"{}\" in table starting on line {}"
 msgstr ""
 
-#: solv/vendor_change_manager.cpp:473
+#: solv/vendor_change_manager.cpp:498
 #, c++-format
 msgid ""
 "Unsupported comparator \"{}\" for vendor definition in \"{}\" on line {}"
 msgstr ""
 
-#: solv/vendor_change_manager.cpp:494
+#: solv/vendor_change_manager.cpp:519
 #, c++-format
 msgid "Missing 'vendor' key in \"{}\" in table starting on line {}"
 msgstr ""
 
-#: solv/vendor_change_manager.cpp:507
+#: solv/vendor_change_manager.cpp:532
 #, c++-format
 msgid ""
 "Invalid regex vendor pattern \"{}\" in \"{}\" in table starting on line {}: "
 "{}"
 msgstr ""
 
-#: solv/vendor_change_manager.cpp:535
+#: solv/vendor_change_manager.cpp:560
 #, c++-format
 msgid "Bad value type in \"{}\" on line {}: {}"
 msgstr ""
 
-#: solv/vendor_change_manager.cpp:541
+#: solv/vendor_change_manager.cpp:566
 #, fuzzy, c++-format
 #| msgid "An error occurred importing key \"{}\": {}"
 msgid "An error occurred when parsing \"{}\": {}"
 msgstr "Při importu klíče \"{}\" došlo k chybě: {}"
 
-#: solv/vendor_change_manager.cpp:555
+#: solv/vendor_change_manager.cpp:580
 #, c++-format
 msgid ""
 "Configuration \"{}\" uses version \"1.0\" which does not support "
 "'incoming_vendors' without 'outgoing_vendors'"
 msgstr ""
 
-#: solv/vendor_change_manager.cpp:561
+#: solv/vendor_change_manager.cpp:586
 #, c++-format
 msgid ""
 "Configuration \"{}\" uses version \"1.0\" which does not support "
 "'outgoing_vendors' without 'incoming_vendors'"
 msgstr ""
 
-#: solv/vendor_change_manager.cpp:651
+#: solv/vendor_change_manager.cpp:676
 #, c++-format
 msgid "Unknown 'comparator' \"{}\" in \"{}\" on line {}"
 msgstr ""
 
-#: solv/vendor_change_manager.cpp:655
+#: solv/vendor_change_manager.cpp:680
 #, c++-format
 msgid ""
 "Configuration \"{}\" uses version \"{}\" which does not support 'comparator' "
 "\"{}\""
 msgstr ""
 
-#: solv/vendor_change_manager.cpp:694
+#: solv/vendor_change_manager.cpp:719
 #, c++-format
 msgid "Unknown 'filter' \"{}\" in \"{}\" on line {}"
 msgstr ""
 
-#: solv/vendor_change_manager.cpp:715
+#: solv/vendor_change_manager.cpp:740
 #, c++-format
 msgid "Missing 'filter' key in \"{}\" for table entry on line {}"
 msgstr ""
 
-#: solv/vendor_change_manager.cpp:720
+#: solv/vendor_change_manager.cpp:745
 #, c++-format
 msgid "Missing 'value' key in \"{}\" for table entry on line {}"
 msgstr ""
 
-#: solv/vendor_change_manager.cpp:727
+#: solv/vendor_change_manager.cpp:752
 #, c++-format
 msgid ""
 "Filter \"cmdline_repo\" in \"{}\" in table starting on line {} does not "
@@ -1752,172 +1789,190 @@ msgid ""
 "for this filter"
 msgstr ""
 
-#: solv/vendor_change_manager.cpp:744
+#: solv/vendor_change_manager.cpp:769
 #, c++-format
 msgid ""
 "Invalid 'value' \"{}\" in \"{}\" in table starting on line {}. Only "
 "\"true\", \"1\", \"false\", \"0\" are supported"
 msgstr ""
 
-#: solv/vendor_change_manager.cpp:754 solv/vendor_change_manager.cpp:765
+#: solv/vendor_change_manager.cpp:779 solv/vendor_change_manager.cpp:790
 #, c++-format
 msgid ""
 "Filter \"{}\" in \"{}\" in table starting on line {} does not support "
 "comparator \"{}\""
 msgstr ""
 
-#: solv/vendor_change_manager.cpp:781
+#: solv/vendor_change_manager.cpp:806
 #, c++-format
 msgid "Invalid epoch value \"{}\" in \"{}\" in table starting on line {}"
 msgstr ""
 
-#: solv/vendor_change_manager.cpp:796
+#: solv/vendor_change_manager.cpp:821
 #, c++-format
 msgid "Invalid regex \"{}\" in \"{}\" in table starting on line {}: {}"
 msgstr ""
 
-#: solv/vendor_change_manager.cpp:848
+#: solv/vendor_change_manager.cpp:873
 msgid "Unexpected end of input"
 msgstr ""
 
-#: solv/vendor_change_manager.cpp:865
+#: solv/vendor_change_manager.cpp:890
 #, c++-format
 msgid "Expected '{}' but found end of input"
 msgstr ""
 
-#: solv/vendor_change_manager.cpp:867
+#: solv/vendor_change_manager.cpp:892
 #, c++-format
 msgid "Expected '{}' but found '{}'"
 msgstr ""
 
-#: solv/vendor_change_manager.cpp:877
+#: solv/vendor_change_manager.cpp:902
 #, c++-format
 msgid "Compact vendor change policy parse error in \"{}\" at position {}"
 msgstr ""
 
-#: solv/vendor_change_manager.cpp:931
+#: solv/vendor_change_manager.cpp:956
 msgid "Expected package filter after '@'"
 msgstr ""
 
-#: solv/vendor_change_manager.cpp:944
+#: solv/vendor_change_manager.cpp:969
 #, fuzzy, c++-format
 #| msgid "Invalid repository id \"{}\": unexpected character '{}'"
 msgid "Unexpected character '{}'"
 msgstr "Neplatné ID repozitáře \"{}\": neočekávaný znak \"{}\""
 
-#: solv/vendor_change_manager.cpp:1020
+#: solv/vendor_change_manager.cpp:1045
 msgid "Expected quoted string starting with '\"'"
 msgstr ""
 
-#: solv/vendor_change_manager.cpp:1028
+#: solv/vendor_change_manager.cpp:1053
 msgid "Unterminated escape sequence"
 msgstr ""
 
-#: solv/vendor_change_manager.cpp:1034
+#: solv/vendor_change_manager.cpp:1059
 #, c++-format
 msgid "Invalid escape sequence '\\{}'. Only '\\\"' and '\\\\' are supported"
 msgstr ""
 
-#: solv/vendor_change_manager.cpp:1041
+#: solv/vendor_change_manager.cpp:1066
 msgid "Unterminated quoted string"
 msgstr ""
 
-#: solv/vendor_change_manager.cpp:1076
+#: solv/vendor_change_manager.cpp:1101
 msgid "Expected direction prefix 'in', 'out', or 'eq'"
 msgstr ""
 
-#: solv/vendor_change_manager.cpp:1140
+#: solv/vendor_change_manager.cpp:1165
 msgid ""
 "Expected comparison operator: relational (<, <=, >, >=) or string (=, ^, $, "
 "*, =*, =~; optionally prefixed with ! and/or i"
 msgstr ""
 
-#: solv/vendor_change_manager.cpp:1205
+#: solv/vendor_change_manager.cpp:1230
 msgid ""
 "Vendor definition does not support relational comparators. Use string "
 "comparators: =, ^, $, *, =*, =~"
 msgstr ""
 
-#: solv/vendor_change_manager.cpp:1213
+#: solv/vendor_change_manager.cpp:1238
 #, c++-format
 msgid "Invalid regex vendor pattern '{}': {}"
 msgstr ""
 
-#: solv/vendor_change_manager.cpp:1231
+#: solv/vendor_change_manager.cpp:1256
 #, fuzzy, c++-format
 #| msgid "Unknown time unit '{}'"
 msgid "Unknown filter field name '{}'"
 msgstr "Neznámá jednotka času '{}'"
 
-#: solv/vendor_change_manager.cpp:1241
+#: solv/vendor_change_manager.cpp:1266
 msgid "Expected filter field name"
 msgstr ""
 
-#: solv/vendor_change_manager.cpp:1264
+#: solv/vendor_change_manager.cpp:1295
 #, fuzzy, c++-format
 #| msgid "Invalid enum option value \"{}\""
 msgid "Invalid epoch value \"{}\""
 msgstr "Neplatná výčtová hodnota volby \"{}\""
 
-#: solv/vendor_change_manager.cpp:1268
+#: solv/vendor_change_manager.cpp:1299
 msgid "Filter 'cmdline_repo' only supports the '=' (EXACT) comparator"
 msgstr ""
 
-#: solv/vendor_change_manager.cpp:1271
+#: solv/vendor_change_manager.cpp:1302
 msgid "Filter 'cmdline_repo' is only allowed in incoming packages ('in:')"
 msgstr ""
 
-#: solv/vendor_change_manager.cpp:1282
+#: solv/vendor_change_manager.cpp:1313
 #, c++-format
 msgid ""
 "Invalid value '{}' for 'cmdline_repo' filter. Use 'true', '1', 'false', or "
 "'0'"
 msgstr ""
 
-#: solv/vendor_change_manager.cpp:1286
+#: solv/vendor_change_manager.cpp:1317
 #, c++-format
 msgid "Filter '{}' only supports relational comparators: =, !=, >, >=, <, <="
 msgstr ""
 
-#: solv/vendor_change_manager.cpp:1290
+#: solv/vendor_change_manager.cpp:1321
 #, c++-format
 msgid "Filter '{}' only supports string comparators: =, ^, $, *, =*, =~"
 msgstr ""
 
-#: solv/vendor_change_manager.cpp:1299
+#: solv/vendor_change_manager.cpp:1330
 #, fuzzy, c++-format
 #| msgid "Invalid package type: {}"
 msgid "Invalid regex '{}': {}"
 msgstr "Neplatný typ balíčku: {}"
 
-#: solv/vendor_change_manager.cpp:1310
+#: solv/vendor_change_manager.cpp:1341
 msgid "Package filters do not support 'eq' direction. Use 'in' or 'out'"
 msgstr ""
 
-#: solv/vendor_change_manager.cpp:1401 solv/vendor_change_manager.cpp:1451
-#: solv/vendor_change_manager.cpp:1462 solv/vendor_change_manager.cpp:1473
+#: solv/vendor_change_manager.cpp:1432 solv/vendor_change_manager.cpp:1482
+#: solv/vendor_change_manager.cpp:1493 solv/vendor_change_manager.cpp:1504
 msgid "{func}(): Policy index {idx} is out of range"
 msgstr ""
 
-#: system/state.cpp:282 system/state.cpp:291
+#: system/state.cpp:291 system/state.cpp:300
 #, c++-format
 msgid "Invalid TOML version \"{}\", \"MAJOR.MINOR\" expected"
 msgstr "Neplatná verze TOML \"{}\", očekává se \"MAJOR.MINOR\""
 
-#: system/state.cpp:299
+#: system/state.cpp:308
 #, c++-format
 msgid "{} state for \"{}\" not found."
 msgstr "Stav {} pro \"{}\" nebyl nalezen."
 
-#: system/state.cpp:303
+#: system/state.cpp:312
 #, c++-format
 msgid "Loading system state TOML file {} failed (see dnf5-system-state(7)): {}"
 msgstr ""
 
-#: system/state.cpp:640
+#: system/state.cpp:649
 #, c++-format
 msgid "Unsupported TOML version \"{}\", maximum supported version is \"{}\""
 msgstr "Nepodporovaná verze TOML \"{}\", maximální podporovaná verze je \"{}\""
+
+#: system/state.cpp:798
+#, fuzzy, c++-format
+#| msgid "Error %i opening rpm database"
+msgid "Error {} opening rpm database"
+msgstr "Chyba %i při otevírání rpm databáze"
+
+#: system/state.cpp:802
+#, fuzzy
+#| msgid "Failed to restore database \"{}\""
+msgid "Failed to get rpm database"
+msgstr "Obnovení databáze \"{}\" se nezdařilo"
+
+#: system/state.cpp:808
+#, fuzzy
+#| msgid "Cannot init rpm database iterator"
+msgid "Failed to initialize database index iterator"
+msgstr "Nelze inicializovat iterátor rpm databáze"
 
 #. TODO(dmach): replace with a better exception class
 #: transaction/db/comps_environment_group.cpp:100
@@ -2117,8 +2172,7 @@ msgstr "Nepodporovaná verze TOML \"{}\", maximální podporovaná verze je \"{}
 #: transaction/transaction_sr.cpp:74
 #, c++-format
 msgid "Incompatible major version: \"{}\", supported major version is \"{}\""
-msgstr ""
-"Nekompatibilní hlavní verze: \"{}\", podporovaná hlavní verze je \"{}\""
+msgstr "Nekompatibilní hlavní verze: \"{}\", podporovaná hlavní verze je \"{}\""
 
 #: transaction/transaction_sr.cpp:81
 #, fuzzy, c++-format
@@ -2340,62 +2394,68 @@ msgstr "Nelze získat adresu symbolu \"{}\": {}"
 msgid "Cannot set the locale \"{}\": {}"
 msgstr "Nelze načíst sdílenou knihovnu \"{}\": {}"
 
-#: utils/locker.cpp:99
+#: utils/locker.cpp:101
 #, c++-format
 msgid "Failed to obtain lock \"{}\""
 msgstr "Nepodařilo se získat zámek \"{}\""
 
-#: utils/locker.cpp:108
+#: utils/locker.cpp:111
 msgid "File is already open."
 msgstr ""
 
-#: utils/locker.cpp:121
+#: utils/locker.cpp:124
 #, c++-format
 msgid "Failed to open lock file \"{}\""
 msgstr "Nepodařilo se otevřít soubor zámku \"{}\""
 
-#: utils/locker.cpp:127 utils/locker.cpp:164
+#: utils/locker.cpp:130 utils/locker.cpp:167
 #, fuzzy, c++-format
 #| msgid "The package is not signed."
 msgid "The lock file \"{}\" is not opened"
 msgstr "Balíček není podepsaný."
 
-#: utils/locker.cpp:132
+#: utils/locker.cpp:135
 #, fuzzy, c++-format
 #| msgid "Failed to close lock file \"{}\""
 msgid "Failed to truncate lock file \"{}\""
 msgstr "Nepodařilo se zavřít soubor zámku \"{}\""
 
-#: utils/locker.cpp:135 utils/locker.cpp:172
+#: utils/locker.cpp:138 utils/locker.cpp:175
 #, fuzzy, c++-format
 #| msgid "Failed to close lock file \"{}\""
 msgid "Failed to seek lock file \"{}\""
 msgstr "Nepodařilo se zavřít soubor zámku \"{}\""
 
-#: utils/locker.cpp:143
+#: utils/locker.cpp:146
 #, fuzzy, c++-format
 #| msgid "Failed to delete lock file \"{}\""
 msgid "Failed to write to lock file \"{}\""
 msgstr "Nepodařilo se smazat soubor zámku \"{}\""
 
-#: utils/locker.cpp:150
+#: utils/locker.cpp:153
 #, fuzzy, c++-format
 #| msgid "Failed to open lock file \"{}\""
 msgid "Failed to sync lock file \"{}\""
 msgstr "Nepodařilo se otevřít soubor zámku \"{}\""
 
-#: utils/locker.cpp:178
+#: utils/locker.cpp:181
 #, fuzzy, c++-format
 #| msgid "Failed to open lock file \"{}\""
 msgid "Failed to read from lock file \"{}\""
 msgstr "Nepodařilo se otevřít soubor zámku \"{}\""
 
-#: utils/locker.cpp:192
+#: utils/locker.cpp:194
+#, fuzzy, c++-format
+#| msgid "The package is not signed."
+msgid "The lock file \"{}\" is not locked"
+msgstr "Balíček není podepsaný."
+
+#: utils/locker.cpp:207
 #, c++-format
 msgid "Failed to close lock file \"{}\""
 msgstr "Nepodařilo se zavřít soubor zámku \"{}\""
 
-#: utils/locker.cpp:196
+#: utils/locker.cpp:211
 #, c++-format
 msgid "Failed to delete lock file \"{}\""
 msgstr "Nepodařilo se smazat soubor zámku \"{}\""
@@ -2418,8 +2478,7 @@ msgstr "Navázání hodnoty integer64 s SQL příkazem se nezdařilo: \"{}\""
 #: utils/sqlite3/sqlite3.cpp:35
 #, c++-format
 msgid "Binding unsigned integer32 value to SQL statement failed: \"{}\""
-msgstr ""
-"Navázání hodnoty unsigned integer32 s SQL příkazem se nezdařilo: \"{}\""
+msgstr "Navázání hodnoty unsigned integer32 s SQL příkazem se nezdařilo: \"{}\""
 
 #: utils/sqlite3/sqlite3.cpp:37
 #, c++-format

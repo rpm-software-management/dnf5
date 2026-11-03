@@ -2,283 +2,286 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # Languages add-on <noreply-addon-languages@weblate.org>, 2026.
+# Skyter Lin <linskyter@gmail.com>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-22 14:19+0000\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Automatically generated\n"
-"Language-Team: none\n"
+"POT-Creation-Date: 2026-11-02 08:43+0000\n"
+"PO-Revision-Date: 2026-11-03 09:58+0000\n"
+"Last-Translator: Skyter Lin <linskyter@gmail.com>\n"
+"Language-Team: Chinese (Traditional Han script) <https://"
+"translate.fedoraproject.org/projects/dnf5/libdnf5/zh_Hant/>\n"
 "Language: zh_Hant\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Weblate 2026.11\n"
 
 #: advisory/advisory.cpp:81
 #, c++-format
 msgid ""
 "Bad libsolv id for advisory \"{}\", solvable name \"{}\" doesn't have "
 "advisory prefix \"{}\""
-msgstr ""
+msgstr "錯誤的 libsolv id： advisory「{}」、可解包名稱「{}」沒有 advisory 前綴「{}」"
 
 #: advisory/advisory_collection.cpp:94
 msgid "This libdnf5 does not support modularity"
-msgstr ""
+msgstr "此 libdnf5 不支援模組化功能"
 
 #: base/active_transaction_info.cpp:93 base/active_transaction_info.cpp:95
 #, c++-format
 msgid "Error parsing transaction info: {}"
-msgstr ""
+msgstr "剖析處理事項資訊時發生錯誤：{}"
 
 #: base/base.cpp:185
 #, c++-format
 msgid "Invalid option value: enabled={}"
-msgstr ""
+msgstr "無效的選項值：enabled={}"
 
 #: base/goal.cpp:490
 #, c++-format
 msgid "Unsupported argument for REMOVE action: {}"
-msgstr ""
+msgstr "REMOVE 動作已不支援的引數：{}"
 
 #. TODO(lukash) throw a proper exception
 #: base/goal.cpp:1741
 #, c++-format
 msgid "Incorrect configuration value for multilib_policy: {}"
-msgstr ""
+msgstr "multilib_policy 的組態設定值不正確：{}"
 
 #: base/goal_elements.cpp:358 transaction/transaction_item_action.cpp:64
 msgid "Install"
-msgstr ""
+msgstr "安裝"
 
 #: base/goal_elements.cpp:360
 msgid "Install via provide"
-msgstr ""
+msgstr "透過外部提供的安裝"
 
 #: base/goal_elements.cpp:362
 msgid "Install by group"
-msgstr ""
+msgstr "依群組安裝"
 
 #: base/goal_elements.cpp:364 transaction/transaction_item_action.cpp:66
 msgid "Upgrade"
-msgstr ""
+msgstr "升級"
 
 #: base/goal_elements.cpp:366
 msgid "Upgrade all"
-msgstr ""
+msgstr "升級全部"
 
 #: base/goal_elements.cpp:368
 msgid "Upgrade minimal"
-msgstr ""
+msgstr "升級最小化"
 
 #: base/goal_elements.cpp:370
 msgid "Upgrade all minimal"
-msgstr ""
+msgstr "升級所有最小化"
 
 #: base/goal_elements.cpp:372 transaction/transaction_item_action.cpp:68
 msgid "Downgrade"
-msgstr ""
+msgstr "降級"
 
 #: base/goal_elements.cpp:374 transaction/transaction_item_action.cpp:70
 msgid "Reinstall"
-msgstr ""
+msgstr "重裝"
 
 #: base/goal_elements.cpp:376
 msgid "Install or reinstall"
-msgstr ""
+msgstr "安裝或者重裝"
 
 #: base/goal_elements.cpp:378 transaction/transaction_item_action.cpp:72
 msgid "Remove"
-msgstr ""
+msgstr "移除"
 
 #: base/goal_elements.cpp:380
 msgid "Distrosync"
-msgstr ""
+msgstr "Distrosync"
 
 #: base/goal_elements.cpp:382
 msgid "Distrosync all"
-msgstr ""
+msgstr "Distrosync all"
 
 #: base/goal_elements.cpp:384 transaction/transaction_item_action.cpp:76
 msgid "Reason Change"
-msgstr ""
+msgstr "變更動機"
 
 #: base/goal_elements.cpp:386
 msgid "Resolve"
-msgstr ""
+msgstr "解決"
 
 #: base/goal_elements.cpp:388 transaction/transaction_item_action.cpp:78
 msgid "Enable"
-msgstr ""
+msgstr "啟用"
 
 #: base/goal_elements.cpp:390 transaction/transaction_item_action.cpp:80
 msgid "Disable"
-msgstr ""
+msgstr "停用"
 
 #: base/goal_elements.cpp:392 transaction/transaction_item_action.cpp:82
 msgid "Reset"
-msgstr ""
+msgstr "重置"
 
 #: base/goal_elements.cpp:394
 msgid "Parse serialized transaction"
-msgstr ""
+msgstr "解析序列化的處理事項"
 
 #: base/goal_elements.cpp:396
 msgid "Install action"
-msgstr ""
+msgstr "安裝動作"
 
 #: base/goal_elements.cpp:398
 msgid "Remove action"
-msgstr ""
+msgstr "移除動作"
 
 #: base/goal_elements.cpp:400
 msgid "Upgrade action"
-msgstr ""
+msgstr "升級動作"
 
 #: base/goal_elements.cpp:402
 msgid "Reinstall action"
-msgstr ""
+msgstr "重裝動作"
 
 #: base/goal_elements.cpp:404
 msgid "Reason change action"
-msgstr ""
+msgstr "變更原因動作"
 
 #: base/goal_elements.cpp:406
 msgid "Reason override"
-msgstr ""
+msgstr "覆寫原因"
 
 #: base/goal_elements.cpp:408
 msgid "Revert comps upgrade"
-msgstr ""
+msgstr "還原 Comps 升級"
 
 #: base/goal_elements.cpp:410
 msgid "Install debug RPMs"
-msgstr ""
+msgstr "安裝除錯 RPM包"
 
 #: base/goal_elements.cpp:412
 msgid "Transaction merge"
-msgstr ""
+msgstr "處理事項管理"
 
 #: base/log_event.cpp:141
 #, c++-format
 msgid "No packages to remove for argument: {}"
-msgstr ""
+msgstr "引數無符合的軟體包可移除：{}"
 
 #: base/log_event.cpp:143
 #, c++-format
 msgid "No groups to remove for argument: {}"
-msgstr ""
+msgstr "引數無符合的群組可移除：{}"
 
 #: base/log_event.cpp:146
 #, c++-format
 msgid "No environmental groups to remove for argument: {}"
-msgstr ""
+msgstr "引數無符合的環境群組可移除：{}"
 
 #: base/log_event.cpp:148
 #, c++-format
 msgid "No modules to remove for argument: {}"
-msgstr ""
+msgstr "引數無符合的模組可移除：{}"
 
 #: base/log_event.cpp:152
 #, c++-format
 msgid "No match for group from environment: {}"
-msgstr ""
+msgstr "找不到符合環境群組的群組：{}"
 
 #: base/log_event.cpp:154
 #, c++-format
 msgid "No match for group package: {}"
-msgstr ""
+msgstr "找不到符合「{}」軟體包群組的項目"
 
 #: base/log_event.cpp:158
 #, c++-format
 msgid "Cannot perform {0}, no match for: {1}."
-msgstr ""
+msgstr "不能執行{0}，未找到：{1}。"
 
 #: base/log_event.cpp:160
 #, c++-format
 msgid "No match for argument: {}"
-msgstr ""
+msgstr "沒有符合引數的項目: {}"
 
 #: base/log_event.cpp:163
 #, c++-format
 msgid "No match for argument '{0}' in selected advisories"
-msgstr ""
+msgstr "選取的通報中無符合此引數之項目：{0}"
 
 #: base/log_event.cpp:165
 msgid "No match in selected advisories"
-msgstr ""
+msgstr "指定通報中無符合項目"
 
 #: base/log_event.cpp:169
 #, c++-format
 msgid "No match for argument '{0}' in repositories '{1}'"
-msgstr ""
+msgstr "軟體庫「{1}」中無符合此引數之項目：{0}"
 
 #: base/log_event.cpp:175
 #, c++-format
 msgid "Cannot perform {0} for {1} '{2}' because it is not installed."
-msgstr ""
+msgstr "無法對 {1}「{2}」執行 {0}，因為尚未安裝。"
 
 #: base/log_event.cpp:180
 #, c++-format
 msgid "Packages for argument '{}' available, but not installed."
-msgstr ""
+msgstr "引數「{}」有可用的軟體包，但尚未安裝。"
 
 #: base/log_event.cpp:184
 #, c++-format
 msgid ""
 "Packages for argument '{}' available, but installed for a different "
 "architecture."
-msgstr ""
+msgstr "引數「{}」有可用的軟體包，但安裝的是不同架構版本。"
 
 #: base/log_event.cpp:188
 #, c++-format
 msgid "Cannot perform {0} because '{1}' matches only source packages."
-msgstr ""
+msgstr "無法執行 {0}，因為「{1}」僅符合原始碼軟體包。"
 
 #: base/log_event.cpp:192
 #, c++-format
 msgid "Argument '{}' matches only source packages."
-msgstr ""
+msgstr "引數「{}」僅比對原始碼軟體包。"
 
 #: base/log_event.cpp:196
 #, c++-format
 msgid "Cannot perform {0} because '{1}' matches only excluded packages."
-msgstr ""
+msgstr "無法執行 {0}，因為「{1}」僅符合已排除的軟體包。"
 
 #: base/log_event.cpp:200
 #, c++-format
 msgid "Argument '{}' matches only excluded packages."
-msgstr ""
+msgstr "引數「{}」僅比對已排除的軟體包。"
 
 #: base/log_event.cpp:204
 #, c++-format
 msgid ""
 "Cannot perform {0} because '{1}' matches only packages excluded by "
 "versionlock."
-msgstr ""
+msgstr "無法執行 {0}，因為「{1}」僅符合由 versionlock 排除的軟體包。"
 
 #: base/log_event.cpp:208
 #, c++-format
 msgid "Argument '{}' matches only packages excluded by versionlock."
-msgstr ""
+msgstr "引數「{}」僅比對由 versionlock 排除的軟體包。"
 
 #: base/log_event.cpp:213
 #, c++-format
 msgid "  * Maybe you meant: {}"
-msgstr ""
+msgstr "  * 或許您想要：{}"
 
 #: base/log_event.cpp:216
 #, c++-format
 msgid "There are following alternatives for '{0}': {1}"
-msgstr ""
+msgstr "以下可以用來替代「{0}」：{1}"
 
 #: base/log_event.cpp:223
 #, c++-format
 msgid ""
 "The lowest available version of the \"{}\" package is already installed, "
 "cannot downgrade it."
-msgstr ""
+msgstr "「{}」軟體包的最低可用版本已安裝，無法降級。"
 
 #: base/log_event.cpp:229
 #, c++-format
@@ -286,67 +289,69 @@ msgid ""
 "Installed packages for argument '{0}' are not available in repositories in "
 "the same version, available versions: {1}, cannot reinstall."
 msgstr ""
+"「{0}」引數所安裝的軟體包在軟體庫中無相同版本，可用版本有：{1}，無法重新安裝"
+"。"
 
 #: base/log_event.cpp:235
 #, c++-format
 msgid ""
 "Cannot perform {0} because '{1}' is installed in a different version: '{2}'."
-msgstr ""
+msgstr "無法執行 {0}，因為「{1}」已安裝的版本不同：「{2}」。"
 
 #: base/log_event.cpp:241
 #, c++-format
 msgid ""
 "Packages for argument '{}' installed and available, but in a different "
 "version."
-msgstr ""
+msgstr "符合「{}」引數的軟體包已安裝且可用，但版本不同。"
 
 #: base/log_event.cpp:243
 #, c++-format
 msgid "Packages for argument '{}' installed, but not available."
-msgstr ""
+msgstr "「{}」引數的軟體包已安裝，但無法使用。"
 
 #: base/log_event.cpp:248
 #, c++-format
 msgid "Group \"{}\" is already installed."
-msgstr ""
+msgstr "群組「{}」已經安裝。"
 
 #: base/log_event.cpp:251
 #, c++-format
 msgid "Environmental group \"{}\" is already installed."
-msgstr ""
+msgstr "環境群組「{}」已經安裝。"
 
 #: base/log_event.cpp:258
 #, c++-format
 msgid "Package \"{}\" is already installed with reason \"{}\"."
-msgstr ""
+msgstr "「{}」軟體包已經安裝，原因為「{}」。"
 
 #: base/log_event.cpp:260
 #, c++-format
 msgid "Package \"{}\" is already installed."
-msgstr ""
+msgstr "「{}」軟體包已經安裝。"
 
 #: base/log_event.cpp:269
 #, c++-format
 msgid "Debug data written to \"{}\""
-msgstr ""
+msgstr "偵錯資料已寫入「{}」"
 
 #: base/log_event.cpp:273
 #, c++-format
 msgid ""
 "{0} upgrade cannot be reverted, however associated package actions will be. "
 "({1} id: '{2}') ."
-msgstr ""
+msgstr "{0} 升級無法還原，但相關的軟體包動作將會還原。（{1} id：「{2}」）。"
 
 #: base/log_event.cpp:279
 #, c++-format
 msgid "{} action for argument \"{}\" is not supported."
-msgstr ""
+msgstr "「{}」引數不支援「{}」動作。"
 
 #. Format a leading line of the error message.
 #: base/log_event.cpp:288
 #, c++-format
 msgid "Unable to resolve argument '{}':"
-msgstr ""
+msgstr "無法解析「{}」引數："
 
 #: base/log_event.cpp:292
 #, c++-format
@@ -359,637 +364,660 @@ msgid_plural ""
 "  - Argument '{}' matches {} streams ('{}') of module '{}', but none of the "
 "streams are enabled or default."
 msgstr[0] ""
-msgstr[1] ""
+"\n"
+"  - 引數「{}」與模組「{}」的 {} 流道（'{}'）相符，但是沒有流道啟用或是預設。"
 
-#: base/log_event.cpp:299
+#: base/log_event.cpp:299 base/log_event.cpp:385
 msgid "', '"
-msgstr ""
+msgstr "', '"
 
 #: base/log_event.cpp:308
 msgid "Modular dependency problems:\n"
-msgstr ""
+msgstr "模組依賴性問題：\n"
 
 #: base/log_event.cpp:315
 msgid "Modular dependency problems with the latest modules:\n"
-msgstr ""
+msgstr "最新模組的模組相依性問題：\n"
 
 #: base/log_event.cpp:322
 msgid "Modular dependency problems with the defaults:\n"
-msgstr ""
+msgstr "預設值的模組相依性問題：\n"
 
 #: base/log_event.cpp:337
 #, c++-format
 msgid ""
 "The operation would result in switching of module '{0}' stream '{1}' to "
 "stream '{2}'\n"
-msgstr ""
+msgstr "此操作會將模組「{0}」的流道「{1}」切換至流道「{2}」。\n"
 
 #: base/log_event.cpp:342
 msgid ""
 "Error: It is not possible to switch enabled streams of a module unless "
 "explicitly enabled via configuration option module_stream_switch."
 msgstr ""
+"錯誤：除非透過設定選項 module_stream_switch 明確啟用，否則無法切換模組的已啟"
+"用流道。"
 
 #: base/log_event.cpp:347
 #, c++-format
 msgid ""
 "Extra package '{0}' (with action '{1}') which is not present in the stored "
 "transaction was pulled into the transaction.\n"
-msgstr ""
+msgstr "額外的軟體包「{0}」（含動作「{1}」）不在儲存的處理事項中，被拉入處理事項。\n"
 
 #: base/log_event.cpp:353
 #, c++-format
 msgid "Cannot parse file: '{0}': {1}.\n"
-msgstr ""
+msgstr "無法解析檔案：'{0}': {1}.\n"
 
 #: base/log_event.cpp:360
 #, c++-format
 msgid ""
 "Could not find debuginfo package for the following packages resolved from "
 "the argument '{0}': {1}"
-msgstr ""
+msgstr "找不到以下從引數「{0}」解析到的 debuginfo 軟體包：{1}"
 
 #: base/log_event.cpp:363 base/log_event.cpp:374
 msgctxt "String for joining NEVRAs - e.g. `foo-4-4.noarch, bar-5-5.noarch`"
 msgid ", "
-msgstr ""
+msgstr ", "
 
 #: base/log_event.cpp:370
 #, c++-format
 msgid ""
 "Could not find debugsource package for the following packages resolved from "
 "the argument '{0}': {1}"
-msgstr ""
+msgstr "找不到以下從引數「{0}」解析到的 debugsource 軟體包：{1}"
 
 #: base/log_event.cpp:377
 #, c++-format
 msgid "Transaction merge error: '{0}'"
+msgstr "處理事項合併錯誤：'{0}'"
+
+#: base/log_event.cpp:381
+#, c++-format
+msgid ""
+"Exceeded installonly_limit ({0}): found {1} installed: '{2}'. You can use "
+"'remove --oldinstallonly'."
 msgstr ""
 
 #: base/solver_problems.cpp:41
 #, c++-format
 msgid "{} does not belong to a distupgrade repository"
-msgstr ""
+msgstr "{} 不屬於 distupgrade 軟體庫"
 
 #: base/solver_problems.cpp:42
 #, c++-format
 msgid "{0} from {1} has inferior architecture"
-msgstr ""
+msgstr "來自 {1} 的 {0} 擁有較差的架構"
 
 #: base/solver_problems.cpp:43
 msgid "problem with installed package"
-msgstr ""
+msgstr "安裝的軟體包有問題"
 
 #: base/solver_problems.cpp:44 base/solver_problems.cpp:83
 msgid "conflicting requests"
-msgstr ""
+msgstr "有衝突的要求"
 
 #: base/solver_problems.cpp:45 base/solver_problems.cpp:84
 msgid "unsupported request"
-msgstr ""
+msgstr "不支援的要求"
 
 #: base/solver_problems.cpp:46 base/solver_problems.cpp:85
 #, c++-format
 msgid "nothing provides requested {}"
-msgstr ""
+msgstr "沒有軟體包提供要求項目{}"
 
 #: base/solver_problems.cpp:47
 #, c++-format
 msgid "package {} does not exist"
-msgstr ""
+msgstr "軟體包 {} 不存在"
 
 #: base/solver_problems.cpp:48 base/solver_problems.cpp:87
 #, c++-format
 msgid "{} is provided by the system"
-msgstr ""
+msgstr "{} 由系統提供"
 
 #: base/solver_problems.cpp:49 base/solver_problems.cpp:88
 msgid "some dependency problem"
-msgstr ""
+msgstr "有一些依賴關係問題"
 
 #: base/solver_problems.cpp:50
 #, c++-format
 msgid "cannot install the best update candidate for package {}"
-msgstr ""
+msgstr "無法安裝軟體包 {} 的最佳更新候選"
 
 #: base/solver_problems.cpp:51 base/solver_problems.cpp:90
 msgid "cannot install the best candidate for the job"
-msgstr ""
+msgstr "無法安裝工作的最佳候選"
 
 #: base/solver_problems.cpp:52
 #, c++-format
 msgid "package {0} from {1} is filtered out by modular filtering"
-msgstr ""
+msgstr "{1} 的軟體包 {0} 被模組篩選排除"
 
 #: base/solver_problems.cpp:53
 #, c++-format
 msgid "package {0} from {1} does not have a compatible architecture"
-msgstr ""
+msgstr "{1} 的軟體包 {0} 沒有相容的架構"
 
 #: base/solver_problems.cpp:54
 #, c++-format
 msgid "package {0} from {1} is not installable"
-msgstr ""
+msgstr "{1} 的軟體包 {0} 無法安裝"
 
 #: base/solver_problems.cpp:55
 #, c++-format
 msgid "package {0} from {1} is filtered out by exclude filtering"
-msgstr ""
+msgstr "{1} 的軟體包 {0} 被排除篩選排除"
 
 #: base/solver_problems.cpp:56
 #, c++-format
 msgid "nothing provides {0} needed by {1} from {2}"
-msgstr ""
+msgstr "沒有任何項目提供 {2} 的 {1} 需要的 {0}"
 
 #: base/solver_problems.cpp:57
 #, c++-format
 msgid "cannot install both {0} from {1} and {2} from {3}"
-msgstr ""
+msgstr "無法同時安裝 {1} 的 {0} 和 {3} 的 {2}"
 
 #: base/solver_problems.cpp:58
 #, c++-format
 msgid "package {0} from {1} conflicts with {2} provided by {3} from {4}"
-msgstr ""
+msgstr "{1} 的「{0}」軟體包與 {4} 的「{3}」提供的「{2}」衝突"
 
 #: base/solver_problems.cpp:60
 #, c++-format
 msgid "installed package {0} conflicts with {1} provided by {2} from {3}"
-msgstr ""
+msgstr "已安裝的「{0}」與 {3} 的「{2}」提供的「{1}」衝突"
 
 #: base/solver_problems.cpp:61
 #, c++-format
 msgid "package {0} from {1} obsoletes {2} provided by {3} from {4}"
-msgstr ""
+msgstr "{1} 的「{0}」軟體包廢止了 {4} 的「{3}」提供的「{2}」"
 
 #: base/solver_problems.cpp:62
 #, c++-format
 msgid "installed package {0} obsoletes {1} provided by {2} from {3}"
-msgstr ""
+msgstr "已安裝的「{0}」廢止了 {3} 的「{2}」提供的「{1}」"
 
 #: base/solver_problems.cpp:64
 #, c++-format
 msgid "package {0} from {1} implicitly obsoletes {2} provided by {3} from {4}"
-msgstr ""
+msgstr "{1} 的「{0}」軟體包隱含廢止了 {4} 的「{3}」提供的「{2}」"
 
 #: base/solver_problems.cpp:66
 #, c++-format
 msgid ""
 "package {1} from {2} requires {0}, but none of the providers can be installed"
-msgstr ""
+msgstr "{2} 的「{1}」軟體包需要「{0}」，但無法安裝任何提供者"
 
 #: base/solver_problems.cpp:68
 #, c++-format
 msgid ""
 "installed package {1} requires {0}, but none of the providers can be "
 "installed"
-msgstr ""
+msgstr "已安裝的「{1}」需要「{0}」，但無法安裝任何提供者"
 
 #: base/solver_problems.cpp:69
 #, c++-format
 msgid "package {0} from {1} conflicts with {2} provided by itself"
-msgstr ""
+msgstr "{1} 的「{0}」軟體包與自身提供的「{2}」衝突"
 
 #: base/solver_problems.cpp:70
 #, c++-format
 msgid "both package {0} from {1} and {3} from {4} obsolete {2}"
-msgstr ""
+msgstr "{1} 的「{0}」和 {4} 的「{3}」都會廢止「{2}」"
 
 #: base/solver_problems.cpp:72
 #, c++-format
 msgid ""
 "The operation would result in removing the following protected packages: {}"
-msgstr ""
+msgstr "此動作可能會導致移除以下受保護的軟體包：{}"
 
 #: base/solver_problems.cpp:75
 #, c++-format
 msgid ""
 "The operation would result in broken dependencies for the following "
 "protected packages: {}"
-msgstr ""
+msgstr "此操作會導致下列受保護的軟體包發生相依性問題：{}"
 
 #: base/solver_problems.cpp:78
 #, c++-format
 msgid "The operation would result in removing of running kernel: {}"
-msgstr ""
+msgstr "此操作將導致移除執行中的核心：{}"
 
 #: base/solver_problems.cpp:80
 #, c++-format
 msgid "module {} does not belong to a distupgrade repository"
-msgstr ""
+msgstr "模組 {} 不屬於 distupgrade 軟體庫"
 
 #: base/solver_problems.cpp:81
 #, c++-format
 msgid "module {} has inferior architecture"
-msgstr ""
+msgstr "模組 {} 的架構較差"
 
 #: base/solver_problems.cpp:82
 #, c++-format
 msgid "problem with installed module {}"
-msgstr ""
+msgstr "安裝的 {} 模組有問題"
 
 #: base/solver_problems.cpp:86
 #, c++-format
 msgid "module {} does not exist"
-msgstr ""
+msgstr "模組 {} 不存在"
 
 #: base/solver_problems.cpp:89
 #, c++-format
 msgid "cannot install the best update candidate for module {}"
-msgstr ""
+msgstr "無法安裝 {} 模組的最佳更新候選"
 
 #: base/solver_problems.cpp:91 base/solver_problems.cpp:94
 #, c++-format
 msgid "module {} is disabled"
-msgstr ""
+msgstr "模組 {} 已停用"
 
 #: base/solver_problems.cpp:92
 #, c++-format
 msgid "module {} does not have a compatible architecture"
-msgstr ""
+msgstr "模組 {} 沒有相容的架構"
 
 #: base/solver_problems.cpp:93
 #, c++-format
 msgid "module {} is not installable"
-msgstr ""
+msgstr "模組 {} 無法安裝"
 
 #: base/solver_problems.cpp:95
 #, c++-format
 msgid "nothing provides {0} needed by module {1}"
-msgstr ""
+msgstr "沒有任何項目提供模組 {1} 需要的 {0}"
 
 #: base/solver_problems.cpp:96
 #, c++-format
 msgid "cannot install both modules {0} and {1}"
-msgstr ""
+msgstr "無法同時安裝模組 {0} 和 {1}"
 
 #: base/solver_problems.cpp:97
 #, c++-format
 msgid "module {0} conflicts with {1} provided by {2}"
-msgstr ""
+msgstr "模組 {0} 與 {2} 提供的 {1} 衝突"
 
 #: base/solver_problems.cpp:98
 #, c++-format
 msgid "module {0} obsoletes {1} provided by {2}"
-msgstr ""
+msgstr "模組 {0} 廢止了 {2} 提供的 {1}"
 
 #: base/solver_problems.cpp:99
 #, c++-format
 msgid "installed module {0} obsoletes {1} provided by {2}"
-msgstr ""
+msgstr "已安裝的模組 {0} 廢止了 {2} 提供的 {1}"
 
 #: base/solver_problems.cpp:100
 #, c++-format
 msgid "module {0} implicitly obsoletes {1} provided by {2}"
-msgstr ""
+msgstr "模組 {0} 隱含廢止了 {2} 提供的 {1}"
 
 #: base/solver_problems.cpp:101
 #, c++-format
 msgid "module {1} requires {0}, but none of the providers can be installed"
-msgstr ""
+msgstr "模組 {1} 需要 {0}，但無法安裝任何提供者"
 
 #: base/solver_problems.cpp:102
 #, c++-format
 msgid "module {1} conflicts with {0} provided by itself"
-msgstr ""
+msgstr "模組 {1} 與自身提供的 {0} 衝突"
 
 #: base/solver_problems.cpp:103
 #, c++-format
 msgid "both module {0} and {2} obsolete {1}"
-msgstr ""
+msgstr "模組 {0} 和 {2} 都會廢止 {1}"
 
 #: base/solver_problems.cpp:294
 msgid "Problem: "
-msgstr ""
+msgstr "問題: "
 
 #: base/solver_problems.cpp:298
 #, c++-format
 msgid "Problem {}: "
-msgstr ""
-
-#: base/transaction.cpp:88
-msgid "This transaction has been already run before."
-msgstr ""
+msgstr "問題 {}： "
 
 #: base/transaction.cpp:89
-msgid "Cannot run transaction with resolving problems."
-msgstr ""
+msgid "This transaction has been already run before."
+msgstr "此處理事項先前已經執行過。"
 
 #: base/transaction.cpp:90
-msgid "Rpm transaction check failed."
-msgstr ""
+msgid "Cannot run transaction with resolving problems."
+msgstr "無法在有解析問題的情況下執行處理事項。"
 
-#: base/transaction.cpp:92
-msgid ""
-"Failed to obtain rpm transaction lock. Another transaction is in progress."
-msgstr ""
+#: base/transaction.cpp:91
+msgid "Rpm transaction check failed."
+msgstr "Rpm 處理事項檢查失敗。"
 
 #: base/transaction.cpp:93
-msgid "Rpm transaction failed."
-msgstr ""
+msgid ""
+"Failed to obtain rpm transaction lock. Another transaction is in progress."
+msgstr "無法取得 rpm 處理事項鎖。另一個處理事項正在進行中。"
 
 #: base/transaction.cpp:94
+msgid "Rpm transaction failed."
+msgstr "Rpm 處理事項失敗。"
+
+#: base/transaction.cpp:95
 msgid "Signature verification failed."
-msgstr ""
+msgstr "簽章驗證失敗。"
 
-#: base/transaction.cpp:98
-msgid "The repository does not have any OpenPGP keys configured."
-msgstr ""
-
-#: base/transaction.cpp:99
-msgid "Public key is not installed."
-msgstr ""
-
-#: base/transaction.cpp:100
-msgid "Canceled by the user."
+#: base/transaction.cpp:97
+msgid ""
+"This transaction is no longer valid because the system repository has "
+"changed since it was loaded."
 msgstr ""
 
 #: base/transaction.cpp:101
+msgid "The repository does not have any OpenPGP keys configured."
+msgstr "軟體庫未設定任何 OpenPGP 金鑰。"
+
+#: base/transaction.cpp:102
+msgid "Public key is not installed."
+msgstr "未安裝公開金鑰。"
+
+#: base/transaction.cpp:103
+msgid "Canceled by the user."
+msgstr "已由使用者取消。"
+
+#: base/transaction.cpp:104
 msgid "Public key import failed."
-msgstr ""
+msgstr "公開金鑰匯入失敗。"
 
-#: base/transaction.cpp:993
+#: base/transaction.cpp:997
 msgid "poll failed during scriptlets pipe processing"
-msgstr ""
+msgstr "處理指令稿管線時 poll 失敗"
 
-#: base/transaction.cpp:1016
+#: base/transaction.cpp:1020
 msgid "failed to read scriptlet output from pipe"
+msgstr "無法從管線讀取指令稿輸出"
+
+#: base/transaction.cpp:1103
+#, c++-format
+msgid "Failed to acquire system repo lock for writing, lock located at \"{}\""
 msgstr ""
 
-#: base/transaction.cpp:1134
+#: base/transaction.cpp:1173
 #, c++-format
 msgid "Invalid tsflag: {}"
-msgstr ""
+msgstr "無效的 tsflag：{}"
 
-#: base/transaction.cpp:1568
+#: base/transaction.cpp:1611
 #, c++-format
 msgid "Public key \"{}\" is already present, not importing."
-msgstr ""
+msgstr "公開金鑰「{}」已存在，不再匯入。"
 
-#: base/transaction.cpp:1589
+#: base/transaction.cpp:1634
 #, c++-format
 msgid "An error occurred importing key \"{}\": {}"
-msgstr ""
+msgstr "匯入金鑰「{}」時發生錯誤：{}"
 
-#: base/transaction.cpp:1623
+#: base/transaction.cpp:1668
 #, c++-format
 msgid "OpenPGP check for package \"{}\" ({}) from repo \"{}\" has failed: "
-msgstr ""
+msgstr "OpenPGP 檢查失敗：軟體包「{}」（{}）來自軟體庫「{}」： "
 
-#: base/transaction.cpp:1651
+#: base/transaction.cpp:1696
 msgid "Import of the key didn't help, wrong key?"
-msgstr ""
+msgstr "匯入金鑰無效，可能是金鑰錯誤？"
 
-#: base/transaction.cpp:1670
+#: base/transaction.cpp:1715
 msgctxt "It is a joining character for repositories IDs"
 msgid ", "
-msgstr ""
+msgstr "， "
 
-#: base/transaction.cpp:1673
+#: base/transaction.cpp:1718
 #, c++-format
 msgid "Warning: skipped OpenPGP checks for {0} package from repository: {1}"
 msgid_plural ""
 "Warning: skipped OpenPGP checks for {0} packages from repository: {1}"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "警告：已略過軟體庫 {1} 的 {0} 個軟體包的 OpenPGP 檢查"
 
-#: base/transaction.cpp:1676
+#: base/transaction.cpp:1721
 #, c++-format
 msgid "Warning: skipped OpenPGP checks for {0} package from repositories: {1}"
 msgid_plural ""
 "Warning: skipped OpenPGP checks for {0} packages from repositories: {1}"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "警告：已略過軟體庫 {1} 的 {0} 個軟體包的 OpenPGP 檢查"
 
-#: base/vendor_change_manager.cpp:145
+#: base/vendor_change_manager.cpp:115
+msgid "{func}(): Cannot create directory: {path}: {msg}"
+msgstr ""
+
+#: base/vendor_change_manager.cpp:164
 msgid "{func}(): Cannot remove file: {path}: {msg}"
-msgstr ""
+msgstr "{func}()：無法移除檔案：{path}：{msg}"
 
-#: base/vendor_change_manager.cpp:151
+#: base/vendor_change_manager.cpp:170
 msgid "{func}(): File does not exist: {path}"
-msgstr ""
+msgstr "{func}()：檔案不存在：{path}"
 
-#: base/vendor_change_manager.cpp:240
+#: base/vendor_change_manager.cpp:259
 msgid "{func}(): Cannot remove existing policy file: {path}"
-msgstr ""
+msgstr "{func}()：無法移除現有的原則檔案：{path}"
 
-#: base/vendor_change_manager.cpp:252
+#: base/vendor_change_manager.cpp:271
 msgid "{func}(): Cannot create file: {path}"
-msgstr ""
+msgstr "{func}()：無法建立檔案：{path}"
 
-#: base/vendor_change_manager.cpp:269
+#: base/vendor_change_manager.cpp:288
 msgid "{func}(): Cannot write to file: {path}"
-msgstr ""
+msgstr "{func}()：無法寫入檔案：{path}"
 
-#: base/vendor_change_manager.cpp:306
+#: base/vendor_change_manager.cpp:325
 msgid "{func}(): Base filename cannot be empty"
-msgstr ""
+msgstr "{func}()：基本檔名不得為空白"
 
-#: base/vendor_change_manager.cpp:312
+#: base/vendor_change_manager.cpp:331
 msgid ""
 "{func}(): Base filename must not contain path components: {base_filename}"
-msgstr ""
+msgstr "{func}()：基本檔名不得包含路徑元件：{base_filename}"
 
-#: base/vendor_change_manager.cpp:437
+#: base/vendor_change_manager.cpp:461
 msgid "{func}(): Path must have .conf extension: {path}"
-msgstr ""
+msgstr "{func}()：路徑必須使用 .conf 副檔名：{path}"
 
 #: common/exception.cpp:78
 msgid "System error"
-msgstr ""
+msgstr "系統錯誤"
 
 #: common/exception.cpp:199
 msgid "General RuntimeError exception"
-msgstr ""
+msgstr "一般 RuntimeError 例外狀況"
 
 #: common/proc.cpp:88
 #, c++-format
 msgid "Cannot stat {}"
-msgstr ""
+msgstr "無法取得「{}」的檔案狀態"
 
 #: common/proc.cpp:124
 #, c++-format
 msgid "Cannot open {}"
-msgstr ""
+msgstr "無法開啟「{}」"
 
 #: common/sack/query.cpp:27
 msgid "Query must contain exactly one object."
-msgstr ""
+msgstr "查詢必須僅包含一個物件。"
 
 #: common/xdg.cpp:43
 msgid "get_user_home_dir(): Cannot determine the user's home directory"
-msgstr ""
+msgstr "get_user_home_dir()：無法判斷使用者的家目錄"
 
 #: common/xdg.cpp:98
 msgid "get_user_runtime_dir(): Cannot determine the user's runtime directory"
-msgstr ""
+msgstr "get_user_runtime_dir()：無法判斷使用者的執行時目錄"
 
 #: comps/environment/environment.cpp:361
 #, c++-format
 msgid "Failed to save xml document for environment \"{}\" to file \"{}\": {}"
-msgstr ""
+msgstr "無法將環境「{}」的 XML 文件儲存至檔案「{}」：{}"
 
 #: comps/group/group.cpp:354
 #, c++-format
 msgid "Failed to save xml document for group \"{}\" to file \"{}\": {}"
-msgstr ""
+msgstr "儲存群組「{}」的 xml 文件至檔案「{}」失敗：{}"
 
 #: comps/group/package.cpp:118 comps/group/package.cpp:121
 #, c++-format
 msgid "Invalid package type: {}"
-msgstr ""
+msgstr "無效的軟體包類型：{}"
 
 #: conf/config_main.cpp:57
 msgid "Input is empty. Must contain a value."
-msgstr ""
+msgstr "輸入為空。必須包含一個值。"
 
 #: conf/config_main.cpp:63
 #, c++-format
 msgid "Input value '{}' must not be negative"
-msgstr ""
+msgstr "輸入值「{}」不得為負數"
 
 #: conf/config_main.cpp:68
 #, c++-format
 msgid "Could not convert '{}' to bytes"
-msgstr ""
+msgstr "無法將「{}」轉換為位元組"
 
 #: conf/config_main.cpp:84
 #, c++-format
 msgid "Unknown unit '{}'"
-msgstr ""
+msgstr "未知的單位「{}」"
 
-#: conf/config_main.cpp:291
+#: conf/config_main.cpp:292
 #, c++-format
 msgid "The throttle value {} is outside the allowed range {} ... {}"
-msgstr ""
+msgstr "節流值 {} 超出允許範圍 {} ... {}"
 
 #: conf/config_parser.cpp:54
 #, c++-format
 msgid "Section \"{}\" not found"
-msgstr ""
+msgstr "找不到區段「{}」"
 
 #: conf/config_parser.cpp:59
 #, c++-format
 msgid "Section \"{}\" does not contain option \"{}\""
-msgstr ""
+msgstr "區段「{}」不包含選項「{}」"
 
 #: conf/config_parser.cpp:96
 #, c++-format
 msgid "Configuration file \"{}\" not found"
-msgstr ""
+msgstr "找不到組態檔案「{}」"
 
 #: conf/config_parser.cpp:99
 #, c++-format
 msgid "Unable to access configuration file \"{}\""
-msgstr ""
+msgstr "無法存取的組態檔案「{}」"
 
 #: conf/config_parser.cpp:102
 #, c++-format
 msgid "Error in configuration file \"{}\""
-msgstr ""
+msgstr "組態檔案「{}」發生錯誤"
 
 #: conf/option_binds.cpp:29
 #, c++-format
 msgid "Option \"{}\" not found"
-msgstr ""
+msgstr "找不到選項「{}」"
 
 #: conf/option_binds.cpp:32
 #, c++-format
 msgid "Option \"{}\" already exists"
-msgstr ""
+msgstr "選項「{}」已存在"
 
 #: conf/option_bool.cpp:82
 #, c++-format
 msgid "Invalid boolean value \"{}\""
-msgstr ""
+msgstr "無效的布林值「{}」"
 
 #: conf/option_enum.cpp:68
 #, c++-format
 msgid "Enum option value \"{}\" not allowed"
-msgstr ""
+msgstr "不允許列舉選項值「{}」"
 
 #: conf/option_number.cpp:99
 #, c++-format
 msgid "Input value {} is outside the allowed range {} ... {}"
-msgstr ""
+msgstr "輸入值 {} 超出允許範圍 {} ... {}"
 
 #: conf/option_number.cpp:112
 #, c++-format
 msgid "Invalid number option value \"{}\""
-msgstr ""
+msgstr "無效的數字選項值「{}」"
 
 #: conf/option_path.cpp:93
 #, c++-format
 msgid "Only absolute paths allowed, relative path \"{}\" detected"
-msgstr ""
+msgstr "僅允許絕對路徑，偵測到相對路徑「{}」"
 
 #: conf/option_path.cpp:98
 #, c++-format
 msgid "Path \"{}\" does not exist"
-msgstr ""
+msgstr "路徑「{}」不存在"
 
 #: conf/option_seconds.cpp:38
 msgid "Empty time option value"
-msgstr ""
+msgstr "時間選項值為空"
 
 #: conf/option_seconds.cpp:50
 #, c++-format
 msgid "Invalid time option value \"{}\", number or \"never\" expected"
-msgstr ""
+msgstr "無效的時間選項值「{}」，預期數字或「never」"
 
 #: conf/option_seconds.cpp:54
 #, c++-format
 msgid ""
 "Invalid time option value \"{}\", negative values except \"-1\" not allowed"
-msgstr ""
+msgstr "無效的時間選項值「{}」，不允許負值（除「-1」外）"
 
 #: conf/option_seconds.cpp:59
 #, c++-format
 msgid "Unknown time format \"{}\""
-msgstr ""
+msgstr "未知的時間格式「{}」"
 
 #: conf/option_seconds.cpp:78
 #, c++-format
 msgid "Unknown time unit '{}'"
-msgstr ""
+msgstr "未知的時間單位「{}」"
 
 #: conf/option_string.cpp:89
 #, c++-format
 msgid ""
 "Input value \"{}\" not allowed, allowed values for this option are defined "
 "by regular expression \"{}\""
-msgstr ""
+msgstr "不允許輸入值「{}」，此選項的允許值由正規表達式「{}」定義"
 
 #. TODO(jrohel): We don't know the option name at this time. Add a text name to the options
 #. or extend exception (add name) in upper layer.
 #: conf/option_string.cpp:114
 msgid "Option value is not set"
-msgstr ""
+msgstr "選項值未設定"
 
 #: conf/option_string_list.cpp:178
 #, c++-format
 msgid ""
 "Input item value \"{}\" not allowed, allowed values for this option are "
 "defined by regular expression \"{}\""
-msgstr ""
+msgstr "不允許輸入項目值「{}」，此選項的允許值由正規表達式「{}」定義"
 
-#: conf/vars.cpp:344 conf/vars.cpp:384
+#: conf/vars.cpp:347 conf/vars.cpp:387
 #, c++-format
 msgid "Variable \"{}\" is read-only"
-msgstr ""
+msgstr "變數「{}」是唯讀的"
 
 #: logger/rotating_file_logger.cpp:75
 msgid "Cannot open log file"
-msgstr ""
+msgstr "無法開啟日誌檔案"
 
 #: module/module_db.cpp:76 module/module_db.cpp:85 module/module_sack.cpp:767
 #, c++-format
 msgid "No such module: {}"
-msgstr ""
+msgstr "沒有這個模組：{}"
 
 #: module/module_db.cpp:268
 #, c++-format
 msgid "Cannot enable multiple streams for module '{}'"
-msgstr ""
+msgstr "無法為模組 '{}' 啟用多個流道"
 
 #. TODO(pkratoch) replace with a proper and descriptive exception
 #. TODO(jmracek) else if (removalOfProtected && removalOfProtected->size()) {
@@ -997,52 +1025,52 @@ msgstr ""
 #. DNF_ERROR_REMOVAL_OF_PROTECTED_PKG);
 #. }
 #. TODO(lukash) replace with a proper and descriptive exception
-#: module/module_goal_private.cpp:83 rpm/solv/goal_private.cpp:354
-#: rpm/solv/goal_private.cpp:776
+#: module/module_goal_private.cpp:83 rpm/solv/goal_private.cpp:374
+#: rpm/solv/goal_private.cpp:796
 msgid "no solution possible"
-msgstr ""
+msgstr "沒有可行的解決方案"
 
 #: module/module_metadata.cpp:102
 #, c++-format
 msgid "Failed to update from string: {}"
-msgstr ""
+msgstr "無法從字串更新：{}"
 
 #: module/module_metadata.cpp:129
 #, c++-format
 msgid "Failed to resolve module metadata: {}"
-msgstr ""
+msgstr "解析模組中繼資料失敗：{}"
 
 #: module/module_metadata.cpp:140
 #, c++-format
 msgid "Failed to upgrade defaults: {}"
-msgstr ""
+msgstr "無法升級預設值：{}"
 
 #: module/module_metadata.cpp:144
 #, c++-format
 msgid "Failed to upgrade streams: {}"
-msgstr ""
+msgstr "無法升級流道：{}"
 
 #: module/module_sack.cpp:93
 #, c++-format
 msgid "Failed to load module metadata for repository \"{}\": {}"
-msgstr ""
+msgstr "無法載入軟體庫「{}」的模組中繼資料：{}"
 
 #: module/module_sack.cpp:594
 msgid "Missing '='"
-msgstr ""
+msgstr "缺少「=」"
 
 #: module/module_sack.cpp:598 module/module_sack.cpp:606
 msgid "Missing '\"' in the value"
-msgstr ""
+msgstr "值中缺少「\"」"
 
 #: module/module_sack.cpp:602
 msgid "Missing ':' in the value"
-msgstr ""
+msgstr "值中缺少「:」"
 
 #: module/module_sack.cpp:911
 #, c++-format
 msgid "Invalid module status: {}"
-msgstr ""
+msgstr "無效的模組狀態：{}"
 
 #: plugin/plugins.cpp:68
 #, c++-format
@@ -1050,327 +1078,334 @@ msgid ""
 "Unsupported plugin API combination. API version provided by plugin \"{}\" "
 "(\"{}\") is \"{}.{}\". API version in libdnf is \"{}.{}\"."
 msgstr ""
+"不支援的插件 API 組合。插件「{}」（「{}」）提供的 API 版本為「{}.{}」。"
+"libdnf 中的 API 版本為「{}.{}」。"
 
 #: plugin/plugins.cpp:93
 msgid "Failed to create a libdnf plugin instance"
-msgstr ""
+msgstr "無法建立 libdnf 插件執行個體"
 
 #: plugin/plugins.cpp:147
 #, c++-format
 msgid "Cannot find plugin library \"{}\""
-msgstr ""
+msgstr "找不到插件庫「{}」"
 
 #: plugin/plugins.cpp:181
 msgid "Plugins::load_plugins(): config_dirs cannot be empty"
-msgstr ""
+msgstr "Plugins::load_plugins()：config_dirs 不得為空"
 
 #: plugin/plugins.cpp:194
 #, c++-format
 msgid "Cannot load libdnf plugin enabled from: {}"
-msgstr ""
+msgstr "無法載入從「{}」啟用的 libdnf 插件"
 
-#: repo/config_repo.cpp:593
+#: repo/config_repo.cpp:602
 msgid "get_unique_id(): Computation of SHA256 failed"
-msgstr ""
+msgstr "get_unique_id()：SHA256 計算失敗"
 
 #: repo/file_downloader.cpp:154
 msgid "Cannot download files, cacheonly option is activated."
-msgstr ""
+msgstr "無法下載檔案，cacheonly 選項已啟用。"
 
 #: repo/file_downloader.cpp:216
 msgid "Failed to download files"
-msgstr ""
+msgstr "下載檔案失敗"
 
 #: repo/librepo.cpp:84
 msgid ""
 "Maximum download speed is lower than minimum, please change configuration of "
 "minrate or throttle"
-msgstr ""
+msgstr "最大下載速度低於最小下載速度。請調整 minrate 或 throttle 的設定檔"
 
 #: repo/librepo.cpp:147
 msgid "'proxy_username' is set but not 'proxy_password'"
-msgstr ""
+msgstr "已設定「proxy_username」但未設定「proxy_password」"
 
 #: repo/package_downloader.cpp:165
 #, c++-format
 msgid "Cannot download the \"{0}\" package, cacheonly option is activated."
-msgstr ""
+msgstr "無法下載「{0}」軟體包，cacheonly 選項已啟用。"
 
 #: repo/package_downloader.cpp:255
 msgid "Already downloaded"
-msgstr ""
+msgstr "已經下載"
 
 #: repo/package_downloader.cpp:303
 msgid "Failed to download packages"
-msgstr ""
+msgstr "下載軟體包失敗"
 
 #: repo/repo.cpp:62
 #, c++-format
 msgid "Failed to load RPM \"{}\": doesn't have the \".rpm\" extension"
-msgstr ""
+msgstr "無法載入 RPM「{}」：沒有「.rpm」副檔名"
 
 #: repo/repo.cpp:66
 #, c++-format
 msgid "Failed to access RPM \"{}\": {}"
-msgstr ""
+msgstr "無法存取 RPM「{}」：{}"
 
 #: repo/repo.cpp:108
 #, c++-format
 msgid "Invalid repository id \"{}\": unexpected character '{}'"
-msgstr ""
+msgstr "無效的軟體庫 id「{}」：意外字元「{}」"
 
 #: repo/repo.cpp:151
 #, c++-format
 msgid "Repository \"{}\" has no source (baseurl, mirrorlist or metalink) set."
-msgstr ""
+msgstr "軟體庫「{}」未設定來源（baseurl、mirrorlist 或 metalink）。"
 
 #: repo/repo.cpp:162
 #, c++-format
 msgid "Repository \"{}\" has unsupported type \"{}\", skipping."
-msgstr ""
+msgstr "軟體庫「{}」有不支援的「{}」類型，跳過。"
 
 #: repo/repo.cpp:222 repo/repo.cpp:242 repo/repo_sack.cpp:370
 #, c++-format
 msgid "Failed to download metadata ({}: \"{}\") for repository \"{}\": {}"
-msgstr ""
+msgstr "下載軟體庫「{}」的中繼資料失敗（{}：「{}」）：{}"
 
 #: repo/repo.cpp:440
 msgid ""
 "Failed to load repository: \"primary\" data not present or in unsupported "
 "format"
-msgstr ""
-
-#: repo/repo.cpp:506
-#, c++-format
-msgid "Failed to load comps \"{}\": doesn't have the \".xml\" extension"
-msgstr ""
+msgstr "無法載入軟體庫：「primary」資料不存在或不支援格式"
 
 #: repo/repo.cpp:513
 #, c++-format
-msgid "Failed to load xml Comps \"{}\": {}"
-msgstr ""
+msgid "Failed to load comps \"{}\": doesn't have the \".xml\" extension"
+msgstr "無法載入 comps「{}」：沒有「.xml」副檔名"
 
-#: repo/repo.cpp:531
+#: repo/repo.cpp:520
+#, c++-format
+msgid "Failed to load xml Comps \"{}\": {}"
+msgstr "無法載入 xml Comps「{}」：{}"
+
+#: repo/repo.cpp:538
 #, c++-format
 msgid "Failed to load RPM \"{}\": {}"
-msgstr ""
+msgstr "無法載入 RPM「{}」：{}"
 
 #: repo/repo_cache.cpp:255
 msgid "Unable to determine id of the repository in the cache."
-msgstr ""
+msgstr "無法判斷快取中軟體庫的 id。"
 
 #: repo/repo_cache_private.hpp:59
 msgid "Empty path to the repository cache directory."
-msgstr ""
+msgstr "軟體庫快取目錄的路徑為空。"
 
 #: repo/repo_config_override.cpp:69
 #, c++-format
 msgid "Cannot set option \"{}\" for repository \"{}\": {}"
-msgstr ""
+msgstr "無法設定選項「{}」（軟體庫「{}」）：{}"
 
 #: repo/repo_config_override.cpp:84
 #, c++-format
 msgid "Cannot create directory \"{}\": {}"
-msgstr ""
+msgstr "無法建立目錄「{}」：{}"
 
 #: repo/repo_config_override.cpp:136 repo/repo_config_override.cpp:143
 #, c++-format
 msgid "Cannot write to file \"{}\": {}"
-msgstr ""
+msgstr "無法寫入檔案「{}」：{}"
 
 #: repo/repo_config_override.cpp:157
 #, c++-format
 msgid "Cannot set permissions on file \"{}\": {}"
-msgstr ""
+msgstr "無法設定檔案「{}」的權限：{}"
 
 #: repo/repo_downloader.cpp:224
 #, c++-format
 msgid "Librepo error: {}"
-msgstr ""
+msgstr "Librepo 錯誤：{}"
 
 #: repo/repo_downloader.cpp:269
 msgid "Failed to set up metadata download"
-msgstr ""
+msgstr "無法設定中繼資料下載"
 
 #: repo/repo_downloader.cpp:323 repo/repo_downloader.cpp:373
 msgid "Failed to download metadata"
-msgstr ""
+msgstr "無法下載中繼資料"
 
 #: repo/repo_downloader.cpp:437
 #, c++-format
 msgid "Error checking if metalink \"{}\" is in sync for repository \"{}\""
-msgstr ""
+msgstr "檢查 metalink「{}」是否與軟體庫「{}」同步時發生錯誤"
 
 #: repo/repo_downloader.cpp:457
 #, c++-format
 msgid "Error checking if repomd ({}: \"{}\") is in sync for repository \"{}\""
-msgstr ""
+msgstr "檢查軟體庫「{}」的 repomd（{}：「{}」）是否同步時發生錯誤"
 
 #: repo/repo_downloader.cpp:526
 #, c++-format
 msgid "Error loading local metadata for repository \"{}\""
-msgstr ""
+msgstr "載入軟體庫「{}」的本地中繼資料時發生錯誤"
 
 #: repo/repo_downloader.cpp:608
 #, c++-format
 msgid ""
 "No valid source (baseurl, mirrorlist or metalink) found for repository \"{}\""
-msgstr ""
+msgstr "找不到軟體庫「{}」的有效來源（baseurl、mirrorlist 或 metalink）"
 
-#: repo/repo_pgp.cpp:65
+#: repo/repo_pgp.cpp:67
 #, c++-format
 msgid "Failed to import OpenPGP keys into temporary keyring: {}"
-msgstr ""
+msgstr "無法將 OpenPGP 金鑰匯入暫時金鑰圈：{}"
 
-#: repo/repo_pgp.cpp:71 repo/repo_pgp.cpp:98
+#: repo/repo_pgp.cpp:73 repo/repo_pgp.cpp:100
 #, c++-format
 msgid "Failed to list OpenPGP keys: {}"
-msgstr ""
+msgstr "無法列出 OpenPGP 金鑰：{}"
 
-#: repo/repo_pgp.cpp:146
+#: repo/repo_pgp.cpp:153
 #, c++-format
 msgid "Failed to import OpenPGP keys: {}"
-msgstr ""
+msgstr "無法匯入 OpenPGP 金鑰：{}"
 
 #: repo/repo_sack.cpp:159
 #, c++-format
 msgid ""
 "Failed to create repo \"{}\": Id is present more than once in the "
 "configuration"
-msgstr ""
+msgstr "無法建立軟體庫「{}」：Id 在設定中出現多次"
 
 #: repo/repo_sack.cpp:637
 #, c++-format
 msgid "Cache-only enabled but no cache for repository \"{}\""
-msgstr ""
+msgstr "已啟用僅快取模式，但軟體庫「{}」沒有快取"
 
-#: repo/solv_repo.cpp:267
+#: repo/solv_repo.cpp:268
 #, c++-format
 msgid "Failed to load repomd for repo \"{}\" from \"{}\": {}."
-msgstr ""
+msgstr "無法載入軟體庫「{}」的 repomd（來自「{}」）：{}。"
 
-#: repo/solv_repo.cpp:275
+#: repo/solv_repo.cpp:276
 #, c++-format
 msgid "Failed to load primary for repo \"{}\" from \"{}\": {}."
-msgstr ""
+msgstr "無法載入軟體庫「{}」的主要資料（來自「{}」）：{}。"
 
-#: repo/solv_repo.cpp:323
+#: repo/solv_repo.cpp:324
 #, c++-format
 msgid "Unsupported extended repodata type for the system repo: \"{}\"."
-msgstr ""
+msgstr "系統軟體庫不支援的擴充 repodata 類型：「{}」。"
 
-#: repo/solv_repo.cpp:395
+#: repo/solv_repo.cpp:396
 #, c++-format
 msgid "Failed to load {} extension for repo \"{}\" from \"{}\": {}"
+msgstr "無法載入軟體庫「{}」的 {} 擴充功能（來自「{}」）：{}"
+
+#: repo/solv_repo.cpp:436
+#, c++-format
+msgid "Failed to acquire system repo lock for reading, lock located at \"{}\""
 msgstr ""
 
-#: repo/solv_repo.cpp:431
+#: repo/solv_repo.cpp:455
 #, c++-format
 msgid "Failed to load system repo from root \"{}\": {}"
-msgstr ""
+msgstr "無法從根目錄「{}」載入系統軟體庫：{}"
 
-#: repo/solv_repo.cpp:532
+#: repo/solv_repo.cpp:559
 #, c++-format
 msgid "Failed to load {} cache for repo \"{}\" from \"{}\": {}"
-msgstr ""
+msgstr "無法載入軟體庫「{}」的 {} 快取（來自「{}」）：{}"
 
-#: repo/solv_repo.cpp:586
+#: repo/solv_repo.cpp:613
 #, c++-format
 msgid "Failed to write primary cache for repo \"{}\" to \"{}\": {}"
-msgstr ""
+msgstr "無法寫入軟體庫「{}」的主要快取（到「{}」）：{}"
 
-#: repo/solv_repo.cpp:608
+#: repo/solv_repo.cpp:635
 #, c++-format
 msgid "Failed to re-load primary cache for repo \"{}\" from \"{}\": {}"
-msgstr ""
+msgstr "無法重新載入軟體庫「{}」的主要快取（來自「{}」）：{}"
 
-#: repo/solv_repo.cpp:673
+#: repo/solv_repo.cpp:700
 #, c++-format
 msgid "Failed to write {} cache for repo \"{}\" to \"{}\": {}"
-msgstr ""
+msgstr "無法寫入軟體庫「{}」的 {} 快取到「{}」：{}"
 
-#: repo/solv_repo.cpp:694
+#: repo/solv_repo.cpp:721
 #, c++-format
 msgid "Failed to re-load {} cache for repo \"{}\" from \"{}\": {}"
-msgstr ""
+msgstr "無法從「{}」重新載入軟體庫「{}」的 {} 快取：{}"
 
 #: repo/temp_files_memory.cpp:52
 #, c++-format
 msgid ""
 "An error occurred when parsing the temporary files memory file at '{}': {}"
-msgstr ""
+msgstr "剖析暫存檔記憶檔案「{}」時發生錯誤：{}"
 
 #: rpm/checksum.cpp:98
 msgid "Unknown checksum type"
-msgstr ""
+msgstr "未知的檢查碼類型"
 
 #: rpm/nevra.cpp:82
 #, c++-format
 msgid "NEVRA string \"{}\" contains ':' multiple times"
-msgstr ""
+msgstr "NEVRA 字串「{}」包含多個「:」字元"
 
 #: rpm/nevra.cpp:86
 #, c++-format
 msgid "Invalid character '{}' in NEVRA string \"{}\""
-msgstr ""
+msgstr "NEVRA 字串「{}」中有無效字元「{}」"
 
 #: rpm/package.cpp:81
 msgid "Package with rpmdbid was not found"
-msgstr ""
+msgstr "找不到具有 rpmdbid 的軟體包"
 
 #: rpm/package.cpp:486
 msgid "<unknown>"
-msgstr ""
+msgstr "<未知>"
 
-#: rpm/reldep.cpp:116 rpm/reldep.cpp:123
+#: rpm/reldep.cpp:117 rpm/reldep.cpp:124
 msgid "Cannot parse a dependency string"
-msgstr ""
+msgstr "無法剖析相依性字串"
 
 #: rpm/rpm_signature.cpp:45
 msgid "No corresponding key was found."
-msgstr ""
+msgstr "找不到對應的金鑰。"
 
 #: rpm/rpm_signature.cpp:46
 msgid "The signature is valid, but the key is not trusted."
-msgstr ""
+msgstr "簽章有效，但金鑰不受信任。"
 
 #: rpm/rpm_signature.cpp:47
 msgid "The package is not signed."
-msgstr ""
+msgstr "此軟體包未簽章。"
 
 #: rpm/rpm_signature.cpp:48
 msgid "Problem occurred when opening the package."
-msgstr ""
+msgstr "開啟軟體包時發生錯誤。"
 
-#: rpm/rpm_signature.cpp:64
+#: rpm/rpm_signature.cpp:64 system/state.cpp:792
 #, c++-format
 msgid "Failed to set rpm transaction rootDir \"{}\"."
-msgstr ""
+msgstr "無法設定 rpm 處理事項根目錄「{}」。"
 
 #: rpm/rpm_signature.cpp:282
 #, c++-format
 msgid "\"{}\": key is not an armored public key."
-msgstr ""
+msgstr "「{}」不是 armored 公鑰。"
 
 #: rpm/rpm_signature.cpp:287
 #, c++-format
 msgid "Failed to import public key \"{}\" to rpmdb: {}"
-msgstr ""
+msgstr "無法將公鑰「{}」匯入 rpmdb：{}"
 
 #. TODO(jrohel): Why? Librpm does not provide this information.
 #: rpm/transaction.cpp:116
 #, c++-format
 msgid "Cannot set root directory \"{}\""
-msgstr ""
+msgstr "無法設定根目錄「{}」"
 
 #: rpm/transaction.cpp:127
 #, c-format
 msgid "Error %i opening rpm database"
-msgstr ""
+msgstr "開啟 rpm 資料庫錯誤 %i"
 
 #: rpm/transaction.cpp:136
 msgid "The rpmdbCookie() function did not return cookie of rpm database."
-msgstr ""
+msgstr "rpmdbCookie() 函數未回傳 rpm 資料庫的 cookie。"
 
 #: rpm/transaction.cpp:228
 #, c++-format
@@ -1380,364 +1415,399 @@ msgid ""
 "versions after an interrupted upgrade. Please remove the duplicate packages "
 "using \"dnf remove\" and retry."
 msgstr ""
+"rpm 處理事項將意外移除相依性解析器未規劃移除的軟體包：{}。這通常發生在升級中"
+"斷後 rpmdb 含有重複版本的軟體包時。請使用「dnf remove」移除重複的軟體包後再試"
+"一次。"
 
 #: rpm/transaction.cpp:236
 msgid "Failed to order the rpm transaction."
-msgstr ""
+msgstr "無法排序 rpm 處理事項。"
 
 #: rpm/transaction.cpp:272
 #, c++-format
 msgid ""
 "Failed to set scriptlet output file, cannot duplicate file descriptor: {}"
-msgstr ""
+msgstr "無法設定命令小稿輸出檔，無法再製檔案描述元：{}"
 
 #: rpm/transaction.cpp:291
 #, c++-format
 msgid "Failed to set scriptlet output file, cannot open file \"{}\": {}"
-msgstr ""
+msgstr "無法設定指令稿輸出檔，無法開啟檔案「{}」：{}"
 
 #: rpm/transaction.cpp:312
 #, c++-format
 msgid "Failed to read package header, cannot open file \"{}\": {}"
-msgstr ""
+msgstr "無法讀取軟體包標頭，無法開啟檔案「{}」：{}"
 
 #: rpm/transaction.cpp:329
 #, c++-format
 msgid "Failed to read package header from file \"{}\""
-msgstr ""
+msgstr "無法從檔案「{}」讀取軟體包標頭"
 
 #: rpm/transaction.cpp:342
 msgid "Cannot init rpm database iterator"
-msgstr ""
+msgstr "無法初始化 rpm 資料庫疊代器"
 
 #: rpm/transaction.cpp:346
 msgid "Package was not found in rpm database"
-msgstr ""
+msgstr "在 rpm 資料庫中找不到軟體包"
 
 #. TODO(jrohel): Why? Librpm does not provide this information.
 #: rpm/transaction.cpp:362
 #, c++-format
 msgid "Cannot reinstall package \"{}\""
-msgstr ""
+msgstr "無法重新安裝軟體包「{}」"
 
 #. TODO(jrohel): Why? Librpm does not provide this information.
 #: rpm/transaction.cpp:380
 #, c++-format
 msgid "Cannot remove package \"{}\""
-msgstr ""
+msgstr "無法移除軟體包「{}」"
 
 #: rpm/transaction.cpp:399
 #, c++-format
 msgid "Cannot upgrade package \"{}\""
-msgstr ""
+msgstr "無法升級軟體包「{}」"
 
 #: rpm/transaction.cpp:403
 #, c++-format
 msgid "Cannot downgrade package \"{}\""
-msgstr ""
+msgstr "無法降級軟體包「{}」"
 
 #: rpm/transaction.cpp:407
 #, c++-format
 msgid "Cannot install package \"{}\""
+msgstr "無法安裝軟體包「{}」"
+
+#: rpm/versionlock_config.cpp:259
+#, c++-format
+msgid "Error parsing versionlock file \"{}\": {}"
 msgstr ""
 
-#: rpm/versionlock_config.cpp:284 system/state.cpp:605
+#: rpm/versionlock_config.cpp:297 system/state.cpp:614
 #, c++-format
 msgid "{}"
-msgstr ""
+msgstr "{}"
 
 #. TODO(lukash) throw proper exception class
 #: solv/pool.cpp:198
 #, c++-format
 msgid "Failed to convert epoch \"{}\" to number"
-msgstr ""
+msgstr "無法將 epoch「{}」轉換為數字"
 
 #: solv/solver.cpp:79
 #, c++-format
 msgid "Writing debugsolver data into \"{}\" failed: {}"
-msgstr ""
+msgstr "寫入 debugsolver 資料到「{}」失敗：{}"
 
-#: solv/vendor_change_manager.cpp:339
+#: solv/vendor_change_manager.cpp:357
 #, c++-format
 msgid "Missing \"version\" key in \"{}\""
-msgstr ""
+msgstr "「{}」中缺少「version」鍵"
 
-#: solv/vendor_change_manager.cpp:351
+#: solv/vendor_change_manager.cpp:369
 #, c++-format
 msgid "Unsupported version \"{}\" in \"{}\". Supported versions: {}"
-msgstr ""
+msgstr "版本「{}」在「{}」中不受支援。支援的版本：{}"
 
-#: solv/vendor_change_manager.cpp:362
+#: solv/vendor_change_manager.cpp:380
 #, c++-format
 msgid ""
 "Configuration \"{}\" uses version \"1.0\" which does not support combining "
 "'equivalent_vendors' with 'outgoing_vendors' and 'incoming_vendors'"
 msgstr ""
+"設定「{}」使用 1.0 版，不支援將「equivalent_vendors」與「outgoing_vendors」及"
+"「incoming_vendors」搭配使用"
 
-#: solv/vendor_change_manager.cpp:394 solv/vendor_change_manager.cpp:432
-#: solv/vendor_change_manager.cpp:484 solv/vendor_change_manager.cpp:709
+#: solv/vendor_change_manager.cpp:412 solv/vendor_change_manager.cpp:457
+#: solv/vendor_change_manager.cpp:509 solv/vendor_change_manager.cpp:734
 #, c++-format
 msgid "Unknown key '{}' in \"{}\" on line {}"
-msgstr ""
+msgstr "未知鍵「{}」出現在「{}」的第 {} 行"
 
-#: solv/vendor_change_manager.cpp:401
+#: solv/vendor_change_manager.cpp:419
 #, c++-format
 msgid ""
 "Configuration \"{}\" uses version \"1.0\" which does not support key '{}' on "
 "line {}"
-msgstr ""
+msgstr "設定「{}」使用 1.0 版，不支援鍵「{}」（第 {} 行）"
 
-#: solv/vendor_change_manager.cpp:420
+#: solv/vendor_change_manager.cpp:445
 #, c++-format
 msgid ""
 "Filter \"cmdline_repo\" is only allowed in the 'incoming_packages' section. "
 "Error in \"{}\" in table starting on line {}"
 msgstr ""
+"篩選器「cmdline_repo」只能用於「incoming_packages」區段。「{}」中從第 {} 行開"
+"始的表格有錯誤"
 
-#: solv/vendor_change_manager.cpp:442
+#: solv/vendor_change_manager.cpp:467
 #, c++-format
 msgid ""
 "Missing package filter definition in \"{}\" in table starting on line {}"
-msgstr ""
+msgstr "「{}」中從第 {} 行開始的表格缺少軟體包篩選器定義"
 
-#: solv/vendor_change_manager.cpp:473
+#: solv/vendor_change_manager.cpp:498
 #, c++-format
 msgid ""
 "Unsupported comparator \"{}\" for vendor definition in \"{}\" on line {}"
-msgstr ""
+msgstr "供應商定義使用了不支援的比較運算子「{}」，位於「{}」的第 {} 行"
 
-#: solv/vendor_change_manager.cpp:494
+#: solv/vendor_change_manager.cpp:519
 #, c++-format
 msgid "Missing 'vendor' key in \"{}\" in table starting on line {}"
-msgstr ""
+msgstr "「{}」中從第 {} 行開始的表格缺少「vendor」鍵"
 
-#: solv/vendor_change_manager.cpp:507
+#: solv/vendor_change_manager.cpp:532
 #, c++-format
 msgid ""
 "Invalid regex vendor pattern \"{}\" in \"{}\" in table starting on line {}: "
 "{}"
-msgstr ""
+msgstr "無效的供應商正規表示式樣式「{}」，位於「{}」中從第 {} 行開始的表格：{}"
 
-#: solv/vendor_change_manager.cpp:535
+#: solv/vendor_change_manager.cpp:560
 #, c++-format
 msgid "Bad value type in \"{}\" on line {}: {}"
-msgstr ""
+msgstr "「{}」第 {} 行的值類型錯誤：{}"
 
-#: solv/vendor_change_manager.cpp:541
+#: solv/vendor_change_manager.cpp:566
 #, c++-format
 msgid "An error occurred when parsing \"{}\": {}"
-msgstr ""
+msgstr "剖析「{}」時發生錯誤：{}"
 
-#: solv/vendor_change_manager.cpp:555
+#: solv/vendor_change_manager.cpp:580
 #, c++-format
 msgid ""
 "Configuration \"{}\" uses version \"1.0\" which does not support "
 "'incoming_vendors' without 'outgoing_vendors'"
 msgstr ""
+"設定「{}」使用 1.0 版，不支援在沒有「outgoing_vendors」的情況下使用「"
+"incoming_vendors」"
 
-#: solv/vendor_change_manager.cpp:561
+#: solv/vendor_change_manager.cpp:586
 #, c++-format
 msgid ""
 "Configuration \"{}\" uses version \"1.0\" which does not support "
 "'outgoing_vendors' without 'incoming_vendors'"
 msgstr ""
+"設定「{}」使用 1.0 版，不支援在沒有「incoming_vendors」的情況下使用「"
+"outgoing_vendors」"
 
-#: solv/vendor_change_manager.cpp:651
+#: solv/vendor_change_manager.cpp:676
 #, c++-format
 msgid "Unknown 'comparator' \"{}\" in \"{}\" on line {}"
-msgstr ""
+msgstr "未知的「comparator」值「{}」，位於「{}」的第 {} 行"
 
-#: solv/vendor_change_manager.cpp:655
+#: solv/vendor_change_manager.cpp:680
 #, c++-format
 msgid ""
 "Configuration \"{}\" uses version \"{}\" which does not support 'comparator' "
 "\"{}\""
-msgstr ""
+msgstr "設定「{}」使用版本「{}」，不支援「comparator」值「{}」"
 
-#: solv/vendor_change_manager.cpp:694
+#: solv/vendor_change_manager.cpp:719
 #, c++-format
 msgid "Unknown 'filter' \"{}\" in \"{}\" on line {}"
-msgstr ""
+msgstr "未知的「filter」值「{}」，位於「{}」的第 {} 行"
 
-#: solv/vendor_change_manager.cpp:715
+#: solv/vendor_change_manager.cpp:740
 #, c++-format
 msgid "Missing 'filter' key in \"{}\" for table entry on line {}"
-msgstr ""
+msgstr "「{}」第 {} 行的表格項目缺少「filter」鍵"
 
-#: solv/vendor_change_manager.cpp:720
+#: solv/vendor_change_manager.cpp:745
 #, c++-format
 msgid "Missing 'value' key in \"{}\" for table entry on line {}"
-msgstr ""
+msgstr "「{}」第 {} 行的表格項目缺少「value」鍵"
 
-#: solv/vendor_change_manager.cpp:727
+#: solv/vendor_change_manager.cpp:752
 #, c++-format
 msgid ""
 "Filter \"cmdline_repo\" in \"{}\" in table starting on line {} does not "
 "support comparator \"{}\". Only the default \"EXACT\" comparator is allowed "
 "for this filter"
 msgstr ""
+"「{}」中從第 {} 行開始之表格內的篩選器「cmdline_repo」不支援比較運算子「{}」"
+"。此篩選器只允許使用預設的「EXACT」比較運算子"
 
-#: solv/vendor_change_manager.cpp:744
+#: solv/vendor_change_manager.cpp:769
 #, c++-format
 msgid ""
 "Invalid 'value' \"{}\" in \"{}\" in table starting on line {}. Only "
 "\"true\", \"1\", \"false\", \"0\" are supported"
 msgstr ""
+"無效的「value」值「{}」，位於「{}」中從第 {} 行開始的表格。僅支援「true」、「"
+"1」、「false」、「0」"
 
-#: solv/vendor_change_manager.cpp:754 solv/vendor_change_manager.cpp:765
+#: solv/vendor_change_manager.cpp:779 solv/vendor_change_manager.cpp:790
 #, c++-format
 msgid ""
 "Filter \"{}\" in \"{}\" in table starting on line {} does not support "
 "comparator \"{}\""
-msgstr ""
+msgstr "篩選器「{}」位於「{}」中從第 {} 行開始的表格，不支援比較運算子「{}」"
 
-#: solv/vendor_change_manager.cpp:781
+#: solv/vendor_change_manager.cpp:806
 #, c++-format
 msgid "Invalid epoch value \"{}\" in \"{}\" in table starting on line {}"
-msgstr ""
+msgstr "無效的 epoch 值「{}」，位於「{}」中從第 {} 行開始的表格"
 
-#: solv/vendor_change_manager.cpp:796
+#: solv/vendor_change_manager.cpp:821
 #, c++-format
 msgid "Invalid regex \"{}\" in \"{}\" in table starting on line {}: {}"
-msgstr ""
+msgstr "無效的正規表示式「{}」，位於「{}」中從第 {} 行開始的表格：{}"
 
-#: solv/vendor_change_manager.cpp:848
+#: solv/vendor_change_manager.cpp:873
 msgid "Unexpected end of input"
-msgstr ""
+msgstr "輸入內容意外結束"
 
-#: solv/vendor_change_manager.cpp:865
+#: solv/vendor_change_manager.cpp:890
 #, c++-format
 msgid "Expected '{}' but found end of input"
-msgstr ""
+msgstr "預期為「{}」，但輸入內容已結束"
 
-#: solv/vendor_change_manager.cpp:867
+#: solv/vendor_change_manager.cpp:892
 #, c++-format
 msgid "Expected '{}' but found '{}'"
-msgstr ""
+msgstr "預期為「{}」，但找到「{}」"
 
-#: solv/vendor_change_manager.cpp:877
+#: solv/vendor_change_manager.cpp:902
 #, c++-format
 msgid "Compact vendor change policy parse error in \"{}\" at position {}"
-msgstr ""
+msgstr "剖析「{}」中的精簡供應商變更原則時發生錯誤，位置 {}"
 
-#: solv/vendor_change_manager.cpp:931
+#: solv/vendor_change_manager.cpp:956
 msgid "Expected package filter after '@'"
-msgstr ""
+msgstr "「@」後應為軟體包篩選器"
 
-#: solv/vendor_change_manager.cpp:944
+#: solv/vendor_change_manager.cpp:969
 #, c++-format
 msgid "Unexpected character '{}'"
-msgstr ""
+msgstr "遇到非預期的字元「{}」"
 
-#: solv/vendor_change_manager.cpp:1020
+#: solv/vendor_change_manager.cpp:1045
 msgid "Expected quoted string starting with '\"'"
-msgstr ""
+msgstr "預期為以「\"」開頭的引號字串"
 
-#: solv/vendor_change_manager.cpp:1028
+#: solv/vendor_change_manager.cpp:1053
 msgid "Unterminated escape sequence"
-msgstr ""
+msgstr "跳脫序列未結束"
 
-#: solv/vendor_change_manager.cpp:1034
+#: solv/vendor_change_manager.cpp:1059
 #, c++-format
 msgid "Invalid escape sequence '\\{}'. Only '\\\"' and '\\\\' are supported"
-msgstr ""
+msgstr "無效的跳脫序列「\\{}」。僅支援「\\\"」與「\\\\」"
 
-#: solv/vendor_change_manager.cpp:1041
+#: solv/vendor_change_manager.cpp:1066
 msgid "Unterminated quoted string"
-msgstr ""
+msgstr "引號字串未結束"
 
-#: solv/vendor_change_manager.cpp:1076
+#: solv/vendor_change_manager.cpp:1101
 msgid "Expected direction prefix 'in', 'out', or 'eq'"
-msgstr ""
+msgstr "預期的方向前綴為「in」、「out」或「eq」"
 
-#: solv/vendor_change_manager.cpp:1140
+#: solv/vendor_change_manager.cpp:1165
 msgid ""
 "Expected comparison operator: relational (<, <=, >, >=) or string (=, ^, $, "
 "*, =*, =~; optionally prefixed with ! and/or i"
 msgstr ""
+"預期為比較運算子：關係運算子（<、<=、>、>=）或字串運算子"
+"（=、^、$、*、=*、=~；可選擇加上 ! 和／或 i 前綴）"
 
-#: solv/vendor_change_manager.cpp:1205
+#: solv/vendor_change_manager.cpp:1230
 msgid ""
 "Vendor definition does not support relational comparators. Use string "
 "comparators: =, ^, $, *, =*, =~"
-msgstr ""
+msgstr "供應商定義不支援關係比較運算子。請使用字串比較運算子：=、^、$、*、=*、=~"
 
-#: solv/vendor_change_manager.cpp:1213
+#: solv/vendor_change_manager.cpp:1238
 #, c++-format
 msgid "Invalid regex vendor pattern '{}': {}"
-msgstr ""
+msgstr "無效的供應商正規表示式樣式「{}」：{}"
 
-#: solv/vendor_change_manager.cpp:1231
+#: solv/vendor_change_manager.cpp:1256
 #, c++-format
 msgid "Unknown filter field name '{}'"
-msgstr ""
+msgstr "未知的篩選欄位名稱「{}」"
 
-#: solv/vendor_change_manager.cpp:1241
+#: solv/vendor_change_manager.cpp:1266
 msgid "Expected filter field name"
-msgstr ""
+msgstr "預期為篩選欄位名稱"
 
-#: solv/vendor_change_manager.cpp:1264
+#: solv/vendor_change_manager.cpp:1295
 #, c++-format
 msgid "Invalid epoch value \"{}\""
-msgstr ""
+msgstr "無效的 epoch 值「{}」"
 
-#: solv/vendor_change_manager.cpp:1268
+#: solv/vendor_change_manager.cpp:1299
 msgid "Filter 'cmdline_repo' only supports the '=' (EXACT) comparator"
-msgstr ""
+msgstr "篩選器「cmdline_repo」僅支援「=」（EXACT）比較運算子"
 
-#: solv/vendor_change_manager.cpp:1271
+#: solv/vendor_change_manager.cpp:1302
 msgid "Filter 'cmdline_repo' is only allowed in incoming packages ('in:')"
-msgstr ""
+msgstr "篩選器「cmdline_repo」只能用於傳入的軟體包（「in:」）"
 
-#: solv/vendor_change_manager.cpp:1282
+#: solv/vendor_change_manager.cpp:1313
 #, c++-format
 msgid ""
 "Invalid value '{}' for 'cmdline_repo' filter. Use 'true', '1', 'false', or "
 "'0'"
-msgstr ""
+msgstr "篩選器「cmdline_repo」的值「{}」無效。請使用「true」、「1」、「false」或「0」"
 
-#: solv/vendor_change_manager.cpp:1286
+#: solv/vendor_change_manager.cpp:1317
 #, c++-format
 msgid "Filter '{}' only supports relational comparators: =, !=, >, >=, <, <="
-msgstr ""
+msgstr "篩選器「{}」僅支援關係比較運算子：=、!=、>、>=、<、<="
 
-#: solv/vendor_change_manager.cpp:1290
+#: solv/vendor_change_manager.cpp:1321
 #, c++-format
 msgid "Filter '{}' only supports string comparators: =, ^, $, *, =*, =~"
-msgstr ""
+msgstr "篩選器「{}」僅支援字串比較運算子：=、^、$、*、=*、=~"
 
-#: solv/vendor_change_manager.cpp:1299
+#: solv/vendor_change_manager.cpp:1330
 #, c++-format
 msgid "Invalid regex '{}': {}"
-msgstr ""
+msgstr "無效的正規表示式「{}」：{}"
 
-#: solv/vendor_change_manager.cpp:1310
+#: solv/vendor_change_manager.cpp:1341
 msgid "Package filters do not support 'eq' direction. Use 'in' or 'out'"
-msgstr ""
+msgstr "軟體包篩選器不支援「eq」方向。請使用「in」或「out」"
 
-#: solv/vendor_change_manager.cpp:1401 solv/vendor_change_manager.cpp:1451
-#: solv/vendor_change_manager.cpp:1462 solv/vendor_change_manager.cpp:1473
+#: solv/vendor_change_manager.cpp:1432 solv/vendor_change_manager.cpp:1482
+#: solv/vendor_change_manager.cpp:1493 solv/vendor_change_manager.cpp:1504
 msgid "{func}(): Policy index {idx} is out of range"
-msgstr ""
+msgstr "{func}()：原則索引 {idx} 超出範圍"
 
-#: system/state.cpp:282 system/state.cpp:291
+#: system/state.cpp:291 system/state.cpp:300
 #, c++-format
 msgid "Invalid TOML version \"{}\", \"MAJOR.MINOR\" expected"
-msgstr ""
+msgstr "無效的 TOML 版本「{}」，預期為「MAJOR.MINOR」"
 
-#: system/state.cpp:299
+#: system/state.cpp:308
 #, c++-format
 msgid "{} state for \"{}\" not found."
-msgstr ""
+msgstr "找不到「{}」的「{}」狀態。"
 
-#: system/state.cpp:303
+#: system/state.cpp:312
 #, c++-format
 msgid "Loading system state TOML file {} failed (see dnf5-system-state(7)): {}"
-msgstr ""
+msgstr "載入系統狀態 TOML 檔案「{}」失敗（請參閱 dnf5-system-state(7)）：{}"
 
-#: system/state.cpp:640
+#: system/state.cpp:649
 #, c++-format
 msgid "Unsupported TOML version \"{}\", maximum supported version is \"{}\""
+msgstr "不支援的 TOML 版本「{}」，最高支援版本為「{}」"
+
+#: system/state.cpp:798
+#, c++-format
+msgid "Error {} opening rpm database"
+msgstr ""
+
+#: system/state.cpp:802
+msgid "Failed to get rpm database"
+msgstr ""
+
+#: system/state.cpp:808
+msgid "Failed to initialize database index iterator"
 msgstr ""
 
 #. TODO(dmach): replace with a better exception class
@@ -1745,162 +1815,162 @@ msgstr ""
 msgid ""
 "Failed to insert record into table 'comps_environment_group' in history "
 "database"
-msgstr ""
+msgstr "無法在歷史資料庫的「comps_environment_group」表格中插入記錄"
 
 #: transaction/db/db.cpp:71
 msgid "Unable to get 'version' from table 'config'"
-msgstr ""
+msgstr "無法從「config」表格取得「version」"
 
 #. TODO(dmach): replace with a better exception class
 #: transaction/db/item.cpp:43
 msgid "Failed to insert record into table 'item' in history database"
-msgstr ""
+msgstr "無法在歷史資料庫的「item」表格中插入記錄"
 
 #: transaction/offline.cpp:212
 msgid "error reading offline state file"
-msgstr ""
+msgstr "讀取離線狀態檔案時發生錯誤"
 
 #: transaction/offline.cpp:217
 msgid "incompatible version of state data"
-msgstr ""
+msgstr "狀態資料版本不相容"
 
 #: transaction/transaction.cpp:87
 msgid "Started"
-msgstr ""
+msgstr "已開始"
 
 #: transaction/transaction.cpp:89
 msgid "Ok"
-msgstr ""
+msgstr "成功"
 
 #: transaction/transaction.cpp:91
 msgid "Error"
-msgstr ""
+msgstr "錯誤"
 
 #: transaction/transaction.cpp:110
 #, c++-format
 msgid "Invalid transaction state: {}"
-msgstr ""
+msgstr "無效的處理事項狀態：{}"
 
 #: transaction/transaction.cpp:313
 msgid "Transaction has already started!"
-msgstr ""
+msgstr "處理事項已經開始！"
 
 #: transaction/transaction_item_action.cpp:30
 #, c++-format
 msgid "Invalid transaction item action: {}"
-msgstr ""
+msgstr "無效的處理事項動作：{}"
 
 #: transaction/transaction_item_action.cpp:74
 msgid "Replaced"
-msgstr ""
+msgstr "已取代"
 
 #: transaction/transaction_item_action.cpp:84
 msgid "Switch"
-msgstr ""
+msgstr "切換"
 
 #: transaction/transaction_item_reason.cpp:30
 #, c++-format
 msgid "Invalid transaction item reason: {}"
-msgstr ""
+msgstr "無效的處理事項原因：{}"
 
 #: transaction/transaction_item_reason.cpp:56
 msgid "None"
-msgstr ""
+msgstr "無"
 
 #: transaction/transaction_item_reason.cpp:58
 msgid "Dependency"
-msgstr ""
+msgstr "相依性"
 
 #: transaction/transaction_item_reason.cpp:60
 msgid "User"
-msgstr ""
+msgstr "使用者"
 
 #: transaction/transaction_item_reason.cpp:62
 msgid "Clean"
-msgstr ""
+msgstr "清理"
 
 #: transaction/transaction_item_reason.cpp:64
 msgid "Weak Dependency"
-msgstr ""
+msgstr "弱相依性"
 
 #: transaction/transaction_item_reason.cpp:66
 msgid "Group"
-msgstr ""
+msgstr "群組"
 
 #: transaction/transaction_item_reason.cpp:68
 msgid "External User"
-msgstr ""
+msgstr "外部使用者"
 
 #: transaction/transaction_item_state.cpp:28
 #, c++-format
 msgid "Invalid transaction item state: {}"
-msgstr ""
+msgstr "無效的處理事項狀態：{}"
 
 #: transaction/transaction_item_type.cpp:28
 #, c++-format
 msgid "Invalid transaction item type: {}"
-msgstr ""
+msgstr "無效的處理事項類型：{}"
 
 #: transaction/transaction_merge.cpp:102
 #, c++-format
 msgid ""
 "Action '{0}' '{1}' cannot be merged after it was '{2}' in preceding "
 "transactions -> setting '{0}'."
-msgstr ""
+msgstr "動作「{0}」「{1}」無法在先前處理事項中是「{2}」後合併 -> 設定「{0}」。"
 
 #: transaction/transaction_merge.cpp:116
 #, c++-format
 msgid ""
 "Action 'Upgrade' '{0}' cannot be merged because it is not present at that "
 "point -> setting 'Install'."
-msgstr ""
+msgstr "動作「Upgrade」「{0}」無法合併，因為在該時間點不存在 -> 設定「Install」。"
 
 #: transaction/transaction_merge.cpp:174 transaction/transaction_merge.cpp:231
 #, c++-format
 msgid ""
 "Action 'Reinstall' '{0}' cannot be merged because it is not present at that "
 "point -> setting 'Install'."
-msgstr ""
+msgstr "動作「Reinstall」「{0}」無法合併，因為在該時間點不存在 -> 設定「Install」。"
 
 #: transaction/transaction_merge.cpp:194
 #, c++-format
 msgid ""
 "Action '{0}' '{1}' cannot be merged after it was '{2}' in preceding "
 "transaction -> setting '{0}'."
-msgstr ""
+msgstr "動作「{0}」「{1}」無法在先前處理事項中是「{2}」後合併 -> 設定「{0}」。"
 
 #: transaction/transaction_merge.cpp:215
 #, c++-format
 msgid "Unexpected action encountered: '{0}' during transaction merge."
-msgstr ""
+msgstr "處理事項合併期間遇到意外的動作：「{0}」。"
 
 #: transaction/transaction_merge.cpp:224
 #, c++-format
 msgid ""
 "Action '{0}' '{1}' cannot be merged because it is not present at that point "
 "-> skipping it."
-msgstr ""
+msgstr "動作「{0}」「{1}」無法合併，因為在該時間點不存在 -> 跳過。"
 
 #: transaction/transaction_merge.cpp:245
 #, c++-format
 msgid ""
 "Action '{0}' '{1}' cannot be merged because it is not present at that point "
 "-> setting 'INSTALL'."
-msgstr ""
+msgstr "動作「{0}」「{1}」無法合併，因為在該時間點不存在 -> 設定「INSTALL」。"
 
 #: transaction/transaction_merge.cpp:266
 #, c++-format
 msgid ""
 "Action '{0}' '{1}' cannot be merged because it is not present at that point "
 "(present versions are: {2}) -> skipping it."
-msgstr ""
+msgstr "動作「{0}」「{1}」無法合併，因為在該時間點不存在（目前版本：{2}）-> 跳過。"
 
 #: transaction/transaction_merge.cpp:277
 #, c++-format
 msgid ""
 "Action '{0}' '{1}' cannot be merged because it is already present at that "
 "point -> skipping it."
-msgstr ""
+msgstr "動作「{0}」「{1}」無法合併，因為在該時間點已存在 -> 跳過。"
 
 #: transaction/transaction_merge.cpp:294
 #, c++-format
@@ -1908,122 +1978,126 @@ msgid ""
 "Action '{0}' '{1}' cannot be merged because it is already installed in "
 "version '{2}' -> keeping the action from older transaction with '{1}'."
 msgstr ""
+"動作「{0}」「{1}」無法合併，因為已安裝版本「{2}」-> 保留先前處理事項中「{1}」"
+"的動作。"
 
 #: transaction/transaction_merge.cpp:304
 #, c++-format
 msgid "Invalid action encountered: '{0}' during transaction merge."
-msgstr ""
+msgstr "處理事項合併期間遇到無效的動作：「{0}」。"
 
 #: transaction/transaction_sr.cpp:49
 msgid "Transaction replay JSON serialized transaction input is empty"
-msgstr ""
+msgstr "處理事項回放的 JSON 序列化的處理事項輸入為空"
 
 #: transaction/transaction_sr.cpp:58
 #, c++-format
 msgid "Error during transaction replay JSON parsing : {}"
-msgstr ""
+msgstr "處理事項回放 JSON 剖析錯誤：{}"
 
 #: transaction/transaction_sr.cpp:68
 #, c++-format
 msgid "Unexpected version format: \"{}\", supported version is \"{}\""
-msgstr ""
+msgstr "意外的版本格式：「{}」，支援的版本為「{}」"
 
 #: transaction/transaction_sr.cpp:74
 #, c++-format
 msgid "Incompatible major version: \"{}\", supported major version is \"{}\""
-msgstr ""
+msgstr "不相容的主要版本：「{}」，支援的主要版本為「{}」"
 
 #: transaction/transaction_sr.cpp:81
 #, c++-format
 msgid "Invalid minor version: \"{}\", number expected"
-msgstr ""
+msgstr "無效的次版號：「{}」，預期值是數字"
 
 #: transaction/transaction_sr.cpp:84
 msgid "Missing key \"version\""
-msgstr ""
+msgstr "缺少鍵「version」"
 
 #: transaction/transaction_sr.cpp:92
 msgid "Unexpected type of \"environments\", array expected"
-msgstr ""
+msgstr "「environments」類型錯誤，預期為陣列"
 
 #: transaction/transaction_sr.cpp:105
 msgid "Missing object key \"id\" in an environment"
-msgstr ""
+msgstr "環境中缺少物件鍵「id」"
 
 #: transaction/transaction_sr.cpp:110
 msgid "Missing object key \"action\" in an environment"
-msgstr ""
+msgstr "環境中缺少物件鍵「action」"
 
 #: transaction/transaction_sr.cpp:129
 msgid "Unexpected type of \"groups\", array expected"
-msgstr ""
+msgstr "「groups」類型錯誤，預期為陣列"
 
 #: transaction/transaction_sr.cpp:145
 msgid "Missing object key \"id\" in a group"
-msgstr ""
+msgstr "群組中缺少物件鍵「id」"
 
 #: transaction/transaction_sr.cpp:150
 msgid "Missing object key \"action\" in a group"
-msgstr ""
+msgstr "群組中缺少物件鍵「action」"
 
 #: transaction/transaction_sr.cpp:155
 msgid "Missing object key \"reason\" in a group"
-msgstr ""
+msgstr "群組中缺少物件鍵「reason」"
 
 #: transaction/transaction_sr.cpp:186
 msgid "Unexpected type of \"rpms\", array expected"
-msgstr ""
+msgstr "「rpms」類型錯誤，預期為陣列"
 
 #: transaction/transaction_sr.cpp:202
 #, c++-format
 msgid "Cannot parse NEVRA for rpm \"{}\""
-msgstr ""
+msgstr "無法剖析 rpm「{}」的 NEVRA"
 
 #: transaction/transaction_sr.cpp:210
 msgid "Either \"nevra\" or \"package_path\" object key is required in an rpm"
-msgstr ""
+msgstr "rpm 必須包含「nevra」或「package_path」物件鍵"
 
 #: transaction/transaction_sr.cpp:215
 msgid "Missing object key \"action\" in an rpm"
-msgstr ""
+msgstr "rpm 中缺少物件鍵「action」"
 
 #: transaction/transaction_sr.cpp:220
 msgid "Missing object key \"reason\" in an rpm"
-msgstr ""
+msgstr "rpm 中缺少物件鍵「reason」"
 
 #: transaction/transaction_sr.cpp:227
 msgid ""
 "Missing mandatory object key \"group_id\" in an rpm with reason \"Group\" "
 "and action \"Reason Change\""
 msgstr ""
+"Reason 為「Group」、Action 為「Reason Change」的 rpm 缺少必要物件鍵「group_id"
+"」"
 
 #: utils/bootc.cpp:46
 #, c++-format
 msgid "Error checking bootc status: {}"
-msgstr ""
+msgstr "檢查 bootc 狀態時發生錯誤：{}"
 
 #: utils/bootc.cpp:49
 #, c++-format
 msgid "Error checking bootc status: bootc command failed with exit code {}"
-msgstr ""
+msgstr "檢查 bootc 狀態時發生錯誤：bootc 指令失敗，結束代碼為 {}"
 
 #: utils/bootc.cpp:58
 msgid "Error checking bootc status: Failed to parse JSON output"
-msgstr ""
+msgstr "檢查 bootc 狀態時發生錯誤：無法剖析 JSON 輸出"
 
 #: utils/bootc.cpp:73
 #, c++-format
 msgid "Failed to query status of bootc system: {}"
-msgstr ""
+msgstr "查詢 bootc 系統狀態失敗：{}"
 
 #: utils/bootc.cpp:90
 msgid "Failed to stat /usr filesystem"
-msgstr ""
+msgstr "無法取得 /usr 檔案系統的狀態"
 
 #: utils/bootc.cpp:125
 #, c++-format
 msgid "Error running `bootc usr-overlay --read-only`: {}"
-msgstr ""
+msgstr "執行 `bootc usr-overlay --read-only` 時發生錯誤：{}"
 
 #: utils/bootc.cpp:128
 #, c++-format
@@ -2031,299 +2105,306 @@ msgid ""
 "Error running `bootc usr-overlay --read-only`: bootc command failed with "
 "exit code {}"
 msgstr ""
+"執行 `bootc usr-overlay --read-only` 時發生錯誤：bootc 指令失敗，結束代碼為 "
+"{}"
 
 #: utils/bootc.cpp:136
 msgid "Failed to unshare mount namespace"
-msgstr ""
+msgstr "無法取消共用掛載命名空間"
 
 #: utils/bootc.cpp:143
 #, c++-format
 msgid "Failed to remount /usr as read-write: {}"
-msgstr ""
+msgstr "無法以可讀寫模式重新掛載 /usr：{}"
 
 #: utils/fs/file.cpp:87
 msgid "cannot open file"
-msgstr ""
+msgstr "無法開啟檔案"
 
 #: utils/fs/file.cpp:100
 msgid "cannot open file from fd"
-msgstr ""
+msgstr "無法從 fd 開啟檔案"
 
 #: utils/fs/file.cpp:110
 msgid "cannot close file"
-msgstr ""
+msgstr "無法關閉檔案"
 
 #: utils/fs/file.cpp:140 utils/fs/file.cpp:169
 msgid "error reading file"
-msgstr ""
+msgstr "讀取檔案時發生錯誤"
 
 #: utils/fs/file.cpp:155 utils/fs/file.cpp:181
 msgid "error writing file"
-msgstr ""
+msgstr "寫入檔案錯誤"
 
 #: utils/fs/file.cpp:190
 msgid "error flushing file"
-msgstr ""
+msgstr "錯誤刷新檔案"
 
 #: utils/fs/file.cpp:199
 msgid "error seeking in file"
-msgstr ""
+msgstr "在檔案中尋找錯誤"
 
 #: utils/fs/file.cpp:210
 msgid "error retrieving file position"
-msgstr ""
+msgstr "檢索檔案位置錯誤"
 
 #: utils/fs/file.cpp:296
 msgid "error reading a line from file"
-msgstr ""
+msgstr "從檔案讀取列的錯誤"
 
 #: utils/fs/file.cpp:334
 msgid "error retrieving file descriptor"
-msgstr ""
+msgstr "擷取檔案描述符錯誤"
 
 #: utils/fs/temp.cpp:42
 msgid "cannot create temporary directory"
-msgstr ""
+msgstr "無法建立臨時目錄"
 
 #: utils/fs/temp.cpp:89
 msgid "cannot create temporary file"
-msgstr ""
+msgstr "無法建立暫存檔案"
 
 #: utils/fs/temp.cpp:142
 msgid "cannot close temporary file"
-msgstr ""
+msgstr "無法關閉臨時檔案"
 
 #: utils/iniparser.cpp:126
 #, c++-format
 msgid "Missing ']' on line {}"
-msgstr ""
+msgstr "在 {} 列缺少 ']'"
 
 #: utils/iniparser.cpp:129
 #, c++-format
 msgid "Empty section name on line {}"
-msgstr ""
+msgstr "第 {} 列的區段名稱為空"
 
 #: utils/iniparser.cpp:137
 #, c++-format
 msgid "Text after section on line {}"
-msgstr ""
+msgstr "第 {} 列的區段後還有文字"
 
 #: utils/iniparser.cpp:147
 #, c++-format
 msgid "Missing section header on line {}"
-msgstr ""
+msgstr "第 {} 列缺少區段標頭"
 
 #: utils/iniparser.cpp:152
 #, c++-format
 msgid "Illegal continuation line on line {}"
-msgstr ""
+msgstr "第 {} 列的延續列不合法"
 
 #: utils/iniparser.cpp:159
 #, c++-format
 msgid "Missing option name on line {}"
-msgstr ""
+msgstr "第 {} 列缺少選項名稱"
 
 #: utils/iniparser.cpp:163
 #, c++-format
 msgid "Missing '=' on line {}"
-msgstr ""
+msgstr "在 {} 列缺少 '='"
 
 #. returns localized message, problem with later translation
 #: utils/library.cpp:34
 #, c++-format
 msgid "Cannot load shared library \"{}\": {}"
-msgstr ""
+msgstr "無法載入共用函式庫「{}」：{}"
 
 #: utils/library.cpp:48
 #, c++-format
 msgid "Cannot obtain address of symbol \"{}\": {}"
-msgstr ""
+msgstr "無法取得符號「{}」的位址：{}"
 
 #: utils/locale.cpp:57
 #, c++-format
 msgid "Cannot set the locale \"{}\": {}"
-msgstr ""
+msgstr "無法設定地區「{}」：{}"
 
-#: utils/locker.cpp:99
+#: utils/locker.cpp:101
 #, c++-format
 msgid "Failed to obtain lock \"{}\""
-msgstr ""
+msgstr "無法取得鎖定「{}」"
 
-#: utils/locker.cpp:108
+#: utils/locker.cpp:111
 msgid "File is already open."
-msgstr ""
+msgstr "檔案已經開啟。"
 
-#: utils/locker.cpp:121
+#: utils/locker.cpp:124
 #, c++-format
 msgid "Failed to open lock file \"{}\""
-msgstr ""
+msgstr "無法開啟鎖定檔「{}」"
 
-#: utils/locker.cpp:127 utils/locker.cpp:164
+#: utils/locker.cpp:130 utils/locker.cpp:167
 #, c++-format
 msgid "The lock file \"{}\" is not opened"
-msgstr ""
+msgstr "鎖定檔「{}」尚未開啟"
 
-#: utils/locker.cpp:132
+#: utils/locker.cpp:135
 #, c++-format
 msgid "Failed to truncate lock file \"{}\""
-msgstr ""
+msgstr "無法截斷鎖定檔「{}」"
 
-#: utils/locker.cpp:135 utils/locker.cpp:172
+#: utils/locker.cpp:138 utils/locker.cpp:175
 #, c++-format
 msgid "Failed to seek lock file \"{}\""
-msgstr ""
+msgstr "無法定位鎖定檔「{}」"
 
-#: utils/locker.cpp:143
+#: utils/locker.cpp:146
 #, c++-format
 msgid "Failed to write to lock file \"{}\""
-msgstr ""
+msgstr "無法寫入鎖定檔「{}」"
 
-#: utils/locker.cpp:150
+#: utils/locker.cpp:153
 #, c++-format
 msgid "Failed to sync lock file \"{}\""
-msgstr ""
+msgstr "無法同步鎖定檔「{}」"
 
-#: utils/locker.cpp:178
+#: utils/locker.cpp:181
 #, c++-format
 msgid "Failed to read from lock file \"{}\""
+msgstr "無法讀取鎖定檔「{}」"
+
+#: utils/locker.cpp:194
+#, c++-format
+msgid "The lock file \"{}\" is not locked"
 msgstr ""
 
-#: utils/locker.cpp:192
+#: utils/locker.cpp:207
 #, c++-format
 msgid "Failed to close lock file \"{}\""
-msgstr ""
+msgstr "無法關閉鎖定檔「{}」"
 
-#: utils/locker.cpp:196
+#: utils/locker.cpp:211
 #, c++-format
 msgid "Failed to delete lock file \"{}\""
-msgstr ""
+msgstr "無法刪除鎖定檔「{}」"
 
 #: utils/sqlite3/sqlite3.cpp:29
 #, c++-format
 msgid "SQL statement compilation failed: \"{}\""
-msgstr ""
+msgstr "SQL 陳述式編譯失敗：「{}」"
 
 #: utils/sqlite3/sqlite3.cpp:31
 #, c++-format
 msgid "Binding integer value to SQL statement failed: \"{}\""
-msgstr ""
+msgstr "綁定 integer 值至 SQL 陳述式失敗：「{}」"
 
 #: utils/sqlite3/sqlite3.cpp:33
 #, c++-format
 msgid "Binding integer64 value to SQL statement failed: \"{}\""
-msgstr ""
+msgstr "綁定 integer64 值至 SQL 陳述式失敗：「{}」"
 
 #: utils/sqlite3/sqlite3.cpp:35
 #, c++-format
 msgid "Binding unsigned integer32 value to SQL statement failed: \"{}\""
-msgstr ""
+msgstr "將 unsigned integer32 值綁定到 SQL 陳述式失敗：「{}」"
 
 #: utils/sqlite3/sqlite3.cpp:37
 #, c++-format
 msgid "Binding double value to SQL statement failed: \"{}\""
-msgstr ""
+msgstr "將雙精度值綁到 SQL 陳述式失敗：「{}」"
 
 #: utils/sqlite3/sqlite3.cpp:39
 #, c++-format
 msgid "Binding bool value to SQL statement failed: \"{}\""
-msgstr ""
+msgstr "將布林值綁到 SQL 陳述式失敗：「{}」"
 
 #: utils/sqlite3/sqlite3.cpp:40
 #, c++-format
 msgid "Binding text to SQL statement failed: \"{}\""
-msgstr ""
+msgstr "綁定文字至 SQL 陳述式失敗：「{}」"
 
 #: utils/sqlite3/sqlite3.cpp:41
 #, c++-format
 msgid "Binding blob to SQL statement failed: \"{}\""
-msgstr ""
+msgstr "綁定 blob 至 SQL 陳述式失敗：「{}」"
 
 #: utils/sqlite3/sqlite3.cpp:42
 #, c++-format
 msgid "SQL statement evaluation failed: \"{}\""
-msgstr ""
+msgstr "SQL 陳述式評估失敗：「{}」"
 
 #: utils/sqlite3/sqlite3.cpp:44
 msgid "Insufficient memory or result exceed maximum SQLite3 string length"
-msgstr ""
+msgstr "記憶體不足或結果超過 SQLite3 字串長度上限"
 
 #: utils/sqlite3/sqlite3.cpp:46
 #, c++-format
 msgid "Column \"{}\" not found"
-msgstr ""
+msgstr "找不到欄位「{}」"
 
 #: utils/sqlite3/sqlite3.cpp:48
 #, c++-format
 msgid "SQL statement execution failed: \"{}\""
-msgstr ""
+msgstr "SQL 陳述式執行失敗：「{}」"
 
 #: utils/sqlite3/sqlite3.cpp:68
 #, c++-format
 msgid "Failed to open database \"{}\""
-msgstr ""
+msgstr "無法開啟資料庫「{}」"
 
 #: utils/sqlite3/sqlite3.cpp:105
 #, c++-format
 msgid "Failed to close database \"{}\""
-msgstr ""
+msgstr "無法關閉資料庫「{}」"
 
 #: utils/sqlite3/sqlite3.cpp:117 utils/sqlite3/sqlite3.cpp:143
 #, c++-format
 msgid "Failed to open backup database \"{}\""
-msgstr ""
+msgstr "無法開啟備份資料庫「{}」"
 
 #: utils/sqlite3/sqlite3.cpp:132
 #, c++-format
 msgid "Failed to backup database \"{}\" into \"{}\""
-msgstr ""
+msgstr "無法備份資料庫「{}」到「{}」"
 
 #: utils/sqlite3/sqlite3.cpp:158
 #, c++-format
 msgid "Failed to restore database \"{}\""
-msgstr ""
+msgstr "無法還原資料庫「{}」"
 
 #: utils/subprocess.cpp:29
 msgid "cannot create pipe"
-msgstr ""
+msgstr "無法建立管線"
 
 #: utils/subprocess.cpp:98
 msgid "cannot fork"
-msgstr ""
+msgstr "無法 fork"
 
 #: utils/subprocess.cpp:173
 msgid "cannot bind child stdin"
-msgstr ""
+msgstr "無法繫結子行程的 stdin"
 
 #: utils/subprocess.cpp:175
 msgid "cannot bind child stdout"
-msgstr ""
+msgstr "無法繫結子行程的 stdout"
 
 #: utils/subprocess.cpp:177
 msgid "cannot bind child stderr"
-msgstr ""
+msgstr "無法繫結子行程的 stderr"
 
 #: utils/subprocess.cpp:180
 #, c++-format
 msgid "failed to execute command: {}"
-msgstr ""
+msgstr "無法執行指令：{}"
 
 #: utils/subprocess.cpp:185
 #, c++-format
 msgid "error during preparation of child process: {}"
-msgstr ""
+msgstr "準備子行程時發生錯誤：{}"
 
 #: utils/subprocess.cpp:211
 msgid "poll failed during subprocess I/O"
-msgstr ""
+msgstr "子行程 I/O 期間 poll 失敗"
 
 #: utils/subprocess.cpp:257
 msgid "unexpected child process status after waitpid"
-msgstr ""
+msgstr "waitpid 後取得非預期的子行程狀態"
 
 #: utils/system.cpp:34
 msgid "failed to read rpm config files"
-msgstr ""
+msgstr "讀取 rpm 設定檔失敗"
 
 #: utils/system.cpp:52
 msgid "Failed to execute uname()"
-msgstr ""
+msgstr "無法執行 uname()"

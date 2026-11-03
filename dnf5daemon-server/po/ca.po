@@ -2,13 +2,14 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # Joan Aymà <joan@ayma.cat>, 2025.
+# David Medina <dmedinacpnl@gmail.com>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-22 14:19+0000\n"
-"PO-Revision-Date: 2025-02-24 18:31+0000\n"
-"Last-Translator: Joan Aymà <joan@ayma.cat>\n"
+"POT-Creation-Date: 2026-11-02 08:43+0000\n"
+"PO-Revision-Date: 2026-11-02 10:25+0000\n"
+"Last-Translator: David Medina <dmedinacpnl@gmail.com>\n"
 "Language-Team: Catalan <https://translate.fedoraproject.org/projects/dnf5/"
 "dnf5daemon-server/ca/>\n"
 "Language: ca\n"
@@ -16,13 +17,12 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.10\n"
+"X-Generator: Weblate 2026.10.1\n"
 
 #: threads_manager.cpp:94
-#, fuzzy, c++-format
-#| msgid "Failed to use locale \"{}\"."
+#, c++-format
 msgid "Invalid locale \"{}\"."
-msgstr "Ha fallat a l'utilitzar la localització \"{}\"."
+msgstr "Configuració regional no vàlida: «{}»."
 
 #: threads_manager.cpp:100
 #, c++-format
@@ -32,4 +32,4 @@ msgstr "Ha fallat al crear la localització \"{}\"."
 #: threads_manager.cpp:105
 #, c++-format
 msgid "Failed to use locale \"{}\"."
-msgstr "Ha fallat a l'utilitzar la localització \"{}\"."
+msgstr "Ha fallat usar la localització \"{}\"."

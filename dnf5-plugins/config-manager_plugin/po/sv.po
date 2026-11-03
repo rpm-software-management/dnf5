@@ -2,15 +2,16 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # Rafael Fontenelle <rafaelff@gnome.org>, 2024.
-# Luna Jernberg <bittin@reimu.nl>, 2024.
+# Luna Jernberg <bittin@reimu.nl>, 2024, 2026.
 # Göran Uddeborg <goeran@uddeborg.se>, 2024.
 # Luna Jernberg <droidbittin@gmail.com>, 2026.
+# Weblate Translation Memory <noreply-mt-weblate-translation-memory@weblate.org>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-22 14:19+0000\n"
-"PO-Revision-Date: 2026-09-22 08:18+0000\n"
+"POT-Creation-Date: 2026-11-02 08:43+0000\n"
+"PO-Revision-Date: 2026-11-03 09:38+0000\n"
 "Last-Translator: Luna Jernberg <droidbittin@gmail.com>\n"
 "Language-Team: Swedish <https://translate.fedoraproject.org/projects/dnf5/"
 "dnf5-plugin-config-manager/sv/>\n"
@@ -19,49 +20,49 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 2026.9.1\n"
+"X-Generator: Weblate 2026.11\n"
 
-#: addrepo.cpp:136
+#: addrepo.cpp:115
 #, c++-format
 msgid "from-repofile: \"{}\" file does not exist"
 msgstr "från-förrådfil \"{}\" fil existerar inte"
 
-#: addrepo.cpp:139
+#: addrepo.cpp:118
 #, c++-format
 msgid "from-repofile: {}"
 msgstr "från-förrådfil: {}"
 
-#: addrepo.cpp:169 setopt.cpp:53 setvar.cpp:49
+#: addrepo.cpp:148 setopt.cpp:53 setvar.cpp:49
 #, c++-format
 msgid "{}: Badly formatted argument value \"{}\""
 msgstr "{}: Felaktigt formaterat argumentvärde \"{}\""
 
-#: addrepo.cpp:179
+#: addrepo.cpp:158
 #, c++-format
 msgid "Cannot set repository option \"{}={}\": {}"
 msgstr "Kan inte ställa in förrådsalternativ \"{}={}\": {}"
 
-#: addrepo.cpp:187 setopt.cpp:108
+#: addrepo.cpp:166 setopt.cpp:108
 #, c++-format
 msgid "Sets the \"{}\" option again with a different value: \"{}\" != \"{}\""
 msgstr ""
 "Ställer in alternativet \"{}\" igen med ett annat värde: \"{}\" != \"{}\""
 
-#: addrepo.cpp:253
+#: addrepo.cpp:232
 msgid "Missing path to repository configuration directory"
 msgstr "Saknar sökväg till förrådskonfigurations katalog"
 
-#: addrepo.cpp:303
+#: addrepo.cpp:282
 #, c++-format
 msgid "Failed to copy repository configuration file \"{}\": {}"
 msgstr "Misslyckades att kopiera förrådets konfigurationsfil \"{}\": {}"
 
-#: addrepo.cpp:314
+#: addrepo.cpp:293
 #, c++-format
 msgid "Failed to download repository configuration file \"{}\": {}"
 msgstr "Misslyckades att ladda ner förrådets konfigurationsfil \"{}\": {}"
 
-#: addrepo.cpp:342
+#: addrepo.cpp:321
 #, c++-format
 msgid ""
 "Error in added repository configuration file. Cannot set repository option "
@@ -70,12 +71,12 @@ msgstr ""
 "Fel i tillagd konfigurationsfil för förråd. Kan inte ställa in "
 "lagringsalternativ \"{}={}\": {}"
 
-#: addrepo.cpp:376
+#: addrepo.cpp:355
 #, c++-format
 msgid "Bad baseurl: {}={}"
 msgstr "Dålig basurl: {}={}"
 
-#: addrepo.cpp:384
+#: addrepo.cpp:363
 msgid ""
 "One of --from-repofile=<URL>, --set=baseurl=<URL>, --set=mirrorlist=<URL>, --"
 "set=metalink=<URL> must be set to a non-empty URL"
@@ -83,12 +84,12 @@ msgstr ""
 "En av --from-repofile=<URL>, --set=baseurl=<URL>, --set=mirrorlist=<URL>, --"
 "set=metalink=<URL> måste vara inställd på en icke-tom URL"
 
-#: addrepo.cpp:429
+#: addrepo.cpp:408
 #, c++-format
 msgid "Failed to save repository configuration file \"{}\": {}"
 msgstr "Misslyckades att spara konfigurationsfil för förråd \"{}: {}"
 
-#: addrepo.cpp:451
+#: addrepo.cpp:430
 #, c++-format
 msgid ""
 "File \"{}\" already exists and configures repositories with IDs \"{}\". Add "
@@ -97,28 +98,214 @@ msgstr ""
 "Filen \"{}\" finns redan och konfigurerar förråd med ID:n \"{}\". Lägg till "
 "\"--add-or-replace\" eller \"--overwrite\"."
 
-#: addrepo.cpp:454
+#: addrepo.cpp:433
 #, c++-format
 msgid ""
 "File \"{}\" already exists and configures repositories with IDs \"{}\". Add "
 "\"--overwrite\" to overwrite."
 msgstr ""
-"Filen \"{}\" finns redan och konfigurerar förråd med ID:n \"{}\". Lägg till "
-"--overwrite\" för att skriva över."
+"Filen \"{}\" finns redan och konfigurerar förråd med ID:n \"{}\". Lägg "
+"till --overwrite\" för att skriva över."
 
-#: addrepo.cpp:474 addrepo.cpp:500
+#: addrepo.cpp:453 addrepo.cpp:479
 #, c++-format
 msgid "A repository with id \"{}\" already configured in file: {}"
 msgstr "Ett förråd med id \"{}\" är redan konfigurerat i fil {}"
 
-#: addrepo.cpp:486 shared.hpp:150
+#: addrepo.cpp:465 shared.hpp:156
 #, c++-format
 msgid "Cannot read repositories from directory \"{}\": {}"
 msgstr "Kan inte läsa in förråd från katalog \"{}\": {}"
 
-#: config-manager.cpp:44
+#: addvendorpolicy.cpp:23
+msgid "Add a vendor change policy from a TOML file or compact format string"
+msgstr ""
+"Lägg till en policy för leverantörsbyte från en TOML-fil eller en sträng i "
+"kompakt format"
+
+#: addvendorpolicy.cpp:29
+msgid "Policy base filename (without .conf extension)"
+msgstr "Policybasfilnamn (utan .conf-ändelse)"
+
+#: addvendorpolicy.cpp:40
+msgid "URL or local path to the source TOML policy file"
+msgstr "URL eller lokal sökväg till källfilen för TOML-policyn"
+
+#: addvendorpolicy.cpp:52
+msgid "Vendor change policy in compact format"
+msgstr "Leverantörsbytespolicy i kompakt format"
+
+#: addvendorpolicy.cpp:64
+msgid "Allow masking a distribution policy"
+msgstr "Tillåt maskering av en distributionspolicy"
+
+#: addvendorpolicy.cpp:73
+msgid "Allow replacing an existing policy file"
+msgstr "Tillåt ersättning av en existerande policyfil"
+
+#: addvendorpolicy.cpp:82
+msgid "Require that the new policy masks a distribution policy"
+msgstr "Kräv att den nya policyn maskerar en distributionspolicy"
+
+#: addvendorpolicy.cpp:94
+msgid "Require that the new policy replaces an existing system policy file"
+msgstr "Kräv att den nya policyn ersätter en befintlig systempolicyfil"
+
+#: addvendorpolicy.cpp:123
+msgid "Option \"{option}\" with nonempty value is required"
+msgstr "Alternativ \"{option}\" med icke-tomt värde krävs"
+
+#: addvendorpolicy.cpp:129
+msgid "Either \"{option1}\" or non-empty \"{option2}\" is required"
+msgstr "Antingen \"{option1}\" eller ett icke-tomt \"{option2}\" krävs"
+
+#: addvendorpolicy.cpp:142
+msgid ""
+"Policy file \"{path}\" already exists. Use \"{option}\" to allow replacing "
+"it."
+msgstr ""
+"Policyfil \"{path}\" existerar redan. Använd \"{option}\" för att tillåta "
+"att ersätta den."
+
+#: addvendorpolicy.cpp:150
+msgid ""
+"Distribution policy \"{name}\" already exists. Use \"{option}\" to allow "
+"masking it."
+msgstr ""
+"Distributionspolicyn ”{name}” existerar redan. Använd ”{option}” Använd \""
+"{option}\" för att tillåta maskering."
+
+#: addvendorpolicy.cpp:165
+msgid ""
+"Cannot add policy: option \"{option}\" requires masking a distribution "
+"policy, but no distribution policy named \"{name}\" exists."
+msgstr ""
+"Kan inte lägga till policy: alternativet \"{option}\" kräver att maskera en "
+"distributionspolicy, men ingen distributionspolicy med namnet \"{name}\" "
+"existerar."
+
+#: addvendorpolicy.cpp:172
+msgid ""
+"Cannot add policy: option \"{option}\" requires replacing an existing system "
+"policy, but no system policy file named \"{name}\" exists."
+msgstr ""
+"Kan inte lägga till policy: alternativet ”{option}” kräver att en befintlig "
+"systempolicy ersätts, men det existerar ingen systempolicyfil med namnet ”"
+"{name}”."
+
+#: addvendorpolicy.cpp:191 addvendorpolicy.cpp:215 addvendorpolicy.cpp:244
+msgid "Replaced vendor policy file: {path}"
+msgstr "Ersatt leverantörspolicyfil: {path}"
+
+#: addvendorpolicy.cpp:196
+msgid "Created vendor policy file: {path}"
+msgstr "Skapade leverantörspolicyfil: {path}"
+
+#: addvendorpolicy.cpp:204
+msgid "Source file does not exist: {path}"
+msgstr "Källfil existerar inte: {path}"
+
+#: addvendorpolicy.cpp:222 addvendorpolicy.cpp:251
+msgid "Saved vendor policy file: {path}"
+msgstr "Sparad leverantörspolicyfil: {path}"
+
+#: addvendorpolicy.cpp:260
+msgid "Masked distribution policy file: {path}"
+msgstr "Maskerad distributionspolicyfil: {path}"
+
+#: addvendorpolicy.cpp:264
+msgid "Failed to add vendor policy"
+msgstr "Misslyckades med att lägga till leverantörspolicy"
+
+#: config-manager.cpp:47
 msgid "Manage configuration"
 msgstr "Hantera konfigurationen"
+
+#: listvendorpolicies.cpp:27
+msgid "List vendor change policy files"
+msgstr "Lista filer med leverantörsändringspolicyer"
+
+#: listvendorpolicies.cpp:33 removevendorpolicy.cpp:29
+msgid "Policy base filename pattern (supports globs)"
+msgstr "Mönster för policyfilnamn (stöder jokertecken)"
+
+#: listvendorpolicies.cpp:42
+msgid "Show detailed information about the policies"
+msgstr "Visa detaljerad information om policyerna"
+
+#: listvendorpolicies.cpp:61 removevendorpolicy.cpp:49
+msgid "No vendor policy files found"
+msgstr "Inga leverantörspolicyfiler hittades"
+
+#: listvendorpolicies.cpp:80 removevendorpolicy.cpp:63
+msgid "No matching vendor policy files found for pattern: {pattern}"
+msgstr "Inga matchande leverantörspolicyfiler hittades för mönster: {pattern}"
+
+#. Note for translators: This is a right-aligned column separator in
+#. a package properties table as in "Name    : bash".
+#: listvendorpolicies.cpp:149
+msgid " : "
+msgstr " : "
+
+#. Add policy info
+#: listvendorpolicies.cpp:155
+msgid "Policy"
+msgstr "Policy"
+
+#: listvendorpolicies.cpp:156
+msgid "Source"
+msgstr "Källa"
+
+#: listvendorpolicies.cpp:157
+msgid "Distribution (read-only)"
+msgstr "Distribution (skrivskyddad)"
+
+#: listvendorpolicies.cpp:157
+msgid "System (manageable)"
+msgstr "System (hanterbar)"
+
+#: listvendorpolicies.cpp:157
+msgid "Type"
+msgstr "Typ"
+
+#: listvendorpolicies.cpp:160
+msgid "Masks"
+msgstr "Maskeringar"
+
+#: listvendorpolicies.cpp:165
+msgid "Masked by"
+msgstr "Maskerad av"
+
+#: listvendorpolicies.cpp:174
+msgid "<conversion failed: {what}>"
+msgstr "<konvertering misslyckades: {what}>"
+
+#: listvendorpolicies.cpp:178 listvendorpolicies.cpp:183
+msgid "Compact"
+msgstr "Kompakt"
+
+#: removevendorpolicy.cpp:23
+msgid "Remove vendor change policy files"
+msgstr "Ta bort policyfiler för leverantörsändringar"
+
+#: removevendorpolicy.cpp:74
+msgid "Removed vendor policy file: {path}"
+msgstr "Borttagen leverantörspolicyfil: {path}"
+
+#: removevendorpolicy.cpp:78
+msgid "Unmasked distribution policy file: {path}"
+msgstr "Avmaskerad distributionspolicyfil: {path}"
+
+#: removevendorpolicy.cpp:83
+msgid "Failed to remove policy file: {path}"
+msgstr "Misslyckades med att ta bort policyfil: {path}"
+
+#: removevendorpolicy.cpp:87
+msgid ""
+"Cannot remove distribution policy file \"{path}\". To mask it, use: {command}"
+msgstr ""
+"Kunde inte att ta bort distributionspolicyfilen \"{path}\". För att maskera "
+"den, använd: {command}"
 
 #: repos.cpp:56 setopt.cpp:140
 #, c++-format
@@ -157,8 +344,8 @@ msgid ""
 "Sets the \"{}\" option of the repository \"{}\" again with a different "
 "value: \"{}\" != \"{}\""
 msgstr ""
-"Ställer in \"{}\" alternativ för förråd \"{} igen med ett annat värde: {}\" !"
-"=\"{}\""
+"Ställer in \"{}\" alternativ för förråd \"{} igen med ett annat värde: {}\" "
+"!=\"{}\""
 
 #: setopt.cpp:100
 #, c++-format
@@ -184,7 +371,7 @@ msgstr "Saknar sökväg till vars katalog"
 msgid "Cannot write variable to file \"{}\": {}"
 msgstr "Kan inte skriva variabel till fil \"{}\": {}"
 
-#: shared.hpp:59
+#: shared.hpp:65
 #, c++-format
 msgid ""
 "The path \"{}\" exists, but it is not a directory or a symlink to a "
@@ -193,14 +380,14 @@ msgstr ""
 "Sökväg \"{}\" existerar, men är inte en katalog eller en symbolisk länk till "
 "en katalog."
 
-#: shared.hpp:64
+#: shared.hpp:70
 #, c++-format
 msgid "The path \"{}\" exists, but it is a symlink to a non-existent object."
 msgstr ""
 "Sökväg \"{}\" existerar, men är en symbolisk länk till ett icke-existerande "
 "objekt."
 
-#: shared.hpp:70
+#: shared.hpp:76
 #, c++-format
 msgid ""
 "Directory \"{}\" does not exist. Add \"--create-missing-dir\" to create "
@@ -209,7 +396,7 @@ msgstr ""
 "Katalogen \"{} existerar inte. Lägg till \"--create-missing-dir\" för att "
 "skapa saknade kataloger."
 
-#: shared.hpp:81
+#: shared.hpp:87
 #, c++-format
 msgid "Variable name can contain only ASCII letters, numbers and '_': {}"
 msgstr "Variabelnamn kan endast innehålla ASCII-bokstäver, siffror och '_': {}"
