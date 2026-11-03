@@ -6,9 +6,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-22 14:19+0000\n"
-"PO-Revision-Date: 2025-09-02 14:20+0000\n"
-"Last-Translator: Tri Phuong Nguyen <triphuongvasa@gmail.com>\n"
+"POT-Creation-Date: 2026-11-02 08:43+0000\n"
+"PO-Revision-Date: 2026-11-03 09:52+0000\n"
+"Last-Translator: Anonymous <noreply@weblate.org>\n"
 "Language-Team: Vietnamese <https://translate.fedoraproject.org/projects/dnf5/"
 "libdnf5-cli/vi/>\n"
 "Language: vi\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.13\n"
+"X-Generator: Weblate 2026.11\n"
 
 #: argument_parser.cpp:68
 #, c++-format
@@ -290,7 +290,6 @@ msgstr ""
 msgid " Installing:      {:4} package\n"
 msgid_plural " Installing:      {:4} packages\n"
 msgstr[0] ""
-msgstr[1] ""
 
 #. Keep the replaceble number aligned across all messages.
 #: output/transaction_table.cpp:143
@@ -298,7 +297,6 @@ msgstr[1] ""
 msgid " Reinstalling:    {:4} package\n"
 msgid_plural " Reinstalling:    {:4} packages\n"
 msgstr[0] ""
-msgstr[1] ""
 
 #. Keep the replaceble number aligned across all messages.
 #: output/transaction_table.cpp:152
@@ -306,7 +304,6 @@ msgstr[1] ""
 msgid " Upgrading:       {:4} package\n"
 msgid_plural " Upgrading:       {:4} packages\n"
 msgstr[0] ""
-msgstr[1] ""
 
 #. Keep the replaceble number aligned across all messages.
 #: output/transaction_table.cpp:161
@@ -314,7 +311,6 @@ msgstr[1] ""
 msgid " Replacing:       {:4} package\n"
 msgid_plural " Replacing:       {:4} packages\n"
 msgstr[0] ""
-msgstr[1] ""
 
 #. Keep the replaceble number aligned across all messages.
 #: output/transaction_table.cpp:170
@@ -322,7 +318,6 @@ msgstr[1] ""
 msgid " Removing:        {:4} package\n"
 msgid_plural " Removing:        {:4} packages\n"
 msgstr[0] ""
-msgstr[1] ""
 
 #. Keep the replaceble number aligned across all messages.
 #: output/transaction_table.cpp:179
@@ -330,7 +325,6 @@ msgstr[1] ""
 msgid " Downgrading:     {:4} package\n"
 msgid_plural " Downgrading:     {:4} packages\n"
 msgstr[0] ""
-msgstr[1] ""
 
 #. Keep the replaceble number aligned across all messages.
 #: output/transaction_table.cpp:188
@@ -338,7 +332,6 @@ msgstr[1] ""
 msgid " Changing reason: {:4} package\n"
 msgid_plural " Changing reason: {:4} packages\n"
 msgstr[0] ""
-msgstr[1] ""
 
 #. Keep the replaceble number aligned across all messages.
 #: output/transaction_table.cpp:197
@@ -346,7 +339,6 @@ msgstr[1] ""
 msgid " Skipping:        {:4} package\n"
 msgid_plural " Skipping:        {:4} packages\n"
 msgstr[0] ""
-msgstr[1] ""
 
 #: output/transaction_table.cpp:279 output/transactioninfo.cpp:74
 msgid "Package"
@@ -550,23 +542,23 @@ msgstr ""
 msgid "Environments altered:"
 msgstr ""
 
-#: output/transactionlist.cpp:53
+#: output/transactionlist.cpp:65
 msgid "ID"
 msgstr ""
 
-#: output/transactionlist.cpp:54
+#: output/transactionlist.cpp:66
 msgid "Command line"
 msgstr ""
 
-#: output/transactionlist.cpp:55
+#: output/transactionlist.cpp:67
 msgid "Date and time"
 msgstr ""
 
-#: output/transactionlist.cpp:56
+#: output/transactionlist.cpp:68
 msgid "Action(s)"
 msgstr ""
 
-#: output/transactionlist.cpp:57
+#: output/transactionlist.cpp:69
 msgid "Altered"
 msgstr ""
 
@@ -590,10 +582,10 @@ msgstr ""
 msgid "\"{}\" date cannot be represented by time_t type on this platform"
 msgstr ""
 
-#: utils/userconfirm.cpp:46
+#: utils/userconfirm.cpp:57
 msgid "Is this ok [Y/n]: "
 msgstr ""
 
-#: utils/userconfirm.cpp:49
+#: utils/userconfirm.cpp:60
 msgid "Is this ok [y/N]: "
 msgstr ""

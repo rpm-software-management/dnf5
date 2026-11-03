@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-22 14:19+0000\n"
-"PO-Revision-Date: 2026-09-14 20:46+0000\n"
+"POT-Creation-Date: 2026-11-02 08:43+0000\n"
+"PO-Revision-Date: 2026-11-03 09:07+0000\n"
 "Last-Translator: Keith Bowes <zooplah@gmail.com>\n"
 "Language-Team: Esperanto <https://translate.fedoraproject.org/projects/dnf5/"
 "dnf5-plugin-config-manager/eo/>\n"
@@ -16,48 +16,48 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 2026.9.1\n"
+"X-Generator: Weblate 2026.11\n"
 
-#: addrepo.cpp:136
+#: addrepo.cpp:115
 #, c++-format
 msgid "from-repofile: \"{}\" file does not exist"
 msgstr "from-repofile: dosiero \"{}\" ne ekzistas"
 
-#: addrepo.cpp:139
+#: addrepo.cpp:118
 #, c++-format
 msgid "from-repofile: {}"
 msgstr "from-repofile: {}"
 
-#: addrepo.cpp:169 setopt.cpp:53 setvar.cpp:49
+#: addrepo.cpp:148 setopt.cpp:53 setvar.cpp:49
 #, c++-format
 msgid "{}: Badly formatted argument value \"{}\""
 msgstr "{}: Malbone formatita argumenta valoro \"{}\""
 
-#: addrepo.cpp:179
+#: addrepo.cpp:158
 #, c++-format
 msgid "Cannot set repository option \"{}={}\": {}"
 msgstr "Ne eblas agordi deponejan opcion \"{}={}\": {}"
 
-#: addrepo.cpp:187 setopt.cpp:108
+#: addrepo.cpp:166 setopt.cpp:108
 #, c++-format
 msgid "Sets the \"{}\" option again with a different value: \"{}\" != \"{}\""
 msgstr "Reagordas la opcion \"{}\" kun alia valoro: \"{}\" != \"{}\""
 
-#: addrepo.cpp:253
+#: addrepo.cpp:232
 msgid "Missing path to repository configuration directory"
 msgstr "Mankas vojo al dosierujo de deponeja agordo"
 
-#: addrepo.cpp:303
+#: addrepo.cpp:282
 #, c++-format
 msgid "Failed to copy repository configuration file \"{}\": {}"
 msgstr "Malsukcesis kopii deponejan agordo-dosieron \"{}\": {}"
 
-#: addrepo.cpp:314
+#: addrepo.cpp:293
 #, c++-format
 msgid "Failed to download repository configuration file \"{}\": {}"
 msgstr "Malsukcesis elŝuti deponejan agordo-dosieron \"{}\": {}"
 
-#: addrepo.cpp:342
+#: addrepo.cpp:321
 #, c++-format
 msgid ""
 "Error in added repository configuration file. Cannot set repository option "
@@ -66,12 +66,12 @@ msgstr ""
 "Eraro en aldonita deponeja agordo-dosiero. Ne eblas agordi deponejan opcion "
 "\"{}={}\": {}"
 
-#: addrepo.cpp:376
+#: addrepo.cpp:355
 #, c++-format
 msgid "Bad baseurl: {}={}"
 msgstr "Malbona baseurl: {}={}"
 
-#: addrepo.cpp:384
+#: addrepo.cpp:363
 msgid ""
 "One of --from-repofile=<URL>, --set=baseurl=<URL>, --set=mirrorlist=<URL>, --"
 "set=metalink=<URL> must be set to a non-empty URL"
@@ -79,12 +79,12 @@ msgstr ""
 "Unu el --from-repofile=<URL>, --set=baseurl=<URL>, --set=mirrorlist=<URL>, --"
 "set=metalink=<URL> devas esti ne malplena URL"
 
-#: addrepo.cpp:429
+#: addrepo.cpp:408
 #, c++-format
 msgid "Failed to save repository configuration file \"{}\": {}"
 msgstr "Malsukcesis konservi deponejan agordo-dosieron \"{}\": {}"
 
-#: addrepo.cpp:451
+#: addrepo.cpp:430
 #, c++-format
 msgid ""
 "File \"{}\" already exists and configures repositories with IDs \"{}\". Add "
@@ -93,7 +93,7 @@ msgstr ""
 "Dosiero \"{}\" jam ekzistas kaj agordas deponejojn kun identigiloj \"{}\". "
 "Aldonu opcion \"--add-or-replace\" aŭ \"--overwrite\"."
 
-#: addrepo.cpp:454
+#: addrepo.cpp:433
 #, c++-format
 msgid ""
 "File \"{}\" already exists and configures repositories with IDs \"{}\". Add "
@@ -102,19 +102,203 @@ msgstr ""
 "Dosiero \"{}\" jam ekzistas kaj agordas deponejojn kun identigiloj \"{}\". "
 "Aldonu la opcion \"--overwrite\" por anstataŭigi ĝin."
 
-#: addrepo.cpp:474 addrepo.cpp:500
+#: addrepo.cpp:453 addrepo.cpp:479
 #, c++-format
 msgid "A repository with id \"{}\" already configured in file: {}"
 msgstr "Deponejo kun la identigilo \"{}\" jam agordita en dosiero: {}"
 
-#: addrepo.cpp:486 shared.hpp:150
+#: addrepo.cpp:465 shared.hpp:156
 #, c++-format
 msgid "Cannot read repositories from directory \"{}\": {}"
 msgstr "Ne eblas legi deponejojn el dosierujo \"{}\": {}"
 
-#: config-manager.cpp:44
+#: addvendorpolicy.cpp:23
+msgid "Add a vendor change policy from a TOML file or compact format string"
+msgstr ""
+"Aldoni politikon pri ŝanĝo de vendinto el TOML-dosiero aŭ densa formatĉeno"
+
+#: addvendorpolicy.cpp:29
+msgid "Policy base filename (without .conf extension)"
+msgstr "Politko-baza dosiernomo (sen sufikso .conf)"
+
+#: addvendorpolicy.cpp:40
+msgid "URL or local path to the source TOML policy file"
+msgstr "URL aŭ loka vojo al la fonta TOML-dosiero pri politiko"
+
+#: addvendorpolicy.cpp:52
+msgid "Vendor change policy in compact format"
+msgstr "Politiko pri ŝanĝo de vendinto laŭ densa formato"
+
+#: addvendorpolicy.cpp:64
+msgid "Allow masking a distribution policy"
+msgstr "Permesi maski distribuan politikon"
+
+#: addvendorpolicy.cpp:73
+msgid "Allow replacing an existing policy file"
+msgstr "Permesi anstataŭigi jaman politiko-dosieron"
+
+#: addvendorpolicy.cpp:82
+msgid "Require that the new policy masks a distribution policy"
+msgstr "Postuli ke la nova politiko maskas la distribuan politikon"
+
+#: addvendorpolicy.cpp:94
+msgid "Require that the new policy replaces an existing system policy file"
+msgstr "Postuli ke la nova politika anstataŭas jam sisteman politiko-dosieron"
+
+#: addvendorpolicy.cpp:123
+msgid "Option \"{option}\" with nonempty value is required"
+msgstr "Valoro de \"{opcio}\" devas ne esti malplena"
+
+#: addvendorpolicy.cpp:129
+msgid "Either \"{option1}\" or non-empty \"{option2}\" is required"
+msgstr "Aŭ \"{option1}\" aŭ ne malplena \"{option2}\" estas postulata"
+
+#: addvendorpolicy.cpp:142
+msgid ""
+"Policy file \"{path}\" already exists. Use \"{option}\" to allow replacing "
+"it."
+msgstr ""
+"Politiko-dosiero \"{path}\" jam ekzistas. Uzeblas \"{option}\" por permesi "
+"anstataŭigi ĝin."
+
+#: addvendorpolicy.cpp:150
+msgid ""
+"Distribution policy \"{name}\" already exists. Use \"{option}\" to allow "
+"masking it."
+msgstr ""
+"Distribua politiko \"{name}\" jam ekzistas. Ueblas \"{option}\" por permesi "
+"maski ĝin."
+
+#: addvendorpolicy.cpp:165
+msgid ""
+"Cannot add policy: option \"{option}\" requires masking a distribution "
+"policy, but no distribution policy named \"{name}\" exists."
+msgstr ""
+"Ne eblas aldoni politikon: opcio \"{option}\" postulas maski distribuan "
+"politikon, sed ne ekzistas distribua politiko nomata \"{name}\"."
+
+#: addvendorpolicy.cpp:172
+msgid ""
+"Cannot add policy: option \"{option}\" requires replacing an existing system "
+"policy, but no system policy file named \"{name}\" exists."
+msgstr ""
+"Ne eblas aldoni politikon: opcio \"{option}\" postulas anstataŭigi jaman "
+"sisteman politikon, sed ne ekzistas sistema politiko-dosiero nomata \"{name}"
+"\"."
+
+#: addvendorpolicy.cpp:191 addvendorpolicy.cpp:215 addvendorpolicy.cpp:244
+msgid "Replaced vendor policy file: {path}"
+msgstr "Anstataŭigita politiko-dosiero pri vendinto: {path}"
+
+#: addvendorpolicy.cpp:196
+msgid "Created vendor policy file: {path}"
+msgstr "Kreita politiko-dosiero pri vendinto: {path}"
+
+#: addvendorpolicy.cpp:204
+msgid "Source file does not exist: {path}"
+msgstr "Fontodosiero ne ekzistas: {path}"
+
+#: addvendorpolicy.cpp:222 addvendorpolicy.cpp:251
+msgid "Saved vendor policy file: {path}"
+msgstr "Konservita politiko dosiero pri vendinto: {path}"
+
+#: addvendorpolicy.cpp:260
+msgid "Masked distribution policy file: {path}"
+msgstr "Maskita distribua politiko-dosiero: {path}"
+
+#: addvendorpolicy.cpp:264
+msgid "Failed to add vendor policy"
+msgstr "Malsukcesis aldoni politikon pri vendinto"
+
+#: config-manager.cpp:47
 msgid "Manage configuration"
 msgstr "Administri agordon"
+
+#: listvendorpolicies.cpp:27
+msgid "List vendor change policy files"
+msgstr "Listigi politiko-dosierojn pri ŝanĝo de vendinto"
+
+#: listvendorpolicies.cpp:33 removevendorpolicy.cpp:29
+msgid "Policy base filename pattern (supports globs)"
+msgstr "Ŝablono de baza dosiernomo pri politiko (uzeblas ĵokeroj)"
+
+#: listvendorpolicies.cpp:42
+msgid "Show detailed information about the policies"
+msgstr "Montri detalajn informojn pri la politikoj"
+
+#: listvendorpolicies.cpp:61 removevendorpolicy.cpp:49
+msgid "No vendor policy files found"
+msgstr "Troveblas neniuj dosieroj pri vendinto"
+
+#: listvendorpolicies.cpp:80 removevendorpolicy.cpp:63
+msgid "No matching vendor policy files found for pattern: {pattern}"
+msgstr "Neniuj troveblaj politiko-dosieroj por ŝablono: {pattern}"
+
+#. Note for translators: This is a right-aligned column separator in
+#. a package properties table as in "Name    : bash".
+#: listvendorpolicies.cpp:149
+msgid " : "
+msgstr " : "
+
+#. Add policy info
+#: listvendorpolicies.cpp:155
+msgid "Policy"
+msgstr "Politiko"
+
+#: listvendorpolicies.cpp:156
+msgid "Source"
+msgstr "Fonto"
+
+#: listvendorpolicies.cpp:157
+msgid "Distribution (read-only)"
+msgstr "Distribuaĵo (nurlega)"
+
+#: listvendorpolicies.cpp:157
+msgid "System (manageable)"
+msgstr "Sistema (administrebla)"
+
+#: listvendorpolicies.cpp:157
+msgid "Type"
+msgstr "Tipo"
+
+#: listvendorpolicies.cpp:160
+msgid "Masks"
+msgstr "Maskoj"
+
+#: listvendorpolicies.cpp:165
+msgid "Masked by"
+msgstr "Maskita per"
+
+#: listvendorpolicies.cpp:174
+msgid "<conversion failed: {what}>"
+msgstr "<konverto malsukcesis: {what}>"
+
+#: listvendorpolicies.cpp:178 listvendorpolicies.cpp:183
+msgid "Compact"
+msgstr "Densa"
+
+#: removevendorpolicy.cpp:23
+msgid "Remove vendor change policy files"
+msgstr "Forigi politiko-dosierojn pri ŝanĝo de vendinto"
+
+#: removevendorpolicy.cpp:74
+msgid "Removed vendor policy file: {path}"
+msgstr "Forigita politiko-dosieron pri vendinto: {path}"
+
+#: removevendorpolicy.cpp:78
+msgid "Unmasked distribution policy file: {path}"
+msgstr "Malmaskita distribua politiko-dosiero: {path}"
+
+#: removevendorpolicy.cpp:83
+msgid "Failed to remove policy file: {path}"
+msgstr "Malsukcesis forigi politiko-dosieron: {path}"
+
+#: removevendorpolicy.cpp:87
+msgid ""
+"Cannot remove distribution policy file \"{path}\". To mask it, use: {command}"
+msgstr ""
+"Ne eblas forigi distribuan politiko-dosieron \"{path}\". Por maski ĝin "
+"uzeblas: {command}"
 
 #: repos.cpp:56 setopt.cpp:140
 #, c++-format
@@ -180,7 +364,7 @@ msgstr "Mankas vojo al la dosierujo de variabloj"
 msgid "Cannot write variable to file \"{}\": {}"
 msgstr "Ne eblas skribi variablon al dosiero \"{}\": {}"
 
-#: shared.hpp:59
+#: shared.hpp:65
 #, c++-format
 msgid ""
 "The path \"{}\" exists, but it is not a directory or a symlink to a "
@@ -189,13 +373,13 @@ msgstr ""
 "La vojo \"{} ekzistas sed ĝi ne estas dosierujo aŭ simbola ligilo al "
 "dosierujo."
 
-#: shared.hpp:64
+#: shared.hpp:70
 #, c++-format
 msgid "The path \"{}\" exists, but it is a symlink to a non-existent object."
 msgstr ""
 "La vojo \"{}\" ekzistas sed ĝi estas simbola ligilo al neekzista objekto."
 
-#: shared.hpp:70
+#: shared.hpp:76
 #, c++-format
 msgid ""
 "Directory \"{}\" does not exist. Add \"--create-missing-dir\" to create "
@@ -204,7 +388,7 @@ msgstr ""
 "Dosierujo \"{}\" ne ekzistas. Aldonu la opcion \"--create-missing-dir\" por "
 "krei mankaj dosierujoj."
 
-#: shared.hpp:81
+#: shared.hpp:87
 #, c++-format
 msgid "Variable name can contain only ASCII letters, numbers and '_': {}"
 msgstr "Variabla nomo povas enhavi nur askiajn literojn, ciferojn kaj '_': {}"

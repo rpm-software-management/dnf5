@@ -1,15 +1,15 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# hsu zangmen <chzang55@gmail.com>, 2025.
-# Weblate Translation Memory <noreply-mt-weblate-translation-memory@weblate.org>, 2025.
+# hsu zangmen <chzang55@gmail.com>, 2025, 2026.
+# Weblate Translation Memory <noreply-mt-weblate-translation-memory@weblate.org>, 2025, 2026.
 # Cheng-Chia Tseng <pswo10680@gmail.com>, 2025, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-22 14:19+0000\n"
-"PO-Revision-Date: 2026-08-27 04:18+0000\n"
+"POT-Creation-Date: 2026-11-02 08:43+0000\n"
+"PO-Revision-Date: 2026-11-03 09:49+0000\n"
 "Last-Translator: Cheng-Chia Tseng <pswo10680@gmail.com>\n"
 "Language-Team: Chinese (Traditional) <https://translate.fedoraproject.org/"
 "projects/dnf5/dnf5-plugin-config-manager/zh_TW/>\n"
@@ -18,60 +18,60 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 2026.8.1\n"
+"X-Generator: Weblate 2026.11\n"
 
-#: addrepo.cpp:136
+#: addrepo.cpp:115
 #, c++-format
 msgid "from-repofile: \"{}\" file does not exist"
 msgstr "from-repofile：「{}」檔案不存在"
 
-#: addrepo.cpp:139
+#: addrepo.cpp:118
 #, c++-format
 msgid "from-repofile: {}"
 msgstr "from-repofile: {}"
 
-#: addrepo.cpp:169 setopt.cpp:53 setvar.cpp:49
+#: addrepo.cpp:148 setopt.cpp:53 setvar.cpp:49
 #, c++-format
 msgid "{}: Badly formatted argument value \"{}\""
 msgstr "{}：格式錯誤的引數值「{}」"
 
-#: addrepo.cpp:179
+#: addrepo.cpp:158
 #, c++-format
 msgid "Cannot set repository option \"{}={}\": {}"
 msgstr "無法設定軟體庫選項「{}={}」：{}"
 
-#: addrepo.cpp:187 setopt.cpp:108
+#: addrepo.cpp:166 setopt.cpp:108
 #, c++-format
 msgid "Sets the \"{}\" option again with a different value: \"{}\" != \"{}\""
 msgstr "以不同的值再次設定「{}」選項：「{}」!=「{}」"
 
-#: addrepo.cpp:253
+#: addrepo.cpp:232
 msgid "Missing path to repository configuration directory"
 msgstr "缺少軟體庫組態目錄的路徑"
 
-#: addrepo.cpp:303
+#: addrepo.cpp:282
 #, c++-format
 msgid "Failed to copy repository configuration file \"{}\": {}"
 msgstr "複製軟體庫組態設定「{}」失敗：{}"
 
-#: addrepo.cpp:314
+#: addrepo.cpp:293
 #, c++-format
 msgid "Failed to download repository configuration file \"{}\": {}"
 msgstr "下載軟體庫組態設定檔「{}」失敗：{}"
 
-#: addrepo.cpp:342
+#: addrepo.cpp:321
 #, c++-format
 msgid ""
 "Error in added repository configuration file. Cannot set repository option "
 "\"{}={}\": {}"
 msgstr "新增軟體庫組態設定檔中出現錯誤。 無法設定軟體庫選項「{}={}」：{}"
 
-#: addrepo.cpp:376
+#: addrepo.cpp:355
 #, c++-format
 msgid "Bad baseurl: {}={}"
 msgstr "不好的 baseurl: {}={}"
 
-#: addrepo.cpp:384
+#: addrepo.cpp:363
 msgid ""
 "One of --from-repofile=<URL>, --set=baseurl=<URL>, --set=mirrorlist=<URL>, --"
 "set=metalink=<URL> must be set to a non-empty URL"
@@ -79,12 +79,12 @@ msgstr ""
 "--from-repofile=<URL>、--set=baseurl=<URL>、--set=mirrorlist=<URL>、--"
 "set=metalink=<URL> 其中之一必須設定為非空白的 URL"
 
-#: addrepo.cpp:429
+#: addrepo.cpp:408
 #, c++-format
 msgid "Failed to save repository configuration file \"{}\": {}"
 msgstr "儲存軟體庫組態設定檔「{}」失敗：{}"
 
-#: addrepo.cpp:451
+#: addrepo.cpp:430
 #, c++-format
 msgid ""
 "File \"{}\" already exists and configures repositories with IDs \"{}\". Add "
@@ -93,28 +93,202 @@ msgstr ""
 "檔案「{}」已經存在，並配置 ID 為「{}」的軟體庫。 新增 \"--add-or-replace\" "
 "或 \"--overwrite\"。"
 
-#: addrepo.cpp:454
+#: addrepo.cpp:433
 #, c++-format
 msgid ""
 "File \"{}\" already exists and configures repositories with IDs \"{}\". Add "
 "\"--overwrite\" to overwrite."
 msgstr ""
-"檔案「{}」已經存在，並且設定 ID 為「{}」的軟體庫。 新增「--overwrite」以覆"
-"寫。"
+"檔案「{}」已經存在，並且設定 ID 為「{}」的軟體庫。 新增「--overwrite」以覆寫"
+"。"
 
-#: addrepo.cpp:474 addrepo.cpp:500
+#: addrepo.cpp:453 addrepo.cpp:479
 #, c++-format
 msgid "A repository with id \"{}\" already configured in file: {}"
 msgstr "檔案中已組態設定 id 為「{}」的軟體庫：{}"
 
-#: addrepo.cpp:486 shared.hpp:150
+#: addrepo.cpp:465 shared.hpp:156
 #, c++-format
 msgid "Cannot read repositories from directory \"{}\": {}"
 msgstr "無法從目錄「{}」讀取軟體庫：{}"
 
-#: config-manager.cpp:44
+#: addvendorpolicy.cpp:23
+msgid "Add a vendor change policy from a TOML file or compact format string"
+msgstr ""
+
+#: addvendorpolicy.cpp:29
+msgid "Policy base filename (without .conf extension)"
+msgstr ""
+
+#: addvendorpolicy.cpp:40
+msgid "URL or local path to the source TOML policy file"
+msgstr ""
+
+#: addvendorpolicy.cpp:52
+msgid "Vendor change policy in compact format"
+msgstr ""
+
+#: addvendorpolicy.cpp:64
+msgid "Allow masking a distribution policy"
+msgstr ""
+
+#: addvendorpolicy.cpp:73
+msgid "Allow replacing an existing policy file"
+msgstr ""
+
+#: addvendorpolicy.cpp:82
+msgid "Require that the new policy masks a distribution policy"
+msgstr ""
+
+#: addvendorpolicy.cpp:94
+msgid "Require that the new policy replaces an existing system policy file"
+msgstr ""
+
+#: addvendorpolicy.cpp:123
+msgid "Option \"{option}\" with nonempty value is required"
+msgstr ""
+
+#: addvendorpolicy.cpp:129
+msgid "Either \"{option1}\" or non-empty \"{option2}\" is required"
+msgstr ""
+
+#: addvendorpolicy.cpp:142
+msgid ""
+"Policy file \"{path}\" already exists. Use \"{option}\" to allow replacing "
+"it."
+msgstr ""
+
+#: addvendorpolicy.cpp:150
+msgid ""
+"Distribution policy \"{name}\" already exists. Use \"{option}\" to allow "
+"masking it."
+msgstr ""
+
+#: addvendorpolicy.cpp:165
+msgid ""
+"Cannot add policy: option \"{option}\" requires masking a distribution "
+"policy, but no distribution policy named \"{name}\" exists."
+msgstr ""
+
+#: addvendorpolicy.cpp:172
+msgid ""
+"Cannot add policy: option \"{option}\" requires replacing an existing system "
+"policy, but no system policy file named \"{name}\" exists."
+msgstr ""
+
+#: addvendorpolicy.cpp:191 addvendorpolicy.cpp:215 addvendorpolicy.cpp:244
+msgid "Replaced vendor policy file: {path}"
+msgstr ""
+
+#: addvendorpolicy.cpp:196
+msgid "Created vendor policy file: {path}"
+msgstr ""
+
+#: addvendorpolicy.cpp:204
+#, fuzzy
+#| msgid "from-repofile: \"{}\" file does not exist"
+msgid "Source file does not exist: {path}"
+msgstr "from-repofile：「{}」檔案不存在"
+
+#: addvendorpolicy.cpp:222 addvendorpolicy.cpp:251
+msgid "Saved vendor policy file: {path}"
+msgstr ""
+
+#: addvendorpolicy.cpp:260
+msgid "Masked distribution policy file: {path}"
+msgstr ""
+
+#: addvendorpolicy.cpp:264
+msgid "Failed to add vendor policy"
+msgstr ""
+
+#: config-manager.cpp:47
 msgid "Manage configuration"
 msgstr "管理組態設定"
+
+#: listvendorpolicies.cpp:27
+msgid "List vendor change policy files"
+msgstr ""
+
+#: listvendorpolicies.cpp:33 removevendorpolicy.cpp:29
+msgid "Policy base filename pattern (supports globs)"
+msgstr ""
+
+#: listvendorpolicies.cpp:42
+msgid "Show detailed information about the policies"
+msgstr ""
+
+#: listvendorpolicies.cpp:61 removevendorpolicy.cpp:49
+msgid "No vendor policy files found"
+msgstr ""
+
+#: listvendorpolicies.cpp:80 removevendorpolicy.cpp:63
+msgid "No matching vendor policy files found for pattern: {pattern}"
+msgstr ""
+
+#. Note for translators: This is a right-aligned column separator in
+#. a package properties table as in "Name    : bash".
+#: listvendorpolicies.cpp:149
+msgid " : "
+msgstr ""
+
+#. Add policy info
+#: listvendorpolicies.cpp:155
+msgid "Policy"
+msgstr ""
+
+#: listvendorpolicies.cpp:156
+msgid "Source"
+msgstr ""
+
+#: listvendorpolicies.cpp:157
+msgid "Distribution (read-only)"
+msgstr ""
+
+#: listvendorpolicies.cpp:157
+msgid "System (manageable)"
+msgstr ""
+
+#: listvendorpolicies.cpp:157
+msgid "Type"
+msgstr ""
+
+#: listvendorpolicies.cpp:160
+msgid "Masks"
+msgstr ""
+
+#: listvendorpolicies.cpp:165
+msgid "Masked by"
+msgstr ""
+
+#: listvendorpolicies.cpp:174
+msgid "<conversion failed: {what}>"
+msgstr ""
+
+#: listvendorpolicies.cpp:178 listvendorpolicies.cpp:183
+msgid "Compact"
+msgstr ""
+
+#: removevendorpolicy.cpp:23
+msgid "Remove vendor change policy files"
+msgstr ""
+
+#: removevendorpolicy.cpp:74
+msgid "Removed vendor policy file: {path}"
+msgstr ""
+
+#: removevendorpolicy.cpp:78
+msgid "Unmasked distribution policy file: {path}"
+msgstr ""
+
+#: removevendorpolicy.cpp:83
+msgid "Failed to remove policy file: {path}"
+msgstr ""
+
+#: removevendorpolicy.cpp:87
+msgid ""
+"Cannot remove distribution policy file \"{path}\". To mask it, use: {command}"
+msgstr ""
 
 #: repos.cpp:56 setopt.cpp:140
 #, c++-format
@@ -123,11 +297,11 @@ msgstr "沒有符合的軟體庫要修改：{}"
 
 #: repos.hpp:42
 msgid "Enables repositories"
-msgstr ""
+msgstr "管理軟體庫"
 
 #: repos.hpp:50
 msgid "Disables repositories"
-msgstr ""
+msgstr "停用軟體庫"
 
 #: setopt.cpp:61 unsetopt.cpp:73
 #, c++-format
@@ -176,26 +350,26 @@ msgstr "缺少 vars 目錄的路徑"
 msgid "Cannot write variable to file \"{}\": {}"
 msgstr "無法將變數寫入檔案「{}」：{}"
 
-#: shared.hpp:59
+#: shared.hpp:65
 #, c++-format
 msgid ""
 "The path \"{}\" exists, but it is not a directory or a symlink to a "
 "directory."
 msgstr "路徑「{}」存在，但它不是目錄或指向目錄的符號連結。"
 
-#: shared.hpp:64
+#: shared.hpp:70
 #, c++-format
 msgid "The path \"{}\" exists, but it is a symlink to a non-existent object."
 msgstr "路徑「{}」存在，但它是指向不存在物件的符號連結。"
 
-#: shared.hpp:70
+#: shared.hpp:76
 #, c++-format
 msgid ""
 "Directory \"{}\" does not exist. Add \"--create-missing-dir\" to create "
 "missing directories."
 msgstr "目錄「{}」不存在。 新增「--create-missing-dir」以建立遺失的目錄。"
 
-#: shared.hpp:81
+#: shared.hpp:87
 #, c++-format
 msgid "Variable name can contain only ASCII letters, numbers and '_': {}"
 msgstr "變數名稱只能包含 ASCII 字母、數字和 '_'：{}"
@@ -237,8 +411,7 @@ msgstr ""
 msgid ""
 "config-manager: Request to remove repository option but it is not present in "
 "the overrides: {}.{}"
-msgstr ""
-"config-manager：請求移除 repository 選項，但它不存在於 overrides 中：{}.{}"
+msgstr "config-manager：請求移除 repository 選項，但它不存在於 overrides 中：{}.{}"
 
 #: unsetopt.cpp:208
 #, c++-format

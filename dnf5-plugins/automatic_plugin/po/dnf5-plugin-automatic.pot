@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-22 14:19+0000\n"
+"POT-Creation-Date: 2026-11-02 08:43+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,76 +17,76 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: automatic.cpp:217
+#: automatic.cpp:228
 msgid ""
 "An alternative CLI to 'dnf upgrade' suitable to be executed automatically "
 "and regularly."
 msgstr ""
 
-#: automatic.cpp:223
+#: automatic.cpp:234
 msgid "Apply random delay before execution."
 msgstr ""
 
-#: automatic.cpp:228
+#: automatic.cpp:239
 msgid "Automatically download updated packages"
 msgstr ""
 
-#: automatic.cpp:235
+#: automatic.cpp:246
 msgid "Do not automatically download updated packages"
 msgstr ""
 
-#: automatic.cpp:244
+#: automatic.cpp:255
 msgid "Automatically install downloaded updates"
 msgstr ""
 
-#: automatic.cpp:251
+#: automatic.cpp:262
 msgid "Do not automatically install downloaded updates"
 msgstr ""
 
-#: automatic.cpp:311
+#: automatic.cpp:322
 #, c++-format
 msgid ""
 "Warning: Configuration file location \"{}\" for dnf automatic is deprecated. "
 "See dnf5-automatic(8) for details."
 msgstr ""
 
-#: automatic.cpp:344
+#: automatic.cpp:355
 #, c++-format
 msgid ""
 "The \"email\" emitter is configured but the installed libcurl does not "
 "support the {} protocol."
 msgstr ""
 
-#: automatic.cpp:387
+#: automatic.cpp:398
 msgid "Resolved transaction:"
 msgstr ""
 
-#: automatic.cpp:416
+#: automatic.cpp:427
 msgid "Downloading packages:"
 msgstr ""
 
-#: automatic.cpp:426
+#: automatic.cpp:437
 msgid "Packages downloaded."
 msgstr ""
 
-#: automatic.cpp:429
+#: automatic.cpp:440
 msgid "Running transaction:"
 msgstr ""
 
-#: automatic.cpp:443
+#: automatic.cpp:454
 msgid "Transaction finished."
 msgstr ""
 
-#: automatic.cpp:445
+#: automatic.cpp:456
 msgid "Transaction failed: "
 msgstr ""
 
-#: automatic.cpp:478
+#: automatic.cpp:489
 #, c++-format
 msgid "Unknown report emitter for dnf5 automatic: \"{}\"."
 msgstr ""
 
-#: automatic.cpp:493
+#: automatic.cpp:504
 #, c++-format
 msgid "Error: reboot command returned nonzero exit code: {}"
 msgstr ""

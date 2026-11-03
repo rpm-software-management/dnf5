@@ -2,16 +2,17 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # Pierre GRASSER <pierre.grasser@proton.me>, 2024.
-# Léane GRASSER <leane.grasser@proton.me>, 2024, 2025.
-# Weblate Translation Memory <noreply-mt-weblate-translation-memory@weblate.org>, 2024.
+# Léane GRASSER <leane.grasser@proton.me>, 2024, 2025, 2026.
+# Weblate Translation Memory <noreply-mt-weblate-translation-memory@weblate.org>, 2024, 2026.
 # Alexandre Juillard <alexandre@juillard.org>, 2026.
+# blutch112 <vincent.lefebvre59@gmail.com>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-22 14:19+0000\n"
-"PO-Revision-Date: 2026-06-26 10:17+0000\n"
-"Last-Translator: Alexandre Juillard <alexandre@juillard.org>\n"
+"POT-Creation-Date: 2026-11-02 08:43+0000\n"
+"PO-Revision-Date: 2026-11-03 09:42+0000\n"
+"Last-Translator: Léane GRASSER <leane.grasser@proton.me>\n"
 "Language-Team: French <https://translate.fedoraproject.org/projects/dnf5/"
 "libdnf5-cli/fr/>\n"
 "Language: fr\n"
@@ -19,7 +20,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 2026.6.1\n"
+"X-Generator: Weblate 2026.11\n"
 
 #: argument_parser.cpp:68
 #, c++-format
@@ -31,8 +32,7 @@ msgstr ""
 #: argument_parser.cpp:76
 #, c++-format
 msgid "Misconfigured alias \"{}\": index \"{}\" out of range"
-msgstr ""
-"Configuration de l'alias \"{}\" incorrecte : indice \"{}\" hors limites"
+msgstr "Configuration de l'alias \"{}\" incorrecte : indice \"{}\" hors limites"
 
 #: argument_parser.cpp:98
 #, c++-format
@@ -191,7 +191,7 @@ msgstr "Nom"
 
 #: output/packageinfo.cpp:68
 msgid "Epoch"
-msgstr "Epoch"
+msgstr "Époque"
 
 #: output/packageinfo.cpp:69 output/transaction_table.cpp:291
 msgid "Version"
@@ -260,49 +260,39 @@ msgstr "Champs avec correspondance : "
 
 #: output/status.cpp:45
 msgid "Groups"
-msgstr ""
+msgstr "Groupes"
 
 #: output/status.cpp:46 output/status.cpp:55 output/status.cpp:72
-#, fuzzy
-#| msgid "Installed size"
 msgid "installed"
-msgstr "Taille une fois installé"
+msgstr "installé"
 
 #: output/status.cpp:47 output/status.cpp:56 output/status.cpp:73
 msgid "available"
-msgstr ""
+msgstr "disponible"
 
 #: output/status.cpp:54
 msgid "Environments"
-msgstr ""
+msgstr "Environnements"
 
 #: output/status.cpp:71
-#, fuzzy
-#| msgid "Package"
 msgid "Packages"
-msgstr "Paquet"
+msgstr "Paquets"
 
 #: output/status.cpp:74
 msgid "user-installed"
 msgstr ""
 
 #: output/status.cpp:84
-#, fuzzy
-#| msgid "Installed size"
 msgid "Installed Size"
 msgstr "Taille une fois installé"
 
 #: output/status.cpp:90
-#, fuzzy
-#| msgid "Repository"
 msgid "Enabled Repositories"
-msgstr "Dépôt"
+msgstr "Dépôts activés"
 
 #: output/status.cpp:101
-#, fuzzy
-#| msgid "Transaction Summary:\n"
 msgid "Last Transaction"
-msgstr "Résumé de la transaction :\n"
+msgstr "Dernière Transaction"
 
 #: output/transaction_table.cpp:129
 msgid "Transaction Summary:\n"
@@ -401,7 +391,7 @@ msgstr " <nom-indéfini>"
 
 #: output/transaction_table.cpp:482
 msgid "replacing "
-msgstr "remplacement de "
+msgstr "remplacement "
 
 #: output/transaction_table.cpp:495
 msgid "Skipping packages with conflicts:"
@@ -472,10 +462,8 @@ msgid "Upgrading groups:"
 msgstr "Mise à jour des groupes :"
 
 #: output/transaction_table.cpp:631
-#, fuzzy
-#| msgid "Changing reason:"
 msgid "Changing reason of installed groups:"
-msgstr "Changement du motif de :"
+msgstr "Modification du motif des groupes installés :"
 
 #: output/transaction_table.cpp:658
 msgid "Installing environmental groups:"
@@ -507,7 +495,7 @@ msgstr "Changement des flux de module :"
 
 #: output/transaction_table.cpp:776 output/transaction_table.cpp:777
 msgid "(none)"
-msgstr ""
+msgstr "(aucun)"
 
 #: output/transaction_table.cpp:783
 #, c++-format
@@ -523,25 +511,23 @@ msgstr "Aucune tâche à effectuer."
 #. The two spaces indent the table the same way as child lines in KeyValueTable
 #: output/transactioninfo.cpp:73
 msgid "Action"
-msgstr ""
+msgstr "Action"
 
 #: output/transactioninfo.cpp:75
 msgid "Reason"
-msgstr ""
+msgstr "Raison"
 
 #: output/transactioninfo.cpp:98
-#, fuzzy
-#| msgid "Transaction Summary:\n"
 msgid "Transaction ID"
-msgstr "Résumé de la transaction :\n"
+msgstr "ID de transaction"
 
 #: output/transactioninfo.cpp:99
 msgid "Begin time"
-msgstr ""
+msgstr "Heure de début"
 
 #: output/transactioninfo.cpp:100
 msgid "Begin rpmdb"
-msgstr ""
+msgstr "Début de rpmdb"
 
 #: output/transactioninfo.cpp:101
 msgid "End time"
@@ -553,25 +539,23 @@ msgstr ""
 
 #: output/transactioninfo.cpp:104
 msgid "User"
-msgstr ""
+msgstr "Utilisateur"
 
 #: output/transactioninfo.cpp:105
 msgid "Status"
-msgstr ""
+msgstr "Statut"
 
 #: output/transactioninfo.cpp:106
-#, fuzzy
-#| msgid "Release"
 msgid "Releasever"
-msgstr "Publication"
+msgstr "Version de publication"
 
 #: output/transactioninfo.cpp:108
 msgid "Comment"
-msgstr ""
+msgstr "Commentaire"
 
 #: output/transactioninfo.cpp:111
 msgid "Packages altered:"
-msgstr ""
+msgstr "Paquets modifiés :"
 
 #: output/transactioninfo.cpp:112
 msgid "Groups altered:"
@@ -579,27 +563,27 @@ msgstr ""
 
 #: output/transactioninfo.cpp:113
 msgid "Environments altered:"
-msgstr ""
+msgstr "Environnements modifiés :"
 
-#: output/transactionlist.cpp:53
+#: output/transactionlist.cpp:65
 msgid "ID"
-msgstr ""
+msgstr "ID"
 
-#: output/transactionlist.cpp:54
+#: output/transactionlist.cpp:66
 msgid "Command line"
-msgstr ""
+msgstr "Ligne de commande"
 
-#: output/transactionlist.cpp:55
+#: output/transactionlist.cpp:67
 msgid "Date and time"
-msgstr ""
+msgstr "Date et heure"
 
-#: output/transactionlist.cpp:56
+#: output/transactionlist.cpp:68
 msgid "Action(s)"
-msgstr ""
+msgstr "Action(s)"
 
-#: output/transactionlist.cpp:57
+#: output/transactionlist.cpp:69
 msgid "Altered"
-msgstr ""
+msgstr "Modifié"
 
 #. namespace
 #: progressbar/multi_progress_bar.cpp:85
@@ -615,19 +599,21 @@ msgstr "Commande manquante"
 msgid ""
 "Invalid date passed: \"{}\". Dates in \"YYYY-MM-DD\" format are expected"
 msgstr ""
+"Date fournie invalide : \"{}\". Les dates sont attendues au format \"YYYY-MM-"
+"DD\""
 
 #: session.cpp:270
 #, c++-format
 msgid "\"{}\" date cannot be represented by time_t type on this platform"
 msgstr ""
 
-#: utils/userconfirm.cpp:46
+#: utils/userconfirm.cpp:57
 msgid "Is this ok [Y/n]: "
-msgstr ""
+msgstr "Voulez-vous continuer ? [O/n] : "
 
-#: utils/userconfirm.cpp:49
+#: utils/userconfirm.cpp:60
 msgid "Is this ok [y/N]: "
-msgstr ""
+msgstr "Voulez-vous continuer ? [o/N] : "
 
 #~ msgid "No matches found."
 #~ msgstr "Aucun résultat."

@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-22 14:19+0000\n"
-"PO-Revision-Date: 2026-09-08 05:18+0000\n"
+"POT-Creation-Date: 2026-11-02 08:43+0000\n"
+"PO-Revision-Date: 2026-11-03 10:03+0000\n"
 "Last-Translator: Bone NI <bounkirdni@gmail.com>\n"
 "Language-Team: Lao <https://translate.fedoraproject.org/projects/dnf5/"
 "libdnf5-cli/lo/>\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 2026.9\n"
+"X-Generator: Weblate 2026.11\n"
 
 #: argument_parser.cpp:68
 #, c++-format
@@ -157,7 +157,8 @@ msgstr "ບໍ່ສາມາດແກ້ໄຂບັນຫາການດຳເ
 
 #: output/moduleinfo.cpp:36
 msgid "Hint: [d]efault, [e]nabled, [x]disabled, [i]nstalled, [a]ctive"
-msgstr "ຄຳແນະນຳ: [d]ຄ່າເລີ່ມຕົ້ນ, [e]ເປີດໃຊ້, [x]ປິດໃຊ້, [i]ຕິດຕັ້ງແລ້ວ, [a]ເຮັດວຽກຢູ່"
+msgstr ""
+"ຄຳແນະນຳ: [d]ຄ່າເລີ່ມຕົ້ນ, [e]ເປີດໃຊ້, [x]ປິດໃຊ້, [i]ຕິດຕັ້ງແລ້ວ, [a]ເຮັດວຽກຢູ່"
 
 #: output/modulelist.cpp:39
 msgid "Hint: [d]efault, [e]nabled, [x]disabled, [i]nstalled"
@@ -541,23 +542,23 @@ msgstr "ກຸ່ມທີ່ຖືກປ່ຽນແປງ:"
 msgid "Environments altered:"
 msgstr "ສະພາບແວດລ້ອມທີ່ຖືກປ່ຽນແປງ:"
 
-#: output/transactionlist.cpp:53
+#: output/transactionlist.cpp:65
 msgid "ID"
 msgstr "ໄອດີ"
 
-#: output/transactionlist.cpp:54
+#: output/transactionlist.cpp:66
 msgid "Command line"
 msgstr "ບັນທັດຄຳສັ່ງ"
 
-#: output/transactionlist.cpp:55
+#: output/transactionlist.cpp:67
 msgid "Date and time"
 msgstr "ວັນທີ ແລະ ເວລາ"
 
-#: output/transactionlist.cpp:56
+#: output/transactionlist.cpp:68
 msgid "Action(s)"
 msgstr "ການດຳເນີນການ"
 
-#: output/transactionlist.cpp:57
+#: output/transactionlist.cpp:69
 msgid "Altered"
 msgstr "ຖືກປ່ຽນແປງ"
 
@@ -581,11 +582,11 @@ msgstr "ວັນທີທີ່ສົ່ງມາບໍ່ຖືກຕ້ອງ
 msgid "\"{}\" date cannot be represented by time_t type on this platform"
 msgstr "ວັນທີ \"{}\" ບໍ່ສາມາດສະແດງຜົນດ້ວຍປະເພດ time_t ໃນລະບົບນີ້ໄດ້"
 
-#: utils/userconfirm.cpp:46
+#: utils/userconfirm.cpp:57
 msgid "Is this ok [Y/n]: "
 msgstr "ຕົກລົງ ຫຼື ບໍ່ [Y/n]: "
 
-#: utils/userconfirm.cpp:49
+#: utils/userconfirm.cpp:60
 msgid "Is this ok [y/N]: "
 msgstr "ຕົກລົງ ຫຼື ບໍ່ [y/N]: "
 

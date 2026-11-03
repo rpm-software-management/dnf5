@@ -1,17 +1,16 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# Petr Ptacek <petr106@atlas.cz>, 2024.
+# Petr Ptacek <petr106@atlas.cz>, 2024, 2026.
 # Jonáš Loskot <alius@users.noreply.translate.fedoraproject.org>, 2025, 2026.
 # Petr Pisar <ppisar@redhat.com>, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-22 14:19+0000\n"
-"PO-Revision-Date: 2026-09-11 21:17+0000\n"
-"Last-Translator: Jonáš Loskot "
-"<alius@users.noreply.translate.fedoraproject.org>\n"
+"POT-Creation-Date: 2026-11-02 08:43+0000\n"
+"PO-Revision-Date: 2026-11-03 09:37+0000\n"
+"Last-Translator: Petr Ptacek <petr106@atlas.cz>\n"
 "Language-Team: Czech <https://translate.fedoraproject.org/projects/dnf5/dnf5-"
 "plugin-config-manager/cs/>\n"
 "Language: cs\n"
@@ -19,48 +18,48 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Weblate 2026.9.1\n"
+"X-Generator: Weblate 2026.11\n"
 
-#: addrepo.cpp:136
+#: addrepo.cpp:115
 #, c++-format
 msgid "from-repofile: \"{}\" file does not exist"
 msgstr "from-repofile: soubor \"{}\" neexistuje"
 
-#: addrepo.cpp:139
+#: addrepo.cpp:118
 #, c++-format
 msgid "from-repofile: {}"
 msgstr "from-repofile: {}"
 
-#: addrepo.cpp:169 setopt.cpp:53 setvar.cpp:49
+#: addrepo.cpp:148 setopt.cpp:53 setvar.cpp:49
 #, c++-format
 msgid "{}: Badly formatted argument value \"{}\""
 msgstr "{}: Špatně utvořená hodnota argumentu „{}“"
 
-#: addrepo.cpp:179
+#: addrepo.cpp:158
 #, c++-format
 msgid "Cannot set repository option \"{}={}\": {}"
 msgstr "Nelze nastavit volbu repozitáře \"{}={}\": {}"
 
-#: addrepo.cpp:187 setopt.cpp:108
+#: addrepo.cpp:166 setopt.cpp:108
 #, c++-format
 msgid "Sets the \"{}\" option again with a different value: \"{}\" != \"{}\""
 msgstr "Nastaví volbu \"{}\" znovu s jinou hodnotou: \"{}\" != \"{}\""
 
-#: addrepo.cpp:253
+#: addrepo.cpp:232
 msgid "Missing path to repository configuration directory"
 msgstr "Chybí cesta ke konfiguračnímu adresáři repozitáře"
 
-#: addrepo.cpp:303
+#: addrepo.cpp:282
 #, c++-format
 msgid "Failed to copy repository configuration file \"{}\": {}"
 msgstr "Nepodařilo se zkopírovat konfigurační soubor repozitáře \"{}\": {}"
 
-#: addrepo.cpp:314
+#: addrepo.cpp:293
 #, c++-format
 msgid "Failed to download repository configuration file \"{}\": {}"
 msgstr "Nepodařilo se stáhnout konfigurační soubor repozitáře „{}“: {}"
 
-#: addrepo.cpp:342
+#: addrepo.cpp:321
 #, c++-format
 msgid ""
 "Error in added repository configuration file. Cannot set repository option "
@@ -69,25 +68,25 @@ msgstr ""
 "Chyba v přidaném konfiguračním souboru repozitáře. Nelze nastavit volbu "
 "úložiště \"{}={}\": {}"
 
-#: addrepo.cpp:376
+#: addrepo.cpp:355
 #, c++-format
 msgid "Bad baseurl: {}={}"
 msgstr "Špatná základní adresa: {}={}"
 
-#: addrepo.cpp:384
+#: addrepo.cpp:363
 msgid ""
 "One of --from-repofile=<URL>, --set=baseurl=<URL>, --set=mirrorlist=<URL>, --"
 "set=metalink=<URL> must be set to a non-empty URL"
 msgstr ""
-"Jeden z --from-repofile=<URL>, --set=baseurl=<URL>, --set=mirrorlist=<URL>, "
-"--set=metalink=<URL> musí být nastaven na neprázdnou adresu URL"
+"Jeden z --from-repofile=<URL>, --set=baseurl=<URL>, --set=mirrorlist=<URL>"
+", --set=metalink=<URL> musí být nastaven na neprázdnou adresu URL"
 
-#: addrepo.cpp:429
+#: addrepo.cpp:408
 #, c++-format
 msgid "Failed to save repository configuration file \"{}\": {}"
 msgstr "Nepodařilo se uložit konfigurační soubor repozitáře \"{}\": {}"
 
-#: addrepo.cpp:451
+#: addrepo.cpp:430
 #, c++-format
 msgid ""
 "File \"{}\" already exists and configures repositories with IDs \"{}\". Add "
@@ -96,7 +95,7 @@ msgstr ""
 "Soubor \"{}\" již existuje a konfiguruje repozitář s ID \"{}\". Přidejte \"--"
 "add-or-replace\" nebo \"--overwrite\"."
 
-#: addrepo.cpp:454
+#: addrepo.cpp:433
 #, c++-format
 msgid ""
 "File \"{}\" already exists and configures repositories with IDs \"{}\". Add "
@@ -105,19 +104,193 @@ msgstr ""
 "Soubor \"{}\" již existuje a konfiguruje repozitář s ID \"{}\". Chcete-li "
 "jej přepsat, přidejte \"--overwrite\"."
 
-#: addrepo.cpp:474 addrepo.cpp:500
+#: addrepo.cpp:453 addrepo.cpp:479
 #, c++-format
 msgid "A repository with id \"{}\" already configured in file: {}"
 msgstr "Repozitář s ID „{}“ již má konfiguraci v souboru: {}"
 
-#: addrepo.cpp:486 shared.hpp:150
+#: addrepo.cpp:465 shared.hpp:156
 #, c++-format
 msgid "Cannot read repositories from directory \"{}\": {}"
 msgstr "Nelze číst repozitáře z adresáře „{}“: {}"
 
-#: config-manager.cpp:44
+#: addvendorpolicy.cpp:23
+msgid "Add a vendor change policy from a TOML file or compact format string"
+msgstr ""
+
+#: addvendorpolicy.cpp:29
+msgid "Policy base filename (without .conf extension)"
+msgstr ""
+
+#: addvendorpolicy.cpp:40
+msgid "URL or local path to the source TOML policy file"
+msgstr ""
+
+#: addvendorpolicy.cpp:52
+msgid "Vendor change policy in compact format"
+msgstr ""
+
+#: addvendorpolicy.cpp:64
+msgid "Allow masking a distribution policy"
+msgstr ""
+
+#: addvendorpolicy.cpp:73
+msgid "Allow replacing an existing policy file"
+msgstr ""
+
+#: addvendorpolicy.cpp:82
+msgid "Require that the new policy masks a distribution policy"
+msgstr ""
+
+#: addvendorpolicy.cpp:94
+msgid "Require that the new policy replaces an existing system policy file"
+msgstr ""
+
+#: addvendorpolicy.cpp:123
+msgid "Option \"{option}\" with nonempty value is required"
+msgstr ""
+
+#: addvendorpolicy.cpp:129
+msgid "Either \"{option1}\" or non-empty \"{option2}\" is required"
+msgstr ""
+
+#: addvendorpolicy.cpp:142
+msgid ""
+"Policy file \"{path}\" already exists. Use \"{option}\" to allow replacing "
+"it."
+msgstr ""
+
+#: addvendorpolicy.cpp:150
+msgid ""
+"Distribution policy \"{name}\" already exists. Use \"{option}\" to allow "
+"masking it."
+msgstr ""
+
+#: addvendorpolicy.cpp:165
+msgid ""
+"Cannot add policy: option \"{option}\" requires masking a distribution "
+"policy, but no distribution policy named \"{name}\" exists."
+msgstr ""
+
+#: addvendorpolicy.cpp:172
+msgid ""
+"Cannot add policy: option \"{option}\" requires replacing an existing system "
+"policy, but no system policy file named \"{name}\" exists."
+msgstr ""
+
+#: addvendorpolicy.cpp:191 addvendorpolicy.cpp:215 addvendorpolicy.cpp:244
+msgid "Replaced vendor policy file: {path}"
+msgstr ""
+
+#: addvendorpolicy.cpp:196
+msgid "Created vendor policy file: {path}"
+msgstr ""
+
+#: addvendorpolicy.cpp:204
+#, fuzzy
+#| msgid "from-repofile: \"{}\" file does not exist"
+msgid "Source file does not exist: {path}"
+msgstr "from-repofile: soubor \"{}\" neexistuje"
+
+#: addvendorpolicy.cpp:222 addvendorpolicy.cpp:251
+msgid "Saved vendor policy file: {path}"
+msgstr ""
+
+#: addvendorpolicy.cpp:260
+msgid "Masked distribution policy file: {path}"
+msgstr ""
+
+#: addvendorpolicy.cpp:264
+msgid "Failed to add vendor policy"
+msgstr ""
+
+#: config-manager.cpp:47
 msgid "Manage configuration"
 msgstr "Správa konfigurace"
+
+#: listvendorpolicies.cpp:27
+msgid "List vendor change policy files"
+msgstr ""
+
+#: listvendorpolicies.cpp:33 removevendorpolicy.cpp:29
+msgid "Policy base filename pattern (supports globs)"
+msgstr ""
+
+#: listvendorpolicies.cpp:42
+msgid "Show detailed information about the policies"
+msgstr ""
+
+#: listvendorpolicies.cpp:61 removevendorpolicy.cpp:49
+msgid "No vendor policy files found"
+msgstr ""
+
+#: listvendorpolicies.cpp:80 removevendorpolicy.cpp:63
+msgid "No matching vendor policy files found for pattern: {pattern}"
+msgstr ""
+
+#. Note for translators: This is a right-aligned column separator in
+#. a package properties table as in "Name    : bash".
+#: listvendorpolicies.cpp:149
+msgid " : "
+msgstr ""
+
+#. Add policy info
+#: listvendorpolicies.cpp:155
+msgid "Policy"
+msgstr ""
+
+#: listvendorpolicies.cpp:156
+msgid "Source"
+msgstr ""
+
+#: listvendorpolicies.cpp:157
+msgid "Distribution (read-only)"
+msgstr ""
+
+#: listvendorpolicies.cpp:157
+msgid "System (manageable)"
+msgstr ""
+
+#: listvendorpolicies.cpp:157
+msgid "Type"
+msgstr ""
+
+#: listvendorpolicies.cpp:160
+msgid "Masks"
+msgstr ""
+
+#: listvendorpolicies.cpp:165
+msgid "Masked by"
+msgstr ""
+
+#: listvendorpolicies.cpp:174
+msgid "<conversion failed: {what}>"
+msgstr ""
+
+#: listvendorpolicies.cpp:178 listvendorpolicies.cpp:183
+msgid "Compact"
+msgstr ""
+
+#: removevendorpolicy.cpp:23
+msgid "Remove vendor change policy files"
+msgstr ""
+
+#: removevendorpolicy.cpp:74
+msgid "Removed vendor policy file: {path}"
+msgstr ""
+
+#: removevendorpolicy.cpp:78
+msgid "Unmasked distribution policy file: {path}"
+msgstr ""
+
+#: removevendorpolicy.cpp:83
+msgid "Failed to remove policy file: {path}"
+msgstr ""
+
+#: removevendorpolicy.cpp:87
+msgid ""
+"Cannot remove distribution policy file \"{path}\". To mask it, use: {command}"
+msgstr ""
 
 #: repos.cpp:56 setopt.cpp:140
 #, c++-format
@@ -182,7 +355,7 @@ msgstr "Chybí cesta k adresáři vars"
 msgid "Cannot write variable to file \"{}\": {}"
 msgstr "Nelze zapsat proměnnou do souboru \"{}\": {}"
 
-#: shared.hpp:59
+#: shared.hpp:65
 #, c++-format
 msgid ""
 "The path \"{}\" exists, but it is not a directory or a symlink to a "
@@ -190,13 +363,13 @@ msgid ""
 msgstr ""
 "Cesta \"{}\" existuje, ale není to adresář ani symbolický odkaz na adresář."
 
-#: shared.hpp:64
+#: shared.hpp:70
 #, c++-format
 msgid "The path \"{}\" exists, but it is a symlink to a non-existent object."
 msgstr ""
 "Cesta \"{}\" existuje, ale je to symbolický odkaz na neexistující objekt."
 
-#: shared.hpp:70
+#: shared.hpp:76
 #, c++-format
 msgid ""
 "Directory \"{}\" does not exist. Add \"--create-missing-dir\" to create "
@@ -205,7 +378,7 @@ msgstr ""
 "Adresář \"{}\" neexistuje. Chcete-li vytvořit chybějící adresáře, přidejte "
 "\"--create-missing-dir\"."
 
-#: shared.hpp:81
+#: shared.hpp:87
 #, c++-format
 msgid "Variable name can contain only ASCII letters, numbers and '_': {}"
 msgstr "Název proměnné může obsahovat pouze písmena ASCII, čísla a '_': {}"

@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-22 14:19+0000\n"
-"PO-Revision-Date: 2026-09-22 17:49+0000\n"
+"POT-Creation-Date: 2026-11-02 08:43+0000\n"
+"PO-Revision-Date: 2026-11-03 09:45+0000\n"
 "Last-Translator: Tomasz Bojanowski <tomasz@bojanowski.me>\n"
 "Language-Team: Polish <https://translate.fedoraproject.org/projects/dnf5/"
 "libdnf5-cli/pl/>\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 2026.9.1\n"
+"X-Generator: Weblate 2026.11\n"
 
 #: argument_parser.cpp:68
 #, c++-format
@@ -117,8 +117,8 @@ msgstr "Identyfikator grupy „{}” został już zarejestrowany dla polecenia �
 #, c++-format
 msgid "Command id \"{}\" does not contain subcommand with id \"{}\""
 msgstr ""
-"Polecenie o identyfikatorze „{}” nie zawiera podpolecenia o identyfikatorze "
-"„{}”"
+"Polecenie o identyfikatorze „{}” nie zawiera podpolecenia o identyfikatorze „"
+"{}”"
 
 #: argument_parser.cpp:1063
 #, c++-format
@@ -181,8 +181,7 @@ msgstr ""
 
 #: output/modulelist.cpp:39
 msgid "Hint: [d]efault, [e]nabled, [x]disabled, [i]nstalled"
-msgstr ""
-"Wskazówka: d — domyślne, e — włączone, x — wyłączone, i — zainstalowane"
+msgstr "Wskazówka: d — domyślne, e — włączone, x — wyłączone, i — zainstalowane"
 
 #. Note for translators: This is a right-aligned column separator in
 #. a package properties table as in "Name    : bash".
@@ -580,23 +579,23 @@ msgstr "Zmienione grupy:"
 msgid "Environments altered:"
 msgstr "Zmienione środowiska:"
 
-#: output/transactionlist.cpp:53
+#: output/transactionlist.cpp:65
 msgid "ID"
 msgstr "Identyfikator"
 
-#: output/transactionlist.cpp:54
+#: output/transactionlist.cpp:66
 msgid "Command line"
 msgstr "Wiersz poleceń"
 
-#: output/transactionlist.cpp:55
+#: output/transactionlist.cpp:67
 msgid "Date and time"
 msgstr "Data i godzina"
 
-#: output/transactionlist.cpp:56
+#: output/transactionlist.cpp:68
 msgid "Action(s)"
 msgstr "Działania"
 
-#: output/transactionlist.cpp:57
+#: output/transactionlist.cpp:69
 msgid "Altered"
 msgstr "Zmienione"
 
@@ -621,11 +620,11 @@ msgstr ""
 msgid "\"{}\" date cannot be represented by time_t type on this platform"
 msgstr "Data „{}” nie może zostać zapisana w typie time_t na tej platformie"
 
-#: utils/userconfirm.cpp:46
+#: utils/userconfirm.cpp:57
 msgid "Is this ok [Y/n]: "
 msgstr "Kontynuować? [T/n]: "
 
-#: utils/userconfirm.cpp:49
+#: utils/userconfirm.cpp:60
 msgid "Is this ok [y/N]: "
 msgstr "Kontynuować? [t/N]: "
 

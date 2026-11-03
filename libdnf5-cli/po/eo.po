@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-22 14:19+0000\n"
-"PO-Revision-Date: 2026-09-14 20:46+0000\n"
+"POT-Creation-Date: 2026-11-02 08:43+0000\n"
+"PO-Revision-Date: 2026-11-03 10:02+0000\n"
 "Last-Translator: Keith Bowes <zooplah@gmail.com>\n"
 "Language-Team: Esperanto <https://translate.fedoraproject.org/projects/dnf5/"
 "libdnf5-cli/eo/>\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 2026.9.1\n"
+"X-Generator: Weblate 2026.11\n"
 
 #: argument_parser.cpp:68
 #, c++-format
@@ -160,8 +160,7 @@ msgstr "Malsukcesis solvi la transakcion"
 
 #: output/moduleinfo.cpp:36
 msgid "Hint: [d]efault, [e]nabled, [x]disabled, [i]nstalled, [a]ctive"
-msgstr ""
-"Konsilo: [d]apriora, [e]ŝaltita, [x]malŝaltita, [i]instalita, [a]aktiva"
+msgstr "Konsilo: [d]apriora, [e]ŝaltita, [x]malŝaltita, [i]instalita, [a]aktiva"
 
 #: output/modulelist.cpp:39
 msgid "Hint: [d]efault, [e]nabled, [x]disabled, [i]nstalled"
@@ -554,30 +553,30 @@ msgstr "Ŝanĝitaj grupoj:"
 msgid "Environments altered:"
 msgstr "Ŝanĝitaj medioj:"
 
-#: output/transactionlist.cpp:53
+#: output/transactionlist.cpp:65
 msgid "ID"
 msgstr "Identigilo"
 
-#: output/transactionlist.cpp:54
+#: output/transactionlist.cpp:66
 msgid "Command line"
 msgstr "Komandlinio"
 
-#: output/transactionlist.cpp:55
+#: output/transactionlist.cpp:67
 msgid "Date and time"
 msgstr "Dato kaj tempo"
 
-#: output/transactionlist.cpp:56
+#: output/transactionlist.cpp:68
 msgid "Action(s)"
 msgstr "Ago(j)"
 
-#: output/transactionlist.cpp:57
+#: output/transactionlist.cpp:69
 msgid "Altered"
 msgstr "Ŝanĝita(j)"
 
 #. namespace
 #: progressbar/multi_progress_bar.cpp:85
 msgid "Total"
-msgstr "Ĉioma"
+msgstr "Ĉiome"
 
 #: session.cpp:153
 msgid "Missing command"
@@ -595,11 +594,11 @@ msgid "\"{}\" date cannot be represented by time_t type on this platform"
 msgstr ""
 "Ne eblas prezenti la daton \"{}\" per la datumtipo time_t en ĉi tiu platformo"
 
-#: utils/userconfirm.cpp:46
+#: utils/userconfirm.cpp:57
 msgid "Is this ok [Y/n]: "
 msgstr "Ĉu tio bonas [J/n]: "
 
-#: utils/userconfirm.cpp:49
+#: utils/userconfirm.cpp:60
 msgid "Is this ok [y/N]: "
 msgstr "Ĉu tio bonas [j/N]: "
 

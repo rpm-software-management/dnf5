@@ -3,12 +3,13 @@
 # This file is distributed under the same license as the PACKAGE package.
 # Languages add-on <noreply-addon-languages@weblate.org>, 2026.
 # Priit Jõerüüt <jrtkbfdr@users.noreply.translate.fedoraproject.org>, 2026.
+# Weblate Translation Memory <noreply-mt-weblate-translation-memory@weblate.org>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-22 14:19+0000\n"
-"PO-Revision-Date: 2026-08-28 08:18+0000\n"
+"POT-Creation-Date: 2026-11-02 08:43+0000\n"
+"PO-Revision-Date: 2026-10-22 07:58+0000\n"
 "Last-Translator: Priit Jõerüüt "
 "<jrtkbfdr@users.noreply.translate.fedoraproject.org>\n"
 "Language-Team: Estonian <https://translate.fedoraproject.org/projects/dnf5/"
@@ -18,7 +19,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 2026.8.1\n"
+"X-Generator: Weblate 2026.10.1\n"
 
 #: commands/advisory/advisory.cpp:35
 msgid "Manage advisories"
@@ -58,12 +59,16 @@ msgid ""
 "Show advisories containing newer versions of installed packages for which a "
 "newer version is available."
 msgstr ""
+"Näita turvateateid, mis sisaldavad paigaldatud pakettide uuemaid versioone, "
+"mille jaoks on saadaval uuem versioon."
 
 #: commands/advisory/arguments.hpp:80
 msgid ""
 "Show only advisories containing packages with specified names. List option, "
 "supports globs."
 msgstr ""
+"Näita turvateateid, mis sisaldavad määratletud nimesid. Loendivalik, toetab "
+"üldnimetusi."
 
 #: commands/advisory/arguments.hpp:81
 msgid "PACKAGE_NAME,..."
@@ -154,21 +159,23 @@ msgstr ""
 
 #: commands/group/group_list.hpp:37
 msgid "Show only available groups."
-msgstr ""
+msgstr "Näita vaid saadaval gruppe."
 
 #: commands/group/group_list.hpp:43
 msgid "Show only installed groups."
-msgstr ""
+msgstr "Näita vaid paigaldatud gruppe."
 
 #: commands/group/group_list.hpp:49
 msgid "Show also hidden groups."
-msgstr ""
+msgstr "Näita ka peidetud gruppe."
 
 #: commands/group/group_list.hpp:59
 msgid ""
 "Show only groups containing packages with specified names. List option, "
 "supports globs."
 msgstr ""
+"Näita vaid gruppe, mis sisaldavad kindlate nimedega pakette. Loendivalik, "
+"toetab üldnimetusi."
 
 #: commands/repo/repo.cpp:37
 msgid "Manage repositories"
@@ -188,6 +195,8 @@ msgid ""
 "This command has to be run with superuser privileges (under the root user on "
 "most systems)."
 msgstr ""
+"Seda käsku pead käivitama peakasutaja õigustes (mis enamuste süsteemide "
+"puhul tähendab „root“ ehk juurkasutajat)."
 
 #: main.cpp:172
 #, c++-format
@@ -197,4 +206,4 @@ msgstr ""
 
 #: main.cpp:272 main.cpp:322
 msgid ". Add \"--help\" for more information about the arguments."
-msgstr ""
+msgstr ". Täiendava teabe jaoks lisa „--help“ argumendina."

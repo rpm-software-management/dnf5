@@ -2,12 +2,13 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # Remus-Gabriel Chelu <remusgabriel.chelu@disroot.org>, 2024, 2026.
+# Petru Rebeja <petru@rebeja.eu>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-22 14:19+0000\n"
-"PO-Revision-Date: 2026-09-02 07:20+0000\n"
+"POT-Creation-Date: 2026-11-02 08:43+0000\n"
+"PO-Revision-Date: 2026-11-03 09:44+0000\n"
 "Last-Translator: Remus-Gabriel Chelu <remusgabriel.chelu@disroot.org>\n"
 "Language-Team: Romanian <https://translate.fedoraproject.org/projects/dnf5/"
 "dnf5-plugin-config-manager/ro/>\n"
@@ -17,48 +18,48 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : (n==0 || (n%100 > 0 && n%100 < "
 "20)) ? 1 : 2;\n"
-"X-Generator: Weblate 2026.8.1\n"
+"X-Generator: Weblate 2026.11\n"
 
-#: addrepo.cpp:136
+#: addrepo.cpp:115
 #, c++-format
 msgid "from-repofile: \"{}\" file does not exist"
 msgstr "from-repofile: fișierul „{}” nu există"
 
-#: addrepo.cpp:139
+#: addrepo.cpp:118
 #, c++-format
 msgid "from-repofile: {}"
 msgstr "from-repofile: {}"
 
-#: addrepo.cpp:169 setopt.cpp:53 setvar.cpp:49
+#: addrepo.cpp:148 setopt.cpp:53 setvar.cpp:49
 #, c++-format
 msgid "{}: Badly formatted argument value \"{}\""
 msgstr "{}: valoarea argumentului „{}” este greșit formatată"
 
-#: addrepo.cpp:179
+#: addrepo.cpp:158
 #, c++-format
 msgid "Cannot set repository option \"{}={}\": {}"
 msgstr "Nu se poate defini opțiunea depozitului „{}={}”: {}"
 
-#: addrepo.cpp:187 setopt.cpp:108
+#: addrepo.cpp:166 setopt.cpp:108
 #, c++-format
 msgid "Sets the \"{}\" option again with a different value: \"{}\" != \"{}\""
 msgstr "Definește din nou opțiunea „{}” cu o valoare diferită: „{}” != ”{}”"
 
-#: addrepo.cpp:253
+#: addrepo.cpp:232
 msgid "Missing path to repository configuration directory"
 msgstr "Lipsește ruta către directorul de configurare a depozitului"
 
-#: addrepo.cpp:303
+#: addrepo.cpp:282
 #, c++-format
 msgid "Failed to copy repository configuration file \"{}\": {}"
 msgstr "Copierea fișierului de configurare a depozitului „{}” a eșuat: {}"
 
-#: addrepo.cpp:314
+#: addrepo.cpp:293
 #, c++-format
 msgid "Failed to download repository configuration file \"{}\": {}"
 msgstr "Descărcarea fișierului de configurare a depozitului a eșuat „{}”: {}"
 
-#: addrepo.cpp:342
+#: addrepo.cpp:321
 #, c++-format
 msgid ""
 "Error in added repository configuration file. Cannot set repository option "
@@ -67,12 +68,12 @@ msgstr ""
 "Eroare în fișierul de configurare a depozitului adăugat. Nu se poate defini "
 "opțiunea depozitului „{}={}”: {}"
 
-#: addrepo.cpp:376
+#: addrepo.cpp:355
 #, c++-format
 msgid "Bad baseurl: {}={}"
 msgstr "baseurl incorectă: {}={}"
 
-#: addrepo.cpp:384
+#: addrepo.cpp:363
 msgid ""
 "One of --from-repofile=<URL>, --set=baseurl=<URL>, --set=mirrorlist=<URL>, --"
 "set=metalink=<URL> must be set to a non-empty URL"
@@ -81,12 +82,12 @@ msgstr ""
 "set=mirrorlist=<URL>”, „--set=metalink=<URL>” trebuie să fie definită la o "
 "adresă URL nevidă"
 
-#: addrepo.cpp:429
+#: addrepo.cpp:408
 #, c++-format
 msgid "Failed to save repository configuration file \"{}\": {}"
 msgstr "Salvarea fișierului de configurare a depozitului „{}” a eșuat: {}"
 
-#: addrepo.cpp:451
+#: addrepo.cpp:430
 #, c++-format
 msgid ""
 "File \"{}\" already exists and configures repositories with IDs \"{}\". Add "
@@ -95,7 +96,7 @@ msgstr ""
 "Fișierul „{}” există deja și configurează depozitele cu ID-urile „{}”. "
 "Adăugați „--add-or-replace” sau „--overwrite”."
 
-#: addrepo.cpp:454
+#: addrepo.cpp:433
 #, c++-format
 msgid ""
 "File \"{}\" already exists and configures repositories with IDs \"{}\". Add "
@@ -104,19 +105,210 @@ msgstr ""
 "Fișierul „{}” există deja și configurează depozitele cu ID-urile „{}”. "
 "Adăugați „--overwrite” pentru a-l suprascrie."
 
-#: addrepo.cpp:474 addrepo.cpp:500
+#: addrepo.cpp:453 addrepo.cpp:479
 #, c++-format
 msgid "A repository with id \"{}\" already configured in file: {}"
 msgstr "Un depozit cu id-ul „{}” este deja configurat în fișierul: {}"
 
-#: addrepo.cpp:486 shared.hpp:150
+#: addrepo.cpp:465 shared.hpp:156
 #, c++-format
 msgid "Cannot read repositories from directory \"{}\": {}"
 msgstr "Nu se pot citi depozitele din directorul „{}”: {}"
 
-#: config-manager.cpp:44
+#: addvendorpolicy.cpp:23
+msgid "Add a vendor change policy from a TOML file or compact format string"
+msgstr ""
+"Adaugă o politică de schimbare a furnizorului dintr-un fișier TOML sau dintr-"
+"un șir de caractere în format compact"
+
+#: addvendorpolicy.cpp:29
+msgid "Policy base filename (without .conf extension)"
+msgstr "Numele fișierului de bază al politicii (fără extensia .conf)"
+
+#: addvendorpolicy.cpp:40
+msgid "URL or local path to the source TOML policy file"
+msgstr "Adresa URL sau ruta locală către fișierul sursă al politicii TOML"
+
+#: addvendorpolicy.cpp:52
+msgid "Vendor change policy in compact format"
+msgstr "Politica privind schimbarea furnizorului, în format compact"
+
+#: addvendorpolicy.cpp:64
+msgid "Allow masking a distribution policy"
+msgstr "Permite mascarea unei politici de distribuție"
+
+#: addvendorpolicy.cpp:73
+msgid "Allow replacing an existing policy file"
+msgstr "Permite înlocuirea unui fișier de politici existent"
+
+#: addvendorpolicy.cpp:82
+msgid "Require that the new policy masks a distribution policy"
+msgstr "Este necesar ca noua politică să înlocuiască o politică de distribuție"
+
+#: addvendorpolicy.cpp:94
+msgid "Require that the new policy replaces an existing system policy file"
+msgstr ""
+"Este necesar ca noua politică să înlocuiască un fișier de politică de sistem "
+"existent"
+
+#: addvendorpolicy.cpp:123
+msgid "Option \"{option}\" with nonempty value is required"
+msgstr "Este necesară opțiunea „{option}” cu o valoare care nu este vidă"
+
+#: addvendorpolicy.cpp:129
+msgid "Either \"{option1}\" or non-empty \"{option2}\" is required"
+msgstr "Este necesară fie „{option1}”, fie „{option2}” (care nu poate fi vidă)"
+
+#: addvendorpolicy.cpp:142
+msgid ""
+"Policy file \"{path}\" already exists. Use \"{option}\" to allow replacing "
+"it."
+msgstr ""
+"Fișierul de politici „{path}” există deja. Utilizați „{option}” pentru a "
+"permite înlocuirea acestuia."
+
+#: addvendorpolicy.cpp:150
+msgid ""
+"Distribution policy \"{name}\" already exists. Use \"{option}\" to allow "
+"masking it."
+msgstr ""
+"Politica de distribuție „{name}” există deja. Utilizați „{option}” pentru a "
+"permite mascarea acesteia."
+
+#: addvendorpolicy.cpp:165
+msgid ""
+"Cannot add policy: option \"{option}\" requires masking a distribution "
+"policy, but no distribution policy named \"{name}\" exists."
+msgstr ""
+"Nu se poate adăuga politica: opțiunea „{option}” necesită mascarea unei "
+"politici a distribuției, dar nu există nicio politică de distribuție cu "
+"numele „{name}”."
+
+#: addvendorpolicy.cpp:172
+msgid ""
+"Cannot add policy: option \"{option}\" requires replacing an existing system "
+"policy, but no system policy file named \"{name}\" exists."
+msgstr ""
+"Nu se poate adăuga politica: opțiunea „{option}” necesită înlocuirea unei "
+"politici de sistem existente, dar nu există niciun fișier de politică de "
+"sistem cu numele „{name}”."
+
+#: addvendorpolicy.cpp:191 addvendorpolicy.cpp:215 addvendorpolicy.cpp:244
+msgid "Replaced vendor policy file: {path}"
+msgstr "Fișierul cu politica furnizorului a fost înlocuit: {path}"
+
+#: addvendorpolicy.cpp:196
+msgid "Created vendor policy file: {path}"
+msgstr "S-a creat fișierul cu politica furnizorului: {path}"
+
+#: addvendorpolicy.cpp:204
+msgid "Source file does not exist: {path}"
+msgstr "Fișierul sursă nu există: {path}"
+
+#: addvendorpolicy.cpp:222 addvendorpolicy.cpp:251
+msgid "Saved vendor policy file: {path}"
+msgstr "Fișierul cu politica furnizorului a fost salvat: {path}"
+
+#: addvendorpolicy.cpp:260
+msgid "Masked distribution policy file: {path}"
+msgstr "Fișierul cu politica distribuției a fost mascat: {path}"
+
+#: addvendorpolicy.cpp:264
+msgid "Failed to add vendor policy"
+msgstr "Nu s-a putut adăuga politica furnizorului"
+
+#: config-manager.cpp:47
 msgid "Manage configuration"
 msgstr "Gestionează configurația"
+
+#: listvendorpolicies.cpp:27
+msgid "List vendor change policy files"
+msgstr "Afișează fișierele cu politica privind schimbarea furnizorilor"
+
+#: listvendorpolicies.cpp:33 removevendorpolicy.cpp:29
+msgid "Policy base filename pattern (supports globs)"
+msgstr ""
+"Modelul numelui fișierului de bază al politicii (acceptă expresii globale)"
+
+#: listvendorpolicies.cpp:42
+msgid "Show detailed information about the policies"
+msgstr "Afișează informații detaliate despre politici"
+
+#: listvendorpolicies.cpp:61 removevendorpolicy.cpp:49
+msgid "No vendor policy files found"
+msgstr "Nu s-au găsit fișiere cu politici ale furnizorilor"
+
+#: listvendorpolicies.cpp:80 removevendorpolicy.cpp:63
+msgid "No matching vendor policy files found for pattern: {pattern}"
+msgstr ""
+"Nu s-au găsit fișiere cu politici ale furnizorilor care să corespundă "
+"modelului: {pattern}"
+
+#. Note for translators: This is a right-aligned column separator in
+#. a package properties table as in "Name    : bash".
+#: listvendorpolicies.cpp:149
+msgid " : "
+msgstr " : "
+
+#. Add policy info
+#: listvendorpolicies.cpp:155
+msgid "Policy"
+msgstr "Politica"
+
+#: listvendorpolicies.cpp:156
+msgid "Source"
+msgstr "Sursa"
+
+#: listvendorpolicies.cpp:157
+msgid "Distribution (read-only)"
+msgstr "Distribuția (doar citire)"
+
+#: listvendorpolicies.cpp:157
+msgid "System (manageable)"
+msgstr "Sistem (gestionabil)"
+
+#: listvendorpolicies.cpp:157
+msgid "Type"
+msgstr "Tip"
+
+#: listvendorpolicies.cpp:160
+msgid "Masks"
+msgstr "Măști"
+
+#: listvendorpolicies.cpp:165
+msgid "Masked by"
+msgstr "Mascat de"
+
+#: listvendorpolicies.cpp:174
+msgid "<conversion failed: {what}>"
+msgstr "<conversia a eșuat: {what}>"
+
+#: listvendorpolicies.cpp:178 listvendorpolicies.cpp:183
+msgid "Compact"
+msgstr "Compact"
+
+#: removevendorpolicy.cpp:23
+msgid "Remove vendor change policy files"
+msgstr "Elimină fișierele cu politica privind modificările furnizorilor"
+
+#: removevendorpolicy.cpp:74
+msgid "Removed vendor policy file: {path}"
+msgstr "Fișierul cu politica furnizorului a fost eliminat: {path}"
+
+#: removevendorpolicy.cpp:78
+msgid "Unmasked distribution policy file: {path}"
+msgstr "Fișierul cu politica distribuției a fost demascat: {path}"
+
+#: removevendorpolicy.cpp:83
+msgid "Failed to remove policy file: {path}"
+msgstr "Nu s-a putut elimina fișierul de politici: {path}"
+
+#: removevendorpolicy.cpp:87
+msgid ""
+"Cannot remove distribution policy file \"{path}\". To mask it, use: {command}"
+msgstr ""
+"Nu se poate elimina fișierul de politici a distribuției „{path}”. Pentru a-l "
+"ascunde, folosiți: {comandă}"
 
 #: repos.cpp:56 setopt.cpp:140
 #, c++-format
@@ -155,8 +347,8 @@ msgid ""
 "Sets the \"{}\" option of the repository \"{}\" again with a different "
 "value: \"{}\" != \"{}\""
 msgstr ""
-"Definește din nou opțiunea „{}” a depozitului „{}” cu o valoare diferită: "
-"„{}” != ”{}”"
+"Definește din nou opțiunea „{}” a depozitului „{}” cu o valoare diferită: „{}"
+"” != ”{}”"
 
 #: setopt.cpp:100
 #, c++-format
@@ -182,7 +374,7 @@ msgstr "Lipsește ruta către directorul de variabile"
 msgid "Cannot write variable to file \"{}\": {}"
 msgstr "Nu se poate scrie variabila în fișierul „{}”: {}"
 
-#: shared.hpp:59
+#: shared.hpp:65
 #, c++-format
 msgid ""
 "The path \"{}\" exists, but it is not a directory or a symlink to a "
@@ -191,13 +383,13 @@ msgstr ""
 "Ruta „{}” există, dar nu este un director sau o legătură simbolică către un "
 "director."
 
-#: shared.hpp:64
+#: shared.hpp:70
 #, c++-format
 msgid "The path \"{}\" exists, but it is a symlink to a non-existent object."
 msgstr ""
 "Ruta „{}” există, dar este o legătură simbolică către un obiect inexistent."
 
-#: shared.hpp:70
+#: shared.hpp:76
 #, c++-format
 msgid ""
 "Directory \"{}\" does not exist. Add \"--create-missing-dir\" to create "
@@ -206,7 +398,7 @@ msgstr ""
 "Directorul „{}” nu există. Adăugați „--create-missing-dir” pentru a crea "
 "directoarele lipsă."
 
-#: shared.hpp:81
+#: shared.hpp:87
 #, c++-format
 msgid "Variable name can contain only ASCII letters, numbers and '_': {}"
 msgstr "Numele variabilei poate conține numai litere ASCII, numere și „_”: {}"

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-22 14:19+0000\n"
+"POT-Creation-Date: 2026-11-02 08:43+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,63 +17,69 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: reposync.cpp:65
+#: reposync.cpp:67
 msgid "Synchronize a remote DNF repository to a local directory."
 msgstr ""
 
-#: reposync.cpp:162
+#: reposync.cpp:122
+#, c++-format
+msgid ""
+"Invalid value \"{}\" for \"--latest-limit\", a positive integer is required"
+msgstr ""
+
+#: reposync.cpp:191
 msgid "Can't use --norepopath with multiple repositories enabled"
 msgstr ""
 
-#: reposync.cpp:167
+#: reposync.cpp:196
 msgid "Can't use --safe-write-path with multiple repositories enabled"
 msgstr ""
 
-#: reposync.cpp:261
+#: reposync.cpp:292
 #, c++-format
 msgid ""
 "Download destination '{0}' for location '{1}' of '{2}' package from '{3}' "
 "repo is outside of safe write path '{4}'."
 msgstr ""
 
-#: reposync.cpp:289
+#: reposync.cpp:320
 #, c++-format
 msgid "Failed to download package: {}"
 msgstr ""
 
-#: reposync.cpp:292
+#: reposync.cpp:323
 msgid "Failed to download one or more packages"
 msgstr ""
 
-#: reposync.cpp:304
+#: reposync.cpp:335
 #, c++-format
 msgid "Failed to create directory '{0}' iterator: {1}"
 msgstr ""
 
-#: reposync.cpp:317
+#: reposync.cpp:348
 #, c++-format
 msgid "Failed to delete file {0}: {1}"
 msgstr ""
 
-#: reposync.cpp:320
+#: reposync.cpp:351
 #, c++-format
 msgid "[DELETED] {}"
 msgstr ""
 
-#: reposync.cpp:336
+#: reposync.cpp:367
 #, c++-format
 msgid "Removing '{}' with failing OpenPGP check: {}"
 msgstr ""
 
-#: reposync.cpp:399
+#: reposync.cpp:430
 msgid "Failed to get mirror for metadata."
 msgstr ""
 
-#: reposync.cpp:409
+#: reposync.cpp:440
 #, c++-format
 msgid "Failed to get mirror for package: \"{}\""
 msgstr ""
 
-#: reposync.cpp:425
+#: reposync.cpp:456
 msgid "OpenPGP signature check failed"
 msgstr ""

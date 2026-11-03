@@ -2,15 +2,16 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # Byoungchan Lee <byoungchan.lee@gmx.com>, 2024.
-# Weblate Translation Memory <noreply-mt-weblate-translation-memory@weblate.org>, 2024.
+# Weblate Translation Memory <noreply-mt-weblate-translation-memory@weblate.org>, 2024, 2026.
 # Joungmin Lee <leejm516@gmail.com>, 2024.
-# 김인수 <simmon@nplob.com>, 2024, 2025.
+# 김인수 <simmon@nplob.com>, 2024, 2025, 2026.
+# Hyeonmin Oh <hyunmin860@gmail.com>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-22 14:19+0000\n"
-"PO-Revision-Date: 2025-09-30 03:54+0000\n"
+"POT-Creation-Date: 2026-11-02 08:43+0000\n"
+"PO-Revision-Date: 2026-10-20 06:25+0000\n"
 "Last-Translator: 김인수 <simmon@nplob.com>\n"
 "Language-Team: Korean <https://translate.fedoraproject.org/projects/dnf5/"
 "libdnf5-cli/ko/>\n"
@@ -19,12 +20,12 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.13.3\n"
+"X-Generator: Weblate 2026.10.1\n"
 
 #: argument_parser.cpp:68
 #, c++-format
 msgid "Misconfigured alias \"{}\": cannot convert \"{}\" to a number"
-msgstr "잘못 구성된 별칭 \"{}\": \"{}\"를 숫자로 변환 할 수 없습니다"
+msgstr "잘못 설정된 별칭 \"{}\": \"{}\"를 숫자로 변환할 수 없습니다"
 
 #: argument_parser.cpp:76
 #, c++-format
@@ -248,49 +249,39 @@ msgstr "일치된 부분: "
 
 #: output/status.cpp:45
 msgid "Groups"
-msgstr ""
+msgstr "모음"
 
 #: output/status.cpp:46 output/status.cpp:55 output/status.cpp:72
-#, fuzzy
-#| msgid "Installed size"
 msgid "installed"
-msgstr "설치된 크기"
+msgstr "설치되었습니다"
 
 #: output/status.cpp:47 output/status.cpp:56 output/status.cpp:73
 msgid "available"
-msgstr ""
+msgstr "사용 가능"
 
 #: output/status.cpp:54
 msgid "Environments"
-msgstr ""
+msgstr "환경"
 
 #: output/status.cpp:71
-#, fuzzy
-#| msgid "Package"
 msgid "Packages"
 msgstr "꾸러미"
 
 #: output/status.cpp:74
 msgid "user-installed"
-msgstr ""
+msgstr "사용자가 설치함"
 
 #: output/status.cpp:84
-#, fuzzy
-#| msgid "Installed size"
 msgid "Installed Size"
 msgstr "설치된 크기"
 
 #: output/status.cpp:90
-#, fuzzy
-#| msgid "Repository"
 msgid "Enabled Repositories"
-msgstr "저장소"
+msgstr "저장소 활성화"
 
 #: output/status.cpp:101
-#, fuzzy
-#| msgid "Transaction Summary:\n"
 msgid "Last Transaction"
-msgstr "연결 요약:\n"
+msgstr "연결"
 
 #: output/transaction_table.cpp:129
 msgid "Transaction Summary:\n"
@@ -452,10 +443,8 @@ msgid "Upgrading groups:"
 msgstr "그룹 향상 중:"
 
 #: output/transaction_table.cpp:631
-#, fuzzy
-#| msgid "Changing reason:"
 msgid "Changing reason of installed groups:"
-msgstr "변경 원인:"
+msgstr "설치된 그룹의 설치 사유 변경:"
 
 #: output/transaction_table.cpp:658
 msgid "Installing environmental groups:"
@@ -487,13 +476,13 @@ msgstr "모듈 스트림 전환 중:"
 
 #: output/transaction_table.cpp:776 output/transaction_table.cpp:777
 msgid "(none)"
-msgstr ""
+msgstr "(없음)"
 
 #: output/transaction_table.cpp:783
 #, c++-format
 msgid "Skipping {0} package due to vendor change restriction: {1}."
 msgid_plural "Skipping {0} packages due to vendor change restriction: {1}."
-msgstr[0] ""
+msgstr[0] "공급업체 변경 제한으로 {0} 꾸러미 건너뛰기: {1}."
 
 #: output/transaction_table.cpp:812
 msgid "Nothing to do."
@@ -502,83 +491,79 @@ msgstr "처리가 필요하지 않습니다."
 #. The two spaces indent the table the same way as child lines in KeyValueTable
 #: output/transactioninfo.cpp:73
 msgid "Action"
-msgstr ""
+msgstr "동작"
 
 #: output/transactioninfo.cpp:75
 msgid "Reason"
-msgstr ""
+msgstr "이유"
 
 #: output/transactioninfo.cpp:98
-#, fuzzy
-#| msgid "Transaction Summary:\n"
 msgid "Transaction ID"
-msgstr "연결 요약:\n"
+msgstr "연결 ID"
 
 #: output/transactioninfo.cpp:99
 msgid "Begin time"
-msgstr ""
+msgstr "로그인 시간"
 
 #: output/transactioninfo.cpp:100
 msgid "Begin rpmdb"
-msgstr ""
+msgstr "rpmdb 시작 :"
 
 #: output/transactioninfo.cpp:101
 msgid "End time"
-msgstr ""
+msgstr "종료 시간"
 
 #: output/transactioninfo.cpp:102
 msgid "End rpmdb"
-msgstr ""
+msgstr "rpmdb 종료"
 
 #: output/transactioninfo.cpp:104
 msgid "User"
-msgstr ""
+msgstr "사용자"
 
 #: output/transactioninfo.cpp:105
 msgid "Status"
-msgstr ""
+msgstr "상태"
 
 #: output/transactioninfo.cpp:106
-#, fuzzy
-#| msgid "Release"
 msgid "Releasever"
 msgstr "출시"
 
 #: output/transactioninfo.cpp:108
 msgid "Comment"
-msgstr ""
+msgstr "설명"
 
 #: output/transactioninfo.cpp:111
 msgid "Packages altered:"
-msgstr ""
+msgstr "변경된 꾸러미:"
 
 #: output/transactioninfo.cpp:112
 msgid "Groups altered:"
-msgstr ""
+msgstr "변경된 그룹:"
 
 #: output/transactioninfo.cpp:113
 msgid "Environments altered:"
-msgstr ""
+msgstr "변경된 환경:"
 
-#: output/transactionlist.cpp:53
+#: output/transactionlist.cpp:65
 msgid "ID"
-msgstr ""
+msgstr "ID"
 
-#: output/transactionlist.cpp:54
+#: output/transactionlist.cpp:66
 msgid "Command line"
-msgstr ""
+msgstr "명령 행"
 
-#: output/transactionlist.cpp:55
+#: output/transactionlist.cpp:67
 msgid "Date and time"
-msgstr ""
+msgstr "날짜와 시간"
 
-#: output/transactionlist.cpp:56
+#: output/transactionlist.cpp:68
 msgid "Action(s)"
-msgstr ""
+msgstr "작업"
 
-#: output/transactionlist.cpp:57
+#: output/transactionlist.cpp:69
 msgid "Altered"
-msgstr ""
+msgstr "변경됨"
 
 #. namespace
 #: progressbar/multi_progress_bar.cpp:85
@@ -593,20 +578,20 @@ msgstr "누락된 명령"
 #, c++-format
 msgid ""
 "Invalid date passed: \"{}\". Dates in \"YYYY-MM-DD\" format are expected"
-msgstr ""
+msgstr "잘못된 날짜가 전달됨: \"{}\". 날짜는 \"YYYY-MM-DD\" 형식이 요구됩니다"
 
 #: session.cpp:270
 #, c++-format
 msgid "\"{}\" date cannot be represented by time_t type on this platform"
-msgstr ""
+msgstr "이 플랫폼에서는 날짜 \"{}\"를 time_t 유형으로 표현할 수 없습니다"
 
-#: utils/userconfirm.cpp:46
+#: utils/userconfirm.cpp:57
 msgid "Is this ok [Y/n]: "
-msgstr ""
+msgstr "진행할까요? [Y/n]: "
 
-#: utils/userconfirm.cpp:49
+#: utils/userconfirm.cpp:60
 msgid "Is this ok [y/N]: "
-msgstr ""
+msgstr "진행할까요? [y/N]: "
 
 #~ msgid "No matches found."
 #~ msgstr "일치 항목이 없습니다."

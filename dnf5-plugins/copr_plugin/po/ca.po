@@ -2,23 +2,26 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # Languages add-on <noreply-addon-languages@weblate.org>, 2026.
+# David Medina <dmedinacpnl@gmail.com>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-22 14:19+0000\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Automatically generated\n"
-"Language-Team: none\n"
+"POT-Creation-Date: 2026-11-02 08:43+0000\n"
+"PO-Revision-Date: 2026-11-02 10:25+0000\n"
+"Last-Translator: David Medina <dmedinacpnl@gmail.com>\n"
+"Language-Team: Catalan <https://translate.fedoraproject.org/projects/dnf5/"
+"dnf5-plugin-copr/ca/>\n"
 "Language: ca\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 2026.10.1\n"
 
 #: copr.cpp:48
 msgid "Copr hub (the web-UI/API server) hostname"
-msgstr ""
+msgstr "Hub Copr (el servidor web-UI/API)"
 
 #: copr.cpp:88
 #, c++-format
@@ -31,16 +34,25 @@ msgid ""
 "copr.fedorainfracloud.org ) or the shortcut (e.g. fedora).  Example: 'fedora/"
 "@footeam/coolproject'."
 msgstr ""
+"ID del projecte Copr a {}.  Utilitzeu el format PROPIETARI/PROJECTe o HUB/"
+"OWNER/PROJECT (si no s'especifica HUB, s'utilitza el predeterminat, o --hub "
+"<ARG>).  PROPIETARI és un nom d'usuari o un  agroupname.  PROJECT pot ser un "
+"nom de projecte simple, o un \"directori de projecte\" que conté dos punts, "
+"p. ex. 'project:custom:123'.  El HUB pot ser el nom de l'amfitrió del "
+"frontend Copr (p. ex. copr.fedorainfracloud.org ) o la drecera (p. ex. "
+"fedora).  Exemple: «fedora/.footeam/coolproject»."
 
 #: copr.cpp:106
 #, c++-format
 msgid "Invalid PROJECT_SPEC format '{}'"
-msgstr ""
+msgstr "Format «{}» de PROJECTSPEC no vàlid"
 
 #: copr_constants.hpp:27
 msgid ""
 "Manage Copr repositories (add-ons provided by users/community/third-party)"
 msgstr ""
+"Gestiona els repositoris de Copr (add-ons proporcionats pels usuaris/"
+"comunitat/tercers)"
 
 #: copr_constants.hpp:29
 msgid ""
@@ -56,6 +68,19 @@ msgid ""
 "Please do not file bug reports about these packages in Fedora\n"
 "Bugzilla. In case of problems, contact the owner of this repository.\n"
 msgstr ""
+"S'està habilitant un repositori Copr. Tingueu en compte que aquest "
+"repositori no és part\n"
+"de la distribució principal, i la qualitat pot variar.\n"
+"\n"
+"El Projecte Fedora no exerceix cap poder sobre el contingut de\n"
+"aquest repositori més enllà de les regles esbossades a les PMF de Copr\n"
+"<https://docs.copr.fedorainfracloud.org/userdocumentation.html#what-i-can-"
+"build-in-copr>,\n"
+"i els paquets no es mantenen a cap nivell de qualitat o seguretat.\n"
+"\n"
+"Si us plau, no presentis informes d'error sobre aquests paquets a Fedora\n"
+"Bugzilla. En cas de problemes, poseu-vos en contacte amb el propietari "
+"d'aquest repositori.\n"
 
 #: copr_constants.hpp:41
 #, c++-format
@@ -73,10 +98,23 @@ msgid ""
 "These repositories are being enabled together with the main\n"
 "repository.\n"
 msgstr ""
+"El mantenidor del repositori Copr habilitat ha decidit fer\n"
+"depèn d'altres repositoris. Aquests repositoris són\n"
+"normalment necessari per a la instal·lació correcta de RPM des de\n"
+"el repositori principal de Copr (proporcionen dependències en temps "
+"d'execució).\n"
+"\n"
+"Tingueu en compte que la nota sobre la qualitat i l'informe d'errors\n"
+"A dalt també s'aplica aquí, el Projecte Fedora no controla el\n"
+"contingut. Reviseu la llista:\n"
+"\n"
+"{}\n"
+"Aquests repositoris s'estan habilitant juntament amb els principals\n"
+"repositori.\n"
 
 #: copr_debug.cpp:30
 msgid "print useful info about the system, useful for debugging"
-msgstr ""
+msgstr "imprimeix informació útil sobre el sistema, útil per a la depuració"
 
 #: copr_disable.cpp:35
 #, c++-format
@@ -84,6 +122,8 @@ msgid ""
 "disable specified Copr repository (if exists), keep {}/*.repo file - just "
 "mark enabled=0"
 msgstr ""
+"inhabilita el repositori Copr especificat (si existeix), mantén el fitxer {}/"
+"*.repo; només cal marcar enabled=0"
 
 #: copr_enable.cpp:38
 #, c++-format
@@ -91,81 +131,90 @@ msgid ""
 "download the repository info from a Copr server and install it as a {}/"
 "*.repo file"
 msgstr ""
+"descarregueu la informació del repositori des d'un servidor Copr i "
+"instal·leu-la com a fitxer {}/*.repo"
 
 #: copr_enable.cpp:46
 msgid ""
 "Chroot specified in the NAME-RELEASE-ARCH format, e.g. 'fedora-rawhide-"
 "ppc64le'.  When not specified, the 'dnf copr' command attempts to detect it."
 msgstr ""
+"Chroot especificat en el format NAME-RELEASE-ARCH, p. ex. «fedora-rawhide-"
+"ppc64le».  Quan no s'especifica, l'ordre 'dnf copr' intenta detectar-la."
 
 #: copr_list.cpp:53
 msgid "list Copr repositories"
-msgstr ""
+msgstr "llista els repositoris Copr"
 
 #: copr_list.cpp:86
 msgid ""
 "No repositories were loaded from the installroot. To use the configuration "
 "and repositories of the host system, pass --use-host-config."
 msgstr ""
+"No s'ha carregat cap repositori des de l'instal·lacióroot. Per a utilitzar "
+"la configuració i els repositoris del sistema amfitrió, passeu --use-host-"
+"config."
 
 #: copr_remove.cpp:35
 #, c++-format
 msgid ""
 "remove specified Copr repository from the system (removes the {}/*.repo file)"
 msgstr ""
+"Elimina el repositori Copr especificat del sistema (elimina el fitxer {}/"
+"*.repo)"
 
 #: copr_repo.cpp:91
 #, c++-format
 msgid "Directory '{}' not found in '{}' Copr project."
-msgstr ""
+msgstr "No s'ha trobat el directori «{}» al projecte «{}» Copr."
 
 #: copr_repo.cpp:97
 msgid "You can use one of these available directories:"
-msgstr ""
+msgstr "Podeu utilitzar un d'aquests directoris disponibles:"
 
 #: copr_repo.cpp:113
 msgid "Chroot not found in the given Copr project"
-msgstr ""
+msgstr "No s'ha trobat el «chroot» en el projecte Copr donat"
 
 #: copr_repo.cpp:115
 msgid "Unable to detect chroot, specify it explicitly."
-msgstr ""
+msgstr "No s'ha pogut detectar chroot, especifiqueu-lo explícitament."
 
 #: copr_repo.cpp:121
 msgid "We tried to find these repos without a success:"
-msgstr ""
+msgstr "Intentem trobar aquests repos sense èxit:"
 
 #: copr_repo.cpp:126
 msgid "You can choose one of the available chroots explicitly:"
-msgstr ""
+msgstr "Podeu triar explícitament un dels chroots disponibles:"
 
 #: copr_repo.cpp:200
 msgid "Can't parse Copr repo spec: "
-msgstr ""
+msgstr "No es pot analitzar l'especificació de dipòsit Copr: "
 
 #: copr_repo.cpp:344
 #, c++-format
 msgid "Can't remove the {} repo file"
-msgstr ""
+msgstr "No es pot eliminar el fitxer de dipòsit {}"
 
 #: copr_repo.cpp:347
 #, c++-format
 msgid "Repo file {} successfully removed"
-msgstr ""
+msgstr "S'ha eliminat el fitxer de publicació {}"
 
 #: copr_repo.cpp:393
 #, c++-format
 msgid "Can't find item {} in {}"
-msgstr ""
+msgstr "No es pot trobar l'element {} a {}"
 
 #: copr_repo.cpp:449
 #, c++-format
 msgid "Removing old config file '{}'"
-msgstr ""
+msgstr "S'està suprimint el fitxer de configuració antic «{}»"
 
 #: copr_repo.cpp:452
 msgid "Can't remove"
-msgstr ""
+msgstr "No es pot eliminar"
 
 #: copr_repo.cpp:526
 #, c++-format
@@ -173,23 +222,25 @@ msgid ""
 "Copr repofile '{}' has an old format, fix by re-enabling it $ {} copr enable "
 "{}"
 msgstr ""
+"El fitxer de repòs Copr '{}' té un format antic, esmeneu-lo tornant a "
+"habilitar $ {} copr enable {}"
 
 #: copr_repo.cpp:560
 #, c++-format
 msgid "Repo id '{}' in '{}' is suspicious"
-msgstr ""
+msgstr "L'identificador de repositori «{}» a «{}» és sospitós"
 
 #: copr_repo.cpp:567
 #, c++-format
 msgid "Repo id '{}' doesn't belong to '{}' repofile"
-msgstr ""
+msgstr "L'ID del dipòsit «{}» no pertany al fitxer de dipòsits «{}»"
 
 #: copr_repo.cpp:618
 #, c++-format
 msgid "Copr repository '{}' in '{}' disabled."
-msgstr ""
+msgstr "Repositori Copr «{}» a «{}» desactivat."
 
 #: copr_repo.cpp:632 copr_repo.cpp:657
 #, c++-format
 msgid "Repository '{}' not found on this system"
-msgstr ""
+msgstr "No s'ha trobat el repositori «{}» en aquest sistema"
