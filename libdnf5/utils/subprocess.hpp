@@ -11,8 +11,8 @@ namespace libdnf5::utils::subprocess {
 
 struct CompletedProcess {
     int returncode;
-    std::vector<std::byte> stdout;
-    std::vector<std::byte> stderr;
+    std::vector<std::byte> stdout_data;
+    std::vector<std::byte> stderr_data;
 };
 
 /// @brief Run a command in a child process and wait for it to complete.

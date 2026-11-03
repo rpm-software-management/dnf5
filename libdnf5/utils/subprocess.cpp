@@ -259,8 +259,8 @@ CompletedProcess run(const std::string & command, const std::vector<std::string>
 
     return CompletedProcess{
         .returncode = returncode,
-        .stdout = stdout_bytes,
-        .stderr = stderr_bytes,
+        .stdout_data = stdout_bytes,
+        .stderr_data = stderr_bytes,
     };
 }
 
