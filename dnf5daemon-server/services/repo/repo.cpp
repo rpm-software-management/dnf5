@@ -53,7 +53,6 @@ enum class RepoAttribute {
     metalink,
     mirrorlist,
     metadata_expire,
-    cache_updated,
     excludepkgs,
     includepkgs,
     skip_if_unavailable,
@@ -67,6 +66,7 @@ enum class RepoAttribute {
     proxy_password,
 
     // require metadata loading
+    cache_updated,
     repofile,
     revision,
     content_tags,
@@ -79,6 +79,7 @@ enum class RepoAttribute {
 };
 
 std::vector<RepoAttribute> metadata_required_attributes{
+    RepoAttribute::cache_updated,
     RepoAttribute::repofile,
     RepoAttribute::revision,
     RepoAttribute::content_tags,
