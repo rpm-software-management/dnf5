@@ -33,6 +33,9 @@ class NeedsRestartingTest : public CppUnit::TestCase {
     CPPUNIT_TEST(test_reboothint_option);
     CPPUNIT_TEST(test_json_option);
     CPPUNIT_TEST(test_all_options_registered);
+    CPPUNIT_TEST(test_reboot_required_file_created_as_root);
+    CPPUNIT_TEST(test_reboot_required_file_not_created_as_nonroot);
+    CPPUNIT_TEST(test_reboot_required_file_contains_packages);
     CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -47,6 +50,9 @@ public:
     void test_reboothint_option();
     void test_json_option();
     void test_all_options_registered();
+    void test_reboot_required_file_created_as_root();
+    void test_reboot_required_file_not_created_as_nonroot();
+    void test_reboot_required_file_contains_packages();
 };
 
 #endif  // DNF5_TEST_NEEDS_RESTARTING_HPP

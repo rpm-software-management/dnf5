@@ -24,6 +24,11 @@
 #include <dnf5/context.hpp>
 #include <libdnf5/base/base.hpp>
 #include <libdnf5/conf/option_bool.hpp>
+#include <unistd.h>
+
+#include <cstdio>
+#include <fstream>
+#include <string>
 
 using namespace dnf5;
 
@@ -257,6 +262,105 @@ void NeedsRestartingTest::test_all_options_registered() {
     CPPUNIT_ASSERT(processes_arg.get_short_name() != exclude_services_arg.get_short_name());
     CPPUNIT_ASSERT(processes_arg.get_short_name() != reboothint_arg.get_short_name());
     CPPUNIT_ASSERT(exclude_services_arg.get_short_name() != reboothint_arg.get_short_name());
+}
+
+void NeedsRestartingTest::test_reboot_required_file_created_as_root() {
+    // Test that the reboot-required file is created when running as root
+    if (getuid() != 0) {
+        return;  // Skip silently - not running as root
+    }
+
+    std::vector<std::unique_ptr<libdnf5::Logger>> loggers;
+    Context context(std::move(loggers));
+
+    // Set up a root command for the argument parser
+    auto & parser = context.get_argument_parser();
+    auto root_cmd = parser.add_new_command("test");
+    parser.set_root_command(root_cmd);
+
+    NeedsRestartingCommand cmd(context);
+    cmd.set_argument_parser();
+
+    // Remove the file if it exists from previous tests
+    std::remove("/run/reboot-required");
+
+    // Create packages vector and call the function
+    std::vector<std::string> packages = {"kernel", "glibc"};
+    cmd.write_reboot_required_file(packages);
+
+    // Check that the file was created
+    std::ifstream file("/run/reboot-required");
+    CPPUNIT_ASSERT(file.good());
+    file.close();
+
+    // Cleanup
+    std::remove("/run/reboot-required");
+}
+
+void NeedsRestartingTest::test_reboot_required_file_not_created_as_nonroot() {
+    // Test that the reboot-required file is not created when running as non-root
+    if (getuid() == 0) {
+        return;  // Skip silently - running as root
+    }
+
+    std::vector<std::unique_ptr<libdnf5::Logger>> loggers;
+    Context context(std::move(loggers));
+
+    // Set up a root command for the argument parser
+    auto & parser = context.get_argument_parser();
+    auto root_cmd = parser.add_new_command("test");
+    parser.set_root_command(root_cmd);
+
+    NeedsRestartingCommand cmd(context);
+    cmd.set_argument_parser();
+
+    // Try to create the file - it should not be created
+    std::vector<std::string> packages = {"kernel", "glibc"};
+    cmd.write_reboot_required_file(packages);
+
+    // Check that the file was not created
+    std::ifstream file("/run/reboot-required");
+    CPPUNIT_ASSERT(!file.good());
+}
+
+void NeedsRestartingTest::test_reboot_required_file_contains_packages() {
+    // Test that the reboot-required file contains the expected packages
+    if (getuid() != 0) {
+        return;  // Skip silently - not running as root
+    }
+
+    std::vector<std::unique_ptr<libdnf5::Logger>> loggers;
+    Context context(std::move(loggers));
+
+    // Set up a root command for the argument parser
+    auto & parser = context.get_argument_parser();
+    auto root_cmd = parser.add_new_command("test");
+    parser.set_root_command(root_cmd);
+
+    NeedsRestartingCommand cmd(context);
+    cmd.set_argument_parser();
+
+    // Remove the file if it exists from previous tests
+    std::remove("/run/reboot-required");
+
+    // Create packages vector and call the function
+    std::vector<std::string> packages = {"kernel", "glibc"};
+    cmd.write_reboot_required_file(packages);
+
+    // Read and verify file contents
+    std::ifstream file("/run/reboot-required");
+    CPPUNIT_ASSERT(file.good());
+
+    std::string content((std::istreambuf_iterator<char>(file)), std::istreambuf_iterator<char>());
+    file.close();
+
+    // Verify that the file contains expected elements (not the exact text as it's not API)
+    CPPUNIT_ASSERT(content.find("Core libraries or services") != std::string::npos);
+    CPPUNIT_ASSERT(content.find("- kernel") != std::string::npos);
+    CPPUNIT_ASSERT(content.find("- glibc") != std::string::npos);
+
+    // Cleanup
+    std::remove("/run/reboot-required");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(NeedsRestartingTest);
