@@ -35,10 +35,24 @@
 #include <libdnf5/comps/group/query.hpp>
 #include <libdnf5/rpm/package_query.hpp>
 #include <libdnf5/rpm/package_set.hpp>
+#include <sys/stat.h>
 #include <transaction/transaction_sr.hpp>
 
 #include <iterator>
 #include <vector>
+
+
+/// Sets the process umask for the lifetime of the object, even when a CPPUNIT assertion throws.
+class ScopedUmask {
+public:
+    explicit ScopedUmask(mode_t mask) : previous(umask(mask)) {}
+    ScopedUmask(const ScopedUmask &) = delete;
+    ScopedUmask & operator=(const ScopedUmask &) = delete;
+    ~ScopedUmask() { umask(previous); }
+
+private:
+    mode_t previous;
+};
 
 
 template <typename T>
