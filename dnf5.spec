@@ -1036,7 +1036,9 @@ automatically and regularly from systemd timers, cron jobs or similar.
 %license lgpl-2.1.txt
 %license lgpl-2.0.txt
 %{_datadir}/dnf5/dnf5-plugins/automatic.conf
+%dir %{_datadir}/dnf5/dnf5-plugins/automatic.conf.d
 %{_datadir}/dbus-1/system.d/org.rpm.dnf.v0.Automatic.conf
+%dir %{_sysconfdir}/dnf/automatic.conf.d
 %ghost %attr(0644, root, root) %config(noreplace) %{_sysconfdir}/dnf/automatic.conf
 %ghost %attr(0644, root, root) %config(noreplace) %{_sysconfdir}/dnf/dnf5-plugins/automatic.conf
 %if %{with man}

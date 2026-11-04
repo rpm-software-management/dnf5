@@ -21,6 +21,11 @@ if (WITH_SYSTEMD)
   install(DIRECTORY "config/usr/lib" DESTINATION "${CMAKE_INSTALL_PREFIX}")
 endif()
 
+# Makes an empty directory for system drop-in configuration files
+install(DIRECTORY DESTINATION "${CMAKE_INSTALL_PREFIX}/share/dnf5/dnf5-plugins/automatic.conf.d")
+# Makes an empty directory for user drop-in configuration files
+install(DIRECTORY DESTINATION "${CMAKE_INSTALL_FULL_SYSCONFDIR}/dnf/automatic.conf.d")
+
 install(PROGRAMS bin/dnf-automatic TYPE BIN)
 
 add_subdirectory(po)
