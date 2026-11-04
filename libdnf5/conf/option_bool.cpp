@@ -83,16 +83,25 @@ bool OptionBool::from_string(const std::string & value) const {
 }
 
 void OptionBool::set(Priority priority, bool value) {
+    set(priority, value, take_pending_source());
+}
+
+void OptionBool::set(Priority priority, bool value, std::string source) {
     assert_not_locked();
 
     if (priority >= get_priority()) {
         p_impl->value = value;
         set_priority(priority);
+        set_source(std::move(source));
     }
 }
 
 void OptionBool::set(bool value) {
-    set(Priority::RUNTIME, value);
+    set(Priority::RUNTIME, value, take_pending_source());
+}
+
+void OptionBool::set(bool value, std::string source) {
+    set(Priority::RUNTIME, value, std::move(source));
 }
 
 void OptionBool::set(Priority priority, const std::string & value) {

@@ -114,18 +114,29 @@ T OptionNumber<T>::from_string(const std::string & value) const {
 
 template <typename T>
 void OptionNumber<T>::set(Priority priority, ValueType value) {
+    set(priority, value, take_pending_source());
+}
+
+template <typename T>
+void OptionNumber<T>::set(Priority priority, ValueType value, std::string source) {
     assert_not_locked();
 
     if (priority >= get_priority()) {
         test(value);
         p_impl->value = value;
         set_priority(priority);
+        set_source(std::move(source));
     }
 }
 
 template <typename T>
 void OptionNumber<T>::set(ValueType value) {
-    set(Priority::RUNTIME, value);
+    set(Priority::RUNTIME, value, take_pending_source());
+}
+
+template <typename T>
+void OptionNumber<T>::set(ValueType value, std::string source) {
+    set(Priority::RUNTIME, value, std::move(source));
 }
 
 template <typename T>
