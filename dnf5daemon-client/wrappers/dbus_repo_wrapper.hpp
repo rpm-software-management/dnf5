@@ -57,6 +57,7 @@ public:
     uint64_t get_size() const { return uint64_t{rawdata.at("size")}; }
     uint64_t get_pkgs() const { return uint64_t{rawdata.at("pkgs")}; }
     uint64_t get_available_pkgs() const { return uint64_t{rawdata.at("available_pkgs")}; }
+    uint64_t get_unique_nevras() const { return uint64_t{rawdata.at("unique_nevras")}; }
     std::vector<std::string> get_mirrors() const { return std::vector<std::string>(rawdata.at("mirrors")); }
 
 private:
