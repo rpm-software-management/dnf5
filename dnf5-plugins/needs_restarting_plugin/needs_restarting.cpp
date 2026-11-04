@@ -371,6 +371,7 @@ void NeedsRestartingCommand::system_needs_restarting(Context & ctx) {
     }
 
     if (reboot_required) {
+        write_reboot_required_file(need_reboot_names);
         throw libdnf5::cli::SilentCommandExitError(1);
     }
 }
@@ -727,6 +728,26 @@ void NeedsRestartingCommand::processes_need_restarting(Context & ctx, bool exclu
             std::cout << process.pid << "\t" << cmdline_str << std::endl;
         }
         throw libdnf5::cli::SilentCommandExitError(1);
+    }
+}
+
+void NeedsRestartingCommand::write_reboot_required_file(const std::vector<std::string> & package_names) {
+    if (getuid() != 0) {
+        return;
+    }
+
+    try {
+        std::ofstream fp("/run/reboot-required");
+        if (!fp.is_open()) {
+            return;
+        }
+
+        fp << "Core libraries or services have been updated since boot-up:\n";
+        for (const auto & pkg_name : package_names) {
+            fp << "- " << pkg_name << "\n";
+        }
+    } catch (...) {
+        // Silently ignore write errors
     }
 }
 

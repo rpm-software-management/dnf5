@@ -37,6 +37,8 @@ The ``needs-restarting`` command determines whether the system should be reboote
 
 The ``needs-restarting`` command will exit with code 1 if a reboot is recommended, or, when invoked with ``--services``, if any systemd service needs restarting. If no action is recommended, ``needs-restarting`` will exit with code 0.
 
+When a reboot is recommended and the command is run as root, a file will be created at ``/run/reboot-required`` containing a list of packages that triggered the reboot requirement. This file is created only when a reboot is needed and is compatible with the format used by PackageKit.
+
 
 Options
 =======
@@ -81,6 +83,19 @@ The configured packages are honoured both by the default reboot hint and by ``--
 
 .. note::
     The DNF 4 ``needs-restarting`` plugin read this configuration from ``/etc/dnf/plugins/needs-restarting.d/``. That location is not used by DNF 5; move any existing files to ``/etc/dnf/suggest-reboot.d/``.
+
+Reboot Required File
+====================
+
+When a reboot is required and the command is run as root, the ``needs-restarting`` command will create or update the ``/run/reboot-required`` file. This file contains a human-readable message with the list of packages that triggered the reboot requirement.
+
+The ``/run/reboot-required`` file is automatically removed by the system on reboot and serves as a persistent indicator that a reboot is pending. This file is compatible with monitoring tools and other system utilities that check for pending reboot conditions.
+
+Example content of ``/run/reboot-required``::
+
+    Core libraries or services have been updated since boot-up:
+    - kernel
+    - glibc
 
 JSON Output
 ===========

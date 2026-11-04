@@ -40,6 +40,9 @@ public:
     void configure() override;
     void run() override;
 
+    // Make write_reboot_required_file public for testing
+    void write_reboot_required_file(const std::vector<std::string> & package_names);
+
 private:
     struct SystemdService {
         std::string name;
