@@ -5,6 +5,7 @@ add_definitions(-DGETTEXT_DOMAIN=\"dnf5-plugin-automatic\")
 # of the plugin we want to test.
 file(GLOB TEST_AUTOMATIC_SOURCES *.cpp
     ${PROJECT_SOURCE_DIR}/dnf5-plugins/automatic_plugin/email_message.cpp
+    ${PROJECT_SOURCE_DIR}/dnf5-plugins/automatic_plugin/config_automatic.cpp
 )
 
 include_directories(${PROJECT_SOURCE_DIR}/dnf5-plugins/automatic_plugin)
