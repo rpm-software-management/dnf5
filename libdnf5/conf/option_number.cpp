@@ -23,6 +23,7 @@
 
 #include <limits>
 #include <sstream>
+#include <type_traits>
 
 namespace libdnf5 {
 
@@ -50,8 +51,19 @@ private:
 
 template <typename T>
 bool from_string(T & out, const std::string & in, std::ios_base & (*manipulator)(std::ios_base &)) {
+    // operator>> stops at the first character that does not fit and wraps "-N" for unsigned types, so
+    // reject a minus sign for unsigned types and anything but whitespace after the number.
     std::istringstream iss(in);
-    return !(iss >> manipulator >> out).fail();
+    if constexpr (std::is_unsigned_v<T>) {
+        if ((iss >> std::ws).peek() == '-') {
+            return false;
+        }
+    }
+    if ((iss >> manipulator >> out).fail()) {
+        return false;
+    }
+    iss >> std::ws;
+    return iss.eof();
 }
 
 template <typename T>

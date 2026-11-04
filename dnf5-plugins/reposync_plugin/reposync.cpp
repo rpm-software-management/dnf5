@@ -112,8 +112,8 @@ void ReposyncCommand::set_argument_parser() {
                                              [[maybe_unused]] const char * option,
                                              const char * value) {
         // Unlike repoquery, negative values ("all but N latest") are rejected. Combined with
-        // --delete they would remove the newest packages from the local copy. The whole value
-        // is checked because OptionNumber accepts trailing characters ("2abc" is read as 2).
+        // --delete they would remove the newest packages from the local copy. The text is checked
+        // again to also refuse what OptionNumber tolerates: surrounding whitespace and a leading "+".
         const std::string_view text(value);
         std::int32_t limit = 0;
         const auto [end, error] = std::from_chars(text.data(), text.data() + text.size(), limit);

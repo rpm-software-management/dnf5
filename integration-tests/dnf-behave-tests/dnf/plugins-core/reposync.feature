@@ -67,7 +67,20 @@ Examples:
     | value |
     | 0     |
     | -1    |
+    | +2    |
+
+
+Scenario Outline: Reposync --latest-limit rejects values that are not a whole number
+  Given I use repository "history-recent" as http
+   When I execute dnf with args "reposync --urls --latest-limit=<value>"
+   Then the exit code is 1
+    And stdout is empty
+    And stderr contains "Invalid number option value \"<value>\""
+
+Examples:
+    | value |
     | 2abc  |
+    | 1.5   |
 
 
 Scenario: Reposync --latest-limit cannot be used together with --newest-only
