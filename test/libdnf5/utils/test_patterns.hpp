@@ -27,11 +27,13 @@ class UtilsPatternsTest : public CppUnit::TestCase {
     CPPUNIT_TEST_SUITE(UtilsPatternsTest);
     CPPUNIT_TEST(test_is_file_pattern);
     CPPUNIT_TEST(test_is_glob_pattern);
+    CPPUNIT_TEST(test_is_cmdline_package_spec);
     CPPUNIT_TEST_SUITE_END();
 
 public:
     void test_is_file_pattern();
     void test_is_glob_pattern();
+    void test_is_cmdline_package_spec();
 };
 
 #endif  // LIBDNF5_TEST_UTILS_PATTERNS_HPP

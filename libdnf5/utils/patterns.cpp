@@ -19,7 +19,10 @@
 
 #include "libdnf5/utils/patterns.hpp"
 
+#include "utils/url.hpp"
+
 #include <cstring>
+#include <string_view>
 
 namespace libdnf5::utils {
 
@@ -29,6 +32,11 @@ bool is_glob_pattern(const char * pattern) noexcept {
 
 bool is_file_pattern(const std::string & pattern) noexcept {
     return pattern[0] == '/' || (pattern[0] == '*' && pattern[1] == '/');
+}
+
+bool is_cmdline_package_spec(const std::string & spec) {
+    constexpr std::string_view rpm_extension(".rpm");
+    return url::is_url(spec) || (spec.length() > rpm_extension.length() && spec.ends_with(rpm_extension));
 }
 
 }  // namespace libdnf5::utils
