@@ -38,6 +38,15 @@ LIBDNF_API bool is_glob_pattern(const char * pattern) noexcept;
 /// @return True if a given pattern is a file path
 LIBDNF_API bool is_file_pattern(const std::string & pattern) noexcept;
 
+/// @brief Check if a given package specification is a command-line package.
+///
+/// A command-line package specification is either a supported URL or a local path
+/// ending in ".rpm".
+///
+/// @param spec Text package specification to be tested
+/// @return True if a given specification is a command-line package
+LIBDNF_API bool is_cmdline_package_spec(const std::string & spec);
+
 }  // namespace libdnf5::utils
 
 #endif  // LIBDNF5_UTILS_PATTERNS_HPP

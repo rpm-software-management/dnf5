@@ -51,6 +51,7 @@
 #include "libdnf5/utils/bgettext/bgettext-mark-domain.h"
 #include "libdnf5/utils/fs/file.hpp"
 #include "libdnf5/utils/fs/temp.hpp"
+#include "libdnf5/utils/patterns.hpp"
 
 extern "C" {
 #include <solv/testcase.h>
@@ -233,9 +234,12 @@ std::map<std::string, libdnf5::rpm::Package> RepoSack::add_cmdline_packages(
     std::vector<std::string> rpm_filepaths;
     const std::string_view ext(".rpm");
     for (const auto & spec : paths) {
+        if (!libdnf5::utils::is_cmdline_package_spec(spec)) {
+            continue;
+        }
         if (libdnf5::utils::url::is_url(spec)) {
             rpm_urls.emplace_back(spec);
-        } else if (spec.length() > ext.length() && spec.ends_with(ext)) {
+        } else {
             rpm_filepaths.emplace_back(spec);
         }
     }

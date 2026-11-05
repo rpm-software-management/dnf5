@@ -42,3 +42,18 @@ void UtilsPatternsTest::test_is_glob_pattern() {
     CPPUNIT_ASSERT(is_glob_pattern("glob[sdf]_pattern"));
     CPPUNIT_ASSERT(is_glob_pattern("glob?_pattern"));
 }
+
+
+void UtilsPatternsTest::test_is_cmdline_package_spec() {
+    CPPUNIT_ASSERT(!is_cmdline_package_spec(""));
+    CPPUNIT_ASSERT(!is_cmdline_package_spec("pkg"));
+    CPPUNIT_ASSERT(!is_cmdline_package_spec(".rpm"));
+    CPPUNIT_ASSERT(!is_cmdline_package_spec("gopher://example.com/pkg"));
+    CPPUNIT_ASSERT(is_cmdline_package_spec("gopher://example.com/pkg.rpm"));
+    CPPUNIT_ASSERT(is_cmdline_package_spec("/repository/pkg.rpm"));
+    CPPUNIT_ASSERT(is_cmdline_package_spec("file:///repository/pkg.rpm"));
+    CPPUNIT_ASSERT(is_cmdline_package_spec("FILE:///repository/pkg.rpm"));
+    CPPUNIT_ASSERT(is_cmdline_package_spec("http://example.com/pkg?marker.rpm"));
+    CPPUNIT_ASSERT(is_cmdline_package_spec("https://example.com/pkg"));
+    CPPUNIT_ASSERT(is_cmdline_package_spec("ftp://example.com/pkg"));
+}

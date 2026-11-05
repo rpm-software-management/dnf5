@@ -485,8 +485,7 @@ void Goal::Impl::add_spec(GoalAction action, const std::string & spec, const Goa
         group_specs.push_back(
             std::make_tuple(action, libdnf5::transaction::TransactionItemReason::USER, group_spec, group_settings));
     } else {
-        const std::string_view ext(".rpm");
-        if (libdnf5::utils::url::is_url(spec) || (spec.length() > ext.length() && spec.ends_with(ext))) {
+        if (libdnf5::utils::is_cmdline_package_spec(spec)) {
             // spec is a remote rpm file or a local rpm file
             if (action == GoalAction::REMOVE) {
                 throw RuntimeError(M_("Unsupported argument for REMOVE action: {}"), spec);
