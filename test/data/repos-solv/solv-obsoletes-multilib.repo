@@ -1,0 +1,16 @@
+=Ver: 3.0
+
+# An older version of `split` is available only for the secondary architecture.
+# `split-part` obsoletes that older version, but not the latest one.
+
+=Pkg: split 1 1 i686
+=Prv: split = 1-1
+
+=Pkg: split 2 1 x86_64
+=Prv: split = 2-1
+=Rec: split-part = 2-1
+=Obs: split < 2
+
+=Pkg: split-part 2 1 noarch
+=Prv: split-part = 2-1
+=Obs: split < 2

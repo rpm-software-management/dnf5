@@ -131,6 +131,23 @@ void BaseGoalTest::test_install_multilib_all() {
     CPPUNIT_ASSERT_EQUAL(expected, transaction.get_transaction_packages());
 }
 
+void BaseGoalTest::test_install_obsoleted_older_other_arch() {
+    add_repo_solv("solv-obsoletes-multilib");
+    base.get_config().get_install_weak_deps_option().set(false);
+
+    libdnf5::Goal goal(base);
+    goal.add_rpm_install("split");
+
+    auto transaction = goal.resolve();
+
+    std::vector<libdnf5::base::TransactionPackage> expected = {libdnf5::base::TransactionPackage(
+        get_pkg("split-0:2-1.x86_64"),
+        TransactionItemAction::INSTALL,
+        TransactionItemReason::USER,
+        TransactionItemState::STARTED)};
+    CPPUNIT_ASSERT_EQUAL(expected, transaction.get_transaction_packages());
+}
+
 void BaseGoalTest::test_reinstall() {
     add_repo_rpm("rpm-repo1");
     add_system_pkg("repos-rpm/rpm-repo1/one-1-1.noarch.rpm", TransactionItemReason::DEPENDENCY);

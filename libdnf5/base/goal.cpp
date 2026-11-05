@@ -73,8 +73,10 @@ void add_obsoletes_to_data(const libdnf5::rpm::PackageQuery & base_query, libdnf
         // case a package has multiple versions and some older version is being
         // obsoleted.
         // See also https://bugzilla.redhat.com/show_bug.cgi?id=2176263
+        // Compare versions across architectures. Otherwise the older version of a
+        // secondary architecture (e.g. i686 on x86_64) brings in its obsoleters.
         data_query.filter_priority();
-        data_query.filter_latest_evr();
+        data_query.filter_latest_evr_any_arch();
     }
 
     libdnf5::rpm::PackageQuery obsoletes_query(base_query);
