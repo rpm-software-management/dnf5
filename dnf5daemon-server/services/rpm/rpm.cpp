@@ -612,42 +612,48 @@ sdbus::MethodReply Rpm::list(sdbus::MethodCall & call) {
 }
 
 void Rpm::list_fd(sdbus::MethodCall & call, const std::string & transfer_id) {
-    // read options from dbus call
-    dnfdaemon::KeyValueMap options;
-    call >> options;
-    // get the output pipe file descriptor
-    sdbus::UnixFd dbus_unix_fd;
-    call >> dbus_unix_fd;
-
-    int out_fd = dbus_unix_fd.get();
-
-    bool interactive = dnfdaemon::key_value_map_get<bool>(options, "interactive", false);
-    session.fill_sack(interactive);
-
-    auto query = filter_packages(options);
-
-    std::vector<std::string> package_attrs =
-        dnfdaemon::key_value_map_get<std::vector<std::string>>(options, "package_attrs", std::vector<std::string>());
     std::string error_msg;
-    for (const auto & pkg : query) {
-        std::string jsonstr;
-        try {
-            jsonstr = package_to_json(pkg, package_attrs) + "\n";
-        } catch (const std::exception & ex) {
-            error_msg = fmt::format(
-                "Error serializing package \"{0}\" from repo \"{1}\": {2}",
-                pkg.get_nevra(),
-                pkg.get_repo_id(),
-                ex.what());
-            break;
+    sdbus::UnixFd dbus_unix_fd;
+
+    try {
+        // read options from dbus call
+        dnfdaemon::KeyValueMap options;
+        call >> options;
+        // get the output pipe file descriptor
+        call >> dbus_unix_fd;
+
+        int out_fd = dbus_unix_fd.get();
+        bool interactive = dnfdaemon::key_value_map_get<bool>(options, "interactive", false);
+        session.fill_sack(interactive);
+        auto query = filter_packages(options);
+        std::vector<std::string> package_attrs = dnfdaemon::key_value_map_get<std::vector<std::string>>(
+            options, "package_attrs", std::vector<std::string>());
+
+        for (const auto & pkg : query) {
+            std::string jsonstr;
+            try {
+                jsonstr = package_to_json(pkg, package_attrs) + "\n";
+            } catch (const std::exception & ex) {
+                error_msg = fmt::format(
+                    "Error serializing package \"{0}\" from repo \"{1}\": {2}",
+                    pkg.get_nevra(),
+                    pkg.get_repo_id(),
+                    ex.what());
+                break;
+            }
+            std::string write_error;
+            if (!dnfdaemon::write_to_fd(jsonstr, out_fd, write_error)) {
+                error_msg = fmt::format("Error writing package list to the fd: {}", write_error);
+                break;
+            }
         }
-        std::string write_error;
-        if (!dnfdaemon::write_to_fd(jsonstr, out_fd, write_error)) {
-            error_msg = fmt::format("Error writing package list to the fd: {}", write_error);
-            break;
-        }
+    } catch (const std::exception & ex) {
+        error_msg = ex.what();
+    } catch (...) {
+        error_msg = "Unknown error while listing packages.";
     }
-    close(out_fd);
+
+    dbus_unix_fd.reset();
 
     // signal client that the transfer has finished and the output file descriptor is closed
     auto dbus_object = get_session().get_dbus_object();
