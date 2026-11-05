@@ -39,7 +39,7 @@ void ManifestInstallCommand::configure() {
     auto & ctx = get_context();
     auto & base = ctx.get_base();
 
-    const auto & arch = base.get_vars()->get_value("arch");
+    const auto & arch = base.get_vars()->get_value("basearch");
 
     const auto & manifest_path = get_manifest_path(*manifest_path_option, arch);
 
