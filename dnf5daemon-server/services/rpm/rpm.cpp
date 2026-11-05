@@ -24,6 +24,7 @@
 
 #include "libdnf5/comps/environment/query.hpp"
 #include "libdnf5/comps/group/query.hpp"
+#include "libdnf5/utils/patterns.hpp"
 
 #include <libdnf5/rpm/package_query.hpp>
 #include <libdnf5/rpm/package_set.hpp>
@@ -383,6 +384,17 @@ std::vector<std::string> get_filter_patterns(dnfdaemon::KeyValueMap options, con
     return filter_patterns;
 }
 
+bool Rpm::authorize_cmdline_package_specs(
+    const std::vector<std::string> & specs, const std::string & sender, bool interactive) {
+    for (const auto & spec : specs) {
+        if (libdnf5::utils::is_cmdline_package_spec(spec)) {
+            return session.check_authorization(dnfdaemon::POLKIT_EXECUTE_RPM_TRANSACTION, sender, interactive);
+        }
+    }
+
+    return true;
+}
+
 libdnf5::rpm::PackageQuery resolve_nevras(
     libdnf5::rpm::PackageQuery base_query, const std::vector<std::string> & nevras) {
     libdnf5::rpm::PackageQuery result(base_query.get_base(), libdnf5::sack::ExcludeFlags::APPLY_EXCLUDES, true);
@@ -593,6 +605,12 @@ sdbus::MethodReply Rpm::list(sdbus::MethodCall & call) {
     call >> options;
 
     bool interactive = dnfdaemon::key_value_map_get<bool>(options, "interactive", false);
+    const auto patterns =
+        dnfdaemon::key_value_map_get<std::vector<std::string>>(options, "patterns", std::vector<std::string>{});
+    if (!authorize_cmdline_package_specs(patterns, call.getSender(), interactive)) {
+        throw std::runtime_error("Not authorized");
+    }
+
     session.fill_sack(interactive);
 
     auto query = filter_packages(options);
@@ -624,6 +642,12 @@ void Rpm::list_fd(sdbus::MethodCall & call, const std::string & transfer_id) {
 
         int out_fd = dbus_unix_fd.get();
         bool interactive = dnfdaemon::key_value_map_get<bool>(options, "interactive", false);
+        const auto patterns =
+            dnfdaemon::key_value_map_get<std::vector<std::string>>(options, "patterns", std::vector<std::string>{});
+        if (!authorize_cmdline_package_specs(patterns, call.getSender(), interactive)) {
+            throw std::runtime_error("Not authorized");
+        }
+
         session.fill_sack(interactive);
         auto query = filter_packages(options);
         std::vector<std::string> package_attrs = dnfdaemon::key_value_map_get<std::vector<std::string>>(
@@ -699,6 +723,12 @@ sdbus::MethodReply Rpm::downgrade(sdbus::MethodCall & call) {
     // read options from dbus call
     dnfdaemon::KeyValueMap options;
     call >> options;
+
+    bool interactive = dnfdaemon::key_value_map_get<bool>(options, "interactive", true);
+    if (!authorize_cmdline_package_specs(specs, call.getSender(), interactive)) {
+        throw std::runtime_error("Not authorized");
+    }
+
     std::vector<std::string> repo_ids = dnfdaemon::key_value_map_get<std::vector<std::string>>(options, "repo_ids", {});
 
     // fill the goal
@@ -720,6 +750,11 @@ sdbus::MethodReply Rpm::install(sdbus::MethodCall & call) {
     // read options from dbus call
     dnfdaemon::KeyValueMap options;
     call >> options;
+
+    bool interactive = dnfdaemon::key_value_map_get<bool>(options, "interactive", true);
+    if (!authorize_cmdline_package_specs(specs, call.getSender(), interactive)) {
+        throw std::runtime_error("Not authorized");
+    }
 
     libdnf5::GoalSetting skip_broken;
     if (options.find("skip_broken") != options.end()) {
@@ -760,6 +795,12 @@ sdbus::MethodReply Rpm::upgrade(sdbus::MethodCall & call) {
     // read options from dbus call
     dnfdaemon::KeyValueMap options;
     call >> options;
+
+    bool interactive = dnfdaemon::key_value_map_get<bool>(options, "interactive", true);
+    if (!authorize_cmdline_package_specs(specs, call.getSender(), interactive)) {
+        throw std::runtime_error("Not authorized");
+    }
+
     std::vector<std::string> repo_ids = dnfdaemon::key_value_map_get<std::vector<std::string>>(options, "repo_ids", {});
 
     // fill the goal
@@ -785,6 +826,12 @@ sdbus::MethodReply Rpm::reinstall(sdbus::MethodCall & call) {
     // read options from dbus call
     dnfdaemon::KeyValueMap options;
     call >> options;
+
+    bool interactive = dnfdaemon::key_value_map_get<bool>(options, "interactive", true);
+    if (!authorize_cmdline_package_specs(specs, call.getSender(), interactive)) {
+        throw std::runtime_error("Not authorized");
+    }
+
     std::vector<std::string> repo_ids = dnfdaemon::key_value_map_get<std::vector<std::string>>(options, "repo_ids", {});
 
     // fill the goal

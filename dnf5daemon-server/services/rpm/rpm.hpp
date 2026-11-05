@@ -35,6 +35,8 @@ public:
 
 private:
     libdnf5::rpm::PackageQuery filter_packages(const dnfdaemon::KeyValueMap & options);
+    bool authorize_cmdline_package_specs(
+        const std::vector<std::string> & specs, const std::string & sender, bool interactive);
 
     sdbus::MethodReply list(sdbus::MethodCall & call);
     sdbus::MethodReply install(sdbus::MethodCall & call);
