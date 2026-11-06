@@ -28,7 +28,7 @@ using namespace dnf5;
 namespace {
 
 constexpr const char * PLUGIN_NAME{"copr"};
-constexpr PluginVersion PLUGIN_VERSION{.major = 0, .minor = 1, .micro = 0};
+constexpr PluginVersion PLUGIN_VERSION{.major = 0, .minor = 2, .micro = 0};
 constexpr PluginAPIVersion REQUIRED_PLUGIN_API_VERSION{.major = 2, .minor = 0};
 
 constexpr const char * attrs[]{"author.name", "author.email", nullptr};
