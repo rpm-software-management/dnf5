@@ -231,3 +231,36 @@ Given I copy repository "simple-base" for modification
       GET simple-base /repodata/repomd.xml
       GET simple-base /repodata/repomd.xml
       """
+
+
+# https://github.com/rpm-software-management/dnf5/issues/2934
+Scenario: Refresh updates metadata in configured cache directory
+Given I configure dnf with
+      | key             | value                                      |
+      | cachedir        | /configured-cache                          |
+      | system_cachedir | /configured-cache                          |
+  And I copy repository "simple-base" for modification
+  And I use repository "simple-base"
+ When I execute dnf with args "makecache"
+  And file "/configured-cache/simple-base-*/repodata/repomd.xml" exists
+ # Change the repository metadata after the configured cache has been populated.
+ Given I execute "cp {context.dnf.fixturesdir}/repos/simple-updates/x86_64/labirinto-2.0-1.fc29.x86_64.rpm {context.dnf.repos[simple-base].path}/x86_64/"
+  And I generate repodata for repository "simple-base"
+ # The unchanged cache must still provide the old metadata.
+ When I execute dnf with args "--cacheonly repoquery labirinto.x86_64"
+ Then the exit code is 0
+  And stdout is
+      """
+      labirinto-0:1.0-1.fc29.x86_64
+      """
+ # --refresh must update the metadata in the configured cache directory.
+ When I execute dnf with args "--refresh makecache"
+ Then the exit code is 0
+ # Cache-only access proves that the refreshed metadata was persisted in the configured cache.
+ When I execute dnf with args "--cacheonly repoquery labirinto.x86_64"
+ Then the exit code is 0
+  And stdout is
+      """
+      labirinto-0:1.0-1.fc29.x86_64
+      labirinto-0:2.0-1.fc29.x86_64
+      """
