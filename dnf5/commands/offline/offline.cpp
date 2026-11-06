@@ -274,7 +274,7 @@ void invalidate_if_not_valid(libdnf5::offline::OfflineTransactionState & state, 
     }
 }
 
-void reboot(bool poweroff = false, PlymouthOutput * plymouth = nullptr) {
+void reboot(bool poweroff = false, [[maybe_unused]] PlymouthOutput * plymouth = nullptr) {
     if (std::getenv("DNF_SYSTEM_UPGRADE_NO_REBOOT")) {
         if (poweroff) {
             std::cerr << "DNF_SYSTEM_UPGRADE_NO_REBOOT is set, not powering off." << std::endl;
