@@ -35,7 +35,7 @@ Description
 
 Alternative CLI to ``dnf upgrade`` with specific facilities to make it suitable to be executed automatically and regularly from systemd timers, cron jobs and similar.
 
-The operation of the tool is controlled by configuration files. Default values are set from ``/usr/share/dnf5/dnf5-plugins/automatic.conf`` config file. Host-specific overrides from ``/etc/dnf/automatic.conf`` are then applied.
+The operation of the tool is controlled by configuration files. Default values are set from ``/usr/share/dnf5/dnf5-plugins/automatic.conf`` config file and drop-in files from ``/usr/share/dnf5/dnf5-plugins/automatic.conf.d/`` directory. Host-specific and user overrides from ``/etc/dnf/automatic.conf`` and ``/etc/dnf/automatic.conf.d/`` are then applied.
 
 The tool synchronizes package metadata as needed and then checks for updates available for the given system and then either exits, downloads the packages or downloads and applies the updates. The outcome of the operation is then reported by a selected mechanism, for instance via the standard output, email or MOTD messages.
 
@@ -67,7 +67,14 @@ The following options can be used to override values from the configuration file
 Run dnf5 automatic service
 ==========================
 
-The service is typically executed using the systemd timer ``dnf5-automatic.timer``. To configure the service, customize the ``/etc/dnf/automatic.conf`` file. You can either copy the distribution config file from ``/usr/share/dnf5/dnf5-plugins/automatic.conf`` and use it as a baseline, or create your own configuration file from scratch with only the required overrides.
+The service is typically executed using the systemd timer ``dnf5-automatic.timer``. To configure the service, customize the ``/etc/dnf/automatic.conf`` file or place drop-in files in ``/etc/dnf/automatic.conf.d/``. You can either copy the distribution config file from ``/usr/share/dnf5/dnf5-plugins/automatic.conf`` and use it as a baseline, or create your own configuration file from scratch with only the required overrides.
+
+Drop-in configuration files can be placed in two locations:
+
+- ``/usr/share/dnf5/dnf5-plugins/automatic.conf.d/`` for distribution-specific and system defaults
+- ``/etc/dnf/automatic.conf.d/`` for host-specific and user overrides
+
+Drop-in files are processed in alphabetical order and allow layering of configuration changes without modifying the main configuration files. Host-specific drop-in files in ``/etc/dnf/automatic.conf.d/`` override system defaults in ``/usr/share/dnf5/dnf5-plugins/automatic.conf.d/``.
 
 Then enable the timer unit:
 
@@ -78,6 +85,39 @@ Configuration File Format
 =========================
 
 The configuration file is separated into topical sections.
+
+Drop-in Configuration Directories
+==================================
+
+Configuration files can be placed in drop-in directories to layer configuration changes without modifying the main configuration files. Two drop-in directories are available:
+
+**System Defaults (``/usr/share/dnf5/dnf5-plugins/automatic.conf.d/``)**
+    Used for distribution-provided and packager-supplied default settings. Files in this directory are read after the main ``/usr/share/dnf5/dnf5-plugins/automatic.conf`` but before any user configuration.
+
+**Host and User Overrides (``/etc/dnf/automatic.conf.d/``)**
+    Used for host-specific and user-supplied overrides. Files in this directory are read after all system defaults and the main ``/etc/dnf/automatic.conf``, providing the highest precedence for configuration changes made by system administrators.
+
+All files with a ``.conf`` extension in these directories are read in alphabetical order. Later files override values set in earlier files.
+
+This mechanism is useful for:
+
+- Distribution packagers to provide additional default settings
+- Site administrators to apply local overrides across many systems
+- System administrators to layer host-specific configuration without modifying main config files
+- Container builders to layer configuration changes without rebuilding images
+
+Drop-in files follow the same INI format as the main configuration file. Only files matching the pattern ``*.conf`` are processed. Files are processed in alphabetical order, which is predictable and deterministic.
+
+**Configuration Precedence**
+
+Configuration is applied in this order, with later entries overriding earlier ones:
+
+1. ``/usr/share/dnf5/dnf5-plugins/automatic.conf`` (system defaults)
+2. ``/usr/share/dnf5/dnf5-plugins/automatic.conf.d/*.conf`` (system drop-ins, alphabetical)
+3. ``/etc/dnf/dnf5-plugins/automatic.conf`` (deprecated host config, shows warning)
+4. ``/etc/dnf/automatic.conf`` (host-specific overrides)
+5. ``/etc/dnf/automatic.conf.d/*.conf`` (host-specific drop-ins, alphabetical)
+6. Command-line options (highest precedence, e.g., ``--installupdates``)
 
 
 ----------------------

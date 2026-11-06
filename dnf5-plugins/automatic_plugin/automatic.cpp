@@ -33,6 +33,7 @@
 #include <libdnf5/rpm/package_set.hpp>
 #include <libdnf5/utils/bgettext/bgettext-mark-domain.h>
 #include <libdnf5/utils/format.hpp>
+#include <libdnf5/utils/fs/utils.hpp>
 #include <libsmartcols/libsmartcols.h>
 #include <netdb.h>
 #include <stdlib.h>
@@ -301,37 +302,63 @@ void AutomaticCommand::pre_configure() {
     base.set_download_callbacks(std::move(download_callbacks_uptr));
     download_callbacks_set = true;
 
-    // read the config files in following order (/etc overrides /usr):
-    //      - [installroot]/usr/share/dnf5/dnf5-plugins/automatic.conf
-    //      - [installroot]/etc/dnf/dnf5-plugins/automatic.conf [deprecated]
-    //      - [installroot]/etc/dnf/automatic.conf
     auto & main_config = base.get_config();
     bool use_host_config{main_config.get_use_host_config_option().get_value()};
     std::filesystem::path installroot_path{main_config.get_installroot_option().get_value()};
-    std::vector<std::tuple<std::filesystem::path, bool>> possible_paths{
-        {"/usr/share/dnf5/dnf5-plugins", false}, {"/etc/dnf/dnf5-plugins", true}, {"/etc/dnf", false}};
     auto & logger = *base.get_logger();
-    for (const auto & [pth, deprecated] : possible_paths) {
-        std::filesystem::path conf_file_path{pth / "automatic.conf"};
-        if (!use_host_config) {
-            conf_file_path = installroot_path / conf_file_path.relative_path();
+
+    auto load_config_file = [&](const std::filesystem::path & path, bool deprecated = false) {
+        if (!std::filesystem::exists(path)) {
+            return;
         }
-        if (std::filesystem::exists(conf_file_path)) {
-            if (deprecated) {
-                auto msg = libdnf5::utils::sformat(
-                    _("Warning: Configuration file location \"{}\" for dnf automatic is deprecated. See "
-                      "dnf5-automatic(8) for details."),
-                    conf_file_path.string());
-                logger.warning(msg);
-                std::cerr << msg << std::endl;
-            }
+        if (deprecated) {
+            auto msg = libdnf5::utils::sformat(
+                _("Warning: Configuration file location \"{}\" for dnf automatic is deprecated. See "
+                  "dnf5-automatic(8) for details."),
+                path.string());
+            logger.warning(msg);
+            std::cerr << msg << std::endl;
+        }
+        try {
             libdnf5::ConfigParser parser;
-            parser.read(conf_file_path);
+            parser.read(path);
             base.get_config().load_from_parser(
                 parser, "base", *base.get_vars(), logger, libdnf5::Option::Priority::AUTOMATICCONFIG);
             config_automatic.load_from_parser(parser, *base.get_vars(), logger);
+        } catch (const std::exception & e) {
+            logger.warning("Error parsing configuration file \"{}\": {}", path.string(), e.what());
         }
-    }
+    };
+
+    auto load_config_dir = [&](const std::filesystem::path & path, bool deprecated = false) {
+        if (!std::filesystem::exists(path)) {
+            return;
+        }
+        std::vector<std::filesystem::path> conf_dirs{path};
+        std::vector<std::filesystem::path> conf_files = libdnf5::utils::fs::create_sorted_file_list(conf_dirs, ".conf");
+        for (const auto & conf_file : conf_files) {
+            load_config_file(conf_file, deprecated);
+        }
+    };
+
+    auto resolve_path = [use_host_config, &installroot_path](const std::filesystem::path & path) {
+        if (use_host_config) {
+            return path;
+        }
+        return installroot_path / path.relative_path();
+    };
+
+    // read the config files in following order (/etc overrides /usr):
+    //      - [installroot]/usr/share/dnf5/dnf5-plugins/automatic.conf
+    load_config_file(resolve_path("/usr/share/dnf5/dnf5-plugins/automatic.conf"));
+    //      - [installroot]/usr/share/dnf5/dnf5-plugins/automatic.conf.d/*.conf (sorted)
+    load_config_dir(resolve_path("/usr/share/dnf5/dnf5-plugins/automatic.conf.d"));
+    //      - [installroot]/etc/dnf/dnf5-plugins/automatic.conf [deprecated=true]
+    load_config_file(resolve_path("/etc/dnf/dnf5-plugins/automatic.conf"), true);
+    //      - [installroot]/etc/dnf/automatic.conf
+    load_config_file(resolve_path("/etc/dnf/automatic.conf"));
+    //      - [installroot]/etc/dnf/automatic.conf.d/*.conf (sorted)
+    load_config_dir(resolve_path("/etc/dnf/automatic.conf.d"));
 
     auto random_sleep = config_automatic.config_commands.random_sleep.get_value();
     if (timer->get_value() && random_sleep > 0) {
