@@ -146,7 +146,7 @@ Provides:       dnf5-command(versionlock) = %{version}-%{release}
 %if %{with modulemd}
 %global libmodulemd_version 2.5.0
 %endif
-%global librepo_version 1.20.0
+%global librepo_version 1.22.0
 %global libsolv_version 0.7.36
 %global sqlite_version 3.35.0
 %global swig_version 4.3
