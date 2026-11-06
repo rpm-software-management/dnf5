@@ -264,30 +264,40 @@ void DownloadCommand::run() {
 
         for (const auto & pkg : pkg_query) {
             original_binary_pkgs.insert(create_nevra_pkg_pair(pkg));
-
-            if (resolve_option->get_value()) {
-                auto goal = std::make_unique<libdnf5::Goal>(ctx.get_base());
-                goal->add_rpm_install(pkg, {});
-
-                auto transaction = goal->resolve();
-                auto transaction_problems = transaction.get_problems();
-                if (transaction_problems != libdnf5::GoalProblem::NO_PROBLEM) {
-                    if (transaction_problems != libdnf5::GoalProblem::NOT_FOUND) {
-                        throw GoalResolveError(transaction);
-                    }
-                }
-                for (auto & tspkg : transaction.get_transaction_packages()) {
-                    if (transaction_item_action_is_inbound(tspkg.get_action()) &&
-                        tspkg.get_package().get_repo()->get_type() != libdnf5::repo::Repo::Type::COMMANDLINE) {
-                        original_binary_pkgs.insert(create_nevra_pkg_pair(tspkg.get_package()));
-                    }
-                }
-            }
         }
     }
 
     if (original_binary_pkgs.empty()) {
         return;
+    }
+
+    if (resolve_option->get_value()) {
+        // Resolve all requested packages together so that explicitly requested versions are
+        // preferred when resolving the dependencies of the other packages. Skipping broken
+        // packages is disabled, otherwise a skipped package would be downloaded without its
+        // dependencies.
+        libdnf5::GoalJobSettings settings;
+        settings.set_skip_broken(libdnf5::GoalSetting::SET_FALSE);
+
+        libdnf5::Goal goal(ctx.get_base());
+        // The packages are unique by NEVRA, a package available from multiple repositories
+        // would otherwise conflict with itself.
+        for (const auto & [nevra, pkg] : original_binary_pkgs) {
+            goal.add_rpm_install(pkg, settings);
+        }
+
+        auto transaction = goal.resolve();
+        auto transaction_problems = transaction.get_problems();
+        if (transaction_problems != libdnf5::GoalProblem::NO_PROBLEM &&
+            transaction_problems != libdnf5::GoalProblem::NOT_FOUND) {
+            throw GoalResolveError(transaction);
+        }
+        for (auto & tspkg : transaction.get_transaction_packages()) {
+            if (transaction_item_action_is_inbound(tspkg.get_action()) &&
+                tspkg.get_package().get_repo()->get_type() != libdnf5::repo::Repo::Type::COMMANDLINE) {
+                original_binary_pkgs.insert(create_nevra_pkg_pair(tspkg.get_package()));
+            }
+        }
     }
 
     if (srpm_option->get_value()) {
