@@ -1321,7 +1321,13 @@ Transaction::TransactionRunResult Transaction::Impl::_run(
     rpm_transaction.set_flags(rpm_transaction_flags);
 
     // execute rpm transaction
-    ret = rpm_transaction.run();
+    try {
+        ret = rpm_transaction.run();
+    } catch (...) {
+        rpm_transaction.set_script_out_fd(-1);
+        thread_processes_scriptlets_output.join();
+        throw;
+    }
 
     // Reset/close file descriptor for output of RPM scriptlets. Required to end thread_processes_scriptlets_output.
     rpm_transaction.set_script_out_fd(-1);

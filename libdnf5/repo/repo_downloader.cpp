@@ -84,12 +84,18 @@ int RepoDownloader::end_cb_full_download(void * data, LrTransferStatus status, c
         }
     }
     if (auto * download_callbacks = download_callback_data->repo->get_base()->get_download_callbacks()) {
-        if (cb_status == DownloadCallbacks::TransferStatus::ERROR && download_callback_data->suppress_keyring_errors &&
-            is_signing_key_not_found_error(msg)) {
-            return download_callbacks->end(
-                download_callback_data->user_cb_data, DownloadCallbacks::TransferStatus::SUCCESSFUL, nullptr);
+        try {
+            if (cb_status == DownloadCallbacks::TransferStatus::ERROR &&
+                download_callback_data->suppress_keyring_errors && is_signing_key_not_found_error(msg)) {
+                return download_callbacks->end(
+                    download_callback_data->user_cb_data, DownloadCallbacks::TransferStatus::SUCCESSFUL, nullptr);
+            }
+            return download_callbacks->end(download_callback_data->user_cb_data, cb_status, msg);
+        } catch (...) {
+            download_callback_data->repo->get_base()->get_logger()->error(
+                "Caught an exception raised by a repo \"end\" download callback; aborting the download");
+            return DownloadCallbacks::ERROR;
         }
-        return download_callbacks->end(download_callback_data->user_cb_data, cb_status, msg);
     }
     return 0;
 }
@@ -131,11 +137,18 @@ int RepoDownloader::end_cb_sync_check(void * data, LrTransferStatus status, cons
         }
     }
     if (auto * download_callbacks = cbd->repo->get_base()->get_download_callbacks()) {
-        if (cb_status == DownloadCallbacks::TransferStatus::ERROR && cbd->suppress_keyring_errors &&
-            is_signing_key_not_found_error(msg)) {
-            return download_callbacks->end(cbd->user_cb_data, DownloadCallbacks::TransferStatus::SUCCESSFUL, nullptr);
+        try {
+            if (cb_status == DownloadCallbacks::TransferStatus::ERROR && cbd->suppress_keyring_errors &&
+                is_signing_key_not_found_error(msg)) {
+                return download_callbacks->end(
+                    cbd->user_cb_data, DownloadCallbacks::TransferStatus::SUCCESSFUL, nullptr);
+            }
+            return download_callbacks->end(cbd->user_cb_data, cb_status, msg);
+        } catch (...) {
+            cbd->repo->get_base()->get_logger()->error(
+                "Caught an exception raised by a repo \"end\" download callback; aborting the download");
+            return DownloadCallbacks::ERROR;
         }
-        return download_callbacks->end(cbd->user_cb_data, cb_status, msg);
     }
     return 0;
 }
@@ -159,7 +172,13 @@ int RepoDownloader::progress_cb(void * data, double total_to_download, double do
         total_to_download += download_callback_data->sum_prev_downloaded;
         downloaded += download_callback_data->sum_prev_downloaded;
 
-        return download_callbacks->progress(download_callback_data->user_cb_data, total_to_download, downloaded);
+        try {
+            return download_callbacks->progress(download_callback_data->user_cb_data, total_to_download, downloaded);
+        } catch (...) {
+            download_callback_data->repo->get_base()->get_logger()->error(
+                "Caught an exception raised by a repo \"progress\" download callback; aborting the download");
+            return DownloadCallbacks::ERROR;
+        }
     }
     return 0;
 }
@@ -189,8 +208,13 @@ void RepoDownloader::fastest_mirror_cb(void * data, LrFastestMirrorStages stage,
         } else {
             msg = nullptr;
         }
-        download_callbacks->fastest_mirror(
-            download_callback_data->user_cb_data, static_cast<DownloadCallbacks::FastestMirrorStage>(stage), msg);
+        try {
+            download_callbacks->fastest_mirror(
+                download_callback_data->user_cb_data, static_cast<DownloadCallbacks::FastestMirrorStage>(stage), msg);
+        } catch (...) {
+            download_callback_data->repo->get_base()->get_logger()->error(
+                "Caught an exception raised by a repo \"fastest_mirror\" download callback; ignoring it");
+        }
     }
 }
 
@@ -201,7 +225,13 @@ int RepoDownloader::mirror_failure_cb(void * data, const char * msg, const char 
     auto download_callback_data = static_cast<CallbackData *>(data);
     if (auto * download_callbacks = download_callback_data->repo->get_base()->get_download_callbacks()) {
         // In this callback type we don't have the `metadata` type, pass NULL instead. The dnf5 callback accounts for this.
-        return download_callbacks->mirror_failure(download_callback_data->user_cb_data, msg, url, NULL);
+        try {
+            return download_callbacks->mirror_failure(download_callback_data->user_cb_data, msg, url, NULL);
+        } catch (...) {
+            download_callback_data->repo->get_base()->get_logger()->error(
+                "Caught an exception raised by a repo \"mirror_failure\" download callback; aborting the download");
+            return DownloadCallbacks::ERROR;
+        }
     }
     return 0;
 };
@@ -214,7 +244,13 @@ int RepoDownloader::mirror_failure_cb(
 
     auto download_callback_data = static_cast<CallbackData *>(data);
     if (auto * download_callbacks = download_callback_data->repo->get_base()->get_download_callbacks()) {
-        return download_callbacks->mirror_failure(download_callback_data->user_cb_data, msg, url, metadata);
+        try {
+            return download_callbacks->mirror_failure(download_callback_data->user_cb_data, msg, url, metadata);
+        } catch (...) {
+            download_callback_data->repo->get_base()->get_logger()->error(
+                "Caught an exception raised by a repo \"mirror_failure\" download callback; aborting the download");
+            return DownloadCallbacks::ERROR;
+        }
     }
     return 0;
 };

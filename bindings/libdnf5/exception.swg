@@ -64,6 +64,11 @@ public:
     }
 
 static void create_swig_exception(const std::exception & e) {
+#if defined(SWIGPYTHON)
+    if (PyErr_Occurred()) {
+        return;
+    }
+#endif
     do {
         swig_if_exception(e, libdnf5::base::ActiveTransactionInfoParseError);
         swig_if_exception(e, libdnf5::base::TransactionError);
