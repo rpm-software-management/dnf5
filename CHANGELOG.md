@@ -23,7 +23,7 @@
 - base: Add VendorChangeManager::ensure_vendor_conf_dir_exists()
 - automatic: support IPv6 network availability checks
 - Always show cursor during userconfirm
-- dnf5daemon-server: Enforce session sender ownership
+- dnf5daemon-server: Enforce session sender ownership (CVE-2026-111253)
 - dnf5daemon-server: Unify exception message handling
 - base bindings: include utils so that lock_system_repo knows its params
 - repoquery/modules.feature: ensure setup step is successful
