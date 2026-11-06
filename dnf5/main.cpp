@@ -103,8 +103,6 @@
 
 constexpr const char * DNF5_LOGGER_FILENAME = "dnf5.log";
 
-namespace dnf5 {
-
 using namespace libdnf5::cli;
 
 namespace {
@@ -137,7 +135,27 @@ void register_group_with_args(
     command.register_group(&group);
 }
 
+void expire_repository_caches(dnf5::Context & context) {
+    std::filesystem::path cachedir{context.get_base().get_config().get_cachedir_option().get_value()};
+    std::error_code ec;
+    for (const auto & dir_entry : std::filesystem::directory_iterator(cachedir, ec)) {
+        if (!dir_entry.is_directory()) {
+            continue;
+        }
+        libdnf5::repo::RepoCache cache(context.get_base().get_weak_ptr(), dir_entry.path());
+        try {
+            cache.write_attribute(libdnf5::repo::RepoCache::ATTRIBUTE_EXPIRED);
+        } catch (const std::exception & ex) {
+            context.print_error(libdnf5::utils::sformat(
+                _("Failed to expire repository cache in path \"{0}\": {1}"), dir_entry.path().native(), ex.what()));
+        }
+    }
+}
+
 }  // namespace
+
+
+namespace dnf5 {
 
 class RootCommand : public Command {
 public:
@@ -209,26 +227,6 @@ void RootCommand::set_argument_parser() {
     auto refresh = parser.add_new_named_arg("refresh");
     refresh->set_long_name("refresh");
     refresh->set_description(_("Force refreshing metadata before running the command."));
-    refresh->set_parse_hook_func([&ctx](
-                                     [[maybe_unused]] ArgumentParser::NamedArg * arg,
-                                     [[maybe_unused]] const char * option,
-                                     [[maybe_unused]] const char * value) {
-        std::filesystem::path cachedir{ctx.get_base().get_config().get_cachedir_option().get_value()};
-        std::error_code ec;
-        for (const auto & dir_entry : std::filesystem::directory_iterator(cachedir, ec)) {
-            if (!dir_entry.is_directory()) {
-                continue;
-            }
-            libdnf5::repo::RepoCache cache(ctx.get_base().get_weak_ptr(), dir_entry.path());
-            try {
-                cache.write_attribute(libdnf5::repo::RepoCache::ATTRIBUTE_EXPIRED);
-            } catch (const std::exception & ex) {
-                ctx.print_error(libdnf5::utils::sformat(
-                    _("Failed to expire repository cache in path \"{0}\": {1}"), dir_entry.path().native(), ex.what()));
-            }
-        }
-        return true;
-    });
     global_options_group->register_argument(refresh);
 
     refresh->add_conflict_argument(*cacheonly);
@@ -1664,6 +1662,13 @@ int main(int argc, char * argv[]) try {
             }
 
             base.setup();
+
+            if (context.get_argument_parser().get_named_arg("refresh", false).get_parse_count() > 0) {
+                // this needs to run after base.load_config() which reads config
+                // options from files, and after base.setup() which applies installroot
+                // relative cache paths.
+                expire_repository_caches(context);
+            }
 
             auto & coloring = base.get_config().get_color_option().get_value();
             if (coloring == "always") {

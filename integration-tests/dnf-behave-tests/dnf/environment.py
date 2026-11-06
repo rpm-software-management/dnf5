@@ -161,7 +161,9 @@ class DNFContext(object):
         for key, value in setopts.items():
             result.append("--setopt={0}={1}".format(key, value))
 
-        result.append("--setopt=cachedir=%s" % self.installroot + "/var/cache/dnf")
+        main_config = self.config.get("[main]", {})
+        if not ("cachedir" in main_config and "system_cachedir" in main_config):
+            result.append("--setopt=cachedir=%s" % self.installroot + "/var/cache/dnf")
 
         return result
 
