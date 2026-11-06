@@ -66,6 +66,9 @@ void DownloadCommand::set_argument_parser() {
     alldeps_option = dynamic_cast<libdnf5::OptionBool *>(
         parser.add_init_value(std::unique_ptr<libdnf5::OptionBool>(new libdnf5::OptionBool(false))));
 
+    together_option = dynamic_cast<libdnf5::OptionBool *>(
+        parser.add_init_value(std::unique_ptr<libdnf5::OptionBool>(new libdnf5::OptionBool(false))));
+
     url_option = dynamic_cast<libdnf5::OptionBool *>(
         parser.add_init_value(std::unique_ptr<libdnf5::OptionBool>(new libdnf5::OptionBool(false))));
 
@@ -93,6 +96,12 @@ void DownloadCommand::set_argument_parser() {
         "When running with --resolve, download all dependencies (do not exclude already installed ones)");
     alldeps->set_const_value("true");
     alldeps->link_value(alldeps_option);
+
+    auto together = parser.add_new_named_arg("together");
+    together->set_long_name("together");
+    together->set_description("When running with --resolve, resolve all specified packages together");
+    together->set_const_value("true");
+    together->link_value(together_option);
 
     auto srpm = parser.add_new_named_arg("srpm");
     srpm->set_long_name("srpm");
@@ -175,6 +184,7 @@ void DownloadCommand::set_argument_parser() {
     cmd.register_named_arg(arch);
     cmd.register_named_arg(resolve);
     cmd.register_named_arg(alldeps);
+    cmd.register_named_arg(together);
     create_from_repo_option(*this, from_repos, true);
     create_from_vendor_option(*this, from_vendors, true);
     create_destdir_option(*this);
@@ -199,6 +209,10 @@ void DownloadCommand::configure() {
     }
 
     context.update_repo_metadata_from_specs(pkg_specs);
+    if (!resolve_option->get_value() && together_option->get_value()) {
+        throw libdnf5::cli::ArgumentParserMissingDependentArgumentError(
+            M_("Option \"--together\" should be used with \"--resolve\""));
+    }
     if (resolve_option->get_value() && !alldeps_option->get_value()) {
         context.set_load_system_repo(true);
     } else if (!resolve_option->get_value() && alldeps_option->get_value()) {
@@ -265,7 +279,7 @@ void DownloadCommand::run() {
         for (const auto & pkg : pkg_query) {
             original_binary_pkgs.insert(create_nevra_pkg_pair(pkg));
 
-            if (resolve_option->get_value()) {
+            if (resolve_option->get_value() && !together_option->get_value()) {
                 auto goal = std::make_unique<libdnf5::Goal>(ctx.get_base());
                 goal->add_rpm_install(pkg, {});
 
@@ -288,6 +302,35 @@ void DownloadCommand::run() {
 
     if (original_binary_pkgs.empty()) {
         return;
+    }
+
+    if (resolve_option->get_value() && together_option->get_value()) {
+        // Resolve all requested packages together so that explicitly requested versions are
+        // preferred when resolving the dependencies of the other packages. Skipping broken
+        // packages is disabled, otherwise a skipped package would be downloaded without its
+        // dependencies.
+        libdnf5::GoalJobSettings settings;
+        settings.set_skip_broken(libdnf5::GoalSetting::SET_FALSE);
+
+        libdnf5::Goal goal(ctx.get_base());
+        // The packages are unique by NEVRA, a package available from multiple repositories
+        // would otherwise conflict with itself.
+        for (const auto & [nevra, pkg] : original_binary_pkgs) {
+            goal.add_rpm_install(pkg, settings);
+        }
+
+        auto transaction = goal.resolve();
+        auto transaction_problems = transaction.get_problems();
+        if (transaction_problems != libdnf5::GoalProblem::NO_PROBLEM &&
+            transaction_problems != libdnf5::GoalProblem::NOT_FOUND) {
+            throw GoalResolveError(transaction);
+        }
+        for (auto & tspkg : transaction.get_transaction_packages()) {
+            if (transaction_item_action_is_inbound(tspkg.get_action()) &&
+                tspkg.get_package().get_repo()->get_type() != libdnf5::repo::Repo::Type::COMMANDLINE) {
+                original_binary_pkgs.insert(create_nevra_pkg_pair(tspkg.get_package()));
+            }
+        }
     }
 
     if (srpm_option->get_value()) {
