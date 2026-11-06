@@ -346,11 +346,26 @@ bool GoalPrivate::limit_installonly_packages(libdnf5::solv::IdQueue & job, Id ru
         }
 
         reresolve = true;
+
+        int excluded_installed_count = 0;
         for (int j = 0; j < same_names.size(); ++j) {
             Id id = same_names[j];
+            if (spool.is_installed(id) && spool.is_solvable_excluded(id)) {
+                excluded_installed_count++;
+            }
+        }
+
+        // We have to keep excluded installed packages
+        int slots = static_cast<int>(installonly_limit) - excluded_installed_count;
+        for (int j = 0; j < same_names.size(); ++j) {
+            Id id = same_names[j];
+
             Id action = SOLVER_ERASE;
-            if (j < static_cast<int>(installonly_limit)) {
+            if (spool.is_installed(id) && spool.is_solvable_excluded(id)) {
                 action = SOLVER_INSTALL;
+            } else if (slots > 0) {
+                action = SOLVER_INSTALL;
+                slots -= 1;
             }
 
             job.push_back(action | SOLVER_SOLVABLE, id);
