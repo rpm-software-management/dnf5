@@ -44,7 +44,7 @@ Options
     | Limit to packages of given architectures. This option can be used multiple times.
 
 ``--resolve``
-    | Resolve dependencies of specified packages and download missing ones.
+    | Resolve dependencies of specified packages and download missing ones. All specified packages are resolved together, as if they were installed in a single transaction, so an explicitly requested version is also used to satisfy the dependencies of the other specified packages. If the packages cannot be installed together, for example when multiple versions of the same package are requested, the command fails with a dependency resolution error. The ``skip_broken`` configuration option does not apply.
 
 ``--alldeps``
     | To be used together with ``--resolve``, it downloads all dependencies, not skipping the already installed ones.
@@ -89,6 +89,9 @@ Examples
 
 ``dnf5 download maven-compiler-plugin --resolve --alldeps``
     | Download the ``maven-compiler-plugin`` package with all its dependencies.
+
+``dnf5 download --resolve foo bar-1.0``
+    | Download ``foo``, version ``1.0`` of ``bar`` and their missing dependencies. If ``foo`` requires ``bar``, version ``1.0`` is used to satisfy that dependency.
 
 ``dnf5 download --destdir /tmp/my_packages maven-compiler-plugin``
     | Download the ``maven-compiler-plugin`` package to ``/tmp/my_packages`` directory.

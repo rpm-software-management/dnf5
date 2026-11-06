@@ -79,6 +79,39 @@ Scenario: Download when package is available from multiple repositories
     And file "/{context.dnf.tempdir}/wget-1.19.6-5.fc29.x86_64.rpm" exists
 
 
+Scenario: Download with resolve option respects explicitly requested versions of dependencies
+  Given I use repository "dependency-chain"
+    And I set working directory to "{context.dnf.tempdir}"
+   When I execute dnf with args "download top mid-1 --resolve"
+   Then the exit code is 0
+    And file "/{context.dnf.tempdir}/top-1-1.fc29.x86_64.rpm" exists
+    And file "/{context.dnf.tempdir}/mid-1-1.fc29.x86_64.rpm" exists
+    And file "/{context.dnf.tempdir}/bot-1-1.fc29.x86_64.rpm" exists
+    And file "/{context.dnf.tempdir}/mid-2-1.fc29.x86_64.rpm" does not exist
+
+
+Scenario: Download with resolve option fails when multiple versions of the same package are requested
+  Given I use repository "dependency-chain"
+    And I set working directory to "{context.dnf.tempdir}"
+   When I execute dnf with args "download mid-1 mid-2 --resolve"
+   Then the exit code is 1
+    And stderr contains "Failed to resolve the transaction"
+    And stderr contains "conflicting requests"
+    And file "/{context.dnf.tempdir}/mid-1-1.fc29.x86_64.rpm" does not exist
+    And file "/{context.dnf.tempdir}/mid-2-1.fc29.x86_64.rpm" does not exist
+
+
+Scenario: Download with resolve option ignores skip_broken when multiple versions of the same package are requested
+  Given I use repository "install-dependencies"
+    And I set working directory to "{context.dnf.tempdir}"
+   When I execute dnf with args "download foo-1.0 foo-2.0 --resolve --setopt=skip_broken=True"
+   Then the exit code is 1
+    And stderr contains "Failed to resolve the transaction"
+    And stderr contains "conflicting requests"
+    And file "/{context.dnf.tempdir}/foo-1.0-1.fc29.x86_64.rpm" does not exist
+    And file "/{context.dnf.tempdir}/foo-2.0-1.fc29.x86_64.rpm" does not exist
+
+
 @bz1463723
 Scenario: Download an existing RPM in file:// mode
   Given I use repository "dnf-ci-fedora"
@@ -117,22 +150,15 @@ Scenario: Download an existing RPM in file:// mode with all dependencies into a 
 
 
 @bz1787908
-Scenario: Download an existing RPM in two versions in file:// mode with all dependencies into a --destdir
+Scenario: Download of an existing RPM in two versions with dependencies into a --destdir fails
   Given I use repository "dnf-ci-fedora"
     And I use repository "dnf-ci-fedora-updates"
    When I execute dnf with args "download glibc-2.28-9.fc29 glibc-0:2.28-26.fc29.x86_64 --resolve --destdir={context.dnf.tempdir}/downloaddir"
-   Then the exit code is 0
-    And file sha256 checksums are following
-        | Path                                                                            | sha256                                                                                                           |
-        | {context.dnf.tempdir}/downloaddir/setup-2.12.1-1.fc29.noarch.rpm                | file://{context.dnf.fixturesdir}/repos/dnf-ci-fedora/noarch/setup-2.12.1-1.fc29.noarch.rpm                       |
-        | {context.dnf.tempdir}/downloaddir/basesystem-11-6.fc29.noarch.rpm               | file://{context.dnf.fixturesdir}/repos/dnf-ci-fedora/noarch/basesystem-11-6.fc29.noarch.rpm                      |
-        | {context.dnf.tempdir}/downloaddir/glibc-2.28-26.fc29.x86_64.rpm                 | file://{context.dnf.fixturesdir}/repos/dnf-ci-fedora-updates/x86_64/glibc-2.28-26.fc29.x86_64.rpm                |
-        | {context.dnf.tempdir}/downloaddir/glibc-2.28-9.fc29.x86_64.rpm                  | file://{context.dnf.fixturesdir}/repos/dnf-ci-fedora/x86_64/glibc-2.28-9.fc29.x86_64.rpm                         |
-        | {context.dnf.tempdir}/downloaddir/glibc-all-langpacks-2.28-26.fc29.x86_64.rpm   | file://{context.dnf.fixturesdir}/repos/dnf-ci-fedora-updates/x86_64/glibc-all-langpacks-2.28-26.fc29.x86_64.rpm  |
-        | {context.dnf.tempdir}/downloaddir/glibc-all-langpacks-2.28-9.fc29.x86_64.rpm    | file://{context.dnf.fixturesdir}/repos/dnf-ci-fedora/x86_64/glibc-all-langpacks-2.28-9.fc29.x86_64.rpm           |
-        | {context.dnf.tempdir}/downloaddir/glibc-common-2.28-26.fc29.x86_64.rpm          | file://{context.dnf.fixturesdir}/repos/dnf-ci-fedora-updates/x86_64/glibc-common-2.28-26.fc29.x86_64.rpm         |
-        | {context.dnf.tempdir}/downloaddir/glibc-common-2.28-9.fc29.x86_64.rpm           | file://{context.dnf.fixturesdir}/repos/dnf-ci-fedora/x86_64/glibc-common-2.28-9.fc29.x86_64.rpm                  |
-        | {context.dnf.tempdir}/downloaddir/filesystem-3.9-2.fc29.x86_64.rpm              | file://{context.dnf.fixturesdir}/repos/dnf-ci-fedora/x86_64/filesystem-3.9-2.fc29.x86_64.rpm                     |
+   Then the exit code is 1
+    And stderr contains "Failed to resolve the transaction"
+    And stderr contains "conflicting requests"
+    And file "/{context.dnf.tempdir}/downloaddir/glibc-2.28-9.fc29.x86_64.rpm" does not exist
+    And file "/{context.dnf.tempdir}/downloaddir/glibc-2.28-26.fc29.x86_64.rpm" does not exist
 
 
 @bz1800342
