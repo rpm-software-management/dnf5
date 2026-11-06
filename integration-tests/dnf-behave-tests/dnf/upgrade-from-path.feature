@@ -3,6 +3,7 @@ Feature: Upgrade RPMs from path
 
 
 Background: Install glibc, wget
+  Given I set environment variable "DNF5_FORCE_COLUMNS" to "500"
   Given I use repository "dnf-ci-fedora"
    When I execute dnf with args "install glibc wget"
    Then the exit code is 0

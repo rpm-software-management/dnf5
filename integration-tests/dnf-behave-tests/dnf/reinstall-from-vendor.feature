@@ -2,6 +2,7 @@ Feature: reinstall with --from-vendor
 
 
 Background: Install some RPMs
+  Given I set environment variable "DNF5_FORCE_COLUMNS" to "500"
   Given I use repository "dnf-ci-vendor-1"
    When I execute dnf with args "install vendorapp2 vendorpkg"
    Then the exit code is 0

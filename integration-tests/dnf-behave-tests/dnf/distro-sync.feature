@@ -1,6 +1,9 @@
 Feature: distro-sync
 
 
+Background:
+  Given I set environment variable "DNF5_FORCE_COLUMNS" to "500"
+
 @dnf5daemon
 Scenario: when there is noting to do
 Given I use repository "simple-base"

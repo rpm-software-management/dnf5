@@ -6,6 +6,7 @@
 Feature: Switch module to streams
 
 Background:
+  Given I set environment variable "DNF5_FORCE_COLUMNS" to "500"
 Given I use repository "dnf-ci-fedora-modular"
 
 Scenario Outline: Enable a module stream by <modulespec-type> using switch-to subcommand

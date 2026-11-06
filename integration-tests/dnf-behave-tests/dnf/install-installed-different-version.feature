@@ -1,5 +1,8 @@
 Feature: Install different version of installed RPMs
 
+Background:
+  Given I set environment variable "DNF5_FORCE_COLUMNS" to "500"
+
 @dnf5daemon
 Scenario: Install higher versions of installed RPMs
   Given I use repository "dnf-ci-fedora"

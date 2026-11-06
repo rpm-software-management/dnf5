@@ -36,6 +36,7 @@ Feature: Group and environment upgrade
 
 
 Background: Enable comps-upgrade-1 nad install dummy
+  Given I set environment variable "DNF5_FORCE_COLUMNS" to "500"
   Given I use repository "comps-upgrade-1"
     And I successfully execute dnf with args "install dummy"
 

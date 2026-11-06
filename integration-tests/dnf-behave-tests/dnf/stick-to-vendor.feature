@@ -1,5 +1,6 @@
 Feature: DNF allow_vendor_change option in dnf.conf
 Background:
+  Given I set environment variable "DNF5_FORCE_COLUMNS" to "500"
   Given I use repository "dnf-ci-vendor-1"
    And I create and substitute file "/etc/dnf/dnf.conf" with
    """

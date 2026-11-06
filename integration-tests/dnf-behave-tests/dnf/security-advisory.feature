@@ -2,6 +2,7 @@ Feature: Test upgrade, upgrade-minimal, and check-ugrade with advisory, cve, sec
 
 
 Background: Use repository with advisories
+  Given I set environment variable "DNF5_FORCE_COLUMNS" to "500"
   Given I use repository "dnf-ci-security"
    When I execute dnf with args "install advisory_A-1.0-1 advisory_B-1.0-1"
    Then the exit code is 0

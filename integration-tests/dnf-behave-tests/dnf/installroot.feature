@@ -1,6 +1,9 @@
 Feature: Installroot test
 
 
+Background:
+  Given I set environment variable "DNF5_FORCE_COLUMNS" to "500"
+
 @dnf5daemon
 @force_installroot
 Scenario: Install package from host repository into empty installroot

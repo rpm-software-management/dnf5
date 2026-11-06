@@ -11,7 +11,17 @@ from lib.rpm import RPM
 
 
 ACTION_RE = re.compile(r"^([^ ].+):$")
-PACKAGE_RE = re.compile(r" (?P<name>[^ ]+) *(?P<arch>[^ ]+) *(?P<evr>[^ ]+) *(?P<repo>[^ ]+) *(?P<size>.+)$")
+# The Version column may contain an inline version transition "old -> new"
+# (upgrade/downgrade/reinstall). Capture the whole thing; it is split later.
+EVR_SUB_RE = r"[^ ]+(?: -> [^ ]+)?"
+PACKAGE_RE = re.compile(
+    r" (?P<name>[^ ]+) *(?P<arch>[^ ]+) *(?P<evr>%s) *(?P<repo>[^ ]+) *(?P<size>.+)$" % EVR_SUB_RE)
+# When a package name does not fit into the Package column, it is printed on its
+# own line (DNF4-style) and the remaining columns follow on the next line with an
+# empty Package cell.
+OVERFLOW_NAME_RE = re.compile(r"^ (?P<name>[^ ]+)\s*$")
+CONTINUATION_RE = re.compile(
+    r"^ +(?P<arch>[^ ]+) *(?P<evr>%s) *(?P<repo>[^ ]+) *(?P<size>.+)$" % EVR_SUB_RE)
 MODULE_LIST_HEADER_RE = re.compile(r"^(Name)\s+(Stream)\s+(Profiles)\s+(Summary)\s*$")
 MODULE_STREAM_RE = re.compile(r"(?P<module>[^ ]+) *(?P<stream>[^ ]+)$")
 MODULE_STREAM_SWITCH_RE = re.compile(r"(?P<module>[^ ]+) *(?P<stream>[^ ]+ -> [^ ]+)$")
@@ -146,22 +156,48 @@ def parse_transaction_table_dnf5(context, lines):
                 continue
 
             result_action = action
+            # number of lines consumed from the table for this package entry
+            consumed = 1
             # match the "  replacing ..." line
             match = REPLACING_DNF5.match(line)
             if match:
                 result_action = 'replaced'
+                match_dict = match.groupdict()
+            elif OVERFLOW_NAME_RE.match(line):
+                # A long package name is printed on its own line and the rest of
+                # the columns follow on the next line with an empty Package cell
+                # (DNF4-style overflow). This must be checked before PACKAGE_RE,
+                # which would otherwise split the lone name into bogus columns.
+                name_match = OVERFLOW_NAME_RE.match(line)
+                cont_match = CONTINUATION_RE.match(lines[1].rstrip()) if len(lines) > 1 else None
+                if not cont_match:
+                    break
+                match_dict = cont_match.groupdict()
+                match_dict["name"] = name_match.group("name")
+                consumed = 2
             else:
                 match = PACKAGE_RE.match(line)
-            if not match:
-                # either next action or parsing error
-                break
+                if not match:
+                    # either next action or parsing error
+                    break
+                match_dict = match.groupdict()
 
-            lines.pop(0)
-            match_dict = match.groupdict()
-            match_dict["evr"] = normalize_epoch(match_dict["evr"])
-            nevra = "{0[name]}-{0[evr]}.{0[arch]}".format(match_dict)
-            rpm = RPM(nevra)
-            result[result_action].add(rpm)
+            for _ in range(consumed):
+                lines.pop(0)
+
+            # An upgrade/downgrade/reinstall shows the version transition inline as
+            # "old -> new". Record the new version under the current action and the
+            # old version as "replaced" (the "replacing ..." sub-line is suppressed).
+            evr = match_dict["evr"]
+            if " -> " in evr:
+                old_evr, new_evr = [e.strip() for e in evr.split(" -> ", 1)]
+                result[result_action].add(RPM("{0}-{1}.{2}".format(
+                    match_dict["name"], normalize_epoch(new_evr), match_dict["arch"])))
+                result["replaced"].add(RPM("{0}-{1}.{2}".format(
+                    match_dict["name"], normalize_epoch(old_evr), match_dict["arch"])))
+            else:
+                result[result_action].add(RPM("{0}-{1}.{2}".format(
+                    match_dict["name"], normalize_epoch(evr), match_dict["arch"])))
             if action == "changing-reason":
                 # Drop line that describes how the reason was changed, eg: User -> Dependency.
                 # Currently we do not record how the reason was changed, it can be checked by

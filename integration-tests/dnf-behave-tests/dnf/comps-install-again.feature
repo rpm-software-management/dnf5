@@ -1,6 +1,9 @@
 Feature: Test installing groups and environments that are already installed
 
 
+Background:
+  Given I set environment variable "DNF5_FORCE_COLUMNS" to "500"
+
 Scenario: Install a group that is already installed
   Given I use repository "comps-upgrade-1"
    When I execute dnf with args "group install C-group"

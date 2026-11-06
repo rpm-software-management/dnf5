@@ -1,6 +1,7 @@
 Feature: Protected packages
 
 Background:
+  Given I set environment variable "DNF5_FORCE_COLUMNS" to "500"
   Given I use repository "dnf-ci-fedora"
     And I execute dnf with args "install filesystem"
    Then the exit code is 0

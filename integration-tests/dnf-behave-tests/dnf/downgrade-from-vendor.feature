@@ -2,6 +2,7 @@ Feature: downgrade with --from-vendor
 
 
 Background: Install some RPMs
+  Given I set environment variable "DNF5_FORCE_COLUMNS" to "500"
   Given I use repository "dnf-ci-vendor-3"
     And I use repository "dnf-ci-vendor-3-updates"
    When I execute dnf with args "install vendorpkg vendorapp"

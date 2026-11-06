@@ -2,6 +2,7 @@ Feature: Upgrade single RPMs
 
 
 Background: Install RPMs
+  Given I set environment variable "DNF5_FORCE_COLUMNS" to "500"
   Given I use repository "dnf-ci-fedora"
     And I use repository "dnf-ci-thirdparty"
    When I execute dnf with args "install glibc flac wget SuperRipper"
