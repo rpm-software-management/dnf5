@@ -41,7 +41,8 @@ std::unique_ptr<json_object, decltype(&json_object_put)> get_bootc_status() {
     // Check whether command failed (non-zero exit code)
     if (result.returncode != 0) {
         // Command ran but failed; show stderr to user
-        std::string stderr_content(reinterpret_cast<const char *>(result.stderr.data()), result.stderr.size());
+        std::string stderr_content(
+            reinterpret_cast<const char *>(result.stderr_data.data()), result.stderr_data.size());
         if (!stderr_content.empty()) {
             throw libdnf5::RuntimeError(M_("Error checking bootc status: {}"), stderr_content);
         } else {
@@ -50,7 +51,7 @@ std::unique_ptr<json_object, decltype(&json_object_put)> get_bootc_status() {
         }
     }
 
-    std::string stdout_content(reinterpret_cast<const char *>(result.stdout.data()), result.stdout.size());
+    std::string stdout_content(reinterpret_cast<const char *>(result.stdout_data.data()), result.stdout_data.size());
     std::unique_ptr<json_object, decltype(&json_object_put)> root(
         json_tokener_parse(stdout_content.c_str()), json_object_put);
 
@@ -120,7 +121,8 @@ void make_usr_writable() {
         // Set up transient overlay
         const auto & result = subprocess::run("bootc", {"bootc", "usr-overlay", "--read-only"});
         if (result.returncode != 0) {
-            std::string stderr_content(reinterpret_cast<const char *>(result.stderr.data()), result.stderr.size());
+            std::string stderr_content(
+                reinterpret_cast<const char *>(result.stderr_data.data()), result.stderr_data.size());
             if (!stderr_content.empty()) {
                 throw libdnf5::RuntimeError(M_("Error running `bootc usr-overlay --read-only`: {}"), stderr_content);
             } else {
@@ -139,7 +141,8 @@ void make_usr_writable() {
     const auto & result = subprocess::run("mount", {"mount", "--options-source=disable", "-o", "remount,rw", "/usr"});
 
     if (result.returncode != 0) {
-        std::string stderr_content(reinterpret_cast<const char *>(result.stderr.data()), result.stderr.size());
+        std::string stderr_content(
+            reinterpret_cast<const char *>(result.stderr_data.data()), result.stderr_data.size());
         throw libdnf5::RuntimeError(M_("Failed to remount /usr as read-write: {}"), stderr_content);
     }
 }

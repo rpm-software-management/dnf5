@@ -34,8 +34,8 @@ void UtilsSubprocessTest::test_stdout_capture() {
         libdnf5::utils::subprocess::run("/usr/bin/env", {"/usr/bin/env", "sh", "-c", "echo 'Hello, World!'"});
 
     CPPUNIT_ASSERT_EQUAL(0, result.returncode);
-    CPPUNIT_ASSERT_EQUAL(std::string("Hello, World!\n"), bytes_to_string(result.stdout));
-    CPPUNIT_ASSERT_EQUAL(std::string(""), bytes_to_string(result.stderr));
+    CPPUNIT_ASSERT_EQUAL(std::string("Hello, World!\n"), bytes_to_string(result.stdout_data));
+    CPPUNIT_ASSERT_EQUAL(std::string(""), bytes_to_string(result.stderr_data));
 }
 
 
@@ -45,8 +45,8 @@ void UtilsSubprocessTest::test_stderr_capture() {
         libdnf5::utils::subprocess::run("/usr/bin/env", {"/usr/bin/env", "sh", "-c", "echo 'Error message' >&2"});
 
     CPPUNIT_ASSERT_EQUAL(0, result.returncode);
-    CPPUNIT_ASSERT_EQUAL(std::string(""), bytes_to_string(result.stdout));
-    CPPUNIT_ASSERT_EQUAL(std::string("Error message\n"), bytes_to_string(result.stderr));
+    CPPUNIT_ASSERT_EQUAL(std::string(""), bytes_to_string(result.stdout_data));
+    CPPUNIT_ASSERT_EQUAL(std::string("Error message\n"), bytes_to_string(result.stderr_data));
 }
 
 
@@ -56,8 +56,8 @@ void UtilsSubprocessTest::test_stdout_and_stderr_capture() {
         "/usr/bin/env", {"/usr/bin/env", "sh", "-c", "echo 'stdout line'; echo 'stderr line' >&2"});
 
     CPPUNIT_ASSERT_EQUAL(0, result.returncode);
-    CPPUNIT_ASSERT_EQUAL(std::string("stdout line\n"), bytes_to_string(result.stdout));
-    CPPUNIT_ASSERT_EQUAL(std::string("stderr line\n"), bytes_to_string(result.stderr));
+    CPPUNIT_ASSERT_EQUAL(std::string("stdout line\n"), bytes_to_string(result.stdout_data));
+    CPPUNIT_ASSERT_EQUAL(std::string("stderr line\n"), bytes_to_string(result.stderr_data));
 }
 
 
@@ -66,8 +66,8 @@ void UtilsSubprocessTest::test_exit_code_success() {
     const auto result = libdnf5::utils::subprocess::run("/usr/bin/env", {"/usr/bin/env", "sh", "-c", "exit 0"});
 
     CPPUNIT_ASSERT_EQUAL(0, result.returncode);
-    CPPUNIT_ASSERT_EQUAL(std::string(""), bytes_to_string(result.stdout));
-    CPPUNIT_ASSERT_EQUAL(std::string(""), bytes_to_string(result.stderr));
+    CPPUNIT_ASSERT_EQUAL(std::string(""), bytes_to_string(result.stdout_data));
+    CPPUNIT_ASSERT_EQUAL(std::string(""), bytes_to_string(result.stderr_data));
 }
 
 
@@ -97,17 +97,17 @@ void UtilsSubprocessTest::test_binary_data() {
     CPPUNIT_ASSERT_EQUAL(0, result.returncode);
 
     // Verify stdout contains the expected binary data
-    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(5), result.stdout.size());
-    CPPUNIT_ASSERT_EQUAL(static_cast<std::byte>(0x00), result.stdout[0]);
-    CPPUNIT_ASSERT_EQUAL(static_cast<std::byte>(0x01), result.stdout[1]);
-    CPPUNIT_ASSERT_EQUAL(static_cast<std::byte>(0x02), result.stdout[2]);
-    CPPUNIT_ASSERT_EQUAL(static_cast<std::byte>(0xff), result.stdout[3]);
-    CPPUNIT_ASSERT_EQUAL(static_cast<std::byte>(0xfe), result.stdout[4]);
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(5), result.stdout_data.size());
+    CPPUNIT_ASSERT_EQUAL(static_cast<std::byte>(0x00), result.stdout_data[0]);
+    CPPUNIT_ASSERT_EQUAL(static_cast<std::byte>(0x01), result.stdout_data[1]);
+    CPPUNIT_ASSERT_EQUAL(static_cast<std::byte>(0x02), result.stdout_data[2]);
+    CPPUNIT_ASSERT_EQUAL(static_cast<std::byte>(0xff), result.stdout_data[3]);
+    CPPUNIT_ASSERT_EQUAL(static_cast<std::byte>(0xfe), result.stdout_data[4]);
 
     // Verify stderr contains the expected binary data
-    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), result.stderr.size());
-    CPPUNIT_ASSERT_EQUAL(static_cast<std::byte>(0x03), result.stderr[0]);
-    CPPUNIT_ASSERT_EQUAL(static_cast<std::byte>(0x04), result.stderr[1]);
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), result.stderr_data.size());
+    CPPUNIT_ASSERT_EQUAL(static_cast<std::byte>(0x03), result.stderr_data[0]);
+    CPPUNIT_ASSERT_EQUAL(static_cast<std::byte>(0x04), result.stderr_data[1]);
 }
 
 
@@ -131,20 +131,20 @@ done
     const auto result = libdnf5::utils::subprocess::run("/usr/bin/env", {"/usr/bin/env", "sh", "-c", script});
 
     // The expected size is: 1000 × 100 bytes = 100,000 bytes per stream
-    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(100000), result.stdout.size());
-    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(100000), result.stderr.size());
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(100000), result.stdout_data.size());
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(100000), result.stderr_data.size());
 
     // Verify the command succeeded (didn't deadlock or error)
     CPPUNIT_ASSERT_EQUAL(0, result.returncode);
 
     // Verify the data is correct (should be all a's on stdout, b's on stderr)
     // Check first few bytes (only if we have data)
-    if (result.stdout.size() > 0) {
-        CPPUNIT_ASSERT_EQUAL(static_cast<std::byte>('a'), result.stdout[0]);
-        CPPUNIT_ASSERT_EQUAL(static_cast<std::byte>('a'), result.stdout[100]);
+    if (result.stdout_data.size() > 0) {
+        CPPUNIT_ASSERT_EQUAL(static_cast<std::byte>('a'), result.stdout_data[0]);
+        CPPUNIT_ASSERT_EQUAL(static_cast<std::byte>('a'), result.stdout_data[100]);
     }
-    if (result.stderr.size() > 0) {
-        CPPUNIT_ASSERT_EQUAL(static_cast<std::byte>('b'), result.stderr[0]);
-        CPPUNIT_ASSERT_EQUAL(static_cast<std::byte>('b'), result.stderr[100]);
+    if (result.stderr_data.size() > 0) {
+        CPPUNIT_ASSERT_EQUAL(static_cast<std::byte>('b'), result.stderr_data[0]);
+        CPPUNIT_ASSERT_EQUAL(static_cast<std::byte>('b'), result.stderr_data[100]);
     }
 }
