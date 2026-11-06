@@ -46,6 +46,7 @@ private:
     std::set<std::string> arch_option;
     libdnf5::OptionBool * resolve_option{nullptr};
     libdnf5::OptionBool * alldeps_option{nullptr};
+    libdnf5::OptionBool * together_option{nullptr};
     libdnf5::OptionBool * url_option{nullptr};
     libdnf5::OptionBool * allmirrors_option{nullptr};
     libdnf5::OptionBool * srpm_option{nullptr};

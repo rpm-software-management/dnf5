@@ -1,4 +1,4 @@
-Feature: Download commands with options --resolve --alldeps
+Feature: Download commands with options --resolve --alldeps --together
 
 
 Scenario: Download a single rpm
@@ -77,6 +77,85 @@ Scenario: Download when package is available from multiple repositories
     And file "/{context.dnf.tempdir}/abcde-2.9.3-1.fc29.noarch.rpm" exists
     And file "/{context.dnf.tempdir}/flac-1.3.3-3.fc29.x86_64.rpm" exists
     And file "/{context.dnf.tempdir}/wget-1.19.6-5.fc29.x86_64.rpm" exists
+
+
+Scenario: Download with resolve option resolves dependencies of each package separately
+  Given I use repository "dependency-chain"
+    And I set working directory to "{context.dnf.tempdir}"
+   When I execute dnf with args "download top mid-1 --resolve"
+   Then the exit code is 0
+    And file "/{context.dnf.tempdir}/top-1-1.fc29.x86_64.rpm" exists
+    And file "/{context.dnf.tempdir}/mid-1-1.fc29.x86_64.rpm" exists
+    And file "/{context.dnf.tempdir}/mid-2-1.fc29.x86_64.rpm" exists
+    And file "/{context.dnf.tempdir}/bot-1-1.fc29.x86_64.rpm" exists
+
+
+Scenario: Download with resolve and together options respects explicitly requested versions of dependencies
+  Given I use repository "dependency-chain"
+    And I set working directory to "{context.dnf.tempdir}"
+   When I execute dnf with args "download top mid-1 --resolve --together"
+   Then the exit code is 0
+    And file "/{context.dnf.tempdir}/top-1-1.fc29.x86_64.rpm" exists
+    And file "/{context.dnf.tempdir}/mid-1-1.fc29.x86_64.rpm" exists
+    And file "/{context.dnf.tempdir}/bot-1-1.fc29.x86_64.rpm" exists
+    And file "/{context.dnf.tempdir}/mid-2-1.fc29.x86_64.rpm" does not exist
+
+
+Scenario: Download with resolve, alldeps and together options
+  Given I use repository "dependency-chain"
+    And I set working directory to "{context.dnf.tempdir}"
+    And I successfully execute dnf with args "install bot"
+   When I execute dnf with args "download top mid-1 --resolve --alldeps --together"
+   Then the exit code is 0
+    And file "/{context.dnf.tempdir}/top-1-1.fc29.x86_64.rpm" exists
+    And file "/{context.dnf.tempdir}/mid-1-1.fc29.x86_64.rpm" exists
+    And file "/{context.dnf.tempdir}/bot-1-1.fc29.x86_64.rpm" exists
+    And file "/{context.dnf.tempdir}/mid-2-1.fc29.x86_64.rpm" does not exist
+
+
+Scenario: Download with resolve and together options fails when multiple versions of the same package are requested
+  Given I use repository "dependency-chain"
+    And I set working directory to "{context.dnf.tempdir}"
+   When I execute dnf with args "download mid-1 mid-2 --resolve --together"
+   Then the exit code is 1
+    And stderr contains "Failed to resolve the transaction"
+    And stderr contains "conflicting requests"
+    And file "/{context.dnf.tempdir}/mid-1-1.fc29.x86_64.rpm" does not exist
+    And file "/{context.dnf.tempdir}/mid-2-1.fc29.x86_64.rpm" does not exist
+
+
+Scenario: Download with resolve and together options ignores skip_broken
+  Given I use repository "install-dependencies"
+    And I set working directory to "{context.dnf.tempdir}"
+   When I execute dnf with args "download foo-1.0 foo-2.0 --resolve --together --setopt=skip_broken=True"
+   Then the exit code is 1
+    And stderr contains "Failed to resolve the transaction"
+    And stderr contains "conflicting requests"
+    And file "/{context.dnf.tempdir}/foo-1.0-1.fc29.x86_64.rpm" does not exist
+    And file "/{context.dnf.tempdir}/foo-2.0-1.fc29.x86_64.rpm" does not exist
+
+
+Scenario: Download with resolve and together options into a --destdir when the package is in multiple repositories
+  Given I use repository "dnf-ci-fedora"
+# Add dnf-ci-fedora-updates repository with identical metadata of dnf-ci-fedora
+    And I use repository "dnf-ci-fedora-updates" with configuration
+        | key             | value                                                 |
+        | baseurl         | file://{context.dnf.fixturesdir}/repos/dnf-ci-fedora  |
+   When I execute dnf with args "download basesystem --resolve --together --destdir={context.dnf.tempdir}/downloaddir"
+   Then the exit code is 0
+    And file sha256 checksums are following
+        | Path                                                                  | sha256                                                                                        |
+        | {context.dnf.tempdir}/downloaddir/setup-2.12.1-1.fc29.noarch.rpm      | file://{context.dnf.fixturesdir}/repos/dnf-ci-fedora/noarch/setup-2.12.1-1.fc29.noarch.rpm    |
+        | {context.dnf.tempdir}/downloaddir/basesystem-11-6.fc29.noarch.rpm     | file://{context.dnf.fixturesdir}/repos/dnf-ci-fedora/noarch/basesystem-11-6.fc29.noarch.rpm   |
+        | {context.dnf.tempdir}/downloaddir/filesystem-3.9-2.fc29.x86_64.rpm    | file://{context.dnf.fixturesdir}/repos/dnf-ci-fedora/x86_64/filesystem-3.9-2.fc29.x86_64.rpm  |
+
+
+Scenario: Download with together option requires resolve option
+  Given I use repository "dnf-ci-fedora"
+    And I set working directory to "{context.dnf.tempdir}"
+   When I execute dnf with args "download abcde --together"
+   Then stderr contains "Option \"--together\" should be used with \"--resolve\""
+    And the exit code is 2
 
 
 @bz1463723
