@@ -47,7 +47,8 @@ std::filesystem::path copr_repo_directory(libdnf5::Base * base) {
         result = installroot.empty() ? dir : installroot / dir;
         return result / "yum.repos.d";
     }
-    return installroot.empty() ? COPR_REPO_DIRECTORY : installroot / COPR_REPO_DIRECTORY;
+    return installroot.empty() ? COPR_REPO_DIRECTORY
+                               : installroot / std::filesystem::path{COPR_REPO_DIRECTORY}.relative_path();
 }
 
 
