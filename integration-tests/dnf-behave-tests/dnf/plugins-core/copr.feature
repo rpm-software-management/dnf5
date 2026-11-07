@@ -1,6 +1,7 @@
-# These tests need to be marked destructive because copr
-# doesn't use repositories in installroot, this is tracked as:
-# https://github.com/rpm-software-management/dnf5/issues/1497
+# These tests need to be marked destructive because the Copr plugin
+# reads its configuration from the host system, outside the installroot.
+# The tests therefore modify the Copr plugin configuration files under
+# /etc/dnf/plugins/ on the host.
 @destructive
 Feature: Test the COPR plugin
 
@@ -61,17 +62,19 @@ Scenario: Test enabling and disabling a project
       Saved vendor policy file: {context.dnf.installroot}/etc/dnf/vendors.d/i_copr:localhost:testuser:testproject.conf
       Saved vendor policy file: {context.dnf.installroot}/etc/dnf/vendors.d/o_copr:localhost:testuser:testproject.conf
       """
+  And file "/etc/yum.repos.d/_copr:localhost:testuser:testproject.repo" exists
   And file "/etc/dnf/vendors.d/i_copr:localhost:testuser:testproject.conf" exists
   And file "/etc/dnf/vendors.d/o_copr:localhost:testuser:testproject.conf" exists
- When I execute dnf with args "--use-host-config copr disable testhub/testuser/testproject"
+ When I execute dnf with args "copr disable testhub/testuser/testproject"
  Then the exit code is 0
   And stdout is
       """
-      Copr repository 'localhost/testuser/testproject' in '/etc/yum.repos.d/_copr:localhost:testuser:testproject.repo' disabled.
-      Vendor policy file updated: /etc/dnf/vendors.d/i_copr:localhost:testuser:testproject.conf
-      Vendor policy file updated: /etc/dnf/vendors.d/o_copr:localhost:testuser:testproject.conf
+      Copr repository 'localhost/testuser/testproject' in '{context.dnf.installroot}/etc/yum.repos.d/_copr:localhost:testuser:testproject.repo' disabled.
+      Vendor policy file updated: {context.dnf.installroot}/etc/dnf/vendors.d/i_copr:localhost:testuser:testproject.conf
+      Vendor policy file updated: {context.dnf.installroot}/etc/dnf/vendors.d/o_copr:localhost:testuser:testproject.conf
       """
   And stderr is empty
+  And file "/etc/yum.repos.d/_copr:localhost:testuser:testproject.repo" exists
   And file "/etc/dnf/vendors.d/i_copr:localhost:testuser:testproject.conf" exists
   And file "/etc/dnf/vendors.d/o_copr:localhost:testuser:testproject.conf" exists
 
@@ -104,6 +107,7 @@ Given I create file "//etc/dnf/plugins/copr.d/enable_vendor_change_to_repo.conf"
       Saved vendor policy file: {context.dnf.installroot}/etc/dnf/vendors.d/i_copr:localhost:testuser:testproject.conf
       Saved vendor policy file: {context.dnf.installroot}/etc/dnf/vendors.d/o_copr:localhost:testuser:testproject.conf
       """
+  And file "/etc/yum.repos.d/_copr:localhost:testuser:testproject.repo" exists
   And file "/etc/dnf/vendors.d/i_copr:localhost:testuser:testproject.conf" exists
   And file "/etc/dnf/vendors.d/o_copr:localhost:testuser:testproject.conf" exists
 
@@ -130,6 +134,7 @@ Scenario: Test enabling a project with --vendor-change=to-repo
       Saved vendor policy file: {context.dnf.installroot}/etc/dnf/vendors.d/i_copr:localhost:testuser:testproject.conf
       Saved vendor policy file: {context.dnf.installroot}/etc/dnf/vendors.d/o_copr:localhost:testuser:testproject.conf
       """
+  And file "/etc/yum.repos.d/_copr:localhost:testuser:testproject.repo" exists
   And file "/etc/dnf/vendors.d/i_copr:localhost:testuser:testproject.conf" exists
   And file "/etc/dnf/vendors.d/o_copr:localhost:testuser:testproject.conf" exists
 
@@ -156,6 +161,7 @@ Scenario: Test enabling a project with --vendor-change=from-repo
       Saved vendor policy file: {context.dnf.installroot}/etc/dnf/vendors.d/i_copr:localhost:testuser:testproject.conf
       Saved vendor policy file: {context.dnf.installroot}/etc/dnf/vendors.d/o_copr:localhost:testuser:testproject.conf
       """
+  And file "/etc/yum.repos.d/_copr:localhost:testuser:testproject.repo" exists
   And file "/etc/dnf/vendors.d/i_copr:localhost:testuser:testproject.conf" exists
   And file "/etc/dnf/vendors.d/o_copr:localhost:testuser:testproject.conf" exists
 
@@ -182,6 +188,7 @@ Scenario: Test enabling a project with --vendor-change=true
       Saved vendor policy file: {context.dnf.installroot}/etc/dnf/vendors.d/i_copr:localhost:testuser:testproject.conf
       Saved vendor policy file: {context.dnf.installroot}/etc/dnf/vendors.d/o_copr:localhost:testuser:testproject.conf
       """
+  And file "/etc/yum.repos.d/_copr:localhost:testuser:testproject.repo" exists
   And file "/etc/dnf/vendors.d/i_copr:localhost:testuser:testproject.conf" exists
   And file "/etc/dnf/vendors.d/o_copr:localhost:testuser:testproject.conf" exists
 
@@ -208,8 +215,29 @@ Scenario: Test enabling a project with --vendor-change=false
       Saved vendor policy file: {context.dnf.installroot}/etc/dnf/vendors.d/i_copr:localhost:testuser:testproject.conf
       Saved vendor policy file: {context.dnf.installroot}/etc/dnf/vendors.d/o_copr:localhost:testuser:testproject.conf
       """
+  And file "/etc/yum.repos.d/_copr:localhost:testuser:testproject.repo" exists
   And file "/etc/dnf/vendors.d/i_copr:localhost:testuser:testproject.conf" exists
   And file "/etc/dnf/vendors.d/o_copr:localhost:testuser:testproject.conf" exists
+
+
+Scenario: Test removing an enabled project
+ When I execute dnf with args "copr enable testhub/testuser/testproject"
+ Then the exit code is 0
+  And file "/etc/yum.repos.d/_copr:localhost:testuser:testproject.repo" exists
+  And file "/etc/dnf/vendors.d/i_copr:localhost:testuser:testproject.conf" exists
+  And file "/etc/dnf/vendors.d/o_copr:localhost:testuser:testproject.conf" exists
+ When I execute dnf with args "copr remove testhub/testuser/testproject"
+ Then the exit code is 0
+  And stdout is
+      """
+      Repo file {context.dnf.installroot}/etc/yum.repos.d/_copr:localhost:testuser:testproject.repo successfully removed
+      Removed vendor policy file: {context.dnf.installroot}/etc/dnf/vendors.d/i_copr:localhost:testuser:testproject.conf
+      Removed vendor policy file: {context.dnf.installroot}/etc/dnf/vendors.d/o_copr:localhost:testuser:testproject.conf
+      """
+  And stderr is empty
+  And file "/etc/yum.repos.d/_copr:localhost:testuser:testproject.repo" does not exist
+  And file "/etc/dnf/vendors.d/i_copr:localhost:testuser:testproject.conf" does not exist
+  And file "/etc/dnf/vendors.d/o_copr:localhost:testuser:testproject.conf" does not exist
 
 
 Scenario: Test disabling a project that is not enabled
@@ -378,16 +406,18 @@ Given I create and substitute file "/{context.dnf.tempdir}/copr/api_3/rpmrepo/te
       Saved vendor policy file: {context.dnf.installroot}/etc/dnf/vendors.d/i_copr:localhost:testuser:depproject.conf
       Saved vendor policy file: {context.dnf.installroot}/etc/dnf/vendors.d/o_copr:localhost:testuser:depproject.conf
       """
+  And file "/etc/yum.repos.d/_copr:localhost:testuser:depproject.repo" exists
   And file "/etc/dnf/vendors.d/i_copr:localhost:testuser:depproject.conf" exists
   And file "/etc/dnf/vendors.d/o_copr:localhost:testuser:depproject.conf" exists
- When I execute dnf with args "copr disable testhub/testuser/depproject --use-host-config"
+ When I execute dnf with args "copr disable testhub/testuser/depproject"
  Then the exit code is 0
   And stdout is
       """
-      Copr repository 'localhost/testuser/depproject' in '/etc/yum.repos.d/_copr:localhost:testuser:depproject.repo' disabled.
-      Vendor policy file updated: /etc/dnf/vendors.d/i_copr:localhost:testuser:depproject.conf
-      Vendor policy file updated: /etc/dnf/vendors.d/o_copr:localhost:testuser:depproject.conf
+      Copr repository 'localhost/testuser/depproject' in '{context.dnf.installroot}/etc/yum.repos.d/_copr:localhost:testuser:depproject.repo' disabled.
+      Vendor policy file updated: {context.dnf.installroot}/etc/dnf/vendors.d/i_copr:localhost:testuser:depproject.conf
+      Vendor policy file updated: {context.dnf.installroot}/etc/dnf/vendors.d/o_copr:localhost:testuser:depproject.conf
       """
   And stderr is empty
+  And file "/etc/yum.repos.d/_copr:localhost:testuser:depproject.repo" exists
   And file "/etc/dnf/vendors.d/i_copr:localhost:testuser:depproject.conf" exists
   And file "/etc/dnf/vendors.d/o_copr:localhost:testuser:depproject.conf" exists
