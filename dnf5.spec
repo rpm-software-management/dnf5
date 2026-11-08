@@ -159,7 +159,7 @@ BuildRequires:  bash-completion-devel
 %else
 BuildRequires:  bash-completion
 %endif
-BuildRequires:  cmake >= 3.22
+BuildRequires:  cmake >= 3.24
 BuildRequires:  doxygen
 BuildRequires:  gettext
 BuildRequires:  pkgconfig(fmt)

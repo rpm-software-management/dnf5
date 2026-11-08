@@ -1,5 +1,5 @@
 message("Running CMake on dnf5...")
-cmake_minimum_required(VERSION 3.22)
+cmake_minimum_required(VERSION 3.24)
 
 
 include(VERSION.cmake)
@@ -84,11 +84,14 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 # Give inline methods hidden visibility by default
 set(CMAKE_VISIBILITY_INLINES_HIDDEN ON)
 
+# can be overridden on the cmdline by passing --compile-no-warning-as-error
+set(CMAKE_COMPILE_WARNING_AS_ERROR ON)
+
 # remove PROJECT_SOURCE_DIR prefix from __FILE__ macro used in asserts (available since GCC 8 and Clang 10)
 add_compile_options("-fmacro-prefix-map=${PROJECT_SOURCE_DIR}/=")
 
 # warnings
-add_compile_options(-Wall -Wextra -Werror)
+add_compile_options(-Wall -Wextra)
 add_compile_options(-Wcast-align -Wformat-nonliteral -Wmissing-format-attribute -Wredundant-decls -Wsign-compare -Wsign-conversion -Wtype-limits -Wuninitialized -Wwrite-strings)
 add_compile_options(-Werror=unused-result -Wodr)
 
