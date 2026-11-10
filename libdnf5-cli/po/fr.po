@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-02 08:43+0000\n"
+"POT-Creation-Date: 2026-11-10 09:05+0000\n"
 "PO-Revision-Date: 2026-11-03 09:42+0000\n"
 "Last-Translator: Léane GRASSER <leane.grasser@proton.me>\n"
 "Language-Team: French <https://translate.fedoraproject.org/projects/dnf5/"
@@ -32,7 +32,8 @@ msgstr ""
 #: argument_parser.cpp:76
 #, c++-format
 msgid "Misconfigured alias \"{}\": index \"{}\" out of range"
-msgstr "Configuration de l'alias \"{}\" incorrecte : indice \"{}\" hors limites"
+msgstr ""
+"Configuration de l'alias \"{}\" incorrecte : indice \"{}\" hors limites"
 
 #: argument_parser.cpp:98
 #, c++-format

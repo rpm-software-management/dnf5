@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-02 08:43+0000\n"
+"POT-Creation-Date: 2026-11-10 09:05+0000\n"
 "PO-Revision-Date: 2026-11-03 09:50+0000\n"
 "Last-Translator: Salvatore Cocuzza <info@salvatorecocuzza.it>\n"
 "Language-Team: Italian <https://translate.fedoraproject.org/projects/dnf5/"
@@ -51,7 +51,8 @@ msgstr "Percorso mancante alla directory di configurazione del repository"
 #: addrepo.cpp:282
 #, c++-format
 msgid "Failed to copy repository configuration file \"{}\": {}"
-msgstr "Copia del file di configurazione del repository \"{}\" non riuscita: {}"
+msgstr ""
+"Copia del file di configurazione del repository \"{}\" non riuscita: {}"
 
 #: addrepo.cpp:293
 #, c++-format

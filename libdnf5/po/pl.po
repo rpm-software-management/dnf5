@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-02 08:43+0000\n"
+"POT-Creation-Date: 2026-11-10 09:05+0000\n"
 "PO-Revision-Date: 2026-11-03 09:45+0000\n"
 "Last-Translator: Tomasz Bojanowski <tomasz@bojanowski.me>\n"
 "Language-Team: Polish <https://translate.fedoraproject.org/projects/dnf5/"
@@ -45,13 +45,13 @@ msgstr "Błąd podczas analizowania informacji o transakcji: {}"
 msgid "Invalid option value: enabled={}"
 msgstr "Nieprawidłowa wartość opcji: enabled={}"
 
-#: base/goal.cpp:490
+#: base/goal.cpp:492
 #, c++-format
 msgid "Unsupported argument for REMOVE action: {}"
 msgstr "Nieobsługiwany argument dla akcji REMOVE: {}"
 
 #. TODO(lukash) throw a proper exception
-#: base/goal.cpp:1741
+#: base/goal.cpp:1743
 #, c++-format
 msgid "Incorrect configuration value for multilib_policy: {}"
 msgstr "Nieprawidłowa wartość konfiguracji dla multilib_policy: {}"
@@ -308,8 +308,8 @@ msgstr ""
 msgid ""
 "Cannot perform {0} because '{1}' is installed in a different version: '{2}'."
 msgstr ""
-"Nie można wykonać {0}, ponieważ „{1}” jest zainstalowany w innej wersji: „{2}"
-"”."
+"Nie można wykonać {0}, ponieważ „{1}” jest zainstalowany w innej wersji: "
+"„{2}”."
 
 #: base/log_event.cpp:241
 #, c++-format
@@ -414,8 +414,8 @@ msgid ""
 "The operation would result in switching of module '{0}' stream '{1}' to "
 "stream '{2}'\n"
 msgstr ""
-"Operacja spowoduje przełączenie strumienia modułu „{0}” „{1}” na strumień „"
-"{2}”\n"
+"Operacja spowoduje przełączenie strumienia modułu „{0}” „{1}” na strumień "
+"„{2}”\n"
 
 #: base/log_event.cpp:342
 msgid ""
@@ -473,8 +473,8 @@ msgid ""
 "Exceeded installonly_limit ({0}): found {1} installed: '{2}'. You can use "
 "'remove --oldinstallonly'."
 msgstr ""
-"Przekroczono limit installonly_limit ({0}): znaleziono {1} zainstalowanych: '"
-"{2}'. Możesz użyć komendy 'remove --oldinstallonly'."
+"Przekroczono limit installonly_limit ({0}): znaleziono {1} zainstalowanych: "
+"'{2}'. Możesz użyć komendy 'remove --oldinstallonly'."
 
 #: base/solver_problems.cpp:41
 #, c++-format
@@ -1161,8 +1161,8 @@ msgid ""
 "Unsupported plugin API combination. API version provided by plugin \"{}\" "
 "(\"{}\") is \"{}.{}\". API version in libdnf is \"{}.{}\"."
 msgstr ""
-"Nieobsługiwana kombinacja API wtyczki. Wersja API dostarczona przez wtyczkę „"
-"{}” („{}”) to „{}.{}”. Wersja API w libdnf to „{}.{}”."
+"Nieobsługiwana kombinacja API wtyczki. Wersja API dostarczona przez wtyczkę "
+"„{}” („{}”) to „{}.{}”. Wersja API w libdnf to „{}.{}”."
 
 #: plugin/plugins.cpp:93
 msgid "Failed to create a libdnf plugin instance"
@@ -1640,8 +1640,8 @@ msgid ""
 "Configuration \"{}\" uses version \"1.0\" which does not support combining "
 "'equivalent_vendors' with 'outgoing_vendors' and 'incoming_vendors'"
 msgstr ""
-"Konfiguracja „{}” używa wersji „1.0”, która nie obsługuje łączenia „"
-"equivalent_vendors” z „outgoing_vendors” i „incoming_vendors”"
+"Konfiguracja „{}” używa wersji „1.0”, która nie obsługuje łączenia "
+"„equivalent_vendors” z „outgoing_vendors” i „incoming_vendors”"
 
 #: solv/vendor_change_manager.cpp:412 solv/vendor_change_manager.cpp:457
 #: solv/vendor_change_manager.cpp:509 solv/vendor_change_manager.cpp:734
@@ -1769,8 +1769,8 @@ msgid ""
 "Invalid 'value' \"{}\" in \"{}\" in table starting on line {}. Only "
 "\"true\", \"1\", \"false\", \"0\" are supported"
 msgstr ""
-"Nieprawidłowa wartość „{}” w „{}” w tabeli rozpoczynającej się od wiersza {}"
-". Obsługiwane są tylko wartości „prawda”, „1”, „fałsz” i „0”"
+"Nieprawidłowa wartość „{}” w „{}” w tabeli rozpoczynającej się od wiersza "
+"{}. Obsługiwane są tylko wartości „prawda”, „1”, „fałsz” i „0”"
 
 #: solv/vendor_change_manager.cpp:779 solv/vendor_change_manager.cpp:790
 #, c++-format
@@ -1897,8 +1897,8 @@ msgid ""
 "Invalid value '{}' for 'cmdline_repo' filter. Use 'true', '1', 'false', or "
 "'0'"
 msgstr ""
-"Nieprawidłowa wartość „{}” dla filtra „cmdline_repo”. Użyj wartości „true”, „"
-"1”, „false” lub „0”"
+"Nieprawidłowa wartość „{}” dla filtra „cmdline_repo”. Użyj wartości „true”, "
+"„1”, „false” lub „0”"
 
 #: solv/vendor_change_manager.cpp:1317
 #, c++-format
@@ -2137,8 +2137,8 @@ msgid ""
 "Action '{0}' '{1}' cannot be merged because it is already present at that "
 "point -> skipping it."
 msgstr ""
-"Nie można scalić akcji „{0}” „{1}”, ponieważ jest już obecna w tym "
-"momencie -> pominięto ją."
+"Nie można scalić akcji „{0}” „{1}”, ponieważ jest już obecna w tym momencie "
+"-> pominięto ją."
 
 #: transaction/transaction_merge.cpp:294
 #, c++-format
@@ -2241,39 +2241,39 @@ msgstr ""
 "Brak obowiązkowego klucza obiektu „group_id” w rpm z powodem „Grupa” i akcją "
 "„Powód zmiany”"
 
-#: utils/bootc.cpp:46
+#: utils/bootc.cpp:47
 #, c++-format
 msgid "Error checking bootc status: {}"
 msgstr "Błąd podczas sprawdzania stanu bootc: {}"
 
-#: utils/bootc.cpp:49
+#: utils/bootc.cpp:50
 #, c++-format
 msgid "Error checking bootc status: bootc command failed with exit code {}"
 msgstr ""
 "Błąd sprawdzania stanu bootc: polecenie bootc nie powiodło się z kodem "
 "wyjścia {}"
 
-#: utils/bootc.cpp:58
+#: utils/bootc.cpp:59
 msgid "Error checking bootc status: Failed to parse JSON output"
 msgstr ""
 "Błąd podczas sprawdzania stanu bootc: Nie udało się przeanalizować danych "
 "wyjściowych JSON"
 
-#: utils/bootc.cpp:73
+#: utils/bootc.cpp:74
 #, c++-format
 msgid "Failed to query status of bootc system: {}"
 msgstr "Nie udało się sprawdzić stanu systemu bootc: {}"
 
-#: utils/bootc.cpp:90
+#: utils/bootc.cpp:91
 msgid "Failed to stat /usr filesystem"
 msgstr "Nie udało się wykonać stat /usr"
 
-#: utils/bootc.cpp:125
+#: utils/bootc.cpp:127
 #, c++-format
 msgid "Error running `bootc usr-overlay --read-only`: {}"
 msgstr "Błąd podczas uruchamiania `bootc usr-overlay --read-only`: {}"
 
-#: utils/bootc.cpp:128
+#: utils/bootc.cpp:130
 #, c++-format
 msgid ""
 "Error running `bootc usr-overlay --read-only`: bootc command failed with "
@@ -2282,11 +2282,11 @@ msgstr ""
 "Błąd podczas uruchamiania `bootc usr-overlay --read-only`: polecenie bootc "
 "nie powiodło się z kodem wyjścia {}"
 
-#: utils/bootc.cpp:136
+#: utils/bootc.cpp:138
 msgid "Failed to unshare mount namespace"
 msgstr "Nie udało się zamontować w przestrzeni nazw"
 
-#: utils/bootc.cpp:143
+#: utils/bootc.cpp:146
 #, c++-format
 msgid "Failed to remount /usr as read-write: {}"
 msgstr "Nie udało się ponownie zamontować /usr do odczytu i zapisu: {}"

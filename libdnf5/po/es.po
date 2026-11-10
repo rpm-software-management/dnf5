@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-02 08:43+0000\n"
+"POT-Creation-Date: 2026-11-10 09:05+0000\n"
 "PO-Revision-Date: 2026-11-03 09:50+0000\n"
 "Last-Translator: GitHub webhook <noreply-webhook-github@weblate.org>\n"
 "Language-Team: Spanish <https://translate.fedoraproject.org/projects/dnf5/"
@@ -44,13 +44,13 @@ msgstr "Error durante transacción repite intérprete JSON : {}"
 msgid "Invalid option value: enabled={}"
 msgstr "Valor de opción no válida: enabled={}"
 
-#: base/goal.cpp:490
+#: base/goal.cpp:492
 #, c++-format
 msgid "Unsupported argument for REMOVE action: {}"
 msgstr "Argumento no soportado para acción REMOVE: {}"
 
 #. TODO(lukash) throw a proper exception
-#: base/goal.cpp:1741
+#: base/goal.cpp:1743
 #, c++-format
 msgid "Incorrect configuration value for multilib_policy: {}"
 msgstr "Valor de configuración incorrecto para multilib_policy: {}"
@@ -737,7 +737,8 @@ msgstr "Esta transacción ha sido ya ejecutada antes."
 
 #: base/transaction.cpp:90
 msgid "Cannot run transaction with resolving problems."
-msgstr "No se puede ejecutar transacción con problemas pendiente de resolución."
+msgstr ""
+"No se puede ejecutar transacción con problemas pendiente de resolución."
 
 #: base/transaction.cpp:91
 msgid "Rpm transaction check failed."
@@ -934,12 +935,14 @@ msgstr ""
 #, fuzzy, c++-format
 #| msgid "Failed to save xml document for group \"{}\" to file \"{}\": {}"
 msgid "Failed to save xml document for environment \"{}\" to file \"{}\": {}"
-msgstr "Incorrecto al guardar documento xml para grupo «{}» al archivo «{}»: {}"
+msgstr ""
+"Incorrecto al guardar documento xml para grupo «{}» al archivo «{}»: {}"
 
 #: comps/group/group.cpp:354
 #, c++-format
 msgid "Failed to save xml document for group \"{}\" to file \"{}\": {}"
-msgstr "Incorrecto al guardar documento xml para grupo «{}» al archivo «{}»: {}"
+msgstr ""
+"Incorrecto al guardar documento xml para grupo «{}» al archivo «{}»: {}"
 
 #: comps/group/package.cpp:118 comps/group/package.cpp:121
 #, c++-format
@@ -1165,8 +1168,8 @@ msgid ""
 "(\"{}\") is \"{}.{}\". API version in libdnf is \"{}.{}\"."
 msgstr ""
 "Combinación API de complemento no mantenido. La versión de API proporcionada "
-"por complemento «{}» («{}») es «{}.{}». La versión de API en libdnf es «{}.{}"
-"»."
+"por complemento «{}» («{}») es «{}.{}». La versión de API en libdnf es «{}."
+"{}»."
 
 #: plugin/plugins.cpp:93
 msgid "Failed to create a libdnf plugin instance"
@@ -1350,8 +1353,8 @@ msgstr "Error al cargar metadatos local para repositorio «{}»"
 msgid ""
 "No valid source (baseurl, mirrorlist or metalink) found for repository \"{}\""
 msgstr ""
-"Origen no válido (baseurl, listado espejo o metalink) encontrado para repo «"
-"{}»"
+"Origen no válido (baseurl, listado espejo o metalink) encontrado para repo "
+"«{}»"
 
 #: repo/repo_pgp.cpp:67
 #, c++-format
@@ -1395,7 +1398,8 @@ msgstr "Ha fallado al cargar primario para repo «{}» desde «{}»: {}."
 #: repo/solv_repo.cpp:324
 #, c++-format
 msgid "Unsupported extended repodata type for the system repo: \"{}\"."
-msgstr "Tipo de repodata extendido no mantenido para el repo del sistema: «{}»."
+msgstr ""
+"Tipo de repodata extendido no mantenido para el repo del sistema: «{}»."
 
 #: repo/solv_repo.cpp:396
 #, c++-format
@@ -2208,54 +2212,54 @@ msgid ""
 "Missing mandatory object key \"group_id\" in an rpm with reason \"Group\" "
 "and action \"Reason Change\""
 msgstr ""
-"Llave de objeto “group_id” mandatorio ausente dentro de un rpm con razón “"
-"Grupo” y acción “Cambio de Razón”"
+"Llave de objeto “group_id” mandatorio ausente dentro de un rpm con razón "
+"“Grupo” y acción “Cambio de Razón”"
 
-#: utils/bootc.cpp:46
+#: utils/bootc.cpp:47
 #, c++-format
 msgid "Error checking bootc status: {}"
 msgstr ""
 
-#: utils/bootc.cpp:49
+#: utils/bootc.cpp:50
 #, c++-format
 msgid "Error checking bootc status: bootc command failed with exit code {}"
 msgstr ""
 
-#: utils/bootc.cpp:58
+#: utils/bootc.cpp:59
 msgid "Error checking bootc status: Failed to parse JSON output"
 msgstr ""
 
-#: utils/bootc.cpp:73
+#: utils/bootc.cpp:74
 #, fuzzy, c++-format
 #| msgid "Failed to update from string: {}"
 msgid "Failed to query status of bootc system: {}"
 msgstr "Incorrecto al actualizar desde cadena: {}"
 
-#: utils/bootc.cpp:90
+#: utils/bootc.cpp:91
 #, fuzzy
 #| msgid "Failed to download files"
 msgid "Failed to stat /usr filesystem"
 msgstr "Incorrecto al descargar archivos"
 
-#: utils/bootc.cpp:125
+#: utils/bootc.cpp:127
 #, c++-format
 msgid "Error running `bootc usr-overlay --read-only`: {}"
 msgstr ""
 
-#: utils/bootc.cpp:128
+#: utils/bootc.cpp:130
 #, c++-format
 msgid ""
 "Error running `bootc usr-overlay --read-only`: bootc command failed with "
 "exit code {}"
 msgstr ""
 
-#: utils/bootc.cpp:136
+#: utils/bootc.cpp:138
 #, fuzzy
 #| msgid "Failed to execute uname()"
 msgid "Failed to unshare mount namespace"
 msgstr "Incorrecto al ejecutar uname()"
 
-#: utils/bootc.cpp:143
+#: utils/bootc.cpp:146
 #, fuzzy, c++-format
 #| msgid "Failed to resolve module metadata: {}"
 msgid "Failed to remount /usr as read-write: {}"
@@ -2448,7 +2452,8 @@ msgstr "Vinculando valor integer64 a enunciado SQL incorrecto: “{}”"
 #: utils/sqlite3/sqlite3.cpp:35
 #, c++-format
 msgid "Binding unsigned integer32 value to SQL statement failed: \"{}\""
-msgstr "Vinculando valor integer32 sin signo a declaración SQL incorrecta: “{}”"
+msgstr ""
+"Vinculando valor integer32 sin signo a declaración SQL incorrecta: “{}”"
 
 #: utils/sqlite3/sqlite3.cpp:37
 #, c++-format

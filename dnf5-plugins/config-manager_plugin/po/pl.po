@@ -8,9 +8,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-02 08:43+0000\n"
-"PO-Revision-Date: 2026-11-03 09:46+0000\n"
-"Last-Translator: Paweł Marciniak <sunwire+fas@gmail.com>\n"
+"POT-Creation-Date: 2026-11-10 09:05+0000\n"
+"PO-Revision-Date: 2026-11-07 18:18+0000\n"
+"Last-Translator: Tomasz Bojanowski <tomasz@bojanowski.me>\n"
 "Language-Team: Polish <https://translate.fedoraproject.org/projects/dnf5/"
 "dnf5-plugin-config-manager/pl/>\n"
 "Language: pl\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 2026.11\n"
+"X-Generator: Weblate 2026.11.1\n"
 
 #: addrepo.cpp:115
 #, c++-format
@@ -109,7 +109,8 @@ msgstr ""
 #: addrepo.cpp:453 addrepo.cpp:479
 #, c++-format
 msgid "A repository with id \"{}\" already configured in file: {}"
-msgstr "Repozytorium o identyfikatorze „{}” jest już skonfigurowane w pliku: {}"
+msgstr ""
+"Repozytorium o identyfikatorze „{}” jest już skonfigurowane w pliku: {}"
 
 #: addrepo.cpp:465 shared.hpp:156
 #, c++-format
@@ -117,79 +118,85 @@ msgid "Cannot read repositories from directory \"{}\": {}"
 msgstr "Nie można odczytać repozytoriów z katalogu „{}”: {}"
 
 #: addvendorpolicy.cpp:23
-#, fuzzy
 msgid "Add a vendor change policy from a TOML file or compact format string"
 msgstr ""
-"Dodaj politykę zmiany dostawcy z pliku TOML lub kompaktowego formatu ciągu "
-"znaków"
+"Dodaj zasady zmiany dostawcy z pliku TOML lub ciągu w formacie kompaktowym"
 
 #: addvendorpolicy.cpp:29
 msgid "Policy base filename (without .conf extension)"
-msgstr ""
+msgstr "Bazowa nazwa pliku zasad (bez rozszerzenia .conf)"
 
 #: addvendorpolicy.cpp:40
 msgid "URL or local path to the source TOML policy file"
-msgstr ""
+msgstr "Adres URL lub lokalna ścieżka do źródłowego pliku zasad TOML"
 
 #: addvendorpolicy.cpp:52
 msgid "Vendor change policy in compact format"
-msgstr ""
+msgstr "Zasady zmiany dostawcy w formacie kompaktowym"
 
 #: addvendorpolicy.cpp:64
 msgid "Allow masking a distribution policy"
-msgstr ""
+msgstr "Zezwalaj na maskowanie zasad dystrybucji"
 
 #: addvendorpolicy.cpp:73
 msgid "Allow replacing an existing policy file"
-msgstr ""
+msgstr "Zezwalaj na zastąpienie istniejącego pliku zasad"
 
 #: addvendorpolicy.cpp:82
 msgid "Require that the new policy masks a distribution policy"
-msgstr ""
+msgstr "Wymagaj, aby nowe zasady maskowały zasady dystrybucji"
 
 #: addvendorpolicy.cpp:94
 msgid "Require that the new policy replaces an existing system policy file"
-msgstr ""
+msgstr "Wymagaj, aby nowe zasady zastąpiły istniejący systemowy plik zasad"
 
 #: addvendorpolicy.cpp:123
 msgid "Option \"{option}\" with nonempty value is required"
-msgstr ""
+msgstr "Wymagana jest opcja „{option}” z niepustą wartością"
 
 #: addvendorpolicy.cpp:129
 msgid "Either \"{option1}\" or non-empty \"{option2}\" is required"
-msgstr ""
+msgstr "Wymagana jest opcja „{option1}” albo niepusta opcja „{option2}”"
 
 #: addvendorpolicy.cpp:142
 msgid ""
 "Policy file \"{path}\" already exists. Use \"{option}\" to allow replacing "
 "it."
 msgstr ""
+"Plik zasad „{path}” już istnieje. Użyj opcji „{option}”, aby zezwolić na "
+"jego zastąpienie."
 
 #: addvendorpolicy.cpp:150
 msgid ""
 "Distribution policy \"{name}\" already exists. Use \"{option}\" to allow "
 "masking it."
 msgstr ""
+"Zasady dystrybucji „{name}” już istnieją. Użyj opcji „{option}”, aby "
+"zezwolić na ich zamaskowanie."
 
 #: addvendorpolicy.cpp:165
 msgid ""
 "Cannot add policy: option \"{option}\" requires masking a distribution "
 "policy, but no distribution policy named \"{name}\" exists."
 msgstr ""
+"Nie można dodać zasad: opcja „{option}” wymaga zamaskowania zasad "
+"dystrybucji, ale nie istnieją zasady dystrybucji o nazwie „{name}”."
 
 #: addvendorpolicy.cpp:172
 msgid ""
 "Cannot add policy: option \"{option}\" requires replacing an existing system "
 "policy, but no system policy file named \"{name}\" exists."
 msgstr ""
+"Nie można dodać zasad: opcja „{option}” wymaga zastąpienia istniejących "
+"zasad systemowych, ale nie istnieje systemowy plik zasad o nazwie „{name}”."
 
 #: addvendorpolicy.cpp:191 addvendorpolicy.cpp:215 addvendorpolicy.cpp:244
 msgid "Replaced vendor policy file: {path}"
-msgstr ""
+msgstr "Zastąpiono plik zasad dostawcy: {path}"
 
 #: addvendorpolicy.cpp:196
 msgid "Created vendor policy file: {path}"
-msgstr ""
+msgstr "Utworzono plik zasad dostawcy: {path}"
 
 #: addvendorpolicy.cpp:204
 msgid "Source file does not exist: {path}"
@@ -197,15 +204,15 @@ msgstr "Plik źródłowy nie istnieje: {path}"
 
 #: addvendorpolicy.cpp:222 addvendorpolicy.cpp:251
 msgid "Saved vendor policy file: {path}"
-msgstr ""
+msgstr "Zapisano plik zasad dostawcy: {path}"
 
 #: addvendorpolicy.cpp:260
 msgid "Masked distribution policy file: {path}"
-msgstr ""
+msgstr "Zamaskowano plik zasad dystrybucji: {path}"
 
 #: addvendorpolicy.cpp:264
 msgid "Failed to add vendor policy"
-msgstr ""
+msgstr "Nie udało się dodać zasad dostawcy"
 
 #: config-manager.cpp:47
 msgid "Manage configuration"
@@ -213,23 +220,23 @@ msgstr "Zarządzaj konfiguracją"
 
 #: listvendorpolicies.cpp:27
 msgid "List vendor change policy files"
-msgstr ""
+msgstr "Wyświetl listę plików zasad zmiany dostawcy"
 
 #: listvendorpolicies.cpp:33 removevendorpolicy.cpp:29
 msgid "Policy base filename pattern (supports globs)"
-msgstr ""
+msgstr "Wzorzec bazowej nazwy pliku zasad (obsługuje wzorce glob)"
 
 #: listvendorpolicies.cpp:42
 msgid "Show detailed information about the policies"
-msgstr ""
+msgstr "Pokaż szczegółowe informacje o zasadach"
 
 #: listvendorpolicies.cpp:61 removevendorpolicy.cpp:49
 msgid "No vendor policy files found"
-msgstr ""
+msgstr "Nie odnaleziono plików zasad dostawcy"
 
 #: listvendorpolicies.cpp:80 removevendorpolicy.cpp:63
 msgid "No matching vendor policy files found for pattern: {pattern}"
-msgstr ""
+msgstr "Nie odnaleziono plików zasad dostawcy pasujących do wzorca: {pattern}"
 
 #. Note for translators: This is a right-aligned column separator in
 #. a package properties table as in "Name    : bash".
@@ -268,7 +275,7 @@ msgstr "Maskowane przez"
 
 #: listvendorpolicies.cpp:174
 msgid "<conversion failed: {what}>"
-msgstr ""
+msgstr "<konwersja się nie powiodła: {what}>"
 
 #: listvendorpolicies.cpp:178 listvendorpolicies.cpp:183
 msgid "Compact"
@@ -276,24 +283,26 @@ msgstr "Kompaktuj"
 
 #: removevendorpolicy.cpp:23
 msgid "Remove vendor change policy files"
-msgstr ""
+msgstr "Usuń pliki zasad zmiany dostawcy"
 
 #: removevendorpolicy.cpp:74
 msgid "Removed vendor policy file: {path}"
-msgstr ""
+msgstr "Usunięto plik zasad dostawcy: {path}"
 
 #: removevendorpolicy.cpp:78
 msgid "Unmasked distribution policy file: {path}"
-msgstr ""
+msgstr "Odmaskowano plik zasad dystrybucji: {path}"
 
 #: removevendorpolicy.cpp:83
 msgid "Failed to remove policy file: {path}"
-msgstr ""
+msgstr "Nie udało się usunąć pliku zasad: {path}"
 
 #: removevendorpolicy.cpp:87
 msgid ""
 "Cannot remove distribution policy file \"{path}\". To mask it, use: {command}"
 msgstr ""
+"Nie można usunąć pliku zasad dystrybucji „{path}”. Aby go zamaskować, użyj "
+"polecenia: {command}"
 
 #: repos.cpp:56 setopt.cpp:140
 #, c++-format

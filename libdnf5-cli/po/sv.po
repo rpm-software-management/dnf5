@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-02 08:43+0000\n"
+"POT-Creation-Date: 2026-11-10 09:05+0000\n"
 "PO-Revision-Date: 2026-11-03 09:38+0000\n"
 "Last-Translator: Luna Jernberg <bittin@reimu.nl>\n"
 "Language-Team: Swedish <https://translate.fedoraproject.org/projects/dnf5/"
@@ -111,7 +111,8 @@ msgstr "Kommando-id \"{}\" innehåller inte underkommando med id \"{}\""
 #: argument_parser.cpp:1063
 #, c++-format
 msgid "Command id \"{}\" does not contain named argument with id \"{}\""
-msgstr "Kommando-id \"{}\" innehåller inte ett namngivet argument med id \"{}\""
+msgstr ""
+"Kommando-id \"{}\" innehåller inte ett namngivet argument med id \"{}\""
 
 #: argument_parser.cpp:1071
 #, c++-format

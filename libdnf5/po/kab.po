@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-02 08:43+0000\n"
+"POT-Creation-Date: 2026-11-10 09:05+0000\n"
 "PO-Revision-Date: 2026-11-03 09:44+0000\n"
 "Last-Translator: Massii Aqvayli <massiin@proton.me>\n"
 "Language-Team: Kabyle <https://translate.fedoraproject.org/projects/dnf5/"
@@ -42,13 +42,13 @@ msgstr "Tuccḍa deg ufaylu n twila \"{}\""
 msgid "Invalid option value: enabled={}"
 msgstr "Azal n uɣewwaṛ d armeɣtu: yermed={}"
 
-#: base/goal.cpp:490
+#: base/goal.cpp:492
 #, c++-format
 msgid "Unsupported argument for REMOVE action: {}"
 msgstr "Afakul ur yettwasefrak ara i tigawt KKES: {}"
 
 #. TODO(lukash) throw a proper exception
-#: base/goal.cpp:1741
+#: base/goal.cpp:1743
 #, c++-format
 msgid "Incorrect configuration value for multilib_policy: {}"
 msgstr "Azal n twila mačči d ameɣtu i multilib_policy: {}"
@@ -390,8 +390,8 @@ msgid ""
 "The operation would result in switching of module '{0}' stream '{1}' to "
 "stream '{2}'\n"
 msgstr ""
-"Tamhelt-a ad d-teglu s usnifel n usuddem '{1}' uzegrir '{0}' ɣer usuddem '{2}"
-"'\n"
+"Tamhelt-a ad d-teglu s usnifel n usuddem '{1}' uzegrir '{0}' ɣer usuddem "
+"'{2}'\n"
 
 #: base/log_event.cpp:342
 msgid ""
@@ -793,7 +793,8 @@ msgid "Warning: skipped OpenPGP checks for {0} package from repositories: {1}"
 msgid_plural ""
 "Warning: skipped OpenPGP checks for {0} packages from repositories: {1}"
 msgstr[0] "Ɣur-k·m: yettwazgel uselken OpenPGP i {0} ukemmus seg ikufiyen: {1}"
-msgstr[1] "Ɣur-k·m: yettwazgel uselken OpenPGP i {0} ikemmusen seg ikufiyen: {1}"
+msgstr[1] ""
+"Ɣur-k·m: yettwazgel uselken OpenPGP i {0} ikemmusen seg ikufiyen: {1}"
 
 #: base/vendor_change_manager.cpp:115
 #, fuzzy
@@ -2096,50 +2097,50 @@ msgid ""
 "and action \"Reason Change\""
 msgstr ""
 
-#: utils/bootc.cpp:46
+#: utils/bootc.cpp:47
 #, c++-format
 msgid "Error checking bootc status: {}"
 msgstr ""
 
-#: utils/bootc.cpp:49
+#: utils/bootc.cpp:50
 #, c++-format
 msgid "Error checking bootc status: bootc command failed with exit code {}"
 msgstr ""
 
-#: utils/bootc.cpp:58
+#: utils/bootc.cpp:59
 msgid "Error checking bootc status: Failed to parse JSON output"
 msgstr ""
 
-#: utils/bootc.cpp:73
+#: utils/bootc.cpp:74
 #, c++-format
 msgid "Failed to query status of bootc system: {}"
 msgstr ""
 
-#: utils/bootc.cpp:90
+#: utils/bootc.cpp:91
 #, fuzzy
 #| msgid "Failed to download files"
 msgid "Failed to stat /usr filesystem"
 msgstr "Asider n ifuyla ur yeddi ara"
 
-#: utils/bootc.cpp:125
+#: utils/bootc.cpp:127
 #, c++-format
 msgid "Error running `bootc usr-overlay --read-only`: {}"
 msgstr ""
 
-#: utils/bootc.cpp:128
+#: utils/bootc.cpp:130
 #, c++-format
 msgid ""
 "Error running `bootc usr-overlay --read-only`: bootc command failed with "
 "exit code {}"
 msgstr ""
 
-#: utils/bootc.cpp:136
+#: utils/bootc.cpp:138
 #, fuzzy
 #| msgid "Failed to execute uname()"
 msgid "Failed to unshare mount namespace"
 msgstr "Yecceḍ uselkem n uname()"
 
-#: utils/bootc.cpp:143
+#: utils/bootc.cpp:146
 #, c++-format
 msgid "Failed to remount /usr as read-write: {}"
 msgstr ""

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-02 08:43+0000\n"
+"POT-Creation-Date: 2026-11-10 09:05+0000\n"
 "PO-Revision-Date: 2026-11-03 09:59+0000\n"
 "Last-Translator: Efstathios Iosifidis <eiosifidis@yandex.com>\n"
 "Language-Team: Greek <https://translate.fedoraproject.org/projects/dnf5/dnf5-"
@@ -122,7 +122,8 @@ msgstr ""
 
 #: copr_debug.cpp:30
 msgid "print useful info about the system, useful for debugging"
-msgstr "εκτύπωση χρήσιμων πληροφοριών για το σύστημα, χρήσιμο για αποσφαλμάτωση"
+msgstr ""
+"εκτύπωση χρήσιμων πληροφοριών για το σύστημα, χρήσιμο για αποσφαλμάτωση"
 
 #: copr_disable.cpp:35
 #, c++-format

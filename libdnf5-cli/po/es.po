@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-02 08:43+0000\n"
+"POT-Creation-Date: 2026-11-10 09:05+0000\n"
 "PO-Revision-Date: 2026-11-03 09:50+0000\n"
 "Last-Translator: \"Fco. Javier F. Serrador\" <fserrador@gmail.com>\n"
 "Language-Team: Spanish <https://translate.fedoraproject.org/projects/dnf5/"
@@ -97,7 +97,8 @@ msgstr "ID del argumento nombrado “{}” ya registrado para la instrucción �
 #: argument_parser.cpp:1018
 #, c++-format
 msgid "Positional argument id \"{}\" already registered for command \"{}\""
-msgstr "ID del argumento posicional “{}” ya registrado para la instrucción “{}”"
+msgstr ""
+"ID del argumento posicional “{}” ya registrado para la instrucción “{}”"
 
 #: argument_parser.cpp:1028
 #, c++-format
@@ -107,7 +108,8 @@ msgstr "ID del grupo “{}” ya registrado para la instrucción “{}”"
 #: argument_parser.cpp:1055
 #, c++-format
 msgid "Command id \"{}\" does not contain subcommand with id \"{}\""
-msgstr "El ID de instrucción “{}” no contiene un sub‐instrucción con el ID “{}”"
+msgstr ""
+"El ID de instrucción “{}” no contiene un sub‐instrucción con el ID “{}”"
 
 #: argument_parser.cpp:1063
 #, c++-format

@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-02 08:43+0000\n"
+"POT-Creation-Date: 2026-11-10 09:05+0000\n"
 "PO-Revision-Date: 2026-11-03 09:42+0000\n"
 "Last-Translator: Mario Blättermann <mario.blaettermann@gmail.com>\n"
 "Language-Team: German <https://translate.fedoraproject.org/projects/dnf5/"
@@ -103,8 +103,8 @@ msgstr "ID „{}“ von benanntem Argument ist bereits registriert für Befehl �
 #, c++-format
 msgid "Positional argument id \"{}\" already registered for command \"{}\""
 msgstr ""
-"ID „{}“ von positionsabhängigem Argument ist bereits registriert für Befehl „"
-"{}“"
+"ID „{}“ von positionsabhängigem Argument ist bereits registriert für Befehl "
+"„{}“"
 
 #: argument_parser.cpp:1028
 #, c++-format

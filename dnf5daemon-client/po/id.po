@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-02 08:43+0000\n"
+"POT-Creation-Date: 2026-11-10 09:05+0000\n"
 "PO-Revision-Date: 2026-11-03 10:00+0000\n"
 "Last-Translator: Arif Budiman <arifpedia@gmail.com>\n"
 "Language-Team: Indonesian <https://translate.fedoraproject.org/projects/dnf5/"
@@ -34,7 +34,8 @@ msgstr "Daftar advisori"
 
 #: commands/advisory/arguments.hpp:32
 msgid "Show advisories containing any version of installed packages."
-msgstr "Tampilkan advisori yang berisi versi apa pun dari paket yang terpasang."
+msgstr ""
+"Tampilkan advisori yang berisi versi apa pun dari paket yang terpasang."
 
 #: commands/advisory/arguments.hpp:43
 msgid ""

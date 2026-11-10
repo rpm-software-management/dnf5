@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-02 08:43+0000\n"
+"POT-Creation-Date: 2026-11-10 09:05+0000\n"
 "PO-Revision-Date: 2026-11-03 09:46+0000\n"
 "Last-Translator: GitHub webhook <noreply-webhook-github@weblate.org>\n"
 "Language-Team: Finnish <https://translate.fedoraproject.org/projects/dnf5/"
@@ -80,7 +80,8 @@ msgstr "Puuttuva komento"
 #, fuzzy, c++-format
 #| msgid "Synax error: Missing equal sign (=) in action output line: {}"
 msgid "Syntax error: Missing equal sign (=) in action output line: {}"
-msgstr "Syntaksivirhe: puuttuu yhtäläisyysmerkki (=) toiminnan lähtörivillä: {}"
+msgstr ""
+"Syntaksivirhe: puuttuu yhtäläisyysmerkki (=) toiminnan lähtörivillä: {}"
 
 #: actions.cpp:957
 #, c++-format

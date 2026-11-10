@@ -11,9 +11,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-02 08:43+0000\n"
-"PO-Revision-Date: 2026-11-03 09:41+0000\n"
-"Last-Translator: Léane GRASSER <leane.grasser@proton.me>\n"
+"POT-Creation-Date: 2026-11-10 09:05+0000\n"
+"PO-Revision-Date: 2026-11-05 09:18+0000\n"
+"Last-Translator: blutch112 <vincent.lefebvre59@gmail.com>\n"
 "Language-Team: French <https://translate.fedoraproject.org/projects/dnf5/"
 "libdnf5/fr/>\n"
 "Language: fr\n"
@@ -46,13 +46,13 @@ msgstr "Erreur lors de l'analyse des informations de transaction : {}"
 msgid "Invalid option value: enabled={}"
 msgstr "Valeur d'option invalide : enabled={}"
 
-#: base/goal.cpp:490
+#: base/goal.cpp:492
 #, c++-format
 msgid "Unsupported argument for REMOVE action: {}"
 msgstr "Argument non pris en charge pour l'action REMOVE : {}"
 
 #. TODO(lukash) throw a proper exception
-#: base/goal.cpp:1741
+#: base/goal.cpp:1743
 #, c++-format
 msgid "Incorrect configuration value for multilib_policy: {}"
 msgstr "Valeur de configuration pour multilib_policy incorrecte : {}"
@@ -309,8 +309,8 @@ msgid ""
 "the same version, available versions: {1}, cannot reinstall."
 msgstr ""
 "Les paquets installés correspondant à l'argument '{0}' ne sont pas "
-"disponibles dans la même version dans les dépôts, versions disponibles : {1}"
-", réinstallation impossible."
+"disponibles dans la même version dans les dépôts, versions disponibles : "
+"{1}, réinstallation impossible."
 
 #: base/log_event.cpp:235
 #, c++-format
@@ -573,7 +573,8 @@ msgstr "le paquet {0} de {1} entre en conflit avec {2}, fourni par {3} de {4}"
 #: base/solver_problems.cpp:60
 #, c++-format
 msgid "installed package {0} conflicts with {1} provided by {2} from {3}"
-msgstr "le paquet installé {0} entre en conflit avec {1}, fourni par {2} de {3}"
+msgstr ""
+"le paquet installé {0} entre en conflit avec {1}, fourni par {2} de {3}"
 
 #: base/solver_problems.cpp:61
 #, c++-format
@@ -616,7 +617,8 @@ msgstr "le paquet {0} de {1} entre en conflit avec {2}, fourni par lui-même"
 #: base/solver_problems.cpp:70
 #, c++-format
 msgid "both package {0} from {1} and {3} from {4} obsolete {2}"
-msgstr "les paquets {0} de {1} et {3} de {4} rendent tous les deux {2} obsolète"
+msgstr ""
+"les paquets {0} de {1} et {3} de {4} rendent tous les deux {2} obsolète"
 
 #: base/solver_problems.cpp:72
 #, c++-format
@@ -742,7 +744,8 @@ msgstr "Cette transaction a déjà été exécutée par le passé."
 
 #: base/transaction.cpp:90
 msgid "Cannot run transaction with resolving problems."
-msgstr "Impossible d'exécuter une transaction avec des problèmes de résolution."
+msgstr ""
+"Impossible d'exécuter une transaction avec des problèmes de résolution."
 
 #: base/transaction.cpp:91
 msgid "Rpm transaction check failed."
@@ -860,7 +863,7 @@ msgstr "{func}() : impossible de supprimer le fichier {path} : {msg}"
 
 #: base/vendor_change_manager.cpp:170
 msgid "{func}(): File does not exist: {path}"
-msgstr ""
+msgstr "{func}() : Le fichier n'existe pas : {path}"
 
 #: base/vendor_change_manager.cpp:259
 msgid "{func}(): Cannot remove existing policy file: {path}"
@@ -869,7 +872,7 @@ msgstr ""
 
 #: base/vendor_change_manager.cpp:271
 msgid "{func}(): Cannot create file: {path}"
-msgstr ""
+msgstr "{func}() : impossible de créer le fichier : {path}"
 
 #: base/vendor_change_manager.cpp:288
 msgid "{func}(): Cannot write to file: {path}"
@@ -1140,7 +1143,8 @@ msgstr "Échec de la mise à jour des flux : {}"
 #: module/module_sack.cpp:93
 #, c++-format
 msgid "Failed to load module metadata for repository \"{}\": {}"
-msgstr "Échec du chargement des métadonnées de module pour le dépôt \"{}\" : {}"
+msgstr ""
+"Échec du chargement des métadonnées de module pour le dépôt \"{}\" : {}"
 
 #: module/module_sack.cpp:594
 msgid "Missing '='"
@@ -1193,7 +1197,8 @@ msgstr "get_unique_id(): Échec du calcul du SHA256"
 
 #: repo/file_downloader.cpp:154
 msgid "Cannot download files, cacheonly option is activated."
-msgstr "Impossible de télécharger les fichiers, l'option cacheonly est activée."
+msgstr ""
+"Impossible de télécharger les fichiers, l'option cacheonly est activée."
 
 #: repo/file_downloader.cpp:216
 msgid "Failed to download files"
@@ -1564,8 +1569,8 @@ msgstr ""
 #, c++-format
 msgid "Failed to read package header, cannot open file \"{}\": {}"
 msgstr ""
-"Échec de la lecture de l'en-tête de paquet, impossible d'ouvrir le fichier \""
-"{}\" : {}"
+"Échec de la lecture de l'en-tête de paquet, impossible d'ouvrir le fichier "
+"\"{}\" : {}"
 
 #: rpm/transaction.cpp:329
 #, c++-format
@@ -1730,7 +1735,7 @@ msgstr ""
 #: solv/vendor_change_manager.cpp:719
 #, c++-format
 msgid "Unknown 'filter' \"{}\" in \"{}\" on line {}"
-msgstr ""
+msgstr "« filter » « {} » inconnu dans « {} » à la ligne {}"
 
 #: solv/vendor_change_manager.cpp:740
 #, c++-format
@@ -2074,7 +2079,8 @@ msgstr ""
 #: transaction/transaction_merge.cpp:215
 #, c++-format
 msgid "Unexpected action encountered: '{0}' during transaction merge."
-msgstr "Action inattendue : '{0}' rencontrée pendant la fusion de transactions."
+msgstr ""
+"Action inattendue : '{0}' rencontrée pendant la fusion de transactions."
 
 #: transaction/transaction_merge.cpp:224
 #, c++-format
@@ -2216,46 +2222,46 @@ msgstr ""
 "Clé d'objet obligatoire \"group_id\" manquante dans un rpm ayant pour motif "
 "\"Group\" et pour action \"Changer le motif\""
 
-#: utils/bootc.cpp:46
+#: utils/bootc.cpp:47
 #, c++-format
 msgid "Error checking bootc status: {}"
 msgstr ""
 
-#: utils/bootc.cpp:49
+#: utils/bootc.cpp:50
 #, c++-format
 msgid "Error checking bootc status: bootc command failed with exit code {}"
 msgstr ""
 
-#: utils/bootc.cpp:58
+#: utils/bootc.cpp:59
 msgid "Error checking bootc status: Failed to parse JSON output"
 msgstr ""
 
-#: utils/bootc.cpp:73
+#: utils/bootc.cpp:74
 #, c++-format
 msgid "Failed to query status of bootc system: {}"
 msgstr "Échec de la consultation du statut du système bootc : {}"
 
-#: utils/bootc.cpp:90
+#: utils/bootc.cpp:91
 msgid "Failed to stat /usr filesystem"
 msgstr "Impossible d'analyser le système de fichiers /usr"
 
-#: utils/bootc.cpp:125
+#: utils/bootc.cpp:127
 #, c++-format
 msgid "Error running `bootc usr-overlay --read-only`: {}"
 msgstr ""
 
-#: utils/bootc.cpp:128
+#: utils/bootc.cpp:130
 #, c++-format
 msgid ""
 "Error running `bootc usr-overlay --read-only`: bootc command failed with "
 "exit code {}"
 msgstr ""
 
-#: utils/bootc.cpp:136
+#: utils/bootc.cpp:138
 msgid "Failed to unshare mount namespace"
 msgstr "Impossible d'annuler le partage d'un espace de nom de montage"
 
-#: utils/bootc.cpp:143
+#: utils/bootc.cpp:146
 #, c++-format
 msgid "Failed to remount /usr as read-write: {}"
 msgstr "Échec du remontage de /usr en lecture-écriture : {}"
@@ -2452,8 +2458,8 @@ msgstr ""
 #, c++-format
 msgid "Binding double value to SQL statement failed: \"{}\""
 msgstr ""
-"Échec de l'association d'une valeur de type double à une déclaration SQL : \""
-"{}\""
+"Échec de l'association d'une valeur de type double à une déclaration SQL : "
+"\"{}\""
 
 #: utils/sqlite3/sqlite3.cpp:39
 #, c++-format
@@ -2529,11 +2535,11 @@ msgstr ""
 
 #: utils/subprocess.cpp:173
 msgid "cannot bind child stdin"
-msgstr ""
+msgstr "impossible de lier l'entrée standard (stdin) du processus enfant"
 
 #: utils/subprocess.cpp:175
 msgid "cannot bind child stdout"
-msgstr ""
+msgstr "impossible de lier la sortie standard (stdout) du processus enfant"
 
 #: utils/subprocess.cpp:177
 msgid "cannot bind child stderr"

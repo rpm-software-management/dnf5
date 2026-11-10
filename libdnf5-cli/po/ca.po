@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-02 08:43+0000\n"
-"PO-Revision-Date: 2026-11-02 10:26+0000\n"
+"POT-Creation-Date: 2026-11-10 09:05+0000\n"
+"PO-Revision-Date: 2026-11-05 09:18+0000\n"
 "Last-Translator: David Medina <dmedinacpnl@gmail.com>\n"
 "Language-Team: Catalan <https://translate.fedoraproject.org/projects/dnf5/"
 "libdnf5-cli/ca/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 2026.10.1\n"
+"X-Generator: Weblate 2026.11\n"
 
 #: argument_parser.cpp:68
 #, c++-format
@@ -92,8 +92,8 @@ msgstr "L'identificador d'ordre \"{}\" ja s'ha registrat a l'ordre \"{}\""
 #, c++-format
 msgid "Named argument id \"{}\" already registered for command \"{}\""
 msgstr ""
-"L'identificador d'argument anomenat \"{}\" ja s'ha registrat per a l'ordre \""
-"{}\""
+"L'identificador d'argument anomenat \"{}\" ja s'ha registrat per a l'ordre "
+"\"{}\""
 
 #: argument_parser.cpp:1018
 #, c++-format
@@ -297,24 +297,24 @@ msgstr "Resum de l'operació:\n"
 #, c++-format
 msgid " Installing:      {:4} package\n"
 msgid_plural " Installing:      {:4} packages\n"
-msgstr[0] " Instal·lació: paquet {:4}\n"
-msgstr[1] " Instal·lació: {:4} paquets\n"
+msgstr[0] " S'instal·la el paquet {:4}\n"
+msgstr[1] " S'instal·len {:4} paquets\n"
 
 #. Keep the replaceble number aligned across all messages.
 #: output/transaction_table.cpp:143
 #, c++-format
 msgid " Reinstalling:    {:4} package\n"
 msgid_plural " Reinstalling:    {:4} packages\n"
-msgstr[0] " Reinstal·lació: paquet {:4}\n"
-msgstr[1] " Reinstal·lació: {:4} paquets\n"
+msgstr[0] " Es reinstal·la el paquet {:4}\n"
+msgstr[1] " Es reinstal·len {:4} paquets\n"
 
 #. Keep the replaceble number aligned across all messages.
 #: output/transaction_table.cpp:152
 #, c++-format
 msgid " Upgrading:       {:4} package\n"
 msgid_plural " Upgrading:       {:4} packages\n"
-msgstr[0] " Actualització: paquet {:4}\n"
-msgstr[1] " Actualització: {:4} paquets\n"
+msgstr[0] " S'actualitza el paquet {:4}\n"
+msgstr[1] " S'actualitzen {:4} paquets\n"
 
 #. Keep the replaceble number aligned across all messages.
 #: output/transaction_table.cpp:161
@@ -329,32 +329,32 @@ msgstr[1] " Substitució: {:4} paquets\n"
 #, c++-format
 msgid " Removing:        {:4} package\n"
 msgid_plural " Removing:        {:4} packages\n"
-msgstr[0] " S'està suprimint: paquet {:4}\n"
-msgstr[1] " S'estan eliminant: {:4} paquets\n"
+msgstr[0] " Se suprimeix el paquet {:4}\n"
+msgstr[1] " S'e suprimeixen {:4} paquets\n"
 
 #. Keep the replaceble number aligned across all messages.
 #: output/transaction_table.cpp:179
 #, c++-format
 msgid " Downgrading:     {:4} package\n"
 msgid_plural " Downgrading:     {:4} packages\n"
-msgstr[0] " S'està desactualitzant: paquet {:4}\n"
-msgstr[1] " S'estan desactualitzant: {:4} paquets\n"
+msgstr[0] " Es degrada el paquet {:4}\n"
+msgstr[1] " Es degraden {:4} paquets\n"
 
 #. Keep the replaceble number aligned across all messages.
 #: output/transaction_table.cpp:188
 #, c++-format
 msgid " Changing reason: {:4} package\n"
 msgid_plural " Changing reason: {:4} packages\n"
-msgstr[0] " S'està canviant el motiu: {:4} paquet\n"
-msgstr[1] " S'està canviant la raó: {:4} paquets\n"
+msgstr[0] " Se'n canvia la raó: {:4} paquet\n"
+msgstr[1] " Se'n canvia la raó: {:4} paquets\n"
 
 #. Keep the replaceble number aligned across all messages.
 #: output/transaction_table.cpp:197
 #, c++-format
 msgid " Skipping:        {:4} package\n"
 msgid_plural " Skipping:        {:4} packages\n"
-msgstr[0] " S'està ignorant: paquet {:4}\n"
-msgstr[1] " S'estan ignorant: {:4} paquets\n"
+msgstr[0] " S'ignora el paquet {:4}\n"
+msgstr[1] " S'ignoren {:4} paquets\n"
 
 #: output/transaction_table.cpp:279 output/transactioninfo.cpp:74
 msgid "Package"
@@ -377,7 +377,7 @@ msgstr "{} -} {}"
 #: output/transaction_table.cpp:381
 #, c++-format
 msgid "replacing {}"
-msgstr "s'està substituint {}"
+msgstr "se substitueix {}"
 
 #: output/transaction_table.cpp:423 output/transaction_table.cpp:451
 msgid " <name-unset>"
@@ -389,7 +389,7 @@ msgstr "reemplaçament "
 
 #: output/transaction_table.cpp:495
 msgid "Skipping packages with conflicts:"
-msgstr "S'estan ometent els paquets amb conflictes:"
+msgstr "S'ometen els paquets amb conflictes:"
 
 #: output/transaction_table.cpp:497
 msgid "Skipping packages with broken dependencies:"
@@ -397,55 +397,55 @@ msgstr "S'ometen els paquets amb dependències trencades:"
 
 #: output/transaction_table.cpp:559
 msgid "Installing dependencies:"
-msgstr "S'estan instal·lant dependències:"
+msgstr "S'instal·len dependències:"
 
 #: output/transaction_table.cpp:561
 msgid "Installing weak dependencies:"
-msgstr "Instal·lació de dependències febles:"
+msgstr "S'instal·len dependències febles:"
 
 #: output/transaction_table.cpp:563
 msgid "Installing group/module packages:"
-msgstr "S'estan instal·lant els paquets de grup/mòdul:"
+msgstr "S'instal·len els paquets de grup / mòdul:"
 
 #: output/transaction_table.cpp:565
 msgid "Installing:"
-msgstr "Instal·lació:"
+msgstr "S'instal·la:"
 
 #: output/transaction_table.cpp:569
 msgid "Upgrading:"
-msgstr "Actualització:"
+msgstr "S'actualitza:"
 
 #: output/transaction_table.cpp:572
 msgid "Downgrading:"
-msgstr "Desactualitzant:"
+msgstr "Es degrada:"
 
 #: output/transaction_table.cpp:575
 msgid "Reinstalling:"
-msgstr "Reinstal·lació:"
+msgstr "Es reinstal·la:"
 
 #: output/transaction_table.cpp:579
 msgid "Removing dependent packages:"
-msgstr "S'estan eliminant els paquets dependents:"
+msgstr "Se suprimeixen els paquets dependents:"
 
 #: output/transaction_table.cpp:581
 msgid "Removing unused dependencies:"
-msgstr "S'estan suprimint les dependències no utilitzades:"
+msgstr "Se suprimeixen les dependències no usades:"
 
 #: output/transaction_table.cpp:583
 msgid "Removing:"
-msgstr "S'està suprimint:"
+msgstr "Se suprimeix:"
 
 #: output/transaction_table.cpp:587
 msgid "Changing reason:"
-msgstr "S'està canviant el motiu:"
+msgstr "Se'n canvia la raó:"
 
 #: output/transaction_table.cpp:619
 msgid "Installing groups dependencies:"
-msgstr "S'estan instal·lant les dependències dels grups:"
+msgstr "S'instal·len les dependències dels grups:"
 
 #: output/transaction_table.cpp:621
 msgid "Installing groups:"
-msgstr "Instal·lació de grups:"
+msgstr "S'instal·len els grups:"
 
 #: output/transaction_table.cpp:625
 msgid "Removing groups:"
@@ -453,23 +453,23 @@ msgstr "Eliminant grups:"
 
 #: output/transaction_table.cpp:628
 msgid "Upgrading groups:"
-msgstr "Actualització de grups:"
+msgstr "S'actualitzen els grups:"
 
 #: output/transaction_table.cpp:631
 msgid "Changing reason of installed groups:"
-msgstr "S'està canviant el motiu dels grups instal·lats:"
+msgstr "Es canvia la raó dels grups instal·lats:"
 
 #: output/transaction_table.cpp:658
 msgid "Installing environmental groups:"
-msgstr "Instal·lació de grups ambientals:"
+msgstr "S'instal·len els grups d'entorn:"
 
 #: output/transaction_table.cpp:661
 msgid "Removing environmental groups:"
-msgstr "Eliminació de grups ambientals:"
+msgstr "Supressió de grups d'entorn:"
 
 #: output/transaction_table.cpp:664
 msgid "Upgrading environmental groups:"
-msgstr "Actualització dels grups ambientals:"
+msgstr "S'actualitzen els grups d'entorn:"
 
 #: output/transaction_table.cpp:691
 msgid "Enabling module streams:"
@@ -477,7 +477,7 @@ msgstr "Habilitant els fluxos dels mòduls:"
 
 #: output/transaction_table.cpp:694
 msgid "Disabling modules:"
-msgstr "S'estan desactivant els mòduls:"
+msgstr "S'inhabiliten mòduls:"
 
 #: output/transaction_table.cpp:697
 msgid "Resetting modules:"
@@ -496,11 +496,9 @@ msgstr "(cap)"
 msgid "Skipping {0} package due to vendor change restriction: {1}."
 msgid_plural "Skipping {0} packages due to vendor change restriction: {1}."
 msgstr[0] ""
-"S'està ometent el paquet {0} a causa de la restricció de canvi del "
-"proveïdor: {1}."
+"S'omet el paquet {0} a causa de la restricció de canvi del proveïdor: {1}."
 msgstr[1] ""
-"S'estan ometent {0} paquets a causa de la restricció de canvi del proveïdor: "
-"{1}."
+"S' ometen {0} paquets a causa de la restricció de canvi del proveïdor: {1}."
 
 #: output/transaction_table.cpp:812
 msgid "Nothing to do."

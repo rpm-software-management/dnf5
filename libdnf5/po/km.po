@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-02 08:43+0000\n"
+"POT-Creation-Date: 2026-11-10 09:05+0000\n"
 "PO-Revision-Date: 2026-11-03 09:56+0000\n"
 "Last-Translator: Anonymous <noreply@weblate.org>\n"
 "Language-Team: Khmer (Central) <https://translate.fedoraproject.org/projects/"
@@ -39,13 +39,13 @@ msgstr ""
 msgid "Invalid option value: enabled={}"
 msgstr ""
 
-#: base/goal.cpp:490
+#: base/goal.cpp:492
 #, c++-format
 msgid "Unsupported argument for REMOVE action: {}"
 msgstr ""
 
 #. TODO(lukash) throw a proper exception
-#: base/goal.cpp:1741
+#: base/goal.cpp:1743
 #, c++-format
 msgid "Incorrect configuration value for multilib_policy: {}"
 msgstr ""
@@ -2041,46 +2041,46 @@ msgid ""
 "and action \"Reason Change\""
 msgstr ""
 
-#: utils/bootc.cpp:46
+#: utils/bootc.cpp:47
 #, c++-format
 msgid "Error checking bootc status: {}"
 msgstr ""
 
-#: utils/bootc.cpp:49
+#: utils/bootc.cpp:50
 #, c++-format
 msgid "Error checking bootc status: bootc command failed with exit code {}"
 msgstr ""
 
-#: utils/bootc.cpp:58
+#: utils/bootc.cpp:59
 msgid "Error checking bootc status: Failed to parse JSON output"
 msgstr ""
 
-#: utils/bootc.cpp:73
+#: utils/bootc.cpp:74
 #, c++-format
 msgid "Failed to query status of bootc system: {}"
 msgstr ""
 
-#: utils/bootc.cpp:90
+#: utils/bootc.cpp:91
 msgid "Failed to stat /usr filesystem"
 msgstr ""
 
-#: utils/bootc.cpp:125
+#: utils/bootc.cpp:127
 #, c++-format
 msgid "Error running `bootc usr-overlay --read-only`: {}"
 msgstr ""
 
-#: utils/bootc.cpp:128
+#: utils/bootc.cpp:130
 #, c++-format
 msgid ""
 "Error running `bootc usr-overlay --read-only`: bootc command failed with "
 "exit code {}"
 msgstr ""
 
-#: utils/bootc.cpp:136
+#: utils/bootc.cpp:138
 msgid "Failed to unshare mount namespace"
 msgstr ""
 
-#: utils/bootc.cpp:143
+#: utils/bootc.cpp:146
 #, c++-format
 msgid "Failed to remount /usr as read-write: {}"
 msgstr ""

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-02 08:43+0000\n"
+"POT-Creation-Date: 2026-11-10 09:05+0000\n"
 "PO-Revision-Date: 2026-11-03 09:50+0000\n"
 "Last-Translator: gossypium "
 "<gossypium@users.noreply.translate.fedoraproject.org>\n"
@@ -58,7 +58,8 @@ msgstr "Error al copiar el archivo de configuración del repositorio «{}»: {}"
 #: addrepo.cpp:293
 #, c++-format
 msgid "Failed to download repository configuration file \"{}\": {}"
-msgstr "Error al descargar el archivo de configuración del repositorio «{}»: {}"
+msgstr ""
+"Error al descargar el archivo de configuración del repositorio «{}»: {}"
 
 #: addrepo.cpp:321
 #, c++-format
@@ -346,7 +347,8 @@ msgstr "No es posible establecer «{}»: La variable «{}» es de «solo lectura
 #: setvar.cpp:68
 #, c++-format
 msgid "Sets the \"{}\" variable again with a different value: \"{}\" != \"{}\""
-msgstr "Establece otra vez la variable «{}» con un valor distinto: «{}» != «{}»"
+msgstr ""
+"Establece otra vez la variable «{}» con un valor distinto: «{}» != «{}»"
 
 #: setvar.cpp:97 unsetvar.cpp:63
 msgid "Missing path to vars directory"

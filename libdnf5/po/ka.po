@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-02 08:43+0000\n"
+"POT-Creation-Date: 2026-11-10 09:05+0000\n"
 "PO-Revision-Date: 2026-11-03 09:37+0000\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <https://translate.fedoraproject.org/projects/dnf5/"
@@ -42,13 +42,13 @@ msgstr "ტრანზაქციის ინფორმაციის დ�
 msgid "Invalid option value: enabled={}"
 msgstr "არასწორი პარამეტრის მნიშვნელობა: enabled={}"
 
-#: base/goal.cpp:490
+#: base/goal.cpp:492
 #, c++-format
 msgid "Unsupported argument for REMOVE action: {}"
 msgstr "მხარდაუჭერელი არგუმენტი ქმედებისთვის REMOVE: {}"
 
 #. TODO(lukash) throw a proper exception
-#: base/goal.cpp:1741
+#: base/goal.cpp:1743
 #, c++-format
 msgid "Incorrect configuration value for multilib_policy: {}"
 msgstr "არასწორი კონფიგურაციის მნიშვნელობა multilib_policy-სთვის: {}"
@@ -443,8 +443,8 @@ msgid ""
 "Could not find debuginfo package for the following packages resolved from "
 "the argument '{0}': {1}"
 msgstr ""
-"ვერ ვიპოვე debuginfo პაკეტი შემდეგი პაკეტებისგან, ამოიხსნა არგუმენტიდან '{0}"
-"': {1}"
+"ვერ ვიპოვე debuginfo პაკეტი შემდეგი პაკეტებისგან, ამოიხსნა არგუმენტიდან "
+"'{0}': {1}"
 
 #: base/log_event.cpp:363 base/log_event.cpp:374
 msgctxt "String for joining NEVRAs - e.g. `foo-4-4.noarch, bar-5-5.noarch`"
@@ -1713,8 +1713,8 @@ msgid ""
 "Configuration \"{}\" uses version \"{}\" which does not support 'comparator' "
 "\"{}\""
 msgstr ""
-"კონფიგურაცია \"{}\" იყენებს ვერსიას \"{}\", რომელსაც არ აქვს 'შემდარებლის' \""
-"{}\" მხარდაჭერა"
+"კონფიგურაცია \"{}\" იყენებს ვერსიას \"{}\", რომელსაც არ აქვს 'შემდარებლის' "
+"\"{}\" მხარდაჭერა"
 
 #: solv/vendor_change_manager.cpp:719
 #, c++-format
@@ -1920,8 +1920,8 @@ msgstr "{} მდგომარეობა \"{}\"-სთვის აღმო
 #, c++-format
 msgid "Loading system state TOML file {} failed (see dnf5-system-state(7)): {}"
 msgstr ""
-"სისტემის მდგომარეობის TOML ფაილის {} ჩატვირთვა ჩავარდა (იხ: dnf5-system-state"
-"(7)): {}"
+"სისტემის მდგომარეობის TOML ფაილის {} ჩატვირთვა ჩავარდა (იხ: dnf5-system-"
+"state(7)): {}"
 
 #: system/state.cpp:649
 #, c++-format
@@ -2068,8 +2068,8 @@ msgid ""
 "Action 'Reinstall' '{0}' cannot be merged because it is not present at that "
 "point -> setting 'Install'."
 msgstr ""
-"ქმედება 'Reinstall' '{0}' შერწყმული ვერ იქნება, რადგან ახლა ის არ "
-"არსებობს -> ვაყენებ 'Install'-ს."
+"ქმედება 'Reinstall' '{0}' შერწყმული ვერ იქნება, რადგან ახლა ის არ არსებობს "
+"-> ვაყენებ 'Install'-ს."
 
 #: transaction/transaction_merge.cpp:194
 #, c++-format
@@ -2077,8 +2077,8 @@ msgid ""
 "Action '{0}' '{1}' cannot be merged after it was '{2}' in preceding "
 "transaction -> setting '{0}'."
 msgstr ""
-"ქმედება '{0}' '{1}' შერწყმული ვერ იქნება, რადგან ის წინა ტრანზაქციაში იყო '"
-"{2}' -> ვაყენებ '{0}'-ს."
+"ქმედება '{0}' '{1}' შერწყმული ვერ იქნება, რადგან ის წინა ტრანზაქციაში იყო "
+"'{2}' -> ვაყენებ '{0}'-ს."
 
 #: transaction/transaction_merge.cpp:215
 #, c++-format
@@ -2223,36 +2223,37 @@ msgstr ""
 "'rpm'-ში აუცილებელი ობიექტის პარამეტრი \"group_id\" ვერ ვიპოვე მიზეზით "
 "\"Group\" და ქმედებით \"Reason Change\""
 
-#: utils/bootc.cpp:46
+#: utils/bootc.cpp:47
 #, c++-format
 msgid "Error checking bootc status: {}"
 msgstr "bootc-ის სტატუსის შემოწმების შეცდომა: {}"
 
-#: utils/bootc.cpp:49
+#: utils/bootc.cpp:50
 #, c++-format
 msgid "Error checking bootc status: bootc command failed with exit code {}"
 msgstr ""
 "bootc-ის სტატუსის შემოწმების შეცდომა: ბრძანება bootc ჩავარდა გასვლის კოდით {}"
 
-#: utils/bootc.cpp:58
+#: utils/bootc.cpp:59
 msgid "Error checking bootc status: Failed to parse JSON output"
-msgstr "bootc-ის სტატუსის შემოწმების შეცდომა: JSON გამოტანის დამუშავება ჩავარდა"
+msgstr ""
+"bootc-ის სტატუსის შემოწმების შეცდომა: JSON გამოტანის დამუშავება ჩავარდა"
 
-#: utils/bootc.cpp:73
+#: utils/bootc.cpp:74
 #, c++-format
 msgid "Failed to query status of bootc system: {}"
 msgstr "bootc სისტემის სტატუსის გამოთხოვის შეცდომა: {}"
 
-#: utils/bootc.cpp:90
+#: utils/bootc.cpp:91
 msgid "Failed to stat /usr filesystem"
 msgstr "/usr ფაილური სისტემის დადგენა შეუძლებელია"
 
-#: utils/bootc.cpp:125
+#: utils/bootc.cpp:127
 #, c++-format
 msgid "Error running `bootc usr-overlay --read-only`: {}"
 msgstr "შეცდომა ბრძანების `bootc usr-overlay --read-only` შესრულებისას: {}"
 
-#: utils/bootc.cpp:128
+#: utils/bootc.cpp:130
 #, c++-format
 msgid ""
 "Error running `bootc usr-overlay --read-only`: bootc command failed with "
@@ -2261,11 +2262,11 @@ msgstr ""
 "ბრძანების `bootc usr-overlay --read-only` შესრულების შეცდომა: bootc ჩავარდა "
 "გასვლის კოდით {}"
 
-#: utils/bootc.cpp:136
+#: utils/bootc.cpp:138
 msgid "Failed to unshare mount namespace"
 msgstr "მიმაგრების სახელების სივრცის გაზიარების გაუქმება ჩავარდა"
 
-#: utils/bootc.cpp:143
+#: utils/bootc.cpp:146
 #, c++-format
 msgid "Failed to remount /usr as read-write: {}"
 msgstr "/usr-ის ჩაწერის უფლებებით თავიდან მიმაგრება ჩავარდა: {}"
@@ -2481,7 +2482,8 @@ msgstr "SQL გამოსახულების შეფასების 
 
 #: utils/sqlite3/sqlite3.cpp:44
 msgid "Insufficient memory or result exceed maximum SQLite3 string length"
-msgstr "არასაკმარისი მეხსიერება ან შედეგი SQLite3-ის სტრიქონის სიგრძეს აჭარბებს"
+msgstr ""
+"არასაკმარისი მეხსიერება ან შედეგი SQLite3-ის სტრიქონის სიგრძეს აჭარბებს"
 
 #: utils/sqlite3/sqlite3.cpp:46
 #, c++-format

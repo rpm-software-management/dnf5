@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-02 08:43+0000\n"
+"POT-Creation-Date: 2026-11-10 09:05+0000\n"
 "PO-Revision-Date: 2026-11-03 10:02+0000\n"
 "Last-Translator: \"Марко Костић (Marko Kostić)\" <marko.m.kostic@gmail.com>\n"
 "Language-Team: Serbian <https://translate.fedoraproject.org/projects/dnf5/"
@@ -43,13 +43,13 @@ msgstr "Грешка током обраде ЈСОН-а за поновно п�
 msgid "Invalid option value: enabled={}"
 msgstr "Неисправна вредност опције: омогућено={}"
 
-#: base/goal.cpp:490
+#: base/goal.cpp:492
 #, c++-format
 msgid "Unsupported argument for REMOVE action: {}"
 msgstr "Неподржан аргумент за радњу „REMOVE“: {}"
 
 #. TODO(lukash) throw a proper exception
-#: base/goal.cpp:1741
+#: base/goal.cpp:1743
 #, c++-format
 msgid "Incorrect configuration value for multilib_policy: {}"
 msgstr "Нетачна вредност подешавања за „multilib_policy“: {}"
@@ -315,7 +315,8 @@ msgstr "Не могу да извршим {0} јер је „{1}“ инстал
 msgid ""
 "Packages for argument '{}' installed and available, but in a different "
 "version."
-msgstr "Пакети за аргумент „{}“ су инсталирани и доступни, али у другом издању."
+msgstr ""
+"Пакети за аргумент „{}“ су инсталирани и доступни, али у другом издању."
 
 #: base/log_event.cpp:243
 #, c++-format
@@ -819,18 +820,24 @@ msgstr ", "
 msgid "Warning: skipped OpenPGP checks for {0} package from repository: {1}"
 msgid_plural ""
 "Warning: skipped OpenPGP checks for {0} packages from repository: {1}"
-msgstr[0] "Упозорење: прескочене су OpenPGP провере за {0} пакет из ризнице: {1}"
-msgstr[1] "Упозорење: прескочене су OpenPGP провере за {0} пакета из ризнице: {1}"
-msgstr[2] "Упозорење: прескочене су OpenPGP провере за {0} пакета из ризнице: {1}"
+msgstr[0] ""
+"Упозорење: прескочене су OpenPGP провере за {0} пакет из ризнице: {1}"
+msgstr[1] ""
+"Упозорење: прескочене су OpenPGP провере за {0} пакета из ризнице: {1}"
+msgstr[2] ""
+"Упозорење: прескочене су OpenPGP провере за {0} пакета из ризнице: {1}"
 
 #: base/transaction.cpp:1721
 #, c++-format
 msgid "Warning: skipped OpenPGP checks for {0} package from repositories: {1}"
 msgid_plural ""
 "Warning: skipped OpenPGP checks for {0} packages from repositories: {1}"
-msgstr[0] "Упозорење: прескочене су OpenPGP провере за {0} пакет из ризница: {1}"
-msgstr[1] "Упозорење: прескочене су OpenPGP провере за {0} пакета из ризница: {1}"
-msgstr[2] "Упозорење: прескочене су OpenPGP провере за {0} пакета из ризница: {1}"
+msgstr[0] ""
+"Упозорење: прескочене су OpenPGP провере за {0} пакет из ризница: {1}"
+msgstr[1] ""
+"Упозорење: прескочене су OpenPGP провере за {0} пакета из ризница: {1}"
+msgstr[2] ""
+"Упозорење: прескочене су OpenPGP провере за {0} пакета из ризница: {1}"
 
 #: base/vendor_change_manager.cpp:115
 #, fuzzy
@@ -903,7 +910,8 @@ msgstr "Упит мора да садржи тачно један објекат
 
 #: common/xdg.cpp:43
 msgid "get_user_home_dir(): Cannot determine the user's home directory"
-msgstr "get_user_home_dir(): Не могу да одредим корисников матични директоријум"
+msgstr ""
+"get_user_home_dir(): Не могу да одредим корисников матични директоријум"
 
 #: common/xdg.cpp:98
 msgid "get_user_runtime_dir(): Cannot determine the user's runtime directory"
@@ -1144,8 +1152,8 @@ msgid ""
 "Unsupported plugin API combination. API version provided by plugin \"{}\" "
 "(\"{}\") is \"{}.{}\". API version in libdnf is \"{}.{}\"."
 msgstr ""
-"Неподржана комбинација АПИ-ја прикључка. Издање АПИ-ја коју даје прикључак „"
-"{}“ („{}“) је „{}.{}“. Издање АПИ-ја у libdnf је „{}.{}“."
+"Неподржана комбинација АПИ-ја прикључка. Издање АПИ-ја коју даје прикључак "
+"„{}“ („{}“) је „{}.{}“. Издање АПИ-ја у libdnf је „{}.{}“."
 
 #: plugin/plugins.cpp:93
 msgid "Failed to create a libdnf plugin instance"
@@ -1185,8 +1193,8 @@ msgid ""
 "Maximum download speed is lower than minimum, please change configuration of "
 "minrate or throttle"
 msgstr ""
-"Највећа брзина преузимања је мања од најмање, промените подешавање за „"
-"minrate“ или „throttle“"
+"Највећа брзина преузимања је мања од најмање, промените подешавање за "
+"„minrate“ или „throttle“"
 
 #: repo/librepo.cpp:147
 msgid "'proxy_username' is set but not 'proxy_password'"
@@ -1399,7 +1407,8 @@ msgstr "Није успело уписивање главне оставе за 
 #: repo/solv_repo.cpp:635
 #, c++-format
 msgid "Failed to re-load primary cache for repo \"{}\" from \"{}\": {}"
-msgstr "Није успело поновно учитавање главне оставе за ризницу „{}“ из „{}“: {}"
+msgstr ""
+"Није успело поновно учитавање главне оставе за ризницу „{}“ из „{}“: {}"
 
 #: repo/solv_repo.cpp:700
 #, c++-format
@@ -2083,8 +2092,8 @@ msgid ""
 "Action '{0}' '{1}' cannot be merged because it is already installed in "
 "version '{2}' -> keeping the action from older transaction with '{1}'."
 msgstr ""
-"Радња „{0}“ „{1}“ не може бити спојена јер је већ инсталирана у издању „{2}"
-"“ -> задржавам радњу из старијег преноса са „{1}“."
+"Радња „{0}“ „{1}“ не може бити спојена јер је већ инсталирана у издању „{2}“ "
+"-> задржавам радњу из старијег преноса са „{1}“."
 
 #: transaction/transaction_merge.cpp:304
 #, c++-format
@@ -2177,51 +2186,51 @@ msgstr ""
 "Недостаје обавезан кључ објекта „group_id“ у рпм-у са разлогом „Group“ и "
 "радњом „Reason Change“"
 
-#: utils/bootc.cpp:46
+#: utils/bootc.cpp:47
 #, c++-format
 msgid "Error checking bootc status: {}"
 msgstr ""
 
-#: utils/bootc.cpp:49
+#: utils/bootc.cpp:50
 #, c++-format
 msgid "Error checking bootc status: bootc command failed with exit code {}"
 msgstr ""
 
-#: utils/bootc.cpp:58
+#: utils/bootc.cpp:59
 msgid "Error checking bootc status: Failed to parse JSON output"
 msgstr ""
 
-#: utils/bootc.cpp:73
+#: utils/bootc.cpp:74
 #, fuzzy, c++-format
 #| msgid "Failed to update from string: {}"
 msgid "Failed to query status of bootc system: {}"
 msgstr "Нисам успео да ажурирам из ниске: {}"
 
-#: utils/bootc.cpp:90
+#: utils/bootc.cpp:91
 #, fuzzy
 #| msgid "Failed to download files"
 msgid "Failed to stat /usr filesystem"
 msgstr "Није успело преузимање датотека"
 
-#: utils/bootc.cpp:125
+#: utils/bootc.cpp:127
 #, c++-format
 msgid "Error running `bootc usr-overlay --read-only`: {}"
 msgstr ""
 
-#: utils/bootc.cpp:128
+#: utils/bootc.cpp:130
 #, c++-format
 msgid ""
 "Error running `bootc usr-overlay --read-only`: bootc command failed with "
 "exit code {}"
 msgstr ""
 
-#: utils/bootc.cpp:136
+#: utils/bootc.cpp:138
 #, fuzzy
 #| msgid "Failed to execute uname()"
 msgid "Failed to unshare mount namespace"
 msgstr "Није успело извршавање функције uname()"
 
-#: utils/bootc.cpp:143
+#: utils/bootc.cpp:146
 #, fuzzy, c++-format
 #| msgid "Failed to resolve module metadata: {}"
 msgid "Failed to remount /usr as read-write: {}"

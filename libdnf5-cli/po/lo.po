@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-02 08:43+0000\n"
+"POT-Creation-Date: 2026-11-10 09:05+0000\n"
 "PO-Revision-Date: 2026-11-03 10:03+0000\n"
 "Last-Translator: Bone NI <bounkirdni@gmail.com>\n"
 "Language-Team: Lao <https://translate.fedoraproject.org/projects/dnf5/"
@@ -157,8 +157,7 @@ msgstr "ບໍ່ສາມາດແກ້ໄຂບັນຫາການດຳເ
 
 #: output/moduleinfo.cpp:36
 msgid "Hint: [d]efault, [e]nabled, [x]disabled, [i]nstalled, [a]ctive"
-msgstr ""
-"ຄຳແນະນຳ: [d]ຄ່າເລີ່ມຕົ້ນ, [e]ເປີດໃຊ້, [x]ປິດໃຊ້, [i]ຕິດຕັ້ງແລ້ວ, [a]ເຮັດວຽກຢູ່"
+msgstr "ຄຳແນະນຳ: [d]ຄ່າເລີ່ມຕົ້ນ, [e]ເປີດໃຊ້, [x]ປິດໃຊ້, [i]ຕິດຕັ້ງແລ້ວ, [a]ເຮັດວຽກຢູ່"
 
 #: output/modulelist.cpp:39
 msgid "Hint: [d]efault, [e]nabled, [x]disabled, [i]nstalled"

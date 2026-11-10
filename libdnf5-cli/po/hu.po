@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-02 08:43+0000\n"
+"POT-Creation-Date: 2026-11-10 09:05+0000\n"
 "PO-Revision-Date: 2026-11-03 09:48+0000\n"
 "Last-Translator: Balázs Meskó <meskobalazs@mailbox.org>\n"
 "Language-Team: Hungarian <https://translate.fedoraproject.org/projects/dnf5/"
@@ -27,7 +27,8 @@ msgstr "Hibásan beállított „{}” álnév: a(z) „{}” nem alakítható �
 #: argument_parser.cpp:76
 #, c++-format
 msgid "Misconfigured alias \"{}\": index \"{}\" out of range"
-msgstr "Hibásan beállított „{}” álnév: a(z) „{}” index a tartományon kívül esik"
+msgstr ""
+"Hibásan beállított „{}” álnév: a(z) „{}” index a tartományon kívül esik"
 
 #: argument_parser.cpp:98
 #, c++-format
@@ -47,7 +48,8 @@ msgstr "A(z) „{}” nem engedélyezett a(z) „{}” pozicionális argumentumm
 #: argument_parser.cpp:147
 #, c++-format
 msgid "Argument id \"{}\" already registered in group \"{}\""
-msgstr "A(z) „{}” argumentumazonosító már regisztrálva van a(z) „{}” csoportban"
+msgstr ""
+"A(z) „{}” argumentumazonosító már regisztrálva van a(z) „{}” csoportban"
 
 #: argument_parser.cpp:274
 #, c++-format

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-02 08:43+0000\n"
+"POT-Creation-Date: 2026-11-10 09:05+0000\n"
 "PO-Revision-Date: 2026-11-03 09:44+0000\n"
 "Last-Translator: Remus-Gabriel Chelu <remusgabriel.chelu@disroot.org>\n"
 "Language-Team: Romanian <https://translate.fedoraproject.org/projects/dnf5/"
@@ -91,7 +91,8 @@ msgstr "Id de comandă „{}” deja înregistrat pentru comanda „{}”"
 #: argument_parser.cpp:1008
 #, c++-format
 msgid "Named argument id \"{}\" already registered for command \"{}\""
-msgstr "Id-ul argumentului numit „{}” este deja înregistrat pentru comanda „{}”"
+msgstr ""
+"Id-ul argumentului numit „{}” este deja înregistrat pentru comanda „{}”"
 
 #: argument_parser.cpp:1018
 #, c++-format
@@ -606,7 +607,8 @@ msgstr ""
 #: session.cpp:270
 #, c++-format
 msgid "\"{}\" date cannot be represented by time_t type on this platform"
-msgstr "Data „{}” nu poate fi reprezentată de tipul time_t pe această platformă"
+msgstr ""
+"Data „{}” nu poate fi reprezentată de tipul time_t pe această platformă"
 
 #: utils/userconfirm.cpp:57
 msgid "Is this ok [Y/n]: "
