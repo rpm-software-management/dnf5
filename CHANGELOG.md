@@ -1,3 +1,23 @@
+# 5.4.8.0
+
+- Update translations from weblate
+- daemon: report list_fd errors through completion signal
+- Fix refresh with non-default cachedir
+- goal: Compare obsoleted versions across architectures
+- libdnf5: subprocess: rename stdout/stderr members of CompletedProcess
+- dnf5: offline: fix building without systemd
+- doc: Annotate CVE-2026-111253 fix
+- dnf5daemon-server: cache_updated requires metadata to be loaded
+- spec: Fix libdnf5-plugin-appstream license
+- spec: Fix dnf5-plugin-manifest license
+- spec: Fix dnf5-plugin-automatic license
+- spec: Fix dnf5daemon-server license
+- spec: Fix dnf5daemon-client license
+- spec: Fix libdnf5-devel license
+- spec: Fix dnf5-devel license
+- spec: Fix libdnf5-cli license
+- progressbar: Use taskbar progress for transaction as well
+
 # 5.4.7.0
 
 - Update translations from weblate

@@ -1,6 +1,6 @@
 %global project_version_prime 5
 %global project_version_major 4
-%global project_version_minor 7
+%global project_version_minor 8
 %global project_version_micro 0
 
 # ========== build options ==========
@@ -1235,6 +1235,9 @@ mkdir -p %{buildroot}%{_libdir}/libdnf5/plugins
 %ldconfig_scriptlets
 
 %changelog
+* Tue Nov 10 2026 Packit Team <hello@packit.dev> - 5.4.8.0-1
+- New upstream release 5.4.8.0
+
 * Tue Nov 03 2026 Packit Team <hello@packit.dev> - 5.4.7.0-1
 - New upstream release 5.4.7.0
 
