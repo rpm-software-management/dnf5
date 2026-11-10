@@ -32,6 +32,7 @@ help:
 	echo ""
 	echo "Integration tests:"
 	echo "  make test-integration       - Build RPMs (if needed), container (if needed), and run tests"
+	echo "  make test-integration-daemon - Build RPMs (if needed), container (if needed), and run dnf5daemon tests"
 	echo "  make test-integration-build - Build RPMs and the test container (with change detection)"
 	echo "  make rpms                   - Build RPMs from local source"
 	echo "  make rpms-mock              - Build RPMs using Mock"
@@ -154,6 +155,10 @@ test-integration-build: $(STAMPS_DIR)/test-integration-build
 .PHONY: test-integration
 test-integration: $(STAMPS_DIR)/test-integration-build
 	$(CONTAINER_TEST) -d run $(ARGS)
+
+.PHONY: test-integration-daemon
+test-integration-daemon: $(STAMPS_DIR)/test-integration-build
+	$(CONTAINER_TEST) -d run $(ARGS) --tags dnf5daemon --command dnf5daemon-client
 
 .PHONY: clean
 clean:
