@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-02 08:43+0000\n"
+"POT-Creation-Date: 2026-11-10 09:05+0000\n"
 "PO-Revision-Date: 2026-11-03 09:38+0000\n"
 "Last-Translator: Luna Jernberg <droidbittin@gmail.com>\n"
 "Language-Team: Swedish <https://translate.fedoraproject.org/projects/dnf5/"
@@ -45,13 +45,13 @@ msgstr "Fel vid tolkning av transaktionsinformation: {}"
 msgid "Invalid option value: enabled={}"
 msgstr "Ogiltigt alternativvärde: enabled={}"
 
-#: base/goal.cpp:490
+#: base/goal.cpp:492
 #, c++-format
 msgid "Unsupported argument for REMOVE action: {}"
 msgstr "Argument som inte stöds för TA BORT åtgärd: {}"
 
 #. TODO(lukash) throw a proper exception
-#: base/goal.cpp:1741
+#: base/goal.cpp:1743
 #, c++-format
 msgid "Incorrect configuration value for multilib_policy: {}"
 msgstr "Felaktigt konfigurationsvärde för multilib_policy: {}"
@@ -409,8 +409,8 @@ msgid ""
 "The operation would result in switching of module '{0}' stream '{1}' to "
 "stream '{2}'\n"
 msgstr ""
-"Åtgärden skulle resultera i byte av modulen ”{0}” ström ”{1}” till ström ”{2}"
-"”\n"
+"Åtgärden skulle resultera i byte av modulen ”{0}” ström ”{1}” till ström "
+"”{2}”\n"
 
 #: base/log_event.cpp:342
 msgid ""
@@ -440,8 +440,8 @@ msgid ""
 "Could not find debuginfo package for the following packages resolved from "
 "the argument '{0}': {1}"
 msgstr ""
-"Kunde inte hitta debuginfo paket för följande paket lösta från argument '{0}"
-"': {1}"
+"Kunde inte hitta debuginfo paket för följande paket lösta från argument "
+"'{0}': {1}"
 
 #: base/log_event.cpp:363 base/log_event.cpp:374
 msgctxt "String for joining NEVRAs - e.g. `foo-4-4.noarch, bar-5-5.noarch`"
@@ -454,8 +454,8 @@ msgid ""
 "Could not find debugsource package for the following packages resolved from "
 "the argument '{0}': {1}"
 msgstr ""
-"Kunde inte hitta debugkäll paket för följande paket löst från argument '{0}' "
-": {1}"
+"Kunde inte hitta debugkäll paket för följande paket löst från argument "
+"'{0}' : {1}"
 
 #: base/log_event.cpp:377
 #, c++-format
@@ -829,7 +829,8 @@ msgstr[1] ""
 msgid "Warning: skipped OpenPGP checks for {0} package from repositories: {1}"
 msgid_plural ""
 "Warning: skipped OpenPGP checks for {0} packages from repositories: {1}"
-msgstr[0] "Varning: hoppade över OpenPGP-kontroller för {0} paket från förråd: {1}"
+msgstr[0] ""
+"Varning: hoppade över OpenPGP-kontroller för {0} paket från förråd: {1}"
 msgstr[1] ""
 "Varning: hoppade över OpenPGP-kontroller för {0} paket från flera förråd: {1}"
 
@@ -1626,7 +1627,8 @@ msgstr ""
 #, c++-format
 msgid ""
 "Missing package filter definition in \"{}\" in table starting on line {}"
-msgstr "Definition av paketfilter saknas i ”{}” i tabellen som börjar på rad {}"
+msgstr ""
+"Definition av paketfilter saknas i ”{}” i tabellen som börjar på rad {}"
 
 #: solv/vendor_change_manager.cpp:498
 #, c++-format
@@ -2189,36 +2191,36 @@ msgstr ""
 "Saknar den obligatoriska objektnyckeln \"group_id\" i en rpm med anledning "
 "\"Group\" och åtgärden \"Reason Change\""
 
-#: utils/bootc.cpp:46
+#: utils/bootc.cpp:47
 #, c++-format
 msgid "Error checking bootc status: {}"
 msgstr "Fel vid kontroll av bootc-status: {}"
 
-#: utils/bootc.cpp:49
+#: utils/bootc.cpp:50
 #, c++-format
 msgid "Error checking bootc status: bootc command failed with exit code {}"
 msgstr ""
 "Fel vid kontroll av bootc-status: kommandot bootc misslyckades med slutkod {}"
 
-#: utils/bootc.cpp:58
+#: utils/bootc.cpp:59
 msgid "Error checking bootc status: Failed to parse JSON output"
 msgstr "Fel vid kontroll av bootc-status: Kunde inte tolka JSON-utdata"
 
-#: utils/bootc.cpp:73
+#: utils/bootc.cpp:74
 #, c++-format
 msgid "Failed to query status of bootc system: {}"
 msgstr "Misslyckades med att förfråga om status för bootc-systemet: {}"
 
-#: utils/bootc.cpp:90
+#: utils/bootc.cpp:91
 msgid "Failed to stat /usr filesystem"
 msgstr "Misslyckades med att hämta status för /usr-filsystemet"
 
-#: utils/bootc.cpp:125
+#: utils/bootc.cpp:127
 #, c++-format
 msgid "Error running `bootc usr-overlay --read-only`: {}"
 msgstr "Fel vid körning av `bootc usr-overlay --read-only`: {}"
 
-#: utils/bootc.cpp:128
+#: utils/bootc.cpp:130
 #, c++-format
 msgid ""
 "Error running `bootc usr-overlay --read-only`: bootc command failed with "
@@ -2227,11 +2229,11 @@ msgstr ""
 "Fel vid körning av `bootc usr-overlay --read-only`: bootc-kommandot "
 "misslyckades med slutkod {}"
 
-#: utils/bootc.cpp:136
+#: utils/bootc.cpp:138
 msgid "Failed to unshare mount namespace"
 msgstr "Misslyckades med att avdela monteringsnamnrymden"
 
-#: utils/bootc.cpp:143
+#: utils/bootc.cpp:146
 #, c++-format
 msgid "Failed to remount /usr as read-write: {}"
 msgstr "Misslyckades med att montera om /usr med läs och skrivrättigheter: {}"
@@ -2416,7 +2418,8 @@ msgstr "Bindning av heltals64-värde till SQL-sats misslyckades: \"{}\""
 #: utils/sqlite3/sqlite3.cpp:35
 #, c++-format
 msgid "Binding unsigned integer32 value to SQL statement failed: \"{}\""
-msgstr "Bindning av osignerat heltal32-värde till SQL-sats misslyckades: \"{}\""
+msgstr ""
+"Bindning av osignerat heltal32-värde till SQL-sats misslyckades: \"{}\""
 
 #: utils/sqlite3/sqlite3.cpp:37
 #, c++-format

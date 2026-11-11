@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-02 08:43+0000\n"
+"POT-Creation-Date: 2026-11-10 09:05+0000\n"
 "PO-Revision-Date: 2026-11-03 09:41+0000\n"
 "Last-Translator: Léane GRASSER <leane.grasser@proton.me>\n"
 "Language-Team: French <https://translate.fedoraproject.org/projects/dnf5/"
@@ -78,7 +78,8 @@ msgstr "Liste des motifs à rechercher dans les noms d'avertissements."
 
 #: commands/advisory/arguments.hpp:95
 msgid "Show only advisories referencing a bugzilla."
-msgstr "Afficher uniquement les avertissements faisant référence à un bugzilla."
+msgstr ""
+"Afficher uniquement les avertissements faisant référence à un bugzilla."
 
 #: commands/advisory/arguments.hpp:102
 msgid "Show only advisories referencing a CVE."

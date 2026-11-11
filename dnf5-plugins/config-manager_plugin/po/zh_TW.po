@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-02 08:43+0000\n"
+"POT-Creation-Date: 2026-11-10 09:05+0000\n"
 "PO-Revision-Date: 2026-11-03 09:49+0000\n"
 "Last-Translator: Cheng-Chia Tseng <pswo10680@gmail.com>\n"
 "Language-Team: Chinese (Traditional) <https://translate.fedoraproject.org/"
@@ -99,8 +99,8 @@ msgid ""
 "File \"{}\" already exists and configures repositories with IDs \"{}\". Add "
 "\"--overwrite\" to overwrite."
 msgstr ""
-"檔案「{}」已經存在，並且設定 ID 為「{}」的軟體庫。 新增「--overwrite」以覆寫"
-"。"
+"檔案「{}」已經存在，並且設定 ID 為「{}」的軟體庫。 新增「--overwrite」以覆"
+"寫。"
 
 #: addrepo.cpp:453 addrepo.cpp:479
 #, c++-format
@@ -411,7 +411,8 @@ msgstr ""
 msgid ""
 "config-manager: Request to remove repository option but it is not present in "
 "the overrides: {}.{}"
-msgstr "config-manager：請求移除 repository 選項，但它不存在於 overrides 中：{}.{}"
+msgstr ""
+"config-manager：請求移除 repository 選項，但它不存在於 overrides 中：{}.{}"
 
 #: unsetopt.cpp:208
 #, c++-format

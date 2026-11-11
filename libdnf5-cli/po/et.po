@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-02 08:43+0000\n"
+"POT-Creation-Date: 2026-11-10 09:05+0000\n"
 "PO-Revision-Date: 2026-11-03 09:49+0000\n"
 "Last-Translator: Priit Jõerüüt "
 "<jrtkbfdr@users.noreply.translate.fedoraproject.org>\n"
@@ -586,7 +586,8 @@ msgstr "Puuduv käsk"
 #, c++-format
 msgid ""
 "Invalid date passed: \"{}\". Dates in \"YYYY-MM-DD\" format are expected"
-msgstr "Oled sisestanud vigase kuupäeva: „{}“. Eeldatud vorming on „AAAA-KK-PP“"
+msgstr ""
+"Oled sisestanud vigase kuupäeva: „{}“. Eeldatud vorming on „AAAA-KK-PP“"
 
 #: session.cpp:270
 #, c++-format

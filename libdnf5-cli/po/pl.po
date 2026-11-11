@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-02 08:43+0000\n"
+"POT-Creation-Date: 2026-11-10 09:05+0000\n"
 "PO-Revision-Date: 2026-11-03 09:45+0000\n"
 "Last-Translator: Tomasz Bojanowski <tomasz@bojanowski.me>\n"
 "Language-Team: Polish <https://translate.fedoraproject.org/projects/dnf5/"
@@ -117,8 +117,8 @@ msgstr "Identyfikator grupy „{}” został już zarejestrowany dla polecenia �
 #, c++-format
 msgid "Command id \"{}\" does not contain subcommand with id \"{}\""
 msgstr ""
-"Polecenie o identyfikatorze „{}” nie zawiera podpolecenia o identyfikatorze „"
-"{}”"
+"Polecenie o identyfikatorze „{}” nie zawiera podpolecenia o identyfikatorze "
+"„{}”"
 
 #: argument_parser.cpp:1063
 #, c++-format
@@ -181,7 +181,8 @@ msgstr ""
 
 #: output/modulelist.cpp:39
 msgid "Hint: [d]efault, [e]nabled, [x]disabled, [i]nstalled"
-msgstr "Wskazówka: d — domyślne, e — włączone, x — wyłączone, i — zainstalowane"
+msgstr ""
+"Wskazówka: d — domyślne, e — włączone, x — wyłączone, i — zainstalowane"
 
 #. Note for translators: This is a right-aligned column separator in
 #. a package properties table as in "Name    : bash".

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-02 08:43+0000\n"
+"POT-Creation-Date: 2026-11-10 09:05+0000\n"
 "PO-Revision-Date: 2026-11-03 09:40+0000\n"
 "Last-Translator: Aleksey Fedorov <aleksejfedorov963@gmail.com>\n"
 "Language-Team: Russian <https://translate.fedoraproject.org/projects/dnf5/"
@@ -116,8 +116,8 @@ msgstr "Идентификатор группы \"{}\" уже зарегистр
 #, c++-format
 msgid "Command id \"{}\" does not contain subcommand with id \"{}\""
 msgstr ""
-"Команда с идентификатором \"{}\" не содержит подкоманду с идентификатором \""
-"{}\""
+"Команда с идентификатором \"{}\" не содержит подкоманду с идентификатором "
+"\"{}\""
 
 #: argument_parser.cpp:1063
 #, c++-format

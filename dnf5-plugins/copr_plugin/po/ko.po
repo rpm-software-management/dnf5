@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-02 08:43+0000\n"
+"POT-Creation-Date: 2026-11-10 09:05+0000\n"
 "PO-Revision-Date: 2026-11-03 09:42+0000\n"
 "Last-Translator: Weblate Translation Memory <noreply-mt-weblate-translation-"
 "memory@weblate.org>\n"
@@ -38,11 +38,11 @@ msgid ""
 msgstr ""
 "{}에 대한 Copr 프로젝트 ID.  형식 OWNER/PROJECT 또는 HUB/OWNER/PROJECT (만약 "
 "HUB가 지정되지 않았으면, 기본값은 하나이거나, --hub<ARG>입니다) 중에 하나를 "
-"사용해요.  소유자(OWNER)는 사용자이름(username), 또는 @groupname 중의 "
-"하나입니다.  프로젝트(PROJECT)는 단순 프로젝트 이거나, 쌍점(:)을 포함하는"
-"(예: 'project:custom:123') “프로젝트 디렉토리”가 될 수 있습니다.  허브(HUB)"
-"는 Copr 프론트엔드 호스트이름 (예: copr.fedorainfracloud.org ) 또는 단축키"
-"(예: 페도라) 중에 하나 일 수 있습니다. 예: 'fedora/@footeam/coolproject'."
+"사용해요.  소유자(OWNER)는 사용자이름(username), 또는 @groupname 중의 하나입"
+"니다.  프로젝트(PROJECT)는 단순 프로젝트 이거나, 쌍점(:)을 포함하는(예: "
+"'project:custom:123') “프로젝트 디렉토리”가 될 수 있습니다.  허브(HUB)는 "
+"Copr 프론트엔드 호스트이름 (예: copr.fedorainfracloud.org ) 또는 단축키(예: "
+"페도라) 중에 하나 일 수 있습니다. 예: 'fedora/@footeam/coolproject'."
 
 #: copr.cpp:106
 #, c++-format
@@ -53,8 +53,8 @@ msgstr "잘못된 PROJECT_SPEC 형식 '{}'"
 msgid ""
 "Manage Copr repositories (add-ons provided by users/community/third-party)"
 msgstr ""
-"Copr 저장소를 관리합니다 (users/community/third-party에 의해 제공되는 추가-"
-"기능)"
+"Copr 저장소를 관리합니다 (users/community/third-party에 의해 제공되는 추가-기"
+"능)"
 
 #: copr_constants.hpp:29
 msgid ""
@@ -80,8 +80,8 @@ msgstr ""
 "Copr FAQ에 있는 설명된 규칙을 넘는 저장소 내용 이상의 권한을 시험하지 않고,\n"
 "꾸러미는 어떤 품질이나 보안 수준을 유지하지 않습니다.\n"
 "\n"
-"페도라 버그질라(Fedora Bugzilla)에 이들 꾸러미에 대한 파일 결점 보고를 "
-"제출하지 마세요.\n"
+"페도라 버그질라(Fedora Bugzilla)에 이들 꾸러미에 대한 파일 결점 보고를 제출하"
+"지 마세요.\n"
 "이들 문제는, 이들 저장소 소유자와 접촉하세요.\n"
 
 #: copr_constants.hpp:41
@@ -151,14 +151,15 @@ msgid ""
 "No repositories were loaded from the installroot. To use the configuration "
 "and repositories of the host system, pass --use-host-config."
 msgstr ""
-"installroot에서 어떤 저장소도 적재되지 않았습니다. 호스트 시스템의 구성 및 "
-"저장소를 사용하려면, --use-host-conifg를 전달하세요."
+"installroot에서 어떤 저장소도 적재되지 않았습니다. 호스트 시스템의 구성 및 저"
+"장소를 사용하려면, --use-host-conifg를 전달하세요."
 
 #: copr_remove.cpp:35
 #, c++-format
 msgid ""
 "remove specified Copr repository from the system (removes the {}/*.repo file)"
-msgstr "시스템에서 지정된 Copr 저장소를 제거합니다 ({}/*.repo 파일을 제거합니다)"
+msgstr ""
+"시스템에서 지정된 Copr 저장소를 제거합니다 ({}/*.repo 파일을 제거합니다)"
 
 #: copr_repo.cpp:91
 #, c++-format
@@ -219,8 +220,8 @@ msgid ""
 "Copr repofile '{}' has an old format, fix by re-enabling it $ {} copr enable "
 "{}"
 msgstr ""
-"Copr repofile '{}'은 오래된 형식을 갖고 있으며, $ {} copr enable {}를 재-"
-"활성화 하여 수정합니다"
+"Copr repofile '{}'은 오래된 형식을 갖고 있으며, $ {} copr enable {}를 재-활성"
+"화 하여 수정합니다"
 
 #: copr_repo.cpp:560
 #, c++-format

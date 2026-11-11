@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-02 08:43+0000\n"
+"POT-Creation-Date: 2026-11-10 09:05+0000\n"
 "PO-Revision-Date: 2026-11-03 09:39+0000\n"
 "Last-Translator: Rafael Fontenelle <rafaelff@gnome.org>\n"
 "Language-Team: Portuguese (Brazil) <https://translate.fedoraproject.org/"
@@ -117,7 +117,8 @@ msgstr "O ID do comando \"{}\" não contém um argumento nomeado com ID \"{}\""
 #: argument_parser.cpp:1071
 #, c++-format
 msgid "Command id \"{}\" does not contain positional argument with id \"{}\""
-msgstr "O ID do comando \"{}\" não contém um argumento posicional com ID \"{}\""
+msgstr ""
+"O ID do comando \"{}\" não contém um argumento posicional com ID \"{}\""
 
 #: argument_parser.cpp:1078
 #, c++-format

@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-02 08:43+0000\n"
-"PO-Revision-Date: 2026-11-03 09:07+0000\n"
+"POT-Creation-Date: 2026-11-10 09:05+0000\n"
+"PO-Revision-Date: 2026-11-05 09:18+0000\n"
 "Last-Translator: David Medina <dmedinacpnl@gmail.com>\n"
 "Language-Team: Catalan <https://translate.fedoraproject.org/projects/dnf5/"
 "libdnf5/ca/>\n"
@@ -42,13 +42,13 @@ msgstr "S'ha produït un error en analitzar la informació de la transacció: {}
 msgid "Invalid option value: enabled={}"
 msgstr "Valor d'opció no vàlid: enabled:{}"
 
-#: base/goal.cpp:490
+#: base/goal.cpp:492
 #, c++-format
 msgid "Unsupported argument for REMOVE action: {}"
 msgstr "Argument no suportat per a l'acció REMOVE: {}"
 
 #. TODO(lukash) throw a proper exception
-#: base/goal.cpp:1741
+#: base/goal.cpp:1743
 #, c++-format
 msgid "Incorrect configuration value for multilib_policy: {}"
 msgstr "Valor de configuració incorrecte per a multilib_policy: {}"
@@ -178,7 +178,7 @@ msgstr "No hi ha grups a eliminar per a l'argument: {}"
 #: base/log_event.cpp:146
 #, c++-format
 msgid "No environmental groups to remove for argument: {}"
-msgstr "No hi ha grups ambientals a eliminar per a l'argument: {}"
+msgstr "No hi ha grups d'entorn per suprimir per a l'argument: {}"
 
 #: base/log_event.cpp:148
 #, c++-format
@@ -208,7 +208,8 @@ msgstr "No coincideix amb l'argument: {}"
 #: base/log_event.cpp:163
 #, c++-format
 msgid "No match for argument '{0}' in selected advisories"
-msgstr "No hi ha coincidència per a l'argument «{0}» en els avisos seleccionats"
+msgstr ""
+"No hi ha coincidència per a l'argument «{0}» en els avisos seleccionats"
 
 #: base/log_event.cpp:165
 msgid "No match in selected advisories"
@@ -294,7 +295,7 @@ msgid ""
 "cannot downgrade it."
 msgstr ""
 "La versió més baixa disponible del paquet \"{}\" ja està instal·lada, no es "
-"pot desactualitzar."
+"pot degradar."
 
 #: base/log_event.cpp:229
 #, c++-format
@@ -336,7 +337,7 @@ msgstr "El grup \"{}\" ja està instal·lat."
 #: base/log_event.cpp:251
 #, c++-format
 msgid "Environmental group \"{}\" is already installed."
-msgstr "El grup ambiental \"{}\" ja està instal·lat."
+msgstr "El grup d'entorn \"{}\" ja està instal·lat."
 
 #: base/log_event.cpp:258
 #, c++-format
@@ -414,8 +415,8 @@ msgid ""
 "The operation would result in switching of module '{0}' stream '{1}' to "
 "stream '{2}'\n"
 msgstr ""
-"L'operació resultaria en commutar el flux del mòdul '{0}' '{1}' al flux '{2}"
-"'\n"
+"L'operació resultaria en commutar el flux del mòdul '{0}' '{1}' al flux "
+"'{2}'\n"
 
 #: base/log_event.cpp:342
 msgid ""
@@ -525,7 +526,7 @@ msgstr ""
 
 #: base/solver_problems.cpp:51 base/solver_problems.cpp:90
 msgid "cannot install the best candidate for the job"
-msgstr "no es pot instal·lar el millor candidat per al treball"
+msgstr "no es pot instal·lar el millor candidat per a la tasca"
 
 #: base/solver_problems.cpp:52
 #, c++-format
@@ -808,7 +809,7 @@ msgstr "La marca tsflag no és vàlida: {}"
 #: base/transaction.cpp:1611
 #, c++-format
 msgid "Public key \"{}\" is already present, not importing."
-msgstr "La clau pública \"{}\" ja està present, no s'està important."
+msgstr "La clau pública \"{}\" ja està present, no s'importa."
 
 #: base/transaction.cpp:1634
 #, c++-format
@@ -1025,7 +1026,8 @@ msgstr "El valor de l'opció número \"{}\" no és vàlid"
 #: conf/option_path.cpp:93
 #, c++-format
 msgid "Only absolute paths allowed, relative path \"{}\" detected"
-msgstr "Només es permeten camins absoluts, s'ha detectat el camí relatiu \"{}\""
+msgstr ""
+"Només es permeten camins absoluts, s'ha detectat el camí relatiu \"{}\""
 
 #: conf/option_path.cpp:98
 #, c++-format
@@ -1117,7 +1119,7 @@ msgstr "no hi ha solució possible"
 #: module/module_metadata.cpp:102
 #, c++-format
 msgid "Failed to update from string: {}"
-msgstr "No s'ha pogut actualitzar des de la cadena: {}"
+msgstr "Ha fallat actualitzar des de la cadena: {}"
 
 #: module/module_metadata.cpp:129
 #, c++-format
@@ -1127,12 +1129,12 @@ msgstr "No s'han pogut resoldre les metadades del mòdul: {}"
 #: module/module_metadata.cpp:140
 #, c++-format
 msgid "Failed to upgrade defaults: {}"
-msgstr "No s'han pogut actualitzar els valors predeterminats: {}"
+msgstr "Ha fallat actualitzar els valors per defecte: {}"
 
 #: module/module_metadata.cpp:144
 #, c++-format
 msgid "Failed to upgrade streams: {}"
-msgstr "No s'han pogut actualitzar els fluxos: {}"
+msgstr "Ha fallat actualitzar els fluxos: {}"
 
 #: module/module_sack.cpp:93
 #, c++-format
@@ -1402,8 +1404,8 @@ msgstr ""
 #, c++-format
 msgid "Unsupported extended repodata type for the system repo: \"{}\"."
 msgstr ""
-"Tipus de dades de repodades esteses no suportades per al repo del sistema: \""
-"{}\"."
+"Tipus de dades de repodades esteses no suportades per al repo del sistema: "
+"\"{}\"."
 
 #: repo/solv_repo.cpp:396
 #, c++-format
@@ -1421,7 +1423,8 @@ msgstr ""
 #: repo/solv_repo.cpp:455
 #, c++-format
 msgid "Failed to load system repo from root \"{}\": {}"
-msgstr "No s'ha pogut carregar el dipòsit del sistema des de l'arrel \"{}\": {}"
+msgstr ""
+"No s'ha pogut carregar el dipòsit del sistema des de l'arrel \"{}\": {}"
 
 #: repo/solv_repo.cpp:559
 #, c++-format
@@ -1453,8 +1456,8 @@ msgstr ""
 #, c++-format
 msgid "Failed to re-load {} cache for repo \"{}\" from \"{}\": {}"
 msgstr ""
-"No s'ha pogut tornar a carregar la memòria cau {} per al dipòsit \"{}\" de \""
-"{}\": {}"
+"No s'ha pogut tornar a carregar la memòria cau {} per al dipòsit \"{}\" de "
+"\"{}\": {}"
 
 #: repo/temp_files_memory.cpp:52
 #, c++-format
@@ -1603,7 +1606,7 @@ msgstr "No es pot eliminar el paquet \"{}\""
 #: rpm/transaction.cpp:399
 #, c++-format
 msgid "Cannot upgrade package \"{}\""
-msgstr "No es pot actualitzar el paquet \"{}\""
+msgstr "No es pot actualitzar el paquet {}"
 
 #: rpm/transaction.cpp:403
 #, c++-format
@@ -1762,7 +1765,8 @@ msgstr "'filtre' desconegut \"{}\" a \"{}\" a la línia {}"
 #: solv/vendor_change_manager.cpp:740
 #, c++-format
 msgid "Missing 'filter' key in \"{}\" for table entry on line {}"
-msgstr "Falta la clau «filter» a «{}» per a l'entrada de la taula a la línia {}"
+msgstr ""
+"Falta la clau «filter» a «{}» per a l'entrada de la taula a la línia {}"
 
 #: solv/vendor_change_manager.cpp:745
 #, c++-format
@@ -1920,7 +1924,8 @@ msgstr ""
 #: solv/vendor_change_manager.cpp:1317
 #, c++-format
 msgid "Filter '{}' only supports relational comparators: =, !=, >, >=, <, <="
-msgstr "El filtre «{}» només admet comparadors relacionals: =, !=, >, >=, <, <="
+msgstr ""
+"El filtre «{}» només admet comparadors relacionals: =, !=, >, >=, <, <="
 
 #: solv/vendor_change_manager.cpp:1321
 #, c++-format
@@ -2129,8 +2134,8 @@ msgid ""
 "Action '{0}' '{1}' cannot be merged because it is not present at that point "
 "-> skipping it."
 msgstr ""
-"L'acció '{0}' '{1}' no es pot fusionar perquè no està present en aquest "
-"punt -. s'omet."
+"L'acció '{0}' '{1}' no es pot fusionar perquè no està present en aquest punt "
+"-. s'omet."
 
 #: transaction/transaction_merge.cpp:245
 #, c++-format
@@ -2138,8 +2143,8 @@ msgid ""
 "Action '{0}' '{1}' cannot be merged because it is not present at that point "
 "-> setting 'INSTALL'."
 msgstr ""
-"L'acció «{0}» «{1}» no es pot fusionar perquè no està present en aquest "
-"punt -. s'estableix «INSTALL»."
+"L'acció «{0}» «{1}» no es pot fusionar perquè no està present en aquest punt "
+"-. s'estableix «INSTALL»."
 
 #: transaction/transaction_merge.cpp:266
 #, c++-format
@@ -2156,8 +2161,8 @@ msgid ""
 "Action '{0}' '{1}' cannot be merged because it is already present at that "
 "point -> skipping it."
 msgstr ""
-"L'acció '{0}' '{1}' no es pot fusionar perquè ja està present en aquest "
-"punt -. s'omet."
+"L'acció '{0}' '{1}' no es pot fusionar perquè ja està present en aquest punt "
+"-. s'omet."
 
 #: transaction/transaction_merge.cpp:294
 #, c++-format
@@ -2263,39 +2268,39 @@ msgstr ""
 "Falta la clau d'objecte obligatòria «groupid» en un rpm amb raó «Group» i "
 "acció «Reason Change»"
 
-#: utils/bootc.cpp:46
+#: utils/bootc.cpp:47
 #, c++-format
 msgid "Error checking bootc status: {}"
 msgstr "S'ha produït un error en comprovar l'estat de l'arrencada: {}"
 
-#: utils/bootc.cpp:49
+#: utils/bootc.cpp:50
 #, c++-format
 msgid "Error checking bootc status: bootc command failed with exit code {}"
 msgstr ""
 "S'ha produït un error en comprovar l'estat del bootc: l'ordre bootc ha "
 "fallat amb el codi de sortida {}"
 
-#: utils/bootc.cpp:58
+#: utils/bootc.cpp:59
 msgid "Error checking bootc status: Failed to parse JSON output"
 msgstr ""
 "S'ha produït un error en comprovar l'estat de l'arrencada: no s'ha pogut "
 "analitzar la sortida JSON"
 
-#: utils/bootc.cpp:73
+#: utils/bootc.cpp:74
 #, c++-format
 msgid "Failed to query status of bootc system: {}"
 msgstr "No s'ha pogut consultar l'estat del sistema d'arrencada: {}"
 
-#: utils/bootc.cpp:90
+#: utils/bootc.cpp:91
 msgid "Failed to stat /usr filesystem"
 msgstr "Ha fallat l'estat del sistema de fitxers /usr"
 
-#: utils/bootc.cpp:125
+#: utils/bootc.cpp:127
 #, c++-format
 msgid "Error running `bootc usr-overlay --read-only`: {}"
 msgstr "Error executant :bootc usr-overlay --read-only:: {}"
 
-#: utils/bootc.cpp:128
+#: utils/bootc.cpp:130
 #, c++-format
 msgid ""
 "Error running `bootc usr-overlay --read-only`: bootc command failed with "
@@ -2304,11 +2309,11 @@ msgstr ""
 "Error executant :bootc usr-overlay --read-only:: l'ordre bootc ha fallat amb "
 "el codi de sortida {}"
 
-#: utils/bootc.cpp:136
+#: utils/bootc.cpp:138
 msgid "Failed to unshare mount namespace"
 msgstr "No s'ha pogut descompartir l'espai de noms de muntatge"
 
-#: utils/bootc.cpp:143
+#: utils/bootc.cpp:146
 #, c++-format
 msgid "Failed to remount /usr as read-write: {}"
 msgstr "No s'ha pogut tornar a muntar /usr com a lectura-escriptura: {}"
@@ -2335,7 +2340,7 @@ msgstr "s'ha produït un error en escriure el fitxer"
 
 #: utils/fs/file.cpp:190
 msgid "error flushing file"
-msgstr "s'ha produït un error en netejar el fitxer"
+msgstr "error en netejar el fitxer"
 
 #: utils/fs/file.cpp:199
 msgid "error seeking in file"

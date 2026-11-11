@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-02 08:43+0000\n"
+"POT-Creation-Date: 2026-11-10 09:05+0000\n"
 "PO-Revision-Date: 2026-11-03 09:42+0000\n"
 "Last-Translator: Dennis Koerner <dennis@bumblebeeman.dev>\n"
 "Language-Team: German <https://translate.fedoraproject.org/projects/dnf5/"
@@ -80,8 +80,9 @@ msgid ""
 "One of --from-repofile=<URL>, --set=baseurl=<URL>, --set=mirrorlist=<URL>, --"
 "set=metalink=<URL> must be set to a non-empty URL"
 msgstr ""
-"Eines von --from-repofile=<URL>, --set=baseurl=<URL>, --set=mirrorlist=<URL>"
-", --set=metalink=<URL> muss auf eine nicht-leere URL gesetzt werden"
+"Eines von --from-repofile=<URL>, --set=baseurl=<URL>, --"
+"set=mirrorlist=<URL>, --set=metalink=<URL> muss auf eine nicht-leere URL "
+"gesetzt werden"
 
 #: addrepo.cpp:408
 #, c++-format
@@ -331,8 +332,8 @@ msgid ""
 "Sets the \"{}\" option of the repository \"{}\" again with a different "
 "value: \"{}\" != \"{}\""
 msgstr ""
-"Setzt die „{}“-Option der Paketquelle „{}“ mit einem anderen Wert erneut: „{}"
-"“ != „{}“"
+"Setzt die „{}“-Option der Paketquelle „{}“ mit einem anderen Wert erneut: "
+"„{}“ != „{}“"
 
 #: setopt.cpp:100
 #, c++-format

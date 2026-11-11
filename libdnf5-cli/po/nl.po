@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-02 08:43+0000\n"
+"POT-Creation-Date: 2026-11-10 09:05+0000\n"
 "PO-Revision-Date: 2026-11-03 09:51+0000\n"
 "Last-Translator: Sijmen Schoon <fedora@vijf.life>\n"
 "Language-Team: Dutch <https://translate.fedoraproject.org/projects/dnf5/"
@@ -34,7 +34,8 @@ msgstr "Verkeerd geconfigureerde alias \"{}\": index \"{}\" buiten bereik"
 #: argument_parser.cpp:98
 #, c++-format
 msgid "\"{}\" not allowed together with named argument \"{}\""
-msgstr "\"{}\" is niet toegestaan in combinatie met een genoemd argument \"{}\""
+msgstr ""
+"\"{}\" is niet toegestaan in combinatie met een genoemd argument \"{}\""
 
 #: argument_parser.cpp:100
 #, c++-format
@@ -99,7 +100,8 @@ msgstr "Benoemd argument-id \"{}\" is al geregistreerd voor opdracht \"{}\""
 #: argument_parser.cpp:1018
 #, c++-format
 msgid "Positional argument id \"{}\" already registered for command \"{}\""
-msgstr "Positioneel argument-id \"{}\" is al geregistreerd voor opdracht \"{}\""
+msgstr ""
+"Positioneel argument-id \"{}\" is al geregistreerd voor opdracht \"{}\""
 
 #: argument_parser.cpp:1028
 #, c++-format
@@ -167,7 +169,8 @@ msgstr ""
 
 #: output/modulelist.cpp:39
 msgid "Hint: [d]efault, [e]nabled, [x]disabled, [i]nstalled"
-msgstr "Hint: [d]standaard, [e]ingeschakeld, [x]uitgeschakeld, [i]geïnstalleerd"
+msgstr ""
+"Hint: [d]standaard, [e]ingeschakeld, [x]uitgeschakeld, [i]geïnstalleerd"
 
 #. Note for translators: This is a right-aligned column separator in
 #. a package properties table as in "Name    : bash".

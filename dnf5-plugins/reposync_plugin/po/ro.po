@@ -1,0 +1,95 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# Remus-Gabriel Chelu <remusgabriel.chelu@disroot.org>, 2026.
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-11-10 09:05+0000\n"
+"PO-Revision-Date: 2026-11-05 09:18+0000\n"
+"Last-Translator: Remus-Gabriel Chelu <remusgabriel.chelu@disroot.org>\n"
+"Language-Team: Romanian <https://translate.fedoraproject.org/projects/dnf5/"
+"dnf5-plugin-reposync/ro/>\n"
+"Language: ro\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=n==1 ? 0 : (n==0 || (n%100 > 0 && n%100 < "
+"20)) ? 1 : 2;\n"
+"X-Generator: Weblate 2026.11\n"
+
+#: reposync.cpp:67
+msgid "Synchronize a remote DNF repository to a local directory."
+msgstr "Sincronizează un depozit DNF de la distanță cu un director local."
+
+#: reposync.cpp:122
+#, c++-format
+msgid ""
+"Invalid value \"{}\" for \"--latest-limit\", a positive integer is required"
+msgstr ""
+"Valoarea „{}” pentru „--latest-limit” nu este validă; este necesar un număr "
+"întreg pozitiv"
+
+#: reposync.cpp:191
+msgid "Can't use --norepopath with multiple repositories enabled"
+msgstr ""
+"Nu se poate utiliza opțiunea „--norepopath” atunci când sunt activate mai "
+"multe depozite"
+
+#: reposync.cpp:196
+msgid "Can't use --safe-write-path with multiple repositories enabled"
+msgstr ""
+"Nu se poate utiliza opțiunea „--safe-write-path” atunci când sunt activate "
+"mai multe depozite"
+
+#: reposync.cpp:292
+#, c++-format
+msgid ""
+"Download destination '{0}' for location '{1}' of '{2}' package from '{3}' "
+"repo is outside of safe write path '{4}'."
+msgstr ""
+"Destinația de descărcare „{0}” pentru locația „{1}” a pachetului „{2}” din "
+"depozitul „{3}” se află în afara rutei sigure de scriere „{4}”."
+
+#: reposync.cpp:320
+#, c++-format
+msgid "Failed to download package: {}"
+msgstr "Nu s-a putut descărca pachetul: {}"
+
+#: reposync.cpp:323
+msgid "Failed to download one or more packages"
+msgstr "Nu s-a putut descărca unul sau mai multe pachete"
+
+#: reposync.cpp:335
+#, c++-format
+msgid "Failed to create directory '{0}' iterator: {1}"
+msgstr "Eșec la crearea iteratorului pentru directorul „{0}”: {1}"
+
+#: reposync.cpp:348
+#, c++-format
+msgid "Failed to delete file {0}: {1}"
+msgstr "Nu s-a putut șterge fișierul {0}: {1}"
+
+#: reposync.cpp:351
+#, c++-format
+msgid "[DELETED] {}"
+msgstr "[ȘTERS] {}"
+
+#: reposync.cpp:367
+#, c++-format
+msgid "Removing '{}' with failing OpenPGP check: {}"
+msgstr "Se elimină „{}” în cazul unei verificări OpenPGP eșuate: {}"
+
+#: reposync.cpp:430
+msgid "Failed to get mirror for metadata."
+msgstr "Nu s-a putut obține depozitul-oglindă pentru metadate."
+
+#: reposync.cpp:440
+#, c++-format
+msgid "Failed to get mirror for package: \"{}\""
+msgstr "Nu s-a putut obține depozitul-oglindă pentru pachetul: „{}”"
+
+#: reposync.cpp:456
+msgid "OpenPGP signature check failed"
+msgstr "Verificarea semnăturii OpenPGP a eșuat"

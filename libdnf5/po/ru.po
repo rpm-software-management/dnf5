@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-02 08:43+0000\n"
+"POT-Creation-Date: 2026-11-10 09:05+0000\n"
 "PO-Revision-Date: 2026-11-03 09:40+0000\n"
 "Last-Translator: Andrei Stepanov <adem4ik@gmail.com>\n"
 "Language-Team: Russian <https://translate.fedoraproject.org/projects/dnf5/"
@@ -43,13 +43,13 @@ msgstr "Ошибка при разборе информации о транза�
 msgid "Invalid option value: enabled={}"
 msgstr "Недопустимое значение опции: enabled={}"
 
-#: base/goal.cpp:490
+#: base/goal.cpp:492
 #, c++-format
 msgid "Unsupported argument for REMOVE action: {}"
 msgstr "Неподдерживаемый аргумент для действия REMOVE: {}"
 
 #. TODO(lukash) throw a proper exception
-#: base/goal.cpp:1741
+#: base/goal.cpp:1743
 #, c++-format
 msgid "Incorrect configuration value for multilib_policy: {}"
 msgstr "Неверное значение конфигурации для multilib_policy: {}"
@@ -1038,8 +1038,8 @@ msgstr ""
 msgid ""
 "Invalid time option value \"{}\", negative values except \"-1\" not allowed"
 msgstr ""
-"Недопустимое значение опции времени \"{}\", отрицательные значения, кроме \"-"
-"1\", недопустимы"
+"Недопустимое значение опции времени \"{}\", отрицательные значения, кроме "
+"\"-1\", недопустимы"
 
 #: conf/option_seconds.cpp:59
 #, c++-format
@@ -1384,7 +1384,8 @@ msgstr ""
 #: repo/solv_repo.cpp:396
 #, c++-format
 msgid "Failed to load {} extension for repo \"{}\" from \"{}\": {}"
-msgstr "Не удалось загрузить расширение {} для репозитория \"{}\" из \"{}\": {}"
+msgstr ""
+"Не удалось загрузить расширение {} для репозитория \"{}\" из \"{}\": {}"
 
 #: repo/solv_repo.cpp:436
 #, c++-format
@@ -1634,8 +1635,8 @@ msgid ""
 "Configuration \"{}\" uses version \"1.0\" which does not support key '{}' on "
 "line {}"
 msgstr ""
-"Конфигурация \"{}\" использует версию \"1.0\", которая не поддерживает ключ '"
-"{}' в строке {}"
+"Конфигурация \"{}\" использует версию \"1.0\", которая не поддерживает ключ "
+"'{}' в строке {}"
 
 #: solv/vendor_change_manager.cpp:445
 #, c++-format
@@ -1665,7 +1666,8 @@ msgstr ""
 #: solv/vendor_change_manager.cpp:519
 #, c++-format
 msgid "Missing 'vendor' key in \"{}\" in table starting on line {}"
-msgstr "Отсутствует ключ 'vendor' в \"{}\" в таблице, начинающейся со строки {}"
+msgstr ""
+"Отсутствует ключ 'vendor' в \"{}\" в таблице, начинающейся со строки {}"
 
 #: solv/vendor_change_manager.cpp:532
 #, c++-format
@@ -1921,15 +1923,15 @@ msgstr "Состояние {} для \"{}\" не найдено."
 #, c++-format
 msgid "Loading system state TOML file {} failed (see dnf5-system-state(7)): {}"
 msgstr ""
-"Загрузка TOML-файла состояния системы {} не удалась (см. dnf5-system-state"
-"(7)): {}"
+"Загрузка TOML-файла состояния системы {} не удалась (см. dnf5-system-"
+"state(7)): {}"
 
 #: system/state.cpp:649
 #, c++-format
 msgid "Unsupported TOML version \"{}\", maximum supported version is \"{}\""
 msgstr ""
-"Неподдерживаемая версия TOML \"{}\", максимальная поддерживаемая версия - \""
-"{}\""
+"Неподдерживаемая версия TOML \"{}\", максимальная поддерживаемая версия - "
+"\"{}\""
 
 #: system/state.cpp:798
 #, c++-format
@@ -2086,7 +2088,8 @@ msgstr ""
 #: transaction/transaction_merge.cpp:215
 #, c++-format
 msgid "Unexpected action encountered: '{0}' during transaction merge."
-msgstr "Во время объединения транзакций обнаружено неожиданное действие: '{0}'."
+msgstr ""
+"Во время объединения транзакций обнаружено неожиданное действие: '{0}'."
 
 #: transaction/transaction_merge.cpp:224
 #, c++-format
@@ -2227,35 +2230,35 @@ msgstr ""
 "Отсутствует обязательный ключ-объект \"group_id\" в rpm с причиной \"Group\" "
 "и действием \"Reason Change\""
 
-#: utils/bootc.cpp:46
+#: utils/bootc.cpp:47
 #, c++-format
 msgid "Error checking bootc status: {}"
 msgstr "Ошибка проверки состояния bootc: {}"
 
-#: utils/bootc.cpp:49
+#: utils/bootc.cpp:50
 #, c++-format
 msgid "Error checking bootc status: bootc command failed with exit code {}"
 msgstr "Ошибка проверки состояния bootc: команда bootc завершилась с кодом {}"
 
-#: utils/bootc.cpp:58
+#: utils/bootc.cpp:59
 msgid "Error checking bootc status: Failed to parse JSON output"
 msgstr "Ошибка проверки состояния bootc: не удалось разобрать вывод JSON"
 
-#: utils/bootc.cpp:73
+#: utils/bootc.cpp:74
 #, c++-format
 msgid "Failed to query status of bootc system: {}"
 msgstr "Не удалось запросить состояние системы bootc: {}"
 
-#: utils/bootc.cpp:90
+#: utils/bootc.cpp:91
 msgid "Failed to stat /usr filesystem"
 msgstr "Не удалось выполнить stat для файловой системы /usr"
 
-#: utils/bootc.cpp:125
+#: utils/bootc.cpp:127
 #, c++-format
 msgid "Error running `bootc usr-overlay --read-only`: {}"
 msgstr "Ошибка выполнения `bootc usr-overlay --read-only`: {}"
 
-#: utils/bootc.cpp:128
+#: utils/bootc.cpp:130
 #, c++-format
 msgid ""
 "Error running `bootc usr-overlay --read-only`: bootc command failed with "
@@ -2264,11 +2267,11 @@ msgstr ""
 "Ошибка выполнения `bootc usr-overlay --read-only`: команда bootc завершилась "
 "с кодом {}"
 
-#: utils/bootc.cpp:136
+#: utils/bootc.cpp:138
 msgid "Failed to unshare mount namespace"
 msgstr "Не удалось разделить пространство имён монтирования"
 
-#: utils/bootc.cpp:143
+#: utils/bootc.cpp:146
 #, c++-format
 msgid "Failed to remount /usr as read-write: {}"
 msgstr "Не удалось перемонтировать /usr как чтение-запись: {}"

@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-02 08:43+0000\n"
+"POT-Creation-Date: 2026-11-10 09:05+0000\n"
 "PO-Revision-Date: 2026-11-03 09:42+0000\n"
 "Last-Translator: Hyeonmin Oh <hyunmin860@gmail.com>\n"
 "Language-Team: Korean <https://translate.fedoraproject.org/projects/dnf5/"
@@ -42,7 +42,8 @@ msgstr "설치된 꾸러미의 모든 버전을 포함하는 권고를 표시합
 msgid ""
 "Show advisories containing newer versions of installed packages. This is the "
 "default behavior."
-msgstr "설치된 꾸러미의 신규 버전을 포함하는 권고를 표시합니다. 이는 기본 동작입니다."
+msgstr ""
+"설치된 꾸러미의 신규 버전을 포함하는 권고를 표시합니다. 이는 기본 동작입니다."
 
 #: commands/advisory/arguments.hpp:55
 msgid ""
@@ -54,16 +55,16 @@ msgid ""
 "Show advisories containing newer versions of installed packages for which a "
 "newer version is available."
 msgstr ""
-"신규 버전을 사용 할 수 있는 설치된 꾸러미의 신규 버전을 포함하는 권고를 "
-"표시합니다."
+"신규 버전을 사용 할 수 있는 설치된 꾸러미의 신규 버전을 포함하는 권고를 표시"
+"합니다."
 
 #: commands/advisory/arguments.hpp:80
 msgid ""
 "Show only advisories containing packages with specified names. List option, "
 "supports globs."
 msgstr ""
-"지정된 이름을 갖는 꾸러미를 포함하는 권고만 표시합니다. 옵션을 나열하고, "
-"glob을 지원합니다."
+"지정된 이름을 갖는 꾸러미를 포함하는 권고만 표시합니다. 옵션을 나열하고, glob"
+"을 지원합니다."
 
 #: commands/advisory/arguments.hpp:81
 msgid "PACKAGE_NAME,..."
@@ -113,8 +114,8 @@ msgid ""
 "Include content contained in advisories with specified severity. List "
 "option. Can be \"critical\", \"important\", \"moderate\", \"low\", \"none\"."
 msgstr ""
-"지정된 심각도를 갖는 권고에 담긴 내용을 포함합니다. 옵션 목록. \"심각\", "
-"\"중요\", \"보통\", \"낮음\", \"없음\"이 될 수 있습니다."
+"지정된 심각도를 갖는 권고에 담긴 내용을 포함합니다. 옵션 목록. \"심각\", \"중"
+"요\", \"보통\", \"낮음\", \"없음\"이 될 수 있습니다."
 
 #: commands/advisory/arguments.hpp:157
 msgid "ADVISORY_SEVERITY,..."
@@ -124,7 +125,8 @@ msgstr "권고_심각도,..."
 msgid ""
 "Include content contained in advisories that fix a Bugzilla ID, Eg. 123123. "
 "List option."
-msgstr "버그질라 ID (Eg. 123123)에서 수정된 권고에 담긴 내용을 포함합니다. 옵션 목록."
+msgstr ""
+"버그질라 ID (Eg. 123123)에서 수정된 권고에 담긴 내용을 포함합니다. 옵션 목록."
 
 #: commands/advisory/arguments.hpp:170
 msgid "BUGZILLA_ID,..."
@@ -135,8 +137,8 @@ msgid ""
 "Include content contained in advisories that fix a CVE (Common "
 "Vulnerabilities and Exposures) ID, Eg. CVE-2201-0123. List option."
 msgstr ""
-"CVE(일반 취약점 및 노출) ID(예: CVE-2201-0123)로 수정된 권고에 담긴 내용을 "
-"포함합니다. 옵션 목록."
+"CVE(일반 취약점 및 노출) ID(예: CVE-2201-0123)로 수정된 권고에 담긴 내용을 포"
+"함합니다. 옵션 목록."
 
 #: commands/advisory/arguments.hpp:182
 msgid "CVE_ID,..."
@@ -173,8 +175,8 @@ msgid ""
 "Show only groups containing packages with specified names. List option, "
 "supports globs."
 msgstr ""
-"지정된 이름을 갖는 꾸러미가 포함된 그룹만 표시합니다. 옵션 목록, "
-"와일드카드를 지원합니다."
+"지정된 이름을 갖는 꾸러미가 포함된 그룹만 표시합니다. 옵션 목록, 와일드카드"
+"를 지원합니다."
 
 #: commands/repo/repo.cpp:37
 msgid "Manage repositories"
@@ -194,14 +196,15 @@ msgid ""
 "This command has to be run with superuser privileges (under the root user on "
 "most systems)."
 msgstr ""
-"이 명령은 슈퍼유저 권한으로 실행해야합니다 (대부분의 시스템에서 root "
-"사용자로 실행)."
+"이 명령은 슈퍼유저 권한으로 실행해야합니다 (대부분의 시스템에서 root 사용자"
+"로 실행)."
 
 #: main.cpp:172
 #, c++-format
 msgid ""
 "{}: Badly formatted argument value: Last key character cannot be '.': {}"
-msgstr "{}: 인수 값의 형식이 잘못되었습니다. 키의 마지막 문자는 '.'일 수 없습니다: {}"
+msgstr ""
+"{}: 인수 값의 형식이 잘못되었습니다. 키의 마지막 문자는 '.'일 수 없습니다: {}"
 
 #: main.cpp:272 main.cpp:322
 msgid ". Add \"--help\" for more information about the arguments."

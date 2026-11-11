@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-02 08:43+0000\n"
+"POT-Creation-Date: 2026-11-10 09:05+0000\n"
 "PO-Revision-Date: 2026-11-03 09:37+0000\n"
 "Last-Translator: Anonymous <noreply@weblate.org>\n"
 "Language-Team: Czech <https://translate.fedoraproject.org/projects/dnf5/"
@@ -45,13 +45,13 @@ msgstr "Chyba parsování JSON při přehrání transakce: {}"
 msgid "Invalid option value: enabled={}"
 msgstr "Neplatná hodnota volby: enabled={}"
 
-#: base/goal.cpp:490
+#: base/goal.cpp:492
 #, c++-format
 msgid "Unsupported argument for REMOVE action: {}"
 msgstr "Nepodporovaný argument pro akci REMOVE: {}"
 
 #. TODO(lukash) throw a proper exception
-#: base/goal.cpp:1741
+#: base/goal.cpp:1743
 #, c++-format
 msgid "Incorrect configuration value for multilib_policy: {}"
 msgstr "Nesprávná hodnota konfigurace pro multilib_policy: {}"
@@ -849,7 +849,8 @@ msgstr "Při importu klíče \"{}\" došlo k chybě: {}"
 #, fuzzy, c++-format
 #| msgid "PGP check for package \"{}\" ({}) from repo \"{}\" has failed: "
 msgid "OpenPGP check for package \"{}\" ({}) from repo \"{}\" has failed: "
-msgstr "Kontrola PGP pro balíček \"{}\" ({}) z repozitáře \"{}\" se nezdařila: "
+msgstr ""
+"Kontrola PGP pro balíček \"{}\" ({}) z repozitáře \"{}\" se nezdařila: "
 
 #: base/transaction.cpp:1696
 msgid "Import of the key didn't help, wrong key?"
@@ -1599,7 +1600,8 @@ msgstr ""
 #: rpm/transaction.cpp:312
 #, c++-format
 msgid "Failed to read package header, cannot open file \"{}\": {}"
-msgstr "Nepodařilo se přečíst hlavičku balíčku, nelze otevřít soubor \"{}\": {}"
+msgstr ""
+"Nepodařilo se přečíst hlavičku balíčku, nelze otevřít soubor \"{}\": {}"
 
 #: rpm/transaction.cpp:329
 #, c++-format
@@ -2172,7 +2174,8 @@ msgstr "Nepodporovaná verze TOML \"{}\", maximální podporovaná verze je \"{}
 #: transaction/transaction_sr.cpp:74
 #, c++-format
 msgid "Incompatible major version: \"{}\", supported major version is \"{}\""
-msgstr "Nekompatibilní hlavní verze: \"{}\", podporovaná hlavní verze je \"{}\""
+msgstr ""
+"Nekompatibilní hlavní verze: \"{}\", podporovaná hlavní verze je \"{}\""
 
 #: transaction/transaction_sr.cpp:81
 #, fuzzy, c++-format
@@ -2240,51 +2243,51 @@ msgid ""
 "and action \"Reason Change\""
 msgstr ""
 
-#: utils/bootc.cpp:46
+#: utils/bootc.cpp:47
 #, c++-format
 msgid "Error checking bootc status: {}"
 msgstr ""
 
-#: utils/bootc.cpp:49
+#: utils/bootc.cpp:50
 #, c++-format
 msgid "Error checking bootc status: bootc command failed with exit code {}"
 msgstr ""
 
-#: utils/bootc.cpp:58
+#: utils/bootc.cpp:59
 msgid "Error checking bootc status: Failed to parse JSON output"
 msgstr ""
 
-#: utils/bootc.cpp:73
+#: utils/bootc.cpp:74
 #, fuzzy, c++-format
 #| msgid "Failed to update from string: {}"
 msgid "Failed to query status of bootc system: {}"
 msgstr "Aktualizace z řetězce: {} se nezdařila"
 
-#: utils/bootc.cpp:90
+#: utils/bootc.cpp:91
 #, fuzzy
 #| msgid "Failed to download files"
 msgid "Failed to stat /usr filesystem"
 msgstr "Stažení souborů se nezdařilo"
 
-#: utils/bootc.cpp:125
+#: utils/bootc.cpp:127
 #, c++-format
 msgid "Error running `bootc usr-overlay --read-only`: {}"
 msgstr ""
 
-#: utils/bootc.cpp:128
+#: utils/bootc.cpp:130
 #, c++-format
 msgid ""
 "Error running `bootc usr-overlay --read-only`: bootc command failed with "
 "exit code {}"
 msgstr ""
 
-#: utils/bootc.cpp:136
+#: utils/bootc.cpp:138
 #, fuzzy
 #| msgid "Failed to execute uname()"
 msgid "Failed to unshare mount namespace"
 msgstr "Nepodařilo se spustit uname()"
 
-#: utils/bootc.cpp:143
+#: utils/bootc.cpp:146
 #, fuzzy, c++-format
 #| msgid "Failed to resolve modules."
 msgid "Failed to remount /usr as read-write: {}"
@@ -2478,7 +2481,8 @@ msgstr "Navázání hodnoty integer64 s SQL příkazem se nezdařilo: \"{}\""
 #: utils/sqlite3/sqlite3.cpp:35
 #, c++-format
 msgid "Binding unsigned integer32 value to SQL statement failed: \"{}\""
-msgstr "Navázání hodnoty unsigned integer32 s SQL příkazem se nezdařilo: \"{}\""
+msgstr ""
+"Navázání hodnoty unsigned integer32 s SQL příkazem se nezdařilo: \"{}\""
 
 #: utils/sqlite3/sqlite3.cpp:37
 #, c++-format

@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-02 08:43+0000\n"
+"POT-Creation-Date: 2026-11-10 09:05+0000\n"
 "PO-Revision-Date: 2026-11-03 09:58+0000\n"
 "Last-Translator: Efstathios Iosifidis <eiosifidis@yandex.com>\n"
 "Language-Team: Greek <https://translate.fedoraproject.org/projects/dnf5/"
@@ -50,7 +50,8 @@ msgstr "Το «{}» δεν επιτρέπεται μαζί με το όρισμ�
 #: argument_parser.cpp:147
 #, c++-format
 msgid "Argument id \"{}\" already registered in group \"{}\""
-msgstr "Το αναγνωριστικό ορίσματος «{}» είναι ήδη καταχωρισμένο στην ομάδα «{}»"
+msgstr ""
+"Το αναγνωριστικό ορίσματος «{}» είναι ήδη καταχωρισμένο στην ομάδα «{}»"
 
 #: argument_parser.cpp:274
 #, c++-format
