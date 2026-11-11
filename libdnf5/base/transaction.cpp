@@ -1206,6 +1206,9 @@ Transaction::TransactionRunResult Transaction::Impl::_run(
         for (auto it : rpm_transaction.get_problems()) {
             transaction_problems.emplace_back(it.to_string());
         }
+        for (auto it : rpm_transaction.extract_rpm_messages()) {
+            transaction_problems.emplace_back(it);
+        }
         return TransactionRunResult::ERROR_RPM_RUN;
     }
 
@@ -1573,6 +1576,9 @@ Transaction::TransactionRunResult Transaction::Impl::_run(
     } else {
         for (auto it : rpm_transaction.get_problems()) {
             transaction_problems.emplace_back(it.to_string());
+        }
+        for (auto it : rpm_transaction.extract_rpm_messages()) {
+            transaction_problems.emplace_back(it);
         }
         return TransactionRunResult::ERROR_RPM_RUN;
     }
