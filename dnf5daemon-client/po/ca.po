@@ -2,13 +2,13 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # Joan Aymà <joan@ayma.cat>, 2025.
-# David Medina <dmedinacpnl@gmail.com>, 2025.
+# David Medina <dmedinacpnl@gmail.com>, 2025, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-02 08:43+0000\n"
-"PO-Revision-Date: 2025-05-13 11:25+0000\n"
+"POT-Creation-Date: 2026-11-10 09:05+0000\n"
+"PO-Revision-Date: 2026-11-05 09:18+0000\n"
 "Last-Translator: David Medina <dmedinacpnl@gmail.com>\n"
 "Language-Team: Catalan <https://translate.fedoraproject.org/projects/dnf5/"
 "dnf5daemon-client/ca/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.11.3\n"
+"X-Generator: Weblate 2026.11\n"
 
 #: commands/advisory/advisory.cpp:35
 msgid "Manage advisories"
@@ -151,13 +151,13 @@ msgstr "CVE_ID,..."
 #: commands/clean/clean.cpp:88
 #, c++-format
 msgid "Error cleaning the cache: {}"
-msgstr "Error al netejar la memòria cau: {}"
+msgstr "Error en netejar la memòria cau: {}"
 
 #: commands/distro-sync/distro-sync.cpp:48
 msgid ""
 "Upgrade or downgrade installed software to the latest available versions"
 msgstr ""
-"Actualitzar o desactualitzar el programari instal·lat a la versions més "
+"Actualitza o desactualitza el programari instal·lat a la versions més "
 "recents disponibles"
 
 #: commands/group/group.cpp:41

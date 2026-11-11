@@ -4,13 +4,15 @@
 # Rafael Fontenelle <rafaelff@gnome.org>, 2024, 2026.
 # "Geraldo S. Simião Kutz" <geraldo.simiao.kutz@gmail.com>, 2024.
 # Weblate Translation Memory <noreply-mt-weblate-translation-memory@weblate.org>, 2026.
+# Ciro Mota <ciromota@users.noreply.translate.fedoraproject.org>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-02 08:43+0000\n"
-"PO-Revision-Date: 2026-11-03 09:39+0000\n"
-"Last-Translator: Rafael Fontenelle <rafaelff@gnome.org>\n"
+"POT-Creation-Date: 2026-11-10 09:05+0000\n"
+"PO-Revision-Date: 2026-11-04 07:31+0000\n"
+"Last-Translator: Ciro Mota "
+"<ciromota@users.noreply.translate.fedoraproject.org>\n"
 "Language-Team: Portuguese (Brazil) <https://translate.fedoraproject.org/"
 "projects/dnf5/dnf5-plugin-config-manager/pt_BR/>\n"
 "Language: pt_BR\n"
@@ -79,8 +81,9 @@ msgid ""
 "One of --from-repofile=<URL>, --set=baseurl=<URL>, --set=mirrorlist=<URL>, --"
 "set=metalink=<URL> must be set to a non-empty URL"
 msgstr ""
-"Uma entre --from-repofile=<URL>, --set=baseurl=<URL>, --set=mirrorlist=<URL>"
-", --set=metalink=<URL> deve ser definida com uma URL não vazia"
+"Uma entre --from-repofile=<URL>, --set=baseurl=<URL>, --"
+"set=mirrorlist=<URL>, --set=metalink=<URL> deve ser definida com uma URL não "
+"vazia"
 
 #: addrepo.cpp:408
 #, c++-format
@@ -118,92 +121,104 @@ msgstr "Não é possível ler repositórios do diretório \"{}\": {}"
 #: addvendorpolicy.cpp:23
 msgid "Add a vendor change policy from a TOML file or compact format string"
 msgstr ""
+"Adicione uma política de alteração de fornecedor a partir de um arquivo TOML "
+"ou de uma string em formato compacto"
 
 #: addvendorpolicy.cpp:29
 msgid "Policy base filename (without .conf extension)"
-msgstr ""
+msgstr "Nome base do arquivo de política (sem a extensão .conf)"
 
 #: addvendorpolicy.cpp:40
 msgid "URL or local path to the source TOML policy file"
-msgstr ""
+msgstr "URL ou caminho local para o arquivo de política TOML de origem"
 
 #: addvendorpolicy.cpp:52
 msgid "Vendor change policy in compact format"
-msgstr ""
+msgstr "Política de alteração de fornecedor em formato compacto"
 
 #: addvendorpolicy.cpp:64
 msgid "Allow masking a distribution policy"
-msgstr ""
+msgstr "Permitir a ocultação de uma política de distribuição"
 
 #: addvendorpolicy.cpp:73
 msgid "Allow replacing an existing policy file"
-msgstr ""
+msgstr "Permitir a substituição de um arquivo de política existente"
 
 #: addvendorpolicy.cpp:82
 msgid "Require that the new policy masks a distribution policy"
-msgstr ""
+msgstr "Exigir que a nova política oculte uma política de distribuição"
 
 #: addvendorpolicy.cpp:94
 msgid "Require that the new policy replaces an existing system policy file"
 msgstr ""
+"Exija que a nova política substitua um arquivo de política de sistema "
+"existente"
 
 #: addvendorpolicy.cpp:123
 msgid "Option \"{option}\" with nonempty value is required"
-msgstr ""
+msgstr "A opção \"{option}\", com valor não vazio, é obrigatória"
 
 #: addvendorpolicy.cpp:129
 msgid "Either \"{option1}\" or non-empty \"{option2}\" is required"
-msgstr ""
+msgstr "É necessário informar \"{option1}\" ou um \"{option2}\" não vazio"
 
 #: addvendorpolicy.cpp:142
 msgid ""
 "Policy file \"{path}\" already exists. Use \"{option}\" to allow replacing "
 "it."
 msgstr ""
+"O arquivo de política \"{path}\" já existe. Use \"{option}\" para permitir "
+"sua substituição."
 
 #: addvendorpolicy.cpp:150
 msgid ""
 "Distribution policy \"{name}\" already exists. Use \"{option}\" to allow "
 "masking it."
 msgstr ""
+"A política de distribuição \"{name}\" já existe. Use \"{option}\" para "
+"permitir a sua substituição."
 
 #: addvendorpolicy.cpp:165
 msgid ""
 "Cannot add policy: option \"{option}\" requires masking a distribution "
 "policy, but no distribution policy named \"{name}\" exists."
 msgstr ""
+"Não é possível adicionar a política: a opção \"{option}\" exige a ocultação "
+"de uma política de distribuição, mas não existe nenhuma política de "
+"distribuição chamada \"{name}\"."
 
 #: addvendorpolicy.cpp:172
 msgid ""
 "Cannot add policy: option \"{option}\" requires replacing an existing system "
 "policy, but no system policy file named \"{name}\" exists."
 msgstr ""
+"Não é possível adicionar a política: a opção \"{option}\" exige a "
+"substituição de uma política de sistema existente, mas não existe nenhum "
+"arquivo de política de sistema com o nome \"{name}\"."
 
 #: addvendorpolicy.cpp:191 addvendorpolicy.cpp:215 addvendorpolicy.cpp:244
 msgid "Replaced vendor policy file: {path}"
-msgstr ""
+msgstr "Arquivo de política do fornecedor substituído: {path}"
 
 #: addvendorpolicy.cpp:196
 msgid "Created vendor policy file: {path}"
-msgstr ""
+msgstr "Arquivo de política de fornecedor criado: {path}"
 
 #: addvendorpolicy.cpp:204
-#, fuzzy
-#| msgid "from-repofile: \"{}\" file does not exist"
 msgid "Source file does not exist: {path}"
-msgstr "from-repofile: o arquivo \"{}\" não existe"
+msgstr "O arquivo de origem não existe: {path}"
 
 #: addvendorpolicy.cpp:222 addvendorpolicy.cpp:251
 msgid "Saved vendor policy file: {path}"
-msgstr ""
+msgstr "Arquivo de política do fornecedor salvo: {path}"
 
 #: addvendorpolicy.cpp:260
 msgid "Masked distribution policy file: {path}"
-msgstr ""
+msgstr "Arquivo de política de distribuição mascarado: {path}"
 
 #: addvendorpolicy.cpp:264
 msgid "Failed to add vendor policy"
-msgstr ""
+msgstr "Falha ao adicionar política de fornecedor"
 
 #: config-manager.cpp:47
 msgid "Manage configuration"
@@ -211,87 +226,91 @@ msgstr "Gerenciar configuração"
 
 #: listvendorpolicies.cpp:27
 msgid "List vendor change policy files"
-msgstr ""
+msgstr "Listar arquivos de política de alteração de fornecedor"
 
 #: listvendorpolicies.cpp:33 removevendorpolicy.cpp:29
 msgid "Policy base filename pattern (supports globs)"
-msgstr ""
+msgstr "Padrão de nome de arquivo base da política (suporta globs)"
 
 #: listvendorpolicies.cpp:42
 msgid "Show detailed information about the policies"
-msgstr ""
+msgstr "Exibir informações detalhadas sobre as políticas"
 
 #: listvendorpolicies.cpp:61 removevendorpolicy.cpp:49
 msgid "No vendor policy files found"
-msgstr ""
+msgstr "Nenhum arquivo de política do fornecedor foi encontrado"
 
 #: listvendorpolicies.cpp:80 removevendorpolicy.cpp:63
 msgid "No matching vendor policy files found for pattern: {pattern}"
 msgstr ""
+"Não foram encontrados arquivos de política de fornecedor correspondentes ao "
+"padrão: {pattern}"
 
 #. Note for translators: This is a right-aligned column separator in
 #. a package properties table as in "Name    : bash".
 #: listvendorpolicies.cpp:149
 msgid " : "
-msgstr ""
+msgstr " : "
 
 #. Add policy info
 #: listvendorpolicies.cpp:155
 msgid "Policy"
-msgstr ""
+msgstr "Política"
 
 #: listvendorpolicies.cpp:156
 msgid "Source"
-msgstr ""
+msgstr "Fonte"
 
 #: listvendorpolicies.cpp:157
 msgid "Distribution (read-only)"
-msgstr ""
+msgstr "Distribuição (somente leitura)"
 
 #: listvendorpolicies.cpp:157
 msgid "System (manageable)"
-msgstr ""
+msgstr "Sistema (gerenciável)"
 
 #: listvendorpolicies.cpp:157
 msgid "Type"
-msgstr ""
+msgstr "Tipo"
 
 #: listvendorpolicies.cpp:160
 msgid "Masks"
-msgstr ""
+msgstr "Máscaras"
 
 #: listvendorpolicies.cpp:165
 msgid "Masked by"
-msgstr ""
+msgstr "Mascarado por"
 
 #: listvendorpolicies.cpp:174
 msgid "<conversion failed: {what}>"
-msgstr ""
+msgstr "<conversão falhou: {what}>"
 
 #: listvendorpolicies.cpp:178 listvendorpolicies.cpp:183
 msgid "Compact"
-msgstr ""
+msgstr "Compactar"
 
 #: removevendorpolicy.cpp:23
 msgid "Remove vendor change policy files"
-msgstr ""
+msgstr "Remover arquivos de política de alterações do fornecedor"
 
 #: removevendorpolicy.cpp:74
 msgid "Removed vendor policy file: {path}"
-msgstr ""
+msgstr "Arquivo de política do fornecedor removido: {path}"
 
 #: removevendorpolicy.cpp:78
 msgid "Unmasked distribution policy file: {path}"
-msgstr ""
+msgstr "Arquivo de política de distribuição não mascarado: {path}"
 
 #: removevendorpolicy.cpp:83
 msgid "Failed to remove policy file: {path}"
-msgstr ""
+msgstr "Falha ao remover o arquivo de política: {path}"
 
 #: removevendorpolicy.cpp:87
 msgid ""
 "Cannot remove distribution policy file \"{path}\". To mask it, use: {command}"
 msgstr ""
+"Não é possível remover o arquivo de política de distribuição \"{path}\". "
+"Para ocultá-lo, utilize: {command}"
 
 #: repos.cpp:56 setopt.cpp:140
 #, c++-format

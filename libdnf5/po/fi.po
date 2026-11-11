@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-02 08:43+0000\n"
+"POT-Creation-Date: 2026-11-10 09:05+0000\n"
 "PO-Revision-Date: 2026-11-03 09:43+0000\n"
 "Last-Translator: GitHub webhook <noreply-webhook-github@weblate.org>\n"
 "Language-Team: Finnish <https://translate.fedoraproject.org/projects/dnf5/"
@@ -47,13 +47,13 @@ msgstr "Virhe jäsennettäessä tapahtumatietoja: {}"
 msgid "Invalid option value: enabled={}"
 msgstr "Virheellinen vaihtoehdon arvo: enabled={}"
 
-#: base/goal.cpp:490
+#: base/goal.cpp:492
 #, c++-format
 msgid "Unsupported argument for REMOVE action: {}"
 msgstr "Ei tuettu argumentti toiminnolle POISTA: {}"
 
 #. TODO(lukash) throw a proper exception
-#: base/goal.cpp:1741
+#: base/goal.cpp:1743
 #, c++-format
 msgid "Incorrect configuration value for multilib_policy: {}"
 msgstr "Virheellinen määritysarvo multilib_policylle: {}"
@@ -565,8 +565,8 @@ msgstr ""
 #, c++-format
 msgid "installed package {0} conflicts with {1} provided by {2} from {3}"
 msgstr ""
-"asennettu paketti {0} on ristiriidassa paketin {1} kanssa, jota tarjoaa {3}"
-":sta peräisin {2}"
+"asennettu paketti {0} on ristiriidassa paketin {1} kanssa, jota tarjoaa "
+"{3}:sta peräisin {2}"
 
 #: base/solver_problems.cpp:61
 #, c++-format
@@ -578,14 +578,15 @@ msgstr ""
 #: base/solver_problems.cpp:62
 #, c++-format
 msgid "installed package {0} obsoletes {1} provided by {2} from {3}"
-msgstr "asennetu paketti {0} vanhentaa {1}:n, jota tarjoaa {3}:sta peräisin {2}"
+msgstr ""
+"asennetu paketti {0} vanhentaa {1}:n, jota tarjoaa {3}:sta peräisin {2}"
 
 #: base/solver_problems.cpp:64
 #, c++-format
 msgid "package {0} from {1} implicitly obsoletes {2} provided by {3} from {4}"
 msgstr ""
-"{1}:sta peräisin paketti {0} epäsuorasti vanhentaa {2}:n, jota tarjoaa {4}"
-":sta peräisin {3}"
+"{1}:sta peräisin paketti {0} epäsuorasti vanhentaa {2}:n, jota tarjoaa "
+"{4}:sta peräisin {3}"
 
 #: base/solver_problems.cpp:66
 #, c++-format
@@ -817,8 +818,8 @@ msgstr "Avaimen \"{}\" tuonnissa tapahtui virhe: {}"
 #, c++-format
 msgid "OpenPGP check for package \"{}\" ({}) from repo \"{}\" has failed: "
 msgstr ""
-"OpenPGP-tarkistus tietovarastosta \"{}\" ({}) peräisin olevalle paketille \""
-"{}\" epäonnistui: "
+"OpenPGP-tarkistus tietovarastosta \"{}\" ({}) peräisin olevalle paketille "
+"\"{}\" epäonnistui: "
 
 #: base/transaction.cpp:1696
 msgid "Import of the key didn't help, wrong key?"
@@ -1235,7 +1236,8 @@ msgstr "Pakettien lataaminen epäonnistui"
 #: repo/repo.cpp:62
 #, c++-format
 msgid "Failed to load RPM \"{}\": doesn't have the \".rpm\" extension"
-msgstr "RPM-\"{}\":n lataaminen epäonnistui: sillä ei ole \".rpm\" -laajennusta"
+msgstr ""
+"RPM-\"{}\":n lataaminen epäonnistui: sillä ei ole \".rpm\" -laajennusta"
 
 #: repo/repo.cpp:66
 #, c++-format
@@ -1245,7 +1247,8 @@ msgstr "RPM-\"{}\":n käyttö epäonnistui: {}"
 #: repo/repo.cpp:108
 #, c++-format
 msgid "Invalid repository id \"{}\": unexpected character '{}'"
-msgstr "Virheellinen ohjelmistolähteen tunnus \"{}\": odottamaton merkki \"{}\""
+msgstr ""
+"Virheellinen ohjelmistolähteen tunnus \"{}\": odottamaton merkki \"{}\""
 
 #: repo/repo.cpp:151
 #, c++-format
@@ -1464,8 +1467,8 @@ msgstr ""
 msgid ""
 "An error occurred when parsing the temporary files memory file at '{}': {}"
 msgstr ""
-"Tapahtui virhe jäsennettäessä väliaikaisten tiedostojen muistitiedostoa '{}"
-"':lla: {}"
+"Tapahtui virhe jäsennettäessä väliaikaisten tiedostojen muistitiedostoa "
+"'{}':lla: {}"
 
 #: rpm/checksum.cpp:98
 msgid "Unknown checksum type"
@@ -1809,7 +1812,8 @@ msgstr ""
 #, fuzzy, c++-format
 #| msgid "Invalid repository id \"{}\": unexpected character '{}'"
 msgid "Unexpected character '{}'"
-msgstr "Virheellinen ohjelmistolähteen tunnus \"{}\": odottamaton merkki \"{}\""
+msgstr ""
+"Virheellinen ohjelmistolähteen tunnus \"{}\": odottamaton merkki \"{}\""
 
 #: solv/vendor_change_manager.cpp:1045
 msgid "Expected quoted string starting with '\"'"
@@ -2105,8 +2109,8 @@ msgid ""
 "Action '{0}' '{1}' cannot be merged because it is not present at that point "
 "-> setting 'INSTALL'."
 msgstr ""
-"Toimintoa '{0}' '{1}' ei voida yhdistää, koska sitä ei ole siinä "
-"vaiheessa -> asetus 'INSTALL'."
+"Toimintoa '{0}' '{1}' ei voida yhdistää, koska sitä ei ole siinä vaiheessa "
+"-> asetus 'INSTALL'."
 
 #: transaction/transaction_merge.cpp:266
 #, c++-format
@@ -2132,8 +2136,8 @@ msgid ""
 "Action '{0}' '{1}' cannot be merged because it is already installed in "
 "version '{2}' -> keeping the action from older transaction with '{1}'."
 msgstr ""
-"Toimintoa '{0}' '{1}' ei voida yhdistää, koska se on jo asennettu versioon '"
-"{2}' -> säilytetään toiminto vanhemmasta tapahtumasta versiolla '{1}'."
+"Toimintoa '{0}' '{1}' ei voida yhdistää, koska se on jo asennettu versioon "
+"'{2}' -> säilytetään toiminto vanhemmasta tapahtumasta versiolla '{1}'."
 
 #: transaction/transaction_merge.cpp:304
 #, c++-format
@@ -2225,51 +2229,51 @@ msgstr ""
 "Pakollinen objektiavain \"group_id\" puuttuu rpm-funktiosta, jonka syy on "
 "\"Group\" ja toiminto on \"Reason Change\""
 
-#: utils/bootc.cpp:46
+#: utils/bootc.cpp:47
 #, c++-format
 msgid "Error checking bootc status: {}"
 msgstr ""
 
-#: utils/bootc.cpp:49
+#: utils/bootc.cpp:50
 #, c++-format
 msgid "Error checking bootc status: bootc command failed with exit code {}"
 msgstr ""
 
-#: utils/bootc.cpp:58
+#: utils/bootc.cpp:59
 msgid "Error checking bootc status: Failed to parse JSON output"
 msgstr ""
 
-#: utils/bootc.cpp:73
+#: utils/bootc.cpp:74
 #, fuzzy, c++-format
 #| msgid "Failed to update from string: {}"
 msgid "Failed to query status of bootc system: {}"
 msgstr "Päivitys merkkijonosta epäonnistui: {}"
 
-#: utils/bootc.cpp:90
+#: utils/bootc.cpp:91
 #, fuzzy
 #| msgid "Failed to download files"
 msgid "Failed to stat /usr filesystem"
 msgstr "Tiedostojen lataaminen epäonnistui"
 
-#: utils/bootc.cpp:125
+#: utils/bootc.cpp:127
 #, c++-format
 msgid "Error running `bootc usr-overlay --read-only`: {}"
 msgstr ""
 
-#: utils/bootc.cpp:128
+#: utils/bootc.cpp:130
 #, c++-format
 msgid ""
 "Error running `bootc usr-overlay --read-only`: bootc command failed with "
 "exit code {}"
 msgstr ""
 
-#: utils/bootc.cpp:136
+#: utils/bootc.cpp:138
 #, fuzzy
 #| msgid "Failed to execute uname()"
 msgid "Failed to unshare mount namespace"
 msgstr "uname():n suoritus epäonnistui"
 
-#: utils/bootc.cpp:143
+#: utils/bootc.cpp:146
 #, fuzzy, c++-format
 #| msgid "Failed to resolve module metadata: {}"
 msgid "Failed to remount /usr as read-write: {}"

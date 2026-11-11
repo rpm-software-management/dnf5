@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-02 08:43+0000\n"
+"POT-Creation-Date: 2026-11-10 09:05+0000\n"
 "PO-Revision-Date: 2026-11-03 09:55+0000\n"
 "Last-Translator: Efstathios Iosifidis <eiosifidis@yandex.com>\n"
 "Language-Team: Greek <https://translate.fedoraproject.org/projects/dnf5/"
@@ -44,13 +44,13 @@ msgstr "Σφάλμα κατά την ανάλυση JSON της αναπαραγ
 msgid "Invalid option value: enabled={}"
 msgstr "Μη έγκυρη τιμή επιλογής: enabled={}"
 
-#: base/goal.cpp:490
+#: base/goal.cpp:492
 #, c++-format
 msgid "Unsupported argument for REMOVE action: {}"
 msgstr "Μη υποστηριζόμενο όρισμα για την ενέργεια REMOVE: {}"
 
 #. TODO(lukash) throw a proper exception
-#: base/goal.cpp:1741
+#: base/goal.cpp:1743
 #, c++-format
 msgid "Incorrect configuration value for multilib_policy: {}"
 msgstr "Εσφαλμένη τιμή ρύθμισης για το multilib_policy: {}"
@@ -224,7 +224,8 @@ msgstr "Καμία αντιστοιχία για το όρισμα '{0}' στα 
 #: base/log_event.cpp:175
 #, c++-format
 msgid "Cannot perform {0} for {1} '{2}' because it is not installed."
-msgstr "Αδυναμία εκτέλεσης {0} για το {1} '{2}' επειδή δεν είναι εγκατεστημένο."
+msgstr ""
+"Αδυναμία εκτέλεσης {0} για το {1} '{2}' επειδή δεν είναι εγκατεστημένο."
 
 #: base/log_event.cpp:180
 #, c++-format
@@ -552,7 +553,8 @@ msgstr "τίποτα δεν παρέχει το {0} που απαιτείται 
 #: base/solver_problems.cpp:57
 #, c++-format
 msgid "cannot install both {0} from {1} and {2} from {3}"
-msgstr "αδυναμία ταυτόχρονης εγκατάστασης των {0} από το {1} και {2} από το {3}"
+msgstr ""
+"αδυναμία ταυτόχρονης εγκατάστασης των {0} από το {1} και {2} από το {3}"
 
 #: base/solver_problems.cpp:58
 #, c++-format
@@ -985,8 +987,8 @@ msgstr "Άγνωστη μονάδα '{}'"
 #, c++-format
 msgid "The throttle value {} is outside the allowed range {} ... {}"
 msgstr ""
-"Η τιμή στραγγαλισμού (throttle) {} είναι εκτός του επιτρεπόμενου εύρους {} "
-"... {}"
+"Η τιμή στραγγαλισμού (throttle) {} είναι εκτός του επιτρεπόμενου εύρους "
+"{} ... {}"
 
 #: conf/config_parser.cpp:54
 #, c++-format
@@ -1158,7 +1160,8 @@ msgstr "Αποτυχία αναβάθμισης ροών (streams): {}"
 #: module/module_sack.cpp:93
 #, c++-format
 msgid "Failed to load module metadata for repository \"{}\": {}"
-msgstr "Αποτυχία φόρτωσης μεταδεδομένων αρθρώματος για το αποθετήριο \"{}\": {}"
+msgstr ""
+"Αποτυχία φόρτωσης μεταδεδομένων αρθρώματος για το αποθετήριο \"{}\": {}"
 
 #: module/module_sack.cpp:594
 msgid "Missing '='"
@@ -1184,8 +1187,8 @@ msgid ""
 "(\"{}\") is \"{}.{}\". API version in libdnf is \"{}.{}\"."
 msgstr ""
 "Μη υποστηριζόμενος συνδυασμός API προσθέτου. Η έκδοση API που παρέχεται από "
-"το πρόσθετο \"{}\" (\"{}\") είναι \"{}.{}\". Η έκδοση API στο libdnf είναι \""
-"{}.{}\"."
+"το πρόσθετο \"{}\" (\"{}\") είναι \"{}.{}\". Η έκδοση API στο libdnf είναι "
+"\"{}.{}\"."
 
 #: plugin/plugins.cpp:93
 msgid "Failed to create a libdnf plugin instance"
@@ -1349,8 +1352,8 @@ msgstr "Αποτυχία λήψης μεταδεδομένων"
 #, c++-format
 msgid "Error checking if metalink \"{}\" is in sync for repository \"{}\""
 msgstr ""
-"Σφάλμα κατά τον έλεγχο συγχρονισμού του metalink \"{}\" για το αποθετήριο \""
-"{}\""
+"Σφάλμα κατά τον έλεγχο συγχρονισμού του metalink \"{}\" για το αποθετήριο "
+"\"{}\""
 
 #: repo/repo_downloader.cpp:457
 #, c++-format
@@ -1369,8 +1372,8 @@ msgstr "Σφάλμα κατά τη φόρτωση τοπικών μεταδεδ�
 msgid ""
 "No valid source (baseurl, mirrorlist or metalink) found for repository \"{}\""
 msgstr ""
-"Δεν βρέθηκε έγκυρη πηγή (baseurl, mirrorlist ή metalink) για το αποθετήριο \""
-"{}\""
+"Δεν βρέθηκε έγκυρη πηγή (baseurl, mirrorlist ή metalink) για το αποθετήριο "
+"\"{}\""
 
 #: repo/repo_pgp.cpp:67
 #, c++-format
@@ -1423,7 +1426,8 @@ msgstr ""
 #: repo/solv_repo.cpp:396
 #, c++-format
 msgid "Failed to load {} extension for repo \"{}\" from \"{}\": {}"
-msgstr "Αποτυχία φόρτωσης της επέκτασης {} για το repo \"{}\" από το \"{}\": {}"
+msgstr ""
+"Αποτυχία φόρτωσης της επέκτασης {} για το repo \"{}\" από το \"{}\": {}"
 
 #: repo/solv_repo.cpp:436
 #, fuzzy, c++-format
@@ -1468,8 +1472,8 @@ msgstr ""
 msgid ""
 "An error occurred when parsing the temporary files memory file at '{}': {}"
 msgstr ""
-"Προέκυψε σφάλμα κατά την ανάλυση του αρχείου μνήμης προσωρινών αρχείων στο '"
-"{}': {}"
+"Προέκυψε σφάλμα κατά την ανάλυση του αρχείου μνήμης προσωρινών αρχείων στο "
+"'{}': {}"
 
 #: rpm/checksum.cpp:98
 msgid "Unknown checksum type"
@@ -1541,7 +1545,8 @@ msgstr "Σφάλμα %i κατά το άνοιγμα της βάσης δεδο�
 
 #: rpm/transaction.cpp:136
 msgid "The rpmdbCookie() function did not return cookie of rpm database."
-msgstr "Η συνάρτηση rpmdbCookie() δεν επέστρεψε cookie της βάσης δεδομένων rpm."
+msgstr ""
+"Η συνάρτηση rpmdbCookie() δεν επέστρεψε cookie της βάσης δεδομένων rpm."
 
 #: rpm/transaction.cpp:228
 #, c++-format
@@ -2216,7 +2221,8 @@ msgstr "Αδυναμία ανάλυσης NEVRA για το rpm \"{}\""
 
 #: transaction/transaction_sr.cpp:210
 msgid "Either \"nevra\" or \"package_path\" object key is required in an rpm"
-msgstr "Απαιτείται είτε το κλειδί \"nevra\" είτε το \"package_path\" σε ένα rpm"
+msgstr ""
+"Απαιτείται είτε το κλειδί \"nevra\" είτε το \"package_path\" σε ένα rpm"
 
 #: transaction/transaction_sr.cpp:215
 msgid "Missing object key \"action\" in an rpm"
@@ -2234,51 +2240,51 @@ msgstr ""
 "Λείπει το υποχρεωτικό κλειδί \"group_id\" σε ένα rpm με αιτία \"Group\" και "
 "ενέργεια \"Reason Change\""
 
-#: utils/bootc.cpp:46
+#: utils/bootc.cpp:47
 #, c++-format
 msgid "Error checking bootc status: {}"
 msgstr ""
 
-#: utils/bootc.cpp:49
+#: utils/bootc.cpp:50
 #, c++-format
 msgid "Error checking bootc status: bootc command failed with exit code {}"
 msgstr ""
 
-#: utils/bootc.cpp:58
+#: utils/bootc.cpp:59
 msgid "Error checking bootc status: Failed to parse JSON output"
 msgstr ""
 
-#: utils/bootc.cpp:73
+#: utils/bootc.cpp:74
 #, fuzzy, c++-format
 #| msgid "Failed to update from string: {}"
 msgid "Failed to query status of bootc system: {}"
 msgstr "Αποτυχία ενημέρωσης από συμβολοσειρά: {}"
 
-#: utils/bootc.cpp:90
+#: utils/bootc.cpp:91
 #, fuzzy
 #| msgid "Failed to download files"
 msgid "Failed to stat /usr filesystem"
 msgstr "Αποτυχία λήψης αρχείων"
 
-#: utils/bootc.cpp:125
+#: utils/bootc.cpp:127
 #, c++-format
 msgid "Error running `bootc usr-overlay --read-only`: {}"
 msgstr ""
 
-#: utils/bootc.cpp:128
+#: utils/bootc.cpp:130
 #, c++-format
 msgid ""
 "Error running `bootc usr-overlay --read-only`: bootc command failed with "
 "exit code {}"
 msgstr ""
 
-#: utils/bootc.cpp:136
+#: utils/bootc.cpp:138
 #, fuzzy
 #| msgid "Failed to execute uname()"
 msgid "Failed to unshare mount namespace"
 msgstr "Αποτυχία εκτέλεσης της uname()"
 
-#: utils/bootc.cpp:143
+#: utils/bootc.cpp:146
 #, fuzzy, c++-format
 #| msgid "Failed to resolve module metadata: {}"
 msgid "Failed to remount /usr as read-write: {}"
@@ -2472,8 +2478,8 @@ msgstr "Η δέσμευση τιμής integer64 στη δήλωση SQL απέ�
 #, c++-format
 msgid "Binding unsigned integer32 value to SQL statement failed: \"{}\""
 msgstr ""
-"Η δέσμευση τιμής μη προσημασμένου ακέραιου 32-bit στη δήλωση SQL απέτυχε: \""
-"{}\""
+"Η δέσμευση τιμής μη προσημασμένου ακέραιου 32-bit στη δήλωση SQL απέτυχε: "
+"\"{}\""
 
 #: utils/sqlite3/sqlite3.cpp:37
 #, c++-format

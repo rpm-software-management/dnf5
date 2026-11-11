@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-02 08:43+0000\n"
-"PO-Revision-Date: 2026-11-03 09:52+0000\n"
+"POT-Creation-Date: 2026-11-10 09:05+0000\n"
+"PO-Revision-Date: 2026-11-05 09:18+0000\n"
 "Last-Translator: Arif Budiman <arifpedia@gmail.com>\n"
 "Language-Team: Indonesian <https://translate.fedoraproject.org/projects/dnf5/"
 "libdnf5/id/>\n"
@@ -25,8 +25,8 @@ msgid ""
 "Bad libsolv id for advisory \"{}\", solvable name \"{}\" doesn't have "
 "advisory prefix \"{}\""
 msgstr ""
-"ID libsolv yang salah untuk advisory \"{}\", nama yang dapat diselesaikan \""
-"{}\" tidak memiliki awalan advisory \"{}\""
+"ID libsolv yang salah untuk advisory \"{}\", nama yang dapat diselesaikan "
+"\"{}\" tidak memiliki awalan advisory \"{}\""
 
 #: advisory/advisory_collection.cpp:94
 msgid "This libdnf5 does not support modularity"
@@ -42,13 +42,13 @@ msgstr "Kesalahan saat mengurai informasi transaksi: {}"
 msgid "Invalid option value: enabled={}"
 msgstr "Nilai opsi tidak valid: enabled={}"
 
-#: base/goal.cpp:490
+#: base/goal.cpp:492
 #, c++-format
 msgid "Unsupported argument for REMOVE action: {}"
 msgstr "Argumen yang tidak didukung untuk tindakan REMOVE: {}"
 
 #. TODO(lukash) throw a proper exception
-#: base/goal.cpp:1741
+#: base/goal.cpp:1743
 #, c++-format
 msgid "Incorrect configuration value for multilib_policy: {}"
 msgstr "Nilai konfigurasi yang salah untuk multilib_policy: {}"
@@ -242,7 +242,8 @@ msgstr ""
 #: base/log_event.cpp:188
 #, c++-format
 msgid "Cannot perform {0} because '{1}' matches only source packages."
-msgstr "Tidak dapat melakukan {0} karena '{1}' hanya cocok dengan paket sumber."
+msgstr ""
+"Tidak dapat melakukan {0} karena '{1}' hanya cocok dengan paket sumber."
 
 #: base/log_event.cpp:192
 #, c++-format
@@ -468,6 +469,8 @@ msgid ""
 "Exceeded installonly_limit ({0}): found {1} installed: '{2}'. You can use "
 "'remove --oldinstallonly'."
 msgstr ""
+"Batas installonly_limit ({0}) terlampaui: ditemukan {1} yang terinstal: "
+"'{2}'. Anda dapat menggunakan 'remove --oldinstallonly'."
 
 #: base/solver_problems.cpp:41
 #, c++-format
@@ -705,7 +708,8 @@ msgstr "modul {0} secara implisit menggantikan {1} yang disediakan oleh {2}"
 #: base/solver_problems.cpp:101
 #, c++-format
 msgid "module {1} requires {0}, but none of the providers can be installed"
-msgstr "modul {1} memerlukan {0}, tetapi tidak ada penyedia yang dapat diinstal"
+msgstr ""
+"modul {1} memerlukan {0}, tetapi tidak ada penyedia yang dapat diinstal"
 
 #: base/solver_problems.cpp:102
 #, c++-format
@@ -759,6 +763,8 @@ msgid ""
 "This transaction is no longer valid because the system repository has "
 "changed since it was loaded."
 msgstr ""
+"Transaksi ini tidak lagi valid karena repositori sistem telah berubah sejak "
+"dimuat."
 
 #: base/transaction.cpp:101
 msgid "The repository does not have any OpenPGP keys configured."
@@ -785,10 +791,11 @@ msgid "failed to read scriptlet output from pipe"
 msgstr "gagal membaca keluaran scriptlet dari pipe"
 
 #: base/transaction.cpp:1103
-#, fuzzy, c++-format
-#| msgid "Failed to load system repo from root \"{}\": {}"
+#, c++-format
 msgid "Failed to acquire system repo lock for writing, lock located at \"{}\""
-msgstr "Gagal memuat repositori sistem dari direktori akar \"{}\": {}"
+msgstr ""
+"Gagal memperoleh kunci repositori sistem untuk penulisan, kunci berada di "
+"\"{}\""
 
 #: base/transaction.cpp:1173
 #, c++-format
@@ -838,10 +845,8 @@ msgstr[0] ""
 "Peringatan: Pemeriksaan OpenPGP dilewati untuk paket {0} dari repositori: {1}"
 
 #: base/vendor_change_manager.cpp:115
-#, fuzzy
-#| msgid "{func}(): Cannot remove file: {path}: {msg}"
 msgid "{func}(): Cannot create directory: {path}: {msg}"
-msgstr "{func}(): Tidak dapat menghapus berkas: {path}: {msg}"
+msgstr "{func}(): Tidak dapat membuat direktori: {path}: {msg}"
 
 #: base/vendor_change_manager.cpp:164
 msgid "{func}(): Cannot remove file: {path}: {msg}"
@@ -853,7 +858,8 @@ msgstr "{func}(): Berkas tidak ada: {path}"
 
 #: base/vendor_change_manager.cpp:259
 msgid "{func}(): Cannot remove existing policy file: {path}"
-msgstr "{func}(): Tidak dapat menghapus berkas kebijakan yang sudah ada: {path}"
+msgstr ""
+"{func}(): Tidak dapat menghapus berkas kebijakan yang sudah ada: {path}"
 
 #: base/vendor_change_manager.cpp:271
 msgid "{func}(): Cannot create file: {path}"
@@ -1377,10 +1383,11 @@ msgid "Failed to load {} extension for repo \"{}\" from \"{}\": {}"
 msgstr "Gagal memuat ekstensi {} untuk repositori \"{}\" dari \"{}\": {}"
 
 #: repo/solv_repo.cpp:436
-#, fuzzy, c++-format
-#| msgid "Failed to load system repo from root \"{}\": {}"
+#, c++-format
 msgid "Failed to acquire system repo lock for reading, lock located at \"{}\""
-msgstr "Gagal memuat repositori sistem dari direktori akar \"{}\": {}"
+msgstr ""
+"Gagal memperoleh kunci repositori sistem untuk pembacaan, kunci berada di "
+"\"{}\""
 
 #: repo/solv_repo.cpp:455
 #, c++-format
@@ -1568,10 +1575,9 @@ msgid "Cannot install package \"{}\""
 msgstr "Tidak dapat menginstal paket \"{}\""
 
 #: rpm/versionlock_config.cpp:259
-#, fuzzy, c++-format
-#| msgid "Error parsing transaction info: {}"
+#, c++-format
 msgid "Error parsing versionlock file \"{}\": {}"
-msgstr "Kesalahan saat mengurai informasi transaksi: {}"
+msgstr "Kesalahan saat mengurai berkas versionlock \"{}\": {}"
 
 #: rpm/versionlock_config.cpp:297 system/state.cpp:614
 #, c++-format
@@ -1911,26 +1917,21 @@ msgstr ""
 #, c++-format
 msgid "Unsupported TOML version \"{}\", maximum supported version is \"{}\""
 msgstr ""
-"Versi TOML yang tidak didukung \"{}\", versi maksimum yang didukung adalah \""
-"{}\""
+"Versi TOML yang tidak didukung \"{}\", versi maksimum yang didukung adalah "
+"\"{}\""
 
 #: system/state.cpp:798
-#, fuzzy, c++-format
-#| msgid "Error %i opening rpm database"
+#, c++-format
 msgid "Error {} opening rpm database"
-msgstr "Kesalahan %i saat membuka basis data RPM"
+msgstr "Kesalahan {} saat membuka basis data rpm"
 
 #: system/state.cpp:802
-#, fuzzy
-#| msgid "Failed to restore database \"{}\""
 msgid "Failed to get rpm database"
-msgstr "Gagal memulihkan database \"{}\""
+msgstr "Gagal memperoleh basis data rpm"
 
 #: system/state.cpp:808
-#, fuzzy
-#| msgid "Cannot init rpm database iterator"
 msgid "Failed to initialize database index iterator"
-msgstr "Tidak dapat menginisialisasi iterator basis data RPM"
+msgstr "Gagal menginisialisasi iterator indeks basis data"
 
 #. TODO(dmach): replace with a better exception class
 #: transaction/db/comps_environment_group.cpp:100
@@ -2109,8 +2110,8 @@ msgid ""
 "Action '{0}' '{1}' cannot be merged because it is already present at that "
 "point -> skipping it."
 msgstr ""
-"Aksi '{0}' '{1}' tidak dapat digabungkan karena sudah ada di titik "
-"tersebut -> dilewati."
+"Aksi '{0}' '{1}' tidak dapat digabungkan karena sudah ada di titik tersebut "
+"-> dilewati."
 
 #: transaction/transaction_merge.cpp:294
 #, c++-format
@@ -2118,8 +2119,8 @@ msgid ""
 "Action '{0}' '{1}' cannot be merged because it is already installed in "
 "version '{2}' -> keeping the action from older transaction with '{1}'."
 msgstr ""
-"Aksi '{0}' '{1}' tidak dapat digabungkan karena sudah terpasang pada versi '"
-"{2}' -> mempertahankan aksi dari transaksi sebelumnya dengan '{1}'."
+"Aksi '{0}' '{1}' tidak dapat digabungkan karena sudah terpasang pada versi "
+"'{2}' -> mempertahankan aksi dari transaksi sebelumnya dengan '{1}'."
 
 #: transaction/transaction_merge.cpp:304
 #, c++-format
@@ -2140,8 +2141,8 @@ msgstr "Kesalahan saat memproses JSON selama pengulangan transaksi: {}"
 #, c++-format
 msgid "Unexpected version format: \"{}\", supported version is \"{}\""
 msgstr ""
-"Format versi yang tidak terduga: \"{}\", format versi yang didukung adalah \""
-"{}\""
+"Format versi yang tidak terduga: \"{}\", format versi yang didukung adalah "
+"\"{}\""
 
 #: transaction/transaction_sr.cpp:74
 #, c++-format
@@ -2218,37 +2219,37 @@ msgstr ""
 "Kunci objek wajib \"group_id\" tidak ditemukan dalam paket RPM dengan alasan "
 "\"Group\" dan tindakan \"Alasan Perubahan\""
 
-#: utils/bootc.cpp:46
+#: utils/bootc.cpp:47
 #, c++-format
 msgid "Error checking bootc status: {}"
 msgstr "Kesalahan saat memeriksa status bootc: {}"
 
-#: utils/bootc.cpp:49
+#: utils/bootc.cpp:50
 #, c++-format
 msgid "Error checking bootc status: bootc command failed with exit code {}"
 msgstr ""
 "Kesalahan saat memeriksa status bootc: perintah bootc gagal dengan kode "
 "keluar {}"
 
-#: utils/bootc.cpp:58
+#: utils/bootc.cpp:59
 msgid "Error checking bootc status: Failed to parse JSON output"
 msgstr "Kesalahan saat memeriksa status bootc: gagal mengurai keluaran JSON"
 
-#: utils/bootc.cpp:73
+#: utils/bootc.cpp:74
 #, c++-format
 msgid "Failed to query status of bootc system: {}"
 msgstr "Gagal meminta status sistem bootc: {}"
 
-#: utils/bootc.cpp:90
+#: utils/bootc.cpp:91
 msgid "Failed to stat /usr filesystem"
 msgstr "Gagal menjalankan stat pada sistem berkas /usr"
 
-#: utils/bootc.cpp:125
+#: utils/bootc.cpp:127
 #, c++-format
 msgid "Error running `bootc usr-overlay --read-only`: {}"
 msgstr "Kesalahan saat menjalankan `bootc usr-overlay --read-only`: {}"
 
-#: utils/bootc.cpp:128
+#: utils/bootc.cpp:130
 #, c++-format
 msgid ""
 "Error running `bootc usr-overlay --read-only`: bootc command failed with "
@@ -2257,11 +2258,11 @@ msgstr ""
 "Kesalahan saat menjalankan `bootc usr-overlay --read-only`: perintah bootc "
 "gagal dengan kode keluar {}"
 
-#: utils/bootc.cpp:136
+#: utils/bootc.cpp:138
 msgid "Failed to unshare mount namespace"
 msgstr "Gagal membatalkan berbagi namespace mount"
 
-#: utils/bootc.cpp:143
+#: utils/bootc.cpp:146
 #, c++-format
 msgid "Failed to remount /usr as read-write: {}"
 msgstr "Gagal me-mount ulang /usr sebagai baca-tulis: {}"
@@ -2414,10 +2415,9 @@ msgid "Failed to read from lock file \"{}\""
 msgstr "Gagal membaca dari berkas kunci \"{}\""
 
 #: utils/locker.cpp:194
-#, fuzzy, c++-format
-#| msgid "The lock file \"{}\" is not opened"
+#, c++-format
 msgid "The lock file \"{}\" is not locked"
-msgstr "Berkas kunci \"{}\" tidak dibuka"
+msgstr "Berkas kunci \"{}\" tidak terkunci"
 
 #: utils/locker.cpp:207
 #, c++-format

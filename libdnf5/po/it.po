@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-02 08:43+0000\n"
+"POT-Creation-Date: 2026-11-10 09:05+0000\n"
 "PO-Revision-Date: 2026-11-03 09:46+0000\n"
 "Last-Translator: Ali Ciloglu <ali.ciloqlu@murena.io>\n"
 "Language-Team: Italian <https://translate.fedoraproject.org/projects/dnf5/"
@@ -45,13 +45,13 @@ msgstr "Errore durante l'analisi JSON della riesecuzione della transazione: {}"
 msgid "Invalid option value: enabled={}"
 msgstr "Valore opzione non valido: enabled={}"
 
-#: base/goal.cpp:490
+#: base/goal.cpp:492
 #, c++-format
 msgid "Unsupported argument for REMOVE action: {}"
 msgstr "Argomento non supportato per l'azione REMOVE: {}"
 
 #. TODO(lukash) throw a proper exception
-#: base/goal.cpp:1741
+#: base/goal.cpp:1743
 #, c++-format
 msgid "Incorrect configuration value for multilib_policy: {}"
 msgstr "Valore di configurazione non corretto per multilib_policy: {}"
@@ -311,8 +311,8 @@ msgstr ""
 msgid ""
 "Cannot perform {0} because '{1}' is installed in a different version: '{2}'."
 msgstr ""
-"Impossibile eseguire {0} perché '{1}' è installato in una versione diversa: '"
-"{2}'."
+"Impossibile eseguire {0} perché '{1}' è installato in una versione diversa: "
+"'{2}'."
 
 #: base/log_event.cpp:241
 #, c++-format
@@ -1149,7 +1149,8 @@ msgstr "Impossibile aggiornare gli stream: {}"
 #: module/module_sack.cpp:93
 #, c++-format
 msgid "Failed to load module metadata for repository \"{}\": {}"
-msgstr "Impossibile caricare i metadati del modulo per il repository \"{}\": {}"
+msgstr ""
+"Impossibile caricare i metadati del modulo per il repository \"{}\": {}"
 
 #: module/module_sack.cpp:594
 msgid "Missing '='"
@@ -1174,8 +1175,8 @@ msgid ""
 "Unsupported plugin API combination. API version provided by plugin \"{}\" "
 "(\"{}\") is \"{}.{}\". API version in libdnf is \"{}.{}\"."
 msgstr ""
-"Combinazione API plugin non supportata. La versione API fornita dal plugin \""
-"{}\" (\"{}\") è \"{}.{}\". La versione API in libdnf è \"{}.{}\"."
+"Combinazione API plugin non supportata. La versione API fornita dal plugin "
+"\"{}\" (\"{}\") è \"{}.{}\". La versione API in libdnf è \"{}.{}\"."
 
 #: plugin/plugins.cpp:93
 msgid "Failed to create a libdnf plugin instance"
@@ -1433,7 +1434,8 @@ msgstr "Impossibile caricare la cache {} per il repo \"{}\" da \"{}\": {}"
 #: repo/solv_repo.cpp:613
 #, c++-format
 msgid "Failed to write primary cache for repo \"{}\" to \"{}\": {}"
-msgstr "Impossibile scrivere la cache primaria per il repo \"{}\" su \"{}\": {}"
+msgstr ""
+"Impossibile scrivere la cache primaria per il repo \"{}\" su \"{}\": {}"
 
 #: repo/solv_repo.cpp:635
 #, c++-format
@@ -1529,7 +1531,8 @@ msgstr "Errore %i nell'apertura del database rpm"
 
 #: rpm/transaction.cpp:136
 msgid "The rpmdbCookie() function did not return cookie of rpm database."
-msgstr "La funzione rpmdbCookie() non ha restituito il cookie del database rpm."
+msgstr ""
+"La funzione rpmdbCookie() non ha restituito il cookie del database rpm."
 
 #: rpm/transaction.cpp:228
 #, c++-format
@@ -2130,13 +2133,14 @@ msgid ""
 "version '{2}' -> keeping the action from older transaction with '{1}'."
 msgstr ""
 "L'azione '{0}' '{1}' non può essere unita perché è già installato nella "
-"versione '{2}' -> mantenimento dell'azione dalla transazione precedente con '"
-"{1}'."
+"versione '{2}' -> mantenimento dell'azione dalla transazione precedente con "
+"'{1}'."
 
 #: transaction/transaction_merge.cpp:304
 #, c++-format
 msgid "Invalid action encountered: '{0}' during transaction merge."
-msgstr "Azione non valida incontrata: '{0}' durante l'unione della transazione."
+msgstr ""
+"Azione non valida incontrata: '{0}' durante l'unione della transazione."
 
 #: transaction/transaction_sr.cpp:49
 msgid "Transaction replay JSON serialized transaction input is empty"
@@ -2227,51 +2231,51 @@ msgstr ""
 "Chiave oggetto obbligatoria \"group_id\" mancante in un rpm con motivo "
 "\"Group\" e azione \"Reason Change\""
 
-#: utils/bootc.cpp:46
+#: utils/bootc.cpp:47
 #, c++-format
 msgid "Error checking bootc status: {}"
 msgstr ""
 
-#: utils/bootc.cpp:49
+#: utils/bootc.cpp:50
 #, c++-format
 msgid "Error checking bootc status: bootc command failed with exit code {}"
 msgstr ""
 
-#: utils/bootc.cpp:58
+#: utils/bootc.cpp:59
 msgid "Error checking bootc status: Failed to parse JSON output"
 msgstr ""
 
-#: utils/bootc.cpp:73
+#: utils/bootc.cpp:74
 #, fuzzy, c++-format
 #| msgid "Failed to update from string: {}"
 msgid "Failed to query status of bootc system: {}"
 msgstr "Impossibile aggiornare dalla stringa: {}"
 
-#: utils/bootc.cpp:90
+#: utils/bootc.cpp:91
 #, fuzzy
 #| msgid "Failed to download files"
 msgid "Failed to stat /usr filesystem"
 msgstr "Impossibile scaricare i file"
 
-#: utils/bootc.cpp:125
+#: utils/bootc.cpp:127
 #, c++-format
 msgid "Error running `bootc usr-overlay --read-only`: {}"
 msgstr ""
 
-#: utils/bootc.cpp:128
+#: utils/bootc.cpp:130
 #, c++-format
 msgid ""
 "Error running `bootc usr-overlay --read-only`: bootc command failed with "
 "exit code {}"
 msgstr ""
 
-#: utils/bootc.cpp:136
+#: utils/bootc.cpp:138
 #, fuzzy
 #| msgid "Failed to execute uname()"
 msgid "Failed to unshare mount namespace"
 msgstr "Impossibile eseguire uname()"
 
-#: utils/bootc.cpp:143
+#: utils/bootc.cpp:146
 #, fuzzy, c++-format
 #| msgid "Failed to resolve module metadata: {}"
 msgid "Failed to remount /usr as read-write: {}"

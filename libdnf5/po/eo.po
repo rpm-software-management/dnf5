@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-02 08:43+0000\n"
+"POT-Creation-Date: 2026-11-10 09:05+0000\n"
 "PO-Revision-Date: 2026-11-03 10:01+0000\n"
 "Last-Translator: Keith Bowes <zooplah@gmail.com>\n"
 "Language-Team: Esperanto <https://translate.fedoraproject.org/projects/dnf5/"
@@ -41,13 +41,13 @@ msgstr "Eraro dum analizo de transakciaj informoj: {}"
 msgid "Invalid option value: enabled={}"
 msgstr "Nevalida opcia valoro: enabled={}"
 
-#: base/goal.cpp:490
+#: base/goal.cpp:492
 #, c++-format
 msgid "Unsupported argument for REMOVE action: {}"
 msgstr "Nekonata argumento por ago REMOVE: {}"
 
 #. TODO(lukash) throw a proper exception
-#: base/goal.cpp:1741
+#: base/goal.cpp:1743
 #, c++-format
 msgid "Incorrect configuration value for multilib_policy: {}"
 msgstr "Malĝusta agordo-valoro por multilib_ploticy: {}"
@@ -433,8 +433,8 @@ msgid ""
 "Could not find debuginfo package for the following packages resolved from "
 "the argument '{0}': {1}"
 msgstr ""
-"Ne eblis trovi debuginfo-pakon por la jenaj pakoj solvitaj de la argumento '"
-"{0}': {1}"
+"Ne eblis trovi debuginfo-pakon por la jenaj pakoj solvitaj de la argumento "
+"'{0}': {1}"
 
 #: base/log_event.cpp:363 base/log_event.cpp:374
 msgctxt "String for joining NEVRAs - e.g. `foo-4-4.noarch, bar-5-5.noarch`"
@@ -803,16 +803,20 @@ msgstr ", "
 msgid "Warning: skipped OpenPGP checks for {0} package from repository: {1}"
 msgid_plural ""
 "Warning: skipped OpenPGP checks for {0} packages from repository: {1}"
-msgstr[0] "Averto: preterpasis OpenPGP-kontrolojn por {0} pako el deponejo: {1}"
-msgstr[1] "Averto: preterpasis OpenPGP-kontrolojn por {0} pakoj el deponejo: {1}"
+msgstr[0] ""
+"Averto: preterpasis OpenPGP-kontrolojn por {0} pako el deponejo: {1}"
+msgstr[1] ""
+"Averto: preterpasis OpenPGP-kontrolojn por {0} pakoj el deponejo: {1}"
 
 #: base/transaction.cpp:1721
 #, c++-format
 msgid "Warning: skipped OpenPGP checks for {0} package from repositories: {1}"
 msgid_plural ""
 "Warning: skipped OpenPGP checks for {0} packages from repositories: {1}"
-msgstr[0] "Averto: preterpasis OpenPGP-kontrolojn por {0} pako el deponejoj: {1}"
-msgstr[1] "Averto: preterpasis OpenPGP-kontrolojn por {0} pakoj el deponejoj: {1}"
+msgstr[0] ""
+"Averto: preterpasis OpenPGP-kontrolojn por {0} pako el deponejoj: {1}"
+msgstr[1] ""
+"Averto: preterpasis OpenPGP-kontrolojn por {0} pakoj el deponejoj: {1}"
 
 #: base/vendor_change_manager.cpp:115
 msgid "{func}(): Cannot create directory: {path}: {msg}"
@@ -1120,8 +1124,8 @@ msgid ""
 "(\"{}\") is \"{}.{}\". API version in libdnf is \"{}.{}\"."
 msgstr ""
 "Nekongruanta kombino de la kromprograma API. La API-eldono provizita de "
-"kromprogramo \"{}\" (\"{}\") estas \"{}.{}\". API-eldono en libdnf estas \"{}"
-".{}\"."
+"kromprogramo \"{}\" (\"{}\") estas \"{}.{}\". API-eldono en libdnf estas "
+"\"{}.{}\"."
 
 #: plugin/plugins.cpp:93
 msgid "Failed to create a libdnf plugin instance"
@@ -1721,7 +1725,8 @@ msgstr ""
 #: solv/vendor_change_manager.cpp:806
 #, c++-format
 msgid "Invalid epoch value \"{}\" in \"{}\" in table starting on line {}"
-msgstr "Nevalida epoka valoro \"{}\" en \"{}\" en tabelo komencanta en linio {}"
+msgstr ""
+"Nevalida epoka valoro \"{}\" en \"{}\" en tabelo komencanta en linio {}"
 
 #: solv/vendor_change_manager.cpp:821
 #, c++-format
@@ -1820,7 +1825,8 @@ msgstr "Filtrilo 'cmdline_repo' konas nur la komparilo '=' (EXACT)"
 
 #: solv/vendor_change_manager.cpp:1302
 msgid "Filter 'cmdline_repo' is only allowed in incoming packages ('in:')"
-msgstr "Filtrilo 'cmdline_repo' estas permesata nur en envenantaj pakoj ('in:')"
+msgstr ""
+"Filtrilo 'cmdline_repo' estas permesata nur en envenantaj pakoj ('in:')"
 
 #: solv/vendor_change_manager.cpp:1313
 #, c++-format
@@ -2017,8 +2023,8 @@ msgid ""
 "Action 'Reinstall' '{0}' cannot be merged because it is not present at that "
 "point -> setting 'Install'."
 msgstr ""
-"Ago 'Reinstall' '{0}' ne eblas kunfandiĝi ĉar ĝi ne ĉeestas en tiu "
-"momento -> agordo 'Reinstall'."
+"Ago 'Reinstall' '{0}' ne eblas kunfandiĝi ĉar ĝi ne ĉeestas en tiu momento "
+"-> agordo 'Reinstall'."
 
 #: transaction/transaction_merge.cpp:194
 #, c++-format
@@ -2171,37 +2177,37 @@ msgstr ""
 "Mankas deviga objekta ŝlosilo \"group_id\" en rpm kun kialo \"Group\" kaj "
 "ago \"Reason Change\""
 
-#: utils/bootc.cpp:46
+#: utils/bootc.cpp:47
 #, c++-format
 msgid "Error checking bootc status: {}"
 msgstr "Eraro dum kontrolo de bootc-stato: {}"
 
-#: utils/bootc.cpp:49
+#: utils/bootc.cpp:50
 #, c++-format
 msgid "Error checking bootc status: bootc command failed with exit code {}"
 msgstr ""
 "Eraro dum kontrolo de bootc-stato: la komando bootc malsukcesis kun elira "
 "kodo {}"
 
-#: utils/bootc.cpp:58
+#: utils/bootc.cpp:59
 msgid "Error checking bootc status: Failed to parse JSON output"
 msgstr "Eraro dum kontrolo de bootc-stato: Malsukcesis analizi JSON-eligon"
 
-#: utils/bootc.cpp:73
+#: utils/bootc.cpp:74
 #, c++-format
 msgid "Failed to query status of bootc system: {}"
 msgstr "Malsukcesis peti staton de bootc-sistemo: {}"
 
-#: utils/bootc.cpp:90
+#: utils/bootc.cpp:91
 msgid "Failed to stat /usr filesystem"
 msgstr "Malsukcesis atingi dosiersistemon de /usr"
 
-#: utils/bootc.cpp:125
+#: utils/bootc.cpp:127
 #, c++-format
 msgid "Error running `bootc usr-overlay --read-only`: {}"
 msgstr "Ero dum plenumo de `bootc user-overlay --read-only`: {}"
 
-#: utils/bootc.cpp:128
+#: utils/bootc.cpp:130
 #, c++-format
 msgid ""
 "Error running `bootc usr-overlay --read-only`: bootc command failed with "
@@ -2210,11 +2216,11 @@ msgstr ""
 "Eraro dum plenumo de `bootc usr-overlay --read-only`: la komando bootc "
 "malsukcesis kun elira kodo {}"
 
-#: utils/bootc.cpp:136
+#: utils/bootc.cpp:138
 msgid "Failed to unshare mount namespace"
 msgstr "Malsukcesis malkunhavi surmeta nomspacon"
 
-#: utils/bootc.cpp:143
+#: utils/bootc.cpp:146
 #, c++-format
 msgid "Failed to remount /usr as read-write: {}"
 msgstr "Malsukcesis dum resurmeto de /usr kiel legebla kaj skribebla: {}"

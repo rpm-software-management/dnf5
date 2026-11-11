@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-02 08:43+0000\n"
+"POT-Creation-Date: 2026-11-10 09:05+0000\n"
 "PO-Revision-Date: 2026-11-03 09:50+0000\n"
 "Last-Translator: Weblate Translation Memory <noreply-mt-weblate-translation-"
 "memory@weblate.org>\n"
@@ -101,7 +101,8 @@ msgstr "Incluir el contenido presente en los avisos de seguridad."
 
 #: commands/advisory/arguments.hpp:128
 msgid "Include content contained in bugfix advisories."
-msgstr "Incluir el contenido presente en los avisos de correcciones de errores."
+msgstr ""
+"Incluir el contenido presente en los avisos de correcciones de errores."
 
 #: commands/advisory/arguments.hpp:135
 msgid "Include content contained in enhancement advisories."
@@ -119,8 +120,8 @@ msgid ""
 "option. Can be \"critical\", \"important\", \"moderate\", \"low\", \"none\"."
 msgstr ""
 "Incluir el contenido presente en los avisos con severidad especificada. "
-"Opción de lista. Puede ser «critical», «important», «moderate», «low» o «none"
-"»."
+"Opción de lista. Puede ser «critical», «important», «moderate», «low» o "
+"«none»."
 
 #: commands/advisory/arguments.hpp:157
 msgid "ADVISORY_SEVERITY,..."
@@ -143,8 +144,8 @@ msgid ""
 "Include content contained in advisories that fix a CVE (Common "
 "Vulnerabilities and Exposures) ID, Eg. CVE-2201-0123. List option."
 msgstr ""
-"Incluir el contenido presente en los avisos que corrigen una ID de CVE («"
-"vulnerabilidades y exposiciones comunes»), p. ej. CVE-2201-0123. Opción de "
+"Incluir el contenido presente en los avisos que corrigen una ID de CVE "
+"(«vulnerabilidades y exposiciones comunes»), p. ej. CVE-2201-0123. Opción de "
 "lista."
 
 #: commands/advisory/arguments.hpp:182

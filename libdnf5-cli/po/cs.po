@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-02 08:43+0000\n"
+"POT-Creation-Date: 2026-11-10 09:05+0000\n"
 "PO-Revision-Date: 2026-11-03 09:48+0000\n"
 "Last-Translator: Petr Pisar <ppisar@redhat.com>\n"
 "Language-Team: Czech <https://translate.fedoraproject.org/projects/dnf5/"
@@ -118,20 +118,21 @@ msgstr ""
 #, c++-format
 msgid "Command id \"{}\" does not contain named argument with id \"{}\""
 msgstr ""
-"Příkaz s identifikátorem „{}“ neobsahuje pojmenovaný argument s "
-"identifikátorem „{}“"
+"Příkaz s identifikátorem „{}“ neobsahuje pojmenovaný argument "
+"s identifikátorem „{}“"
 
 #: argument_parser.cpp:1071
 #, c++-format
 msgid "Command id \"{}\" does not contain positional argument with id \"{}\""
 msgstr ""
-"Příkaz s identifikátorem „{}“ neobsahuje poziční argument s identifikátorem „"
-"{}“"
+"Příkaz s identifikátorem „{}“ neobsahuje poziční argument s identifikátorem "
+"„{}“"
 
 #: argument_parser.cpp:1078
 #, c++-format
 msgid "Command id \"{}\" does not contain group with id \"{}\""
-msgstr "Příkaz s identifikátorem „{}“ neobsahuje skupinu s identifikátorem „{}“"
+msgstr ""
+"Příkaz s identifikátorem „{}“ neobsahuje skupinu s identifikátorem „{}“"
 
 #: argument_parser.cpp:1204 argument_parser.cpp:1425
 #, c++-format

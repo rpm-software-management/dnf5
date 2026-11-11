@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-02 08:43+0000\n"
+"POT-Creation-Date: 2026-11-10 09:05+0000\n"
 "PO-Revision-Date: 2026-11-03 10:03+0000\n"
 "Last-Translator: Bone NI <bounkirdni@gmail.com>\n"
 "Language-Team: Lao <https://translate.fedoraproject.org/projects/dnf5/dnf5-"
@@ -34,8 +34,8 @@ msgid ""
 "@footeam/coolproject'."
 msgstr ""
 "ໄອດີໂຄງການ Copr ສຳລັບ {}. ໃຊ້ຮູບແບບ OWNER/PROJECT ຫຼື HUB/OWNER/PROJECT (ຖ້າບໍ່ໄດ້ລະບຸ "
-"HUB, ຈະໃຊ້ຄ່າເລີ່ມຕົ້ນ ຫຼື --hub <ARG>. OWNER ແມ່ນຊື່ຜູ້ໃຊ້ ຫຼື @groupname. PROJECT ສາມາດເປັນຊື່"
-"ໂຄງການແບບງ່າຍໆ ຫຼື \"project directory\" ທີ່ມີເຄື່ອງໝາຍຈໍ້າສອງເມັດ, ຕົວຢ່າງ: "
+"HUB, ຈະໃຊ້ຄ່າເລີ່ມຕົ້ນ ຫຼື --hub <ARG>. OWNER ແມ່ນຊື່ຜູ້ໃຊ້ ຫຼື @groupname. PROJECT "
+"ສາມາດເປັນຊື່ໂຄງການແບບງ່າຍໆ ຫຼື \"project directory\" ທີ່ມີເຄື່ອງໝາຍຈໍ້າສອງເມັດ, ຕົວຢ່າງ: "
 "'project:custom:123'. HUB ສາມາດເປັນຊື່ໂຮສ frontend ຂອງ Copr (ຕົວຢ່າງ: "
 "copr.fedorainfracloud.org) ຫຼື ຊື່ຫຍໍ້ (ຕົວຢ່າງ: fedora). ຕົວຢ່າງ: 'fedora/@footeam/"
 "coolproject'.)"
@@ -104,8 +104,7 @@ msgstr ""
 
 #: copr_debug.cpp:30
 msgid "print useful info about the system, useful for debugging"
-msgstr ""
-"ສະແດງຂໍ້ມູນທີ່ມີປະໂຫຍດກ່ຽວກັບລະບົບ, ມີປະໂຫຍດສຳລັບການກວດສອບຂໍ້ຜິດພາດ (debugging)"
+msgstr "ສະແດງຂໍ້ມູນທີ່ມີປະໂຫຍດກ່ຽວກັບລະບົບ, ມີປະໂຫຍດສຳລັບການກວດສອບຂໍ້ຜິດພາດ (debugging)"
 
 #: copr_disable.cpp:35
 #, c++-format
@@ -127,8 +126,8 @@ msgid ""
 "Chroot specified in the NAME-RELEASE-ARCH format, e.g. 'fedora-rawhide-"
 "ppc64le'.  When not specified, the 'dnf copr' command attempts to detect it."
 msgstr ""
-"ລະບຸ Chroot ໃນຮູບແບບ NAME-RELEASE-ARCH, ຕົວຢ່າງ: 'fedora-rawhide-ppc64le'. ເມື່ອບໍ່ໄດ້"
-"ລະບຸ, ຄຳສັ່ງ 'dnf copr' ຈະພະຍາຍາມກວດຫາດ້ວຍຕົວມັນເອງ."
+"ລະບຸ Chroot ໃນຮູບແບບ NAME-RELEASE-ARCH, ຕົວຢ່າງ: 'fedora-rawhide-ppc64le'. "
+"ເມື່ອບໍ່ໄດ້ລະບຸ, ຄຳສັ່ງ 'dnf copr' ຈະພະຍາຍາມກວດຫາດ້ວຍຕົວມັນເອງ."
 
 #: copr_list.cpp:53
 msgid "list Copr repositories"
@@ -139,8 +138,8 @@ msgid ""
 "No repositories were loaded from the installroot. To use the configuration "
 "and repositories of the host system, pass --use-host-config."
 msgstr ""
-"ບໍ່ມີຄັງເກັບຊອບແວໃດຖືກໂຫຼດມາຈາກ installroot. ເພື່ອນຳໃຊ້ການຕັ້ງຄ່າ ແລະ ຄັງເກັບຊອບແວຂອງລະບົບໂຮ"
-"ສ, ໃຫ້ລະບຸ --use-host-config."
+"ບໍ່ມີຄັງເກັບຊອບແວໃດຖືກໂຫຼດມາຈາກ installroot. ເພື່ອນຳໃຊ້ການຕັ້ງຄ່າ ແລະ "
+"ຄັງເກັບຊອບແວຂອງລະບົບໂຮສ, ໃຫ້ລະບຸ --use-host-config."
 
 #: copr_remove.cpp:35
 #, c++-format

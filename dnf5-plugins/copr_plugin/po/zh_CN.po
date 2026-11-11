@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-02 08:43+0000\n"
+"POT-Creation-Date: 2026-11-10 09:05+0000\n"
 "PO-Revision-Date: 2026-11-03 09:49+0000\n"
 "Last-Translator: Jean-Baptiste Holcroft <jean-baptiste@holcroft.fr>\n"
 "Language-Team: Chinese (Simplified) <https://translate.fedoraproject.org/"
@@ -130,7 +130,8 @@ msgstr "打印关于系统的有用信息，用于调试"
 msgid ""
 "disable specified Copr repository (if exists), keep {}/*.repo file - just "
 "mark enabled=0"
-msgstr "禁用指定的 Copr 版本库（如果存在），保留 {}/*.repo 文件 - 仅标记 enabled=0"
+msgstr ""
+"禁用指定的 Copr 版本库（如果存在），保留 {}/*.repo 文件 - 仅标记 enabled=0"
 
 #: copr_enable.cpp:38
 #, c++-format

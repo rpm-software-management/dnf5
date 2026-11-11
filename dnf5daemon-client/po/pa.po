@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-02 08:43+0000\n"
+"POT-Creation-Date: 2026-11-10 09:05+0000\n"
 "PO-Revision-Date: 2026-11-03 10:00+0000\n"
 "Last-Translator: A S Alam <aalam@users.noreply.translate.fedoraproject.org>\n"
 "Language-Team: Punjabi <https://translate.fedoraproject.org/projects/dnf5/"
@@ -139,8 +139,7 @@ msgstr "ਕੈਸ਼ ਮਿਟਾਉਣ ਦੌਰਾਨ ਗਲਤੀ: {}"
 #: commands/distro-sync/distro-sync.cpp:48
 msgid ""
 "Upgrade or downgrade installed software to the latest available versions"
-msgstr ""
-"ਇੰਸਟਾਲ ਹੋਏ ਸਾਫਟਵੇਅਰਾਂ ਨੂੰ ਉਹਨਾਂ ਦੇ ਮੌਜੂਦ ਨਵੇਂ ਵਰਜ਼ਨ ਲਈ ਅੱਪਗਰੇਡ ਜਾਂ ਡਾਊਨਗਰੇਡ ਕਰੋ"
+msgstr "ਇੰਸਟਾਲ ਹੋਏ ਸਾਫਟਵੇਅਰਾਂ ਨੂੰ ਉਹਨਾਂ ਦੇ ਮੌਜੂਦ ਨਵੇਂ ਵਰਜ਼ਨ ਲਈ ਅੱਪਗਰੇਡ ਜਾਂ ਡਾਊਨਗਰੇਡ ਕਰੋ"
 
 #: commands/group/group.cpp:41
 msgid "Manage comps groups"

@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-02 08:43+0000\n"
+"POT-Creation-Date: 2026-11-10 09:05+0000\n"
 "PO-Revision-Date: 2026-11-03 09:37+0000\n"
 "Last-Translator: Mario Blättermann <mario.blaettermann@gmail.com>\n"
 "Language-Team: German <https://translate.fedoraproject.org/projects/dnf5/"
@@ -51,13 +51,13 @@ msgstr ""
 msgid "Invalid option value: enabled={}"
 msgstr "Ungültiger Optionswert: enabled={}"
 
-#: base/goal.cpp:490
+#: base/goal.cpp:492
 #, c++-format
 msgid "Unsupported argument for REMOVE action: {}"
 msgstr "Nicht unterstütztes Argument für die REMOVE-Aktion: {}"
 
 #. TODO(lukash) throw a proper exception
-#: base/goal.cpp:1741
+#: base/goal.cpp:1743
 #, c++-format
 msgid "Incorrect configuration value for multilib_policy: {}"
 msgstr "Fehlerhafter Konfigurationswert für multilib_policy: {}"
@@ -1197,8 +1197,8 @@ msgid ""
 "(\"{}\") is \"{}.{}\". API version in libdnf is \"{}.{}\"."
 msgstr ""
 "Nicht unterstützte Plugin/API-Kombination. Die vom Plugin „{}“ („{}“) "
-"bereitgestellte API-Version ist „{}.{}“. Die API-Version in libdnf ist „{}.{}"
-"“."
+"bereitgestellte API-Version ist „{}.{}“. Die API-Version in libdnf ist „{}."
+"{}“."
 
 #: plugin/plugins.cpp:93
 msgid "Failed to create a libdnf plugin instance"
@@ -1388,8 +1388,8 @@ msgstr "Fehler beim Laden der lokalen Metadaten für Paketquelle „{}“"
 msgid ""
 "No valid source (baseurl, mirrorlist or metalink) found for repository \"{}\""
 msgstr ""
-"Keine gültige Quelle (baseurl, mirrorlist oder metalink) für Paketquelle „{}"
-"“ gefunden"
+"Keine gültige Quelle (baseurl, mirrorlist oder metalink) für Paketquelle "
+"„{}“ gefunden"
 
 #: repo/repo_pgp.cpp:67
 #, c++-format
@@ -1954,8 +1954,8 @@ msgstr "Zustand {} für „{}“ nicht gefunden."
 #, c++-format
 msgid "Loading system state TOML file {} failed (see dnf5-system-state(7)): {}"
 msgstr ""
-"Laden der Systemstatus-TOML-Datei {} fehlgeschlagen (siehe dnf5-system-state"
-"(7)): {}"
+"Laden der Systemstatus-TOML-Datei {} fehlgeschlagen (siehe dnf5-system-"
+"state(7)): {}"
 
 #: system/state.cpp:649
 #, c++-format
@@ -2270,54 +2270,54 @@ msgid ""
 "Missing mandatory object key \"group_id\" in an rpm with reason \"Group\" "
 "and action \"Reason Change\""
 msgstr ""
-"Fehlender erforderlicher Objektschlüssel „group_id“ in einem rpm mit Grund „"
-"Group“ und Aktion „Reason Change“"
+"Fehlender erforderlicher Objektschlüssel „group_id“ in einem rpm mit Grund "
+"„Group“ und Aktion „Reason Change“"
 
-#: utils/bootc.cpp:46
+#: utils/bootc.cpp:47
 #, c++-format
 msgid "Error checking bootc status: {}"
 msgstr ""
 
-#: utils/bootc.cpp:49
+#: utils/bootc.cpp:50
 #, c++-format
 msgid "Error checking bootc status: bootc command failed with exit code {}"
 msgstr ""
 
-#: utils/bootc.cpp:58
+#: utils/bootc.cpp:59
 msgid "Error checking bootc status: Failed to parse JSON output"
 msgstr ""
 
-#: utils/bootc.cpp:73
+#: utils/bootc.cpp:74
 #, fuzzy, c++-format
 #| msgid "Failed to update from string: {}"
 msgid "Failed to query status of bootc system: {}"
 msgstr "Aktualisierung von Zeichenkette fehlgeschlagen: {}"
 
-#: utils/bootc.cpp:90
+#: utils/bootc.cpp:91
 #, fuzzy
 #| msgid "Failed to download files"
 msgid "Failed to stat /usr filesystem"
 msgstr "Herunterladen der Dateien fehlgeschlagen"
 
-#: utils/bootc.cpp:125
+#: utils/bootc.cpp:127
 #, c++-format
 msgid "Error running `bootc usr-overlay --read-only`: {}"
 msgstr ""
 
-#: utils/bootc.cpp:128
+#: utils/bootc.cpp:130
 #, c++-format
 msgid ""
 "Error running `bootc usr-overlay --read-only`: bootc command failed with "
 "exit code {}"
 msgstr ""
 
-#: utils/bootc.cpp:136
+#: utils/bootc.cpp:138
 #, fuzzy
 #| msgid "Failed to execute uname()"
 msgid "Failed to unshare mount namespace"
 msgstr "Ausführen von uname() fehlgeschlagen"
 
-#: utils/bootc.cpp:143
+#: utils/bootc.cpp:146
 #, fuzzy, c++-format
 #| msgid "Failed to resolve module metadata: {}"
 msgid "Failed to remount /usr as read-write: {}"
@@ -2511,8 +2511,8 @@ msgstr "Binden des integer64-Wertes an die SQL-Anweisung fehlgeschlagen: „{}�
 #, c++-format
 msgid "Binding unsigned integer32 value to SQL statement failed: \"{}\""
 msgstr ""
-"Binden des „unsigned integer32“-Wertes an die SQL-Anweisung fehlgeschlagen: „"
-"{}“"
+"Binden des „unsigned integer32“-Wertes an die SQL-Anweisung fehlgeschlagen: "
+"„{}“"
 
 #: utils/sqlite3/sqlite3.cpp:37
 #, c++-format

@@ -8,9 +8,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-02 08:43+0000\n"
-"PO-Revision-Date: 2026-11-03 09:42+0000\n"
-"Last-Translator: Hyeonmin Oh <hyunmin860@gmail.com>\n"
+"POT-Creation-Date: 2026-11-10 09:05+0000\n"
+"PO-Revision-Date: 2026-11-08 05:47+0000\n"
+"Last-Translator: 김인수 <simmon@nplob.com>\n"
 "Language-Team: Korean <https://translate.fedoraproject.org/projects/dnf5/"
 "dnf5-plugin-config-manager/ko/>\n"
 "Language: ko\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 2026.11\n"
+"X-Generator: Weblate 2026.11.1\n"
 
 #: addrepo.cpp:115
 #, c++-format
@@ -116,93 +116,99 @@ msgstr "디렉토리에서 저장소를 읽을 수 없습니다 \"{}\": {}"
 
 #: addvendorpolicy.cpp:23
 msgid "Add a vendor change policy from a TOML file or compact format string"
-msgstr ""
+msgstr "TOML 파일이나 간결한 형식 문자열에서 공급업체 변경 추가"
 
 #: addvendorpolicy.cpp:29
 msgid "Policy base filename (without .conf extension)"
-msgstr ""
+msgstr "정책 기반 파일이름 (.conf 확장자 없는)"
 
 #: addvendorpolicy.cpp:40
 msgid "URL or local path to the source TOML policy file"
-msgstr ""
+msgstr "원천 TOML 정책 파일로 URL 이나 로컬 경로"
 
 #: addvendorpolicy.cpp:52
 msgid "Vendor change policy in compact format"
-msgstr ""
+msgstr "간소한 형식의 공급업체 변경 정책"
 
 #: addvendorpolicy.cpp:64
 msgid "Allow masking a distribution policy"
-msgstr ""
+msgstr "분배 정책 가리기 허용"
 
 #: addvendorpolicy.cpp:73
 msgid "Allow replacing an existing policy file"
-msgstr ""
+msgstr "기존 정책 파일 교체하기 허용"
 
 #: addvendorpolicy.cpp:82
 msgid "Require that the new policy masks a distribution policy"
-msgstr ""
+msgstr "신규 정책을 분배 정책으로 가리는 것이 필요합니다"
 
 #: addvendorpolicy.cpp:94
 msgid "Require that the new policy replaces an existing system policy file"
-msgstr ""
+msgstr "신규 정책은 기존 시스템 정책 파일로 교체하는 것이 필요합니다"
 
 #: addvendorpolicy.cpp:123
 msgid "Option \"{option}\" with nonempty value is required"
-msgstr ""
+msgstr "비어있지 않은 값 Option \"{option}\"이 필요합니다"
 
 #: addvendorpolicy.cpp:129
 msgid "Either \"{option1}\" or non-empty \"{option2}\" is required"
-msgstr ""
+msgstr "\"{option1}\" 또는 non-empty \"{option2}\" 중에 하나가 필요합니다"
 
 #: addvendorpolicy.cpp:142
 msgid ""
 "Policy file \"{path}\" already exists. Use \"{option}\" to allow replacing "
 "it."
 msgstr ""
+"정책 파일 \"{path}\"가 이미 존재합니다. \"{option}\"을 사용하여 이를 대체하도"
+"록 허용합니다."
 
 #: addvendorpolicy.cpp:150
 msgid ""
 "Distribution policy \"{name}\" already exists. Use \"{option}\" to allow "
 "masking it."
 msgstr ""
+"분배 정책 \"{name}\"이 이미 존재합니다. \"{option}\" 부분을 사용하여 이를 가"
+"리도록 허용합니다."
 
 #: addvendorpolicy.cpp:165
 msgid ""
 "Cannot add policy: option \"{option}\" requires masking a distribution "
 "policy, but no distribution policy named \"{name}\" exists."
 msgstr ""
+"정책을 추가 할 수 없습니다: option \"{option}\" 부분은 분배 정책을 가리는 데 "
+"필요하지만, 분배 정책 명칭 \"{name}\" 부분이 존재하지 않습니다."
 
 #: addvendorpolicy.cpp:172
 msgid ""
 "Cannot add policy: option \"{option}\" requires replacing an existing system "
 "policy, but no system policy file named \"{name}\" exists."
 msgstr ""
+"정책을 추가 할 수 없습니다: option \"{option}\" 부분은 기존 시스템 정책 교체"
+"가 필요하지만, 시스템 파일 명칭 \"{named}\" 부분이 존재하지 않습니다."
 
 #: addvendorpolicy.cpp:191 addvendorpolicy.cpp:215 addvendorpolicy.cpp:244
 msgid "Replaced vendor policy file: {path}"
-msgstr ""
+msgstr "교체된 공급업체 정책 파일: {path}"
 
 #: addvendorpolicy.cpp:196
 msgid "Created vendor policy file: {path}"
-msgstr ""
+msgstr "생성된 공급업체 정책 파일: {path}"
 
 #: addvendorpolicy.cpp:204
-#, fuzzy
-#| msgid "from-repofile: \"{}\" file does not exist"
 msgid "Source file does not exist: {path}"
-msgstr "from-repofile: \"{}\" 파일이 존재하지 않습니다"
+msgstr "원천 파일이 존재하지 않습니다: {path}"
 
 #: addvendorpolicy.cpp:222 addvendorpolicy.cpp:251
 msgid "Saved vendor policy file: {path}"
-msgstr ""
+msgstr "저장된 공급업체 정책 파일: {path}"
 
 #: addvendorpolicy.cpp:260
 msgid "Masked distribution policy file: {path}"
-msgstr ""
+msgstr "가려진 분배 정책 파일: {path}"
 
 #: addvendorpolicy.cpp:264
 msgid "Failed to add vendor policy"
-msgstr ""
+msgstr "공급업체 정책을 추가하는 데 실패함"
 
 #: config-manager.cpp:47
 msgid "Manage configuration"
@@ -210,87 +216,89 @@ msgstr "환경설정을 관리합니다"
 
 #: listvendorpolicies.cpp:27
 msgid "List vendor change policy files"
-msgstr ""
+msgstr "공급업체 변경 정책 파일을 목록화합니다"
 
 #: listvendorpolicies.cpp:33 removevendorpolicy.cpp:29
 msgid "Policy base filename pattern (supports globs)"
-msgstr ""
+msgstr "정책 기반 파일이름 형태 (globs 지원)"
 
 #: listvendorpolicies.cpp:42
 msgid "Show detailed information about the policies"
-msgstr ""
+msgstr "정책에 대한 자세한 정보 표시"
 
 #: listvendorpolicies.cpp:61 removevendorpolicy.cpp:49
 msgid "No vendor policy files found"
-msgstr ""
+msgstr "공급업체 정책 파일을 찾을 수 없습니다"
 
 #: listvendorpolicies.cpp:80 removevendorpolicy.cpp:63
 msgid "No matching vendor policy files found for pattern: {pattern}"
-msgstr ""
+msgstr "일치하는 공급업체 정책 파일을 형식으로 찾을 수 없습니다: {pattern}"
 
 #. Note for translators: This is a right-aligned column separator in
 #. a package properties table as in "Name    : bash".
 #: listvendorpolicies.cpp:149
 msgid " : "
-msgstr ""
+msgstr " : "
 
 #. Add policy info
 #: listvendorpolicies.cpp:155
 msgid "Policy"
-msgstr ""
+msgstr "정책"
 
 #: listvendorpolicies.cpp:156
 msgid "Source"
-msgstr ""
+msgstr "원천"
 
 #: listvendorpolicies.cpp:157
 msgid "Distribution (read-only)"
-msgstr ""
+msgstr "배포 (읽기-전용)"
 
 #: listvendorpolicies.cpp:157
 msgid "System (manageable)"
-msgstr ""
+msgstr "시스템 (관리가능)"
 
 #: listvendorpolicies.cpp:157
 msgid "Type"
-msgstr ""
+msgstr "유형"
 
 #: listvendorpolicies.cpp:160
 msgid "Masks"
-msgstr ""
+msgstr "가림"
 
 #: listvendorpolicies.cpp:165
 msgid "Masked by"
-msgstr ""
+msgstr "마스크 설정되었습니다"
 
 #: listvendorpolicies.cpp:174
 msgid "<conversion failed: {what}>"
-msgstr ""
+msgstr "<변환 실패함: {what}>"
 
 #: listvendorpolicies.cpp:178 listvendorpolicies.cpp:183
 msgid "Compact"
-msgstr ""
+msgstr "간략히"
 
 #: removevendorpolicy.cpp:23
 msgid "Remove vendor change policy files"
-msgstr ""
+msgstr "공급업체 변경 정책 파일을 제거합니다"
 
 #: removevendorpolicy.cpp:74
 msgid "Removed vendor policy file: {path}"
-msgstr ""
+msgstr "제거된 공급업체 정책 파일: {path}"
 
 #: removevendorpolicy.cpp:78
 msgid "Unmasked distribution policy file: {path}"
-msgstr ""
+msgstr "가려진 배포 정책 파일: {path}"
 
 #: removevendorpolicy.cpp:83
 msgid "Failed to remove policy file: {path}"
-msgstr ""
+msgstr "정책 파일 제거하는 데 실패함: {path}"
 
 #: removevendorpolicy.cpp:87
 msgid ""
 "Cannot remove distribution policy file \"{path}\". To mask it, use: {command}"
 msgstr ""
+"배포 정책 파일 \"{path}\"을 제거 할 수 없습니다. 이를 가리려면, 다음을 사용합"
+"니다: {command}"
 
 #: repos.cpp:56 setopt.cpp:140
 #, c++-format
@@ -309,7 +317,8 @@ msgstr "저장소 비활성화"
 #, c++-format
 msgid ""
 "{}: Badly formatted argument value: Last key character cannot be '.': {}"
-msgstr "{}: 인수 값의 형식이 잘못되었습니다. 키의 마지막 문자는 '.'일 수 없습니다: {}"
+msgstr ""
+"{}: 인수 값의 형식이 잘못되었습니다. 키의 마지막 문자는 '.'일 수 없습니다: {}"
 
 #: setopt.cpp:70 unsetopt.cpp:82
 #, c++-format
@@ -360,8 +369,8 @@ msgid ""
 "The path \"{}\" exists, but it is not a directory or a symlink to a "
 "directory."
 msgstr ""
-"경로 \"{}\"가 존재하지만, 디렉토리 또는 디렉토리에 대한 심볼릭링크가 "
-"아닙니다."
+"경로 \"{}\"가 존재하지만, 디렉토리 또는 디렉토리에 대한 심볼릭링크가 아닙니"
+"다."
 
 #: shared.hpp:70
 #, c++-format
@@ -374,8 +383,8 @@ msgid ""
 "Directory \"{}\" does not exist. Add \"--create-missing-dir\" to create "
 "missing directories."
 msgstr ""
-"디렉토리 \"{}\"가 존재하지 않습니다. \"--create-missing-dir\"를 추가하여 "
-"누락된 디렉토리를 생성합니다."
+"디렉토리 \"{}\"가 존재하지 않습니다. \"--create-missing-dir\"를 추가하여 누락"
+"된 디렉토리를 생성합니다."
 
 #: shared.hpp:87
 #, c++-format
@@ -398,16 +407,16 @@ msgid ""
 "config-manager: Request to remove main option but it is not present in the "
 "config file: {}"
 msgstr ""
-"config-manager: 주요 옵션을 제거하도록 요청하지만 config 파일에서 존재하지 "
-"않습니다: {}"
+"config-manager: 주요 옵션을 제거하도록 요청하지만 config 파일에서 존재하지 않"
+"습니다: {}"
 
 #: unsetopt.cpp:152
 #, c++-format
 msgid ""
 "config-manager: Request to remove main option but config file not found: {}"
 msgstr ""
-"config-manager: 주요 옵션을 제거하도록 요청하지만 config 파일을 찾을 수 "
-"없습니다: {}"
+"config-manager: 주요 옵션을 제거하도록 요청하지만 config 파일을 찾을 수 없습"
+"니다: {}"
 
 #: unsetopt.cpp:186
 #, c++-format
@@ -415,8 +424,8 @@ msgid ""
 "config-manager: Request to remove repository option but repoid is not "
 "present in the overrides: {}"
 msgstr ""
-"config-manager: 저장소 옵션을 제거하도록 요청하지만 repoid는 재정의에서 "
-"존재하지 않습니다: {}"
+"config-manager: 저장소 옵션을 제거하도록 요청하지만 repoid는 재정의에서 존재"
+"하지 않습니다: {}"
 
 #: unsetopt.cpp:194
 #, c++-format
@@ -424,8 +433,8 @@ msgid ""
 "config-manager: Request to remove repository option but it is not present in "
 "the overrides: {}.{}"
 msgstr ""
-"config-manager: 저장소 옵션을 제거하려고 요청하지만 재정의에서 존재하지 "
-"않습니다: {}.{}"
+"config-manager: 저장소 옵션을 제거하려고 요청하지만 재정의에서 존재하지 않습"
+"니다: {}.{}"
 
 #: unsetopt.cpp:208
 #, c++-format
@@ -442,8 +451,8 @@ msgid ""
 "config-manager: Request to remove variable but vars directory was not found: "
 "{}"
 msgstr ""
-"config-manager: 변수를 제거하려고 요청하지만 var 디렉토리를 찾을 수 "
-"없습니다: {}"
+"config-manager: 변수를 제거하려고 요청하지만 var 디렉토리를 찾을 수 없습니"
+"다: {}"
 
 #: unsetvar.cpp:82
 #, c++-format
@@ -451,8 +460,8 @@ msgid ""
 "config-manager: Request to remove variable but it is not present in the vars "
 "directory: {}"
 msgstr ""
-"config-manager: 변수를 제거하려고 요청하지만 var 디렉토레에서 존재하지 "
-"않습니다: {}"
+"config-manager: 변수를 제거하려고 요청하지만 var 디렉토레에서 존재하지 않습니"
+"다: {}"
 
 #: unsetvar.cpp:88
 #, c++-format

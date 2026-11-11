@@ -20,7 +20,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-02 08:43+0000\n"
+"POT-Creation-Date: 2026-11-10 09:05+0000\n"
 "PO-Revision-Date: 2026-11-03 09:48+0000\n"
 "Last-Translator: Luke Na <narukeu@outlook.com>\n"
 "Language-Team: Chinese (Simplified) <https://translate.fedoraproject.org/"
@@ -32,7 +32,7 @@ msgstr ""
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Generator: Weblate 2026.11\n"
 
-#: cmdline_aliases.cpp:84 context.cpp:222 main.cpp:1619
+#: cmdline_aliases.cpp:84 context.cpp:222 main.cpp:1617
 msgid ", "
 msgstr ", "
 
@@ -48,7 +48,8 @@ msgstr "附加的命名参数 \"{}\" 未找到: {}: 请求的文件 \"{}\" 行�
 msgid ""
 "Unknown attribute \"{}\" of attached named argument for alias \"{}\" in file "
 "\"{}\" on line {}: {}"
-msgstr "未知属性 \"{}\" 为别名附加的命名参数 \"{}\" 在文件 \"{}\" 中的行列位置 {}: {}"
+msgstr ""
+"未知属性 \"{}\" 为别名附加的命名参数 \"{}\" 在文件 \"{}\" 中的行列位置 {}: {}"
 
 #: cmdline_aliases.cpp:171
 #, c++-format
@@ -172,8 +173,8 @@ msgid ""
 "Used config file version \"1.0\" for attribute \"{}\" of command \"{}\" in "
 "file \"{}\" on line {}: {}"
 msgstr ""
-"为属性使用 \"1.0\" 版本的配置文件 \"{}\" 命令 \"{}\" 文件 \"{}\" 行列位置 {}"
-": {}"
+"为属性使用 \"1.0\" 版本的配置文件 \"{}\" 命令 \"{}\" 文件 \"{}\" 行列位置 "
+"{}: {}"
 
 #: cmdline_aliases.cpp:713
 #, c++-format
@@ -363,7 +364,8 @@ msgstr "BUGZILLA_ID,..."
 msgid ""
 "Include content contained in advisories that fix a CVE (Common "
 "Vulnerabilities and Exposures) ID, Eg. CVE-2201-0123. List option."
-msgstr "包含修复CVE(常见漏洞和暴露)ID(例如CVE-2201-0123)的建议中的内容，列表选项。"
+msgstr ""
+"包含修复CVE(常见漏洞和暴露)ID(例如CVE-2201-0123)的建议中的内容，列表选项。"
 
 #: commands/advisory_shared.hpp:260
 msgid "CVE_ID,..."
@@ -508,7 +510,7 @@ msgstr "当加 --url 参数运行时，打印所有可用镜像源中的URL"
 msgid "Invalid urlprotocol option: {}"
 msgstr "无效的url协议选项: {}"
 
-#: commands/download/download.cpp:166 main.cpp:833
+#: commands/download/download.cpp:166 main.cpp:831
 #, c++-format
 msgid "Unsupported architecture \"{0}\". Please choose one from {1}"
 msgstr "不支持的系统架构 \"{0}\"。请从中选择一个 {1}"
@@ -686,8 +688,8 @@ msgid ""
 "Invalid transaction ID range \"{}\", \"ID\" or \"ID..ID\" expected, where ID "
 "is \"NUMBER\", \"last\" or \"last-NUMBER\"."
 msgstr ""
-"不合法的事务ID范围 \"{}\"，应该为 \"ID\" 或 \"ID..ID\"，ID应该是 \"数"
-"字\"、\"last\" 或 \"last-数字\"。"
+"不合法的事务ID范围 \"{}\"，应该为 \"ID\" 或 \"ID..ID\"，ID应该是 \"数字\"、"
+"\"last\" 或 \"last-数字\"。"
 
 #: commands/install/install.cpp:41
 msgid "Install software"
@@ -726,13 +728,15 @@ msgstr "列出可安装的软件包。"
 msgid ""
 "List extras, that is packages installed on the system that are not available "
 "in any known repository."
-msgstr "列出额外的，即安装在系统上的软件包，这些软件包在任何已知的仓库中都不可用。"
+msgstr ""
+"列出额外的，即安装在系统上的软件包，这些软件包在任何已知的仓库中都不可用。"
 
 #: commands/list/list.cpp:89
 msgid ""
 "List packages installed on the system that are obsoleted by packages in any "
 "known repository."
-msgstr "列出已安装在系统上的软件包，这些软件包已被任何已知仓库中的软件包所取代。"
+msgstr ""
+"列出已安装在系统上的软件包，这些软件包已被任何已知仓库中的软件包所取代。"
 
 #: commands/list/list.cpp:94
 msgid "List packages recently added into the repositories."
@@ -1016,8 +1020,8 @@ msgid ""
 "An offline transaction was started, but it did not finish. Run `dnf5 offline "
 "log` for more information. The command that initiated the transaction was:"
 msgstr ""
-"一个离线事务已经开始，但是并未结束。运行 \"dnf5 offline log\" 以获得更多信息"
-"。启动事务的命令是:"
+"一个离线事务已经开始，但是并未结束。运行 \"dnf5 offline log\" 以获得更多信"
+"息。启动事务的命令是:"
 
 #: commands/offline/offline.cpp:855
 msgid "Unknown offline transaction status: "
@@ -1099,7 +1103,8 @@ msgstr "搜索符合各种条件的软件包"
 msgid ""
 "Option \"--exactdeps\" has to be used either with \"--whatrequires\" or \"--"
 "whatdepends\""
-msgstr "选项 \"--exactdeps\" 必须与 \"--whatrequires\" 或 \"--whatdepends\" 一起使用"
+msgstr ""
+"选项 \"--exactdeps\" 必须与 \"--whatrequires\" 或 \"--whatdepends\" 一起使用"
 
 #: commands/repoquery/repoquery.cpp:532
 msgid ""
@@ -1358,7 +1363,8 @@ msgstr "设置选项: \"{}.{}\": {}"
 msgid ""
 "No matching repositories for {}. To use repositories from a host system, "
 "pass --use-host-config option"
-msgstr "任何仓库未匹配到 {} 。通过 \"--use-host-config\" 选项使用指定域名中的仓库"
+msgstr ""
+"任何仓库未匹配到 {} 。通过 \"--use-host-config\" 选项使用指定域名中的仓库"
 
 #: context.cpp:230
 #, c++-format
@@ -1434,8 +1440,8 @@ msgid ""
 "reboot and run the transaction. To cancel the transaction and delete the "
 "downloaded files, use `dnf5 offline clean`."
 msgstr ""
-"已经存储的事务可以离线执行。运行 \"dnf5 offline reboot\" 以重新启动并运行事务"
-"。若要取消事务并删除已下载的文件，须使用 \"dnf5 offline clean\" 命令。"
+"已经存储的事务可以离线执行。运行 \"dnf5 offline reboot\" 以重新启动并运行事"
+"务。若要取消事务并删除已下载的文件，须使用 \"dnf5 offline clean\" 命令。"
 
 #: context.cpp:565
 msgid "Running transaction"
@@ -1543,70 +1549,70 @@ msgstr "无法加载共享库文件 \"{}\":{}"
 msgid "Cannot obtain address of symbol \"{}\": {}"
 msgstr "无法获取符号的地址 \"{}\": {}"
 
-#: main.cpp:156
+#: main.cpp:150
+#, c++-format
+msgid "Failed to expire repository cache in path \"{0}\": {1}"
+msgstr "在如下路径中使仓库缓存过期失败 \"{0}\": {1}"
+
+#: main.cpp:174
 msgid "Utility for packages maintaining"
 msgstr "维护软件包的实用工具"
 
-#: main.cpp:157
+#: main.cpp:175
 msgid "DNF5 is a program for maintaining packages."
 msgstr "DNF5是一个维护软件包的程序。"
 
-#: main.cpp:158
+#: main.cpp:176
 msgid "Unclassified options:"
 msgstr "未分类的选项:"
 
-#: main.cpp:161
+#: main.cpp:179
 msgid "Global options:"
 msgstr "全局选项:"
 
-#: main.cpp:166
+#: main.cpp:184
 msgid "Print help"
 msgstr "输出帮助信息"
 
-#: main.cpp:173
+#: main.cpp:191
 msgid "Configuration file location"
 msgstr "配置文件存放位置"
 
-#: main.cpp:181
+#: main.cpp:199
 msgid ""
 "In combination with a non-interactive command, shows just the relevant "
 "content. Suppresses messages notifying about the current state or actions of "
 "dnf5."
 msgstr "结合非交互式命令，仅显示相关内容。抑制通知dnf5当前状态或操作的消息。"
 
-#: main.cpp:196
+#: main.cpp:214
 msgid ""
 "Run entirely from system cache, don't update the cache and use it even in "
 "case it is expired."
 msgstr "完全从系统缓存运行，即使缓存已过期，也不要更新缓存。"
 
-#: main.cpp:205
+#: main.cpp:223
 msgid "Control whether color is used."
 msgstr "配置是否使用颜色。"
 
-#: main.cpp:211
+#: main.cpp:229
 msgid "Force refreshing metadata before running the command."
 msgstr "在执行该命令前强制刷新元数据。"
 
-#: main.cpp:227
-#, c++-format
-msgid "Failed to expire repository cache in path \"{0}\": {1}"
-msgstr "在如下路径中使仓库缓存过期失败 \"{0}\": {1}"
-
-#: main.cpp:241
+#: main.cpp:239
 msgid "create additional repository using id and path"
 msgstr "使用id和路径创建额外的仓库"
 
-#: main.cpp:249
+#: main.cpp:247
 #, c++-format
 msgid "repofrompath: Incorrect repoid and path specification \"{}\""
 msgstr "repofrompath: 不正确的仓库id和指定路径 \" {} \""
 
-#: main.cpp:261
+#: main.cpp:259
 msgid "set arbitrary config and repo options"
 msgstr "设置任意配置和仓库选项"
 
-#: main.cpp:263
+#: main.cpp:261
 msgid ""
 "Override a configuration option from the configuration file. To override "
 "configuration options for repositories, use repoid.option for  the\n"
@@ -1622,56 +1628,56 @@ msgstr ""
 "这些值不会覆盖到它。然而如果指定一个空值(如\"--setopt=tsflags=\")则会清空该选"
 "项值 。"
 
-#: main.cpp:272 main.cpp:311
+#: main.cpp:270 main.cpp:309
 #, c++-format
 msgid "{}: Badly formatted argument value \"{}\""
 msgstr "{}：错误的参数值格式 \"{}\""
 
-#: main.cpp:279
+#: main.cpp:277
 #, c++-format
 msgid ""
 "{}: Badly formatted argument value: Last key character cannot be '.': {}"
 msgstr "{}：错误的参数值格式：键名的结尾字符不能是\".\"：{}"
 
-#: main.cpp:292
+#: main.cpp:290
 #, c++-format
 msgid "setopt: \"{0}\": {1}"
 msgstr "设置选项: \"{0}\": {1}"
 
-#: main.cpp:304
+#: main.cpp:302
 msgid "set arbitrary variable"
 msgstr "设置任意变量"
 
-#: main.cpp:318
+#: main.cpp:316
 #, c++-format
 msgid "setvar: {}"
 msgstr "设置变量: {}"
 
-#: main.cpp:327
+#: main.cpp:325
 msgid "automatically answer yes for all questions"
 msgstr "全部问题自动应答为是"
 
-#: main.cpp:334
+#: main.cpp:332
 msgid "automatically answer no for all questions"
 msgstr "全部问题自动应答为否"
 
-#: main.cpp:341
+#: main.cpp:339
 msgid "try the best available package versions in transactions"
 msgstr "在事务中尝试最佳的软件包版本"
 
-#: main.cpp:348
+#: main.cpp:346
 msgid "do not limit the transaction to the best candidate"
 msgstr "不限制事务的最佳候选"
 
-#: main.cpp:357
+#: main.cpp:355
 msgid "allow automatic package replacements from different vendors"
 msgstr ""
 
-#: main.cpp:364
+#: main.cpp:362
 msgid "do not allow automatic package replacements from different vendors"
 msgstr ""
 
-#: main.cpp:377
+#: main.cpp:375
 #, fuzzy
 #| msgid ""
 #| "Enable additional repositories. List option. Supports globs, can be "
@@ -1681,7 +1687,7 @@ msgid ""
 "globs, can be specified multiple times."
 msgstr "启用额外的仓库。列表选项。支持通配符，可以指定多次。"
 
-#: main.cpp:396
+#: main.cpp:394
 #, fuzzy
 #| msgid ""
 #| "Disable repositories. List option. Supports globs, can be specified "
@@ -1691,7 +1697,7 @@ msgid ""
 "globs, can be specified multiple times."
 msgstr "禁用仓库。列表选项。支持通配符，可以被指定多次。"
 
-#: main.cpp:415
+#: main.cpp:413
 #, fuzzy
 #| msgid ""
 #| "Enable libdnf5 plugins by name. List option. Supports globs, can be "
@@ -1701,7 +1707,7 @@ msgid ""
 "option. Supports globs, can be specified multiple times."
 msgstr "通过名称启用 libdnf5 插件。列表选项。支持通配符，可以被指定多次。"
 
-#: main.cpp:444
+#: main.cpp:442
 #, fuzzy
 #| msgid ""
 #| "Disable repositories. List option. Supports globs, can be specified "
@@ -1710,13 +1716,13 @@ msgid ""
 "Add a vendor change policy for this run. Can be specified multiple times."
 msgstr "禁用仓库。列表选项。支持通配符，可以被指定多次。"
 
-#: main.cpp:459
+#: main.cpp:457
 #, c++-format
 msgid ""
 "Remove all vendor change policies. Can be combined with {} to replace them."
 msgstr ""
 
-#: main.cpp:478
+#: main.cpp:476
 #, fuzzy
 #| msgid ""
 #| "Disable repositories. List option. Supports globs, can be specified "
@@ -1726,164 +1732,164 @@ msgid ""
 "Supports globs, can be specified multiple times."
 msgstr "禁用仓库。列表选项。支持通配符，可以被指定多次。"
 
-#: main.cpp:495
+#: main.cpp:493
 msgid ""
 "Don't install files that are marked as documentation (which includes man "
 "pages and texinfo documents)"
 msgstr "不要安装标记为文档(包含使用手册和文档信息)的文件"
 
-#: main.cpp:511
+#: main.cpp:509
 msgid "exclude packages by name or glob"
 msgstr "用全名或通配符排除软件包"
 
-#: main.cpp:530
+#: main.cpp:528
 msgid ""
 "Enable additional repositories. List option. Supports globs, can be "
 "specified multiple times."
 msgstr "启用额外的仓库。列表选项。支持通配符，可以指定多次。"
 
-#: main.cpp:548
+#: main.cpp:546
 msgid ""
 "Disable repositories. List option. Supports globs, can be specified multiple "
 "times."
 msgstr "禁用仓库。列表选项。支持通配符，可以被指定多次。"
 
-#: main.cpp:566
+#: main.cpp:564
 msgid ""
 "Enable just specific repositories. List option. Supports globs, can be "
 "specified multiple times."
 msgstr "仅启用特定存储库。列表选项。支持通配符，可以多次指定。"
 
-#: main.cpp:588
+#: main.cpp:586
 msgid "disable OpenPGP signature checking (if RPM policy allows)"
 msgstr "禁用OpenPGP签名检查(如果 RPM 策略允许)"
 
-#: main.cpp:605
+#: main.cpp:603
 msgid "Disable all libdnf5 plugins"
 msgstr "禁用所有 libdnf5 插件"
 
-#: main.cpp:615
+#: main.cpp:613
 msgid ""
 "Enable libdnf5 plugins by name. List option. Supports globs, can be "
 "specified multiple times."
 msgstr "通过名称启用 libdnf5 插件。列表选项。支持通配符，可以被指定多次。"
 
-#: main.cpp:630
+#: main.cpp:628
 msgid ""
 "Disable libdnf5 plugins by name. List option. Supports globs, can be "
 "specified multiple times."
 msgstr "通过名称禁用 libdnf5 插件。列表选项。支持通配符，可以被指定多次。"
 
-#: main.cpp:647
+#: main.cpp:645
 msgid "add a comment to transaction"
 msgstr "为事务添加一个注释"
 
-#: main.cpp:649
+#: main.cpp:647
 msgid ""
 "Adds a comment to the action. If a transaction takes place, the comment is "
 "stored in it."
 msgstr "为操作添加注释。如果产生事务，则注释将存储在其中。"
 
-#: main.cpp:662
+#: main.cpp:660
 msgid "set install root"
 msgstr "设置目标根目录"
 
-#: main.cpp:669
+#: main.cpp:667
 msgid ""
 "use configuration, reposdir, and vars from the host system rather than the "
 "installroot"
 msgstr "使用系统中的configuration、reposdir和var，而不是installroot"
 
-#: main.cpp:678
+#: main.cpp:676
 msgid "override the value of $releasever in config and repo files"
 msgstr "覆盖在配置文件和仓库文件中 $releasever 的值"
 
-#: main.cpp:691
+#: main.cpp:689
 #, fuzzy
 #| msgid "override the value of $releasever in config and repo files"
 msgid "override the value of $releasever_major in config and repo files"
 msgstr "覆盖在配置文件和仓库文件中 $releasever 的值"
 
-#: main.cpp:704
+#: main.cpp:702
 #, fuzzy
 #| msgid "override the value of $releasever in config and repo files"
 msgid "override the value of $releasever_minor in config and repo files"
 msgstr "覆盖在配置文件和仓库文件中 $releasever 的值"
 
-#: main.cpp:717
+#: main.cpp:715
 msgid ""
 "Show newly installed leaf packages and packages that became leaves after a "
 "transaction."
 msgstr "显示新安装的叶子软件包，以及在事务完成后成为叶子节点的软件包。"
 
-#: main.cpp:731
+#: main.cpp:729
 msgid "Dump detailed solving results into files"
 msgstr "将详细的解决结果转储到文件中"
 
-#: main.cpp:740
+#: main.cpp:738
 msgid "Print main configuration values to stdout"
 msgstr "打印主要的配置值到标准输出中"
 
-#: main.cpp:757
+#: main.cpp:755
 msgid ""
 "Print repository configuration values to stdout. List option. Supports globs"
 msgstr "打印仓库配置值到标准输出。列表选项。支持通配符"
 
-#: main.cpp:772
+#: main.cpp:770
 msgid "Print variable values to stdout"
 msgstr "打印变量值到标准输出"
 
-#: main.cpp:786
+#: main.cpp:784
 #, fuzzy
 #| msgid "Print variable values to stdout"
 msgid "Print loaded vendor change policies to stdout"
 msgstr "打印变量值到标准输出"
 
-#: main.cpp:800
+#: main.cpp:798
 msgid "Show DNF5 version and exit"
 msgstr "显示 DNF5 版本并退出"
 
-#: main.cpp:814
+#: main.cpp:812
 msgid "Force the use of a different architecture."
 msgstr "强制使用不同的系统架构。"
 
-#: main.cpp:846
+#: main.cpp:844
 msgid "Skip acquiring file locks, such as the lock on the system repository"
 msgstr ""
 
-#: main.cpp:861
+#: main.cpp:859
 msgid "Software Management Commands:"
 msgstr "软件管理命令:"
 
-#: main.cpp:868
+#: main.cpp:866
 msgid "Query Commands:"
 msgstr "查询命令:"
 
-#: main.cpp:875
+#: main.cpp:873
 msgid "Subcommands:"
 msgstr "子命令:"
 
-#: main.cpp:977
+#: main.cpp:975
 #, c++-format
 msgid "{} version {}.{}.{}.{}"
 msgstr "{} 版本 {}.{}.{}.{}"
 
-#: main.cpp:980
+#: main.cpp:978
 #, c++-format
 msgid "{} plugin API version {}.{}"
 msgstr "{} 插件API版本 {}.{}"
 
-#: main.cpp:985
+#: main.cpp:983
 #, c++-format
 msgid "libdnf5 version {}.{}.{}.{}"
 msgstr "libdnf5 版本 {}.{}.{}.{}"
 
-#: main.cpp:988
+#: main.cpp:986
 #, c++-format
 msgid "libdnf5 plugin API version {}.{}"
 msgstr "libdnf5 插件API版本 {}.{}"
 
-#: main.cpp:995
+#: main.cpp:993
 #, c++-format
 msgid ""
 "\n"
@@ -1892,22 +1898,22 @@ msgstr ""
 "\n"
 "已加载 {} 插件:"
 
-#: main.cpp:1000 main.cpp:1016
+#: main.cpp:998 main.cpp:1014
 #, c++-format
 msgid "  name: {}"
 msgstr "  名称: {}"
 
-#: main.cpp:1003 main.cpp:1019
+#: main.cpp:1001 main.cpp:1017
 #, c++-format
 msgid "  version: {}.{}.{}"
 msgstr "  版本: {}.{}.{}"
 
-#: main.cpp:1005 main.cpp:1021
+#: main.cpp:1003 main.cpp:1019
 #, c++-format
 msgid "  API version: {}.{}"
 msgstr "  API版本: {}.{}"
 
-#: main.cpp:1012
+#: main.cpp:1010
 #, fuzzy
 #| msgid ""
 #| "\n"
@@ -1919,85 +1925,85 @@ msgstr ""
 "\n"
 "已加载 {} 插件:"
 
-#: main.cpp:1059
+#: main.cpp:1057
 #, c++-format
 msgid ""
 "Total size of inbound packages is {:.0f} {:s}. Need to download {:.0f} {:s}."
 msgstr "本次要处理的软件包总大小为 {:.0f} {:s}. 还需下载 {:.0f} {:s}。"
 
-#: main.cpp:1076
+#: main.cpp:1074
 #, c++-format
 msgid ""
 "After this operation, {:.0f} {:s} extra will be used (install {:.0f} {:s}, "
 "remove {:.0f} {:s})."
 msgstr ""
-"此次操作后，将额外占用 {:.0f} {:s} 空间（安装 {:.0f} {:s}，移除 {:.0f} {:s}）"
-"。"
+"此次操作后，将额外占用 {:.0f} {:s} 空间（安装 {:.0f} {:s}，移除 {:.0f} "
+"{:s}）。"
 
-#: main.cpp:1087
+#: main.cpp:1085
 #, c++-format
 msgid ""
 "After this operation, {:.0f} {:s} will be freed (install {:.0f} {:s}, remove "
 "{:.0f} {:s})."
 msgstr ""
-"此次操作完成之后，{:.0f} {:s} 空间被释放 (安装 {:.0f} {:s}, 删除 {:.0f} {:s})"
-"。"
+"此次操作完成之后，{:.0f} {:s} 空间被释放 (安装 {:.0f} {:s}, 删除 {:.0f} "
+"{:s})。"
 
-#: main.cpp:1099
+#: main.cpp:1097
 msgid "======== Main configuration: ========"
 msgstr "======== 主要配置: ========"
 
-#: main.cpp:1136
+#: main.cpp:1134
 #, c++-format
 msgid "No matching repo to dump configuration: \"{}\""
 msgstr "无匹配到的仓库写入到配置中: \"{}\""
 
-#: main.cpp:1141
+#: main.cpp:1139
 #, c++-format
 msgid "======== \"{}\" repository configuration: ========"
 msgstr "======== \"{}\" 仓库配置: ========"
 
-#: main.cpp:1161
+#: main.cpp:1159
 msgid "======== Variables: ========"
 msgstr "======== 变量: ========"
 
-#: main.cpp:1169
+#: main.cpp:1167
 #, fuzzy
 #| msgid "======== Variables: ========"
 msgid "======== Vendor Change Policies: ========"
 msgstr "======== 变量: ========"
 
-#: main.cpp:1173
+#: main.cpp:1171
 #, c++-format
 msgid "Policy #{}: source: {}"
 msgstr ""
 
-#: main.cpp:1179
+#: main.cpp:1177
 msgid ""
 "allow_vendor_change is enabled. Packages can be replaced by any vendor, and "
 "vendor change policies will be ignored."
 msgstr ""
 
-#: main.cpp:1217
+#: main.cpp:1215
 msgid "New leaves:"
 msgstr "新增叶子软件包："
 
-#: main.cpp:1219
+#: main.cpp:1217
 #, c++-format
 msgid " {}"
 msgstr " {}"
 
-#: main.cpp:1279
+#: main.cpp:1277
 #, c++-format
 msgid "{} to skip unavailable packages"
 msgstr "{} 跳过不可用软件包"
 
-#: main.cpp:1287
+#: main.cpp:1285
 #, c++-format
 msgid "{} to allow extra packages in the transaction"
 msgstr "{} 在本次事务中允许额外的软件包"
 
-#: main.cpp:1300
+#: main.cpp:1298
 #, c++-format
 msgid ""
 "{} to allow mismatches between installed and stored transaction packages. "
@@ -2007,113 +2013,113 @@ msgstr ""
 "{} 允许已安装和已存储的软件包事务之间不匹配。这可能会导致空事务，因为除其他事"
 "项外，该选项可以忽略失败的删除操作。"
 
-#: main.cpp:1356
+#: main.cpp:1354
 #, c++-format
 msgid "{} to not limit the transaction to the best candidates"
 msgstr "{} 不将事务限制在最佳候选中"
 
-#: main.cpp:1363
+#: main.cpp:1361
 #, c++-format
 msgid "{} to allow removing of installed packages to resolve problems"
 msgstr "{} 允许删除和安装软件包来解决问题"
 
-#: main.cpp:1372
+#: main.cpp:1370
 #, c++-format
 msgid "{} to load additional filelists metadata"
 msgstr "{} 加载额外的文件列表元数据"
 
-#: main.cpp:1379
+#: main.cpp:1377
 #, c++-format
 msgid "{} to skip uninstallable packages"
 msgstr "{} 跳过不可删除的软件包"
 
-#: main.cpp:1394
+#: main.cpp:1392
 #, fuzzy, c++-format
 #| msgid "{} to allow extra packages in the transaction"
 msgid "{} to allow switching to packages from VENDOR"
 msgstr "{} 在本次事务中允许额外的软件包"
 
-#: main.cpp:1396
+#: main.cpp:1394
 #, fuzzy, c++-format
 #| msgid "{} to allow extra packages in the transaction"
 msgid "{} to allow replacing packages from VENDOR"
 msgstr "{} 在本次事务中允许额外的软件包"
 
-#: main.cpp:1398
+#: main.cpp:1396
 #, c++-format
 msgid "{} to add specific vendor change rules"
 msgstr ""
 
-#: main.cpp:1399
+#: main.cpp:1397
 #, fuzzy, c++-format
 #| msgid "{} to allow extra packages in the transaction"
 msgid "{} to allow all vendor changes"
 msgstr "{} 在本次事务中允许额外的软件包"
 
-#: main.cpp:1403
+#: main.cpp:1401
 msgid "You can try to add to command line:"
 msgstr "你可以尝试添加到命令行中:"
 
-#: main.cpp:1421
+#: main.cpp:1419
 #, c++-format
 msgid ""
 "No matches were found for the following plugin name patterns while enabling "
 "libdnf plugins: {}"
 msgstr "启用libdnf插件时，未匹配到以下插件的名称: {}"
 
-#: main.cpp:1422
+#: main.cpp:1420
 #, c++-format
 msgid ""
 "No matches were found for the following plugin name patterns while disabling "
 "libdnf plugins: {}"
 msgstr "禁用libdnf插件时，未匹配到以下插件的名称: {}"
 
-#: main.cpp:1488
+#: main.cpp:1486
 #, c++-format
 msgid "--- DNF5 launched with arguments: \"{}\" ---"
 msgstr "--- DNF5 启动参数: \"{}\" ---"
 
-#: main.cpp:1524
+#: main.cpp:1522
 #, c++-format
 msgid "Invalid \"index\" in \"--complete=<index>[,...]\": {}"
 msgstr "无效的 \"index\" 在 \"--complete=<index>[,...]\": {}"
 
-#: main.cpp:1563
+#: main.cpp:1561
 #, c++-format
 msgid "{}."
 msgstr "{}."
 
-#: main.cpp:1566 main.cpp:1953
+#: main.cpp:1564 main.cpp:1958
 #, c++-format
 msgid "{}. Add \"--help\" for more information about the arguments."
 msgstr "{}。添加 \"--help\" 参数来获取更多的参数信息。"
 
-#: main.cpp:1575
+#: main.cpp:1573
 #, c++-format
 msgid ""
 "It could be a command provided by a plugin, try: dnf5 install 'dnf5-"
 "command({})'"
 msgstr "它可能是插件提供的命令，尝试用: dnf5 install 'dnf5-command({})'"
 
-#: main.cpp:1617
+#: main.cpp:1615
 #, c++-format
 msgid ""
 "The argument is available for commands: {}. (It has to be placed after the "
 "command.)"
 msgstr "该参数可用于如下命令: {}。(参数必须放在命令的后面)"
 
-#: main.cpp:1654
+#: main.cpp:1652
 msgid "No read/execute access in current directory, moving to /"
 msgstr "没有当前目录的读取/执行权限，移动至 /"
 
-#: main.cpp:1689
+#: main.cpp:1694
 #, c++-format
 msgid ""
 "{}. Dropping all logs. To redirect the log file location use the \"logdir\" "
 "configuration option."
 msgstr ""
 
-#: main.cpp:1754
+#: main.cpp:1759
 msgid ""
 "The requested operation requires superuser privileges. Please log in as a "
 "user with elevated rights, or use the \"--assumeno\" or \"--downloadonly\" "
@@ -2122,26 +2128,26 @@ msgstr ""
 "请求的操作需要超级用户权限。请以提升权限的用户登录。或者使用「--assumeno」或"
 "「--downloadonly」选项运行该命令，以便在不修改系统状态的情况下进行操作。"
 
-#: main.cpp:1768
+#: main.cpp:1773
 #, c++-format
 msgid "Warning: {}"
 msgstr ""
 
-#: main.cpp:1781
+#: main.cpp:1786
 msgid ""
 "Error: /usr is configured to be read-only. You may be running an image-based "
 "or immutable operating system. For more information, refer to your "
 "distribution's documentation."
 msgstr ""
 
-#: main.cpp:1800
+#: main.cpp:1805
 msgid ""
 "Error: persistent transactions aren't supported on bootc systems. Pass --"
 "transient to perform this operation in a transient overlay which will reset "
 "when the system reboots."
 msgstr ""
 
-#: main.cpp:1810
+#: main.cpp:1815
 #, fuzzy
 #| msgid ""
 #| "Error: this bootc system is configured to be read-only. For more "
@@ -2152,32 +2158,32 @@ msgid ""
 "system reboots."
 msgstr "错误：此 bootc 系统配置为只读。有关更多信息，请运行“bootc --help”。"
 
-#: main.cpp:1821
+#: main.cpp:1826
 msgid "Error: transient transactions are only supported on bootc systems."
 msgstr ""
 
-#: main.cpp:1862
+#: main.cpp:1867
 #, c++-format
 msgid "The operation will only store the transaction in {}"
 msgstr "此操作仅将事务保存到: {}"
 
-#: main.cpp:1864
+#: main.cpp:1869
 msgid "The operation will only download packages for the transaction."
 msgstr "该操作将仅下载这个事务的软件包。"
 
-#: main.cpp:1869
+#: main.cpp:1874
 msgid ""
 "Test mode enabled: Only package downloads, OpenPGP key installations and "
 "transaction checks will be performed."
 msgstr "测试模式已启用: 仅执行软件包下载、OpenPGP密钥安装和事务检查。"
 
-#: main.cpp:1878
+#: main.cpp:1883
 #, fuzzy
 #| msgid "Starting offline transaction. This will take a while."
 msgid "Warning: A pending offline transaction will be invalidated."
 msgstr "开始离线事务。这将需要一段时间。"
 
-#: main.cpp:1881
+#: main.cpp:1886
 #, fuzzy, c++-format
 #| msgid "An offline transaction was initiated by the following command:"
 msgid ""
@@ -2185,36 +2191,36 @@ msgid ""
 "will be invalidated: {}"
 msgstr "一个离线事务将在以下命令之后执行:"
 
-#: main.cpp:1906
+#: main.cpp:1911
 msgid ""
 "This transaction would modify the following paths, possibly introducing "
 "inconsistencies when the transient overlay on /usr is discarded. See the "
 "usr_drift_protected_paths configuration option for more information."
 msgstr ""
 
-#: main.cpp:1917
+#: main.cpp:1922
 msgid ""
 "Operation aborted. Pass --setopt=usr_drift_protected_paths= to disable this "
 "check and proceed anyway."
 msgstr ""
 
-#: main.cpp:1926
+#: main.cpp:1931
 msgid ""
 "A transient overlay will be created on /usr that will be discarded on "
 "reboot. Keep in mind that changes to /etc and /var will still persist, and "
 "packages commonly modify these directories."
 msgstr ""
 
-#: main.cpp:1963
+#: main.cpp:1968
 #, c++-format
 msgid "Command returned error: {}"
 msgstr "命令返回错误: {}"
 
-#: main.cpp:1971
+#: main.cpp:1976
 msgid "DNF5 finished"
 msgstr "DNF5 执行完毕"
 
-#: main.cpp:1975
+#: main.cpp:1980
 msgid "Complete!"
 msgstr "完成！"
 
@@ -2234,7 +2240,8 @@ msgstr "允许跳过不可用的软件包"
 msgid ""
 "The following items can be selected only from the specified repositories. "
 "All enabled repositories will still be used to satisfy dependencies."
-msgstr "以下项目只能从指定的存储库中选择。所有已启用的存储库仍将用于满足依赖项。"
+msgstr ""
+"以下项目只能从指定的存储库中选择。所有已启用的存储库仍将用于满足依赖项。"
 
 #: shared_options.cpp:178 shared_options.cpp:211
 msgid "REPO_ID,..."
@@ -2267,7 +2274,8 @@ msgid ""
 "The following items can be selected only from the specified vendors. The "
 "vendor is ignored or vendor change policies (if allow_vendor_change=0) will "
 "still be used for items that satisfy dependencies."
-msgstr "以下项目只能从指定的存储库中选择。所有已启用的存储库仍将用于满足依赖项。"
+msgstr ""
+"以下项目只能从指定的存储库中选择。所有已启用的存储库仍将用于满足依赖项。"
 
 #: shared_options.cpp:239
 #, fuzzy

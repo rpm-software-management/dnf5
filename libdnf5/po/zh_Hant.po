@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-02 08:43+0000\n"
-"PO-Revision-Date: 2026-11-03 09:58+0000\n"
+"POT-Creation-Date: 2026-11-10 09:05+0000\n"
+"PO-Revision-Date: 2026-11-11 06:49+0000\n"
 "Last-Translator: Skyter Lin <linskyter@gmail.com>\n"
 "Language-Team: Chinese (Traditional Han script) <https://"
 "translate.fedoraproject.org/projects/dnf5/libdnf5/zh_Hant/>\n"
@@ -17,14 +17,15 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 2026.11\n"
+"X-Generator: Weblate 2026.11.1\n"
 
 #: advisory/advisory.cpp:81
 #, c++-format
 msgid ""
 "Bad libsolv id for advisory \"{}\", solvable name \"{}\" doesn't have "
 "advisory prefix \"{}\""
-msgstr "錯誤的 libsolv id： advisory「{}」、可解包名稱「{}」沒有 advisory 前綴「{}」"
+msgstr ""
+"錯誤的 libsolv id： advisory「{}」、可解包名稱「{}」沒有 advisory 前綴「{}」"
 
 #: advisory/advisory_collection.cpp:94
 msgid "This libdnf5 does not support modularity"
@@ -40,13 +41,13 @@ msgstr "剖析處理事項資訊時發生錯誤：{}"
 msgid "Invalid option value: enabled={}"
 msgstr "無效的選項值：enabled={}"
 
-#: base/goal.cpp:490
+#: base/goal.cpp:492
 #, c++-format
 msgid "Unsupported argument for REMOVE action: {}"
 msgstr "REMOVE 動作已不支援的引數：{}"
 
 #. TODO(lukash) throw a proper exception
-#: base/goal.cpp:1741
+#: base/goal.cpp:1743
 #, c++-format
 msgid "Incorrect configuration value for multilib_policy: {}"
 msgstr "multilib_policy 的組態設定值不正確：{}"
@@ -289,8 +290,8 @@ msgid ""
 "Installed packages for argument '{0}' are not available in repositories in "
 "the same version, available versions: {1}, cannot reinstall."
 msgstr ""
-"「{0}」引數所安裝的軟體包在軟體庫中無相同版本，可用版本有：{1}，無法重新安裝"
-"。"
+"「{0}」引數所安裝的軟體包在軟體庫中無相同版本，可用版本有：{1}，無法重新安"
+"裝。"
 
 #: base/log_event.cpp:235
 #, c++-format
@@ -403,7 +404,8 @@ msgstr ""
 msgid ""
 "Extra package '{0}' (with action '{1}') which is not present in the stored "
 "transaction was pulled into the transaction.\n"
-msgstr "額外的軟體包「{0}」（含動作「{1}」）不在儲存的處理事項中，被拉入處理事項。\n"
+msgstr ""
+"額外的軟體包「{0}」（含動作「{1}」）不在儲存的處理事項中，被拉入處理事項。\n"
 
 #: base/log_event.cpp:353
 #, c++-format
@@ -440,6 +442,8 @@ msgid ""
 "Exceeded installonly_limit ({0}): found {1} installed: '{2}'. You can use "
 "'remove --oldinstallonly'."
 msgstr ""
+"已超過 installonly_limit（{0}）：發現已安裝 {1} 個：「{2}」。您可以使用「"
+"remove --oldinstallonly」。"
 
 #: base/solver_problems.cpp:41
 #, c++-format
@@ -710,7 +714,7 @@ msgstr "簽章驗證失敗。"
 msgid ""
 "This transaction is no longer valid because the system repository has "
 "changed since it was loaded."
-msgstr ""
+msgstr "自從載入這筆交易後，系統軟體庫已變更，因此這筆交易不再有效。"
 
 #: base/transaction.cpp:101
 msgid "The repository does not have any OpenPGP keys configured."
@@ -739,7 +743,7 @@ msgstr "無法從管線讀取指令稿輸出"
 #: base/transaction.cpp:1103
 #, c++-format
 msgid "Failed to acquire system repo lock for writing, lock located at \"{}\""
-msgstr ""
+msgstr "無法取得系統軟體庫的寫入鎖定，鎖定檔位於「{}」"
 
 #: base/transaction.cpp:1173
 #, c++-format
@@ -786,7 +790,7 @@ msgstr[0] "警告：已略過軟體庫 {1} 的 {0} 個軟體包的 OpenPGP 檢�
 
 #: base/vendor_change_manager.cpp:115
 msgid "{func}(): Cannot create directory: {path}: {msg}"
-msgstr ""
+msgstr "{func}()：無法建立目錄：{path}：{msg}"
 
 #: base/vendor_change_manager.cpp:164
 msgid "{func}(): Cannot remove file: {path}: {msg}"
@@ -1297,7 +1301,7 @@ msgstr "無法載入軟體庫「{}」的 {} 擴充功能（來自「{}」）：{
 #: repo/solv_repo.cpp:436
 #, c++-format
 msgid "Failed to acquire system repo lock for reading, lock located at \"{}\""
-msgstr ""
+msgstr "無法取得系統軟體庫的讀取鎖定，鎖定檔位於「{}」"
 
 #: repo/solv_repo.cpp:455
 #, c++-format
@@ -1482,7 +1486,7 @@ msgstr "無法安裝軟體包「{}」"
 #: rpm/versionlock_config.cpp:259
 #, c++-format
 msgid "Error parsing versionlock file \"{}\": {}"
-msgstr ""
+msgstr "解析 versionlock 檔案「{}」時發生錯誤：{}"
 
 #: rpm/versionlock_config.cpp:297 system/state.cpp:614
 #, c++-format
@@ -1581,8 +1585,8 @@ msgid ""
 "Configuration \"{}\" uses version \"1.0\" which does not support "
 "'incoming_vendors' without 'outgoing_vendors'"
 msgstr ""
-"設定「{}」使用 1.0 版，不支援在沒有「outgoing_vendors」的情況下使用「"
-"incoming_vendors」"
+"設定「{}」使用 1.0 版，不支援在沒有「outgoing_vendors」的情況下使用"
+"「incoming_vendors」"
 
 #: solv/vendor_change_manager.cpp:586
 #, c++-format
@@ -1590,8 +1594,8 @@ msgid ""
 "Configuration \"{}\" uses version \"1.0\" which does not support "
 "'outgoing_vendors' without 'incoming_vendors'"
 msgstr ""
-"設定「{}」使用 1.0 版，不支援在沒有「incoming_vendors」的情況下使用「"
-"outgoing_vendors」"
+"設定「{}」使用 1.0 版，不支援在沒有「incoming_vendors」的情況下使用"
+"「outgoing_vendors」"
 
 #: solv/vendor_change_manager.cpp:676
 #, c++-format
@@ -1627,8 +1631,8 @@ msgid ""
 "support comparator \"{}\". Only the default \"EXACT\" comparator is allowed "
 "for this filter"
 msgstr ""
-"「{}」中從第 {} 行開始之表格內的篩選器「cmdline_repo」不支援比較運算子「{}」"
-"。此篩選器只允許使用預設的「EXACT」比較運算子"
+"「{}」中從第 {} 行開始之表格內的篩選器「cmdline_repo」不支援比較運算子"
+"「{}」。此篩選器只允許使用預設的「EXACT」比較運算子"
 
 #: solv/vendor_change_manager.cpp:769
 #, c++-format
@@ -1636,8 +1640,8 @@ msgid ""
 "Invalid 'value' \"{}\" in \"{}\" in table starting on line {}. Only "
 "\"true\", \"1\", \"false\", \"0\" are supported"
 msgstr ""
-"無效的「value」值「{}」，位於「{}」中從第 {} 行開始的表格。僅支援「true」、「"
-"1」、「false」、「0」"
+"無效的「value」值「{}」，位於「{}」中從第 {} 行開始的表格。僅支援「true」、"
+"「1」、「false」、「0」"
 
 #: solv/vendor_change_manager.cpp:779 solv/vendor_change_manager.cpp:790
 #, c++-format
@@ -1710,14 +1714,15 @@ msgid ""
 "Expected comparison operator: relational (<, <=, >, >=) or string (=, ^, $, "
 "*, =*, =~; optionally prefixed with ! and/or i"
 msgstr ""
-"預期為比較運算子：關係運算子（<、<=、>、>=）或字串運算子"
-"（=、^、$、*、=*、=~；可選擇加上 ! 和／或 i 前綴）"
+"預期為比較運算子：關係運算子（<、<=、>、>=）或字串運算子（=、^、$、*、=*、"
+"=~；可選擇加上 ! 和／或 i 前綴）"
 
 #: solv/vendor_change_manager.cpp:1230
 msgid ""
 "Vendor definition does not support relational comparators. Use string "
 "comparators: =, ^, $, *, =*, =~"
-msgstr "供應商定義不支援關係比較運算子。請使用字串比較運算子：=、^、$、*、=*、=~"
+msgstr ""
+"供應商定義不支援關係比較運算子。請使用字串比較運算子：=、^、$、*、=*、=~"
 
 #: solv/vendor_change_manager.cpp:1238
 #, c++-format
@@ -1751,7 +1756,8 @@ msgstr "篩選器「cmdline_repo」只能用於傳入的軟體包（「in:」）
 msgid ""
 "Invalid value '{}' for 'cmdline_repo' filter. Use 'true', '1', 'false', or "
 "'0'"
-msgstr "篩選器「cmdline_repo」的值「{}」無效。請使用「true」、「1」、「false」或「0」"
+msgstr ""
+"篩選器「cmdline_repo」的值「{}」無效。請使用「true」、「1」、「false」或「0」"
 
 #: solv/vendor_change_manager.cpp:1317
 #, c++-format
@@ -1800,15 +1806,15 @@ msgstr "不支援的 TOML 版本「{}」，最高支援版本為「{}」"
 #: system/state.cpp:798
 #, c++-format
 msgid "Error {} opening rpm database"
-msgstr ""
+msgstr "開啟 rpm 資料庫時發生錯誤 {}"
 
 #: system/state.cpp:802
 msgid "Failed to get rpm database"
-msgstr ""
+msgstr "無法取得 rpm 資料庫"
 
 #: system/state.cpp:808
 msgid "Failed to initialize database index iterator"
-msgstr ""
+msgstr "無法初始化資料庫索引迭代器"
 
 #. TODO(dmach): replace with a better exception class
 #: transaction/db/comps_environment_group.cpp:100
@@ -1923,14 +1929,16 @@ msgstr "動作「{0}」「{1}」無法在先前處理事項中是「{2}」後合
 msgid ""
 "Action 'Upgrade' '{0}' cannot be merged because it is not present at that "
 "point -> setting 'Install'."
-msgstr "動作「Upgrade」「{0}」無法合併，因為在該時間點不存在 -> 設定「Install」。"
+msgstr ""
+"動作「Upgrade」「{0}」無法合併，因為在該時間點不存在 -> 設定「Install」。"
 
 #: transaction/transaction_merge.cpp:174 transaction/transaction_merge.cpp:231
 #, c++-format
 msgid ""
 "Action 'Reinstall' '{0}' cannot be merged because it is not present at that "
 "point -> setting 'Install'."
-msgstr "動作「Reinstall」「{0}」無法合併，因為在該時間點不存在 -> 設定「Install」。"
+msgstr ""
+"動作「Reinstall」「{0}」無法合併，因為在該時間點不存在 -> 設定「Install」。"
 
 #: transaction/transaction_merge.cpp:194
 #, c++-format
@@ -1963,7 +1971,8 @@ msgstr "動作「{0}」「{1}」無法合併，因為在該時間點不存在 ->
 msgid ""
 "Action '{0}' '{1}' cannot be merged because it is not present at that point "
 "(present versions are: {2}) -> skipping it."
-msgstr "動作「{0}」「{1}」無法合併，因為在該時間點不存在（目前版本：{2}）-> 跳過。"
+msgstr ""
+"動作「{0}」「{1}」無法合併，因為在該時間點不存在（目前版本：{2}）-> 跳過。"
 
 #: transaction/transaction_merge.cpp:277
 #, c++-format
@@ -2068,38 +2077,38 @@ msgid ""
 "Missing mandatory object key \"group_id\" in an rpm with reason \"Group\" "
 "and action \"Reason Change\""
 msgstr ""
-"Reason 為「Group」、Action 為「Reason Change」的 rpm 缺少必要物件鍵「group_id"
-"」"
+"Reason 為「Group」、Action 為「Reason Change」的 rpm 缺少必要物件鍵"
+"「group_id」"
 
-#: utils/bootc.cpp:46
+#: utils/bootc.cpp:47
 #, c++-format
 msgid "Error checking bootc status: {}"
 msgstr "檢查 bootc 狀態時發生錯誤：{}"
 
-#: utils/bootc.cpp:49
+#: utils/bootc.cpp:50
 #, c++-format
 msgid "Error checking bootc status: bootc command failed with exit code {}"
 msgstr "檢查 bootc 狀態時發生錯誤：bootc 指令失敗，結束代碼為 {}"
 
-#: utils/bootc.cpp:58
+#: utils/bootc.cpp:59
 msgid "Error checking bootc status: Failed to parse JSON output"
 msgstr "檢查 bootc 狀態時發生錯誤：無法剖析 JSON 輸出"
 
-#: utils/bootc.cpp:73
+#: utils/bootc.cpp:74
 #, c++-format
 msgid "Failed to query status of bootc system: {}"
 msgstr "查詢 bootc 系統狀態失敗：{}"
 
-#: utils/bootc.cpp:90
+#: utils/bootc.cpp:91
 msgid "Failed to stat /usr filesystem"
 msgstr "無法取得 /usr 檔案系統的狀態"
 
-#: utils/bootc.cpp:125
+#: utils/bootc.cpp:127
 #, c++-format
 msgid "Error running `bootc usr-overlay --read-only`: {}"
 msgstr "執行 `bootc usr-overlay --read-only` 時發生錯誤：{}"
 
-#: utils/bootc.cpp:128
+#: utils/bootc.cpp:130
 #, c++-format
 msgid ""
 "Error running `bootc usr-overlay --read-only`: bootc command failed with "
@@ -2108,11 +2117,11 @@ msgstr ""
 "執行 `bootc usr-overlay --read-only` 時發生錯誤：bootc 指令失敗，結束代碼為 "
 "{}"
 
-#: utils/bootc.cpp:136
+#: utils/bootc.cpp:138
 msgid "Failed to unshare mount namespace"
 msgstr "無法取消共用掛載命名空間"
 
-#: utils/bootc.cpp:143
+#: utils/bootc.cpp:146
 #, c++-format
 msgid "Failed to remount /usr as read-write: {}"
 msgstr "無法以可讀寫模式重新掛載 /usr：{}"
@@ -2267,7 +2276,7 @@ msgstr "無法讀取鎖定檔「{}」"
 #: utils/locker.cpp:194
 #, c++-format
 msgid "The lock file \"{}\" is not locked"
-msgstr ""
+msgstr "鎖定檔「{}」未被鎖定"
 
 #: utils/locker.cpp:207
 #, c++-format

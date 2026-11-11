@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-02 08:43+0000\n"
+"POT-Creation-Date: 2026-11-10 09:05+0000\n"
 "PO-Revision-Date: 2026-11-03 09:51+0000\n"
 "Last-Translator: GitHub webhook <noreply-webhook-github@weblate.org>\n"
 "Language-Team: Dutch <https://translate.fedoraproject.org/projects/dnf5/"
@@ -37,20 +37,21 @@ msgstr ""
 #, fuzzy, c++-format
 #| msgid "Error during transaction replay JSON parsing : {}"
 msgid "Error parsing transaction info: {}"
-msgstr "Fout bij het parsen van de JSON voor het herhalen van de transactie: {}"
+msgstr ""
+"Fout bij het parsen van de JSON voor het herhalen van de transactie: {}"
 
 #: base/base.cpp:185
 #, c++-format
 msgid "Invalid option value: enabled={}"
 msgstr "Ongeldige optiewaarde: enabled={}"
 
-#: base/goal.cpp:490
+#: base/goal.cpp:492
 #, c++-format
 msgid "Unsupported argument for REMOVE action: {}"
 msgstr "Niet-ondersteund argument voor REMOVE-actie: {}"
 
 #. TODO(lukash) throw a proper exception
-#: base/goal.cpp:1741
+#: base/goal.cpp:1743
 #, c++-format
 msgid "Incorrect configuration value for multilib_policy: {}"
 msgstr "Incorrecte configuratiewaarde voor multilib_policy: {}"
@@ -313,8 +314,8 @@ msgstr ""
 msgid ""
 "Cannot perform {0} because '{1}' is installed in a different version: '{2}'."
 msgstr ""
-"Kan {0} niet uitvoeren omdat '{1}' geïnstalleerd is in een andere versie: '"
-"{2}'."
+"Kan {0} niet uitvoeren omdat '{1}' geïnstalleerd is in een andere versie: "
+"'{2}'."
 
 #: base/log_event.cpp:241
 #, c++-format
@@ -328,7 +329,8 @@ msgstr ""
 #: base/log_event.cpp:243
 #, c++-format
 msgid "Packages for argument '{}' installed, but not available."
-msgstr "Pakketten voor argument '{}' zijn geïnstalleerd, maar niet beschikbaar."
+msgstr ""
+"Pakketten voor argument '{}' zijn geïnstalleerd, maar niet beschikbaar."
 
 #: base/log_event.cpp:248
 #, fuzzy, c++-format
@@ -1269,7 +1271,8 @@ msgstr ""
 #: repo/repo.cpp:222 repo/repo.cpp:242 repo/repo_sack.cpp:370
 #, c++-format
 msgid "Failed to download metadata ({}: \"{}\") for repository \"{}\": {}"
-msgstr "Downloaden van metadata ({}: \"{}\") voor repository \"{}\": {} mislukt"
+msgstr ""
+"Downloaden van metadata ({}: \"{}\") voor repository \"{}\": {} mislukt"
 
 #: repo/repo.cpp:440
 msgid ""
@@ -1306,7 +1309,8 @@ msgstr "Leeg pad naar de repository-cachemap."
 #, fuzzy, c++-format
 #| msgid "Failed to download metadata ({}: \"{}\") for repository \"{}\": {}"
 msgid "Cannot set option \"{}\" for repository \"{}\": {}"
-msgstr "Downloaden van metadata ({}: \"{}\") voor repository \"{}\": {} mislukt"
+msgstr ""
+"Downloaden van metadata ({}: \"{}\") voor repository \"{}\": {} mislukt"
 
 #: repo/repo_config_override.cpp:84
 #, fuzzy, c++-format
@@ -1403,7 +1407,8 @@ msgstr "Laden van repomd voor repo \"{}\" van \"{}\" mislukt: {}."
 #: repo/solv_repo.cpp:276
 #, c++-format
 msgid "Failed to load primary for repo \"{}\" from \"{}\": {}."
-msgstr "Het laden van primary voor repository \"{}\" van \"{}\" is mislukt: {}."
+msgstr ""
+"Het laden van primary voor repository \"{}\" van \"{}\" is mislukt: {}."
 
 #: repo/solv_repo.cpp:324
 #, c++-format
@@ -1613,7 +1618,8 @@ msgstr "Installeren van pakket \"{}\" is mislukt"
 #, fuzzy, c++-format
 #| msgid "Error during transaction replay JSON parsing : {}"
 msgid "Error parsing versionlock file \"{}\": {}"
-msgstr "Fout bij het parsen van de JSON voor het herhalen van de transactie: {}"
+msgstr ""
+"Fout bij het parsen van de JSON voor het herhalen van de transactie: {}"
 
 #: rpm/versionlock_config.cpp:297 system/state.cpp:614
 #, c++-format
@@ -1916,8 +1922,8 @@ msgstr "{}-staat voor \"{}\" niet gevonden."
 #, c++-format
 msgid "Loading system state TOML file {} failed (see dnf5-system-state(7)): {}"
 msgstr ""
-"Laden van TOML-bestand voor systeemstaat {} is mislukt (zie dnf5-system-state"
-"(7)): {}"
+"Laden van TOML-bestand voor systeemstaat {} is mislukt (zie dnf5-system-"
+"state(7)): {}"
 
 #: system/state.cpp:649
 #, c++-format
@@ -2149,7 +2155,8 @@ msgstr ""
 #: transaction/transaction_sr.cpp:58
 #, c++-format
 msgid "Error during transaction replay JSON parsing : {}"
-msgstr "Fout bij het parsen van de JSON voor het herhalen van de transactie: {}"
+msgstr ""
+"Fout bij het parsen van de JSON voor het herhalen van de transactie: {}"
 
 #: transaction/transaction_sr.cpp:68
 #, c++-format
@@ -2229,51 +2236,51 @@ msgstr ""
 "Ontbrekende verplichte objectsleutel \"group_id\" in een rpm met reden "
 "\"Group\" en actie \"Reason Change\""
 
-#: utils/bootc.cpp:46
+#: utils/bootc.cpp:47
 #, c++-format
 msgid "Error checking bootc status: {}"
 msgstr ""
 
-#: utils/bootc.cpp:49
+#: utils/bootc.cpp:50
 #, c++-format
 msgid "Error checking bootc status: bootc command failed with exit code {}"
 msgstr ""
 
-#: utils/bootc.cpp:58
+#: utils/bootc.cpp:59
 msgid "Error checking bootc status: Failed to parse JSON output"
 msgstr ""
 
-#: utils/bootc.cpp:73
+#: utils/bootc.cpp:74
 #, fuzzy, c++-format
 #| msgid "Failed to update from string: {}"
 msgid "Failed to query status of bootc system: {}"
 msgstr "Update van string mislukt: {}"
 
-#: utils/bootc.cpp:90
+#: utils/bootc.cpp:91
 #, fuzzy
 #| msgid "Failed to download files"
 msgid "Failed to stat /usr filesystem"
 msgstr "Downloaden van bestanden is mislukt"
 
-#: utils/bootc.cpp:125
+#: utils/bootc.cpp:127
 #, c++-format
 msgid "Error running `bootc usr-overlay --read-only`: {}"
 msgstr ""
 
-#: utils/bootc.cpp:128
+#: utils/bootc.cpp:130
 #, c++-format
 msgid ""
 "Error running `bootc usr-overlay --read-only`: bootc command failed with "
 "exit code {}"
 msgstr ""
 
-#: utils/bootc.cpp:136
+#: utils/bootc.cpp:138
 #, fuzzy
 #| msgid "Failed to execute uname()"
 msgid "Failed to unshare mount namespace"
 msgstr "Uitvoeren uname() mislukt"
 
-#: utils/bootc.cpp:143
+#: utils/bootc.cpp:146
 #, fuzzy, c++-format
 #| msgid "Failed to resolve module metadata: {}"
 msgid "Failed to remount /usr as read-write: {}"
@@ -2571,7 +2578,8 @@ msgstr "Uitvoeren uname() mislukt"
 #, fuzzy, c++-format
 #| msgid "Error during transaction replay JSON parsing : {}"
 msgid "error during preparation of child process: {}"
-msgstr "Fout bij het parsen van de JSON voor het herhalen van de transactie: {}"
+msgstr ""
+"Fout bij het parsen van de JSON voor het herhalen van de transactie: {}"
 
 #: utils/subprocess.cpp:211
 msgid "poll failed during subprocess I/O"

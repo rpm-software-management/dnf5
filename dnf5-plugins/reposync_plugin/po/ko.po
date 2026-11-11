@@ -1,0 +1,89 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# 김인수 <simmon@nplob.com>, 2026.
+# Weblate Translation Memory <noreply-mt-weblate-translation-memory@weblate.org>, 2026.
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-11-10 09:05+0000\n"
+"PO-Revision-Date: 2026-11-10 19:57+0000\n"
+"Last-Translator: 김인수 <simmon@nplob.com>\n"
+"Language-Team: Korean <https://translate.fedoraproject.org/projects/dnf5/"
+"dnf5-plugin-reposync/ko/>\n"
+"Language: ko\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Weblate 2026.11.1\n"
+
+#: reposync.cpp:67
+msgid "Synchronize a remote DNF repository to a local directory."
+msgstr ""
+
+#: reposync.cpp:122
+#, c++-format
+msgid ""
+"Invalid value \"{}\" for \"--latest-limit\", a positive integer is required"
+msgstr ""
+
+#: reposync.cpp:191
+msgid "Can't use --norepopath with multiple repositories enabled"
+msgstr "활성화된 다중 저장소와 함께 --norepopath 를 사용 할 수 없습니다"
+
+#: reposync.cpp:196
+msgid "Can't use --safe-write-path with multiple repositories enabled"
+msgstr "활성화된 다중 저장소와 함께 --safe-write-path 를 사용 할 수 없습니다"
+
+#: reposync.cpp:292
+#, c++-format
+msgid ""
+"Download destination '{0}' for location '{1}' of '{2}' package from '{3}' "
+"repo is outside of safe write path '{4}'."
+msgstr ""
+"'{3}' 저장소에서 '{2}' 꾸러미의 위치 '{1}'을 위한 내려받기 대상 '{0}' 부분은 "
+"안전한 쓰기 경로 '{4}'의 밖에 있습니다."
+
+#: reposync.cpp:320
+#, c++-format
+msgid "Failed to download package: {}"
+msgstr "꾸러미를 내려받는 데 실패함: {}"
+
+#: reposync.cpp:323
+msgid "Failed to download one or more packages"
+msgstr "하나 이상의 꾸러미를 내려받는 데 실패함"
+
+#: reposync.cpp:335
+#, c++-format
+msgid "Failed to create directory '{0}' iterator: {1}"
+msgstr ""
+
+#: reposync.cpp:348
+#, c++-format
+msgid "Failed to delete file {0}: {1}"
+msgstr ""
+
+#: reposync.cpp:351
+#, c++-format
+msgid "[DELETED] {}"
+msgstr "[삭제됨] {}"
+
+#: reposync.cpp:367
+#, c++-format
+msgid "Removing '{}' with failing OpenPGP check: {}"
+msgstr ""
+
+#: reposync.cpp:430
+msgid "Failed to get mirror for metadata."
+msgstr "메타자료용 미러를 가져오는 데 실패함."
+
+#: reposync.cpp:440
+#, c++-format
+msgid "Failed to get mirror for package: \"{}\""
+msgstr "꾸러미용 미러를 가져오는 데 실패함: \"{}\""
+
+#: reposync.cpp:456
+msgid "OpenPGP signature check failed"
+msgstr "GPG 서명 점검이 실패함"

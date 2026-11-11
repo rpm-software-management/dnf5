@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-02 08:43+0000\n"
+"POT-Creation-Date: 2026-11-10 09:05+0000\n"
 "PO-Revision-Date: 2026-11-03 10:01+0000\n"
 "Last-Translator: Keith Bowes <zooplah@gmail.com>\n"
 "Language-Team: Esperanto <https://translate.fedoraproject.org/projects/dnf5/"
@@ -84,7 +84,8 @@ msgstr "Montri nur avizojn, kiuj mencias CVE-on."
 #: commands/advisory/arguments.hpp:113
 msgid ""
 "Include content contained in advisories with specified name. List option."
-msgstr "Inkluzivigi enhavon enhavita en avizoj kun specifita nomo. Lista opcio."
+msgstr ""
+"Inkluzivigi enhavon enhavita en avizoj kun specifita nomo. Lista opcio."
 
 #: commands/advisory/arguments.hpp:114
 msgid "ADVISORY_NAME,..."

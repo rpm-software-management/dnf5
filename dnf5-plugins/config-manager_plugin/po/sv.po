@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-02 08:43+0000\n"
+"POT-Creation-Date: 2026-11-10 09:05+0000\n"
 "PO-Revision-Date: 2026-11-03 09:38+0000\n"
 "Last-Translator: Luna Jernberg <droidbittin@gmail.com>\n"
 "Language-Team: Swedish <https://translate.fedoraproject.org/projects/dnf5/"
@@ -104,8 +104,8 @@ msgid ""
 "File \"{}\" already exists and configures repositories with IDs \"{}\". Add "
 "\"--overwrite\" to overwrite."
 msgstr ""
-"Filen \"{}\" finns redan och konfigurerar förråd med ID:n \"{}\". Lägg "
-"till --overwrite\" för att skriva över."
+"Filen \"{}\" finns redan och konfigurerar förråd med ID:n \"{}\". Lägg till "
+"--overwrite\" för att skriva över."
 
 #: addrepo.cpp:453 addrepo.cpp:479
 #, c++-format
@@ -172,8 +172,8 @@ msgid ""
 "Distribution policy \"{name}\" already exists. Use \"{option}\" to allow "
 "masking it."
 msgstr ""
-"Distributionspolicyn ”{name}” existerar redan. Använd ”{option}” Använd \""
-"{option}\" för att tillåta maskering."
+"Distributionspolicyn ”{name}” existerar redan. Använd ”{option}” Använd "
+"\"{option}\" för att tillåta maskering."
 
 #: addvendorpolicy.cpp:165
 msgid ""
@@ -190,8 +190,8 @@ msgid ""
 "policy, but no system policy file named \"{name}\" exists."
 msgstr ""
 "Kan inte lägga till policy: alternativet ”{option}” kräver att en befintlig "
-"systempolicy ersätts, men det existerar ingen systempolicyfil med namnet ”"
-"{name}”."
+"systempolicy ersätts, men det existerar ingen systempolicyfil med namnet "
+"”{name}”."
 
 #: addvendorpolicy.cpp:191 addvendorpolicy.cpp:215 addvendorpolicy.cpp:244
 msgid "Replaced vendor policy file: {path}"
@@ -344,8 +344,8 @@ msgid ""
 "Sets the \"{}\" option of the repository \"{}\" again with a different "
 "value: \"{}\" != \"{}\""
 msgstr ""
-"Ställer in \"{}\" alternativ för förråd \"{} igen med ett annat värde: {}\" "
-"!=\"{}\""
+"Ställer in \"{}\" alternativ för förråd \"{} igen med ett annat värde: {}\" !"
+"=\"{}\""
 
 #: setopt.cpp:100
 #, c++-format

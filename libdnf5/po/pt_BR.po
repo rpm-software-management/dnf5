@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-02 08:43+0000\n"
-"PO-Revision-Date: 2026-11-03 09:39+0000\n"
+"POT-Creation-Date: 2026-11-10 09:05+0000\n"
+"PO-Revision-Date: 2026-11-04 07:31+0000\n"
 "Last-Translator: Ciro Mota "
 "<ciromota@users.noreply.translate.fedoraproject.org>\n"
 "Language-Team: Portuguese (Brazil) <https://translate.fedoraproject.org/"
@@ -47,13 +47,13 @@ msgstr "Erro ao analisar as informações da transação: {}"
 msgid "Invalid option value: enabled={}"
 msgstr "Valor de opção inválido: enabled={}"
 
-#: base/goal.cpp:490
+#: base/goal.cpp:492
 #, c++-format
 msgid "Unsupported argument for REMOVE action: {}"
 msgstr "Argumento não suportado para ação REMOVE: {}"
 
 #. TODO(lukash) throw a proper exception
-#: base/goal.cpp:1741
+#: base/goal.cpp:1743
 #, c++-format
 msgid "Incorrect configuration value for multilib_policy: {}"
 msgstr "Valor de configuração incorreto para multilib_policy: {}"
@@ -419,8 +419,8 @@ msgid ""
 "The operation would result in switching of module '{0}' stream '{1}' to "
 "stream '{2}'\n"
 msgstr ""
-"A operação resultaria na troca do módulo '{0}' stream '{1}' para stream '{2}"
-"'\n"
+"A operação resultaria na troca do módulo '{0}' stream '{1}' para stream "
+"'{2}'\n"
 
 #: base/log_event.cpp:342
 msgid ""
@@ -784,7 +784,8 @@ msgstr "Falha na importação da chave pública."
 
 #: base/transaction.cpp:997
 msgid "poll failed during scriptlets pipe processing"
-msgstr "falha na operação de poll durante o processamento de pipe de scriptlets"
+msgstr ""
+"falha na operação de poll durante o processamento de pipe de scriptlets"
 
 #: base/transaction.cpp:1020
 msgid "failed to read scriptlet output from pipe"
@@ -851,10 +852,8 @@ msgstr[1] ""
 "repositórios: {1}"
 
 #: base/vendor_change_manager.cpp:115
-#, fuzzy
-#| msgid "{func}(): Cannot remove file: {path}: {msg}"
 msgid "{func}(): Cannot create directory: {path}: {msg}"
-msgstr "{func}(): Não é possível remover o arquivo: {path}: {msg}"
+msgstr "{func}(): Não é possível criar o diretório: {path}: {msg}"
 
 #: base/vendor_change_manager.cpp:164
 msgid "{func}(): Cannot remove file: {path}: {msg}"
@@ -929,7 +928,8 @@ msgstr ""
 #: comps/environment/environment.cpp:361
 #, c++-format
 msgid "Failed to save xml document for environment \"{}\" to file \"{}\": {}"
-msgstr "Falha ao salvar o documento xml do ambiente \"{}\" no arquivo \"{}\":{}"
+msgstr ""
+"Falha ao salvar o documento xml do ambiente \"{}\" no arquivo \"{}\":{}"
 
 #: comps/group/group.cpp:354
 #, c++-format
@@ -1320,8 +1320,8 @@ msgstr "Falha ao baixar metadados"
 #, c++-format
 msgid "Error checking if metalink \"{}\" is in sync for repository \"{}\""
 msgstr ""
-"Erro ao verificar se o metalink \"{}\" está sincronizado com o repositório \""
-"{}\""
+"Erro ao verificar se o metalink \"{}\" está sincronizado com o repositório "
+"\"{}\""
 
 #: repo/repo_downloader.cpp:457
 #, c++-format
@@ -1392,7 +1392,8 @@ msgstr ""
 #: repo/solv_repo.cpp:396
 #, c++-format
 msgid "Failed to load {} extension for repo \"{}\" from \"{}\": {}"
-msgstr "Falha ao carregar a extensão {} para o repositório \"{}\" de \"{}\": {}"
+msgstr ""
+"Falha ao carregar a extensão {} para o repositório \"{}\" de \"{}\": {}"
 
 #: repo/solv_repo.cpp:436
 #, c++-format
@@ -1409,7 +1410,8 @@ msgstr "Falha ao carregar o repositório do sistema a partir da raiz \"{}\": {}"
 #: repo/solv_repo.cpp:559
 #, c++-format
 msgid "Failed to load {} cache for repo \"{}\" from \"{}\": {}"
-msgstr "Falha ao carregar o cache de {} para o repositório \"{}\" de \"{}\": {}"
+msgstr ""
+"Falha ao carregar o cache de {} para o repositório \"{}\" de \"{}\": {}"
 
 #: repo/solv_repo.cpp:613
 #, c++-format
@@ -1438,8 +1440,8 @@ msgstr ""
 msgid ""
 "An error occurred when parsing the temporary files memory file at '{}': {}"
 msgstr ""
-"Ocorreu um erro ao analisar o arquivo de memória de arquivos temporários em '"
-"{}': {}"
+"Ocorreu um erro ao analisar o arquivo de memória de arquivos temporários em "
+"'{}': {}"
 
 #: rpm/checksum.cpp:98
 msgid "Unknown checksum type"
@@ -1890,13 +1892,14 @@ msgstr ""
 #, c++-format
 msgid "Filter '{}' only supports relational comparators: =, !=, >, >=, <, <="
 msgstr ""
-"O filtro '{}' suporta apenas operadores de comparação relacionais: =, !=, >"
-", >=, <, <="
+"O filtro '{}' suporta apenas operadores de comparação relacionais: =, !=, >, "
+">=, <, <="
 
 #: solv/vendor_change_manager.cpp:1321
 #, c++-format
 msgid "Filter '{}' only supports string comparators: =, ^, $, *, =*, =~"
-msgstr "O filtro '{}' suporta apenas comparadores de string: =, ^, $, *, =*, =~"
+msgstr ""
+"O filtro '{}' suporta apenas comparadores de string: =, ^, $, *, =*, =~"
 
 #: solv/vendor_change_manager.cpp:1330
 #, c++-format
@@ -2134,8 +2137,8 @@ msgid ""
 "Action '{0}' '{1}' cannot be merged because it is already installed in "
 "version '{2}' -> keeping the action from older transaction with '{1}'."
 msgstr ""
-"A ação '{0}' '{1}' não pode ser mesclada porque já está instalada na versão '"
-"{2}' -> mantendo a ação da transação mais antiga com '{1}'."
+"A ação '{0}' '{1}' não pode ser mesclada porque já está instalada na versão "
+"'{2}' -> mantendo a ação da transação mais antiga com '{1}'."
 
 #: transaction/transaction_merge.cpp:304
 #, c++-format
@@ -2230,37 +2233,37 @@ msgstr ""
 "Faltando chave de objeto \"group_id\" obrigatória em um rpm com motivo "
 "\"Group\" e ação \"Reason Change\""
 
-#: utils/bootc.cpp:46
+#: utils/bootc.cpp:47
 #, c++-format
 msgid "Error checking bootc status: {}"
 msgstr "Erro ao verificar o status do bootc: {}"
 
-#: utils/bootc.cpp:49
+#: utils/bootc.cpp:50
 #, c++-format
 msgid "Error checking bootc status: bootc command failed with exit code {}"
 msgstr ""
 "Erro ao verificar o status do bootc: o comando bootc falhou com o código de "
 "saída {}"
 
-#: utils/bootc.cpp:58
+#: utils/bootc.cpp:59
 msgid "Error checking bootc status: Failed to parse JSON output"
 msgstr "Erro ao verificar o status do bootc: Falha ao analisar a saída JSON"
 
-#: utils/bootc.cpp:73
+#: utils/bootc.cpp:74
 #, c++-format
 msgid "Failed to query status of bootc system: {}"
 msgstr "Falha ao consultar o status do sistema bootc: {}"
 
-#: utils/bootc.cpp:90
+#: utils/bootc.cpp:91
 msgid "Failed to stat /usr filesystem"
 msgstr "Falha ao obter informações do sistema de arquivos /usr"
 
-#: utils/bootc.cpp:125
+#: utils/bootc.cpp:127
 #, c++-format
 msgid "Error running `bootc usr-overlay --read-only`: {}"
 msgstr "Erro ao executar `bootc usr-overlay --read-only`: {}"
 
-#: utils/bootc.cpp:128
+#: utils/bootc.cpp:130
 #, c++-format
 msgid ""
 "Error running `bootc usr-overlay --read-only`: bootc command failed with "
@@ -2269,11 +2272,11 @@ msgstr ""
 "Erro ao executar `bootc usr-overlay --read-only`: o comando bootc falhou com "
 "o código de saída {}"
 
-#: utils/bootc.cpp:136
+#: utils/bootc.cpp:138
 msgid "Failed to unshare mount namespace"
 msgstr "Falha ao descompartilhar o namespace de montagem"
 
-#: utils/bootc.cpp:143
+#: utils/bootc.cpp:146
 #, c++-format
 msgid "Failed to remount /usr as read-write: {}"
 msgstr "Falha ao remontar /usr com permissão de leitura e escrita: {}"

@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-02 08:43+0000\n"
+"POT-Creation-Date: 2026-11-10 09:05+0000\n"
 "PO-Revision-Date: 2026-11-03 09:59+0000\n"
 "Last-Translator: Jean-Baptiste Holcroft <jean-baptiste@holcroft.fr>\n"
 "Language-Team: Chinese (Simplified) <https://translate.fedoraproject.org/"
@@ -100,7 +100,8 @@ msgstr ""
 msgid ""
 "File \"{}\" already exists and configures repositories with IDs \"{}\". Add "
 "\"--overwrite\" to overwrite."
-msgstr "文件 \"{}\" 已存在并已用ID \"{}\" 配置软件仓库。添加 \"--overwrite\" 以覆盖。"
+msgstr ""
+"文件 \"{}\" 已存在并已用ID \"{}\" 配置软件仓库。添加 \"--overwrite\" 以覆盖。"
 
 #: addrepo.cpp:453 addrepo.cpp:479
 #, c++-format
@@ -324,7 +325,8 @@ msgstr "无法设置软件仓库选项 \"{}\"：{}"
 msgid ""
 "Sets the \"{}\" option of the repository \"{}\" again with a different "
 "value: \"{}\" != \"{}\""
-msgstr "将 \"{}\" 选项（来自软件仓库 \"{}\" ）重新设置成不同的值：\"{}\" != \"{}\""
+msgstr ""
+"将 \"{}\" 选项（来自软件仓库 \"{}\" ）重新设置成不同的值：\"{}\" != \"{}\""
 
 #: setopt.cpp:100
 #, c++-format

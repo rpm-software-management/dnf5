@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-02 08:43+0000\n"
+"POT-Creation-Date: 2026-11-10 09:05+0000\n"
 "PO-Revision-Date: 2026-11-03 09:38+0000\n"
 "Last-Translator: Luna Jernberg <droidbittin@gmail.com>\n"
 "Language-Team: Swedish <https://translate.fedoraproject.org/projects/dnf5/"
@@ -21,7 +21,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Generator: Weblate 2026.11\n"
 
-#: cmdline_aliases.cpp:84 context.cpp:222 main.cpp:1619
+#: cmdline_aliases.cpp:84 context.cpp:222 main.cpp:1617
 msgid ", "
 msgstr ", "
 
@@ -193,8 +193,8 @@ msgid ""
 "Missing attribute \"value_help\" of required value for alias \"{}\" in file "
 "\"{}\""
 msgstr ""
-"Saknar attributet \"value_help\" för det obligatoriska värdet för aliaset \""
-"{}\" i fil \"{}\""
+"Saknar attributet \"value_help\" för det obligatoriska värdet för aliaset "
+"\"{}\" i fil \"{}\""
 
 #: cmdline_aliases.cpp:740
 #, c++-format
@@ -330,7 +330,8 @@ msgstr "Ingen rekommendation hittades som matchar de angivna filtren."
 #: commands/advisory_shared.hpp:193
 msgid ""
 "Include content contained in advisories with specified name. List option."
-msgstr "Inkludera innehåll i rekommendationer med angivet namn. Listalternativ."
+msgstr ""
+"Inkludera innehåll i rekommendationer med angivet namn. Listalternativ."
 
 #: commands/advisory_shared.hpp:194
 msgid "ADVISORY_NAME,..."
@@ -358,8 +359,8 @@ msgid ""
 "option. Can be \"critical\", \"important\", \"moderate\", \"low\", \"none\"."
 msgstr ""
 "Inkludera innehåll som finns i rekommendationer med den angivna "
-"allvarlighetsgraden. Listflagga. Kan vara ”critical”, ”important”, ”moderate"
-"”, ”low”, ”none”."
+"allvarlighetsgraden. Listflagga. Kan vara ”critical”, ”important”, "
+"”moderate”, ”low”, ”none”."
 
 #: commands/advisory_shared.hpp:235
 msgid "ADVISORY_SEVERITY,..."
@@ -369,7 +370,8 @@ msgstr "REKOMMENDATIONSALLVARLIGHET,…"
 msgid ""
 "Include content contained in advisories that fix a Bugzilla ID, Eg. 123123. "
 "List option."
-msgstr "Inkludera innehåll som löser ett Bugzilla-ID, t.ex. 123123. Listflagga."
+msgstr ""
+"Inkludera innehåll som löser ett Bugzilla-ID, t.ex. 123123. Listflagga."
 
 #: commands/advisory_shared.hpp:248
 msgid "BUGZILLA_ID,..."
@@ -528,7 +530,7 @@ msgstr "När det körs med --url, skriver URL:ar från alla tillgängliga spegla
 msgid "Invalid urlprotocol option: {}"
 msgstr "Ogiltigt urlprotocol alternativ: {}"
 
-#: commands/download/download.cpp:166 main.cpp:833
+#: commands/download/download.cpp:166 main.cpp:831
 #, c++-format
 msgid "Unsupported architecture \"{0}\". Please choose one from {1}"
 msgstr "Arkitektur \"{0}\" som inte stöds. Välj en från {1}"
@@ -878,7 +880,8 @@ msgstr ""
 #: commands/offline/offline.cpp:267
 msgid ""
 "The system has been modified since the offline transaction was prepared."
-msgstr "Systemet har modifierats sedan transaktionen i offlineläge förbereddes."
+msgstr ""
+"Systemet har modifierats sedan transaktionen i offlineläge förbereddes."
 
 #: commands/offline/offline.cpp:271
 #, c++-format
@@ -1616,31 +1619,36 @@ msgstr "Kan inte ladda delat bibliotek \"{}\": {}"
 msgid "Cannot obtain address of symbol \"{}\": {}"
 msgstr "Kan inte erhålla adressen till symbol \"{}\": {}"
 
-#: main.cpp:156
+#: main.cpp:150
+#, c++-format
+msgid "Failed to expire repository cache in path \"{0}\": {1}"
+msgstr "Det gick inte att upphöra förrådscache i sökväg \"{0}\": {1}"
+
+#: main.cpp:174
 msgid "Utility for packages maintaining"
 msgstr "Verktyg för pakethantering"
 
-#: main.cpp:157
+#: main.cpp:175
 msgid "DNF5 is a program for maintaining packages."
 msgstr "DNF5 är ett program för att hantera paket."
 
-#: main.cpp:158
+#: main.cpp:176
 msgid "Unclassified options:"
 msgstr "Oklassificerade flaggor:"
 
-#: main.cpp:161
+#: main.cpp:179
 msgid "Global options:"
 msgstr "Globala flaggor:"
 
-#: main.cpp:166
+#: main.cpp:184
 msgid "Print help"
 msgstr "Skriv ut hjälp"
 
-#: main.cpp:173
+#: main.cpp:191
 msgid "Configuration file location"
 msgstr "Konfigurationsfilens plats"
 
-#: main.cpp:181
+#: main.cpp:199
 msgid ""
 "In combination with a non-interactive command, shows just the relevant "
 "content. Suppresses messages notifying about the current state or actions of "
@@ -1650,7 +1658,7 @@ msgstr ""
 "innehållet. Undertrycker meddelanden som berättar om tillståndet hos eller "
 "åtgärder av dnf5."
 
-#: main.cpp:196
+#: main.cpp:214
 msgid ""
 "Run entirely from system cache, don't update the cache and use it even in "
 "case it is expired."
@@ -1658,33 +1666,28 @@ msgstr ""
 "Kör helt från systemets cache, uppdatera inte cachen och använd den även då "
 "den har gått ut."
 
-#: main.cpp:205
+#: main.cpp:223
 msgid "Control whether color is used."
 msgstr "Styr huruvida färg används."
 
-#: main.cpp:211
+#: main.cpp:229
 msgid "Force refreshing metadata before running the command."
 msgstr "Framtvinga uppdatering av metadata före kommandot körs."
 
-#: main.cpp:227
-#, c++-format
-msgid "Failed to expire repository cache in path \"{0}\": {1}"
-msgstr "Det gick inte att upphöra förrådscache i sökväg \"{0}\": {1}"
-
-#: main.cpp:241
+#: main.cpp:239
 msgid "create additional repository using id and path"
 msgstr "skapa ytterligare förråd med ett id och en sökväg"
 
-#: main.cpp:249
+#: main.cpp:247
 #, c++-format
 msgid "repofrompath: Incorrect repoid and path specification \"{}\""
 msgstr "repofrompath: Felaktigt förrådsid och sökvägsspecifikation \"{}\""
 
-#: main.cpp:261
+#: main.cpp:259
 msgid "set arbitrary config and repo options"
 msgstr "sätt godtyckliga konfigurations- och förrådsalternativ"
 
-#: main.cpp:263
+#: main.cpp:261
 msgid ""
 "Override a configuration option from the configuration file. To override "
 "configuration options for repositories, use repoid.option for  the\n"
@@ -1703,12 +1706,12 @@ msgstr ""
 "              de åsidosätter det inte. Dock kommer att ange ett tomt värde "
 "(t.ex. --setopt=tsflags=) nollställa alternativet."
 
-#: main.cpp:272 main.cpp:311
+#: main.cpp:270 main.cpp:309
 #, c++-format
 msgid "{}: Badly formatted argument value \"{}\""
 msgstr "{}: Felaktigt formaterat argumentvärde \"{}\""
 
-#: main.cpp:279
+#: main.cpp:277
 #, c++-format
 msgid ""
 "{}: Badly formatted argument value: Last key character cannot be '.': {}"
@@ -1716,45 +1719,45 @@ msgstr ""
 "{}: Felaktigt formaterat argumentvärde: Sista nyckeltecknet kan inte vara "
 "'.': {}"
 
-#: main.cpp:292
+#: main.cpp:290
 #, c++-format
 msgid "setopt: \"{0}\": {1}"
 msgstr "setopt: \"{0}\": {1}"
 
-#: main.cpp:304
+#: main.cpp:302
 msgid "set arbitrary variable"
 msgstr "sätt godtycklig variabel"
 
-#: main.cpp:318
+#: main.cpp:316
 #, c++-format
 msgid "setvar: {}"
 msgstr "setvar: {}"
 
-#: main.cpp:327
+#: main.cpp:325
 msgid "automatically answer yes for all questions"
 msgstr "svara automatiskt ja på alla frågor"
 
-#: main.cpp:334
+#: main.cpp:332
 msgid "automatically answer no for all questions"
 msgstr "svara automatiskt nej på alla frågor"
 
-#: main.cpp:341
+#: main.cpp:339
 msgid "try the best available package versions in transactions"
 msgstr "prova de bästa tillgängliga paketversionerna i transaktioner"
 
-#: main.cpp:348
+#: main.cpp:346
 msgid "do not limit the transaction to the best candidate"
 msgstr "begränsa inte transaktionen till den bästa kandidaten"
 
-#: main.cpp:357
+#: main.cpp:355
 msgid "allow automatic package replacements from different vendors"
 msgstr "tillåt automatiska paketersättningar från olika leverantörer"
 
-#: main.cpp:364
+#: main.cpp:362
 msgid "do not allow automatic package replacements from different vendors"
 msgstr "tillåt inte automatiska paketersättningar från olika leverantörer"
 
-#: main.cpp:377
+#: main.cpp:375
 msgid ""
 "Allow switching packages from any vendor to packages from VENDOR. Supports "
 "globs, can be specified multiple times."
@@ -1762,7 +1765,7 @@ msgstr ""
 "Tillåt byte av paket från valfri leverantör till paket från LEVERANTÖR. "
 "Stöder jokertecken (globs) och kan anges flera gånger."
 
-#: main.cpp:396
+#: main.cpp:394
 msgid ""
 "Allow replacing packages from VENDOR to packages from any vendor. Supports "
 "globs, can be specified multiple times."
@@ -1770,22 +1773,22 @@ msgstr ""
 "Tillåt ersättning av paket från LEVERANTÖR till paket från valfri "
 "leverantör. Stöder jokertecken och kan anges flera gånger."
 
-#: main.cpp:415
+#: main.cpp:413
 msgid ""
 "Allow vendor changes for packages matching PKG_NAME (bidirectional). List "
 "option. Supports globs, can be specified multiple times."
 msgstr ""
-"Tillåt leverantörsändringar för paket som matchar PKG_NAME (dubbelriktad)"
-".Listalternativ. Stöder jokertecken och kan anges flera gånger."
+"Tillåt leverantörsändringar för paket som matchar PKG_NAME "
+"(dubbelriktad).Listalternativ. Stöder jokertecken och kan anges flera gånger."
 
-#: main.cpp:444
+#: main.cpp:442
 msgid ""
 "Add a vendor change policy for this run. Can be specified multiple times."
 msgstr ""
 "Lägg till en leverantörsändringspolicy för den här körningen. Kan anges "
 "flera gånger."
 
-#: main.cpp:459
+#: main.cpp:457
 #, c++-format
 msgid ""
 "Remove all vendor change policies. Can be combined with {} to replace them."
@@ -1793,7 +1796,7 @@ msgstr ""
 "Ta bort alla policyer för leverantörsändringar. Kan kombineras med {} för "
 "att ersätta dem."
 
-#: main.cpp:478
+#: main.cpp:476
 msgid ""
 "Disable vendor change policies whose source matches the specified pattern. "
 "Supports globs, can be specified multiple times."
@@ -1801,7 +1804,7 @@ msgstr ""
 "Inaktivera leverantörsändringspolicyer vars källa matchar det angivna "
 "mönstret. Stöder jokertecken (globs) och kan anges flera gånger."
 
-#: main.cpp:495
+#: main.cpp:493
 msgid ""
 "Don't install files that are marked as documentation (which includes man "
 "pages and texinfo documents)"
@@ -1809,11 +1812,11 @@ msgstr ""
 "Installera inte filer som är markerade som dokumentation (vilket inkluderar "
 "manualsidor och texinfo-dokument)"
 
-#: main.cpp:511
+#: main.cpp:509
 msgid "exclude packages by name or glob"
 msgstr "uteslut paket via namn eller glob"
 
-#: main.cpp:530
+#: main.cpp:528
 msgid ""
 "Enable additional repositories. List option. Supports globs, can be "
 "specified multiple times."
@@ -1821,7 +1824,7 @@ msgstr ""
 "Aktivera ytterligare datakataloger. Listalternativ. Stödjer globbningar, kan "
 "anges flera gånger."
 
-#: main.cpp:548
+#: main.cpp:546
 msgid ""
 "Disable repositories. List option. Supports globs, can be specified multiple "
 "times."
@@ -1829,7 +1832,7 @@ msgstr ""
 "Avaktivera förråd. Listalternativ. Stödjer globbningar, kan anges flera "
 "gånger."
 
-#: main.cpp:566
+#: main.cpp:564
 msgid ""
 "Enable just specific repositories. List option. Supports globs, can be "
 "specified multiple times."
@@ -1837,15 +1840,15 @@ msgstr ""
 "Aktivera bara specifika förråd. Listalternativ. Stödjer globbningar, kan "
 "anges flera gånger."
 
-#: main.cpp:588
+#: main.cpp:586
 msgid "disable OpenPGP signature checking (if RPM policy allows)"
 msgstr "avaktivera kontroll av OpenPGP-signatur (om RPM-policyn tillåter)"
 
-#: main.cpp:605
+#: main.cpp:603
 msgid "Disable all libdnf5 plugins"
 msgstr "Avaktivera alla libdnf5-insticksmoduler"
 
-#: main.cpp:615
+#: main.cpp:613
 msgid ""
 "Enable libdnf5 plugins by name. List option. Supports globs, can be "
 "specified multiple times."
@@ -1853,7 +1856,7 @@ msgstr ""
 "Akvtivera libdnf5-insticksmoduler efter namn. Listalternativ. Stödjer "
 "globbningar, kan anges flera gånger."
 
-#: main.cpp:630
+#: main.cpp:628
 msgid ""
 "Disable libdnf5 plugins by name. List option. Supports globs, can be "
 "specified multiple times."
@@ -1861,11 +1864,11 @@ msgstr ""
 "Avakvtivera libdnf5-insticksmoduler efter namn. Listalternativ. Stödjer "
 "globbningar, kan anges flera gånger."
 
-#: main.cpp:647
+#: main.cpp:645
 msgid "add a comment to transaction"
 msgstr "lägg till en kommentar till transaktionen"
 
-#: main.cpp:649
+#: main.cpp:647
 msgid ""
 "Adds a comment to the action. If a transaction takes place, the comment is "
 "stored in it."
@@ -1873,11 +1876,11 @@ msgstr ""
 "Lägger till kommentarer till åtgärden. Om en transaktion sker lagras "
 "kommentaren i den."
 
-#: main.cpp:662
+#: main.cpp:660
 msgid "set install root"
 msgstr "ange installationsrot"
 
-#: main.cpp:669
+#: main.cpp:667
 msgid ""
 "use configuration, reposdir, and vars from the host system rather than the "
 "installroot"
@@ -1885,19 +1888,19 @@ msgstr ""
 "använd konfiguration, förrådskatalog och variabler från värdsystemet "
 "istället för installationsroten"
 
-#: main.cpp:678
+#: main.cpp:676
 msgid "override the value of $releasever in config and repo files"
 msgstr "åsidosätt värdet på $releasever i config- och repo-filer"
 
-#: main.cpp:691
+#: main.cpp:689
 msgid "override the value of $releasever_major in config and repo files"
 msgstr "åsidosätt värdet för $releasever_major i konfigurations och repofiler"
 
-#: main.cpp:704
+#: main.cpp:702
 msgid "override the value of $releasever_minor in config and repo files"
 msgstr "åsidosätt värdet för $releasever_minor i konfigurations och repofiler"
 
-#: main.cpp:717
+#: main.cpp:715
 msgid ""
 "Show newly installed leaf packages and packages that became leaves after a "
 "transaction."
@@ -1905,74 +1908,74 @@ msgstr ""
 "Visa nyligen installerade lövpaket och paket som blev löv efter en "
 "transaktion."
 
-#: main.cpp:731
+#: main.cpp:729
 msgid "Dump detailed solving results into files"
 msgstr "Dumpa ut detaljerade lösningsresultat till filer"
 
-#: main.cpp:740
+#: main.cpp:738
 msgid "Print main configuration values to stdout"
 msgstr "Skriv huvudkonfigurationsvärden till standard ut"
 
-#: main.cpp:757
+#: main.cpp:755
 msgid ""
 "Print repository configuration values to stdout. List option. Supports globs"
 msgstr ""
 "Skriv förrådskonfigurationsvärden till standard ut. Listalternativ. Stödjer "
 "globbningar"
 
-#: main.cpp:772
+#: main.cpp:770
 msgid "Print variable values to stdout"
 msgstr "Skriv variabelvärden till standard ut"
 
-#: main.cpp:786
+#: main.cpp:784
 msgid "Print loaded vendor change policies to stdout"
 msgstr "Skriv ut laddade leverantörsändringspolicyer till stdout"
 
-#: main.cpp:800
+#: main.cpp:798
 msgid "Show DNF5 version and exit"
 msgstr "Visa DNF5-version och avsluta"
 
-#: main.cpp:814
+#: main.cpp:812
 msgid "Force the use of a different architecture."
 msgstr "Framtvinga användningen av en annan arkitektur."
 
-#: main.cpp:846
+#: main.cpp:844
 msgid "Skip acquiring file locks, such as the lock on the system repository"
 msgstr "Hoppa över att hämta fil-lås, till exempel låset på systemförrådet"
 
-#: main.cpp:861
+#: main.cpp:859
 msgid "Software Management Commands:"
 msgstr "Programvaruhanteringskommandon:"
 
-#: main.cpp:868
+#: main.cpp:866
 msgid "Query Commands:"
 msgstr "Frågekommandon:"
 
-#: main.cpp:875
+#: main.cpp:873
 msgid "Subcommands:"
 msgstr "Underkommandon:"
 
-#: main.cpp:977
+#: main.cpp:975
 #, c++-format
 msgid "{} version {}.{}.{}.{}"
 msgstr "{} version {}.{}.{}.{}"
 
-#: main.cpp:980
+#: main.cpp:978
 #, c++-format
 msgid "{} plugin API version {}.{}"
 msgstr "{} plugin API version {}.{}"
 
-#: main.cpp:985
+#: main.cpp:983
 #, c++-format
 msgid "libdnf5 version {}.{}.{}.{}"
 msgstr "libdnf5 version {}.{}.{}.{}"
 
-#: main.cpp:988
+#: main.cpp:986
 #, c++-format
 msgid "libdnf5 plugin API version {}.{}"
 msgstr "libdnf5 insticksmoduls-API-version {}.{}"
 
-#: main.cpp:995
+#: main.cpp:993
 #, c++-format
 msgid ""
 "\n"
@@ -1981,22 +1984,22 @@ msgstr ""
 "\n"
 "Laddade {} plugins:"
 
-#: main.cpp:1000 main.cpp:1016
+#: main.cpp:998 main.cpp:1014
 #, c++-format
 msgid "  name: {}"
 msgstr "  namn: {}"
 
-#: main.cpp:1003 main.cpp:1019
+#: main.cpp:1001 main.cpp:1017
 #, c++-format
 msgid "  version: {}.{}.{}"
 msgstr "  version: {}.{}.{}"
 
-#: main.cpp:1005 main.cpp:1021
+#: main.cpp:1003 main.cpp:1019
 #, c++-format
 msgid "  API version: {}.{}"
 msgstr "  API version: {}.{}"
 
-#: main.cpp:1012
+#: main.cpp:1010
 msgid ""
 "\n"
 "Loaded libdnf5 plugins:"
@@ -2004,7 +2007,7 @@ msgstr ""
 "\n"
 "Laddade libdnf5 plugins:"
 
-#: main.cpp:1059
+#: main.cpp:1057
 #, c++-format
 msgid ""
 "Total size of inbound packages is {:.0f} {:s}. Need to download {:.0f} {:s}."
@@ -2012,7 +2015,7 @@ msgstr ""
 "Total storlek på inkommande paket är {:.0f} {:s}. Behöver ladda ner {:.0f} "
 "{:s}."
 
-#: main.cpp:1076
+#: main.cpp:1074
 #, c++-format
 msgid ""
 "After this operation, {:.0f} {:s} extra will be used (install {:.0f} {:s}, "
@@ -2021,7 +2024,7 @@ msgstr ""
 "Efter denna operation kommer {:.0f} {:s} extra att användas (install {:.0f} "
 "{:s}, remove {:.0f} {:s})."
 
-#: main.cpp:1087
+#: main.cpp:1085
 #, c++-format
 msgid ""
 "After this operation, {:.0f} {:s} will be freed (install {:.0f} {:s}, remove "
@@ -2030,34 +2033,34 @@ msgstr ""
 "Efter denna operation kommer {:.0f} {:s} att frigöras (install {:.0f} {:s}, "
 "remove {:.0f} {:s})."
 
-#: main.cpp:1099
+#: main.cpp:1097
 msgid "======== Main configuration: ========"
 msgstr "======== Huvudkonfiguration: ========"
 
-#: main.cpp:1136
+#: main.cpp:1134
 #, c++-format
 msgid "No matching repo to dump configuration: \"{}\""
 msgstr "Inget matchande förråd för att skriva dumpkonfiguration: \"{}\""
 
-#: main.cpp:1141
+#: main.cpp:1139
 #, c++-format
 msgid "======== \"{}\" repository configuration: ========"
 msgstr "======== \"{}\" Förrådskonfiguration: ========"
 
-#: main.cpp:1161
+#: main.cpp:1159
 msgid "======== Variables: ========"
 msgstr "======== Variabler: ========"
 
-#: main.cpp:1169
+#: main.cpp:1167
 msgid "======== Vendor Change Policies: ========"
 msgstr "======== Policyer för leverantörsändringar: ========"
 
-#: main.cpp:1173
+#: main.cpp:1171
 #, c++-format
 msgid "Policy #{}: source: {}"
 msgstr "Policy #{}: källa: {}"
 
-#: main.cpp:1179
+#: main.cpp:1177
 msgid ""
 "allow_vendor_change is enabled. Packages can be replaced by any vendor, and "
 "vendor change policies will be ignored."
@@ -2065,26 +2068,26 @@ msgstr ""
 "allow_vendor_change är aktiverat. Paket kan ersättas av vilken leverantör "
 "som helst, och policyer för leverantörsbyte ignoreras."
 
-#: main.cpp:1217
+#: main.cpp:1215
 msgid "New leaves:"
 msgstr "Nya löv:"
 
-#: main.cpp:1219
+#: main.cpp:1217
 #, c++-format
 msgid " {}"
 msgstr " {}"
 
-#: main.cpp:1279
+#: main.cpp:1277
 #, c++-format
 msgid "{} to skip unavailable packages"
 msgstr "{} för att hoppa över otillgängliga paket"
 
-#: main.cpp:1287
+#: main.cpp:1285
 #, c++-format
 msgid "{} to allow extra packages in the transaction"
 msgstr "{} för att tillåta extra paket i transaktionen"
 
-#: main.cpp:1300
+#: main.cpp:1298
 #, c++-format
 msgid ""
 "{} to allow mismatches between installed and stored transaction packages. "
@@ -2095,51 +2098,51 @@ msgstr ""
 "transaktionspaket. Detta kan resultera i en tom transaktion eftersom "
 "alternativet bland annat kan ignorera misslyckade ta bort åtgärder."
 
-#: main.cpp:1356
+#: main.cpp:1354
 #, c++-format
 msgid "{} to not limit the transaction to the best candidates"
 msgstr "{} för att inte begränsa transaktionen till de bästa kandidaterna"
 
-#: main.cpp:1363
+#: main.cpp:1361
 #, c++-format
 msgid "{} to allow removing of installed packages to resolve problems"
 msgstr "{} för att tillåta att ta bort installerade paket för att lösa problem"
 
-#: main.cpp:1372
+#: main.cpp:1370
 #, c++-format
 msgid "{} to load additional filelists metadata"
 msgstr "{} för att läsa in ytterligare fillistemetadata"
 
-#: main.cpp:1379
+#: main.cpp:1377
 #, c++-format
 msgid "{} to skip uninstallable packages"
 msgstr "{} för att hoppa över oinstallerbara paket"
 
-#: main.cpp:1394
+#: main.cpp:1392
 #, c++-format
 msgid "{} to allow switching to packages from VENDOR"
 msgstr "{} för att tillåta byte till paket från LEVERANTÖR"
 
-#: main.cpp:1396
+#: main.cpp:1394
 #, c++-format
 msgid "{} to allow replacing packages from VENDOR"
 msgstr "{} för att tillåta ersättning av paket från LEVERANTÖR"
 
-#: main.cpp:1398
+#: main.cpp:1396
 #, c++-format
 msgid "{} to add specific vendor change rules"
 msgstr "{} för att lägga till specifika regler för leverantörsändring"
 
-#: main.cpp:1399
+#: main.cpp:1397
 #, c++-format
 msgid "{} to allow all vendor changes"
 msgstr "{} för att tillåta alla leverantörsändringar"
 
-#: main.cpp:1403
+#: main.cpp:1401
 msgid "You can try to add to command line:"
 msgstr "Du kan försöka lägga till till kommandoraden:"
 
-#: main.cpp:1421
+#: main.cpp:1419
 #, c++-format
 msgid ""
 "No matches were found for the following plugin name patterns while enabling "
@@ -2148,7 +2151,7 @@ msgstr ""
 "Inga matchningar hittades för följande pluginnamnmönster när libdnf-plugins "
 "aktiverades: {}"
 
-#: main.cpp:1422
+#: main.cpp:1420
 #, c++-format
 msgid ""
 "No matches were found for the following plugin name patterns while disabling "
@@ -2157,27 +2160,27 @@ msgstr ""
 "Inga matchningar hittades för följande pluginnamnsmönster när libdnf-plugins "
 "inaktiverades: {}"
 
-#: main.cpp:1488
+#: main.cpp:1486
 #, c++-format
 msgid "--- DNF5 launched with arguments: \"{}\" ---"
 msgstr "--- DNF5 startades med argument: \"{}\" ---"
 
-#: main.cpp:1524
+#: main.cpp:1522
 #, c++-format
 msgid "Invalid \"index\" in \"--complete=<index>[,...]\": {}"
 msgstr "Ogiltigt \"index\" i \"--complete=<index>[,...]\": {}"
 
-#: main.cpp:1563
+#: main.cpp:1561
 #, c++-format
 msgid "{}."
 msgstr "{}."
 
-#: main.cpp:1566 main.cpp:1953
+#: main.cpp:1564 main.cpp:1958
 #, c++-format
 msgid "{}. Add \"--help\" for more information about the arguments."
 msgstr "{}. Lägg till \"--help\" för mer information om argumenten."
 
-#: main.cpp:1575
+#: main.cpp:1573
 #, c++-format
 msgid ""
 "It could be a command provided by a plugin, try: dnf5 install 'dnf5-"
@@ -2186,7 +2189,7 @@ msgstr ""
 "Det kan vara ett kommando från ett plugin, försök med: dnf5 install 'dnf5-"
 "command({})'"
 
-#: main.cpp:1617
+#: main.cpp:1615
 #, c++-format
 msgid ""
 "The argument is available for commands: {}. (It has to be placed after the "
@@ -2195,11 +2198,11 @@ msgstr ""
 "Argumentet är tillgängligt för kommandon: {}. (Det måste placeras efter "
 "kommandot.)"
 
-#: main.cpp:1654
+#: main.cpp:1652
 msgid "No read/execute access in current directory, moving to /"
 msgstr "Inga läs-/körrättigheter i aktuell katalog, flyttar till /"
 
-#: main.cpp:1689
+#: main.cpp:1694
 #, c++-format
 msgid ""
 "{}. Dropping all logs. To redirect the log file location use the \"logdir\" "
@@ -2208,7 +2211,7 @@ msgstr ""
 "{}. Skippar alla loggar. Använd konfigurationsalternativet ”logdir” för att "
 "ändra platsen för loggfilen."
 
-#: main.cpp:1754
+#: main.cpp:1759
 msgid ""
 "The requested operation requires superuser privileges. Please log in as a "
 "user with elevated rights, or use the \"--assumeno\" or \"--downloadonly\" "
@@ -2219,12 +2222,12 @@ msgstr ""
 "downloadonly\" alternativen för att köra kommandot utan att ändra "
 "systemtillståndet."
 
-#: main.cpp:1768
+#: main.cpp:1773
 #, c++-format
 msgid "Warning: {}"
 msgstr "Varning: {}"
 
-#: main.cpp:1781
+#: main.cpp:1786
 msgid ""
 "Error: /usr is configured to be read-only. You may be running an image-based "
 "or immutable operating system. For more information, refer to your "
@@ -2234,7 +2237,7 @@ msgstr ""
 "eller oföränderligt (immutable) operativsystem. Mer information finns i "
 "dokumentationen för din distribution."
 
-#: main.cpp:1800
+#: main.cpp:1805
 msgid ""
 "Error: persistent transactions aren't supported on bootc systems. Pass --"
 "transient to perform this operation in a transient overlay which will reset "
@@ -2244,7 +2247,7 @@ msgstr ""
 "transient för att utföra åtgärden i ett temporärt överläggslager som "
 "återställs vid omstart av systemet."
 
-#: main.cpp:1810
+#: main.cpp:1815
 msgid ""
 "Error: this bootc system is configured to be read-only. Pass --transient to "
 "perform this operation in a transient overlay which will reset when the "
@@ -2254,20 +2257,20 @@ msgstr ""
 "transient för att utföra åtgärden i ett tillfälligt överläggslager som "
 "återställs när systemet startas om."
 
-#: main.cpp:1821
+#: main.cpp:1826
 msgid "Error: transient transactions are only supported on bootc systems."
 msgstr "Fel: transienta transaktioner stöds endast på bootc-system."
 
-#: main.cpp:1862
+#: main.cpp:1867
 #, c++-format
 msgid "The operation will only store the transaction in {}"
 msgstr "Operationen kommer endast att lagra transaktionen i {}"
 
-#: main.cpp:1864
+#: main.cpp:1869
 msgid "The operation will only download packages for the transaction."
 msgstr "Operationen kommer bara att ladda ner paket för transaktionen."
 
-#: main.cpp:1869
+#: main.cpp:1874
 msgid ""
 "Test mode enabled: Only package downloads, OpenPGP key installations and "
 "transaction checks will be performed."
@@ -2275,11 +2278,11 @@ msgstr ""
 "Testläge aktiverat: Endast paketnedladdningar, OpenPGP-nyckelinstallationer "
 "och transaktionskontroller kommer att utföras."
 
-#: main.cpp:1878
+#: main.cpp:1883
 msgid "Warning: A pending offline transaction will be invalidated."
 msgstr "Varning: En väntande offlinetransaktion kommer att ogiltigförklaras."
 
-#: main.cpp:1881
+#: main.cpp:1886
 #, c++-format
 msgid ""
 "Warning: A pending offline transaction initiated by the following command "
@@ -2288,7 +2291,7 @@ msgstr ""
 "Varning: En väntande offline-transaktion som initierats av följande kommando "
 "kommer att ogiltigförklaras: {}"
 
-#: main.cpp:1906
+#: main.cpp:1911
 msgid ""
 "This transaction would modify the following paths, possibly introducing "
 "inconsistencies when the transient overlay on /usr is discarded. See the "
@@ -2298,7 +2301,7 @@ msgstr ""
 "leda till inkonsekvenser när det temporära överlagret på /usr tas bort. Se "
 "konfigurationsalternativet usr_drift_protected_paths för mer information."
 
-#: main.cpp:1917
+#: main.cpp:1922
 msgid ""
 "Operation aborted. Pass --setopt=usr_drift_protected_paths= to disable this "
 "check and proceed anyway."
@@ -2306,7 +2309,7 @@ msgstr ""
 "Åtgärden avbröts. Ange --setopt=usr_drift_protected_paths= för att "
 "inaktivera den här kontrollen och fortsätt ändå."
 
-#: main.cpp:1926
+#: main.cpp:1931
 msgid ""
 "A transient overlay will be created on /usr that will be discarded on "
 "reboot. Keep in mind that changes to /etc and /var will still persist, and "
@@ -2316,16 +2319,16 @@ msgstr ""
 "omstart. Tänk på att ändringar i /etc och /var kommer att finnas kvar, och "
 "att paket ofta ändrar dessa kataloger."
 
-#: main.cpp:1963
+#: main.cpp:1968
 #, c++-format
 msgid "Command returned error: {}"
 msgstr "Kommandot returnerade fel: {}"
 
-#: main.cpp:1971
+#: main.cpp:1976
 msgid "DNF5 finished"
 msgstr "DNF5 färdig"
 
-#: main.cpp:1975
+#: main.cpp:1980
 msgid "Complete!"
 msgstr "Färdig!"
 

@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-02 08:43+0000\n"
-"PO-Revision-Date: 2026-01-23 15:21+0000\n"
+"POT-Creation-Date: 2026-11-10 09:05+0000\n"
+"PO-Revision-Date: 2026-11-05 09:18+0000\n"
 "Last-Translator: Arif Budiman <arifpedia@gmail.com>\n"
 "Language-Team: Indonesian <https://translate.fedoraproject.org/projects/dnf5/"
 "dnf5-plugin-config-manager/id/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.15.2\n"
+"X-Generator: Weblate 2026.11\n"
 
 #: addrepo.cpp:115
 #, c++-format
@@ -117,92 +117,106 @@ msgstr "Tidak dapat membaca repositori dari direktori \"{}\": {}"
 #: addvendorpolicy.cpp:23
 msgid "Add a vendor change policy from a TOML file or compact format string"
 msgstr ""
+"Tambahkan kebijakan perubahan vendor dari berkas TOML atau string berformat "
+"ringkas"
 
 #: addvendorpolicy.cpp:29
 msgid "Policy base filename (without .conf extension)"
-msgstr ""
+msgstr "Nama dasar berkas kebijakan (tanpa ekstensi .conf)"
 
 #: addvendorpolicy.cpp:40
 msgid "URL or local path to the source TOML policy file"
-msgstr ""
+msgstr "URL atau jalur lokal ke berkas kebijakan TOML sumber"
 
 #: addvendorpolicy.cpp:52
 msgid "Vendor change policy in compact format"
-msgstr ""
+msgstr "Kebijakan perubahan vendor dalam format ringkas"
 
 #: addvendorpolicy.cpp:64
 msgid "Allow masking a distribution policy"
-msgstr ""
+msgstr "Izinkan penonaktifan kebijakan distribusi melalui masking"
 
 #: addvendorpolicy.cpp:73
 msgid "Allow replacing an existing policy file"
-msgstr ""
+msgstr "Izinkan penggantian berkas kebijakan yang sudah ada"
 
 #: addvendorpolicy.cpp:82
 msgid "Require that the new policy masks a distribution policy"
 msgstr ""
+"Wajibkan kebijakan baru menonaktifkan kebijakan distribusi melalui masking"
 
 #: addvendorpolicy.cpp:94
 msgid "Require that the new policy replaces an existing system policy file"
 msgstr ""
+"Wajibkan kebijakan baru menggantikan berkas kebijakan sistem yang sudah ada"
 
 #: addvendorpolicy.cpp:123
 msgid "Option \"{option}\" with nonempty value is required"
-msgstr ""
+msgstr "Opsi \"{option}\" dengan nilai yang tidak kosong wajib diisi"
 
 #: addvendorpolicy.cpp:129
 msgid "Either \"{option1}\" or non-empty \"{option2}\" is required"
 msgstr ""
+"Salah satu dari \"{option1}\" atau \"{option2}\" yang tidak kosong wajib "
+"diisi"
 
 #: addvendorpolicy.cpp:142
 msgid ""
 "Policy file \"{path}\" already exists. Use \"{option}\" to allow replacing "
 "it."
 msgstr ""
+"Berkas kebijakan \"{path}\" sudah ada. Gunakan \"{option}\" untuk "
+"mengizinkan penggantiannya."
 
 #: addvendorpolicy.cpp:150
 msgid ""
 "Distribution policy \"{name}\" already exists. Use \"{option}\" to allow "
 "masking it."
 msgstr ""
+"Kebijakan distribusi \"{name}\" sudah ada. Gunakan \"{option}\" untuk "
+"mengizinkan penonaktifannya melalui masking."
 
 #: addvendorpolicy.cpp:165
 msgid ""
 "Cannot add policy: option \"{option}\" requires masking a distribution "
 "policy, but no distribution policy named \"{name}\" exists."
 msgstr ""
+"Tidak dapat menambahkan kebijakan: opsi \"{option}\" mewajibkan penonaktifan "
+"kebijakan distribusi melalui masking, tetapi tidak ada kebijakan distribusi "
+"bernama \"{name}\"."
 
 #: addvendorpolicy.cpp:172
 msgid ""
 "Cannot add policy: option \"{option}\" requires replacing an existing system "
 "policy, but no system policy file named \"{name}\" exists."
 msgstr ""
+"Tidak dapat menambahkan kebijakan: opsi \"{option}\" mewajibkan penggantian "
+"kebijakan sistem yang sudah ada, tetapi tidak ada berkas kebijakan sistem "
+"bernama \"{name}\"."
 
 #: addvendorpolicy.cpp:191 addvendorpolicy.cpp:215 addvendorpolicy.cpp:244
 msgid "Replaced vendor policy file: {path}"
-msgstr ""
+msgstr "Berkas kebijakan vendor diganti: {path}"
 
 #: addvendorpolicy.cpp:196
 msgid "Created vendor policy file: {path}"
-msgstr ""
+msgstr "Berkas kebijakan vendor dibuat: {path}"
 
 #: addvendorpolicy.cpp:204
-#, fuzzy
-#| msgid "from-repofile: \"{}\" file does not exist"
 msgid "Source file does not exist: {path}"
-msgstr "from-repofile: berkas \"{}\" tidak ada"
+msgstr "Berkas sumber tidak ada: {path}"
 
 #: addvendorpolicy.cpp:222 addvendorpolicy.cpp:251
 msgid "Saved vendor policy file: {path}"
-msgstr ""
+msgstr "Berkas kebijakan vendor disimpan: {path}"
 
 #: addvendorpolicy.cpp:260
 msgid "Masked distribution policy file: {path}"
-msgstr ""
+msgstr "Berkas kebijakan distribusi dinonaktifkan melalui masking: {path}"
 
 #: addvendorpolicy.cpp:264
 msgid "Failed to add vendor policy"
-msgstr ""
+msgstr "Gagal menambahkan kebijakan vendor"
 
 #: config-manager.cpp:47
 msgid "Manage configuration"
@@ -210,87 +224,90 @@ msgstr "Kelola konfigurasi"
 
 #: listvendorpolicies.cpp:27
 msgid "List vendor change policy files"
-msgstr ""
+msgstr "Tampilkan daftar berkas kebijakan perubahan vendor"
 
 #: listvendorpolicies.cpp:33 removevendorpolicy.cpp:29
 msgid "Policy base filename pattern (supports globs)"
-msgstr ""
+msgstr "Pola nama dasar berkas kebijakan (mendukung glob)"
 
 #: listvendorpolicies.cpp:42
 msgid "Show detailed information about the policies"
-msgstr ""
+msgstr "Tampilkan informasi terperinci tentang kebijakan"
 
 #: listvendorpolicies.cpp:61 removevendorpolicy.cpp:49
 msgid "No vendor policy files found"
-msgstr ""
+msgstr "Tidak ditemukan berkas kebijakan vendor"
 
 #: listvendorpolicies.cpp:80 removevendorpolicy.cpp:63
 msgid "No matching vendor policy files found for pattern: {pattern}"
 msgstr ""
+"Tidak ditemukan berkas kebijakan vendor yang cocok dengan pola: {pattern}"
 
 #. Note for translators: This is a right-aligned column separator in
 #. a package properties table as in "Name    : bash".
 #: listvendorpolicies.cpp:149
 msgid " : "
-msgstr ""
+msgstr " : "
 
 #. Add policy info
 #: listvendorpolicies.cpp:155
 msgid "Policy"
-msgstr ""
+msgstr "Kebijakan"
 
 #: listvendorpolicies.cpp:156
 msgid "Source"
-msgstr ""
+msgstr "Sumber"
 
 #: listvendorpolicies.cpp:157
 msgid "Distribution (read-only)"
-msgstr ""
+msgstr "Distribusi (hanya baca)"
 
 #: listvendorpolicies.cpp:157
 msgid "System (manageable)"
-msgstr ""
+msgstr "Sistem (dapat dikelola)"
 
 #: listvendorpolicies.cpp:157
 msgid "Type"
-msgstr ""
+msgstr "Jenis"
 
 #: listvendorpolicies.cpp:160
 msgid "Masks"
-msgstr ""
+msgstr "Menonaktifkan melalui masking"
 
 #: listvendorpolicies.cpp:165
 msgid "Masked by"
-msgstr ""
+msgstr "Dinonaktifkan melalui masking oleh"
 
 #: listvendorpolicies.cpp:174
 msgid "<conversion failed: {what}>"
-msgstr ""
+msgstr "<konversi gagal: {what}>"
 
 #: listvendorpolicies.cpp:178 listvendorpolicies.cpp:183
 msgid "Compact"
-msgstr ""
+msgstr "Ringkas"
 
 #: removevendorpolicy.cpp:23
 msgid "Remove vendor change policy files"
-msgstr ""
+msgstr "Hapus berkas kebijakan perubahan vendor"
 
 #: removevendorpolicy.cpp:74
 msgid "Removed vendor policy file: {path}"
-msgstr ""
+msgstr "Berkas kebijakan vendor dihapus: {path}"
 
 #: removevendorpolicy.cpp:78
 msgid "Unmasked distribution policy file: {path}"
-msgstr ""
+msgstr "Masking pada berkas kebijakan distribusi dibatalkan: {path}"
 
 #: removevendorpolicy.cpp:83
 msgid "Failed to remove policy file: {path}"
-msgstr ""
+msgstr "Gagal menghapus berkas kebijakan: {path}"
 
 #: removevendorpolicy.cpp:87
 msgid ""
 "Cannot remove distribution policy file \"{path}\". To mask it, use: {command}"
 msgstr ""
+"Tidak dapat menghapus berkas kebijakan distribusi \"{path}\". Untuk "
+"menonaktifkannya melalui masking, gunakan: {command}"
 
 #: repos.cpp:56 setopt.cpp:140
 #, c++-format
@@ -299,11 +316,11 @@ msgstr "Tidak ada repositori yang cocok untuk dimodifikasi: {}"
 
 #: repos.hpp:42
 msgid "Enables repositories"
-msgstr ""
+msgstr "Mengaktifkan repositori"
 
 #: repos.hpp:50
 msgid "Disables repositories"
-msgstr ""
+msgstr "Menonaktifkan repositori"
 
 #: setopt.cpp:61 unsetopt.cpp:73
 #, c++-format
