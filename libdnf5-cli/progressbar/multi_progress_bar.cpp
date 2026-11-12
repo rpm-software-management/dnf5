@@ -88,11 +88,7 @@ MultiProgressBar::Impl::Impl(TrackingMode tracking_mode) : tracking_mode(trackin
 }
 
 
-MultiProgressBar::MultiProgressBar(TrackingMode tracking_mode) : p_impl(new Impl(tracking_mode)) {
-    if (tty::is_interactive()) {
-        tty::hide_cursor();
-    }
-}
+MultiProgressBar::MultiProgressBar(TrackingMode tracking_mode) : p_impl(new Impl(tracking_mode)) {}
 
 
 MultiProgressBar::MultiProgressBar() : MultiProgressBar(TrackingMode::ON_RENDER) {}
@@ -316,7 +312,15 @@ std::ostream & operator<<(std::ostream & stream, MultiProgressBar & mbar) {
         }
     }
 
+    if (is_interactive && !all_done && !tty::is_cursor_hidden()) {
+        tty::hide_cursor();
+    }
+
     stream << text_buffer.str();  // Single syscall to output all commands
+
+    if (is_interactive && all_done && tty::is_cursor_hidden()) {
+        tty::show_cursor();
+    }
 
     text_buffer.str("");
     text_buffer.clear();
