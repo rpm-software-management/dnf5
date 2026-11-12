@@ -23,6 +23,8 @@
 #include "helpers.hpp"
 #include "json.hpp"
 
+#include "libdnf5/repo/repo.hpp"
+#include "libdnf5/utils/format.hpp"
 #include "libdnf5/utils/fs/file.hpp"
 
 #include <fnmatch.h>
@@ -33,6 +35,7 @@
 
 #include <filesystem>
 #include <sstream>
+#include <stdexcept>
 #include <string>
 
 
@@ -507,6 +510,12 @@ void CoprRepo::load_raw_values(libdnf5::ConfigParser & parser) {
 }
 
 void CoprRepo::add_repo_part(const CoprRepoPart & rp) {
+    const auto & repo_id = rp.get_id();
+    const auto idx = libdnf5::repo::Repo::verify_id(repo_id);
+    if (idx != std::string::npos) {
+        throw std::runtime_error(libdnf5::utils::sformat(
+            _("copr: Invalid repository id \"{}\": unexpected character '{}'"), repo_id, repo_id[idx]));
+    }
     repositories[rp.get_id()] = rp;
 }
 
