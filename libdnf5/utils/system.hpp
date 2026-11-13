@@ -24,7 +24,6 @@
 namespace libdnf5::utils {
 
 void init_lib_rpm(const char * arch);
-std::string detect_arch();
 std::string get_os();
 
 }  // namespace libdnf5::utils
