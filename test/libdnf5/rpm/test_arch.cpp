@@ -24,6 +24,11 @@
 CPPUNIT_TEST_SUITE_REGISTRATION(ArchTest);
 
 
+void ArchTest::test_detect_arch() {
+    const auto arch = libdnf5::rpm::detect_arch();
+    CPPUNIT_ASSERT(!arch.empty());
+}
+
 void ArchTest::test_get_supported_arches() {
     std::vector<std::string> arches = libdnf5::rpm::get_supported_arches();
     // at least one architecture was found
