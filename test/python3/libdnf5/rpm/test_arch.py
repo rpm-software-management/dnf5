@@ -26,6 +26,11 @@ import base_test_case
 
 
 class TestRpmArch(unittest.TestCase):
+    def test_detect_arch(self):
+        arch = libdnf5.rpm.detect_arch()
+        self.assertIsInstance(arch, str)
+        self.assertTrue(arch)
+
     def test_get_supported_arches(self):
         arches = libdnf5.rpm.get_supported_arches()
         # at least one architecture was found

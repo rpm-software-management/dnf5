@@ -20,10 +20,9 @@
 #include "system.hpp"
 
 #include <libdnf5/common/exception.hpp>
+#include <libdnf5/rpm/arch.hpp>
 #include <libdnf5/utils/bgettext/bgettext-mark-domain.h>
 #include <rpm/rpmlib.h>
-#include <sys/auxv.h>
-#include <sys/utsname.h>
 
 namespace libdnf5::utils {
 
@@ -37,51 +36,9 @@ void init_lib_rpm(const char * arch) {
     }
 }
 
-/* ARM specific HWCAP defines may be missing on non-ARM devices */
-#ifndef HWCAP_ARM_VFP
-#define HWCAP_ARM_VFP (1 << 6)
-#endif
-#ifndef HWCAP_ARM_NEON
-#define HWCAP_ARM_NEON (1 << 12)
-#endif
-
-std::string detect_arch() {
-    struct utsname un;
-
-    if (uname(&un) < 0) {
-        throw RuntimeError(M_("Failed to execute uname()"));
-    }
-
-    if (!strncmp(un.machine, "armv", 4)) {
-        /* un.machine is armvXE, where X is version number and E is
-         * endianness (b or l); we need to add modifiers such as
-         * h (hardfloat), n (neon). Neon is a requirement of armv8 so
-         * as far as rpm is concerned armv8l is the equivalent of armv7hnl
-         * (or 7hnb) so we don't explicitly add 'n' for 8+ as it's expected. */
-        char endian = un.machine[strlen(un.machine) - 1];
-        char * modifier = un.machine + 5;
-        while (isdigit(*modifier)) /* keep armv7, armv8, armv9, armv10, armv100, ... */
-            modifier++;
-        if (getauxval(AT_HWCAP) & HWCAP_ARM_VFP)
-            *modifier++ = 'h';
-        if ((atoi(un.machine + 4) == 7) && (getauxval(AT_HWCAP) & HWCAP_ARM_NEON))
-            *modifier++ = 'n';
-        *modifier++ = endian;
-        *modifier = 0;
-    }
-#ifdef __MIPSEL__
-    // support for little endian MIPS
-    if (!strcmp(un.machine, "mips"))
-        strcpy(un.machine, "mipsel");
-    else if (!strcmp(un.machine, "mips64"))
-        strcpy(un.machine, "mips64el");
-#endif
-    return un.machine;
-}
-
 std::string get_os() {
     const char * value;
-    init_lib_rpm(detect_arch().c_str());
+    init_lib_rpm(rpm::detect_arch().c_str());
     rpmGetOsInfo(&value, nullptr);
     return value;
 }

@@ -29,6 +29,10 @@
 
 namespace libdnf5::rpm {
 
+/// Detects the host architecture.
+/// @throws RuntimeError If the host architecture cannot be detected using uname().
+LIBDNF_API std::string detect_arch();
+
 /// Returns a list of architectures supported by libdnf5.
 LIBDNF_API std::vector<std::string> get_supported_arches();
 
