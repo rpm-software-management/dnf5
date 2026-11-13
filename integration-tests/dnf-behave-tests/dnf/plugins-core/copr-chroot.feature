@@ -1,6 +1,7 @@
-# These tests need to be marked destructive because copr
-# doesn't use repositories in installroot, this is tracked as:
-# https://github.com/rpm-software-management/dnf5/issues/1497
+# These tests need to be marked destructive because the Copr plugin
+# reads its configuration from the host system, outside the installroot.
+# The tests therefore modify the Copr plugin configuration files under
+# /etc/dnf/plugins/ on the host.
 @destructive
 Feature: Test the COPR plugin chroot argument
 
@@ -84,9 +85,13 @@ Scenario: Test enabling a repo with manually specified chroot (different to curr
 
       Please do not file bug reports about these packages in Fedora
       Bugzilla. In case of problems, contact the owner of this repository.
+
+      Using the vendor change setting from the Copr configuration (or its default) for the
+      repositories enabled by this command: allow a vendor change in both directions
+      Saved vendor policy file: {context.dnf.installroot}/etc/dnf/vendors.d/i_copr:localhost:testuser:testproject.conf
+      Saved vendor policy file: {context.dnf.installroot}/etc/dnf/vendors.d/o_copr:localhost:testuser:testproject.conf
       """
-# --use-host-config has to be used because of https://github.com/rpm-software-management/dnf5/issues/1497
- When I execute dnf with args "repo list f32 --use-host-config"
+ When I execute dnf with args "repo list f32"
  Then the exit code is 0
   And stdout is
       """
