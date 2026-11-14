@@ -153,7 +153,7 @@ Given I use repository "dnf-ci-multicontext-modular-advisory"
       """
   When I execute dnf with args "check-update --enhancement"
   Then the exit code is 100
-   And stdout contains "test-perl-DBI.x86_64\s+1-2.module_el8\+6587\+9879afr5\s+dnf-ci-multicontext-modular-advisory"
+   And stdout contains "test-perl-DBI.x86_64\s+1-1.module_el8\+7554\+8763afg8\s+->\s+1-2.module_el8\+6587\+9879afr5\s+dnf-ci-multicontext-modular-advisory"
   When I execute dnf with args "update --enhancement"
   Then the exit code is 0
    And Transaction is following
