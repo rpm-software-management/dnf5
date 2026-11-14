@@ -88,3 +88,34 @@ class TestFileDownloader(base_test_case.BaseTestCase):
         self.assertEqual(
             cbs.end_status, DownloadCallbacks.TransferStatus_SUCCESSFUL)
         self.assertEqual(cbs.end_msg, None)
+
+    def test_file_downloader_callback_exception(self):
+        class CallbackError(Exception):
+            pass
+
+        class DownloadCallbacks(libdnf5.repo.DownloadCallbacks):
+            def __init__(self):
+                super(DownloadCallbacks, self).__init__()
+                self.end_cnt = 0
+
+            def end(self, user_cb_data, status, msg):
+                self.end_cnt += 1
+                raise CallbackError("exception from a download callback")
+
+        source_file_path = os.path.join(
+            base_test_case.PROJECT_SOURCE_DIR, "test/data/keys/key.pub")
+        source_url = "file://" + source_file_path
+        dest_file_path = os.path.join(
+            self.temp_dir, "file_downloader_cb_exception.pub")
+
+        cbs = DownloadCallbacks()
+        self.base.set_download_callbacks(
+            libdnf5.repo.DownloadCallbacksUniquePtr(cbs))
+
+        file_downloader = libdnf5.repo.FileDownloader(self.base)
+        file_downloader.add(source_url, dest_file_path, self.USER_DATA)
+
+        with self.assertRaises(Exception):
+            file_downloader.download()
+
+        self.assertEqual(cbs.end_cnt, 1)

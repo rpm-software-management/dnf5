@@ -22,6 +22,9 @@
 #include "utils/string.hpp"
 
 #include <libdnf5/repo/file_downloader.hpp>
+#include <libdnf5/repo/file_downloader_errors.hpp>
+
+#include <stdexcept>
 
 CPPUNIT_TEST_SUITE_REGISTRATION(FileDownloaderTest);
 
@@ -77,6 +80,24 @@ public:
     std::string end_msg;
 };
 
+class ThrowingDownloadCallbacks : public libdnf5::repo::DownloadCallbacks {
+public:
+    class CallbackError : public std::runtime_error {
+    public:
+        CallbackError() : std::runtime_error("exception from a download callback") {}
+    };
+
+    int end(
+        [[maybe_unused]] void * user_cb_data,
+        [[maybe_unused]] TransferStatus status,
+        [[maybe_unused]] const char * msg) override {
+        ++end_cnt;
+        throw CallbackError();
+    }
+
+    int end_cnt = 0;
+};
+
 }  // namespace
 
 
@@ -114,4 +135,22 @@ void FileDownloaderTest::test_file_downloader() {
     dest_file.open(dest_file_path, "r");
     std::string dest_file_content = dest_file.read();
     CPPUNIT_ASSERT_EQUAL(source_file_content, dest_file_content);
+}
+
+void FileDownloaderTest::test_file_downloader_callback_exception() {
+    std::string user_data = "User data";
+
+    std::string source_file_path = std::string(PROJECT_SOURCE_DIR) + "/test/data/keys/key.pub";
+    std::string source_url = "file://" + source_file_path;
+    auto dest_file_path = temp_dir->get_path() / "file_downloader_cb_exception.pub";
+
+    auto cbs_unique_ptr = std::make_unique<ThrowingDownloadCallbacks>();
+    auto cbs = cbs_unique_ptr.get();
+    base.set_download_callbacks(std::move(cbs_unique_ptr));
+
+    libdnf5::repo::FileDownloader file_downloader(base);
+    file_downloader.add(source_url, dest_file_path, &user_data);
+
+    CPPUNIT_ASSERT_THROW(file_downloader.download(), libdnf5::repo::FileDownloadError);
+    CPPUNIT_ASSERT_EQUAL(1, cbs->end_cnt);
 }
