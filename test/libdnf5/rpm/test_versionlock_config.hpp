@@ -20,6 +20,7 @@ class RpmVersionlockConfigTest : public BaseTestCase {
     CPPUNIT_TEST(test_load_valid_file);
     CPPUNIT_TEST(test_load_malformed_file);
     CPPUNIT_TEST(test_load_unreadable_file);
+    CPPUNIT_TEST(test_save_restrictive_umask);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -30,6 +31,7 @@ public:
     void test_load_valid_file();
     void test_load_malformed_file();
     void test_load_unreadable_file();
+    void test_save_restrictive_umask();
 
 private:
     // Writes `content` to the versionlock configuration file, creating parent

@@ -30,6 +30,7 @@
 #include <algorithm>
 #include <cstring>
 #include <system_error>
+#include <vector>
 
 namespace libdnf5::utils::fs {
 
@@ -87,6 +88,43 @@ void move_recursive(const std::filesystem::path & src, const std::filesystem::pa
     } catch (const std::filesystem::filesystem_error &) {
         std::filesystem::copy(src, dest, std::filesystem::copy_options::recursive);
         std::filesystem::remove_all(src);
+    }
+}
+
+
+void add_read_for_all(const std::filesystem::path & path, std::error_code & ec) {
+    const auto status = stdfs::status(path, ec);
+    if (ec) {
+        return;
+    }
+    auto wanted = stdfs::perms::group_read | stdfs::perms::others_read;
+    if (stdfs::is_directory(status)) {
+        wanted |= stdfs::perms::group_exec | stdfs::perms::others_exec;
+    }
+    // chmod fails for files owned by somebody else (e.g. an unprivileged user saving state), even when it is a no-op.
+    if ((status.permissions() & wanted) != wanted) {
+        stdfs::permissions(path, wanted, stdfs::perm_options::add, ec);
+    }
+}
+
+
+void create_directories_readable(const std::filesystem::path & path, std::error_code & ec) {
+    // create_directories() applies the umask to every directory it creates, so note which ones are missing.
+    std::vector<stdfs::path> missing;
+    for (auto dir = path; !dir.empty() && !stdfs::exists(dir, ec); dir = dir.parent_path()) {
+        missing.push_back(dir);
+    }
+
+    stdfs::create_directories(path, ec);
+    if (ec) {
+        return;
+    }
+
+    for (const auto & dir : missing) {
+        add_read_for_all(dir, ec);
+        if (ec) {
+            return;
+        }
     }
 }
 
