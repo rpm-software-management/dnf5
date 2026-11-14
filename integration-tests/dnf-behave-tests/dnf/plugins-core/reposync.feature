@@ -67,7 +67,28 @@ Examples:
     | value |
     | 0     |
     | -1    |
+
+
+# The step text is a regular expression, so the plus sign is written as [+].
+Scenario: Reposync --latest-limit rejects a leading plus sign
+  Given I use repository "history-recent" as http
+   When I execute dnf with args "reposync --urls --latest-limit=+2"
+   Then the exit code is 2
+    And stdout is empty
+    And stderr contains "Invalid value \"[+]2\" for \"--latest-limit\", a positive integer is required"
+
+
+Scenario Outline: Reposync --latest-limit rejects values that are not a whole number
+  Given I use repository "history-recent" as http
+   When I execute dnf with args "reposync --urls --latest-limit=<value>"
+   Then the exit code is 1
+    And stdout is empty
+    And stderr contains "Invalid number option value \"<value>\""
+
+Examples:
+    | value |
     | 2abc  |
+    | 1.5   |
 
 
 Scenario: Reposync --latest-limit cannot be used together with --newest-only

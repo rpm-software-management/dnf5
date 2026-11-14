@@ -145,16 +145,16 @@ class ConfigMain::Impl {
     OptionStringList group_package_types{GROUP_PACKAGE_TYPES};
     OptionStringAppendSet optional_metadata_types{
         OptionStringAppendSet::ValueType{libdnf5::METADATA_TYPE_COMPS, libdnf5::METADATA_TYPE_UPDATEINFO}};
-    OptionNumber<std::uint32_t> installonly_limit{3, 0, [](const std::string & value) -> std::uint32_t {
-                                                      if (value == "<off>") {
-                                                          return 0;
-                                                      }
-                                                      try {
-                                                          return static_cast<std::uint32_t>(std::stoul(value));
-                                                      } catch (...) {
-                                                          return 0;
-                                                      }
-                                                  }};
+    OptionNumber<std::uint32_t> installonly_limit{
+        3, 0, [](const std::string & value) -> std::uint32_t {
+            if (value == "<off>") {
+                return 0;
+            }
+            // Same parsing as the other options: no trailing characters, no
+            // negative values. An invalid value must not silently turn the limit off.
+            static const OptionNumber<std::uint32_t> parser{0};
+            return parser.from_string(value);
+        }};
 
     OptionStringAppendList tsflags{std::vector<std::string>{}};
     OptionBool assumeyes{false};
