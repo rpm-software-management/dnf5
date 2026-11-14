@@ -2,6 +2,7 @@
 Feature: Upgrade package from noarch to arch
 
 Background: Install package to upgrade
+  Given I set environment variable "DNF5_FORCE_COLUMNS" to "500"
    Given I use repository "upgrade-from-noarch"
     When I execute dnf with args "install it-1.0"
     Then the exit code is 0

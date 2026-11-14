@@ -3,6 +3,9 @@
 Feature: repo-packages remove-or-reinstall
 
 
+Background:
+  Given I set environment variable "DNF5_FORCE_COLUMNS" to "500"
+
 Scenario: remove-or-reinstall all packages from repository
 Given I use repository "dnf-ci-fedora"
 Given I use repository "dnf-ci-fedora-updates"

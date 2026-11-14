@@ -5,6 +5,7 @@ Feature: Test execution of transaction() callback of removed plugin
 
 
 Background: setup plugins and repositories
+  Given I set environment variable "DNF5_FORCE_COLUMNS" to "500"
   Given I use repository "plugins-callbacks"
     And I configure dnf with
         | key          | value                                 |

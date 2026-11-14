@@ -1,6 +1,7 @@
 Feature: Test the offline command
 
 Background:
+  Given I set environment variable "DNF5_FORCE_COLUMNS" to "500"
 Given I use repository "dnf-ci-fedora"
   And I successfully execute dnf with args "install glibc"
   And I set environment variable "DNF_SYSTEM_UPGRADE_NO_REBOOT" to "1"

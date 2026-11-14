@@ -1,6 +1,9 @@
 @dnf5daemon
 Feature: Upgrade packages with the same NEVRA but different build times
 
+Background:
+  Given I set environment variable "DNF5_FORCE_COLUMNS" to "500"
+
 @bz1728252
 Scenario Outline: Upgrade does not reinstall package with the same NEVRA and different build time
    # get build time of package from the repository and build local rpm

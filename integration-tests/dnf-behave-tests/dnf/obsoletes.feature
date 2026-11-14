@@ -6,6 +6,7 @@ Feature: Obsoleted packages
 # PackageA-Provider which provides PackageA in versin 4.0
 
 Background: Use dnf-ci-obsoletes repository
+  Given I set environment variable "DNF5_FORCE_COLUMNS" to "500"
   Given I use repository "dnf-ci-obsoletes"
 
 

@@ -2,6 +2,7 @@ Feature: Installing and removing multilib packages
 
 
 Background: Use "install-remove-multilib" repo
+  Given I set environment variable "DNF5_FORCE_COLUMNS" to "500"
   Given I use repository "install-remove-multilib"
 
 

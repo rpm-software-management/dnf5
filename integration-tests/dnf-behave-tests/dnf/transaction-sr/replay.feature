@@ -1,6 +1,7 @@
 Feature: Transaction replay tests
 
 Background:
+  Given I set environment variable "DNF5_FORCE_COLUMNS" to "500"
 Given I set working directory to "{context.dnf.tempdir}"
 Given I use repository "transaction-sr"
   And I successfully execute dnf with args "install top-a-1.0"

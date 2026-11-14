@@ -5,6 +5,9 @@ Feature: Advisory aplicability on a modular system
 
 # Missing module install command
 # https://github.com/rpm-software-management/dnf5/issues/146
+Background:
+  Given I set environment variable "DNF5_FORCE_COLUMNS" to "500"
+
 @xfail
 @bz1622614
 Scenario: List available updates for installed streams (updates available)

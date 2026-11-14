@@ -1,6 +1,9 @@
 Feature: Upgrade using security advisories
 
 
+Background:
+  Given I set environment variable "DNF5_FORCE_COLUMNS" to "500"
+
 @bz1770125
 @bz1794644
 Scenario: Upgrade packages with security issues
