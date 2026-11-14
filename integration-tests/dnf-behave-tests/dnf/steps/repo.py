@@ -461,6 +461,7 @@ def step_sign_metadata_with_key(context, repo, key_path):
     # sign repomd.xml
     gpg_cmd = [
         "gpg",
+        "--yes",
         "--homedir",
         temp_gpg_home,
         "--detach-sign",
