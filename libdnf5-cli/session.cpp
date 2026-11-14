@@ -22,6 +22,8 @@
 #include <libdnf5/utils/bgettext/bgettext-mark-domain.h>
 
 #include <chrono>
+#include <ctime>
+#include <iomanip>
 #include <limits>
 #include <sstream>
 #include <utility>
@@ -249,23 +251,31 @@ DateOption::DateOption(
     arg->set_description(desc);
     arg->set_arg_value_help(help);
     arg->set_has_value(true);
-    conf = dynamic_cast<libdnf5::OptionNumber<std::int64_t> *>(
-        parser.add_init_value(std::unique_ptr<libdnf5::OptionNumber<std::int64_t>>(
+    conf = dynamic_cast<libdnf5::OptionNumber<std::int64_t> *>(parser.add_init_value(
+        std::unique_ptr<libdnf5::OptionNumber<std::int64_t>>(
             new libdnf5::OptionNumber<int64_t>(0, [](const std::string & value) {
+                // Parse the date in the local timezone, honoring the TZ
+                // environment variable, to match the timestamps printed by
+                // other commands
+                // (https://github.com/rpm-software-management/dnf5/issues/2200).
+                std::tm tm_value{};
                 std::istringstream ss(value);
-                std::chrono::sys_seconds tp;
-                ss >> std::chrono::parse("%F", tp);
+                ss >> std::get_time(&tm_value, "%Y-%m-%d");
                 if (ss.fail()) {
                     throw libdnf5::cli::ArgumentParserError(
                         M_("Invalid date passed: \"{}\". Dates in \"YYYY-MM-DD\" format are expected"), value);
                 }
+                tm_value.tm_hour = 0;
+                tm_value.tm_min = 0;
+                tm_value.tm_sec = 0;
+                tm_value.tm_isdst = -1;
                 // This option should have used time_t because it is used
                 // elsewhere, e.g. in PackageQuery::filter_recent().
                 // Therefore reject out-of-range values right now instead of
                 // dealing with the overflows throughout the code.
-                auto numeric_value = tp.time_since_epoch().count();
-                if (std::cmp_less(numeric_value, std::numeric_limits<time_t>::lowest()) ||
-                    std::cmp_greater(numeric_value, std::numeric_limits<time_t>::max())) {
+                auto numeric_value = static_cast<int64_t>(std::mktime(&tm_value));
+                if (std::cmp_less(numeric_value, static_cast<int64_t>(std::numeric_limits<time_t>::lowest())) ||
+                    std::cmp_greater(numeric_value, static_cast<int64_t>(std::numeric_limits<time_t>::max()))) {
                     throw libdnf5::cli::ArgumentParserError(
                         M_("\"{}\" date cannot be represented by time_t type on this platform"), value);
                 }
@@ -296,8 +306,9 @@ AppendStringListOption::AppendStringListOption(
     const bool icase,
     const std::string & delimiters) {
     auto & parser = command.get_session().get_argument_parser();
-    conf = dynamic_cast<libdnf5::OptionStringList *>(parser.add_init_value(std::make_unique<libdnf5::OptionStringList>(
-        std::vector<std::string>(), allowed_values_regex, icase, delimiters)));
+    conf = dynamic_cast<libdnf5::OptionStringList *>(parser.add_init_value(
+        std::make_unique<libdnf5::OptionStringList>(
+            std::vector<std::string>(), allowed_values_regex, icase, delimiters)));
     arg = parser.add_new_named_arg(long_name);
 
     if (!long_name.empty()) {
