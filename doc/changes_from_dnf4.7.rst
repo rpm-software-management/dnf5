@@ -223,6 +223,7 @@ Changes to individual commands
 ``download``
   * Option ``--source`` was renamed to ``--srpm``.
   * Dropped ``--downloaddir`` argument, only ``--destdir`` is supported now.
+  * New option ``--together`` to resolve all specified packages together when used with ``--resolve``.
 
 ``group``
   * New option ``--contains-pkgs`` to filter only groups containing specific packages.
