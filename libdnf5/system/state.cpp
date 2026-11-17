@@ -31,6 +31,7 @@
 
 #include <fcntl.h>
 #include <libdnf5/comps/group/package.hpp>
+#include <rpm/rpmcrypto.h>
 #include <rpm/rpmdb.h>
 #include <rpm/rpmtag.h>
 #include <rpm/rpmts.h>
