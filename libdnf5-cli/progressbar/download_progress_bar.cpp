@@ -22,6 +22,8 @@
 
 #include "libdnf5-cli/tty.hpp"
 
+#include <unistd.h>
+
 #include <algorithm>
 
 
@@ -103,7 +105,8 @@ void DownloadProgressBar::set_number_widget_visible(bool value) noexcept {
 void DownloadProgressBar::to_stream(std::ostream & stream) {
     update();
 
-    if (!is_finished() && !tty::is_interactive()) {
+    // The progress bars are printed to the standard error output
+    if (!is_finished() && !tty::is_interactive(STDERR_FILENO)) {
         // don't spam non-interactive terminal with progressbar's progress
         // only print the final form
         return;
@@ -142,7 +145,7 @@ void DownloadProgressBar::to_stream(std::ostream & stream) {
         }
     }
 
-    std::size_t terminal_width = static_cast<std::size_t>(tty::get_width());
+    std::size_t terminal_width = static_cast<std::size_t>(tty::get_width(STDERR_FILENO));
     std::size_t bar_width = get_bar_width(widgets);
 
     // if bar is finished or doesn't fit terminal width, hide the progress widget

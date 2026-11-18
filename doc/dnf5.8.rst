@@ -499,13 +499,16 @@ Environment
     Override a terminal width used for rendering progress bars and other
     tabular data.  The value should be a positive integer.  If it is unset or
     invalid, the width will be detected from a terminal device connected to
-    the standard output.  If the detection fails, 80 columns will be assumed.
+    the standard output (the standard error output for progress bars).  If the
+    detection fails, 80 columns will be assumed.
 
 ``DNF5_FORCE_INTERACTIVE``
     Override interactivity of the connected standard input/output. Set to `0` to pretend
     that the input/output is not connected to an interactive terminal and DNF5
     should not ask any questions. Set to `1` to force DNF5 to ask questions
-    even if the terminal is non-interactive. See
+    even if the terminal is non-interactive. It also overrides the detection
+    of whether progress bars, which are printed to the standard error output,
+    are drawn interactively. See
     :ref:`--assumeno<assumeno_option_ref-label>` and
     :ref:`--assumeyes<assumeyes_option_ref-label>` options.
 
