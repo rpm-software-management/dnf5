@@ -356,6 +356,7 @@ It supports RPM packages%{?with_modulemd:, modulemd modules,} and comps groups &
 %{_mandir}/man8/dnf5-history.8.*
 %{_mandir}/man8/dnf5-info.8.*
 %{_mandir}/man8/dnf5-install.8.*
+%{_mandir}/man8/dnf5-installonly-lock.8.*
 %{_mandir}/man8/dnf5-leaves.8.*
 %{_mandir}/man8/dnf5-list.8.*
 %{_mandir}/man8/dnf5-makecache.8.*
@@ -414,6 +415,7 @@ It supports RPM packages%{?with_modulemd:, modulemd modules,} and comps groups &
 %{_mandir}/man8/dnf-history.8.*
 %{_mandir}/man8/dnf-info.8.*
 %{_mandir}/man8/dnf-install.8.*
+%{_mandir}/man8/dnf-installonly-lock.8.*
 %{_mandir}/man8/dnf-leaves.8.*
 %{_mandir}/man8/dnf-list.8.*
 %{_mandir}/man8/dnf-makecache.8.*

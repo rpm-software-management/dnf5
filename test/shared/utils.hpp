@@ -237,11 +237,12 @@ struct assertion_traits<libdnf5::system::PackageState> {
 template <>
 struct assertion_traits<libdnf5::system::NevraState> {
     inline static bool equal(const libdnf5::system::NevraState & left, const libdnf5::system::NevraState & right) {
-        return left.from_repo == right.from_repo;
+        return left.from_repo == right.from_repo && left.installonly_locked == right.installonly_locked;
     }
 
     inline static std::string toString(const libdnf5::system::NevraState & nevra_state) {
-        return fmt::format("NevraState: from_repo: {}", nevra_state.from_repo);
+        return fmt::format(
+            "NevraState: from_repo: {}, installonly_locked: {}", nevra_state.from_repo, nevra_state.installonly_locked);
     }
 };
 

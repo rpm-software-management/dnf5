@@ -82,6 +82,9 @@ struct from<libdnf5::system::NevraState> {
         if (v.contains("from_repo")) {
             nevra_state.from_repo = toml::find<std::string>(v, "from_repo");
         }
+        if (v.contains("installonly_locked")) {
+            nevra_state.installonly_locked = toml::find<bool>(v, "installonly_locked");
+        }
 
         return nevra_state;
     }
@@ -94,11 +97,17 @@ struct into<libdnf5::system::NevraState> {
     static toml::value into_toml(const libdnf5::system::NevraState & nevra_state) {
         toml::value res;
         res["from_repo"] = nevra_state.from_repo;
+        if (nevra_state.installonly_locked) {
+            res["installonly_locked"] = true;
+        }
 #else
     template <typename TC>
     static toml::basic_value<TC> into_toml(const libdnf5::system::NevraState & nevra_state) {
         toml::basic_value<TC> res;
         res["from_repo"] = nevra_state.from_repo;
+        if (nevra_state.installonly_locked) {
+            res["installonly_locked"] = true;
+        }
         res.as_table_fmt().fmt = toml::table_format::oneline;
 #endif  // #ifdef TOML11_COMPAT
 
@@ -425,6 +434,21 @@ std::string State::get_package_from_repo(const std::string & nevra) {
 
 void State::set_package_from_repo(const std::string & nevra, const std::string & from_repo) {
     nevra_states[nevra].from_repo = from_repo;
+}
+
+
+bool State::get_package_installonly_locked(const std::string & nevra) {
+    auto it = nevra_states.find(nevra);
+    if (it == nevra_states.end()) {
+        return false;
+    }
+
+    return it->second.installonly_locked;
+}
+
+
+void State::set_package_installonly_locked(const std::string & nevra, bool locked) {
+    nevra_states[nevra].installonly_locked = locked;
 }
 
 

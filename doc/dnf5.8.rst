@@ -90,6 +90,9 @@ For more details see the separate man page for the specific command, f.e. ``man 
 :ref:`install <install_command_ref-label>`
     | Install packages.
 
+:ref:`installonly-lock <installonly_lock_command_ref-label>`
+    | Lock installonly packages against automatic removal by installonly_limit.
+
 :ref:`leaves <leaves_command_ref-label>`
     | List groups of leaf packages.
 
@@ -546,6 +549,7 @@ Commands:
     | :ref:`History command <history_command_ref-label>`
     | :ref:`Info command <info_command_ref-label>`
     | :ref:`Install command <install_command_ref-label>`
+    | :ref:`Installonly Lock command <installonly_lock_command_ref-label>`
     | :ref:`Leaves command <leaves_command_ref-label>`
     | :ref:`List command <list_command_ref-label>`
     | :ref:`Makecache command <makecache_command_ref-label>`

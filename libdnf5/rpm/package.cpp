@@ -488,6 +488,24 @@ std::string Package::get_from_repo_id() const {
 }
 
 
+bool Package::is_installonly_locked() const {
+    if (!is_installed()) {
+        return false;
+    }
+
+    return p_impl->base->p_impl->get_system_state().get_package_installonly_locked(get_nevra());
+}
+
+
+void Package::set_installonly_locked(bool locked) {
+    libdnf_user_assert(is_installed(), "Cannot set installonly lock on a package that is not installed");
+
+    auto & system_state = p_impl->base->p_impl->get_system_state();
+    system_state.set_package_installonly_locked(get_nevra(), locked);
+    system_state.save();
+}
+
+
 libdnf5::transaction::TransactionItemReason Package::get_reason() const {
     // TODO(lukash) this query is a temporary solution.
     // The logic should be moved to the system::State, where a cache of

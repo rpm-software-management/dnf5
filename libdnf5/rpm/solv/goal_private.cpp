@@ -19,6 +19,7 @@
 
 #include "goal_private.hpp"
 
+#include "base/base_impl.hpp"
 #include "solv/pool.hpp"
 
 #include "libdnf5/common/exception.hpp"
@@ -347,21 +348,31 @@ bool GoalPrivate::limit_installonly_packages(libdnf5::solv::IdQueue & job, Id ru
 
         reresolve = true;
 
-        int excluded_installed_count = 0;
+        auto & system_state = libdnf5::InternalBaseUser::get_system_state(base);
+        auto keep_installed = [&spool, &system_state](Id id) {
+            if (!spool.is_installed(id)) {
+                return false;
+            }
+            if (spool.is_solvable_excluded(id)) {
+                return true;
+            }
+            return system_state.get_package_installonly_locked(spool.get_nevra(id));
+        };
+
+        int kept_installed_count = 0;
         for (int j = 0; j < same_names.size(); ++j) {
-            Id id = same_names[j];
-            if (spool.is_installed(id) && spool.is_solvable_excluded(id)) {
-                excluded_installed_count++;
+            if (keep_installed(same_names[j])) {
+                kept_installed_count++;
             }
         }
 
-        // We have to keep excluded installed packages
-        int slots = static_cast<int>(installonly_limit) - excluded_installed_count;
+        // We have to keep excluded and installonly-locked installed packages
+        int slots = static_cast<int>(installonly_limit) - kept_installed_count;
         for (int j = 0; j < same_names.size(); ++j) {
             Id id = same_names[j];
 
             Id action = SOLVER_ERASE;
-            if (spool.is_installed(id) && spool.is_solvable_excluded(id)) {
+            if (keep_installed(id)) {
                 action = SOLVER_INSTALL;
             } else if (slots > 0) {
                 action = SOLVER_INSTALL;

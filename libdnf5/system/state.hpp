@@ -45,6 +45,9 @@ public:
 class NevraState {
 public:
     std::string from_repo;
+    /// When true, this installonly package version is not automatically removed by
+    /// installonly_limit / limit_installonly_packages.
+    bool installonly_locked{false};
 };
 
 class GroupState {
@@ -167,6 +170,17 @@ public:
     /// @param from_repo The repository to set.
     /// @since 5.0
     void set_package_from_repo(const std::string & nevra, const std::string & from_repo);
+
+    /// @return Whether the package NEVRA is locked against automatic installonly removal.
+    /// @param nevra The NEVRA to check.
+    /// @since 5.4.9.0
+    bool get_package_installonly_locked(const std::string & nevra);
+
+    /// Sets whether the package NEVRA is locked against automatic installonly removal.
+    /// @param nevra The NEVRA to set the lock for.
+    /// @param locked True to prevent automatic removal by installonly_limit.
+    /// @since 5.4.9.0
+    void set_package_installonly_locked(const std::string & nevra, bool locked);
 
     /// Removes the state for a package NEVRA.
     /// @param na The NEVRA to remove the state for.
