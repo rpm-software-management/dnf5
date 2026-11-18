@@ -86,7 +86,7 @@ Scenario: Cached packages cleanup (dnf clean packages)
    Then the exit code is 0
     And stdout matches line by line
         """
-        (Removed 1 files, 1 directories \(total of [0-9]* KiB\). 0 errors occurred.|Cache successfully cleaned.)
+        (Removed 1 file, 1 directory \(total of [0-9]* KiB\). 0 errors occurred.|Cache successfully cleaned.)
         """
    When I execute "find | sort" in "{context.dnf.installroot}/var/cache/dnf"
    Then stdout matches line by line
@@ -106,7 +106,7 @@ Scenario: Database cached cleanup (dnf clean dbcache)
    Then the exit code is 0
     And stdout matches line by line
         """
-        (Removed 1 files, 1 directories \(total of [0-9]* KiB\). 0 errors occurred.|Cache successfully cleaned.)
+        (Removed 1 file, 1 directory \(total of [0-9]* KiB\). 0 errors occurred.|Cache successfully cleaned.)
         """
    When I execute "find | sort" in "{context.dnf.installroot}/var/cache/dnf"
    Then stdout matches line by line
