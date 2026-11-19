@@ -21,6 +21,7 @@
 #include "test_transaction.hpp"
 
 #include "../shared/utils.hpp"
+#include "conf/config.h"
 #include "utils/string.hpp"
 
 #include <libdnf5/base/base.hpp>
@@ -29,7 +30,9 @@
 #include <libdnf5/repo/package_downloader.hpp>
 #include <libdnf5/rpm/transaction_callbacks.hpp>
 #include <libdnf5/transaction/transaction_history.hpp>
+#include <rpm/rpmmacro.h>
 
+#include <cstdlib>
 #include <filesystem>
 
 
@@ -94,6 +97,26 @@ public:
     std::vector<std::string> expected_order;
     size_t current_index = 0;
     bool order_correct = true;
+};
+
+class ScopedPkgverifyLevel {
+public:
+    explicit ScopedPkgverifyLevel(const std::string & level) {
+        char * expanded = rpmExpand("%{?_pkgverify_level}", nullptr);
+        previous_level = expanded ? expanded : "";
+        free(expanded);
+        set(level);
+    }
+
+    ~ScopedPkgverifyLevel() { set(previous_level); }
+
+    ScopedPkgverifyLevel(const ScopedPkgverifyLevel &) = delete;
+    ScopedPkgverifyLevel & operator=(const ScopedPkgverifyLevel &) = delete;
+
+private:
+    static void set(const std::string & level) { rpmDefineMacro(nullptr, ("_pkgverify_level " + level).c_str(), 0); }
+
+    std::string previous_level;
 };
 
 }  // namespace
@@ -276,3 +299,85 @@ void RpmTransactionTest::test_source_date_epoch_history_timestamps() {
 
     unsetenv("SOURCE_DATE_EPOCH");
 }
+
+void RpmTransactionTest::test_pkgverify_level_enforced_when_gpgcheck_not_configured() {
+    add_repo_rpm("rpm-repo1");
+
+    libdnf5::Goal goal(base);
+    goal.add_rpm_install("one");
+    auto transaction = goal.resolve();
+    transaction.download();
+
+    ScopedPkgverifyLevel pkgverify_level("signature");
+    auto res = transaction.run();
+
+    CPPUNIT_ASSERT_EQUAL(libdnf5::base::Transaction::TransactionRunResult::ERROR_RPM_RUN, res);
+    auto problems = libdnf5::utils::string::join(transaction.get_transaction_problems(), "\n");
+    CPPUNIT_ASSERT(problems.find("does not verify") != std::string::npos);
+}
+
+void RpmTransactionTest::test_pkgverify_level_enforced_for_cmdline_pkg_when_localpkg_gpgcheck_not_configured() {
+    add_cmdline_pkg("repos-rpm/rpm-repo1/one-1-1.noarch.rpm");
+
+    libdnf5::Goal goal(base);
+    goal.add_rpm_install("one");
+    auto transaction = goal.resolve();
+
+    ScopedPkgverifyLevel pkgverify_level("signature");
+    auto res = transaction.run();
+
+    CPPUNIT_ASSERT_EQUAL(libdnf5::base::Transaction::TransactionRunResult::ERROR_RPM_RUN, res);
+    auto problems = libdnf5::utils::string::join(transaction.get_transaction_problems(), "\n");
+    CPPUNIT_ASSERT(problems.find("does not verify") != std::string::npos);
+}
+
+#if defined(HAVE_RPMTE_SETVFYLEVEL)
+void RpmTransactionTest::test_pkgverify_level_not_enforced_when_repo_gpgcheck_explicitly_set_false() {
+    auto repo = add_repo_rpm("rpm-repo1");
+    repo->get_config().get_pkg_gpgcheck_option().set(false);
+
+    libdnf5::Goal goal(base);
+    goal.add_rpm_install("one");
+    auto transaction = goal.resolve();
+    transaction.download();
+
+    ScopedPkgverifyLevel pkgverify_level("signature");
+    transaction.run();
+
+    auto problems = libdnf5::utils::string::join(transaction.get_transaction_problems(), "\n");
+    CPPUNIT_ASSERT(problems.find("does not verify") == std::string::npos);
+}
+
+void RpmTransactionTest::test_pkgverify_level_not_enforced_when_main_pkg_gpgcheck_explicitly_set_false() {
+    add_repo_rpm("rpm-repo1");
+
+    base.get_config().get_pkg_gpgcheck_option().set(false);
+
+    libdnf5::Goal goal(base);
+    goal.add_rpm_install("one");
+    auto transaction = goal.resolve();
+    transaction.download();
+
+    ScopedPkgverifyLevel pkgverify_level("signature");
+    transaction.run();
+
+    auto problems = libdnf5::utils::string::join(transaction.get_transaction_problems(), "\n");
+    CPPUNIT_ASSERT(problems.find("does not verify") == std::string::npos);
+}
+
+void RpmTransactionTest::test_pkgverify_level_not_enforced_when_localpkg_gpgcheck_explicitly_set_false() {
+    add_cmdline_pkg("repos-rpm/rpm-repo1/one-1-1.noarch.rpm");
+
+    base.get_config().get_localpkg_gpgcheck_option().set(false);
+
+    libdnf5::Goal goal(base);
+    goal.add_rpm_install("one");
+    auto transaction = goal.resolve();
+
+    ScopedPkgverifyLevel pkgverify_level("signature");
+    transaction.run();
+
+    auto problems = libdnf5::utils::string::join(transaction.get_transaction_problems(), "\n");
+    CPPUNIT_ASSERT(problems.find("does not verify") == std::string::npos);
+}
+#endif

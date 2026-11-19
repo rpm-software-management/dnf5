@@ -22,6 +22,7 @@
 #define LIBDNF5_TEST_RPM_TRANSACTION_HPP
 
 #include "../shared/base_test_case.hpp"
+#include "conf/config.h"
 
 #include <cppunit/TestCase.h>
 #include <cppunit/extensions/HelperMacros.h>
@@ -33,6 +34,13 @@ class RpmTransactionTest : public BaseTestCase {
     CPPUNIT_TEST(test_transaction_temp_files_cleanup);
     CPPUNIT_TEST(test_source_date_epoch_sorting);
     CPPUNIT_TEST(test_source_date_epoch_history_timestamps);
+    CPPUNIT_TEST(test_pkgverify_level_enforced_when_gpgcheck_not_configured);
+    CPPUNIT_TEST(test_pkgverify_level_enforced_for_cmdline_pkg_when_localpkg_gpgcheck_not_configured);
+#if defined(HAVE_RPMTE_SETVFYLEVEL)
+    CPPUNIT_TEST(test_pkgverify_level_not_enforced_when_repo_gpgcheck_explicitly_set_false);
+    CPPUNIT_TEST(test_pkgverify_level_not_enforced_when_main_pkg_gpgcheck_explicitly_set_false);
+    CPPUNIT_TEST(test_pkgverify_level_not_enforced_when_localpkg_gpgcheck_explicitly_set_false);
+#endif
     CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -40,6 +48,13 @@ public:
     void test_transaction_temp_files_cleanup();
     void test_source_date_epoch_sorting();
     void test_source_date_epoch_history_timestamps();
+    void test_pkgverify_level_enforced_when_gpgcheck_not_configured();
+    void test_pkgverify_level_enforced_for_cmdline_pkg_when_localpkg_gpgcheck_not_configured();
+#if defined(HAVE_RPMTE_SETVFYLEVEL)
+    void test_pkgverify_level_not_enforced_when_repo_gpgcheck_explicitly_set_false();
+    void test_pkgverify_level_not_enforced_when_main_pkg_gpgcheck_explicitly_set_false();
+    void test_pkgverify_level_not_enforced_when_localpkg_gpgcheck_explicitly_set_false();
+#endif
 };
 
 #endif

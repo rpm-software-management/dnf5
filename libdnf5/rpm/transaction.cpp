@@ -23,8 +23,11 @@
 #include "conf/config.h"
 #include "utils/string.hpp"
 
+#include "libdnf5/base/base_weak.hpp"
 #include "libdnf5/base/transaction.hpp"
 #include "libdnf5/common/exception.hpp"
+#include "libdnf5/conf/option.hpp"
+#include "libdnf5/repo/repo.hpp"
 #include "libdnf5/rpm/package_query.hpp"
 #include "libdnf5/transaction/transaction_item_action.hpp"
 #include "libdnf5/utils/bgettext/bgettext-mark-domain.h"
@@ -45,6 +48,20 @@
 
 
 namespace libdnf5::rpm {
+
+namespace {
+
+bool pkg_gpgcheck_explicitly_disabled(const BaseWeakPtr & base, const base::TransactionPackage & transaction_package) {
+    const auto & pkg = transaction_package.get_package();
+    if (pkg.get_repo()->get_type() == libdnf5::repo::Repo::Type::COMMANDLINE) {
+        const auto & option = base->get_config().get_localpkg_gpgcheck_option();
+        return !option.get_value() && option.get_priority() > libdnf5::Option::Priority::DEFAULT;
+    }
+    const auto & option = pkg.get_repo()->get_config().get_pkg_gpgcheck_option();
+    return !option.get_value() && option.get_priority() > libdnf5::Option::Priority::DEFAULT;
+}
+
+}  // namespace
 
 RpmHeader & RpmHeader::operator=(const RpmHeader & src) {
     if (&src != this) {
@@ -453,7 +470,9 @@ int Transaction::ts_change_callback(int event, rpmte te, rpmte other, void * dat
             // When nocrypto tsflag is set, skip digest verification as well
             auto & tsflags = transaction->base->get_config().get_tsflags_option().get_value();
             bool nocrypto = std::find(tsflags.begin(), tsflags.end(), "nocrypto") != tsflags.end();
-            rpmteSetVfyLevel(te, nocrypto ? RPMSIG_NONE_TYPE : RPMSIG_DIGEST_TYPE);
+            if (nocrypto || pkg_gpgcheck_explicitly_disabled(transaction->base, *transaction->last_added_item)) {
+                rpmteSetVfyLevel(te, nocrypto ? RPMSIG_NONE_TYPE : RPMSIG_DIGEST_TYPE);
+            }
         }
 #endif
     } else {
