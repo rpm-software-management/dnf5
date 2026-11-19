@@ -21,6 +21,7 @@
 
 #include "config.h"
 #include "config_utils.hpp"
+#include "utils/convert.hpp"
 #include "utils/deprecate.hpp"
 #include "utils/system.hpp"
 
@@ -37,6 +38,8 @@
 #include <algorithm>
 #include <array>
 #include <cctype>
+#include <cmath>
+#include <limits>
 #include <sstream>
 #include <utility>
 
@@ -51,14 +54,17 @@ namespace libdnf5 {
 /// 1k = 1024 bytes is used.
 ///
 /// @param str Bandwidth as user friendly string
-/// @return int Number of bytes
-static int str_to_bytes(const std::string & str) {
+/// @return std::uint32_t Number of bytes
+static std::uint32_t str_to_bytes(const std::string & str) {
     if (str.empty()) {
         throw OptionInvalidValueError(M_("Input is empty. Must contain a value."));
     }
 
     std::size_t idx;
-    auto res = std::stod(str, &idx);
+    double res;
+    if (!utils::parse_double(str, res, &idx) || std::isnan(res)) {
+        throw OptionInvalidValueError(M_("Could not convert '{}' to bytes"), str);
+    }
     if (res < 0) {
         throw OptionInvalidValueError(M_("Input value '{}' must not be negative"), str);
     }
@@ -85,7 +91,11 @@ static int str_to_bytes(const std::string & str) {
         }
     }
 
-    return static_cast<int>(res);
+    // Also catches infinity. The conversion of an out of range double is undefined.
+    if (res > std::numeric_limits<std::uint32_t>::max()) {
+        throw OptionInvalidValueError(M_("Input value '{}' is too large"), str);
+    }
+    return static_cast<std::uint32_t>(res);
 }
 
 static std::string get_user_agent() {
@@ -135,7 +145,14 @@ class ConfigMain::Impl {
     OptionEnum cacheonly{"none", {"all", "metadata", "none"}};
     OptionBool keepcache{false};
     OptionPath logdir{geteuid() == 0 ? "/var/log" : libdnf5::xdg::get_user_state_dir()};
-    OptionNumber<std::int32_t> log_size{1024 * 1024, str_to_bytes};
+    OptionNumber<std::int32_t> log_size{
+        1024 * 1024, [](const std::string & value) -> std::int32_t {
+            const auto bytes = str_to_bytes(value);
+            if (bytes > static_cast<std::uint32_t>(std::numeric_limits<std::int32_t>::max())) {
+                throw OptionInvalidValueError(M_("Input value '{}' is too large"), value);
+            }
+            return static_cast<std::int32_t>(bytes);
+        }};
     OptionNumber<std::int32_t> log_rotate{4, 0};
     OptionPath debugdir{"./debugdata"};
     OptionStringList varsdir{VARS_DIRS};
@@ -283,15 +300,18 @@ class ConfigMain::Impl {
     OptionNumber<float> throttle{
         0, 0, [](const std::string & value) {
             if (!value.empty() && value.back() == '%') {
-                std::size_t idx;
-                auto res = std::stof(value, &idx);
-                if (res < 0 || res > 100) {
+                double res;
+                if (!utils::parse_double(value, res)) {
+                    throw OptionInvalidValueError(M_("Invalid throttle value \"{}\""), value);
+                }
+                // NaN fails both comparisons below, so test for it explicitly
+                if (std::isnan(res) || res < 0 || res > 100) {
                     // TODO(jrohel): Better exception info?
                     // throw Option::InvalidValue(tfm::format(_("percentage '%s' is out of range"), value));
                     throw OptionInvalidValueError(
                         M_("The throttle value {} is outside the allowed range {} ... {}"), value, 0, 100);
                 }
-                return res / 100;
+                return static_cast<float>(res / 100);
             }
             return static_cast<float>(str_to_bytes(value));
         }};
