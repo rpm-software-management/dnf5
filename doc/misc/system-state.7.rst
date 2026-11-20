@@ -35,6 +35,8 @@ The DNF5 system state consists of several TOML files with their location determi
 
     3. Track installed environmental groups.
 
+    4. Track installonly packages locked against automatic removal by ``installonly_limit`` (see :manpage:`dnf5-installonly-lock(8)`).
+
 
 The way of storing the DNF5 system state is an internal implementation detail and may change at any time. To modify the state, always use the DNF5 command-line interface or DNF5 API.
 

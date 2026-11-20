@@ -40,6 +40,7 @@
 #ifdef WITH_MODULEMD
 #include "commands/module/module.hpp"
 #endif
+#include "commands/installonly-lock/installonly_lock.hpp"
 #include "commands/no_matches.hpp"
 #include "commands/offline/offline.hpp"
 #include "commands/provides/provides.hpp"
@@ -930,6 +931,7 @@ static void add_commands(Context & context) {
     context.add_and_initialize_command(std::make_unique<DownloadCommand>(context));
     context.add_and_initialize_command(std::make_unique<MakeCacheCommand>(context));
     context.add_and_initialize_command(std::make_unique<VersionlockCommand>(context));
+    context.add_and_initialize_command(std::make_unique<InstallonlyLockCommand>(context));
     context.add_and_initialize_command(std::make_unique<SystemUpgradeCommand>(context));
     context.add_and_initialize_command(std::make_unique<OfflineDistroSyncCommand>(context));
     context.add_and_initialize_command(std::make_unique<OfflineUpgradeCommand>(context));

@@ -125,6 +125,7 @@ man_pages = [
     ('commands/history.8', 'dnf5-history', 'History Command', AUTHORS, 8),
     ('commands/info.8', 'dnf5-info', 'Info Command', AUTHORS, 8),
     ('commands/install.8', 'dnf5-install', 'Install Command', AUTHORS, 8),
+    ('commands/installonly-lock.8', 'dnf5-installonly-lock', 'Installonly Lock Command', AUTHORS, 8),
     ('commands/leaves.8', 'dnf5-leaves', 'Leaves Command', AUTHORS, 8),
     ('commands/list.8', 'dnf5-list', 'List Command', AUTHORS, 8),
     ('commands/makecache.8', 'dnf5-makecache', 'Makecache Command', AUTHORS, 8),

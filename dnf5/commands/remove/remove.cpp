@@ -186,6 +186,9 @@ void RemoveCommand::run() {
                         running_kernel_skipped = true;
                         continue;
                     }
+                    if (packages[i].is_installonly_locked()) {
+                        continue;
+                    }
                     goal->add_rpm_remove(packages[i]);
                 }
             }

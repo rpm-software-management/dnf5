@@ -481,6 +481,17 @@ public:
     // @replaces libdnf:libdnf/dnf-package.h:function:dnf_package_get_origin(DnfPackage * pkg)
     std::string get_from_repo_id() const;
 
+    /// @return Whether this installed package is locked against automatic installonly removal.
+    ///         Always false for packages that are not installed.
+    /// @since 5.4.9.0
+    bool is_installonly_locked() const;
+
+    /// Mark or unmark this installed package as locked against automatic installonly removal.
+    /// The change is persisted to the system state.
+    /// @param locked True to prevent automatic removal by installonly_limit.
+    /// @since 5.4.9.0
+    void set_installonly_locked(bool locked);
+
     /// @return The unix timestamp (seconds since epoch) of when the package was installed.
     ///         Return 0 if the package is not installed.
     //
