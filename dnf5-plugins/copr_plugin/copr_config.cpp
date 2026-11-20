@@ -48,14 +48,31 @@ void CoprConfig::load_all_configuration() {
 
     libdnf5::utils::OSRelease os_release(etc_dir / "os-release");
 
+    // The "dnf5-plugins" paths are the new dnf5-specific configuration locations. The old
+    // "plugins" (dnf4) paths are kept and loaded as well for backward compatibility, so
+    // configuration placed there by dnf4/distributions keeps working.
+    // Config files are read in the order below, and for options set in more than one file,
+    // the value from the file read last wins (ConfigParser's normal cascading behavior).
+    // This means the new dnf5 location takes precedence over the old dnf4 one, and, as
+    // before, system configuration takes precedence over the distribution-provided one.
+    //
+    // TODO: Should a system configuration file actually replace (mask) a distribution file
+    // of the same name, instead of both being read and merged option-by-option as they are
+    // now? This is how other dnf5 configuration areas (e.g. repo overrides, vendor change
+    // policies) already handle a system/distribution file name collision.
     load_copr_config_file("/usr/share/dnf/plugins/copr.vendor.conf");
+    load_copr_config_file("/usr/share/dnf5/dnf5-plugins/copr.vendor.conf");
     load_copr_config_file(etc_dir / "dnf/plugins/copr.vendor.conf");
     load_copr_config_file(etc_dir / "dnf/plugins/copr.conf");
+    load_copr_config_file(etc_dir / "dnf/dnf5-plugins/copr.vendor.conf");
+    load_copr_config_file(etc_dir / "dnf/dnf5-plugins/copr.conf");
 
-    // Load configuration files from drop-in directory
-    {
+    // Load configuration files from the drop-in directories: the old dnf4 location and the
+    // new dnf5-specific one, kept side by side for the same backward-compatibility reason
+    // as above. Files from both directories are loaded; a file in the new directory does
+    // not mask a same-named file in the old one (see the TODO above).
+    for (const auto & drop_in_dir : {etc_dir / "dnf/plugins/copr.d/", etc_dir / "dnf/dnf5-plugins/copr.d/"}) {
         // Create a set of configuration files sorted by name from the drop-in directory
-        const auto drop_in_dir = etc_dir / "dnf/plugins/copr.d/";
         std::set<std::filesystem::path> drop_in_files;
         std::error_code ec;
         for (const auto & dentry : std::filesystem::directory_iterator(drop_in_dir, ec)) {
