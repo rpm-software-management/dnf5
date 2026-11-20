@@ -44,18 +44,18 @@ namespace {
 
 struct CacheType {
     std::string name;
-    std::string description;
+    BgettextMessage description;
     CleanCommand::Actions action;
 };
 
 const CacheType CACHE_TYPES[]{
-    {"all", "Delete all cached data from the repositories cache", CleanCommand::CLEAN_ALL},
-    {"packages", "Delete packages from the repositories cache", CleanCommand::CLEAN_PACKAGES},
+    {"all", M_("Delete all cached data from the repositories cache"), CleanCommand::CLEAN_ALL},
+    {"packages", M_("Delete packages from the repositories cache"), CleanCommand::CLEAN_PACKAGES},
     {"metadata",
-     "Delete the metadata and dbcache from the repositories cache",
+     M_("Delete the metadata and dbcache from the repositories cache"),
      static_cast<CleanCommand::Actions>(CleanCommand::CLEAN_METADATA | CleanCommand::CLEAN_DBCACHE)},
-    {"dbcache", "Delete dbcache from the repositories cache", CleanCommand::CLEAN_DBCACHE},
-    {"expire-cache", "Mark the repositories cache as expired", CleanCommand::EXPIRE_CACHE}};
+    {"dbcache", M_("Delete dbcache from the repositories cache"), CleanCommand::CLEAN_DBCACHE},
+    {"expire-cache", M_("Mark the repositories cache as expired"), CleanCommand::EXPIRE_CACHE}};
 
 }  // namespace
 
@@ -73,13 +73,13 @@ void CleanCommand::set_argument_parser() {
     auto & parser = ctx.get_argument_parser();
 
     auto & cmd = *get_argument_parser_command();
-    cmd.set_description("Remove or expire cached data");
+    cmd.set_description(_("Remove or expire cached data"));
 
     std::string known_types;
     bool first = true;
     for (const auto & type : CACHE_TYPES) {
         if (!first) {
-            known_types.append(", ");
+            known_types.append(_(", "));
         }
         known_types.append(type.name);
         first = false;
@@ -119,7 +119,8 @@ void CleanCommand::set_argument_parser() {
         std::vector<std::string> cache_types;
         for (const auto & type : CACHE_TYPES) {
             if (type.name.compare(0, to_complete.length(), to_complete) == 0) {
-                cache_types.emplace_back(fmt::format("{:15} ({})", type.name, type.description));
+                // Note for translators: This is a shell completion for "dnf5 clean" command.
+                cache_types.emplace_back(libdnf5::utils::sformat(_("{:15} ({})"), type.name, TM_(type.description, 1)));
                 last = type.name;
             }
         }
@@ -183,13 +184,27 @@ void CleanCommand::run() {
 
     const auto [bytes_removed_value, bytes_removed_unit] =
         libdnf5::cli::utils::units::to_size(static_cast<int64_t>(statistics.get_bytes_removed()));
-    std::cout << fmt::format(
-                     "Removed {} files, {} directories (total of {:.0f} {:s}). {} errors occurred.",
-                     statistics.get_files_removed(),
-                     statistics.get_dirs_removed(),
+    const auto files_counter = statistics.get_files_removed();
+    // Note for translators: The argument is a counter.
+    const auto files_text = libdnf5::utils::sformat(P_("{} file", "{} files", files_counter), files_counter);
+    const auto directories_counter = statistics.get_dirs_removed();
+    const auto directories_text =
+        // Note for translators: The argument is a counter.
+        libdnf5::utils::sformat(P_("{} directory", "{} directories", directories_counter), directories_counter);
+    const auto errors_counter = statistics.get_errors();
+    std::cout << libdnf5::utils::sformat(
+                     // Note for translators: The first two arguments are "{} files" and
+                     // "{} directories" translated above. The third and forth arguments are
+                     // a number and a unit of information amount (e.g. "0 B").
+                     // The fifth argument is a counter of the errors.
+                     P_("Removed {}, {} (total of {:.0f} {:s}). {} error occurred.",
+                        "Removed {}, {} (total of {:.0f} {:s}). {} errors occurred.",
+                        errors_counter),
+                     files_text,
+                     directories_text,
                      bytes_removed_value,
                      bytes_removed_unit,
-                     statistics.get_errors())
+                     errors_counter)
               << std::endl;
 }
 
