@@ -20,6 +20,7 @@ class RpmVersionlockConfigTest : public BaseTestCase {
     CPPUNIT_TEST(test_load_valid_file);
     CPPUNIT_TEST(test_load_malformed_file);
     CPPUNIT_TEST(test_load_unreadable_file);
+    CPPUNIT_TEST(test_load_installonly_config);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -30,13 +31,16 @@ public:
     void test_load_valid_file();
     void test_load_malformed_file();
     void test_load_unreadable_file();
+    void test_load_installonly_config();
 
 private:
     // Writes `content` to the versionlock configuration file, creating parent
     // directories as needed.
     void write_versionlock_config(const std::string & content);
+    void write_versionlock_installonly_config(const std::string & content);
 
     std::filesystem::path versionlock_path;
+    std::filesystem::path versionlock_installonly_path;
 };
 
 

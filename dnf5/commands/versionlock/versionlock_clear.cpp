@@ -38,6 +38,9 @@ void VersionlockClearCommand::run() {
     auto vl_config = package_sack->get_versionlock_config();
     vl_config.get_packages().clear();
     vl_config.save();
+    auto vl_installonly_config = package_sack->get_versionlock_installonly_config();
+    vl_installonly_config.get_packages().clear();
+    vl_installonly_config.save();
 }
 
 }  // namespace dnf5

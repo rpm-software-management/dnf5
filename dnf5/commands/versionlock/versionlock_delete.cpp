@@ -49,7 +49,7 @@ void VersionlockDeleteCommand::set_argument_parser() {
     cmd.register_positional_arg(keys);
 }
 
-void delete_package(libdnf5::rpm::VersionlockConfig & vl_config, std::string_view spec) {
+bool delete_package(libdnf5::rpm::VersionlockConfig & vl_config, std::string_view spec) {
     auto remove_predicate = [spec](libdnf5::rpm::VersionlockPackage & pkg) {
         if (pkg.is_valid() && pkg.get_name() == spec) {
             std::cout << _("Deleting versionlock entry:") << std::endl;
@@ -60,20 +60,32 @@ void delete_package(libdnf5::rpm::VersionlockConfig & vl_config, std::string_vie
     };
 
     auto & vl_packages = vl_config.get_packages();
+    const auto orig_size = vl_packages.size();
     vl_packages.erase(std::remove_if(vl_packages.begin(), vl_packages.end(), remove_predicate), vl_packages.end());
+    return vl_packages.size() != orig_size;
 }
 
 void VersionlockDeleteCommand::run() {
     auto & ctx = get_context();
     auto package_sack = ctx.get_base().get_rpm_package_sack();
     auto vl_config = package_sack->get_versionlock_config();
-    auto orig_size = vl_config.get_packages().size();
+    auto vl_installonly_config = package_sack->get_versionlock_installonly_config();
+    bool changed = false;
+    bool installonly_changed = false;
 
     for (const auto & spec : pkg_specs) {
-        delete_package(vl_config, spec);
+        if (delete_package(vl_config, spec)) {
+            changed = true;
+        }
+        if (delete_package(vl_installonly_config, spec)) {
+            installonly_changed = true;
+        }
     }
-    if (vl_config.get_packages().size() != orig_size) {
+    if (changed) {
         vl_config.save();
+    }
+    if (installonly_changed) {
+        vl_installonly_config.save();
     }
 }
 

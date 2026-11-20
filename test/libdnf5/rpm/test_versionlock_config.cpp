@@ -23,12 +23,20 @@ void RpmVersionlockConfigTest::setUp() {
     // (set to a temporary directory by BaseTestCase) to VERSIONLOCK_CONF_FILENAME.
     const std::filesystem::path installroot = base.get_config().get_installroot_option().get_value();
     versionlock_path = installroot / std::filesystem::path(libdnf5::VERSIONLOCK_CONF_FILENAME).relative_path();
+    versionlock_installonly_path =
+        installroot / std::filesystem::path(libdnf5::VERSIONLOCK_INSTALLONLY_CONF_FILENAME).relative_path();
 }
 
 
 void RpmVersionlockConfigTest::write_versionlock_config(const std::string & content) {
     std::filesystem::create_directories(versionlock_path.parent_path());
     libdnf5::utils::fs::File(versionlock_path, "w").write(content);
+}
+
+
+void RpmVersionlockConfigTest::write_versionlock_installonly_config(const std::string & content) {
+    std::filesystem::create_directories(versionlock_installonly_path.parent_path());
+    libdnf5::utils::fs::File(versionlock_installonly_path, "w").write(content);
 }
 
 
@@ -76,4 +84,29 @@ void RpmVersionlockConfigTest::test_load_unreadable_file() {
     std::filesystem::permissions(versionlock_path, std::filesystem::perms::none);
 
     CPPUNIT_ASSERT_THROW(sack->get_versionlock_config(), libdnf5::FileSystemError);
+}
+
+
+void RpmVersionlockConfigTest::test_load_installonly_config() {
+    write_versionlock_installonly_config(
+        "version = \"1.0\"\n"
+        "[[packages]]\n"
+        "name = \"kernel\"\n"
+        "[[packages.conditions]]\n"
+        "key = \"evr\"\n"
+        "comparator = \"=\"\n"
+        "value = \"4.18.16-300.fc29\"\n");
+
+    auto config = sack->get_versionlock_installonly_config();
+    auto & packages = config.get_packages();
+    CPPUNIT_ASSERT_EQUAL(static_cast<std::size_t>(1), packages.size());
+    CPPUNIT_ASSERT_EQUAL(std::string("kernel"), packages[0].get_name());
+    CPPUNIT_ASSERT(packages[0].is_valid());
+    const auto & conditions = packages[0].get_conditions();
+    CPPUNIT_ASSERT_EQUAL(static_cast<std::size_t>(1), conditions.size());
+    CPPUNIT_ASSERT_EQUAL(libdnf5::rpm::VersionlockCondition::Keys::EVR, conditions[0].get_key());
+    CPPUNIT_ASSERT_EQUAL(std::string("4.18.16-300.fc29"), conditions[0].get_value());
+
+    // Installonly config is separate from the main versionlock file
+    CPPUNIT_ASSERT(sack->get_versionlock_config().get_packages().empty());
 }

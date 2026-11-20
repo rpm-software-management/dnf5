@@ -55,6 +55,9 @@ Subcommands
 ``exclude``
     | Add an exclude (within versionlock) for the available packages matching the spec. It means that packages represented by ``package-spec-N`` will be excluded from transaction operations.
 
+``installonly``
+    | Lock installed installonly packages matching the spec so they are not automatically removed when ``installonly_limit`` is exceeded. Unlike ``add``, this does not exclude other versions and does not affect package availability for other commands — the lock is stored in a separate file (`/etc/dnf/versionlock-installonly.toml`) and consulted only by installonly limit cleanup. Manual removal with ``dnf5 remove`` is not blocked.
+
 ``clear``
     | Remove all versionlock entries.
 
@@ -80,11 +83,16 @@ Examples
 ``dnf5 versionlock exclude iftop-1.2.3-7.fc38``
     | Exclude iftop-1.2.3-7.fc38 release.
 
+``dnf5 versionlock installonly kernel-6.5.0-1.fc39``
+    | Keep this installed installonly kernel version when ``installonly_limit`` would otherwise remove it.
+
 
 Versionlock file format
 =======================
 
 The versionlock file is a TOML file stored in location `/etc/dnf/versionlock.toml`.
+Installonly locks from the ``installonly`` subcommand are stored separately in
+`/etc/dnf/versionlock-installonly.toml` (same format).
 The file must contain the `version` key, currently supported version is `1.0`.
 Then it contains `packages` - a list of locking entries. Each entry consist of the package name and a list of conditions. The package name specification supports the same glob pattern matching as the shell. All the conditions must be true for a package to match (they are combined using logical AND). All entries are then combined together using logical OR operation.
 
@@ -137,6 +145,24 @@ Example of versionlock file
     key = "evr"
     comparator = "<"
     value = "3:571"
+
+
+Example of installonly versionlock file
+---------------------------------------
+
+
+.. code-block:: toml
+
+    version = "1.0"
+
+    # keep installed installonly kernel from automatic installonly_limit removal
+    # (versionlock installonly kernel-4.18.16-300.fc29)
+    [[packages]]
+    name = "kernel"
+    [[packages.conditions]]
+    key = "evr"
+    comparator = "="
+    value = "4.18.16-300.fc29"
 
 
 See Also

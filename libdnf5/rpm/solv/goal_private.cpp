@@ -22,6 +22,9 @@
 #include "solv/pool.hpp"
 
 #include "libdnf5/common/exception.hpp"
+#include "libdnf5/common/sack/query_cmp.hpp"
+#include "libdnf5/rpm/package_query.hpp"
+#include "libdnf5/rpm/versionlock_config.hpp"
 #include "libdnf5/utils/bgettext/bgettext-mark-domain.h"
 
 extern "C" {
@@ -309,6 +312,54 @@ bool GoalPrivate::limit_installonly_packages(libdnf5::solv::IdQueue & job, Id ru
     installed_after_transaction_providers.sort(&installonly_cmp, &installonly_cmp_data);
     std::sort(available_unused_providers.begin(), available_unused_providers.end(), name_solvable_cmp_key);
 
+    // Packages from the installonly versionlock file. Checked here directly so
+    // those locks for installed packages do not go through versionlock excludes
+    // and affect other commands.
+    libdnf5::solv::SolvMap versionlock_locked_installonly(spool.get_nsolvables());
+    {
+        auto vl_conf = base->get_rpm_package_sack()->get_versionlock_installonly_config();
+        libdnf5::rpm::PackageQuery installed_query(base, libdnf5::rpm::PackageQuery::ExcludeFlags::IGNORE_EXCLUDES);
+        installed_query.filter_installed();
+        for (const auto & vl_pkg : vl_conf.get_packages()) {
+            if (!vl_pkg.is_valid()) {
+                continue;
+            }
+            libdnf5::rpm::PackageQuery pkg_query(installed_query);
+            pkg_query.filter_name({vl_pkg.get_name()}, libdnf5::sack::QueryCmp::GLOB);
+            for (const auto & vl_condition : vl_pkg.get_conditions()) {
+                if (!vl_condition.is_valid()) {
+                    continue;
+                }
+                switch (vl_condition.get_key()) {
+                    case libdnf5::rpm::VersionlockCondition::Keys::EPOCH:
+                        pkg_query.filter_epoch(
+                            std::vector<long unsigned int>{std::stoul(vl_condition.get_value())},
+                            vl_condition.get_comparator());
+                        break;
+                    case libdnf5::rpm::VersionlockCondition::Keys::EVR:
+                        pkg_query.filter_evr({vl_condition.get_value()}, vl_condition.get_comparator());
+                        break;
+                    case libdnf5::rpm::VersionlockCondition::Keys::ARCH:
+                        pkg_query.filter_arch({vl_condition.get_value()}, vl_condition.get_comparator());
+                        break;
+                }
+            }
+            for (const auto & pkg : pkg_query) {
+                versionlock_locked_installonly.add_unsafe(pkg.get_id().id);
+            }
+        }
+    }
+
+    auto keep_installed = [&spool, &versionlock_locked_installonly](Id id) {
+        if (!spool.is_installed(id)) {
+            return false;
+        }
+        if (spool.is_solvable_excluded(id)) {
+            return true;
+        }
+        return versionlock_locked_installonly.contains_unsafe(id);
+    };
+
     libdnf5::solv::IdQueue same_names;
     // For each set of `installed_after_transaction_providers` with the same name that are being installed in the transaction
     // ensure at most `installonly_limit` are installed.
@@ -347,21 +398,20 @@ bool GoalPrivate::limit_installonly_packages(libdnf5::solv::IdQueue & job, Id ru
 
         reresolve = true;
 
-        int excluded_installed_count = 0;
+        int kept_installed_count = 0;
         for (int j = 0; j < same_names.size(); ++j) {
-            Id id = same_names[j];
-            if (spool.is_installed(id) && spool.is_solvable_excluded(id)) {
-                excluded_installed_count++;
+            if (keep_installed(same_names[j])) {
+                kept_installed_count++;
             }
         }
 
-        // We have to keep excluded installed packages
-        int slots = static_cast<int>(installonly_limit) - excluded_installed_count;
+        // Keep excluded and versionlock-installonly-locked installed packages
+        int slots = static_cast<int>(installonly_limit) - kept_installed_count;
         for (int j = 0; j < same_names.size(); ++j) {
             Id id = same_names[j];
 
             Id action = SOLVER_ERASE;
-            if (spool.is_installed(id) && spool.is_solvable_excluded(id)) {
+            if (keep_installed(id)) {
                 action = SOLVER_INSTALL;
             } else if (slots > 0) {
                 action = SOLVER_INSTALL;
