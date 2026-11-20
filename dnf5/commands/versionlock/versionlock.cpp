@@ -23,6 +23,7 @@
 #include "versionlock_clear.hpp"
 #include "versionlock_delete.hpp"
 #include "versionlock_exclude.hpp"
+#include "versionlock_installonly.hpp"
 #include "versionlock_list.hpp"
 
 #include <libdnf5/utils/bgettext/bgettext-lib.h>
@@ -46,6 +47,7 @@ void VersionlockCommand::register_subcommands() {
     get_argument_parser_command()->register_group(commands_group);
     register_subcommand(std::make_unique<VersionlockAddCommand>(get_context()), commands_group);
     register_subcommand(std::make_unique<VersionlockExcludeCommand>(get_context()), commands_group);
+    register_subcommand(std::make_unique<VersionlockInstallonlyCommand>(get_context()), commands_group);
     register_subcommand(std::make_unique<VersionlockClearCommand>(get_context()), commands_group);
     register_subcommand(std::make_unique<VersionlockDeleteCommand>(get_context()), commands_group);
     register_subcommand(std::make_unique<VersionlockListCommand>(get_context()), commands_group);

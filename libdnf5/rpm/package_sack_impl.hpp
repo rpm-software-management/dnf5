@@ -115,6 +115,7 @@ public:
 #endif
 
     VersionlockConfig get_versionlock_config() const;
+    VersionlockConfig get_versionlock_installonly_config() const;
     const PackageSet get_versionlock_excludes();
     void add_versionlock_excludes(const PackageSet & excludes);
     void remove_versionlock_excludes(const PackageSet & excludes);

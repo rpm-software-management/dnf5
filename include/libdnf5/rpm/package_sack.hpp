@@ -152,6 +152,10 @@ public:
     /// @since 5.1.13
     VersionlockConfig get_versionlock_config() const;
 
+    /// Returns installonly versionlock configuration
+    /// @since 5.4.8
+    VersionlockConfig get_versionlock_installonly_config() const;
+
     /// Returns versionlock excluded package set
     /// @since 5.1.13
     const PackageSet get_versionlock_excludes();
