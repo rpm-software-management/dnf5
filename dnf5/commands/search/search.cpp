@@ -21,6 +21,7 @@
 #include "search.hpp"
 
 #include "../no_matches.hpp"
+#include "output/search_impl.hpp"
 #include "search_processor.hpp"
 
 #include "libdnf5/utils/bgettext/bgettext-mark-domain.h"
@@ -28,10 +29,15 @@
 #include <dnf5/shared_options.hpp>
 #include <libdnf5-cli/exception.hpp>
 #include <libdnf5-cli/output/search.hpp>
+#include <libdnf5/common/sack/exclude_flags.hpp>
 #include <libdnf5/conf/option_string.hpp>
 #include <libdnf5/rpm/package_query.hpp>
-#include <libdnf5/rpm/package_set.hpp>
 #include <libdnf5/utils/bgettext/bgettext-lib.h>
+
+#include <set>
+#include <string>
+#include <string_view>
+#include <vector>
 
 namespace dnf5 {
 
@@ -89,7 +95,32 @@ void SearchCommand::run() {
         search_name->get_value(),
         search_summary->get_value());
     auto results = processor.get_results();
-    libdnf5::cli::output::print_search_results(results);
+    std::set<std::string> installed_package_ids;
+    if (!results.group_results.empty()) {
+        std::set<std::string> matched_names;
+        for (auto const & group : results.group_results) {
+            for (auto const & package : group.matched_packages.packages) {
+                matched_names.insert(package.get_name());
+            }
+        }
+
+        libdnf5::rpm::PackageQuery installed_query(ctx.get_base(), libdnf5::sack::ExcludeFlags::IGNORE_EXCLUDES);
+        installed_query.filter_name(std::vector<std::string>(matched_names.begin(), matched_names.end()));
+        installed_query.filter_installed();
+        for (auto const & package : installed_query) {
+            if (show_duplicates->get_value()) {
+                installed_package_ids.insert(package.get_full_nevra());
+            } else {
+                installed_package_ids.insert(package.get_name() + "." + package.get_arch());
+            }
+        }
+    }
+    const auto installed_marker = " " + std::string(_("[installed]"));
+    libdnf5::cli::output::detail::render_search_results(results, [&](const auto & package) -> std::string_view {
+        const auto identity =
+            results.options.show_duplicates ? package.get_full_nevra() : package.get_name() + "." + package.get_arch();
+        return installed_package_ids.contains(identity) ? std::string_view{installed_marker} : std::string_view{};
+    });
     report_no_matches(ctx, {}, results.group_results.empty(), no_repos_enabled(ctx), false);
 }
 

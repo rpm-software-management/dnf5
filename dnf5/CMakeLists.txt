@@ -37,6 +37,9 @@ include_directories(.)
 
 add_executable(dnf5 ${DNF5_SOURCES})
 
+set_property(SOURCE commands/search/search.cpp APPEND PROPERTY
+    INCLUDE_DIRECTORIES "${PROJECT_SOURCE_DIR}/libdnf5-cli")
+
 # Enable symbol export. Needed for loadable modules (dnf5 plugins).
 set_property(TARGET dnf5 PROPERTY ENABLE_EXPORTS 1)
 # Export only explicitly marked symbols.
