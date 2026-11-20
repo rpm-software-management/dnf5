@@ -95,7 +95,7 @@ MultiProgressBar::MultiProgressBar() : MultiProgressBar(TrackingMode::ON_RENDER)
 
 
 MultiProgressBar::~MultiProgressBar() {
-    if (tty::is_interactive()) {
+    if (tty::is_interactive(STDERR_FILENO)) {
         // Clear any taskbar/tab progress indicator so it does not linger.
         tty::set_taskbar_progress(std::cerr, tty::TaskbarProgressState::CLEAR);
         tty::show_cursor();
@@ -171,8 +171,9 @@ std::size_t MultiProgressBar::get_total_num_of_bars() const noexcept {
 
 
 std::ostream & operator<<(std::ostream & stream, MultiProgressBar & mbar) {
-    const bool is_interactive{tty::is_interactive()};
-    auto terminal_width = static_cast<std::size_t>(tty::get_width());
+    // The progress bars are printed to the standard error output
+    const bool is_interactive{tty::is_interactive(STDERR_FILENO)};
+    auto terminal_width = static_cast<std::size_t>(tty::get_width(STDERR_FILENO));
     auto total_num_of_bars = mbar.p_impl->total.get_total();
 
     // We'll buffer the output text to a single string and print it all at once.
@@ -185,7 +186,8 @@ std::ostream & operator<<(std::ostream & stream, MultiProgressBar & mbar) {
             text_buffer << "\033[" << (mbar.p_impl->num_of_lines_to_clear - 1) << "A";
         }
         text_buffer << "\r";
-        text_buffer << tty::clear_to_end;
+        // Not tty::clear_to_end, which checks the standard output instead
+        text_buffer << "\033[0J";
     }
 
     // Number of lines that need to be cleared, including the last line even if it is empty

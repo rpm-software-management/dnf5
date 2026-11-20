@@ -31,6 +31,11 @@ namespace libdnf5::cli::tty {
 
 
 int get_width() {
+    return get_width(STDOUT_FILENO);
+}
+
+
+int get_width(int fd) {
     // Use a custom "DNF5_FORCE_COLUMNS" variable for testing purposes.
     // "COLUMNS" is overwritten in a sub-shell and that makes testing more difficult
     char * columns = std::getenv("DNF5_FORCE_COLUMNS");
@@ -45,7 +50,7 @@ int get_width() {
     }
 
     struct winsize size;
-    if (ioctl(STDOUT_FILENO, TIOCGWINSZ, &size) == 0) {
+    if (ioctl(fd, TIOCGWINSZ, &size) == 0) {
         if (size.ws_col > 0)
             return size.ws_col;
     }
@@ -55,8 +60,13 @@ int get_width() {
 
 
 bool is_interactive() {
+    return is_interactive(STDOUT_FILENO);
+}
+
+
+bool is_interactive(int fd) {
     // Use a custom "DNF5_FORCE_INTERACTIVE" variable for testing purposes.
-    // "interactivity" depends on stdout configuration which is hard to control sometimes
+    // "interactivity" depends on stdout/stderr configuration which is hard to control sometimes
     char * force_interactive = std::getenv("DNF5_FORCE_INTERACTIVE");
     if (force_interactive != nullptr) {
         try {
@@ -67,11 +77,12 @@ bool is_interactive() {
         } catch (std::out_of_range & ex) {
         }
     }
-    return isatty(fileno(stdout)) == 1;
+    return isatty(fd) == 1;
 }
 
 std::ostream & set_taskbar_progress(std::ostream & stream, TaskbarProgressState state, int percent) {
-    if (is_interactive()) {
+    // Progress is reported on the standard error output
+    if (is_interactive(STDERR_FILENO)) {
         if (percent < 0) {
             percent = 0;
         } else if (percent > 100) {
@@ -158,9 +169,11 @@ TTY_COMMAND(cursor_hide, "\x1b[?25l")
 // tty::cursor_show
 TTY_COMMAND(cursor_show, "\x1b[?25h")
 
+// hide_cursor() and show_cursor() write to stderr, so they check stderr and
+// write the escape codes directly: tty::cursor_hide and tty::cursor_show check stdout
 void hide_cursor() {
-    if (is_interactive()) {
-        std::cerr << cursor_hide;
+    if (is_interactive(STDERR_FILENO)) {
+        std::cerr << "\x1b[?25l";
         if (std::cerr) {
             cursor_hidden = true;
         }
@@ -168,8 +181,8 @@ void hide_cursor() {
 }
 
 void show_cursor() {
-    if (is_interactive()) {
-        std::cerr << cursor_show;
+    if (is_interactive(STDERR_FILENO)) {
+        std::cerr << "\x1b[?25h";
         if (std::cerr) {
             cursor_hidden = false;
         }

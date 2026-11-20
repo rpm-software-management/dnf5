@@ -75,6 +75,8 @@ enum class TaskbarProgressState {
 
 /// Emit an `OSC 9;4` escape sequence reporting overall progress to the terminal,
 /// which some terminals render on the tab/card/taskbar entry.
+/// The sequence is emitted only if the standard error output, where progress
+/// is reported, is connected to a terminal.
 /// @param stream   Stream to write the sequence to.
 /// @param state    Indicator state.
 /// @param percent  Progress percentage, clamped to 0-100 (ignored for
@@ -82,8 +84,18 @@ enum class TaskbarProgressState {
 LIBDNF_CLI_API std::ostream & set_taskbar_progress(std::ostream & stream, TaskbarProgressState state, int percent = 0);
 
 
+/// Return the width of the terminal connected to the standard output.
 LIBDNF_CLI_API int get_width();
+/// Return the width of the terminal connected to the file descriptor `fd`
+/// (e.g. STDERR_FILENO), or 80 if it is not a terminal.
+/// The DNF5_FORCE_COLUMNS environment variable overrides the detection.
+LIBDNF_CLI_API int get_width(int fd);
+
+/// Return true if the standard output is connected to a terminal.
 LIBDNF_CLI_API bool is_interactive();
+/// Return true if the file descriptor `fd` (e.g. STDERR_FILENO) is connected to a terminal.
+/// The DNF5_FORCE_INTERACTIVE environment variable overrides the detection.
+LIBDNF_CLI_API bool is_interactive(int fd);
 
 enum class ColoringEnabled { AUTO, ALWAYS, NEVER };
 
