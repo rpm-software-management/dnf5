@@ -1,6 +1,9 @@
 Feature: dnf-automatic performs update
 
 
+Background:
+  Given I set environment variable "DNF5_FORCE_COLUMNS" to "500"
+
 Scenario: dnf-automatic can update package
   Given I use repository "simple-base"
     And I successfully execute dnf with args "install labirinto"

@@ -1,6 +1,9 @@
 Feature: Remove duplicate RPMs
 
 
+Background:
+  Given I set environment variable "DNF5_FORCE_COLUMNS" to "500"
+
 @bz1674296
 Scenario: Remove a duplicate RPM
   Given I use repository "dnf-ci-fedora-updates"

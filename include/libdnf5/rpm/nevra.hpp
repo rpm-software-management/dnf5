@@ -173,6 +173,25 @@ inline std::string to_nevra_string(const T & obj) {
 }
 
 
+/// Create an evr string ("[epoch:]version-release") from an object, excluding a
+/// zero (or unset) epoch, consistently with to_nevra_string().
+template <typename T>
+inline std::string to_evr_string(const T & obj) {
+    auto epoch = obj.get_epoch();
+    const bool show_epoch = !epoch.empty() && epoch != "0";
+    std::string result;
+    result.reserve((show_epoch ? epoch.size() + 1 : 0) + 1 + obj.get_version().size() + obj.get_release().size());
+    if (show_epoch) {
+        result.append(epoch);
+        result.append(":");
+    }
+    result.append(obj.get_version());
+    result.append("-");
+    result.append(obj.get_release());
+    return result;
+}
+
+
 /// Copy nevra attributes from one object to another
 template <typename F, typename T>
 inline void copy_nevra_attributes(const F & from, T & to) {

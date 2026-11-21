@@ -1,6 +1,7 @@
 Feature: Vendor change restriction hints when allow_vendor_change=false
 
 Background:
+  Given I set environment variable "DNF5_FORCE_COLUMNS" to "500"
   Given I use repository "vendor-hints"
     And I configure dnf with
         | key                 | value |

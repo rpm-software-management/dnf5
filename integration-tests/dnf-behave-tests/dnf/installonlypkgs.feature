@@ -3,6 +3,7 @@ Feature: Test upgrading installonly packages - "installonlypkgs" configuration o
 
 
 Background: Install one version of each test package
+  Given I set environment variable "DNF5_FORCE_COLUMNS" to "500"
   Given I use repository "installonly"
    When I execute dnf with args "install installonlyA-1.0 installonlyB-1.0 kernel-core-4.18.16"
    Then the exit code is 0

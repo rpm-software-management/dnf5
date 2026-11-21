@@ -7,6 +7,7 @@ Feature: Installing modules from MdDocuments with static_context=True
 
 
 Background:
+  Given I set environment variable "DNF5_FORCE_COLUMNS" to "500"
   Given I set default module platformid to "platform:f29"
 
 

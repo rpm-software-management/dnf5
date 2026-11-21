@@ -1,6 +1,7 @@
 Feature: transaction: upgrades and downgrades
 
 Background: Install RPMs
+  Given I set environment variable "DNF5_FORCE_COLUMNS" to "500"
   Given I use repository "dnf-ci-fedora"
    When I execute dnf with args "install glibc flac"
    Then the exit code is 0

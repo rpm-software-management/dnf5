@@ -1,5 +1,8 @@
 Feature: Autoremoval of unneeded packages
 
+Background:
+  Given I set environment variable "DNF5_FORCE_COLUMNS" to "500"
+
 Scenario: Autoremoval of package which became non-required by others
   Given I use repository "dnf-ci-fedora"
     And I use repository "dnf-ci-thirdparty"

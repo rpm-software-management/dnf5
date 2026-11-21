@@ -2,6 +2,7 @@ Feature: distro-sync with --install-from-repo and --from-repo
 
 
 Background: Install some RPMs from one repository
+  Given I set environment variable "DNF5_FORCE_COLUMNS" to "500"
   Given I use repository "from-repo"
    When I execute dnf with args "install abcde pkgB"
    Then the exit code is 0

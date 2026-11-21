@@ -7,6 +7,7 @@ Feature: Updating module profiles
 
 
 Background:
+  Given I set environment variable "DNF5_FORCE_COLUMNS" to "500"
 Given I use repository "dnf-ci-fedora-modular"
   And I use repository "dnf-ci-fedora"
 
