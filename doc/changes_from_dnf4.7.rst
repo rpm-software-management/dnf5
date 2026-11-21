@@ -494,6 +494,9 @@ Changes to individual commands
 
   * See the :ref:`Repoquery command <repoquery_command_ref-label>` for more information.
 
+``search``
+  * Installed packages are marked with ``[installed]`` in the output.
+
 ``shell``
   * The ``shell`` command has been superseded by the new ``do`` command.
 

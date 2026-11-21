@@ -41,6 +41,10 @@ By default the command searches for all requested keys (AND operation) in
 the search to specific fields using ``--name`` or ``--summary``
 options. Matching is case-insensitive and globs are supported.
 
+Packages installed on the system are marked with ``[installed]``. Unless
+``--showduplicates`` is used, a package is marked when any version of it with
+the same name and architecture is installed.
+
 
 Options
 =======
