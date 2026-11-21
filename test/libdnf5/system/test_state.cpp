@@ -149,6 +149,34 @@ void StateTest::test_state_read() {
     CPPUNIT_ASSERT_EQUAL(std::string("foo"), state.get_rpmdb_cookie());
 }
 
+void StateTest::test_state_write_restrictive_umask() {
+    // The state is read by unprivileged users, so it must not depend on the umask of the user running the
+    // transaction (https://github.com/rpm-software-management/dnf5/issues/1908).
+    ScopedUmask umask_077(077);
+
+    namespace fs = std::filesystem;
+
+    const auto path = temp_dir->get_path() / "umask_test" / "sysimage" / "libdnf5";
+    libdnf5::system::State state(base.get_weak_ptr(), path);
+    state.set_package_reason("pkg.x86_64", transaction::TransactionItemReason::USER);
+    state.save();
+
+    const auto others_read = fs::perms::others_read | fs::perms::group_read;
+    const auto others_search = others_read | fs::perms::others_exec | fs::perms::group_exec;
+    for (auto dir = path; dir != temp_dir->get_path(); dir = dir.parent_path()) {
+        CPPUNIT_ASSERT_MESSAGE(dir.string(), (fs::status(dir).permissions() & others_search) == others_search);
+    }
+    for (const auto & entry : fs::directory_iterator(path)) {
+        CPPUNIT_ASSERT_MESSAGE(entry.path().string(), (entry.status().permissions() & others_read) == others_read);
+    }
+    CPPUNIT_ASSERT(fs::exists(path / "packages.toml"));
+
+    // A state directory created earlier under a restrictive umask is repaired by the next save.
+    fs::permissions(path, fs::perms::owner_all, fs::perm_options::replace);
+    state.save();
+    CPPUNIT_ASSERT((fs::status(path).permissions() & others_search) == others_search);
+}
+
 void StateTest::test_state_write() {
     const auto path = temp_dir->get_path() / "write_test";
     libdnf5::system::State state(base.get_weak_ptr(), path);

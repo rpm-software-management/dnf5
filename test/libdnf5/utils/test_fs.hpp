@@ -48,6 +48,8 @@ class UtilsFsTest : public CppUnit::TestCase {
     CPPUNIT_TEST(test_file_release);
     CPPUNIT_TEST(test_file_flush);
 
+    CPPUNIT_TEST(test_add_read_for_all);
+
     CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -66,6 +68,8 @@ public:
     void test_file_seek();
     void test_file_release();
     void test_file_flush();
+
+    void test_add_read_for_all();
 };
 
 
