@@ -60,7 +60,8 @@ find_package(bash-completion)
 if(BASH_COMPLETION_FOUND)
   message(STATUS "Using bash completion dir ${BASH_COMPLETION_COMPLETIONSDIR}")
 else()
-  set (BASH_COMPLETION_COMPLETIONSDIR "/etc/bash_completion.d")
+  set (BASH_COMPLETION_COMPLETIONSDIR "${CMAKE_INSTALL_FULL_SYSCONFDIR}/bash_completion.d"
+      CACHE PATH "Fallback directory for bash completion files")
   message (STATUS "Using fallback bash completion dir ${BASH_COMPLETION_COMPLETIONSDIR}")
 endif()
 
