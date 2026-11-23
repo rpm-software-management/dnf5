@@ -19,7 +19,7 @@
 
 #include "repoclosure.hpp"
 
-#include <json-c/json.h>
+#include <json.h>
 #include <libdnf5-cli/argument_parser.hpp>
 #include <libdnf5-cli/exception.hpp>
 #include <libdnf5/conf/const.hpp>

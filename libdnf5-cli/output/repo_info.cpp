@@ -24,7 +24,7 @@
 
 #include "libdnf5-cli/utils/units.hpp"
 
-#include <json-c/json_object.h>
+#include <json_object.h>
 
 #include <iostream>
 

@@ -19,7 +19,7 @@ target_link_directories(run_tests PRIVATE ${CMAKE_BINARY_DIR}/libdnf5)
 target_link_libraries(run_tests PRIVATE stdc++ libdnf5_iface test_shared)
 
 pkg_check_modules(JSONC REQUIRED json-c)
-include_directories(${JSONC_INCLUDE_DIRS})
+include_directories(SYSTEM ${JSONC_INCLUDE_DIRS})
 target_link_libraries(run_tests PRIVATE ${JSONC_LIBRARIES})
 
 pkg_check_modules(LIBSOLV REQUIRED libsolv>=0.7.21)

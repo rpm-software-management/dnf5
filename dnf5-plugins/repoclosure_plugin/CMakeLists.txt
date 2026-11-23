@@ -7,6 +7,10 @@ add_library(repoclosure_cmd_plugin MODULE repoclosure.cpp repoclosure_cmd_plugin
 # disable the 'lib' prefix in order to create repoclosure_cmd_plugin.so
 set_target_properties(repoclosure_cmd_plugin PROPERTIES PREFIX "")
 
+pkg_check_modules(JSONC REQUIRED json-c)
+include_directories(SYSTEM ${JSONC_INCLUDE_DIRS})
+target_link_libraries(repoclosure_cmd_plugin PRIVATE ${JSONC_LIBRARIES})
+
 target_link_libraries(repoclosure_cmd_plugin PRIVATE libdnf5 libdnf5-cli)
 target_link_libraries(repoclosure_cmd_plugin PRIVATE dnf5)
 

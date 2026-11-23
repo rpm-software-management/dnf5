@@ -71,7 +71,7 @@ target_link_libraries(libdnf5 PUBLIC ${LIBFMT_LIBRARIES})
 target_link_libraries(libdnf5_iface INTERFACE ${LIBFMT_LIBRARIES})
 
 pkg_check_modules(JSONC REQUIRED json-c)
-include_directories(${JSONC_INCLUDE_DIRS})
+include_directories(SYSTEM ${JSONC_INCLUDE_DIRS})
 target_link_libraries(libdnf5 PRIVATE ${JSONC_LIBRARIES})
 target_link_libraries(libdnf5_iface INTERFACE ${JSONC_LIBRARIES})
 

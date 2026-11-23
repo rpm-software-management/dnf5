@@ -22,6 +22,7 @@ include(sdbus_cpp)
 pkg_check_modules(RPM REQUIRED rpm>=4.19.0)
 
 pkg_check_modules(JSONC REQUIRED json-c)
+include_directories(SYSTEM ${JSONC_INCLUDE_DIRS})
 
 add_executable(run_tests_needs_restarting ${TEST_NEEDS_RESTARTING_SOURCES})
 target_link_libraries(run_tests_needs_restarting PRIVATE common_obj stdc++ libdnf5 libdnf5-cli test_shared ${SDBUS_CPP_LIBRARIES} ${RPM_LIBRARIES} ${JSONC_LIBRARIES})

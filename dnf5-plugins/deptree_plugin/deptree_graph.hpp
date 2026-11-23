@@ -4,7 +4,7 @@
 #ifndef DNF5_PLUGINS_DEPTREE_PLUGIN_DEPTREE_GRAPH_HPP
 #define DNF5_PLUGINS_DEPTREE_PLUGIN_DEPTREE_GRAPH_HPP
 
-#include <json-c/json.h>
+#include <json.h>
 #include <libdnf5/base/base.hpp>
 #include <libdnf5/rpm/package.hpp>
 #include <libdnf5/rpm/package_query.hpp>
