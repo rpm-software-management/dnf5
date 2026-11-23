@@ -72,6 +72,7 @@ private:
     // Enabled dependency relation kinds.
     const std::set<std::string> & types;
     // Exact architecture filter, empty when all architectures are included.
+    [[maybe_unused]]  // currently unused, but part of the public API.
     const std::set<std::string> & arches;
     // Cached latest packages query for reverse traversal.
     std::optional<libdnf5::rpm::PackageQuery> latest_available;
