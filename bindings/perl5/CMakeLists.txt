@@ -12,7 +12,7 @@ find_package(PerlLibs REQUIRED)
 
 # Preprocessor flags (cppflags) are already included in compiler flags
 # (ccflags). Except a path to perl.h that is recorded nowhere.
-include_directories(${PERL_INCLUDE_PATH})
+include_directories(SYSTEM ${PERL_INCLUDE_PATH})
 perl_get_info(PERL_CFLAGS "ccflags")
 separate_arguments(PERL_CFLAGS)
 

@@ -7,7 +7,7 @@ message("Building bindings for python3")
 
 
 find_package(Python3 REQUIRED COMPONENTS Interpreter Development)
-include_directories(${Python3_INCLUDE_DIRS})
+include_directories(SYSTEM ${Python3_INCLUDE_DIRS})
 
 
 function(add_python3_module LIBRARY_NAME MODULE_NAME)

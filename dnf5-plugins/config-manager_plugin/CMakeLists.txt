@@ -12,7 +12,7 @@ pkg_check_modules(LIBFMT REQUIRED fmt)
 target_link_libraries(libdnf5-cli PUBLIC ${LIBFMT_LIBRARIES})
 
 find_package(CURL 7.62.0 REQUIRED)
-include_directories(${CURL_INCLUDE_DIR})
+include_directories(SYSTEM ${CURL_INCLUDE_DIR})
 
 find_package(ZLIB REQUIRED)
 

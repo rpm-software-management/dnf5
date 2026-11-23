@@ -7,10 +7,10 @@ set(GETTEXT_DOMAIN libdnf5-plugin-rhsm-container)
 add_definitions(-DGETTEXT_DOMAIN=\"${GETTEXT_DOMAIN}\")
 
 pkg_check_modules(RHSM REQUIRED librhsm>=0.0.3)
-include_directories(${RHSM_INCLUDE_DIRS})
+include_directories(SYSTEM ${RHSM_INCLUDE_DIRS})
 
 pkg_check_modules(GLIB REQUIRED glib-2.0>=2.44.0)
-include_directories(${GLIB_INCLUDE_DIRS})
+include_directories(SYSTEM ${GLIB_INCLUDE_DIRS})
 
 add_library(rhsm_plugin_container MODULE rhsm-container.cpp)
 

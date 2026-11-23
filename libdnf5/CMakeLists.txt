@@ -109,19 +109,19 @@ check_library_exists(rpm rpmteSetVfyLevel "" HAVE_RPMTE_SETVFYLEVEL)
 if(WITH_COMPS)
     pkg_check_modules(LIBXML2 REQUIRED libxml-2.0)
     list(APPEND LIBDNF5_PC_REQUIRES_PRIVATE "${LIBXML2_MODULE_NAME}")
-    include_directories(${LIBXML2_INCLUDE_DIRS})
+    include_directories(SYSTEM ${LIBXML2_INCLUDE_DIRS})
     target_link_libraries(libdnf5 PRIVATE ${LIBXML2_LIBRARIES})
     target_link_libraries(libdnf5_iface INTERFACE ${LIBXML2_LIBRARIES})
 endif()
 
 # GLIB librepo and libmodulemd uses glib2 in API :(
 pkg_check_modules (GLIB2 glib-2.0>=2.46.0)
-include_directories(${GLIB2_INCLUDE_DIRS})
+include_directories(SYSTEM ${GLIB2_INCLUDE_DIRS})
 target_link_libraries(libdnf5 PRIVATE ${GLIB2_LIBRARIES})
 
 pkg_check_modules(LIBREPO REQUIRED librepo>=1.20.0)
 list(APPEND LIBDNF5_PC_REQUIRES "${LIBREPO_MODULE_NAME}")
-target_include_directories(libdnf5 PUBLIC PRIVATE ${LIBREPO_INCLUDE_DIRS})
+target_include_directories(libdnf5_obj SYSTEM PRIVATE ${LIBREPO_INCLUDE_DIRS})
 target_link_libraries(libdnf5 PRIVATE ${LIBREPO_LDFLAGS})
 target_link_libraries(libdnf5_iface INTERFACE ${LIBREPO_LDFLAGS})
 

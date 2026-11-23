@@ -10,7 +10,7 @@ add_library(automatic_cmd_plugin MODULE ${AUTOMATIC_SOURCES})
 # disable the 'lib' prefix in order to create automatic_cmd_plugin.so
 set_target_properties(automatic_cmd_plugin PROPERTIES PREFIX "")
 
-target_include_directories(automatic_cmd_plugin PRIVATE ${SDBUS_CPP_INCLUDE_DIRS})
+target_include_directories(automatic_cmd_plugin SYSTEM PRIVATE ${SDBUS_CPP_INCLUDE_DIRS})
 target_link_libraries(automatic_cmd_plugin PRIVATE libdnf5 libdnf5-cli)
 target_link_libraries(automatic_cmd_plugin PRIVATE dnf5)
 target_link_libraries(automatic_cmd_plugin PRIVATE ${SDBUS_CPP_LIBRARIES})
