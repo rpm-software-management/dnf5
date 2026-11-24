@@ -205,6 +205,9 @@ std::pair<std::vector<Getter>, std::string> parse_queryformat(const std::string 
         } else if (previous_qf_char == '\\' && qf_char == 'n') {
             // replace new lines, two characters in input: '\' 'n' -> '\n'
             format[format_size - 1] = '\n';  //replace the previous '\'
+        } else if (previous_qf_char == '\\' && qf_char == 't') {
+            // replace tabs, two characters in input: '\' 't' -> '\t'
+            format[format_size - 1] = '\t';  //replace the previous '\'
         } else {
             format[format_size] = qf_char;
             format_size++;
