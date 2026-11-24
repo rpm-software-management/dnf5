@@ -838,6 +838,23 @@ Scenario: repoquery --queryformat upper-case tags
       """
 
 
+Scenario: repoquery --queryformat \t
+ When I execute dnf with args "repoquery --queryformat '%{{NAME}}-%{{VERSION}}-%{{release}}\t%{{RePoId}}\n' bottom-*"
+ Then the exit code is 0
+  And stderr is
+      """
+      <REPOSYNC>
+      """
+  And stdout is
+      """
+      bottom-a1-1.0-1	repoquery-main
+      bottom-a1-2.0-1	repoquery-main
+      bottom-a2-1.0-1	repoquery-main
+      bottom-a3-1.0-1	repoquery-main
+      bottom-a3-2.0-1	repoquery-main
+      """
+
+
 # --querytags
 @bz1744073
 Scenario: dnf repoquery --querytags
