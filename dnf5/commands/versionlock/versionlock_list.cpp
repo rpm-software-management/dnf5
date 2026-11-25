@@ -19,6 +19,8 @@
 
 #include "versionlock_list.hpp"
 
+#include <libdnf5/utils/bgettext/bgettext-lib.h>
+
 #include <iostream>
 
 namespace dnf5 {
@@ -42,6 +44,23 @@ void VersionlockListCommand::run() {
         }
         std::cout << vl_pkg.to_string(true, true) << std::endl;
         first = false;
+    }
+
+    auto vl_installonly_config = package_sack->get_versionlock_installonly_config();
+    const auto & installonly_packages = vl_installonly_config.get_packages();
+    if (!installonly_packages.empty()) {
+        if (!first) {
+            std::cout << std::endl;
+        }
+        std::cout << _("Installonly locks:") << std::endl;
+        first = true;
+        for (const auto & vl_pkg : installonly_packages) {
+            if (!first) {
+                std::cout << std::endl;
+            }
+            std::cout << vl_pkg.to_string(true, true) << std::endl;
+            first = false;
+        }
     }
 }
 

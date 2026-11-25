@@ -363,14 +363,26 @@ void PackageSack::Impl::clear_module_excludes() {
 }
 #endif
 
-VersionlockConfig PackageSack::Impl::get_versionlock_config() const {
+namespace {
+
+std::filesystem::path resolve_versionlock_path(const BaseWeakPtr & base, const char * filename) {
     const auto & config = base->get_config();
-    std::filesystem::path conf_file_path{libdnf5::VERSIONLOCK_CONF_FILENAME};
+    std::filesystem::path conf_file_path{filename};
     if (!config.get_use_host_config_option().get_value()) {
         const std::filesystem::path installroot_path{config.get_installroot_option().get_value()};
         conf_file_path = installroot_path / conf_file_path.relative_path();
     }
-    return VersionlockConfig(conf_file_path);
+    return conf_file_path;
+}
+
+}  // namespace
+
+VersionlockConfig PackageSack::Impl::get_versionlock_config() const {
+    return VersionlockConfig(resolve_versionlock_path(base, libdnf5::VERSIONLOCK_CONF_FILENAME));
+}
+
+VersionlockConfig PackageSack::Impl::get_versionlock_installonly_config() const {
+    return VersionlockConfig(resolve_versionlock_path(base, libdnf5::VERSIONLOCK_INSTALLONLY_CONF_FILENAME));
 }
 
 const PackageSet PackageSack::Impl::get_versionlock_excludes() {
@@ -568,6 +580,10 @@ void PackageSack::clear_user_includes() {
 
 VersionlockConfig PackageSack::get_versionlock_config() const {
     return p_impl->get_versionlock_config();
+}
+
+VersionlockConfig PackageSack::get_versionlock_installonly_config() const {
+    return p_impl->get_versionlock_installonly_config();
 }
 
 const PackageSet PackageSack::get_versionlock_excludes() {
