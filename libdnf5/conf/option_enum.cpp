@@ -84,6 +84,7 @@ void OptionEnum::set(Priority priority, const std::string & value) {
         test(val);
         p_impl->value = val;
         set_priority(priority);
+        set_source(take_pending_source());
     }
 }
 

@@ -58,8 +58,14 @@ public:
     // @replaces libdnf:conf/OptionStingList.hpp:method:OptionStringList.set(Priority priority, bool value)
     virtual void set(Priority priority, const ValueType & value);
 
+    /// Sets new value and priority. Records source if value is accepted.
+    void set(Priority priority, const ValueType & value, std::string source);
+
     /// Sets new value and runtime priority.
     void set(const ValueType & value);
+
+    /// Sets new value and runtime priority. Records source if value is accepted.
+    void set(const ValueType & value, std::string source);
 
     /// Parses input string and sets new value and priority.
     /// The value and priority are stored only if the new priority is equal to or higher than the stored priority.
@@ -69,17 +75,27 @@ public:
     /// Parses input string and sets new value and runtime priority.
     void set(const std::string & value) override;
 
+    using Option::set;
+
     /// Adds items from an another container.
     /// New items are stored in the container value
     void add(Priority priority, const ValueType & items);
+
+    /// Adds items from an another container. Records source if value is accepted.
+    void add(Priority priority, const ValueType & items, std::string source);
 
     /// Parses input string and adds new values and priority.
     /// The value and priority are stored only if the new priority is equal to or higher than the stored priority.
     void add(Priority priority, const std::string & value);
 
+    /// Parses input string and adds new values and priority. Records source if value is accepted.
+    void add(Priority priority, const std::string & value, std::string source);
+
     /// Adds new item to the container.
-    /// New item is stored in the container value
     void add_item(Priority priority, const std::string & item);
+
+    /// Adds new item to the container with source.
+    void add_item(Priority priority, const std::string & item, std::string source);
 
     /// Gets the stored value.
     // @replaces libdnf:conf/OptionStringList.hpp:method:OptionStringList.getValue()
@@ -123,14 +139,24 @@ public:
     /// Return delimiters of this OptionStringList
     const char * get_delimiters() const noexcept;
 
+    /// Returns information about each item in the container.
+    ///
+    /// For each item, returns its priority (when it was set), value, and source
+    /// (where it came from, e.g., "config_file.conf" or "" if set without source).
+    ///
+    /// This is useful for tracking where each individual item in a list or set came from,
+    /// especially for append options where items can come from multiple sources.
+    ///
+    /// @return Vector of ItemInfo structures containing priority, value (as string_view),
+    ///         and source for each item in the container
+    /// @since 5.2.7.0
+    std::vector<ItemInfo<std::string_view>> get_items_info() const;
+
 protected:
     /// Tests new container item value and throws exception if the item value is not allowed.
     void test_item(const std::string & item) const;
 
 private:
-    LIBDNF_LOCAL void init_regex_matcher();
-    LIBDNF_LOCAL void test_item_worker(const std::string & item) const;
-
     class LIBDNF_LOCAL Impl;
     ImplPtr<Impl> p_impl;
 };

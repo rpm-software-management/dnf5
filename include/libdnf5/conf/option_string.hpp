@@ -53,6 +53,8 @@ public:
     /// Sets new value and runtime priority.
     void set(const std::string & value) override;
 
+    using Option::set;
+
     /// Gets the stored value.
     // @replaces libdnf:conf/OptionString.hpp:method:OptionString.getValue()
     const std::string & get_value() const;

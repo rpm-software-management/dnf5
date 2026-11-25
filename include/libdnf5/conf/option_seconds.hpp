@@ -39,6 +39,7 @@ public:
     OptionSeconds * clone() const override;
 
     using OptionNumber<std::int32_t>::set;
+    using Option::set;
 
     /// Parses input string and sets new value and priority.
     /// Valid inputs: 100, 1.5m, 90s, 1.2d, 1d, 0xF, 0.1, -1, never.
