@@ -51,7 +51,6 @@ cmake_dependent_option(WITH_TRANSLATIONS "Build translations" ON "NOT ENABLE_HTM
 # build options - tests
 cmake_dependent_option(WITH_TESTS "Build tests" ON "NOT ENABLE_HTML_ONLY" OFF)
 cmake_dependent_option(WITH_PERFORMANCE_TESTS "Build performance tests (DEBUG ONLY)" OFF "NOT ENABLE_HTML_ONLY" OFF)
-cmake_dependent_option(WITH_DNF5DAEMON_TESTS "Build dnf5daemon tests (requires configured dbus)" OFF "NOT ENABLE_HTML_ONLY" OFF)
 
 # build options - debugging
 cmake_dependent_option(WITH_SANITIZERS "Build with address, leak and undefined sanitizers (DEBUG ONLY)" OFF "NOT ENABLE_HTML_ONLY" OFF)
