@@ -80,8 +80,8 @@ Scenario: Upgrade vendorpkg from "Second Vendor" and upgrade dependencies and in
         | install-dep | vendordep3-0:1.2-1.x86_64 |
     And dnf5 transaction items for transaction "last" are
         | action   | package                    | reason          | repository              |
-        | Install  | vendordep3-0:1.2-1.x86_64  | Dependency      | dnf-ci-vendor-3-updates |
         | Install  | vendordep2-0:1.1-1.x86_64  | Dependency      | dnf-ci-vendor-2-updates |
+        | Install  | vendordep3-0:1.2-1.x86_64  | Dependency      | dnf-ci-vendor-3-updates |
         | Upgrade  | vendorpkg-0:1.10-1.x86_64  | User            | dnf-ci-vendor-2-updates |
         | Upgrade  | vendordep-0:1.8-1.x86_64   | Dependency      | dnf-ci-vendor-3-updates |
         | Replaced | vendordep-0:1.0-1.x86_64   | Dependency      | @System                 |
