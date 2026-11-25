@@ -31,6 +31,7 @@ class RpmTransactionTest : public BaseTestCase {
     CPPUNIT_TEST_SUITE(RpmTransactionTest);
     CPPUNIT_TEST(test_transaction);
     CPPUNIT_TEST(test_transaction_temp_files_cleanup);
+    CPPUNIT_TEST(test_transaction_callback_exception);
     CPPUNIT_TEST(test_source_date_epoch_sorting);
     CPPUNIT_TEST(test_source_date_epoch_history_timestamps);
     CPPUNIT_TEST_SUITE_END();
@@ -38,6 +39,7 @@ class RpmTransactionTest : public BaseTestCase {
 public:
     void test_transaction();
     void test_transaction_temp_files_cleanup();
+    void test_transaction_callback_exception();
     void test_source_date_epoch_sorting();
     void test_source_date_epoch_history_timestamps();
 };

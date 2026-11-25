@@ -49,3 +49,23 @@ Includes
 * Includes from a different component in the repository should use the angle-bracket form. E.g. in dnf5::
 
     #include <libdnf5/.../*.hpp>
+
+
+Exceptions
+----------
+
+* Never let an exception escape across a C boundary. Functions passed as C
+  callbacks (e.g. to librpm or librepo) and invoked from C code must catch every
+  exception, because unwinding through C frames is undefined behavior and can,
+  for an rpm transaction, leave the system in an undefined state.
+
+* In such a callback, catch with ``catch (...)``, log the error, and translate it
+  into a value the C API understands (for example a librepo error return code).
+  When the exception must still reach the caller, store it with
+  ``std::current_exception()`` and rethrow it with ``std::rethrow_exception()``
+  from a C++ frame once the C call has safely returned, rather than letting it
+  propagate through the C boundary.
+
+* Destructors are implicitly ``noexcept``: a callback invoked from a destructor
+  must also swallow any exception, or ``std::terminate()`` is called during stack
+  unwinding.

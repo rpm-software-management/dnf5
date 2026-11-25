@@ -64,7 +64,12 @@ public:
     ~FileTarget() {
         if (need_call_end_callback) {
             if (auto * download_callbacks = base->get_download_callbacks()) {
-                download_callbacks->end(user_cb_data, DownloadCallbacks::TransferStatus::ERROR, "Interrupted");
+                try {
+                    download_callbacks->end(user_cb_data, DownloadCallbacks::TransferStatus::ERROR, "Interrupted");
+                } catch (...) {
+                    base->get_logger()->error(
+                        "Caught an exception raised by a file \"end\" download callback during cleanup; ignoring it");
+                }
             }
         }
     }
@@ -87,7 +92,13 @@ static int end_callback(void * data, LrTransferStatus status, const char * msg) 
     if (auto * download_callbacks = file_target->base->get_download_callbacks()) {
         libdnf_assert(file_target->need_call_end_callback == true, "unexpected end_callback call");
         file_target->need_call_end_callback = false;
-        return download_callbacks->end(file_target->user_cb_data, cb_status, msg);
+        try {
+            return download_callbacks->end(file_target->user_cb_data, cb_status, msg);
+        } catch (...) {
+            file_target->base->get_logger()->error(
+                "Caught an exception raised by a file \"end\" download callback; aborting the download");
+            return DownloadCallbacks::ERROR;
+        }
     }
     return 0;
 }
@@ -97,7 +108,13 @@ static int progress_callback(void * data, double total_to_download, double downl
 
     auto * file_target = static_cast<FileTarget *>(data);
     if (auto * download_callbacks = file_target->base->get_download_callbacks()) {
-        return download_callbacks->progress(file_target->user_cb_data, total_to_download, downloaded);
+        try {
+            return download_callbacks->progress(file_target->user_cb_data, total_to_download, downloaded);
+        } catch (...) {
+            file_target->base->get_logger()->error(
+                "Caught an exception raised by a file \"progress\" download callback; aborting the download");
+            return DownloadCallbacks::ERROR;
+        }
     }
     return 0;
 }
@@ -107,7 +124,13 @@ static int mirror_failure_callback(void * data, const char * msg, const char * u
 
     auto * file_target = static_cast<FileTarget *>(data);
     if (auto * download_callbacks = file_target->base->get_download_callbacks()) {
-        return download_callbacks->mirror_failure(file_target->user_cb_data, msg, url, nullptr);
+        try {
+            return download_callbacks->mirror_failure(file_target->user_cb_data, msg, url, nullptr);
+        } catch (...) {
+            file_target->base->get_logger()->error(
+                "Caught an exception raised by a file \"mirror_failure\" download callback; aborting the download");
+            return DownloadCallbacks::ERROR;
+        }
     }
     return 0;
 }

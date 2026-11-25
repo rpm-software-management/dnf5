@@ -46,8 +46,13 @@
 // Deletes any previously defined general purpose exception handler
 %exception;
 
+%typemap(throws, noblock=1) Swig::DirectorException {
+    (void)$1;
+    SWIG_fail;
+}
+
 // Set default exception handler
-%catches(libdnf5::UserAssertionError, std::runtime_error, std::out_of_range);
+%catches(Swig::DirectorException, libdnf5::UserAssertionError, std::runtime_error, std::out_of_range);
 
 #define CV __perl_CV
 

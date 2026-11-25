@@ -96,6 +96,23 @@ public:
     bool order_correct = true;
 };
 
+class CallbackError : public std::runtime_error {
+public:
+    CallbackError() : std::runtime_error("exception from a transaction callback") {}
+};
+
+class ThrowingCallbacks : public libdnf5::rpm::TransactionCallbacks {
+public:
+    explicit ThrowingCallbacks(bool & reached) : reached(reached) {}
+
+    void verify_start([[maybe_unused]] uint64_t total) override {
+        reached = true;
+        throw CallbackError();
+    }
+
+    bool & reached;
+};
+
 }  // namespace
 
 
@@ -178,6 +195,29 @@ void RpmTransactionTest::test_transaction_temp_files_cleanup() {
     } else {
         CPPUNIT_ASSERT(!std::filesystem::exists(package_path));
     }
+}
+
+void RpmTransactionTest::test_transaction_callback_exception() {
+    add_repo_rpm("rpm-repo1");
+
+    libdnf5::Goal goal(base);
+    goal.add_rpm_install("one");
+
+    auto transaction = goal.resolve();
+    transaction.download();
+
+    bool reached = false;
+    transaction.set_callbacks(std::make_unique<ThrowingCallbacks>(reached));
+    transaction.set_description("install package one");
+
+    bool threw = false;
+    try {
+        transaction.run();
+    } catch (const CallbackError &) {
+        threw = true;
+    }
+
+    CPPUNIT_ASSERT_EQUAL(reached, threw);
 }
 
 void RpmTransactionTest::test_source_date_epoch_sorting() {
