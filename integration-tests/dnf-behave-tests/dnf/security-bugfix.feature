@@ -2,6 +2,7 @@ Feature: Test security options for update
 
 
 Background: Use repository with advisories
+  Given I set environment variable "DNF5_FORCE_COLUMNS" to "500"
   Given I use repository "dnf-ci-security"
    When I execute dnf with args "install bugfix_A-1.0-1 bugfix_B-1.0-1 bugfix_C-1.0-1"
    Then the exit code is 0

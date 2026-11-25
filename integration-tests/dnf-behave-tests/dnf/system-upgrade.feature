@@ -1,6 +1,7 @@
 Feature: Test the system-upgrade command
 
 Background:
+  Given I set environment variable "DNF5_FORCE_COLUMNS" to "500"
 Given I use repository "system-upgrade-f$releasever" with configuration
   # Install the initial package versions first, then set the (target)
   # releasever and switch the repositories to http (so that system-upgrade

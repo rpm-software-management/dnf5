@@ -2,6 +2,7 @@ Feature: downgrade with --install-from-repo
 
 
 Background: Install some RPMs from one repository
+  Given I set environment variable "DNF5_FORCE_COLUMNS" to "500"
   Given I use repository "from-repo"
     And I use repository "from-repo-updates1"
    When I execute dnf with args "install basesystem"

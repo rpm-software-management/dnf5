@@ -2,6 +2,9 @@ Feature: Reinstall must keep the "reason" why a package was installed
   E.g. if package with dependency is installed, and the dependency is reinstalled, and the main package is then removed, the dependency is removed as well.
 
 
+Background:
+  Given I set environment variable "DNF5_FORCE_COLUMNS" to "500"
+
 Scenario: Reinstall a dependency, and then remove the main package
   Given I use repository "dnf-ci-fedora"
     And I use repository "dnf-ci-fedora-updates"

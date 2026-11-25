@@ -1,6 +1,7 @@
 Feature: Checking GPG signatures of repository metadata
 
 Background: Sign simple-base repo and serve its public key
+  Given I set environment variable "DNF5_FORCE_COLUMNS" to "500"
   Given I copy repository "simple-base" for modification
     And I sign repository "simple-base" metadata with "{context.dnf.fixturesdir}/gpgkeys/keys/dnf-ci-gpg/dnf-ci-gpg-private"
     And I start http server "key_server" at "{context.dnf.fixturesdir}/gpgkeys/keys/dnf-ci-gpg"

@@ -4,6 +4,7 @@ Feature: Fail-safe
 
 
 Background: Copy the dnf-ci-fedora-modular repo (to allow modulemd removal and so on), and enable nodejs:5 (containing the oldest nodejs package) -> this makes fail-safe copy of nodejs:5
+  Given I set environment variable "DNF5_FORCE_COLUMNS" to "500"
   Given I copy repository "dnf-ci-fedora-modular" for modification
     And I use repository "dnf-ci-fedora-modular" with configuration
         | key                 | value |

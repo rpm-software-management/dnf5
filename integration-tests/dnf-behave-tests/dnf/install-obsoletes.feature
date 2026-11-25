@@ -1,6 +1,9 @@
 Feature: Install an obsoleted RPM
 
 
+Background:
+  Given I set environment variable "DNF5_FORCE_COLUMNS" to "500"
+
 Scenario: Install an obsoleted RPM
   Given I use repository "dnf-ci-thirdparty"
    When I execute dnf with args "install glibc-profile"

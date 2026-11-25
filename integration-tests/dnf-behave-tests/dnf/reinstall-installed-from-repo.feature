@@ -2,6 +2,7 @@ Feature: reinstall with --installed-from-repo
 
 
 Background: Installing packages from multiple repositories
+  Given I set environment variable "DNF5_FORCE_COLUMNS" to "500"
   Given I use repository "from-repo"
     And I use repository "from-repo-updates1"
     And I use repository "from-repo-updates2"

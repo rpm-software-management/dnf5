@@ -2,6 +2,7 @@ Feature: Test the security filters for offline-upgrade commands
 
 
 Background:
+  Given I set environment variable "DNF5_FORCE_COLUMNS" to "500"
   Given I use repository "dnf-ci-fedora"
 
 

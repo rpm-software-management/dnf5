@@ -1,6 +1,9 @@
 Feature: --security upgrades
 
 
+Background:
+  Given I set environment variable "DNF5_FORCE_COLUMNS" to "500"
+
 @bz2088149
 # More details in: https://github.com/rpm-software-management/libdnf/pull/1526
 Scenario: --security upgrade with advisories with pkgs of different arches

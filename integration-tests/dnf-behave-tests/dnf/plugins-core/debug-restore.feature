@@ -4,6 +4,7 @@ Feature: Test for debug plugin - restoring
 
 
 Background: install some packages and create dump file
+  Given I set environment variable "DNF5_FORCE_COLUMNS" to "500"
   Given I use repository "debug-plugin"
     And I successfully execute dnf with args "install kernel-4.19.1 kernel-4.20.1"
     And I successfully execute dnf with args "install test-replace-2"
