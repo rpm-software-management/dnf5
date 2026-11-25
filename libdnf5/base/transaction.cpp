@@ -702,6 +702,64 @@ void Transaction::Impl::process_solver_problems(rpm::solv::GoalPrivate & solved_
     }
 }
 
+/// If the package at `id` is not cached but an equivalent package (same NEVRA
+/// and checksum) from a different repository is cached, return that package's ID.
+/// Otherwise return the original ID. This prevents cache-only operations from
+/// failing when duplicate packages exist across repos with the same priority.
+static Id prefer_cached_package(const BaseWeakPtr & base, Id id) {
+    rpm::Package pkg(base, rpm::PackageId(id));
+
+    // If already cached, nothing to do
+    if (pkg.is_available_locally()) {
+        return id;
+    }
+
+    // Check if an equivalent package is cached in another repo
+    auto checksum = pkg.get_checksum();
+    if (checksum.get_type() == rpm::Checksum::Type::UNKNOWN || checksum.get_checksum().empty()) {
+        return id;
+    }
+
+    rpm::PackageQuery query(base);
+    query.filter_available();
+    query.filter_name(pkg.get_name());
+    query.filter_evr(pkg.get_evr());
+    query.filter_arch(pkg.get_arch());
+
+    for (const auto & candidate : query) {
+        // Skip the original package
+        if (candidate.get_id().id == id) {
+            continue;
+        }
+
+        // Skip packages from the same repo
+        if (candidate.get_repo_id() == pkg.get_repo_id()) {
+            continue;
+        }
+
+        // Verify size and checksum match
+        if (candidate.get_download_size() != pkg.get_download_size()) {
+            continue;
+        }
+
+        auto candidate_checksum = candidate.get_checksum();
+        if (candidate_checksum.get_type() != checksum.get_type()) {
+            continue;
+        }
+
+        if (candidate_checksum.get_checksum() != checksum.get_checksum()) {
+            continue;
+        }
+
+        // Check if this candidate is actually cached
+        if (candidate.is_available_locally()) {
+            return candidate.get_id().id;
+        }
+    }
+
+    return id;
+}
+
 void Transaction::Impl::set_transaction(
     rpm::solv::GoalPrivate & solved_goal,
 #ifdef WITH_MODULEMD
@@ -805,21 +863,25 @@ void Transaction::Impl::set_transaction(
     // The order of packages in the vector matters, we rely on outbound actions
     // being at the end in Transaction::Impl::run()
     for (auto id : solved_goal.list_installs()) {
+        id = prefer_cached_package(base, id);
         packages.emplace_back(
             make_transaction_package(id, TransactionPackage::Action::INSTALL, solved_goal, replaced, installed_query));
     }
 
     for (auto id : solved_goal.list_reinstalls()) {
+        id = prefer_cached_package(base, id);
         packages.emplace_back(make_transaction_package(
             id, TransactionPackage::Action::REINSTALL, solved_goal, replaced, installed_query));
     }
 
     for (auto id : solved_goal.list_upgrades()) {
+        id = prefer_cached_package(base, id);
         packages.emplace_back(
             make_transaction_package(id, TransactionPackage::Action::UPGRADE, solved_goal, replaced, installed_query));
     }
 
     for (auto id : solved_goal.list_downgrades()) {
+        id = prefer_cached_package(base, id);
         packages.emplace_back(make_transaction_package(
             id, TransactionPackage::Action::DOWNGRADE, solved_goal, replaced, installed_query));
     }
