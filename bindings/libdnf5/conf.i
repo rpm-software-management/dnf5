@@ -182,5 +182,16 @@ create_config_option_attributes(ConfigMain)
 %}
 #endif
 
+// Make returned wrapped objects (options, option binds, ...) keep their owner
+// alive to avoid use-after-free when a temporary owner is garbage collected
+// (e.g. libdnf5.base.Base().get_config().get_cachedir_option()). See 'common.i'
+// (install_keep_alive) and
+// https://github.com/rpm-software-management/dnf5/issues/2379
+#if defined(SWIGPYTHON)
+%pythoncode %{
+common.install_keep_alive(globals())
+%}
+#endif
+
 // Deletes any previously defined catches
 %catches();
