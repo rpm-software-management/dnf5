@@ -21,6 +21,7 @@ DNF5 Commands
     history.8
     info.8
     install.8
+    installonly-lock.8
     leaves.8
     list.8
     makecache.8

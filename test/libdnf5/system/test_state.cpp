@@ -38,7 +38,7 @@ static const std::string packages_contents{R"""(version = "1.0"
 
 static const std::string nevras_contents{R"""(version = "1.0"
 [nevras]
-"pkg-1.2-1.x86_64" = {from_repo="repo1"}
+"pkg-1.2-1.x86_64" = {from_repo="repo1",installonly_locked=true}
 "pkg-libs-1.2-1.x86_64" = {from_repo=""}
 "unresolvable-1.2-1.noarch" = {from_repo="repo2"}
 )"""};
@@ -126,6 +126,9 @@ void StateTest::test_state_read() {
 
     CPPUNIT_ASSERT_EQUAL(std::string("repo1"), state.get_package_from_repo("pkg-1.2-1.x86_64"));
     CPPUNIT_ASSERT_EQUAL(std::string("repo2"), state.get_package_from_repo("unresolvable-1.2-1.noarch"));
+    CPPUNIT_ASSERT_EQUAL(true, state.get_package_installonly_locked("pkg-1.2-1.x86_64"));
+    CPPUNIT_ASSERT_EQUAL(false, state.get_package_installonly_locked("pkg-libs-1.2-1.x86_64"));
+    CPPUNIT_ASSERT_EQUAL(false, state.get_package_installonly_locked("missing-1.0-1.noarch"));
 
     libdnf5::system::GroupState grp_state_1{
         .userinstalled = true,
@@ -159,6 +162,7 @@ void StateTest::test_state_write() {
     state.set_package_reason("unresolvable.noarch", transaction::TransactionItemReason::DEPENDENCY);
 
     state.set_package_from_repo("pkg-1.2-1.x86_64", "repo1");
+    state.set_package_installonly_locked("pkg-1.2-1.x86_64", true);
     state.set_package_from_repo("unresolvable-1.2-1.noarch", "repo2");
     state.set_package_from_repo("pkg-libs-1.2-1.x86_64", "");
 
