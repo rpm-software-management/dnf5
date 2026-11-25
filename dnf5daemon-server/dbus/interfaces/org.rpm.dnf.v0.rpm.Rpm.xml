@@ -186,6 +186,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
         @options: an array of key/value pairs to modify distro_sync behavior
 
         Following @options are supported:
+            - repo_ids: list of strings
+                Identifiers of the repos from which the packages could be installed.
 
         Unknown options are ignored.
     -->
@@ -205,6 +207,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
         Following @options are supported:
 
+            - repo_ids: list of strings
+                Identifiers of the repos from which the packages could be installed.
             - interactive: boolean, default true
                 Set to "true", when the operation is done by a user, thus user interaction like password prompts can be done.
 
@@ -226,6 +230,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
         Following @options are supported:
 
+            - repo_ids: list of strings
+                Identifiers of the repos from which the packages could be installed.
             - interactive: boolean, default true
                 Set to "true", when the operation is done by a user, thus user interaction like password prompts can be done.
 

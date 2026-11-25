@@ -701,9 +701,12 @@ sdbus::MethodReply Rpm::distro_sync(sdbus::MethodCall & call) {
     dnfdaemon::KeyValueMap options;
     call >> options;
 
+    std::vector<std::string> repo_ids = dnfdaemon::key_value_map_get<std::vector<std::string>>(options, "repo_ids", {});
+
     // fill the goal
     auto & goal = session.get_goal();
     libdnf5::GoalJobSettings setting;
+    setting.set_to_repo_ids(repo_ids);
     if (specs.empty()) {
         goal.add_rpm_distro_sync(setting);
     } else {
