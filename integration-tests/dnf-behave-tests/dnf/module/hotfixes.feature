@@ -69,7 +69,7 @@ Scenario: hotfix content is used when listing available updates
   Given I use repository "dnf-ci-fedora-modular-hotfix"
    When I execute dnf with args "check-update"
    Then the exit code is 100
-    And stdout contains "nodejs\.x86_64\s+1:8\.11\.5-1\.module_2030\+42747d40\s+dnf-ci-fedora-modular-hotfix"
+    And stdout contains "nodejs\.x86_64\s+8\.11\.4-1\.module_2030\+42747d40\s+->\s+1:8\.11\.5-1\.module_2030\+42747d40\s+dnf-ci-fedora-modular-hotfix"
 
 
 # Missing module install command

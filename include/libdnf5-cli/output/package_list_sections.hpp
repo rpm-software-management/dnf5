@@ -52,11 +52,13 @@ public:
     /// @param heading Header of the section
     /// @param pkg_set List of packages to be printed in this section
     /// @param obsoletes Optional map of obsoleted packages by obsoleter
+    /// @param upgrades Optional map of installed packages being upgraded by upgrade candidate
     /// @return Returns `true` in case at least one package was added, `false` otherwise
     bool add_section(
         const std::string & heading,
         const libdnf5::rpm::PackageSet & pkg_set,
-        const std::map<libdnf5::rpm::PackageId, std::vector<libdnf5::rpm::Package>> & obsoletes = {});
+        const std::map<libdnf5::rpm::PackageId, std::vector<libdnf5::rpm::Package>> & obsoletes = {},
+        const std::map<libdnf5::rpm::PackageId, libdnf5::rpm::Package> & upgrades = {});
 
 protected:
     class LIBDNF_CLI_LOCAL Impl;
