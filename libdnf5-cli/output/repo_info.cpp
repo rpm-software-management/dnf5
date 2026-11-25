@@ -161,6 +161,7 @@ void RepoInfo::Impl::add_repo(IRepoInfo & repo) {
     if (enabled) {
         auto group_repodata = add_line("Repodata info", "", nullptr);
         add_line("Available packages", repo.get_available_pkgs(), nullptr, group_repodata);
+        add_line("Unique NEVRAs", repo.get_unique_nevras(), nullptr, group_repodata);
         add_line("Total packages", repo.get_pkgs(), nullptr, group_repodata);
 
         std::string size = libdnf5::cli::utils::units::format_size_aligned(static_cast<int64_t>(repo.get_size()));
