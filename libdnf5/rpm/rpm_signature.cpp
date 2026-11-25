@@ -201,7 +201,7 @@ RpmSignature::CheckResult RpmSignature::check_package_signature(const std::strin
     auto ts_ptr = create_transaction(p_impl->base);
     auto oldmask = rpmlogSetMask(RPMLOG_UPTO(RPMLOG_PRI(RPMLOG_INFO)));
 
-    rpmtsSetVfyLevel(ts_ptr.get(), RPMSIG_SIGNATURE_TYPE);
+    rpmtsSetVfyLevel(ts_ptr.get(), rpmtsVfyLevel(ts_ptr.get()) | RPMSIG_SIGNATURE_TYPE);
     std::string path_non_const{path};
     char * const path_array[2] = {&path_non_const[0], NULL};
     auto rc = rpmcliVerifySignatures(ts_ptr.get(), path_array);

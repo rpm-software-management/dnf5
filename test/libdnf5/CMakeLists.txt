@@ -25,6 +25,10 @@ target_link_libraries(run_tests PRIVATE ${JSONC_LIBRARIES})
 pkg_check_modules(LIBSOLV REQUIRED libsolv>=0.7.21)
 target_link_libraries(run_tests PRIVATE ${LIBSOLV_LIBRARIES})
 
+pkg_check_modules(RPM REQUIRED rpm>=4.19.0)
+include_directories(${RPM_INCLUDE_DIRS})
+target_link_libraries(run_tests PRIVATE ${RPM_LIBRARIES})
+
 
 if(WITH_PERFORMANCE_TESTS)
     target_compile_options(run_tests PRIVATE -DWITH_PERFORMANCE_TESTS)

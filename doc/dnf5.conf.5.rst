@@ -1136,6 +1136,12 @@ configuration.
     Doesn't apply for packages passed directly as arguments, as they are not in any repository,
     see :ref:`localpkg_gpgcheck <localpkg_gpgcheck_options-label>`.
 
+    When this option is not explicitly set, packages from this repository are subject to the
+    package verification level enforced by ``rpm`` (the ``%_pkgverify_level`` and
+    ``%_pkgverify_flags`` macros). Explicitly setting ``pkg_gpgcheck=0`` opts the repository
+    out of the signature requirement of the ``rpm`` policy; the digest verification required
+    by the ``rpm`` policy is still performed.
+
     To import the repository's signing keys without asking for confirmation, see
     :ref:`auto_import_local_keys <auto_import_local_keys_options-label>`.
 
@@ -1173,6 +1179,12 @@ configuration.
     :ref:`boolean <boolean-label>`
 
     If enabled, DNF5 will perform a OpenPGP signature check on local packages (packages in a file, not in a repository).
+
+    When this option is not explicitly set, local packages are subject to the package
+    verification level enforced by ``rpm`` (the ``%_pkgverify_level`` and ``%_pkgverify_flags``
+    macros). Explicitly setting ``localpkg_gpgcheck=0`` opts out of the signature requirement
+    of the ``rpm`` policy; the digest verification required by the ``rpm`` policy is still
+    performed.
 
     Default: ``False``.
 

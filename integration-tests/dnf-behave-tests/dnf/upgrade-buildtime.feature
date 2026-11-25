@@ -11,6 +11,9 @@ Scenario Outline: Upgrade does not reinstall package with the same NEVRA and dif
    When I execute "[[ $(rpm -q --queryformat "%{{BUILDTIME}}" {context.scenario.repos_location}/dnf-ci-fedora/noarch/setup-2.12.1-1.fc29.noarch.rpm) -ne $(rpm -q --queryformat "%{{BUILDTIME}}" noarch/setup-2.12.1-1.fc29.noarch.rpm) ]]" in "{context.dnf.tempdir}"
    Then the exit code is 0
    # install local package
+  Given I configure dnf with
+        | key               | value |
+        | localpkg_gpgcheck | 0     |
    When I execute dnf with args "install {context.dnf.tempdir}/noarch/setup-2.12.1-1.fc29.noarch.rpm"
    Then the exit code is 0
     And Transaction is following
