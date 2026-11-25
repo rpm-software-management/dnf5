@@ -362,8 +362,8 @@ Scenario: use both advisories even if they are duplicates but with different iss
     And stdout is
         """
         Name      Type     Severity      Package              Issued
-        custom_id security Moderate E-2-2.x86_64 2022-12-17 00:00:00
-        custom_id security Moderate E-2-2.x86_64 2022-12-17 00:00:00
+        custom_id security Moderate E-2-2.x86_64 2022-12-17 00:00:00 +0000
+        custom_id security Moderate E-2-2.x86_64 2022-12-17 00:00:00 +0000
         """
    When I execute dnf with args "upgrade --security"
    Then the exit code is 0
@@ -388,9 +388,9 @@ Scenario: use all (3) advisories even if they are duplicates but with different 
     And stdout is
         """
         Name      Type     Severity      Package              Issued
-        custom_id security Moderate E-2-2.x86_64 2022-12-17 00:00:00
-        custom_id security Moderate E-2-2.x86_64 2022-12-17 00:00:00
-        custom_id security Moderate E-2-2.x86_64 2022-12-17 00:00:00
+        custom_id security Moderate E-2-2.x86_64 2022-12-17 00:00:00 +0000
+        custom_id security Moderate E-2-2.x86_64 2022-12-17 00:00:00 +0000
+        custom_id security Moderate E-2-2.x86_64 2022-12-17 00:00:00 +0000
         """
    When I execute dnf with args "upgrade --security"
    Then the exit code is 0
@@ -415,8 +415,8 @@ Scenario: use both advisories even if they are duplicates but with just summary 
     And stdout is
         """
         Name        Type     Severity      Package              Issued
-        custom_id_F security Moderate F-2-2.x86_64 2019-08-19 22:00:00
-        custom_id_F security Moderate F-2-2.x86_64 2019-08-19 22:00:00
+        custom_id_F security Moderate F-2-2.x86_64 2019-08-19 22:00:00 +0000
+        custom_id_F security Moderate F-2-2.x86_64 2019-08-19 22:00:00 +0000
         """
    When I execute dnf with args "upgrade --security"
    Then the exit code is 0

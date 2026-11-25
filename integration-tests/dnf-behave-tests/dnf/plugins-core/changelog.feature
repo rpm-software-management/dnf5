@@ -14,12 +14,12 @@ Scenario: Listing changelogs since given date
     """
     And stdout is
     """
-    Listing changelogs since Sun Jan  1 00:00:00 2023
+    Listing changelogs since Sun Jan  1 00:00:00 2023 +0000
     Changelogs for pkg-with-changelogs-1.0-3.src, pkg-with-changelogs-1.0-3.x86_64
-    * Mon May 01 12:00:00 2023 DNF5 Team <pkgs@dnf.team> - 1.0-3
+    * Mon May 01 12:00:00 2023 +0000 DNF5 Team <pkgs@dnf.team> - 1.0-3
     - New downstream release 1.0-3
 
-    * Fri Jan 20 12:00:00 2023 DNF5 Team <pkgs@dnf.team> - 1.0-2
+    * Fri Jan 20 12:00:00 2023 +0000 DNF5 Team <pkgs@dnf.team> - 1.0-2
     - New downstream release 1.0-2
     """
 
