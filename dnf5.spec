@@ -142,7 +142,7 @@ Provides:       dnf5-command(versionlock) = %{version}-%{release}
 
 # ========== versions of dependencies ==========
 
-%global libpkgmanifest_version 0.5.10
+%global libpkgmanifest_version 0.6.0
 %if %{with modulemd}
 %global libmodulemd_version 2.5.0
 %endif
