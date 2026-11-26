@@ -1,6 +1,7 @@
-# These tests need to be marked destructive because copr
-# doesn't use repositories in installroot, this is tracked as:
-# https://github.com/rpm-software-management/dnf5/issues/1497
+# These tests need to be marked destructive because the Copr plugin
+# reads its configuration from the host system, outside the installroot.
+# The tests therefore modify the Copr plugin configuration files under
+# /etc/dnf/plugins/ on the host.
 @destructive
 Feature: Test the COPR plugin
 
@@ -55,14 +56,188 @@ Scenario: Test enabling and disabling a project
 
       Please do not file bug reports about these packages in Fedora
       Bugzilla. In case of problems, contact the owner of this repository.
+
+      Using the vendor change setting from the Copr configuration (or its default) for the
+      repositories enabled by this command: allow a vendor change in both directions
+      Saved vendor policy file: {context.dnf.installroot}/etc/dnf/vendors.d/i_copr:localhost:testuser:testproject.conf
+      Saved vendor policy file: {context.dnf.installroot}/etc/dnf/vendors.d/o_copr:localhost:testuser:testproject.conf
       """
- When I execute dnf with args "--use-host-config copr disable testhub/testuser/testproject"
+  And file "/etc/yum.repos.d/_copr:localhost:testuser:testproject.repo" exists
+  And file "/etc/dnf/vendors.d/i_copr:localhost:testuser:testproject.conf" exists
+  And file "/etc/dnf/vendors.d/o_copr:localhost:testuser:testproject.conf" exists
+ When I execute dnf with args "copr disable testhub/testuser/testproject"
  Then the exit code is 0
   And stdout is
       """
-      Copr repository 'localhost/testuser/testproject' in '/etc/yum.repos.d/_copr:localhost:testuser:testproject.repo' disabled.
+      Copr repository 'localhost/testuser/testproject' in '{context.dnf.installroot}/etc/yum.repos.d/_copr:localhost:testuser:testproject.repo' disabled.
+      Vendor policy file updated: {context.dnf.installroot}/etc/dnf/vendors.d/i_copr:localhost:testuser:testproject.conf
+      Vendor policy file updated: {context.dnf.installroot}/etc/dnf/vendors.d/o_copr:localhost:testuser:testproject.conf
       """
   And stderr is empty
+  And file "/etc/yum.repos.d/_copr:localhost:testuser:testproject.repo" exists
+  And file "/etc/dnf/vendors.d/i_copr:localhost:testuser:testproject.conf" exists
+  And file "/etc/dnf/vendors.d/o_copr:localhost:testuser:testproject.conf" exists
+
+
+Scenario: Test enabling a project with vendor_change=to-repo in copr config file
+Given I create file "//etc/dnf/plugins/copr.d/enable_vendor_change_to_repo.conf" with
+      """
+      [main]
+      vendor_change = to-repo
+      """
+ When I execute dnf with args "copr enable testhub/testuser/testproject"
+ Then the exit code is 0
+  And stdout is empty
+  And stderr is
+      """
+      <REPOSYNC>
+      Enabling a Copr repository. Please note that this repository is not part
+      of the main distribution, and quality may vary.
+
+      The Fedora Project does not exercise any power over the contents of
+      this repository beyond the rules outlined in the Copr FAQ at
+      <https://docs.copr.fedorainfracloud.org/user_documentation.html#what-i-can-build-in-copr>,
+      and packages are not held to any quality or security level.
+
+      Please do not file bug reports about these packages in Fedora
+      Bugzilla. In case of problems, contact the owner of this repository.
+
+      Using the vendor change setting from the Copr configuration (or its default) for the
+      repositories enabled by this command: allow packages from these repositories to replace an already installed package from a different vendor
+      Saved vendor policy file: {context.dnf.installroot}/etc/dnf/vendors.d/i_copr:localhost:testuser:testproject.conf
+      Saved vendor policy file: {context.dnf.installroot}/etc/dnf/vendors.d/o_copr:localhost:testuser:testproject.conf
+      """
+  And file "/etc/yum.repos.d/_copr:localhost:testuser:testproject.repo" exists
+  And file "/etc/dnf/vendors.d/i_copr:localhost:testuser:testproject.conf" exists
+  And file "/etc/dnf/vendors.d/o_copr:localhost:testuser:testproject.conf" exists
+
+
+Scenario: Test enabling a project with --vendor-change=to-repo
+ When I execute dnf with args "copr enable --vendor-change=to-repo testhub/testuser/testproject"
+ Then the exit code is 0
+  And stdout is empty
+  And stderr is
+      """
+      <REPOSYNC>
+      Enabling a Copr repository. Please note that this repository is not part
+      of the main distribution, and quality may vary.
+
+      The Fedora Project does not exercise any power over the contents of
+      this repository beyond the rules outlined in the Copr FAQ at
+      <https://docs.copr.fedorainfracloud.org/user_documentation.html#what-i-can-build-in-copr>,
+      and packages are not held to any quality or security level.
+
+      Please do not file bug reports about these packages in Fedora
+      Bugzilla. In case of problems, contact the owner of this repository.
+
+      Using --vendor-change for the repositories enabled by this command: allow packages from these repositories to replace an already installed package from a different vendor
+      Saved vendor policy file: {context.dnf.installroot}/etc/dnf/vendors.d/i_copr:localhost:testuser:testproject.conf
+      Saved vendor policy file: {context.dnf.installroot}/etc/dnf/vendors.d/o_copr:localhost:testuser:testproject.conf
+      """
+  And file "/etc/yum.repos.d/_copr:localhost:testuser:testproject.repo" exists
+  And file "/etc/dnf/vendors.d/i_copr:localhost:testuser:testproject.conf" exists
+  And file "/etc/dnf/vendors.d/o_copr:localhost:testuser:testproject.conf" exists
+
+
+Scenario: Test enabling a project with --vendor-change=from-repo
+ When I execute dnf with args "copr enable --vendor-change=from-repo testhub/testuser/testproject"
+ Then the exit code is 0
+  And stdout is empty
+  And stderr is
+      """
+      <REPOSYNC>
+      Enabling a Copr repository. Please note that this repository is not part
+      of the main distribution, and quality may vary.
+
+      The Fedora Project does not exercise any power over the contents of
+      this repository beyond the rules outlined in the Copr FAQ at
+      <https://docs.copr.fedorainfracloud.org/user_documentation.html#what-i-can-build-in-copr>,
+      and packages are not held to any quality or security level.
+
+      Please do not file bug reports about these packages in Fedora
+      Bugzilla. In case of problems, contact the owner of this repository.
+
+      Using --vendor-change for the repositories enabled by this command: allow a package installed from these repositories to be replaced by a package from a different vendor
+      Saved vendor policy file: {context.dnf.installroot}/etc/dnf/vendors.d/i_copr:localhost:testuser:testproject.conf
+      Saved vendor policy file: {context.dnf.installroot}/etc/dnf/vendors.d/o_copr:localhost:testuser:testproject.conf
+      """
+  And file "/etc/yum.repos.d/_copr:localhost:testuser:testproject.repo" exists
+  And file "/etc/dnf/vendors.d/i_copr:localhost:testuser:testproject.conf" exists
+  And file "/etc/dnf/vendors.d/o_copr:localhost:testuser:testproject.conf" exists
+
+
+Scenario: Test enabling a project with --vendor-change=true
+ When I execute dnf with args "copr enable --vendor-change=true testhub/testuser/testproject"
+ Then the exit code is 0
+  And stdout is empty
+  And stderr is
+      """
+      <REPOSYNC>
+      Enabling a Copr repository. Please note that this repository is not part
+      of the main distribution, and quality may vary.
+
+      The Fedora Project does not exercise any power over the contents of
+      this repository beyond the rules outlined in the Copr FAQ at
+      <https://docs.copr.fedorainfracloud.org/user_documentation.html#what-i-can-build-in-copr>,
+      and packages are not held to any quality or security level.
+
+      Please do not file bug reports about these packages in Fedora
+      Bugzilla. In case of problems, contact the owner of this repository.
+
+      Using --vendor-change for the repositories enabled by this command: allow a vendor change in both directions
+      Saved vendor policy file: {context.dnf.installroot}/etc/dnf/vendors.d/i_copr:localhost:testuser:testproject.conf
+      Saved vendor policy file: {context.dnf.installroot}/etc/dnf/vendors.d/o_copr:localhost:testuser:testproject.conf
+      """
+  And file "/etc/yum.repos.d/_copr:localhost:testuser:testproject.repo" exists
+  And file "/etc/dnf/vendors.d/i_copr:localhost:testuser:testproject.conf" exists
+  And file "/etc/dnf/vendors.d/o_copr:localhost:testuser:testproject.conf" exists
+
+
+Scenario: Test enabling a project with --vendor-change=false
+ When I execute dnf with args "copr enable --vendor-change=false testhub/testuser/testproject"
+ Then the exit code is 0
+  And stdout is empty
+  And stderr is
+      """
+      <REPOSYNC>
+      Enabling a Copr repository. Please note that this repository is not part
+      of the main distribution, and quality may vary.
+
+      The Fedora Project does not exercise any power over the contents of
+      this repository beyond the rules outlined in the Copr FAQ at
+      <https://docs.copr.fedorainfracloud.org/user_documentation.html#what-i-can-build-in-copr>,
+      and packages are not held to any quality or security level.
+
+      Please do not file bug reports about these packages in Fedora
+      Bugzilla. In case of problems, contact the owner of this repository.
+
+      Using --vendor-change for the repositories enabled by this command: do not allow a vendor change in either direction
+      Saved vendor policy file: {context.dnf.installroot}/etc/dnf/vendors.d/i_copr:localhost:testuser:testproject.conf
+      Saved vendor policy file: {context.dnf.installroot}/etc/dnf/vendors.d/o_copr:localhost:testuser:testproject.conf
+      """
+  And file "/etc/yum.repos.d/_copr:localhost:testuser:testproject.repo" exists
+  And file "/etc/dnf/vendors.d/i_copr:localhost:testuser:testproject.conf" exists
+  And file "/etc/dnf/vendors.d/o_copr:localhost:testuser:testproject.conf" exists
+
+
+Scenario: Test removing an enabled project
+ When I execute dnf with args "copr enable testhub/testuser/testproject"
+ Then the exit code is 0
+  And file "/etc/yum.repos.d/_copr:localhost:testuser:testproject.repo" exists
+  And file "/etc/dnf/vendors.d/i_copr:localhost:testuser:testproject.conf" exists
+  And file "/etc/dnf/vendors.d/o_copr:localhost:testuser:testproject.conf" exists
+ When I execute dnf with args "copr remove testhub/testuser/testproject"
+ Then the exit code is 0
+  And stdout is
+      """
+      Repo file {context.dnf.installroot}/etc/yum.repos.d/_copr:localhost:testuser:testproject.repo successfully removed
+      Removed vendor policy file: {context.dnf.installroot}/etc/dnf/vendors.d/i_copr:localhost:testuser:testproject.conf
+      Removed vendor policy file: {context.dnf.installroot}/etc/dnf/vendors.d/o_copr:localhost:testuser:testproject.conf
+      """
+  And stderr is empty
+  And file "/etc/yum.repos.d/_copr:localhost:testuser:testproject.repo" does not exist
+  And file "/etc/dnf/vendors.d/i_copr:localhost:testuser:testproject.conf" does not exist
+  And file "/etc/dnf/vendors.d/o_copr:localhost:testuser:testproject.conf" does not exist
 
 
 Scenario: Test disabling a project that is not enabled
@@ -224,11 +399,25 @@ Given I create and substitute file "/{context.dnf.tempdir}/copr/api_3/rpmrepo/te
 
       These repositories are being enabled together with the main
       repository.
+
+
+      Using the vendor change setting from the Copr configuration (or its default) for the
+      repositories enabled by this command: allow a vendor change in both directions
+      Saved vendor policy file: {context.dnf.installroot}/etc/dnf/vendors.d/i_copr:localhost:testuser:depproject.conf
+      Saved vendor policy file: {context.dnf.installroot}/etc/dnf/vendors.d/o_copr:localhost:testuser:depproject.conf
       """
- When I execute dnf with args "copr disable testhub/testuser/depproject --use-host-config"
+  And file "/etc/yum.repos.d/_copr:localhost:testuser:depproject.repo" exists
+  And file "/etc/dnf/vendors.d/i_copr:localhost:testuser:depproject.conf" exists
+  And file "/etc/dnf/vendors.d/o_copr:localhost:testuser:depproject.conf" exists
+ When I execute dnf with args "copr disable testhub/testuser/depproject"
  Then the exit code is 0
   And stdout is
       """
-      Copr repository 'localhost/testuser/depproject' in '/etc/yum.repos.d/_copr:localhost:testuser:depproject.repo' disabled.
+      Copr repository 'localhost/testuser/depproject' in '{context.dnf.installroot}/etc/yum.repos.d/_copr:localhost:testuser:depproject.repo' disabled.
+      Vendor policy file updated: {context.dnf.installroot}/etc/dnf/vendors.d/i_copr:localhost:testuser:depproject.conf
+      Vendor policy file updated: {context.dnf.installroot}/etc/dnf/vendors.d/o_copr:localhost:testuser:depproject.conf
       """
   And stderr is empty
+  And file "/etc/yum.repos.d/_copr:localhost:testuser:depproject.repo" exists
+  And file "/etc/dnf/vendors.d/i_copr:localhost:testuser:depproject.conf" exists
+  And file "/etc/dnf/vendors.d/o_copr:localhost:testuser:depproject.conf" exists
