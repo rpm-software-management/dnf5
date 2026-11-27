@@ -1295,29 +1295,44 @@ const ArgumentParser::Command::ParseHookFunc & ArgumentParser::CommandAlias::get
 }
 
 void ArgumentParser::CommandAlias::parse(const char * option, int argc, const char * const argv[]) {
-    const auto number_of_required_values = static_cast<int>(required_values.size());
-    if (argc <= number_of_required_values) {
-        throw ArgumentParserNamedArgMissingValueError(
-            M_("Missing value for command alias \"{}\""), std::string(option));
-    }
-
-    // Invoke the attached named arguments
-    for (auto & target_named_arg : attached_named_args) {
-        auto & target_arg = owner.get_named_arg(target_named_arg.id_path, false);
-        const char * args[2];
-        int args_count = 1;
-        std::string value;
-        if (target_arg.get_has_value()) {
-            value = format_string(target_named_arg.value, number_of_required_values + 1, argv);
-            args[args_count++] = value.c_str();
+    // Parse attached named arguments from aliases (in case there are aliases of aliases).
+    int next_unconsumed_arg_index = 1;
+    Command * attached_command_iter = this;
+    while (auto * alias = dynamic_cast<CommandAlias *>(attached_command_iter)) {
+        const auto number_of_required_values = static_cast<int>(alias->required_values.size());
+        if (argc - next_unconsumed_arg_index < number_of_required_values) {
+            throw ArgumentParserNamedArgMissingValueError(
+                M_("Missing value for command alias \"{}\""), std::string(option));
         }
-        args[0] = option;
-        target_arg.parse_long(option, args_count, args);
+
+        std::vector<const char *> fmt_argv;
+        fmt_argv.reserve(static_cast<size_t>(number_of_required_values) + 1);
+        // ${0} is this alias's id
+        fmt_argv.push_back(alias->get_id().c_str());
+        for (int i = 0; i < number_of_required_values; ++i) {
+            fmt_argv.push_back(argv[next_unconsumed_arg_index + i]);
+        }
+
+        for (auto & target_named_arg : alias->attached_named_args) {
+            auto & target_arg = owner.get_named_arg(target_named_arg.id_path, false);
+            const char * args[2];
+            int args_count = 1;
+            std::string value;
+            if (target_arg.get_has_value()) {
+                value = format_string(target_named_arg.value, static_cast<int>(fmt_argv.size()), fmt_argv.data());
+                args[args_count++] = value.c_str();
+            }
+            args[0] = option;
+            target_arg.parse_long(option, args_count, args);
+        }
+        next_unconsumed_arg_index += number_of_required_values;
+        attached_command_iter = &alias->attached_command;
     }
 
-    auto & cmds = attached_command.get_commands();
-    auto & named_args = attached_command.get_named_args();
-    auto & pos_args = attached_command.get_positional_args();
+    // At this point attached_command_iter has to point to non-alias command, the final command we are aliasing
+    auto & cmds = attached_command_iter->get_commands();
+    auto & named_args = attached_command_iter->get_named_args();
+    auto & pos_args = attached_command_iter->get_positional_args();
     std::vector<NamedArg *> extended_named_args;
     bool inherit_named_args_from_parent = owner.p_impl->inherit_named_args && parent;
     if (inherit_named_args_from_parent) {
@@ -1335,7 +1350,7 @@ void ArgumentParser::CommandAlias::parse(const char * option, int argc, const ch
     size_t used_positional_arguments = 0;
     int short_option_idx = 0;
     bool stop_at_named_args = true;
-    for (int i = 1 + number_of_required_values; i < argc;) {
+    for (int i = next_unconsumed_arg_index; i < argc;) {
         if (stop_at_named_args && std::strcmp(argv[i], "--") == 0 &&
             (!owner.p_impl->complete_arg_ptr || argv + i != owner.p_impl->complete_arg_ptr)) {
             stop_at_named_args = false;
@@ -1442,8 +1457,8 @@ void ArgumentParser::CommandAlias::parse(const char * option, int argc, const ch
         }
     }
 
-    if (auto & parse_hook = attached_command.get_parse_hook_func()) {
-        parse_hook(&attached_command, option, argc, argv);
+    if (auto & parse_hook = attached_command_iter->get_parse_hook_func()) {
+        parse_hook(attached_command_iter, option, argc, argv);
     }
 }
 

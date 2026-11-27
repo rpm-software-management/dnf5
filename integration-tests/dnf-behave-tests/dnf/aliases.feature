@@ -165,3 +165,88 @@ Test Query Aliases:
   ls                            Alias for 'repo list'
   if                            Alias for 'repo info'
 """
+
+
+Scenario: I can define an alias of an alias which preserves attached arguments
+Given I create directory "//etc/dnf/dnf5-aliases.d"
+  And I create file "//etc/dnf/dnf5-aliases.d/TEST_ALIASES.conf" with
+"""
+version = '1.0'
+
+['inthrone']
+type = 'command'
+attached_command = 'install'
+attached_named_args = [
+    { id_path = 'assumeno' }
+]
+
+['inthrone2']
+type = 'command'
+attached_command = 'inthrone'
+"""
+ When I execute dnf with args "inthrone2 labirinto"
+ Then the exit code is 1
+  And stderr contains "Operation aborted by the user."
+
+
+Scenario: Alias of an alias can pass multiple required values to placeholders
+Given I create directory "//etc/dnf/dnf5-aliases.d"
+  And I create file "//etc/dnf/dnf5-aliases.d/TEST_ALIASES.conf" with
+"""
+version = '1.1'
+
+['inthrone']
+type = 'command'
+attached_command = 'install'
+attached_named_args = [
+    { id_path = 'repo', value = '${1}' },
+    { id_path = 'setopt', value = '${2}' },
+    { id_path = 'assumeno' }
+]
+required_values = [
+    { value_help.C = 'REPO,...' },
+    { value_help.C = 'CUSTOM_SETOPT,...' },
+]
+
+['inthrone2']
+type = 'command'
+attached_command = 'inthrone'
+"""
+ When I execute dnf with args "inthrone2 simple-base keepcache=true labirinto"
+ Then the exit code is 1
+  And stderr contains "Operation aborted by the user."
+
+
+Scenario: Alias of an alias can pass multiple required values to placeholders and define its own placeholders
+Given I create directory "//etc/dnf/dnf5-aliases.d"
+  And I create file "//etc/dnf/dnf5-aliases.d/TEST_ALIASES.conf" with
+"""
+version = '1.1'
+
+['inthrone']
+type = 'command'
+attached_command = 'install'
+attached_named_args = [
+    { id_path = 'repo', value = '${1}' },
+    { id_path = 'setopt', value = '${2}' },
+    { id_path = 'assumeno' }
+]
+required_values = [
+    { value_help.C = 'REPO' },
+    { value_help.C = 'CUSTOM_SETOPT' },
+]
+
+['inthrone2']
+type = 'command'
+attached_command = 'inthrone'
+attached_named_args = [
+    { id_path = 'install.store', value = '${1}' },
+]
+required_values = [
+    { value_help.C = 'PATH' },
+]
+"""
+ When I execute dnf with args "inthrone2 ./test simple-base keepcache=true labirinto"
+ Then the exit code is 1
+  And stderr contains "Operation aborted by the user."
+  And stderr contains "The operation will only store the transaction in ./test"
