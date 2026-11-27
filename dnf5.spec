@@ -64,7 +64,6 @@
 # Testing
 %bcond_without tests
 %bcond_with    performance_tests
-%bcond_with    dnf5daemon_tests
 
 %if %{with clang}
 %global toolchain clang
@@ -236,12 +235,6 @@ BuildRequires:  pkgconfig(libpkgmanifest) >= %{libpkgmanifest_version}
 # required for dnf5daemon-server
 BuildRequires:  pkgconfig(sdbus-c++) >= 0.9.0
 BuildRequires:  systemd-rpm-macros
-%if %{with dnf5daemon_tests}
-BuildRequires:  dbus-daemon
-BuildRequires:  polkit
-BuildRequires:  python3-devel
-BuildRequires:  python3dist(dbus-python)
-%endif
 %endif
 
 %if %{with plugin_rhsm_container}
@@ -1126,7 +1119,6 @@ DNF5 plugin for working with RPM package manifest files.
     -DWITH_SANITIZERS=%{?with_sanitizers:ON}%{!?with_sanitizers:OFF} \
     -DWITH_TESTS=%{?with_tests:ON}%{!?with_tests:OFF} \
     -DWITH_PERFORMANCE_TESTS=%{?with_performance_tests:ON}%{!?with_performance_tests:OFF} \
-    -DWITH_DNF5DAEMON_TESTS=%{?with_dnf5daemon_tests:ON}%{!?with_dnf5daemon_tests:OFF} \
     \
     -DVERSION_PRIME=%{project_version_prime} \
     -DVERSION_MAJOR=%{project_version_major} \

@@ -43,7 +43,6 @@ add_subdirectory(python3)
 add_subdirectory(ruby)
 
 # components
-add_subdirectory(dnf5daemon-server)
 add_subdirectory(dnf5-plugins)
 
 # add shared
