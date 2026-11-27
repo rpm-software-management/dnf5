@@ -31,6 +31,7 @@ class OptionTest : public CppUnit::TestCase {
     CPPUNIT_TEST(test_options_child);
     CPPUNIT_TEST(test_options_enum);
     CPPUNIT_TEST(test_options_number);
+    CPPUNIT_TEST(test_options_number_from_string);
     CPPUNIT_TEST(test_options_path);
     CPPUNIT_TEST(test_options_seconds);
     CPPUNIT_TEST(test_options_string);
@@ -52,6 +53,7 @@ public:
     void test_options_child();
     void test_options_enum();
     void test_options_number();
+    void test_options_number_from_string();
     void test_options_path();
     void test_options_seconds();
     void test_options_string();
