@@ -401,29 +401,33 @@ void RepoSack::Impl::update_and_load_repos(libdnf5::repo::RepoQuery & repos, boo
     std::exception_ptr except_ptr;                   // for pass exception from thread_sack_loader to main thread,
                                                      // a default-constructed std::exception_ptr is a null pointer
 
-    std::vector<Repo *> prepared_repos;            // array of repositories prepared to load into solv sack
-    std::mutex prepared_repos_mutex;               // mutex for the array
-    std::condition_variable signal_prepared_repo;  // signals that next item is added into array
+    // Map of repositories prepared to load, sorted by ID for deterministic libsolv behavior
+    std::map<std::string, Repo *> prepared_repos;  // repositories prepared to load into solv sack
+    std::mutex prepared_repos_mutex;               // mutex for the map
+    std::condition_variable signal_prepared_repo;  // signals that next item is added
+    bool all_repos_prepared{false};                // set to true when all repos are ready to load
     std::size_t num_repos_loaded{0};               // number of repositories already loaded into solv sack
 
-    prepared_repos.reserve(repos.size() + 1);  // optimization: preallocate memory to avoid realocations, +1 stop tag
-
-    // This thread loads prepared repositories into solvable sack
+    // This thread loads prepared repositories into solvable sack.
+    // Repos are loaded in sorted order by ID to ensure deterministic package selection
+    // when multiple repos offer identical packages at the same priority.
     std::thread thread_sack_loader([&]() {
         try {
-            while (true) {
-                std::unique_lock<std::mutex> lock(prepared_repos_mutex);
-                while (prepared_repos.size() <= num_repos_loaded) {
-                    signal_prepared_repo.wait(lock);
-                }
-                auto repo = prepared_repos[num_repos_loaded];
+            std::unique_lock<std::mutex> lock(prepared_repos_mutex);
+            // Wait until all repos are prepared
+            while (!all_repos_prepared) {
+                signal_prepared_repo.wait(lock);
+            }
+
+            if (except_in_main_thread) {
+                return;
+            }
+
+            // Load repos in sorted order (std::map is already sorted by key)
+            for (auto & [id, repo] : prepared_repos) {
                 lock.unlock();
-
-                if (!repo || except_in_main_thread) {
-                    break;  // nullptr mark - work is done, or exception in main thread
-                }
-
                 repo->load();
+                lock.lock();
                 ++num_repos_loaded;
             }
         } catch (std::runtime_error & ex) {
@@ -432,19 +436,25 @@ void RepoSack::Impl::update_and_load_repos(libdnf5::repo::RepoQuery & repos, boo
         }
     });
 
-    // Add repository to array of repositories prepared to load into solv sack.
+    // Add repository to map of repositories prepared to load into solv sack.
+    // Repos are keyed by ID to maintain sorted order.
     auto send_to_sack_loader = [&](repo::Repo * repo) {
         {
             std::lock_guard<std::mutex> lock(prepared_repos_mutex);
-            prepared_repos.push_back(repo);
+            if (repo) {
+                prepared_repos[repo->get_id()] = repo;
+            } else {
+                // nullptr mark - all repos prepared, signal loader to proceed
+                all_repos_prepared = true;
+            }
         }
         signal_prepared_repo.notify_one();
     };
 
-    // Adds information that all repos are updated (nullptr tag) and is waiting for thread_sack_loader to complete.
+    // Signals that all repos are prepared and waits for thread_sack_loader to complete.
     auto finish_sack_loader = [&]() {
-        send_to_sack_loader(nullptr);
-        thread_sack_loader.join();  // waits for the thread_sack_loader to finish its execution
+        send_to_sack_loader(nullptr);  // nullptr mark signals all repos are ready
+        thread_sack_loader.join();     // waits for the thread_sack_loader to finish its execution
     };
 
     // Ensures that when update_and_load_repos is unexpectedly exited due to an exception,
