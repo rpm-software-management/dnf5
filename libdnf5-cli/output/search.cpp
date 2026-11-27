@@ -22,13 +22,16 @@
 
 #include "libdnf5-cli/tty.hpp"
 
+#include <libdnf5/rpm/package_query.hpp>
 #include <libdnf5/utils/bgettext/bgettext-lib.h>
 #include <libdnf5/utils/patterns.hpp>
 
 #include <algorithm>
 #include <iostream>
 #include <numeric>
+#include <optional>
 #include <regex>
+#include <set>
 
 namespace libdnf5::cli::output {
 
@@ -82,6 +85,30 @@ std::string construct_highlight_regex_format() {
     return replace_format.str();
 }
 
+
+/// Get a string identifying the package in the search results.
+/// Without duplicates only the latest version of each name.arch is shown, which may not be the installed
+/// one, so packages are identified by name.arch. With duplicates all versions are shown, so by full NEVRA.
+std::string get_package_id(const libdnf5::rpm::Package & package, bool show_duplicates) {
+    if (show_duplicates) {
+        return package.get_full_nevra();
+    }
+    return package.get_name() + "." + package.get_arch();
+}
+
+
+/// Get the identifiers of all installed packages, see get_package_id().
+std::set<std::string> get_installed_package_ids(const libdnf5::BaseWeakPtr & base, bool show_duplicates) {
+    std::set<std::string> installed_ids;
+    // Excludes do not affect whether a package is installed.
+    libdnf5::rpm::PackageQuery installed(base, libdnf5::sack::ExcludeFlags::IGNORE_EXCLUDES);
+    installed.filter_installed();
+    for (auto const & package : installed) {
+        installed_ids.insert(get_package_id(package, show_duplicates));
+    }
+    return installed_ids;
+}
+
 }  // namespace
 
 
@@ -95,18 +122,26 @@ void print_search_results(const SearchResults & results) {
     auto highlight = [&](auto const & text) {
         return std::regex_replace(text, patterns_regex, highlight_regex_format);
     };
+    std::optional<std::set<std::string>> installed_ids;
 
     for (auto const & result : results.group_results) {
         std::cout << bold << _("Matched fields: ") << reset << construct_keys_string(result.matched_keys) << std::endl;
 
         for (auto const & package : result.matched_packages.packages) {
+            if (!installed_ids) {
+                installed_ids = get_installed_package_ids(package.get_base(), results.options.show_duplicates);
+            }
             std::cout << " ";
             if (results.options.show_duplicates) {
                 std::cout << highlight(package.get_full_nevra());
             } else {
                 std::cout << highlight(package.get_name()) << "." << package.get_arch();
             }
-            std::cout << "\t" << highlight(package.get_summary()) << std::endl;
+            std::cout << "\t" << highlight(package.get_summary());
+            if (installed_ids->contains(get_package_id(package, results.options.show_duplicates))) {
+                std::cout << " " << _("[installed]");
+            }
+            std::cout << std::endl;
         }
     }
 }
