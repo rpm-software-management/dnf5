@@ -30,10 +30,13 @@ namespace {
 constexpr std::string_view reset_formatting = "\033[0m\033[?25h";
 
 void signal_handler([[maybe_unused]] int signum) {
-    // only write the reset code to interactive terminals
-    if (libdnf5::cli::tty::is_interactive()) {
-        // store the unused result to avoid "ignoring return value" warning
-        [[maybe_unused]] auto result = write(STDOUT_FILENO, reset_formatting.data(), reset_formatting.size());
+    // only write the reset code to interactive terminals; the progress bars
+    // (and the hidden cursor) are on stderr, other output is on stdout
+    for (int fd : {STDOUT_FILENO, STDERR_FILENO}) {
+        if (libdnf5::cli::tty::is_interactive(fd)) {
+            // store the unused result to avoid "ignoring return value" warning
+            [[maybe_unused]] auto result = write(fd, reset_formatting.data(), reset_formatting.size());
+        }
     }
 
     _exit(1);
