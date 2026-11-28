@@ -20,7 +20,7 @@ pkg_check_modules(JSONC REQUIRED json-c)
 include(sdbus_cpp)
 find_package(Threads)
 
-include_directories(${JSONC_INCLUDE_DIRS})
+include_directories(SYSTEM ${JSONC_INCLUDE_DIRS})
 
 add_executable(${DNF5DAEMON_SERVER_BIN} ${DNF5DAEMON_SERVER_SOURCES})
 

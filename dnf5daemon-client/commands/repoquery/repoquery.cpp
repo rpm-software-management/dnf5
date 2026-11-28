@@ -25,7 +25,7 @@
 #include <dnf5daemon-server/dbus.hpp>
 #include <fcntl.h>
 #include <fmt/format.h>
-#include <json-c/json.h>
+#include <json.h>
 #include <libdnf5-cli/exception.hpp>
 #include <libdnf5-cli/output/adapters/package_tmpl.hpp>
 #include <libdnf5-cli/output/packageinfo.hpp>

@@ -26,7 +26,7 @@
 #include "libdnf5-cli/tty.hpp"
 
 #include <fmt/format.h>
-#include <json-c/json.h>
+#include <json.h>
 #include <libdnf5/utils/bgettext/bgettext-lib.h>
 #include <pwd.h>
 

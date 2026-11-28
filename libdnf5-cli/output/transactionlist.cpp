@@ -27,7 +27,7 @@
 #include "libdnf5/transaction/transaction_history.hpp"
 #include "libdnf5/transaction/transaction_item_action.hpp"
 
-#include <json-c/json.h>
+#include <json.h>
 #include <libdnf5/utils/bgettext/bgettext-lib.h>
 #include <libsmartcols/libsmartcols.h>
 

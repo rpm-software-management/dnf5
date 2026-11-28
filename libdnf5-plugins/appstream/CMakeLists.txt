@@ -9,7 +9,7 @@ set_target_properties(appstream_plugin PROPERTIES PREFIX "")
 set_target_properties(appstream_plugin PROPERTIES OUTPUT_NAME "appstream")
 
 pkg_check_modules(APPSTREAM REQUIRED appstream>=0.16)
-include_directories(${APPSTREAM_INCLUDE_DIRS})
+include_directories(SYSTEM ${APPSTREAM_INCLUDE_DIRS})
 target_link_libraries(appstream_plugin PRIVATE ${APPSTREAM_LIBRARIES})
 target_link_libraries(appstream_plugin PRIVATE libdnf5)
 

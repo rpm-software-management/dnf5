@@ -9,7 +9,7 @@ add_library(copr_cmd_plugin MODULE ${COPR_SOURCES})
 set_target_properties(copr_cmd_plugin PROPERTIES PREFIX "")
 
 pkg_check_modules(JSONC REQUIRED json-c)
-include_directories(${JSONC_INCLUDE_DIRS})
+include_directories(SYSTEM ${JSONC_INCLUDE_DIRS})
 target_link_libraries(copr_cmd_plugin PRIVATE ${JSONC_LIBRARIES})
 
 target_link_libraries(copr_cmd_plugin PRIVATE libdnf5 libdnf5-cli)

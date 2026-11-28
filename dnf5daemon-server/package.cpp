@@ -20,7 +20,7 @@
 #include "package.hpp"
 
 #include <fmt/format.h>
-#include <json-c/json.h>
+#include <json.h>
 
 #include <map>
 

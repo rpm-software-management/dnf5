@@ -9,6 +9,10 @@ set_target_properties(needs_restarting_cmd_plugin PROPERTIES PREFIX "")
 
 include(sdbus_cpp)
 
+pkg_check_modules(JSONC REQUIRED json-c)
+include_directories(SYSTEM ${JSONC_INCLUDE_DIRS})
+target_link_libraries(needs_restarting_cmd_plugin PRIVATE ${JSONC_LIBRARIES})
+
 target_link_libraries(needs_restarting_cmd_plugin PRIVATE dnf5 libdnf5 libdnf5-cli ${SDBUS_CPP_LIBRARIES})
 
 install(TARGETS needs_restarting_cmd_plugin LIBRARY DESTINATION ${CMAKE_INSTALL_FULL_LIBDIR}/dnf5/plugins/)

@@ -12,7 +12,7 @@ add_library(actions MODULE actions.cpp)
 set_target_properties(actions PROPERTIES PREFIX "")
 
 pkg_check_modules(JSONC REQUIRED json-c)
-include_directories(${JSONC_INCLUDE_DIRS})
+include_directories(SYSTEM ${JSONC_INCLUDE_DIRS})
 target_link_libraries(actions PRIVATE ${JSONC_LIBRARIES})
 
 target_link_libraries(actions PRIVATE libdnf5)

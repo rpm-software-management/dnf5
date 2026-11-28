@@ -8,7 +8,7 @@ endif()
 
 find_package(Python3 REQUIRED COMPONENTS Interpreter Development)
 find_package(SWIG REQUIRED)
-include_directories(${Python3_INCLUDE_DIRS})
+include_directories(SYSTEM ${Python3_INCLUDE_DIRS})
 
 add_custom_target(swigpyrun-header
     ${SWIG_EXECUTABLE} -python -external-runtime

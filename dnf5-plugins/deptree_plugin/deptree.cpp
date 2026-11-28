@@ -6,7 +6,7 @@
 #include "deptree_graph.hpp"
 
 #include <dnf5/shared_options.hpp>
-#include <json-c/json.h>
+#include <json.h>
 #include <libdnf5-cli/argument_parser.hpp>
 #include <libdnf5/conf/option_string_list.hpp>
 #include <libdnf5/rpm/package.hpp>

@@ -21,7 +21,7 @@
 
 #include <dirent.h>
 #include <dnf5/shared_options.hpp>
-#include <json-c/json.h>
+#include <json.h>
 #include <libdnf5-cli/argument_parser.hpp>
 #include <libdnf5-cli/output/changelogs.hpp>
 #include <libdnf5/conf/const.hpp>

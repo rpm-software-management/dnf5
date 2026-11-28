@@ -4,7 +4,7 @@
 #ifndef DNF5_PLUGINS_DEPTREE_PLUGIN_DEPTREE_GRAPH_HPP
 #define DNF5_PLUGINS_DEPTREE_PLUGIN_DEPTREE_GRAPH_HPP
 
-#include <json-c/json.h>
+#include <json.h>
 #include <libdnf5/base/base.hpp>
 #include <libdnf5/rpm/package.hpp>
 #include <libdnf5/rpm/package_query.hpp>
@@ -72,6 +72,7 @@ private:
     // Enabled dependency relation kinds.
     const std::set<std::string> & types;
     // Exact architecture filter, empty when all architectures are included.
+    [[maybe_unused]]  // currently unused, but part of the public API.
     const std::set<std::string> & arches;
     // Cached latest packages query for reverse traversal.
     std::optional<libdnf5::rpm::PackageQuery> latest_available;

@@ -7,7 +7,7 @@ message("Building bindings for ruby")
 
 
 find_package(Ruby REQUIRED)
-include_directories(${Ruby_INCLUDE_DIRS})
+include_directories(SYSTEM ${Ruby_INCLUDE_DIRS})
 
 # Upstream CMake cannot detect Ruby_VENDORARCH_DIR
 # <http://public.kitware.com/Bug/view.php?id=12965>,

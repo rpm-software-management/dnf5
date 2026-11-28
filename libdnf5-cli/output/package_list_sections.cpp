@@ -25,7 +25,7 @@
 #include "libdnf5-cli/tty.hpp"
 #include "libdnf5-cli/utils/json.hpp"
 
-#include <json-c/json.h>
+#include <json.h>
 #include <libdnf5/rpm/nevra.hpp>
 #include <libsmartcols/libsmartcols.h>
 
